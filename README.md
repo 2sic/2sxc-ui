@@ -1,6 +1,6 @@
-2sxc - the DNN extension you can't live without
+2sxc UI - the JS UI of 2sxc
 ============
 
-This tool helps web designers and developers prepare great looking, animated and sexy content templates in DNN (DotNetNuke). It's like mixing DNN with Umbraco and Drupal :).
+This project is part of 2sxc, https://github.com/2sic/2sxc.
 
-BTW: it used to be called 2SexyContent.
+It is separate to keep concerns separate and make contributions simpler (because it's a smaller project). 
