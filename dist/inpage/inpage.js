@@ -1520,7 +1520,8 @@ $(function () {
             var fullSet = {
                 name: original.name || "toolbar",
                 groups: original.groups || [],
-                defaults: original.defaults || {}
+                defaults: original.defaults || {},      // the button defaults like icon, etc.
+                parameters: original.parameters || {}   // these are the default command parameters
             };
 
             // not an array, but with property action - with one or more verbs, so it must be a button or a short-list of buttons
@@ -1544,10 +1545,6 @@ $(function () {
         expandCompactedSyntax: function(fullSet, actions){ //, itemSettings) {
             // by now we should have a structure, let's check/fix the buttons
             for (var g = 0; g < fullSet.groups.length; g++) {
-                // enhance the group with the context of the other groups it's in
-                // 2016-10-20 2dm don't think I need this any more
-                // $2sxc._lib.extend(fullSet.groups[g], { index: g, groups: fullSet.groups });
-
                 // expand a verb-list like "edit,new" into objects like [{ action: "edit" }, {action: "new"}]
                 tools.expandBtnVerbs(fullSet.groups[g]);
 
@@ -1604,6 +1601,7 @@ $(function () {
                 btns = btns.split(",");
                 cmdTemplate = $.extend({}, grp);  // inherit all fields used in the button
                 delete cmdTemplate.buttons; // this one's not needed
+                delete cmdTemplate.name; // this one's not needed
             }
 
             // add each button - check if it's already an object or just the string
