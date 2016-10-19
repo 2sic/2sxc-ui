@@ -60,7 +60,9 @@
                     classesList = (actDef.classes || "").split(","),
                     box = $("<div/>"),
                     symbol = $("<i class=\"" + actDef.icon + "\" aria-hidden=\"true\"></i>"),
-                    onclick = actDef.onclick || "$2sxc(" + id + ", " + cbid + ").manage.action(" + JSON.stringify(actDef.command, tb._jsonifyFilterGroup) + ", event);";
+                    onclick = actDef.onclick || "$2sxc(" + id + ", " + cbid + ").manage.action(" + JSON.stringify(actDef.command /*, tb._jsonifyFilterGroup*/) + ", event);";
+
+                console.log("onclick: " + onclick);
 
                 for (var c = 0; c < classesList.length; c++)
                     showClasses += " " + classesList[c];
@@ -84,12 +86,18 @@
 
             // Builds the toolbar and returns it as HTML
             // expects settings - either for 1 button or for an array of buttons
-            getToolbar: function(settings) {
-                // if it has an action or is an array, keep that. Otherwise get standard buttons
-                if(!settings.action && !Array.isArray(settings)) // if single item with specified action, use this as our button-list
-                    settings = tbManager.standardButtons(editContext.User.CanDesign);
+            getToolbar: function (settings) {
+                if ($2sxc.debug.load) {
+                    console.log("creating toolbar");
+                    console.log(settings);
+                }
 
-                var btns = tbManager.buttonHelpers.createFlatList(settings, allActions, settings, tb.config);
+                // if it has an action or is an array, keep that. Otherwise get standard buttons
+                var btnList = settings;
+                if (!settings.action && !Array.isArray(settings)) 
+                    btnList = tbManager.standardButtons(editContext.User.CanDesign, settings);
+
+                var btns = tbManager.buttonHelpers.createFlatList(btnList, allActions, settings, tb.config);
                 
 
                 var tbClasses = "sc-menu group-0 " + ((settings.sortOrder === -1) ? " listContent" : "");

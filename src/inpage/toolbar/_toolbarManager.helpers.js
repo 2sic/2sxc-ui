@@ -5,24 +5,24 @@
     var tools = $2sxc._toolbarManager.buttonHelpers = {
 
         createFlatList: function (unstructuredConfig, actions, itemSettings, config) {
+            var clonedSettings = $.extend(true, {}, itemSettings); // make sure I have a clean clone, otherwise it may get modified as I work with it
+
             var realConfig = tools.ensureHierarchy(unstructuredConfig);
 
-            // tools.structureButtonsWithDefaults(realConfig);
+            tools.expandCompactedSyntax(realConfig, actions, clonedSettings);
 
             var btnList = tools.flattenList(realConfig);
-            for (var i = 0; i < btnList.length; i++) 
-                tools.btnCleanVariousInputFormats(btnList[i], actions, itemSettings);
 
-            tools.removeButtonsWithUnmetConditions(btnList, itemSettings, config);
+            tools.removeButtonsWithUnmetConditions(btnList, clonedSettings, config);
             return btnList;
         },
 
-        btnCleanVariousInputFormats: function(btn, actions){//, itemSettings) {
-            // warn about buttons which don't have an action or an own click-event
+        btnCleanVariousInputFormats: function(btn, actions, itemSettings) {
+            // warn about buttons which don't have a known action
             tools.btnWarnUnknownAction(btn, actions);
 
             // enhance the button with settings for this instance
-            // tools.btnAddItemSettings(btn, itemSettings);
+            tools.btnAddItemSettings(btn, itemSettings);
 
             // ensure all buttons have either own settings, or the fallbacks
             tools.btnAttachMissingSettings(btn, actions);            
@@ -41,6 +41,9 @@
                 defaults: original.defaults || {}
             };
 
+            // not an array, but with property action - with one or more verbs, so it must be a button or a short-list of buttons
+            if (!Array.isArray(original) && original.action)
+                original = [$.extend({}, original)];
 
             // a simple case: arrays of either buttons or button-groups, having at least 1 item
             if (Array.isArray(original) && original[0]) {
@@ -53,46 +56,30 @@
                     fullSet.groups.push({ buttons: original });
             }
 
-            // not an array, but with property action - with one or more verbs, so it must be a button or a short-list of buttons
-            else if (original.action) 
-                fullSet.groups.push({ buttons: [original] });
-            
-
-            // by now we should have a structure, let's check/fix the buttons
-            for (var g = 0; g < fullSet.groups.length; g++) {
-                var btns = fullSet.groups[g].buttons;
-                if (Array.isArray(btns))
-                    for (var b = 0; b < btns.length; b++)
-                        btns[b] = tools.expandFlatBtnDef(btns[b]);
-            }
-
             return fullSet;
         },
 
-        // ensure that if a button is an unfinished button-object, it's correctly restructured
-        //structureButtonsWithDefaults: function(fullSet) {
-        //    for (var g = 0; g < fullSet.groups.length; g++) {
-        //        var btns = fullSet.groups[g].buttons;
-        //
-        //        if(Array.isArray(btns))
-        //            for (var b = 0; b < btns.length; b++)
-        //                btns[b] = tools.expandFlatBtnDef(btns[b]);
-        //            //{
-        //                //var btn = btns[b];
-        //                //
-        //                //if (!btn.defaults && Object.keys(btn).length > 0) { // has multiple properties but not mapped to defaults
-        //                //    btns[b] = {
-        //                //        action: btn.action,
-        //                //        defaults: btn
-        //                //    };
-        //                //    delete btns[b].defaults.action;
-        //                //}
-        //            //};
-        //    }
-        //},
+        expandCompactedSyntax: function(fullSet, actions, itemSettings) {
+            // by now we should have a structure, let's check/fix the buttons
+            for (var g = 0; g < fullSet.groups.length; g++) {
+                // enhance the group with the context of the other groups it's in
+                $2sxc._lib.extend(fullSet.groups[g], { index: g, groups: fullSet.groups });
+
+                // expand a verb-list like "edit,new" into objects like [{ action: "edit" }, {action: "new"}]
+                tools.expandBtnVerbs(fullSet.groups[g]);
+
+                // fix all the buttons
+                var btns = fullSet.groups[g].buttons;
+                if (Array.isArray(btns))
+                    for (var b = 0; b < btns.length; b++) {
+                        btns[b] = tools.expandFlatBtnDef(btns[b]);
+                        tools.btnCleanVariousInputFormats(btns[b], actions, itemSettings);
+                    }
+            }
+        },
 
         expandFlatBtnDef: function(btn) {
-            if (!btn.defaults && Object.keys(btn).length > 1) { // has multiple properties but not mapped to defaults
+            if (!(btn._expanded || btn.defaults || btn.command) && Object.keys(btn).length > 1) { // has multiple properties but not mapped to defaults
                 btn = {
                     action: btn.action,
                     defaults: btn
@@ -110,23 +97,36 @@
             var flatList = [];
             for (var s = 0; s < btnGroups.length; s++) {
                 // first, enrich the set so it knows about it's context
-                var grp = $2sxc._lib.extend(btnGroups[s], { index: s, groups: btnGroups});
+                var grp = btnGroups[s];// $2sxc._lib.extend(btnGroups[s], { index: s, groups: btnGroups});
 
                 // now process the buttons if string-format
-                var btns = grp.buttons;
-                if (typeof btns === "string")
-                    btns = btns.split(",");
+                //var btns = grp.buttons;
+                //if (typeof btns === "string")
+                //    btns = btns.split(",");
 
                 // add each button - check if it's already an object or just the string
-                for (var v = 0; v < btns.length; v++) {
-                    btns[v] = tools.expandButtonConfig(btns[v]);
-                    btns[v].group = grp;    // attach group reference, needed for fallback etc.
-                    flatList.push(btns[v]);
+                for (var v = 0; v < grp.buttons.length; v++) {
+                    //btns[v] = tools.expandButtonConfig(btns[v]);
+                    //btns[v].group = grp;    // attach group reference, needed for fallback etc.
+                    flatList.push(grp.buttons[v]);
                 }
-                grp.buttons = btns; // ensure the internal def is also an array now
+                //grp.buttons = btns; // ensure the internal def is also an array now
             }
             full.flat = flatList;
             return flatList;
+        },
+
+        expandBtnVerbs: function(grp) {
+            var btns = grp.buttons;
+            if (typeof btns === "string")
+                btns = btns.split(",");
+
+            // add each button - check if it's already an object or just the string
+            for (var v = 0; v < btns.length; v++) {
+                btns[v] = tools.expandButtonConfig(btns[v]);
+                btns[v].group = grp;    // attach group reference, needed for fallback etc.
+            }
+            grp.buttons = btns; // ensure the internal def is also an array now
         },
 
         // takes an object like "actionname" or { action: "actionname", ... } and changes it to a { command: { action: "actionname" }, ... }
@@ -166,7 +166,7 @@
         },
 
         btnAddItemSettings: function(btn, itemSettings) {
-            $2sxc._lib.extend(btn.command, itemSettings);
+            //$2sxc._lib.extend(btn.command, itemSettings);
         },
 
         btnProperties: [
@@ -176,6 +176,7 @@
             "dynamicClasses",
             "showCondition"
         ],
+
         actProperties: [
             "params"    // todo: maybe different! DOESN'T WORK YET - MUST IMPLEMENT
         ],
@@ -189,6 +190,7 @@
         fallbackOneSetting: function(btn, actions, propName) {
             btn[propName] = btn[propName]   // by if already defined, use the already defined propery
                 || (btn.group.defaults && btn.group.defaults[propName])     // if the group has defaults, try use use that property
+                || (btn.group.groups && btn.group.groups.defaults && btn.group.groups.defaults[propName])     // if the group has defaults, try use use that property
                 || (actions[btn.command.action] && actions[btn.command.action][propName]); // if there is an action, try to use that property name
         }
     };
