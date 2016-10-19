@@ -50,13 +50,12 @@
             actions: allActions,
             // Generate a button (an <a>-tag) for one specific toolbar-action. 
             // Expects: settings, an object containing the specs for the expected buton
-            getButton: function (actDef) {
+            getButton: function (actDef, groupIndex) {
                 // if the button belongs to a content-item, move the specs up to the item into the settings-object
                 flattenActionDefinition(actDef);
 
                 // retrieve configuration for this button
-                var groupId = actDef.group.index,
-                    showClasses = "group-" + groupId,
+                var showClasses = "group-" + groupIndex,
                     classesList = (actDef.classes || "").split(","),
                     box = $("<div/>"),
                     symbol = $("<i class=\"" + actDef.icon + "\" aria-hidden=\"true\"></i>"),
@@ -78,10 +77,10 @@
                 return button[0].outerHTML;
             },
 
-            _jsonifyFilterGroup: function (key, value) {
-                return key === "groups" ? undefined : value;
-                //return key === "group" || key === "icon" || key === "title" ? undefined : value;
-            },
+            //_jsonifyFilterGroup: function (key, value) {
+            //    return key === "groups" ? undefined : value;
+            //    //return key === "group" || key === "icon" || key === "title" ? undefined : value;
+            //},
 
 
             // Builds the toolbar and returns it as HTML
@@ -97,17 +96,20 @@
                 if (!settings.action && !Array.isArray(settings)) 
                     btnList = tbManager.standardButtons(editContext.User.CanDesign, settings);
 
-                var btns = tbManager.buttonHelpers.createFlatList(btnList, allActions, settings, tb.config);
-                
+                var tlbDef = tbManager.buttonHelpers.buildFullDefinition(btnList, allActions, /*settings,*/ tb.config);
+                var btnGroups = tlbDef.groups;
 
+                // todo: this settings assumes it's not in an array...
                 var tbClasses = "sc-menu group-0 " + ((settings.sortOrder === -1) ? " listContent" : "");
                 var toolbar = $("<ul />", { 'class': tbClasses, 'onclick': "var e = arguments[0] || window.event; e.stopPropagation();" });
 
-                for (var i = 0; i < btns.length; i++)
-                    toolbar.append($("<li />").append($(tb.getButton(btns[i]))));
+                for (var g = 0; g < btnGroups.length; g++) {
+                    var btns = btnGroups[g].buttons;
+                    for (var i = 0; i < btns.length; i++)
+                        toolbar.append($("<li />").append($(tb.getButton(btns[i], g))));
+                }
 
-                //toolbar.data("groups", btns[0] && btns[0].group.groups);
-                toolbar.attr("group-count", btns[0] && btns[0].group.groups.length);
+                toolbar.attr("group-count", btnGroups.length);
 
                 return toolbar[0].outerHTML;
             },
