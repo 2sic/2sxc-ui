@@ -9,7 +9,7 @@
                 // execute the action
                 sxc.manage.action(actionName, config, event);
             }
-
+             
         };
 
         sxc.inlineUi = {

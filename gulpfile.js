@@ -10,12 +10,15 @@ var gulp = require("gulp"),
     config = {
         debug: true,
         autostart: true,
+        autopublish: true,
+        autopublishTarget: "./../2SexyContent/Web/DesktopModules/ToSIC_SexyContent/dist",
+        autopublishTargetJs: "./../2SexyContent/Web/DesktopModules/ToSIC_SexyContent/js",
         rootDist: "dist/" // "tmp-gulp/dist/"
     };
 
 
 // register all watches & run them
-gulp.task("watch-our-code", function () {
+gulp.task("A-watch-our-code", function () {
     watchSet(createSetsForOurCode());
     watchDnnUi();
 });
@@ -24,8 +27,24 @@ gulp.task("import-libs", function() {
     importDependencies();
 });
 
-gulp.task("watch-snippets", function() {
+gulp.task("C-watch-snippets", function() {
     watchSnippets();
+});
+
+// deploy the result to the current 2sxc-dev
+gulp.task("publish-dist-to-2sxc", function () {
+    gulp.src(["./dist/**/*"])
+        //"!./dist/i18n/**/*",
+        //"!./dist/lib/fonts/**/*"])
+    .pipe(gulp.dest(config.autopublishTarget));
+});
+gulp.task("publish-js-to-2sxc", function () {
+    gulp.src(["./js/**/*"])
+    .pipe(gulp.dest(config.autopublishTargetJs));
+});
+gulp.task("B-watch-publish-to-2sxc", function () {
+    gulp.watch("dist/**/*", ["publish-dist-to-2sxc"]);
+    gulp.watch("js/**/*", ["publish-js-to-2sxc"]);
 });
 
 
