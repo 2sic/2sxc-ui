@@ -1349,8 +1349,9 @@ $(function () {
 (function () {
     var tbManager = $2sxc._toolbarManager;
     tbManager.create = function (sxc, editContext) {
-        var id = sxc.id, cbid = sxc.cbid;
-        var allActions = $2sxc._actions.create({
+        var id = sxc.id,
+            cbid = sxc.cbid,
+            allActions = $2sxc._actions.create({
             canDesign: editContext.User.CanDesign,
             templateId: editContext.ContentGroup.TemplateId,
             contentTypeId: editContext.ContentGroup.ContentTypeName
@@ -1364,7 +1365,7 @@ $(function () {
                 moduleId: context.Environment.InstanceId,
                 version: context.Environment.SxcVersion,
 
-                contentGroupId: context.ContentGroup.Guid, // todo 8.4
+                contentGroupId: context.ContentGroup.Guid, 
                 cbIsEntity: context.ContentBlock.IsEntity,
                 cbId: context.ContentBlock.Id,
                 appPath: context.ContentGroup.AppUrl,
@@ -1407,7 +1408,7 @@ $(function () {
                     classesList = (actDef.classes || "").split(","),
                     box = $("<div/>"),
                     symbol = $("<i class=\"" + actDef.icon + "\" aria-hidden=\"true\"></i>"),
-                    onclick = actDef.onclick || "$2sxc(" + id + ", " + cbid + ").manage.action(" + JSON.stringify(actDef.command) + ", event);";
+                    onclick = actDef.onclick || "$2sxc(" + id + ", " + cbid + ").manage.action(" + JSON.stringify(actDef.command, tb._jsonifyFilterGroup) + ", event);";
 
                 for (var c = 0; c < classesList.length; c++)
                     showClasses += " " + classesList[c];
@@ -1423,21 +1424,20 @@ $(function () {
                 return button[0].outerHTML;
             },
 
-            _jsonifyFilterGroup: function(key, value) {
-                return key === "group" || key === "icon" || key === "title" ? undefined : value;
+            _jsonifyFilterGroup: function (key, value) {
+                return key === "groups" ? undefined : value;
+                //return key === "group" || key === "icon" || key === "title" ? undefined : value;
             },
 
 
             // Builds the toolbar and returns it as HTML
             // expects settings - either for 1 button or for an array of buttons
             getToolbar: function(settings) {
-                var actionList = settings.action
-                    ? [settings] // if single item with specified action, use this as our button-list
-                    : $.isArray(settings)
-                        ? settings // if it is an array, use that. Otherwise assume that we auto-generate all buttons with supplied settings
-                        : tbManager.standardButtons(editContext.User.CanDesign);
+                // if it has an action or is an array, keep that. Otherwise get standard buttons
+                if(!settings.action && !Array.isArray(settings)) // if single item with specified action, use this as our button-list
+                    settings = tbManager.standardButtons(editContext.User.CanDesign);
 
-                var btns = tbManager.buttonHelpers.createFlatList(actionList, allActions, settings, tb.config);
+                var btns = tbManager.buttonHelpers.createFlatList(settings, allActions, settings, tb.config);
                 
 
                 var tbClasses = "sc-menu group-0 " + ((settings.sortOrder === -1) ? " listContent" : "");
@@ -1481,6 +1481,8 @@ $(function () {
         createFlatList: function (unstructuredConfig, actions, itemSettings, config) {
             var realConfig = tools.ensureHierarchy(unstructuredConfig);
 
+            // tools.structureButtonsWithDefaults(realConfig);
+
             var btnList = tools.flattenList(realConfig);
             for (var i = 0; i < btnList.length; i++) 
                 tools.btnCleanVariousInputFormats(btnList[i], actions, itemSettings);
@@ -1489,31 +1491,89 @@ $(function () {
             return btnList;
         },
 
-        btnCleanVariousInputFormats: function(btn, actions, itemSettings) {
+        btnCleanVariousInputFormats: function(btn, actions){//, itemSettings) {
             // warn about buttons which don't have an action or an own click-event
             tools.btnWarnUnknownAction(btn, actions);
 
             // enhance the button with settings for this instance
-            tools.btnAddItemSettings(btn, itemSettings);
+            // tools.btnAddItemSettings(btn, itemSettings);
 
             // ensure all buttons have either own settings, or the fallbacks
             tools.btnAttachMissingSettings(btn, actions);            
         },
 
         ensureHierarchy: function (original) {
+            // original is null/undefined, just return empty set
+            if (!original)
+                throw ("preparing toolbar, with nothing to work on: " + original);
+
             // goal: return an object with this structure
+            // so we'll import what we can, and check/fix/build what came in differently
             var fullSet = {
-                name: "my toolbar",
-                groups: [],
-                defaults: {}
+                name: original.name || "toolbar",
+                groups: original.groups || [],
+                defaults: original.defaults || {}
             };
 
-            // the second simplest case: just an array of buttons, each configured
-            if (Array.isArray(original)) {
-                fullSet.groups = original;
-                return fullSet;
+
+            // a simple case: arrays of either buttons or button-groups, having at least 1 item
+            if (Array.isArray(original) && original[0]) {
+                // an array of items having buttons, so it must be button-groups
+                if (original[0].buttons)
+                    fullSet.groups = original;
+
+                // array of items having an action, so these are buttons
+                else if (original[0].action) 
+                    fullSet.groups.push({ buttons: original });
             }
-            return original;
+
+            // not an array, but with property action - with one or more verbs, so it must be a button or a short-list of buttons
+            else if (original.action) 
+                fullSet.groups.push({ buttons: [original] });
+            
+
+            // by now we should have a structure, let's check/fix the buttons
+            for (var g = 0; g < fullSet.groups.length; g++) {
+                var btns = fullSet.groups[g].buttons;
+                if (Array.isArray(btns))
+                    for (var b = 0; b < btns.length; b++)
+                        btns[b] = tools.expandFlatBtnDef(btns[b]);
+            }
+
+            return fullSet;
+        },
+
+        // ensure that if a button is an unfinished button-object, it's correctly restructured
+        //structureButtonsWithDefaults: function(fullSet) {
+        //    for (var g = 0; g < fullSet.groups.length; g++) {
+        //        var btns = fullSet.groups[g].buttons;
+        //
+        //        if(Array.isArray(btns))
+        //            for (var b = 0; b < btns.length; b++)
+        //                btns[b] = tools.expandFlatBtnDef(btns[b]);
+        //            //{
+        //                //var btn = btns[b];
+        //                //
+        //                //if (!btn.defaults && Object.keys(btn).length > 0) { // has multiple properties but not mapped to defaults
+        //                //    btns[b] = {
+        //                //        action: btn.action,
+        //                //        defaults: btn
+        //                //    };
+        //                //    delete btns[b].defaults.action;
+        //                //}
+        //            //};
+        //    }
+        //},
+
+        expandFlatBtnDef: function(btn) {
+            if (!btn.defaults && Object.keys(btn).length > 1) { // has multiple properties but not mapped to defaults
+                btn = {
+                    action: btn.action,
+                    defaults: btn
+                };
+                delete btn.defaults.action;
+            }
+            return btn;
         },
 
 
@@ -1534,7 +1594,7 @@ $(function () {
                 // add each button - check if it's already an object or just the string
                 for (var v = 0; v < btns.length; v++) {
                     btns[v] = tools.expandButtonConfig(btns[v]);
-                    btns[v].group = grp;    // attach group reference
+                    btns[v].group = grp;    // attach group reference, needed for fallback etc.
                     flatList.push(btns[v]);
                 }
                 grp.buttons = btns; // ensure the internal def is also an array now

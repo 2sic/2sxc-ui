@@ -43,8 +43,8 @@ gulp.task("publish-js-to-2sxc", function () {
     .pipe(gulp.dest(config.autopublishTargetJs));
 });
 gulp.task("B-watch-publish-to-2sxc", function () {
-    gulp.watch("dist/**/*", ["publish-dist-to-2sxc"]);
-    gulp.watch("js/**/*", ["publish-js-to-2sxc"]);
+    gulp.watch("./dist/**/*", ["publish-dist-to-2sxc"]);
+    gulp.watch("./js/**/*", ["publish-js-to-2sxc"]);
 });
 
 
