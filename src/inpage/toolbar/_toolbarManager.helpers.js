@@ -68,18 +68,12 @@
                 var btns = fullSet.groups[g].buttons;
                 if (Array.isArray(btns))
                     for (var b = 0; b < btns.length; b++) {
-                        // warn about buttons which don't have a known action
-                        tools.btnWarnUnknownAction(btns[b], actions);
-
-                        // enhance the button with settings for this instance
-                        tools.btnAddItemSettings(btns[b], fullSet.parameters);// itemSettings);
-
-                        // ensure all buttons have either own settings, or the fallbacks
-                        tools.btnAttachMissingSettings(btns[b], actions);
+                        tools.btnWarnUnknownAction(btns[b], actions);           // warn about buttons which don't have a known action
+                        tools.btnAddItemSettings(btns[b], fullSet.parameters);  // enhance the button with settings for this instance
+                        tools.btnAttachMissingSettings(btns[b], actions);       // ensure all buttons have either own settings, or the fallbacks
                     }
             }
         },
-
 
         btnAddItemSettings: function (btn, itemSettings) {
             $2sxc._lib.extend(btn.command, itemSettings);
@@ -110,14 +104,21 @@
             return flatList;
         },
 
-        expandBtnVerbs: function(grp) {
-            var btns = grp.buttons;
+        expandBtnVerbs: function (grp) {
+            var root = grp; // the root object which has all params of the command
+            var btns = root.buttons;
+            if (Array.isArray(btns) && btns.length === 1 && btns[0].action) { // if btns. is neither array nor string, it's a short-hand with action names
+                root = btns[0];
+                btns = root.action;
+            }
+
             var cmdTemplate = null;
             if (typeof btns === "string") {
                 btns = btns.split(",");
-                cmdTemplate = $.extend({}, grp);  // inherit all fields used in the button
+                cmdTemplate = $.extend({}, root);  // inherit all fields used in the button
                 delete cmdTemplate.buttons; // this one's not needed
-                delete cmdTemplate.name; // this one's not needed
+                delete cmdTemplate.name;    // this one's not needed
+                delete cmdTemplate.action;  //
             }
 
             // add each button - check if it's already an object or just the string
