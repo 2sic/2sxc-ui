@@ -498,7 +498,12 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
             "app-import": action("app-import", "Dashboard", "", "", true, {}),
 
             // open an edit-item dialog
-            'edit': action("edit", "Edit", "pencil", "default", false, { params: { mode: "edit" } }),
+            'edit': action("edit", "Edit", "pencil", "default", false, {
+                params: { mode: "edit" },
+                showCondition: function (settings, modConfig) {
+                    return modConfig.entityId || settings.useModuleList; // need ID or a "slot", otherwise edit won't work
+                }
+            }),
 
             // new is a dialog to add something, and will not add if cancelled
             // new can also be used for mini-toolbars which just add an entity not attached to a module
@@ -584,7 +589,9 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
                 }
             }),
             'movedown': action("movedown", "MoveDown", "move-down", "edit", false, {
-                showCondition: function (settings, modConfig) { return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1; },
+                showCondition: function(settings, modConfig) {
+                    return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1;
+                },
                 code: function (settings, event, manager) {
                     manager.contentBlock.changeOrder(settings.sortOrder, settings.sortOrder + 1);
                 }
@@ -1497,20 +1504,17 @@ $(function () {
         // just a command: { entityId: 17, action: "edit" }
         // array of commands: [{entityId: 17, action: "edit"}, {contentType: "blog", action: "new"}]
         buildFullDefinition: function (unstructuredConfig, actions, /*itemSettings, */ config) {
-            //var clonedSettings = $.extend(true, {}, itemSettings); // make sure I have a clean clone, otherwise it may get modified as I work with it
-
             var realConfig = tools.ensureDefinitionTree(unstructuredConfig);
 
-            tools.expandCompactedSyntax(realConfig, actions);//, clonedSettings);
+            tools.expandButtonGroups(realConfig, actions);
 
-            var btnList = tools.flattenList(realConfig);
-
-            // todo: must correct to work with grouped sets (not just in flat-list)
-            tools.removeButtonsWithUnmetConditions(btnList, /*clonedSettings,*/ config);
+            tools.removeButtonsWithUnmetConditions(realConfig, config);
             return realConfig;
-            //return btnList;
         },
 
+        // this will take an input which could already be a tree, but it could also be a 
+        // button-definition, or just a string, and make sure that afterwards it's a tree with groups
+        // the groups could still be in compact form, or already expanded, dependending on the input
         ensureDefinitionTree: function (original) {
             // original is null/undefined, just return empty set
             if (!original) throw ("preparing toolbar, with nothing to work on: " + original);
@@ -1542,53 +1546,28 @@ $(function () {
             return fullSet;
         },
 
-        expandCompactedSyntax: function(fullSet, actions){ //, itemSettings) {
+        // this will traverse a groups-tree and expand each group
+        // so if groups were just strings like "edit,new" or compact buttons, they will be expanded afterwards
+        expandButtonGroups: function(fullSet, actions){ //, itemSettings) {
             // by now we should have a structure, let's check/fix the buttons
             for (var g = 0; g < fullSet.groups.length; g++) {
                 // expand a verb-list like "edit,new" into objects like [{ action: "edit" }, {action: "new"}]
-                tools.expandBtnVerbs(fullSet.groups[g]);
+                tools.expandButtonList(fullSet.groups[g]);
 
                 // fix all the buttons
                 var btns = fullSet.groups[g].buttons;
                 if (Array.isArray(btns))
                     for (var b = 0; b < btns.length; b++) {
-                        tools.btnWarnUnknownAction(btns[b], actions);           // warn about buttons which don't have a known action
-                        tools.btnAddItemSettings(btns[b], fullSet.parameters);  // enhance the button with settings for this instance
-                        tools.btnAttachMissingSettings(btns[b], actions);       // ensure all buttons have either own settings, or the fallbacks
+                        tools.btnWarnUnknownAction(btns[b], actions);       // warn about buttons which don't have a known action
+                        $2sxc._lib.extend(btns[b].command, fullSet.parameters);     // enhance the button with settings for this instance
+                        tools.addDefaultBtnSettings(btns[b], actions);   // ensure all buttons have either own settings, or the fallbacks
                     }
             }
         },
 
-        btnAddItemSettings: function (btn, itemSettings) {
-            $2sxc._lib.extend(btn.command, itemSettings);
-        },
-
-        // change a hierarchy of buttons into a flat, simpler list
-        flattenList: function (full) {
-            var btnGroups = full.groups;
-            var flatList = [];
-            for (var s = 0; s < btnGroups.length; s++) {
-                // first, enrich the set so it knows about it's context
-                var grp = btnGroups[s];// $2sxc._lib.extend(btnGroups[s], { index: s, groups: btnGroups});
-
-                // now process the buttons if string-format
-                //var btns = grp.buttons;
-                //if (typeof btns === "string")
-                //    btns = btns.split(",");
-
-                // add each button - check if it's already an object or just the string
-                for (var v = 0; v < grp.buttons.length; v++) {
-                    //btns[v] = tools.expandButtonConfig(btns[v]);
-                    //btns[v].group = grp;    // attach group reference, needed for fallback etc.
-                    flatList.push(grp.buttons[v]);
-                }
-                //grp.buttons = btns; // ensure the internal def is also an array now
-            }
-            full.flat = flatList;
-            return flatList;
-        },
-
-        expandBtnVerbs: function (grp) {
+        // take a list of buttons (objects OR strings)
+        // and convert to proper array of buttons with actions
+        expandButtonList: function (grp) {
             var root = grp; // the root object which has all params of the command
             var btns = root.buttons;
             if (Array.isArray(btns) && btns.length === 1 && btns[0].action) { // if btns. is neither array nor string, it's a short-hand with action names
@@ -1641,17 +1620,26 @@ $(function () {
         },
 
         // remove buttons which are not valid based on add condition
-        removeButtonsWithUnmetConditions: function(btnList, /*settings,*/ config) {
-            for (var i = 0; i < btnList.length; i++) {
-                var add = btnList[i].showCondition;
-                if (add !== undefined && (typeof (add) === "function"))
-                    if (!add(/* settings*/ btnList[i].command, config)) {
-                        btnList.splice(i, 1);
-                        i--;
-                    }
+        removeButtonsWithUnmetConditions: function (full, config) {
+            var btnGroups = full.groups;
+            for (var g = 0; g < btnGroups.length; g++) {
+                var btns = btnGroups[g].buttons;
+                tools.removeButtonsIfAddUnmet(btns, config);
+
+                // remove the group, if no buttons left, or only "more"
+                if (btns.length === 0 || (btns.length === 1 && btns[0].command.action === "more"))
+                    btnGroups.splice(g--, 1);   // remove, and decrement counter
             }
         },
 
+        removeButtonsIfAddUnmet(btns, config) {
+            for (var i = 0; i < btns.length; i++) {
+                var add = btns[i].showCondition;
+                if (add !== undefined && (typeof (add) === "function"))
+                    if (!add(btns[i].command, config))
+                        btns.splice(i--, 1);
+            }
+        },
 
         btnProperties: [
             "classes",
@@ -1664,11 +1652,7 @@ $(function () {
             "defaults"
         ],
 
-        actProperties: [
-            "params"    // todo: maybe different! DOESN'T WORK YET - MUST IMPLEMENT
-        ],
-
-        btnAttachMissingSettings: function(btn, actions) {
+        addDefaultBtnSettings: function(btn, actions) {
             for (var d = 0; d < tools.btnProperties.length; d++)
                 tools.fallbackOneSetting(btn, actions, tools.btnProperties[d]);
         },

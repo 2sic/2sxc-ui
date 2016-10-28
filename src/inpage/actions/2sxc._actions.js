@@ -37,7 +37,12 @@
             "app-import": action("app-import", "Dashboard", "", "", true, {}),
 
             // open an edit-item dialog
-            'edit': action("edit", "Edit", "pencil", "default", false, { params: { mode: "edit" } }),
+            'edit': action("edit", "Edit", "pencil", "default", false, {
+                params: { mode: "edit" },
+                showCondition: function (settings, modConfig) {
+                    return modConfig.entityId || settings.useModuleList; // need ID or a "slot", otherwise edit won't work
+                }
+            }),
 
             // new is a dialog to add something, and will not add if cancelled
             // new can also be used for mini-toolbars which just add an entity not attached to a module
@@ -123,7 +128,9 @@
                 }
             }),
             'movedown': action("movedown", "MoveDown", "move-down", "edit", false, {
-                showCondition: function (settings, modConfig) { return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1; },
+                showCondition: function(settings, modConfig) {
+                    return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1;
+                },
                 code: function (settings, event, manager) {
                     manager.contentBlock.changeOrder(settings.sortOrder, settings.sortOrder + 1);
                 }
