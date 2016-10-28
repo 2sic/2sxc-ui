@@ -6,19 +6,17 @@
 
         // take any common input format and convert it to a full toolbar-structure definition
         // can handle the following input formats (the param unstructuredConfig):
-        // complete tree: { name: ..., groups: [ {}, {}], defaults: {...} } 
-        // group of buttons: { name: ..., buttons: "..." | [] }
-        // list of buttons: [ { action: "..." | []}, { action: ""|[]} ]
-        // button: { action: ""|[], icon: "..", ... }
-        // just a command: { entityId: 17, action: "edit" }
-        // array of commands: [{entityId: 17, action: "edit"}, {contentType: "blog", action: "new"}]
-        buildFullDefinition: function (unstructuredConfig, actions, /*itemSettings, */ config) {
-            var realConfig = tools.ensureDefinitionTree(unstructuredConfig);
-
-            tools.expandButtonGroups(realConfig, actions);
-
-            tools.removeButtonsWithUnmetConditions(realConfig, config);
-            return realConfig;
+        // complete tree (detected by "groups): { name: ..., groups: [ {}, {}], defaults: {...} } 
+        // group of buttons (detected by "buttons): { name: ..., buttons: "..." | [] }
+        // list of buttons (detected by IsArray): [ { action: "..." | []}, { action: ""|[]} ]
+        // button (detected by "command"): { command: ""|[], icon: "..", ... }
+        // just a command (detected by "action"): { entityId: 17, action: "edit" }
+        // array of commands/buttons: [{entityId: 17, action: "edit"}, {contentType: "blog", action: "new"}]
+        buildFullDefinition: function (unstructuredConfig, actions, config) {
+            var fullConfig = tools.ensureDefinitionTree(unstructuredConfig);
+            tools.expandButtonGroups(fullConfig, actions);
+            tools.removeButtonsWithUnmetConditions(fullConfig, config);
+            return fullConfig;
         },
 
         // this will take an input which could already be a tree, but it could also be a 

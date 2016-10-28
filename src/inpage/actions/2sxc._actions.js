@@ -52,7 +52,7 @@
                 params: { mode: "new" },
                 dialog: "edit", // don't use "new" (default) but use "edit"
                 showCondition: function (settings, modConfig) {
-                    return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1; // don't provide new on the header-item
+                    return settings.contentType || modConfig.isList && settings.useModuleList && settings.sortOrder !== -1; // don't provide new on the header-item
                 },
                 code: function (settings, event, manager) {
                     // todo - should refactor this to be a toolbarManager.contentBlock command

@@ -513,7 +513,7 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
                 params: { mode: "new" },
                 dialog: "edit", // don't use "new" (default) but use "edit"
                 showCondition: function (settings, modConfig) {
-                    return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1; // don't provide new on the header-item
+                    return settings.contentType || modConfig.isList && settings.useModuleList && settings.sortOrder !== -1; // don't provide new on the header-item
                 },
                 code: function (settings, event, manager) {
                     // todo - should refactor this to be a toolbarManager.contentBlock command
@@ -1445,7 +1445,7 @@ $(function () {
                 // if it has an action or is an array, keep that. Otherwise get standard buttons
                 settings = settings || {};// if null/undefined, use empty object
                 var btnList = settings; 
-                if (!settings.action && !Array.isArray(settings))
+                if (!settings.action && !settings.groups && !settings.buttons && !Array.isArray(settings))
                     btnList = tbManager.standardButtons(editContext.User.CanDesign, settings);
 
                 var tlbDef = tbManager.buttonHelpers.buildFullDefinition(btnList, allActions, /*settings,*/ tb.config);
@@ -1474,20 +1474,26 @@ $(function () {
                 var toolbars = getToolbars();
                 if (toolbars.length === 0) // no toolbars found, must help a bit because otherwise editing is hard
                 {
-                    var outsideCB = !parentTag.hasClass('sc-content-block');
-                    var contentTag = outsideCB ? parentTag.find("div.sc-content-block") : parentTag;
+                    var outsideCb = !parentTag.hasClass('sc-content-block');
+                    var contentTag = outsideCb ? parentTag.find("div.sc-content-block") : parentTag;
                     contentTag.addClass("sc-element");
                     contentTag.prepend($("<ul class='sc-menu' data-toolbar=''/>"));
                     toolbars = getToolbars();
                 }
                 toolbars.each(function () {
-                    var toolbarSettings = $.parseJSON($(this).attr("data-toolbar"));
-                    var toolbarTag = $(this);
+                    var toolbarTag = $(this), data = toolbarTag.attr("data-toolbar"), toolbarSettings = null;
+                    try {
+                        toolbarSettings = $.parseJSON(data);
+                    }
+                    catch(err) {
+                        console.log("error on toolbar JSON - probably invalid - make sure you also quote your properties like \"name\": ...", data);
+                    }
+                    if (!toolbarSettings)
+                        return;
                     var newTb = $2sxc(toolbarTag).manage.getToolbar(toolbarSettings);
                     toolbarTag.replaceWith(newTb);
                 });
             }
-
 
         };
         return tb;
@@ -1505,19 +1511,17 @@ $(function () {
 
         // take any common input format and convert it to a full toolbar-structure definition
         // can handle the following input formats (the param unstructuredConfig):
-        // complete tree: { name: ..., groups: [ {}, {}], defaults: {...} } 
-        // group of buttons: { name: ..., buttons: "..." | [] }
-        // list of buttons: [ { action: "..." | []}, { action: ""|[]} ]
-        // button: { action: ""|[], icon: "..", ... }
-        // just a command: { entityId: 17, action: "edit" }
-        // array of commands: [{entityId: 17, action: "edit"}, {contentType: "blog", action: "new"}]
-        buildFullDefinition: function (unstructuredConfig, actions, /*itemSettings, */ config) {
-            var realConfig = tools.ensureDefinitionTree(unstructuredConfig);
-
-            tools.expandButtonGroups(realConfig, actions);
-
-            tools.removeButtonsWithUnmetConditions(realConfig, config);
-            return realConfig;
+        // complete tree (detected by "groups): { name: ..., groups: [ {}, {}], defaults: {...} } 
+        // group of buttons (detected by "buttons): { name: ..., buttons: "..." | [] }
+        // list of buttons (detected by IsArray): [ { action: "..." | []}, { action: ""|[]} ]
+        // button (detected by "command"): { command: ""|[], icon: "..", ... }
+        // just a command (detected by "action"): { entityId: 17, action: "edit" }
+        // array of commands/buttons: [{entityId: 17, action: "edit"}, {contentType: "blog", action: "new"}]
+        buildFullDefinition: function (unstructuredConfig, actions, config) {
+            var fullConfig = tools.ensureDefinitionTree(unstructuredConfig);
+            tools.expandButtonGroups(fullConfig, actions);
+            tools.removeButtonsWithUnmetConditions(fullConfig, config);
+            return fullConfig;
         },
 
         // this will take an input which could already be a tree, but it could also be a 

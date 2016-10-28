@@ -90,7 +90,7 @@
                 // if it has an action or is an array, keep that. Otherwise get standard buttons
                 settings = settings || {};// if null/undefined, use empty object
                 var btnList = settings; 
-                if (!settings.action && !Array.isArray(settings))
+                if (!settings.action && !settings.groups && !settings.buttons && !Array.isArray(settings))
                     btnList = tbManager.standardButtons(editContext.User.CanDesign, settings);
 
                 var tlbDef = tbManager.buttonHelpers.buildFullDefinition(btnList, allActions, /*settings,*/ tb.config);
@@ -119,20 +119,26 @@
                 var toolbars = getToolbars();
                 if (toolbars.length === 0) // no toolbars found, must help a bit because otherwise editing is hard
                 {
-                    var outsideCB = !parentTag.hasClass('sc-content-block');
-                    var contentTag = outsideCB ? parentTag.find("div.sc-content-block") : parentTag;
+                    var outsideCb = !parentTag.hasClass('sc-content-block');
+                    var contentTag = outsideCb ? parentTag.find("div.sc-content-block") : parentTag;
                     contentTag.addClass("sc-element");
                     contentTag.prepend($("<ul class='sc-menu' data-toolbar=''/>"));
                     toolbars = getToolbars();
                 }
                 toolbars.each(function () {
-                    var toolbarSettings = $.parseJSON($(this).attr("data-toolbar"));
-                    var toolbarTag = $(this);
+                    var toolbarTag = $(this), data = toolbarTag.attr("data-toolbar"), toolbarSettings = null;
+                    try {
+                        toolbarSettings = $.parseJSON(data);
+                    }
+                    catch(err) {
+                        console.log("error on toolbar JSON - probably invalid - make sure you also quote your properties like \"name\": ...", data);
+                    }
+                    if (!toolbarSettings)
+                        return;
                     var newTb = $2sxc(toolbarTag).manage.getToolbar(toolbarSettings);
                     toolbarTag.replaceWith(newTb);
                 });
             }
-
 
         };
         return tb;
