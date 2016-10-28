@@ -40,7 +40,7 @@
             'edit': action("edit", "Edit", "pencil", "default", false, {
                 params: { mode: "edit" },
                 showCondition: function (settings, modConfig) {
-                    return modConfig.entityId || settings.useModuleList; // need ID or a "slot", otherwise edit won't work
+                    return settings.entityId || settings.useModuleList; // need ID or a "slot", otherwise edit won't work
                 }
             }),
 

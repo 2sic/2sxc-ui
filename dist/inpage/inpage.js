@@ -501,7 +501,7 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
             'edit': action("edit", "Edit", "pencil", "default", false, {
                 params: { mode: "edit" },
                 showCondition: function (settings, modConfig) {
-                    return modConfig.entityId || settings.useModuleList; // need ID or a "slot", otherwise edit won't work
+                    return settings.entityId || settings.useModuleList; // need ID or a "slot", otherwise edit won't work
                 }
             }),
 
@@ -1366,17 +1366,18 @@ $(function () {
 
         // #region helper functions
         function createToolbarConfig(context) {
+            var c = context, ce = c.Environment, cg = c.ContentGroup, cb = c.ContentBlock;
             return {
-                portalId: context.Environment.WebsiteId,
-                tabId: context.Environment.PageId,
-                moduleId: context.Environment.InstanceId,
-                version: context.Environment.SxcVersion,
+                portalId: ce.WebsiteId,
+                tabId: ce.PageId,
+                moduleId: ce.InstanceId,
+                version: ce.SxcVersion,
 
-                contentGroupId: context.ContentGroup.Guid, 
-                cbIsEntity: context.ContentBlock.IsEntity,
-                cbId: context.ContentBlock.Id,
-                appPath: context.ContentGroup.AppUrl,
-                isList: context.ContentGroup.IsList
+                contentGroupId: cg.Guid, 
+                cbIsEntity: cb.IsEntity,
+                cbId: cb.Id,
+                appPath: cg.AppUrl,
+                isList: cg.IsList
             };
         }
 
@@ -1447,8 +1448,9 @@ $(function () {
                 }
 
                 // if it has an action or is an array, keep that. Otherwise get standard buttons
-                var btnList = settings;
-                if (!settings.action && !Array.isArray(settings)) 
+                settings = settings || {};// if null/undefined, use empty object
+                var btnList = settings; 
+                if (!settings.action && !Array.isArray(settings))
                     btnList = tbManager.standardButtons(editContext.User.CanDesign, settings);
 
                 var tlbDef = tbManager.buttonHelpers.buildFullDefinition(btnList, allActions, /*settings,*/ tb.config);
@@ -1472,7 +1474,16 @@ $(function () {
             // find all toolbar-info-attributes in the HTML, convert to <ul><li> toolbar
             _processToolbars: function (parentTag) {
                 parentTag = parentTag ? $(parentTag) : $(".DnnModule-" + id);
-                $(".sc-menu[data-toolbar]", parentTag).each(function() {
+                function getToolbars() { return $(".sc-menu[data-toolbar]", parentTag); }
+
+                var toolbars = getToolbars();
+                if (toolbars.length === 0) // no toolbars found, must help a bit because otherwise editing is hard
+                {
+                    parentTag.addClass("sc-element");
+                    parentTag.prepend($("auto-toolbar: <ul class='sc-menu' data-toolbar=''/> - end"));
+                    toolbars = getToolbars();
+                }
+                toolbars.each(function () {
                     var toolbarSettings = $.parseJSON($(this).attr("data-toolbar"));
                     var toolbarTag = $(this);
                     var newTb = $2sxc(toolbarTag).manage.getToolbar(toolbarSettings);
