@@ -29,7 +29,7 @@
             //},
             {
                 name: "default",
-                buttons: "edit,new,metadata,publish,more"
+                buttons: "edit,new,metadata,publish,layout,more"
             },
             {
                 name: "list",

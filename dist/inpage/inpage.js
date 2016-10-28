@@ -1433,11 +1433,6 @@ $(function () {
                 return button[0].outerHTML;
             },
 
-            //_jsonifyFilterGroup: function (key, value) {
-            //    return key === "groups" ? undefined : value;
-            //    //return key === "group" || key === "icon" || key === "title" ? undefined : value;
-            //},
-
 
             // Builds the toolbar and returns it as HTML
             // expects settings - either for 1 button or for an array of buttons
@@ -1479,8 +1474,10 @@ $(function () {
                 var toolbars = getToolbars();
                 if (toolbars.length === 0) // no toolbars found, must help a bit because otherwise editing is hard
                 {
-                    parentTag.addClass("sc-element");
-                    parentTag.prepend($("auto-toolbar: <ul class='sc-menu' data-toolbar=''/> - end"));
+                    var isOutsideContentBlock = !parentTag.hasClass('sc-content-block');
+                    var contentTag = isOutsideContentBlock ? parentTag.find("div.sc-content-block") : parentTag;
+                    contentTag.addClass("sc-element");
+                    contentTag.prepend($("<ul class='sc-menu' data-toolbar=''/>"));
                     toolbars = getToolbars();
                 }
                 toolbars.each(function () {
@@ -1725,7 +1722,7 @@ $(function () {
             //},
             {
                 name: "default",
-                buttons: "edit,new,metadata,publish,more"
+                buttons: "edit,new,metadata,publish,layout,more"
             },
             {
                 name: "list",
