@@ -1474,8 +1474,8 @@ $(function () {
                 var toolbars = getToolbars();
                 if (toolbars.length === 0) // no toolbars found, must help a bit because otherwise editing is hard
                 {
-                    var isOutsideContentBlock = !parentTag.hasClass('sc-content-block');
-                    var contentTag = isOutsideContentBlock ? parentTag.find("div.sc-content-block") : parentTag;
+                    var outsideCB = !parentTag.hasClass('sc-content-block');
+                    var contentTag = outsideCB ? parentTag.find("div.sc-content-block") : parentTag;
                     contentTag.addClass("sc-element");
                     contentTag.prepend($("<ul class='sc-menu' data-toolbar=''/>"));
                     toolbars = getToolbars();
