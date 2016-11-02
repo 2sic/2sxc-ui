@@ -31,7 +31,7 @@
 
         var act = {
             // show the basic dashboard which allows view-changing
-            "dash-view": action("dash", "Dashboard", "", "", true, { inlineWindow: true }),
+            "dash-view": action("dash-view", "Dashboard", "", "", true, { inlineWindow: true }),
 
             // open the import dialog
             "app-import": action("app-import", "Dashboard", "", "", true, {}),
@@ -153,23 +153,6 @@
                 }
             }),
 
-            //'unpublish': createActionConfig("publish", "Published", "eye", "edit", false, {
-            //    icon2: "icon-sxc-eye-off",
-            //    disabled: true,
-            //    showCondition: function(settings, modConfig) {
-            //        return true; 
-            //    },
-            //    code: function (settings, event, manager) {
-            //        if (settings.isPublished) {
-            //            alert($2sxc.translate("Toolbar.AlreadyPublished"));
-            //            return;
-            //        }
-            //        var part = settings.sortOrder === -1 ? "listcontent" : "content";
-            //        var index = settings.sortOrder === -1 ? 0 : settings.sortOrder;
-            //        manager.contentBlock.publish(part, index);
-            //    }
-            //}),
-
             'replace': action("replace", "Replace", "replace", "edit", false, {
                 showCondition: function (settings) { return settings.useModuleList; }
             }),
@@ -209,21 +192,25 @@
                 code: function (settings, event, manager) {
                     console.log("custom action with code - BETA feature, may change");
                     if (!settings.customCode) {
-                        console.log("custom code action, but no onclick found to run");
+                        console.warn("custom code action, but no onclick found to run", settings);
                         return;
                     }
-                    eval(settings.customCode); // jshint ignore:line
+                    try {
+                        var fn = new Function("settings", "event", "manager", settings.customCode); // jshint ignore:line
+                        fn(settings, event, manager);
+                    } catch (err) {
+                        console.error("error in custom button-code: ", settings);
+                    }
                 }
             }),
 
             "more": action("more", "MoreActions", "options btn-mode", "default,edit,design,admin", true, {
                 code: function (settings, event) {
-                    var btn = $(event.target);
-                    var fullMenu = btn.closest("ul.sc-menu"); 
-                    var oldState = Number(fullMenu.attr("data-state") || 0);
-                    var newState = oldState + 1;
-                    var max = Number(fullMenu.attr("group-count"));
-                    newState = newState % max;
+                    var btn = $(event.target),
+                        fullMenu = btn.closest("ul.sc-menu"),
+                        oldState = Number(fullMenu.attr("data-state") || 0),
+                        max = Number(fullMenu.attr("group-count")),
+                        newState = (oldState + 1) % max;
 
                     fullMenu.removeClass("group-" + oldState)
                         .addClass("group-" + newState)
@@ -231,6 +218,7 @@
                 }
             })
         };
+
         return act;
     };
 

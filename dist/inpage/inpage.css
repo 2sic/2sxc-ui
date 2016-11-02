@@ -66,17 +66,17 @@
 
 .sc-menu span.disabled { color: #aaa}
 
-.show-set-1 i.btn-mode:before { 
-    -ms-transform: rotate(45deg); /* IE 9 */
+.group-1 i.btn-mode:before, .group-5 i.btn-mode:before { 
     transform: rotate(45deg);
+    -ms-transform: rotate(45deg); /* IE 9 */
 }
-.show-set-2 i.btn-mode:before { 
-    -ms-transform: rotate(90deg); /* IE 9 */
+.group-2 i.btn-mode:before, .group-6 i.btn-mode:before { 
     transform: rotate(90deg);
+    -ms-transform: rotate(90deg); /* IE 9 */
 }
-.show-set-3 i.btn-mode:before { 
-    -ms-transform: rotate(135deg); /* IE 9 */
+.group-3 i.btn-mode:before, .group-7 i.btn-mode:before { 
     transform: rotate(135deg);
+    -ms-transform: rotate(135deg); /* IE 9 */
 }
 
 

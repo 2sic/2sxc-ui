@@ -52,6 +52,7 @@
                 }
             }
         ],
-        defaults: {}
+        defaults: {},
+        params: {}
     };
 })();

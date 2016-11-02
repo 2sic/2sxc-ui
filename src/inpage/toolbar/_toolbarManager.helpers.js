@@ -6,51 +6,59 @@
 
         // take any common input format and convert it to a full toolbar-structure definition
         // can handle the following input formats (the param unstructuredConfig):
-        // complete tree (detected by "groups): { name: ..., groups: [ {}, {}], defaults: {...} } 
-        // group of buttons (detected by "buttons): { name: ..., buttons: "..." | [] }
-        // list of buttons (detected by IsArray): [ { action: "..." | []}, { action: ""|[]} ]
+        // complete tree (detected by "groups): { groups: [ {}, {}], name: ..., defaults: {...} } 
+        // group of buttons (detected by "buttons): { buttons: "..." | [], name: ..., ... }
+        // list of buttons (detected by IsArray with action): [ { action: "..." | []}, { action: ""|[]} ]
         // button (detected by "command"): { command: ""|[], icon: "..", ... }
         // just a command (detected by "action"): { entityId: 17, action: "edit" }
         // array of commands/buttons: [{entityId: 17, action: "edit"}, {contentType: "blog", action: "new"}]
         buildFullDefinition: function (unstructuredConfig, actions, config) {
+            if (unstructuredConfig.debug)
+                console.log("toolbar: detailed debug on; start build full Def");
             var fullConfig = tools.ensureDefinitionTree(unstructuredConfig);
             tools.expandButtonGroups(fullConfig, actions);
             tools.removeButtonsWithUnmetConditions(fullConfig, config);
+            if (fullConfig.debug)
+                console.log("after remove: ", fullConfig);
             return fullConfig;
         },
 
         // this will take an input which could already be a tree, but it could also be a 
         // button-definition, or just a string, and make sure that afterwards it's a tree with groups
         // the groups could still be in compact form, or already expanded, dependending on the input
+        // output is object with:
+        // - groups containing buttons[], but buttons could still be very flat
+        // - defaults, already officially formatted
+        // - params, officially formatted 
         ensureDefinitionTree: function (original) {
             // original is null/undefined, just return empty set
             if (!original) throw ("preparing toolbar, with nothing to work on: " + original);
 
-            // goal: return an object with this structure
-            // so we'll import what we can, and check/fix/build what came in differently
-            var fullSet = {
-                name: original.name || "toolbar",
-                groups: original.groups || [],
-                defaults: original.defaults || {},      // the button defaults like icon, etc.
-                parameters: original.parameters || {}   // these are the default command parameters
-            };
-
-            // not an array, but with property action - with one or more verbs, so it must be a button or a short-list of buttons
+            // ensure that if it's just actions, they are always in arrays
             if (!Array.isArray(original) && original.action)
                 original = [original];
 
-            // a simple case: arrays of either buttons or button-groups, having at least 1 item
-            if (Array.isArray(original) && original[0]) {
+            // ensure that arrays of actions or buttons are re-mapped to the right structure node
+            if (Array.isArray(original) && original.length) {
                 // an array of items having buttons, so it must be button-groups
                 if (original[0].buttons)
-                    fullSet.groups = original;
+                    original.groups = original; // move "down"
 
                 // array of items having an action, so these are buttons
-                else if (original[0].action) 
-                    fullSet.groups.push({ buttons: original });
+                else if (original[0].action)
+                    original = { groups: [{ buttons: original }] };
+                else 
+                    console.warn("toolbar tried to build toolbar but couldn't detect type of this:", original);
             }
 
-            return fullSet;
+            // build an object with this structure
+            return {
+                name: original.name || "toolbar",   // name, no real use
+                debug: original.debug || false,     // show more debug info
+                groups: original.groups || [],      // the groups of buttons
+                defaults: original.defaults || {},  // the button defaults like icon, etc.
+                params: original.params || {}       // these are the default command parameters
+            };
         },
 
         // this will traverse a groups-tree and expand each group
@@ -65,43 +73,62 @@
                 var btns = fullSet.groups[g].buttons;
                 if (Array.isArray(btns))
                     for (var b = 0; b < btns.length; b++) {
-                        tools.btnWarnUnknownAction(btns[b], actions);       // warn about buttons which don't have a known action
-                        $2sxc._lib.extend(btns[b].command, fullSet.parameters);     // enhance the button with settings for this instance
-                        tools.addDefaultBtnSettings(btns[b], actions);   // ensure all buttons have either own settings, or the fallbacks
+                        var btn = btns[b];
+                        if (!(actions[btn.command.action]))
+                            console.warn("warning: toolbar-button with unknown action-name:", btn.command.action);
+                        $.extend(btn.command, fullSet.params); // enhance the button with settings for this instance
+                        // tools.addCommandParams(fullSet, btn);
+                        tools.addDefaultBtnSettings(btn, actions);      // ensure all buttons have either own settings, or the fallbacks
                     }
             }
         },
 
         // take a list of buttons (objects OR strings)
         // and convert to proper array of buttons with actions
-        expandButtonList: function (grp) {
-            var root = grp; // the root object which has all params of the command
-            var btns = root.buttons;
-            if (Array.isArray(btns) && btns.length === 1 && btns[0].action) { // if btns. is neither array nor string, it's a short-hand with action names
-                root = btns[0];
-                btns = root.action;
-            }
+        // on the in is a object with buttons, which are either:
+        // - a string like "edit" or multi-value "layout,more"
+        // - an array of such strings incl. optional complex objects which are
+        // 
+        expandButtonList: function (root) {
+            // var root = grp; // the root object which has all params of the command
+            var btns = [], sharedProperties = null;
 
-            var cmdTemplate = null;
-            if (typeof btns === "string") {
-                btns = btns.split(",");
-                cmdTemplate = $.extend({}, root);  // inherit all fields used in the button
-                delete cmdTemplate.buttons; // this one's not needed
-                delete cmdTemplate.name;    // this one's not needed
-                delete cmdTemplate.action;  //
+            // convert compact buttons (with multi-verb action objects) into own button-objects
+            // important because an older syntax allowed {action: "new,edit", entityId: 17}
+            if (Array.isArray(root.buttons)) {
+                for (var b = 0; b < root.buttons.length; b++) {
+                    var btn = root.buttons[b];
+                    if (typeof btn.action === "string" && btn.action.indexOf(",") > -1) { // if btns. is neither array nor string, it's a short-hand with action names
+                        var acts = btn.action.split(",");
+                        for (var a = 0; a < acts.length; a++) {
+                            btns.push($.extend(true, {}, btn, { action: acts[a] }));
+                        }
+                    } else
+                        btns.push(btn);
+                }
+            } else if (typeof root.buttons === "string") {
+                btns = root.buttons.split(",");
+                sharedProperties = $.extend({}, root); // inherit all fields used in the button
+                delete sharedProperties.buttons; // this one's not needed
+                delete sharedProperties.name; // this one's not needed
+                delete sharedProperties.action; //
+            } else {
+                btns = root.buttons;
             }
 
             // add each button - check if it's already an object or just the string
             for (var v = 0; v < btns.length; v++) {
-                btns[v] = tools.expandButtonConfig(btns[v], cmdTemplate);
-                btns[v].group = grp;    // attach group reference, needed for fallback etc.
+                btns[v] = tools.expandButtonConfig(btns[v], sharedProperties);
+                // todo: refactor this out, not needed any more as they are all together now
+                btns[v].group = root;// grp;    // attach group reference, needed for fallback etc.
             }
-            grp.buttons = btns; // ensure the internal def is also an array now
+            root.buttons = btns; // ensure the internal def is also an array now
         },
 
         // takes an object like "actionname" or { action: "actionname", ... } and changes it to a { command: { action: "actionname" }, ... }
-        expandButtonConfig: function (original, cmdTemplate) {
-            if (original._expanded)
+        expandButtonConfig: function (original, sharedProps) {
+            // prevent multiple inits
+            if (original._expanded || original.command)
                 return original;
 
             // if just a name, turn into a command
@@ -111,9 +138,12 @@
             // if it's a command w/action, wrap into command + trim
             if (typeof original.action === "string") {
                 original.action = original.action.trim();
-                $2sxc._lib.extend(original, {
-                    command: $2sxc._lib.extend({}, cmdTemplate, original)   // merge template w/action
-                });
+                original = { command: original };
+
+                // ??? try to NOT keep all properties...
+                //$2sxc._lib.extend(original, {
+                //    command: $2sxc._lib.extend({}, sharedProps, original)   // merge template w/action
+                //});
             }
             // some clean-up
             delete original.action;  // remove the action property
@@ -121,32 +151,29 @@
             return original;
         },
 
-        btnWarnUnknownAction: function(btn, actions) {
-            if (!(actions[btn.command.action]))
-                console.log("warning: toolbar-button with unknown action-name: '" + btn.command.action);
-        },
-
         // remove buttons which are not valid based on add condition
         removeButtonsWithUnmetConditions: function (full, config) {
             var btnGroups = full.groups;
             for (var g = 0; g < btnGroups.length; g++) {
                 var btns = btnGroups[g].buttons;
-                tools.removeButtonsIfAddUnmet(btns, config);
+                removeButtonsIfAddUnmet(btns, config);
 
                 // remove the group, if no buttons left, or only "more"
                 if (btns.length === 0 || (btns.length === 1 && btns[0].command.action === "more"))
                     btnGroups.splice(g--, 1);   // remove, and decrement counter
             }
-        },
 
-        removeButtonsIfAddUnmet(btns, config) {
-            for (var i = 0; i < btns.length; i++) {
-                var add = btns[i].showCondition;
-                if (add !== undefined && (typeof (add) === "function"))
-                    if (!add(btns[i].command, config))
-                        btns.splice(i--, 1);
+            function removeButtonsIfAddUnmet(btns, config) {
+                for (var i = 0; i < btns.length; i++) {
+                    var add = btns[i].showCondition;
+                    if (add !== undefined && (typeof (add) === "function"))
+                        if (!add(btns[i].command, config))
+                            btns.splice(i--, 1);
+                }
             }
         },
+
+
 
         btnProperties: [
             "classes",
@@ -156,21 +183,24 @@
             "showCondition"
         ],
         prvProperties: [
-            "defaults"
+            "defaults",
+            "params",
+            "name"
         ],
 
+        // enhance button-object with default icons, etc.
         addDefaultBtnSettings: function(btn, actions) {
             for (var d = 0; d < tools.btnProperties.length; d++)
-                tools.fallbackOneSetting(btn, actions, tools.btnProperties[d]);
-        },
+                fallbackBtnSetting(btn, actions, tools.btnProperties[d]);
 
-        // configure missing button properties with various fallback options
-        fallbackOneSetting: function(btn, actions, propName) {
-            btn[propName] = btn[propName]   // by if already defined, use the already defined propery
-                || (btn.group.defaults && btn.group.defaults[propName])     // if the group has defaults, try use use that property
-                || (btn.group.groups && btn.group.groups.defaults && btn.group.groups.defaults[propName])     // if the group has defaults, try use use that property
-                || (actions[btn.command.action] && actions[btn.command.action][propName]); // if there is an action, try to use that property name
-        }
+            // configure missing button properties with various fallback options
+            function fallbackBtnSetting(btn, actions, propName) {
+                btn[propName] = btn[propName]   // by if already defined, use the already defined propery
+                    || (btn.group.defaults && btn.group.defaults[propName])     // if the group has defaults, try use use that property
+                    || (btn.group.groups && btn.group.groups.defaults && btn.group.groups.defaults[propName])     // if the group has defaults, try use use that property
+                    || (actions[btn.command.action] && actions[btn.command.action][propName]); // if there is an action, try to use that property name
+            }
+        },
     };
 
 })();

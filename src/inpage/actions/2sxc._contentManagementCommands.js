@@ -108,11 +108,18 @@ $2sxc._contentManagementCommands = function (sxc, targetTag) {
             }
         },
 
-        executeAction: function (optionalName, settings, event) {
+        executeAction: function (nameOrSettings, settings, event) {
             // check if name is name (string) or object (settings)
-            if (typeof (optionalName) === "string")
-                settings = $2sxc._lib.extend(settings || {}, { "action": optionalName });
-            else { event = settings; settings = optionalName; }
+            if (event === undefined && settings.altKey) {
+                event = settings;
+                settings = {};
+            }
+            if (typeof (nameOrSettings) === "string") {
+                settings = $2sxc._lib.extend(settings || {}, { "action": nameOrSettings });
+            } else {
+                //event = settings;
+                settings = nameOrSettings;
+            }
 
             var conf = cmc.editManager.toolbar.actions[settings.action];
             settings = $2sxc._lib.extend({}, conf, settings); // merge conf & settings, but settings has higher priority

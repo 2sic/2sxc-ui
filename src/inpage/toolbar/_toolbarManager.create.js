@@ -60,9 +60,9 @@
                     classesList = (actDef.classes || "").split(","),
                     box = $("<div/>"),
                     symbol = $("<i class=\"" + actDef.icon + "\" aria-hidden=\"true\"></i>"),
-                    onclick = actDef.onclick || "$2sxc(" + id + ", " + cbid + ").manage.action(" + JSON.stringify(actDef.command /*, tb._jsonifyFilterGroup*/) + ", event);";
+                    onclick = actDef.onclick || "$2sxc(" + id + ", " + cbid + ").manage.run(" + JSON.stringify(actDef.command /*, tb._jsonifyFilterGroup*/) + ", event);";
 
-                console.log("onclick: " + onclick);
+                 console.log("onclick: " + onclick);
 
                 for (var c = 0; c < classesList.length; c++)
                     showClasses += " " + classesList[c];
@@ -125,19 +125,30 @@
                     contentTag.prepend($("<ul class='sc-menu' data-toolbar=''/>"));
                     toolbars = getToolbars();
                 }
-                toolbars.each(function () {
-                    var toolbarTag = $(this), data = toolbarTag.attr("data-toolbar"), toolbarSettings = null;
+
+                function initToolbar() {
                     try {
-                        toolbarSettings = $.parseJSON(data);
+                        var toolbarTag = $(this), data = toolbarTag.attr("data-toolbar"), toolbarSettings = null;
+                        try {
+                            toolbarSettings = $.parseJSON(data);
+                        }
+                        catch(err) {
+                            console.error("error on toolbar JSON - probably invalid - make sure you also quote your properties like \"name\": ...", data, err);
+                        }
+
+                        if (!toolbarSettings)
+                            return;
+
+
+                        var newTb = $2sxc(toolbarTag).manage.getToolbar(toolbarSettings);
+                        toolbarTag.replaceWith(newTb);
+                    } catch (err) {
+                        // note: errors can happen a lot on custom toolbars, must be sure the others are still rendered
+                        console.error("error creating toolbar - will skip this one", err);
                     }
-                    catch(err) {
-                        console.log("error on toolbar JSON - probably invalid - make sure you also quote your properties like \"name\": ...", data);
-                    }
-                    if (!toolbarSettings)
-                        return;
-                    var newTb = $2sxc(toolbarTag).manage.getToolbar(toolbarSettings);
-                    toolbarTag.replaceWith(newTb);
-                });
+                }
+
+                toolbars.each(initToolbar);
             }
 
         };
