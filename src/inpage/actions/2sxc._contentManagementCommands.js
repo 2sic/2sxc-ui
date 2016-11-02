@@ -110,7 +110,7 @@ $2sxc._contentManagementCommands = function (sxc, targetTag) {
 
         executeAction: function (nameOrSettings, settings, event) {
             // check if name is name (string) or object (settings)
-            if (event === undefined && settings.altKey) {
+            if (!event && settings && settings.altKey) { // no event param, but settings, which is an event
                 event = settings;
                 settings = {};
             }

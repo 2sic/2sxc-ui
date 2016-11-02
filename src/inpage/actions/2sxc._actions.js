@@ -16,7 +16,7 @@
 
 (function () {
     // helper function to create the configuration object
-    function action(name, translateKey, icon, show, uiOnly, more) {
+    function action(name, translateKey, icon, uiOnly, more) {
         return $2sxc._lib.extend({
             name: name,
             title: "Toolbar." + translateKey,
@@ -31,13 +31,13 @@
 
         var act = {
             // show the basic dashboard which allows view-changing
-            "dash-view": action("dash-view", "Dashboard", "", "", true, { inlineWindow: true }),
+            "dash-view": action("dash-view", "Dashboard", "", true, { inlineWindow: true }),
 
             // open the import dialog
-            "app-import": action("app-import", "Dashboard", "", "", true, {}),
+            "app-import": action("app-import", "Dashboard", "", true, {}),
 
             // open an edit-item dialog
-            'edit': action("edit", "Edit", "pencil", "default", false, {
+            'edit': action("edit", "Edit", "pencil", false, {
                 params: { mode: "edit" },
                 showCondition: function (settings, modConfig) {
                     return settings.entityId || settings.useModuleList; // need ID or a "slot", otherwise edit won't work
@@ -48,7 +48,7 @@
             // new can also be used for mini-toolbars which just add an entity not attached to a module
             // in that case it's essential to add a contentType like 
             // <ul class="sc-menu" data-toolbar='{"action":"new", "contentType": "Category"}'></ul>
-            'new': action("new", "New", "plus", "default", false, {
+            'new': action("new", "New", "plus", false, {
                 params: { mode: "new" },
                 dialog: "edit", // don't use "new" (default) but use "edit"
                 showCondition: function (settings, modConfig) {
@@ -61,7 +61,7 @@
             }),
 
             // add brings no dialog, just add an empty item
-            'add': action("add", "AddDemo", "plus-circled", "edit", false, {
+            'add': action("add", "AddDemo", "plus-circled", false, {
                 showCondition: function(settings, modConfig) {
                     return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1;
                 },
@@ -72,7 +72,7 @@
             }),
 
             // create a metadata toolbar
-            "metadata": action("metadata", "Metadata", "tag", "default", false, {
+            "metadata": action("metadata", "Metadata", "tag", false, {
                 params: { mode: "new" },
                 dialog: "edit", // don't use "new" (default) but use "edit"
                 dynamicClasses: function (settings) {
@@ -93,7 +93,7 @@
             }),
 
             // remove an item from the placeholder (usually for lists)
-            'remove': action("remove", "Remove", "minus-circled", "edit", false, {
+            'remove': action("remove", "Remove", "minus-circled", false, {
                 showCondition: function(settings, modConfig) {
                     return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1;
                 },
@@ -118,7 +118,7 @@
             //    }
             //},
 
-            'moveup': action("moveup", "MoveUp", "move-up", "edit", false, {
+            'moveup': action("moveup", "MoveUp", "move-up", false, {
                 showCondition: function(settings, modConfig) {
                     return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1 && settings.sortOrder !== 0;
                 },
@@ -127,7 +127,7 @@
                         .changeOrder(settings.sortOrder, Math.max(settings.sortOrder - 1, 0));
                 }
             }),
-            'movedown': action("movedown", "MoveDown", "move-down", "edit", false, {
+            'movedown': action("movedown", "MoveDown", "move-down", false, {
                 showCondition: function(settings, modConfig) {
                     return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1;
                 },
@@ -135,10 +135,10 @@
                     manager.contentBlock.changeOrder(settings.sortOrder, settings.sortOrder + 1);
                 }
             }),
-            'sort': action("sort", "Sort", "list-numbered", "edit", false, {
+            'sort': action("sort", "Sort", "list-numbered", false, {
                 showCondition: function (settings, modConfig) { return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1; }
             }),
-            'publish': action("publish", "Unpublished", "eye-off", "default", false, {
+            'publish': action("publish", "Unpublished", "eye-off", false, {
                 showCondition: function (settings, modConfig) {
                     return settings.isPublished === false;
                 },
@@ -153,17 +153,17 @@
                 }
             }),
 
-            'replace': action("replace", "Replace", "replace", "edit", false, {
+            'replace': action("replace", "Replace", "replace", false, {
                 showCondition: function (settings) { return settings.useModuleList; }
             }),
 
-            'layout': action("layout", "ChangeLayout", "glasses", "default", true, {
+            'layout': action("layout", "ChangeLayout", "glasses", true, {
                 code: function (settings, event, manager) {
                     manager.contentBlock.dialogToggle();
                 }
             }),
 
-            'develop': action("develop", "Develop", "code", "admin", true, {
+            'develop': action("develop", "Develop", "code", true, {
                 newWindow: true,
                 showCondition: enableTools,
                 configureCommand: function (cmd) {
@@ -171,24 +171,24 @@
                 }
             }),
 
-            'contenttype': action("contenttype", "ContentType", "fields", "admin", true, {
+            'contenttype': action("contenttype", "ContentType", "fields", true, {
                 showCondition: enableTools
             }),
 
-            'contentitems': action("contentitems", "ContentItems", "table", "admin", true, {
+            'contentitems': action("contentitems", "ContentItems", "table", true, {
                 params: { contentTypeName: editContext.contentTypeId },
                 showCondition: enableTools && editContext.contentTypeId
             }),
 
-            'app': action("app", "App", "settings", "admin", true, {
+            'app': action("app", "App", "settings", true, {
                 showCondition: enableTools
             }),
 
-            'zone': action("zone", "Zone", "manage", "admin", true, {
+            'zone': action("zone", "Zone", "manage", true, {
                 showCondition: enableTools
             }),
 
-            'custom': action("custom", "Custom", "bomb", "admin", true, {
+            'custom': action("custom", "Custom", "bomb", true, {
                 code: function (settings, event, manager) {
                     console.log("custom action with code - BETA feature, may change");
                     if (!settings.customCode) {
@@ -204,7 +204,7 @@
                 }
             }),
 
-            "more": action("more", "MoreActions", "options btn-mode", "default,edit,design,admin", true, {
+            "more": action("more", "MoreActions", "options btn-mode", true, {
                 code: function (settings, event) {
                     var btn = $(event.target),
                         fullMenu = btn.closest("ul.sc-menu"),

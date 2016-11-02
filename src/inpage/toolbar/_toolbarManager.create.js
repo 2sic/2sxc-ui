@@ -62,7 +62,7 @@
                     symbol = $("<i class=\"" + actDef.icon + "\" aria-hidden=\"true\"></i>"),
                     onclick = actDef.onclick || "$2sxc(" + id + ", " + cbid + ").manage.run(" + JSON.stringify(actDef.command /*, tb._jsonifyFilterGroup*/) + ", event);";
 
-                 console.log("onclick: " + onclick);
+                //console.log("onclick: " + onclick);
 
                 for (var c = 0; c < classesList.length; c++)
                     showClasses += " " + classesList[c];
@@ -119,6 +119,7 @@
                 var toolbars = getToolbars();
                 if (toolbars.length === 0) // no toolbars found, must help a bit because otherwise editing is hard
                 {
+                    console.warn("didn't find a toolbar, so will create an automatic one to help for the block", parentTag);
                     var outsideCb = !parentTag.hasClass('sc-content-block');
                     var contentTag = outsideCb ? parentTag.find("div.sc-content-block") : parentTag;
                     contentTag.addClass("sc-element");
@@ -134,11 +135,8 @@
                         }
                         catch(err) {
                             console.error("error on toolbar JSON - probably invalid - make sure you also quote your properties like \"name\": ...", data, err);
-                        }
-
-                        if (!toolbarSettings)
                             return;
-
+                        }
 
                         var newTb = $2sxc(toolbarTag).manage.getToolbar(toolbarSettings);
                         toolbarTag.replaceWith(newTb);

@@ -477,7 +477,7 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
 
 (function () {
     // helper function to create the configuration object
-    function action(name, translateKey, icon, show, uiOnly, more) {
+    function action(name, translateKey, icon, uiOnly, more) {
         return $2sxc._lib.extend({
             name: name,
             title: "Toolbar." + translateKey,
@@ -492,13 +492,13 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
 
         var act = {
             // show the basic dashboard which allows view-changing
-            "dash-view": action("dash-view", "Dashboard", "", "", true, { inlineWindow: true }),
+            "dash-view": action("dash-view", "Dashboard", "", true, { inlineWindow: true }),
 
             // open the import dialog
-            "app-import": action("app-import", "Dashboard", "", "", true, {}),
+            "app-import": action("app-import", "Dashboard", "", true, {}),
 
             // open an edit-item dialog
-            'edit': action("edit", "Edit", "pencil", "default", false, {
+            'edit': action("edit", "Edit", "pencil", false, {
                 params: { mode: "edit" },
                 showCondition: function (settings, modConfig) {
                     return settings.entityId || settings.useModuleList; // need ID or a "slot", otherwise edit won't work
@@ -509,7 +509,7 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
             // new can also be used for mini-toolbars which just add an entity not attached to a module
             // in that case it's essential to add a contentType like 
             // <ul class="sc-menu" data-toolbar='{"action":"new", "contentType": "Category"}'></ul>
-            'new': action("new", "New", "plus", "default", false, {
+            'new': action("new", "New", "plus", false, {
                 params: { mode: "new" },
                 dialog: "edit", // don't use "new" (default) but use "edit"
                 showCondition: function (settings, modConfig) {
@@ -522,7 +522,7 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
             }),
 
             // add brings no dialog, just add an empty item
-            'add': action("add", "AddDemo", "plus-circled", "edit", false, {
+            'add': action("add", "AddDemo", "plus-circled", false, {
                 showCondition: function(settings, modConfig) {
                     return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1;
                 },
@@ -533,7 +533,7 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
             }),
 
             // create a metadata toolbar
-            "metadata": action("metadata", "Metadata", "tag", "default", false, {
+            "metadata": action("metadata", "Metadata", "tag", false, {
                 params: { mode: "new" },
                 dialog: "edit", // don't use "new" (default) but use "edit"
                 dynamicClasses: function (settings) {
@@ -554,7 +554,7 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
             }),
 
             // remove an item from the placeholder (usually for lists)
-            'remove': action("remove", "Remove", "minus-circled", "edit", false, {
+            'remove': action("remove", "Remove", "minus-circled", false, {
                 showCondition: function(settings, modConfig) {
                     return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1;
                 },
@@ -579,7 +579,7 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
             //    }
             //},
 
-            'moveup': action("moveup", "MoveUp", "move-up", "edit", false, {
+            'moveup': action("moveup", "MoveUp", "move-up", false, {
                 showCondition: function(settings, modConfig) {
                     return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1 && settings.sortOrder !== 0;
                 },
@@ -588,7 +588,7 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
                         .changeOrder(settings.sortOrder, Math.max(settings.sortOrder - 1, 0));
                 }
             }),
-            'movedown': action("movedown", "MoveDown", "move-down", "edit", false, {
+            'movedown': action("movedown", "MoveDown", "move-down", false, {
                 showCondition: function(settings, modConfig) {
                     return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1;
                 },
@@ -596,10 +596,10 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
                     manager.contentBlock.changeOrder(settings.sortOrder, settings.sortOrder + 1);
                 }
             }),
-            'sort': action("sort", "Sort", "list-numbered", "edit", false, {
+            'sort': action("sort", "Sort", "list-numbered", false, {
                 showCondition: function (settings, modConfig) { return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1; }
             }),
-            'publish': action("publish", "Unpublished", "eye-off", "default", false, {
+            'publish': action("publish", "Unpublished", "eye-off", false, {
                 showCondition: function (settings, modConfig) {
                     return settings.isPublished === false;
                 },
@@ -614,17 +614,17 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
                 }
             }),
 
-            'replace': action("replace", "Replace", "replace", "edit", false, {
+            'replace': action("replace", "Replace", "replace", false, {
                 showCondition: function (settings) { return settings.useModuleList; }
             }),
 
-            'layout': action("layout", "ChangeLayout", "glasses", "default", true, {
+            'layout': action("layout", "ChangeLayout", "glasses", true, {
                 code: function (settings, event, manager) {
                     manager.contentBlock.dialogToggle();
                 }
             }),
 
-            'develop': action("develop", "Develop", "code", "admin", true, {
+            'develop': action("develop", "Develop", "code", true, {
                 newWindow: true,
                 showCondition: enableTools,
                 configureCommand: function (cmd) {
@@ -632,24 +632,24 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
                 }
             }),
 
-            'contenttype': action("contenttype", "ContentType", "fields", "admin", true, {
+            'contenttype': action("contenttype", "ContentType", "fields", true, {
                 showCondition: enableTools
             }),
 
-            'contentitems': action("contentitems", "ContentItems", "table", "admin", true, {
+            'contentitems': action("contentitems", "ContentItems", "table", true, {
                 params: { contentTypeName: editContext.contentTypeId },
                 showCondition: enableTools && editContext.contentTypeId
             }),
 
-            'app': action("app", "App", "settings", "admin", true, {
+            'app': action("app", "App", "settings", true, {
                 showCondition: enableTools
             }),
 
-            'zone': action("zone", "Zone", "manage", "admin", true, {
+            'zone': action("zone", "Zone", "manage", true, {
                 showCondition: enableTools
             }),
 
-            'custom': action("custom", "Custom", "bomb", "admin", true, {
+            'custom': action("custom", "Custom", "bomb", true, {
                 code: function (settings, event, manager) {
                     console.log("custom action with code - BETA feature, may change");
                     if (!settings.customCode) {
@@ -662,13 +662,10 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
                     } catch (err) {
                         console.error("error in custom button-code: ", settings);
                     }
-                    //var maybeFn = eval(settings.customCode); 
-                    //if (typeof maybeFn === "function")
-                    //    maybeFn(settings, event, manager);
                 }
             }),
 
-            "more": action("more", "MoreActions", "options btn-mode", "default,edit,design,admin", true, {
+            "more": action("more", "MoreActions", "options btn-mode", true, {
                 code: function (settings, event) {
                     var btn = $(event.target),
                         fullMenu = btn.closest("ul.sc-menu"),
@@ -800,7 +797,7 @@ $2sxc._contentManagementCommands = function (sxc, targetTag) {
 
         executeAction: function (nameOrSettings, settings, event) {
             // check if name is name (string) or object (settings)
-            if (event === undefined && settings.altKey) {
+            if (!event && settings && settings.altKey) { // no event param, but settings, which is an event
                 event = settings;
                 settings = {};
             }
@@ -1415,7 +1412,7 @@ $(function () {
                     symbol = $("<i class=\"" + actDef.icon + "\" aria-hidden=\"true\"></i>"),
                     onclick = actDef.onclick || "$2sxc(" + id + ", " + cbid + ").manage.run(" + JSON.stringify(actDef.command /*, tb._jsonifyFilterGroup*/) + ", event);";
 
-                 console.log("onclick: " + onclick);
+                //console.log("onclick: " + onclick);
 
                 for (var c = 0; c < classesList.length; c++)
                     showClasses += " " + classesList[c];
@@ -1472,6 +1469,7 @@ $(function () {
                 var toolbars = getToolbars();
                 if (toolbars.length === 0) // no toolbars found, must help a bit because otherwise editing is hard
                 {
+                    console.warn("didn't find a toolbar, so will create an automatic one to help for the block", parentTag);
                     var outsideCb = !parentTag.hasClass('sc-content-block');
                     var contentTag = outsideCb ? parentTag.find("div.sc-content-block") : parentTag;
                     contentTag.addClass("sc-element");
@@ -1487,11 +1485,8 @@ $(function () {
                         }
                         catch(err) {
                             console.error("error on toolbar JSON - probably invalid - make sure you also quote your properties like \"name\": ...", data, err);
-                        }
-
-                        if (!toolbarSettings)
                             return;
-
+                        }
 
                         var newTb = $2sxc(toolbarTag).manage.getToolbar(toolbarSettings);
                         toolbarTag.replaceWith(newTb);
