@@ -14,7 +14,7 @@
 
     function getContextInfo(cb) {
         var attr = cb.getAttribute("data-edit-context");
-        return $.parseJSON(attr || "");
+        return JSON.parse(attr || "");
     }
     //#endregion
 

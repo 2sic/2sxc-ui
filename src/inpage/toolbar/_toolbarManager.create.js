@@ -60,7 +60,7 @@
                     classesList = (actDef.classes || "").split(","),
                     box = $("<div/>"),
                     symbol = $("<i class=\"" + actDef.icon + "\" aria-hidden=\"true\"></i>"),
-                    onclick = actDef.onclick || "$2sxc(" + id + ", " + cbid + ").manage.run(" + JSON.stringify(actDef.command /*, tb._jsonifyFilterGroup*/) + ", event);";
+                    onclick = /* actDef.click ||*/ "$2sxc(" + id + ", " + cbid + ").manage.run(" + JSON.stringify(actDef.command /*, tb._jsonifyFilterGroup*/) + ", event);";
 
                 //console.log("onclick: " + onclick);
 
@@ -129,9 +129,9 @@
 
                 function initToolbar() {
                     try {
-                        var toolbarTag = $(this), data = toolbarTag.attr("data-toolbar"), toolbarSettings = null;
+                        var toolbarTag = $(this), data = toolbarTag.attr("data-toolbar"), toolbarSettings;
                         try {
-                            toolbarSettings = $.parseJSON(data);
+                            toolbarSettings = data ? JSON.parse(data) : {};
                         }
                         catch(err) {
                             console.error("error on toolbar JSON - probably invalid - make sure you also quote your properties like \"name\": ...", data, err);

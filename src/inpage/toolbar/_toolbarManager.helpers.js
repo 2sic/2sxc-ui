@@ -11,7 +11,7 @@
         // list of buttons (detected by IsArray with action): [ { action: "..." | []}, { action: ""|[]} ]
         // button (detected by "command"): { command: ""|[], icon: "..", ... }
         // just a command (detected by "action"): { entityId: 17, action: "edit" }
-        // array of commands/buttons: [{entityId: 17, action: "edit"}, {contentType: "blog", action: "new"}]
+        // array of commands: [{entityId: 17, action: "edit"}, {contentType: "blog", action: "new"}]
         buildFullDefinition: function (unstructuredConfig, actions, config) {
             if (unstructuredConfig.debug)
                 console.log("toolbar: detailed debug on; start build full Def");
@@ -34,8 +34,8 @@
             // original is null/undefined, just return empty set
             if (!original) throw ("preparing toolbar, with nothing to work on: " + original);
 
-            // ensure that if it's just actions, they are always in arrays
-            if (!Array.isArray(original) && original.action)
+            // ensure that if it's just actions or buttons, they are then processed as arrays with 1 entry
+            if (!Array.isArray(original) && (original.action || original.buttons))
                 original = [original];
 
             // ensure that arrays of actions or buttons are re-mapped to the right structure node
@@ -45,7 +45,7 @@
                     original.groups = original; // move "down"
 
                 // array of items having an action, so these are buttons
-                else if (original[0].action)
+                else if (original[0].command || original[0].action)
                     original = { groups: [{ buttons: original }] };
                 else 
                     console.warn("toolbar tried to build toolbar but couldn't detect type of this:", original);
@@ -76,7 +76,7 @@
                         var btn = btns[b];
                         if (!(actions[btn.command.action]))
                             console.warn("warning: toolbar-button with unknown action-name:", btn.command.action);
-                        $.extend(btn.command, fullSet.params); // enhance the button with settings for this instance
+                        $2sxc._lib.extend(btn.command, fullSet.params); // enhance the button with settings for this instance
                         // tools.addCommandParams(fullSet, btn);
                         tools.addDefaultBtnSettings(btn, actions);      // ensure all buttons have either own settings, or the fallbacks
                     }
@@ -139,11 +139,6 @@
             if (typeof original.action === "string") {
                 original.action = original.action.trim();
                 original = { command: original };
-
-                // ??? try to NOT keep all properties...
-                //$2sxc._lib.extend(original, {
-                //    command: $2sxc._lib.extend({}, sharedProps, original)   // merge template w/action
-                //});
             }
             // some clean-up
             delete original.action;  // remove the action property
