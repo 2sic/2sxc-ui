@@ -56,9 +56,9 @@
                 showCondition: function (settings, modConfig) {
                     return settings.contentType || modConfig.isList && settings.useModuleList && settings.sortOrder !== -1; // don't provide new on the header-item
                 },
-                code: function (settings, event, manage) {
+                code: function (settings, event, sxc) {
                     // todo - should refactor this to be a toolbarManager.contentBlock command
-                    manage._commands._openNgDialog($2sxc._lib.extend({}, settings, { sortOrder: settings.sortOrder + 1 }), event);
+                    sxc._commands._openNgDialog($2sxc._lib.extend({}, settings, { sortOrder: settings.sortOrder + 1 }), event);
                 }
             }),
 
@@ -67,8 +67,8 @@
                 showCondition: function(settings, modConfig) {
                     return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1;
                 },
-                code: function (settings, event, manage) {
-                    manage.contentBlock 
+                code: function (settings, event, sxc) {
+                    sxc.contentBlock 
                         .addItem(settings.sortOrder + 1);
                 }
             }),
@@ -99,9 +99,9 @@
                 showCondition: function(settings, modConfig) {
                     return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1;
                 },
-                code: function (settings, event, manage) {
+                code: function (settings, event, sxc) {
                     if (confirm($2sxc.translate("Toolbar.ConfirmRemove"))) {
-                        manage.contentBlock
+                        sxc.contentBlock
                             .removeFromList(settings.sortOrder);
                     }
                 }
@@ -124,8 +124,8 @@
                 showCondition: function(settings, modConfig) {
                     return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1 && settings.sortOrder !== 0;
                 },
-                code: function (settings, event, manage) {
-                    manage.contentBlock
+                code: function (settings, event, sxc) {
+                    sxc.contentBlock
                         .changeOrder(settings.sortOrder, Math.max(settings.sortOrder - 1, 0));
                 }
             }),
@@ -133,8 +133,8 @@
                 showCondition: function(settings, modConfig) {
                     return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1;
                 },
-                code: function (settings, event, manage) {
-                    manage.contentBlock.changeOrder(settings.sortOrder, settings.sortOrder + 1);
+                code: function (settings, event, sxc) {
+                    sxc.contentBlock.changeOrder(settings.sortOrder, settings.sortOrder + 1);
                 }
             }),
 
@@ -146,14 +146,14 @@
                 showCondition: function (settings, modConfig) {
                     return settings.isPublished === false;
                 },
-                code: function (settings, event, manage) {
+                code: function (settings, event, sxc) {
                     if (settings.isPublished) {
                         alert($2sxc.translate("Toolbar.AlreadyPublished"));
                         return;
                     }
                     var part = settings.sortOrder === -1 ? "listcontent" : "content";
                     var index = settings.sortOrder === -1 ? 0 : settings.sortOrder;
-                    manage.contentBlock.publish(part, index);
+                    sxc.contentBlock.publish(part, index);
                 }
             }),
 
@@ -245,15 +245,15 @@
             //#endregion
 
             'custom': makeDef("custom", "Custom", "bomb", true, {
-                code: function (settings, event, manage) {
+                code: function (settings, event, sxc) {
                     console.log("custom action with code - BETA feature, may change");
                     if (!settings.customCode) {
                         console.warn("custom code action, but no onclick found to run", settings);
                         return;
                     }
                     try {
-                        var fn = new Function("settings", "event", "manage", settings.customCode); // jshint ignore:line
-                        fn(settings, event, manage);
+                        var fn = new Function("settings", "event", "sxc", settings.customCode); // jshint ignore:line
+                        fn(settings, event, sxc);
                     } catch (err) {
                         console.error("error in custom button-code: ", settings);
                     }
@@ -262,8 +262,8 @@
 
             //#region UI actions: layout, more
             'layout': makeDef("layout", "ChangeLayout", "glasses", true, {
-                code: function (settings, event, manage) {
-                    manage.contentBlock.dialogToggle();
+                code: function (settings, event, sxc) {
+                    sxc.contentBlock.dialogToggle();
                 }
             }),
 
