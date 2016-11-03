@@ -213,7 +213,6 @@
                     return enableTools && !isContent && editContext.appSettingsId != null; // only if settings exist, or are 0 (to be created)
                 },
                 configureCommand: function (cmd) {
-                    cmd.Title = "TODO"; //TODO
                     cmd.items = [{ EntityId: editContext.appSettingsId }];
                 }
             }),
@@ -225,7 +224,6 @@
                     return enableTools && !isContent && editContext.appResourcesId != null; // only if resources exist or are 0 (to be created)...
                 },
                 configureCommand: function (cmd) {
-                    cmd.Title = "TODO"; //todo
                     cmd.items = [{ EntityId: editContext.appResourcesId }];
                 }
             }),
