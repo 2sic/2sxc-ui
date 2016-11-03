@@ -38,7 +38,7 @@
             {
                 name: "instance",
                 // todo: add templatesettings, query
-                buttons: "template-develop,template-settings,contentitems,query,contenttype,more",
+                buttons: "template-develop,template-settings,contentitems,template-query,contenttype,more",
                 defaults: {
                     classes: "group-pro"
                 }

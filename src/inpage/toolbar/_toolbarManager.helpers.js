@@ -175,7 +175,8 @@
             "icon",
             "title",
             "dynamicClasses",
-            "showCondition"
+            "showCondition",
+            "disabled"
         ],
         prvProperties: [
             "defaults",

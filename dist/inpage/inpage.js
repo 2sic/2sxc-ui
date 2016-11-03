@@ -643,22 +643,23 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
                 }
             }),
 
-            // todo: improve condition
-            'query': action("query", "QueryEdit", "filter", true, {
+            'template-query': action("query", "QueryEdit", "filter", true, {
+                dialog: "pipeline-designer",
+                newWindow: true,
+                disabled: editContext.appSettingsId === null,
+                title: "Toolbar.QueryEdit" + (editContext.queryId === null ? "Disabled" : ""),
                 showCondition: function (settings, modConfig) {
-                    return enableTools && !isContent && editContext.queryId;
+                    return enableTools && !isContent;
                 },
                 dynamicClasses: function (settings) {
                     return editContext.queryId ? "" : "empty";  // if it doesn't have a query, make it less strong
                 }
             }),
 
-            // todo: title i18n
             'template-settings': action("template-settings", "TemplateSettings", "sliders", true, {
                 dialog: "edit",
                 showCondition: enableTools,
                 configureCommand: function (cmd) {
-                    cmd.Title = "EditFormTitle.TemplateSettings"; 
                     cmd.items = [{ EntityId: editContext.templateId }];
                 }
 
@@ -670,6 +671,8 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
             // todo: dynamicClasses like metadata, to disable if not ready...
             'app-settings': action("app-settings", "AppSettings", "sliders", true, {
                 dialog: "edit",
+                disabled: editContext.appSettingsId === null,
+                title: "Toolbar.AppSettings" + (editContext.appSettingsId === null ? "Disabled" : ""),
                 showCondition: function(settings, modConfig) {
                     return enableTools && !isContent && editContext.appSettingsId != null; // only if settings exist, or are 0 (to be created)
                 },
@@ -681,6 +684,8 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
             // todo: improve condition
             'app-resources': action("app-resources", "AppResources", "language", true, {
                 dialog: "edit",
+                disabled: editContext.appResourcesId === null,
+                title: "Toolbar.AppSettings" + (editContext.appResourcesId === null ? "Disabled" : ""),
                 showCondition: function (settings, modConfig) {
                     return enableTools && !isContent && editContext.appResourcesId != null; // only if resources exist or are 0 (to be created)...
                 },
@@ -1466,7 +1471,7 @@ $(function () {
                     classesList = (actDef.classes || "").split(","),
                     box = $("<div/>"),
                     symbol = $("<i class=\"" + actDef.icon + "\" aria-hidden=\"true\"></i>"),
-                    onclick = /* actDef.click ||*/ "$2sxc(" + id + ", " + cbid + ").manage.run(" + JSON.stringify(actDef.command /*, tb._jsonifyFilterGroup*/) + ", event);";
+                    onclick = actDef.disabled ? "" : "$2sxc(" + id + ", " + cbid + ").manage.run(" + JSON.stringify(actDef.command /*, tb._jsonifyFilterGroup*/) + ", event);";
 
                 //if ($2sxc.debug.load)
                 //  console.log("onclick: " + onclick);
@@ -1741,7 +1746,8 @@ $(function () {
             "icon",
             "title",
             "dynamicClasses",
-            "showCondition"
+            "showCondition",
+            "disabled"
         ],
         prvProperties: [
             "defaults",
@@ -1820,7 +1826,7 @@ $(function () {
             {
                 name: "instance",
                 // todo: add templatesettings, query
-                buttons: "template-develop,template-settings,contentitems,query,contenttype,more",
+                buttons: "template-develop,template-settings,contentitems,template-query,contenttype,more",
                 defaults: {
                     classes: "group-pro"
                 }
