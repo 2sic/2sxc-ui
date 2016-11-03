@@ -223,7 +223,7 @@
             'app-resources': makeDef("app-resources", "AppResources", "language", true, {
                 dialog: "edit",
                 disabled: editContext.appResourcesId === null,
-                title: "Toolbar.AppSettings" + (editContext.appResourcesId === null ? "Disabled" : ""),
+                title: "Toolbar.AppResources" + (editContext.appResourcesId === null ? "Disabled" : ""),
                 showCondition: function (settings, modConfig) {
                     return enableTools && !isContent && editContext.appResourcesId !== null; // only if resources exist or are 0 (to be created)...
                 },
