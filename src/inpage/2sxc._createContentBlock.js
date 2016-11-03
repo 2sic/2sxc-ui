@@ -13,7 +13,7 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
     //#region loads of old stuff, should be cleaned, mostly just copied from the angulare code
 
     var cViewWithoutContent = "_LayoutElement"; // needed to differentiate the "select item" from the "empty-is-selected" which are both empty
-    var editContext = manage.editContext;
+    var editContext = manage._editContext;
     var ctid = (editContext.ContentGroup.ContentTypeName === "" && editContext.ContentGroup.TemplateId !== null)
         ? cViewWithoutContent // has template but no content, use placeholder
         : editContext.ContentGroup.ContentTypeName;// manageInfo.contentTypeId;
@@ -42,7 +42,7 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
                 $(cbTag).replaceWith(newStuff);
                 cbTag = newStuff;
                 cb.buttonsAreLoaded = false;
-                //$2sxc(newStuff).manage.toolbar._processToolbars(newStuff); // init it...
+                //$2sxc(newStuff).manage._toolbar._processToolbars(newStuff); // init it...
             } catch (e) {
                 console.log("Error while rendering template:");
                 console.log(e);
@@ -57,17 +57,17 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
             // force ajax is set when a new app was chosen, and the new app supports ajax
             // this value can only be true, or not exist at all
             if (forceAjax)
-                manage.reloadWithAjax = true;
+                manage._reloadWithAjax = true;
 
-            if (manage.reloadWithAjax) // necessary to show the original template again
+            if (manage._reloadWithAjax) // necessary to show the original template again
                 return (forceAjax
                     ? cb.reload(-1) // -1 is important to it doesn't try to use the old templateid
                     : cb.reload())
                     .then(function () {
-                        if (manage.reloadWithAjax && sxc.manage.dialog) sxc.manage.dialog.destroy(); // only remove on force, which is an app-change
+                        if (manage._reloadWithAjax && sxc.manage.dialog) sxc.manage.dialog.destroy(); // only remove on force, which is an app-change
                         // create new sxc-object
                         cb.sxc = cb.sxc.recreate();
-                        cb.sxc.manage.toolbar._processToolbars(); // sub-optimal deep dependency
+                        cb.sxc.manage._toolbar._processToolbars(); // sub-optimal deep dependency
                         cb.buttonsAreLoaded = true;
                     });
             else
@@ -86,7 +86,7 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
                 return null;
 
             // if reloading a non-content-app, re-load the page
-            if (!manage.reloadWithAjax) // special code to force ajax-app-change
+            if (!manage._reloadWithAjax) // special code to force ajax-app-change
                 return window.location.reload();
 
             // remember for future persist/save/undo
@@ -185,17 +185,17 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
             }
             if (!diag) {
                 // still not found, create it
-                diag = manage.dialog = manage.action({ "action": "dash-view" }); // not ideal, must improve
+                diag = manage.dialog = manage.run("dash-view"); // not ideal, must improve
 
             } else {
                 diag.toggle();
             }
 
             var isVisible = diag.isVisible();
-            if (manage.editContext.ContentBlock.ShowTemplatePicker !== isVisible)
+            if (manage._editContext.ContentBlock.ShowTemplatePicker !== isVisible)
                 cb._setTemplateChooserState(isVisible)
                     .then(function () {
-                        manage.editContext.ContentBlock.ShowTemplatePicker = isVisible;
+                        manage._editContext.ContentBlock.ShowTemplatePicker = isVisible;
                     });
 
         },
@@ -226,7 +226,7 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
                         newGuid = newGuid.replace(/[\",\']/g, ""); // fixes a special case where the guid is given with quotes (dependes on version of angularjs) issue #532
                         if (console) console.log("created content group {" + newGuid + "}");
 
-                        manage.updateContentGroupGuid(newGuid);
+                        manage._updateContentGroupGuid(newGuid);
                     });
 
             var promiseToCorrectUi = promiseToSetState.then(function () {
@@ -242,7 +242,7 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
                     cb.editContext.ContentGroup.HasContent = forceCreate;
 
                 // only re-load on content, not on app as that was already re-loaded on the preview
-                if (!cb.buttonsAreLoaded || (!groupExistsAndTemplateUnchanged && manage.reloadWithAjax))      // necessary to show the original template again
+                if (!cb.buttonsAreLoaded || (!groupExistsAndTemplateUnchanged && manage._reloadWithAjax))      // necessary to show the original template again
                     cb.reloadAndReInitialize();
             });
 

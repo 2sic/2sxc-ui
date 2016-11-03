@@ -16,7 +16,7 @@ $(document).ready(function () {
             // 2016-10-09 2dm disabled try, as it only makes debugging harder...
             // not sure if we really need it
             //try {
-            $2sxc(this).manage.toolbar._processToolbars(this);
+            $2sxc(this).manage._toolbar._processToolbars(this);
             //} catch (e) { // Make sure that if one app breaks, others continue to work
             //    if (console && console.error) console.error(e);
             //}

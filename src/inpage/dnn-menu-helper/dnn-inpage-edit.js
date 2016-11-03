@@ -7,7 +7,7 @@ var $2sxcActionMenuMapper = function (moduleId) {
     return {
         changeLayoutOrContent: function () {    run("layout");  },
         addItem: function () {                  run("add", { "useModuleList": true, "sortOrder": 0 }); },
-        edit: function () {                     run ("edit", { "useModuleList": true, "sortOrder": 0 });},
+        edit: function () {                     run("edit", { "useModuleList": true, "sortOrder": 0 });},
         adminApp: function () {                 run("app"); },
         adminZone: function () {                run("zone");},
         develop: function () {                  run("template-develop"); }

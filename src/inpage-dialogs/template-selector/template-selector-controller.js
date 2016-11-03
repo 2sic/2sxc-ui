@@ -163,9 +163,9 @@
                 });
         });
 
-        vm.manageApps = function() {    wrapper.sxc.manage.action({ "action": "zone" });    };
-        vm.appSettings = function() {   wrapper.sxc.manage.action({ "action": "app" });     };
-        vm.appImport = function() {   wrapper.sxc.manage.action({ "action": "app-import" });     };
+        vm.manageApps = function() {    wrapper.sxc.manage.run("zone");    };
+        vm.appSettings = function() {   wrapper.sxc.manage.run("app");     };
+        vm.appImport = function() {   wrapper.sxc.manage.run("app-import");     };
 
         // Cancel and reset back to original state
         vm.cancelTemplateChange = wrapper.contentBlock._cancelTemplateChange;

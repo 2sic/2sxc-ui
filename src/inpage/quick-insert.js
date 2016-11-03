@@ -95,7 +95,7 @@
     qi.cmds = {
         cb: {
             "delete": function(clip) {
-                return $2sxc(clip.list).manage.deleteContentBlock(clip.parent, clip.field, clip.index);
+                return $2sxc(clip.list).manage._deleteContentBlock(clip.parent, clip.field, clip.index);
             }
         },
         mod: {
@@ -126,7 +126,7 @@
         var cbAction = $(this).data("action");
         if (!cbAction) {
             var appOrContent = $(this).data("type");
-            return $2sxc(list).manage.createContentBlock(actionConfig.parent, actionConfig.field, index, appOrContent, list);
+            return $2sxc(list).manage._createContentBlock(actionConfig.parent, actionConfig.field, index, appOrContent, list);
         } else
             // this is a cut/paste action
             return qi.copyPasteInPage(cbAction, list, index, selectors.cb.id);
@@ -143,7 +143,7 @@
             if (isNaN(from) || isNaN(to) || from === to || from + 1 === to) // this moves it to the same spot, so ignore
                 return qi.clipboard.clear(); // don't do anything
 
-            $2sxc(list).manage.moveContentBlock(clip.parent, clip.field, from, to);
+            $2sxc(list).manage._moveContentBlock(clip.parent, clip.field, from, to);
             qi.clipboard.clear();
         } 
     };

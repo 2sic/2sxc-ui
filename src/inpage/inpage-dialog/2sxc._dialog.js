@@ -19,11 +19,11 @@
 
         //#region data bridge both ways
         iframe.getManageInfo = function() {
-            return iframe.sxc.manage.dialogParameters;
+            return iframe.sxc.manage._dialogParameters;
         };
 
         iframe.getAdditionalDashboardConfig = function () {
-            return iframe.sxc.manage.dashboardConfig;
+            return iframe.sxc.manage._dashboardConfig;
         };
 
         iframe.getCommands = function() {

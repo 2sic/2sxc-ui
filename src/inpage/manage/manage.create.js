@@ -18,8 +18,8 @@
     }
     //#endregion
 
-
-    $2sxc._getManageController = function (sxc) {
+    $2sxc._manage = {};
+    $2sxc._manage.create = function (sxc) {
         var contentBlockTag = getContentBlockTag(sxc);
         var editContext = getContextInfo(contentBlockTag);
 
@@ -53,30 +53,52 @@
         };
 
         var toolsAndButtons = $2sxc._toolbarManager.create(sxc, editContext);
-        var cmds = $2sxc._contentManagementCommands(sxc, contentBlockTag);
+        var cmds = $2sxc._commands.engine(sxc, contentBlockTag);
 
         var editManager = {
+            //#region Official, public properties and commands, which are stable for use from the outside
+
             // public method to find out if it's in edit-mode
             isEditMode: function () { return editContext.Environment.IsEditable; },
-            reloadWithAjax: editContext.ContentGroup.SupportsAjax,  // for now, allow all content to use ajax, apps use page-reload
 
-            dialogParameters: ngDialogParams, // used for various dialogs
-            toolbarConfig: toolsAndButtons.config, // used to configure buttons / toolbars
+            // run a command - often used in toolbars and custom buttons
+            run: cmds.executeAction,
 
-            editContext: editContext, // metadata necessary to know what/how to edit
-            dashboardConfig: dashConfig,
-            _commands: cmds,
+            // get a button or a toolbar for something
+            getButton: toolsAndButtons.getButton,
+            getToolbar: toolsAndButtons.getToolbar,
 
-            // Perform a toolbar button-action - basically get the configuration and execute it's action
-            action: cmds.executeAction,
-            run: cmds.executeAction,        // test in 08.06, alternative to "action" for more consistent naming
+            //#endregion official, public properties - everything below this can change at any time
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            _reloadWithAjax: editContext.ContentGroup.SupportsAjax,
+
+            _dialogParameters: ngDialogParams,      // used for various dialogs
+            _toolbarConfig: toolsAndButtons.config, // used to configure buttons / toolbars
+
+            _editContext: editContext,              // metadata necessary to know what/how to edit
+            _dashboardConfig: dashConfig,           // used for in-page dialogs
+            _commands: cmds,                        // used to handle the commands for this content-block
 
             //#region toolbar quick-access commands - might be used by other scripts, so I'm keeping them here for the moment, but may just delete them later
-            toolbar: toolsAndButtons, // should use this from now on when accessing from outside
-            getButton: toolsAndButtons.getButton,
-            // 2016-10-11 maybe breaking change, but shoudn't be exposed
-            //createDefaultToolbar: toolsAndButtons.defaultButtonList,
-            getToolbar: toolsAndButtons.getToolbar,
+            _toolbar: toolsAndButtons, // should use this from now on when accessing from outside
             //#endregion
 
             // init this object 
@@ -91,19 +113,17 @@
 
                 // attach & open the mini-dashboard iframe
                 if (!editContext.error.type && editContext.ContentBlock.ShowTemplatePicker)
-                    editManager.action("layout");
+                    editManager.run("layout");
 
             },
 
-            // private: show error
+            // private: show error when the app/data hasn't been installed yet for this imported-module
             _handleErrors: function (errType, cbTag) {
                 var errWrapper = $("<div class=\"dnnFormMessage dnnFormWarning sc-element\"></div>");
                 var msg = "";
                 var toolbar = $("<ul class='sc-menu'></ul>");
-                var actions = [];
                 if (errType === "DataIsMissing") {
                     msg = "Error: System.Exception: Data is missing - usually when a site is copied but the content / apps have not been imported yet - check 2sxc.org/help?tag=export-import";
-                    actions = ["zone", "more"];
                     toolbar.attr("data-toolbar", '[{\"action\": \"zone\"}, {\"action\": \"more\"}]');
                 }
                 errWrapper.append(msg);
@@ -112,13 +132,15 @@
             },
 
             // change config by replacing the guid, and refreshing dependend sub-objects
-            updateContentGroupGuid: function (newGuid) {
+            _updateContentGroupGuid: function (newGuid) {
                 editContext.ContentGroup.Guid = newGuid;
                 toolsAndButtons.refreshConfig(); 
-                editManager.toolbarConfig = toolsAndButtons.config;
+                editManager._toolbarConfig = toolsAndButtons.config;
             },
 
-            createContentBlock: function (parentId, fieldName, index, appName, container) {
+            //#region ContentBlock commands: create, move, delete --> should probably move out of the manage-class
+
+            _createContentBlock: function (parentId, fieldName, index, appName, container) {
                 // the wrapper, into which this will be placed and the list of pre-existing blocks
                 var listTag = container;
                 if (listTag.length === 0) return alert("can't add content-block as we couldn't find the list");
@@ -140,12 +162,12 @@
                 
 
                     var sxcNew = $2sxc(newTag);
-                    sxcNew.manage.toolbar._processToolbars(newTag);
+                    sxcNew.manage._toolbar._processToolbars(newTag);
 
                 });
             },
 
-            moveContentBlock: function(parentId, field, indexFrom, indexTo) {
+            _moveContentBlock: function(parentId, field, indexFrom, indexTo) {
                 return sxc.webApi.get({
                     url: "view/module/MoveItemInList",
                     params: { parentId: parentId, field: field, indexFrom: indexFrom, indexTo: indexTo }
@@ -156,7 +178,7 @@
             },
 
             // delete a content-block inside a list of content-blocks
-            deleteContentBlock: function (parentId, field, index) {
+            _deleteContentBlock: function (parentId, field, index) {
                 if (confirm($2sxc.translate("QuickInsertMenu.ConfirmDelete")))
                     return sxc.webApi.get({
                         url: "view/module/RemoveItemInList",
@@ -166,10 +188,25 @@
                         window.location.reload();
                     });
                 return null;
+            },
+            //#endregion
+
+            //#region deprecated properties - these all should have been undocumented/ private till now
+            
+            // 2016-11-03 v.08.06 deprecated command "action", it was only for internal use till now
+            action: function () {
+                console.error("Obsolete: you are using a deprecated method 'action' which will be removed in 2sxc v9. you must change it to 'run'");
+                return cmds.executeAction.apply(undefined, arguments);
+            },
+            // 2016-10-11 v08.06 maybe breaking change, but shouldn't be exposed
+            createDefaultToolbar: function () {
+                console.error("Obsolete: you are using a deprecated method 'createDefaultToolbar' which will be removed in 2sxc v9. you must change it to 'getToolbar'");
+                return toolsAndButtons.defaultButtonList.apply(undefined, arguments);
             }
 
+            //#endregion
 
-        };
+            };
 
         editManager.init();
         return editManager;

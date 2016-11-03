@@ -11,12 +11,13 @@
  * - showCondition(settings, moduleConfiguration) - would conditionally prevent adding this button by default
  * - code(settings, event) - the code executed on click, if it's not the default action
  * - dynamicClasses(settings) - can conditionally add more css-class names to add to the button, like the "empty" added if something doesn't have metadata
+ * - disabled (new!)
  * - params - ...
  */
 
 (function () {
     // helper function to create the configuration object
-    function action(name, translateKey, icon, uiOnly, more) {
+    function makeDef(name, translateKey, icon, uiOnly, more) {
         return $2sxc._lib.extend({
             name: name,
             title: "Toolbar." + translateKey,
@@ -25,20 +26,20 @@
         }, more);
     }
 
-    $2sxc._actions = {};
-    $2sxc._actions.create = function (editContext) {
+    $2sxc._commands.definitions = {};
+    $2sxc._commands.definitions.create = function (editContext) {
         var enableTools = editContext.canDesign;
         var isContent = editContext.isContent;
 
         var act = {
             // show the basic dashboard which allows view-changing
-            "dash-view": action("dash-view", "Dashboard", "", true, { inlineWindow: true }),
+            "dash-view": makeDef("dash-view", "Dashboard", "", true, { inlineWindow: true }),
 
             // open the import dialog
-            "app-import": action("app-import", "Dashboard", "", true, {}),
+            "app-import": makeDef("app-import", "Dashboard", "", true, {}),
 
             // open an edit-item dialog
-            'edit': action("edit", "Edit", "pencil", false, {
+            'edit': makeDef("edit", "Edit", "pencil", false, {
                 params: { mode: "edit" },
                 showCondition: function (settings, modConfig) {
                     return settings.entityId || settings.useModuleList; // need ID or a "slot", otherwise edit won't work
@@ -49,7 +50,7 @@
             // new can also be used for mini-toolbars which just add an entity not attached to a module
             // in that case it's essential to add a contentType like 
             // <ul class="sc-menu" data-toolbar='{"action":"new", "contentType": "Category"}'></ul>
-            'new': action("new", "New", "plus", false, {
+            'new': makeDef("new", "New", "plus", false, {
                 params: { mode: "new" },
                 dialog: "edit", // don't use "new" (default) but use "edit"
                 showCondition: function (settings, modConfig) {
@@ -62,7 +63,7 @@
             }),
 
             // add brings no dialog, just add an empty item
-            'add': action("add", "AddDemo", "plus-circled", false, {
+            'add': makeDef("add", "AddDemo", "plus-circled", false, {
                 showCondition: function(settings, modConfig) {
                     return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1;
                 },
@@ -73,7 +74,7 @@
             }),
 
             // create a metadata toolbar
-            "metadata": action("metadata", "Metadata", "tag", false, {
+            "metadata": makeDef("metadata", "Metadata", "tag", false, {
                 params: { mode: "new" },
                 dialog: "edit", // don't use "new" (default) but use "edit"
                 dynamicClasses: function (settings) {
@@ -94,7 +95,7 @@
             }),
 
             // remove an item from the placeholder (usually for lists)
-            'remove': action("remove", "Remove", "minus-circled", false, {
+            'remove': makeDef("remove", "Remove", "minus-circled", false, {
                 showCondition: function(settings, modConfig) {
                     return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1;
                 },
@@ -119,7 +120,7 @@
             //    }
             //},
 
-            'moveup': action("moveup", "MoveUp", "move-up", false, {
+            'moveup': makeDef("moveup", "MoveUp", "move-up", false, {
                 showCondition: function(settings, modConfig) {
                     return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1 && settings.sortOrder !== 0;
                 },
@@ -128,7 +129,7 @@
                         .changeOrder(settings.sortOrder, Math.max(settings.sortOrder - 1, 0));
                 }
             }),
-            'movedown': action("movedown", "MoveDown", "move-down", false, {
+            'movedown': makeDef("movedown", "MoveDown", "move-down", false, {
                 showCondition: function(settings, modConfig) {
                     return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1;
                 },
@@ -137,11 +138,11 @@
                 }
             }),
 
-            'instance-list': action("instance-list", "Sort", "list-numbered", false, {
+            'instance-list': makeDef("instance-list", "Sort", "list-numbered", false, {
                 showCondition: function (settings, modConfig) { return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1; }
             }),
 
-            'publish': action("publish", "Unpublished", "eye-off", false, {
+            'publish': makeDef("publish", "Unpublished", "eye-off", false, {
                 showCondition: function (settings, modConfig) {
                     return settings.isPublished === false;
                 },
@@ -156,24 +157,24 @@
                 }
             }),
 
-            'replace': action("replace", "Replace", "replace", false, {
+            'replace': makeDef("replace", "Replace", "replace", false, {
                 showCondition: function (settings) { return settings.useModuleList; }
             }),
 
 
-            //#region template commands: contenttype, contentitems, query, develop
+            //#region template commands: contenttype, contentitems, template-query, template-develop, template-settings
 
-            'contenttype': action("contenttype", "ContentType", "fields", true, {
+            'contenttype': makeDef("contenttype", "ContentType", "fields", true, {
                 showCondition: enableTools
             }),
 
-            'contentitems': action("contentitems", "ContentItems", "table", true, {
+            'contentitems': makeDef("contentitems", "ContentItems", "table", true, {
                 params: { contentTypeName: editContext.contentTypeId },
                 showCondition: enableTools && editContext.contentTypeId
             }),
 
 
-            'template-develop': action("develop", "Develop", "code", true, {
+            'template-develop': makeDef("develop", "Develop", "code", true, {
                 newWindow: true,
                 dialog: "develop",
                 showCondition: enableTools,
@@ -182,7 +183,7 @@
                 }
             }),
 
-            'template-query': action("query", "QueryEdit", "filter", true, {
+            'template-query': makeDef("query", "QueryEdit", "filter", true, {
                 dialog: "pipeline-designer",
                 newWindow: true,
                 disabled: editContext.appSettingsId === null,
@@ -195,7 +196,7 @@
                 }
             }),
 
-            'template-settings': action("template-settings", "TemplateSettings", "sliders", true, {
+            'template-settings': makeDef("template-settings", "TemplateSettings", "sliders", true, {
                 dialog: "edit",
                 showCondition: enableTools,
                 configureCommand: function (cmd) {
@@ -206,27 +207,25 @@
             //#endregion template commands
 
             //#region app-actions: app-settings, app-resources
-            // todo: improve condition
-            // todo: dynamicClasses like metadata, to disable if not ready...
-            'app-settings': action("app-settings", "AppSettings", "sliders", true, {
+
+            'app-settings': makeDef("app-settings", "AppSettings", "sliders", true, {
                 dialog: "edit",
                 disabled: editContext.appSettingsId === null,
                 title: "Toolbar.AppSettings" + (editContext.appSettingsId === null ? "Disabled" : ""),
                 showCondition: function(settings, modConfig) {
-                    return enableTools && !isContent && editContext.appSettingsId != null; // only if settings exist, or are 0 (to be created)
+                    return enableTools && !isContent && editContext.appSettingsId !== null; // only if settings exist, or are 0 (to be created)
                 },
                 configureCommand: function (cmd) {
                     cmd.items = [{ EntityId: editContext.appSettingsId }];
                 }
             }),
 
-            // todo: improve condition
-            'app-resources': action("app-resources", "AppResources", "language", true, {
+            'app-resources': makeDef("app-resources", "AppResources", "language", true, {
                 dialog: "edit",
                 disabled: editContext.appResourcesId === null,
                 title: "Toolbar.AppSettings" + (editContext.appResourcesId === null ? "Disabled" : ""),
                 showCondition: function (settings, modConfig) {
-                    return enableTools && !isContent && editContext.appResourcesId != null; // only if resources exist or are 0 (to be created)...
+                    return enableTools && !isContent && editContext.appResourcesId !== null; // only if resources exist or are 0 (to be created)...
                 },
                 configureCommand: function (cmd) {
                     cmd.items = [{ EntityId: editContext.appResourcesId }];
@@ -236,16 +235,16 @@
 
             //#region app & zone
 
-            'app': action("app", "App", "settings", true, {
+            'app': makeDef("app", "App", "settings", true, {
                 showCondition: enableTools
             }),
 
-            'zone': action("zone", "Zone", "manage", true, {
+            'zone': makeDef("zone", "Zone", "manage", true, {
                 showCondition: enableTools
             }),
             //#endregion
 
-            'custom': action("custom", "Custom", "bomb", true, {
+            'custom': makeDef("custom", "Custom", "bomb", true, {
                 code: function (settings, event, manager) {
                     console.log("custom action with code - BETA feature, may change");
                     if (!settings.customCode) {
@@ -262,13 +261,13 @@
             }),
 
             //#region UI actions: layout, more
-            'layout': action("layout", "ChangeLayout", "glasses", true, {
+            'layout': makeDef("layout", "ChangeLayout", "glasses", true, {
                 code: function (settings, event, manager) {
                     manager.contentBlock.dialogToggle();
                 }
             }),
 
-            "more": action("more", "MoreActions", "options btn-mode", true, {
+            "more": makeDef("more", "MoreActions", "options btn-mode", true, {
                 code: function (settings, event) {
                     var btn = $(event.target),
                         fullMenu = btn.closest("ul.sc-menu"),

@@ -7,7 +7,7 @@
                 // ...
 
                 // execute the action
-                sxc.manage.action(actionName, config, event);
+                sxc.manage.run(actionName, config, event);
             }
              
         };

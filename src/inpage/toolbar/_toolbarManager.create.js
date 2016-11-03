@@ -5,7 +5,7 @@
             cbid = sxc.cbid,
             ec = editContext,
             cg = ec.ContentGroup,
-            allActions = $2sxc._actions.create({
+            allActions = $2sxc._commands.definitions.create({
                 canDesign: ec.User.CanDesign,
                 templateId: cg.TemplateId,
                 contentTypeId: cg.ContentTypeName,

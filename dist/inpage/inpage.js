@@ -13,7 +13,7 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
     //#region loads of old stuff, should be cleaned, mostly just copied from the angulare code
 
     var cViewWithoutContent = "_LayoutElement"; // needed to differentiate the "select item" from the "empty-is-selected" which are both empty
-    var editContext = manage.editContext;
+    var editContext = manage._editContext;
     var ctid = (editContext.ContentGroup.ContentTypeName === "" && editContext.ContentGroup.TemplateId !== null)
         ? cViewWithoutContent // has template but no content, use placeholder
         : editContext.ContentGroup.ContentTypeName;// manageInfo.contentTypeId;
@@ -42,7 +42,7 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
                 $(cbTag).replaceWith(newStuff);
                 cbTag = newStuff;
                 cb.buttonsAreLoaded = false;
-                //$2sxc(newStuff).manage.toolbar._processToolbars(newStuff); // init it...
+                //$2sxc(newStuff).manage._toolbar._processToolbars(newStuff); // init it...
             } catch (e) {
                 console.log("Error while rendering template:");
                 console.log(e);
@@ -57,17 +57,17 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
             // force ajax is set when a new app was chosen, and the new app supports ajax
             // this value can only be true, or not exist at all
             if (forceAjax)
-                manage.reloadWithAjax = true;
+                manage._reloadWithAjax = true;
 
-            if (manage.reloadWithAjax) // necessary to show the original template again
+            if (manage._reloadWithAjax) // necessary to show the original template again
                 return (forceAjax
                     ? cb.reload(-1) // -1 is important to it doesn't try to use the old templateid
                     : cb.reload())
                     .then(function () {
-                        if (manage.reloadWithAjax && sxc.manage.dialog) sxc.manage.dialog.destroy(); // only remove on force, which is an app-change
+                        if (manage._reloadWithAjax && sxc.manage.dialog) sxc.manage.dialog.destroy(); // only remove on force, which is an app-change
                         // create new sxc-object
                         cb.sxc = cb.sxc.recreate();
-                        cb.sxc.manage.toolbar._processToolbars(); // sub-optimal deep dependency
+                        cb.sxc.manage._toolbar._processToolbars(); // sub-optimal deep dependency
                         cb.buttonsAreLoaded = true;
                     });
             else
@@ -86,7 +86,7 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
                 return null;
 
             // if reloading a non-content-app, re-load the page
-            if (!manage.reloadWithAjax) // special code to force ajax-app-change
+            if (!manage._reloadWithAjax) // special code to force ajax-app-change
                 return window.location.reload();
 
             // remember for future persist/save/undo
@@ -185,17 +185,17 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
             }
             if (!diag) {
                 // still not found, create it
-                diag = manage.dialog = manage.action({ "action": "dash-view" }); // not ideal, must improve
+                diag = manage.dialog = manage.run("dash-view"); // not ideal, must improve
 
             } else {
                 diag.toggle();
             }
 
             var isVisible = diag.isVisible();
-            if (manage.editContext.ContentBlock.ShowTemplatePicker !== isVisible)
+            if (manage._editContext.ContentBlock.ShowTemplatePicker !== isVisible)
                 cb._setTemplateChooserState(isVisible)
                     .then(function () {
-                        manage.editContext.ContentBlock.ShowTemplatePicker = isVisible;
+                        manage._editContext.ContentBlock.ShowTemplatePicker = isVisible;
                     });
 
         },
@@ -226,7 +226,7 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
                         newGuid = newGuid.replace(/[\",\']/g, ""); // fixes a special case where the guid is given with quotes (dependes on version of angularjs) issue #532
                         if (console) console.log("created content group {" + newGuid + "}");
 
-                        manage.updateContentGroupGuid(newGuid);
+                        manage._updateContentGroupGuid(newGuid);
                     });
 
             var promiseToCorrectUi = promiseToSetState.then(function () {
@@ -242,7 +242,7 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
                     cb.editContext.ContentGroup.HasContent = forceCreate;
 
                 // only re-load on content, not on app as that was already re-loaded on the preview
-                if (!cb.buttonsAreLoaded || (!groupExistsAndTemplateUnchanged && manage.reloadWithAjax))      // necessary to show the original template again
+                if (!cb.buttonsAreLoaded || (!groupExistsAndTemplateUnchanged && manage._reloadWithAjax))      // necessary to show the original template again
                     cb.reloadAndReInitialize();
             });
 
@@ -265,7 +265,7 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
                 // ...
 
                 // execute the action
-                sxc.manage.action(actionName, config, event);
+                sxc.manage.run(actionName, config, event);
             }
              
         };
@@ -280,184 +280,8 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
 
 })();
 
-// A helper-controller in charge of opening edit-dialogs + creating the toolbars for it
-// all in-page toolbars etc.
-// if loaded, it's found under the $2sxc(module).manage
-// it has commands to
-// - getButton
-// - getToolbar
-// - action(...)
-
-(function () {
-    //#region helper functions
-    function getContentBlockTag(sxci) {
-         return $("div[data-cb-id='" + sxci.cbid + "']")[0];
-    }
-
-    function getContextInfo(cb) {
-        var attr = cb.getAttribute("data-edit-context");
-        return JSON.parse(attr || "");
-    }
-    //#endregion
-
-
-    $2sxc._getManageController = function (sxc) {
-        var contentBlockTag = getContentBlockTag(sxc);
-        var editContext = getContextInfo(contentBlockTag);
-
-        // assemble all parameters needed for the dialogs if we open anything
-        var ngDialogParams = {
-            zoneId: editContext.ContentGroup.ZoneId,
-            appId: editContext.ContentGroup.AppId,
-            tid: editContext.Environment.PageId,
-            mid: editContext.Environment.InstanceId,
-            cbid: sxc.cbid,
-            lang: editContext.Language.Current,
-            langpri: editContext.Language.Primary,
-            langs: JSON.stringify(editContext.Language.All),
-            portalroot: editContext.Environment.WebsiteUrl,
-            websiteroot: editContext.Environment.SxcRootUrl,
-            // todo: probably move the user into the dashboard info
-            user: { canDesign: editContext.User.CanDesign, canDevelop: editContext.User.CanDesign },
-            approot: editContext.ContentGroup.AppUrl || null // this is the only value which doesn't have a slash by default.  note that the app-root doesn't exist when opening "manage-app"
-        };
-
-        var dashConfig = {
-            appId: editContext.ContentGroup.AppId,
-            isContent: editContext.ContentGroup.IsContent,
-            hasContent: editContext.ContentGroup.HasContent,
-            isList: editContext.ContentGroup.IsList,
-            templateId: editContext.ContentGroup.TemplateId,
-            contentTypeId: editContext.ContentGroup.ContentTypeName,
-            templateChooserVisible: editContext.ContentBlock.ShowTemplatePicker, // todo: maybe move to content-goup
-            user: { canDesign: editContext.User.CanDesign, canDevelop: editContext.User.CanDesign },
-            supportsAjax: editContext.ContentGroup.SupportsAjax
-        };
-
-        var toolsAndButtons = $2sxc._toolbarManager.create(sxc, editContext);
-        var cmds = $2sxc._contentManagementCommands(sxc, contentBlockTag);
-
-        var editManager = {
-            // public method to find out if it's in edit-mode
-            isEditMode: function () { return editContext.Environment.IsEditable; },
-            reloadWithAjax: editContext.ContentGroup.SupportsAjax,  // for now, allow all content to use ajax, apps use page-reload
-
-            dialogParameters: ngDialogParams, // used for various dialogs
-            toolbarConfig: toolsAndButtons.config, // used to configure buttons / toolbars
-
-            editContext: editContext, // metadata necessary to know what/how to edit
-            dashboardConfig: dashConfig,
-            _commands: cmds,
-
-            // Perform a toolbar button-action - basically get the configuration and execute it's action
-            action: cmds.executeAction,
-            run: cmds.executeAction,        // test in 08.06, alternative to "action" for more consistent naming
-
-            //#region toolbar quick-access commands - might be used by other scripts, so I'm keeping them here for the moment, but may just delete them later
-            toolbar: toolsAndButtons, // should use this from now on when accessing from outside
-            getButton: toolsAndButtons.getButton,
-            // 2016-10-11 maybe breaking change, but shoudn't be exposed
-            //createDefaultToolbar: toolsAndButtons.defaultButtonList,
-            getToolbar: toolsAndButtons.getToolbar,
-            //#endregion
-
-            // init this object 
-            init: function init() {
-                // enhance UI in case there are known errors / issues
-                if (editContext.error.type)
-                    editManager._handleErrors(editContext.error.type, contentBlockTag);
-
-                // finish init of sub-objects
-                editManager._commands.init(editManager);
-                editManager.contentBlock = $2sxc._contentBlock.create(sxc, editManager, contentBlockTag);
-
-                // attach & open the mini-dashboard iframe
-                if (!editContext.error.type && editContext.ContentBlock.ShowTemplatePicker)
-                    editManager.action("layout");
-
-            },
-
-            // private: show error
-            _handleErrors: function (errType, cbTag) {
-                var errWrapper = $("<div class=\"dnnFormMessage dnnFormWarning sc-element\"></div>");
-                var msg = "";
-                var toolbar = $("<ul class='sc-menu'></ul>");
-                var actions = [];
-                if (errType === "DataIsMissing") {
-                    msg = "Error: System.Exception: Data is missing - usually when a site is copied but the content / apps have not been imported yet - check 2sxc.org/help?tag=export-import";
-                    actions = ["zone", "more"];
-                    toolbar.attr("data-toolbar", '[{\"action\": \"zone\"}, {\"action\": \"more\"}]');
-                }
-                errWrapper.append(msg);
-                errWrapper.append(toolbar);
-                $(cbTag).append(errWrapper);
-            },
-
-            // change config by replacing the guid, and refreshing dependend sub-objects
-            updateContentGroupGuid: function (newGuid) {
-                editContext.ContentGroup.Guid = newGuid;
-                toolsAndButtons.refreshConfig(); 
-                editManager.toolbarConfig = toolsAndButtons.config;
-            },
-
-            createContentBlock: function (parentId, fieldName, index, appName, container) {
-                // the wrapper, into which this will be placed and the list of pre-existing blocks
-                var listTag = container;
-                if (listTag.length === 0) return alert("can't add content-block as we couldn't find the list");
-                var cblockList = listTag.find("div.sc-content-block");
-                if (index > cblockList.length)
-                    index = cblockList.length; // make sure index is never greater than the amount of items
-                return sxc.webApi.get({
-                    url: "view/module/generatecontentblock",
-                    params: { parentId: parentId, field: fieldName, sortOrder: index, app: appName }
-                }).then(function (result) {
-                    var newTag = $(result); // prepare tag for inserting
-
-                    // should I add it to a specific position...
-                    if (cblockList.length > 0 && index > 0) 
-                        $(cblockList[cblockList.length > index - 1 ? index - 1: cblockList.length - 1])
-                            .after(newTag);
-                    else    //...or just at the beginning?
-                        listTag.prepend(newTag);
-                
-
-                    var sxcNew = $2sxc(newTag);
-                    sxcNew.manage.toolbar._processToolbars(newTag);
-
-                });
-            },
-
-            moveContentBlock: function(parentId, field, indexFrom, indexTo) {
-                return sxc.webApi.get({
-                    url: "view/module/MoveItemInList",
-                    params: { parentId: parentId, field: field, indexFrom: indexFrom, indexTo: indexTo }
-                }).then(function() {
-                    console.log("done moving!");
-                    window.location.reload();
-                });
-            },
-
-            // delete a content-block inside a list of content-blocks
-            deleteContentBlock: function (parentId, field, index) {
-                if (confirm($2sxc.translate("QuickInsertMenu.ConfirmDelete")))
-                    return sxc.webApi.get({
-                        url: "view/module/RemoveItemInList",
-                        params: { parentId: parentId, field: field, index: index }
-                    }).then(function() {
-                        console.log("done deleting!");
-                        window.location.reload();
-                    });
-                return null;
-            }
-
-
-        };
-
-        editManager.init();
-        return editManager;
-    };
-
-
+(function() {
+    $2sxc._commands = {};
 })();
 /*
  * Actions of 2sxc - mostly used in toolbars
@@ -472,12 +296,13 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
  * - showCondition(settings, moduleConfiguration) - would conditionally prevent adding this button by default
  * - code(settings, event) - the code executed on click, if it's not the default action
  * - dynamicClasses(settings) - can conditionally add more css-class names to add to the button, like the "empty" added if something doesn't have metadata
+ * - disabled (new!)
  * - params - ...
  */
 
 (function () {
     // helper function to create the configuration object
-    function action(name, translateKey, icon, uiOnly, more) {
+    function makeDef(name, translateKey, icon, uiOnly, more) {
         return $2sxc._lib.extend({
             name: name,
             title: "Toolbar." + translateKey,
@@ -486,20 +311,20 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
         }, more);
     }
 
-    $2sxc._actions = {};
-    $2sxc._actions.create = function (editContext) {
+    $2sxc._commands.definitions = {};
+    $2sxc._commands.definitions.create = function (editContext) {
         var enableTools = editContext.canDesign;
         var isContent = editContext.isContent;
 
         var act = {
             // show the basic dashboard which allows view-changing
-            "dash-view": action("dash-view", "Dashboard", "", true, { inlineWindow: true }),
+            "dash-view": makeDef("dash-view", "Dashboard", "", true, { inlineWindow: true }),
 
             // open the import dialog
-            "app-import": action("app-import", "Dashboard", "", true, {}),
+            "app-import": makeDef("app-import", "Dashboard", "", true, {}),
 
             // open an edit-item dialog
-            'edit': action("edit", "Edit", "pencil", false, {
+            'edit': makeDef("edit", "Edit", "pencil", false, {
                 params: { mode: "edit" },
                 showCondition: function (settings, modConfig) {
                     return settings.entityId || settings.useModuleList; // need ID or a "slot", otherwise edit won't work
@@ -510,7 +335,7 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
             // new can also be used for mini-toolbars which just add an entity not attached to a module
             // in that case it's essential to add a contentType like 
             // <ul class="sc-menu" data-toolbar='{"action":"new", "contentType": "Category"}'></ul>
-            'new': action("new", "New", "plus", false, {
+            'new': makeDef("new", "New", "plus", false, {
                 params: { mode: "new" },
                 dialog: "edit", // don't use "new" (default) but use "edit"
                 showCondition: function (settings, modConfig) {
@@ -523,7 +348,7 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
             }),
 
             // add brings no dialog, just add an empty item
-            'add': action("add", "AddDemo", "plus-circled", false, {
+            'add': makeDef("add", "AddDemo", "plus-circled", false, {
                 showCondition: function(settings, modConfig) {
                     return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1;
                 },
@@ -534,7 +359,7 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
             }),
 
             // create a metadata toolbar
-            "metadata": action("metadata", "Metadata", "tag", false, {
+            "metadata": makeDef("metadata", "Metadata", "tag", false, {
                 params: { mode: "new" },
                 dialog: "edit", // don't use "new" (default) but use "edit"
                 dynamicClasses: function (settings) {
@@ -555,7 +380,7 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
             }),
 
             // remove an item from the placeholder (usually for lists)
-            'remove': action("remove", "Remove", "minus-circled", false, {
+            'remove': makeDef("remove", "Remove", "minus-circled", false, {
                 showCondition: function(settings, modConfig) {
                     return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1;
                 },
@@ -580,7 +405,7 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
             //    }
             //},
 
-            'moveup': action("moveup", "MoveUp", "move-up", false, {
+            'moveup': makeDef("moveup", "MoveUp", "move-up", false, {
                 showCondition: function(settings, modConfig) {
                     return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1 && settings.sortOrder !== 0;
                 },
@@ -589,7 +414,7 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
                         .changeOrder(settings.sortOrder, Math.max(settings.sortOrder - 1, 0));
                 }
             }),
-            'movedown': action("movedown", "MoveDown", "move-down", false, {
+            'movedown': makeDef("movedown", "MoveDown", "move-down", false, {
                 showCondition: function(settings, modConfig) {
                     return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1;
                 },
@@ -598,11 +423,11 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
                 }
             }),
 
-            'instance-list': action("instance-list", "Sort", "list-numbered", false, {
+            'instance-list': makeDef("instance-list", "Sort", "list-numbered", false, {
                 showCondition: function (settings, modConfig) { return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1; }
             }),
 
-            'publish': action("publish", "Unpublished", "eye-off", false, {
+            'publish': makeDef("publish", "Unpublished", "eye-off", false, {
                 showCondition: function (settings, modConfig) {
                     return settings.isPublished === false;
                 },
@@ -617,24 +442,24 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
                 }
             }),
 
-            'replace': action("replace", "Replace", "replace", false, {
+            'replace': makeDef("replace", "Replace", "replace", false, {
                 showCondition: function (settings) { return settings.useModuleList; }
             }),
 
 
-            //#region template commands: contenttype, contentitems, query, develop
+            //#region template commands: contenttype, contentitems, template-query, template-develop, template-settings
 
-            'contenttype': action("contenttype", "ContentType", "fields", true, {
+            'contenttype': makeDef("contenttype", "ContentType", "fields", true, {
                 showCondition: enableTools
             }),
 
-            'contentitems': action("contentitems", "ContentItems", "table", true, {
+            'contentitems': makeDef("contentitems", "ContentItems", "table", true, {
                 params: { contentTypeName: editContext.contentTypeId },
                 showCondition: enableTools && editContext.contentTypeId
             }),
 
 
-            'template-develop': action("develop", "Develop", "code", true, {
+            'template-develop': makeDef("develop", "Develop", "code", true, {
                 newWindow: true,
                 dialog: "develop",
                 showCondition: enableTools,
@@ -643,7 +468,7 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
                 }
             }),
 
-            'template-query': action("query", "QueryEdit", "filter", true, {
+            'template-query': makeDef("query", "QueryEdit", "filter", true, {
                 dialog: "pipeline-designer",
                 newWindow: true,
                 disabled: editContext.appSettingsId === null,
@@ -656,7 +481,7 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
                 }
             }),
 
-            'template-settings': action("template-settings", "TemplateSettings", "sliders", true, {
+            'template-settings': makeDef("template-settings", "TemplateSettings", "sliders", true, {
                 dialog: "edit",
                 showCondition: enableTools,
                 configureCommand: function (cmd) {
@@ -667,27 +492,25 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
             //#endregion template commands
 
             //#region app-actions: app-settings, app-resources
-            // todo: improve condition
-            // todo: dynamicClasses like metadata, to disable if not ready...
-            'app-settings': action("app-settings", "AppSettings", "sliders", true, {
+
+            'app-settings': makeDef("app-settings", "AppSettings", "sliders", true, {
                 dialog: "edit",
                 disabled: editContext.appSettingsId === null,
                 title: "Toolbar.AppSettings" + (editContext.appSettingsId === null ? "Disabled" : ""),
                 showCondition: function(settings, modConfig) {
-                    return enableTools && !isContent && editContext.appSettingsId != null; // only if settings exist, or are 0 (to be created)
+                    return enableTools && !isContent && editContext.appSettingsId !== null; // only if settings exist, or are 0 (to be created)
                 },
                 configureCommand: function (cmd) {
                     cmd.items = [{ EntityId: editContext.appSettingsId }];
                 }
             }),
 
-            // todo: improve condition
-            'app-resources': action("app-resources", "AppResources", "language", true, {
+            'app-resources': makeDef("app-resources", "AppResources", "language", true, {
                 dialog: "edit",
                 disabled: editContext.appResourcesId === null,
                 title: "Toolbar.AppSettings" + (editContext.appResourcesId === null ? "Disabled" : ""),
                 showCondition: function (settings, modConfig) {
-                    return enableTools && !isContent && editContext.appResourcesId != null; // only if resources exist or are 0 (to be created)...
+                    return enableTools && !isContent && editContext.appResourcesId !== null; // only if resources exist or are 0 (to be created)...
                 },
                 configureCommand: function (cmd) {
                     cmd.items = [{ EntityId: editContext.appResourcesId }];
@@ -697,16 +520,16 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
 
             //#region app & zone
 
-            'app': action("app", "App", "settings", true, {
+            'app': makeDef("app", "App", "settings", true, {
                 showCondition: enableTools
             }),
 
-            'zone': action("zone", "Zone", "manage", true, {
+            'zone': makeDef("zone", "Zone", "manage", true, {
                 showCondition: enableTools
             }),
             //#endregion
 
-            'custom': action("custom", "Custom", "bomb", true, {
+            'custom': makeDef("custom", "Custom", "bomb", true, {
                 code: function (settings, event, manager) {
                     console.log("custom action with code - BETA feature, may change");
                     if (!settings.customCode) {
@@ -723,13 +546,13 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
             }),
 
             //#region UI actions: layout, more
-            'layout': action("layout", "ChangeLayout", "glasses", true, {
+            'layout': makeDef("layout", "ChangeLayout", "glasses", true, {
                 code: function (settings, event, manager) {
                     manager.contentBlock.dialogToggle();
                 }
             }),
 
-            "more": action("more", "MoreActions", "options btn-mode", true, {
+            "more": makeDef("more", "MoreActions", "options btn-mode", true, {
                 code: function (settings, event) {
                     var btn = $(event.target),
                         fullMenu = btn.closest("ul.sc-menu"),
@@ -752,146 +575,146 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
 })();
 
 
-(function(){
-$2sxc._contentManagementCommands = function (sxc, targetTag) {
-    var cmc = {
-        editManager: "must-be-added-after-initialization",
-        init: function(editor) {
-            cmc.editManager = editor;
-        },
+(function() {
+    $2sxc._commands.engine = function(sxc, targetTag) {
+        var cmc = {
+            manage: "must-be-added-after-initialization",
+            init: function(manage) {
+                cmc.manage = manage;
+            },
 
-        // assemble an object which will store the configuration and execute it
-        create: function(specialSettings) {
-            var settings = $2sxc._lib.extend({}, cmc.editManager.toolbarConfig, specialSettings); // merge button with general toolbar-settings
-            var ngDialogUrl = cmc.editManager.editContext.Environment.SxcRootUrl + "desktopmodules/tosic_sexycontent/dist/dnn/ui.html?sxcver="
-                + cmc.editManager.editContext.Environment.SxcVersion;
-            var isDebug = $2sxc.urlParams.get("debug") ? "&debug=true" : "";
+            // assemble an object which will store the configuration and execute it
+            create: function(specialSettings) {
+                var settings = $2sxc._lib.extend({}, cmc.manage._toolbarConfig, specialSettings); // merge button with general toolbar-settings
+                var ngDialogUrl = cmc.manage._editContext.Environment.SxcRootUrl + "desktopmodules/tosic_sexycontent/dist/dnn/ui.html?sxcver="
+                    + cmc.manage._editContext.Environment.SxcVersion;
+                var isDebug = $2sxc.urlParams.get("debug") ? "&debug=true" : "";
 
-            var cmd = {
-                settings: settings,
-                items: settings.items || [], // use predefined or create empty array
-                params: $2sxc._lib.extend({
-                    dialog: settings.dialog || settings.action // the variable used to name the dialog changed in the history of 2sxc from action to dialog
-                }, settings.params),
+                var cmd = {
+                    settings: settings,
+                    items: settings.items || [], // use predefined or create empty array
+                    params: $2sxc._lib.extend({
+                        dialog: settings.dialog || settings.action // the variable used to name the dialog changed in the history of 2sxc from action to dialog
+                    }, settings.params),
 
-                addSimpleItem: function() {
-                    var itm = {}, ct = cmd.settings.contentType || cmd.settings.attributeSetName; // two ways to name the content-type-name this, v 7.2+ and older
-                    if (cmd.settings.entityId) itm.EntityId = cmd.settings.entityId;
-                    if (ct) itm.ContentTypeName = ct;
-                    if (itm.EntityId || itm.ContentTypeName) // only add if there was stuff to add
-                        cmd.items.push(itm);
-                },
+                    addSimpleItem: function() {
+                        var itm = {}, ct = cmd.settings.contentType || cmd.settings.attributeSetName; // two ways to name the content-type-name this, v 7.2+ and older
+                        if (cmd.settings.entityId) itm.EntityId = cmd.settings.entityId;
+                        if (ct) itm.ContentTypeName = ct;
+                        if (itm.EntityId || itm.ContentTypeName) // only add if there was stuff to add
+                            cmd.items.push(itm);
+                    },
 
-                // this adds an item of the content-group, based on the group GUID and the sequence number
-                addContentGroupItem: function(guid, index, part, isAdd, isEntity, cbid, sectionLanguageKey) {
-                    cmd.items.push({
-                        Group: { Guid: guid, Index: index, Part: part, Add: isAdd },
-                        Title: $2sxc.translate(sectionLanguageKey)
-                    });
-                },
+                    // this adds an item of the content-group, based on the group GUID and the sequence number
+                    addContentGroupItem: function(guid, index, part, isAdd, isEntity, cbid, sectionLanguageKey) {
+                        cmd.items.push({
+                            Group: { Guid: guid, Index: index, Part: part, Add: isAdd },
+                            Title: $2sxc.translate(sectionLanguageKey)
+                        });
+                    },
 
-                // this will tell the command to edit a item from the sorted list in the group, optionally together with the presentation item
-                addContentGroupItemSetsToEditList: function(withPresentation) {
-                    var isContentAndNotHeader = (cmd.settings.sortOrder !== -1);
-                    var index = isContentAndNotHeader ? cmd.settings.sortOrder : 0;
-                    var prefix = isContentAndNotHeader ? "" : "List";
-                    var cTerm = prefix + "Content";
-                    var pTerm = prefix + "Presentation";
-                    var isAdd = cmd.settings.action === "new";
-                    var groupId = cmd.settings.contentGroupId;
-                    cmd.addContentGroupItem(groupId, index, cTerm.toLowerCase(), isAdd, cmd.settings.cbIsEntity, cmd.settings.cbId, "EditFormTitle." + cTerm);
+                    // this will tell the command to edit a item from the sorted list in the group, optionally together with the presentation item
+                    addContentGroupItemSetsToEditList: function(withPresentation) {
+                        var isContentAndNotHeader = (cmd.settings.sortOrder !== -1);
+                        var index = isContentAndNotHeader ? cmd.settings.sortOrder : 0;
+                        var prefix = isContentAndNotHeader ? "" : "List";
+                        var cTerm = prefix + "Content";
+                        var pTerm = prefix + "Presentation";
+                        var isAdd = cmd.settings.action === "new";
+                        var groupId = cmd.settings.contentGroupId;
+                        cmd.addContentGroupItem(groupId, index, cTerm.toLowerCase(), isAdd, cmd.settings.cbIsEntity, cmd.settings.cbId, "EditFormTitle." + cTerm);
 
-                    if (withPresentation)
-                        cmd.addContentGroupItem(groupId, index, pTerm.toLowerCase(), isAdd, cmd.settings.cbIsEntity, cmd.settings.cbId, "EditFormTitle." + pTerm);
+                        if (withPresentation)
+                            cmd.addContentGroupItem(groupId, index, pTerm.toLowerCase(), isAdd, cmd.settings.cbIsEntity, cmd.settings.cbId, "EditFormTitle." + pTerm);
 
-                },
+                    },
 
-                generateLink: function() {
-                    // if there is no items-array, create an empty one (it's required later on)
-                    if (!cmd.settings.items) cmd.settings.items = [];
-                    //#region steps for all actions: prefill, serialize, open-dialog
-                    // when doing new, there may be a prefill in the link to initialize the new item
-                    if (cmd.settings.prefill)
-                        for (var i = 0; i < cmd.items.length; i++)
-                            cmd.items[i].Prefill = cmd.settings.prefill;
+                    generateLink: function() {
+                        // if there is no items-array, create an empty one (it's required later on)
+                        if (!cmd.settings.items) cmd.settings.items = [];
+                        //#region steps for all actions: prefill, serialize, open-dialog
+                        // when doing new, there may be a prefill in the link to initialize the new item
+                        if (cmd.settings.prefill)
+                            for (var i = 0; i < cmd.items.length; i++)
+                                cmd.items[i].Prefill = cmd.settings.prefill;
 
-                    cmd.params.items = JSON.stringify(cmd.items); // Serialize/json-ify the complex items-list
+                        cmd.params.items = JSON.stringify(cmd.items); // Serialize/json-ify the complex items-list
 
-                    return ngDialogUrl
-                        + "#" + $.param(cmc.editManager.dialogParameters)
-                        + "&" + $.param(cmd.params)
-                        + isDebug;
-                    //#endregion
-                }
-            };
-            return cmd;
-        },
+                        return ngDialogUrl
+                            + "#" + $.param(cmc.manage._dialogParameters)
+                            + "&" + $.param(cmd.params)
+                            + isDebug;
+                        //#endregion
+                    }
+                };
+                return cmd;
+            },
 
-        // create a dialog link
-        _linkToNgDialog: function(specialSettings) {
-            var cmd = cmc.editManager._commands.create(specialSettings);
+            // create a dialog link
+            _linkToNgDialog: function(specialSettings) {
+                var cmd = cmc.manage._commands.create(specialSettings);
 
-            if (cmd.settings.useModuleList)
-                cmd.addContentGroupItemSetsToEditList(true);
-            else
-                cmd.addSimpleItem();
-
-            // if the command has own configuration stuff, do that now
-            if (cmd.settings.configureCommand)
-                cmd.settings.configureCommand(cmd);
-
-            return cmd.generateLink();
-        },
-        // open a new dialog of the angular-ui
-        _openNgDialog: function (settings, event, closeCallback) {
-
-            var callback = function () {
-                cmc.editManager.contentBlock.reloadAndReInitialize();
-                closeCallback();
-            };
-            var link = cmc._linkToNgDialog(settings);
-
-            if (settings.newWindow || (event && event.shiftKey))
-                return window.open(link);
-            else {
-                if (settings.inlineWindow)
-                    return $2sxc._dialog.create(sxc, targetTag, link, callback);
+                if (cmd.settings.useModuleList)
+                    cmd.addContentGroupItemSetsToEditList(true);
                 else
-                    return $2sxc.totalPopup.open(link, callback);
+                    cmd.addSimpleItem();
+
+                // if the command has own configuration stuff, do that now
+                if (cmd.settings.configureCommand)
+                    cmd.settings.configureCommand(cmd);
+
+                return cmd.generateLink();
+            },
+            // open a new dialog of the angular-ui
+            _openNgDialog: function(settings, event, closeCallback) {
+
+                var callback = function() {
+                    cmc.manage.contentBlock.reloadAndReInitialize();
+                    closeCallback();
+                };
+                var link = cmc._linkToNgDialog(settings);
+
+                if (settings.newWindow || (event && event.shiftKey))
+                    return window.open(link);
+                else {
+                    if (settings.inlineWindow)
+                        return $2sxc._dialog.create(sxc, targetTag, link, callback);
+                    else
+                        return $2sxc.totalPopup.open(link, callback);
+                }
+            },
+
+            executeAction: function(nameOrSettings, settings, event) {
+                // check if name is name (string) or object (settings)
+                if (!event && settings && settings.altKey) { // no event param, but settings, which is an event
+                    event = settings;
+                    settings = {};
+                }
+                if (typeof (nameOrSettings) === "string") {
+                    settings = $2sxc._lib.extend(settings || {}, { "action": nameOrSettings });
+                } else {
+                    //event = settings;
+                    settings = nameOrSettings;
+                }
+
+                var conf = cmc.manage._toolbar.actions[settings.action];
+                settings = $2sxc._lib.extend({}, conf, settings); // merge conf & settings, but settings has higher priority
+                if (!settings.dialog) settings.dialog = settings.action; // old code uses "action" as the parameter, now use verb ? dialog
+                if (!settings.code) settings.code = cmc._openNgDialog; // decide what action to perform
+
+                var origEvent = event || window.event; // pre-save event because afterwards we have a promise, so the event-object changes; funky syntax is because of browser differences
+                if (conf.uiActionOnly)
+                    return settings.code(settings, origEvent, cmc.manage);
+
+                // if more than just a UI-action, then it needs to be sure the content-group is created first
+                cmc.manage.contentBlock.prepareToAddContent()
+                    .then(function() {
+                        return settings.code(settings, origEvent, cmc.manage);
+                    });
             }
-        },
+        };
 
-        executeAction: function (nameOrSettings, settings, event) {
-            // check if name is name (string) or object (settings)
-            if (!event && settings && settings.altKey) { // no event param, but settings, which is an event
-                event = settings;
-                settings = {};
-            }
-            if (typeof (nameOrSettings) === "string") {
-                settings = $2sxc._lib.extend(settings || {}, { "action": nameOrSettings });
-            } else {
-                //event = settings;
-                settings = nameOrSettings;
-            }
-
-            var conf = cmc.editManager.toolbar.actions[settings.action];
-            settings = $2sxc._lib.extend({}, conf, settings); // merge conf & settings, but settings has higher priority
-            if (!settings.dialog) settings.dialog = settings.action; // old code uses "action" as the parameter, now use verb ? dialog
-            if (!settings.code) settings.code = cmc._openNgDialog; // decide what action to perform
-
-            var origEvent = event || window.event; // pre-save event because afterwards we have a promise, so the event-object changes; funky syntax is because of browser differences
-            if (conf.uiActionOnly)
-                return settings.code(settings, origEvent, cmc.editManager);
-
-            // if more than just a UI-action, then it needs to be sure the content-group is created first
-            cmc.editManager.contentBlock.prepareToAddContent()
-                .then(function () {
-                    return settings.code(settings, origEvent, cmc.editManager);
-                });
-        }
-    };
-
-    return cmc;
+        return cmc;
     };
 
 
@@ -905,7 +728,7 @@ var $2sxcActionMenuMapper = function (moduleId) {
     return {
         changeLayoutOrContent: function () {    run("layout");  },
         addItem: function () {                  run("add", { "useModuleList": true, "sortOrder": 0 }); },
-        edit: function () {                     run ("edit", { "useModuleList": true, "sortOrder": 0 });},
+        edit: function () {                     run("edit", { "useModuleList": true, "sortOrder": 0 });},
         adminApp: function () {                 run("app"); },
         adminZone: function () {                run("zone");},
         develop: function () {                  run("template-develop"); }
@@ -932,11 +755,11 @@ var $2sxcActionMenuMapper = function (moduleId) {
 
         //#region data bridge both ways
         iframe.getManageInfo = function() {
-            return iframe.sxc.manage.dialogParameters;
+            return iframe.sxc.manage._dialogParameters;
         };
 
         iframe.getAdditionalDashboardConfig = function () {
-            return iframe.sxc.manage.dashboardConfig;
+            return iframe.sxc.manage._dashboardConfig;
         };
 
         iframe.getCommands = function() {
@@ -997,6 +820,222 @@ var $2sxcActionMenuMapper = function (moduleId) {
 	};
 })();
 
+// A helper-controller in charge of opening edit-dialogs + creating the toolbars for it
+// all in-page toolbars etc.
+// if loaded, it's found under the $2sxc(module).manage
+// it has commands to
+// - getButton
+// - getToolbar
+// - action(...)
+
+(function () {
+    //#region helper functions
+    function getContentBlockTag(sxci) {
+         return $("div[data-cb-id='" + sxci.cbid + "']")[0];
+    }
+
+    function getContextInfo(cb) {
+        var attr = cb.getAttribute("data-edit-context");
+        return JSON.parse(attr || "");
+    }
+    //#endregion
+
+    $2sxc._manage = {};
+    $2sxc._manage.create = function (sxc) {
+        var contentBlockTag = getContentBlockTag(sxc);
+        var editContext = getContextInfo(contentBlockTag);
+
+        // assemble all parameters needed for the dialogs if we open anything
+        var ngDialogParams = {
+            zoneId: editContext.ContentGroup.ZoneId,
+            appId: editContext.ContentGroup.AppId,
+            tid: editContext.Environment.PageId,
+            mid: editContext.Environment.InstanceId,
+            cbid: sxc.cbid,
+            lang: editContext.Language.Current,
+            langpri: editContext.Language.Primary,
+            langs: JSON.stringify(editContext.Language.All),
+            portalroot: editContext.Environment.WebsiteUrl,
+            websiteroot: editContext.Environment.SxcRootUrl,
+            // todo: probably move the user into the dashboard info
+            user: { canDesign: editContext.User.CanDesign, canDevelop: editContext.User.CanDesign },
+            approot: editContext.ContentGroup.AppUrl || null // this is the only value which doesn't have a slash by default.  note that the app-root doesn't exist when opening "manage-app"
+        };
+
+        var dashConfig = {
+            appId: editContext.ContentGroup.AppId,
+            isContent: editContext.ContentGroup.IsContent,
+            hasContent: editContext.ContentGroup.HasContent,
+            isList: editContext.ContentGroup.IsList,
+            templateId: editContext.ContentGroup.TemplateId,
+            contentTypeId: editContext.ContentGroup.ContentTypeName,
+            templateChooserVisible: editContext.ContentBlock.ShowTemplatePicker, // todo: maybe move to content-goup
+            user: { canDesign: editContext.User.CanDesign, canDevelop: editContext.User.CanDesign },
+            supportsAjax: editContext.ContentGroup.SupportsAjax
+        };
+
+        var toolsAndButtons = $2sxc._toolbarManager.create(sxc, editContext);
+        var cmds = $2sxc._commands.engine(sxc, contentBlockTag);
+
+        var editManager = {
+            //#region Official, public properties and commands, which are stable for use from the outside
+
+            // public method to find out if it's in edit-mode
+            isEditMode: function () { return editContext.Environment.IsEditable; },
+
+            // run a command - often used in toolbars and custom buttons
+            run: cmds.executeAction,
+
+            // get a button or a toolbar for something
+            getButton: toolsAndButtons.getButton,
+            getToolbar: toolsAndButtons.getToolbar,
+
+            //#endregion official, public properties - everything below this can change at any time
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            _reloadWithAjax: editContext.ContentGroup.SupportsAjax,
+
+            _dialogParameters: ngDialogParams,      // used for various dialogs
+            _toolbarConfig: toolsAndButtons.config, // used to configure buttons / toolbars
+
+            _editContext: editContext,              // metadata necessary to know what/how to edit
+            _dashboardConfig: dashConfig,           // used for in-page dialogs
+            _commands: cmds,                        // used to handle the commands for this content-block
+
+            //#region toolbar quick-access commands - might be used by other scripts, so I'm keeping them here for the moment, but may just delete them later
+            _toolbar: toolsAndButtons, // should use this from now on when accessing from outside
+            //#endregion
+
+            // init this object 
+            init: function init() {
+                // enhance UI in case there are known errors / issues
+                if (editContext.error.type)
+                    editManager._handleErrors(editContext.error.type, contentBlockTag);
+
+                // finish init of sub-objects
+                editManager._commands.init(editManager);
+                editManager.contentBlock = $2sxc._contentBlock.create(sxc, editManager, contentBlockTag);
+
+                // attach & open the mini-dashboard iframe
+                if (!editContext.error.type && editContext.ContentBlock.ShowTemplatePicker)
+                    editManager.run("layout");
+
+            },
+
+            // private: show error when the app/data hasn't been installed yet for this imported-module
+            _handleErrors: function (errType, cbTag) {
+                var errWrapper = $("<div class=\"dnnFormMessage dnnFormWarning sc-element\"></div>");
+                var msg = "";
+                var toolbar = $("<ul class='sc-menu'></ul>");
+                if (errType === "DataIsMissing") {
+                    msg = "Error: System.Exception: Data is missing - usually when a site is copied but the content / apps have not been imported yet - check 2sxc.org/help?tag=export-import";
+                    toolbar.attr("data-toolbar", '[{\"action\": \"zone\"}, {\"action\": \"more\"}]');
+                }
+                errWrapper.append(msg);
+                errWrapper.append(toolbar);
+                $(cbTag).append(errWrapper);
+            },
+
+            // change config by replacing the guid, and refreshing dependend sub-objects
+            _updateContentGroupGuid: function (newGuid) {
+                editContext.ContentGroup.Guid = newGuid;
+                toolsAndButtons.refreshConfig(); 
+                editManager._toolbarConfig = toolsAndButtons.config;
+            },
+
+            //#region ContentBlock commands: create, move, delete --> should probably move out of the manage-class
+
+            _createContentBlock: function (parentId, fieldName, index, appName, container) {
+                // the wrapper, into which this will be placed and the list of pre-existing blocks
+                var listTag = container;
+                if (listTag.length === 0) return alert("can't add content-block as we couldn't find the list");
+                var cblockList = listTag.find("div.sc-content-block");
+                if (index > cblockList.length)
+                    index = cblockList.length; // make sure index is never greater than the amount of items
+                return sxc.webApi.get({
+                    url: "view/module/generatecontentblock",
+                    params: { parentId: parentId, field: fieldName, sortOrder: index, app: appName }
+                }).then(function (result) {
+                    var newTag = $(result); // prepare tag for inserting
+
+                    // should I add it to a specific position...
+                    if (cblockList.length > 0 && index > 0) 
+                        $(cblockList[cblockList.length > index - 1 ? index - 1: cblockList.length - 1])
+                            .after(newTag);
+                    else    //...or just at the beginning?
+                        listTag.prepend(newTag);
+                
+
+                    var sxcNew = $2sxc(newTag);
+                    sxcNew.manage._toolbar._processToolbars(newTag);
+
+                });
+            },
+
+            _moveContentBlock: function(parentId, field, indexFrom, indexTo) {
+                return sxc.webApi.get({
+                    url: "view/module/MoveItemInList",
+                    params: { parentId: parentId, field: field, indexFrom: indexFrom, indexTo: indexTo }
+                }).then(function() {
+                    console.log("done moving!");
+                    window.location.reload();
+                });
+            },
+
+            // delete a content-block inside a list of content-blocks
+            _deleteContentBlock: function (parentId, field, index) {
+                if (confirm($2sxc.translate("QuickInsertMenu.ConfirmDelete")))
+                    return sxc.webApi.get({
+                        url: "view/module/RemoveItemInList",
+                        params: { parentId: parentId, field: field, index: index }
+                    }).then(function() {
+                        console.log("done deleting!");
+                        window.location.reload();
+                    });
+                return null;
+            },
+            //#endregion
+
+            //#region deprecated properties - these all should have been undocumented/ private till now
+            
+            // 2016-11-03 v.08.06 deprecated command "action", it was only for internal use till now
+            action: function () {
+                console.error("Obsolete: you are using a deprecated method 'action' which will be removed in 2sxc v9. you must change it to 'run'");
+                return cmds.executeAction.apply(undefined, arguments);
+            },
+            // 2016-10-11 v08.06 maybe breaking change, but shouldn't be exposed
+            createDefaultToolbar: function () {
+                console.error("Obsolete: you are using a deprecated method 'createDefaultToolbar' which will be removed in 2sxc v9. you must change it to 'getToolbar'");
+                return toolsAndButtons.defaultButtonList.apply(undefined, arguments);
+            }
+
+            //#endregion
+
+            };
+
+        editManager.init();
+        return editManager;
+    };
+
+
+})();
 $(function () {
     "use strict";
 
@@ -1094,7 +1133,7 @@ $(function () {
     qi.cmds = {
         cb: {
             "delete": function(clip) {
-                return $2sxc(clip.list).manage.deleteContentBlock(clip.parent, clip.field, clip.index);
+                return $2sxc(clip.list).manage._deleteContentBlock(clip.parent, clip.field, clip.index);
             }
         },
         mod: {
@@ -1125,7 +1164,7 @@ $(function () {
         var cbAction = $(this).data("action");
         if (!cbAction) {
             var appOrContent = $(this).data("type");
-            return $2sxc(list).manage.createContentBlock(actionConfig.parent, actionConfig.field, index, appOrContent, list);
+            return $2sxc(list).manage._createContentBlock(actionConfig.parent, actionConfig.field, index, appOrContent, list);
         } else
             // this is a cut/paste action
             return qi.copyPasteInPage(cbAction, list, index, selectors.cb.id);
@@ -1142,7 +1181,7 @@ $(function () {
             if (isNaN(from) || isNaN(to) || from === to || from + 1 === to) // this moves it to the same spot, so ignore
                 return qi.clipboard.clear(); // don't do anything
 
-            $2sxc(list).manage.moveContentBlock(clip.parent, clip.field, from, to);
+            $2sxc(list).manage._moveContentBlock(clip.parent, clip.field, from, to);
             qi.clipboard.clear();
         } 
     };
@@ -1410,7 +1449,7 @@ $(function () {
             cbid = sxc.cbid,
             ec = editContext,
             cg = ec.ContentGroup,
-            allActions = $2sxc._actions.create({
+            allActions = $2sxc._commands.definitions.create({
                 canDesign: ec.User.CanDesign,
                 templateId: cg.TemplateId,
                 contentTypeId: cg.ContentTypeName,
@@ -1862,7 +1901,7 @@ $(document).ready(function () {
             // 2016-10-09 2dm disabled try, as it only makes debugging harder...
             // not sure if we really need it
             //try {
-            $2sxc(this).manage.toolbar._processToolbars(this);
+            $2sxc(this).manage._toolbar._processToolbars(this);
             //} catch (e) { // Make sure that if one app breaks, others continue to work
             //    if (console && console.error) console.error(e);
             //}
@@ -1880,12 +1919,12 @@ $(document).ready(function () {
         window.i18next
             .use(window.i18nextXHRBackend)
             .init({
-                lng: manage.editContext.Language.Current.substr(0,2), // "en",
+                lng: manage._editContext.Language.Current.substr(0,2), // "en",
                 fallbackLng: "en",
                 whitelist: ["en", "de", "fr", "it", "uk", "nl"],
                 preload: ["en"],
                 backend: {
-                    loadPath: manage.editContext.Environment.SxcRootUrl + "desktopmodules/tosic_sexycontent/dist/i18n/inpage-{{lng}}.js"
+                    loadPath: manage._editContext.Environment.SxcRootUrl + "desktopmodules/tosic_sexycontent/dist/i18n/inpage-{{lng}}.js"
                 }
             }, function (err, t) {
                 // for options see

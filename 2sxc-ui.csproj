@@ -39,10 +39,11 @@
     <Content Include="src\inpage-dialogs\template-selector\template-selector.css" />
     <Content Include="src\inpage-dialogs\template-selector\template-selector.html" />
     <Content Include="src\inpage\2sxc.cms.js" />
-    <Content Include="src\inpage\2sxc.manageController.js" />
+    <Content Include="src\inpage\manage\manage.create.js" />
     <Content Include="src\inpage\2sxc._createContentBlock.js" />
-    <Content Include="src\inpage\actions\2sxc._actions.js" />
-    <Content Include="src\inpage\actions\2sxc._contentManagementCommands.js" />
+    <Content Include="src\inpage\commands\commands.definitions.js" />
+    <Content Include="src\inpage\commands\commands.engine.js" />
+    <Content Include="src\inpage\commands\commands.{}.js" />
     <Content Include="src\inpage\dnn-menu-helper\dnn-inpage-edit.js" />
     <Content Include="src\inpage\edit.css" />
     <Content Include="src\inpage\inpage-dialog\2sxc._dialog.js" />
