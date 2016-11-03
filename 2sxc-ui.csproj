@@ -38,8 +38,9 @@
     <Content Include="src\inpage-dialogs\template-selector\template-selector-controller.js" />
     <Content Include="src\inpage-dialogs\template-selector\template-selector.css" />
     <Content Include="src\inpage-dialogs\template-selector\template-selector.html" />
+    <Content Include="src\inpage\dnn-workarounds\dnn-08.00.04.js" />
     <Content Include="src\inpage\manage\manage.create.js" />
-    <Content Include="src\inpage\contentBlock\2sxc._createContentBlock.js" />
+    <Content Include="src\inpage\contentBlock\contentBlock.create.js" />
     <Content Include="src\inpage\commands\commands.definitions.js" />
     <Content Include="src\inpage\commands\commands.engine.js" />
     <Content Include="src\inpage\commands\commands.{}.js" />

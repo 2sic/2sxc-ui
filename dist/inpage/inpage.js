@@ -422,12 +422,12 @@
 
                 var origEvent = event || window.event; // pre-save event because afterwards we have a promise, so the event-object changes; funky syntax is because of browser differences
                 if (conf.uiActionOnly)
-                    return settings.code(settings, origEvent, cmc.manage);
+                    return settings.code(settings, origEvent, sxc);// 2016-11-03 cmc.manage);
 
                 // if more than just a UI-action, then it needs to be sure the content-group is created first
                 cmc.manage.contentBlock.prepareToAddContent()
                     .then(function() {
-                        return settings.code(settings, origEvent, cmc.manage);
+                        return settings.code(settings, origEvent, sxc);// 2016-11-03 cmc.manage);
                     });
             }
         };
@@ -710,6 +710,21 @@ var $2sxcActionMenuMapper = function (moduleId) {
         develop: function () {                  run("template-develop"); }
     };
 };
+
+// The following script fixes a bug in DNN 08.00.04
+// the bug tries to detect a module-ID based on classes in a tag, 
+// but uses a bad regex and captures the number 2 on all 2sxc-modules 
+// instead of the real id
+// this patch replaces the faulty regex with the correct one
+// documented here https://github.com/2sic/2sxc/issues/986
+
+/*jshint ignore:start*/
+// fix bug in dnn 08.00.04 drag-drop functionality - it has an incorrect regex
+if($ && $.fn && $.fn.dnnModuleDragDrop)
+    eval("$.fn.dnnModuleDragDrop = "
+        + $.fn.dnnModuleDragDrop.toString()
+            .replace(".match(/DnnModule-([0-9]+)/)", ".match(/DnnModule-([0-9]+)(?:\W|$)/)"));
+/*jshint ignore:end*/
 // this is a dialog handler which will create in-page dialogs for 
 // - the template / view picker
 // - the getting-started / install-templates dialog

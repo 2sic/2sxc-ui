@@ -128,12 +128,12 @@
 
                 var origEvent = event || window.event; // pre-save event because afterwards we have a promise, so the event-object changes; funky syntax is because of browser differences
                 if (conf.uiActionOnly)
-                    return settings.code(settings, origEvent, cmc.manage);
+                    return settings.code(settings, origEvent, sxc);// 2016-11-03 cmc.manage);
 
                 // if more than just a UI-action, then it needs to be sure the content-group is created first
                 cmc.manage.contentBlock.prepareToAddContent()
                     .then(function() {
-                        return settings.code(settings, origEvent, cmc.manage);
+                        return settings.code(settings, origEvent, sxc);// 2016-11-03 cmc.manage);
                     });
             }
         };
