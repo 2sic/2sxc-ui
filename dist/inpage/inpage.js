@@ -1,3 +1,442 @@
+(function() {
+    $2sxc._commands = {};
+})();
+/*
+ * Actions of 2sxc - mostly used in toolbars
+ * 
+ * Minimal documentation regarding a button
+ * the button can have the following properties / methods
+ * - the indexer in the array (usually the same as the name)
+ * - name (created in the buttonConfig)
+ * - title - actually the translation key to retrieve the title (buttonConfig)
+ * - icon - the icon-class
+ * - uiActionOnly - true/false if this is just something visual; otherwise a webservice will ensure that a content-group exists (for editing etc.)
+ * - showCondition(settings, moduleConfiguration) - would conditionally prevent adding this button by default
+ * - code(settings, event) - the code executed on click, if it's not the default action
+ * - dynamicClasses(settings) - can conditionally add more css-class names to add to the button, like the "empty" added if something doesn't have metadata
+ * - disabled (new!)
+ * - params - ...
+ */
+
+(function () {
+    // helper function to create the configuration object
+    function makeDef(name, translateKey, icon, uiOnly, more) {
+        return $2sxc._lib.extend({
+            name: name,
+            title: "Toolbar." + translateKey,
+            icon: "icon-sxc-" + icon,
+            uiActionOnly: uiOnly
+        }, more);
+    }
+
+    $2sxc._commands.definitions = {};
+    $2sxc._commands.definitions.create = function (editContext) {
+        var enableTools = editContext.canDesign;
+        var isContent = editContext.isContent;
+
+        var act = {
+            // show the basic dashboard which allows view-changing
+            "dash-view": makeDef("dash-view", "Dashboard", "", true, { inlineWindow: true }),
+
+            // open the import dialog
+            "app-import": makeDef("app-import", "Dashboard", "", true, {}),
+
+            // open an edit-item dialog
+            'edit': makeDef("edit", "Edit", "pencil", false, {
+                params: { mode: "edit" },
+                showCondition: function (settings, modConfig) {
+                    return settings.entityId || settings.useModuleList; // need ID or a "slot", otherwise edit won't work
+                }
+            }),
+
+            // new is a dialog to add something, and will not add if cancelled
+            // new can also be used for mini-toolbars which just add an entity not attached to a module
+            // in that case it's essential to add a contentType like 
+            // <ul class="sc-menu" data-toolbar='{"action":"new", "contentType": "Category"}'></ul>
+            'new': makeDef("new", "New", "plus", false, {
+                params: { mode: "new" },
+                dialog: "edit", // don't use "new" (default) but use "edit"
+                showCondition: function (settings, modConfig) {
+                    return settings.contentType || modConfig.isList && settings.useModuleList && settings.sortOrder !== -1; // don't provide new on the header-item
+                },
+                code: function (settings, event, manage) {
+                    // todo - should refactor this to be a toolbarManager.contentBlock command
+                    manage._commands._openNgDialog($2sxc._lib.extend({}, settings, { sortOrder: settings.sortOrder + 1 }), event);
+                }
+            }),
+
+            // add brings no dialog, just add an empty item
+            'add': makeDef("add", "AddDemo", "plus-circled", false, {
+                showCondition: function(settings, modConfig) {
+                    return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1;
+                },
+                code: function (settings, event, manage) {
+                    manage.contentBlock 
+                        .addItem(settings.sortOrder + 1);
+                }
+            }),
+
+            // create a metadata toolbar
+            "metadata": makeDef("metadata", "Metadata", "tag", false, {
+                params: { mode: "new" },
+                dialog: "edit", // don't use "new" (default) but use "edit"
+                dynamicClasses: function (settings) {
+                    // if it doesn't have data yet, make it less strong
+                    return settings.entityId ? "" : "empty";
+                    // return settings.items && settings.items[0].entityId ? "" : "empty";
+                },
+                showCondition: function(settings) {
+                    return !!settings.metadata;
+                }, // only add a metadata-button if it has metadata-infos
+                configureCommand: function (cmd) {
+                    var itm = {
+                        Title: "EditFormTitle.Metadata",
+                        Metadata: $2sxc._lib.extend({ keyType: "string", targetType: 10 }, cmd.settings.metadata)
+                    };
+                    $2sxc._lib.extend(cmd.items[0], itm);
+                }
+            }),
+
+            // remove an item from the placeholder (usually for lists)
+            'remove': makeDef("remove", "Remove", "minus-circled", false, {
+                showCondition: function(settings, modConfig) {
+                    return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1;
+                },
+                code: function (settings, event, manage) {
+                    if (confirm($2sxc.translate("Toolbar.ConfirmRemove"))) {
+                        manage.contentBlock
+                            .removeFromList(settings.sortOrder);
+                    }
+                }
+            }),
+
+            // todo: work in progress related to https://github.com/2sic/2sxc/issues/618
+            //'delete': {
+            //    title: "Toolbar.Delete",
+            //    icon: "icon-sxc-cancel",
+            //    disabled: true,
+            //    showCondition: function (settings) { return !settings.useModuleList; },
+            //    code: function (settings, event) {
+            //        if (confirm(tbContr.translate("Toolbar.ReallyDelete"))) {
+            //            tbContr._getAngularVm().reallyDelete(settings.entityId);
+            //        }
+            //    }
+            //},
+
+            'moveup': makeDef("moveup", "MoveUp", "move-up", false, {
+                showCondition: function(settings, modConfig) {
+                    return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1 && settings.sortOrder !== 0;
+                },
+                code: function (settings, event, manage) {
+                    manage.contentBlock
+                        .changeOrder(settings.sortOrder, Math.max(settings.sortOrder - 1, 0));
+                }
+            }),
+            'movedown': makeDef("movedown", "MoveDown", "move-down", false, {
+                showCondition: function(settings, modConfig) {
+                    return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1;
+                },
+                code: function (settings, event, manage) {
+                    manage.contentBlock.changeOrder(settings.sortOrder, settings.sortOrder + 1);
+                }
+            }),
+
+            'instance-list': makeDef("instance-list", "Sort", "list-numbered", false, {
+                showCondition: function (settings, modConfig) { return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1; }
+            }),
+
+            'publish': makeDef("publish", "Unpublished", "eye-off", false, {
+                showCondition: function (settings, modConfig) {
+                    return settings.isPublished === false;
+                },
+                code: function (settings, event, manage) {
+                    if (settings.isPublished) {
+                        alert($2sxc.translate("Toolbar.AlreadyPublished"));
+                        return;
+                    }
+                    var part = settings.sortOrder === -1 ? "listcontent" : "content";
+                    var index = settings.sortOrder === -1 ? 0 : settings.sortOrder;
+                    manage.contentBlock.publish(part, index);
+                }
+            }),
+
+            'replace': makeDef("replace", "Replace", "replace", false, {
+                showCondition: function (settings) { return settings.useModuleList; }
+            }),
+
+
+            //#region template commands: contenttype, contentitems, template-query, template-develop, template-settings
+
+            'contenttype': makeDef("contenttype", "ContentType", "fields", true, {
+                showCondition: enableTools
+            }),
+
+            'contentitems': makeDef("contentitems", "ContentItems", "table", true, {
+                params: { contentTypeName: editContext.contentTypeId },
+                showCondition: enableTools && editContext.contentTypeId
+            }),
+
+
+            'template-develop': makeDef("develop", "Develop", "code", true, {
+                newWindow: true,
+                dialog: "develop",
+                showCondition: enableTools,
+                configureCommand: function (cmd) {
+                    cmd.items = [{ EntityId: editContext.templateId }];
+                }
+            }),
+
+            'template-query': makeDef("query", "QueryEdit", "filter", true, {
+                dialog: "pipeline-designer",
+                newWindow: true,
+                disabled: editContext.appSettingsId === null,
+                title: "Toolbar.QueryEdit" + (editContext.queryId === null ? "Disabled" : ""),
+                showCondition: function (settings, modConfig) {
+                    return enableTools && !isContent;
+                },
+                dynamicClasses: function (settings) {
+                    return editContext.queryId ? "" : "empty";  // if it doesn't have a query, make it less strong
+                }
+            }),
+
+            'template-settings': makeDef("template-settings", "TemplateSettings", "sliders", true, {
+                dialog: "edit",
+                showCondition: enableTools,
+                configureCommand: function (cmd) {
+                    cmd.items = [{ EntityId: editContext.templateId }];
+                }
+
+            }),
+            //#endregion template commands
+
+            //#region app-actions: app-settings, app-resources
+
+            'app-settings': makeDef("app-settings", "AppSettings", "sliders", true, {
+                dialog: "edit",
+                disabled: editContext.appSettingsId === null,
+                title: "Toolbar.AppSettings" + (editContext.appSettingsId === null ? "Disabled" : ""),
+                showCondition: function(settings, modConfig) {
+                    return enableTools && !isContent && editContext.appSettingsId !== null; // only if settings exist, or are 0 (to be created)
+                },
+                configureCommand: function (cmd) {
+                    cmd.items = [{ EntityId: editContext.appSettingsId }];
+                }
+            }),
+
+            'app-resources': makeDef("app-resources", "AppResources", "language", true, {
+                dialog: "edit",
+                disabled: editContext.appResourcesId === null,
+                title: "Toolbar.AppSettings" + (editContext.appResourcesId === null ? "Disabled" : ""),
+                showCondition: function (settings, modConfig) {
+                    return enableTools && !isContent && editContext.appResourcesId !== null; // only if resources exist or are 0 (to be created)...
+                },
+                configureCommand: function (cmd) {
+                    cmd.items = [{ EntityId: editContext.appResourcesId }];
+                }
+            }),
+            //#endregion
+
+            //#region app & zone
+
+            'app': makeDef("app", "App", "settings", true, {
+                showCondition: enableTools
+            }),
+
+            'zone': makeDef("zone", "Zone", "manage", true, {
+                showCondition: enableTools
+            }),
+            //#endregion
+
+            'custom': makeDef("custom", "Custom", "bomb", true, {
+                code: function (settings, event, manage) {
+                    console.log("custom action with code - BETA feature, may change");
+                    if (!settings.customCode) {
+                        console.warn("custom code action, but no onclick found to run", settings);
+                        return;
+                    }
+                    try {
+                        var fn = new Function("settings", "event", "manage", settings.customCode); // jshint ignore:line
+                        fn(settings, event, manage);
+                    } catch (err) {
+                        console.error("error in custom button-code: ", settings);
+                    }
+                }
+            }),
+
+            //#region UI actions: layout, more
+            'layout': makeDef("layout", "ChangeLayout", "glasses", true, {
+                code: function (settings, event, manage) {
+                    manage.contentBlock.dialogToggle();
+                }
+            }),
+
+            "more": makeDef("more", "MoreActions", "options btn-mode", true, {
+                code: function (settings, event) {
+                    var btn = $(event.target),
+                        fullMenu = btn.closest("ul.sc-menu"),
+                        oldState = Number(fullMenu.attr("data-state") || 0),
+                        max = Number(fullMenu.attr("group-count")),
+                        newState = (oldState + 1) % max;
+
+                    fullMenu.removeClass("group-" + oldState)
+                        .addClass("group-" + newState)
+                        .attr("data-state", newState);
+                }
+            })
+
+            //#endregion
+        };
+
+        return act;
+    };
+
+})();
+
+
+(function() {
+    $2sxc._commands.engine = function(sxc, targetTag) {
+        var cmc = {
+            manage: "must-be-added-after-initialization",
+            init: function(manage) {
+                cmc.manage = manage;
+            },
+
+            // assemble an object which will store the configuration and execute it
+            create: function(specialSettings) {
+                var settings = $2sxc._lib.extend({}, cmc.manage._toolbarConfig, specialSettings); // merge button with general toolbar-settings
+                var ngDialogUrl = cmc.manage._editContext.Environment.SxcRootUrl + "desktopmodules/tosic_sexycontent/dist/dnn/ui.html?sxcver="
+                    + cmc.manage._editContext.Environment.SxcVersion;
+                var isDebug = $2sxc.urlParams.get("debug") ? "&debug=true" : "";
+
+                var cmd = {
+                    settings: settings,
+                    items: settings.items || [], // use predefined or create empty array
+                    params: $2sxc._lib.extend({
+                        dialog: settings.dialog || settings.action // the variable used to name the dialog changed in the history of 2sxc from action to dialog
+                    }, settings.params),
+
+                    addSimpleItem: function() {
+                        var itm = {}, ct = cmd.settings.contentType || cmd.settings.attributeSetName; // two ways to name the content-type-name this, v 7.2+ and older
+                        if (cmd.settings.entityId) itm.EntityId = cmd.settings.entityId;
+                        if (ct) itm.ContentTypeName = ct;
+                        if (itm.EntityId || itm.ContentTypeName) // only add if there was stuff to add
+                            cmd.items.push(itm);
+                    },
+
+                    // this adds an item of the content-group, based on the group GUID and the sequence number
+                    addContentGroupItem: function(guid, index, part, isAdd, isEntity, cbid, sectionLanguageKey) {
+                        cmd.items.push({
+                            Group: { Guid: guid, Index: index, Part: part, Add: isAdd },
+                            Title: $2sxc.translate(sectionLanguageKey)
+                        });
+                    },
+
+                    // this will tell the command to edit a item from the sorted list in the group, optionally together with the presentation item
+                    addContentGroupItemSetsToEditList: function(withPresentation) {
+                        var isContentAndNotHeader = (cmd.settings.sortOrder !== -1);
+                        var index = isContentAndNotHeader ? cmd.settings.sortOrder : 0;
+                        var prefix = isContentAndNotHeader ? "" : "List";
+                        var cTerm = prefix + "Content";
+                        var pTerm = prefix + "Presentation";
+                        var isAdd = cmd.settings.action === "new";
+                        var groupId = cmd.settings.contentGroupId;
+                        cmd.addContentGroupItem(groupId, index, cTerm.toLowerCase(), isAdd, cmd.settings.cbIsEntity, cmd.settings.cbId, "EditFormTitle." + cTerm);
+
+                        if (withPresentation)
+                            cmd.addContentGroupItem(groupId, index, pTerm.toLowerCase(), isAdd, cmd.settings.cbIsEntity, cmd.settings.cbId, "EditFormTitle." + pTerm);
+
+                    },
+
+                    generateLink: function() {
+                        // if there is no items-array, create an empty one (it's required later on)
+                        if (!cmd.settings.items) cmd.settings.items = [];
+                        //#region steps for all actions: prefill, serialize, open-dialog
+                        // when doing new, there may be a prefill in the link to initialize the new item
+                        if (cmd.settings.prefill)
+                            for (var i = 0; i < cmd.items.length; i++)
+                                cmd.items[i].Prefill = cmd.settings.prefill;
+
+                        cmd.params.items = JSON.stringify(cmd.items); // Serialize/json-ify the complex items-list
+
+                        return ngDialogUrl
+                            + "#" + $.param(cmc.manage._dialogParameters)
+                            + "&" + $.param(cmd.params)
+                            + isDebug;
+                        //#endregion
+                    }
+                };
+                return cmd;
+            },
+
+            // create a dialog link
+            _linkToNgDialog: function(specialSettings) {
+                var cmd = cmc.manage._commands.create(specialSettings);
+
+                if (cmd.settings.useModuleList)
+                    cmd.addContentGroupItemSetsToEditList(true);
+                else
+                    cmd.addSimpleItem();
+
+                // if the command has own configuration stuff, do that now
+                if (cmd.settings.configureCommand)
+                    cmd.settings.configureCommand(cmd);
+
+                return cmd.generateLink();
+            },
+            // open a new dialog of the angular-ui
+            _openNgDialog: function(settings, event, closeCallback) {
+
+                var callback = function() {
+                    cmc.manage.contentBlock.reloadAndReInitialize();
+                    closeCallback();
+                };
+                var link = cmc._linkToNgDialog(settings);
+
+                if (settings.newWindow || (event && event.shiftKey))
+                    return window.open(link);
+                else {
+                    if (settings.inlineWindow)
+                        return $2sxc._dialog.create(sxc, targetTag, link, callback);
+                    else
+                        return $2sxc.totalPopup.open(link, callback);
+                }
+            },
+
+            executeAction: function(nameOrSettings, settings, event) {
+                // check if name is name (string) or object (settings)
+                if (!event && settings && settings.altKey) { // no event param, but settings, which is an event
+                    event = settings;
+                    settings = {};
+                }
+                if (typeof (nameOrSettings) === "string") {
+                    settings = $2sxc._lib.extend(settings || {}, { "action": nameOrSettings });
+                } else {
+                    //event = settings;
+                    settings = nameOrSettings;
+                }
+
+                var conf = cmc.manage._toolbar.actions[settings.action];
+                settings = $2sxc._lib.extend({}, conf, settings); // merge conf & settings, but settings has higher priority
+                if (!settings.dialog) settings.dialog = settings.action; // old code uses "action" as the parameter, now use verb ? dialog
+                if (!settings.code) settings.code = cmc._openNgDialog; // decide what action to perform
+
+                var origEvent = event || window.event; // pre-save event because afterwards we have a promise, so the event-object changes; funky syntax is because of browser differences
+                if (conf.uiActionOnly)
+                    return settings.code(settings, origEvent, cmc.manage);
+
+                // if more than just a UI-action, then it needs to be sure the content-group is created first
+                cmc.manage.contentBlock.prepareToAddContent()
+                    .then(function() {
+                        return settings.code(settings, origEvent, cmc.manage);
+                    });
+            }
+        };
+
+        return cmc;
+    };
+
+
+})();
 /* 
  * this is a content block in the browser
  * 
@@ -256,469 +695,6 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
 };
 
 
-// this is the edit-API which is included when content can be edited
-(function() {
-    $2sxc._cms = function extendWithCms(sxc) {
-        sxc.cms = {
-            exec: function (actionName, config, event) {
-                // todo: do some checks to confirm that this action is currently possible (prevent just throwing errors)
-                // ...
-
-                // execute the action
-                sxc.manage.run(actionName, config, event);
-            }
-             
-        };
-
-        sxc.inlineUi = {
-            // config: {},
-            getButton: sxc.manage.getButton,
-            getToolbar: sxc.manage.getToolbar
-        };
-    };
-    console.log('cms loaded');
-
-})();
-
-(function() {
-    $2sxc._commands = {};
-})();
-/*
- * Actions of 2sxc - mostly used in toolbars
- * 
- * Minimal documentation regarding a button
- * the button can have the following properties / methods
- * - the indexer in the array (usually the same as the name)
- * - name (created in the buttonConfig)
- * - title - actually the translation key to retrieve the title (buttonConfig)
- * - icon - the icon-class
- * - uiActionOnly - true/false if this is just something visual; otherwise a webservice will ensure that a content-group exists (for editing etc.)
- * - showCondition(settings, moduleConfiguration) - would conditionally prevent adding this button by default
- * - code(settings, event) - the code executed on click, if it's not the default action
- * - dynamicClasses(settings) - can conditionally add more css-class names to add to the button, like the "empty" added if something doesn't have metadata
- * - disabled (new!)
- * - params - ...
- */
-
-(function () {
-    // helper function to create the configuration object
-    function makeDef(name, translateKey, icon, uiOnly, more) {
-        return $2sxc._lib.extend({
-            name: name,
-            title: "Toolbar." + translateKey,
-            icon: "icon-sxc-" + icon,
-            uiActionOnly: uiOnly
-        }, more);
-    }
-
-    $2sxc._commands.definitions = {};
-    $2sxc._commands.definitions.create = function (editContext) {
-        var enableTools = editContext.canDesign;
-        var isContent = editContext.isContent;
-
-        var act = {
-            // show the basic dashboard which allows view-changing
-            "dash-view": makeDef("dash-view", "Dashboard", "", true, { inlineWindow: true }),
-
-            // open the import dialog
-            "app-import": makeDef("app-import", "Dashboard", "", true, {}),
-
-            // open an edit-item dialog
-            'edit': makeDef("edit", "Edit", "pencil", false, {
-                params: { mode: "edit" },
-                showCondition: function (settings, modConfig) {
-                    return settings.entityId || settings.useModuleList; // need ID or a "slot", otherwise edit won't work
-                }
-            }),
-
-            // new is a dialog to add something, and will not add if cancelled
-            // new can also be used for mini-toolbars which just add an entity not attached to a module
-            // in that case it's essential to add a contentType like 
-            // <ul class="sc-menu" data-toolbar='{"action":"new", "contentType": "Category"}'></ul>
-            'new': makeDef("new", "New", "plus", false, {
-                params: { mode: "new" },
-                dialog: "edit", // don't use "new" (default) but use "edit"
-                showCondition: function (settings, modConfig) {
-                    return settings.contentType || modConfig.isList && settings.useModuleList && settings.sortOrder !== -1; // don't provide new on the header-item
-                },
-                code: function (settings, event, manager) {
-                    // todo - should refactor this to be a toolbarManager.contentBlock command
-                    manager._commands._openNgDialog($2sxc._lib.extend({}, settings, { sortOrder: settings.sortOrder + 1 }), event);
-                }
-            }),
-
-            // add brings no dialog, just add an empty item
-            'add': makeDef("add", "AddDemo", "plus-circled", false, {
-                showCondition: function(settings, modConfig) {
-                    return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1;
-                },
-                code: function (settings, event, manager) {
-                    manager.contentBlock 
-                        .addItem(settings.sortOrder + 1);
-                }
-            }),
-
-            // create a metadata toolbar
-            "metadata": makeDef("metadata", "Metadata", "tag", false, {
-                params: { mode: "new" },
-                dialog: "edit", // don't use "new" (default) but use "edit"
-                dynamicClasses: function (settings) {
-                    // if it doesn't have data yet, make it less strong
-                    return settings.entityId ? "" : "empty";
-                    // return settings.items && settings.items[0].entityId ? "" : "empty";
-                },
-                showCondition: function(settings) {
-                    return !!settings.metadata;
-                }, // only add a metadata-button if it has metadata-infos
-                configureCommand: function (cmd) {
-                    var itm = {
-                        Title: "EditFormTitle.Metadata",
-                        Metadata: $2sxc._lib.extend({ keyType: "string", targetType: 10 }, cmd.settings.metadata)
-                    };
-                    $2sxc._lib.extend(cmd.items[0], itm);
-                }
-            }),
-
-            // remove an item from the placeholder (usually for lists)
-            'remove': makeDef("remove", "Remove", "minus-circled", false, {
-                showCondition: function(settings, modConfig) {
-                    return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1;
-                },
-                code: function (settings, event, manager) {
-                    if (confirm($2sxc.translate("Toolbar.ConfirmRemove"))) {
-                        manager.contentBlock
-                            .removeFromList(settings.sortOrder);
-                    }
-                }
-            }),
-
-            // todo: work in progress related to https://github.com/2sic/2sxc/issues/618
-            //'delete': {
-            //    title: "Toolbar.Delete",
-            //    icon: "icon-sxc-cancel",
-            //    disabled: true,
-            //    showCondition: function (settings) { return !settings.useModuleList; },
-            //    code: function (settings, event) {
-            //        if (confirm(tbContr.translate("Toolbar.ReallyDelete"))) {
-            //            tbContr._getAngularVm().reallyDelete(settings.entityId);
-            //        }
-            //    }
-            //},
-
-            'moveup': makeDef("moveup", "MoveUp", "move-up", false, {
-                showCondition: function(settings, modConfig) {
-                    return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1 && settings.sortOrder !== 0;
-                },
-                code: function (settings, event, manager) {
-                    manager.contentBlock
-                        .changeOrder(settings.sortOrder, Math.max(settings.sortOrder - 1, 0));
-                }
-            }),
-            'movedown': makeDef("movedown", "MoveDown", "move-down", false, {
-                showCondition: function(settings, modConfig) {
-                    return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1;
-                },
-                code: function (settings, event, manager) {
-                    manager.contentBlock.changeOrder(settings.sortOrder, settings.sortOrder + 1);
-                }
-            }),
-
-            'instance-list': makeDef("instance-list", "Sort", "list-numbered", false, {
-                showCondition: function (settings, modConfig) { return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1; }
-            }),
-
-            'publish': makeDef("publish", "Unpublished", "eye-off", false, {
-                showCondition: function (settings, modConfig) {
-                    return settings.isPublished === false;
-                },
-                code: function (settings, event, manager) {
-                    if (settings.isPublished) {
-                        alert($2sxc.translate("Toolbar.AlreadyPublished"));
-                        return;
-                    }
-                    var part = settings.sortOrder === -1 ? "listcontent" : "content";
-                    var index = settings.sortOrder === -1 ? 0 : settings.sortOrder;
-                    manager.contentBlock.publish(part, index);
-                }
-            }),
-
-            'replace': makeDef("replace", "Replace", "replace", false, {
-                showCondition: function (settings) { return settings.useModuleList; }
-            }),
-
-
-            //#region template commands: contenttype, contentitems, template-query, template-develop, template-settings
-
-            'contenttype': makeDef("contenttype", "ContentType", "fields", true, {
-                showCondition: enableTools
-            }),
-
-            'contentitems': makeDef("contentitems", "ContentItems", "table", true, {
-                params: { contentTypeName: editContext.contentTypeId },
-                showCondition: enableTools && editContext.contentTypeId
-            }),
-
-
-            'template-develop': makeDef("develop", "Develop", "code", true, {
-                newWindow: true,
-                dialog: "develop",
-                showCondition: enableTools,
-                configureCommand: function (cmd) {
-                    cmd.items = [{ EntityId: editContext.templateId }];
-                }
-            }),
-
-            'template-query': makeDef("query", "QueryEdit", "filter", true, {
-                dialog: "pipeline-designer",
-                newWindow: true,
-                disabled: editContext.appSettingsId === null,
-                title: "Toolbar.QueryEdit" + (editContext.queryId === null ? "Disabled" : ""),
-                showCondition: function (settings, modConfig) {
-                    return enableTools && !isContent;
-                },
-                dynamicClasses: function (settings) {
-                    return editContext.queryId ? "" : "empty";  // if it doesn't have a query, make it less strong
-                }
-            }),
-
-            'template-settings': makeDef("template-settings", "TemplateSettings", "sliders", true, {
-                dialog: "edit",
-                showCondition: enableTools,
-                configureCommand: function (cmd) {
-                    cmd.items = [{ EntityId: editContext.templateId }];
-                }
-
-            }),
-            //#endregion template commands
-
-            //#region app-actions: app-settings, app-resources
-
-            'app-settings': makeDef("app-settings", "AppSettings", "sliders", true, {
-                dialog: "edit",
-                disabled: editContext.appSettingsId === null,
-                title: "Toolbar.AppSettings" + (editContext.appSettingsId === null ? "Disabled" : ""),
-                showCondition: function(settings, modConfig) {
-                    return enableTools && !isContent && editContext.appSettingsId !== null; // only if settings exist, or are 0 (to be created)
-                },
-                configureCommand: function (cmd) {
-                    cmd.items = [{ EntityId: editContext.appSettingsId }];
-                }
-            }),
-
-            'app-resources': makeDef("app-resources", "AppResources", "language", true, {
-                dialog: "edit",
-                disabled: editContext.appResourcesId === null,
-                title: "Toolbar.AppSettings" + (editContext.appResourcesId === null ? "Disabled" : ""),
-                showCondition: function (settings, modConfig) {
-                    return enableTools && !isContent && editContext.appResourcesId !== null; // only if resources exist or are 0 (to be created)...
-                },
-                configureCommand: function (cmd) {
-                    cmd.items = [{ EntityId: editContext.appResourcesId }];
-                }
-            }),
-            //#endregion
-
-            //#region app & zone
-
-            'app': makeDef("app", "App", "settings", true, {
-                showCondition: enableTools
-            }),
-
-            'zone': makeDef("zone", "Zone", "manage", true, {
-                showCondition: enableTools
-            }),
-            //#endregion
-
-            'custom': makeDef("custom", "Custom", "bomb", true, {
-                code: function (settings, event, manager) {
-                    console.log("custom action with code - BETA feature, may change");
-                    if (!settings.customCode) {
-                        console.warn("custom code action, but no onclick found to run", settings);
-                        return;
-                    }
-                    try {
-                        var fn = new Function("settings", "event", "manager", settings.customCode); // jshint ignore:line
-                        fn(settings, event, manager);
-                    } catch (err) {
-                        console.error("error in custom button-code: ", settings);
-                    }
-                }
-            }),
-
-            //#region UI actions: layout, more
-            'layout': makeDef("layout", "ChangeLayout", "glasses", true, {
-                code: function (settings, event, manager) {
-                    manager.contentBlock.dialogToggle();
-                }
-            }),
-
-            "more": makeDef("more", "MoreActions", "options btn-mode", true, {
-                code: function (settings, event) {
-                    var btn = $(event.target),
-                        fullMenu = btn.closest("ul.sc-menu"),
-                        oldState = Number(fullMenu.attr("data-state") || 0),
-                        max = Number(fullMenu.attr("group-count")),
-                        newState = (oldState + 1) % max;
-
-                    fullMenu.removeClass("group-" + oldState)
-                        .addClass("group-" + newState)
-                        .attr("data-state", newState);
-                }
-            })
-
-            //#endregion
-        };
-
-        return act;
-    };
-
-})();
-
-
-(function() {
-    $2sxc._commands.engine = function(sxc, targetTag) {
-        var cmc = {
-            manage: "must-be-added-after-initialization",
-            init: function(manage) {
-                cmc.manage = manage;
-            },
-
-            // assemble an object which will store the configuration and execute it
-            create: function(specialSettings) {
-                var settings = $2sxc._lib.extend({}, cmc.manage._toolbarConfig, specialSettings); // merge button with general toolbar-settings
-                var ngDialogUrl = cmc.manage._editContext.Environment.SxcRootUrl + "desktopmodules/tosic_sexycontent/dist/dnn/ui.html?sxcver="
-                    + cmc.manage._editContext.Environment.SxcVersion;
-                var isDebug = $2sxc.urlParams.get("debug") ? "&debug=true" : "";
-
-                var cmd = {
-                    settings: settings,
-                    items: settings.items || [], // use predefined or create empty array
-                    params: $2sxc._lib.extend({
-                        dialog: settings.dialog || settings.action // the variable used to name the dialog changed in the history of 2sxc from action to dialog
-                    }, settings.params),
-
-                    addSimpleItem: function() {
-                        var itm = {}, ct = cmd.settings.contentType || cmd.settings.attributeSetName; // two ways to name the content-type-name this, v 7.2+ and older
-                        if (cmd.settings.entityId) itm.EntityId = cmd.settings.entityId;
-                        if (ct) itm.ContentTypeName = ct;
-                        if (itm.EntityId || itm.ContentTypeName) // only add if there was stuff to add
-                            cmd.items.push(itm);
-                    },
-
-                    // this adds an item of the content-group, based on the group GUID and the sequence number
-                    addContentGroupItem: function(guid, index, part, isAdd, isEntity, cbid, sectionLanguageKey) {
-                        cmd.items.push({
-                            Group: { Guid: guid, Index: index, Part: part, Add: isAdd },
-                            Title: $2sxc.translate(sectionLanguageKey)
-                        });
-                    },
-
-                    // this will tell the command to edit a item from the sorted list in the group, optionally together with the presentation item
-                    addContentGroupItemSetsToEditList: function(withPresentation) {
-                        var isContentAndNotHeader = (cmd.settings.sortOrder !== -1);
-                        var index = isContentAndNotHeader ? cmd.settings.sortOrder : 0;
-                        var prefix = isContentAndNotHeader ? "" : "List";
-                        var cTerm = prefix + "Content";
-                        var pTerm = prefix + "Presentation";
-                        var isAdd = cmd.settings.action === "new";
-                        var groupId = cmd.settings.contentGroupId;
-                        cmd.addContentGroupItem(groupId, index, cTerm.toLowerCase(), isAdd, cmd.settings.cbIsEntity, cmd.settings.cbId, "EditFormTitle." + cTerm);
-
-                        if (withPresentation)
-                            cmd.addContentGroupItem(groupId, index, pTerm.toLowerCase(), isAdd, cmd.settings.cbIsEntity, cmd.settings.cbId, "EditFormTitle." + pTerm);
-
-                    },
-
-                    generateLink: function() {
-                        // if there is no items-array, create an empty one (it's required later on)
-                        if (!cmd.settings.items) cmd.settings.items = [];
-                        //#region steps for all actions: prefill, serialize, open-dialog
-                        // when doing new, there may be a prefill in the link to initialize the new item
-                        if (cmd.settings.prefill)
-                            for (var i = 0; i < cmd.items.length; i++)
-                                cmd.items[i].Prefill = cmd.settings.prefill;
-
-                        cmd.params.items = JSON.stringify(cmd.items); // Serialize/json-ify the complex items-list
-
-                        return ngDialogUrl
-                            + "#" + $.param(cmc.manage._dialogParameters)
-                            + "&" + $.param(cmd.params)
-                            + isDebug;
-                        //#endregion
-                    }
-                };
-                return cmd;
-            },
-
-            // create a dialog link
-            _linkToNgDialog: function(specialSettings) {
-                var cmd = cmc.manage._commands.create(specialSettings);
-
-                if (cmd.settings.useModuleList)
-                    cmd.addContentGroupItemSetsToEditList(true);
-                else
-                    cmd.addSimpleItem();
-
-                // if the command has own configuration stuff, do that now
-                if (cmd.settings.configureCommand)
-                    cmd.settings.configureCommand(cmd);
-
-                return cmd.generateLink();
-            },
-            // open a new dialog of the angular-ui
-            _openNgDialog: function(settings, event, closeCallback) {
-
-                var callback = function() {
-                    cmc.manage.contentBlock.reloadAndReInitialize();
-                    closeCallback();
-                };
-                var link = cmc._linkToNgDialog(settings);
-
-                if (settings.newWindow || (event && event.shiftKey))
-                    return window.open(link);
-                else {
-                    if (settings.inlineWindow)
-                        return $2sxc._dialog.create(sxc, targetTag, link, callback);
-                    else
-                        return $2sxc.totalPopup.open(link, callback);
-                }
-            },
-
-            executeAction: function(nameOrSettings, settings, event) {
-                // check if name is name (string) or object (settings)
-                if (!event && settings && settings.altKey) { // no event param, but settings, which is an event
-                    event = settings;
-                    settings = {};
-                }
-                if (typeof (nameOrSettings) === "string") {
-                    settings = $2sxc._lib.extend(settings || {}, { "action": nameOrSettings });
-                } else {
-                    //event = settings;
-                    settings = nameOrSettings;
-                }
-
-                var conf = cmc.manage._toolbar.actions[settings.action];
-                settings = $2sxc._lib.extend({}, conf, settings); // merge conf & settings, but settings has higher priority
-                if (!settings.dialog) settings.dialog = settings.action; // old code uses "action" as the parameter, now use verb ? dialog
-                if (!settings.code) settings.code = cmc._openNgDialog; // decide what action to perform
-
-                var origEvent = event || window.event; // pre-save event because afterwards we have a promise, so the event-object changes; funky syntax is because of browser differences
-                if (conf.uiActionOnly)
-                    return settings.code(settings, origEvent, cmc.manage);
-
-                // if more than just a UI-action, then it needs to be sure the content-group is created first
-                cmc.manage.contentBlock.prepareToAddContent()
-                    .then(function() {
-                        return settings.code(settings, origEvent, cmc.manage);
-                    });
-            }
-        };
-
-        return cmc;
-    };
-
-
-})();
 
 
 
@@ -826,20 +802,10 @@ var $2sxcActionMenuMapper = function (moduleId) {
 // it has commands to
 // - getButton
 // - getToolbar
-// - action(...)
+// - run(...)
+// - isEditMode
 
 (function () {
-    //#region helper functions
-    function getContentBlockTag(sxci) {
-         return $("div[data-cb-id='" + sxci.cbid + "']")[0];
-    }
-
-    function getContextInfo(cb) {
-        var attr = cb.getAttribute("data-edit-context");
-        return JSON.parse(attr || "");
-    }
-    //#endregion
-
     $2sxc._manage = {};
     $2sxc._manage.create = function (sxc) {
         var contentBlockTag = getContentBlockTag(sxc);
@@ -880,9 +846,6 @@ var $2sxcActionMenuMapper = function (moduleId) {
         var editManager = {
             //#region Official, public properties and commands, which are stable for use from the outside
 
-            // public method to find out if it's in edit-mode
-            isEditMode: function () { return editContext.Environment.IsEditable; },
-
             // run a command - often used in toolbars and custom buttons
             run: cmds.executeAction,
 
@@ -909,6 +872,8 @@ var $2sxcActionMenuMapper = function (moduleId) {
 
 
 
+            // internal method to find out if it's in edit-mode
+            _isEditMode: function () { return editContext.Environment.IsEditable; },
 
             _reloadWithAjax: editContext.ContentGroup.SupportsAjax,
 
@@ -1034,7 +999,16 @@ var $2sxcActionMenuMapper = function (moduleId) {
         return editManager;
     };
 
+    //#region helper functions
+    function getContentBlockTag(sxci) {
+         return $("div[data-cb-id='" + sxci.cbid + "']")[0];
+    }
 
+    function getContextInfo(cb) {
+        var attr = cb.getAttribute("data-edit-context");
+        return JSON.parse(attr || "");
+    }
+    //#endregion
 })();
 $(function () {
     "use strict";
@@ -1436,6 +1410,33 @@ $(function () {
         };
     };
 });
+
+// Toolbar bootstrapping (initialize all toolbars after loading page)
+$(document).ready(function () {
+    // Prevent propagation of the click (if menu was clicked)
+    $(".sc-menu").click(function (e) {
+        e.stopPropagation();
+    });
+
+    var modules = $("div[data-edit-context]");
+
+    if (console) console.log("found " + modules.length + " content blocks");
+
+    // Ensure the _processToolbar is called after the next event cycle to make sure that the Angular app (template selector) is loaded first
+    window.setTimeout(function () {
+        modules.each(function () {
+            // 2016-10-09 2dm disabled try, as it only makes debugging harder...
+            // not sure if we really need it
+            //try {
+            $2sxc(this).manage._toolbar._processToolbars(this);
+            //} catch (e) { // Make sure that if one app breaks, others continue to work
+            //    if (console && console.error) console.error(e);
+            //}
+        });
+    }, 0);
+
+});
+
 // the toolbar manager is an internal helper
 // taking care of toolbars, buttons etc.
 
@@ -1883,33 +1884,6 @@ $(function () {
         params: {}
     };
 })();
-
-// Toolbar bootstrapping (initialize all toolbars after loading page)
-$(document).ready(function () {
-    // Prevent propagation of the click (if menu was clicked)
-    $(".sc-menu").click(function (e) {
-        e.stopPropagation();
-    });
-
-    var modules = $("div[data-edit-context]");
-
-    if (console) console.log("found " + modules.length + " content blocks");
-
-    // Ensure the _processToolbar is called after the next event cycle to make sure that the Angular app (template selector) is loaded first
-    window.setTimeout(function () {
-        modules.each(function () {
-            // 2016-10-09 2dm disabled try, as it only makes debugging harder...
-            // not sure if we really need it
-            //try {
-            $2sxc(this).manage._toolbar._processToolbars(this);
-            //} catch (e) { // Make sure that if one app breaks, others continue to work
-            //    if (console && console.error) console.error(e);
-            //}
-        });
-    }, 0);
-
-});
-
 // initialize the translation system; ensure toolbars etc. are translated
 (function () {
     var initialized = false;

@@ -119,7 +119,7 @@
             lastRefresh: null,
             manage: null, // initialize correctly later on
             isEditMode: function () {
-                return controller.manage && controller.manage.isEditMode();
+                return controller.manage && controller.manage._isEditMode();
             },
             recreate: function() {
                 delete $2sxc._controllers[cacheKey];    // clear cache

@@ -4,20 +4,10 @@
 // it has commands to
 // - getButton
 // - getToolbar
-// - action(...)
+// - run(...)
+// - isEditMode
 
 (function () {
-    //#region helper functions
-    function getContentBlockTag(sxci) {
-         return $("div[data-cb-id='" + sxci.cbid + "']")[0];
-    }
-
-    function getContextInfo(cb) {
-        var attr = cb.getAttribute("data-edit-context");
-        return JSON.parse(attr || "");
-    }
-    //#endregion
-
     $2sxc._manage = {};
     $2sxc._manage.create = function (sxc) {
         var contentBlockTag = getContentBlockTag(sxc);
@@ -58,9 +48,6 @@
         var editManager = {
             //#region Official, public properties and commands, which are stable for use from the outside
 
-            // public method to find out if it's in edit-mode
-            isEditMode: function () { return editContext.Environment.IsEditable; },
-
             // run a command - often used in toolbars and custom buttons
             run: cmds.executeAction,
 
@@ -87,6 +74,8 @@
 
 
 
+            // internal method to find out if it's in edit-mode
+            _isEditMode: function () { return editContext.Environment.IsEditable; },
 
             _reloadWithAjax: editContext.ContentGroup.SupportsAjax,
 
@@ -212,5 +201,14 @@
         return editManager;
     };
 
+    //#region helper functions
+    function getContentBlockTag(sxci) {
+         return $("div[data-cb-id='" + sxci.cbid + "']")[0];
+    }
 
+    function getContextInfo(cb) {
+        var attr = cb.getAttribute("data-edit-context");
+        return JSON.parse(attr || "");
+    }
+    //#endregion
 })();
