@@ -28,6 +28,7 @@
     $2sxc._actions = {};
     $2sxc._actions.create = function (editContext) {
         var enableTools = editContext.canDesign;
+        var isContent = editContext.isContent;
 
         var act = {
             // show the basic dashboard which allows view-changing
@@ -135,9 +136,11 @@
                     manager.contentBlock.changeOrder(settings.sortOrder, settings.sortOrder + 1);
                 }
             }),
-            'sort': action("sort", "Sort", "list-numbered", false, {
+
+            'instance-list': action("instance-list", "Sort", "list-numbered", false, {
                 showCondition: function (settings, modConfig) { return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1; }
             }),
+
             'publish': action("publish", "Unpublished", "eye-off", false, {
                 showCondition: function (settings, modConfig) {
                     return settings.isPublished === false;
@@ -157,19 +160,8 @@
                 showCondition: function (settings) { return settings.useModuleList; }
             }),
 
-            'layout': action("layout", "ChangeLayout", "glasses", true, {
-                code: function (settings, event, manager) {
-                    manager.contentBlock.dialogToggle();
-                }
-            }),
 
-            'develop': action("develop", "Develop", "code", true, {
-                newWindow: true,
-                showCondition: enableTools,
-                configureCommand: function (cmd) {
-                    cmd.items = [{ EntityId: editContext.templateId }];
-                }
-            }),
+            //#region template commands: contenttype, contentitems, query, develop
 
             'contenttype': action("contenttype", "ContentType", "fields", true, {
                 showCondition: enableTools
@@ -180,6 +172,53 @@
                 showCondition: enableTools && editContext.contentTypeId
             }),
 
+
+            'template-develop': action("develop", "Develop", "code", true, {
+                newWindow: true,
+                dialog: "develop",
+                showCondition: enableTools,
+                configureCommand: function (cmd) {
+                    cmd.items = [{ EntityId: editContext.templateId }];
+                }
+            }),
+
+            // todo: i18n
+            // todo: improve condition
+            'query': action("query", "QueryEdit", "filter", true, {
+                showCondition: enableTools && !isContent    // todo: only if it has a query
+            }),
+
+            // todo: i18n
+            'template-settings': action("template-settings", "TemplateSettings", "sliders", true, {
+                params: { mode: "new" },
+                dialog: "edit",
+
+                showCondition: enableTools,
+                configureCommand: function (cmd) {
+                    cmd.Title = "EditFormTitle.TemplateSettings"; // todo: check /sync with template-management
+                    cmd.items = [{ EntityId: editContext.templateId }];
+                }
+
+            }),
+            //#endregion template commands
+
+            //#region app-actions: app-settings, app-resources
+            // todo: i18n
+            // todo: improve condition
+            // todo: dynamicClasses like metadata, to disable if not ready...
+            'app-settings': action("app-settings", "AppSettings", "sliders", true, {
+                showCondition: enableTools && !isContent
+            }),
+
+            // todo: i18n
+            // todo: improve condition
+            'app-resources': action("app-resources", "AppResources", "language", true, {
+                showCondition: enableTools && !isContent // todo: ideally only if resources are configured...
+            }),
+            //#endregion
+
+            //#region app & zone
+
             'app': action("app", "App", "settings", true, {
                 showCondition: enableTools
             }),
@@ -187,6 +226,7 @@
             'zone': action("zone", "Zone", "manage", true, {
                 showCondition: enableTools
             }),
+            //#endregion
 
             'custom': action("custom", "Custom", "bomb", true, {
                 code: function (settings, event, manager) {
@@ -204,6 +244,13 @@
                 }
             }),
 
+            //#region UI actions: layout, more
+            'layout': action("layout", "ChangeLayout", "glasses", true, {
+                code: function (settings, event, manager) {
+                    manager.contentBlock.dialogToggle();
+                }
+            }),
+
             "more": action("more", "MoreActions", "options btn-mode", true, {
                 code: function (settings, event) {
                     var btn = $(event.target),
@@ -217,6 +264,8 @@
                         .attr("data-state", newState);
                 }
             })
+
+            //#endregion
         };
 
         return act;

@@ -6,7 +6,8 @@
             allActions = $2sxc._actions.create({
             canDesign: editContext.User.CanDesign,
             templateId: editContext.ContentGroup.TemplateId,
-            contentTypeId: editContext.ContentGroup.ContentTypeName
+            contentTypeId: editContext.ContentGroup.ContentTypeName,
+            isContent: editContext.ContentGroup.IsContent
         });
 
         // #region helper functions
@@ -47,7 +48,7 @@
 
         var tb = {
             config: createToolbarConfig(editContext),
-            refreshConfig: function() { tb.config = createToolbarConfig(); },
+            refreshConfig: function () { tb.config = createToolbarConfig(editContext); },
             actions: allActions,
             // Generate a button (an <a>-tag) for one specific toolbar-action. 
             // Expects: settings, an object containing the specs for the expected buton
@@ -62,7 +63,8 @@
                     symbol = $("<i class=\"" + actDef.icon + "\" aria-hidden=\"true\"></i>"),
                     onclick = /* actDef.click ||*/ "$2sxc(" + id + ", " + cbid + ").manage.run(" + JSON.stringify(actDef.command /*, tb._jsonifyFilterGroup*/) + ", event);";
 
-                //console.log("onclick: " + onclick);
+                //if ($2sxc.debug.load)
+                //  console.log("onclick: " + onclick);
 
                 for (var c = 0; c < classesList.length; c++)
                     showClasses += " " + classesList[c];
@@ -82,10 +84,10 @@
             // Builds the toolbar and returns it as HTML
             // expects settings - either for 1 button or for an array of buttons
             getToolbar: function (settings) {
-                if ($2sxc.debug.load) {
-                    console.log("creating toolbar");
-                    console.log(settings);
-                }
+                //if ($2sxc.debug.load) {
+                //    console.log("creating toolbar");
+                //    console.log(settings);
+                //}
 
                 // if it has an action or is an array, keep that. Otherwise get standard buttons
                 settings = settings || {};// if null/undefined, use empty object

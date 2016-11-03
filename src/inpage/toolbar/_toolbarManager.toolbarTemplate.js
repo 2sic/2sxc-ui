@@ -33,12 +33,12 @@
             },
             {
                 name: "list",
-                buttons: "add,remove,moveup,movedown,sort,replace,more"
+                buttons: "add,remove,moveup,movedown,instance-list,replace,more"
             },
             {
                 name: "instance",
                 // todo: add templatesettings, query
-                buttons: "develop,contenttype,contentitems,more",
+                buttons: "template-develop,template-settings,contentitems,query,contenttype,more",
                 defaults: {
                     classes: "group-pro"
                 }
@@ -46,7 +46,7 @@
             {
                 name: "app",
                 // todo: add multilanguage-resources & settings
-                buttons: "app,zone,more",
+                buttons: "app,app-settings,app-resources,zone,more",
                 defaults: {
                     classes: "group-pro"
                 }

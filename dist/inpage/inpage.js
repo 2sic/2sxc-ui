@@ -489,6 +489,7 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
     $2sxc._actions = {};
     $2sxc._actions.create = function (editContext) {
         var enableTools = editContext.canDesign;
+        var isContent = editContext.isContent;
 
         var act = {
             // show the basic dashboard which allows view-changing
@@ -596,9 +597,11 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
                     manager.contentBlock.changeOrder(settings.sortOrder, settings.sortOrder + 1);
                 }
             }),
-            'sort': action("sort", "Sort", "list-numbered", false, {
+
+            'instance-list': action("instance-list", "Sort", "list-numbered", false, {
                 showCondition: function (settings, modConfig) { return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1; }
             }),
+
             'publish': action("publish", "Unpublished", "eye-off", false, {
                 showCondition: function (settings, modConfig) {
                     return settings.isPublished === false;
@@ -618,19 +621,8 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
                 showCondition: function (settings) { return settings.useModuleList; }
             }),
 
-            'layout': action("layout", "ChangeLayout", "glasses", true, {
-                code: function (settings, event, manager) {
-                    manager.contentBlock.dialogToggle();
-                }
-            }),
 
-            'develop': action("develop", "Develop", "code", true, {
-                newWindow: true,
-                showCondition: enableTools,
-                configureCommand: function (cmd) {
-                    cmd.items = [{ EntityId: editContext.templateId }];
-                }
-            }),
+            //#region template commands: contenttype, contentitems, query, develop
 
             'contenttype': action("contenttype", "ContentType", "fields", true, {
                 showCondition: enableTools
@@ -641,6 +633,53 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
                 showCondition: enableTools && editContext.contentTypeId
             }),
 
+
+            'template-develop': action("develop", "Develop", "code", true, {
+                newWindow: true,
+                dialog: "develop",
+                showCondition: enableTools,
+                configureCommand: function (cmd) {
+                    cmd.items = [{ EntityId: editContext.templateId }];
+                }
+            }),
+
+            // todo: i18n
+            // todo: improve condition
+            'query': action("query", "QueryEdit", "filter", true, {
+                showCondition: enableTools && !isContent    // todo: only if it has a query
+            }),
+
+            // todo: i18n
+            'template-settings': action("template-settings", "TemplateSettings", "sliders", true, {
+                params: { mode: "new" },
+                dialog: "edit",
+
+                showCondition: enableTools,
+                configureCommand: function (cmd) {
+                    cmd.Title = "EditFormTitle.TemplateSettings"; // todo: check /sync with template-management
+                    cmd.items = [{ EntityId: editContext.templateId }];
+                }
+
+            }),
+            //#endregion template commands
+
+            //#region app-actions: app-settings, app-resources
+            // todo: i18n
+            // todo: improve condition
+            // todo: dynamicClasses like metadata, to disable if not ready...
+            'app-settings': action("app-settings", "AppSettings", "sliders", true, {
+                showCondition: enableTools && !isContent
+            }),
+
+            // todo: i18n
+            // todo: improve condition
+            'app-resources': action("app-resources", "AppResources", "language", true, {
+                showCondition: enableTools && !isContent // todo: ideally only if resources are configured...
+            }),
+            //#endregion
+
+            //#region app & zone
+
             'app': action("app", "App", "settings", true, {
                 showCondition: enableTools
             }),
@@ -648,6 +687,7 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
             'zone': action("zone", "Zone", "manage", true, {
                 showCondition: enableTools
             }),
+            //#endregion
 
             'custom': action("custom", "Custom", "bomb", true, {
                 code: function (settings, event, manager) {
@@ -665,6 +705,13 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
                 }
             }),
 
+            //#region UI actions: layout, more
+            'layout': action("layout", "ChangeLayout", "glasses", true, {
+                code: function (settings, event, manager) {
+                    manager.contentBlock.dialogToggle();
+                }
+            }),
+
             "more": action("more", "MoreActions", "options btn-mode", true, {
                 code: function (settings, event) {
                     var btn = $(event.target),
@@ -678,6 +725,8 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
                         .attr("data-state", newState);
                 }
             })
+
+            //#endregion
         };
 
         return act;
@@ -835,25 +884,14 @@ $2sxc._contentManagementCommands = function (sxc, targetTag) {
 
 // Maps actions of the module menu to JS actions - needed because onclick event can't be set (actually, a bug in DNN)
 var $2sxcActionMenuMapper = function (moduleId) {
+    var run = $2sxc(moduleId).manage.run;
     return {
-        changeLayoutOrContent: function () {
-            $2sxc(moduleId).manage.action("layout");
-        },
-        addItem: function () {
-            $2sxc(moduleId).manage.action("add", { "useModuleList": true, "sortOrder": 0 });
-        },
-        edit: function () {
-            $2sxc(moduleId).manage.action("edit", { "useModuleList": true, "sortOrder": 0 });
-        },
-        adminApp: function () {
-            $2sxc(moduleId).manage.action("app");
-        },
-        adminZone: function () {
-            $2sxc(moduleId).manage.action("zone");
-        },
-        develop: function () {
-            $2sxc(moduleId).manage.action("develop");
-        }
+        changeLayoutOrContent: function () {    run("layout");  },
+        addItem: function () {                  run("add", { "useModuleList": true, "sortOrder": 0 }); },
+        edit: function () {                     run ("edit", { "useModuleList": true, "sortOrder": 0 });},
+        adminApp: function () {                 run("app"); },
+        adminZone: function () {                run("zone");},
+        develop: function () {                  run("template-develop"); }
     };
 };
 // this is a dialog handler which will create in-page dialogs for 
@@ -1356,7 +1394,8 @@ $(function () {
             allActions = $2sxc._actions.create({
             canDesign: editContext.User.CanDesign,
             templateId: editContext.ContentGroup.TemplateId,
-            contentTypeId: editContext.ContentGroup.ContentTypeName
+            contentTypeId: editContext.ContentGroup.ContentTypeName,
+            isContent: editContext.ContentGroup.IsContent
         });
 
         // #region helper functions
@@ -1397,7 +1436,7 @@ $(function () {
 
         var tb = {
             config: createToolbarConfig(editContext),
-            refreshConfig: function() { tb.config = createToolbarConfig(); },
+            refreshConfig: function () { tb.config = createToolbarConfig(editContext); },
             actions: allActions,
             // Generate a button (an <a>-tag) for one specific toolbar-action. 
             // Expects: settings, an object containing the specs for the expected buton
@@ -1412,7 +1451,8 @@ $(function () {
                     symbol = $("<i class=\"" + actDef.icon + "\" aria-hidden=\"true\"></i>"),
                     onclick = /* actDef.click ||*/ "$2sxc(" + id + ", " + cbid + ").manage.run(" + JSON.stringify(actDef.command /*, tb._jsonifyFilterGroup*/) + ", event);";
 
-                //console.log("onclick: " + onclick);
+                //if ($2sxc.debug.load)
+                //  console.log("onclick: " + onclick);
 
                 for (var c = 0; c < classesList.length; c++)
                     showClasses += " " + classesList[c];
@@ -1432,10 +1472,10 @@ $(function () {
             // Builds the toolbar and returns it as HTML
             // expects settings - either for 1 button or for an array of buttons
             getToolbar: function (settings) {
-                if ($2sxc.debug.load) {
-                    console.log("creating toolbar");
-                    console.log(settings);
-                }
+                //if ($2sxc.debug.load) {
+                //    console.log("creating toolbar");
+                //    console.log(settings);
+                //}
 
                 // if it has an action or is an array, keep that. Otherwise get standard buttons
                 settings = settings || {};// if null/undefined, use empty object
@@ -1587,7 +1627,7 @@ $(function () {
                             console.warn("warning: toolbar-button with unknown action-name:", btn.command.action);
                         $2sxc._lib.extend(btn.command, fullSet.params); // enhance the button with settings for this instance
                         // tools.addCommandParams(fullSet, btn);
-                        tools.addDefaultBtnSettings(btn, actions);      // ensure all buttons have either own settings, or the fallbacks
+                        tools.addDefaultBtnSettings(btn, fullSet.groups[g], fullSet, actions);      // ensure all buttons have either own settings, or the fallbacks
                     }
             }
         },
@@ -1629,7 +1669,7 @@ $(function () {
             for (var v = 0; v < btns.length; v++) {
                 btns[v] = tools.expandButtonConfig(btns[v], sharedProperties);
                 // todo: refactor this out, not needed any more as they are all together now
-                btns[v].group = root;// grp;    // attach group reference, needed for fallback etc.
+                // btns[v].group = root;// grp;    // attach group reference, needed for fallback etc.
             }
             root.buttons = btns; // ensure the internal def is also an array now
         },
@@ -1693,15 +1733,15 @@ $(function () {
         ],
 
         // enhance button-object with default icons, etc.
-        addDefaultBtnSettings: function(btn, actions) {
+        addDefaultBtnSettings: function(btn, group, groups, actions) {
             for (var d = 0; d < tools.btnProperties.length; d++)
                 fallbackBtnSetting(btn, actions, tools.btnProperties[d]);
 
             // configure missing button properties with various fallback options
             function fallbackBtnSetting(btn, actions, propName) {
                 btn[propName] = btn[propName]   // by if already defined, use the already defined propery
-                    || (btn.group.defaults && btn.group.defaults[propName])     // if the group has defaults, try use use that property
-                    || (btn.group.groups && btn.group.groups.defaults && btn.group.groups.defaults[propName])     // if the group has defaults, try use use that property
+                    || (group.defaults && group.defaults[propName])     // if the group has defaults, try use use that property
+                    || (groups && groups.defaults && groups.defaults[propName])     // if the group has defaults, try use use that property
                     || (actions[btn.command.action] && actions[btn.command.action][propName]); // if there is an action, try to use that property name
             }
         },
@@ -1758,12 +1798,12 @@ $(function () {
             },
             {
                 name: "list",
-                buttons: "add,remove,moveup,movedown,sort,replace,more"
+                buttons: "add,remove,moveup,movedown,instance-list,replace,more"
             },
             {
                 name: "instance",
                 // todo: add templatesettings, query
-                buttons: "develop,contenttype,contentitems,more",
+                buttons: "template-develop,template-settings,contentitems,query,contenttype,more",
                 defaults: {
                     classes: "group-pro"
                 }
@@ -1771,7 +1811,7 @@ $(function () {
             {
                 name: "app",
                 // todo: add multilanguage-resources & settings
-                buttons: "app,zone,more",
+                buttons: "app,app-settings,app-resources,zone,more",
                 defaults: {
                     classes: "group-pro"
                 }

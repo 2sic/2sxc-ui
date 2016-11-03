@@ -78,7 +78,7 @@
                             console.warn("warning: toolbar-button with unknown action-name:", btn.command.action);
                         $2sxc._lib.extend(btn.command, fullSet.params); // enhance the button with settings for this instance
                         // tools.addCommandParams(fullSet, btn);
-                        tools.addDefaultBtnSettings(btn, actions);      // ensure all buttons have either own settings, or the fallbacks
+                        tools.addDefaultBtnSettings(btn, fullSet.groups[g], fullSet, actions);      // ensure all buttons have either own settings, or the fallbacks
                     }
             }
         },
@@ -120,7 +120,7 @@
             for (var v = 0; v < btns.length; v++) {
                 btns[v] = tools.expandButtonConfig(btns[v], sharedProperties);
                 // todo: refactor this out, not needed any more as they are all together now
-                btns[v].group = root;// grp;    // attach group reference, needed for fallback etc.
+                // btns[v].group = root;// grp;    // attach group reference, needed for fallback etc.
             }
             root.buttons = btns; // ensure the internal def is also an array now
         },
@@ -184,15 +184,15 @@
         ],
 
         // enhance button-object with default icons, etc.
-        addDefaultBtnSettings: function(btn, actions) {
+        addDefaultBtnSettings: function(btn, group, groups, actions) {
             for (var d = 0; d < tools.btnProperties.length; d++)
                 fallbackBtnSetting(btn, actions, tools.btnProperties[d]);
 
             // configure missing button properties with various fallback options
             function fallbackBtnSetting(btn, actions, propName) {
                 btn[propName] = btn[propName]   // by if already defined, use the already defined propery
-                    || (btn.group.defaults && btn.group.defaults[propName])     // if the group has defaults, try use use that property
-                    || (btn.group.groups && btn.group.groups.defaults && btn.group.groups.defaults[propName])     // if the group has defaults, try use use that property
+                    || (group.defaults && group.defaults[propName])     // if the group has defaults, try use use that property
+                    || (groups && groups.defaults && groups.defaults[propName])     // if the group has defaults, try use use that property
                     || (actions[btn.command.action] && actions[btn.command.action][propName]); // if there is an action, try to use that property name
             }
         },
