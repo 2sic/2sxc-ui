@@ -643,20 +643,22 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
                 }
             }),
 
-            // todo: i18n
             // todo: improve condition
             'query': action("query", "QueryEdit", "filter", true, {
-                showCondition: enableTools && !isContent    // todo: only if it has a query
+                showCondition: function (settings, modConfig) {
+                    return enableTools && !isContent && editContext.queryId;
+                },
+                dynamicClasses: function (settings) {
+                    return editContext.queryId ? "" : "empty";  // if it doesn't have a query, make it less strong
+                }
             }),
 
-            // todo: i18n
+            // todo: title i18n
             'template-settings': action("template-settings", "TemplateSettings", "sliders", true, {
-                params: { mode: "new" },
                 dialog: "edit",
-
                 showCondition: enableTools,
                 configureCommand: function (cmd) {
-                    cmd.Title = "EditFormTitle.TemplateSettings"; // todo: check /sync with template-management
+                    cmd.Title = "EditFormTitle.TemplateSettings"; 
                     cmd.items = [{ EntityId: editContext.templateId }];
                 }
 
@@ -664,17 +666,29 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
             //#endregion template commands
 
             //#region app-actions: app-settings, app-resources
-            // todo: i18n
             // todo: improve condition
             // todo: dynamicClasses like metadata, to disable if not ready...
             'app-settings': action("app-settings", "AppSettings", "sliders", true, {
-                showCondition: enableTools && !isContent
+                dialog: "edit",
+                showCondition: function(settings, modConfig) {
+                    return enableTools && !isContent && editContext.appSettingsId != null; // only if settings exist, or are 0 (to be created)
+                },
+                configureCommand: function (cmd) {
+                    cmd.Title = "TODO"; //TODO
+                    cmd.items = [{ EntityId: editContext.appSettingsId }];
+                }
             }),
 
-            // todo: i18n
             // todo: improve condition
             'app-resources': action("app-resources", "AppResources", "language", true, {
-                showCondition: enableTools && !isContent // todo: ideally only if resources are configured...
+                dialog: "edit",
+                showCondition: function (settings, modConfig) {
+                    return enableTools && !isContent && editContext.appResourcesId != null; // only if resources exist or are 0 (to be created)...
+                },
+                configureCommand: function (cmd) {
+                    cmd.Title = "TODO"; //todo
+                    cmd.items = [{ EntityId: editContext.appResourcesId }];
+                }
             }),
             //#endregion
 
@@ -1391,12 +1405,17 @@ $(function () {
     tbManager.create = function (sxc, editContext) {
         var id = sxc.id,
             cbid = sxc.cbid,
+            ec = editContext,
+            cg = ec.ContentGroup,
             allActions = $2sxc._actions.create({
-            canDesign: editContext.User.CanDesign,
-            templateId: editContext.ContentGroup.TemplateId,
-            contentTypeId: editContext.ContentGroup.ContentTypeName,
-            isContent: editContext.ContentGroup.IsContent
-        });
+                canDesign: ec.User.CanDesign,
+                templateId: cg.TemplateId,
+                contentTypeId: cg.ContentTypeName,
+                isContent: cg.IsContent,
+                queryId: cg.QueryId,
+                appResourcesId: cg.AppResourcesId,
+                appSettingsId: cg.AppSettingsId
+    });
 
         // #region helper functions
         function createToolbarConfig(context) {

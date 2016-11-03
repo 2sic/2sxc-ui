@@ -3,12 +3,17 @@
     tbManager.create = function (sxc, editContext) {
         var id = sxc.id,
             cbid = sxc.cbid,
+            ec = editContext,
+            cg = ec.ContentGroup,
             allActions = $2sxc._actions.create({
-            canDesign: editContext.User.CanDesign,
-            templateId: editContext.ContentGroup.TemplateId,
-            contentTypeId: editContext.ContentGroup.ContentTypeName,
-            isContent: editContext.ContentGroup.IsContent
-        });
+                canDesign: ec.User.CanDesign,
+                templateId: cg.TemplateId,
+                contentTypeId: cg.ContentTypeName,
+                isContent: cg.IsContent,
+                queryId: cg.QueryId,
+                appResourcesId: cg.AppResourcesId,
+                appSettingsId: cg.AppSettingsId
+    });
 
         // #region helper functions
         function createToolbarConfig(context) {
