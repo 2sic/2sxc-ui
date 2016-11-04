@@ -61,7 +61,7 @@
                 },
                 code: function (settings, event, sxc) {
                     // todo - should refactor this to be a toolbarManager.contentBlock command
-                    sxc._commands._openNgDialog($2sxc._lib.extend({}, settings, { sortOrder: settings.sortOrder + 1 }), event);
+                    sxc.manage._commands._openNgDialog($2sxc._lib.extend({}, settings, { sortOrder: settings.sortOrder + 1 }), event);
                 }
             }),
 
@@ -71,7 +71,7 @@
                     return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1;
                 },
                 code: function (settings, event, sxc) {
-                    sxc.contentBlock 
+                    sxc.manage.contentBlock
                         .addItem(settings.sortOrder + 1);
                 }
             }),
@@ -104,7 +104,7 @@
                 },
                 code: function (settings, event, sxc) {
                     if (confirm($2sxc.translate("Toolbar.ConfirmRemove"))) {
-                        sxc.contentBlock
+                        sxc.manage.contentBlock
                             .removeFromList(settings.sortOrder);
                     }
                 }
@@ -128,7 +128,7 @@
                     return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1 && settings.sortOrder !== 0;
                 },
                 code: function (settings, event, sxc) {
-                    sxc.contentBlock
+                    sxc.manage.contentBlock
                         .changeOrder(settings.sortOrder, Math.max(settings.sortOrder - 1, 0));
                 }
             }),
@@ -137,7 +137,7 @@
                     return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1;
                 },
                 code: function (settings, event, sxc) {
-                    sxc.contentBlock.changeOrder(settings.sortOrder, settings.sortOrder + 1);
+                    sxc.manage.contentBlock.changeOrder(settings.sortOrder, settings.sortOrder + 1);
                 }
             }),
 
@@ -156,7 +156,7 @@
                     }
                     var part = settings.sortOrder === -1 ? "listcontent" : "content";
                     var index = settings.sortOrder === -1 ? 0 : settings.sortOrder;
-                    sxc.contentBlock.publish(part, index);
+                    sxc.manage.contentBlock.publish(part, index);
                 }
             }),
 
@@ -266,7 +266,7 @@
             //#region UI actions: layout, more
             'layout': makeDef("layout", "ChangeLayout", "glasses", true, {
                 code: function (settings, event, sxc) {
-                    sxc.contentBlock.dialogToggle();
+                    sxc.manage.contentBlock.dialogToggle();
                 }
             }),
 

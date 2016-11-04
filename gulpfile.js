@@ -17,6 +17,7 @@ var gulp = require("gulp"),
     };
 
 
+
 // register all watches & run them
 gulp.task("A-watch-our-code", function () {
     watchSet(createSetsForOurCode());
@@ -46,7 +47,6 @@ gulp.task("B-watch-publish-to-2sxc", function () {
     gulp.watch("./dist/**/*", ["publish-dist-to-2sxc"]);
     gulp.watch("./js/**/*", ["publish-js-to-2sxc"]);
 });
-
 
 // watch the dnn ui.html for changes and republish
 function watchDnnUi() {

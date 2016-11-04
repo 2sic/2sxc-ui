@@ -1123,35 +1123,12 @@ angular.module("sxcFieldTemplates")
             formlyConfigProvider.setType({
                 name: "string-wysiwyg-tinymce",
                 templateUrl: "fields/string/string-wysiwyg-tinymce.html",
-                // todo: check if we could use the defaultFieldWrappers instead
-                wrapper: defaultFieldWrappers, // ["eavLabel", "bootstrapHasError", "eavLocalization", "collapsible"],
+                wrapper: defaultFieldWrappers, 
                 controller: "FieldWysiwygTinyMce as vm"
             });
         }])
 
         .controller("FieldWysiwygTinyMce", FieldWysiwygTinyMceController);
-
-    // these are the translation keys we must import from angular-translate
-    // as of now we can't just read the content of the json because angular-translate doesn't give external access to the list
-    var translationsMce = [
-            "Link.AdamFile",
-            "Link.AdamFile.Tooltip",
-            "Image.AdamImage",
-            "Image.AdamImage.Tooltip",
-            "Link.DnnFile",
-            "Link.DnnFile.Tooltip",
-            "Link.Page",
-            "Link.Page.Tooltip",
-            "Image.DnnImage",
-            "Image.DnnImage.Tooltip",
-            "Link.Anchor.Tooltip",
-            "SwitchMode.Pro",
-            "SwitchMode.Standard",
-            "H1",
-            "H2",
-            "H3",
-            "Remove"
-    ];
 
     // these are the sizes we can auto-resize to
     var imgSizes = [100, 75, 70, 66, 60, 50, 40, 33, 30, 25, 10];
@@ -1192,7 +1169,7 @@ angular.module("sxcFieldTemplates")
                     + "| numlist "// not needed since now context senitive: " outdent indent "
                     + "| linkfiles linkgroup "
                     + "| modeadvanced ",
-                    contextmenu: "charmap hr",
+                    contextmenu: "charmap hr"
                 },
                 advanced: {
                     menubar: true,
@@ -1203,7 +1180,7 @@ angular.module("sxcFieldTemplates")
                     + "| bullist numlist outdent indent "
                     + "| images linkfiles linkgrouppro "
                     + "| code modestandard ",
-                    contextmenu: "link image | charmap hr adamimage",
+                    contextmenu: "link image | charmap hr adamimage"
                 }
             };
 
@@ -1335,17 +1312,20 @@ angular.module("sxcFieldTemplates")
 
     // Initialize the tinymce resources which we translate ourselves
     function initLangResources(editor, language, $translate) {
-        var keys = [], mceTransObject = {}, prefix = "Extension.TinyMce.";
+        var keys = [], mceTranslations = {}, prefix = "Extension.TinyMce.", pLen = prefix.length, primaryLan = "en";
 
-        // create array to request values from $translate
-        for (var k = 0; k < translationsMce.length; k++)
-            keys.push(prefix + translationsMce[k]);
+        // find all relevant keys by querying the primary language
+        var all = $translate.getTranslationTable(primaryLan); 
+        // ReSharper disable once MissingHasOwnPropertyInForeach
+        for (var key in all)    
+            if (key.indexOf(prefix) === 0) 
+                keys.push(key);
+
         var translations = $translate.instant(keys);
 
-        // reconvert to the keys / structure which tinyMce needs and hand it in
-        for (k = 0; k < translationsMce.length; k++)
-            mceTransObject[translationsMce[k]] = translations[prefix + translationsMce[k]];
-        tinymce.addI18n(language, mceTransObject);
+        for (var k = 0; k < keys.length; k++)
+            mceTranslations[keys[k].substring(pLen)] = translations[keys[k]];
+        tinymce.addI18n(language, mceTranslations);
     }
 
     function addTinyMceToolbarButtons(editor, vm) {
