@@ -9,7 +9,7 @@
 
 (function () {
     $2sxc._manage = {};
-    $2sxc._manage.create = function (sxc) {
+    $2sxc._manage.createFor = function (sxc) {
         var contentBlockTag = getContentBlockTag(sxc);
         var editContext = getContextInfo(contentBlockTag);
 
@@ -45,7 +45,7 @@
         var toolsAndButtons = $2sxc._toolbarManager.create(sxc, editContext);
         var cmds = $2sxc._commands.engine(sxc, contentBlockTag);
 
-        var editManager = {
+        var editManager = sxc.manage = {
             //#region Official, public properties and commands, which are stable for use from the outside
 
             // run a command - often used in toolbars and custom buttons

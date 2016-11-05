@@ -1159,7 +1159,6 @@ angular.module("sxcFieldTemplates")
                 "table",        // https://www.tinymce.com/docs/plugins/searchreplace/
                 "lists",        // should fix bug with fonts in list-items (https://github.com/tinymce/tinymce/issues/2330),
                 "textpattern",  // enable typing like "1. text" to create lists etc.
-
             ];
 
             var modes = {
@@ -1228,7 +1227,7 @@ angular.module("sxcFieldTemplates")
             var lang2 = languages.currentLanguage.substr(0, 2);
 
             // test a specific language quickly
-             // lang2 = "de";
+            // lang2 = "de";
 
             if (availableLanguages.indexOf(lang2) >= 0)
                 angular.extend($scope.tinymceOptions, {

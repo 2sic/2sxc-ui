@@ -822,7 +822,7 @@ if($ && $.fn && $.fn.dnnModuleDragDrop)
 
 (function () {
     $2sxc._manage = {};
-    $2sxc._manage.create = function (sxc) {
+    $2sxc._manage.createFor = function (sxc) {
         var contentBlockTag = getContentBlockTag(sxc);
         var editContext = getContextInfo(contentBlockTag);
 
@@ -858,7 +858,7 @@ if($ && $.fn && $.fn.dnnModuleDragDrop)
         var toolsAndButtons = $2sxc._toolbarManager.create(sxc, editContext);
         var cmds = $2sxc._commands.engine(sxc, contentBlockTag);
 
-        var editManager = {
+        var editManager = sxc.manage = {
             //#region Official, public properties and commands, which are stable for use from the outside
 
             // run a command - often used in toolbars and custom buttons
@@ -1443,7 +1443,9 @@ $(document).ready(function () {
             // 2016-10-09 2dm disabled try, as it only makes debugging harder...
             // not sure if we really need it
             //try {
-            $2sxc(this).manage._toolbar._processToolbars(this);
+            var ctl = $2sxc(this);
+            if(ctl.manage)
+                ctl.manage._toolbar._processToolbars(this);
             //} catch (e) { // Make sure that if one app breaks, others continue to work
             //    if (console && console.error) console.error(e);
             //}
