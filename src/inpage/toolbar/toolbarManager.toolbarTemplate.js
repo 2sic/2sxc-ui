@@ -56,8 +56,9 @@
         params: {},
         settings: {
             autoAddMore: true,
-            float: "right",
-            align: "right"
+            // these are defaults, don't set again
+            //float: "right",
+            //align: "right"
         }
     };
 })();

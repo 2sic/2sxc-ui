@@ -5,9 +5,12 @@
     var tools = $2sxc._toolbarManager.buttonHelpers = {
 
         defaultSettings: {
-            autoAddMore: false,
-            align: "right",
-            float: "right"
+            autoAddMore: false,     // false | true
+            align: "right",         // right | left
+            float: "right",         // right | left
+            show: "hover",          // always | hover
+            display: "float",       // float | inline
+            // order or reverse, still thinking about this --> order: "default"    // default | reverse
         },
 
         // take any common input format and convert it to a full toolbar-structure definition
