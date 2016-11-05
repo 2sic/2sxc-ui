@@ -23,6 +23,7 @@
         var vm = this;
 
         vm.activate = function () {
+            var defaultLanguage = "en";
             var availableLanguages = "de,es,fr,it,uk,nl".split(",");
 
             var plugins = [
@@ -51,7 +52,7 @@
                     toolbar: " undo redo removeformat "
                     + "| bold formatgroup "
                     + "| h1 h2 hgroup " 
-                    + "| numlist "// not needed since now context senitive: " outdent indent "
+                    + "| listgroup "// not needed since now context senitive: " outdent indent "
                     + "| linkfiles linkgroup "
                     + "| modeadvanced ",
                     contextmenu: "charmap hr"
@@ -96,12 +97,12 @@
                 theme: "modern",
                 // statusbar: true,    // doesn't work in inline :(
 
-                language: "en",
+                language: defaultLanguage,
 
                 setup: function(editor) {
                     vm.editor = editor;
                     if ($scope.tinymceOptions.language)
-                        initLangResources(editor, $scope.tinymceOptions.language, $translate);
+                        initLangResources(editor, defaultLanguage, $scope.tinymceOptions.language, $translate);
                     addTinyMceToolbarButtons(editor, vm);
                 },
                 debounce: false // prevent slow update of model
@@ -196,11 +197,11 @@
     }
 
     // Initialize the tinymce resources which we translate ourselves
-    function initLangResources(editor, language, $translate) {
-        var keys = [], mceTranslations = {}, prefix = "Extension.TinyMce.", pLen = prefix.length, primaryLan = "en";
+    function initLangResources(editor, primaryLan, language, $translate) {
+        var keys = [], mceTranslations = {}, prefix = "Extension.TinyMce.", pLen = prefix.length;
 
         // find all relevant keys by querying the primary language
-        var all = $translate.getTranslationTable(primaryLan); 
+        var all = $translate.getTranslationTable(primaryLan);
         // ReSharper disable once MissingHasOwnPropertyInForeach
         for (var key in all)    
             if (key.indexOf(prefix) === 0) 
@@ -217,21 +218,20 @@
         //#region helpers like initOnPostRender(name)
 
         // helper function to add activate/deactivate to buttons like alignleft, alignright etc.
-        function initOnPostRender(name) { // copied from https://github.com/tinymce/tinymce/blob/ddfa0366fc700334f67b2c57f8c6e290abf0b222/js/tinymce/classes/ui/FormatControls.js#L232-L249
+        function initOnPostRender(name) { // copied/modified from https://github.com/tinymce/tinymce/blob/ddfa0366fc700334f67b2c57f8c6e290abf0b222/js/tinymce/classes/ui/FormatControls.js#L232-L249
             return function () {
-                var self = this;
+                var self = this; // keep ref to the current button?
 
-                if (editor.formatter) {
+                function watchChange() {
                     editor.formatter.formatChanged(name, function (state) {
                         self.active(state);
                     });
-                } else {
-                    editor.on("init", function () {
-                        editor.formatter.formatChanged(name, function (state) {
-                            self.active(state);
-                        });
-                    });
                 }
+
+                if (editor.formatter) 
+                    watchChange();
+                else 
+                    editor.on("init", watchChange());
             };
         }
 
@@ -353,6 +353,22 @@
                 { icon: "strikethrough", text: "Strikethrough", onclick: function () { editor.execCommand("strikethrough"); } },
                 {   icon: "superscript", text: "Superscript", onclick: function() { editor.execCommand("superscript"); }  },
                 {   icon: "subscript", text: "Subscript", onclick: function() { editor.execCommand("subscript"); }  }
+            ]
+
+        });
+
+        // drop-down with italic, strikethrough, ...
+        editor.addButton("listgroup", {
+            type: "splitbutton",
+            tooltip: "Numbered list",  // official tinymce key
+            text: "",
+            icon: "numlist",
+            cmd: "InsertOrderedList",
+            onPostRender: initOnPostRender("numlist"),  // for unknown reasons, this just doesn't activate correctly :( - neither does the bullist
+            menu: [
+                { icon: "bullist", text: "Bullet list", onPostRender: initOnPostRender("bullist"), onclick: function () { editor.execCommand("InsertUnorderedList"); } },
+                { icon: "outdent", text: "Outdent", onclick: function () { editor.execCommand("Outdent"); } },
+                { icon: "indent", text: "Indent", onclick: function () { editor.execCommand("Indent"); } }
             ]
 
         });
