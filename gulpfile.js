@@ -97,6 +97,8 @@ function importDependencies() {
     gulp.src(bwr + "angular-ui-ace/*.js")
         .pipe(gulp.dest(config.rootDist + "lib/angular-ui-ace/"));
 
+    gulp.src(bwr + "shake.js/shake.js")
+        .pipe(gulp.dest("src/inpage/toolbar/libs/"));
     //});
 }
 

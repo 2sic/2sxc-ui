@@ -25,4 +25,16 @@ $(document).ready(function () {
         });
     }, 0);
 
+    // start shake-event monitoring, which will then generate a window-event
+    var myShakeEvent = new Shake();
+    myShakeEvent.start();
+
+    window.addEventListener("shake", toggleAllToolbars, false);
+
+    //function to call when shake occurs
+    function toggleAllToolbars() {
+        $(document).toggleClass("sc-tb-show-all");
+    }
+
+
 });

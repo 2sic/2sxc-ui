@@ -50,6 +50,7 @@
     <Content Include="src\inpage\inpage-icons-codes.css" />
     <Content Include="src\inpage\lib-helpers\2sxc._lib.extend.js" />
     <Content Include="src\inpage\quick-insert.js" />
+    <Content Include="src\inpage\toolbar\libs\shake.js" />
     <Content Include="src\inpage\toolbar\toolbar-bootstrapper.js" />
     <Content Include="src\inpage\toolbar\toolbarManager.create.js" />
     <Content Include="src\inpage\toolbar\toolbarManager.helpers.js" />
@@ -170,6 +171,7 @@
     <Content Include="src\sxc-develop\source-editor\README.md" />
     <Content Include="src\sxc-develop\source-editor\snippets.xlsx" />
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">12.0</VisualStudioVersion>
   </PropertyGroup>
