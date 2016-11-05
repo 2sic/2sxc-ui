@@ -1738,7 +1738,7 @@ $(document).ready(function () {
             // find all toolbar-info-attributes in the HTML, convert to <ul><li> toolbar
             _processToolbars: function (parentTag) {
                 parentTag = parentTag ? $(parentTag) : $(".DnnModule-" + id);
-                function getToolbars() { return $(".sc-menu[data-toolbar]", parentTag); }
+                function getToolbars() { return $(".sc-menu[toolbar],.sc-menu[data-toolbar]", parentTag); }
 
                 var toolbars = getToolbars();
                 if (toolbars.length === 0) // no toolbars found, must help a bit because otherwise editing is hard
