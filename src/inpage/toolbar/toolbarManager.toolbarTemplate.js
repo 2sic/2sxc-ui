@@ -55,7 +55,7 @@
         defaults: {},
         params: {},
         settings: {
-            autoAddMore: true,
+            autoAddMore: "right",
             // these are defaults, don't set again
             //float: "right",
             //align: "right"

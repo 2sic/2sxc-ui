@@ -13,14 +13,16 @@
 
 /****** the in-page toolbar and positioning / visibility thereof */
 .sc-element { position:relative; }
-/*.sc-element .sc-menu { position:absolute; right:5px; display:none; }*/
 .sc-element .sc-menu.sc-tb-float-right { position:absolute; left: auto; right: 5px;top: 5px; }
 .sc-element .sc-menu.sc-tb-float-left { position:absolute; left: 5px;right: auto;top: 5px; }
+.sc-element .sc-menu.sc-tb-float-center { position:absolute;margin-left: 0;margin-right: 0; top: 5px; display: inline-block }
 .sc-element .sc-menu.sc-tb-float-none { position:relative; right:auto;top: auto; }
 
 
-.sc-element .sc-menu.sc-tb-show-always, .sc-element:hover .sc-menu.sc-tb-show-always  { display: initial; }
+.sc-element .sc-menu.sc-tb-show-always, 
+    .sc-element:hover .sc-menu.sc-tb-show-always  { display: initial; }
 .sc-element .sc-menu.sc-tb-show-hover { display: none; }
+body.sc-tb-show-all .sc-element .sc-menu { display: initial !important; }
 .sc-element:hover .sc-menu.sc-tb-show-hover { display: block; }
 .sc-element:hover .sc-element:not(:hover) .sc-menu.sc-tb-show-hover { display: none; }   /* prevent hover of a parent, when the item itself is not hovered */
 

@@ -5,11 +5,9 @@
     var tools = $2sxc._toolbarManager.buttonHelpers = {
 
         defaultSettings: {
-            autoAddMore: false,     // false | true
-            align: "right",         // right | left
-            float: "right",         // right | left
+            autoAddMore: null,     // null | "right" | "start" | true
+            float: "right",         // right | left | none
             show: "hover",          // always | hover
-            display: "float",       // float | inline
             // order or reverse, still thinking about this --> order: "default"    // default | reverse
         },
 
@@ -132,7 +130,7 @@
 
             // optionally add a more-button in each group
             if (settings.autoAddMore) {
-                if (settings.align === "right")
+                if (settings.autoAddMore === "right")
                     btns.push("more");
                 else {
                     btns.unshift("more");
