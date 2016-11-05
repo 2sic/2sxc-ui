@@ -1586,12 +1586,13 @@ $(document).ready(function () {
     var myShakeEvent = new Shake();
     myShakeEvent.start();
 
+    // this will add a css-class to auto-show all toolbars (or remove it again)
+    function toggleAllToolbars() {
+        $(document.body).toggleClass("sc-tb-show-all");
+    }
+
     window.addEventListener("shake", toggleAllToolbars, false);
 
-    //function to call when shake occurs
-    function toggleAllToolbars() {
-        $(document).toggleClass("sc-tb-show-all");
-    }
 
 
 });
