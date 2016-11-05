@@ -239,7 +239,7 @@
         // add manage property, but not within initializer, because inside the manage-initializer it may reference 2sxc again
         try { // sometimes the manage can't be build, like before installing
             controller.manage = null;
-            if ($2sxc._manage) $2sxc._manage.createFor(controller);
+            if ($2sxc._manage) $2sxc._manage.attach(controller);
         } catch (e) {
             throw e; }
 

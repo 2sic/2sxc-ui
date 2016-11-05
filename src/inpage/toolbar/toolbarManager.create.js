@@ -88,23 +88,29 @@
 
             // Builds the toolbar and returns it as HTML
             // expects settings - either for 1 button or for an array of buttons
-            getToolbar: function (settings) {
+            getToolbar: function (tbConfig, moreSettings) {
                 //if ($2sxc.debug.load) {
                 //    console.log("creating toolbar");
                 //    console.log(settings);
                 //}
 
                 // if it has an action or is an array, keep that. Otherwise get standard buttons
-                settings = settings || {};// if null/undefined, use empty object
-                var btnList = settings; 
-                if (!settings.action && !settings.groups && !settings.buttons && !Array.isArray(settings))
-                    btnList = tbManager.standardButtons(editContext.User.CanDesign, settings);
+                tbConfig = tbConfig || {};// if null/undefined, use empty object
+                var btnList = tbConfig; 
+                if (!tbConfig.action && !tbConfig.groups && !tbConfig.buttons && !Array.isArray(tbConfig))
+                    btnList = tbManager.standardButtons(editContext.User.CanDesign, tbConfig);
 
-                var tlbDef = tbManager.buttonHelpers.buildFullDefinition(btnList, allActions, /*settings,*/ tb.config);
+                // whatever we had, if more settings were provided, override with these...
+                if (moreSettings)
+                    $2sxc._lib.extend(btnList.settings, moreSettings);
+
+                var tlbDef = tbManager.buttonHelpers.buildFullDefinition(btnList, allActions, tb.config);
                 var btnGroups = tlbDef.groups;
 
                 // todo: this settings assumes it's not in an array...
-                var tbClasses = "sc-menu group-0 " + ((settings.sortOrder === -1) ? " listContent" : "");
+                var tbClasses = "sc-menu group-0 "
+                    + ((tbConfig.sortOrder === -1) ? " listContent" : "")
+                    + (tlbDef.settings.float === "left" ? "sc-tb-left" : "sc-tb-right");
                 var toolbar = $("<ul />", { 'class': tbClasses, 'onclick': "var e = arguments[0] || window.event; e.stopPropagation();" });
 
                 for (var g = 0; g < btnGroups.length; g++) {
@@ -130,22 +136,34 @@
                     var outsideCb = !parentTag.hasClass('sc-content-block');
                     var contentTag = outsideCb ? parentTag.find("div.sc-content-block") : parentTag;
                     contentTag.addClass("sc-element");
-                    contentTag.prepend($("<ul class='sc-menu' data-toolbar=''/>"));
+                    contentTag.prepend($("<ul class='sc-menu' toolbar='' settings='{ \"float\": \"left\", \"align\": \"left\" }'/>"));
                     toolbars = getToolbars();
                 }
 
                 function initToolbar() {
                     try {
-                        var toolbarTag = $(this), data = toolbarTag.attr("data-toolbar"), toolbarSettings;
+                        var toolbarTag = $(this),
+                            toolbarConfig, toolbarSettings;
+
                         try {
-                            toolbarSettings = data ? JSON.parse(data) : {};
+                            var data = toolbarTag.attr("toolbar") || toolbarTag.attr("data-toolbar");
+                            toolbarConfig = data ? JSON.parse(data) : {};
                         }
                         catch(err) {
                             console.error("error on toolbar JSON - probably invalid - make sure you also quote your properties like \"name\": ...", data, err);
                             return;
                         }
 
-                        var newTb = $2sxc(toolbarTag).manage.getToolbar(toolbarSettings);
+                        try {
+                            var settings = toolbarTag.attr("settings") || toolbarTag.attr("data-settings");
+                            toolbarSettings = settings ? JSON.parse(settings) : {};
+                        }
+                        catch (err) {
+                            console.error("error on toolbar JSON - probably invalid - make sure you also quote your properties like \"name\": ...", settings, err);
+                            return;
+                        }
+
+                        var newTb = $2sxc(toolbarTag).manage.getToolbar(toolbarConfig, toolbarSettings);
                         toolbarTag.replaceWith(newTb);
                     } catch (err) {
                         // note: errors can happen a lot on custom toolbars, must be sure the others are still rendered

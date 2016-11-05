@@ -29,16 +29,16 @@
             //},
             {
                 name: "default",
-                buttons: "edit,new,metadata,publish,layout,more"
+                buttons: "edit,new,metadata,publish,layout"
             },
             {
                 name: "list",
-                buttons: "add,remove,moveup,movedown,instance-list,replace,more"
+                buttons: "add,remove,moveup,movedown,instance-list,replace"
             },
             {
                 name: "instance",
                 // todo: add templatesettings, query
-                buttons: "template-develop,template-settings,contentitems,template-query,contenttype,more",
+                buttons: "template-develop,template-settings,contentitems,template-query,contenttype",
                 defaults: {
                     classes: "group-pro"
                 }
@@ -46,13 +46,18 @@
             {
                 name: "app",
                 // todo: add multilanguage-resources & settings
-                buttons: "app,app-settings,app-resources,zone,more",
+                buttons: "app,app-settings,app-resources,zone",
                 defaults: {
                     classes: "group-pro"
                 }
             }
         ],
         defaults: {},
-        params: {}
+        params: {},
+        settings: {
+            autoAddMore: true,
+            float: "right",
+            align: "right"
+        }
     };
 })();

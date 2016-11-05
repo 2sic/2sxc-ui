@@ -14,6 +14,8 @@
 /****** the in-page toolbar and positioning / visibility thereof */
 .sc-element { position:relative; }
 .sc-element .sc-menu { position:absolute; right:5px; top:5px; display:none; }
+.sc-element .sc-menu.sc-tb-right { left: auto;right: 5px; }
+.sc-element .sc-menu.sc-tb-left { left: 5px;right: auto; }
 .sc-element:hover .sc-menu { display: block; }
 .sc-element:hover .sc-element:not(:hover) .sc-menu { display: none; }   /* prevent hover of a parent, when the item itself is not hovered */
 

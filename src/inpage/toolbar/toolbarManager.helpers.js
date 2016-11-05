@@ -4,6 +4,12 @@
 (function () {
     var tools = $2sxc._toolbarManager.buttonHelpers = {
 
+        defaultSettings: {
+            autoAddMore: false,
+            align: "right",
+            float: "right"
+        },
+
         // take any common input format and convert it to a full toolbar-structure definition
         // can handle the following input formats (the param unstructuredConfig):
         // complete tree (detected by "groups): { groups: [ {}, {}], name: ..., defaults: {...} } 
@@ -20,9 +26,13 @@
             tools.removeButtonsWithUnmetConditions(fullConfig, config);
             if (fullConfig.debug)
                 console.log("after remove: ", fullConfig);
+
+            tools.customize(fullConfig);
+
             return fullConfig;
         },
 
+        //#region build initial toolbar object
         // this will take an input which could already be a tree, but it could also be a 
         // button-definition, or just a string, and make sure that afterwards it's a tree with groups
         // the groups could still be in compact form, or already expanded, dependending on the input
@@ -57,9 +67,11 @@
                 debug: original.debug || false,     // show more debug info
                 groups: original.groups || [],      // the groups of buttons
                 defaults: original.defaults || {},  // the button defaults like icon, etc.
-                params: original.params || {}       // these are the default command parameters
+                params: original.params || {},      // these are the default command parameters
+                settings: $2sxc._lib.extend({}, tools.defaultSettings, original.settings)
             };
         },
+        //#endregion inital toolbar object
 
         // this will traverse a groups-tree and expand each group
         // so if groups were just strings like "edit,new" or compact buttons, they will be expanded afterwards
@@ -67,7 +79,7 @@
             // by now we should have a structure, let's check/fix the buttons
             for (var g = 0; g < fullSet.groups.length; g++) {
                 // expand a verb-list like "edit,new" into objects like [{ action: "edit" }, {action: "new"}]
-                tools.expandButtonList(fullSet.groups[g]);
+                tools.expandButtonList(fullSet.groups[g], fullSet.settings);
 
                 // fix all the buttons
                 var btns = fullSet.groups[g].buttons;
@@ -88,8 +100,7 @@
         // on the in is a object with buttons, which are either:
         // - a string like "edit" or multi-value "layout,more"
         // - an array of such strings incl. optional complex objects which are
-        // 
-        expandButtonList: function (root) {
+        expandButtonList: function (root, settings) {
             // var root = grp; // the root object which has all params of the command
             var btns = [], sharedProperties = null;
 
@@ -114,6 +125,15 @@
                 delete sharedProperties.action; //
             } else {
                 btns = root.buttons;
+            }
+
+            // optionally add a more-button in each group
+            if (settings.autoAddMore) {
+                if (settings.align === "right")
+                    btns.push("more");
+                else {
+                    btns.unshift("more");
+                }
             }
 
             // add each button - check if it's already an object or just the string
@@ -197,6 +217,20 @@
                     || (actions[btn.command.action] && actions[btn.command.action][propName]); // if there is an action, try to use that property name
             }
         },
+
+        customize: function(toolbar) {
+            //if (!toolbar.settings) return;
+            //var set = toolbar.settings;
+            //if (set.autoAddMore) {
+            //    console.log("auto-more");
+            //    var grps = toolbar.groups;
+            //    for (var g = 0; g < grps.length; g++) {
+            //        var btns = grps[g];
+            //        for (var i = 0; i < btns.length; i++) {
+            //        }
+            //    }
+            //}
+        }
     };
 
 })();

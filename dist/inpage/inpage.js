@@ -822,7 +822,7 @@ if($ && $.fn && $.fn.dnnModuleDragDrop)
 
 (function () {
     $2sxc._manage = {};
-    $2sxc._manage.createFor = function (sxc) {
+    $2sxc._manage.attach = function (sxc) {
         var contentBlockTag = getContentBlockTag(sxc);
         var editContext = getContextInfo(contentBlockTag);
 
@@ -1550,23 +1550,29 @@ $(document).ready(function () {
 
             // Builds the toolbar and returns it as HTML
             // expects settings - either for 1 button or for an array of buttons
-            getToolbar: function (settings) {
+            getToolbar: function (tbConfig, moreSettings) {
                 //if ($2sxc.debug.load) {
                 //    console.log("creating toolbar");
                 //    console.log(settings);
                 //}
 
                 // if it has an action or is an array, keep that. Otherwise get standard buttons
-                settings = settings || {};// if null/undefined, use empty object
-                var btnList = settings; 
-                if (!settings.action && !settings.groups && !settings.buttons && !Array.isArray(settings))
-                    btnList = tbManager.standardButtons(editContext.User.CanDesign, settings);
+                tbConfig = tbConfig || {};// if null/undefined, use empty object
+                var btnList = tbConfig; 
+                if (!tbConfig.action && !tbConfig.groups && !tbConfig.buttons && !Array.isArray(tbConfig))
+                    btnList = tbManager.standardButtons(editContext.User.CanDesign, tbConfig);
 
-                var tlbDef = tbManager.buttonHelpers.buildFullDefinition(btnList, allActions, /*settings,*/ tb.config);
+                // whatever we had, if more settings were provided, override with these...
+                if (moreSettings)
+                    $2sxc._lib.extend(btnList.settings, moreSettings);
+
+                var tlbDef = tbManager.buttonHelpers.buildFullDefinition(btnList, allActions, tb.config);
                 var btnGroups = tlbDef.groups;
 
                 // todo: this settings assumes it's not in an array...
-                var tbClasses = "sc-menu group-0 " + ((settings.sortOrder === -1) ? " listContent" : "");
+                var tbClasses = "sc-menu group-0 "
+                    + ((tbConfig.sortOrder === -1) ? " listContent" : "")
+                    + (tlbDef.settings.float === "left" ? "sc-tb-left" : "sc-tb-right");
                 var toolbar = $("<ul />", { 'class': tbClasses, 'onclick': "var e = arguments[0] || window.event; e.stopPropagation();" });
 
                 for (var g = 0; g < btnGroups.length; g++) {
@@ -1592,22 +1598,34 @@ $(document).ready(function () {
                     var outsideCb = !parentTag.hasClass('sc-content-block');
                     var contentTag = outsideCb ? parentTag.find("div.sc-content-block") : parentTag;
                     contentTag.addClass("sc-element");
-                    contentTag.prepend($("<ul class='sc-menu' data-toolbar=''/>"));
+                    contentTag.prepend($("<ul class='sc-menu' toolbar='' settings='{ \"float\": \"left\", \"align\": \"left\" }'/>"));
                     toolbars = getToolbars();
                 }
 
                 function initToolbar() {
                     try {
-                        var toolbarTag = $(this), data = toolbarTag.attr("data-toolbar"), toolbarSettings;
+                        var toolbarTag = $(this),
+                            toolbarConfig, toolbarSettings;
+
                         try {
-                            toolbarSettings = data ? JSON.parse(data) : {};
+                            var data = toolbarTag.attr("toolbar") || toolbarTag.attr("data-toolbar");
+                            toolbarConfig = data ? JSON.parse(data) : {};
                         }
                         catch(err) {
                             console.error("error on toolbar JSON - probably invalid - make sure you also quote your properties like \"name\": ...", data, err);
                             return;
                         }
 
-                        var newTb = $2sxc(toolbarTag).manage.getToolbar(toolbarSettings);
+                        try {
+                            var settings = toolbarTag.attr("settings") || toolbarTag.attr("data-settings");
+                            toolbarSettings = settings ? JSON.parse(settings) : {};
+                        }
+                        catch (err) {
+                            console.error("error on toolbar JSON - probably invalid - make sure you also quote your properties like \"name\": ...", settings, err);
+                            return;
+                        }
+
+                        var newTb = $2sxc(toolbarTag).manage.getToolbar(toolbarConfig, toolbarSettings);
                         toolbarTag.replaceWith(newTb);
                     } catch (err) {
                         // note: errors can happen a lot on custom toolbars, must be sure the others are still rendered
@@ -1632,6 +1650,12 @@ $(document).ready(function () {
 (function () {
     var tools = $2sxc._toolbarManager.buttonHelpers = {
 
+        defaultSettings: {
+            autoAddMore: false,
+            align: "right",
+            float: "right"
+        },
+
         // take any common input format and convert it to a full toolbar-structure definition
         // can handle the following input formats (the param unstructuredConfig):
         // complete tree (detected by "groups): { groups: [ {}, {}], name: ..., defaults: {...} } 
@@ -1648,9 +1672,13 @@ $(document).ready(function () {
             tools.removeButtonsWithUnmetConditions(fullConfig, config);
             if (fullConfig.debug)
                 console.log("after remove: ", fullConfig);
+
+            tools.customize(fullConfig);
+
             return fullConfig;
         },
 
+        //#region build initial toolbar object
         // this will take an input which could already be a tree, but it could also be a 
         // button-definition, or just a string, and make sure that afterwards it's a tree with groups
         // the groups could still be in compact form, or already expanded, dependending on the input
@@ -1685,9 +1713,11 @@ $(document).ready(function () {
                 debug: original.debug || false,     // show more debug info
                 groups: original.groups || [],      // the groups of buttons
                 defaults: original.defaults || {},  // the button defaults like icon, etc.
-                params: original.params || {}       // these are the default command parameters
+                params: original.params || {},      // these are the default command parameters
+                settings: $2sxc._lib.extend({}, tools.defaultSettings, original.settings)
             };
         },
+        //#endregion inital toolbar object
 
         // this will traverse a groups-tree and expand each group
         // so if groups were just strings like "edit,new" or compact buttons, they will be expanded afterwards
@@ -1695,7 +1725,7 @@ $(document).ready(function () {
             // by now we should have a structure, let's check/fix the buttons
             for (var g = 0; g < fullSet.groups.length; g++) {
                 // expand a verb-list like "edit,new" into objects like [{ action: "edit" }, {action: "new"}]
-                tools.expandButtonList(fullSet.groups[g]);
+                tools.expandButtonList(fullSet.groups[g], fullSet.settings);
 
                 // fix all the buttons
                 var btns = fullSet.groups[g].buttons;
@@ -1716,8 +1746,7 @@ $(document).ready(function () {
         // on the in is a object with buttons, which are either:
         // - a string like "edit" or multi-value "layout,more"
         // - an array of such strings incl. optional complex objects which are
-        // 
-        expandButtonList: function (root) {
+        expandButtonList: function (root, settings) {
             // var root = grp; // the root object which has all params of the command
             var btns = [], sharedProperties = null;
 
@@ -1742,6 +1771,15 @@ $(document).ready(function () {
                 delete sharedProperties.action; //
             } else {
                 btns = root.buttons;
+            }
+
+            // optionally add a more-button in each group
+            if (settings.autoAddMore) {
+                if (settings.align === "right")
+                    btns.push("more");
+                else {
+                    btns.unshift("more");
+                }
             }
 
             // add each button - check if it's already an object or just the string
@@ -1825,6 +1863,20 @@ $(document).ready(function () {
                     || (actions[btn.command.action] && actions[btn.command.action][propName]); // if there is an action, try to use that property name
             }
         },
+
+        customize: function(toolbar) {
+            //if (!toolbar.settings) return;
+            //var set = toolbar.settings;
+            //if (set.autoAddMore) {
+            //    console.log("auto-more");
+            //    var grps = toolbar.groups;
+            //    for (var g = 0; g < grps.length; g++) {
+            //        var btns = grps[g];
+            //        for (var i = 0; i < btns.length; i++) {
+            //        }
+            //    }
+            //}
+        }
     };
 
 })();
@@ -1874,16 +1926,16 @@ $(document).ready(function () {
             //},
             {
                 name: "default",
-                buttons: "edit,new,metadata,publish,layout,more"
+                buttons: "edit,new,metadata,publish,layout"
             },
             {
                 name: "list",
-                buttons: "add,remove,moveup,movedown,instance-list,replace,more"
+                buttons: "add,remove,moveup,movedown,instance-list,replace"
             },
             {
                 name: "instance",
                 // todo: add templatesettings, query
-                buttons: "template-develop,template-settings,contentitems,template-query,contenttype,more",
+                buttons: "template-develop,template-settings,contentitems,template-query,contenttype",
                 defaults: {
                     classes: "group-pro"
                 }
@@ -1891,14 +1943,19 @@ $(document).ready(function () {
             {
                 name: "app",
                 // todo: add multilanguage-resources & settings
-                buttons: "app,app-settings,app-resources,zone,more",
+                buttons: "app,app-settings,app-resources,zone",
                 defaults: {
                     classes: "group-pro"
                 }
             }
         ],
         defaults: {},
-        params: {}
+        params: {},
+        settings: {
+            autoAddMore: true,
+            float: "right",
+            align: "right"
+        }
     };
 })();
 // initialize the translation system; ensure toolbars etc. are translated

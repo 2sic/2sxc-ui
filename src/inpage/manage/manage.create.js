@@ -9,7 +9,7 @@
 
 (function () {
     $2sxc._manage = {};
-    $2sxc._manage.createFor = function (sxc) {
+    $2sxc._manage.attach = function (sxc) {
         var contentBlockTag = getContentBlockTag(sxc);
         var editContext = getContextInfo(contentBlockTag);
 
