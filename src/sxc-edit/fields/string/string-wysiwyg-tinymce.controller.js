@@ -42,7 +42,8 @@
                 "nonbreaking",  // add button to insert &nbsp; https://www.tinymce.com/docs/plugins/nonbreaking/
                 "searchreplace",// search/replace https://www.tinymce.com/docs/plugins/searchreplace/
                 "table",        // https://www.tinymce.com/docs/plugins/searchreplace/
-                "lists",        // should fix bug with fonts in list-items (https://github.com/tinymce/tinymce/issues/2330)
+                "lists",        // should fix bug with fonts in list-items (https://github.com/tinymce/tinymce/issues/2330),
+                "textpattern",  // enable typing like "1. text" to create lists etc.
 
             ];
 
