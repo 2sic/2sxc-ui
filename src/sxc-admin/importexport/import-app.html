@@ -34,7 +34,7 @@
     <div ng-if="vm.ImportResult.Messages">
         <div class="modal-body">
             <div ng-if="vm.ImportResult.Succeeded" class="sxc-message sxc-message-info">
-                {{"ImportExport.ImportContent.Messages.ImportSucceeded" | translate}} (<a ng-click="vm.ImportResult._hideSuccessMessages = !vm.ImportResult._hideSuccessMessages">{{"ImportExport.ImportContent.Commands.ToggleSuccessMessages" | translate}}</a>)
+                {{"ImportExport.ImportContent.Messages.ImportSucceeded" | translate}} <!-- (<a ng-click="vm.ImportResult._hideSuccessMessages = !vm.ImportResult._hideSuccessMessages">{{"ImportExport.ImportContent.Commands.ToggleSuccessMessages" | translate}}</a>) -->
             </div>
             <div ng-if="!vm.ImportResult.Succeeded" class="sxc-message sxc-message-error">
                 {{"ImportExport.ImportContent.Messages.ImportFailed" | translate}}
