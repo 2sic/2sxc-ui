@@ -19,12 +19,12 @@
         // button (detected by "command"): { command: ""|[], icon: "..", ... }
         // just a command (detected by "action"): { entityId: 17, action: "edit" }
         // array of commands: [{entityId: 17, action: "edit"}, {contentType: "blog", action: "new"}]
-        buildFullDefinition: function (unstructuredConfig, actions, config) {
+        buildFullDefinition: function (unstructuredConfig, allActions, instanceConfig, moreSettings) {
             if (unstructuredConfig.debug)
                 console.log("toolbar: detailed debug on; start build full Def");
-            var fullConfig = tools.ensureDefinitionTree(unstructuredConfig);
-            tools.expandButtonGroups(fullConfig, actions);
-            tools.removeButtonsWithUnmetConditions(fullConfig, config);
+            var fullConfig = tools.ensureDefinitionTree(unstructuredConfig, moreSettings);
+            tools.expandButtonGroups(fullConfig, allActions);
+            tools.removeButtonsWithUnmetConditions(fullConfig, instanceConfig);
             if (fullConfig.debug)
                 console.log("after remove: ", fullConfig);
 
@@ -41,7 +41,7 @@
         // - groups containing buttons[], but buttons could still be very flat
         // - defaults, already officially formatted
         // - params, officially formatted 
-        ensureDefinitionTree: function (original) {
+        ensureDefinitionTree: function (original, moreSettings) {
             // original is null/undefined, just return empty set
             if (!original) throw ("preparing toolbar, with nothing to work on: " + original);
 
@@ -69,7 +69,7 @@
                 groups: original.groups || [],      // the groups of buttons
                 defaults: original.defaults || {},  // the button defaults like icon, etc.
                 params: original.params || {},      // these are the default command parameters
-                settings: $2sxc._lib.extend({}, tools.defaultSettings, original.settings)
+                settings: $2sxc._lib.extend({}, tools.defaultSettings, moreSettings)
             };
         },
         //#endregion inital toolbar object

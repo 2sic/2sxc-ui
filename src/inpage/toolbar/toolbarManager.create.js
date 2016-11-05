@@ -101,10 +101,10 @@
                     btnList = tbManager.standardButtons(editContext.User.CanDesign, tbConfig);
 
                 // whatever we had, if more settings were provided, override with these...
-                if (moreSettings)
-                    $2sxc._lib.extend(btnList.settings, moreSettings);
+                //if (moreSettings)
+                //    $2sxc._lib.extend(btnList.settings, moreSettings);
 
-                var tlbDef = tbManager.buttonHelpers.buildFullDefinition(btnList, allActions, tb.config);
+                var tlbDef = tbManager.buttonHelpers.buildFullDefinition(btnList, allActions, tb.config, moreSettings);
                 var btnGroups = tlbDef.groups;
                 var behaviourClasses = " sc-tb-float-" + tlbDef.settings.float
                     + " sc-tb-show-" + tlbDef.settings.show;
@@ -135,14 +135,20 @@
                 parentTag = parentTag ? $(parentTag) : $(".DnnModule-" + id);
                 function getToolbars() { return $(".sc-menu[toolbar],.sc-menu[data-toolbar]", parentTag); }
 
-                var toolbars = getToolbars();
+                var toolbars = getToolbars(),
+                    settingsForEmptyToolbar = {
+                        float: "left",
+                        autoAddMore: "left"
+                    };
                 if (toolbars.length === 0) // no toolbars found, must help a bit because otherwise editing is hard
                 {
                     console.warn("didn't find a toolbar, so will create an automatic one to help for the block", parentTag);
                     var outsideCb = !parentTag.hasClass('sc-content-block');
                     var contentTag = outsideCb ? parentTag.find("div.sc-content-block") : parentTag;
                     contentTag.addClass("sc-element");
-                    contentTag.prepend($("<ul class='sc-menu' toolbar='' settings='{ \"float\": \"left\", \"align\": \"left\" }'/>"));
+                    // todo: make the empty-toolbar-default-settings used below as well...
+                    var  settingsString = JSON.stringify(settingsForEmptyToolbar);
+                    contentTag.prepend($("<ul class='sc-menu' toolbar='' xsettings='" + settingsString + "'/>"));
                     toolbars = getToolbars();
                 }
 
@@ -162,6 +168,8 @@
                         try {
                             data = tag.attr("settings") || tag.attr("data-settings");
                             toolbarSettings = data ? JSON.parse(data) : {};
+                            if (toolbarConfig === {} && toolbarSettings === {})
+                                toolbarSettings = settingsForEmptyToolbar;
                         }
                         catch (err) {
                             console.error("error on settings JSON - probably invalid - make sure you also quote your properties like \"name\": ...", data, err);
