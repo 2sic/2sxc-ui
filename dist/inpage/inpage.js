@@ -173,7 +173,11 @@
 
             'contentitems': makeDef("contentitems", "ContentItems", "table", true, {
                 params: { contentTypeName: editContext.contentTypeId },
-                showCondition: enableTools && editContext.contentTypeId
+                showCondition: enableTools && editContext.contentTypeId,
+                configureCommand: function (cmd) {
+                    if (cmd.settings.contentType)    // optionally override with custom type
+                        cmd.params.contentTypeName = cmd.settings.contentType;
+                }
             }),
 
 
