@@ -1711,7 +1711,7 @@ $(document).ready(function () {
 
                 var tlbDef = tbManager.buttonHelpers.buildFullDefinition(btnList, allActions, tb.config, moreSettings);
                 var btnGroups = tlbDef.groups;
-                var behaviourClasses = " sc-tb-float-" + tlbDef.settings.float
+                var behaviourClasses = " sc-tb-hover-" + tlbDef.settings.hover
                     + " sc-tb-show-" + tlbDef.settings.show;
 
 
@@ -1720,7 +1720,6 @@ $(document).ready(function () {
                 var tbClasses = "sc-menu group-0 "
                     + behaviourClasses + " "
                     + ((tbConfig.sortOrder === -1) ? " listContent" : "")
-                    + (tlbDef.settings.float === "left" ? "sc-tb-left" : "sc-tb-right")
                     + (tlbDef.settings.classes ? " " + tlbDef.settings.classes: "");
                 var toolbar = $("<ul />", { 'class': tbClasses, 'onclick': "var e = arguments[0] || window.event; e.stopPropagation();" });
 
@@ -1742,7 +1741,7 @@ $(document).ready(function () {
 
                 var toolbars = getToolbars(),
                     settingsForEmptyToolbar = {
-                        float: "left",
+                        hover: "left",
                         autoAddMore: "left"
                     };
                 if (toolbars.length === 0) // no toolbars found, must help a bit because otherwise editing is hard
@@ -1808,7 +1807,7 @@ $(document).ready(function () {
 
         defaultSettings: {
             autoAddMore: null,     // null | "right" | "start" | true
-            float: "right",         // right | left | none
+            hover: "right",         // right | left | none
             show: "hover",          // always | hover
             // order or reverse, still thinking about this --> order: "default"    // default | reverse
         },
@@ -1871,7 +1870,7 @@ $(document).ready(function () {
                 groups: original.groups || [],      // the groups of buttons
                 defaults: original.defaults || {},  // the button defaults like icon, etc.
                 params: original.params || {},      // these are the default command parameters
-                settings: $2sxc._lib.extend({}, tools.defaultSettings, moreSettings)
+                settings: $2sxc._lib.extend({}, tools.defaultSettings, moreSettings, original.settings)
             };
         },
         //#endregion inital toolbar object
@@ -2091,7 +2090,6 @@ $(document).ready(function () {
             },
             {
                 name: "instance",
-                // todo: add templatesettings, query
                 buttons: "template-develop,template-settings,contentitems,template-query,contenttype",
                 defaults: {
                     classes: "group-pro"
@@ -2099,7 +2097,6 @@ $(document).ready(function () {
             },
             {
                 name: "app",
-                // todo: add multilanguage-resources & settings
                 buttons: "app,app-settings,app-resources,zone",
                 defaults: {
                     classes: "group-pro"
@@ -2111,8 +2108,7 @@ $(document).ready(function () {
         settings: {
             autoAddMore: "right",
             // these are defaults, don't set again
-            //float: "right",
-            //align: "right"
+            //hover: "right",
         }
     };
 })();

@@ -6,7 +6,7 @@
 
         defaultSettings: {
             autoAddMore: null,     // null | "right" | "start" | true
-            float: "right",         // right | left | none
+            hover: "right",         // right | left | none
             show: "hover",          // always | hover
             // order or reverse, still thinking about this --> order: "default"    // default | reverse
         },
@@ -69,7 +69,7 @@
                 groups: original.groups || [],      // the groups of buttons
                 defaults: original.defaults || {},  // the button defaults like icon, etc.
                 params: original.params || {},      // these are the default command parameters
-                settings: $2sxc._lib.extend({}, tools.defaultSettings, moreSettings)
+                settings: $2sxc._lib.extend({}, tools.defaultSettings, moreSettings, original.settings)
             };
         },
         //#endregion inital toolbar object

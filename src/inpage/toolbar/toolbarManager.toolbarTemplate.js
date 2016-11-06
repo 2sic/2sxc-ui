@@ -37,7 +37,6 @@
             },
             {
                 name: "instance",
-                // todo: add templatesettings, query
                 buttons: "template-develop,template-settings,contentitems,template-query,contenttype",
                 defaults: {
                     classes: "group-pro"
@@ -45,7 +44,6 @@
             },
             {
                 name: "app",
-                // todo: add multilanguage-resources & settings
                 buttons: "app,app-settings,app-resources,zone",
                 defaults: {
                     classes: "group-pro"
@@ -57,8 +55,7 @@
         settings: {
             autoAddMore: "right",
             // these are defaults, don't set again
-            //float: "right",
-            //align: "right"
+            //hover: "right",
         }
     };
 })();

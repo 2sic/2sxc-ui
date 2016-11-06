@@ -106,7 +106,7 @@
 
                 var tlbDef = tbManager.buttonHelpers.buildFullDefinition(btnList, allActions, tb.config, moreSettings);
                 var btnGroups = tlbDef.groups;
-                var behaviourClasses = " sc-tb-float-" + tlbDef.settings.float
+                var behaviourClasses = " sc-tb-hover-" + tlbDef.settings.hover
                     + " sc-tb-show-" + tlbDef.settings.show;
 
 
@@ -115,7 +115,6 @@
                 var tbClasses = "sc-menu group-0 "
                     + behaviourClasses + " "
                     + ((tbConfig.sortOrder === -1) ? " listContent" : "")
-                    + (tlbDef.settings.float === "left" ? "sc-tb-left" : "sc-tb-right")
                     + (tlbDef.settings.classes ? " " + tlbDef.settings.classes: "");
                 var toolbar = $("<ul />", { 'class': tbClasses, 'onclick': "var e = arguments[0] || window.event; e.stopPropagation();" });
 
@@ -137,7 +136,7 @@
 
                 var toolbars = getToolbars(),
                     settingsForEmptyToolbar = {
-                        float: "left",
+                        hover: "left",
                         autoAddMore: "left"
                     };
                 if (toolbars.length === 0) // no toolbars found, must help a bit because otherwise editing is hard
