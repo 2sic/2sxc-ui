@@ -8,7 +8,7 @@ $(document).ready(function () {
 
     var modules = $("div[data-edit-context]");
 
-    if (console) console.log("found " + modules.length + " content blocks");
+    if ($2sxc.debug.load && console) console.log("found " + modules.length + " content blocks");
 
     // Ensure the _processToolbar is called after the next event cycle to make sure that the Angular app (template selector) is loaded first
     window.setTimeout(function () {

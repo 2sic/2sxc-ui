@@ -69,7 +69,7 @@
                 groups: original.groups || [],      // the groups of buttons
                 defaults: original.defaults || {},  // the button defaults like icon, etc.
                 params: original.params || {},      // these are the default command parameters
-                settings: $2sxc._lib.extend({}, tools.defaultSettings, moreSettings, original.settings)
+                settings: $2sxc._lib.extend({}, tools.defaultSettings, original.settings, moreSettings)
             };
         },
         //#endregion inital toolbar object
