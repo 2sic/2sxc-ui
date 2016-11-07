@@ -24,7 +24,8 @@
 
         this.options = {
             threshold: 15, //default velocity threshold for shake to register
-            timeout: 1000 //default interval between events
+            timeout: 1000,
+            callback: null // optional callback - will only be used if provided, otherwise generate event // function() {}//default interval between events
         };
 
         if (typeof options === 'object') {
@@ -43,17 +44,19 @@
         this.lastY = null;
         this.lastZ = null;
 
-        //create custom event
-        if (typeof document.CustomEvent === 'function') {
-            this.event = new document.CustomEvent('shake', {
-                bubbles: true,
-                cancelable: true
-            });
-        } else if (typeof document.createEvent === 'function') {
-            this.event = document.createEvent('Event');
-            this.event.initEvent('shake', true, true);
-        } else {
-            return false;
+        //create custom event - but only if no callback provided
+        if(!this.options.callback) {
+            if (typeof document.CustomEvent === 'function') {
+                this.event = new document.CustomEvent('shake', {
+                    bubbles: true,
+                    cancelable: true
+                });
+            } else if (typeof document.createEvent === 'function') {
+                this.event = document.createEvent('Event');
+                this.event.initEvent('shake', true, true);
+            } else {
+                return false;
+            }
         }
     }
 
@@ -106,8 +109,15 @@
             currentTime = new Date();
             timeDifference = currentTime.getTime() - this.lastTime.getTime();
 
+            
+            
             if (timeDifference > this.options.timeout) {
-                window.dispatchEvent(this.event);
+                // once triggered, execute either the callback, or dispatch the event
+                if( typeof this.options.callback === 'function' ) {
+                    this.options.callback();
+                }
+                else
+                    window.dispatchEvent(this.event);
                 this.lastTime = new Date();
             }
         }

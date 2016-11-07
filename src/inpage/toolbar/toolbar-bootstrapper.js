@@ -25,17 +25,14 @@ $(document).ready(function () {
         });
     }, 0);
 
-    // start shake-event monitoring, which will then generate a window-event
-    var myShakeEvent = new Shake();
-    myShakeEvent.start();
 
     // this will add a css-class to auto-show all toolbars (or remove it again)
     function toggleAllToolbars() {
         $(document.body).toggleClass("sc-tb-show-all");
     }
 
-    window.addEventListener("shake", toggleAllToolbars, false);
-
-
+    // start shake-event monitoring, which will then generate a window-event
+    var myShakeEvent = new Shake({ callback: toggleAllToolbars});
+    myShakeEvent.start();
 
 });
