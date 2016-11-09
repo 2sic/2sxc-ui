@@ -237,12 +237,26 @@ function runOneInstallJob(packages, i, progressIndicator, $http) {
 
 
         vm.filteredTemplates = function (contentTypeId) {
-            // Don't filter on App - so just return all
-            if (!vm.isContentApp)
+            if (vm.templates.length === 0)  // skip any filters if we don't have anything to go on yet
                 return vm.templates;
 
-            var condition = { ContentTypeStaticName: (contentTypeId === cViewWithoutContent) ? "" : contentTypeId };
-            return $filter("filter")(vm.templates, condition, true);
+            // filters for "normal" content - applies to everything
+            // note that if a template is hidden by config but is curretly used here, the UI thinks it's not hidden, so the filter won't break anything
+            var condition = { IsHidden: false };
+
+            // 2016-11-09 disable don't filter on app, because even in this case there may already be data stored which is viewspecific
+            // so it should only allow switching to views which have the same data-type
+            // Don't filter on App - so just return all
+            //if (!vm.isContentApp)
+            //    return vm.templates;
+            
+            // add more conditions if in Content-Mode (which has a type-selector)
+            if (vm.isContentApp)
+                condition = angular.extend(condition, {
+                    ContentTypeStaticName: (contentTypeId === cViewWithoutContent) ? "" : contentTypeId
+                });
+            var result = $filter("filter")(vm.templates, condition, true);
+            return result;
         };
 
 
@@ -260,12 +274,16 @@ function runOneInstallJob(packages, i, progressIndicator, $http) {
 
                     // if the currently selected content-type/template is configured to hidden, 
                     // re-show it, so that it can be used in the selectors
-                    function findAndUnhide(filter) {
+                    function unhideUsedContentType(filter) {
                         var found = vm.contentTypes.filter(filter);
-                        if (found && found[0] && found[0].IsHidden) found[0].IsHidden = false;                        
+                        if (found && found[0] && found[0].IsHidden) found[0].IsHidden = false;
                     }
-                    findAndUnhide(function (item) { return item.StaticName === vm.contentTypeId; });
-                    findAndUnhide(function(item) { return item.TemplateId === vm.templateId; });
+                    unhideUsedContentType(function (item) { return item.StaticName === vm.contentTypeId; });
+                    unhideUsedContentType(function(item) { return item.TemplateId === vm.templateId; });
+
+                    // unhide the currently used template
+                    var tmpl = $filter("filter")(vm.templates, { TemplateId: vm.templateId }, true);
+                    if (tmpl && tmpl[0]) tmpl[0].IsHidden = false;
 
                     // Add option for no content type if there are templates without
                     if ($filter("filter")(vm.templates, { ContentTypeStaticName: "" }, true).length > 0) {
