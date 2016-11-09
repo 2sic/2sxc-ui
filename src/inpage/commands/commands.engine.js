@@ -108,18 +108,15 @@
                 }
             },
 
-            executeAction: function(nameOrSettings, settings, event) {
+            executeAction: function (nameOrSettings, settings, event) {
                 // check if name is name (string) or object (settings)
-                if (!event && settings && settings.altKey) { // no event param, but settings, which is an event
-                    event = settings;
-                    settings = {};
+                if (!event && settings && (typeof settings.altKey !== "undefined")) { // no event param, but settings contains the event-object
+                    event = settings;   // move it to the correct variable
+                    settings = {};      // clear the settings variable
                 }
-                if (typeof (nameOrSettings) === "string") {
-                    settings = $2sxc._lib.extend(settings || {}, { "action": nameOrSettings });
-                } else {
-                    //event = settings;
-                    settings = nameOrSettings;
-                }
+                settings = (typeof (nameOrSettings) === "string") 
+                    ? $2sxc._lib.extend(settings || {}, { "action": nameOrSettings }) // place the name as an action-name into a command-object
+                    : nameOrSettings;
 
                 var conf = cmc.manage._toolbar.actions[settings.action];
                 settings = $2sxc._lib.extend({}, conf, settings); // merge conf & settings, but settings has higher priority
