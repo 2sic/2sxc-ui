@@ -125,7 +125,7 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
 
         addItem: function (sortOrder) {
             return cb.sxc.webApi.get({
-                url: "View/Module/AddItem",
+                url: "view/module/additem",
                 params: { sortOrder: sortOrder }
             }).then(cb.reloadAndReInitialize);
         },

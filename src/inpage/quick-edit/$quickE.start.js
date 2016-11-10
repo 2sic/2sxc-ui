@@ -1,5 +1,4 @@
-﻿// todo: document this stuff incl. config
-$(function () {
+﻿$(function () {
     $quickE.enable = function () {
         $quickE.prepareToolbarInDom();
 

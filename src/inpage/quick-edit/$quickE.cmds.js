@@ -3,7 +3,10 @@ $(function () {
     $quickE.cmds = {
         cb: {
             "delete": function (clip) {
-                return $2sxc(clip.list).manage._deleteContentBlock(clip.parent, clip.field, clip.index);
+                return $2sxc(clip.list).manage._getCbManipulator().delete /*_deleteContentBlock*/(clip.parent, clip.field, clip.index);
+            },
+            "create": function(parent, field, index, appOrContent, list, newGuid) {
+                return $2sxc(list).manage._getCbManipulator().create/*_createContentBlock*/(parent, field, index, appOrContent, list, newGuid);
             }
         },
         mod: {

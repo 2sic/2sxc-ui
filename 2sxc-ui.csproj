@@ -178,7 +178,9 @@
     <Content Include="src\sxc-develop\source-editor\README.md" />
     <Content Include="src\sxc-develop\source-editor\snippets.xlsx" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="src\inpage\contentBlock\contentBlock.manipulate.js" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">12.0</VisualStudioVersion>
   </PropertyGroup>

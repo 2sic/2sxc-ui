@@ -9,11 +9,13 @@ $(function () {
         if ($quickE.main.actionsForCb.hasClass($quickE.selectors.cb.class))
             index = listItems.index($quickE.main.actionsForCb[0]) + 1;
 
+        var newGuid = actionConfig.guid || null;
+
         // check cut/paste
         var cbAction = $(this).data("action");
         if (!cbAction) {
             var appOrContent = $(this).data("type");
-            return $2sxc(list).manage._createContentBlock(actionConfig.parent, actionConfig.field, index, appOrContent, list);
+            return $quickE.cmds.cb.create(actionConfig.parent, actionConfig.field, index, appOrContent, list, newGuid);
         } else
             // this is a cut/paste action
             return $quickE.copyPasteInPage(cbAction, list, index, $quickE.selectors.cb.id);

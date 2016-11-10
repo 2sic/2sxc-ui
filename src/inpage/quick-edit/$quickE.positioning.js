@@ -21,10 +21,18 @@ $(function () {
         if (!$quickE.cachedPanes)
             $quickE.cachedPanes = $($quickE.selectors.mod.listSelector);
 
-        if ($quickE.config.innerBlocks.enable)
-            $quickE.contentBlocks = $($quickE.selectors.cb.listSelector).find($quickE.selectors.cb.selector).add($quickE.selectors.cb.listSelector);
+        if ($quickE.config.innerBlocks.enable) {
+            // get all content-block lists which are empty, or which allow multiple child-items
+            var lists = $($quickE.selectors.cb.listSelector)
+                .filter(":not(." + $quickE.selectors.cb.singleItem + "), :empty");
+            $quickE.contentBlocks = lists // $($quickE.selectors.cb.listSelector)
+                .find($quickE.selectors.cb.selector)
+                .add(lists);// $quickE.selectors.cb.listSelector);
+        }
         if ($quickE.config.modules.enable)
-            $quickE.modules = $quickE.cachedPanes.find($quickE.selectors.mod.selector).add($quickE.cachedPanes);
+            $quickE.modules = $quickE.cachedPanes
+                .find($quickE.selectors.mod.selector)
+                .add($quickE.cachedPanes);
     };
 
     // position, align and show a menu linked to another item
@@ -38,6 +46,7 @@ $(function () {
 
     // Refresh positioning / visibility of the quick-insert bar
     $quickE.refresh = function (e) {
+        var highlightClass = "sc-cb-highlight-for-insert";
 
         if (!$quickE.refreshDomObjects.lastCall || (new Date() - $quickE.refreshDomObjects.lastCall > 1000)) {
             // console.log('refreshed contentblock and modules');
@@ -58,7 +67,7 @@ $(function () {
 
         // if previously a parent-pane was highlighted, un-highlight it now
         if ($quickE.main.parentContainer)
-            $($quickE.main.parentContainer).removeClass("sc-cb-highlight-for-insert");
+            $($quickE.main.parentContainer).removeClass(highlightClass);
 
         if ($quickE.nearestCb !== null || $quickE.nearestMod !== null) {
             var alignTo = $quickE.nearestCb || $quickE.nearestMod;
@@ -68,6 +77,7 @@ $(function () {
             var parentCbList = $(alignTo.element).closest($quickE.selectors.cb.listSelector);
             var parentContainer = (parentCbList.length ? parentCbList : parentPane)[0];
 
+            // put part of the pane-name into the button-labels
             if (parentPane.length > 0) {
                 var paneName = parentPane.attr("id") || "";
                 if (paneName.length > 4) paneName = paneName.substr(4);
@@ -83,7 +93,7 @@ $(function () {
             $quickE.main.actionsForCb = $quickE.nearestCb ? $quickE.nearestCb.element : null;
             $quickE.main.actionsForModule = $quickE.nearestMod ? $quickE.nearestMod.element : null;
             $quickE.main.parentContainer = parentContainer;
-            $(parentContainer).addClass("sc-cb-highlight-for-insert");
+            $(parentContainer).addClass(highlightClass);
         } else {
             $quickE.main.hide();
         }

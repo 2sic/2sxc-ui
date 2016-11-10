@@ -565,7 +565,7 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
 
         addItem: function (sortOrder) {
             return cb.sxc.webApi.get({
-                url: "View/Module/AddItem",
+                url: "view/module/additem",
                 params: { sortOrder: sortOrder }
             }).then(cb.reloadAndReInitialize);
         },
@@ -696,6 +696,74 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
 };
 
 
+// contains commands to create/move/delete a contentBlock in a page
+
+$2sxc._contentBlock.manipulator = function(sxc) {
+    return {
+        create: function(parentId, fieldName, index, appName, container, newGuid) {
+            // the wrapper, into which this will be placed and the list of pre-existing blocks
+            var listTag = container;
+            if (listTag.length === 0) return alert("can't add content-block as we couldn't find the list");
+            var cblockList = listTag.find("div.sc-content-block");
+            if (index > cblockList.length)
+                index = cblockList.length; // make sure index is never greater than the amount of items
+            return sxc.webApi.get({
+                url: "view/module/generatecontentblock",
+                params: {
+                    parentId: parentId,
+                    field: fieldName,
+                    sortOrder: index,
+                    app: appName,
+                    guid: newGuid
+                }
+            }).then(function(result) {
+                var newTag = $(result); // prepare tag for inserting
+
+                // should I add it to a specific position...
+                if (cblockList.length > 0 && index > 0)
+                    $(cblockList[cblockList.length > index - 1 ? index - 1 : cblockList.length - 1])
+                        .after(newTag);
+                else //...or just at the beginning?
+                    listTag.prepend(newTag);
+
+
+                var sxcNew = $2sxc(newTag);
+                sxcNew.manage._toolbar._processToolbars(newTag);
+
+            });
+        },
+
+
+        move: function(parentId, field, indexFrom, indexTo) {
+            // todo: need sxc!
+            return sxc.webApi.get({
+                url: "view/module/moveiteminlist",
+                params: {
+                    parentId: parentId,
+                    field: field,
+                    indexFrom: indexFrom,
+                    indexTo: indexTo
+                }
+            }).then(function() {
+                console.log("done moving!");
+                window.location.reload();
+            });
+        },
+
+        // delete a content-block inside a list of content-blocks
+        "delete": function(parentId, field, index) {
+            if (confirm($2sxc.translate("QuickInsertMenu.ConfirmDelete")))
+                return sxc.webApi.get({
+                    url: "view/module/RemoveItemInList",
+                    params: { parentId: parentId, field: field, index: index }
+                }).then(function() {
+                    console.log("done deleting!");
+                    window.location.reload();
+                });
+            return null;
+        }
+    };
+};
 
 
 
@@ -941,57 +1009,60 @@ if($ && $.fn && $.fn.dnnModuleDragDrop)
                 editManager._toolbarConfig = toolsAndButtons.config;
             },
 
+            _getCbManipulator: function() {
+                return $2sxc._contentBlock.manipulator(sxc);
+            },
             //#region ContentBlock commands: create, move, delete --> should probably move out of the manage-class
 
-            _createContentBlock: function (parentId, fieldName, index, appName, container) {
-                // the wrapper, into which this will be placed and the list of pre-existing blocks
-                var listTag = container;
-                if (listTag.length === 0) return alert("can't add content-block as we couldn't find the list");
-                var cblockList = listTag.find("div.sc-content-block");
-                if (index > cblockList.length)
-                    index = cblockList.length; // make sure index is never greater than the amount of items
-                return sxc.webApi.get({
-                    url: "view/module/generatecontentblock",
-                    params: { parentId: parentId, field: fieldName, sortOrder: index, app: appName }
-                }).then(function (result) {
-                    var newTag = $(result); // prepare tag for inserting
+            //_createContentBlock: function (parentId, fieldName, index, appName, container) {
+            //    // the wrapper, into which this will be placed and the list of pre-existing blocks
+            //    var listTag = container;
+            //    if (listTag.length === 0) return alert("can't add content-block as we couldn't find the list");
+            //    var cblockList = listTag.find("div.sc-content-block");
+            //    if (index > cblockList.length)
+            //        index = cblockList.length; // make sure index is never greater than the amount of items
+            //    return sxc.webApi.get({
+            //        url: "view/module/generatecontentblock",
+            //        params: { parentId: parentId, field: fieldName, sortOrder: index, app: appName }
+            //    }).then(function (result) {
+            //        var newTag = $(result); // prepare tag for inserting
 
-                    // should I add it to a specific position...
-                    if (cblockList.length > 0 && index > 0) 
-                        $(cblockList[cblockList.length > index - 1 ? index - 1: cblockList.length - 1])
-                            .after(newTag);
-                    else    //...or just at the beginning?
-                        listTag.prepend(newTag);
+            //        // should I add it to a specific position...
+            //        if (cblockList.length > 0 && index > 0) 
+            //            $(cblockList[cblockList.length > index - 1 ? index - 1: cblockList.length - 1])
+            //                .after(newTag);
+            //        else    //...or just at the beginning?
+            //            listTag.prepend(newTag);
                 
 
-                    var sxcNew = $2sxc(newTag);
-                    sxcNew.manage._toolbar._processToolbars(newTag);
+            //        var sxcNew = $2sxc(newTag);
+            //        sxcNew.manage._toolbar._processToolbars(newTag);
 
-                });
-            },
+            //    });
+            //},
 
-            _moveContentBlock: function(parentId, field, indexFrom, indexTo) {
-                return sxc.webApi.get({
-                    url: "view/module/MoveItemInList",
-                    params: { parentId: parentId, field: field, indexFrom: indexFrom, indexTo: indexTo }
-                }).then(function() {
-                    console.log("done moving!");
-                    window.location.reload();
-                });
-            },
+            //_moveContentBlock: function(parentId, field, indexFrom, indexTo) {
+            //    return sxc.webApi.get({
+            //        url: "view/module/MoveItemInList",
+            //        params: { parentId: parentId, field: field, indexFrom: indexFrom, indexTo: indexTo }
+            //    }).then(function() {
+            //        console.log("done moving!");
+            //        window.location.reload();
+            //    });
+            //},
 
             // delete a content-block inside a list of content-blocks
-            _deleteContentBlock: function (parentId, field, index) {
-                if (confirm($2sxc.translate("QuickInsertMenu.ConfirmDelete")))
-                    return sxc.webApi.get({
-                        url: "view/module/RemoveItemInList",
-                        params: { parentId: parentId, field: field, index: index }
-                    }).then(function() {
-                        console.log("done deleting!");
-                        window.location.reload();
-                    });
-                return null;
-            },
+            //_deleteContentBlock: function (parentId, field, index) {
+            //    if (confirm($2sxc.translate("QuickInsertMenu.ConfirmDelete")))
+            //        return sxc.webApi.get({
+            //            url: "view/module/RemoveItemInList",
+            //            params: { parentId: parentId, field: field, index: index }
+            //        }).then(function() {
+            //            console.log("done deleting!");
+            //            window.location.reload();
+            //        });
+            //    return null;
+            //},
             //#endregion
 
             //#region deprecated properties - these all should have been undocumented/ private till now
@@ -1041,7 +1112,8 @@ $(function () {
             "class": "sc-content-block",
             selector: ".sc-content-block",
             listSelector: ".sc-content-block-list",
-            context: "data-list-context"
+            context: "data-list-context",
+            singleItem: "single-item"
         },
         mod: {
             id: "mod",
@@ -1115,7 +1187,7 @@ $(function () {
             if (isNaN(from) || isNaN(to) || from === to || from + 1 === to) // this moves it to the same spot, so ignore
                 return $quickE.clipboard.clear(); // don't do anything
 
-            $2sxc(list).manage._moveContentBlock(clip.parent, clip.field, from, to);
+            $2sxc(list).manage._getCbManipulator().move/*._moveContentBlock*/(clip.parent, clip.field, from, to);
             $quickE.clipboard.clear();
         }
     };
@@ -1189,7 +1261,10 @@ $(function () {
     $quickE.cmds = {
         cb: {
             "delete": function (clip) {
-                return $2sxc(clip.list).manage._deleteContentBlock(clip.parent, clip.field, clip.index);
+                return $2sxc(clip.list).manage._getCbManipulator().delete /*_deleteContentBlock*/(clip.parent, clip.field, clip.index);
+            },
+            "create": function(parent, field, index, appOrContent, list, newGuid) {
+                return $2sxc(list).manage._getCbManipulator().create/*_createContentBlock*/(parent, field, index, appOrContent, list, newGuid);
             }
         },
         mod: {
@@ -1261,11 +1336,13 @@ $(function () {
         if ($quickE.main.actionsForCb.hasClass($quickE.selectors.cb.class))
             index = listItems.index($quickE.main.actionsForCb[0]) + 1;
 
+        var newGuid = actionConfig.guid || null;
+
         // check cut/paste
         var cbAction = $(this).data("action");
         if (!cbAction) {
             var appOrContent = $(this).data("type");
-            return $2sxc(list).manage._createContentBlock(actionConfig.parent, actionConfig.field, index, appOrContent, list);
+            return $quickE.cmds.cb.create(actionConfig.parent, actionConfig.field, index, appOrContent, list, newGuid);
         } else
             // this is a cut/paste action
             return $quickE.copyPasteInPage(cbAction, list, index, $quickE.selectors.cb.id);
@@ -1369,10 +1446,18 @@ $(function () {
         if (!$quickE.cachedPanes)
             $quickE.cachedPanes = $($quickE.selectors.mod.listSelector);
 
-        if ($quickE.config.innerBlocks.enable)
-            $quickE.contentBlocks = $($quickE.selectors.cb.listSelector).find($quickE.selectors.cb.selector).add($quickE.selectors.cb.listSelector);
+        if ($quickE.config.innerBlocks.enable) {
+            // get all content-block lists which are empty, or which allow multiple child-items
+            var lists = $($quickE.selectors.cb.listSelector)
+                .filter(":not(." + $quickE.selectors.cb.singleItem + "), :empty");
+            $quickE.contentBlocks = lists // $($quickE.selectors.cb.listSelector)
+                .find($quickE.selectors.cb.selector)
+                .add(lists);// $quickE.selectors.cb.listSelector);
+        }
         if ($quickE.config.modules.enable)
-            $quickE.modules = $quickE.cachedPanes.find($quickE.selectors.mod.selector).add($quickE.cachedPanes);
+            $quickE.modules = $quickE.cachedPanes
+                .find($quickE.selectors.mod.selector)
+                .add($quickE.cachedPanes);
     };
 
     // position, align and show a menu linked to another item
@@ -1386,6 +1471,7 @@ $(function () {
 
     // Refresh positioning / visibility of the quick-insert bar
     $quickE.refresh = function (e) {
+        var highlightClass = "sc-cb-highlight-for-insert";
 
         if (!$quickE.refreshDomObjects.lastCall || (new Date() - $quickE.refreshDomObjects.lastCall > 1000)) {
             // console.log('refreshed contentblock and modules');
@@ -1406,7 +1492,7 @@ $(function () {
 
         // if previously a parent-pane was highlighted, un-highlight it now
         if ($quickE.main.parentContainer)
-            $($quickE.main.parentContainer).removeClass("sc-cb-highlight-for-insert");
+            $($quickE.main.parentContainer).removeClass(highlightClass);
 
         if ($quickE.nearestCb !== null || $quickE.nearestMod !== null) {
             var alignTo = $quickE.nearestCb || $quickE.nearestMod;
@@ -1416,6 +1502,7 @@ $(function () {
             var parentCbList = $(alignTo.element).closest($quickE.selectors.cb.listSelector);
             var parentContainer = (parentCbList.length ? parentCbList : parentPane)[0];
 
+            // put part of the pane-name into the button-labels
             if (parentPane.length > 0) {
                 var paneName = parentPane.attr("id") || "";
                 if (paneName.length > 4) paneName = paneName.substr(4);
@@ -1431,7 +1518,7 @@ $(function () {
             $quickE.main.actionsForCb = $quickE.nearestCb ? $quickE.nearestCb.element : null;
             $quickE.main.actionsForModule = $quickE.nearestMod ? $quickE.nearestMod.element : null;
             $quickE.main.parentContainer = parentContainer;
-            $(parentContainer).addClass("sc-cb-highlight-for-insert");
+            $(parentContainer).addClass(highlightClass);
         } else {
             $quickE.main.hide();
         }
@@ -1480,7 +1567,6 @@ $(function () {
         };
     };
 });
-// todo: document this stuff incl. config
 $(function () {
     $quickE.enable = function () {
         $quickE.prepareToolbarInDom();
@@ -1821,7 +1907,7 @@ $(document).ready(function () {
                     };
                 if (toolbars.length === 0) // no toolbars found, must help a bit because otherwise editing is hard
                 {
-                    console.warn("didn't find a toolbar, so will create an automatic one to help for the block", parentTag);
+                    console.log("didn't find a toolbar, so will create an automatic one to help for the block", parentTag);
                     var outsideCb = !parentTag.hasClass('sc-content-block');
                     var contentTag = outsideCb ? parentTag.find("div.sc-content-block") : parentTag;
                     contentTag.addClass("sc-element");

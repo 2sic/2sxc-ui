@@ -13,7 +13,8 @@
             "class": "sc-content-block",
             selector: ".sc-content-block",
             listSelector: ".sc-content-block-list",
-            context: "data-list-context"
+            context: "data-list-context",
+            singleItem: "single-item"
         },
         mod: {
             id: "mod",

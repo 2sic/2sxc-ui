@@ -13,7 +13,7 @@ $(function () {
             if (isNaN(from) || isNaN(to) || from === to || from + 1 === to) // this moves it to the same spot, so ignore
                 return $quickE.clipboard.clear(); // don't do anything
 
-            $2sxc(list).manage._moveContentBlock(clip.parent, clip.field, from, to);
+            $2sxc(list).manage._getCbManipulator().move/*._moveContentBlock*/(clip.parent, clip.field, from, to);
             $quickE.clipboard.clear();
         }
     };
