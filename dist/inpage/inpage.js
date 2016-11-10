@@ -1069,8 +1069,8 @@ $(function () {
 
     // the quick-insert object
     $2sxc._lib.extend($quickE, {
-        enableCb: hasInnerCBs, // for now, ContentBlocks are only enabled if they exist on the page
-        enableMod: !hasInnerCBs,   // if it has inner-content, then it's probably a details page, where quickly adding modules would be a problem, so for now, disable modules in this case
+        enableCb: hasInnerCBs,      // for now, ContentBlocks are only enabled if they exist on the page
+        enableMod: !hasInnerCBs,    // if it has inner-content, then it's probably a details page, where quickly adding modules would be a problem, so for now, disable modules in this case
         body: $("body"),
         win: $(window),
         main: $("<div class='sc-content-block-menu sc-content-block-quick-insert sc-i18n'></div>"),
