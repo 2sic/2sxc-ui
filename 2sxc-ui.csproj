@@ -49,7 +49,7 @@
     <Content Include="src\inpage\inpage-dialog\2sxc._dialog.js" />
     <Content Include="src\inpage\inpage-icons-codes.css" />
     <Content Include="src\inpage\lib-helpers\2sxc._lib.extend.js" />
-    <Content Include="src\inpage\quick-insert.js" />
+    <Content Include="src\inpage\quick-insert\%24qi.{}.js" />
     <Content Include="src\inpage\toolbar\libs\shake.js" />
     <Content Include="src\inpage\toolbar\toolbar-bootstrapper.js" />
     <Content Include="src\inpage\toolbar\toolbarManager.create.js" />
