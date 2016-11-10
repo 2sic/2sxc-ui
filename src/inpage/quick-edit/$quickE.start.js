@@ -1,7 +1,8 @@
-﻿$(function () {
-    // todo: add features to not enable this at all
-
+﻿// todo: document this stuff incl. config
+$(function () {
     $quickE.enable = function () {
+        $quickE.prepareToolbarInDom();
+
         // start watching for mouse-move
         var refreshTimeout = null;
         $("body").on("mousemove", function(e) {
@@ -13,9 +14,18 @@
                     });
                 }, 20);
         });
-        console.log('enabling quick Edit');
+    };
+
+    $quickE.start = function() {
+        try {
+            $quickE._readPageConfig();
+            if ($quickE.config.enable)
+                $quickE.enable();
+        } catch (e) {
+            console.error("couldn't start quick-edit", e);
+        }
     };
 
     // run on-load
-    $($quickE.enable);
+    $($quickE.start);
 });

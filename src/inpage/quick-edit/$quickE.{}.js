@@ -4,8 +4,9 @@
     // the Wonderful In Page Editing object
     var $quickE = window.$quickE = {};
 
+
     // selectors used all over the in-page-editing
-    //var enableModuleMove = false; // not implemented yet
+    // var enableModuleMove = false; // not implemented yet
     $quickE.selectors = {
         cb: {
             id: "cb",
@@ -25,12 +26,6 @@
         selected: "sc-cb-is-selected"
     };
 
-    // any inner blocks found? will currently affect if modules can be inserted...
-    var hasInnerCBs = ($($quickE.selectors.cb.listSelector).length > 0);
-    $2sxc._lib.extend($quickE, {
-        enableCb: hasInnerCBs,  // for now, ContentBlocks are only enabled if they exist on the page
-        enableMod: !hasInnerCBs // if it has inner-content, then it's probably a details page, where quickly adding modules would be a problem, so for now, disable modules in this case
-    });
 
     $quickE.btn = function(action, icon, i18N, invisible, unavailable, classes) {
         return "<a class='sc-content-block-menu-btn sc-cb-action icon-sxc-" + icon + " "
@@ -41,8 +36,6 @@
 
     // the quick-insert object
     $2sxc._lib.extend($quickE, {
-        enableCb: hasInnerCBs,      // for now, ContentBlocks are only enabled if they exist on the page
-        enableMod: !hasInnerCBs,    // if it has inner-content, then it's probably a details page, where quickly adding modules would be a problem, so for now, disable modules in this case
         body: $("body"),
         win: $(window),
         main: $("<div class='sc-content-block-menu sc-content-block-quick-insert sc-i18n'></div>"),
@@ -64,19 +57,18 @@
         modActions: $($quickE.template.replace(/QuickInsertMenu.AddBlock/g, "QuickInsertMenu.AddModule")).attr("data-context", "module").addClass("sc-content-block-menu-module")
     });
 
+    // build the toolbar (hidden, but ready to show)
     $quickE.prepareToolbarInDom = function() {
         $quickE.body.append($quickE.main);
         $quickE.body.append($quickE.selected);
 
         // content blocks actions
-        if ($quickE.enableCb)
+        if ($quickE.config.innerBlocks.enable)
             $quickE.main.append($quickE.cbActions);
 
         // module actions
-        if ($quickE.enableMod)
+        if ($quickE.config.modules.enable)
             $quickE.main.append($quickE.modActions);
     };
-
-    $quickE.prepareToolbarInDom();
 
 });

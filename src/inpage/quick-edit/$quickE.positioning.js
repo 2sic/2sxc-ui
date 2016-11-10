@@ -21,9 +21,9 @@ $(function () {
         if (!$quickE.cachedPanes)
             $quickE.cachedPanes = $($quickE.selectors.mod.listSelector);
 
-        if ($quickE.enableCb)
+        if ($quickE.config.innerBlocks.enable)
             $quickE.contentBlocks = $($quickE.selectors.cb.listSelector).find($quickE.selectors.cb.selector).add($quickE.selectors.cb.listSelector);
-        if ($quickE.enableMod)
+        if ($quickE.config.modules.enable)
             $quickE.modules = $quickE.cachedPanes.find($quickE.selectors.mod.selector).add($quickE.cachedPanes);
     };
 
@@ -45,11 +45,11 @@ $(function () {
             $quickE.refreshDomObjects();
         }
 
-        if ($quickE.enableCb && $quickE.contentBlocks) {
+        if ($quickE.config.innerBlocks.enable && $quickE.contentBlocks) {
             $quickE.nearestCb = $quickE.findNearest($quickE.contentBlocks, { x: e.clientX, y: e.clientY }, $quickE.selectors.cb.selector);
         }
 
-        if ($quickE.enableMod && $quickE.modules) {
+        if ($quickE.config.modules.enable && $quickE.modules) {
             $quickE.nearestMod = $quickE.findNearest($quickE.modules, { x: e.clientX, y: e.clientY }, $quickE.selectors.mod.selector);
         }
 

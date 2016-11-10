@@ -1032,8 +1032,9 @@ $(function () {
     // the Wonderful In Page Editing object
     var $quickE = window.$quickE = {};
 
+
     // selectors used all over the in-page-editing
-    //var enableModuleMove = false; // not implemented yet
+    // var enableModuleMove = false; // not implemented yet
     $quickE.selectors = {
         cb: {
             id: "cb",
@@ -1053,12 +1054,6 @@ $(function () {
         selected: "sc-cb-is-selected"
     };
 
-    // any inner blocks found? will currently affect if modules can be inserted...
-    var hasInnerCBs = ($($quickE.selectors.cb.listSelector).length > 0);
-    $2sxc._lib.extend($quickE, {
-        enableCb: hasInnerCBs,  // for now, ContentBlocks are only enabled if they exist on the page
-        enableMod: !hasInnerCBs // if it has inner-content, then it's probably a details page, where quickly adding modules would be a problem, so for now, disable modules in this case
-    });
 
     $quickE.btn = function(action, icon, i18N, invisible, unavailable, classes) {
         return "<a class='sc-content-block-menu-btn sc-cb-action icon-sxc-" + icon + " "
@@ -1069,8 +1064,6 @@ $(function () {
 
     // the quick-insert object
     $2sxc._lib.extend($quickE, {
-        enableCb: hasInnerCBs,      // for now, ContentBlocks are only enabled if they exist on the page
-        enableMod: !hasInnerCBs,    // if it has inner-content, then it's probably a details page, where quickly adding modules would be a problem, so for now, disable modules in this case
         body: $("body"),
         win: $(window),
         main: $("<div class='sc-content-block-menu sc-content-block-quick-insert sc-i18n'></div>"),
@@ -1092,20 +1085,19 @@ $(function () {
         modActions: $($quickE.template.replace(/QuickInsertMenu.AddBlock/g, "QuickInsertMenu.AddModule")).attr("data-context", "module").addClass("sc-content-block-menu-module")
     });
 
+    // build the toolbar (hidden, but ready to show)
     $quickE.prepareToolbarInDom = function() {
         $quickE.body.append($quickE.main);
         $quickE.body.append($quickE.selected);
 
         // content blocks actions
-        if ($quickE.enableCb)
+        if ($quickE.config.innerBlocks.enable)
             $quickE.main.append($quickE.cbActions);
 
         // module actions
-        if ($quickE.enableMod)
+        if ($quickE.config.modules.enable)
             $quickE.main.append($quickE.modActions);
     };
-
-    $quickE.prepareToolbarInDom();
 
 });
 // add a clipboard to the WInPE
@@ -1215,6 +1207,49 @@ $(function () {
         }
     };
 });
+$(function () {
+
+
+    // any inner blocks found? will currently affect if modules can be inserted...
+    var hasInnerCBs = ($($quickE.selectors.cb.listSelector).length > 0);
+    var conf = $quickE.config = {
+        enable: true,
+        innerBlocks: {
+            enable: null    // default: auto-detect
+        },
+        modules: {
+            enable: null    // default: auto-detect
+        }
+    };
+
+    $quickE._readPageConfig = function () {
+        var configAttr = "quick-edit-config";
+        var configs = $("[" + configAttr + "]"), finalConfig = {}, confJ, confO;
+        if (configs.length > 0) {
+            // go through reverse list, as the last is the most important...
+            for (var c = configs.length; c >= 0; c--) {
+                confJ = configs[0].getAttribute(configAttr);
+                try {
+                    confO = JSON.parse(confJ);
+                    $.extend(finalConfig, confO);
+                } catch (e) {
+                    console.warn('had trouble with json', e);
+                }
+            }
+            $.extend(conf, finalConfig);
+        }
+
+        // re-check "auto" or "null"
+        // if it has inner-content, then it's probably a details page, where quickly adding modules would be a problem, so for now, disable modules in this case
+        if (conf.modules.enable === null || conf.modules.enable === "auto")
+            conf.modules.enable = !hasInnerCBs;
+
+        // for now, ContentBlocks are only enabled if they exist on the page
+        if (conf.innerBlocks.enable === null || conf.innerBlocks.enable === "auto")
+            conf.innerBlocks.enable = hasInnerCBs;  
+    };
+
+});
 // content-block specific stuff like actions
 $(function () {
     $quickE.cbActions.click(function () {
@@ -1236,9 +1271,6 @@ $(function () {
             return $quickE.copyPasteInPage(cbAction, list, index, $quickE.selectors.cb.id);
     });
 
-});
-$(function () {
-    $quickE.x = 0;
 });
 // module specific stuff
 $(function () {
@@ -1337,9 +1369,9 @@ $(function () {
         if (!$quickE.cachedPanes)
             $quickE.cachedPanes = $($quickE.selectors.mod.listSelector);
 
-        if ($quickE.enableCb)
+        if ($quickE.config.innerBlocks.enable)
             $quickE.contentBlocks = $($quickE.selectors.cb.listSelector).find($quickE.selectors.cb.selector).add($quickE.selectors.cb.listSelector);
-        if ($quickE.enableMod)
+        if ($quickE.config.modules.enable)
             $quickE.modules = $quickE.cachedPanes.find($quickE.selectors.mod.selector).add($quickE.cachedPanes);
     };
 
@@ -1361,11 +1393,11 @@ $(function () {
             $quickE.refreshDomObjects();
         }
 
-        if ($quickE.enableCb && $quickE.contentBlocks) {
+        if ($quickE.config.innerBlocks.enable && $quickE.contentBlocks) {
             $quickE.nearestCb = $quickE.findNearest($quickE.contentBlocks, { x: e.clientX, y: e.clientY }, $quickE.selectors.cb.selector);
         }
 
-        if ($quickE.enableMod && $quickE.modules) {
+        if ($quickE.config.modules.enable && $quickE.modules) {
             $quickE.nearestMod = $quickE.findNearest($quickE.modules, { x: e.clientX, y: e.clientY }, $quickE.selectors.mod.selector);
         }
 
@@ -1448,10 +1480,11 @@ $(function () {
         };
     };
 });
+// todo: document this stuff incl. config
 $(function () {
-    // todo: add features to not enable this at all
-
     $quickE.enable = function () {
+        $quickE.prepareToolbarInDom();
+
         // start watching for mouse-move
         var refreshTimeout = null;
         $("body").on("mousemove", function(e) {
@@ -1463,11 +1496,20 @@ $(function () {
                     });
                 }, 20);
         });
-        console.log('enabling quick Edit');
+    };
+
+    $quickE.start = function() {
+        try {
+            $quickE._readPageConfig();
+            if ($quickE.config.enable)
+                $quickE.enable();
+        } catch (e) {
+            console.error("couldn't start quick-edit", e);
+        }
     };
 
     // run on-load
-    $($quickE.enable);
+    $($quickE.start);
 });
 /*
  * Author: Alex Gibson
