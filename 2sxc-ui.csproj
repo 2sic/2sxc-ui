@@ -101,6 +101,7 @@
     <Content Include="src\sxc-admin\manage-content-list\manage-content-list.html" />
     <Content Include="src\sxc-admin\replace-content\replace-content-controller.js" />
     <Content Include="src\sxc-admin\replace-content\replace-content.html" />
+    <Content Include="src\sxc-edit\fields\string\libs\Math.uuid.js" />
     <Content Include="src\sxc-admin\services\app- dialog-config-service.js" />
     <Content Include="src\sxc-admin\services\app-assets-service.js" />
     <Content Include="src\sxc-admin\services\app-settings.js" />

@@ -1,6 +1,6 @@
 angular.module("sxcFieldTemplates")
     /*@ngInject*/
-    .factory("tinyMceToolbars", function (tinyMceConfig) {
+    .factory("tinyMceToolbars", function (tinyMceConfig, beta) {
         var svc = {
             addButtons: addTinyMceToolbarButtons
         };
@@ -236,7 +236,18 @@ angular.module("sxcFieldTemplates")
             }));
             //#endregion
 
+            // #region inside content
+            editor.addButton("addcontentblock", {
+                icon: " icon-eav-star",
+                tooltip: "add content block (todo i18n)",
+                onclick: function() {
+                    var guid = Math.uuid().toLowerCase(); // requires the uuid-generator to be included
 
+                    vm.editor.insertContent('<hr sxc="sxc-content-block" guid="' + guid + '" />');
+                }
+
+            });
+            // #endregion
 
             //#region image alignment / size buttons
             editor.addButton("alignimgleft", { icon: " icon-eav-align-left", tooltip: "Align left", cmd: "JustifyLeft", onPostRender: initOnPostRender("alignleft") });
