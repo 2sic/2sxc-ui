@@ -57,7 +57,7 @@
             ngscope.$watch("to.disabled", function(newValue, oldValue) {
                 if (newValue !== oldValue && vm.editor !== null) {
                     ngscope.tinymceOptions.readonly = newValue;
-                    ngscope.$broadcast('$tinymce:refresh'); // Refresh tinymce instance to pick-up new readonly value
+                    ngscope.$broadcast("$tinymce:refresh"); // Refresh tinymce instance to pick-up new readonly value
                 }
             });
         }
