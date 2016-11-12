@@ -1112,12 +1112,22 @@ angular.module("sxcFieldTemplates")
 
 
 })();
+angular.module("sxcFieldTemplates")
+    /*@ngInject*/
+    .factory("tinyMceConfig", function () {
+        var svc = {
+            // these are the sizes we can auto-resize to
+            imgSizes: [100, 75, 70, 66, 60, 50, 40, 33, 30, 25, 10]
+        };
+
+        return svc;
+    });
 
 (function () {
 	"use strict";
 
     // Register in Angular Formly
-    FieldWysiwygTinyMceController.$inject = ["$scope", "dnnBridgeSvc", "languages", "$translate"];
+    FieldWysiwygTinyMceController.$inject = ["$scope", "dnnBridgeSvc", "languages", "$translate", "beta", "tinyMceHelpers", "tinyMceToolbars", "tinyMceConfig"];
     angular.module("sxcFieldTemplates")
         .config(["formlyConfigProvider", "defaultFieldWrappers", function (formlyConfigProvider, defaultFieldWrappers) {
             formlyConfigProvider.setType({
@@ -1130,11 +1140,11 @@ angular.module("sxcFieldTemplates")
 
         .controller("FieldWysiwygTinyMce", FieldWysiwygTinyMceController);
 
-    // these are the sizes we can auto-resize to
-    var imgSizes = [100, 75, 70, 66, 60, 50, 40, 33, 30, 25, 10];
+    //// these are the sizes we can auto-resize to
+    //var imgSizes = [100, 75, 70, 66, 60, 50, 40, 33, 30, 25, 10];
 
     /*@ngInject*/
-    function FieldWysiwygTinyMceController($scope, dnnBridgeSvc, languages, $translate) {
+    function FieldWysiwygTinyMceController($scope, dnnBridgeSvc, languages, $translate, beta, tinyMceHelpers, tinyMceToolbars, tinyMceConfig) {
         var vm = this;
 
         vm.activate = function () {
@@ -1217,8 +1227,10 @@ angular.module("sxcFieldTemplates")
                 setup: function(editor) {
                     vm.editor = editor;
                     if ($scope.tinymceOptions.language)
-                        initLangResources(editor, defaultLanguage, $scope.tinymceOptions.language, $translate);
-                    addTinyMceToolbarButtons(editor, vm);
+                        tinyMceHelpers.addTranslations(editor, defaultLanguage, $scope.tinymceOptions.language);
+                        //initLangResources(editor, defaultLanguage, $scope.tinymceOptions.language, $translate);
+                    tinyMceToolbars.addButtons(editor, vm);
+                    //addTinyMceToolbarButtons(editor, vm);
                 },
                 debounce: false // prevent slow update of model
             };
@@ -1311,305 +1323,618 @@ angular.module("sxcFieldTemplates")
         });
     }
 
-    // Initialize the tinymce resources which we translate ourselves
-    function initLangResources(editor, primaryLan, language, $translate) {
-        var keys = [], mceTranslations = {}, prefix = "Extension.TinyMce.", pLen = prefix.length;
+    //// Initialize the tinymce resources which we translate ourselves
+    //function initLangResources(editor, primaryLan, language, $translate) {
+    //    var keys = [], mceTranslations = {}, prefix = "Extension.TinyMce.", pLen = prefix.length;
 
-        // find all relevant keys by querying the primary language
-        var all = $translate.getTranslationTable(primaryLan);
-        // ReSharper disable once MissingHasOwnPropertyInForeach
-        for (var key in all)    
-            if (key.indexOf(prefix) === 0) 
-                keys.push(key);
+    //    // find all relevant keys by querying the primary language
+    //    var all = $translate.getTranslationTable(primaryLan);
+    //    // ReSharper disable once MissingHasOwnPropertyInForeach
+    //    for (var key in all)    
+    //        if (key.indexOf(prefix) === 0) 
+    //            keys.push(key);
 
-        var translations = $translate.instant(keys);
+    //    var translations = $translate.instant(keys);
 
-        for (var k = 0; k < keys.length; k++)
-            mceTranslations[keys[k].substring(pLen)] = translations[keys[k]];
-        tinymce.addI18n(language, mceTranslations);
-    }
+    //    for (var k = 0; k < keys.length; k++)
+    //        mceTranslations[keys[k].substring(pLen)] = translations[keys[k]];
+    //    tinymce.addI18n(language, mceTranslations);
+    //}
 
-    function addTinyMceToolbarButtons(editor, vm) {
-        //#region helpers like initOnPostRender(name)
+    //function addTinyMceToolbarButtons(editor, vm) {
+    //    //#region helpers like initOnPostRender(name)
 
-        // helper function to add activate/deactivate to buttons like alignleft, alignright etc.
-        function initOnPostRender(name) { // copied/modified from https://github.com/tinymce/tinymce/blob/ddfa0366fc700334f67b2c57f8c6e290abf0b222/js/tinymce/classes/ui/FormatControls.js#L232-L249
-            return function () {
-                var self = this; // keep ref to the current button?
+    //    // helper function to add activate/deactivate to buttons like alignleft, alignright etc.
+    //    function initOnPostRender(name) { // copied/modified from https://github.com/tinymce/tinymce/blob/ddfa0366fc700334f67b2c57f8c6e290abf0b222/js/tinymce/classes/ui/FormatControls.js#L232-L249
+    //        return function () {
+    //            var self = this; // keep ref to the current button?
 
-                function watchChange() {
-                    editor.formatter.formatChanged(name, function (state) {
-                        self.active(state);
-                    });
-                }
+    //            function watchChange() {
+    //                editor.formatter.formatChanged(name, function (state) {
+    //                    self.active(state);
+    //                });
+    //            }
 
-                if (editor.formatter) 
-                    watchChange();
-                else 
-                    editor.on("init", watchChange());
-            };
-        }
+    //            if (editor.formatter) 
+    //                watchChange();
+    //            else 
+    //                editor.on("init", watchChange());
+    //        };
+    //    }
 
-        //#endregion
+    //    //#endregion
 
-        //#region register formats
+    //    //#region register formats
 
-        // the method that will register all formats - like img-sizes
-        function registerTinyMceFormats(editor, vm) {
-            var imgformats = {};
-            for (var is = 0; is < imgSizes.length; is++)
-                imgformats["imgwidth" + imgSizes[is]] = [{ selector: "img", collapsed: false, styles: { 'width': imgSizes[is] + "%" } }];
-            editor.formatter.register(imgformats);
-        }
+    //    // the method that will register all formats - like img-sizes
+    //    function registerTinyMceFormats(editor, vm) {
+    //        var imgformats = {};
+    //        for (var is = 0; is < imgSizes.length; is++)
+    //            imgformats["imgwidth" + imgSizes[is]] = [{ selector: "img", collapsed: false, styles: { 'width': imgSizes[is] + "%" } }];
+    //        editor.formatter.register(imgformats);
+    //    }
 
-        // call register once the editor-object is ready
-        editor.on('init', function() {
-            registerTinyMceFormats(editor, vm);
-        });
+    //    // call register once the editor-object is ready
+    //    editor.on('init', function() {
+    //        registerTinyMceFormats(editor, vm);
+    //    });
 
-        //#endregion
+    //    //#endregion
 
-        // group with adam-link, dnn-link
-        editor.addButton("linkfiles", {
-            type: "splitbutton",
-            icon: " icon-eav-file-pdf",
-            title: "Link.AdamFile.Tooltip",
-            onclick: function() {
-                vm.toggleAdam(false);
-            },
-            menu: [
-                {
-                    text: "Link.AdamFile",
-                    tooltip: "Link.AdamFile.Tooltip",
-                    icon: " icon-eav-file-pdf",
-                    onclick: function() {
-                        vm.toggleAdam(false);
-                    }
-                }, {
-                    text: "Link.DnnFile",
-                    tooltip: "Link.DnnFile.Tooltip",
-                    icon: " icon-eav-file",
-                    onclick: function () {
-                        vm.openDnnDialog("documentmanager");
-                    }
-                }
-            ]
-        });
+    //    // group with adam-link, dnn-link
+    //    editor.addButton("linkfiles", {
+    //        type: "splitbutton",
+    //        icon: " icon-eav-file-pdf",
+    //        title: "Link.AdamFile.Tooltip",
+    //        onclick: function() {
+    //            vm.toggleAdam(false);
+    //        },
+    //        menu: [
+    //            {
+    //                text: "Link.AdamFile",
+    //                tooltip: "Link.AdamFile.Tooltip",
+    //                icon: " icon-eav-file-pdf",
+    //                onclick: function() {
+    //                    vm.toggleAdam(false);
+    //                }
+    //            }, {
+    //                text: "Link.DnnFile",
+    //                tooltip: "Link.DnnFile.Tooltip",
+    //                icon: " icon-eav-file",
+    //                onclick: function () {
+    //                    vm.openDnnDialog("documentmanager");
+    //                }
+    //            }
+    //        ]
+    //    });
 
-        //#region link group with web-link, page-link, unlink, anchor
-        var linkgroup = {
-            type: "splitbutton",
-            icon: "link",
-            title: "Link",
-            onPostRender: initOnPostRender("link"),
-            onclick: function() {
-                editor.execCommand("mceLink");
-            },
+    //    //#region link group with web-link, page-link, unlink, anchor
+    //    var linkgroup = {
+    //        type: "splitbutton",
+    //        icon: "link",
+    //        title: "Link",
+    //        onPostRender: initOnPostRender("link"),
+    //        onclick: function() {
+    //            editor.execCommand("mceLink");
+    //        },
             
-            menu: [
-            { icon: "link", text: "Link", onclick: function() { editor.execCommand("mceLink"); } },
-            {
-                text: "Link.Page",
-                tooltip: "Link.Page.Tooltip",
-                icon: " icon-eav-sitemap",
-                onclick: function() {
-                    vm.openDnnDialog("pagepicker");
-                }
-            }
-        ]
-        };
-        var linkgroupPro = angular.copy(linkgroup);
-        linkgroupPro.menu.push({ icon: " icon-eav-anchor", text: "Anchor", tooltip: "Link.Anchor.Tooltip", onclick: function() { editor.execCommand("mceAnchor"); } });
-        editor.addButton("linkgroup", linkgroup);
-        editor.addButton("linkgrouppro", linkgroupPro);
-        //#endregion
+    //        menu: [
+    //        { icon: "link", text: "Link", onclick: function() { editor.execCommand("mceLink"); } },
+    //        {
+    //            text: "Link.Page",
+    //            tooltip: "Link.Page.Tooltip",
+    //            icon: " icon-eav-sitemap",
+    //            onclick: function() {
+    //                vm.openDnnDialog("pagepicker");
+    //            }
+    //        }
+    //    ]
+    //    };
+    //    var linkgroupPro = angular.copy(linkgroup);
+    //    linkgroupPro.menu.push({ icon: " icon-eav-anchor", text: "Anchor", tooltip: "Link.Anchor.Tooltip", onclick: function() { editor.execCommand("mceAnchor"); } });
+    //    editor.addButton("linkgroup", linkgroup);
+    //    editor.addButton("linkgrouppro", linkgroupPro);
+    //    //#endregion
 
-        // group with images (adam) - only in PRO mode
-        editor.addButton("images", {
-            type: "splitbutton",
-            text: "",
-            icon: "image",
-            onclick: function() {
-                vm.toggleAdam(true);
-            },
-            menu: [
-                {
-                    text: "Image.AdamImage", 
-                    tooltip: "Image.AdamImage.Tooltip",
-                    icon: "image",
-                    onclick: function() { vm.toggleAdam(true); }
-                }, {
-                    text: "Image.DnnImage", 
-                    tooltip: "Image.DnnImage.Tooltip",
-                    icon: "image",
-                    onclick: function() { vm.openDnnDialog("imagemanager"); }
-                }, {
-                    text: "Insert\/edit image", // i18n tinyMce standard
-                    icon: "image",
-                    onclick: function () { editor.execCommand("mceImage"); }
+    //    // group with images (adam) - only in PRO mode
+    //    editor.addButton("images", {
+    //        type: "splitbutton",
+    //        text: "",
+    //        icon: "image",
+    //        onclick: function() {
+    //            vm.toggleAdam(true);
+    //        },
+    //        menu: [
+    //            {
+    //                text: "Image.AdamImage", 
+    //                tooltip: "Image.AdamImage.Tooltip",
+    //                icon: "image",
+    //                onclick: function() { vm.toggleAdam(true); }
+    //            }, {
+    //                text: "Image.DnnImage", 
+    //                tooltip: "Image.DnnImage.Tooltip",
+    //                icon: "image",
+    //                onclick: function() { vm.openDnnDialog("imagemanager"); }
+    //            }, {
+    //                text: "Insert\/edit image", // i18n tinyMce standard
+    //                icon: "image",
+    //                onclick: function () { editor.execCommand("mceImage"); }
 
-                },
-                // note: all these use i18n from tinyMce standard
-                { icon: "alignleft", tooltip:"Align left", onclick: function() { editor.execCommand("JustifyLeft"); } },
-                { icon: "aligncenter", tooltip: "Align center", onclick: function() { editor.execCommand("JustifyCenter"); } },
-                { icon: "alignright", tooltip: "Align right", onclick: function() { editor.execCommand("JustifyRight"); } }
-            ]
-        });
+    //            },
+    //            // note: all these use i18n from tinyMce standard
+    //            { icon: "alignleft", tooltip:"Align left", onclick: function() { editor.execCommand("JustifyLeft"); } },
+    //            { icon: "aligncenter", tooltip: "Align center", onclick: function() { editor.execCommand("JustifyCenter"); } },
+    //            { icon: "alignright", tooltip: "Align right", onclick: function() { editor.execCommand("JustifyRight"); } }
+    //        ]
+    //    });
 
-        // drop-down with italic, strikethrough, ...
-        editor.addButton("formatgroup", {
-            type: "splitbutton",
-            tooltip: "Italic",  // will be autotranslated
-            text: "",
-            icon: "italic",
-            cmd: "italic",
-            onPostRender: initOnPostRender("italic"),
-            menu: [
-                { icon: "strikethrough", text: "Strikethrough", onclick: function () { editor.execCommand("strikethrough"); } },
-                {   icon: "superscript", text: "Superscript", onclick: function() { editor.execCommand("superscript"); }  },
-                {   icon: "subscript", text: "Subscript", onclick: function() { editor.execCommand("subscript"); }  }
-            ]
+    //    // drop-down with italic, strikethrough, ...
+    //    editor.addButton("formatgroup", {
+    //        type: "splitbutton",
+    //        tooltip: "Italic",  // will be autotranslated
+    //        text: "",
+    //        icon: "italic",
+    //        cmd: "italic",
+    //        onPostRender: initOnPostRender("italic"),
+    //        menu: [
+    //            { icon: "strikethrough", text: "Strikethrough", onclick: function () { editor.execCommand("strikethrough"); } },
+    //            {   icon: "superscript", text: "Superscript", onclick: function() { editor.execCommand("superscript"); }  },
+    //            {   icon: "subscript", text: "Subscript", onclick: function() { editor.execCommand("subscript"); }  }
+    //        ]
 
-        });
+    //    });
 
-        // drop-down with italic, strikethrough, ...
-        editor.addButton("listgroup", {
-            type: "splitbutton",
-            tooltip: "Numbered list",  // official tinymce key
-            text: "",
-            icon: "numlist",
-            cmd: "InsertOrderedList",
-            onPostRender: initOnPostRender("numlist"),  // for unknown reasons, this just doesn't activate correctly :( - neither does the bullist
-            menu: [
-                { icon: "bullist", text: "Bullet list", onPostRender: initOnPostRender("bullist"), onclick: function () { editor.execCommand("InsertUnorderedList"); } },
-                { icon: "outdent", text: "Outdent", onclick: function () { editor.execCommand("Outdent"); } },
-                { icon: "indent", text: "Indent", onclick: function () { editor.execCommand("Indent"); } }
-            ]
+    //    // drop-down with italic, strikethrough, ...
+    //    editor.addButton("listgroup", {
+    //        type: "splitbutton",
+    //        tooltip: "Numbered list",  // official tinymce key
+    //        text: "",
+    //        icon: "numlist",
+    //        cmd: "InsertOrderedList",
+    //        onPostRender: initOnPostRender("numlist"),  // for unknown reasons, this just doesn't activate correctly :( - neither does the bullist
+    //        menu: [
+    //            { icon: "bullist", text: "Bullet list", onPostRender: initOnPostRender("bullist"), onclick: function () { editor.execCommand("InsertUnorderedList"); } },
+    //            { icon: "outdent", text: "Outdent", onclick: function () { editor.execCommand("Outdent"); } },
+    //            { icon: "indent", text: "Indent", onclick: function () { editor.execCommand("Indent"); } }
+    //        ]
 
-        });
+    //    });
 
-        //#region mode switching and the buttons for it
-        function switchModes(mode) {
-            editor.settings.toolbar = editor.settings.modes[mode].toolbar;
-            editor.settings.menubar = editor.settings.modes[mode].menubar;
-            // editor.settings.contextmenu = editor.settings.modes[mode].contextmenu; - doesn't work at the moment
+    //    //#region mode switching and the buttons for it
+    //    function switchModes(mode) {
+    //        editor.settings.toolbar = editor.settings.modes[mode].toolbar;
+    //        editor.settings.menubar = editor.settings.modes[mode].menubar;
+    //        // editor.settings.contextmenu = editor.settings.modes[mode].contextmenu; - doesn't work at the moment
             
-            editor.theme.panel.remove();    // kill current toolbar
-            editor.theme.renderUI(editor);
-            editor.execCommand("mceFocus");
+    //        editor.theme.panel.remove();    // kill current toolbar
+    //        editor.theme.renderUI(editor);
+    //        editor.execCommand("mceFocus");
 
-            // focus away...
-            document.getElementById("dummyfocus").focus();
+    //        // focus away...
+    //        document.getElementById("dummyfocus").focus();
 
-            // ...and focus back a bit later
-            setTimeout(function() {
-                editor.focus();
-            }, 100);
-        }
+    //        // ...and focus back a bit later
+    //        setTimeout(function() {
+    //            editor.focus();
+    //        }, 100);
+    //    }
 
-        editor.addButton("modestandard", {
-            icon: " icon-eav-cancel",
-            tooltip: "SwitchMode.Standard",
-            onclick: function () { switchModes("standard"); }
-        });
+    //    editor.addButton("modestandard", {
+    //        icon: " icon-eav-cancel",
+    //        tooltip: "SwitchMode.Standard",
+    //        onclick: function () { switchModes("standard"); }
+    //    });
 
-        editor.addButton("modeadvanced", {
-            icon: " icon-eav-pro",
-            tooltip: "SwitchMode.Pro",
-            onclick: function () {  switchModes("advanced");    }
-        });
-        //#endregion
+    //    editor.addButton("modeadvanced", {
+    //        icon: " icon-eav-pro",
+    //        tooltip: "SwitchMode.Pro",
+    //        onclick: function () {  switchModes("advanced");    }
+    //    });
+    //    //#endregion
 
-        //#region h1, h2, etc. buttons, inspired by http://blog.ionelmc.ro/2013/10/17/tinymce-formatting-toolbar-buttons/
-        // note that the complex array is needede because auto-translate only happens if the string is identical
-        [["pre", "Preformatted", "Preformatted"],
-            ["p", "Paragraph", "Paragraph"],
-            ["code", "Code", "Code"],
-            ["h1", "Heading 1", "H1"],
-            ["h2", "Heading 2", "H2"],
-            ["h3", "Heading 3", "H3"],
-            ["h4", "Heading 4", "Heading 4"],
-            ["h5", "Heading 5", "Heading 5"],
-            ["h6", "Heading 6", "Heading 6"]].forEach(function (tag) {
-            editor.addButton(tag[0], {
-                tooltip: tag[1],
-                text: tag[2],
-                onclick: function() { editor.execCommand("mceToggleFormat", false, tag[0]); },
-                onPostRender: function() {
-                    var self = this,
-                        setup = function() {
-                            editor.formatter.formatChanged(tag[0], function(state) {
-                                self.active(state);
-                            });
-                        };
-                    var x = editor.formatter ? setup() : editor.on("init", setup);
-                }
-            });
-        });
+    //    //#region h1, h2, etc. buttons, inspired by http://blog.ionelmc.ro/2013/10/17/tinymce-formatting-toolbar-buttons/
+    //    // note that the complex array is needede because auto-translate only happens if the string is identical
+    //    [["pre", "Preformatted", "Preformatted"],
+    //        ["p", "Paragraph", "Paragraph"],
+    //        ["code", "Code", "Code"],
+    //        ["h1", "Heading 1", "H1"],
+    //        ["h2", "Heading 2", "H2"],
+    //        ["h3", "Heading 3", "H3"],
+    //        ["h4", "Heading 4", "Heading 4"],
+    //        ["h5", "Heading 5", "Heading 5"],
+    //        ["h6", "Heading 6", "Heading 6"]].forEach(function (tag) {
+    //        editor.addButton(tag[0], {
+    //            tooltip: tag[1],
+    //            text: tag[2],
+    //            onclick: function() { editor.execCommand("mceToggleFormat", false, tag[0]); },
+    //            onPostRender: function() {
+    //                var self = this,
+    //                    setup = function() {
+    //                        editor.formatter.formatChanged(tag[0], function(state) {
+    //                            self.active(state);
+    //                        });
+    //                    };
+    //                var x = editor.formatter ? setup() : editor.on("init", setup);
+    //            }
+    //        });
+    //    });
 
-        // group of buttons with an h3 to start and showing h4-6 + p
-        editor.addButton("hgroup", angular.extend({}, editor.buttons.h3,
-        {
-            type: "splitbutton",
-            menu: [
-                editor.buttons.h4,
-                editor.buttons.h5,
-                editor.buttons.h6,
-                editor.buttons.p
-            ]
-        }));
-        //#endregion
+    //    // group of buttons with an h3 to start and showing h4-6 + p
+    //    editor.addButton("hgroup", angular.extend({}, editor.buttons.h3,
+    //    {
+    //        type: "splitbutton",
+    //        menu: [
+    //            editor.buttons.h4,
+    //            editor.buttons.h5,
+    //            editor.buttons.h6,
+    //            editor.buttons.p
+    //        ]
+    //    }));
+    //    //#endregion
 
 
 
-        //#region image alignment / size buttons
-        editor.addButton("alignimgleft", { icon: " icon-eav-align-left", tooltip: "Align left", cmd: "JustifyLeft", onPostRender: initOnPostRender("alignleft") });
-        editor.addButton("alignimgcenter", { icon: " icon-eav-align-center", tooltip: "Align center", cmd: "justifycenter", onPostRender: initOnPostRender("aligncenter") });
-        editor.addButton("alignimgright", { icon: " icon-eav-align-right", tooltip: "Align right", cmd: "justifyright", onPostRender: initOnPostRender("alignright") });
+    //    //#region image alignment / size buttons
+    //    editor.addButton("alignimgleft", { icon: " icon-eav-align-left", tooltip: "Align left", cmd: "JustifyLeft", onPostRender: initOnPostRender("alignleft") });
+    //    editor.addButton("alignimgcenter", { icon: " icon-eav-align-center", tooltip: "Align center", cmd: "justifycenter", onPostRender: initOnPostRender("aligncenter") });
+    //    editor.addButton("alignimgright", { icon: " icon-eav-align-right", tooltip: "Align right", cmd: "justifyright", onPostRender: initOnPostRender("alignright") });
 
-        var imgMenuArray = [];
-        function makeImgFormatCall(size) { return function() { editor.formatter.apply("imgwidth" + size); }; }
-        for (var is = 0; is < imgSizes.length; is++) {
-            var config = {
-                icon: " icon-eav-resize-horizontal",
-                tooltip: imgSizes[is] + "%",
-                text: imgSizes[is] + "%",
-                onclick: makeImgFormatCall(imgSizes[is]),
-                onPostRender: initOnPostRender("imgwidth" + imgSizes[is])
-            };
-            editor.addButton("imgresize" + imgSizes[is], config);
-            imgMenuArray.push(config);
-        }
+    //    var imgMenuArray = [];
+    //    function makeImgFormatCall(size) { return function() { editor.formatter.apply("imgwidth" + size); }; }
+    //    for (var is = 0; is < imgSizes.length; is++) {
+    //        var config = {
+    //            icon: " icon-eav-resize-horizontal",
+    //            tooltip: imgSizes[is] + "%",
+    //            text: imgSizes[is] + "%",
+    //            onclick: makeImgFormatCall(imgSizes[is]),
+    //            onPostRender: initOnPostRender("imgwidth" + imgSizes[is])
+    //        };
+    //        editor.addButton("imgresize" + imgSizes[is], config);
+    //        imgMenuArray.push(config);
+    //    }
 
-        editor.addButton("resizeimg100", {icon: " icon-eav-resize-horizontal", tooltip: "100%",
-            onclick: function() {   editor.formatter.apply("imgwidth100");  },
-            onPostRender: initOnPostRender("imgwidth100")
-        });
+    //    editor.addButton("resizeimg100", {icon: " icon-eav-resize-horizontal", tooltip: "100%",
+    //        onclick: function() {   editor.formatter.apply("imgwidth100");  },
+    //        onPostRender: initOnPostRender("imgwidth100")
+    //    });
 
-        // group of buttons to resize an image 100%, 50%, etc.
-        editor.addButton("imgresponsive", angular.extend({}, editor.buttons.resizeimg100,
-        { type: "splitbutton", menu: imgMenuArray }));
-        //#endregion
+    //    // group of buttons to resize an image 100%, 50%, etc.
+    //    editor.addButton("imgresponsive", angular.extend({}, editor.buttons.resizeimg100,
+    //    { type: "splitbutton", menu: imgMenuArray }));
+    //    //#endregion
 
-        //#region my context toolbars for links, images and lists (ul/li)
-        function makeTagDetector(tagWeNeedInTheTagPath) {
-            return function tagDetector(currentElement) {
-                // check if we are in a tag within a specific tag
-                var selectorMatched = editor.dom.is(currentElement, tagWeNeedInTheTagPath) && editor.getBody().contains(currentElement);
-                return selectorMatched;
-            };
-        }
+    //    //#region my context toolbars for links, images and lists (ul/li)
+    //    function makeTagDetector(tagWeNeedInTheTagPath) {
+    //        return function tagDetector(currentElement) {
+    //            // check if we are in a tag within a specific tag
+    //            var selectorMatched = editor.dom.is(currentElement, tagWeNeedInTheTagPath) && editor.getBody().contains(currentElement);
+    //            return selectorMatched;
+    //        };
+    //    }
 
-        editor.addContextToolbar(makeTagDetector("a"), "link unlink");
-        editor.addContextToolbar(makeTagDetector("img"), "image | alignimgleft alignimgcenter alignimgright imgresponsive | removeformat | remove");
-        editor.addContextToolbar(makeTagDetector("li,ol,ul"), "bullist numlist | outdent indent");
-        //#endregion
-    }
+    //    editor.addContextToolbar(makeTagDetector("a"), "link unlink");
+    //    editor.addContextToolbar(makeTagDetector("img"), "image | alignimgleft alignimgcenter alignimgright imgresponsive | removeformat | remove");
+    //    editor.addContextToolbar(makeTagDetector("li,ol,ul"), "bullist numlist | outdent indent");
+    //    //#endregion
+    //}
 
 })();
 
 
 
+angular.module("sxcFieldTemplates")
+    /*@ngInject*/
+    .factory("tinyMceHelpers", ["$translate", function ($translate) {
+        var svc = {
+            addTranslations: initLangResources
+        };
+
+        // Initialize the tinymce resources which we translate ourselves
+        function initLangResources(editor, primaryLan, language) {
+            var keys = [], mceTranslations = {}, prefix = "Extension.TinyMce.", pLen = prefix.length;
+
+            // find all relevant keys by querying the primary language
+            var all = $translate.getTranslationTable(primaryLan);
+            // ReSharper disable once MissingHasOwnPropertyInForeach
+            for (var key in all)
+                if (key.indexOf(prefix) === 0)
+                    keys.push(key);
+
+            var translations = $translate.instant(keys);
+
+            for (var k = 0; k < keys.length; k++)
+                mceTranslations[keys[k].substring(pLen)] = translations[keys[k]];
+            tinymce.addI18n(language, mceTranslations);
+        }
+        return svc;
+    }]);
+angular.module("sxcFieldTemplates")
+    /*@ngInject*/
+    .factory("tinyMceToolbars", ["tinyMceConfig", function (tinyMceConfig) {
+        var svc = {
+            addButtons: addTinyMceToolbarButtons
+        };
+
+        function addTinyMceToolbarButtons(editor, vm) {
+            //#region helpers like initOnPostRender(name)
+
+            // helper function to add activate/deactivate to buttons like alignleft, alignright etc.
+            function initOnPostRender(name) { // copied/modified from https://github.com/tinymce/tinymce/blob/ddfa0366fc700334f67b2c57f8c6e290abf0b222/js/tinymce/classes/ui/FormatControls.js#L232-L249
+                return function () {
+                    var self = this; // keep ref to the current button?
+
+                    function watchChange() {
+                        editor.formatter.formatChanged(name, function (state) {
+                            self.active(state);
+                        });
+                    }
+
+                    if (editor.formatter)
+                        watchChange();
+                    else
+                        editor.on("init", watchChange());
+                };
+            }
+
+            //#endregion
+
+            //#region register formats
+
+            // the method that will register all formats - like img-sizes
+            function registerTinyMceFormats(editor, vm) {
+                var imgformats = {};
+                for (var is = 0; is < tinyMceConfig.imgSizes.length; is++)
+                    imgformats["imgwidth" + tinyMceConfig.imgSizes[is]] = [{ selector: "img", collapsed: false, styles: { 'width': tinyMceConfig.imgSizes[is] + "%" } }];
+                editor.formatter.register(imgformats);
+            }
+
+            // call register once the editor-object is ready
+            editor.on('init', function () {
+                registerTinyMceFormats(editor, vm);
+            });
+
+            //#endregion
+
+            // group with adam-link, dnn-link
+            editor.addButton("linkfiles", {
+                type: "splitbutton",
+                icon: " icon-eav-file-pdf",
+                title: "Link.AdamFile.Tooltip",
+                onclick: function () {
+                    vm.toggleAdam(false);
+                },
+                menu: [
+                    {
+                        text: "Link.AdamFile",
+                        tooltip: "Link.AdamFile.Tooltip",
+                        icon: " icon-eav-file-pdf",
+                        onclick: function () {
+                            vm.toggleAdam(false);
+                        }
+                    }, {
+                        text: "Link.DnnFile",
+                        tooltip: "Link.DnnFile.Tooltip",
+                        icon: " icon-eav-file",
+                        onclick: function () {
+                            vm.openDnnDialog("documentmanager");
+                        }
+                    }
+                ]
+            });
+
+            //#region link group with web-link, page-link, unlink, anchor
+            var linkgroup = {
+                type: "splitbutton",
+                icon: "link",
+                title: "Link",
+                onPostRender: initOnPostRender("link"),
+                onclick: function () {
+                    editor.execCommand("mceLink");
+                },
+
+                menu: [
+                { icon: "link", text: "Link", onclick: function () { editor.execCommand("mceLink"); } },
+                {
+                    text: "Link.Page",
+                    tooltip: "Link.Page.Tooltip",
+                    icon: " icon-eav-sitemap",
+                    onclick: function () {
+                        vm.openDnnDialog("pagepicker");
+                    }
+                }
+                ]
+            };
+            var linkgroupPro = angular.copy(linkgroup);
+            linkgroupPro.menu.push({ icon: " icon-eav-anchor", text: "Anchor", tooltip: "Link.Anchor.Tooltip", onclick: function () { editor.execCommand("mceAnchor"); } });
+            editor.addButton("linkgroup", linkgroup);
+            editor.addButton("linkgrouppro", linkgroupPro);
+            //#endregion
+
+            // group with images (adam) - only in PRO mode
+            editor.addButton("images", {
+                type: "splitbutton",
+                text: "",
+                icon: "image",
+                onclick: function () {
+                    vm.toggleAdam(true);
+                },
+                menu: [
+                    {
+                        text: "Image.AdamImage",
+                        tooltip: "Image.AdamImage.Tooltip",
+                        icon: "image",
+                        onclick: function () { vm.toggleAdam(true); }
+                    }, {
+                        text: "Image.DnnImage",
+                        tooltip: "Image.DnnImage.Tooltip",
+                        icon: "image",
+                        onclick: function () { vm.openDnnDialog("imagemanager"); }
+                    }, {
+                        text: "Insert\/edit image", // i18n tinyMce standard
+                        icon: "image",
+                        onclick: function () { editor.execCommand("mceImage"); }
+
+                    },
+                    // note: all these use i18n from tinyMce standard
+                    { icon: "alignleft", tooltip: "Align left", onclick: function () { editor.execCommand("JustifyLeft"); } },
+                    { icon: "aligncenter", tooltip: "Align center", onclick: function () { editor.execCommand("JustifyCenter"); } },
+                    { icon: "alignright", tooltip: "Align right", onclick: function () { editor.execCommand("JustifyRight"); } }
+                ]
+            });
+
+            // drop-down with italic, strikethrough, ...
+            editor.addButton("formatgroup", {
+                type: "splitbutton",
+                tooltip: "Italic",  // will be autotranslated
+                text: "",
+                icon: "italic",
+                cmd: "italic",
+                onPostRender: initOnPostRender("italic"),
+                menu: [
+                    { icon: "strikethrough", text: "Strikethrough", onclick: function () { editor.execCommand("strikethrough"); } },
+                    { icon: "superscript", text: "Superscript", onclick: function () { editor.execCommand("superscript"); } },
+                    { icon: "subscript", text: "Subscript", onclick: function () { editor.execCommand("subscript"); } }
+                ]
+
+            });
+
+            // drop-down with italic, strikethrough, ...
+            editor.addButton("listgroup", {
+                type: "splitbutton",
+                tooltip: "Numbered list",  // official tinymce key
+                text: "",
+                icon: "numlist",
+                cmd: "InsertOrderedList",
+                onPostRender: initOnPostRender("numlist"),  // for unknown reasons, this just doesn't activate correctly :( - neither does the bullist
+                menu: [
+                    { icon: "bullist", text: "Bullet list", onPostRender: initOnPostRender("bullist"), onclick: function () { editor.execCommand("InsertUnorderedList"); } },
+                    { icon: "outdent", text: "Outdent", onclick: function () { editor.execCommand("Outdent"); } },
+                    { icon: "indent", text: "Indent", onclick: function () { editor.execCommand("Indent"); } }
+                ]
+
+            });
+
+            //#region mode switching and the buttons for it
+            function switchModes(mode) {
+                editor.settings.toolbar = editor.settings.modes[mode].toolbar;
+                editor.settings.menubar = editor.settings.modes[mode].menubar;
+                // editor.settings.contextmenu = editor.settings.modes[mode].contextmenu; - doesn't work at the moment
+
+                editor.theme.panel.remove();    // kill current toolbar
+                editor.theme.renderUI(editor);
+                editor.execCommand("mceFocus");
+
+                // focus away...
+                document.getElementById("dummyfocus").focus();
+
+                // ...and focus back a bit later
+                setTimeout(function () {
+                    editor.focus();
+                }, 100);
+            }
+
+            editor.addButton("modestandard", {
+                icon: " icon-eav-cancel",
+                tooltip: "SwitchMode.Standard",
+                onclick: function () { switchModes("standard"); }
+            });
+
+            editor.addButton("modeadvanced", {
+                icon: " icon-eav-pro",
+                tooltip: "SwitchMode.Pro",
+                onclick: function () { switchModes("advanced"); }
+            });
+            //#endregion
+
+            //#region h1, h2, etc. buttons, inspired by http://blog.ionelmc.ro/2013/10/17/tinymce-formatting-toolbar-buttons/
+            // note that the complex array is needede because auto-translate only happens if the string is identical
+            [["pre", "Preformatted", "Preformatted"],
+                ["p", "Paragraph", "Paragraph"],
+                ["code", "Code", "Code"],
+                ["h1", "Heading 1", "H1"],
+                ["h2", "Heading 2", "H2"],
+                ["h3", "Heading 3", "H3"],
+                ["h4", "Heading 4", "Heading 4"],
+                ["h5", "Heading 5", "Heading 5"],
+                ["h6", "Heading 6", "Heading 6"]].forEach(function (tag) {
+                    editor.addButton(tag[0], {
+                        tooltip: tag[1],
+                        text: tag[2],
+                        onclick: function () { editor.execCommand("mceToggleFormat", false, tag[0]); },
+                        onPostRender: function () {
+                            var self = this,
+                                setup = function () {
+                                    editor.formatter.formatChanged(tag[0], function (state) {
+                                        self.active(state);
+                                    });
+                                };
+                            var x = editor.formatter ? setup() : editor.on("init", setup);
+                        }
+                    });
+                });
+
+            // group of buttons with an h3 to start and showing h4-6 + p
+            editor.addButton("hgroup", angular.extend({}, editor.buttons.h3,
+            {
+                type: "splitbutton",
+                menu: [
+                    editor.buttons.h4,
+                    editor.buttons.h5,
+                    editor.buttons.h6,
+                    editor.buttons.p
+                ]
+            }));
+            //#endregion
+
+
+
+            //#region image alignment / size buttons
+            editor.addButton("alignimgleft", { icon: " icon-eav-align-left", tooltip: "Align left", cmd: "JustifyLeft", onPostRender: initOnPostRender("alignleft") });
+            editor.addButton("alignimgcenter", { icon: " icon-eav-align-center", tooltip: "Align center", cmd: "justifycenter", onPostRender: initOnPostRender("aligncenter") });
+            editor.addButton("alignimgright", { icon: " icon-eav-align-right", tooltip: "Align right", cmd: "justifyright", onPostRender: initOnPostRender("alignright") });
+
+            var imgMenuArray = [];
+            function makeImgFormatCall(size) { return function () { editor.formatter.apply("imgwidth" + size); }; }
+            for (var is = 0; is < tinyMceConfig.imgSizes.length; is++) {
+                var config = {
+                    icon: " icon-eav-resize-horizontal",
+                    tooltip: tinyMceConfig.imgSizes[is] + "%",
+                    text: tinyMceConfig.imgSizes[is] + "%",
+                    onclick: makeImgFormatCall(tinyMceConfig.imgSizes[is]),
+                    onPostRender: initOnPostRender("imgwidth" + tinyMceConfig.imgSizes[is])
+                };
+                editor.addButton("imgresize" + tinyMceConfig.imgSizes[is], config);
+                imgMenuArray.push(config);
+            }
+
+            editor.addButton("resizeimg100", {
+                icon: " icon-eav-resize-horizontal", tooltip: "100%",
+                onclick: function () { editor.formatter.apply("imgwidth100"); },
+                onPostRender: initOnPostRender("imgwidth100")
+            });
+
+            // group of buttons to resize an image 100%, 50%, etc.
+            editor.addButton("imgresponsive", angular.extend({}, editor.buttons.resizeimg100,
+            { type: "splitbutton", menu: imgMenuArray }));
+            //#endregion
+
+            //#region my context toolbars for links, images and lists (ul/li)
+            function makeTagDetector(tagWeNeedInTheTagPath) {
+                return function tagDetector(currentElement) {
+                    // check if we are in a tag within a specific tag
+                    var selectorMatched = editor.dom.is(currentElement, tagWeNeedInTheTagPath) && editor.getBody().contains(currentElement);
+                    return selectorMatched;
+                };
+            }
+
+            editor.addContextToolbar(makeTagDetector("a"), "link unlink");
+            editor.addContextToolbar(makeTagDetector("img"), "image | alignimgleft alignimgcenter alignimgright imgresponsive | removeformat | remove");
+            editor.addContextToolbar(makeTagDetector("li,ol,ul"), "bullist numlist | outdent indent");
+            //#endregion
+        }
+
+        return svc;
+    }]);
 angular.module("SxcEditTemplates", []).run(["$templateCache", function($templateCache) {$templateCache.put("adam/adam-hint.html","<div class=\"small pull-right\">\r\n    <span style=\"opacity: 0.5\">drop files here -</span>\r\n    <a href=\"http://2sxc.org/help?tag=adam\" target=\"_blank\" uib-tooltip=\"ADAM is the Automatic Digital Assets Manager - click to discover more\">\r\n        <i class=\"icon-eav-apple\"></i>\r\n        Adam\r\n    </a>\r\n    <span style=\"opacity: 0.5\"> is sponsored with\r\n    <i class=\"icon-eav-heart\"></i> by\r\n    <a tabindex=\"-1\" href=\"http://2sic.com/\" target=\"_blank\">\r\n        2sic.com\r\n    </a>\r\n    </span>\r\n</div>\r\n");
 $templateCache.put("adam/browser.html","<div ng-if=\"vm.show\" class=\"\">\r\n    <!-- info for dropping stuff here -->\r\n    <div class=\"dz-preview dropzone-adam\" ng-disabled=\"vm.disabled\" uib-tooltip=\"{{\'Edit.Fields.Hyperlink.Default.AdamUploadLabel\' | translate }}\" ng-click=\"vm.openUpload()\">\r\n        <div class=\"dz-image adam-browse-background-icon adam-browse-background\" xstyle=\"background-color: whitesmoke\">\r\n            <i class=\"icon-eav-up-circled2\"></i>\r\n            <div class=\"adam-short-label\">drop files</div>\r\n        </div>\r\n    </div>\r\n\r\n    <!-- add folder - not always shown -->\r\n    <div ng-show=\"vm.allowCreateFolder() || vm.debug.on\" class=\"dz-preview\" ng-disabled=\"vm.disabled\" ng-click=\"vm.addFolder()\">\r\n        <div class=\"dz-image adam-browse-background-icon adam-browse-background\">\r\n            <div class=\"\">\r\n                <i class=\"icon-eav-folder-empty\"></i>\r\n                <div class=\"adam-short-label\">new folder</div>\r\n            </div>\r\n        </div>\r\n        <div class=\"adam-background adam-browse-background-icon\">\r\n            <i class=\"icon-eav-plus\" style=\"font-size: 2em; top: 13px; position: relative;\"></i>\r\n        </div>\r\n        <div class=\"dz-details\" style=\"opacity: 1\">\r\n\r\n        </div>\r\n    </div>\r\n\r\n    <!-- browse up a folder - not always shown -->\r\n    <div ng-show=\"vm.showFolders || vm.debug.on\" class=\"dz-preview\" ng-disabled=\"vm.disabled\" ng-if=\"vm.folders.length > 0\" ng-click=\"vm.goUp()\">\r\n        <div class=\"dz-image  adam-browse-background-icon adam-browse-background\">\r\n            <i class=\"icon-eav-folder-empty\"></i>\r\n            <div class=\"adam-short-label\">up</div>\r\n        </div>\r\n        <div class=\"adam-background adam-browse-background-icon\">\r\n            <i class=\"icon-eav-level-up\" style=\"font-size: 2em; top: 13px; position: relative;\"></i>\r\n        </div>\r\n    </div>\r\n\r\n    <!-- folder list - not always shown -->\r\n    <div ng-show=\"vm.showFolders || vm.debug.on\" class=\"dz-preview\" ng-repeat=\"item in vm.items | filter: { IsFolder: true }  | orderBy:\'Name\'\" ng-click=\"vm.goIntoFolder(item)\">\r\n        <div class=\"dz-image adam-blur adam-browse-background-icon adam-browse-background\">\r\n            <i class=\"icon-eav-folder-empty\"></i>\r\n            <div class=\"short-label\">{{ item.Name }}</div>\r\n        </div>\r\n\r\n        <div class=\"dz-details file-type-{{item.Type}}\">\r\n            <span ng-click=\"vm.del(item)\" stop-event=\"click\" class=\"adam-delete-button\"><i class=\"icon-eav-cancel\"></i></span>\r\n            <div class=\"adam-full-name-area\">\r\n                <div class=\"adam-full-name\">{{ item.Name }}</div>\r\n            </div>\r\n        </div>\r\n\r\n        <span class=\"adam-tag\" ng-class=\"{\'metadata-exists\': item.MetadataId > 0}\"\r\n              ng-click=\"vm.editMetadata(item)\"\r\n              ng-if=\"vm.getMetadataType(item)\"\r\n              stop-event=\"click\"\r\n              uib-tooltip=\"{{vm.getMetadataType(item)}}:{{item.MetadataId}}\">\r\n            <i class=\"icon-eav-tag\" style=\"font-size: larger\"></i>\r\n        </span>\r\n    </div>\r\n\r\n\r\n    <!-- files -->\r\n    <div class=\"dz-preview\" ng-class=\"{ \'dz-success\': value.Value.toLowerCase() == \'file:\' + item.Id }\" ng-repeat=\"item in (vm.items | filter: { IsFolder: false }) | filter: (vm.showImagesOnly ? {Type: \'image\'} : {})  | orderBy:\'Name\'\" ng-click=\"vm.select(item)\" ng-disabled=\"vm.disabled || !vm.enableSelect\">\r\n        <div ng-if=\"item.Type !== \'image\'\" class=\"dz-image adam-blur  adam-browse-background-icon adam-browse-background\">\r\n            <i ng-class=\"vm.icon(item)\"></i>\r\n            <div class=\"adam-short-label\">{{ item.Name }}</div>\r\n        </div>\r\n        <div ng-if=\"item.Type === \'image\'\" class=\"dz-image\">\r\n            <img data-dz-thumbnail=\"\" alt=\"{{ item.Id + \':\' + item.Name\r\n}}\" ng-src=\"{{ item.fullPath + \'?w=120&h=120&mode=crop\' }}\">\r\n        </div>\r\n\r\n\r\n\r\n        <div class=\"dz-details file-type-{{item.Type}}\">\r\n            <span ng-click=\"vm.del(item)\" stop-event=\"click\" class=\"adam-delete-button\"><i class=\"icon-eav-cancel\"></i></span>\r\n            <div class=\"adam-full-name-area\">\r\n                <div class=\"adam-full-name\">{{ item.Name }}</div>\r\n            </div>\r\n            <div class=\"dz-filename adam-short-label\">\r\n                <span>#{{ item.Id }} - {{ (item.Size / 1024).toFixed(0) }} kb</span>\r\n            </div>\r\n        </div>\r\n\r\n        <span class=\"adam-tag\" ng-class=\"{\'metadata-exists\': item.MetadataId > 0}\"\r\n              ng-click=\"vm.editMetadata(item)\"\r\n              ng-if=\"vm.getMetadataType(item)\"\r\n              stop-event=\"click\"\r\n              uib-tooltip=\"{{vm.getMetadataType(item)}}:{{item.MetadataId}}\">\r\n            <i class=\"icon-eav-tag\" style=\"font-size: larger\"></i>\r\n        </span>\r\n\r\n\r\n        <div class=\"dz-success-mark\">\r\n            <svg width=\"54px\" height=\"54px\" viewBox=\"0 0 54 54\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:sketch=\"http://www.bohemiancoding.com/sketch/ns\">\r\n                <title>Check</title>\r\n                <defs></defs>\r\n                <g id=\"Page-1\" stroke=\"none\" stroke-width=\"1\" fill=\"none\" fill-rule=\"evenodd\" sketch:type=\"MSPage\">\r\n                    <path d=\"M23.5,31.8431458 L17.5852419,25.9283877 C16.0248253,24.3679711 13.4910294,24.366835 11.9289322,25.9289322 C10.3700136,27.4878508 10.3665912,30.0234455 11.9283877,31.5852419 L20.4147581,40.0716123 C20.5133999,40.1702541 20.6159315,40.2626649 20.7218615,40.3488435 C22.2835669,41.8725651 24.794234,41.8626202 26.3461564,40.3106978 L43.3106978,23.3461564 C44.8771021,21.7797521 44.8758057,19.2483887 43.3137085,17.6862915 C41.7547899,16.1273729 39.2176035,16.1255422 37.6538436,17.6893022 L23.5,31.8431458 Z M27,53 C41.3594035,53 53,41.3594035 53,27 C53,12.6405965 41.3594035,1 27,1 C12.6405965,1 1,12.6405965 1,27 C1,41.3594035 12.6405965,53 27,53 Z\" id=\"Oval-2\" stroke-opacity=\"0.198794158\" stroke=\"#747474\" fill-opacity=\"0.816519475\" fill=\"#FFFFFF\" sketch:type=\"MSShapeGroup\"></path>\r\n                </g>\r\n            </svg>\r\n        </div>\r\n    </div>\r\n\r\n</div>");
 $templateCache.put("adam/dropzone-upload-preview.html","<div ng-show=\"uploading\">\r\n    <div class=\"dropzone-previews\">\r\n    </div>\r\n    <span class=\"invisible-clickable\" data-note=\"just a fake, invisible area for dropzone\"></span>\r\n</div>");

@@ -153,6 +153,9 @@
     <Content Include="src\sxc-edit\fields\hyperlink\hyperlink-library.controller.js" />
     <Content Include="src\sxc-edit\fields\hyperlink\hyperlink-library.html" />
     <Content Include="src\sxc-edit\fields\hyperlink\hyperlink.css" />
+    <Content Include="src\sxc-edit\fields\string\string-wysiwyg-tinymce.config.service.js" />
+    <Content Include="src\sxc-edit\fields\string\string-wysiwyg-tinymce.toolbar.service.js" />
+    <Content Include="src\sxc-edit\fields\string\string-wysiwyg-tinymce.service.js" />
     <Content Include="src\sxc-edit\fields\string\string-font-icon-picker.css" />
     <Content Include="src\sxc-edit\fields\string\string-font-icon-picker.html" />
     <Content Include="src\sxc-edit\fields\string\string-font-icon-picker.js" />

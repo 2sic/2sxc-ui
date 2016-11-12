@@ -41,6 +41,10 @@
                 if (found)
                     return (found) ? JSON.parse(found) : null;
         })
+        /*@ngInject*/
+        .factory("beta", function ($2sxc) {
+            return $2sxc.urlParams.get("beta");
+        })
     ;
 
 
