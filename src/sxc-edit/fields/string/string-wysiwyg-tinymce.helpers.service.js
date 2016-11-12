@@ -1,12 +1,13 @@
 angular.module("sxcFieldTemplates")
     /*@ngInject*/
-    .factory("tinyMceHelpers", function ($translate) {
+    .factory("tinyMceHelpers", function ($translate, tinyMceConfig) {
         var svc = {
             addTranslations: initLangResources
         };
 
         // Initialize the tinymce resources which we translate ourselves
-        function initLangResources(editor, primaryLan, language) {
+        function initLangResources(editor, language) {
+            var primaryLan = tinyMceConfig.defaultLanguage;
             var keys = [], mceTranslations = {}, prefix = "Extension.TinyMce.", pLen = prefix.length;
 
             // find all relevant keys by querying the primary language

@@ -16,15 +16,17 @@
         .controller("FieldWysiwygTinyMce", FieldWysiwygTinyMceController);
 
     /*@ngInject*/
-    function FieldWysiwygTinyMceController($scope, dnnBridgeSvc, languages, $translate, tinyMceHelpers, tinyMceToolbars, tinyMceConfig) {
+    function FieldWysiwygTinyMceController($scope, dnnBridgeSvc, languages, $translate, tinyMceHelpers, tinyMceToolbars, tinyMceConfig, tinyMceAdam) {
         var vm = this;
         vm.activate = function () {
             $scope.tinymceOptions = angular.extend(tinyMceConfig.getDefaultOptions(), {
                 setup: function(editor) {
                     vm.editor = editor;
                     if ($scope.tinymceOptions.language)
-                        tinyMceHelpers.addTranslations(editor, tinyMceConfig.defaultLanguage, $scope.tinymceOptions.language);
-                    tinyMceToolbars.addButtons(editor, vm);
+                        tinyMceHelpers.addTranslations(editor, $scope.tinymceOptions.language);
+                    tinyMceToolbars.addButtons(vm);
+
+                    tinyMceAdam.addButtons(vm);
                 }
             });
 
@@ -38,31 +40,33 @@
 
         };
 
+        tinyMceAdam.attachAdam(vm, $scope);
+
         // todo: sometime put in own service
         //#region new adam: callbacks only
-        vm.registerAdam = function (adam) {
-            vm.adam = adam;
-        };
+        //vm.registerAdam = function (adam) {
+        //    vm.adam = adam;
+        //};
 
 
-        vm.setValue = function (fileItem, modeImage) {
-            if (modeImage === undefined)        // if not supplied, use the setting in the adam
-                modeImage = vm.adamModeImage; 
-            vm.editor.insertContent(modeImage
-                ? "<img src=\"" + fileItem.fullPath + "\">"
-                : "<a href=\"" + fileItem.fullPath + "\">" + fileItem.Name.substr(0, fileItem.Name.lastIndexOf(".")) + "</a>");
-        };
+        //vm.setValue = function (fileItem, modeImage) {
+        //    if (modeImage === undefined)        // if not supplied, use the setting in the adam
+        //        modeImage = vm.adamModeImage; 
+        //    vm.editor.insertContent(modeImage
+        //        ? "<img src=\"" + fileItem.fullPath + "\">"
+        //        : "<a href=\"" + fileItem.fullPath + "\">" + fileItem.Name.substr(0, fileItem.Name.lastIndexOf(".")) + "</a>");
+        //};
 
-        // this is the event called by dropzone as something is dropped
-        $scope.afterUpload = function(fileItem) {   
-            vm.setValue(fileItem, fileItem.Type === "image");
-        };
+        //// this is the event called by dropzone as something is dropped
+        //$scope.afterUpload = function(fileItem) {   
+        //    vm.setValue(fileItem, fileItem.Type === "image");
+        //};
 
-        vm.toggleAdam = function toggle(imagesOnly) {
-            vm.adamModeImage = imagesOnly;
-            vm.adam.toggle({showImagesOnly: imagesOnly});
-            $scope.$apply();
-        };
+        //vm.toggleAdam = function toggle(imagesOnly) {
+        //    vm.adamModeImage = imagesOnly;
+        //    vm.adam.toggle({showImagesOnly: imagesOnly});
+        //    $scope.$apply();
+        //};
 
         //#endregion
 

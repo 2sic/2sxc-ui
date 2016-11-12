@@ -1,11 +1,12 @@
 angular.module("sxcFieldTemplates")
     /*@ngInject*/
-    .factory("tinyMceToolbars", function (tinyMceConfig, beta) {
+    .factory("tinyMceToolbars", function (tinyMceConfig) {
         var svc = {
             addButtons: addTinyMceToolbarButtons
         };
 
-        function addTinyMceToolbarButtons(editor, vm) {
+        function addTinyMceToolbarButtons(vm) {
+            var editor = vm.editor;
             //#region helpers like initOnPostRender(name)
 
             // helper function to add activate/deactivate to buttons like alignleft, alignright etc.
@@ -45,32 +46,32 @@ angular.module("sxcFieldTemplates")
 
             //#endregion
 
-            // group with adam-link, dnn-link
-            editor.addButton("linkfiles", {
-                type: "splitbutton",
-                icon: " icon-eav-file-pdf",
-                title: "Link.AdamFile.Tooltip",
-                onclick: function () {
-                    vm.toggleAdam(false);
-                },
-                menu: [
-                    {
-                        text: "Link.AdamFile",
-                        tooltip: "Link.AdamFile.Tooltip",
-                        icon: " icon-eav-file-pdf",
-                        onclick: function () {
-                            vm.toggleAdam(false);
-                        }
-                    }, {
-                        text: "Link.DnnFile",
-                        tooltip: "Link.DnnFile.Tooltip",
-                        icon: " icon-eav-file",
-                        onclick: function () {
-                            vm.openDnnDialog("documentmanager");
-                        }
-                    }
-                ]
-            });
+            //// group with adam-link, dnn-link
+            //editor.addButton("linkfiles", {
+            //    type: "splitbutton",
+            //    icon: " icon-eav-file-pdf",
+            //    title: "Link.AdamFile.Tooltip",
+            //    onclick: function () {
+            //        vm.toggleAdam(false);
+            //    },
+            //    menu: [
+            //        {
+            //            text: "Link.AdamFile",
+            //            tooltip: "Link.AdamFile.Tooltip",
+            //            icon: " icon-eav-file-pdf",
+            //            onclick: function () {
+            //                vm.toggleAdam(false);
+            //            }
+            //        }, {
+            //            text: "Link.DnnFile",
+            //            tooltip: "Link.DnnFile.Tooltip",
+            //            icon: " icon-eav-file",
+            //            onclick: function () {
+            //                vm.openDnnDialog("documentmanager");
+            //            }
+            //        }
+            //    ]
+            //});
 
             //#region link group with web-link, page-link, unlink, anchor
             var linkgroup = {
@@ -243,9 +244,8 @@ angular.module("sxcFieldTemplates")
                 onclick: function() {
                     var guid = Math.uuid().toLowerCase(); // requires the uuid-generator to be included
 
-                    vm.editor.insertContent('<hr sxc="sxc-content-block" guid="' + guid + '" />');
+                    vm.editor.insertContent("<hr sxc=\"sxc-content-block\" guid=\"" + guid + "\" />");
                 }
-
             });
             // #endregion
 
