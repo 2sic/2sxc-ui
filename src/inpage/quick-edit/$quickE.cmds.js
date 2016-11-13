@@ -1,4 +1,4 @@
-﻿// extend the wonderful in-page editing with the core commands
+﻿// extend the quick edit with the core commands
 $(function () {
     $quickE.cmds = {
         cb: {

@@ -1155,7 +1155,12 @@ $(function () {
                 if ($quickE.clipboard.data.type !== newClip.type)
                     return alert("can't move module-to-block; move only works from module-to-module or block-to-block");
 
-                if (isNaN(from) || isNaN(to) || from === to || from + 1 === to) // this moves it to the same spot, so ignore
+                if (isNaN(from) || isNaN(to) || from === to) // || from + 1 === to) // this moves it to the same spot, so ignore
+                    return $quickE.clipboard.clear(); // don't do anything
+
+                // cb-numbering is a bit different, because the selector is at the bottom
+                // only there we should also skip on +1;
+                if(newClip.type === $quickE.selectors.cb.id && from + 1 === to)
                     return $quickE.clipboard.clear(); // don't do anything
 
                 if (type === $quickE.selectors.cb.type) {
@@ -1241,7 +1246,7 @@ $(function () {
     });
 
 });
-// extend the wonderful in-page editing with the core commands
+// extend the quick edit with the core commands
 $(function () {
     $quickE.cmds = {
         cb: {
