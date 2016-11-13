@@ -1,11 +1,10 @@
 ﻿$(function () {
     "use strict";
 
-    // the Wonderful In Page Editing object
+    // the quick-edit object
     var $quickE = window.$quickE = {};
 
-
-    // selectors used all over the in-page-editing
+    // selectors used all over the in-page-editing, centralized to ensure consistency
     $quickE.selectors = {
         cb: {
             id: "cb",

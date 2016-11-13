@@ -254,7 +254,7 @@
 
     $2sxc._controllers = {};
     $2sxc.name = "The 2sxc Controller object";
-    // $2sxc.version = "08.06.00";   // todo: get from url param
+    // $2sxc.version = "08.07.00";   // todo: get from url param
     $2sxc.beta = {};
     $2sxc._data = {};
     

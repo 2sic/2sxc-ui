@@ -78,7 +78,7 @@ $(function () {
     };
 
 
-    $quickE.selected.toggle = function (target, type) {
+    $quickE.selected.toggle = function (target) {
         if (!target)
             return $quickE.selected.hide();
 
@@ -86,12 +86,6 @@ $(function () {
         coords.yh = coords.y + 20;
         $quickE.positionAndAlign($quickE.selected, coords);
         $quickE.selected.target = target;
-
-        if (type === $quickE.selectors.mod.id)
-            $quickE.selected.addClass("sc-cb-selected-mod");
-        else {
-            $quickE.selected.removeClass("sc-cb-selected-mod");
-        }
     };
 
     // bind clipboard actions 

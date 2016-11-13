@@ -6,10 +6,21 @@ $(function () {
         "delete": deleteMod,
         create: createModWithTypeName,
         move: moveMod,
-        getPaneName: function(pane) {
-            return $(pane).attr("id").replace("dnn_", "");
-        }
+        getPaneName: getPaneName,
+        getModuleId: getModuleId,
+        getMoveButtons: generatePaneMoveButtons
     };
+
+
+    function getPaneName(pane) {
+        return $(pane).attr("id").replace("dnn_", "");
+    }
+
+
+    function getModuleId(classes) {
+        var result = classes.match(/DnnModule-([0-9]+)(?:\W|$)/);
+        return (result && result.length === 2) ? result[1] : null;
+    }
 
     function xhrError (xhr, optionalMessage) {
         alert(optionalMessage || "Error while talking to server.");
@@ -103,6 +114,30 @@ $(function () {
                 window.location.reload();
             }
         });
+    }
+
+    function generatePaneMoveButtons(current) {
+        var pns = $quickE.cachedPanes;
+        // generate list of panes as links
+        var targets = $("<div>");
+        for (var p = 0; p < pns.length; p++) {
+            var pName = $quickE.modManage.getPaneName(pns[p]),
+                selected = (current === pName) ? " selected " : "";
+            if (!selected)
+                targets.append("<a data='" + pName + "'>" + pName + "</a>");
+        }
+
+        // attach click event...
+        targets.find("a").click(function (d) {
+            var link = $(this),
+                clip = $quickE.clipboard.data,
+                modId = $quickE.modManage.getModuleId(clip.item.className),
+                newPane = link.attr("data");
+
+            $quickE.modManage.move(modId, newPane, 0);
+        });
+
+        return targets;
     }
 
 });

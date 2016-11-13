@@ -97,9 +97,9 @@ body.sc-tb-show-all .sc-element .sc-menu { display: initial !important; }
 /* only use the WOFF, as all modern browsers support that */
 @font-face {
   font-family: 'inpage-icons';
-  src: url('../lib/fonts/inpage-icons.woff?4236189') format('woff'),
-       url('../lib/fonts/inpage-icons.eot?4236189#iefix') format('embedded-opentype'),
-       url('../lib/fonts/inpage-icons.ttf?4236189') format('truetype');
+  src: url('../lib/fonts/inpage-icons.woff?08.07.00') format('woff'),
+       url('../lib/fonts/inpage-icons.eot?08.07.00#iefix') format('embedded-opentype'),
+       url('../lib/fonts/inpage-icons.ttf?08.07.00') format('truetype');
   font-weight: normal;
   font-style: normal;
 }
@@ -291,9 +291,4 @@ a.sc-content-block-selected-menu.sc-content-block-menu-btn {
     -webkit-filter: grayscale(0);
     filter: grayscale(0);
 }
-
-/*.sc-content-block-menu a.sc-cb-mod-only {     
-    -webkit-filter: grayscale(100%);
-    filter: grayscale(100%);}
-.sc-cb-selected-mod a.sc-cb-mod-only { display: initial;}*/ 
 
