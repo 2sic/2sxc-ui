@@ -13,12 +13,13 @@ $(function () {
 
         // check cut/paste
         var cbAction = $(this).data("action");
-        if (!cbAction) {
-            var appOrContent = $(this).data("type");
-            return $quickE.cmds.cb.create(actionConfig.parent, actionConfig.field, index, appOrContent, list, newGuid);
-        } else
+        if (cbAction)
             // this is a cut/paste action
             return $quickE.copyPasteInPage(cbAction, list, index, $quickE.selectors.cb.id);
+        else {
+            var appOrContent = $(this).data("type");
+            return $quickE.cmds.cb.create(actionConfig.parent, actionConfig.field, index, appOrContent, list, newGuid);
+        } 
     });
 
 });

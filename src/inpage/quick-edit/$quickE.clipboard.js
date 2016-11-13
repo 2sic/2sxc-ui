@@ -3,19 +3,28 @@ $(function () {
 
     // perform copy and paste commands - needs the clipboard
     $quickE.copyPasteInPage = function (cbAction, list, index, type) {
-        var clip = $quickE.clipboard.createSpecs(type, list, index);
+        var newClip = $quickE.clipboard.createSpecs(type, list, index);
 
         // action!
         if (cbAction === "select") {
-            $quickE.clipboard.mark(clip);
+            $quickE.clipboard.mark(newClip);
         } else if (cbAction === "paste") {
-            var from = $quickE.clipboard.data.index, to = clip.index;
+            var from = $quickE.clipboard.data.index, to = newClip.index;
+            // check that we only move block-to-block or module to module
+            if ($quickE.clipboard.data.type !== newClip.type)
+                return alert("can only move module-to-module or block-to-block");
+
             if (isNaN(from) || isNaN(to) || from === to || from + 1 === to) // this moves it to the same spot, so ignore
                 return $quickE.clipboard.clear(); // don't do anything
 
-            $2sxc(list).manage._getCbManipulator().move/*._moveContentBlock*/(clip.parent, clip.field, from, to);
+            if (type === $quickE.selectors.cb.type) {
+                $2sxc(list).manage._getCbManipulator().move(newClip.parent, newClip.field, from, to);
+            } else {
+                $quickE.cmds.mod.move($quickE.clipboard.data, newClip, from, to);
+            }
             $quickE.clipboard.clear();
         }
+        return null;
     };
 
     // clipboard object - remembers what module (or content-block) was previously copied / needs to be pasted
@@ -42,6 +51,7 @@ $(function () {
             $quickE.setSecondaryActionsState(false);
             $quickE.selected.toggle(false);
         },
+
         createSpecs: function (type, list, index) {
             var listItems = list.find($quickE.selectors[type].selector);
             if (index >= listItems.length) index = listItems.length - 1; // sometimes the index is 1 larger than the length, then select last

@@ -49,7 +49,8 @@
         contentBlocks: null,
         modules: null,
         nearestCb: null, 
-        nearestMod: null
+        nearestMod: null,
+        modManage: null // will be populated later in the module section
     });
 
     // add stuff which dependes on other values to create

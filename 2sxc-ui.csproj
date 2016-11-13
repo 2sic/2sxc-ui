@@ -52,6 +52,7 @@
     <Content Include="src\inpage\quick-edit\%24quickE.cmds.js" />
     <Content Include="src\inpage\quick-edit\%24quickE.clipboard.js" />
     <Content Include="src\inpage\quick-edit\%24quickE.content-block.js" />
+    <Content Include="src\inpage\quick-edit\%24quickE.modManage.js" />
     <Content Include="src\inpage\quick-edit\%24quickE.positioning.js" />
     <Content Include="src\inpage\quick-edit\%24quickE.module.js" />
     <Content Include="src\inpage\quick-edit\%24quickE.config.js" />
@@ -200,7 +201,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>6379</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>

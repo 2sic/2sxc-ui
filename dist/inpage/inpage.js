@@ -1102,7 +1102,8 @@ $(function () {
         contentBlocks: null,
         modules: null,
         nearestCb: null, 
-        nearestMod: null
+        nearestMod: null,
+        modManage: null // will be populated later in the module section
     });
 
     // add stuff which dependes on other values to create
@@ -1131,19 +1132,28 @@ $(function () {
 
     // perform copy and paste commands - needs the clipboard
     $quickE.copyPasteInPage = function (cbAction, list, index, type) {
-        var clip = $quickE.clipboard.createSpecs(type, list, index);
+        var newClip = $quickE.clipboard.createSpecs(type, list, index);
 
         // action!
         if (cbAction === "select") {
-            $quickE.clipboard.mark(clip);
+            $quickE.clipboard.mark(newClip);
         } else if (cbAction === "paste") {
-            var from = $quickE.clipboard.data.index, to = clip.index;
+            var from = $quickE.clipboard.data.index, to = newClip.index;
+            // check that we only move block-to-block or module to module
+            if ($quickE.clipboard.data.type !== newClip.type)
+                return alert("can only move module-to-module or block-to-block");
+
             if (isNaN(from) || isNaN(to) || from === to || from + 1 === to) // this moves it to the same spot, so ignore
                 return $quickE.clipboard.clear(); // don't do anything
 
-            $2sxc(list).manage._getCbManipulator().move/*._moveContentBlock*/(clip.parent, clip.field, from, to);
+            if (type === $quickE.selectors.cb.type) {
+                $2sxc(list).manage._getCbManipulator().move(newClip.parent, newClip.field, from, to);
+            } else {
+                $quickE.cmds.mod.move($quickE.clipboard.data, newClip, from, to);
+            }
             $quickE.clipboard.clear();
         }
+        return null;
     };
 
     // clipboard object - remembers what module (or content-block) was previously copied / needs to be pasted
@@ -1170,6 +1180,7 @@ $(function () {
             $quickE.setSecondaryActionsState(false);
             $quickE.selected.toggle(false);
         },
+
         createSpecs: function (type, list, index) {
             var listItems = list.find($quickE.selectors[type].selector);
             if (index >= listItems.length) index = listItems.length - 1; // sometimes the index is 1 larger than the length, then select last
@@ -1215,26 +1226,32 @@ $(function () {
     $quickE.cmds = {
         cb: {
             "delete": function (clip) {
-                return $2sxc(clip.list).manage._getCbManipulator().delete /*_deleteContentBlock*/(clip.parent, clip.field, clip.index);
+                return $2sxc(clip.list).manage._getCbManipulator().delete(clip.parent, clip.field, clip.index);
             },
             "create": function(parent, field, index, appOrContent, list, newGuid) {
-                return $2sxc(list).manage._getCbManipulator().create/*_createContentBlock*/(parent, field, index, appOrContent, list, newGuid);
+                return $2sxc(list).manage._getCbManipulator().create(parent, field, index, appOrContent, list, newGuid);
             }
         },
         mod: {
             "delete": function (clip) {
-                alert("module delete not implemented yet");
-                // todo: get tabid and mod id, then call delete
-                //if (confirm("delete?")) { // todo i18n
-                //    var apiCmd = { url: "dnn/module/delete", params: { tabId: 0, modId: 17 } };
-                //    var sxc = $2sxc(0).webApi.get(apiCmd)
-                //}
+                if (!confirm("are you sure?"))
+                    return;
+                var modId = getModuleId(clip.item.className);
+                $quickE.modManage.delete(modId);
             },
-            move: function (clip, etc) {
-                // todo
+            move: function (oldClip, newClip, from, to) {
+                var modId = getModuleId(oldClip.item.className);
+                var pane = $quickE.modManage.getPaneName(newClip.list);
+                $quickE.modManage.move(modId, pane, to);
             }
         }
     };
+
+    function getModuleId(classes) {
+        var result = classes.match(/DnnModule-([0-9]+)(?:\W|$)/);
+        return (result && result.length === 2) ? result[1] : null;
+    }
+
 });
 $(function () {
 
@@ -1294,34 +1311,37 @@ $(function () {
 
         // check cut/paste
         var cbAction = $(this).data("action");
-        if (!cbAction) {
-            var appOrContent = $(this).data("type");
-            return $quickE.cmds.cb.create(actionConfig.parent, actionConfig.field, index, appOrContent, list, newGuid);
-        } else
+        if (cbAction)
             // this is a cut/paste action
             return $quickE.copyPasteInPage(cbAction, list, index, $quickE.selectors.cb.id);
+        else {
+            var appOrContent = $(this).data("type");
+            return $quickE.cmds.cb.create(actionConfig.parent, actionConfig.field, index, appOrContent, list, newGuid);
+        } 
     });
 
 });
 // module specific stuff
 $(function () {
+    "use strict";
 
-    $quickE.modActions.click(function () {
-        var type = $(this).data("type"),
-            dnnMod = $quickE.main.actionsForModule,
-            pane = dnnMod.closest($quickE.selectors.mod.listSelector),
-            paneName = pane.attr("id").replace("dnn_", "");
+    $quickE.modManage = {
+        "delete": deleteMod,
+        create: createModWithTypeName,
+        move: moveMod,
+        getPaneName: function(pane) {
+            return pane.attr("id").replace("dnn_", "");
+        }
+    };
 
-        var index = 0;
-        if (dnnMod.hasClass("DnnModule")) 
-            index = pane.find(".DnnModule").index(dnnMod[0]) + 1;
-        
+    function xhrError (xhr, optionalMessage) {
+        alert(optionalMessage || "Error while talking to server.");
+        console.log(xhr);
+    }
 
-        var cbAction = $(this).data("action");
-        if (cbAction)
-            return $quickE.copyPasteInPage(cbAction, pane, index, $quickE.selectors.mod.id);
-
-        return sendDnnAjax("GetPortalDesktopModules", { 
+    // service calls we'll need
+    function createModWithTypeName(paneName, index, type) {
+        return sendDnnAjax("controlbar/GetPortalDesktopModules", {
             data: "category=All&loadingStartIndex=0&loadingPageSize=100&searchTerm=",
             success: function (desktopModules) {
                 var moduleToFind = type === "Default" ? " Content" : " App";
@@ -1337,17 +1357,54 @@ $(function () {
                     : createMod(paneName, index, module.ModuleID);
             }
         });
-    });
-
-    function xhrError (xhr) {
-        alert("Error while adding module.");
-        console.log(xhr);
     }
 
-    // service calls we'll need
+    function moveMod(modId, pane, order) {
+        var service = $.dnnSF();
+        var tabId = service.getTabId();
+        var dataVar = {
+            TabId: tabId,
+            ModuleId: modId,
+            Pane: pane,
+            ModuleOrder: (2 * order + 4) // strange formula, copied from DNN https://github.com/dnnsoftware/Dnn.Platform/blob/fd225b8de07042837f7473cd49fba13de42a3cc0/Website/admin/Menus/ModuleActions/ModuleActions.js#L70
+        };
+
+        sendDnnAjax("ModuleService/MoveModule", {
+            type: "POST",
+            data: dataVar,
+            success: function () {
+                window.location.reload();
+            }
+        });
+
+        //fire window resize to reposition action menus
+        $(window).resize();
+    }
+    
+
+    function deleteMod(modId) {
+        var service = $.dnnSF();
+        var tabId = service.getTabId();
+        // calling https://github.com/dnnsoftware/Dnn.Platform/blob/fd225b8de07042837f7473cd49fba13de42a3cc0/DNN%20Platform/DotNetNuke.Web/InternalServices/ModuleServiceController.cs#L116-L132
+        return sendDnnAjax("ModuleService/DeleteModule", {
+            type: "POST",
+            data: {
+                TabId: tabId,
+                ModuleId: modId,
+                SoftDelete: true
+            },
+            success: function(d) {
+                window.location.reload();
+            },
+            error: function(xhr) {
+                xhrError(xhr, "Could not delete - you probably have a older DNN, you need DNN 7.4.1 or higher");
+            }
+        });
+    }
+
     function sendDnnAjax(serviceName, options) {
         var service = $.dnnSF();
-        var serviceUrl = service.getServiceRoot("internalservices") + "controlbar/";
+        var serviceUrl = service.getServiceRoot("internalservices");// + "controlbar/";
         return $.ajax($.extend( {
             type: "GET",
             url: serviceUrl + serviceName,
@@ -1367,25 +1424,144 @@ $(function () {
             AddExistingModule: false,
             CopyModule: false
         };
-        return sendDnnAjax("AddModule", {
+        return sendDnnAjax("controlbar/AddModule", {
             type: "POST",
             data: postData,
             success: function (d) {
                 window.location.reload();
-            },
+            }
         });
-
-        //$.ajax({
-        //    url: serviceUrl + "AddModule",
-        //    type: "POST",
-        //    data: postData,
-        //    beforeSend: service.setModuleHeaders,
-        //    success: function (d) {
-        //        window.location.reload();
-        //    },
-        //    error: xhrError
-        //});
     }
+
+});
+// module specific stuff
+$(function () {
+    "use strict";
+    $quickE.modActions.click(function () {
+        var type = $(this).data("type"),
+            dnnMod = $quickE.main.actionsForModule,
+            pane = dnnMod.closest($quickE.selectors.mod.listSelector),
+            //paneName = pane.attr("id").replace("dnn_", ""),
+            index = 0;
+
+        if (dnnMod.hasClass("DnnModule"))
+            index = pane.find(".DnnModule").index(dnnMod[0]) + 1;
+
+        var cbAction = $(this).data("action");
+        if (cbAction)  // copy/paste
+            return $quickE.copyPasteInPage(cbAction, pane, index, $quickE.selectors.mod.id);
+
+        return $quickE.modManage.create($quickE.modManage.getPaneName(pane), index, type);
+    });
+
+
+    //$quickE.modManage = {
+    //    "delete": deleteMod,
+    //    create: createModWithTypeName,
+    //    move: moveMod,
+    //    getPaneName: function(pane) {
+    //        return pane.attr("id").replace("dnn_", "");
+    //    }
+    //};
+
+    //function xhrError (xhr, optionalMessage) {
+    //    alert(optionalMessage || "Error while talking to server.");
+    //    console.log(xhr);
+    //}
+
+    //// service calls we'll need
+    //function createModWithTypeName(paneName, index, type) {
+    //    return sendDnnAjax("controlbar/GetPortalDesktopModules", {
+    //        data: "category=All&loadingStartIndex=0&loadingPageSize=100&searchTerm=",
+    //        success: function (desktopModules) {
+    //            var moduleToFind = type === "Default" ? " Content" : " App";
+    //            var module = null;
+
+    //            desktopModules.forEach(function (e, i) {
+    //                if (e.ModuleName === moduleToFind)
+    //                    module = e;
+    //            });
+
+    //            return (!module)
+    //                ? alert(moduleToFind + " module not found.")
+    //                : createMod(paneName, index, module.ModuleID);
+    //        }
+    //    });
+    //}
+
+    //function moveMod(modId, pane, order) {
+    //    var service = $.dnnSF();
+    //    var tabId = service.getTabId();
+    //    var dataVar = {
+    //        TabId: tabId,
+    //        ModuleId: modId,
+    //        Pane: pane,
+    //        ModuleOrder: (2 * order + 4) // strange formula, copied from DNN https://github.com/dnnsoftware/Dnn.Platform/blob/fd225b8de07042837f7473cd49fba13de42a3cc0/Website/admin/Menus/ModuleActions/ModuleActions.js#L70
+    //    };
+
+    //    sendDnnAjax("ModuleService/MoveModule", {
+    //        type: "POST",
+    //        data: dataVar,
+    //        success: function () {
+    //            window.location.reload();
+    //        }
+    //    });
+
+    //    //fire window resize to reposition action menus
+    //    $(window).resize();
+    //}
+    
+
+    //function deleteMod(modId) {
+    //    var service = $.dnnSF();
+    //    var tabId = service.getTabId();
+    //    // calling https://github.com/dnnsoftware/Dnn.Platform/blob/fd225b8de07042837f7473cd49fba13de42a3cc0/DNN%20Platform/DotNetNuke.Web/InternalServices/ModuleServiceController.cs#L116-L132
+    //    return sendDnnAjax("ModuleService/DeleteModule", {
+    //        type: "POST",
+    //        data: {
+    //            TabId: tabId,
+    //            ModuleId: modId,
+    //            SoftDelete: true
+    //        },
+    //        success: function(d) {
+    //            window.location.reload();
+    //        },
+    //        error: function(xhr) {
+    //            xhrError(xhr, "Could not delete - you probably have a older DNN, you need DNN 7.4.1 or higher");
+    //        }
+    //    });
+    //}
+
+    //function sendDnnAjax(serviceName, options) {
+    //    var service = $.dnnSF();
+    //    var serviceUrl = service.getServiceRoot("internalservices");// + "controlbar/";
+    //    return $.ajax($.extend( {
+    //        type: "GET",
+    //        url: serviceUrl + serviceName,
+    //        beforeSend: service.setModuleHeaders,
+    //        error: xhrError
+    //    }, options));
+    //}
+
+    //function createMod(paneName, position, moduleId) {
+    //    var postData = {
+    //        Module: moduleId,
+    //        Page: "",
+    //        Pane: paneName,
+    //        Position: -1,
+    //        Sort: position,
+    //        Visibility: 0,
+    //        AddExistingModule: false,
+    //        CopyModule: false
+    //    };
+    //    return sendDnnAjax("controlbar/AddModule", {
+    //        type: "POST",
+    //        data: postData,
+    //        success: function (d) {
+    //            window.location.reload();
+    //        }
+    //    });
+    //}
 
 });
 // everything related to positioning the quick-edit in-page editing
