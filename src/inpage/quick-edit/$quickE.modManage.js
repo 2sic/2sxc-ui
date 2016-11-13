@@ -62,29 +62,24 @@ $(function () {
     function deleteMod(modId) {
         var service = $.dnnSF();
         var tabId = service.getTabId();
-        // calling https://github.com/dnnsoftware/Dnn.Platform/blob/fd225b8de07042837f7473cd49fba13de42a3cc0/DNN%20Platform/DotNetNuke.Web/InternalServices/ModuleServiceController.cs#L116-L132
-        return sendDnnAjax("ModuleService/DeleteModule", {
-            type: "POST",
+        return sendDnnAjax("2sxc/dnn/module/delete", {
+            url: $.dnnSF().getServiceRoot("2sxc") + "dnn/module/delete",
+            type: "GET",
             data: {
-                TabId: tabId,
-                ModuleId: modId,
-                SoftDelete: true
+                tabId: tabId,
+                modId: modId
             },
             success: function(d) {
                 window.location.reload();
-            },
-            error: function(xhr) {
-                xhrError(xhr, "Could not delete - you probably have a older DNN, you need DNN 7.4.1 or higher");
             }
         });
     }
 
     function sendDnnAjax(serviceName, options) {
-        var service = $.dnnSF();
-        var serviceUrl = service.getServiceRoot("internalservices");// + "controlbar/";
+         var service = $.dnnSF();
         return $.ajax($.extend( {
             type: "GET",
-            url: serviceUrl + serviceName,
+            url: service.getServiceRoot("internalservices") + serviceName,
             beforeSend: service.setModuleHeaders,
             error: xhrError
         }, options));

@@ -12,7 +12,7 @@ $(function () {
             var from = $quickE.clipboard.data.index, to = newClip.index;
             // check that we only move block-to-block or module to module
             if ($quickE.clipboard.data.type !== newClip.type)
-                return alert("can only move module-to-module or block-to-block");
+                return alert("can't move module-to-block; move only works from module-to-module or block-to-block");
 
             if (isNaN(from) || isNaN(to) || from === to || from + 1 === to) // this moves it to the same spot, so ignore
                 return $quickE.clipboard.clear(); // don't do anything
