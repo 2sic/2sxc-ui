@@ -1,7 +1,7 @@
 ﻿// module specific stuff
 $(function () {
-    "use strict";
-    $quickE.modActions.click(function () {
+
+    function onModuleButtonClick() {
         var type = $(this).data("type"),
             dnnMod = $quickE.main.actionsForModule,
             pane = dnnMod.closest($quickE.selectors.mod.listSelector),
@@ -15,6 +15,8 @@ $(function () {
             return $quickE.copyPasteInPage(cbAction, pane, index, $quickE.selectors.mod.id);
 
         return $quickE.modManage.create($quickE.modManage.getPaneName(pane), index, type);
-    });
+    }
 
+    // bind module actions click
+    $quickE.modActions.click(onModuleButtonClick);
 });

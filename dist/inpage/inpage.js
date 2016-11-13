@@ -1059,7 +1059,6 @@ $(function () {
 
 
     // selectors used all over the in-page-editing
-    // var enableModuleMove = false; // not implemented yet
     $quickE.selectors = {
         cb: {
             id: "cb",
@@ -1089,7 +1088,7 @@ $(function () {
     };
 
     // the quick-insert object
-    $2sxc._lib.extend($quickE, {
+    $.extend($quickE, {
         body: $("body"),
         win: $(window),
         main: $("<div class='sc-content-block-menu sc-content-block-quick-insert sc-i18n'></div>"),
@@ -1100,9 +1099,11 @@ $(function () {
         selected: $("<div class='sc-content-block-menu sc-content-block-selected-menu sc-i18n'></div>")
             .append(
                 $quickE.btn("delete", "trash-empty", "Delete"),
-                $quickE.btn("move", "export", "Move", null, null, "sc-cb-mod-only")
+                $quickE.btn("sendToPane", "export", "Move", null, null, "sc-cb-mod-only"),
+                "<div id='paneList'></div>"
             ),
         contentBlocks: null,
+        cachedPanes: null,
         modules: null,
         nearestCb: null, 
         nearestMod: null,
@@ -1110,7 +1111,7 @@ $(function () {
     });
 
     // add stuff which dependes on other values to create
-    $2sxc._lib.extend($quickE, {
+    $.extend($quickE, {
         cbActions: $($quickE.template),
         modActions: $($quickE.template.replace(/QuickInsertMenu.AddBlock/g, "QuickInsertMenu.AddModule"))
             .attr("data-context", "module")
@@ -1129,10 +1130,14 @@ $(function () {
         // module actions
         if ($quickE.config.modules.enable)
             $quickE.main.append($quickE.modActions);
+
+        // Cache the panes (because panes can't change dynamically)
+        if (!$quickE.cachedPanes)
+            $quickE.cachedPanes = $($quickE.selectors.mod.listSelector);
     };
 
 });
-// add a clipboard to the WInPE
+// add a clipboard to the quick edit
 $(function () {
 
     // perform copy and paste commands - needs the clipboard
@@ -1140,23 +1145,27 @@ $(function () {
         var newClip = $quickE.clipboard.createSpecs(type, list, index);
 
         // action!
-        if (cbAction === "select") {
-            $quickE.clipboard.mark(newClip);
-        } else if (cbAction === "paste") {
-            var from = $quickE.clipboard.data.index, to = newClip.index;
-            // check that we only move block-to-block or module to module
-            if ($quickE.clipboard.data.type !== newClip.type)
-                return alert("can't move module-to-block; move only works from module-to-module or block-to-block");
+        switch (cbAction) {
+            case "select":
+                $quickE.clipboard.mark(newClip);
+                break;
+            case "paste":
+                var from = $quickE.clipboard.data.index, to = newClip.index;
+                // check that we only move block-to-block or module to module
+                if ($quickE.clipboard.data.type !== newClip.type)
+                    return alert("can't move module-to-block; move only works from module-to-module or block-to-block");
 
-            if (isNaN(from) || isNaN(to) || from === to || from + 1 === to) // this moves it to the same spot, so ignore
-                return $quickE.clipboard.clear(); // don't do anything
+                if (isNaN(from) || isNaN(to) || from === to || from + 1 === to) // this moves it to the same spot, so ignore
+                    return $quickE.clipboard.clear(); // don't do anything
 
-            if (type === $quickE.selectors.cb.type) {
-                $2sxc(list).manage._getCbManipulator().move(newClip.parent, newClip.field, from, to);
-            } else {
-                $quickE.cmds.mod.move($quickE.clipboard.data, newClip, from, to);
-            }
-            $quickE.clipboard.clear();
+                if (type === $quickE.selectors.cb.type) {
+                    $2sxc(list).manage._getCbManipulator().move(newClip.parent, newClip.field, from, to);
+                } else {
+                    $quickE.cmds.mod.move($quickE.clipboard.data, newClip, from, to);
+                }
+                $quickE.clipboard.clear();
+                break;
+            default:
         }
         return null;
     };
@@ -1219,15 +1228,15 @@ $(function () {
         }
     };
 
-    // give all actions
+    // bind clipboard actions 
     $("a", $quickE.selected).click(function () {
         var action = $(this).data("action");
         var clip = $quickE.clipboard.data;
         switch (action) {
-            case "cancel":
-                return $quickE.clipboard.clear();
             case "delete":
-                $quickE.cmds[clip.type].delete(clip);
+                return $quickE.cmds[clip.type].delete(clip);
+            case "sendToPane":
+                return $quickE.cmds.mod.sendToPane(clip);
         }
     });
 
@@ -1254,14 +1263,52 @@ $(function () {
                 var modId = getModuleId(oldClip.item.className);
                 var pane = $quickE.modManage.getPaneName(newClip.list);
                 $quickE.modManage.move(modId, pane, to);
+            },
+            sendToPane: function() {
+                var pane = $quickE.main.actionsForModule.closest($quickE.selectors.mod.listSelector);
+
+                // show the pane-options
+                var pl = $quickE.selected.find("#paneList");
+                if (!pl.is(":empty"))
+                    pl.empty();
+                pl.append(generatePaneMoveButtons($quickE.modManage.getPaneName(pane)));
+
             }
         }
     };
 
+
+    // todo: move to...modManage
     function getModuleId(classes) {
         var result = classes.match(/DnnModule-([0-9]+)(?:\W|$)/);
         return (result && result.length === 2) ? result[1] : null;
     }
+
+    function generatePaneMoveButtons(current) {
+        var pns = $quickE.cachedPanes;
+        // generate list of panes as links
+        var targets = $("<div>");
+        for (var p = 0; p < pns.length; p++) {
+            var pName = $quickE.modManage.getPaneName(pns[p]),
+                selected = (current === pName) ? " selected " : "";
+            if (!selected)
+                targets.append("<a data='" + pName + "'>" + pName + "</a>");
+        }
+
+        // attach click event...
+        targets.find("a").click(function(d) {
+            var link = $(this),
+                clip = $quickE.clipboard.data,
+                modId = getModuleId(clip.item.className),
+                newPane = link.attr("data");
+
+            $quickE.modManage.move(modId, newPane, 0);
+        });
+        
+        return targets;
+    }
+
+
 
 });
 $(function () {
@@ -1309,16 +1356,16 @@ $(function () {
 });
 // content-block specific stuff like actions
 $(function () {
-    $quickE.cbActions.click(function () {
-        var list = $quickE.main.actionsForCb.closest($quickE.selectors.cb.listSelector);
-        var listItems = list.find($quickE.selectors.cb.selector);
-        var actionConfig = JSON.parse(list.attr($quickE.selectors.cb.context));
-        var index = 0;
+
+    function onCbButtonClick () {
+        var list = $quickE.main.actionsForCb.closest($quickE.selectors.cb.listSelector),
+            listItems = list.find($quickE.selectors.cb.selector),
+            actionConfig = JSON.parse(list.attr($quickE.selectors.cb.context)),
+            index = 0,
+            newGuid = actionConfig.guid || null;
 
         if ($quickE.main.actionsForCb.hasClass($quickE.selectors.cb.class))
             index = listItems.index($quickE.main.actionsForCb[0]) + 1;
-
-        var newGuid = actionConfig.guid || null;
 
         // check cut/paste
         var cbAction = $(this).data("action");
@@ -1329,8 +1376,9 @@ $(function () {
             var appOrContent = $(this).data("type");
             return $quickE.cmds.cb.create(actionConfig.parent, actionConfig.field, index, appOrContent, list, newGuid);
         } 
-    });
+    }
 
+    $quickE.cbActions.click(onCbButtonClick);
 });
 // module specific stuff
 $(function () {
@@ -1341,7 +1389,7 @@ $(function () {
         create: createModWithTypeName,
         move: moveMod,
         getPaneName: function(pane) {
-            return pane.attr("id").replace("dnn_", "");
+            return $(pane).attr("id").replace("dnn_", "");
         }
     };
 
@@ -1442,8 +1490,8 @@ $(function () {
 });
 // module specific stuff
 $(function () {
-    "use strict";
-    $quickE.modActions.click(function () {
+
+    function onModuleButtonClick() {
         var type = $(this).data("type"),
             dnnMod = $quickE.main.actionsForModule,
             pane = dnnMod.closest($quickE.selectors.mod.listSelector),
@@ -1457,8 +1505,10 @@ $(function () {
             return $quickE.copyPasteInPage(cbAction, pane, index, $quickE.selectors.mod.id);
 
         return $quickE.modManage.create($quickE.modManage.getPaneName(pane), index, type);
-    });
+    }
 
+    // bind module actions click
+    $quickE.modActions.click(onModuleButtonClick);
 });
 // everything related to positioning the quick-edit in-page editing
 $(function () {
@@ -1479,9 +1529,9 @@ $(function () {
     $quickE.refreshDomObjects = function () {
         $quickE.bodyOffset = $quickE.getBodyPosition(); // must update this, as sometimes after finishing page load the position changes, like when dnn adds the toolbar
 
-        // Cache the panes (because panes can't change dynamically)
-        if (!$quickE.cachedPanes)
-            $quickE.cachedPanes = $($quickE.selectors.mod.listSelector);
+        //// Cache the panes (because panes can't change dynamically)
+        //if (!$quickE.cachedPanes)
+        //    $quickE.cachedPanes = $($quickE.selectors.mod.listSelector);
 
         if ($quickE.config.innerBlocks.enable) {
             // get all content-block lists which are empty, or which allow multiple child-items
@@ -1603,6 +1653,7 @@ $(function () {
             yh: element.offset().top + (element.is($quickE.selectors.eitherCbOrMod) ? element.height() : 0)
         };
     };
+
 });
 $(function () {
     $quickE.enable = function () {

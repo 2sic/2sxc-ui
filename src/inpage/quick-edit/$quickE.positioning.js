@@ -17,9 +17,9 @@ $(function () {
     $quickE.refreshDomObjects = function () {
         $quickE.bodyOffset = $quickE.getBodyPosition(); // must update this, as sometimes after finishing page load the position changes, like when dnn adds the toolbar
 
-        // Cache the panes (because panes can't change dynamically)
-        if (!$quickE.cachedPanes)
-            $quickE.cachedPanes = $($quickE.selectors.mod.listSelector);
+        //// Cache the panes (because panes can't change dynamically)
+        //if (!$quickE.cachedPanes)
+        //    $quickE.cachedPanes = $($quickE.selectors.mod.listSelector);
 
         if ($quickE.config.innerBlocks.enable) {
             // get all content-block lists which are empty, or which allow multiple child-items
@@ -141,4 +141,5 @@ $(function () {
             yh: element.offset().top + (element.is($quickE.selectors.eitherCbOrMod) ? element.height() : 0)
         };
     };
+
 });

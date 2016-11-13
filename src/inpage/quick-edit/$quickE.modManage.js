@@ -7,7 +7,7 @@ $(function () {
         create: createModWithTypeName,
         move: moveMod,
         getPaneName: function(pane) {
-            return pane.attr("id").replace("dnn_", "");
+            return $(pane).attr("id").replace("dnn_", "");
         }
     };
 

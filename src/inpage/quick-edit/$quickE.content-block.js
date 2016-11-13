@@ -1,15 +1,15 @@
 ﻿// content-block specific stuff like actions
 $(function () {
-    $quickE.cbActions.click(function () {
-        var list = $quickE.main.actionsForCb.closest($quickE.selectors.cb.listSelector);
-        var listItems = list.find($quickE.selectors.cb.selector);
-        var actionConfig = JSON.parse(list.attr($quickE.selectors.cb.context));
-        var index = 0;
+
+    function onCbButtonClick () {
+        var list = $quickE.main.actionsForCb.closest($quickE.selectors.cb.listSelector),
+            listItems = list.find($quickE.selectors.cb.selector),
+            actionConfig = JSON.parse(list.attr($quickE.selectors.cb.context)),
+            index = 0,
+            newGuid = actionConfig.guid || null;
 
         if ($quickE.main.actionsForCb.hasClass($quickE.selectors.cb.class))
             index = listItems.index($quickE.main.actionsForCb[0]) + 1;
-
-        var newGuid = actionConfig.guid || null;
 
         // check cut/paste
         var cbAction = $(this).data("action");
@@ -20,6 +20,7 @@ $(function () {
             var appOrContent = $(this).data("type");
             return $quickE.cmds.cb.create(actionConfig.parent, actionConfig.field, index, appOrContent, list, newGuid);
         } 
-    });
+    }
 
+    $quickE.cbActions.click(onCbButtonClick);
 });

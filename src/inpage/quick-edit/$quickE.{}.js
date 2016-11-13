@@ -6,7 +6,6 @@
 
 
     // selectors used all over the in-page-editing
-    // var enableModuleMove = false; // not implemented yet
     $quickE.selectors = {
         cb: {
             id: "cb",
@@ -36,7 +35,7 @@
     };
 
     // the quick-insert object
-    $2sxc._lib.extend($quickE, {
+    $.extend($quickE, {
         body: $("body"),
         win: $(window),
         main: $("<div class='sc-content-block-menu sc-content-block-quick-insert sc-i18n'></div>"),
@@ -47,9 +46,11 @@
         selected: $("<div class='sc-content-block-menu sc-content-block-selected-menu sc-i18n'></div>")
             .append(
                 $quickE.btn("delete", "trash-empty", "Delete"),
-                $quickE.btn("move", "export", "Move", null, null, "sc-cb-mod-only")
+                $quickE.btn("sendToPane", "export", "Move", null, null, "sc-cb-mod-only"),
+                "<div id='paneList'></div>"
             ),
         contentBlocks: null,
+        cachedPanes: null,
         modules: null,
         nearestCb: null, 
         nearestMod: null,
@@ -57,7 +58,7 @@
     });
 
     // add stuff which dependes on other values to create
-    $2sxc._lib.extend($quickE, {
+    $.extend($quickE, {
         cbActions: $($quickE.template),
         modActions: $($quickE.template.replace(/QuickInsertMenu.AddBlock/g, "QuickInsertMenu.AddModule"))
             .attr("data-context", "module")
@@ -76,6 +77,10 @@
         // module actions
         if ($quickE.config.modules.enable)
             $quickE.main.append($quickE.modActions);
+
+        // Cache the panes (because panes can't change dynamically)
+        if (!$quickE.cachedPanes)
+            $quickE.cachedPanes = $($quickE.selectors.mod.listSelector);
     };
 
 });

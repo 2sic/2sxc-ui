@@ -1,4 +1,4 @@
-﻿// add a clipboard to the WInPE
+﻿// add a clipboard to the quick edit
 $(function () {
 
     // perform copy and paste commands - needs the clipboard
@@ -6,23 +6,27 @@ $(function () {
         var newClip = $quickE.clipboard.createSpecs(type, list, index);
 
         // action!
-        if (cbAction === "select") {
-            $quickE.clipboard.mark(newClip);
-        } else if (cbAction === "paste") {
-            var from = $quickE.clipboard.data.index, to = newClip.index;
-            // check that we only move block-to-block or module to module
-            if ($quickE.clipboard.data.type !== newClip.type)
-                return alert("can't move module-to-block; move only works from module-to-module or block-to-block");
+        switch (cbAction) {
+            case "select":
+                $quickE.clipboard.mark(newClip);
+                break;
+            case "paste":
+                var from = $quickE.clipboard.data.index, to = newClip.index;
+                // check that we only move block-to-block or module to module
+                if ($quickE.clipboard.data.type !== newClip.type)
+                    return alert("can't move module-to-block; move only works from module-to-module or block-to-block");
 
-            if (isNaN(from) || isNaN(to) || from === to || from + 1 === to) // this moves it to the same spot, so ignore
-                return $quickE.clipboard.clear(); // don't do anything
+                if (isNaN(from) || isNaN(to) || from === to || from + 1 === to) // this moves it to the same spot, so ignore
+                    return $quickE.clipboard.clear(); // don't do anything
 
-            if (type === $quickE.selectors.cb.type) {
-                $2sxc(list).manage._getCbManipulator().move(newClip.parent, newClip.field, from, to);
-            } else {
-                $quickE.cmds.mod.move($quickE.clipboard.data, newClip, from, to);
-            }
-            $quickE.clipboard.clear();
+                if (type === $quickE.selectors.cb.type) {
+                    $2sxc(list).manage._getCbManipulator().move(newClip.parent, newClip.field, from, to);
+                } else {
+                    $quickE.cmds.mod.move($quickE.clipboard.data, newClip, from, to);
+                }
+                $quickE.clipboard.clear();
+                break;
+            default:
         }
         return null;
     };
@@ -85,15 +89,15 @@ $(function () {
         }
     };
 
-    // give all actions
+    // bind clipboard actions 
     $("a", $quickE.selected).click(function () {
         var action = $(this).data("action");
         var clip = $quickE.clipboard.data;
         switch (action) {
-            case "cancel":
-                return $quickE.clipboard.clear();
             case "delete":
-                $quickE.cmds[clip.type].delete(clip);
+                return $quickE.cmds[clip.type].delete(clip);
+            case "sendToPane":
+                return $quickE.cmds.mod.sendToPane(clip);
         }
     });
 
