@@ -45,7 +45,7 @@
 
 
 
-/* icons */
+/*#region icons */
 .sc-content-block-menu-addcontent {
     background: url(../../icon.png);
     background-size: 32px 32px;
@@ -65,7 +65,7 @@
     background: url(../../icon-app-black.png);
     background-size: 32px 32px;
 }
-
+/*#endregion */
 
 
 a.sc-content-block-menu-btn {
@@ -106,10 +106,6 @@ div.sc-cb-highlight-for-insert { background-color: rgba(128, 128, 128, 0.1); }
 /* this is needed to disable the paste button till it can be used */
 .sc-unavailable { display: none !important; }
 
-/* this rule disables copy/paste on module, as it's not supported (only on blocks) */
-/* todo 2016-11-13 should already work, but postpone to next release 
-a.sc-content-block-menu-module.sc-cb-action { display: none !important; }*/
-
 .sc-content-block-selected-menu { display: none; }
 
 a.sc-content-block-selected-menu.sc-content-block-menu-btn {
@@ -117,3 +113,5 @@ a.sc-content-block-selected-menu.sc-content-block-menu-btn {
     filter: grayscale(0%);
 }
 
+.sc-content-block-menu a.sc-cb-mod-only { display: none;}
+.sc-cb-selected-mod a.sc-cb-mod-only { display: initial;}

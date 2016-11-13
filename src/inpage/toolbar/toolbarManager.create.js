@@ -141,13 +141,13 @@
                     };
                 if (toolbars.length === 0) // no toolbars found, must help a bit because otherwise editing is hard
                 {
-                    console.log("didn't find a toolbar, so will create an automatic one to help for the block", parentTag);
+                    //console.log("didn't find a toolbar, so will create an automatic one to help for the block", parentTag);
                     var outsideCb = !parentTag.hasClass('sc-content-block');
                     var contentTag = outsideCb ? parentTag.find("div.sc-content-block") : parentTag;
                     contentTag.addClass("sc-element");
                     // todo: make the empty-toolbar-default-settings used below as well...
                     var  settingsString = JSON.stringify(settingsForEmptyToolbar);
-                    contentTag.prepend($("<ul class='sc-menu' toolbar='' xsettings='" + settingsString + "'/>"));
+                    contentTag.prepend($("<ul class='sc-menu' toolbar='' settings='" + settingsString + "'/>"));
                     toolbars = getToolbars();
                 }
 

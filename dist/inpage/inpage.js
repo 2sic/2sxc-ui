@@ -1098,7 +1098,10 @@ $(function () {
             + $quickE.btn("select", "ok", "Select", true)
             + $quickE.btn("paste", "paste", "Paste", true, true),
         selected: $("<div class='sc-content-block-menu sc-content-block-selected-menu sc-i18n'></div>")
-            .append(/*$quickE.btn("cancel", "ok", "Cancel") + */ $quickE.btn("delete", "trash-empty", "Delete")),
+            .append(
+                $quickE.btn("delete", "trash-empty", "Delete"),
+                $quickE.btn("move", "export", "Move", null, null, "sc-cb-mod-only")
+            ),
         contentBlocks: null,
         modules: null,
         nearestCb: null, 
@@ -1109,7 +1112,9 @@ $(function () {
     // add stuff which dependes on other values to create
     $2sxc._lib.extend($quickE, {
         cbActions: $($quickE.template),
-        modActions: $($quickE.template.replace(/QuickInsertMenu.AddBlock/g, "QuickInsertMenu.AddModule")).attr("data-context", "module").addClass("sc-content-block-menu-module")
+        modActions: $($quickE.template.replace(/QuickInsertMenu.AddBlock/g, "QuickInsertMenu.AddModule"))
+            .attr("data-context", "module")
+            .addClass("sc-content-block-menu-module")
     });
 
     // build the toolbar (hidden, but ready to show)
@@ -1172,7 +1177,7 @@ $(function () {
             if (cb.prev().is("iframe"))
                 cb.prev().addClass($quickE.selectors.selected);
             $quickE.setSecondaryActionsState(true);
-            $quickE.selected.toggle(cb);
+            $quickE.selected.toggle(cb, $quickE.clipboard.data.type);
         },
         clear: function () {
             $("." + $quickE.selectors.selected).removeClass($quickE.selectors.selected);
@@ -1198,7 +1203,7 @@ $(function () {
     };
 
 
-    $quickE.selected.toggle = function (target) {
+    $quickE.selected.toggle = function (target, type) {
         if (!target)
             return $quickE.selected.hide();
 
@@ -1206,6 +1211,12 @@ $(function () {
         coords.yh = coords.y + 20;
         $quickE.positionAndAlign($quickE.selected, coords);
         $quickE.selected.target = target;
+
+        if (type === $quickE.selectors.mod.id)
+            $quickE.selected.addClass("sc-cb-selected-mod");
+        else {
+            $quickE.selected.removeClass("sc-cb-selected-mod");
+        }
     };
 
     // give all actions
@@ -1933,13 +1944,13 @@ $(document).ready(function () {
                     };
                 if (toolbars.length === 0) // no toolbars found, must help a bit because otherwise editing is hard
                 {
-                    console.log("didn't find a toolbar, so will create an automatic one to help for the block", parentTag);
+                    //console.log("didn't find a toolbar, so will create an automatic one to help for the block", parentTag);
                     var outsideCb = !parentTag.hasClass('sc-content-block');
                     var contentTag = outsideCb ? parentTag.find("div.sc-content-block") : parentTag;
                     contentTag.addClass("sc-element");
                     // todo: make the empty-toolbar-default-settings used below as well...
                     var  settingsString = JSON.stringify(settingsForEmptyToolbar);
-                    contentTag.prepend($("<ul class='sc-menu' toolbar='' xsettings='" + settingsString + "'/>"));
+                    contentTag.prepend($("<ul class='sc-menu' toolbar='' settings='" + settingsString + "'/>"));
                     toolbars = getToolbars();
                 }
 

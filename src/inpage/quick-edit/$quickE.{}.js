@@ -45,7 +45,10 @@
             + $quickE.btn("select", "ok", "Select", true)
             + $quickE.btn("paste", "paste", "Paste", true, true),
         selected: $("<div class='sc-content-block-menu sc-content-block-selected-menu sc-i18n'></div>")
-            .append(/*$quickE.btn("cancel", "ok", "Cancel") + */ $quickE.btn("delete", "trash-empty", "Delete")),
+            .append(
+                $quickE.btn("delete", "trash-empty", "Delete"),
+                $quickE.btn("move", "export", "Move", null, null, "sc-cb-mod-only")
+            ),
         contentBlocks: null,
         modules: null,
         nearestCb: null, 
@@ -56,7 +59,9 @@
     // add stuff which dependes on other values to create
     $2sxc._lib.extend($quickE, {
         cbActions: $($quickE.template),
-        modActions: $($quickE.template.replace(/QuickInsertMenu.AddBlock/g, "QuickInsertMenu.AddModule")).attr("data-context", "module").addClass("sc-content-block-menu-module")
+        modActions: $($quickE.template.replace(/QuickInsertMenu.AddBlock/g, "QuickInsertMenu.AddModule"))
+            .attr("data-context", "module")
+            .addClass("sc-content-block-menu-module")
     });
 
     // build the toolbar (hidden, but ready to show)

@@ -43,7 +43,7 @@ $(function () {
             if (cb.prev().is("iframe"))
                 cb.prev().addClass($quickE.selectors.selected);
             $quickE.setSecondaryActionsState(true);
-            $quickE.selected.toggle(cb);
+            $quickE.selected.toggle(cb, $quickE.clipboard.data.type);
         },
         clear: function () {
             $("." + $quickE.selectors.selected).removeClass($quickE.selectors.selected);
@@ -69,7 +69,7 @@ $(function () {
     };
 
 
-    $quickE.selected.toggle = function (target) {
+    $quickE.selected.toggle = function (target, type) {
         if (!target)
             return $quickE.selected.hide();
 
@@ -77,6 +77,12 @@ $(function () {
         coords.yh = coords.y + 20;
         $quickE.positionAndAlign($quickE.selected, coords);
         $quickE.selected.target = target;
+
+        if (type === $quickE.selectors.mod.id)
+            $quickE.selected.addClass("sc-cb-selected-mod");
+        else {
+            $quickE.selected.removeClass("sc-cb-selected-mod");
+        }
     };
 
     // give all actions
