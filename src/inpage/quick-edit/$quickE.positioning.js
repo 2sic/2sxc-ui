@@ -1,4 +1,4 @@
-﻿// everything related to positioning the wonderful in-page editing
+﻿// everything related to positioning the quick-edit in-page editing
 $(function () {
 
 
@@ -38,9 +38,9 @@ $(function () {
     // position, align and show a menu linked to another item
     $quickE.positionAndAlign = function (element, coords) {
         return element.css({
-            'left': coords.x - $quickE.bodyOffset.x,
-            'top': coords.yh - $quickE.bodyOffset.y,
-            'width': coords.element.width()
+            left: coords.x - $quickE.bodyOffset.x,
+            top: coords.yh - $quickE.bodyOffset.y,
+            width: coords.element.width()
         }).show();
     };
 

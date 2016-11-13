@@ -52,7 +52,7 @@
         nearestMod: null
     });
 
-    // add stuff which must be added in a second run
+    // add stuff which dependes on other values to create
     $2sxc._lib.extend($quickE, {
         cbActions: $($quickE.template),
         modActions: $($quickE.template.replace(/QuickInsertMenu.AddBlock/g, "QuickInsertMenu.AddModule")).attr("data-context", "module").addClass("sc-content-block-menu-module")

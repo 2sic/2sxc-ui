@@ -1018,58 +1018,6 @@ if($ && $.fn && $.fn.dnnModuleDragDrop)
             _getCbManipulator: function() {
                 return $2sxc._contentBlock.manipulator(sxc);
             },
-            //#region ContentBlock commands: create, move, delete --> should probably move out of the manage-class
-
-            //_createContentBlock: function (parentId, fieldName, index, appName, container) {
-            //    // the wrapper, into which this will be placed and the list of pre-existing blocks
-            //    var listTag = container;
-            //    if (listTag.length === 0) return alert("can't add content-block as we couldn't find the list");
-            //    var cblockList = listTag.find("div.sc-content-block");
-            //    if (index > cblockList.length)
-            //        index = cblockList.length; // make sure index is never greater than the amount of items
-            //    return sxc.webApi.get({
-            //        url: "view/module/generatecontentblock",
-            //        params: { parentId: parentId, field: fieldName, sortOrder: index, app: appName }
-            //    }).then(function (result) {
-            //        var newTag = $(result); // prepare tag for inserting
-
-            //        // should I add it to a specific position...
-            //        if (cblockList.length > 0 && index > 0) 
-            //            $(cblockList[cblockList.length > index - 1 ? index - 1: cblockList.length - 1])
-            //                .after(newTag);
-            //        else    //...or just at the beginning?
-            //            listTag.prepend(newTag);
-                
-
-            //        var sxcNew = $2sxc(newTag);
-            //        sxcNew.manage._toolbar._processToolbars(newTag);
-
-            //    });
-            //},
-
-            //_moveContentBlock: function(parentId, field, indexFrom, indexTo) {
-            //    return sxc.webApi.get({
-            //        url: "view/module/MoveItemInList",
-            //        params: { parentId: parentId, field: field, indexFrom: indexFrom, indexTo: indexTo }
-            //    }).then(function() {
-            //        console.log("done moving!");
-            //        window.location.reload();
-            //    });
-            //},
-
-            // delete a content-block inside a list of content-blocks
-            //_deleteContentBlock: function (parentId, field, index) {
-            //    if (confirm($2sxc.translate("QuickInsertMenu.ConfirmDelete")))
-            //        return sxc.webApi.get({
-            //            url: "view/module/RemoveItemInList",
-            //            params: { parentId: parentId, field: field, index: index }
-            //        }).then(function() {
-            //            console.log("done deleting!");
-            //            window.location.reload();
-            //        });
-            //    return null;
-            //},
-            //#endregion
 
             //#region deprecated properties - these all should have been undocumented/ private till now
             
@@ -1157,7 +1105,7 @@ $(function () {
         nearestMod: null
     });
 
-    // add stuff which must be added in a second run
+    // add stuff which dependes on other values to create
     $2sxc._lib.extend($quickE, {
         cbActions: $($quickE.template),
         modActions: $($quickE.template.replace(/QuickInsertMenu.AddBlock/g, "QuickInsertMenu.AddModule")).attr("data-context", "module").addClass("sc-content-block-menu-module")
@@ -1359,32 +1307,22 @@ $(function () {
 $(function () {
 
     $quickE.modActions.click(function () {
-        var type = $(this).data("type");
-        var pane = $quickE.main.actionsForModule.closest($quickE.selectors.mod.listSelector);
-        var paneName = pane.attr("id").replace("dnn_", "");
+        var type = $(this).data("type"),
+            dnnMod = $quickE.main.actionsForModule,
+            pane = dnnMod.closest($quickE.selectors.mod.listSelector),
+            paneName = pane.attr("id").replace("dnn_", "");
 
         var index = 0;
-        if ($quickE.main.actionsForModule.hasClass("DnnModule"))
-            index = pane.find(".DnnModule").index($quickE.main.actionsForModule[0]) + 1;
+        if (dnnMod.hasClass("DnnModule")) 
+            index = pane.find(".DnnModule").index(dnnMod[0]) + 1;
+        
 
         var cbAction = $(this).data("action");
         if (cbAction)
             return $quickE.copyPasteInPage(cbAction, pane, index, $quickE.selectors.mod.id);
 
-        // todo: try to use $2sxc(...).webApi instead of custom re-assembling these common build-up things
-        // how: create a object containing the url, data, then just use the sxc.webApi(yourobject)
-        var service = $.dnnSF();
-        var serviceUrl = service.getServiceRoot("internalservices") + "controlbar/";
-
-        var xhrError = function (xhr) {
-            alert("Error while adding module.");
-            console.log(xhr);
-        };
-        $.ajax({
-            url: serviceUrl + "GetPortalDesktopModules",
-            type: "GET",
+        return sendDnnAjax("GetPortalDesktopModules", { 
             data: "category=All&loadingStartIndex=0&loadingPageSize=100&searchTerm=",
-            beforeSend: service.setModuleHeaders,
             success: function (desktopModules) {
                 var moduleToFind = type === "Default" ? " Content" : " App";
                 var module = null;
@@ -1394,42 +1332,63 @@ $(function () {
                         module = e;
                 });
 
-                if (!module)
-                    return alert(moduleToFind + " module not found.");
-
-                var postData = {
-                    Module: module.ModuleID,
-                    Page: "",
-                    Pane: paneName,
-                    Position: -1,
-                    Sort: index,
-                    Visibility: 0,
-                    AddExistingModule: false,
-                    CopyModule: false
-                };
-
-
-
-                $.ajax({
-                    url: serviceUrl + "AddModule",
-                    type: "POST",
-                    data: postData,
-                    beforeSend: service.setModuleHeaders,
-                    success: function (d) {
-                        window.location.reload();
-                    },
-                    error: xhrError
-                });
-            },
-            error: xhrError
+                return (!module)
+                    ? alert(moduleToFind + " module not found.")
+                    : createMod(paneName, index, module.ModuleID);
+            }
         });
-
-
-
     });
 
+    function xhrError (xhr) {
+        alert("Error while adding module.");
+        console.log(xhr);
+    }
+
+    // service calls we'll need
+    function sendDnnAjax(serviceName, options) {
+        var service = $.dnnSF();
+        var serviceUrl = service.getServiceRoot("internalservices") + "controlbar/";
+        return $.ajax($.extend( {
+            type: "GET",
+            url: serviceUrl + serviceName,
+            beforeSend: service.setModuleHeaders,
+            error: xhrError
+        }, options));
+    }
+
+    function createMod(paneName, position, moduleId) {
+        var postData = {
+            Module: moduleId,
+            Page: "",
+            Pane: paneName,
+            Position: -1,
+            Sort: position,
+            Visibility: 0,
+            AddExistingModule: false,
+            CopyModule: false
+        };
+        return sendDnnAjax("AddModule", {
+            type: "POST",
+            data: postData,
+            success: function (d) {
+                window.location.reload();
+            },
+        });
+
+        //$.ajax({
+        //    url: serviceUrl + "AddModule",
+        //    type: "POST",
+        //    data: postData,
+        //    beforeSend: service.setModuleHeaders,
+        //    success: function (d) {
+        //        window.location.reload();
+        //    },
+        //    error: xhrError
+        //});
+    }
+
 });
-// everything related to positioning the wonderful in-page editing
+// everything related to positioning the quick-edit in-page editing
 $(function () {
 
 
@@ -1469,9 +1428,9 @@ $(function () {
     // position, align and show a menu linked to another item
     $quickE.positionAndAlign = function (element, coords) {
         return element.css({
-            'left': coords.x - $quickE.bodyOffset.x,
-            'top': coords.yh - $quickE.bodyOffset.y,
-            'width': coords.element.width()
+            left: coords.x - $quickE.bodyOffset.x,
+            top: coords.yh - $quickE.bodyOffset.y,
+            width: coords.element.width()
         }).show();
     };
 
