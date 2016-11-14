@@ -78,8 +78,10 @@
             $quickE.main.append($quickE.modActions);
 
         // Cache the panes (because panes can't change dynamically)
-        if (!$quickE.cachedPanes)
+        if (!$quickE.cachedPanes) {
             $quickE.cachedPanes = $($quickE.selectors.mod.listSelector);
+            $quickE.cachedPanes.addClass("sc-cb-pane-glow");
+        }
     };
 
 });

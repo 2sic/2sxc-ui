@@ -65,9 +65,7 @@ $(function () {
         $quickE.modActions.toggleClass("sc-invisible", $quickE.nearestMod === null);
         $quickE.cbActions.toggleClass("sc-invisible", $quickE.nearestCb === null);
 
-        // if previously a parent-pane was highlighted, un-highlight it now
-        if ($quickE.main.parentContainer)
-            $($quickE.main.parentContainer).removeClass(highlightClass);
+        var oldParent = $quickE.main.parentContainer;
 
         if ($quickE.nearestCb !== null || $quickE.nearestMod !== null) {
             var alignTo = $quickE.nearestCb || $quickE.nearestMod;
@@ -95,8 +93,13 @@ $(function () {
             $quickE.main.parentContainer = parentContainer;
             $(parentContainer).addClass(highlightClass);
         } else {
+            $quickE.main.parentContainer = null;
             $quickE.main.hide();
         }
+
+        // if previously a parent-pane was highlighted, un-highlight it now
+        if (oldParent && oldParent !== $quickE.main.parentContainer)
+            $(oldParent).removeClass(highlightClass);
     };
 
     // Return the nearest element to the mouse cursor from elements (jQuery elements)
