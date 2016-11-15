@@ -191,6 +191,7 @@
 
             'template-query': makeDef("query", "QueryEdit", "filter", true, {
                 dialog: "pipeline-designer",
+                params: { pipelineId: editContext.queryId},
                 newWindow: true,
                 disabled: editContext.appSettingsId === null,
                 title: "Toolbar.QueryEdit" + (editContext.queryId === null ? "Disabled" : ""),
@@ -199,7 +200,10 @@
                 },
                 dynamicClasses: function (settings) {
                     return editContext.queryId ? "" : "empty";  // if it doesn't have a query, make it less strong
-                }
+                },
+                //configureCommand: function (cmd) {
+                //    cmd.params.pipelineId = editContext.queryId;
+                //}
             }),
 
             'template-settings': makeDef("template-settings", "TemplateSettings", "sliders", true, {
