@@ -174,6 +174,8 @@
                 configureCommand: function (cmd) {
                     if (cmd.settings.contentType)    // optionally override with custom type
                         cmd.params.contentTypeName = cmd.settings.contentType;
+                    if (cmd.settings.filters)
+                        cmd.params.filters = JSON.stringify(cmd.settings.filters);
                 }
             }),
 
