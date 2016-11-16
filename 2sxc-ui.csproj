@@ -23,6 +23,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include=".gitignore" />
+    <Content Include="2sxc-apps-js\src\angular\2sxc4ng.js" />
+    <Content Include="2sxc-apps-js\src\js\2sxc.api.js" />
     <Content Include="gulpfile.js" />
     <Content Include="icon-app-black.png" />
     <Content Include="icon-app.png" />
@@ -71,8 +73,6 @@
     <Content Include="src\inpage\translate\libs\i18next.min.js" />
     <Content Include="src\inpage\translate\libs\i18nextXHRBackend.min.js" />
     <Content Include="src\inpage\translate\libs\jquery-i18next.min.js" />
-    <Content Include="src\js-api\2sxc.api\2sxc.api.js" />
-    <Content Include="src\js-api\angular1\2sxc4ng.js" />
     <Content Include="src\sxc-admin\app-main\app-main-controller.js" />
     <Content Include="src\sxc-admin\app-main\app-main.html" />
     <Content Include="src\sxc-admin\app-settings\app-settings-controller.js" />
@@ -188,6 +188,11 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="src\inpage\contentBlock\contentBlock.manipulate.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="2sxc-apps-js\.git" />
+    <Content Include="2sxc-apps-js\LICENSE" />
+    <Content Include="2sxc-apps-js\README.md" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">12.0</VisualStudioVersion>
