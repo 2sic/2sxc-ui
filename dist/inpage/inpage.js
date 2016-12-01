@@ -150,10 +150,13 @@
                     return settings.isPublished === false;
                 },
                 code: function (settings, event, sxc) {
-                    if (settings.isPublished) {
-                        alert($2sxc.translate("Toolbar.AlreadyPublished"));
-                        return;
-                    }
+                    if (settings.isPublished) 
+                        return alert($2sxc.translate("Toolbar.AlreadyPublished"));
+
+                    // if we have an entity-id, publish based on that
+                    if (settings.entityId)
+                        return sxc.manage.contentBlock.publishId(settings.entityId);
+
                     var part = settings.sortOrder === -1 ? "listcontent" : "content";
                     var index = settings.sortOrder === -1 ? 0 : settings.sortOrder;
                     sxc.manage.contentBlock.publish(part, index);
@@ -177,6 +180,9 @@
                 configureCommand: function (cmd) {
                     if (cmd.settings.contentType)    // optionally override with custom type
                         cmd.params.contentTypeName = cmd.settings.contentType;
+                    // maybe: if item doesn't have a type, use that of template
+                    // else if (editContext.contentTypeId)
+                    //    cmd.params.contentTypeName = editContext.contentTypeId;
                     if (cmd.settings.filters)
                         cmd.params.filters = JSON.stringify(cmd.settings.filters);
                 }
@@ -555,6 +561,13 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
             return cb.sxc.webApi.get({
                 url: "view/module/publish",
                 params: { part: part, sortOrder: sortOrder }
+            }).then(cb.reloadAndReInitialize);
+        },
+
+        publishId: function (entityId) {
+            return cb.sxc.webApi.get({
+                url: "view/module/publish",
+                params: { id: entityId }
             }).then(cb.reloadAndReInitialize);
         },
 

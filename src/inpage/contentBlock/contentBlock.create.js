@@ -106,6 +106,13 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
             }).then(cb.reloadAndReInitialize);
         },
 
+        publishId: function (entityId) {
+            return cb.sxc.webApi.get({
+                url: "view/module/publish",
+                params: { id: entityId }
+            }).then(cb.reloadAndReInitialize);
+        },
+
         // remove an item from a list, then reload
         removeFromList: function (sortOrder) {
             return cb.sxc.webApi.get({
