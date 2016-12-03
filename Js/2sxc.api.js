@@ -254,7 +254,6 @@
 
     $2sxc._controllers = {};
     $2sxc.description = "The 2sxc Controller object";
-    // $2sxc.version = "08.07.00";   // todo: get from url param
     $2sxc.beta = {};
     $2sxc._data = {};
     
@@ -340,5 +339,24 @@
         var iid = containerTag.getAttribute("data-cb-instance"), cbid = containerTag.getAttribute("data-cb-id");
         if (!iid || !cbid) return null;
         return $2sxc(iid, cbid);
+    };
+
+
+    // note: I would like to remove this from $2sxc, but it's currently used both in the inpage-edit and in the dialogs
+    // debug state which is needed in various places
+    $2sxc.debug = {
+        load: ($2sxc.urlParams.get("debug") === "true"),
+        uncache: $2sxc.urlParams.get("sxcver")
+    };
+
+
+    // mini-helpers to manage 2sxc parts, a bit like a dependency loader which will optimize to load min/max depending on debug state
+    $2sxc.parts = {
+        getUrl: function improveUrl(url, preventUnmin) {
+            var r = (preventUnmin || !$2sxc.debug.load) ? url : url.replace(".min", ""); // use min or not
+            if ($2sxc.debug.uncache && r.indexOf("sxcver") === -1)
+                r = r + ((r.indexOf("?") === -1) ? "?" : "&") + "sxcver=" + $2sxc.debug.uncache;
+            return r;
+        }
     };
 })();
