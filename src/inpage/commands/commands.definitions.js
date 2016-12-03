@@ -156,7 +156,7 @@
 
                     var part = settings.sortOrder === -1 ? "listcontent" : "content";
                     var index = settings.sortOrder === -1 ? 0 : settings.sortOrder;
-                    sxc.manage.contentBlock.publish(part, index);
+                    return sxc.manage.contentBlock.publish(part, index);
                 }
             }),
 
@@ -207,7 +207,7 @@
 
             'zone': makeDef("zone", "Zone", "manage", true, {
                 showCondition: enableTools
-            }),
+            })
             //#endregion
 
         };
@@ -256,7 +256,7 @@
             },
             dynamicClasses: function(settings) {
                 return editContext.queryId ? "" : "empty"; // if it doesn't have a query, make it less strong
-            },
+            }
             //configureCommand: function (cmd) {
             //    cmd.params.pipelineId = editContext.queryId;
             //}

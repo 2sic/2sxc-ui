@@ -184,7 +184,6 @@
                     var add = btns[i].showCondition;
                     if (add !== undefined)
                         if (typeof (add) === "function" ? !add(btns[i].command, config) : !add)
-                        //if (!add(btns[i].command, config))
                             btns.splice(i--, 1);
                 }
             }
