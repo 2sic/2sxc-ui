@@ -26,12 +26,7 @@
     <Content Include="2sxc-apps-js\src\angular\2sxc4ng.js" />
     <Content Include="2sxc-apps-js\src\js\2sxc.api.js" />
     <Content Include="gulpfile.js" />
-    <Content Include="icon-app-black.png" />
-    <Content Include="icon-app.png" />
-    <Content Include="icon-black.png" />
-    <Content Include="icon.png" />
     <Content Include="License.txt" />
-    <Content Include="ReleaseNotes.txt" />
     <Content Include="src\config\eav-configuration-in-sxc.js" />
     <Content Include="src\dnn\ui.html" />
     <Content Include="src\inpage-dialogs\getting-started\getting-started.js" />
