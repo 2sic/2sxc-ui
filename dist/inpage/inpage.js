@@ -168,62 +168,6 @@
             }),
 
 
-            //#region template commands: contenttype, contentitems, template-query, template-develop, template-settings
-
-            'contenttype': makeDef("contenttype", "ContentType", "fields", true, {
-                showCondition: enableTools
-            }),
-
-            'contentitems': makeDef("contentitems", "ContentItems", "table", true, {
-                params: { contentTypeName: editContext.contentTypeId },
-                showCondition: enableTools && editContext.contentTypeId,
-                configureCommand: function (cmd) {
-                    if (cmd.settings.contentType)    // optionally override with custom type
-                        cmd.params.contentTypeName = cmd.settings.contentType;
-                    // maybe: if item doesn't have a type, use that of template
-                    // else if (editContext.contentTypeId)
-                    //    cmd.params.contentTypeName = editContext.contentTypeId;
-                    if (cmd.settings.filters)
-                        cmd.params.filters = JSON.stringify(cmd.settings.filters);
-                }
-            }),
-
-
-            'template-develop': makeDef("develop", "Develop", "code", true, {
-                newWindow: true,
-                dialog: "develop",
-                showCondition: enableTools,
-                configureCommand: function (cmd) {
-                    cmd.items = [{ EntityId: editContext.templateId }];
-                }
-            }),
-
-            'template-query': makeDef("query", "QueryEdit", "filter", true, {
-                dialog: "pipeline-designer",
-                params: { pipelineId: editContext.queryId},
-                newWindow: true,
-                disabled: editContext.appSettingsId === null,
-                title: "Toolbar.QueryEdit" + (editContext.queryId === null ? "Disabled" : ""),
-                showCondition: function (settings, modConfig) {
-                    return enableTools && !isContent;
-                },
-                dynamicClasses: function (settings) {
-                    return editContext.queryId ? "" : "empty";  // if it doesn't have a query, make it less strong
-                },
-                //configureCommand: function (cmd) {
-                //    cmd.params.pipelineId = editContext.queryId;
-                //}
-            }),
-
-            'template-settings': makeDef("template-settings", "TemplateSettings", "sliders", true, {
-                dialog: "edit",
-                showCondition: enableTools,
-                configureCommand: function (cmd) {
-                    cmd.items = [{ EntityId: editContext.templateId }];
-                }
-
-            }),
-            //#endregion template commands
 
             //#region app-actions: app-settings, app-resources
 
@@ -269,45 +213,108 @@
             }),
             //#endregion
 
-            'custom': makeDef("custom", "Custom", "bomb", true, {
-                code: function (settings, event, sxc) {
-                    console.log("custom action with code - BETA feature, may change");
-                    if (!settings.customCode) {
-                        console.warn("custom code action, but no onclick found to run", settings);
-                        return;
-                    }
-                    try {
-                        var fn = new Function("settings", "event", "sxc", settings.customCode); // jshint ignore:line
-                        fn(settings, event, sxc);
-                    } catch (err) {
-                        console.error("error in custom button-code: ", settings);
-                    }
-                }
-            }),
-
-            //#region UI actions: layout, more
-            'layout': makeDef("layout", "ChangeLayout", "glasses", true, {
-                code: function (settings, event, sxc) {
-                    sxc.manage.contentBlock.dialogToggle();
-                }
-            }),
-
-            "more": makeDef("more", "MoreActions", "options btn-mode", true, {
-                code: function (settings, event) {
-                    var btn = $(event.target),
-                        fullMenu = btn.closest("ul.sc-menu"),
-                        oldState = Number(fullMenu.attr("data-state") || 0),
-                        max = Number(fullMenu.attr("group-count")),
-                        newState = (oldState + 1) % max;
-
-                    fullMenu.removeClass("group-" + oldState)
-                        .addClass("group-" + newState)
-                        .attr("data-state", newState);
-                }
-            })
-
-            //#endregion
         };
+
+        // quick helper so we can better debug the creation of definitions
+        function addDef(def) { act[def.name] = def; }
+
+        //#region template commands: contenttype, contentitems, template-query, template-develop, template-settings
+
+        addDef(makeDef("contenttype", "ContentType", "fields", true, {
+            showCondition: enableTools
+        }));
+
+        addDef(makeDef("contentitems", "ContentItems", "table", true, {
+            params: { contentTypeName: editContext.contentTypeId },
+            showCondition: enableTools && editContext.contentTypeId,
+            configureCommand: function(cmd) {
+                if (cmd.settings.contentType) // optionally override with custom type
+                    cmd.params.contentTypeName = cmd.settings.contentType;
+                // maybe: if item doesn't have a type, use that of template
+                // else if (editContext.contentTypeId)
+                //    cmd.params.contentTypeName = editContext.contentTypeId;
+                if (cmd.settings.filters)
+                    cmd.params.filters = JSON.stringify(cmd.settings.filters);
+            }
+        }));
+
+
+        addDef(makeDef("template-develop", "Develop", "code", true, {
+            newWindow: true,
+            dialog: "develop",
+            showCondition: enableTools,
+            configureCommand: function(cmd) {
+                cmd.items = [{ EntityId: editContext.templateId }];
+            }
+        }));
+
+        addDef(makeDef("template-query", "QueryEdit", "filter", true, {
+            dialog: "pipeline-designer",
+            params: { pipelineId: editContext.queryId },
+            newWindow: true,
+            disabled: editContext.appSettingsId === null,
+            title: "Toolbar.QueryEdit" + (editContext.queryId === null ? "Disabled" : ""),
+            showCondition: function(settings, modConfig) {
+                return enableTools && !isContent;
+            },
+            dynamicClasses: function(settings) {
+                return editContext.queryId ? "" : "empty"; // if it doesn't have a query, make it less strong
+            },
+            //configureCommand: function (cmd) {
+            //    cmd.params.pipelineId = editContext.queryId;
+            //}
+        }));
+
+        addDef(makeDef("template-settings", "TemplateSettings", "sliders", true, {
+            dialog: "edit",
+            showCondition: enableTools,
+            configureCommand: function(cmd) {
+                cmd.items = [{ EntityId: editContext.templateId }];
+            }
+
+        }));
+        //#endregion template commands
+
+        //#region custom code buttons
+        addDef(makeDef("custom", "Custom", "bomb", true, {
+            code: function(settings, event, sxc) {
+                console.log("custom action with code - BETA feature, may change");
+                if (!settings.customCode) {
+                    console.warn("custom code action, but no onclick found to run", settings);
+                    return;
+                }
+                try {
+                    var fn = new Function("settings", "event", "sxc", settings.customCode); // jshint ignore:line
+                    fn(settings, event, sxc);
+                } catch (err) {
+                    console.error("error in custom button-code: ", settings);
+                }
+            }
+        }));
+        //#endregion
+
+        //#region UI actions: layout, more
+        addDef(makeDef("layout", "ChangeLayout", "glasses", true, {
+            code: function(settings, event, sxc) {
+                sxc.manage.contentBlock.dialogToggle();
+            }
+        }));
+
+        addDef(makeDef("more", "MoreActions", "options btn-mode", true, {
+            code: function(settings, event) {
+                var btn = $(event.target),
+                    fullMenu = btn.closest("ul.sc-menu"),
+                    oldState = Number(fullMenu.attr("data-state") || 0),
+                    max = Number(fullMenu.attr("group-count")),
+                    newState = (oldState + 1) % max;
+
+                fullMenu.removeClass("group-" + oldState)
+                    .addClass("group-" + newState)
+                    .attr("data-state", newState);
+            }
+        }));
+
+        //#endregion
 
         return act;
     };
@@ -2259,8 +2266,9 @@ $(document).ready(function () {
             function removeButtonsIfAddUnmet(btns, config) {
                 for (var i = 0; i < btns.length; i++) {
                     var add = btns[i].showCondition;
-                    if (add !== undefined && (typeof (add) === "function"))
-                        if (!add(btns[i].command, config))
+                    if (add !== undefined)
+                        if (typeof (add) === "function" ? !add(btns[i].command, config) : !add)
+                        //if (!add(btns[i].command, config))
                             btns.splice(i--, 1);
                 }
             }

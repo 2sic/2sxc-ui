@@ -182,8 +182,9 @@
             function removeButtonsIfAddUnmet(btns, config) {
                 for (var i = 0; i < btns.length; i++) {
                     var add = btns[i].showCondition;
-                    if (add !== undefined && (typeof (add) === "function"))
-                        if (!add(btns[i].command, config))
+                    if (add !== undefined)
+                        if (typeof (add) === "function" ? !add(btns[i].command, config) : !add)
+                        //if (!add(btns[i].command, config))
                             btns.splice(i--, 1);
                 }
             }
