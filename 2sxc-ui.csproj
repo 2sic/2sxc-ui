@@ -24,6 +24,7 @@
   <ItemGroup>
     <Content Include=".gitignore" />
     <Content Include=".gitmodules" />
+    <Content Include="2sxc-apps-js\src\angular\bootstrapper.js" />
     <Content Include="2sxc-apps-js\src\angular\2sxc4ng.js" />
     <Content Include="2sxc-apps-js\src\js\2sxc.api.js" />
     <Content Include="gulpfile.js" />

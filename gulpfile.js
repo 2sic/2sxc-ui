@@ -35,8 +35,6 @@ gulp.task("C-watch-snippets", function() {
 // deploy the result to the current 2sxc-dev
 gulp.task("publish-dist-to-2sxc", function () {
     gulp.src(["./dist/**/*"])
-        //"!./dist/i18n/**/*",
-        //"!./dist/lib/fonts/**/*"])
     .pipe(gulp.dest(config.autopublishTarget));
 });
 gulp.task("publish-js-to-2sxc", function () {
@@ -159,9 +157,11 @@ function packageJs(set) {
     if (set.js.autoSort)
         result = result.pipe($.sort());
 
+    if (config.debug) console.log("ready to save main js for: " + set.name);
     result = result.pipe($.concat(set.js.concat))
         .pipe(gulp.dest(set.dist));
 
+    if (config.debug) console.log("ready to create min for: " + set.name);
     if (set.js.alsoRunMin) {
         gulp.src(set.dist + set.js.concat)  // reload the dist as new src for source-map
         .pipe($.rename({ extname: ".min.js" }))
@@ -175,6 +175,9 @@ function packageJs(set) {
                 .on("error", $.util.log)
             .pipe($.sourcemaps.write("./"))
             .pipe(gulp.dest(set.dist));
+         if (config.debug) console.log("minification done on: " + set.name + " into file: " + set.dist);
+   } else {
+        if (config.debug) console.log("no minification on: " + set.name);
     }
     if (config.debug) console.log($.util.colors.cyan("bundling done: " + set.name));
 
@@ -265,7 +268,7 @@ function createSetsForOurCode() {
     var api = createConfig("2sxc.api", "templates", "js/", "2sxc.api.js", undefined, "2sxc-apps-js/src/js/");
     sets.push(api);
 
-    var ang1 = createConfig("2sxc4ng", "templates", "js/angularjs", "2sxc4ng.js", undefined, "2sxc-apps-js/src/angular/");
+    var ang1 = createConfig("2sxc4ng", "templates", "js/angularjs/", "2sxc4ng.js", undefined, "2sxc-apps-js/src/angular/");
     sets.push(ang1);
 
     return sets;
@@ -277,6 +280,6 @@ function watchSet(setList) {
         var x = setList[i];
         if (x.js.run) gulp.watch(x.cwd + "**/*", createWatchCallback(x, js));
         if (x.css.run)
-            gulp.watch(x.cwd + "**/*", createWatchCallback(x, css));
+            gulp.watch(x.cwd + "**/*css", createWatchCallback(x, css));
     }
 }
