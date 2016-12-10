@@ -29,7 +29,7 @@ $(function () {
 
     // service calls we'll need
     function createModWithTypeName(paneName, index, type) {
-        return sendDnnAjax("controlbar/GetPortalDesktopModules", {
+        return sendDnnAjax(null, "controlbar/GetPortalDesktopModules", {
             data: "category=All&loadingStartIndex=0&loadingPageSize=100&searchTerm=",
             success: function (desktopModules) {
                 var moduleToFind = type === "Default" ? " Content" : " App";
@@ -48,7 +48,7 @@ $(function () {
     }
 
     function moveMod(modId, pane, order) {
-        var service = $.dnnSF();
+        var service = $.dnnSF(modId);
         var tabId = service.getTabId();
         var dataVar = {
             TabId: tabId,
@@ -57,7 +57,7 @@ $(function () {
             ModuleOrder: (2 * order + 4) // strange formula, copied from DNN https://github.com/dnnsoftware/Dnn.Platform/blob/fd225b8de07042837f7473cd49fba13de42a3cc0/Website/admin/Menus/ModuleActions/ModuleActions.js#L70
         };
 
-        sendDnnAjax("ModuleService/MoveModule", {
+        sendDnnAjax(modId, "ModuleService/MoveModule", {
             type: "POST",
             data: dataVar,
             success: function () {
@@ -71,9 +71,9 @@ $(function () {
     
 
     function deleteMod(modId) {
-        var service = $.dnnSF();
+        var service = $.dnnSF(modId);
         var tabId = service.getTabId();
-        return sendDnnAjax("2sxc/dnn/module/delete", {
+        return sendDnnAjax(modId, "2sxc/dnn/module/delete", {
             url: $.dnnSF().getServiceRoot("2sxc") + "dnn/module/delete",
             type: "GET",
             data: {
@@ -86,8 +86,9 @@ $(function () {
         });
     }
 
-    function sendDnnAjax(serviceName, options) {
-         var service = $.dnnSF();
+    function sendDnnAjax(modId, serviceName, options) {
+        var service = $.dnnSF(modId);
+
         return $.ajax($.extend( {
             type: "GET",
             url: service.getServiceRoot("internalservices") + serviceName,
@@ -96,9 +97,9 @@ $(function () {
         }, options));
     }
 
-    function createMod(paneName, position, moduleId) {
+    function createMod(paneName, position, modId) {
         var postData = {
-            Module: moduleId,
+            Module: modId,
             Page: "",
             Pane: paneName,
             Position: -1,
@@ -107,7 +108,7 @@ $(function () {
             AddExistingModule: false,
             CopyModule: false
         };
-        return sendDnnAjax("controlbar/AddModule", {
+        return sendDnnAjax(modId, "controlbar/AddModule", {
             type: "POST",
             data: postData,
             success: function (d) {
