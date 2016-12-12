@@ -1418,12 +1418,13 @@ $(function () {
         return $(pane).attr("id").replace("dnn_", "");
     }
 
-
+    // find the correct module id from a list of classes - used on the module-wrapper
     function getModuleId(classes) {
         var result = classes.match(/DnnModule-([0-9]+)(?:\W|$)/);
         return (result && result.length === 2) ? result[1] : null;
     }
 
+    // show an error when an xhr error occurs
     function xhrError (xhr, optionalMessage) {
         alert(optionalMessage || "Error while talking to server.");
         console.log(xhr);
@@ -1449,6 +1450,7 @@ $(function () {
         });
     }
 
+    // move a dnn module
     function moveMod(modId, pane, order) {
         var service = $.dnnSF(modId);
         var tabId = service.getTabId();
@@ -1471,7 +1473,7 @@ $(function () {
         $(window).resize();
     }
     
-
+    // delete a module
     function deleteMod(modId) {
         var service = $.dnnSF(modId);
         var tabId = service.getTabId();
@@ -1488,6 +1490,7 @@ $(function () {
         });
     }
 
+    // call an api on dnn
     function sendDnnAjax(modId, serviceName, options) {
         var service = $.dnnSF(modId);
 
@@ -1499,6 +1502,7 @@ $(function () {
         }, options));
     }
 
+    // create / insert a new module
     function createMod(paneName, position, modId) {
         var postData = {
             Module: modId,
@@ -1518,6 +1522,7 @@ $(function () {
             }
         });
     }
+
 
     function generatePaneMoveButtons(current) {
         var pns = $quickE.cachedPanes;
