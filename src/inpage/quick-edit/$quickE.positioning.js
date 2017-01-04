@@ -10,9 +10,6 @@ $(function () {
             : { x: 0, y: 0 };
     };
 
-    // todo: this should be in an init/start method
-    $quickE.bodyOffset = $quickE.getBodyPosition();
-
     // Refresh content block and modules elements
     $quickE.refreshDomObjects = function () {
         $quickE.bodyOffset = $quickE.getBodyPosition(); // must update this, as sometimes after finishing page load the position changes, like when dnn adds the toolbar

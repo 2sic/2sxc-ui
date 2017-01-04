@@ -66,22 +66,10 @@
 
     // build the toolbar (hidden, but ready to show)
     $quickE.prepareToolbarInDom = function() {
-        $quickE.body.append($quickE.main);
-        $quickE.body.append($quickE.selected);
-
-        // content blocks actions
-        if ($quickE.config.innerBlocks.enable)
-            $quickE.main.append($quickE.cbActions);
-
-        // module actions
-        if ($quickE.config.modules.enable)
-            $quickE.main.append($quickE.modActions);
-
-        // Cache the panes (because panes can't change dynamically)
-        if (!$quickE.cachedPanes) {
-            $quickE.cachedPanes = $($quickE.selectors.mod.listSelector);
-            $quickE.cachedPanes.addClass("sc-cb-pane-glow");
-        }
+        $quickE.body.append($quickE.main)
+            .append($quickE.selected);
+        $quickE.main.append($quickE.cbActions)
+            .append($quickE.modActions);
     };
 
 });
