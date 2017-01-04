@@ -38,7 +38,7 @@
         function exportContent() {     
             var contentTypeIds = selectedContentTypes().map(function (item) { return item.Id; });
             var templateIds = selectedTemplates().map(function (item) { return item.Id; });
-            var entityIds = selectedEntities().map(function (item) { return item.EntityId; });
+            var entityIds = selectedEntities().map(function (item) { return item.Id; });
             entityIds = entityIds.concat(templateIds);
             
             vm.IsExporting = true;
