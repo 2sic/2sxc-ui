@@ -223,7 +223,9 @@
 
         addDef(makeDef("contentitems", "ContentItems", "table", true, {
             params: { contentTypeName: editContext.contentTypeId },
-            showCondition: enableTools && editContext.contentTypeId,
+            showCondition: function(settings, modConfig) {
+                return enableTools && (settings.contentType || editContext.contentTypeId);
+            },
             configureCommand: function(cmd) {
                 if (cmd.settings.contentType) // optionally override with custom type
                     cmd.params.contentTypeName = cmd.settings.contentType;
