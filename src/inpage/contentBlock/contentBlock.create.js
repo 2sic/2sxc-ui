@@ -94,7 +94,8 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
 
             // ajax-call, then replace
             return cb._getPreviewWithTemplate(templateId)
-                .then(cb.replace);
+                .then(cb.replace)
+                .then($quickE.reset);   // reset quick-edit, because the config could have changed
         },
 
         //#region simple item commands like publish, remove, add, re-order

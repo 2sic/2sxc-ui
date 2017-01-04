@@ -591,7 +591,8 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
 
             // ajax-call, then replace
             return cb._getPreviewWithTemplate(templateId)
-                .then(cb.replace);
+                .then(cb.replace)
+                .then($quickE.reset);   // reset quick-edit, because the config could have changed
         },
 
         //#region simple item commands like publish, remove, add, re-order
@@ -1328,10 +1329,9 @@ $(function () {
 
 });
 $(function () {
+    var configAttr = "quick-edit-config";
 
-
-    // any inner blocks found? will currently affect if modules can be inserted...
-    var hasInnerCBs = ($($quickE.selectors.cb.listSelector).length > 0);
+    // the initial configuration
     var conf = $quickE.config = {
         enable: true,
         innerBlocks: {
@@ -1343,8 +1343,11 @@ $(function () {
     };
 
     $quickE._readPageConfig = function () {
-        var configAttr = "quick-edit-config";
         var configs = $("[" + configAttr + "]"), finalConfig = {}, confJ, confO;
+
+        // any inner blocks found? will currently affect if modules can be inserted...
+        var hasInnerCBs = ($($quickE.selectors.cb.listSelector).length > 0);
+
         if (configs.length > 0) {
             // go through reverse list, as the last is the most important...
             for (var c = configs.length; c >= 0; c--) {
