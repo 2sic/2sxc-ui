@@ -699,9 +699,10 @@ angular.module("sxcFieldTemplates")
                     }
                     if (type === "file" || type === "image") {
                         dnnBridgeSvc.convertPathToId(value, type)
-                            .then(function(result) {
-                                if (result.data)
-                                    $scope.value.Value = "file:" + result.data.FileId;
+                            .then(function (result) {
+                                $scope.value.Value = (result.data)
+                                    ? "file:" + result.data.FileId // default case, found number for this
+                                    : value; // this happens when it couldn't be resolved, for example on a secure file ticket
                             });
                     }
                 });
