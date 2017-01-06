@@ -18,10 +18,18 @@
     /*@ngInject*/
     function FieldWysiwygTinyMceController($scope, languages, tinyMceHelpers, tinyMceToolbars, tinyMceConfig, tinyMceAdam, tinyMceDnnBridge) {
         var vm = this;
+        vm.enableContentBlocks = true;
+
+        var settings = {
+            enableContentBlocks : false
+        };
 
         vm.activate = function () {
+
+            enableContentBlocksIfPossible(settings);
+
             // initialize options and wire-up init-callback
-            $scope.tinymceOptions = angular.extend(tinyMceConfig.getDefaultOptions(), {
+            $scope.tinymceOptions = angular.extend(tinyMceConfig.getDefaultOptions(settings), {
                 setup: tinyMceInitCallback
             });
 
@@ -50,6 +58,8 @@
 
             tinyMceToolbars.addButtons(vm);
             tinyMceAdam.addButtons(vm);
+
+            enableContentBlocksIfPossible(editor);
         }
 
         function watchDisabled(ngscope) {
@@ -62,6 +72,15 @@
             });
         }
 
+        function enableContentBlocksIfPossible(settings) {
+            // quit if there are no following fields
+            if ($scope.fields.length === $scope.index + 1)
+                return;
+
+            var nextField = $scope.fields[$scope.index + 1];
+            if (nextField.type === "entity-content-blocks")
+                settings.enableContentBlocks = true;
+        }
 
         vm.activate();
     }
