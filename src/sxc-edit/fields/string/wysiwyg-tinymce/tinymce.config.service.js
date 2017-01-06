@@ -31,49 +31,55 @@ angular.module("sxcFieldTemplates")
                 "searchreplace", // search/replace https://www.tinymce.com/docs/plugins/searchreplace/
                 "table", // https://www.tinymce.com/docs/plugins/searchreplace/
                 "lists", // should fix bug with fonts in list-items (https://github.com/tinymce/tinymce/issues/2330),
-                "textpattern", // enable typing like "1. text" to create lists etc.
+                "textpattern" // enable typing like "1. text" to create lists etc.
             ],
 
+
+
+            validateAlso: '@[class]' // allow classes on all elements, 
+                    + ',i' // allow i elements (allows icon-font tags like <i class="fa fa-...">)
+                    + ",hr[sxc|guid]" // experimental: allow inline content-blocks
+        };
+
+        function buildModes(settings) {
             // the WYSIWYG-modes we offer, standard with simple toolbar and advanced with much more
-            modes: {
+            modes = {
                 standard: {
                     menubar: false,
                     toolbar: " undo redo removeformat "
-                    + "| bold formatgroup "
-                    + "| h1 h2 hgroup " 
-                    + "| listgroup "// not needed since now context senitive: " outdent indent "
-                    + "| linkfiles linkgroup "
-                    + "| " + (beta ? "addcontentblock ": "") + "modeadvanced ",
-                    contextmenu: "charmap hr"
+                        + "| bold formatgroup "
+                        + "| h1 h2 hgroup "
+                        + "| listgroup "
+                        + "| linkfiles linkgroup "
+                        + "| " + (settings.enableContentBlocks ? " addcontentblock " : "")+ "modeadvanced ",
+                    contextmenu: "charmap hr" + (settings.enableContentBlocks ? " addcontentblock" : "")
                 },
                 advanced: {
                     menubar: true,
                     toolbar: " undo redo removeformat "
-                    + "| styleselect "
-                    + "| bold italic "
-                    + "| h1 h2 hgroup "
-                    + "| bullist numlist outdent indent "
-                    + "| images linkfiles linkgrouppro "
-                    + "| code modestandard ",
+                        + "| styleselect "
+                        + "| bold italic "
+                        + "| h1 h2 hgroup "
+                        + "| bullist numlist outdent indent "
+                        + "| images linkfiles linkgrouppro "
+                        + "| code modestandard ",
                     contextmenu: "link image | charmap hr adamimage"
                 }
-            },
+            };
+            return modes;
+        }
 
-            validateAlso: '@[class]' // allow classes on all elements, 
-                    + ',i' // allow i elements (allows icon-font tags like <i class="fa fa-...">)
-                    + ",hr[sxc|guid]", // experimental: allow inline content-blocks
-        };
-
-        svc.getDefaultOptions = function() {
+        svc.getDefaultOptions = function (settings) {
+            var modes = buildModes(settings);
             return {
                 baseURL: svc.cdnRoot,
                 inline: true, // use the div, not an iframe
                 automatic_uploads: false, // we're using our own upload mechanism
-                modes: svc.modes, // for later switch to another mode
-                menubar: svc.modes.standard.menubar, // basic menu (none)
-                toolbar: svc.modes.standard.toolbar, // basic toolbar
+                modes: modes, // for later switch to another mode
+                menubar: modes.standard.menubar, // basic menu (none)
+                toolbar: modes.standard.toolbar, // basic toolbar
                 plugins: svc.plugins.join(" "),
-                contextmenu: svc.modes.standard.contextmenu, //"link image | charmap hr adamimage",
+                contextmenu: modes.standard.contextmenu, //"link image | charmap hr adamimage",
                 autosave_ask_before_unload: false,
                 paste_as_text: true,
                 extended_valid_elements: svc.validateAlso,
@@ -95,7 +101,7 @@ angular.module("sxcFieldTemplates")
 
                 language: svc.defaultLanguage,
 
-                debounce: false // prevent slow update of model
+                debounce: false // DONT slow-down model updates - otherwise we sometimes miss the last changes
             };
         };
 

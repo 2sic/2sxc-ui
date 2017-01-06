@@ -81,3 +81,11 @@ hr[sxc] {
     background-color: #B0DCFF; /* temporary color */
     height: 25px;
 }
+
+/*.mce-btn-addcontentblock.mce-btn {
+    display: none;
+}
+
+.feature-contentblocks .mce-btn-addcontentblock.mce-btn {
+    display: inline-block;
+}*/
