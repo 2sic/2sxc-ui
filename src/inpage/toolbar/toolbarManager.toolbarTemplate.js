@@ -33,7 +33,7 @@
             },
             {
                 name: "list",
-                buttons: "add,remove,moveup,movedown,instance-list,replace"
+                buttons: "add,remove,delete,moveup,movedown,instance-list,replace"
             },
             {
                 name: "instance",

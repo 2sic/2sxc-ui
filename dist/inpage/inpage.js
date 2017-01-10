@@ -176,8 +176,9 @@
 
             // todo: work in progress related to https://github.com/2sic/2sxc/issues/618
             'delete': makeDef("deleteItem", "Delete", "cancel", true, {
-                disabled: true,
-                showCondition: function(settings) {
+                // disabled: true,
+                showCondition: function (settings) {
+                    // can never be used for a modulelist item, as it is always in use somewhere
                     if (settings.useModuleList) return false;
                     // check if all data exists
                     return settings.entityId && settings.entityGuid && settings.entityTitle;
@@ -2473,7 +2474,7 @@ $(document).ready(function () {
             },
             {
                 name: "list",
-                buttons: "add,remove,moveup,movedown,instance-list,replace"
+                buttons: "add,remove,delete,moveup,movedown,instance-list,replace"
             },
             {
                 name: "instance",
