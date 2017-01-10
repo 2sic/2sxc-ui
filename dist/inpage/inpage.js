@@ -29,29 +29,31 @@
         //#region contentItem Commands - at the moment only finishUpgrade
         $2sxc.contentItems = {
             // delete command - try to really delete a content-item
-            "delete": function (sxc, itemId) {
+            "delete": function (sxc, itemId, itemGuid, itemTitle) {
                 // first show main warning / get ok
                 // todo: i18n
-                var ok = confirm("This will really delete item " + itemId + ". This cannot be undone. Are you sure?");
+                var ok = confirm("BETA!\n\n"
+                    + "This will really delete item " + itemId
+                    + (itemTitle ? " \"" + itemTitle + "\"" : "")
+                    + ". "
+                    + "\n\nThis cannot be undone. Are you sure?");
                 if (!ok) return;
-                console.log('would delete now, but not implemented');
-                
-                
 
-                sxc.webApi.delete("app-content/beta/" + itemId, null, null, true)
+                sxc.webApi.delete("app-content/any/" + itemGuid, null, null, true)
                     .success(function () {
-                        alert("ok!");
                         location.reload();
                     }).error(function (error) {
+                        // todo: i18n
+                        var msgJs = "\n\nPlease check javascript console for more information.";
                         // check if it's a permission config problem
                         console.log(error);
                         if (error.status === 401) {
                             // todo: i18n
-                            alert("permission missing, check information ...");
+                            alert("Can't delete - permissions missing. " + msgJs);
                         }
                         if (error.status === 400) {
                             // todo: i18n
-                            alert("delete failed - item is probably in use, see ...");
+                            alert("Can't delete - item is probably in use elsewhere. " + msgJs);
                         }
                     });
             }
@@ -173,15 +175,15 @@
             }),
 
             // todo: work in progress related to https://github.com/2sic/2sxc/issues/618
-            'deleteItem': makeDef("deleteItem", "Delete", "cancel", true, {
-                // disabled: true,
-                // showCondition: false, //function (settings) { return !settings.useModuleList; },
+            'delete': makeDef("deleteItem", "Delete", "cancel", true, {
+                disabled: true,
+                showCondition: function(settings) {
+                    if (settings.useModuleList) return false;
+                    // check if all data exists
+                    return settings.entityId && settings.entityGuid && settings.entityTitle;
+                },
                 code: function (settings, event, sxc) {
-                    $2sxc.contentItems.delete(sxc, settings.entityId);
-                    $2sxc.contentItems.delete(sxc, settings.entityGuid);
-                    //if (confirm(tbContr.translate("Toolbar.ReallyDelete"))) {
-                    //    tbContr._getAngularVm().reallyDelete(settings.entityId);
-                    //}
+                    $2sxc.contentItems.delete(sxc, settings.entityId, settings.entityGuid, settings.entityTitle);
                 }
             }),
 

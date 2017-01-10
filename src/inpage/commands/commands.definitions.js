@@ -108,15 +108,15 @@
             }),
 
             // todo: work in progress related to https://github.com/2sic/2sxc/issues/618
-            'deleteItem': makeDef("deleteItem", "Delete", "cancel", true, {
-                // disabled: true,
-                // showCondition: false, //function (settings) { return !settings.useModuleList; },
+            'delete': makeDef("deleteItem", "Delete", "cancel", true, {
+                disabled: true,
+                showCondition: function(settings) {
+                    if (settings.useModuleList) return false;
+                    // check if all data exists
+                    return settings.entityId && settings.entityGuid && settings.entityTitle;
+                },
                 code: function (settings, event, sxc) {
-                    $2sxc.contentItems.delete(sxc, settings.entityId);
-                    //$2sxc.contentItems.delete(sxc, settings.entityGuid);
-                    //if (confirm(tbContr.translate("Toolbar.ReallyDelete"))) {
-                    //    tbContr._getAngularVm().reallyDelete(settings.entityId);
-                    //}
+                    $2sxc.contentItems.delete(sxc, settings.entityId, settings.entityGuid, settings.entityTitle);
                 }
             }),
 
