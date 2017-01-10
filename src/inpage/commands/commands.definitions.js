@@ -108,17 +108,17 @@
             }),
 
             // todo: work in progress related to https://github.com/2sic/2sxc/issues/618
-            //'delete': {
-            //    title: "Toolbar.Delete",
-            //    icon: "icon-sxc-cancel",
-            //    disabled: true,
-            //    showCondition: function (settings) { return !settings.useModuleList; },
-            //    code: function (settings, event) {
-            //        if (confirm(tbContr.translate("Toolbar.ReallyDelete"))) {
-            //            tbContr._getAngularVm().reallyDelete(settings.entityId);
-            //        }
-            //    }
-            //},
+            'deleteItem': makeDef("deleteItem", "Delete", "cancel", true, {
+                // disabled: true,
+                // showCondition: false, //function (settings) { return !settings.useModuleList; },
+                code: function (settings, event, sxc) {
+                    $2sxc.contentItems.delete(sxc, settings.entityId);
+                    //$2sxc.contentItems.delete(sxc, settings.entityGuid);
+                    //if (confirm(tbContr.translate("Toolbar.ReallyDelete"))) {
+                    //    tbContr._getAngularVm().reallyDelete(settings.entityId);
+                    //}
+                }
+            }),
 
             'moveup': makeDef("moveup", "MoveUp", "move-up", false, {
                 showCondition: function(settings, modConfig) {
