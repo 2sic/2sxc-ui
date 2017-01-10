@@ -25,5 +25,21 @@
 
             // use "inherited" controller just like described in http://stackoverflow.com/questions/18461263/can-an-angularjs-controller-inherit-from-another-controller-in-the-same-module
             $controller("FieldTemplate-EntityCtrl", { $scope: $scope });
+
+            // do something with the values...
+            var vals = $scope.model[$scope.options.key].Values[0].Value;
+
+            //addCSSRule("div", "background-color: pink");
         });
+
+    function addCSSRule(selector, rules, index) {
+        var sheet = document.styleSheets[0];
+        if ("insertRule" in sheet) {
+            sheet.insertRule(selector + "{" + rules + "}", index);
+        }
+        else if ("addRule" in sheet) {
+            sheet.addRule(selector, rules, index);
+        }
+    }
+
 })();
