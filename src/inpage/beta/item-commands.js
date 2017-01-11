@@ -7,29 +7,23 @@
             // delete command - try to really delete a content-item
             "delete": function (sxc, itemId, itemGuid, itemTitle) {
                 // first show main warning / get ok
-                // todo: i18n
-                var ok = confirm("BETA!\n\n"
-                    + "This will really delete item " + itemId
-                    + (itemTitle ? " \"" + itemTitle + "\"" : "")
-                    + ". "
-                    + "\n\nThis cannot be undone. Are you sure?");
+                var ok = confirm($2sxc.translate("Delete.Confirm")
+                    .replace("{id}", itemId)
+                    .replace("{title}", itemTitle));
                 if (!ok) return;
 
                 sxc.webApi.delete("app-content/any/" + itemGuid, null, null, true)
                     .success(function () {
                         location.reload();
                     }).error(function (error) {
-                        // todo: i18n
-                        var msgJs = "\n\nPlease check javascript console for more information.";
+                        var msgJs = $2sxc.translate("Delete.ErrCheckConsole");
                         // check if it's a permission config problem
                         console.log(error);
                         if (error.status === 401) {
-                            // todo: i18n
-                            alert("Can't delete - permissions missing. " + msgJs);
+                            alert($2sxc.translate("Delete.ErrPermission") + msgJs);
                         }
                         if (error.status === 400) {
-                            // todo: i18n
-                            alert("Can't delete - item is probably in use elsewhere. " + msgJs);
+                            alert($2sxc.translate("Delete.ErrInUse") + msgJs);
                         }
                     });
             }

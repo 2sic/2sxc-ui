@@ -112,8 +112,10 @@
                 // disabled: true,
                 showCondition: function (settings) {
                     // can never be used for a modulelist item, as it is always in use somewhere
-                    if (settings.useModuleList) return false;
-                    // check if all data exists
+                    if (settings.useModuleList)
+                        return false;
+
+                    // check if all data exists required for deleting
                     return settings.entityId && settings.entityGuid && settings.entityTitle;
                 },
                 code: function (settings, event, sxc) {

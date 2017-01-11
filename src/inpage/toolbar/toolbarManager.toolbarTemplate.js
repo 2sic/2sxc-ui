@@ -33,7 +33,11 @@
             },
             {
                 name: "list",
-                buttons: "add,remove,delete,moveup,movedown,instance-list,replace"
+                buttons: "add,remove,moveup,movedown,instance-list,replace"
+            },
+            {
+                name: "data",
+                buttons: "delete"
             },
             {
                 name: "instance",
