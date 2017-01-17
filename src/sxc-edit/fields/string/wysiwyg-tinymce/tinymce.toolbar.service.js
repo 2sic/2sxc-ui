@@ -239,12 +239,12 @@ angular.module("sxcFieldTemplates")
 
             // #region inside content
             editor.addButton("addcontentblock", {
-                icon: " icon-eav-star",
+                icon: " icon-eav-content-block",
                 classes: "btn-addcontentblock",
                 tooltip: "ContentBlock.Add",
                 onclick: function() {
                     var guid = Math.uuid().toLowerCase(); // requires the uuid-generator to be included
-
+                    
                     vm.editor.insertContent("<hr sxc=\"sxc-content-block\" guid=\"" + guid + "\" />");
                 }
             });

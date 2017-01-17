@@ -89,3 +89,5 @@
 .icon-eav-side-marker:before { content: '\e857'; } /* '' */
 .icon-eav-git-branch:before { content: '\e858'; } /* '' */
 .icon-eav-git-pull-request:before { content: '\e859'; } /* '' */
+.icon-eav-content-block:before { content: '\e9bd'; } /* '' */
+.icon-eav-app:before { content: '\e9bf'; } /* '' */
