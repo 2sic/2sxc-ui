@@ -24,7 +24,7 @@
                 var config = {
                     url: url,
                     urlRoot: url,
-                    maxFilesize: 100,
+                    maxFilesize: 10000, // 10'000 MB = 10 GB, note that it will also be stopped on the server if it's larger than the really allowed sized
                     paramName: "uploadfile",
                     maxThumbnailFilesize: 10,
 
@@ -77,7 +77,7 @@
                 };
 
                 // delay building the dropszone till the DOM is ready
-                $timeout(function() {
+                $timeout(function () {
                     var dropzone = new Dropzone(element[0], config);
 
                     angular.forEach(eventHandlers, function(handler, event) {
