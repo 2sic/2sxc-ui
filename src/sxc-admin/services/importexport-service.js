@@ -11,7 +11,7 @@ angular.module("SxcServices")
             // todo: 2tk - everything here is only demo code
 
             svc = angular.extend(svc, svcCreator.implementLiveList(function getAll() {
-                return $http.get("app/template/getall", { params: { appId: svc.appId } });
+                return $http.get("app-sys/template/getall", { params: { appId: svc.appId } });
             }));
 
             // delete, then reload
