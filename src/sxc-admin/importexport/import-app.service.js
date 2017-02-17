@@ -15,7 +15,7 @@
         function importApp(file) {
             return $http({
                 method: "POST",
-                url: "app/ImportExport/ImportApp",
+                url: "app-sys/ImportExport/ImportApp",
                 headers: { "Content-Type": undefined },
                 transformRequest: function (data) {
                     var formData = new FormData();

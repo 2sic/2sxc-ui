@@ -5,7 +5,7 @@ angular.module("SxcServices")
 
         // this will retrieve an advanced getting-started url to use in an the iframe
         svc.getDialogSettings = function gettingStartedUrl() {
-            return $http.get("app/system/dialogsettings", { params: { appId: appId } });
+            return $http.get("app-sys/system/dialogsettings", { params: { appId: appId } });
         };
         return svc;
     });

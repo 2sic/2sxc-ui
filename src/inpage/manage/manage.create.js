@@ -106,7 +106,7 @@
 
             },
 
-            // private: show error when the app/data hasn't been installed yet for this imported-module
+            // private: show error when the app-data hasn't been installed yet for this imported-module
             _handleErrors: function (errType, cbTag) {
                 var errWrapper = $("<div class=\"dnnFormMessage dnnFormWarning sc-element\"></div>");
                 var msg = "";

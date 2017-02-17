@@ -107,7 +107,6 @@
     <Content Include="src\sxc-admin\services\app-settings.js" />
     <Content Include="src\sxc-admin\services\apps-service.js" />
     <Content Include="src\sxc-admin\services\content-group-service.js" />
-    <Content Include="src\sxc-admin\services\importexport-service.js" />
     <Content Include="src\sxc-admin\services\init-sxc-params-from-url.js" />
     <Content Include="src\sxc-admin\services\languages-service.js" />
     <Content Include="src\sxc-admin\services\sxc-dialogs-service.js" />
