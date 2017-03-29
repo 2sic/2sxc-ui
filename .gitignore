@@ -177,3 +177,7 @@ bower_components
 Temporary/
 _/
 /2sxc-apps-js/
+
+# build dest
+# dist/
+# Js/

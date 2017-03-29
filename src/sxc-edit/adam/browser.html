@@ -79,6 +79,9 @@
             <div class="dz-filename adam-short-label">
                 <span>#{{ item.Id }} - {{ (item.Size / 1024).toFixed(0) }} kb</span>
             </div>
+            <a class="adam-link-button" target="_blank" ng-href="{{ item.fullPath }}">
+                <i class="icon-eav-link-ext" style="font-size: larger"></i>
+            </a>
         </div>
 
         <span class="adam-tag" ng-class="{'metadata-exists': item.MetadataId > 0}"

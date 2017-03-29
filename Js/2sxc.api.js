@@ -22,7 +22,7 @@
             $2sxc._data[cacheKey] = {};
 
         var controller = $2sxc._controllers[cacheKey] = {
-            serviceScopes: ["app", "app-sys", "app-api", "app-query", "app-content", "eav", "view", "dnn"],
+            serviceScopes: ["app", "app-api", "app-query", "app-content", "eav", "view", "dnn"],
             serviceRoot: $.ServicesFramework(id).getServiceRoot("2sxc"),
             resolveServiceUrl: function resolveServiceUrl(virtualPath) {
                 var scope = virtualPath.split("/")[0].toLowerCase();
@@ -36,7 +36,7 @@
             data: {
                 // source path defaulting to current page + optional params
                 sourceUrl: function (params) {
-                    var url = controller.resolveServiceUrl("app-sys/appcontent/GetContentBlockData");
+                    var url = controller.resolveServiceUrl("app/appcontent/GetContentBlockData");
                     if (typeof params == "string") // text like 'id=7'
                         url += "&" + params;
                     return url;
@@ -186,7 +186,7 @@
                     var sf = $.ServicesFramework(id);
                     var base = (settings.url)
                         ? controller.resolveServiceUrl(settings.url)
-                        : sf.getServiceRoot("2sxc") + "app/auto/api/" + settings.controller + "/" + settings.action;
+                        : sf.getServiceRoot("2sxc") + "app-api/" + settings.controller + "/" + settings.action;
                     return base + (settings.params === null ? "" : ("?" + $.param(settings.params)));
                 }
             },
@@ -253,11 +253,7 @@
     };
 
     $2sxc._controllers = {};
-    $2sxc.sysinfo = {
-        version: "08.11.00",
-        description: "The 2sxc Controller object"
-    };
-
+    $2sxc.description = "The 2sxc Controller object";
     $2sxc.beta = {};
     $2sxc._data = {};
     
@@ -266,8 +262,8 @@
     $2sxc.totalPopup = {
         open: function openTotalPopup(url, callback) {
             // count parents to see how high the z-index needs to be
-            var z = 1500, p = window;
-            while (p !== window.top && z < 1600) {
+            var z = 10000000, p = window; // Needs at least 10000000 to be on top of the DNN9 bar
+            while (p !== window.top && z < 10000100) {
                 z++;
                 p = p.parent;
             }
