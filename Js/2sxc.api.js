@@ -22,7 +22,7 @@
             $2sxc._data[cacheKey] = {};
 
         var controller = $2sxc._controllers[cacheKey] = {
-            serviceScopes: ["app", "app-api", "app-query", "app-content", "eav", "view", "dnn"],
+            serviceScopes: ["app", "app-sys", "app-api", "app-query", "app-content", "eav", "view", "dnn"],
             serviceRoot: $.ServicesFramework(id).getServiceRoot("2sxc"),
             resolveServiceUrl: function resolveServiceUrl(virtualPath) {
                 var scope = virtualPath.split("/")[0].toLowerCase();
@@ -36,7 +36,7 @@
             data: {
                 // source path defaulting to current page + optional params
                 sourceUrl: function (params) {
-                    var url = controller.resolveServiceUrl("app/appcontent/GetContentBlockData");
+                    var url = controller.resolveServiceUrl("app-sys/appcontent/GetContentBlockData");
                     if (typeof params == "string") // text like 'id=7'
                         url += "&" + params;
                     return url;
@@ -186,7 +186,7 @@
                     var sf = $.ServicesFramework(id);
                     var base = (settings.url)
                         ? controller.resolveServiceUrl(settings.url)
-                        : sf.getServiceRoot("2sxc") + "app-api/" + settings.controller + "/" + settings.action;
+                        : sf.getServiceRoot("2sxc") + "app/auto/api/" + settings.controller + "/" + settings.action;
                     return base + (settings.params === null ? "" : ("?" + $.param(settings.params)));
                 }
             },
@@ -253,7 +253,11 @@
     };
 
     $2sxc._controllers = {};
-    $2sxc.description = "The 2sxc Controller object";
+    $2sxc.sysinfo = {
+        version: "08.12.00",
+        description: "The 2sxc Controller object"
+    };
+
     $2sxc.beta = {};
     $2sxc._data = {};
     
