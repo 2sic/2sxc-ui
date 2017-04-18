@@ -21,11 +21,11 @@
         </div>
         <div class="after-preview">
             <div class="input-group" uib-dropdown>
-
                 <input type="text" class="form-control input-lg" ng-model="value.Value" uib-tooltip="{{'Edit.Fields.Hyperlink.Default.Tooltip1' | translate }}
 {{'Edit.Fields.Hyperlink.Default.Tooltip2' | translate }}
 ADAM - sponsored with ♥ by 2sic.com">
                 <span class="input-group-btn" style="vertical-align: top;">
+                    <div style="width: 6px;"></div>
                     <button ng-if="to.settings['merged'].Buttons.indexOf('adam') > -1" type="button" class="btn btn-default icon-field-button" ng-disabled="to.disabled" uib-tooltip="{{'Edit.Fields.Hyperlink.Default.AdamUploadLabel' | translate }}" ng-click="vm.toggleAdam()">
                         <i class="icon-eav-apple"></i>
                     </button>

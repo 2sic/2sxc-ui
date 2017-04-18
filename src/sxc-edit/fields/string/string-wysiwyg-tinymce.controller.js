@@ -49,6 +49,7 @@
 
             watchDisabled($scope);
         };
+        vm.activate();
 
         // callback event which tinyMce will execute when it's built the editor
         function tinyMceInitCallback(editor) {
@@ -81,8 +82,6 @@
             if (nextField.type === "entity-content-blocks")
                 settings.enableContentBlocks = true;
         }
-
-        vm.activate();
     }
 
 
