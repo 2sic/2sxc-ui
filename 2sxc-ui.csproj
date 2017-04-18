@@ -23,10 +23,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include=".gitignore" />
-    <Content Include=".gitmodules" />
-    <Content Include="2sxc-apps-js\src\angular\bootstrapper.js" />
-    <Content Include="2sxc-apps-js\src\angular\2sxc4ng.js" />
-    <Content Include="2sxc-apps-js\src\js\2sxc.api.js" />
+    <Content Include="2sxc-api\angular\2sxc4ng.js" />
+    <Content Include="2sxc-api\angular\bootstrapper.js" />
+    <Content Include="2sxc-api\js\2sxc.api.js" />
     <Content Include="gulpfile.js" />
     <Content Include="License.txt" />
     <Content Include="src\config\eav-configuration-in-sxc.js" />
@@ -185,11 +184,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="src\inpage\contentBlock\contentBlock.manipulate.js" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="2sxc-apps-js\.git" />
-    <Content Include="2sxc-apps-js\LICENSE" />
-    <Content Include="2sxc-apps-js\README.md" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="src\inpage\2sxc-extensions\2sxc.api.edit-extensions.js" />
