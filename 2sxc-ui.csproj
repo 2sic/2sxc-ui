@@ -30,6 +30,7 @@
     <Content Include="gulpfile.js" />
     <Content Include="License.txt" />
     <Content Include="src\config\eav-configuration-in-sxc.js" />
+    <Content Include="src\dnn\ui.css" />
     <Content Include="src\dnn\ui.html" />
     <Content Include="src\inpage-dialogs\getting-started\getting-started.js" />
     <Content Include="src\inpage-dialogs\template-selector\2sxc.view_app.js" />
@@ -39,6 +40,8 @@
     <Content Include="src\inpage-dialogs\template-selector\template-selector.html" />
     <Content Include="src\inpage\beta\item-commands.js" />
     <Content Include="src\inpage\dnn-workarounds\dnn-08.00.04.js" />
+    <Content Include="src\inpage\inpage-dialog\dialog.css" />
+    <Content Include="src\inpage\inpage-dialog\polyfill.js" />
     <Content Include="src\inpage\manage\manage.create.js" />
     <Content Include="src\inpage\contentBlock\contentBlock.create.js" />
     <Content Include="src\inpage\commands\commands.definitions.js" />

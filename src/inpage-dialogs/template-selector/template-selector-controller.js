@@ -280,8 +280,5 @@
         vm.activate();
 
         //#endregion
-
     });
-
-
 })();

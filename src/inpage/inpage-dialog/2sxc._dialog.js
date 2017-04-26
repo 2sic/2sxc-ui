@@ -5,67 +5,80 @@
 // known issues
 // - we never got around to making the height adjust automatically
 (function () {
-    var diag = $2sxc._dialog = {
-        mode: "iframe",
-        template: "<iframe width='100%' height='100px' src='{{url}}' onresize=\"console.log('resize')\"></iframe>"
-    };
+    $2sxc._dialog = { create: Dialog };
 
-    diag.create = function (sxc, wrapperTag, url, closeCallback) {
-        var iframe = $(diag.template.replace("{{url}}", url))[0];    // build iframe tag
+    var RESIZE_INTERVAL = 200;
 
-        iframe.closeCallback = closeCallback;
-        iframe.sxc = sxc;
-        // iframe.attr("data-for-manual-debug", "app: " + sxc.manage.ContentGroup.AppUrl);
+    function Dialog (sxc, wrapperTag, url, closeCallback) {
+        var template =
+            "<div class=\"inpage-frame-wrapper\">"
+            + "<div class=\"inpage-frame\"><iframe width='100%' height='100px' src='" + url + "'></iframe></div>"
+            + "<div class=\"backdrop\"></div>"
+            + "</div>",
+            container = $(template),
+            iframe = container.find('iframe')[0],
+            backdrop = container.find('.backdrop'),
+            resizeInterval;
 
-        //#region data bridge both ways
-        iframe.getManageInfo = function() {
-            return iframe.sxc.manage._dialogParameters;
-        };
+        container.on('load', loadEventListener);
+        backdrop.on('click', function () {
+            toggle(false);
+        })
+        $(wrapperTag).before(container);
 
-        iframe.getAdditionalDashboardConfig = function () {
-            return iframe.sxc.manage._dashboardConfig;
-        };
+        /**
+         * Assign properties to the iframe for later use.
+         */
+        return Object.assign(iframe, {
+            closeCallback: closeCallback,
+            sxc: sxc,
+            destroy: function () {
+                window.clearInterval(resizeInterval);
+                iframe.remove();
+            },
+            getManageInfo: getManageInfo,
+            getAdditionalDashboardConfig: getAdditionalDashboardConfig,
+            getCommands: getCommands,
+            syncHeight: syncHeight,
+            toggle: function () {
+                return toggle();
+            },
+            justHide: function () {
+                return toggle(false);
+            },
+            isVisible: function () {
+                return !container.hasClass('hidden');
+            }
+        });
 
-        iframe.getCommands = function() {
+        function toggle(show) {
+            if (show == undefined) return container.toggleClass('hidden');
+            return container.toggleClass('hidden', !show);
+        }
+
+        function loadEventListener() {
+            syncHeight();
+            resizeInterval = window.setInterval(iframe.syncHeight, RESIZE_INTERVAL);
+        }
+
+        function getManageInfo() {
+            return sxc.manage._dialogParameters;
+        }
+
+        function getAdditionalDashboardConfig() {
+            return sxc.manage._dashboardConfig;
+        }
+
+        function getCommands() {
             return iframe.vm;
-        };
-        //#endregion
+        }
 
-        //#region sync size
-        iframe.syncHeight = function () {
+        function syncHeight() {
             var height = iframe.contentDocument.body.offsetHeight;
-            if (iframe.previousHeight === height)
-                return;
+            if (iframe.previousHeight === height) return;
             window.diagBox = iframe;
             iframe.height = height + 'px';
             iframe.previousHeight = height;
-        };
-
-        function loadEventListener()  {
-            iframe.syncHeight();
-            iframe.resizeInterval = window.setInterval(iframe.syncHeight, 200); // Not ideal - polling the document height may cause performance issues
-            //diagBox.contentDocument.body.addEventListener('resize', function () { diagBox.syncHeight(); }, true); // The resize event is not called reliable when the iframe content changes
         }
-        iframe.addEventListener('load', loadEventListener);
-
-        //#endregion
-
-        //#region Visibility toggle & status
-
-        iframe.isVisible = function() { return iframe.style.display !== "none";   };
-        iframe.toggle = function () { iframe.style.display = iframe.style.display === "none" ? "" : "none"; };
-        iframe.justHide = function () { iframe.style.display = "none"; };
-        //#endregion
-
-        // remove the diagBox - important when replacing the app with ajax, and the diag needs to be re-initialized
-        iframe.destroy = function () {
-            window.clearInterval(iframe.resizeInterval);   // clear this first, to prevent errors
-            iframe.remove(); // use the jquery remove for this
-        };
-
-        $(wrapperTag).before(iframe);
-
-        return iframe;
     };
-
 })();
