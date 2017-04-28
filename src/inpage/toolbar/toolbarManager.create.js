@@ -68,9 +68,6 @@
                     symbol = $("<i class=\"" + actDef.icon + "\" aria-hidden=\"true\"></i>"),
                     onclick = actDef.disabled ? "" : "$2sxc(" + id + ", " + cbid + ").manage.run(" + JSON.stringify(actDef.command /*, tb._jsonifyFilterGroup*/) + ", event);";
 
-                //if ($2sxc.debug.load)
-                //  console.log("onclick: " + onclick);
-
                 for (var c = 0; c < classesList.length; c++)
                     showClasses += " " + classesList[c];
 

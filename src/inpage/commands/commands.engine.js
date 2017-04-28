@@ -1,14 +1,14 @@
 ﻿
-(function() {
-    $2sxc._commands.engine = function(sxc, targetTag) {
+(function () {
+    $2sxc._commands.engine = function (sxc, targetTag) {
         var cmc = {
             manage: "must-be-added-after-initialization",
-            init: function(manage) {
+            init: function (manage) {
                 cmc.manage = manage;
             },
 
             // assemble an object which will store the configuration and execute it
-            create: function(specialSettings) {
+            create: function (specialSettings) {
                 var settings = $2sxc._lib.extend({}, cmc.manage._toolbarConfig, specialSettings); // merge button with general toolbar-settings
                 var ngDialogUrl = cmc.manage._editContext.Environment.SxcRootUrl + "desktopmodules/tosic_sexycontent/dist/dnn/ui.html?sxcver="
                     + cmc.manage._editContext.Environment.SxcVersion;
@@ -21,7 +21,7 @@
                         dialog: settings.dialog || settings.action // the variable used to name the dialog changed in the history of 2sxc from action to dialog
                     }, settings.params),
 
-                    addSimpleItem: function() {
+                    addSimpleItem: function () {
                         var itm = {}, ct = cmd.settings.contentType || cmd.settings.attributeSetName; // two ways to name the content-type-name this, v 7.2+ and older
                         if (cmd.settings.entityId) itm.EntityId = cmd.settings.entityId;
                         if (ct) itm.ContentTypeName = ct;
@@ -30,7 +30,7 @@
                     },
 
                     // this adds an item of the content-group, based on the group GUID and the sequence number
-                    addContentGroupItem: function(guid, index, part, isAdd, isEntity, cbid, sectionLanguageKey) {
+                    addContentGroupItem: function (guid, index, part, isAdd, isEntity, cbid, sectionLanguageKey) {
                         cmd.items.push({
                             Group: { Guid: guid, Index: index, Part: part, Add: isAdd },
                             Title: $2sxc.translate(sectionLanguageKey)
@@ -38,7 +38,7 @@
                     },
 
                     // this will tell the command to edit a item from the sorted list in the group, optionally together with the presentation item
-                    addContentGroupItemSetsToEditList: function(withPresentation) {
+                    addContentGroupItemSetsToEditList: function (withPresentation) {
                         var isContentAndNotHeader = (cmd.settings.sortOrder !== -1);
                         var index = isContentAndNotHeader ? cmd.settings.sortOrder : 0;
                         var prefix = isContentAndNotHeader ? "" : "List";
@@ -53,7 +53,7 @@
 
                     },
 
-                    generateLink: function() {
+                    generateLink: function () {
                         // if there is no items-array, create an empty one (it's required later on)
                         if (!cmd.settings.items) cmd.settings.items = [];
                         //#region steps for all actions: prefill, serialize, open-dialog
@@ -75,7 +75,7 @@
             },
 
             // create a dialog link
-            _linkToNgDialog: function(specialSettings) {
+            _linkToNgDialog: function (specialSettings) {
                 var cmd = cmc.manage._commands.create(specialSettings);
 
                 if (cmd.settings.useModuleList)
@@ -90,9 +90,8 @@
                 return cmd.generateLink();
             },
             // open a new dialog of the angular-ui
-            _openNgDialog: function(settings, event, closeCallback) {
-
-                var callback = function() {
+            _openNgDialog: function (settings, event, closeCallback) {
+                var callback = function () {
                     cmc.manage.contentBlock.reloadAndReInitialize();
                     closeCallback();
                 };
@@ -102,7 +101,7 @@
                     return window.open(link);
                 else {
                     if (settings.inlineWindow)
-                        return $2sxc._dialog.create(sxc, targetTag, link, callback);
+                        return $2sxc._dialog(sxc, targetTag, link, callback);
                     else
                         return $2sxc.totalPopup.open(link, callback);
                 }
@@ -114,22 +113,24 @@
                     event = settings;   // move it to the correct variable
                     settings = {};      // clear the settings variable
                 }
-                settings = (typeof (nameOrSettings) === "string") 
+                settings = (typeof nameOrSettings === "string")
                     ? $2sxc._lib.extend(settings || {}, { "action": nameOrSettings }) // place the name as an action-name into a command-object
                     : nameOrSettings;
 
                 var conf = cmc.manage._toolbar.actions[settings.action];
                 settings = $2sxc._lib.extend({}, conf, settings); // merge conf & settings, but settings has higher priority
+
                 if (!settings.dialog) settings.dialog = settings.action; // old code uses "action" as the parameter, now use verb ? dialog
                 if (!settings.code) settings.code = cmc._openNgDialog; // decide what action to perform
 
                 var origEvent = event || window.event; // pre-save event because afterwards we have a promise, so the event-object changes; funky syntax is because of browser differences
+
                 if (conf.uiActionOnly)
                     return settings.code(settings, origEvent, sxc);// 2016-11-03 cmc.manage);
 
                 // if more than just a UI-action, then it needs to be sure the content-group is created first
                 cmc.manage.contentBlock.prepareToAddContent()
-                    .then(function() {
+                    .then(function () {
                         return settings.code(settings, origEvent, sxc);// 2016-11-03 cmc.manage);
                     });
             }

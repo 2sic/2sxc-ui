@@ -5,25 +5,19 @@
 // known issues
 // - we never got around to making the height adjust automatically
 (function () {
-    $2sxc._dialog = { create: Dialog };
+    $2sxc._dialog = Dialog;
 
-    var RESIZE_INTERVAL = 200;
+    var RESIZE_INTERVAL = 200,
+        SHOW_DELAY = 400,
+        activeDialog;
 
-    function Dialog (sxc, wrapperTag, url, closeCallback) {
-        var template =
-            "<div class=\"inpage-frame-wrapper\">"
-            + "<div class=\"inpage-frame\"><iframe width='100%' height='100px' src='" + url + "'></iframe></div>"
-            + "<div class=\"backdrop\"></div>"
-            + "</div>",
-            container = $(template),
-            iframe = container.find('iframe')[0],
-            backdrop = container.find('.backdrop'),
+    function Dialog(sxc, wrapperTag, url, closeCallback) {
+        var container, // the dialog (jQuery object)
+            iframe, // frame inside the dialog (HTMLElement)
             resizeInterval;
 
-        container.on('load', loadEventListener);
-        backdrop.on('click', function () {
-            toggle(false);
-        })
+        init();
+
         $(wrapperTag).before(container);
 
         /**
@@ -33,8 +27,7 @@
             closeCallback: closeCallback,
             sxc: sxc,
             destroy: function () {
-                window.clearInterval(resizeInterval);
-                iframe.remove();
+                // TODO: evaluate what to do here
             },
             getManageInfo: getManageInfo,
             getAdditionalDashboardConfig: getAdditionalDashboardConfig,
@@ -51,14 +44,52 @@
             }
         });
 
-        function toggle(show) {
-            if (show == undefined) return container.toggleClass('hidden');
-            return container.toggleClass('hidden', !show);
+        function init() {
+            var res = $(wrapperTag).parent().find('.inpage-frame-wrapper');
+
+            // the dialog has already been initialized
+            if (res.length > 0) {
+                container = res.eq(0);
+                iframe = container.find('iframe')[0];
+                load();
+                return res.eq(0);
+            }
+
+            container = $('<div class="inpage-frame-wrapper">'
+                + '<div class="inpage-frame"><iframe width="100%" height="100px" src="' + url + '"></iframe></div>'
+                + '</div>');
+            iframe = container.find('iframe')[0];
+
+            $(iframe).on('load', load);
+
+            function load() {
+                if (activeDialog == iframe) {
+                    console.log('this dialog is already open');
+                    return false;
+                }
+                syncHeight();
+                setTimeout(function () {
+                    toggle(true);
+                }, SHOW_DELAY);
+            }
         }
 
-        function loadEventListener() {
-            syncHeight();
-            resizeInterval = window.setInterval(iframe.syncHeight, RESIZE_INTERVAL);
+        function toggle(show) {
+            var moduleContent = container.parent('.DNNModuleContent'),
+                action = show === undefined ? !moduleContent.hasClass('dia-select') : show;
+
+            if (action) {
+                if (activeDialog === undefined) {
+                    activeDialog = iframe;
+                } else {
+                    console.log('already one dialog open', activeDialog);
+                    return false;
+                }
+            } else {
+                activeDialog = undefined;
+            }
+
+            moduleContent.toggleClass('dia-select', action);
         }
 
         function getManageInfo() {
@@ -72,7 +103,7 @@
         function getCommands() {
             return iframe.vm;
         }
-
+        
         function syncHeight() {
             var height = iframe.contentDocument.body.offsetHeight;
             if (iframe.previousHeight === height) return;
@@ -80,5 +111,5 @@
             iframe.height = height + 'px';
             iframe.previousHeight = height;
         }
-    };
+    }
 })();

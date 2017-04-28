@@ -194,18 +194,16 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
             if (!diag) {
                 // still not found, create it
                 diag = manage.dialog = manage.run("dash-view"); // not ideal, must improve
-
             } else {
                 diag.toggle();
             }
 
             var isVisible = diag.isVisible();
-            if (manage._editContext.ContentBlock.ShowTemplatePicker !== isVisible)
-                cb._setTemplateChooserState(isVisible)
-                    .then(function () {
-                        manage._editContext.ContentBlock.ShowTemplatePicker = isVisible;
-                    });
-
+            if (manage._editContext.ContentBlock.ShowTemplatePicker === isVisible) return;
+            cb._setTemplateChooserState(isVisible)
+                .then(function () {
+                    manage._editContext.ContentBlock.ShowTemplatePicker = isVisible;
+                });
         },
 
 

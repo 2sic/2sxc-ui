@@ -64,7 +64,7 @@
 
             // add brings no dialog, just add an empty item
             'add': makeDef("add", "AddDemo", "plus-circled", false, {
-                showCondition: function(settings, modConfig) {
+                showCondition: function (settings, modConfig) {
                     return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1;
                 },
                 code: function (settings, event, sxc) {
@@ -82,7 +82,7 @@
                     return settings.entityId ? "" : "empty";
                     // return settings.items && settings.items[0].entityId ? "" : "empty";
                 },
-                showCondition: function(settings) {
+                showCondition: function (settings) {
                     return !!settings.metadata;
                 }, // only add a metadata-button if it has metadata-infos
                 configureCommand: function (cmd) {
@@ -96,7 +96,7 @@
 
             // remove an item from the placeholder (usually for lists)
             'remove': makeDef("remove", "Remove", "minus-circled", false, {
-                showCondition: function(settings, modConfig) {
+                showCondition: function (settings, modConfig) {
                     return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1;
                 },
                 code: function (settings, event, sxc) {
@@ -124,7 +124,7 @@
             }),
 
             'moveup': makeDef("moveup", "MoveUp", "move-up", false, {
-                showCondition: function(settings, modConfig) {
+                showCondition: function (settings, modConfig) {
                     return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1 && settings.sortOrder !== 0;
                 },
                 code: function (settings, event, sxc) {
@@ -133,7 +133,7 @@
                 }
             }),
             'movedown': makeDef("movedown", "MoveDown", "move-down", false, {
-                showCondition: function(settings, modConfig) {
+                showCondition: function (settings, modConfig) {
                     return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1;
                 },
                 code: function (settings, event, sxc) {
@@ -150,7 +150,7 @@
                     return settings.isPublished === false;
                 },
                 code: function (settings, event, sxc) {
-                    if (settings.isPublished) 
+                    if (settings.isPublished)
                         return alert($2sxc.translate("Toolbar.AlreadyPublished"));
 
                     // if we have an entity-id, publish based on that
@@ -175,7 +175,7 @@
                 dialog: "edit",
                 disabled: editContext.appSettingsId === null,
                 title: "Toolbar.AppSettings" + (editContext.appSettingsId === null ? "Disabled" : ""),
-                showCondition: function(settings, modConfig) {
+                showCondition: function (settings, modConfig) {
                     return enableTools && !isContent /*&& editContext.appSettingsId !== null*/; // only if settings exist, or are 0 (to be created)
                 },
                 configureCommand: function (cmd) {
@@ -226,10 +226,10 @@
 
         addDef(makeDef("contentitems", "ContentItems", "table", true, {
             params: { contentTypeName: editContext.contentTypeId },
-            showCondition: function(settings, modConfig) {
+            showCondition: function (settings, modConfig) {
                 return enableTools && (settings.contentType || editContext.contentTypeId);
             },
-            configureCommand: function(cmd) {
+            configureCommand: function (cmd) {
                 if (cmd.settings.contentType) // optionally override with custom type
                     cmd.params.contentTypeName = cmd.settings.contentType;
                 // maybe: if item doesn't have a type, use that of template
@@ -253,7 +253,7 @@
             newWindow: true,
             dialog: "develop",
             showCondition: enableTools,
-            configureCommand: function(cmd) {
+            configureCommand: function (cmd) {
                 cmd.items = [{ EntityId: editContext.templateId }];
             }
         }));
@@ -264,10 +264,10 @@
             newWindow: true,
             disabled: editContext.appSettingsId === null,
             title: "Toolbar.QueryEdit" + (editContext.queryId === null ? "Disabled" : ""),
-            showCondition: function(settings, modConfig) {
+            showCondition: function (settings, modConfig) {
                 return enableTools && !isContent;
             },
-            dynamicClasses: function(settings) {
+            dynamicClasses: function (settings) {
                 return editContext.queryId ? "" : "empty"; // if it doesn't have a query, make it less strong
             }
             //configureCommand: function (cmd) {
@@ -278,7 +278,7 @@
         addDef(makeDef("template-settings", "TemplateSettings", "sliders", true, {
             dialog: "edit",
             showCondition: enableTools,
-            configureCommand: function(cmd) {
+            configureCommand: function (cmd) {
                 cmd.items = [{ EntityId: editContext.templateId }];
             }
 
@@ -287,7 +287,7 @@
 
         //#region custom code buttons
         addDef(makeDef("custom", "Custom", "bomb", true, {
-            code: function(settings, event, sxc) {
+            code: function (settings, event, sxc) {
                 console.log("custom action with code - BETA feature, may change");
                 if (!settings.customCode) {
                     console.warn("custom code action, but no onclick found to run", settings);
@@ -305,13 +305,13 @@
 
         //#region UI actions: layout, more
         addDef(makeDef("layout", "ChangeLayout", "glasses", true, {
-            code: function(settings, event, sxc) {
+            code: function (settings, event, sxc) {
                 sxc.manage.contentBlock.dialogToggle();
             }
         }));
 
         addDef(makeDef("more", "MoreActions", "options btn-mode", true, {
-            code: function(settings, event) {
+            code: function (settings, event) {
                 var btn = $(event.target),
                     fullMenu = btn.closest("ul.sc-menu"),
                     oldState = Number(fullMenu.attr("data-state") || 0),
@@ -325,7 +325,6 @@
         }));
 
         //#endregion
-
         return act;
     };
 

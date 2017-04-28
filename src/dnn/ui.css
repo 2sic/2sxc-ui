@@ -1,3 +1,7 @@
 ﻿.contentBlockDashboard {
 
 }
+
+iframe {
+    border: none;
+}
