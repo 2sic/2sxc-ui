@@ -604,12 +604,14 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
                         cb.sxc = cb.sxc.recreate();
                         cb.sxc.manage._toolbar._processToolbars(); // sub-optimal deep dependency
                         cb.buttonsAreLoaded = true;
+                    }, function () {
+                        // nothing to load
                     });
             else
                 return window.location.reload();
 
         },
-
+        
         // retrieve new preview-content with alternate template and then show the result
         reload: function (templateId) {
             // if nothing specified, use stored id
@@ -618,7 +620,7 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
 
             // if nothing specified / stored, cancel
             if (!templateId)
-                return null;
+                return $.Deferred().reject();
 
             // if reloading a non-content-app, re-load the page
             if (!manage._reloadWithAjax) // special code to force ajax-app-change
@@ -683,7 +685,7 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
                     cbisentity: editContext.ContentBlock.IsEntity,
                     cbid: editContext.ContentBlock.Id,
                     originalparameters: JSON.stringify(editContext.Environment.parameters)
-        },
+                },
                 dataType: "html"
             });
         },
@@ -951,7 +953,7 @@ if($ && $.fn && $.fn.dnnModuleDragDrop)
                 load();
                 return res.eq(0);
             }
-
+            
             container = $('<div class="inpage-frame-wrapper">'
                 + '<div class="inpage-frame"><iframe width="100%" height="100px" src="' + url + '"></iframe></div>'
                 + '</div>');
@@ -960,11 +962,19 @@ if($ && $.fn && $.fn.dnnModuleDragDrop)
             $(iframe).on('load', load);
 
             function load() {
+                var interval;
                 if (activeDialog == iframe) {
                     console.log('this dialog is already open');
                     return false;
                 }
                 syncHeight();
+                interval = setInterval(function() {
+                    try {
+                        syncHeight();
+                    } catch(e) {
+                        clearInterval(interval);
+                    }
+                }, RESIZE_INTERVAL);
                 setTimeout(function () {
                     toggle(true);
                 }, SHOW_DELAY);
@@ -1134,14 +1144,14 @@ if (typeof Object.assign != 'function') {
                 editManager._commands.init(editManager);
                 editManager.contentBlock = $2sxc._contentBlock.create(sxc, editManager, contentBlockTag);
 
-                if (!editContext.ContentGroup.HasContent) configureInlineGlassesButton();
+                if ($(contentBlockTag).html().replace(/ /g, '').replace(/\n/g, '') === '') ensureInlineGlassesButton();
 
                 // display the dialog
                 if (!editContext.error.type && editContext.ContentBlock.ShowTemplatePicker) {
                     editManager.run("layout");
                 }
 
-                function configureInlineGlassesButton() {
+                function ensureInlineGlassesButton() {
                     var btn;
                     if ($(contentBlockTag).parent().find('.glasses').length != 0) return;
                     btn = $('<div class="glasses"><i class="icon-sxc-glasses" aria-hidden="true"></i></div>');

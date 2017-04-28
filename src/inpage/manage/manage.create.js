@@ -84,14 +84,14 @@
                 editManager._commands.init(editManager);
                 editManager.contentBlock = $2sxc._contentBlock.create(sxc, editManager, contentBlockTag);
 
-                if (!editContext.ContentGroup.HasContent) configureInlineGlassesButton();
+                if ($(contentBlockTag).html().replace(/ /g, '').replace(/\n/g, '') === '') ensureInlineGlassesButton();
 
                 // display the dialog
                 if (!editContext.error.type && editContext.ContentBlock.ShowTemplatePicker) {
                     editManager.run("layout");
                 }
 
-                function configureInlineGlassesButton() {
+                function ensureInlineGlassesButton() {
                     var btn;
                     if ($(contentBlockTag).parent().find('.glasses').length != 0) return;
                     btn = $('<div class="glasses"><i class="icon-sxc-glasses" aria-hidden="true"></i></div>');

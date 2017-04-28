@@ -7,7 +7,7 @@
             // will generate an object necessary to communicate with the outer system
             var iframe = window.frameElement;
             iframe.vm = vm;
-
+            
             return {
                 dialogContainer: iframe,
                 window: window.parent,
@@ -67,7 +67,6 @@
         }
         //#endregion
 
-
         vm.filteredTemplates = function (contentTypeId) {
             if (vm.templates.length === 0)  // skip any filters if we don't have anything to go on yet
                 return vm.templates;
@@ -93,7 +92,6 @@
 
 
         vm.reloadTemplatesAndContentTypes = function () {
-
             vm.loading++;
             var getContentTypes = svc.getSelectableContentTypes();
             var getTemplates = svc.getSelectableTemplates();

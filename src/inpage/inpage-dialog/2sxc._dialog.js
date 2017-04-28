@@ -54,7 +54,7 @@
                 load();
                 return res.eq(0);
             }
-
+            
             container = $('<div class="inpage-frame-wrapper">'
                 + '<div class="inpage-frame"><iframe width="100%" height="100px" src="' + url + '"></iframe></div>'
                 + '</div>');
@@ -63,11 +63,19 @@
             $(iframe).on('load', load);
 
             function load() {
+                var interval;
                 if (activeDialog == iframe) {
                     console.log('this dialog is already open');
                     return false;
                 }
                 syncHeight();
+                interval = setInterval(function() {
+                    try {
+                        syncHeight();
+                    } catch(e) {
+                        clearInterval(interval);
+                    }
+                }, RESIZE_INTERVAL);
                 setTimeout(function () {
                     toggle(true);
                 }, SHOW_DELAY);
