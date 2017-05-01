@@ -7,7 +7,7 @@
             // will generate an object necessary to communicate with the outer system
             var iframe = window.frameElement;
             iframe.vm = vm;
-            
+
             return {
                 dialogContainer: iframe,
                 window: window.parent,
@@ -48,10 +48,9 @@
         vm.appId = vm.dashInfo.appId !== 0 ? vm.dashInfo.appId : null;
         vm.savedAppId = vm.dashInfo.appId;
 
-
         vm.showRemoteInstaller = false;
         vm.remoteInstallerUrl = "";
-
+        vm.isDirty = isDirty;
         vm.loading = 0;
         vm.progressIndicator = {
             show: false,
@@ -67,8 +66,12 @@
         }
         //#endregion
 
+        function isDirty() {
+            return vm.form.$dirty;
+        }
+
         vm.filteredTemplates = function (contentTypeId) {
-            if (vm.templates.length === 0)  // skip any filters if we don't have anything to go on yet
+            if (vm.templates.length === 0) // skip any filters if we don't have anything to go on yet
                 return vm.templates;
 
             // filters for "normal" content - applies to everything
@@ -89,7 +92,6 @@
             var result = $filter("filter")(vm.templates, condition, true);
             return result;
         };
-
 
         vm.reloadTemplatesAndContentTypes = function () {
             vm.loading++;
@@ -231,7 +233,7 @@
                     processInstallMessage(event, AppInstanceId, vm.progressIndicator, $http); // this calls an external, non-angular method to handle resizing & installation...
                 }, false);
             },
-
+            
             setup: function () {
                 svc.gettingStartedUrl().then(function (result) {
                     if (result.data) {  // only show getting started if it's really still a blank system, otherwise the server will return null, then don't do anything

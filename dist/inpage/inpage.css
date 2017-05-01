@@ -142,7 +142,7 @@ body.sc-tb-show-all .sc-element .sc-menu { display: initial !important; }
 
 .inpage-frame-wrapper .inpage-frame {
     width: 100%;
-    z-index: 9999;
+    z-index: 10000001;
     text-align: center;
     -moz-user-select: none;
     -khtml-user-select: none;
@@ -191,8 +191,12 @@ body.sc-tb-show-all .sc-element .sc-menu { display: initial !important; }
 
 .DNNModuleContent.dia-select {
     min-height: 16px;
+}
+
+.DNNModuleContent.dia-select.dia-mouseover {
     outline: rgb(13, 71, 161);
-    outline-style: dotted;
+    outline-style: solid;
+    outline-width: 1px;
 }
 
 .dnnEditState .DnnModule {

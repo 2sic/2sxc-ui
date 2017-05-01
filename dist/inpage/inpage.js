@@ -910,6 +910,14 @@ if($ && $.fn && $.fn.dnnModuleDragDrop)
         SHOW_DELAY = 400,
         activeDialog;
 
+    $('body').on('mouseover', '.inpage-frame-wrapper', function () {
+        $(this).parents('.DNNModuleContent').eq(0).toggleClass('dia-mouseover', true);
+    });
+    
+    $('body').on('mouseout', '.inpage-frame-wrapper', function () {
+        $(this).parents('.DNNModuleContent').eq(0).toggleClass('dia-mouseover', false);
+    });
+
     function Dialog(sxc, wrapperTag, url, closeCallback) {
         var container, // the dialog (jQuery object)
             iframe, // frame inside the dialog (HTMLElement)
@@ -953,7 +961,7 @@ if($ && $.fn && $.fn.dnnModuleDragDrop)
                 load();
                 return res.eq(0);
             }
-            
+
             container = $('<div class="inpage-frame-wrapper">'
                 + '<div class="inpage-frame"><iframe width="100%" height="100px" src="' + url + '"></iframe></div>'
                 + '</div>');
@@ -968,10 +976,10 @@ if($ && $.fn && $.fn.dnnModuleDragDrop)
                     return false;
                 }
                 syncHeight();
-                interval = setInterval(function() {
+                interval = setInterval(function () {
                     try {
                         syncHeight();
-                    } catch(e) {
+                    } catch (e) {
                         clearInterval(interval);
                     }
                 }, RESIZE_INTERVAL);
@@ -982,16 +990,19 @@ if($ && $.fn && $.fn.dnnModuleDragDrop)
         }
 
         function toggle(show) {
-            var moduleContent = container.parent('.DNNModuleContent'),
-                action = show === undefined ? !moduleContent.hasClass('dia-select') : show;
+            var moduleContent = container.parents('.DNNModuleContent').eq(0),
+                action = show === undefined ? !moduleContent.hasClass('dia-select') : show,
+                dirty;
 
             if (action) {
-                if (activeDialog === undefined) {
-                    activeDialog = iframe;
-                } else {
-                    console.log('already one dialog open', activeDialog);
-                    return false;
+                if (activeDialog !== undefined) {
+                    if (activeDialog == iframe) return false;
+                    dirty = activeDialog.vm.isDirty();
+                    // TODO: i18n
+                    if (dirty && !window.confirm('Unsaved changes detected. Would you like to continue?')) return false;
+                    $(activeDialog).eq(0).parents('.DNNModuleContent').eq(0).toggleClass('dia-select', false);
                 }
+                activeDialog = iframe;
             } else {
                 activeDialog = undefined;
             }
@@ -1010,7 +1021,7 @@ if($ && $.fn && $.fn.dnnModuleDragDrop)
         function getCommands() {
             return iframe.vm;
         }
-        
+
         function syncHeight() {
             var height = iframe.contentDocument.body.offsetHeight;
             if (iframe.previousHeight === height) return;
