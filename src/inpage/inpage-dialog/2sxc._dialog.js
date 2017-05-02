@@ -14,7 +14,7 @@
     $('body').on('mouseover', '.inpage-frame-wrapper', function () {
         $(this).parents('.DNNModuleContent').eq(0).toggleClass('dia-mouseover', true);
     });
-    
+
     $('body').on('mouseout', '.inpage-frame-wrapper', function () {
         $(this).parents('.DNNModuleContent').eq(0).toggleClass('dia-mouseover', false);
     });
@@ -25,6 +25,7 @@
             resizeInterval;
 
         init();
+        console.log({ frame: iframe });
 
         $(wrapperTag).before(container);
 
@@ -63,6 +64,9 @@
                 return res.eq(0);
             }
 
+            // REMOVE THIS
+            url = url.replace('/desktopmodules/tosic_sexycontent/dist/dnn/ui.html', 'http://localhost:4200');
+
             container = $('<div class="inpage-frame-wrapper">'
                 + '<div class="inpage-frame"><iframe width="100%" height="100px" src="' + url + '"></iframe></div>'
                 + '</div>');
@@ -98,7 +102,7 @@
             if (action) {
                 if (activeDialog !== undefined) {
                     if (activeDialog == iframe) return false;
-                    dirty = activeDialog.vm.isDirty();
+                    dirty = false; // activeDialog.vm.isDirty();
                     // TODO: i18n
                     if (dirty && !window.confirm('Unsaved changes detected. Would you like to continue?')) return false;
                     $(activeDialog).eq(0).parents('.DNNModuleContent').eq(0).toggleClass('dia-select', false);
@@ -107,7 +111,7 @@
             } else {
                 activeDialog = undefined;
             }
-
+            
             moduleContent.toggleClass('dia-select', action);
         }
 

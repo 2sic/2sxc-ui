@@ -89,6 +89,11 @@
 
                 return cmd.generateLink();
             },
+
+            _linkToNg4Dialog: function ( ){
+                return cmc._linkToNgDialog.apply(null, arguments).replace('ui.html', 'ui-a4');
+            },
+
             // open a new dialog of the angular-ui
             _openNgDialog: function (settings, event, closeCallback) {
                 var callback = function () {

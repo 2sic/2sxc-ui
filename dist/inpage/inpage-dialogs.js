@@ -119,7 +119,7 @@ function runOneInstallJob(packages, i, progressIndicator, $http) {
             setAppId: function(appId) {
                 return $http.get("View/Module/SetAppId", { params: { appId: appId } });
             },
-
+            
             getSelectableContentTypes: function() {
                 return $http.get("View/Module/GetSelectableContentTypes")
                     .then(function(result) {
@@ -175,7 +175,7 @@ function runOneInstallJob(packages, i, progressIndicator, $http) {
             // will generate an object necessary to communicate with the outer system
             var iframe = window.frameElement;
             iframe.vm = vm;
-
+            
             return {
                 dialogContainer: iframe,
                 window: window.parent,

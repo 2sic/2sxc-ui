@@ -24,7 +24,7 @@
             setAppId: function(appId) {
                 return $http.get("View/Module/SetAppId", { params: { appId: appId } });
             },
-
+            
             getSelectableContentTypes: function() {
                 return $http.get("View/Module/GetSelectableContentTypes")
                     .then(function(result) {

@@ -7,7 +7,7 @@
             // will generate an object necessary to communicate with the outer system
             var iframe = window.frameElement;
             iframe.vm = vm;
-
+            
             return {
                 dialogContainer: iframe,
                 window: window.parent,
