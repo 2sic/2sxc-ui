@@ -5,67 +5,135 @@
 // known issues
 // - we never got around to making the height adjust automatically
 (function () {
-    var diag = $2sxc._dialog = {
-        mode: "iframe",
-        template: "<iframe width='100%' height='100px' src='{{url}}' onresize=\"console.log('resize')\"></iframe>"
-    };
+    $2sxc._dialog = Dialog;
 
-    diag.create = function (sxc, wrapperTag, url, closeCallback) {
-        var iframe = $(diag.template.replace("{{url}}", url))[0];    // build iframe tag
+    var RESIZE_INTERVAL = 200,
+        SHOW_DELAY = 400,
+        activeDialog;
 
-        iframe.closeCallback = closeCallback;
-        iframe.sxc = sxc;
-        // iframe.attr("data-for-manual-debug", "app: " + sxc.manage.ContentGroup.AppUrl);
+    $('body').on('mouseover', '.inpage-frame-wrapper', function () {
+        $(this).parents('.DNNModuleContent').eq(0).toggleClass('dia-mouseover', true);
+    });
 
-        //#region data bridge both ways
-        iframe.getManageInfo = function() {
-            return iframe.sxc.manage._dialogParameters;
-        };
+    $('body').on('mouseout', '.inpage-frame-wrapper', function () {
+        $(this).parents('.DNNModuleContent').eq(0).toggleClass('dia-mouseover', false);
+    });
 
-        iframe.getAdditionalDashboardConfig = function () {
-            return iframe.sxc.manage._dashboardConfig;
-        };
+    function Dialog(sxc, wrapperTag, url, closeCallback) {
+        var container, // the dialog (jQuery object)
+            iframe, // frame inside the dialog (HTMLElement)
+            resizeInterval;
 
-        iframe.getCommands = function() {
+        init();
+
+        $(wrapperTag).before(container);
+
+        /**
+         * Assign properties to the iframe for later use.
+         */
+        return Object.assign(iframe, {
+            closeCallback: closeCallback,
+            sxc: sxc,
+            destroy: function () {
+                // TODO: evaluate what to do here
+            },
+            getManageInfo: getManageInfo,
+            getAdditionalDashboardConfig: getAdditionalDashboardConfig,
+            getCommands: getCommands,
+            syncHeight: syncHeight,
+            toggle: function () {
+                return toggle();
+            },
+            justHide: function () {
+                return toggle(false);
+            },
+            isVisible: function () {
+                return !container.hasClass('hidden');
+            }
+        });
+
+        function init() {
+            var res = $(wrapperTag).parent().find('.inpage-frame-wrapper');
+
+            // the dialog has already been initialized
+            if (res.length > 0) {
+                container = res.eq(0);
+                iframe = container.find('iframe')[0];
+                load();
+                return res.eq(0);
+            }
+            
+            // REMOVE THIS
+            url = url
+                .replace('/dist/dnn/ui.html', '/dist/ng/')
+                .replace('#', '&');
+            
+            container = $('<div class="inpage-frame-wrapper">'
+                + '<div class="inpage-frame"><iframe width="100%" height="100px" src="' + url + '"></iframe></div>'
+                + '</div>');
+            iframe = container.find('iframe')[0];
+
+            $(iframe).on('load', load);
+
+            function load() {
+                var interval;
+                if (activeDialog == iframe) {
+                    console.log('this dialog is already open');
+                    return false;
+                }
+                syncHeight();
+                interval = setInterval(function () {
+                    try {
+                        syncHeight();
+                    } catch (e) {
+                        clearInterval(interval);
+                    }
+                }, RESIZE_INTERVAL);
+                setTimeout(function () {
+                    toggle(true);
+                }, SHOW_DELAY);
+            }
+        }
+
+        function toggle(show) {
+            var moduleContent = container.parents('.DNNModuleContent').eq(0),
+                action = show === undefined ? !moduleContent.hasClass('dia-select') : show,
+                dirty;
+
+            if (action) {
+                if (activeDialog !== undefined) {
+                    if (activeDialog == iframe) return false;
+                    dirty = false; // activeDialog.vm.isDirty();
+                    // TODO: i18n
+                    if (dirty && !window.confirm('Unsaved changes detected. Would you like to continue?')) return false;
+                    $(activeDialog).eq(0).parents('.DNNModuleContent').eq(0).toggleClass('dia-select', false);
+                }
+                activeDialog = iframe;
+            } else {
+                activeDialog = undefined;
+            }
+            
+            moduleContent.toggleClass('dia-select', action);
+        }
+
+        function getManageInfo() {
+            return sxc.manage._dialogParameters;
+        }
+
+        function getAdditionalDashboardConfig() {
+            return sxc.manage._dashboardConfig;
+        }
+
+        function getCommands() {
             return iframe.vm;
-        };
-        //#endregion
+        }
 
-        //#region sync size
-        iframe.syncHeight = function () {
+        function syncHeight() {
             var height = iframe.contentDocument.body.offsetHeight;
-            if (iframe.previousHeight === height)
-                return;
+            if (iframe.previousHeight === height) return;
             window.diagBox = iframe;
             iframe.height = height + 'px';
             iframe.previousHeight = height;
-        };
-
-        function loadEventListener()  {
-            iframe.syncHeight();
-            iframe.resizeInterval = window.setInterval(iframe.syncHeight, 200); // Not ideal - polling the document height may cause performance issues
-            //diagBox.contentDocument.body.addEventListener('resize', function () { diagBox.syncHeight(); }, true); // The resize event is not called reliable when the iframe content changes
         }
-        iframe.addEventListener('load', loadEventListener);
-
-        //#endregion
-
-        //#region Visibility toggle & status
-
-        iframe.isVisible = function() { return iframe.style.display !== "none";   };
-        iframe.toggle = function () { iframe.style.display = iframe.style.display === "none" ? "" : "none"; };
-        iframe.justHide = function () { iframe.style.display = "none"; };
-        //#endregion
-
-        // remove the diagBox - important when replacing the app with ajax, and the diag needs to be re-initialized
-        iframe.destroy = function () {
-            window.clearInterval(iframe.resizeInterval);   // clear this first, to prevent errors
-            iframe.remove(); // use the jquery remove for this
-        };
-
-        $(wrapperTag).before(iframe);
-
-        return iframe;
-    };
-
+    }
 })();

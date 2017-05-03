@@ -7,10 +7,10 @@
             // will generate an object necessary to communicate with the outer system
             var iframe = window.frameElement;
             iframe.vm = vm;
-
+            
             return {
                 dialogContainer: iframe,
-                window: window.parent, 
+                window: window.parent,
                 sxc: iframe.sxc,
                 contentBlock: iframe.sxc.manage.contentBlock,
                 // getManageInfo: iframe.getManageInfo,
@@ -25,7 +25,7 @@
         var cViewWithoutContent = "_LayoutElement"; // needed to differentiate the "select item" from the "empty-is-selected" which are both empty
         var cAppActionManage = -2, cAppActionImport = -1, cAppActionCreate = -3;
         //#endregion
-
+        
         var realScope = $scope;
         var svc = moduleApiService;
 
@@ -48,10 +48,9 @@
         vm.appId = vm.dashInfo.appId !== 0 ? vm.dashInfo.appId : null;
         vm.savedAppId = vm.dashInfo.appId;
 
-
         vm.showRemoteInstaller = false;
         vm.remoteInstallerUrl = "";
-
+        vm.isDirty = isDirty;
         vm.loading = 0;
         vm.progressIndicator = {
             show: false,
@@ -61,15 +60,18 @@
 
         //#region installer
         function enableProgressIndicator() {
-            vm.progressIndicator.updater = $interval(function() {
+            vm.progressIndicator.updater = $interval(function () {
                 // don't do anything, this is just to ensure the digest happens
             }, 200);
         }
         //#endregion
 
+        function isDirty() {
+            return vm.form.$dirty;
+        }
 
         vm.filteredTemplates = function (contentTypeId) {
-            if (vm.templates.length === 0)  // skip any filters if we don't have anything to go on yet
+            if (vm.templates.length === 0) // skip any filters if we don't have anything to go on yet
                 return vm.templates;
 
             // filters for "normal" content - applies to everything
@@ -81,7 +83,7 @@
             // Don't filter on App - so just return all
             //if (!vm.isContentApp)
             //    return vm.templates;
-            
+
             // add more conditions if in Content-Mode (which has a type-selector)
             if (vm.isContentApp)
                 condition = angular.extend(condition, {
@@ -91,9 +93,7 @@
             return result;
         };
 
-
-        vm.reloadTemplatesAndContentTypes = function() {
-
+        vm.reloadTemplatesAndContentTypes = function () {
             vm.loading++;
             var getContentTypes = svc.getSelectableContentTypes();
             var getTemplates = svc.getSelectableTemplates();
@@ -111,7 +111,7 @@
                         if (found && found[0] && found[0].IsHidden) found[0].IsHidden = false;
                     }
                     unhideUsedContentType(function (item) { return item.StaticName === vm.contentTypeId; });
-                    unhideUsedContentType(function(item) { return item.TemplateId === vm.templateId; });
+                    unhideUsedContentType(function (item) { return item.TemplateId === vm.templateId; });
 
                     // unhide the currently used template
                     var tmpl = $filter("filter")(vm.templates, { TemplateId: vm.templateId }, true);
@@ -144,19 +144,19 @@
 
             // App
             vm.persistTemplate(false)
-                .then(function() {
+                .then(function () {
                     return wrapper.window.location.reload(); //note: must be in a function, as the reload is a method of the location object
                 });
         });
 
         // Auto-set view-dropdown if content-type changed
         realScope.$watch("vm.contentTypeId", function (newContentTypeId, oldContentTypeId) {
-        	if (newContentTypeId === oldContentTypeId)
-        		return;
-        	// Select first template if contentType changed
-        	var firstTemplateId = vm.filteredTemplates(newContentTypeId)[0].TemplateId; 
-        	if (vm.templateId !== firstTemplateId && firstTemplateId !== null)
-        		vm.templateId = firstTemplateId;
+            if (newContentTypeId === oldContentTypeId)
+                return;
+            // Select first template if contentType changed
+            var firstTemplateId = vm.filteredTemplates(newContentTypeId)[0].TemplateId;
+            if (vm.templateId !== firstTemplateId && firstTemplateId !== null)
+                vm.templateId = firstTemplateId;
         });
 
         // Save/reload on app-change or show import-window
@@ -173,7 +173,7 @@
             var newApp = $filter('filter')(vm.apps, { AppId: newAppId })[0];
 
             svc.setAppId(newAppId)
-                .then(function() {
+                .then(function () {
                     if (newApp.SupportsAjaxReload) {
                         vm.reInitAll(true); // special code to force app-change/reload
                     } else
@@ -181,9 +181,9 @@
                 });
         });
 
-        vm.manageApps = function() {    wrapper.sxc.manage.run("zone");    };
-        vm.appSettings = function() {   wrapper.sxc.manage.run("app");     };
-        vm.appImport = function() {   wrapper.sxc.manage.run("app-import");     };
+        vm.manageApps = function () { wrapper.sxc.manage.run("zone"); };
+        vm.appSettings = function () { wrapper.sxc.manage.run("app"); };
+        vm.appImport = function () { wrapper.sxc.manage.run("app-import"); };
 
         // Cancel and reset back to original state
         vm.cancelTemplateChange = wrapper.contentBlock._cancelTemplateChange;
@@ -193,7 +193,7 @@
         vm.renderTemplate = wrapper.contentBlock.reload;  // just map to that method
         vm.reInitAll = wrapper.contentBlock.reloadAndReInitialize;  // just map to that method
 
-        vm.appStore = function() {
+        vm.appStore = function () {
             window.open("http://2sxc.org/en/apps");
         };
 
@@ -207,7 +207,7 @@
             if (vm.dashInfo.templateChooserVisible) {
                 var promises = [];
                 if (vm.appId !== null) // if an app had already been chosen OR the content-app (always chosen)
-                    promises.push(vm.reloadTemplatesAndContentTypes()); 
+                    promises.push(vm.reloadTemplatesAndContentTypes());
 
                 // if it's the app-dialog and the app's haven't been loaded yet...
                 if (!vm.isContentApp && vm.apps.length === 0)
@@ -220,8 +220,8 @@
         vm.externalInstaller = {
             // based on situation, decide if we should show the auto-install IFrame
             showIfConfigIsEmpty: function () {
-                var showAutoInstaller = (vm.isContentApp) 
-                    ? vm.templates.length === 0 
+                var showAutoInstaller = (vm.isContentApp)
+                    ? vm.templates.length === 0
                     : vm.appCount === 0;
 
                 if (showAutoInstaller)
@@ -233,8 +233,8 @@
                     processInstallMessage(event, AppInstanceId, vm.progressIndicator, $http); // this calls an external, non-angular method to handle resizing & installation...
                 }, false);
             },
-
-            setup: function() {
+            
+            setup: function () {
                 svc.gettingStartedUrl().then(function (result) {
                     if (result.data) {  // only show getting started if it's really still a blank system, otherwise the server will return null, then don't do anything
                         vm.externalInstaller.configureCallback();
@@ -257,9 +257,9 @@
             }
         };
 
-        vm.loadApps = function() {
+        vm.loadApps = function () {
             return svc.getSelectableApps()
-                .then(function(data) {
+                .then(function (data) {
                     vm.apps = data.data;
                     vm.appCount = data.data.length; // needed in the future to check if it shows getting started
 
@@ -273,15 +273,12 @@
 
         //#region initialize this
 
-        vm.activate = function() {
-            vm.show(true); 
+        vm.activate = function () {
+            vm.show(true);
         };
 
         vm.activate();
 
         //#endregion
-
     });
-
-
 })();

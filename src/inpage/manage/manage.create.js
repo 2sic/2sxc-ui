@@ -57,23 +57,6 @@
 
             //#endregion official, public properties - everything below this can change at any time
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             // internal method to find out if it's in edit-mode
             _isEditMode: function () { return editContext.Environment.IsEditable; },
 
@@ -92,6 +75,7 @@
 
             // init this object 
             init: function init() {
+
                 // enhance UI in case there are known errors / issues
                 if (editContext.error.type)
                     editManager._handleErrors(editContext.error.type, contentBlockTag);
@@ -100,10 +84,22 @@
                 editManager._commands.init(editManager);
                 editManager.contentBlock = $2sxc._contentBlock.create(sxc, editManager, contentBlockTag);
 
-                // attach & open the mini-dashboard iframe
-                if (!editContext.error.type && editContext.ContentBlock.ShowTemplatePicker)
-                    editManager.run("layout");
+                if ($(contentBlockTag).html().replace(/ /g, '').replace(/\n/g, '') === '') ensureInlineGlassesButton();
 
+                // display the dialog
+                if (!editContext.error.type && editContext.ContentBlock.ShowTemplatePicker) {
+                    editManager.run("layout");
+                }
+
+                function ensureInlineGlassesButton() {
+                    var btn;
+                    if ($(contentBlockTag).parent().find('.glasses').length != 0) return;
+                    btn = $('<div class="glasses"><i class="icon-sxc-glasses" aria-hidden="true"></i></div>');
+                    btn.on('click', function() {
+                        editManager.run("layout");
+                    });
+                    $(contentBlockTag).before(btn);
+                }
             },
 
             // private: show error when the app-data hasn't been installed yet for this imported-module
@@ -123,16 +119,16 @@
             // change config by replacing the guid, and refreshing dependend sub-objects
             _updateContentGroupGuid: function (newGuid) {
                 editContext.ContentGroup.Guid = newGuid;
-                toolsAndButtons.refreshConfig(); 
+                toolsAndButtons.refreshConfig();
                 editManager._toolbarConfig = toolsAndButtons.config;
             },
 
-            _getCbManipulator: function() {
+            _getCbManipulator: function () {
                 return $2sxc._contentBlock.manipulator(sxc);
             },
 
             //#region deprecated properties - these all should have been undocumented/ private till now
-            
+
             // 2016-11-03 v.08.06 deprecated command "action", it was only for internal use till now
             action: function () {
                 console.error("Obsolete: you are using a deprecated method 'action' which will be removed in 2sxc v9. you must change it to 'run'");
@@ -146,7 +142,7 @@
 
             //#endregion
 
-            };
+        };
 
         editManager.init();
         return editManager;
@@ -154,7 +150,7 @@
 
     //#region helper functions
     function getContentBlockTag(sxci) {
-         return $("div[data-cb-id='" + sxci.cbid + "']")[0];
+        return $("div[data-cb-id='" + sxci.cbid + "']")[0];
     }
 
     function getContextInfo(cb) {

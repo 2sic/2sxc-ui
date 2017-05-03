@@ -1,5 +1,4 @@
-﻿// Initial variables, constants, etc.
-var gulp = require("gulp"),
+﻿var gulp = require("gulp"),
     $ = require("gulp-load-plugins")({ lazy: false }),
     packageJSON = require("./package"),
     // would need this to always auto-publish after compile... runSequence = require('run-sequence'),
@@ -16,7 +15,7 @@ var gulp = require("gulp"),
         rootDist: "dist/" // "tmp-gulp/dist/"
     };
 
-
+gulp.task('develop', [ 'A-watch-our-code', 'B-watch-publish-to-2sxc' ]);
 
 // register all watches & run them
 gulp.task("A-watch-our-code", function () {
@@ -227,11 +226,7 @@ function createWatchCallback(set, part) {
         run({ path: "[none]", type: "autostart" });
     return run;
 }
-
-
 //#endregion
-
-
 
 /// create watch-sets for all our code blocks
 function createSetsForOurCode() {

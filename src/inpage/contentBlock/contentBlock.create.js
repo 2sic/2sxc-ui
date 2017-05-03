@@ -69,12 +69,14 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
                         cb.sxc = cb.sxc.recreate();
                         cb.sxc.manage._toolbar._processToolbars(); // sub-optimal deep dependency
                         cb.buttonsAreLoaded = true;
+                    }, function () {
+                        // nothing to load
                     });
             else
                 return window.location.reload();
 
         },
-
+        
         // retrieve new preview-content with alternate template and then show the result
         reload: function (templateId) {
             // if nothing specified, use stored id
@@ -83,7 +85,7 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
 
             // if nothing specified / stored, cancel
             if (!templateId)
-                return null;
+                return $.Deferred().reject();
 
             // if reloading a non-content-app, re-load the page
             if (!manage._reloadWithAjax) // special code to force ajax-app-change
@@ -148,7 +150,7 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
                     cbisentity: editContext.ContentBlock.IsEntity,
                     cbid: editContext.ContentBlock.Id,
                     originalparameters: JSON.stringify(editContext.Environment.parameters)
-        },
+                },
                 dataType: "html"
             });
         },
@@ -194,18 +196,16 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
             if (!diag) {
                 // still not found, create it
                 diag = manage.dialog = manage.run("dash-view"); // not ideal, must improve
-
             } else {
                 diag.toggle();
             }
 
             var isVisible = diag.isVisible();
-            if (manage._editContext.ContentBlock.ShowTemplatePicker !== isVisible)
-                cb._setTemplateChooserState(isVisible)
-                    .then(function () {
-                        manage._editContext.ContentBlock.ShowTemplatePicker = isVisible;
-                    });
-
+            if (manage._editContext.ContentBlock.ShowTemplatePicker === isVisible) return;
+            cb._setTemplateChooserState(isVisible)
+                .then(function () {
+                    manage._editContext.ContentBlock.ShowTemplatePicker = isVisible;
+                });
         },
 
 
