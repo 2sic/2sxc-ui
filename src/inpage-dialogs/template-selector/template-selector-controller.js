@@ -25,7 +25,7 @@
         var cViewWithoutContent = "_LayoutElement"; // needed to differentiate the "select item" from the "empty-is-selected" which are both empty
         var cAppActionManage = -2, cAppActionImport = -1, cAppActionCreate = -3;
         //#endregion
-
+        
         var realScope = $scope;
         var svc = moduleApiService;
 

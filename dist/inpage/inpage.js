@@ -929,7 +929,6 @@ if($ && $.fn && $.fn.dnnModuleDragDrop)
             resizeInterval;
 
         init();
-        console.log({ frame: iframe });
 
         $(wrapperTag).before(container);
 
@@ -969,8 +968,10 @@ if($ && $.fn && $.fn.dnnModuleDragDrop)
             }
 
             // REMOVE THIS
-            url = url.replace('/desktopmodules/tosic_sexycontent/dist/dnn/ui.html', 'http://localhost:4200');
-
+            url = url
+                .replace('/dist/dnn/ui.html', '/dist/ng/')
+                .replace('#', '&');
+            
             container = $('<div class="inpage-frame-wrapper">'
                 + '<div class="inpage-frame"><iframe width="100%" height="100px" src="' + url + '"></iframe></div>'
                 + '</div>');

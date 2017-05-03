@@ -149,6 +149,8 @@ body.sc-tb-show-all .sc-element .sc-menu { display: initial !important; }
     -webkit-user-select: none;
     -ms-user-select: none;
     user-select: none;
+    background: rgba(255, 255, 255, .8);
+    border-bottom: 1px solid rgba(0, 0, 0, .2);
 }
 
 .inpage-frame-wrapper .inpage-frame iframe {
@@ -168,8 +170,6 @@ body.sc-tb-show-all .sc-element .sc-menu { display: initial !important; }
     top: 0;
     width: 100%;
     z-index: 9999;
-    background: rgba(13, 71, 161, .8);
-    border-bottom: 1px solid rgb(13, 71, 161);
 }
 
 .DNNModuleContent .glasses {

@@ -3,7 +3,10 @@ import { IDialogFrameElement } from "app/core/dialog-frame-element";
 import { ModuleApiService } from "app/core/module-api.service";
 import { Observable } from 'rxjs/Rx';
 import { Subscription } from "rxjs/Subscription";
-import { ActivatedRoute, Router } from "@angular/router";
+import { ActivatedRoute, Router, Params } from "@angular/router";
+import { TemplateFilterPipe } from "app/template-picker/template-filter.pipe";
+
+var win = window;
 
 @Component({
   selector: 'app-template-picker',
@@ -11,121 +14,183 @@ import { ActivatedRoute, Router } from "@angular/router";
   styleUrls: ['./template-picker.component.scss']
 })
 export class TemplatePickerComponent implements OnInit {
-  private frame: IDialogFrameElement;
-  private cViewWithoutContent: string = '_LayoutElement';
-  private cAppActionManage: number = -2;
-  private cAppActionImport: number = -1;
-  private cAppActionCreate: number = -3;
-  private apps: any[] = [];
-  private contentTypes: any[] = [];
-  private templates: any[] = [];
-  private isContentApp: boolean;
-  private supportsAjax: boolean;
-  private showAdvanced: boolean;
-  private templateId: number;
-  private undoTemplateId: number;
-  private contentTypeId: number;
-  private undoContentTypeId: number;
-  private appId: number;
-  private savedAppId: number;
-  private showRemoteInstaller: boolean = false;
-  private remoteInstallerUrl: string = '';
-  private isLoading: boolean = false;
+  frame: IDialogFrameElement;
+  dashInfo: any;
+  cViewWithoutContent: string = '_LayoutElement';
+  cAppActionManage: number = -2;
+  cAppActionImport: number = -1;
+  cAppActionCreate: number = -3;
+  apps: any[] = [];
+  contentTypes: any[] = [];
+  templates: any[] = [];
+  isContentApp: boolean;
+  supportsAjax: boolean;
+  showAdvanced: boolean;
+  templateId: number;
+  undoTemplateId: number;
+  contentTypeId: number;
+  undoContentTypeId: number;
+  appId: number;
+  savedAppId: number;
+  showRemoteInstaller: boolean = false;
+  remoteInstallerUrl: string = '';
+  isLoading: boolean = false;
+  appCount: number;
 
   constructor(
-    @Inject("windowObject") window: Window,
     private api: ModuleApiService,
-    private router: Router
+    private route: ActivatedRoute,
+    public templateFilter: TemplateFilterPipe
   ) {
-    this.frame = <IDialogFrameElement>window.frameElement;
-    console.log(router.parseUrl(router.url).queryParams);
+    this.frame = <IDialogFrameElement>win.frameElement;
+    let params = route.snapshot.queryParams
+    this.api.configure(params['mid'], params['tid'])
   }
 
   isDirty(): boolean {
     return false;
   }
 
-  /*realScope.$watch("vm.templateId", function (newTemplateId, oldTemplateId) {
-      if (newTemplateId === oldTemplateId)
-          return;
+  private appStore() {
+    win.open("http://2sxc.org/en/apps");
+  }
 
-      // Content (ajax, don't save the changed value)
-      if (vm.supportsAjax)
-          return vm.renderTemplate(newTemplateId);
+  private updateTemplateId(evt) {
+    let id = evt.value;
+    if (this.supportsAjax) return this.frame.sxc.manage.contentBlock.reload(id);
 
-      // ToDo: Not sure why we need to set this value before calling persistTemplate. Clean up
-      wrapper.contentBlock.templateId = vm.templateId;
+    // TODO: Not sure why we need to set this value before calling persistTemplate. Clean up!
+    this.frame.sxc.manage.contentBlock.templateId = this.templateId;
 
-      // App
-      vm.persistTemplate(false)
-          .then(function () {
-              return wrapper.window.location.reload(); //note: must be in a function, as the reload is a method of the location object
-          });
-  });*/
+    // app
+    this.frame.sxc.manage.contentBlock.persistTemplate(false)
+      .then(() => win.parent.location.reload());
+  }
+
+  updateContentTypeId(evt) {
+    let id = evt.value;
+
+    // select first template
+    let firstTemplateId = this.templateFilter.transform(this.templates, id)[0].TemplateId;
+    if (firstTemplateId === null) return false;
+    this.templateId = firstTemplateId;
+  }
+
+  updateAppId(evt) {
+    let id = evt.value;
+
+    // add app
+    if (id === this.cAppActionImport) return this.frame.sxc.manage.run('app-import');
+
+    // find new app specs
+    var newApp = this.apps.find(a => a.AppId === id);
+
+    this.api.setAppId(id)
+      .subscribe(res => {
+        if (newApp.SupportsAjaxReload) return this.frame.sxc.manage.reloadAndReInitialize(true);
+        win.parent.location.reload();
+      })
+  }
 
   ngOnInit() {
-    let di = this.frame.getAdditionalDashboardConfig();
-    this.isContentApp = di.isContent;
-    this.supportsAjax = this.isContentApp || di.supportsAjax;
-    this.showAdvanced = di.user.canDesign;
-    this.templateId = di.templateId;
-    this.undoTemplateId = di.templateId;
-    this.contentTypeId = di.contentTypeId;
+    this.dashInfo = this.frame.getAdditionalDashboardConfig();
+    this.isContentApp = this.dashInfo.isContent;
+    this.supportsAjax = this.isContentApp || this.dashInfo.supportsAjax;
+    this.showAdvanced = this.dashInfo.user.canDesign;
+    this.templateId = this.dashInfo.templateId;
+    this.undoTemplateId = this.dashInfo.templateId;
+    this.contentTypeId = this.dashInfo.contentTypeId;
     this.undoContentTypeId = this.contentTypeId;
-    this.appId = di.appId || null;
-    this.savedAppId = di.appId;
+    this.appId = this.dashInfo.appId || null;
+    this.savedAppId = this.dashInfo.appId;
     this.frame.isDirty = this.isDirty;
-
-    console.log({ frame: this.frame });
-    // this.api.configure(moduleId, tabId)
-
     this.reloadTemplatesAndContentTypes();
+    this.show(true);
   }
 
-  private reloadTemplatesAndContentTypes(): Subscription {
+  private reloadTemplatesAndContentTypes(): Observable<any> {
     this.isLoading = true;
-    return Observable.forkJoin([
+    let obs = Observable.forkJoin([
       this.api.getSelectableContentTypes(),
       this.api.getSelectableTemplates()
-    ]).subscribe(response => {
-      console.log("response", response);
-    })
+    ]);
+
+    obs.subscribe(res => {
+      this.contentTypes = res[0] || [];
+      this.templates = res[1] || [];
+
+      // ensure current content type is visible
+      this.contentTypes
+        .filter(c => c.StaticName === this.contentTypeId || c.TemplateId === this.templateId)
+        .forEach(c => c.IsHidden = false);
+
+      // add option for no content type if there are templates without
+      if (this.templates.find(t => t.ContentTypeStaticName === '')) {
+
+        // TODO: i18n
+        let name = "TemplatePicker.LayoutElement";
+        this.contentTypes.push({
+          StaticName: this.cViewWithoutContent,
+          Name: name,
+          Label: name,
+          IsHidden: false
+        });
+      }
+
+      // sort the content types
+      this.contentTypes = this.contentTypes
+        .sort((a, b) => {
+          if (a.Name > b.Name) return 1;
+          if (a.Name < b.Name) return -1;
+          return 0;
+        });
+
+      this.isLoading = false;
+    });
+
+    return obs;
   }
 
-  /*vm.reloadTemplatesAndContentTypes = function () {
-    var getContentTypes = svc.getSelectableContentTypes();
-    var getTemplates = svc.getSelectableTemplates();
+  toggle() {
+    if (this.dashInfo.templateChooserVisible) return this.frame.sxc.manage.contentBlock._cancelTemplateChange();
+    this.show(true);
+  }
 
-    return $q.all([getContentTypes, getTemplates])
-      .then(function (res) {
-        // map to view-model
-        vm.contentTypes = res[0].data || [];
-        vm.templates = res[1].data || [];
+  private show(stateChange): Subscription {
+    // todo 8.4 disabled this, as this info should never be set from here again...
+    if (stateChange !== undefined)  // optionally change the show-state
+      this.dashInfo.templateChooserVisible = stateChange;
 
-        // if the currently selected content-type/template is configured to hidden, 
-        // re-show it, so that it can be used in the selectors
-        function unhideUsedContentType(filter) {
-          var found = vm.contentTypes.filter(filter);
-          if (found && found[0] && found[0].IsHidden) found[0].IsHidden = false;
-        }
-        unhideUsedContentType(function (item) { return item.StaticName === vm.contentTypeId; });
-        unhideUsedContentType(function (item) { return item.TemplateId === vm.templateId; });
+    if (this.dashInfo.templateChooserVisible) {
+      let observables = [];
 
-        // unhide the currently used template
-        var tmpl = $filter("filter")(vm.templates, { TemplateId: vm.templateId }, true);
-        if (tmpl && tmpl[0]) tmpl[0].IsHidden = false;
+      if (this.appId !== null) // if an app had already been chosen OR the content-app (always chosen)
+        observables.push(this.reloadTemplatesAndContentTypes());
 
-        // Add option for no content type if there are templates without
-        if ($filter("filter")(vm.templates, { ContentTypeStaticName: "" }, true).length > 0) {
-          var le = { StaticName: cViewWithoutContent, Name: $translate.instant("TemplatePicker.LayoutElement"), IsHidden: false };
-          le.Label = le.Name;
-          vm.contentTypes.push(le);
-        }
+      // if it's the app-dialog and the app's haven't been loaded yet...
+      if (!this.isContentApp && this.apps.length === 0)
+        observables.push(this.loadApps());
 
-        // sort them now
-        vm.contentTypes = $filter("orderBy")(vm.contentTypes, "Name");
+      return Observable.forkJoin(observables)
+        .subscribe(() => {
+          // TODO: implement external installer
+          // this.externalInstaller.showIfConfigIsEmpty
+        })
+    }
+  }
 
-        vm.loading--;
-      });
-  };*/
+  private loadApps(): Observable<any> {
+    let obs = this.api.getSelectableApps();
+    obs.subscribe(apps => {
+      console.log("apps", apps);
+
+      this.apps = apps;
+      this.appCount = apps.length; // needed in the future to check if it shows getting started
+
+      if (this.showAdvanced) {
+        this.apps.push({ Name: "TemplatePicker.Install", AppId: this.cAppActionImport });
+      }
+    });
+    return obs;
+  };
 }
