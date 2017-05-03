@@ -93,6 +93,7 @@
                     controller.webApi.get(controller.data.source)
                         .then(controller.data.source.success, controller.data.source.error);
                     return controller.data;
+
                 },
 
                 on: function(events, callback) {
@@ -201,6 +202,7 @@
                     return result;
                 }
 
+
                 // if it's an unspecified 0-error, it's probably not an error but a cancelled request, (happens when closing popups containing angularJS)
                 if (result.status === 0 || result.status === -1)
                     return result;
@@ -215,6 +217,8 @@
                     if (msg) infoText += "\nMessage: " + msg;
                     var msgDet = srvResp.MessageDetail || srvResp.ExceptionMessage;
                     if (msgDet) infoText += "\nDetail: " + msgDet;
+
+
                     if (msgDet && msgDet.indexOf("No action was found") === 0)
                         if (msgDet.indexOf("that matches the name") > 0)
                             infoText += "\n\nTip from 2sxc: you probably got the action-name wrong in your JS.";
@@ -250,13 +254,14 @@
 
     $2sxc._controllers = {};
     $2sxc.sysinfo = {
-        version: "08.12.00",
+        version: "09.00.00",
         description: "The 2sxc Controller object"
     };
 
     $2sxc.beta = {};
     $2sxc._data = {};
     
+
     // this creates a full-screen iframe-popup and provides a close-command to finish the dialog as needed
     $2sxc.totalPopup = {
         open: function openTotalPopup(url, callback) {
@@ -339,13 +344,17 @@
         if (!iid || !cbid) return null;
         return $2sxc(iid, cbid);
     };
-    
+
+
+
+
     // note: I would like to remove this from $2sxc, but it's currently used both in the inpage-edit and in the dialogs
     // debug state which is needed in various places
     $2sxc.debug = {
         load: ($2sxc.urlParams.get("debug") === "true"),
         uncache: $2sxc.urlParams.get("sxcver")
     };
+
 
     // mini-helpers to manage 2sxc parts, a bit like a dependency loader which will optimize to load min/max depending on debug state
     $2sxc.parts = {

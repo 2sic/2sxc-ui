@@ -93,7 +93,7 @@
 
                 function ensureInlineGlassesButton() {
                     var btn;
-                    if ($(contentBlockTag).parent().find('.glasses').length != 0) return;
+                    if ($(contentBlockTag).parent().find('.glasses').length !== 0) return;
                     btn = $('<div class="glasses"><i class="icon-sxc-glasses" aria-hidden="true"></i></div>');
                     btn.on('click', function() {
                         editManager.run("layout");
