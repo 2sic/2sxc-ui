@@ -41,9 +41,9 @@ body.sc-tb-show-all .sc-element .sc-menu { display: initial !important; }
     background-color: #0088f4;
     border-style: solid; 
     box-sizing: content-box;
-    border-radius: 3px;
-    -webkit-border-radius: 3px; 
-    -moz-border-radius: 3px;
+    border-radius: 20px; /*3px;*/
+    -webkit-border-radius: 20px; 
+    -moz-border-radius: 20px;
     color: #fff; 
     text-align: center; 
     font-size: 15px }
