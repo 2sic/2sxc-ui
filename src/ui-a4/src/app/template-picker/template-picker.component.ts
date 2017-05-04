@@ -5,6 +5,8 @@ import { Observable } from 'rxjs/Rx';
 import { Subscription } from "rxjs/Subscription";
 import { ActivatedRoute, Router, Params } from "@angular/router";
 import { TemplateFilterPipe } from "app/template-picker/template-filter.pipe";
+import { HttpInterceptorService } from "app/http-interceptor.service";
+import { Http } from "@angular/http";
 
 var win = window;
 
@@ -40,17 +42,16 @@ export class TemplatePickerComponent implements OnInit {
   constructor(
     private api: ModuleApiService,
     private route: ActivatedRoute,
+    private http: Http,
     public templateFilter: TemplateFilterPipe
   ) {
     this.frame = <IDialogFrameElement>win.frameElement;
-    let params = route.snapshot.queryParams
-    this.api.configure(params['mid'], params['tid'])
   }
 
   isDirty(): boolean {
     return false;
   }
-
+  
   private appStore() {
     win.open("http://2sxc.org/en/apps");
   }
@@ -182,8 +183,6 @@ export class TemplatePickerComponent implements OnInit {
   private loadApps(): Observable<any> {
     let obs = this.api.getSelectableApps();
     obs.subscribe(apps => {
-      console.log("apps", apps);
-
       this.apps = apps;
       this.appCount = apps.length; // needed in the future to check if it shows getting started
 

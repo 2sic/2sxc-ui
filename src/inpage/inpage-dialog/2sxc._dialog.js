@@ -62,12 +62,12 @@
                 load();
                 return res.eq(0);
             }
-            
+
             // REMOVE THIS
             url = url
-                .replace('/dist/dnn/ui.html', '/dist/ng/')
+                // .replace('/desktopmodules/tosic_sexycontent/dist/dnn/ui.html', 'http://localhost:4200')
                 .replace('#', '&');
-            
+
             container = $('<div class="inpage-frame-wrapper">'
                 + '<div class="inpage-frame"><iframe width="100%" height="100px" src="' + url + '"></iframe></div>'
                 + '</div>');
@@ -112,7 +112,7 @@
             } else {
                 activeDialog = undefined;
             }
-            
+
             moduleContent.toggleClass('dia-select', action);
         }
 
