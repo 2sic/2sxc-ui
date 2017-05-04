@@ -5,8 +5,8 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class TemplateFilterPipe implements PipeTransform {
 
-  transform(templates: any[], contentTypeId: string): any[] {
+  transform(templates: any[], args: any): any[] {
     return templates
-      .filter(t => !t.IsHidden && t.ContentTypeStaticName === (contentTypeId || ''));
+      .filter(t => !t.IsHidden && (!args.isContentApp || t.ContentTypeStaticName === (args.contentTypeId || '')));
   }
 }

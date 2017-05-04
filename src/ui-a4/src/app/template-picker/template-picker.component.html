@@ -16,7 +16,7 @@
                 <md-icon>add_shopping_cart</md-icon>
             </button>
             <button md-mini-fab (click)="frame.sxc.manage.run('zone')" title="{{ 'TemplatePicker.Zone' }}">
-                <md-icon>settings</md-icon>
+                <md-icon>extension</md-icon>
             </button>
         </div>
     </div>
@@ -29,7 +29,7 @@
     </div>
     <div class="row" fxLayout="row" *ngIf="isContentApp ? contentTypeId != 0 : (savedAppId != 0)">
         <md-select [(ngModel)]="templateId" (change)="updateTemplateId($event)" [disabled]="templates.length == 0 && templateId">
-            <md-option *ngFor="let template of templates | templateFilter:contentTypeId" [value]="template.TemplateId">
+            <md-option *ngFor="let template of templates | templateFilter:{ contentTypeId: contentTypeId, isContentApp: isContentApp }" [value]="template.TemplateId">
                 {{ template.Name }}
             </md-option>
         </md-select>
@@ -41,12 +41,13 @@
     </button>
     </div>
     <div *ngIf="showRemoteInstaller">
-        <iframe id="frGettingStarted" src="{{ remoteInstallerUrl }}" width="100%" height="300px"></iframe>
-        <div class="sc-loading" id="pnlLoading" *ngIf="progressIndicator.show">
+        <md-progress-bar *ngIf="showProgress"></md-progress-bar>
+        <iframe class="fr-getting-started" id="frGettingStarted" [src]="remoteInstallerUrl" width="100%" height="300px"></iframe>
+        <!--<div class="sc-loading" id="pnlLoading" *ngIf="progressIndicator.show">
             <i class="icon-eav-spinner animate-spin"></i>
             <span class="sc-loading-label">
                 installing <span id="packageName">{{ progressIndicator.label }}</span>
             </span>
-        </div>
+        </div>-->
     </div>
 </md-card>

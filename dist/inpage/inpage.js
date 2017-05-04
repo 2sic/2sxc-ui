@@ -927,7 +927,7 @@ if($ && $.fn && $.fn.dnnModuleDragDrop)
         init();
 
         $(wrapperTag).before(container);
-
+        
         /**
          * Assign properties to the iframe for later use.
          */

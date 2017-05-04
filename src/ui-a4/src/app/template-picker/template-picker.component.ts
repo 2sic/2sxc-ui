@@ -7,7 +7,12 @@ import { ActivatedRoute, Router, Params } from "@angular/router";
 import { TemplateFilterPipe } from "app/template-picker/template-filter.pipe";
 import { HttpInterceptorService } from "app/http-interceptor.service";
 import { Http } from "@angular/http";
+import { GettingStartedService } from "app/getting-started.service";
+import { DomSanitizer, SafeResourceUrl, SafeUrl } from '@angular/platform-browser';
+import { $2sxcService } from "app/core/$2sxc.service";
+import { MdProgressBarModule } from '@angular/material';
 
+declare const $2sxc: any;
 var win = window;
 
 @Component({
@@ -27,6 +32,7 @@ export class TemplatePickerComponent implements OnInit {
   templates: any[] = [];
   isContentApp: boolean;
   supportsAjax: boolean;
+  showProgress: boolean = false;
   showAdvanced: boolean;
   templateId: number;
   undoTemplateId: number;
@@ -37,39 +43,42 @@ export class TemplatePickerComponent implements OnInit {
   showRemoteInstaller: boolean = false;
   remoteInstallerUrl: string = '';
   isLoading: boolean = false;
-  appCount: number;
-  /*externalInstaller: any = {
+  externalInstaller: any = {
     showIfConfigIsEmpty: () => {
-      var showAutoInstaller = (this.isContentApp)
+      var showAutoInstaller = this.isContentApp
         ? this.templates.length === 0
-        : this.appCount === 0;
+        : this.apps.length === 0;
 
       if (showAutoInstaller) this.externalInstaller.setup();
     },
     configureCallback: () => {
       window.addEventListener("message", evt => {
-        processInstallMessage(evt, appId, this.progressIndicator, $http); // this calls an external, non-angular method to handle resizing & installation...
+        this.showProgress = true;
+        // TODO: mid into service
+        this.gettingStarted.processInstallMessage(evt, $2sxc.urlParams.require('mid'))
+          .subscribe(() => this.showProgress = false);
       }, false);
     },
     setup: () => {
       this.api.gettingStartedUrl()
-        .then(function (result) {
-          if (result.data) {  // only show getting started if it's really still a blank system, otherwise the server will return null, then don't do anything
-            this.externalInstaller.configureCallback();
-            this.showRemoteInstaller = true;
-            enableProgressIndicator();
-            this.remoteInstallerUrl = $sce.trustAsResourceUrl(result.data);
-          }
+        .subscribe(response => {
+          // only show getting started if it's really still a blank system, otherwise the server will return null, then don't do anything
+          if (!response.json()) return;
+          this.externalInstaller.configureCallback();
+          this.showRemoteInstaller = true;
+          this.remoteInstallerUrl = <string>this.sanitizer.bypassSecurityTrustResourceUrl(response.json());
         });
     }
-  };*/
+  };
 
   constructor(
     private api: ModuleApiService,
     private route: ActivatedRoute,
     private http: Http,
-    // private appId: appId,
-    public templateFilter: TemplateFilterPipe
+    private gettingStarted: GettingStartedService,
+    public templateFilter: TemplateFilterPipe,
+    private sanitizer: DomSanitizer,
+    private sxc: $2sxcService
   ) {
     this.frame = <IDialogFrameElement>win.frameElement;
   }
@@ -114,7 +123,7 @@ export class TemplatePickerComponent implements OnInit {
 
     this.api.setAppId(id)
       .subscribe(res => {
-        if (newApp.SupportsAjaxReload) return this.frame.sxc.manage.reloadAndReInitialize(true);
+        if (newApp.SupportsAjaxReload) return this.frame.sxc.manage.contentBlock.reloadAndReInitialize(true);
         win.parent.location.reload();
       })
   }
@@ -199,10 +208,7 @@ export class TemplatePickerComponent implements OnInit {
         observables.push(this.loadApps());
 
       return Observable.forkJoin(observables)
-        .subscribe(() => {
-          // TODO: implement external installer
-          // this.externalInstaller.showIfConfigIsEmpty
-        })
+        .subscribe(this.externalInstaller.showIfConfigIsEmpty)
     }
   }
 
@@ -210,11 +216,7 @@ export class TemplatePickerComponent implements OnInit {
     let obs = this.api.getSelectableApps();
     obs.subscribe(apps => {
       this.apps = apps;
-      this.appCount = apps.length; // needed in the future to check if it shows getting started
-
-      if (this.showAdvanced) {
-        this.apps.push({ Name: "TemplatePicker.Install", AppId: this.cAppActionImport });
-      }
+      if (this.showAdvanced) this.apps.push({ Name: "TemplatePicker.Install", AppId: this.cAppActionImport });
     });
     return obs;
   };

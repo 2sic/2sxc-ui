@@ -9,6 +9,7 @@ import { TemplatePickerComponent } from "app/template-picker/template-picker.com
 import { RouterModule } from "@angular/router";
 import { APP_BASE_HREF, Location } from '@angular/common';
 import { HttpInterceptorService } from "app/http-interceptor.service";
+import { GettingStartedService } from "app/getting-started.service";
 
 const appRoutes = [
   {
@@ -29,7 +30,8 @@ const appRoutes = [
     RouterModule.forRoot(appRoutes),
   ],
   providers: [
-    { provide: "windowObject", useValue: window },
+    // { provide: "windowObject", useValue: window },
+    GettingStartedService
     // { provide: APP_BASE_HREF, useValue: window['_app_base'] || '/' }
   ],
   bootstrap: [AppComponent]
