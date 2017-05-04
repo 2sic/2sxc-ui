@@ -1,16 +1,19 @@
 :host {
     md-card {
-        background: #028bff;
+        background: #fff;
         md-select {
-            width: 220px;
+            width: 320px;
         }
         .row {
             margin: 8px 0;
         }
         button {
-            margin: 0 4px;
+            margin: 0 0 0 8px;
             float: left;
-            background: rgba(0, 0, 0, .1);
+            background: #0088f4;
+        }
+        .fr-getting-started {
+            border: none;
         }
     }
 }

@@ -11,7 +11,7 @@
 $2sxc._contentBlock = {};
 $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
     //#region loads of old stuff, should be cleaned, mostly just copied from the angulare code
-
+    
     var cViewWithoutContent = "_LayoutElement"; // needed to differentiate the "select item" from the "empty-is-selected" which are both empty
     var editContext = manage._editContext;
     var ctid = (editContext.ContentGroup.ContentTypeName === "" && editContext.ContentGroup.TemplateId !== null)

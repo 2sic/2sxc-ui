@@ -14,14 +14,14 @@ export class ModuleApiService {
     private http: Http,
     private sxc: $2sxcService
   ) {}
-
+  
   public getSelectableApps(): Observable<any> {
     return this.http.get('View/Module/GetSelectableApps')
       .map(response => response.json());
   }
 
   public setAppId(appId: string): Observable<any> {
-    return this.http.get('view/Module/SetAppId?appId=${appId}');
+    return this.http.get(`view/Module/SetAppId?appId=${appId}`);
   }
 
   public getSelectableContentTypes(): Observable<any> {
@@ -40,8 +40,6 @@ export class ModuleApiService {
   }
 
   public gettingStartedUrl(): Observable<any> {
-    let params = new URLSearchParams();
-    params.set('dialog', 'gettingstarted');
-    return this.http.get('View/Module/RemoteInstallDialogUrl', { search: params });
+    return this.http.get('View/Module/RemoteInstallDialogUrl?dialog=gettingstarted');
   }
 }
