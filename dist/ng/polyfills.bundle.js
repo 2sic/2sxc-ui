@@ -232,7 +232,7 @@ var create         = __webpack_require__(83)
   , IteratorPrototype = {};
 
 // 25.1.2.1.1 %IteratorPrototype%[@@iterator]()
-__webpack_require__(56)(IteratorPrototype, __webpack_require__(20)('iterator'), function(){ return this; });
+__webpack_require__(56)(IteratorPrototype, __webpack_require__(19)('iterator'), function(){ return this; });
 
 module.exports = function(Constructor, NAME, next){
   Constructor.prototype = create(IteratorPrototype, {next: descriptor(1, next)});
@@ -363,6 +363,63 @@ module.exports = function(it, key){
 
 /***/ }),
 
+/***/ 18:
+/***/ (function(module, exports, __webpack_require__) {
+
+var Map     = __webpack_require__(237)
+  , $export = __webpack_require__(8)
+  , shared  = __webpack_require__(87)('metadata')
+  , store   = shared.store || (shared.store = new (__webpack_require__(253)));
+
+var getOrCreateMetadataMap = function(target, targetKey, create){
+  var targetMetadata = store.get(target);
+  if(!targetMetadata){
+    if(!create)return undefined;
+    store.set(target, targetMetadata = new Map);
+  }
+  var keyMetadata = targetMetadata.get(targetKey);
+  if(!keyMetadata){
+    if(!create)return undefined;
+    targetMetadata.set(targetKey, keyMetadata = new Map);
+  } return keyMetadata;
+};
+var ordinaryHasOwnMetadata = function(MetadataKey, O, P){
+  var metadataMap = getOrCreateMetadataMap(O, P, false);
+  return metadataMap === undefined ? false : metadataMap.has(MetadataKey);
+};
+var ordinaryGetOwnMetadata = function(MetadataKey, O, P){
+  var metadataMap = getOrCreateMetadataMap(O, P, false);
+  return metadataMap === undefined ? undefined : metadataMap.get(MetadataKey);
+};
+var ordinaryDefineOwnMetadata = function(MetadataKey, MetadataValue, O, P){
+  getOrCreateMetadataMap(O, P, true).set(MetadataKey, MetadataValue);
+};
+var ordinaryOwnMetadataKeys = function(target, targetKey){
+  var metadataMap = getOrCreateMetadataMap(target, targetKey, false)
+    , keys        = [];
+  if(metadataMap)metadataMap.forEach(function(_, key){ keys.push(key); });
+  return keys;
+};
+var toMetaKey = function(it){
+  return it === undefined || typeof it == 'symbol' ? it : String(it);
+};
+var exp = function(O){
+  $export($export.S, 'Reflect', O);
+};
+
+module.exports = {
+  store: store,
+  map: getOrCreateMetadataMap,
+  has: ordinaryHasOwnMetadata,
+  get: ordinaryGetOwnMetadata,
+  set: ordinaryDefineOwnMetadata,
+  keys: ordinaryOwnMetadataKeys,
+  key: toMetaKey,
+  exp: exp
+};
+
+/***/ }),
+
 /***/ 181:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -432,63 +489,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /***/ }),
 
 /***/ 19:
-/***/ (function(module, exports, __webpack_require__) {
-
-var Map     = __webpack_require__(237)
-  , $export = __webpack_require__(8)
-  , shared  = __webpack_require__(87)('metadata')
-  , store   = shared.store || (shared.store = new (__webpack_require__(253)));
-
-var getOrCreateMetadataMap = function(target, targetKey, create){
-  var targetMetadata = store.get(target);
-  if(!targetMetadata){
-    if(!create)return undefined;
-    store.set(target, targetMetadata = new Map);
-  }
-  var keyMetadata = targetMetadata.get(targetKey);
-  if(!keyMetadata){
-    if(!create)return undefined;
-    targetMetadata.set(targetKey, keyMetadata = new Map);
-  } return keyMetadata;
-};
-var ordinaryHasOwnMetadata = function(MetadataKey, O, P){
-  var metadataMap = getOrCreateMetadataMap(O, P, false);
-  return metadataMap === undefined ? false : metadataMap.has(MetadataKey);
-};
-var ordinaryGetOwnMetadata = function(MetadataKey, O, P){
-  var metadataMap = getOrCreateMetadataMap(O, P, false);
-  return metadataMap === undefined ? undefined : metadataMap.get(MetadataKey);
-};
-var ordinaryDefineOwnMetadata = function(MetadataKey, MetadataValue, O, P){
-  getOrCreateMetadataMap(O, P, true).set(MetadataKey, MetadataValue);
-};
-var ordinaryOwnMetadataKeys = function(target, targetKey){
-  var metadataMap = getOrCreateMetadataMap(target, targetKey, false)
-    , keys        = [];
-  if(metadataMap)metadataMap.forEach(function(_, key){ keys.push(key); });
-  return keys;
-};
-var toMetaKey = function(it){
-  return it === undefined || typeof it == 'symbol' ? it : String(it);
-};
-var exp = function(O){
-  $export($export.S, 'Reflect', O);
-};
-
-module.exports = {
-  store: store,
-  map: getOrCreateMetadataMap,
-  has: ordinaryHasOwnMetadata,
-  get: ordinaryGetOwnMetadata,
-  set: ordinaryDefineOwnMetadata,
-  keys: ordinaryOwnMetadataKeys,
-  key: toMetaKey,
-  exp: exp
-};
-
-/***/ }),
-
-/***/ 20:
 /***/ (function(module, exports, __webpack_require__) {
 
 var store      = __webpack_require__(87)('wks')
@@ -589,7 +589,7 @@ module.exports = function(IS_INCLUDES){
 
 var isObject = __webpack_require__(13)
   , isArray  = __webpack_require__(224)
-  , SPECIES  = __webpack_require__(20)('species');
+  , SPECIES  = __webpack_require__(19)('species');
 
 module.exports = function(original){
   var C;
@@ -654,7 +654,7 @@ module.exports = Function.bind || function bind(that /*, args... */){
 
 // getting tag from 19.1.3.6 Object.prototype.toString()
 var cof = __webpack_require__(77)
-  , TAG = __webpack_require__(20)('toStringTag')
+  , TAG = __webpack_require__(19)('toStringTag')
   // ES3 wrong here
   , ARG = cof(function(){ return arguments; }()) == 'Arguments';
 
@@ -816,7 +816,7 @@ module.exports = function(fn, args, that){
 
 // check on default Array iterator
 var Iterators  = __webpack_require__(82)
-  , ITERATOR   = __webpack_require__(20)('iterator')
+  , ITERATOR   = __webpack_require__(19)('iterator')
   , ArrayProto = Array.prototype;
 
 module.exports = function(it){
@@ -868,7 +868,7 @@ var LIBRARY        = __webpack_require__(229)
   , $iterCreate    = __webpack_require__(121)
   , setToStringTag = __webpack_require__(85)
   , getPrototypeOf = __webpack_require__(32)
-  , ITERATOR       = __webpack_require__(20)('iterator')
+  , ITERATOR       = __webpack_require__(19)('iterator')
   , BUGGY          = !([].keys && 'next' in [].keys()) // Safari has buggy iterators w/o `next`
   , FF_ITERATOR    = '@@iterator'
   , KEYS           = 'keys'
@@ -934,7 +934,7 @@ module.exports = function(Base, NAME, Constructor, next, DEFAULT, IS_SET, FORCED
 /***/ 227:
 /***/ (function(module, exports, __webpack_require__) {
 
-var ITERATOR     = __webpack_require__(20)('iterator')
+var ITERATOR     = __webpack_require__(19)('iterator')
   , SAFE_CLOSING = false;
 
 try {
@@ -1070,7 +1070,7 @@ module.exports = Reflect && Reflect.ownKeys || function ownKeys(it){
 var global      = __webpack_require__(16)
   , dP          = __webpack_require__(28)
   , DESCRIPTORS = __webpack_require__(31)
-  , SPECIES     = __webpack_require__(20)('species');
+  , SPECIES     = __webpack_require__(19)('species');
 
 module.exports = function(KEY){
   var C = global[KEY];
@@ -1099,7 +1099,7 @@ module.exports = function(index, length){
 /***/ (function(module, exports, __webpack_require__) {
 
 var classof   = __webpack_require__(218)
-  , ITERATOR  = __webpack_require__(20)('iterator')
+  , ITERATOR  = __webpack_require__(19)('iterator')
   , Iterators = __webpack_require__(82);
 module.exports = __webpack_require__(40).getIteratorMethod = function(it){
   if(it != undefined)return it[ITERATOR]
@@ -1551,7 +1551,7 @@ if(new $WeakMap().set((Object.freeze || Object)(tmp), 7).get(tmp) != 7){
 /***/ 254:
 /***/ (function(module, exports, __webpack_require__) {
 
-var metadata                  = __webpack_require__(19)
+var metadata                  = __webpack_require__(18)
   , anObject                  = __webpack_require__(5)
   , toMetaKey                 = metadata.key
   , ordinaryDefineOwnMetadata = metadata.set;
@@ -1565,7 +1565,7 @@ metadata.exp({defineMetadata: function defineMetadata(metadataKey, metadataValue
 /***/ 255:
 /***/ (function(module, exports, __webpack_require__) {
 
-var metadata               = __webpack_require__(19)
+var metadata               = __webpack_require__(18)
   , anObject               = __webpack_require__(5)
   , toMetaKey              = metadata.key
   , getOrCreateMetadataMap = metadata.map
@@ -1588,7 +1588,7 @@ metadata.exp({deleteMetadata: function deleteMetadata(metadataKey, target /*, ta
 
 var Set                     = __webpack_require__(252)
   , from                    = __webpack_require__(213)
-  , metadata                = __webpack_require__(19)
+  , metadata                = __webpack_require__(18)
   , anObject                = __webpack_require__(5)
   , getPrototypeOf          = __webpack_require__(32)
   , ordinaryOwnMetadataKeys = metadata.keys
@@ -1611,7 +1611,7 @@ metadata.exp({getMetadataKeys: function getMetadataKeys(target /*, targetKey */)
 /***/ 257:
 /***/ (function(module, exports, __webpack_require__) {
 
-var metadata               = __webpack_require__(19)
+var metadata               = __webpack_require__(18)
   , anObject               = __webpack_require__(5)
   , getPrototypeOf         = __webpack_require__(32)
   , ordinaryHasOwnMetadata = metadata.has
@@ -1634,7 +1634,7 @@ metadata.exp({getMetadata: function getMetadata(metadataKey, target /*, targetKe
 /***/ 258:
 /***/ (function(module, exports, __webpack_require__) {
 
-var metadata                = __webpack_require__(19)
+var metadata                = __webpack_require__(18)
   , anObject                = __webpack_require__(5)
   , ordinaryOwnMetadataKeys = metadata.keys
   , toMetaKey               = metadata.key;
@@ -1648,7 +1648,7 @@ metadata.exp({getOwnMetadataKeys: function getOwnMetadataKeys(target /*, targetK
 /***/ 259:
 /***/ (function(module, exports, __webpack_require__) {
 
-var metadata               = __webpack_require__(19)
+var metadata               = __webpack_require__(18)
   , anObject               = __webpack_require__(5)
   , ordinaryGetOwnMetadata = metadata.get
   , toMetaKey              = metadata.key;
@@ -1663,7 +1663,7 @@ metadata.exp({getOwnMetadata: function getOwnMetadata(metadataKey, target /*, ta
 /***/ 260:
 /***/ (function(module, exports, __webpack_require__) {
 
-var metadata               = __webpack_require__(19)
+var metadata               = __webpack_require__(18)
   , anObject               = __webpack_require__(5)
   , getPrototypeOf         = __webpack_require__(32)
   , ordinaryHasOwnMetadata = metadata.has
@@ -1685,7 +1685,7 @@ metadata.exp({hasMetadata: function hasMetadata(metadataKey, target /*, targetKe
 /***/ 261:
 /***/ (function(module, exports, __webpack_require__) {
 
-var metadata               = __webpack_require__(19)
+var metadata               = __webpack_require__(18)
   , anObject               = __webpack_require__(5)
   , ordinaryHasOwnMetadata = metadata.has
   , toMetaKey              = metadata.key;
@@ -1700,7 +1700,7 @@ metadata.exp({hasOwnMetadata: function hasOwnMetadata(metadataKey, target /*, ta
 /***/ 262:
 /***/ (function(module, exports, __webpack_require__) {
 
-var metadata                  = __webpack_require__(19)
+var metadata                  = __webpack_require__(18)
   , anObject                  = __webpack_require__(5)
   , aFunction                 = __webpack_require__(39)
   , toMetaKey                 = metadata.key
@@ -4775,7 +4775,7 @@ module.exports = function(target, src, safe){
 
 var def = __webpack_require__(28).f
   , has = __webpack_require__(17)
-  , TAG = __webpack_require__(20)('toStringTag');
+  , TAG = __webpack_require__(19)('toStringTag');
 
 module.exports = function(it, tag, stat){
   if(it && !has(it = stat ? it : it.prototype, TAG))def(it, TAG, {configurable: true, value: tag});

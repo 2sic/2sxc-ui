@@ -6,7 +6,7 @@
     dashInfo: iframe.getAdditionalDashboardConfig
     var svc = moduleApiService;
     var di = vm.dashInfo = wrapper.dashInfo();
-
+    
     /*@ngInject*/
     module.controller("TemplateSelectorCtrl", function ($scope, $interval, moduleApiService, AppInstanceId, sxc, $filter, $q, $window, $translate, $sce, contentBlockLink, $http) {
         // Auto-set view-dropdown if content-type changed

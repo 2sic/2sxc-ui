@@ -11,7 +11,7 @@ function processInstallMessage(event, modId, progressIndicator, $http) {
 
     // Data is sent as text because IE8 and 9 cannot send objects through postMessage
     var data = JSON.parse(event.data);
-
+    
     modId = Number(modId);
     // If message does not belong to this module, return
     if (data.moduleId !== modId)
@@ -54,7 +54,6 @@ function runOneInstallJob(packages, i, progressIndicator, $http) {
     progressIndicator.label = currentPackage.displayName;
     return $http.get("app-sys/installer/installpackage",
         { params: { "packageUrl": currentPackage.url } })
-
 
     .then(function (response) {
         console.log(currentPackage.displayName + "(" + i + ") completed");

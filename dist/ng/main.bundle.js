@@ -6,7 +6,7 @@ webpackJsonp([1,4],{
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__(37);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_map__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_map__ = __webpack_require__(20);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_map___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_map__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_app_core_2sxc_service__ = __webpack_require__(54);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ModuleApiService; });
@@ -30,14 +30,14 @@ var ModuleApiService = (function () {
         this.base = 'http://2sxc.dev/desktopmodules/2sxc/api/';
     }
     ModuleApiService.prototype.getSelectableApps = function () {
-        return this.http.get(this.base + "View/Module/GetSelectableApps")
+        return this.http.get('View/Module/GetSelectableApps')
             .map(function (response) { return response.json(); });
     };
     ModuleApiService.prototype.setAppId = function (appId) {
-        return this.http.get(this.base + "view/Module/SetAppId?appId=" + appId);
+        return this.http.get('view/Module/SetAppId?appId=${appId}');
     };
     ModuleApiService.prototype.getSelectableContentTypes = function () {
-        return this.http.get(this.base + "View/Module/GetSelectableContentTypes")
+        return this.http.get('View/Module/GetSelectableContentTypes')
             .map(function (response) { return (response.json() || []).map(function (x) {
             x.Label = (x.Metadata && x.Metadata.Label)
                 ? x.Metadata.Label
@@ -46,18 +46,18 @@ var ModuleApiService = (function () {
         }); });
     };
     ModuleApiService.prototype.getSelectableTemplates = function () {
-        return this.http.get(this.base + "View/Module/GetSelectableTemplates")
+        return this.http.get('View/Module/GetSelectableTemplates')
             .map(function (response) { return response.json(); });
     };
     ModuleApiService.prototype.gettingStartedUrl = function () {
         var params = new URLSearchParams();
         params.set('dialog', 'gettingstarted');
-        return this.http.get(this.base + "View/Module/RemoteInstallDialogUrl", { search: params });
+        return this.http.get('View/Module/RemoteInstallDialogUrl', { search: params });
     };
     return ModuleApiService;
 }());
 ModuleApiService = __decorate([
-    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["e" /* Injectable */])(),
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["w" /* Injectable */])(),
     __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_3_app_core_2sxc_service__["a" /* $2sxcService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3_app_core_2sxc_service__["a" /* $2sxcService */]) === "function" && _b || Object])
 ], ModuleApiService);
 
@@ -89,7 +89,7 @@ var TemplateFilterPipe = (function () {
     return TemplateFilterPipe;
 }());
 TemplateFilterPipe = __decorate([
-    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["A" /* Pipe */])({
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["S" /* Pipe */])({
         name: 'templateFilter'
     })
 ], TemplateFilterPipe);
@@ -127,7 +127,34 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 var win = window;
 var TemplatePickerComponent = (function () {
-    function TemplatePickerComponent(api, route, http, templateFilter) {
+    /*externalInstaller: any = {
+      showIfConfigIsEmpty: () => {
+        var showAutoInstaller = (this.isContentApp)
+          ? this.templates.length === 0
+          : this.appCount === 0;
+  
+        if (showAutoInstaller) this.externalInstaller.setup();
+      },
+      configureCallback: () => {
+        window.addEventListener("message", evt => {
+          processInstallMessage(evt, appId, this.progressIndicator, $http); // this calls an external, non-angular method to handle resizing & installation...
+        }, false);
+      },
+      setup: () => {
+        this.api.gettingStartedUrl()
+          .then(function (result) {
+            if (result.data) {  // only show getting started if it's really still a blank system, otherwise the server will return null, then don't do anything
+              this.externalInstaller.configureCallback();
+              this.showRemoteInstaller = true;
+              enableProgressIndicator();
+              this.remoteInstallerUrl = $sce.trustAsResourceUrl(result.data);
+            }
+          });
+      }
+    };*/
+    function TemplatePickerComponent(api, route, http, 
+        // private appId: appId,
+        templateFilter) {
         this.api = api;
         this.route = route;
         this.http = http;
@@ -369,7 +396,6 @@ AppComponent = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_app_template_picker_template_picker_module__ = __webpack_require__(209);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_app_template_picker_template_picker_component__ = __webpack_require__(116);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__angular_router__ = __webpack_require__(53);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__angular_common__ = __webpack_require__(18);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppModule; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -377,7 +403,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-
 
 
 
@@ -411,7 +436,6 @@ AppModule = __decorate([
         ],
         providers: [
             { provide: "windowObject", useValue: window },
-            { provide: __WEBPACK_IMPORTED_MODULE_8__angular_common__["a" /* APP_BASE_HREF */], useValue: window['_app_base'] || '/' }
         ],
         bootstrap: [__WEBPACK_IMPORTED_MODULE_4__app_component__["a" /* AppComponent */]]
     })
@@ -426,7 +450,7 @@ AppModule = __decorate([
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common__ = __webpack_require__(24);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_router__ = __webpack_require__(53);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_app_core_module_api_service__ = __webpack_require__(114);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_app_core_2sxc_service__ = __webpack_require__(54);
@@ -523,7 +547,7 @@ var HttpInterceptorService = (function (_super) {
     return HttpInterceptorService;
 }(__WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */]));
 HttpInterceptorService = __decorate([
-    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["e" /* Injectable */])(),
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["w" /* Injectable */])(),
     __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_http__["f" /* ConnectionBackend */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_http__["f" /* ConnectionBackend */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1__angular_http__["d" /* RequestOptions */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_http__["d" /* RequestOptions */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_2_app_core_2sxc_service__["a" /* $2sxcService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2_app_core_2sxc_service__["a" /* $2sxcService */]) === "function" && _c || Object])
 ], HttpInterceptorService);
 
@@ -555,7 +579,7 @@ var ContentTypeFilterPipe = (function () {
     return ContentTypeFilterPipe;
 }());
 ContentTypeFilterPipe = __decorate([
-    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["A" /* Pipe */])({
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["S" /* Pipe */])({
         name: 'contentTypeFilter'
     })
 ], ContentTypeFilterPipe);
@@ -571,7 +595,7 @@ ContentTypeFilterPipe = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_forms__ = __webpack_require__(75);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_material__ = __webpack_require__(201);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_common__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_common__ = __webpack_require__(24);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__angular_platform_browser_animations__ = __webpack_require__(203);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__template_picker_component__ = __webpack_require__(116);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__template_filter_pipe__ = __webpack_require__(115);
@@ -601,6 +625,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
+var appId = $2sxc.urlParams.require('appId');
 var TemplatePickerModule = (function () {
     function TemplatePickerModule() {
     }
@@ -629,6 +654,7 @@ TemplatePickerModule = __decorate([
                 deps: [__WEBPACK_IMPORTED_MODULE_10__angular_http__["c" /* XHRBackend */], __WEBPACK_IMPORTED_MODULE_10__angular_http__["d" /* RequestOptions */], __WEBPACK_IMPORTED_MODULE_12_app_core_2sxc_service__["a" /* $2sxcService */]]
             }
         ],
+        // { provide: appId, useValue: appId }],
         declarations: [__WEBPACK_IMPORTED_MODULE_5__template_picker_component__["a" /* TemplatePickerComponent */], __WEBPACK_IMPORTED_MODULE_6__template_filter_pipe__["a" /* TemplateFilterPipe */], __WEBPACK_IMPORTED_MODULE_8__content_type_filter_pipe__["a" /* ContentTypeFilterPipe */]]
     })
 ], TemplatePickerModule);
@@ -700,7 +726,7 @@ module.exports = "<router-outlet></router-outlet>"
 /***/ 269:
 /***/ (function(module, exports) {
 
-module.exports = "<md-card>\n    <div *ngIf=\"!isContentApp\" fxLayout=\"row\" class=\"row\">\n        <md-select [(ngModel)]=\"appId\" (change)=\"updateAppId($event)\" [disabled]=\"dashInfo.hasContent\">\n            <md-option *ngFor=\"let app of apps\" [value]=\"app.AppId\">\n                {{ app.Name.indexOf('TemplatePicker.') === 0 ? '[+] ' + app.Name : app.Name }}\n            </md-option>\n        </md-select>\n        <div *ngIf=\"showAdvanced && !isContentApp\">\n            <button md-mini-fab *ngIf=\"appId !== null\" (click)=\"frame.sxc.manage.run('app')\" title=\"{{ 'TemplatePicker.App' }}\">\n                <md-icon>settings</md-icon>\n            </button>\n            <button md-mini-fab (click)=\"frame.sxc.manage.run('app-import')\" title=\"{{ 'TemplatePicker.Install' }}\">\n                <md-icon>add</md-icon>\n            </button>\n            <button md-mini-fab (click)=\"appStore()\" title=\"{{ 'TemplatePicker.Catalog' }}\">\n                <md-icon>add_shopping_cart</md-icon>\n            </button>\n            <button md-mini-fab (click)=\"frame.sxc.manage.run('zone')\" title=\"{{ 'TemplatePicker.Zone' }}\">\n                <md-icon>settings</md-icon>\n            </button>\n        </div>\n    </div>\n    <div *ngIf=\"isContentApp\">\n        <md-select [(ngModel)]=\"contentTypeId\" (change)=\"updateContentTypeId($event)\" [disabled]=\"dashInfo.hasContent || dashInfo.isList\">\n            <md-option *ngFor=\"let type of contentTypes | contentTypeFilter\" [value]=\"type.StaticName\">\n                {{ type.Label }}\n            </md-option>\n        </md-select>\n    </div>\n    <div class=\"row\" fxLayout=\"row\" *ngIf=\"isContentApp ? contentTypeId != 0 : (savedAppId != 0)\">\n        <md-select [(ngModel)]=\"templateId\" (change)=\"updateTemplateId($event)\" [disabled]=\"templates.length == 0 && templateId\">\n            <md-option *ngFor=\"let template of templates | templateFilter:contentTypeId\" [value]=\"template.TemplateId\">\n                {{ template.Name }}\n            </md-option>\n        </md-select>\n        <button md-mini-fab *ngIf=\"templateId !== null\" (click)=\"frame.sxc.manage.contentBlock.persistTemplate(false, false)\" title=\"{{ 'TemplatePicker.Save' }}\">\n        <md-icon>check</md-icon>\n    </button>\n        <button md-mini-fab *ngIf=\"undoTemplateId !== null\" (click)=\"frame.sxc.manage.contentBlock._cancelTemplateChange()\" title=\"{{ 'TemplatePicker.' + (isContentApp ? 'Cancel' : 'Close') }}\">\n        <md-icon>close</md-icon>\n    </button>\n    </div>\n    <div *ngIf=\"showRemoteInstaller\">\n        <iframe id=\"frGettingStarted\" src=\"{{ remoteInstallerUrl }}\" width=\"100%\" height=\"300px\"></iframe>\n        <div class=\"sc-loading\" id=\"pnlLoading\" *ngIf=\"progressIndicator.show\">\n            <i class=\"icon-eav-spinner animate-spin\"></i>\n            <span class=\"sc-loading-label\">\n                installing <span id=\"packageName\">{{ progressIndicator.label }}</span>\n            </span>\n        </div>\n    </div>\n</md-card>"
+module.exports = "<md-card>\r\n    <div *ngIf=\"!isContentApp\" fxLayout=\"row\" class=\"row\">\r\n        <md-select [(ngModel)]=\"appId\" (change)=\"updateAppId($event)\" [disabled]=\"dashInfo.hasContent\">\r\n            <md-option *ngFor=\"let app of apps\" [value]=\"app.AppId\">\r\n                {{ app.Name.indexOf('TemplatePicker.') === 0 ? '[+] ' + app.Name : app.Name }}\r\n            </md-option>\r\n        </md-select>\r\n        <div *ngIf=\"showAdvanced && !isContentApp\">\r\n            <button md-mini-fab *ngIf=\"appId !== null\" (click)=\"frame.sxc.manage.run('app')\" title=\"{{ 'TemplatePicker.App' }}\">\r\n                <md-icon>settings</md-icon>\r\n            </button>\r\n            <button md-mini-fab (click)=\"frame.sxc.manage.run('app-import')\" title=\"{{ 'TemplatePicker.Install' }}\">\r\n                <md-icon>add</md-icon>\r\n            </button>\r\n            <button md-mini-fab (click)=\"appStore()\" title=\"{{ 'TemplatePicker.Catalog' }}\">\r\n                <md-icon>add_shopping_cart</md-icon>\r\n            </button>\r\n            <button md-mini-fab (click)=\"frame.sxc.manage.run('zone')\" title=\"{{ 'TemplatePicker.Zone' }}\">\r\n                <md-icon>settings</md-icon>\r\n            </button>\r\n        </div>\r\n    </div>\r\n    <div *ngIf=\"isContentApp\">\r\n        <md-select [(ngModel)]=\"contentTypeId\" (change)=\"updateContentTypeId($event)\" [disabled]=\"dashInfo.hasContent || dashInfo.isList\">\r\n            <md-option *ngFor=\"let type of contentTypes | contentTypeFilter\" [value]=\"type.StaticName\">\r\n                {{ type.Label }}\r\n            </md-option>\r\n        </md-select>\r\n    </div>\r\n    <div class=\"row\" fxLayout=\"row\" *ngIf=\"isContentApp ? contentTypeId != 0 : (savedAppId != 0)\">\r\n        <md-select [(ngModel)]=\"templateId\" (change)=\"updateTemplateId($event)\" [disabled]=\"templates.length == 0 && templateId\">\r\n            <md-option *ngFor=\"let template of templates | templateFilter:contentTypeId\" [value]=\"template.TemplateId\">\r\n                {{ template.Name }}\r\n            </md-option>\r\n        </md-select>\r\n        <button md-mini-fab *ngIf=\"templateId !== null\" (click)=\"frame.sxc.manage.contentBlock.persistTemplate(false, false)\" title=\"{{ 'TemplatePicker.Save' }}\">\r\n        <md-icon>check</md-icon>\r\n    </button>\r\n        <button md-mini-fab *ngIf=\"undoTemplateId !== null\" (click)=\"frame.sxc.manage.contentBlock._cancelTemplateChange()\" title=\"{{ 'TemplatePicker.' + (isContentApp ? 'Cancel' : 'Close') }}\">\r\n        <md-icon>close</md-icon>\r\n    </button>\r\n    </div>\r\n    <div *ngIf=\"showRemoteInstaller\">\r\n        <iframe id=\"frGettingStarted\" src=\"{{ remoteInstallerUrl }}\" width=\"100%\" height=\"300px\"></iframe>\r\n        <div class=\"sc-loading\" id=\"pnlLoading\" *ngIf=\"progressIndicator.show\">\r\n            <i class=\"icon-eav-spinner animate-spin\"></i>\r\n            <span class=\"sc-loading-label\">\r\n                installing <span id=\"packageName\">{{ progressIndicator.label }}</span>\r\n            </span>\r\n        </div>\r\n    </div>\r\n</md-card>"
 
 /***/ }),
 
@@ -738,7 +764,7 @@ var $2sxcService = (function () {
     return $2sxcService;
 }());
 $2sxcService = __decorate([
-    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["e" /* Injectable */])(),
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["w" /* Injectable */])(),
     __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_router__["b" /* ActivatedRoute */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_router__["b" /* ActivatedRoute */]) === "function" && _a || Object])
 ], $2sxcService);
 

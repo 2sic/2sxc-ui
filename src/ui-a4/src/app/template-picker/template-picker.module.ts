@@ -13,6 +13,9 @@ import { HttpInterceptorService } from "app/http-interceptor.service";
 import { ActivatedRoute, Router } from "@angular/router/src";
 import { $2sxcService } from "app/core/$2sxc.service";
 
+declare const $2sxc: any;
+const appId = $2sxc.urlParams.require('appId');
+
 @NgModule({
   exports: [
     TemplatePickerComponent
@@ -34,6 +37,7 @@ import { $2sxcService } from "app/core/$2sxc.service";
       },
       deps: [XHRBackend, RequestOptions, $2sxcService]
     }],
+  // { provide: appId, useValue: appId }],
   declarations: [TemplatePickerComponent, TemplateFilterPipe, ContentTypeFilterPipe]
 })
 export class TemplatePickerModule { }
