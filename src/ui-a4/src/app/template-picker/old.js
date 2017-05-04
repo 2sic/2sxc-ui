@@ -101,7 +101,6 @@
                         vm.showRemoteInstaller = true;
                         enableProgressIndicator();
                         vm.remoteInstallerUrl = $sce.trustAsResourceUrl(result.data);
-                        console.log(result.data);
                     }
                 });
             }

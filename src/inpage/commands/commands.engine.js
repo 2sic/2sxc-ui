@@ -90,10 +90,6 @@
                 return cmd.generateLink();
             },
 
-            _linkToNg4Dialog: function ( ){
-                return cmc._linkToNgDialog.apply(null, arguments).replace('ui.html', 'ui-a4');
-            },
-
             // open a new dialog of the angular-ui
             _openNgDialog: function (settings, event, closeCallback) {
                 var callback = function () {
@@ -106,7 +102,7 @@
                     return window.open(link);
                 else {
                     if (settings.inlineWindow)
-                        return $2sxc._dialog(sxc, targetTag, link, callback);
+                        return $2sxc._dialog(sxc, targetTag, link.replace('dist/dnn/ui.html?', 'dist/ng/?'), callback);
                     else
                         return $2sxc.totalPopup.open(link, callback);
                 }
