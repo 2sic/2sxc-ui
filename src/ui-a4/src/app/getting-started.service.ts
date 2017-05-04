@@ -55,7 +55,6 @@ export class GettingStartedService {
       })
       .catch((e: Response | any) => {
         console.error(e);
-        console.log(e);
         var errorMessage = "Something went wrong while installing '" + currentPackage.displayName + "': " + status;
         if (e.responseText && e.responseText !== "") {
           var response = JSON.parse(e.responseText);

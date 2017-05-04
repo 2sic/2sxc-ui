@@ -216,12 +216,7 @@ export class TemplatePickerComponent implements OnInit {
     let obs = this.api.getSelectableApps();
     obs.subscribe(apps => {
       this.apps = apps;
-      console.log("apps", apps);
-
-
-      if (this.showAdvanced) {
-        this.apps.push({ Name: "TemplatePicker.Install", AppId: this.cAppActionImport });
-      }
+      if (this.showAdvanced) this.apps.push({ Name: "TemplatePicker.Install", AppId: this.cAppActionImport });
     });
     return obs;
   };
