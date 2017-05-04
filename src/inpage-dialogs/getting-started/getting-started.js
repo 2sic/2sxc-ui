@@ -54,8 +54,7 @@ function runOneInstallJob(packages, i, progressIndicator, $http) {
     progressIndicator.label = currentPackage.displayName;
     return $http.get("app-sys/installer/installpackage",
         { params: { "packageUrl": currentPackage.url } })
-
-
+        
     .then(function (response) {
         console.log(currentPackage.displayName + "(" + i + ") completed");
         if (i + 1 < packages.length) {

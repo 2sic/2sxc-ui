@@ -38,11 +38,37 @@ export class TemplatePickerComponent implements OnInit {
   remoteInstallerUrl: string = '';
   isLoading: boolean = false;
   appCount: number;
+  externalInstaller: any = {
+    showIfConfigIsEmpty: () => {
+      var showAutoInstaller = (this.isContentApp)
+        ? this.templates.length === 0
+        : this.appCount === 0;
+
+      if (showAutoInstaller) this.externalInstaller.setup();
+    },
+    configureCallback: () => {
+      window.addEventListener("message", evt => {
+        this.externalInstaller.processInstallMessage(evt, appId, this.progressIndicator, $http); // this calls an external, non-angular method to handle resizing & installation...
+      }, false);
+    },
+    setup: () => {
+      this.api.gettingStartedUrl()
+        .then(function (result) {
+          if (result.data) {  // only show getting started if it's really still a blank system, otherwise the server will return null, then don't do anything
+            this.externalInstaller.configureCallback();
+            this.showRemoteInstaller = true;
+            enableProgressIndicator();
+            this.remoteInstallerUrl = $sce.trustAsResourceUrl(result.data);
+          }
+        });
+    }
+  };
 
   constructor(
     private api: ModuleApiService,
     private route: ActivatedRoute,
     private http: Http,
+    private appId: appId,
     public templateFilter: TemplateFilterPipe
   ) {
     this.frame = <IDialogFrameElement>win.frameElement;
@@ -51,7 +77,7 @@ export class TemplatePickerComponent implements OnInit {
   isDirty(): boolean {
     return false;
   }
-  
+
   private appStore() {
     win.open("http://2sxc.org/en/apps");
   }
