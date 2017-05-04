@@ -32,13 +32,13 @@ export class TemplatePickerComponent implements OnInit {
   undoTemplateId: number;
   contentTypeId: number;
   undoContentTypeId: number;
-  appId: number;
   savedAppId: number;
+  appId: number;
   showRemoteInstaller: boolean = false;
   remoteInstallerUrl: string = '';
   isLoading: boolean = false;
   appCount: number;
-  externalInstaller: any = {
+  /*externalInstaller: any = {
     showIfConfigIsEmpty: () => {
       var showAutoInstaller = (this.isContentApp)
         ? this.templates.length === 0
@@ -48,7 +48,7 @@ export class TemplatePickerComponent implements OnInit {
     },
     configureCallback: () => {
       window.addEventListener("message", evt => {
-        this.externalInstaller.processInstallMessage(evt, appId, this.progressIndicator, $http); // this calls an external, non-angular method to handle resizing & installation...
+        processInstallMessage(evt, appId, this.progressIndicator, $http); // this calls an external, non-angular method to handle resizing & installation...
       }, false);
     },
     setup: () => {
@@ -62,13 +62,13 @@ export class TemplatePickerComponent implements OnInit {
           }
         });
     }
-  };
+  };*/
 
   constructor(
     private api: ModuleApiService,
     private route: ActivatedRoute,
     private http: Http,
-    private appId: appId,
+    // private appId: appId,
     public templateFilter: TemplateFilterPipe
   ) {
     this.frame = <IDialogFrameElement>win.frameElement;

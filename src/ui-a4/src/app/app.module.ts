@@ -30,7 +30,7 @@ const appRoutes = [
   ],
   providers: [
     { provide: "windowObject", useValue: window },
-    { provide: APP_BASE_HREF, useValue: window['_app_base'] || '/' }
+    // { provide: APP_BASE_HREF, useValue: window['_app_base'] || '/' }
   ],
   bootstrap: [AppComponent]
 })

@@ -16,16 +16,16 @@ export class ModuleApiService {
   ) {}
 
   public getSelectableApps(): Observable<any> {
-    return this.http.get(`${this.base}View/Module/GetSelectableApps`)
+    return this.http.get('View/Module/GetSelectableApps')
       .map(response => response.json());
   }
 
   public setAppId(appId: string): Observable<any> {
-    return this.http.get(`${this.base}view/Module/SetAppId?appId=${appId}`);
+    return this.http.get('view/Module/SetAppId?appId=${appId}');
   }
 
   public getSelectableContentTypes(): Observable<any> {
-    return this.http.get(`${this.base}View/Module/GetSelectableContentTypes`)
+    return this.http.get('View/Module/GetSelectableContentTypes')
       .map(response => (response.json() || []).map(x => {
         x.Label = (x.Metadata && x.Metadata.Label)
           ? x.Metadata.Label
@@ -35,13 +35,13 @@ export class ModuleApiService {
   }
 
   public getSelectableTemplates(): Observable<any> {
-    return this.http.get(`${this.base}View/Module/GetSelectableTemplates`)
+    return this.http.get('View/Module/GetSelectableTemplates')
       .map(response => response.json());
   }
 
   public gettingStartedUrl(): Observable<any> {
     let params = new URLSearchParams();
     params.set('dialog', 'gettingstarted');
-    return this.http.get(`${this.base}View/Module/RemoteInstallDialogUrl`, { search: params });
+    return this.http.get('View/Module/RemoteInstallDialogUrl', { search: params });
   }
 }

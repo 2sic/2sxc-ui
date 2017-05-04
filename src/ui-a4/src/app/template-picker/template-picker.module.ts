@@ -36,8 +36,8 @@ const appId = $2sxc.urlParams.require('appId');
         return new HttpInterceptorService(backend, options, sxc);
       },
       deps: [XHRBackend, RequestOptions, $2sxcService]
-    },
-    { provide: appId, useValue: appId }],
+    }],
+  // { provide: appId, useValue: appId }],
   declarations: [TemplatePickerComponent, TemplateFilterPipe, ContentTypeFilterPipe]
 })
 export class TemplatePickerModule { }
