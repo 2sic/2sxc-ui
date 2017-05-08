@@ -29,7 +29,6 @@
     <Content Include="gulpfile.js" />
     <Content Include="License.txt" />
     <Content Include="src\config\eav-configuration-in-sxc.js" />
-    <Content Include="src\dnn\ui.css" />
     <Content Include="src\dnn\ui.html" />
     <Content Include="src\inpage-dialogs\getting-started\getting-started.js" />
     <Content Include="src\inpage-dialogs\template-selector\2sxc.view_app.js" />
