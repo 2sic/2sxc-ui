@@ -21,7 +21,7 @@
     font-size: 120%;
 }
 
- [class^="icon-"]:before, [class*=" icon-"]:before {
+ [class^="eav-icon-"]:before, [class*=" eav-icon-"]:before {
   font-family: "app-icons";
   font-style: normal;
   font-weight: normal;

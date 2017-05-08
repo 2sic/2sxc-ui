@@ -23,8 +23,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include=".gitignore" />
-    <Content Include="2sxc-api\angular\2sxc4ng.js" />
-    <Content Include="2sxc-api\angular\bootstrapper.js" />
+    <Content Include="2sxc-api\angularjs\2sxc4ng.js" />
+    <Content Include="2sxc-api\angularjs\bootstrapper.js" />
     <Content Include="2sxc-api\js\2sxc.api.js" />
     <Content Include="gulpfile.js" />
     <Content Include="License.txt" />
@@ -189,6 +189,15 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="src\inpage\2sxc-extensions\2sxc.api.edit-extensions.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="2sxc-api\angularjs\readme.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <TypeScriptCompile Include="2sxc-api\angular\2sxc4angular.ts" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="2sxc-api\angular\readme.md" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">12.0</VisualStudioVersion>
