@@ -8,7 +8,7 @@ export class GettingStartedService {
   constructor(
     private http: Http
   ) { }
-
+  
   processInstallMessage(event, modId): Observable<any> {
     var regExToCheckOrigin = /^(http|https):\/\/((gettingstarted|[a-z]*)\.)?(2sexycontent|2sxc)\.org(\/.*)?$/gi;
     if (!regExToCheckOrigin.test(event.origin)) throw 'Cannot execute. Wrong source domain.';

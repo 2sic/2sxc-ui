@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Http, Headers, RequestOptions } from "@angular/http";
 import { Observable } from 'rxjs/Rx';
@@ -11,7 +11,7 @@ export class ModuleApiService {
   private headers: Headers;
   
   constructor(
-    private http: Http,
+    @Inject(Http) private http: Http,
     private sxc: $2sxcService
   ) {}
   
