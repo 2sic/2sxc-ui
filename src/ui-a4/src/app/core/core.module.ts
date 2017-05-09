@@ -21,7 +21,7 @@ export function httpFactory(backend: XHRBackend, defaultOptions: RequestOptions,
     ModuleApiService,
     $2sxcService,
     {
-      provide: Http2sxc,
+      provide: 'Http',
       useFactory: httpFactory,
       deps: [XHRBackend, RequestOptions, $2sxcService],
     }
