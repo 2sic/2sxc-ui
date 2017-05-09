@@ -49,7 +49,7 @@ angular.module("sxcFieldTemplates")
             //// group with adam-link, dnn-link
             //editor.addButton("linkfiles", {
             //    type: "splitbutton",
-            //    icon: " icon-eav-file-pdf",
+            //    icon: " eav-icon-file-pdf",
             //    title: "Link.AdamFile.Tooltip",
             //    onclick: function () {
             //        vm.toggleAdam(false);
@@ -58,14 +58,14 @@ angular.module("sxcFieldTemplates")
             //        {
             //            text: "Link.AdamFile",
             //            tooltip: "Link.AdamFile.Tooltip",
-            //            icon: " icon-eav-file-pdf",
+            //            icon: " eav-icon-file-pdf",
             //            onclick: function () {
             //                vm.toggleAdam(false);
             //            }
             //        }, {
             //            text: "Link.DnnFile",
             //            tooltip: "Link.DnnFile.Tooltip",
-            //            icon: " icon-eav-file",
+            //            icon: " eav-icon-file",
             //            onclick: function () {
             //                vm.openDnnDialog("documentmanager");
             //            }
@@ -88,7 +88,7 @@ angular.module("sxcFieldTemplates")
                 {
                     text: "Link.Page",
                     tooltip: "Link.Page.Tooltip",
-                    icon: " icon-eav-sitemap",
+                    icon: " eav-icon-sitemap",
                     onclick: function () {
                         vm.openDnnDialog("pagepicker");
                     }
@@ -96,7 +96,7 @@ angular.module("sxcFieldTemplates")
                 ]
             };
             var linkgroupPro = angular.copy(linkgroup);
-            linkgroupPro.menu.push({ icon: " icon-eav-anchor", text: "Anchor", tooltip: "Link.Anchor.Tooltip", onclick: function () { editor.execCommand("mceAnchor"); } });
+            linkgroupPro.menu.push({ icon: " eav-icon-anchor", text: "Anchor", tooltip: "Link.Anchor.Tooltip", onclick: function () { editor.execCommand("mceAnchor"); } });
             editor.addButton("linkgroup", linkgroup);
             editor.addButton("linkgrouppro", linkgroupPro);
             //#endregion
@@ -185,13 +185,13 @@ angular.module("sxcFieldTemplates")
             }
 
             editor.addButton("modestandard", {
-                icon: " icon-eav-cancel",
+                icon: " eav-icon-cancel",
                 tooltip: "SwitchMode.Standard",
                 onclick: function () { switchModes("standard"); }
             });
 
             editor.addButton("modeadvanced", {
-                icon: " icon-eav-pro",
+                icon: " eav-icon-pro",
                 tooltip: "SwitchMode.Pro",
                 onclick: function () { switchModes("advanced"); }
             });
@@ -239,7 +239,7 @@ angular.module("sxcFieldTemplates")
 
             // #region inside content
             editor.addButton("addcontentblock", {
-                icon: " icon-eav-content-block",
+                icon: " eav-icon-content-block",
                 classes: "btn-addcontentblock",
                 tooltip: "ContentBlock.Add",
                 onclick: function() {
@@ -251,15 +251,15 @@ angular.module("sxcFieldTemplates")
             // #endregion
 
             //#region image alignment / size buttons
-            editor.addButton("alignimgleft", { icon: " icon-eav-align-left", tooltip: "Align left", cmd: "JustifyLeft", onPostRender: initOnPostRender("alignleft") });
-            editor.addButton("alignimgcenter", { icon: " icon-eav-align-center", tooltip: "Align center", cmd: "justifycenter", onPostRender: initOnPostRender("aligncenter") });
-            editor.addButton("alignimgright", { icon: " icon-eav-align-right", tooltip: "Align right", cmd: "justifyright", onPostRender: initOnPostRender("alignright") });
+            editor.addButton("alignimgleft", { icon: " eav-icon-align-left", tooltip: "Align left", cmd: "JustifyLeft", onPostRender: initOnPostRender("alignleft") });
+            editor.addButton("alignimgcenter", { icon: " eav-icon-align-center", tooltip: "Align center", cmd: "justifycenter", onPostRender: initOnPostRender("aligncenter") });
+            editor.addButton("alignimgright", { icon: " eav-icon-align-right", tooltip: "Align right", cmd: "justifyright", onPostRender: initOnPostRender("alignright") });
 
             var imgMenuArray = [];
             function makeImgFormatCall(size) { return function () { editor.formatter.apply("imgwidth" + size); }; }
             for (var is = 0; is < tinyMceConfig.imgSizes.length; is++) {
                 var config = {
-                    icon: " icon-eav-resize-horizontal",
+                    icon: " eav-icon-resize-horizontal",
                     tooltip: tinyMceConfig.imgSizes[is] + "%",
                     text: tinyMceConfig.imgSizes[is] + "%",
                     onclick: makeImgFormatCall(tinyMceConfig.imgSizes[is]),
@@ -270,7 +270,7 @@ angular.module("sxcFieldTemplates")
             }
 
             editor.addButton("resizeimg100", {
-                icon: " icon-eav-resize-horizontal", tooltip: "100%",
+                icon: " eav-icon-resize-horizontal", tooltip: "100%",
                 onclick: function () { editor.formatter.apply("imgwidth100"); },
                 onPostRender: initOnPostRender("imgwidth100")
             });

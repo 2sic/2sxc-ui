@@ -14,7 +14,7 @@
         <ul>
             <li ng-repeat="value in subsetValue | toArray | orderBy: '$key'" uib-tooltip="{{ value.snip }}">
                 <span ng-mouseover="showAdd = true" ng-click="show = !show" ng-mouseout="showAdd = false">
-                    <i class="icon-eav-plus-squared"
+                    <i class="eav-icon-plus-squared"
                        ng-click="vm.addSnippet(value.snip)"
                        ng-show="showAdd"
                        stop-event="click"></i>

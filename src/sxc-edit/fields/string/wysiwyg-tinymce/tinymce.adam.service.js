@@ -36,7 +36,7 @@ angular.module("sxcFieldTemplates")
             // group with adam-link, dnn-link
             e.addButton("linkfiles", {
                 type: "splitbutton",
-                icon: " icon-eav-file-pdf",
+                icon: " eav-icon-file-pdf",
                 title: "Link.AdamFile.Tooltip",
                 onclick: function () {
                     vm.toggleAdam(false);
@@ -45,14 +45,14 @@ angular.module("sxcFieldTemplates")
                     {
                         text: "Link.AdamFile",
                         tooltip: "Link.AdamFile.Tooltip",
-                        icon: " icon-eav-file-pdf",
+                        icon: " eav-icon-file-pdf",
                         onclick: function () {
                             vm.toggleAdam(false);
                         }
                     }, {
                         text: "Link.DnnFile",
                         tooltip: "Link.DnnFile.Tooltip",
-                        icon: " icon-eav-file",
+                        icon: " eav-icon-file",
                         onclick: function () {
                             vm.openDnnDialog("documentmanager");
                         }
