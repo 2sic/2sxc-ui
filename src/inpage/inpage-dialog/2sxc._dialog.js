@@ -27,7 +27,7 @@
         init();
 
         $(wrapperTag).before(container);
-        
+
         /**
          * Assign properties to the iframe for later use.
          */
@@ -62,11 +62,18 @@
                 load();
                 return res.eq(0);
             }
-
+            
             // REMOVE THIS
             url = url
-                // .replace('/desktopmodules/tosic_sexycontent/dist/dnn/ui.html', 'http://localhost:4200')
                 .replace('#', '&');
+            
+            try {
+                var devMode = localStorage.getItem('devMode');
+                if (devMode && ~~devMode) {
+                    url = url
+                        .replace('/desktopmodules/tosic_sexycontent/dist/ng', 'http://localhost:4200')
+                }
+            } catch (e) { }
 
             container = $('<div class="inpage-frame-wrapper">'
                 + '<div class="inpage-frame"><iframe width="100%" height="100px" src="' + url + '"></iframe></div>'

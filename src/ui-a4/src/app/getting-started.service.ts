@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { Http } from "@angular/http";
 import { Observable } from "rxjs/Rx";
+import { Http2sxc } from "app/core/http-interceptor.service";
 
 @Injectable()
 export class GettingStartedService {
 
   constructor(
-    private http: Http
+    private http: Http2sxc
   ) { }
   
   processInstallMessage(event, modId): Observable<any> {

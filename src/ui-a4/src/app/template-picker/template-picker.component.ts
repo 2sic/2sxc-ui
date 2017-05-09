@@ -5,12 +5,9 @@ import { Observable } from 'rxjs/Rx';
 import { Subscription } from "rxjs/Subscription";
 import { ActivatedRoute, Router, Params } from "@angular/router";
 import { TemplateFilterPipe } from "app/template-picker/template-filter.pipe";
-import { HttpInterceptorService } from "app/http-interceptor.service";
-import { Http } from "@angular/http";
 import { GettingStartedService } from "app/getting-started.service";
 import { DomSanitizer, SafeResourceUrl, SafeUrl } from '@angular/platform-browser';
 import { $2sxcService } from "app/core/$2sxc.service";
-import { MdProgressBarModule } from '@angular/material';
 
 declare const $2sxc: any;
 var win = window;
@@ -74,7 +71,6 @@ export class TemplatePickerComponent implements OnInit {
   constructor(
     private api: ModuleApiService,
     private route: ActivatedRoute,
-    private http: Http,
     private gettingStarted: GettingStartedService,
     public templateFilter: TemplateFilterPipe,
     private sanitizer: DomSanitizer,

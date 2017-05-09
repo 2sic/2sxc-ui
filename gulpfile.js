@@ -16,6 +16,7 @@
     };
 
 gulp.task('develop', [ 'A-watch-our-code', 'B-watch-publish-to-2sxc' ]);
+gulp.task('watch-publish', [ 'B-watch-publish-to-2sxc' ]);
 
 // register all watches & run them
 gulp.task("A-watch-our-code", function () {

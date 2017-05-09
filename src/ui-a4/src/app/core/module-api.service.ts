@@ -1,9 +1,9 @@
 import { Injectable, Inject } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
-import { Http, Headers, RequestOptions } from "@angular/http";
 import { Observable } from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
 import { $2sxcService } from "app/core/$2sxc.service";
+import { Http2sxc } from "app/core/http-interceptor.service";
 
 @Injectable()
 export class ModuleApiService {
@@ -11,9 +11,13 @@ export class ModuleApiService {
   private headers: Headers;
   
   constructor(
-    @Inject(Http) private http: Http,
+    private http: Http2sxc,
+    // private http2: Http,
     private sxc: $2sxcService
-  ) {}
+  ) {
+    console.log("sxc", sxc);
+    console.log("http", http);
+  }
   
   public getSelectableApps(): Observable<any> {
     return this.http.get('View/Module/GetSelectableApps')
@@ -23,7 +27,7 @@ export class ModuleApiService {
   public setAppId(appId: string): Observable<any> {
     return this.http.get(`view/Module/SetAppId?appId=${appId}`);
   }
-
+  
   public getSelectableContentTypes(): Observable<any> {
     return this.http.get('View/Module/GetSelectableContentTypes')
       .map(response => (response.json() || []).map(x => {
