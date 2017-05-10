@@ -7,10 +7,6 @@ import { HttpModule, XHRBackend, RequestOptions } from "@angular/http";
 import { Http2sxc } from "app/core/http-interceptor.service";
 import { Http2SxcHttpProvider } from "app/core/http-interceptor.service.provider";
 
-// export function httpFactory(backend: XHRBackend, defaultOptions: RequestOptions, sxc: $2sxcService) {
-//   return  new Http2sxc(backend, defaultOptions, sxc);
-// }
-
 @NgModule({
   imports: [
     CommonModule,
@@ -22,11 +18,6 @@ import { Http2SxcHttpProvider } from "app/core/http-interceptor.service.provider
     ModuleApiService,
     $2sxcService,
     Http2SxcHttpProvider,
-    // {
-    //   provide: 'Http',
-    //   useFactory: httpFactory,
-    //   deps: [XHRBackend, RequestOptions, $2sxcService],
-    // }
   ]
 })
 export class CoreModule { }
