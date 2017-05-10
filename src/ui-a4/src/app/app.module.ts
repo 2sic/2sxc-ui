@@ -13,6 +13,10 @@ const appRoutes = [
   {
     path: '',
     component: TemplatePickerComponent
+  },
+  {
+    path: 'index.html',
+    component: TemplatePickerComponent
   }
 ];
 
