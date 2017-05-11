@@ -64,8 +64,8 @@
             }
             
             // REMOVE THIS
-            //url = url
-            //    .replace('#', '&');
+            url = url
+               .replace('#', '&');
             url = url.replace("dist/dnn/ui.html?", "dist/ng/index.html?");
             
             try {
@@ -73,6 +73,7 @@
                 if (devMode && ~~devMode)
                     url = url.replace("/desktopmodules/tosic_sexycontent/dist/ng", "http://localhost:4200");
             } catch (e) { }
+            console.log("url", url);
 
             container = $('<div class="inpage-frame-wrapper">'
                 + '<div class="inpage-frame"><iframe width="100%" height="100px" src="' + url + '"></iframe></div>'

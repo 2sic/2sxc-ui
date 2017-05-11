@@ -5,9 +5,9 @@ import { Observable } from 'rxjs/Rx';
 import { Subscription } from "rxjs/Subscription";
 import { ActivatedRoute, Router, Params } from "@angular/router";
 import { TemplateFilterPipe } from "app/template-picker/template-filter.pipe";
-import { GettingStartedService } from "app/getting-started.service";
 import { DomSanitizer, SafeResourceUrl, SafeUrl } from '@angular/platform-browser';
 import { $2sxcService } from "app/core/$2sxc.service";
+import { App } from "app/core/app";
 
 declare const $2sxc: any;
 var win = window;
@@ -18,15 +18,16 @@ var win = window;
   styleUrls: ['./template-picker.component.scss']
 })
 export class TemplatePickerComponent implements OnInit {
+  allTemplates: any[] = [];
+  templates: any[] = [];
+  contentTypes: any[] = [];
+  apps: App[] = [];
   frame: IDialogFrameElement;
   dashInfo: any;
   cViewWithoutContent: string = '_LayoutElement';
   cAppActionManage: number = -2;
   cAppActionImport: number = -1;
   cAppActionCreate: number = -3;
-  apps: any[] = [];
-  contentTypes: any[] = [];
-  templates: any[] = [];
   isContentApp: boolean;
   supportsAjax: boolean;
   showProgress: boolean = false;
@@ -37,46 +38,53 @@ export class TemplatePickerComponent implements OnInit {
   undoContentTypeId: number;
   savedAppId: number;
   appId: number;
-  showRemoteInstaller: boolean = false;
-  remoteInstallerUrl: string = '';
   isLoading: boolean = false;
-  externalInstaller: any = {
-    showIfConfigIsEmpty: () => {
-      var showAutoInstaller = this.isContentApp
-        ? this.templates.length === 0
-        : this.apps.length === 0;
-
-      if (showAutoInstaller) this.externalInstaller.setup();
-    },
-    configureCallback: () => {
-      window.addEventListener("message", evt => {
-        this.showProgress = true;
-        // TODO: mid into service
-        this.gettingStarted.processInstallMessage(evt, $2sxc.urlParams.require('mid'))
-          .subscribe(() => this.showProgress = false);
-      }, false);
-    },
-    setup: () => {
-      this.api.gettingStartedUrl()
-        .subscribe(response => {
-          // only show getting started if it's really still a blank system, otherwise the server will return null, then don't do anything
-          if (!response.json()) return;
-          this.externalInstaller.configureCallback();
-          this.showRemoteInstaller = true;
-          this.remoteInstallerUrl = <string>this.sanitizer.bypassSecurityTrustResourceUrl(response.json());
-        });
-    }
-  };
+  showInstaller: boolean = false;
 
   constructor(
     private api: ModuleApiService,
     private route: ActivatedRoute,
-    private gettingStarted: GettingStartedService,
     public templateFilter: TemplateFilterPipe,
-    private sanitizer: DomSanitizer,
     private sxc: $2sxcService
   ) {
     this.frame = <IDialogFrameElement>win.frameElement;
+    this.api.templates
+      .subscribe(templates => this.setTemplates(templates));
+
+    this.api.contentTypes
+      .subscribe(contentTypes => this.setContentTypes(contentTypes));
+
+    this.api.apps
+      .subscribe(apps => this.setApps(apps));
+
+    Observable.combineLatest([
+      this.api.templates,
+      this.api.contentTypes,
+      this.api.apps
+    ]).subscribe(res => {
+      this.showInstaller = this.isContentApp
+        ? res[0].length === 0
+        : res[2].length === 0
+    });
+  }
+
+  ngOnInit() {
+    this.dashInfo = this.frame.getAdditionalDashboardConfig();
+    this.isContentApp = this.dashInfo.isContent;
+    this.supportsAjax = this.isContentApp || this.dashInfo.supportsAjax;
+    this.showAdvanced = this.dashInfo.user.canDesign;
+    this.templateId = this.dashInfo.templateId;
+    this.undoTemplateId = this.dashInfo.templateId;
+    this.contentTypeId = this.dashInfo.contentTypeId;
+    this.undoContentTypeId = this.contentTypeId;
+    this.appId = this.dashInfo.appId || null;
+    this.savedAppId = this.dashInfo.appId;
+    this.frame.isDirty = this.isDirty;
+    this.dashInfo.templateChooserVisible = true;
+
+    this.api.loadTemplates();
+    this.api.loadContentTypes();
+    this.api.loadApps();
   }
 
   isDirty(): boolean {
@@ -85,6 +93,52 @@ export class TemplatePickerComponent implements OnInit {
 
   private appStore() {
     win.open("http://2sxc.org/en/apps");
+  }
+
+  private setTemplates(templates: any[]) {
+    this.allTemplates = templates;
+    this.filterTemplates(templates);
+  }
+
+  private filterTemplates(templates: any[]) {
+    this.templates = this.templateFilter.transform(templates, {
+      contentTypeId: this.contentTypeId,
+      isContentApp: this.isContentApp
+    });
+  }
+
+  private setApps(apps: App[]) {
+    this.apps = apps;
+    if (this.showAdvanced) apps.push(<App>{
+      name: 'TemplatePicker.Install',
+      appId: this.cAppActionImport
+    });
+  }
+
+  private setContentTypes(contentTypes: any[]) {
+    contentTypes
+      .filter(c => c.StaticName === this.contentTypeId || c.TemplateId === this.templateId)
+      .forEach(c => c.IsHidden = false);
+
+    // option for no content types
+    if (this.templates.find(t => t.ContentTypeStaticName === '')) {
+
+      // TODO: i18n
+      let name = "TemplatePicker.LayoutElement";
+      contentTypes.push({
+        StaticName: this.cViewWithoutContent,
+        Name: name,
+        Label: name,
+        IsHidden: false
+      });
+    }
+
+    this.contentTypes = contentTypes
+      .sort((a, b) => {
+        if (a.Name > b.Name) return 1;
+        if (a.Name < b.Name) return -1;
+        return 0;
+      });
   }
 
   private updateTemplateId(evt) {
@@ -102,10 +156,11 @@ export class TemplatePickerComponent implements OnInit {
   updateContentTypeId(evt) {
     let id = evt.value;
 
+    this.filterTemplates(this.allTemplates);
+
     // select first template
-    let firstTemplateId = this.templateFilter.transform(this.templates, id)[0].TemplateId;
-    if (firstTemplateId === null) return false;
-    this.templateId = firstTemplateId;
+    if (this.templates.length === 0) return false;
+    this.templateId = this.templates[0].TemplateId;
   }
 
   updateAppId(evt) {
@@ -115,105 +170,16 @@ export class TemplatePickerComponent implements OnInit {
     if (id === this.cAppActionImport) return this.frame.sxc.manage.run('app-import');
 
     // find new app specs
-    var newApp = this.apps.find(a => a.AppId === id);
-
+    let newApp = this.apps.find(a => a.appId === id);
+    
     this.api.setAppId(id)
       .subscribe(res => {
-        if (newApp.SupportsAjaxReload) return this.frame.sxc.manage.contentBlock.reloadAndReInitialize(true);
+        if (newApp.supportsAjaxReload) return this.frame.sxc.manage.contentBlock.reloadAndReInitialize(true);
         win.parent.location.reload();
       })
   }
 
-  ngOnInit() {
-    this.dashInfo = this.frame.getAdditionalDashboardConfig();
-    this.isContentApp = this.dashInfo.isContent;
-    this.supportsAjax = this.isContentApp || this.dashInfo.supportsAjax;
-    this.showAdvanced = this.dashInfo.user.canDesign;
-    this.templateId = this.dashInfo.templateId;
-    this.undoTemplateId = this.dashInfo.templateId;
-    this.contentTypeId = this.dashInfo.contentTypeId;
-    this.undoContentTypeId = this.contentTypeId;
-    this.appId = this.dashInfo.appId || null;
-    this.savedAppId = this.dashInfo.appId;
-    this.frame.isDirty = this.isDirty;
-    this.reloadTemplatesAndContentTypes();
-    this.show(true);
-  }
-
-  private reloadTemplatesAndContentTypes(): Observable<any> {
-    this.isLoading = true;
-    let obs = Observable.forkJoin([
-      this.api.getSelectableContentTypes(),
-      this.api.getSelectableTemplates()
-    ]);
-
-    obs.subscribe(res => {
-      this.contentTypes = res[0] || [];
-      this.templates = res[1] || [];
-
-      // ensure current content type is visible
-      this.contentTypes
-        .filter(c => c.StaticName === this.contentTypeId || c.TemplateId === this.templateId)
-        .forEach(c => c.IsHidden = false);
-
-      // add option for no content type if there are templates without
-      if (this.templates.find(t => t.ContentTypeStaticName === '')) {
-
-        // TODO: i18n
-        let name = "TemplatePicker.LayoutElement";
-        this.contentTypes.push({
-          StaticName: this.cViewWithoutContent,
-          Name: name,
-          Label: name,
-          IsHidden: false
-        });
-      }
-
-      // sort the content types
-      this.contentTypes = this.contentTypes
-        .sort((a, b) => {
-          if (a.Name > b.Name) return 1;
-          if (a.Name < b.Name) return -1;
-          return 0;
-        });
-
-      this.isLoading = false;
-    });
-
-    return obs;
-  }
-
   toggle() {
     if (this.dashInfo.templateChooserVisible) return this.frame.sxc.manage.contentBlock._cancelTemplateChange();
-    this.show(true);
   }
-
-  private show(stateChange): Subscription {
-    // todo 8.4 disabled this, as this info should never be set from here again...
-    if (stateChange !== undefined)  // optionally change the show-state
-      this.dashInfo.templateChooserVisible = stateChange;
-
-    if (this.dashInfo.templateChooserVisible) {
-      let observables = [];
-
-      if (this.appId !== null) // if an app had already been chosen OR the content-app (always chosen)
-        observables.push(this.reloadTemplatesAndContentTypes());
-
-      // if it's the app-dialog and the app's haven't been loaded yet...
-      if (!this.isContentApp && this.apps.length === 0)
-        observables.push(this.loadApps());
-
-      return Observable.forkJoin(observables)
-        .subscribe(this.externalInstaller.showIfConfigIsEmpty)
-    }
-  }
-
-  private loadApps(): Observable<any> {
-    let obs = this.api.getSelectableApps();
-    obs.subscribe(apps => {
-      this.apps = apps;
-      if (this.showAdvanced) this.apps.push({ Name: "TemplatePicker.Install", AppId: this.cAppActionImport });
-    });
-    return obs;
-  };
 }

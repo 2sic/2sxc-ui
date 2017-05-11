@@ -1,0 +1,10 @@
+<md-progress-bar [mode]="indeterminate"></md-progress-bar>
+<div *ngIf="ready">
+  <iframe class="fr-getting-started" id="frGettingStarted" [src]="remoteInstallerUrl" width="100%" height="300px"></iframe>
+</div>
+<!--<div class="sc-loading" id="pnlLoading" *ngIf="progressIndicator.show">
+  <i class="icon-eav-spinner animate-spin"></i>
+  <span class="sc-loading-label">
+    installing <span id="packageName">{{ progressIndicator.label }}</span>
+  </span>
+</div>-->

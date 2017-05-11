@@ -6,8 +6,6 @@ import { AppComponent } from './app.component';
 import { TemplatePickerModule } from "app/template-picker/template-picker.module";
 import { TemplatePickerComponent } from "app/template-picker/template-picker.component";
 import { RouterModule } from "@angular/router";
-import { APP_BASE_HREF, Location } from '@angular/common';
-import { GettingStartedService } from "app/getting-started.service";
 
 const appRoutes = [
   {
@@ -31,9 +29,7 @@ const appRoutes = [
     RouterModule,
     RouterModule.forRoot(appRoutes),
   ],
-  providers: [
-    GettingStartedService,
-  ],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

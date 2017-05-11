@@ -1,15 +1,15 @@
 import { TestBed, inject } from '@angular/core/testing';
 
-import { GettingStartedService } from './getting-started.service';
+import { installerService } from './installer.service';
 
 describe('GettingStartedService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [GettingStartedService]
+      providers: [installerService]
     });
   });
 
-  it('should ...', inject([GettingStartedService], (service: GettingStartedService) => {
+  it('should ...', inject([installerService], (service: installerService) => {
     expect(service).toBeTruthy();
   }));
 });

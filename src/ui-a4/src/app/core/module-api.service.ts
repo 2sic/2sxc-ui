@@ -4,61 +4,74 @@ import { Observable, BehaviorSubject } from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
 import { $2sxcService } from "app/core/$2sxc.service";
 import { Http } from "@angular/http";
+import { App } from "app/core/app";
+import { Subject } from "rxjs/Subject";
 
 @Injectable()
 export class ModuleApiService {
-  private readonly base: string = 'http://2sxc.dev/desktopmodules/2sxc/api/';
-  private headers: Headers;
-
-  private appsSubject: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
   public apps: Observable<any[]>;
+  public contentTypes: Observable<any[]>;
+  public gettingStarted: Observable<string>;
+  public templates: Observable<any[]>;
 
-  private ctSubject: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
-  // public contentTypes: Observable<any[]>;
-  private ctLoaded = false;
+  private readonly base: string = 'http://2sxc.dev/desktopmodules/2sxc/api/';
+  private appSubject: Subject<any[]> = new Subject<any[]>();
+  private contentTypeSubject: Subject<any[]> = new Subject<any[]>();
+  private gettingStartedSubject: Subject<string> = new Subject<string>();
+  private templateSubject: Subject<any[]> = new Subject<any[]>();
 
   constructor(
     private http: Http,
     private sxc: $2sxcService
   ) {
-    this.apps = this.appsSubject.asObservable();
-    // this.contentTypes = this.ctSubject.asObservable();
-  }
-
-  public getContentTypes(): Observable<any> {
-    if (!this.ctLoaded) {
-      this.getSelectableContentTypes();
-      this.ctLoaded = true;
-    }
-    return this.ctSubject.asObservable();
-  }
-
-  public getSelectableApps(): Observable<any> {
-    return this.http.get('View/Module/GetSelectableApps')
-      .map(response => this.appsSubject.next(response.json()));
+    this.apps = this.appSubject.asObservable();
+    this.contentTypes = this.contentTypeSubject.asObservable();
+    this.gettingStarted = this.gettingStartedSubject.asObservable();
+    this.templates = this.templateSubject.asObservable();
   }
 
   public setAppId(appId: string): Observable<any> {
     return this.http.get(`view/Module/SetAppId?appId=${appId}`);
   }
 
-  public getSelectableContentTypes(): Observable<any> {
-    return this.http.get('View/Module/GetSelectableContentTypes')
-      .map(response => this.ctSubject.next((response.json() || []).map(x => {
+  public loadGettingStarted(): Observable<string> {
+    let obs = this.http.get('View/Module/RemoteInstallDialogUrl?dialog=gettingstarted')
+      .map(response => response.json());
+    obs.subscribe(json => this.gettingStartedSubject.next(json));
+    return obs;
+  }
+
+  public loadTemplates(): Observable<any> {
+    let obs = this.http.get('View/Module/GetSelectableTemplates')
+      .map(response => response.json());
+    obs.subscribe(json => this.templateSubject.next(json));
+    return obs;
+  }
+
+  public loadContentTypes(): Observable<any> {
+    let obs = this.http.get('View/Module/GetSelectableContentTypes')
+      .map(response => (response.json() || []).map(x => {
         x.Label = (x.Metadata && x.Metadata.Label)
           ? x.Metadata.Label
           : x.Name;
         return x;
-      })));
-      // return this.ctSubject.asObservable();
+      }));
+    obs.subscribe(json => this.contentTypeSubject.next(json));
+    return obs;
   }
 
-  public getSelectableTemplates(): Observable<any> {
-    return this.http.get('View/Module/GetSelectableTemplates')
-      .map(response => response.json());
+  public loadApps(): Observable<App[]> {
+    let obs = this.http.get('View/Module/GetSelectableApps')
+      .map(response => response.json().map(this.parseResultObject));
+    obs.subscribe(json => this.appSubject.next(json));
+    return obs;
   }
 
-  public gettingStartedUrl(): Observable<any> {
-    return this.http.get('View/Module/RemoteInstallDialogUrl?dialog=gettingstarted');
+  private parseResultObject(obj): any {
+    return Object.keys(obj)
+      .reduce((t, v, k: any) => {
+        t[v.split('').reduce((t, v, k) => t + (k === 0 ? v.toLowerCase() : v), '')] = obj[v];
+        return t;
+      }, {})
   }
 }
