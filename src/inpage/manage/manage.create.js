@@ -61,7 +61,7 @@
             _isEditMode: function () { return editContext.Environment.IsEditable; },
 
             _reloadWithAjax: editContext.ContentGroup.SupportsAjax,
-
+            
             _dialogParameters: ngDialogParams,      // used for various dialogs
             _toolbarConfig: toolsAndButtons.config, // used to configure buttons / toolbars
 
@@ -79,7 +79,7 @@
                 // enhance UI in case there are known errors / issues
                 if (editContext.error.type)
                     editManager._handleErrors(editContext.error.type, contentBlockTag);
-
+                
                 // finish init of sub-objects
                 editManager._commands.init(editManager);
                 editManager.contentBlock = $2sxc._contentBlock.create(sxc, editManager, contentBlockTag);

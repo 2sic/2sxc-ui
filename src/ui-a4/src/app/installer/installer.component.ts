@@ -18,7 +18,7 @@ export class InstallerComponent implements OnInit {
   private apps: any[];
 
   remoteInstallerUrl: string = '';
-  private ready: Boolean = false;
+  ready: Boolean = false;
 
   constructor(
     private installer: InstallerService,
@@ -28,7 +28,6 @@ export class InstallerComponent implements OnInit {
     this.api.gettingStarted
       .subscribe(url => {
         this.remoteInstallerUrl = <string>this.sanitizer.bypassSecurityTrustResourceUrl(url);
-        console.log('remoteInstallerUrl', url, this.remoteInstallerUrl);
         this.ready = true;
       });
   }

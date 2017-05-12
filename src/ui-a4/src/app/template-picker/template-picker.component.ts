@@ -64,7 +64,7 @@ export class TemplatePickerComponent implements OnInit {
     ]).subscribe(res => {
       this.showInstaller = this.isContentApp
         ? res[0].length === 0
-        : res[2].length === 0
+        : res[2].filter(a => a.appId !== this.cAppActionImport).length === 0
     });
   }
 
@@ -171,7 +171,7 @@ export class TemplatePickerComponent implements OnInit {
 
     // find new app specs
     let newApp = this.apps.find(a => a.appId === id);
-    
+
     this.api.setAppId(id)
       .subscribe(res => {
         if (newApp.supportsAjaxReload) return this.frame.sxc.manage.contentBlock.reloadAndReInitialize(true);

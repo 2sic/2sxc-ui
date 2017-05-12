@@ -33,7 +33,7 @@ export class ModuleApiService {
   public setAppId(appId: string): Observable<any> {
     return this.http.get(`view/Module/SetAppId?appId=${appId}`);
   }
-
+  
   public loadGettingStarted(): Observable<string> {
     let obs = this.http.get('View/Module/RemoteInstallDialogUrl?dialog=gettingstarted')
       .map(response => response.json());
@@ -43,7 +43,7 @@ export class ModuleApiService {
 
   public loadTemplates(): Observable<any> {
     let obs = this.http.get('View/Module/GetSelectableTemplates')
-      .map(response => response.json());
+      .map(response => response.json() || []);
     obs.subscribe(json => this.templateSubject.next(json));
     return obs;
   }

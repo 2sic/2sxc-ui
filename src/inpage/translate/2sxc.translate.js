@@ -2,7 +2,7 @@
 (function () {
 
     $2sxc.translate = function(key) {
-        return $.t(key);
+        return key;
+        // return $.t(key);
     };
-    
 })();
