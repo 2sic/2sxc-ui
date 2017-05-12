@@ -4,7 +4,8 @@ import { ModuleApiService } from "app/core/module-api.service";
 import { DomSanitizer, SafeResourceUrl, SafeUrl } from '@angular/platform-browser';
 
 declare const $2sxc: any;
-var win = window;
+declare const window: any;
+declare const console: any;
 
 @Component({
   selector: 'app-installer',
@@ -17,6 +18,7 @@ export class InstallerComponent implements OnInit {
   private templates: any[];
   private apps: any[];
 
+  currentPackage: any;
   remoteInstallerUrl: string = '';
   ready: Boolean = false;
 
@@ -35,10 +37,31 @@ export class InstallerComponent implements OnInit {
   ngOnInit() {
     this.api.loadGettingStarted();
 
-    window.addEventListener("message", evt => {
+    window.addEventListener('message', evt => {
+      var data;
+
+      try {
+        data = JSON.parse(evt.data);
+      } catch (e) {
+        return false;
+      }
+      
+      if (~~data.moduleId !== ~~$2sxc.urlParams.require('mid')) return;
+      if (data.action !== 'install') return;
+      
       this.showProgress = true;
-      this.installer.processInstallMessage(evt, $2sxc.urlParams.require('mid'))
-        .subscribe(() => this.showProgress = false);
+      this.installer.installPackages(Object.values(data.packages))
+        .subscribe(
+        p => this.currentPackage = p,
+        e => {
+          this.showProgress = false;
+          alert('An error occurred.');
+        },
+        () => {
+          this.showProgress = false;
+          alert('Installation complete. If you saw no errors, everything worked.');
+          window.top.location.reload();
+        });
     }, false);
   }
 }

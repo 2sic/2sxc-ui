@@ -14,6 +14,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { $2sxcService } from "app/core/$2sxc.service";
 
 declare const $2sxc: any;
+declare const window: any;
 
 @Injectable()
 export class Http2sxc extends Http {

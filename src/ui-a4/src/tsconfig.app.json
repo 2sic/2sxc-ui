@@ -4,7 +4,25 @@
     "outDir": "../out-tsc/app",
     "module": "es2015",
     "baseUrl": "",
-    "types": []
+    "types": [
+      "node",
+      "dom",
+      "es5",
+      "scripthost",
+      "es2015",
+      "es2016",
+      "es2017",
+      "es2017.object"
+    ],
+    "lib": [
+      "dom",
+      "es5",
+      "scripthost",
+      "es2015",
+      "es2016",
+      "es2017",
+      "es2017.object"
+    ]
   },
   "exclude": [
     "test.ts",
