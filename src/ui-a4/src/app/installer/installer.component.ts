@@ -13,11 +13,7 @@ declare const console: any;
   styleUrls: ['./installer.component.scss']
 })
 export class InstallerComponent implements OnInit {
-  private isContentApp: boolean;
-  private showProgress: boolean;
-  private templates: any[];
-  private apps: any[];
-
+  showProgress: boolean;
   currentPackage: any;
   remoteInstallerUrl: string = '';
   ready: Boolean = false;
@@ -45,14 +41,22 @@ export class InstallerComponent implements OnInit {
       } catch (e) {
         return false;
       }
-      
-      console.log("data", data);
-      
+
       if (~~data.moduleId !== ~~$2sxc.urlParams.require('mid')) return;
       if (data.action !== 'install') return;
-      
+
+      let
+        packages = Object.values(data.packages),
+        packagesDisplayNames = packages.reduce((t, c) => `${t} - ${c.displayName}\n`, '');
+
+      if (!confirm(`
+          Do you want to install these packages?\n\n
+          ${packagesDisplayNames}\nThis could take 10 to 60 seconds per package, 
+          please don't reload the page while it's installing.
+          You will see a message once it's done and progess is logged to the JS-console.`)) return;
+
       this.showProgress = true;
-      this.installer.installPackages(Object.values(data.packages))
+      this.installer.installPackages(packages)
         .subscribe(
         p => this.currentPackage = p,
         e => {

@@ -12,35 +12,26 @@ export class InstallerService {
   constructor(
     private http: Http
   ) { }
-  
+
   installPackages(packages: any[]): Observable<any> {
     let
       subject = new Subject<any>(),
-      packagesDisplayNames = packages.reduce((t, c) => `${t} - ${c.displayName}\n`, '');
-    
-    if (!confirm(`
-          Do you want to install these packages?\n\n
-          ${packagesDisplayNames}\nThis could take 10 to 60 seconds per package, 
-          please don't reload the page while it's installing.
-          You will see a message once it's done and progess is logged to the JS-console.`)) return;
-    
-    // install packages
-    let res = packages.reduce((t, c) => t
-      .then(() => {
-        if (!c.url) {
-          // spinner color in 2sxc
-          console.log("fail", c);
-          return Promise.resolve();
-        }
-        subject.next(c);
-        return this.http.get(`app-sys/installer/installpackage?packageUrl=${c.url}`).toPromise();
-      }), Promise.resolve())
-      .then(() => subject.complete())
-      .catch(e => subject.error(e));
-    
+      res = packages.reduce((t, c) => t
+        .then(() => {
+          if (!c.url) {
+            // spinner in 2sxc color
+            console.log("fail", c);
+            return Promise.resolve();
+          }
+          subject.next(c);
+          return this.http.get(`app-sys/installer/installpackage?packageUrl=${c.url}`).toPromise();
+        }), Promise.resolve())
+        .then(() => subject.complete())
+        .catch(e => subject.error(e));
+
     return subject.asObservable();
   }
-  
+
   // processInstallMessage(event, modId: number): Observable<any> {
   //   let regExToCheckOrigin = /^(http|https):\/\/((gettingstarted|[a-z]*)\.)?(2sexycontent|2sxc)\.org(\/.*)?$/gi;
   //   if (!regExToCheckOrigin.test(event.origin)) throw 'Cannot execute. Wrong source domain.';

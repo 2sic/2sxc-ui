@@ -18,7 +18,7 @@
     $("body").on("mouseout", ".inpage-frame-wrapper", function () {
         $(this).parents(".DNNModuleContent").eq(0).toggleClass("dia-mouseover", false);
     });
-
+    
     function Dialog(sxc, wrapperTag, url, closeCallback) {
         var container, // the dialog (jQuery object)
             iframe, // frame inside the dialog (HTMLElement)
