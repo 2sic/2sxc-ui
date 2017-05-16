@@ -1,6 +1,10 @@
 :host {
-    md-card {
-        background: #fff;
+    .card {
+        md-tab-group {
+            md-tab-header {
+                border-bottom: none;
+            }
+        }
         md-select {
             width: 320px;
         }
@@ -14,6 +18,18 @@
         }
         .fr-getting-started {
             border: none;
+        }
+    }
+}
+
+/deep/ md-tab-group md-tab-header {
+    border-bottom: none !important;
+    .mat-tab-labels {
+        display: block;
+        text-align: center;
+        .mat-tab-label {
+            min-width: 0 !important;
+            display: inline-block;
         }
     }
 }

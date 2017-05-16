@@ -547,7 +547,7 @@
 $2sxc._contentBlock = {};
 $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
     //#region loads of old stuff, should be cleaned, mostly just copied from the angulare code
-    
+
     var cViewWithoutContent = "_LayoutElement"; // needed to differentiate the "select item" from the "empty-is-selected" which are both empty
     var editContext = manage._editContext;
     var ctid = (editContext.ContentGroup.ContentTypeName === "" && editContext.ContentGroup.TemplateId !== null)
@@ -612,7 +612,7 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
                 return window.location.reload();
 
         },
-        
+
         // retrieve new preview-content with alternate template and then show the result
         reload: function (templateId) {
             // if nothing specified, use stored id
@@ -743,8 +743,7 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
                     manage._editContext.ContentBlock.ShowTemplatePicker = isVisible;
                 });
         },
-
-
+        
         prepareToAddContent: function () {
             return cb.persistTemplate(true, false);
         },
@@ -910,7 +909,7 @@ if($ && $.fn && $.fn.dnnModuleDragDrop)
     var RESIZE_INTERVAL = 200,
         SHOW_DELAY = 400,
         activeDialog;
-
+    
     $("body").on("mouseover", ".inpage-frame-wrapper", function () {
         $(this).parents(".DNNModuleContent").eq(0).toggleClass("dia-mouseover", true);
     });
@@ -923,9 +922,9 @@ if($ && $.fn && $.fn.dnnModuleDragDrop)
         var container, // the dialog (jQuery object)
             iframe, // frame inside the dialog (HTMLElement)
             resizeInterval;
-
+        
         init();
-
+        
         $(wrapperTag).before(container);
 
         /**
@@ -973,8 +972,7 @@ if($ && $.fn && $.fn.dnnModuleDragDrop)
                 if (devMode && ~~devMode)
                     url = url.replace("/desktopmodules/tosic_sexycontent/dist/ng", "http://localhost:4200");
             } catch (e) { }
-            console.log("url", url);
-
+            
             container = $('<div class="inpage-frame-wrapper">'
                 + '<div class="inpage-frame"><iframe width="100%" height="100px" src="' + url + '"></iframe></div>'
                 + "</div>");
@@ -1167,22 +1165,22 @@ if (typeof Object.assign != 'function') {
                 // finish init of sub-objects
                 editManager._commands.init(editManager);
                 editManager.contentBlock = $2sxc._contentBlock.create(sxc, editManager, contentBlockTag);
-
-                if ($(contentBlockTag).html().replace(/ /g, "").replace(/\n/g, "") === "") ensureInlineGlassesButton();
-
+                
+                if (editManager.contentBlock.templateId === 0) ensureInlineGlassesButton();
+                
                 // display the dialog
                 if (!editContext.error.type && editContext.ContentBlock.ShowTemplatePicker) {
                     editManager.run("layout");
                 }
-
+                
                 function ensureInlineGlassesButton() {
-                    if ($(contentBlockTag).parent().find(".sc-uninitialized").length !== 0) return;
+                    if ($(contentBlockTag).find(".sc-uninitialized").length !== 0) return;
                     var placeholder = '<div class="sc-uninitialized" title="' + $2sxc.translate("InPage.NewElement") + '"><div>+</div></div>';
                     var btn = $(placeholder);
                     btn.on("click", function() {
                         editManager.run("layout");
                     });
-                    $(contentBlockTag).before(btn);
+                    $(contentBlockTag).append(btn);
                 }
             },
 
@@ -1722,7 +1720,7 @@ $(function () {
         //// Cache the panes (because panes can't change dynamically)
         //if (!$quickE.cachedPanes)
         //    $quickE.cachedPanes = $($quickE.selectors.mod.listSelector);
-
+        
         if ($quickE.config.innerBlocks.enable) {
             // get all content-block lists which are empty, or which allow multiple child-items
             var lists = $($quickE.selectors.cb.listSelector)

@@ -46,6 +46,8 @@ export class InstallerComponent implements OnInit {
         return false;
       }
       
+      console.log("data", data);
+      
       if (~~data.moduleId !== ~~$2sxc.urlParams.require('mid')) return;
       if (data.action !== 'install') return;
       

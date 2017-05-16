@@ -9,6 +9,7 @@ export class $2sxcService {
   constructor(
     private route: ActivatedRoute
   ) {
-    this.sxc = $2sxc(route.snapshot.queryParams['appId']);
+    let params = route.snapshot.queryParams;
+    this.sxc = $2sxc(params['mid'], params['cbid']);
   }
 }

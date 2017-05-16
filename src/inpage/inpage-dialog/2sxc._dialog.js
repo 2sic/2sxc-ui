@@ -10,7 +10,7 @@
     var RESIZE_INTERVAL = 200,
         SHOW_DELAY = 400,
         activeDialog;
-
+    
     $("body").on("mouseover", ".inpage-frame-wrapper", function () {
         $(this).parents(".DNNModuleContent").eq(0).toggleClass("dia-mouseover", true);
     });
@@ -23,9 +23,9 @@
         var container, // the dialog (jQuery object)
             iframe, // frame inside the dialog (HTMLElement)
             resizeInterval;
-
+        
         init();
-
+        
         $(wrapperTag).before(container);
 
         /**
@@ -73,8 +73,7 @@
                 if (devMode && ~~devMode)
                     url = url.replace("/desktopmodules/tosic_sexycontent/dist/ng", "http://localhost:4200");
             } catch (e) { }
-            console.log("url", url);
-
+            
             container = $('<div class="inpage-frame-wrapper">'
                 + '<div class="inpage-frame"><iframe width="100%" height="100px" src="' + url + '"></iframe></div>'
                 + "</div>");
