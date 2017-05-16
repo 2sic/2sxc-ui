@@ -17,7 +17,7 @@ $(function () {
         //// Cache the panes (because panes can't change dynamically)
         //if (!$quickE.cachedPanes)
         //    $quickE.cachedPanes = $($quickE.selectors.mod.listSelector);
-
+        
         if ($quickE.config.innerBlocks.enable) {
             // get all content-block lists which are empty, or which allow multiple child-items
             var lists = $($quickE.selectors.cb.listSelector)

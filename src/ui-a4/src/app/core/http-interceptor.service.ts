@@ -14,6 +14,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { $2sxcService } from "app/core/$2sxc.service";
 
 declare const $2sxc: any;
+declare const window: any;
 
 @Injectable()
 export class Http2sxc extends Http {
@@ -25,7 +26,7 @@ export class Http2sxc extends Http {
     super(backend, defaultOptions);
     this.configure(defaultOptions);
   }
-
+  
   request(url: string | Request, options: RequestOptionsArgs = new RequestOptions()): Observable<Response> {
     let isDevMode = window.location.hostname === 'localhost';
     this.configure(options);
@@ -37,10 +38,14 @@ export class Http2sxc extends Http {
   private configure(options: RequestOptionsArgs): RequestOptionsArgs {
     let
       mid = $2sxc.urlParams.require('mid'),
-      tid = $2sxc.urlParams.require('tid');
+      tid = $2sxc.urlParams.require('tid'),
+      cbid = $2sxc.urlParams.require('cbid');
     if (!options.headers) options.headers = new Headers();
-    options.headers.set('moduleId', mid)
-    options.headers.set('tabId', tid)
+    options.headers.set('ModuleId', mid);
+    options.headers.set('TabId', tid);
+    options.headers.set('ContentBlockId', cbid);
+    options.headers.set('RequestVerificationToken', window.$.ServicesFramework(mid).getAntiForgeryValue());
+    options.headers.set('X-Debugging-Hint', 'bootstrapped by 2sxc4ng');
     return options;
   }
 }

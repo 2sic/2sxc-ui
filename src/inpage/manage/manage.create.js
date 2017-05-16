@@ -83,22 +83,22 @@
                 // finish init of sub-objects
                 editManager._commands.init(editManager);
                 editManager.contentBlock = $2sxc._contentBlock.create(sxc, editManager, contentBlockTag);
-
-                if ($(contentBlockTag).html().replace(/ /g, "").replace(/\n/g, "") === "") ensureInlineGlassesButton();
-
+                
+                if (editManager.contentBlock.templateId === 0) ensureInlineGlassesButton();
+                
                 // display the dialog
                 if (!editContext.error.type && editContext.ContentBlock.ShowTemplatePicker) {
                     editManager.run("layout");
                 }
-
+                
                 function ensureInlineGlassesButton() {
-                    if ($(contentBlockTag).parent().find(".sc-uninitialized").length !== 0) return;
+                    if ($(contentBlockTag).find(".sc-uninitialized").length !== 0) return;
                     var placeholder = '<div class="sc-uninitialized" title="' + $2sxc.translate("InPage.NewElement") + '"><div>+</div></div>';
                     var btn = $(placeholder);
                     btn.on("click", function() {
                         editManager.run("layout");
                     });
-                    $(contentBlockTag).before(btn);
+                    $(contentBlockTag).append(btn);
                 }
             },
 

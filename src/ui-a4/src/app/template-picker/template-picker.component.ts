@@ -69,6 +69,7 @@ export class TemplatePickerComponent implements OnInit {
   }
 
   ngOnInit() {
+    console.log("frame", this.frame);
     this.dashInfo = this.frame.getAdditionalDashboardConfig();
     this.isContentApp = this.dashInfo.isContent;
     this.supportsAjax = this.isContentApp || this.dashInfo.supportsAjax;
@@ -82,6 +83,8 @@ export class TemplatePickerComponent implements OnInit {
     this.frame.isDirty = this.isDirty;
     this.dashInfo.templateChooserVisible = true;
 
+    console.log("inner content", this);
+
     this.api.loadTemplates();
     this.api.loadContentTypes();
     this.api.loadApps();
@@ -89,6 +92,12 @@ export class TemplatePickerComponent implements OnInit {
 
   isDirty(): boolean {
     return false;
+  }
+
+  persistTemplate() {
+    let cb = this.frame.sxc.manage.contentBlock;
+    cb.templateId = this.templateId;
+    cb.persistTemplate(false, false)
   }
 
   private appStore() {
