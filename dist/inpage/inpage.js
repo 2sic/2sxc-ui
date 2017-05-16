@@ -965,7 +965,7 @@ if($ && $.fn && $.fn.dnnModuleDragDrop)
             // REMOVE THIS
             url = url
                .replace('#', '&');
-            url = url.replace("dist/dnn/ui.html?", "dist/ng/index.html?");
+            url = url.replace("dist/dnn/ui.html?", "dist/ng/ui.html?");
             
             try {
                 var devMode = localStorage.getItem("devMode");
