@@ -93,7 +93,8 @@
                 
                 function ensureInlineGlassesButton() {
                     if ($(contentBlockTag).find(".sc-uninitialized").length !== 0) return;
-                    var placeholder = '<div class="sc-uninitialized" title="' + $2sxc.translate("InPage.NewElement") + '"><div>+</div></div>';
+                    // note: title is added on mouseover, as the translation isn't ready at page-load
+                    var placeholder = '<div class="sc-uninitialized" onmouseover="this.title = $2sxc.translate(this.title)" title="InPage.NewElement"><div class="icon-sxc-glasses"></div></div>';
                     var btn = $(placeholder);
                     btn.on("click", function() {
                         editManager.run("layout");
