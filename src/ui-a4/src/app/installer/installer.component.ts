@@ -16,7 +16,7 @@ export class InstallerComponent implements OnInit {
   showProgress: boolean;
   currentPackage: any;
   remoteInstallerUrl: string = '';
-  ready: Boolean = false;
+  ready: boolean = false;
 
   constructor(
     private installer: InstallerService,
@@ -44,7 +44,7 @@ export class InstallerComponent implements OnInit {
 
       if (~~data.moduleId !== ~~$2sxc.urlParams.require('mid')) return;
       if (data.action !== 'install') return;
-
+      
       let
         packages = Object.values(data.packages),
         packagesDisplayNames = packages.reduce((t, c) => `${t} - ${c.displayName}\n`, '');

@@ -50,7 +50,7 @@
             </div>
         </md-tab>
     </md-tab-group>-->
-    <div *ngIf="!isContentApp; else isApp" fxLayout="row" class="row">
+    <div *ngIf="!isContentApp; else contentApp" fxLayout="row" class="row">
         <md-select [(ngModel)]="appId" (change)="updateAppId($event)" [disabled]="dashInfo.hasContent">
             <md-option *ngFor="let app of apps" [value]="app.appId">
                 {{ app.name.indexOf('TemplatePicker.') === 0 ? '[+] ' + app.name : app.name }}
@@ -71,7 +71,7 @@
             </button>
         </div>
     </div>
-    <ng-template #isApp>
+    <ng-template #contentApp>
         <md-select [(ngModel)]="contentTypeId" (change)="updateContentTypeId($event)" [disabled]="dashInfo.hasContent || dashInfo.isList">
             <md-option *ngFor="let type of contentTypes | contentTypeFilter" [value]="type.StaticName">
                 {{ type.Label }}

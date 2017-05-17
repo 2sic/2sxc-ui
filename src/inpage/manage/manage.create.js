@@ -85,7 +85,7 @@
                 editManager.contentBlock = $2sxc._contentBlock.create(sxc, editManager, contentBlockTag);
                 
                 if (editManager.contentBlock.templateId === 0) ensureInlineGlassesButton();
-                
+
                 // display the dialog
                 if (!editContext.error.type && editContext.ContentBlock.ShowTemplatePicker) {
                     editManager.run("layout");
@@ -101,7 +101,7 @@
                     $(contentBlockTag).append(btn);
                 }
             },
-
+            
             // private: show error when the app-data hasn't been installed yet for this imported-module
             _handleErrors: function (errType, cbTag) {
                 var errWrapper = $("<div class=\"dnnFormMessage dnnFormWarning sc-element\"></div>");
