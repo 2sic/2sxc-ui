@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { InstallerService } from "app/installer/installer.service";
 import { ModuleApiService } from "app/core/module-api.service";
 import { DomSanitizer, SafeResourceUrl, SafeUrl } from '@angular/platform-browser';
@@ -13,6 +13,8 @@ declare const console: any;
   styleUrls: ['./installer.component.scss']
 })
 export class InstallerComponent implements OnInit {
+  @Input() isContentApp: boolean;
+
   showProgress: boolean;
   currentPackage: any;
   remoteInstallerUrl: string = '';
@@ -31,7 +33,7 @@ export class InstallerComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.api.loadGettingStarted();
+    this.api.loadGettingStarted(this.isContentApp);
 
     window.addEventListener('message', evt => {
       var data;

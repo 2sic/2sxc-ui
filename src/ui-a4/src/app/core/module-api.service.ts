@@ -34,8 +34,8 @@ export class ModuleApiService {
     return this.http.get(`view/Module/SetAppId?appId=${appId}`);
   }
   
-  public loadGettingStarted(): Observable<string> {
-    let obs = this.http.get('View/Module/RemoteInstallDialogUrl?dialog=gettingstarted')
+  public loadGettingStarted(isContentApp: boolean): Observable<string> {
+    let obs = this.http.get(`View/Module/RemoteInstallDialogUrl?dialog=gettingstarted&isContentApp=${isContentApp}`)
       .map(response => response.json());
     obs.subscribe(json => this.gettingStartedSubject.next(json));
     return obs;
