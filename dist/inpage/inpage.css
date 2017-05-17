@@ -103,9 +103,9 @@ body.sc-tb-show-all .sc-element .sc-menu { display: initial !important; }
 /* only use the WOFF, as all modern browsers support that */
 @font-face {
   font-family: 'inpage-icons';
-  src: url('../lib/fonts/inpage-icons.woff?09.00.01') format('woff'),
-       url('../lib/fonts/inpage-icons.eot?09.00.01#iefix') format('embedded-opentype'),
-       url('../lib/fonts/inpage-icons.ttf?09.00.01') format('truetype');
+  src: url('../lib/fonts/inpage-icons.woff?09.01.00') format('woff'),
+       url('../lib/fonts/inpage-icons.eot?09.01.00#iefix') format('embedded-opentype'),
+       url('../lib/fonts/inpage-icons.ttf?09.01.00') format('truetype');
   font-weight: normal;
   font-style: normal;
 }
@@ -129,14 +129,14 @@ body.sc-tb-show-all .sc-element .sc-menu { display: initial !important; }
   text-transform: none;
  
   /* fix buttons height, for twitter bootstrap */
-  line-height: 1em;
+     line-height: 28px; /*1em;*/
  
   /* Animation center compensation - margins should be symmetric */
   /* remove if not needed */
   margin-left: .2em;
  
   /* you can be more comfortable with increased icons size */
-   font-size: 130%; 
+     font-size: 125%; /*130%;*/ 
  
   /* Font smoothing. That was taken from TWBS */
   -webkit-font-smoothing: antialiased;
@@ -197,7 +197,7 @@ body.sc-tb-show-all .sc-element .sc-menu { display: initial !important; }
     border-radius: 50px;
     text-align: center;
     vertical-align: middle;
-    line-height: 95px;
+    line-height: 100px;
     display: inline-block;
 }
 

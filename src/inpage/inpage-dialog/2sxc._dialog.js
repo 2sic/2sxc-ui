@@ -68,12 +68,14 @@
             // REMOVE THIS
             /*url = url
                .replace('#', '&');*/
-            url = url.replace("dist/dnn/ui.html?", "dist/ng/index.html?");
+            url = url.replace("dist/dnn/ui.html?", "dist/ng/ui.html?");
 
             try {
                 var devMode = localStorage.getItem("devMode");
-                if (devMode && ~~devMode)
+                if (devMode && ~~devMode) {
                     url = url.replace("/desktopmodules/tosic_sexycontent/dist/ng", "http://localhost:4200");
+                    url = url.replace("dist/ng/ui.html?", "dist/ng/index.html?");
+                }
             } catch (e) { }
 
             iframe = document.createElement('iframe');

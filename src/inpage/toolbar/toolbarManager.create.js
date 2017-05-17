@@ -129,14 +129,18 @@
             // find all toolbar-info-attributes in the HTML, convert to <ul><li> toolbar
             _processToolbars: function (parentTag) {
                 parentTag = parentTag ? $(parentTag) : $(".DnnModule-" + id);
+                // find current toolbars on this tag
                 function getToolbars() { return $(".sc-menu[toolbar],.sc-menu[data-toolbar]", parentTag); }
+
+                // don't add, if it is has un-initialized content
+                var disableAutoAdd = $(".sc-uninitialized", parentTag).length !== 0;
 
                 var toolbars = getToolbars(),
                     settingsForEmptyToolbar = {
                         hover: "left",
                         autoAddMore: "left"
                     };
-                if (toolbars.length === 0) // no toolbars found, must help a bit because otherwise editing is hard
+                if (toolbars.length === 0 && !disableAutoAdd) // no toolbars found, must help a bit because otherwise editing is hard
                 {
                     //console.log("didn't find a toolbar, so will create an automatic one to help for the block", parentTag);
                     var outsideCb = !parentTag.hasClass('sc-content-block');
