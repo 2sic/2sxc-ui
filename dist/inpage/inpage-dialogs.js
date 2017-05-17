@@ -315,7 +315,7 @@ function runOneInstallJob(packages, i, progressIndicator, $http) {
                     return wrapper.window.location.reload(); //note: must be in a function, as the reload is a method of the location object
                 });
         });
-
+        
         // Auto-set view-dropdown if content-type changed
         realScope.$watch("vm.contentTypeId", function (newContentTypeId, oldContentTypeId) {
             if (newContentTypeId === oldContentTypeId)

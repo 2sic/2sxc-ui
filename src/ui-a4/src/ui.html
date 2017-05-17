@@ -9,7 +9,7 @@
       apiUrl;
 
     document.write('<base href="' + path + '">');
-    
+
     var
       jsVersionCacheId = window.location.search,
       devPath = 'http://2sxc.dev/desktopmodules/tosic_sexycontent/dist/a4/';
@@ -42,7 +42,6 @@
       var async = src.async || false;
       src = typeof src === "string" ? src : src.url;
       var script = document.createElement('script');
-      script.type = 'text/javascript';
       script.src = src + jsVersionCacheId;
       if (async)
         document.getElementsByTagName("head")[0].appendChild(script);
@@ -65,11 +64,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link href="//fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="styles.bundle.css">
 </head>
 
 <body>
   <app-root>Loading...</app-root>
-  <script type="text/javascript">
+  <script>
     if (!isDevMode) {
       // now add the scripts as needed
       for (var s = 0; s < scripts.length; s++) addScript(scripts[s]);

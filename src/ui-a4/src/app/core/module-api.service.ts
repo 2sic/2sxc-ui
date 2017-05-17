@@ -40,7 +40,7 @@ export class ModuleApiService {
     obs.subscribe(json => this.gettingStartedSubject.next(json));
     return obs;
   }
-
+  
   public loadTemplates(): Observable<any> {
     let obs = this.http.get('View/Module/GetSelectableTemplates')
       .map(response => response.json() || []);

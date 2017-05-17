@@ -134,7 +134,7 @@
         realScope.$watch("vm.templateId", function (newTemplateId, oldTemplateId) {
             if (newTemplateId === oldTemplateId)
                 return;
-
+            
             // Content (ajax, don't save the changed value)
             if (vm.supportsAjax)
                 return vm.renderTemplate(newTemplateId);
