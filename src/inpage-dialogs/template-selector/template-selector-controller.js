@@ -126,7 +126,6 @@
 
                     // sort them now
                     vm.contentTypes = $filter("orderBy")(vm.contentTypes, "Name");
-
                     vm.loading--;
                 });
         };

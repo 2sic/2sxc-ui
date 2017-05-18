@@ -293,7 +293,6 @@ function runOneInstallJob(packages, i, progressIndicator, $http) {
 
                     // sort them now
                     vm.contentTypes = $filter("orderBy")(vm.contentTypes, "Name");
-
                     vm.loading--;
                 });
         };
@@ -301,7 +300,7 @@ function runOneInstallJob(packages, i, progressIndicator, $http) {
         realScope.$watch("vm.templateId", function (newTemplateId, oldTemplateId) {
             if (newTemplateId === oldTemplateId)
                 return;
-
+            
             // Content (ajax, don't save the changed value)
             if (vm.supportsAjax)
                 return vm.renderTemplate(newTemplateId);
@@ -315,7 +314,7 @@ function runOneInstallJob(packages, i, progressIndicator, $http) {
                     return wrapper.window.location.reload(); //note: must be in a function, as the reload is a method of the location object
                 });
         });
-        
+
         // Auto-set view-dropdown if content-type changed
         realScope.$watch("vm.contentTypeId", function (newContentTypeId, oldContentTypeId) {
             if (newContentTypeId === oldContentTypeId)

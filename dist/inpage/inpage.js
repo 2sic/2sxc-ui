@@ -931,8 +931,7 @@ if($ && $.fn && $.fn.dnnModuleDragDrop)
             window.diagBox = iframe;
             iframe.height = height + "px";
             iframe.previousHeight = height;
-        } catch (e) {
-        }
+        } catch (e) { }
     }, RESIZE_INTERVAL);
 
     function Dialog(sxc, wrapperTag, url, closeCallback) {
@@ -964,17 +963,11 @@ if($ && $.fn && $.fn.dnnModuleDragDrop)
         });
 
         function init() {
-            // REMOVE THIS
-            /*url = url
-               .replace('#', '&');*/
             url = url.replace("dist/dnn/ui.html?", "dist/ng/ui.html?");
 
             try {
                 var devMode = localStorage.getItem("devMode");
-                if (devMode && ~~devMode) {
-                    url = url.replace("/desktopmodules/tosic_sexycontent/dist/ng", "http://localhost:4200");
-                    url = url.replace("dist/ng/ui.html?", "dist/ng/index.html?");
-                }
+                if (devMode && ~~devMode) url = url.replace("/desktopmodules/tosic_sexycontent/dist/ng/ui.html", "http://localhost:4200");
             } catch (e) { }
 
             iframe = document.createElement('iframe');
@@ -984,7 +977,7 @@ if($ && $.fn && $.fn.dnnModuleDragDrop)
         function toggle(show) {
             var action = show === undefined ? (activeDialog != iframe) : show,
                 dirty;
-
+            
             if (action) {
                 if (activeDialog == iframe) return false;
                 if (activeDialog !== undefined) {
