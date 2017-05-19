@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, NgModule, Inject } from '@angular/core';
+import { Component, OnInit, Input, NgModule, Inject, ApplicationRef } from '@angular/core';
 import { IDialogFrameElement } from "app/core/dialog-frame-element";
 import { ModuleApiService } from "app/core/module-api.service";
 import { Observable } from 'rxjs/Rx';
@@ -8,9 +8,20 @@ import { TemplateFilterPipe } from "app/template-picker/template-filter.pipe";
 import { DomSanitizer, SafeResourceUrl, SafeUrl } from '@angular/platform-browser';
 import { $2sxcService } from "app/core/$2sxc.service";
 import { App } from "app/core/app";
+import { Subject } from "rxjs/Subject";
 
 declare const $2sxc: any;
 var win = window;
+
+class Template {
+  TemplateId: number;
+  Name: string;
+}
+
+class ContentType {
+  StaticName: string;
+  Label: string;
+}
 
 @Component({
   selector: 'app-template-picker',
@@ -18,50 +29,123 @@ var win = window;
   styleUrls: ['./template-picker.component.scss']
 })
 export class TemplatePickerComponent implements OnInit {
-  allTemplates: any[] = [];
-  templates: any[] = [];
-  contentTypes: any[] = [];
   apps: App[] = [];
-  frame: IDialogFrameElement;
+  app: App;
+  savedAppId: number;
+  templates: any[] = [];
+  template: Template;
+  undoTemplateId: number;
+  contentTypes: any[] = [];
+  contentType: ContentType;
+  undoContentTypeId: number;
   dashInfo: any;
-  cViewWithoutContent: string = '_LayoutElement';
-  cAppActionManage: number = -2;
-  cAppActionImport: number = -1;
-  cAppActionCreate: number = -3;
   isContentApp: boolean;
-  supportsAjax: boolean;
   showProgress: boolean = false;
   showAdvanced: boolean;
-  templateId: number;
-  undoTemplateId: number;
-  contentTypeId: number;
-  undoContentTypeId: number;
-  savedAppId: number;
-  appId: number;
-  isLoading: boolean = false;
   showInstaller: boolean = false;
+  loading: boolean = false;
+  ready: boolean = false;
+  tabIndex: number = 0;
+  updateTemplateSubject: Subject<any> = new Subject<any>();
+  updateAppSubject: Subject<any> = new Subject<any>();
+
+  private allTemplates: any[] = [];
+  private frame: IDialogFrameElement;
+  private cViewWithoutContent: string = '_LayoutElement';
+  private cAppActionImport: number = -1;
+  private supportsAjax: boolean;
 
   constructor(
     private api: ModuleApiService,
     private route: ActivatedRoute,
-    public templateFilter: TemplateFilterPipe,
-    private sxc: $2sxcService
+    private templateFilter: TemplateFilterPipe,
+    private sxc: $2sxcService,
+    private appRef: ApplicationRef
   ) {
     this.frame = <IDialogFrameElement>win.frameElement;
-    this.api.templates
-      .subscribe(templates => this.setTemplates(templates));
+    this.dashInfo = this.frame.getAdditionalDashboardConfig();
 
-    this.api.contentTypes
-      .subscribe(contentTypes => this.setContentTypes(contentTypes));
+    Observable.merge(
+      this.updateTemplateSubject.asObservable(),
+      this.updateAppSubject.asObservable()
+    ).subscribe(res => {
+      this.loading = true;
+    });
+
+    this.updateAppSubject
+      .debounceTime(400)
+      .subscribe(({ app, preview }) => {
+        this.api.setAppId(app.appId.toString())
+          .subscribe(res => {
+            alert("reload");
+            if (app.supportsAjaxReload) return this.frame.sxc.manage.contentBlock.reloadAndReInitialize(true, true)
+              .then(() => {
+                (() => {
+                  if (!preview) return this.api.loadTemplates().toPromise();
+                  return Promise.resolve();
+                })()
+                  .then(() => {
+                    this.loading = false;
+                    this.frame.scrollToTarget();
+                    this.appRef.tick();
+                  });
+              });
+            
+            if (preview) return this.frame.sxc.manage.contentBlock.reloadNoLivePreview(`<p class="no-live-preview-available">The app <b>${app.name}</b> does not have a live preview. Please click on it to see it in action!</p>`)
+              .then(() => {
+                this.loading = false;
+                this.frame.scrollToTarget();
+                this.appRef.tick();
+              });
+            win.parent.location.reload();
+          })
+      });
+
+    this.updateTemplateSubject
+      .debounceTime(400)
+      .subscribe(({ template, preview }) => {
+        if (!preview) this.template = template;
+        if (this.supportsAjax) return this.frame.sxc.manage.contentBlock.reload(template.TemplateId)
+          .then(() => {
+            this.loading = false;
+            this.frame.scrollToTarget();
+            this.appRef.tick();
+          });
+
+        if (preview) return this.frame.sxc.manage.contentBlock.reloadNoLivePreview(`<p class="no-live-preview-available">The content type <b>${template.Name}</b> does not have a live preview. Please click on it to see it in action!</p>`)
+          .then(() => {
+            this.loading = false;
+            this.frame.scrollToTarget();
+            this.appRef.tick();
+          });
+
+        // TODO: Not sure why we need to set this value before calling persistTemplate. Clean up!
+        this.frame.sxc.manage.contentBlock.templateId = this.template.TemplateId;
+
+        return this.frame.sxc.manage.contentBlock.persistTemplate(false)
+          .then(() => win.parent.location.reload());
+      });
 
     this.api.apps
-      .subscribe(apps => this.setApps(apps));
+      .subscribe(apps => {
+        this.app = apps.find(a => a.appId === this.dashInfo.appId);
+        if (this.app) this.tabIndex = 1;
+        this.setApps(apps)
+      });
+
+    this.api.templates
+      .subscribe(templates => this.setTemplates(templates, this.dashInfo.templateId));
+
+    this.api.contentTypes
+      .subscribe(contentTypes => this.setContentTypes(contentTypes, this.dashInfo.contentTypeId));
 
     Observable.combineLatest([
       this.api.templates,
       this.api.contentTypes,
       this.api.apps
     ]).subscribe(res => {
+      this.filterTemplates(this.contentType);
+      this.ready = true;
       this.showInstaller = this.isContentApp
         ? res[0].length === 0
         : res[2].filter(a => a.appId !== this.cAppActionImport).length === 0
@@ -69,21 +153,19 @@ export class TemplatePickerComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.dashInfo = this.frame.getAdditionalDashboardConfig();
     this.isContentApp = this.dashInfo.isContent;
     this.supportsAjax = this.isContentApp || this.dashInfo.supportsAjax;
     this.showAdvanced = this.dashInfo.user.canDesign;
-    this.templateId = this.dashInfo.templateId;
     this.undoTemplateId = this.dashInfo.templateId;
-    this.contentTypeId = this.dashInfo.contentTypeId;
-    this.undoContentTypeId = this.contentTypeId;
-    this.appId = this.dashInfo.appId || null;
+    this.undoContentTypeId = this.dashInfo.contentTypeId;
     this.savedAppId = this.dashInfo.appId;
     this.frame.isDirty = this.isDirty;
     this.dashInfo.templateChooserVisible = true;
 
-    this.api.loadTemplates();
-    this.api.loadContentTypes();
+    Observable.concat([
+      this.api.loadTemplates(),
+      this.api.loadContentTypes()
+    ]);
     this.api.loadApps();
   }
 
@@ -93,7 +175,7 @@ export class TemplatePickerComponent implements OnInit {
 
   persistTemplate() {
     let cb = this.frame.sxc.manage.contentBlock;
-    cb.templateId = this.templateId;
+    cb.templateId = this.template.TemplateId;
     cb.persistTemplate(false, false)
   }
 
@@ -101,41 +183,36 @@ export class TemplatePickerComponent implements OnInit {
     win.open("http://2sxc.org/en/apps");
   }
 
-  private setTemplates(templates: any[]) {
-    this.allTemplates = templates;
-    this.filterTemplates(templates);
-  }
-
-  private filterTemplates(templates: any[]) {
-    this.templates = this.templateFilter.transform(templates, {
-      contentTypeId: this.contentTypeId,
+  private filterTemplates(contentType: ContentType) {
+    this.templates = this.templateFilter.transform(this.allTemplates, {
+      contentTypeId: contentType ? contentType.StaticName : undefined,
       isContentApp: this.isContentApp
     });
   }
 
   private setApps(apps: App[]) {
     this.apps = apps;
-    if (this.showAdvanced) apps.push(<App>{
-      name: 'TemplatePicker.Install',
-      appId: this.cAppActionImport
-    });
   }
 
-  private setContentTypes(contentTypes: any[]) {
+  private setTemplates(templates: any[], selectedTemplateId: number) {
+    if (selectedTemplateId) this.template = templates.find(t => t.TemplateId === selectedTemplateId);
+    this.allTemplates = templates;
+  }
+
+  private setContentTypes(contentTypes: any[], selectedContentTypeId) {
+    if (selectedContentTypeId) this.contentType = contentTypes.find(c => c.StaticName === selectedContentTypeId);
     contentTypes
-      .filter(c => c.StaticName === this.contentTypeId || c.TemplateId === this.templateId)
+      .filter(c => (this.template && c.TemplateId === this.template.TemplateId) || (this.contentType && c.StaticName === this.contentType.StaticName))
       .forEach(c => c.IsHidden = false);
 
     // option for no content types
     if (this.templates.find(t => t.ContentTypeStaticName === '')) {
-
-      // TODO: i18n
       let name = "TemplatePicker.LayoutElement";
       contentTypes.push({
         StaticName: this.cViewWithoutContent,
         Name: name,
         Label: name,
-        IsHidden: false
+        IsHidden: false,
       });
     }
 
@@ -147,45 +224,38 @@ export class TemplatePickerComponent implements OnInit {
       });
   }
 
-  private updateTemplateId(evt) {
-    let id = evt.value;
-    if (this.supportsAjax) return this.frame.sxc.manage.contentBlock.reload(id);
+  updateContentType(contentType: ContentType, preview: boolean = false, keepTemplate: boolean = false) {
+    if (!preview) {
+      this.contentType = contentType;
+      this.tabIndex = 1;
+    }
 
-    // TODO: Not sure why we need to set this value before calling persistTemplate. Clean up!
-    this.frame.sxc.manage.contentBlock.templateId = this.templateId;
-
-    // app
-    this.frame.sxc.manage.contentBlock.persistTemplate(false)
-      .then(() => win.parent.location.reload());
-  }
-
-  updateContentTypeId(evt) {
-    let id = evt.value;
-
-    this.filterTemplates(this.allTemplates);
-
-    // select first template
+    this.filterTemplates(contentType);
     if (this.templates.length === 0) return false;
-    this.templateId = this.templates[0].TemplateId;
-    this.updateTemplateId({
-      value: this.templateId
+    this.updateTemplateSubject.next({
+      template: keepTemplate ? this.template : this.templates[0],
+      preview
     });
   }
-  
-  updateAppId(evt) {
-    let id = evt.value;
 
-    // add app
-    if (id === this.cAppActionImport) return this.frame.sxc.manage.run('app-import');
+  reloadContentType() {
+    this.updateContentType(this.contentType, true, true);
+  }
 
-    // find new app specs
-    let newApp = this.apps.find(a => a.appId === id);
+  reloadApp() {
+    this.updateApp(this.app, true);
+  }
 
-    this.api.setAppId(id)
-      .subscribe(res => {
-        if (newApp.supportsAjaxReload) return this.frame.sxc.manage.contentBlock.reloadAndReInitialize(true);
-        win.parent.location.reload();
-      })
+  updateApp(app: App, preview: boolean = false) {
+    if (!preview) {
+      this.app = app;
+      this.tabIndex = 1;
+    }
+
+    this.updateAppSubject.next({
+      app,
+      preview
+    });
   }
 
   toggle() {

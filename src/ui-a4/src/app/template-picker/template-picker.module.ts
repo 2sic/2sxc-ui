@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { MaterialModule, MdProgressBarModule, MdTabsModule } from '@angular/material';
+import { MaterialModule, MdProgressBarModule, MdTabsModule, MdMenuModule } from '@angular/material';
 import { CommonModule } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TemplatePickerComponent } from './template-picker.component';
@@ -22,6 +22,7 @@ const appId = $2sxc.urlParams.require('appId');
   imports: [
     CommonModule,
     MaterialModule,
+    MdMenuModule,
     MdTabsModule,
     BrowserAnimationsModule,
     CoreModule,

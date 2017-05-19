@@ -10,13 +10,14 @@
     var RESIZE_INTERVAL = 200,
         SHOW_DELAY = 400,
         activeDialog,
+        activeWrapper,
         container = $('<div class="inpage-frame-wrapper"><div class="inpage-frame"></div></div>'),
         inpageFrame = container.find('.inpage-frame');
 
     $('body').append(container);
 
     $("body").on("mouseover", ".inpage-frame-wrapper", function () {
-        $(this).toggleClass("dia-mouseover", true);
+        $('body').animate({ scrollTop: $(activeWrapper).offset().top });
     });
 
     $("body").on("mouseout", ".inpage-frame-wrapper", function () {
@@ -27,7 +28,7 @@
         try {
             var iframe = inpageFrame.find('iframe')[0], height;
             if (!iframe) return;
-            height = iframe.contentDocument.body.offsetHeight + 10;
+            height = iframe.contentDocument.body.offsetHeight;
             if (iframe.previousHeight === height) return;
             window.diagBox = iframe;
             iframe.height = height + "px";
@@ -52,6 +53,9 @@
             getManageInfo: getManageInfo,
             getAdditionalDashboardConfig: getAdditionalDashboardConfig,
             getCommands: getCommands,
+            scrollToTarget: function() {
+                $('body').animate({ scrollTop: $(wrapperTag).offset().top });
+            },
             toggle: function () {
                 return toggle();
             },
@@ -89,8 +93,10 @@
                 iframe.setAttribute('src', url);
                 $(inpageFrame).html(iframe);
                 activeDialog = iframe;
+                activeWrapper = wrapperTag;
             } else {
                 activeDialog = undefined;
+                activeWrapper = undefined;
             }
 
             container.toggleClass("dia-select", action);

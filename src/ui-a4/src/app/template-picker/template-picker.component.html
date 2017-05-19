@@ -1,96 +1,47 @@
-<div class="card">
-    <!--<md-tab-group>
-        <md-tab label="One">
-            <div *ngIf="!isContentApp; else isApp" fxLayout="row" class="row">
-                <div class="app" *ngFor="let app of apps">
-                    {{ app }}
-                </div>
-                <md-select [(ngModel)]="appId" (change)="updateAppId($event)" [disabled]="dashInfo.hasContent">
-                    <md-option *ngFor="let app of apps" [value]="app.appId">
-                        {{ app.name.indexOf('TemplatePicker.') === 0 ? '[+] ' + app.name : app.name }}
-                    </md-option>
-                </md-select>
-                <div *ngIf="showAdvanced && !isContentApp">
-                    <button md-mini-fab *ngIf="appId !== null" (click)="frame.sxc.manage.run('app')" title="{{ 'TemplatePicker.App' }}">
-                        <md-icon>settings</md-icon>
-                    </button>
-                    <button md-mini-fab (click)="frame.sxc.manage.run('app-import')" title="{{ 'TemplatePicker.Install' }}">
-                        <md-icon>add</md-icon>
-                    </button>
-                    <button md-mini-fab (click)="appStore()" title="{{ 'TemplatePicker.Catalog' }}">
-                        <md-icon>add_shopping_cart</md-icon>
-                    </button>
-                    <button md-mini-fab (click)="frame.sxc.manage.run('zone')" title="{{ 'TemplatePicker.Zone' }}">
-                        <md-icon>extension</md-icon>
-                    </button>
-                </div>
-            </div>
-            <ng-template #isApp>
-                <md-select [(ngModel)]="contentTypeId" (change)="updateContentTypeId($event)" [disabled]="dashInfo.hasContent || dashInfo.isList">
-                    <md-option *ngFor="let type of contentTypes | contentTypeFilter" [value]="type.StaticName">
-                        {{ type.Label }}
-                    </md-option>
-                </md-select>
-            </ng-template>
-        </md-tab>
-        <md-tab label="Two" *ngIf="isContentApp ? contentTypeId != 0 : (savedAppId != 0)">
-            <div class="row" fxLayout="row">
-                <md-select [(ngModel)]="templateId" (change)="updateTemplateId($event)" [disabled]="templates.length == 0 && templateId">
-                    <md-option *ngIf="templates.length === 0" value="-1">No content type</md-option>
-                    <md-option *ngFor="let template of templates" [value]="template.TemplateId">
-                        {{ template.Name }}
-                    </md-option>
-                </md-select>
-                <button md-mini-fab *ngIf="templateId !== null" (click)="persistTemplate()" title="{{ 'TemplatePicker.Save' }}">
-                    <md-icon>check</md-icon>
-                </button>
-                <button md-mini-fab *ngIf="undoTemplateId !== null" (click)="frame.sxc.manage.contentBlock._cancelTemplateChange()" title="{{ 'TemplatePicker.' + (isContentApp ? 'Cancel' : 'Close') }}">
-                    <md-icon>close</md-icon>
-                </button>
-            </div>
-        </md-tab>
-    </md-tab-group>-->
-    <div *ngIf="!isContentApp; else contentApp" fxLayout="row" class="row">
-        <md-select [(ngModel)]="appId" (change)="updateAppId($event)" [disabled]="dashInfo.hasContent">
-            <md-option *ngFor="let app of apps" [value]="app.appId">
-                {{ app.name.indexOf('TemplatePicker.') === 0 ? '[+] ' + app.name : app.name }}
-            </md-option>
-        </md-select>
-        <div *ngIf="showAdvanced && !isContentApp">
-            <button md-mini-fab *ngIf="appId !== null" (click)="frame.sxc.manage.run('app')" title="{{ 'TemplatePicker.App' }}">
-                <md-icon>settings</md-icon>
+<div class="content">
+    <md-progress-bar [ngStyle]="{ opacity: (!ready || loading) ? 1 : 0 }" [mode]="'indeterminate'"></md-progress-bar>
+    <div *ngIf="ready" class="card">
+        <div class="top-controls" fxLayout="row" fxLayoutAlign="center center">
+            <button md-fab *ngIf="template" (click)="persistTemplate()" title="{{ 'TemplatePicker.Save' }}">
+                <md-icon>check</md-icon>
             </button>
-            <button md-mini-fab (click)="frame.sxc.manage.run('app-import')" title="{{ 'TemplatePicker.Install' }}">
-                <md-icon>add</md-icon>
-            </button>
-            <button md-mini-fab (click)="appStore()" title="{{ 'TemplatePicker.Catalog' }}">
-                <md-icon>add_shopping_cart</md-icon>
-            </button>
-            <button md-mini-fab (click)="frame.sxc.manage.run('zone')" title="{{ 'TemplatePicker.Zone' }}">
-                <md-icon>extension</md-icon>
+            <button md-mini-fab class="secondary" *ngIf="undoTemplateId !== null" (click)="frame.sxc.manage.contentBlock._cancelTemplateChange()"
+                title="{{ 'TemplatePicker.' + (isContentApp ? 'Cancel' : 'Close') }}">
+                <md-icon>close</md-icon>
             </button>
         </div>
+        <md-tab-group [(selectedIndex)]="tabIndex">
+            <md-tab [label]="(isContentApp ? (contentType?.Name || 'Choose a content type!') : (app?.name || 'Choose an app!'))">
+                <div *ngIf="!isContentApp; else contentApp">
+                    <div class="tile" [ngClass]="{ active: app?.appId === a.appId }" [attr.title]="a.name" (click)="updateApp(a)" (mouseover)="updateApp(a, true)"
+                        (mouseout)="reloadApp()" *ngFor="let a of apps">
+                        {{ a.name }}
+                    </div>
+                    <div class="tile config" *ngIf="showAdvanced && !isContentApp" (click)="frame.sxc.manage.run('app-import')">
+                        Install Apps
+                    </div>
+                    <div class="tile config" *ngIf="showAdvanced && !isContentApp" (click)="frame.sxc.manage.run('zone')">
+                        Manage Apps
+                    </div>
+                </div>
+                <ng-template #contentApp>
+                    <div class="tile" [ngClass]="{ active: contentType?.StaticName === c.StaticName }" [attr.title]="c.Label" (mouseover)="updateContentType(c, true)"
+                        (mouseout)="reloadContentType()" (click)="updateContentType(c)" *ngFor="let c of contentTypes">
+                        {{ c.Label }}
+                    </div>
+                </ng-template>
+            </md-tab>
+            <md-tab *ngIf="isContentApp ? contentType : app" [label]="'Change View'">
+                <div class="no-template-msg" *ngIf="templates.length === 0">No template</div>
+                <div class="tile" [ngClass]="{ active: template?.TemplateId === t.TemplateId }" [attr.title]="t.name" (click)="updateTemplateSubject.next({ template: t })"
+                    *ngFor="let t of templates">
+                    {{ t.Name }}
+                </div>
+                <div class="tile config" *ngIf="showAdvanced && !isContentApp && app?.appId !== null" (click)="frame.sxc.manage.run('app')">
+                    Manage Views
+                </div>
+            </md-tab>
+        </md-tab-group>
+        <app-installer *ngIf="showInstaller" [isContentApp]="isContentApp"></app-installer>
     </div>
-    <ng-template #contentApp>
-        <md-select [(ngModel)]="contentTypeId" (change)="updateContentTypeId($event)" [disabled]="dashInfo.hasContent || dashInfo.isList">
-            <md-option *ngFor="let type of contentTypes | contentTypeFilter" [value]="type.StaticName">
-                {{ type.Label }}
-            </md-option>
-        </md-select>
-    </ng-template>
-    <div class="row" fxLayout="row" *ngIf="isContentApp ? contentTypeId != 0 : (savedAppId != 0)">
-        <md-select [(ngModel)]="templateId" (change)="updateTemplateId($event)" [disabled]="templates.length == 0 && templateId">
-            <md-option *ngIf="templates.length === 0" value="-1">No content type</md-option>
-            <md-option *ngFor="let template of templates" [value]="template.TemplateId">
-                {{ template.Name }}
-            </md-option>
-        </md-select>
-        <button md-mini-fab *ngIf="templateId !== null" (click)="persistTemplate()" title="{{ 'TemplatePicker.Save' }}">
-            <md-icon>check</md-icon>
-        </button>
-        <button md-mini-fab *ngIf="undoTemplateId !== null" (click)="frame.sxc.manage.contentBlock._cancelTemplateChange()" title="{{ 'TemplatePicker.' + (isContentApp ? 'Cancel' : 'Close') }}">
-            <md-icon>close</md-icon>
-        </button>
-    </div>
-    <app-installer *ngIf="showInstaller" [isContentApp]="isContentApp"></app-installer>
 </div>

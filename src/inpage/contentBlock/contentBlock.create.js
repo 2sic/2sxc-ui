@@ -53,35 +53,31 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
         },
 
         // this one assumes a replace / change has already happened, but now must be finalized...
-        reloadAndReInitialize: function (forceAjax) {
+        reloadAndReInitialize: function (forceAjax, preview) {
             // force ajax is set when a new app was chosen, and the new app supports ajax
             // this value can only be true, or not exist at all
-            if (forceAjax)
-                manage._reloadWithAjax = true;
+            if (forceAjax) manage._reloadWithAjax = true;
 
-            if (manage._reloadWithAjax) // necessary to show the original template again
-                return (forceAjax
-                    ? cb.reload(-1) // -1 is important to it doesn't try to use the old templateid
-                    : cb.reload())
-                    .then(function () {
-                        if (manage._reloadWithAjax && sxc.manage.dialog) sxc.manage.dialog.destroy(); // only remove on force, which is an app-change
-                        // create new sxc-object
-                        cb.sxc = cb.sxc.recreate();
-                        cb.sxc.manage._toolbar._processToolbars(); // sub-optimal deep dependency
-                        cb.buttonsAreLoaded = true;
-                    }, function () {
-                        // nothing to load
-                    });
-            else
-                return window.location.reload();
-
+            // necessary to show the original template again
+            if (manage._reloadWithAjax) return (forceAjax
+                ? cb.reload(-1) // -1 is important to it doesn't try to use the old templateid
+                : cb.reload())
+                .then(function () {
+                    if (manage._reloadWithAjax && sxc.manage.dialog) sxc.manage.dialog.destroy(); // only remove on force, which is an app-change
+                    if (preview) return;
+                    cb.sxc = cb.sxc.recreate(); // create new sxc-object
+                    cb.sxc.manage._toolbar._processToolbars(); // sub-optimal deep dependency
+                    cb.buttonsAreLoaded = true;
+                }, function () {
+                    // nothing to load
+                });
+            return window.location.reload();
         },
 
         // retrieve new preview-content with alternate template and then show the result
         reload: function (templateId) {
             // if nothing specified, use stored id
-            if (!templateId)
-                templateId = cb.templateId;
+            if (!templateId) templateId = cb.templateId;
 
             // if nothing specified / stored, cancel
             if (!templateId)
@@ -98,6 +94,11 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
             return cb._getPreviewWithTemplate(templateId)
                 .then(cb.replace)
                 .then($quickE.reset);   // reset quick-edit, because the config could have changed
+        },
+
+        reloadNoLivePreview: function (msg) {
+            cb.replace(msg);
+            return $.when();
         },
 
         //#region simple item commands like publish, remove, add, re-order
@@ -207,7 +208,7 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
                     manage._editContext.ContentBlock.ShowTemplatePicker = isVisible;
                 });
         },
-        
+
         prepareToAddContent: function () {
             return cb.persistTemplate(true, false);
         },
