@@ -47,7 +47,7 @@
                     </div>
                 </div>
                 <ng-template #contentApp>
-                    <div class="tile" [ngClass]="{ active: contentType?.StaticName === c.StaticName }" [attr.title]="c.Label" (mouseover)="updateContentType(c, true)"
+                    <div class="tile" [ngClass]="{ active: contentType?.StaticName === c.StaticName, blocked: !allowContentTypeChange }" [attr.title]="c.Label" (mouseover)="updateContentType(c, true)"
                         (mouseout)="reloadContentType()" (click)="updateContentType(c)" *ngFor="let c of contentTypes">
                         <div class="bg">
                             <img *ngIf="c.Thumbnail !== null && c.Thumbnail !== ''" class="bg-img" [attr.src]="c.Thumbnail + '?w=176&h=176'">

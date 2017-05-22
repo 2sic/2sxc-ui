@@ -41,6 +41,7 @@ export class TemplatePickerComponent implements OnInit {
   tabIndex: number = 0;
   updateTemplateSubject: Subject<any> = new Subject<any>();
   updateAppSubject: Subject<any> = new Subject<any>();
+  allowContentTypeChange: boolean;
 
   private allTemplates: any[] = [];
   private frame: IDialogFrameElement;
@@ -59,6 +60,7 @@ export class TemplatePickerComponent implements OnInit {
   ) {
     this.frame = <IDialogFrameElement>win.frameElement;
     this.dashInfo = this.frame.getAdditionalDashboardConfig();
+    this.allowContentTypeChange = this.dashInfo.hasContent || this.dashInfo.isList;
 
     Observable.merge(
       this.updateTemplateSubject.asObservable(),
@@ -228,7 +230,8 @@ export class TemplatePickerComponent implements OnInit {
       });
   }
 
-  updateContentType(contentType: ContentType, preview: boolean = false, keepTemplate: boolean = false) {
+  updateContentType(contentType: ContentType, preview: boolean = false, keepTemplate: boolean = false): boolean {
+    if (!this.allowContentTypeChange) return false;
     if (!preview) {
       this.contentType = contentType;
       this.tabIndex = 1;
@@ -245,6 +248,7 @@ export class TemplatePickerComponent implements OnInit {
       template: keepTemplate ? (this.template || this.templates[0]) : this.templates[0],
       preview
     });
+    return true;
   }
 
   reloadContentType() {
