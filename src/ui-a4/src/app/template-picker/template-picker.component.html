@@ -15,7 +15,15 @@
                 <div *ngIf="!isContentApp; else contentApp">
                     <div class="tile" [ngClass]="{ active: app?.appId === a.appId }" [attr.title]="a.name" (click)="updateApp(a)" (mouseover)="updateApp(a, true)"
                         (mouseout)="reloadApp()" *ngFor="let a of apps">
-                        {{a.name}}
+                        <div class="bg">
+                            <img *ngIf="a.thumbnail !== null" class="bg-img" [attr.src]="'http://2sxc.dev/' + a.thumbnail + '?w=88&h=88'">
+                            <div *ngIf="a.thumbnail === null" class="bg-icon">
+                                <md-icon>star</md-icon>
+                            </div>
+                        </div>
+                        <div class="title">
+                            <span>{{a.name}}</span>
+                        </div>
                     </div>
                     <div class="tile config" *ngIf="showAdvanced && !isContentApp" (click)="frame.sxc.manage.run('app-import')">
                         Install Apps
@@ -32,7 +40,7 @@
                 </ng-template>
             </md-tab>
             <md-tab *ngIf="isContentApp ? contentType : app" [label]="'Change View'">
-                <div class="no-template-msg" *ngIf="templates.length === 0">No template</div>
+                <md-spinner class="templates-spinner" *ngIf="loadingTemplates"></md-spinner>
                 <div class="tile" [ngClass]="{ active: template?.TemplateId === t.TemplateId }" [attr.title]="t.name" (click)="updateTemplateSubject.next({ template: t })"
                     *ngFor="let t of templates">
                     {{t.Name}}

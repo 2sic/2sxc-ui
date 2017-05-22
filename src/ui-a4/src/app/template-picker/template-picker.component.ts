@@ -44,6 +44,7 @@ export class TemplatePickerComponent implements OnInit {
   showAdvanced: boolean;
   showInstaller: boolean = false;
   loading: boolean = false;
+  loadingTemplates: boolean = false;
   ready: boolean = false;
   tabIndex: number = 0;
   updateTemplateSubject: Subject<any> = new Subject<any>();
@@ -76,13 +77,17 @@ export class TemplatePickerComponent implements OnInit {
     this.updateAppSubject
       .debounceTime(400)
       .subscribe(({ app, preview }) => {
-        this.api.setAppId(app.appId.toString())
-          .subscribe(res => {
+        this.api.setAppId(app.appId.toString()).toPromise()
+          .then(res => {
             if (app.supportsAjaxReload) return this.frame.sxc.manage.contentBlock.reloadAndReInitialize(true, true)
               .then(() => {
                 (() => {
                   if (!preview) return this.api.loadTemplates().toPromise()
-                    .then(() => this.template = this.templates[0]);
+                    .then(() => {
+                      this.loadingTemplates = false;
+                      this.template = this.templates[0];
+                      this.appRef.tick();
+                    });
                   return Promise.resolve();
                 })()
                   .then(() => {
@@ -108,7 +113,6 @@ export class TemplatePickerComponent implements OnInit {
     this.updateTemplateSubject
       .debounceTime(400)
       .subscribe(({ template, preview }) => {
-        console.log('updaing template');
         if (!preview) this.template = template;
         if (this.supportsAjax) return this.frame.sxc.manage.contentBlock.reload(template.TemplateId)
           .then(() => {
@@ -135,7 +139,8 @@ export class TemplatePickerComponent implements OnInit {
       .subscribe(apps => {
         this.app = apps.find(a => a.appId === this.dashInfo.appId);
         if (this.app) this.tabIndex = 1;
-        this.setApps(apps)
+        this.apps = apps;
+        console.log('apps', apps);
       });
 
     this.api.templates
@@ -195,10 +200,6 @@ export class TemplatePickerComponent implements OnInit {
     });
   }
 
-  private setApps(apps: App[]) {
-    this.apps = apps;
-  }
-
   private setTemplates(templates: any[], selectedTemplateId: number) {
     if (selectedTemplateId) this.template = templates.find(t => t.TemplateId === selectedTemplateId);
     this.allTemplates = templates;
@@ -254,8 +255,10 @@ export class TemplatePickerComponent implements OnInit {
   updateApp(app: App, preview: boolean = false) {
     if (!preview) {
       this.app = app;
-      this.tabIndex = 1;
+      if (app.supportsAjaxReload) this.tabIndex = 1;
       this.updatingApp = true;
+      this.templates = [];
+      this.loadingTemplates = true;
     } else if (this.updatingApp) {
       return false;
     }

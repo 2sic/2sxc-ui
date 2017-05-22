@@ -7,7 +7,7 @@
 /*jshint laxbreak:true */
 (function () {
     var runningInDnn = location.href.indexOf("ui.html") === -1;
-
+ 
     // will contain some settings which are filled in different ways
     window.$eavUIConfig = {
         languages: {
