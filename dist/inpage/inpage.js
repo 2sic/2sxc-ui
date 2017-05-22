@@ -909,6 +909,7 @@ if($ && $.fn && $.fn.dnnModuleDragDrop)
 
     var RESIZE_INTERVAL = 200,
         SHOW_DELAY = 400,
+        SCROLL_TOP_OFFSET = 80,
         activeDialog,
         activeWrapper,
         container = $('<div class="inpage-frame-wrapper"><div class="inpage-frame"></div></div>'),
@@ -917,7 +918,7 @@ if($ && $.fn && $.fn.dnnModuleDragDrop)
     $('body').append(container);
 
     $("body").on("mouseover", ".inpage-frame-wrapper", function () {
-        $('body').animate({ scrollTop: $(activeWrapper).offset().top });
+        $('body').animate({ scrollTop: $(activeWrapper).offset().top - SCROLL_TOP_OFFSET });
     });
 
     $("body").on("mouseout", ".inpage-frame-wrapper", function () {
@@ -938,7 +939,8 @@ if($ && $.fn && $.fn.dnnModuleDragDrop)
 
     function Dialog(sxc, wrapperTag, url, closeCallback) {
         var iframe, // frame inside the dialog (HTMLElement)
-            resizeInterval;
+            resizeInterval,
+            wrapperParent = $(wrapperTag).parent().eq(0);
 
         init();
         /**
@@ -954,7 +956,7 @@ if($ && $.fn && $.fn.dnnModuleDragDrop)
             getAdditionalDashboardConfig: getAdditionalDashboardConfig,
             getCommands: getCommands,
             scrollToTarget: function() {
-                $('body').animate({ scrollTop: $(wrapperTag).offset().top });
+                $('body').animate({ scrollTop: $(activeWrapper).offset().top - SCROLL_TOP_OFFSET });
             },
             toggle: function () {
                 return toggle();
@@ -993,7 +995,7 @@ if($ && $.fn && $.fn.dnnModuleDragDrop)
                 iframe.setAttribute('src', url);
                 $(inpageFrame).html(iframe);
                 activeDialog = iframe;
-                activeWrapper = wrapperTag;
+                activeWrapper = wrapperParent;
             } else {
                 activeDialog = undefined;
                 activeWrapper = undefined;

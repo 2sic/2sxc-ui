@@ -56,6 +56,7 @@ export class TemplatePickerComponent implements OnInit {
   private cAppActionImport: number = -1;
   private supportsAjax: boolean;
   private updatingApp: boolean = false;
+  private updatingContentType: boolean = false;
 
   constructor(
     private api: ModuleApiService,
@@ -66,7 +67,7 @@ export class TemplatePickerComponent implements OnInit {
   ) {
     this.frame = <IDialogFrameElement>win.frameElement;
     this.dashInfo = this.frame.getAdditionalDashboardConfig();
-
+    
     Observable.merge(
       this.updateTemplateSubject.asObservable(),
       this.updateAppSubject.asObservable()
@@ -113,7 +114,12 @@ export class TemplatePickerComponent implements OnInit {
     this.updateTemplateSubject
       .debounceTime(400)
       .subscribe(({ template, preview }) => {
-        if (!preview) this.template = template;
+        if (!preview) {
+          this.loadingTemplates = false;
+          this.template = template;
+          this.updatingContentType = false;
+          this.appRef.tick();
+        }
         if (this.supportsAjax) return this.frame.sxc.manage.contentBlock.reload(template.TemplateId)
           .then(() => {
             this.loading = false;
@@ -140,7 +146,6 @@ export class TemplatePickerComponent implements OnInit {
         this.app = apps.find(a => a.appId === this.dashInfo.appId);
         if (this.app) this.tabIndex = 1;
         this.apps = apps;
-        console.log('apps', apps);
       });
 
     this.api.templates
@@ -234,12 +239,17 @@ export class TemplatePickerComponent implements OnInit {
     if (!preview) {
       this.contentType = contentType;
       this.tabIndex = 1;
+      this.updatingContentType = true;
+      this.templates = [];
+      this.loadingTemplates = true;
+    } else if (this.updatingContentType) {
+      return false;
     }
 
     this.filterTemplates(contentType);
     if (this.templates.length === 0) return false;
     this.updateTemplateSubject.next({
-      template: keepTemplate ? this.template : this.templates[0],
+      template: keepTemplate ? (this.template || this.templates[0]) : this.templates[0],
       preview
     });
   }
