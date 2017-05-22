@@ -9,19 +9,11 @@ import { DomSanitizer, SafeResourceUrl, SafeUrl } from '@angular/platform-browse
 import { $2sxcService } from "app/core/$2sxc.service";
 import { App } from "app/core/app";
 import { Subject } from "rxjs/Subject";
+import { Template } from "app/template-picker/template";
+import { ContentType } from "app/template-picker/content-type";
 
 declare const $2sxc: any;
 var win = window;
-
-class Template {
-  TemplateId: number;
-  Name: string;
-}
-
-class ContentType {
-  StaticName: string;
-  Label: string;
-}
 
 @Component({
   selector: 'app-template-picker',
@@ -67,7 +59,7 @@ export class TemplatePickerComponent implements OnInit {
   ) {
     this.frame = <IDialogFrameElement>win.frameElement;
     this.dashInfo = this.frame.getAdditionalDashboardConfig();
-    
+
     Observable.merge(
       this.updateTemplateSubject.asObservable(),
       this.updateAppSubject.asObservable()
@@ -110,7 +102,7 @@ export class TemplatePickerComponent implements OnInit {
             this.updatingApp = false;
           })
       });
-
+    
     this.updateTemplateSubject
       .debounceTime(400)
       .subscribe(({ template, preview }) => {
@@ -126,7 +118,7 @@ export class TemplatePickerComponent implements OnInit {
             this.frame.scrollToTarget();
             this.appRef.tick();
           });
-
+        
         if (preview) return this.frame.sxc.manage.contentBlock.reloadNoLivePreview(`<p class="no-live-preview-available">The content type <b>${template.Name}</b> does not have a live preview. Please click on it to see it in action!</p>`)
           .then(() => {
             this.loading = false;
@@ -277,9 +269,5 @@ export class TemplatePickerComponent implements OnInit {
       app,
       preview,
     });
-  }
-
-  toggle() {
-    if (this.dashInfo.templateChooserVisible) return this.frame.sxc.manage.contentBlock._cancelTemplateChange();
   }
 }
