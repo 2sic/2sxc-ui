@@ -54,6 +54,7 @@ export class TemplatePickerComponent implements OnInit {
   private cViewWithoutContent: string = '_LayoutElement';
   private cAppActionImport: number = -1;
   private supportsAjax: boolean;
+  private updatingApp: boolean = false;
 
   constructor(
     private api: ModuleApiService,
@@ -77,33 +78,37 @@ export class TemplatePickerComponent implements OnInit {
       .subscribe(({ app, preview }) => {
         this.api.setAppId(app.appId.toString())
           .subscribe(res => {
-            alert("reload");
             if (app.supportsAjaxReload) return this.frame.sxc.manage.contentBlock.reloadAndReInitialize(true, true)
               .then(() => {
                 (() => {
-                  if (!preview) return this.api.loadTemplates().toPromise();
+                  if (!preview) return this.api.loadTemplates().toPromise()
+                    .then(() => this.template = this.templates[0]);
                   return Promise.resolve();
                 })()
                   .then(() => {
                     this.loading = false;
                     this.frame.scrollToTarget();
                     this.appRef.tick();
+                    this.updatingApp = false;
                   });
               });
-            
+
             if (preview) return this.frame.sxc.manage.contentBlock.reloadNoLivePreview(`<p class="no-live-preview-available">The app <b>${app.name}</b> does not have a live preview. Please click on it to see it in action!</p>`)
               .then(() => {
                 this.loading = false;
                 this.frame.scrollToTarget();
                 this.appRef.tick();
               });
+
             win.parent.location.reload();
+            this.updatingApp = false;
           })
       });
 
     this.updateTemplateSubject
       .debounceTime(400)
       .subscribe(({ template, preview }) => {
+        console.log('updaing template');
         if (!preview) this.template = template;
         if (this.supportsAjax) return this.frame.sxc.manage.contentBlock.reload(template.TemplateId)
           .then(() => {
@@ -250,11 +255,14 @@ export class TemplatePickerComponent implements OnInit {
     if (!preview) {
       this.app = app;
       this.tabIndex = 1;
+      this.updatingApp = true;
+    } else if (this.updatingApp) {
+      return false;
     }
 
     this.updateAppSubject.next({
       app,
-      preview
+      preview,
     });
   }
 

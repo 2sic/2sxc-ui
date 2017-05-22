@@ -15,7 +15,7 @@
                 <div *ngIf="!isContentApp; else contentApp">
                     <div class="tile" [ngClass]="{ active: app?.appId === a.appId }" [attr.title]="a.name" (click)="updateApp(a)" (mouseover)="updateApp(a, true)"
                         (mouseout)="reloadApp()" *ngFor="let a of apps">
-                        {{ a.name }}
+                        {{a.name}}
                     </div>
                     <div class="tile config" *ngIf="showAdvanced && !isContentApp" (click)="frame.sxc.manage.run('app-import')">
                         Install Apps
@@ -27,7 +27,7 @@
                 <ng-template #contentApp>
                     <div class="tile" [ngClass]="{ active: contentType?.StaticName === c.StaticName }" [attr.title]="c.Label" (mouseover)="updateContentType(c, true)"
                         (mouseout)="reloadContentType()" (click)="updateContentType(c)" *ngFor="let c of contentTypes">
-                        {{ c.Label }}
+                        {{c.Label}}
                     </div>
                 </ng-template>
             </md-tab>
@@ -35,7 +35,7 @@
                 <div class="no-template-msg" *ngIf="templates.length === 0">No template</div>
                 <div class="tile" [ngClass]="{ active: template?.TemplateId === t.TemplateId }" [attr.title]="t.name" (click)="updateTemplateSubject.next({ template: t })"
                     *ngFor="let t of templates">
-                    {{ t.Name }}
+                    {{t.Name}}
                 </div>
                 <div class="tile config" *ngIf="showAdvanced && !isContentApp && app?.appId !== null" (click)="frame.sxc.manage.run('app')">
                     Manage Views
