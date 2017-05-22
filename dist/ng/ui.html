@@ -49,14 +49,23 @@
         document.write(script.outerHTML); // needs doc.write to ensure in-sync loading of the files
     }
 
+    function addStyle(src) {
+      var style = document.createElement("link");
+      style.setAttribute("rel", "stylesheet");
+      style.setAttribute("type", "text/css");
+      style.setAttribute("href", src);// + "?" + sxcVersionParam);
+      document.getElementsByTagName("head")[0].appendChild(style);
+    }
+
     var scripts = [
       'inline.bundle.js',     // ? purpose unknown yet    
       // todo: i18n probably...
       // '../i18n/lib/angular-i18n/angular-locale_' + langTwoLetter + '.js',
       'polyfills.bundle.js',  // js polyfills for older browsers
       'vendor.bundle.js',     // default set needed for all UIs like angular, animate, translate
-      'main.bundle.js'        // our app, with everything
-    ];
+      'main.bundle.js',        // our app, with everything
+      'styles.bundle.js'
+    ], styles = [];
   </script>
   <meta charset="utf-8">
   <title>Quick Dialog</title>
@@ -64,15 +73,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link href="//fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <link href="styles.bundle.css">
 </head>
 
 <body>
   <app-root></app-root>
   <script>
     if (!isDevMode) {
+      var s;
       // now add the scripts as needed
-      for (var s = 0; s < scripts.length; s++) addScript(scripts[s]);
+      for (s = 0; s < scripts.length; s++) addScript(scripts[s]);
+      for (s = 0; s < styles.length; s++) addStyle(styles[s]);
     }
   </script>
 </body>

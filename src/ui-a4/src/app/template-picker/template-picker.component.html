@@ -16,12 +16,12 @@
                     <div class="tile" [ngClass]="{ active: app?.appId === a.appId }" [attr.title]="a.name" (click)="updateApp(a)" (mouseover)="updateApp(a, true)"
                         (mouseout)="reloadApp()" *ngFor="let a of apps">
                         <div class="bg">
-                            <img *ngIf="a.thumbnail !== null" class="bg-img" [attr.src]="a.thumbnail + '?w=176&h=176'">
-                            <div *ngIf="a.thumbnail === null" class="bg-icon">
+                            <img *ngIf="a.thumbnail !== null && a.thumbnail !== ''" class="bg-img" [attr.src]="a.thumbnail + '?w=176&h=176'">
+                            <div *ngIf="a.thumbnail === null || a.thumbnail === ''" class="bg-icon">
                                 <md-icon>star</md-icon>
                             </div>
                         </div>
-                        <div class="title" [ngClass]="{ show: a.thumbnail === null }">
+                        <div class="title" [ngClass]="{ show: a.thumbnail === null || a.thumbnail === '' }">
                             <span>{{a.name}}</span>
                         </div>
                     </div>
@@ -50,12 +50,12 @@
                     <div class="tile" [ngClass]="{ active: contentType?.StaticName === c.StaticName }" [attr.title]="c.Label" (mouseover)="updateContentType(c, true)"
                         (mouseout)="reloadContentType()" (click)="updateContentType(c)" *ngFor="let c of contentTypes">
                         <div class="bg">
-                            <img *ngIf="c.Thumbnail !== null" class="bg-img" [attr.src]="c.Thumbnail + '?w=176&h=176'">
-                            <div *ngIf="c.Thumbnail === null" class="bg-icon">
+                            <img *ngIf="c.Thumbnail !== null && c.Thumbnail !== ''" class="bg-img" [attr.src]="c.Thumbnail + '?w=176&h=176'">
+                            <div *ngIf="c.Thumbnail === null || c.Thumbnail === ''" class="bg-icon">
                                 <md-icon>bubble_chart</md-icon>
                             </div>
                         </div>
-                        <div class="title" [ngClass]="{ show: c.Thumbnail === null }">
+                        <div class="title" [ngClass]="{ show: c.Thumbnail === null || c.Thumbnail === '' }">
                             <span>{{c.Label}}</span>
                         </div>
                     </div>
@@ -66,13 +66,13 @@
                 <div class="tile" [ngClass]="{ active: template?.TemplateId === t.TemplateId }" [attr.title]="t.Name" (mouseover)="updateTemplateSubject.next({ template: t, preview: true })" (click)="updateTemplateSubject.next({ template: t })"
                     *ngFor="let t of templates">
                     <div class="bg">
-                        <img *ngIf="t.Thumbnail !== null" class="bg-img" [attr.src]="t.thumbnail + '?w=176&h=176'">
-                        <div *ngIf="t.Thumbnail === null" class="bg-icon">
+                        <img *ngIf="t.Thumbnail !== null && t.Thumbnail !== ''" class="bg-img" [attr.src]="t.thumbnail + '?w=176&h=176'">
+                        <div *ngIf="t.Thumbnail === null || t.Thumbnail === ''" class="bg-icon">
                             <md-icon *ngIf="isContentApp">view_carousel</md-icon>
                             <md-icon *ngIf="!isContentApp">view_quilt</md-icon>
                         </div>
                     </div>
-                    <div class="title" [ngClass]="{ show: t.Thumbnail === null }">
+                    <div class="title" [ngClass]="{ show: t.Thumbnail === null || t.Thumbnail === '' }">
                         <span>{{t.Name}}</span>
                     </div>
                 </div>
