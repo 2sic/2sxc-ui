@@ -48,19 +48,16 @@ export class TemplatePickerComponent implements OnInit {
   private cViewWithoutContent: string = '_LayoutElement';
   private cAppActionImport: number = -1;
   private supportsAjax: boolean;
-  private updatingApp: boolean = false;
-  private updatingContentType: boolean = false;
 
   constructor(
     private api: ModuleApiService,
     private route: ActivatedRoute,
     private templateFilter: TemplateFilterPipe,
-    private sxc: $2sxcService,
     private appRef: ApplicationRef
   ) {
     this.frame = <IDialogFrameElement>win.frameElement;
     this.dashInfo = this.frame.getAdditionalDashboardConfig();
-    this.allowContentTypeChange = this.dashInfo.hasContent || this.dashInfo.isList;
+    this.allowContentTypeChange = !(this.dashInfo.hasContent || this.dashInfo.isList);
 
     Observable.merge(
       this.updateTemplateSubject.asObservable(),
@@ -71,29 +68,25 @@ export class TemplatePickerComponent implements OnInit {
 
     this.updateAppSubject
       .debounceTime(400)
-      .subscribe(({ app, preview }) => {
+      .subscribe(({ app }) => {
         this.api.setAppId(app.appId.toString()).toPromise()
           .then(res => {
             if (app.supportsAjaxReload) return this.frame.sxc.manage.contentBlock.reloadAndReInitialize(true, true)
               .then(() => {
-                (() => {
-                  if (!preview) return this.api.loadTemplates().toPromise()
-                    .then(() => {
-                      this.loadingTemplates = false;
-                      this.template = this.templates[0];
-                      this.appRef.tick();
-                    });
-                  return Promise.resolve();
-                })()
+                return this.api.loadTemplates().toPromise()
+                  .then(() => {
+                    this.loadingTemplates = false;
+                    this.template = this.templates[0];
+                    this.appRef.tick();
+                  })
                   .then(() => {
                     this.loading = false;
                     this.frame.scrollToTarget();
                     this.appRef.tick();
-                    this.updatingApp = false;
                   });
               });
 
-            if (preview) return this.frame.sxc.manage.contentBlock.reloadNoLivePreview(`<p class="no-live-preview-available">The app <b>${app.name}</b> does not have a live preview. Please click on it to see it in action!</p>`)
+            this.frame.sxc.manage.contentBlock.reloadNoLivePreview(`<p class="no-live-preview-available">Reloading App. Please wait.</p>`)
               .then(() => {
                 this.loading = false;
                 this.frame.scrollToTarget();
@@ -101,27 +94,24 @@ export class TemplatePickerComponent implements OnInit {
               });
 
             win.parent.location.reload();
-            this.updatingApp = false;
           })
       });
-    
+
     this.updateTemplateSubject
       .debounceTime(400)
-      .subscribe(({ template, preview }) => {
-        if (!preview) {
-          this.loadingTemplates = false;
-          this.template = template;
-          this.updatingContentType = false;
-          this.appRef.tick();
-        }
+      .subscribe(({ template }) => {
+        this.loadingTemplates = false;
+        this.template = template;
+        this.appRef.tick();
+
         if (this.supportsAjax) return this.frame.sxc.manage.contentBlock.reload(template.TemplateId)
           .then(() => {
             this.loading = false;
             this.frame.scrollToTarget();
             this.appRef.tick();
           });
-        
-        if (preview) return this.frame.sxc.manage.contentBlock.reloadNoLivePreview(`<p class="no-live-preview-available">The content type <b>${template.Name}</b> does not have a live preview. Please click on it to see it in action!</p>`)
+
+        this.frame.sxc.manage.contentBlock.reloadNoLivePreview(`<p class="no-live-preview-available">Reloading content type <b>${template.Name}</b>. Please wait.</p>`)
           .then(() => {
             this.loading = false;
             this.frame.scrollToTarget();
@@ -206,7 +196,6 @@ export class TemplatePickerComponent implements OnInit {
 
   private setContentTypes(contentTypes: any[], selectedContentTypeId) {
     if (selectedContentTypeId) this.contentType = contentTypes.find(c => c.StaticName === selectedContentTypeId);
-    if (this.contentType) this.tabIndex = 1;
     contentTypes
       .filter(c => (this.template && c.TemplateId === this.template.TemplateId) || (this.contentType && c.StaticName === this.contentType.StaticName))
       .forEach(c => c.IsHidden = false);
@@ -230,49 +219,36 @@ export class TemplatePickerComponent implements OnInit {
       });
   }
 
-  updateContentType(contentType: ContentType, preview: boolean = false, keepTemplate: boolean = false): boolean {
+  updateContentType(contentType: ContentType, keepTemplate: boolean = false): boolean {
     if (!this.allowContentTypeChange) return false;
-    if (!preview) {
-      this.contentType = contentType;
-      this.tabIndex = 1;
-      this.updatingContentType = true;
-      this.templates = [];
-      this.loadingTemplates = true;
-    } else if (this.updatingContentType) {
-      return false;
-    }
+    this.contentType = contentType;
+    this.tabIndex = 1;
+    this.templates = [];
+    this.loadingTemplates = true;
 
     this.filterTemplates(contentType);
     if (this.templates.length === 0) return false;
     this.updateTemplateSubject.next({
       template: keepTemplate ? (this.template || this.templates[0]) : this.templates[0],
-      preview
     });
     return true;
   }
 
   reloadContentType() {
-    this.updateContentType(this.contentType, true, true);
+    this.updateContentType(this.contentType, true);
   }
 
-  reloadApp() {
-    this.updateApp(this.app, true);
+  switchTab() {
+    this.tabIndex = 1;
   }
 
-  updateApp(app: App, preview: boolean = false) {
-    if (!preview) {
-      this.app = app;
-      if (app.supportsAjaxReload) this.tabIndex = 1;
-      this.updatingApp = true;
-      this.templates = [];
-      this.loadingTemplates = true;
-    } else if (this.updatingApp) {
-      return false;
-    }
+  updateApp(app: App) {
+    this.app = app;
+    this.templates = [];
+    this.loadingTemplates = true;
 
     this.updateAppSubject.next({
       app,
-      preview,
     });
   }
 }

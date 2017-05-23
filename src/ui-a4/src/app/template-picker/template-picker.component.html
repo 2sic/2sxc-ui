@@ -13,8 +13,7 @@
         <md-tab-group [(selectedIndex)]="tabIndex">
             <md-tab [label]="(isContentApp ? (contentType?.Name || 'Choose a content type!') : (app?.name || 'Choose an app!'))">
                 <div *ngIf="!isContentApp; else contentApp">
-                    <div class="tile" [ngClass]="{ active: app?.appId === a.appId }" [attr.title]="a.name" (click)="updateApp(a)" (mouseover)="updateApp(a, true)"
-                        (mouseout)="reloadApp()" *ngFor="let a of apps">
+                    <div class="tile" [ngClass]="{ active: app?.appId === a.appId }" [attr.title]="a.name" (click)="app?.appId === a.appId ? switchTab() : updateApp(a)" (dblclick)="switchTab()" *ngFor="let a of apps">
                         <div class="bg">
                             <img *ngIf="a.thumbnail !== null && a.thumbnail !== ''" class="bg-img" [attr.src]="a.thumbnail + '?w=176&h=176'">
                             <div *ngIf="a.thumbnail === null || a.thumbnail === ''" class="bg-icon">
@@ -47,8 +46,8 @@
                     </div>
                 </div>
                 <ng-template #contentApp>
-                    <div class="tile" [ngClass]="{ active: contentType?.StaticName === c.StaticName, blocked: !allowContentTypeChange }" [attr.title]="c.Label" (mouseover)="updateContentType(c, true)"
-                        (mouseout)="reloadContentType()" (click)="updateContentType(c)" *ngFor="let c of contentTypes">
+                    <div class="tile" [ngClass]="{ active: contentType?.StaticName === c.StaticName, blocked: !allowContentTypeChange }" [attr.title]="c.Label"
+                        (click)="contentType?.StaticName === c.StaticName ? switchTab() : updateContentType(c)" (dblclick)="switchTab()" *ngFor="let c of contentTypes">
                         <div class="bg">
                             <img *ngIf="c.Thumbnail !== null && c.Thumbnail !== ''" class="bg-img" [attr.src]="c.Thumbnail + '?w=176&h=176'">
                             <div *ngIf="c.Thumbnail === null || c.Thumbnail === ''" class="bg-icon">
@@ -61,9 +60,9 @@
                     </div>
                 </ng-template>
             </md-tab>
-            <md-tab *ngIf="isContentApp ? contentType : app" [label]="'Change View'">
+            <md-tab *ngIf="isContentApp ? contentType : app" [label]="'Change View (' + templates.length + ')'">
                 <md-spinner class="templates-spinner" *ngIf="loadingTemplates"></md-spinner>
-                <div class="tile" [ngClass]="{ active: template?.TemplateId === t.TemplateId }" [attr.title]="t.Name" (mouseover)="updateTemplateSubject.next({ template: t, preview: true })" (click)="updateTemplateSubject.next({ template: t })"
+                <div class="tile" [ngClass]="{ active: template?.TemplateId === t.TemplateId }" [attr.title]="t.Name" (click)="updateTemplateSubject.next({ template: t })"
                     *ngFor="let t of templates">
                     <div class="bg">
                         <img *ngIf="t.Thumbnail !== null && t.Thumbnail !== ''" class="bg-img" [attr.src]="t.thumbnail + '?w=176&h=176'">

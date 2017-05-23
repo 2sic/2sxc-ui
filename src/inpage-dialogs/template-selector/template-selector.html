@@ -39,7 +39,7 @@
                 ng-disabled="vm.dashInfo.hasContent || vm.dashInfo.isList">
             <option ng-disabled="vm.contentTypeId != ''" value="" translate="TemplatePicker.ContentTypePickerDefault"></option>
         </select>
-            
+
             <!-- view / template selector -->
             <div>
                 <select ng-show="vm.isContentApp ? vm.contentTypeId != 0 : (vm.savedAppId != null)" x="( && vm.filteredTemplates().length > 1)"
