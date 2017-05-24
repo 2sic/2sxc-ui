@@ -55,7 +55,7 @@
             getManageInfo: getManageInfo,
             getAdditionalDashboardConfig: getAdditionalDashboardConfig,
             getCommands: getCommands,
-            scrollToTarget: function() {
+            scrollToTarget: function () {
                 $('body').animate({ scrollTop: $(activeWrapper).offset().top - SCROLL_TOP_OFFSET });
             },
             toggle: function () {
@@ -84,7 +84,7 @@
         function toggle(show) {
             var action = show === undefined ? (activeDialog != iframe) : show,
                 dirty;
-            
+
             if (action) {
                 if (activeDialog == iframe) return false;
                 if (activeDialog !== undefined) {

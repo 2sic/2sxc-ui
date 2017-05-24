@@ -1,12 +1,19 @@
-﻿
-// Toolbar bootstrapping (initialize all toolbars after loading page)
+﻿// Toolbar bootstrapping (initialize all toolbars after loading page)
+console.log("aaaaa");
+$(function() {
+console.log("this is a test asdasdasd")
+})
+console.log($);
 $(document).ready(function () {
+    console.log("this is a test")
     // Prevent propagation of the click (if menu was clicked)
     $(".sc-menu").click(function (e) {
         e.stopPropagation();
     });
 
     var modules = $("div[data-edit-context]");
+
+    console.log("this is a test")
 
     if ($2sxc.debug.load && console) console.log("found " + modules.length + " content blocks");
 

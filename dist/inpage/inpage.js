@@ -531,8 +531,6 @@
 
         return cmc;
     };
-
-
 })();
 /* 
  * this is a content block in the browser
@@ -893,7 +891,7 @@ var $2sxcActionMenuMapper = function (moduleId) {
 
 /*jshint ignore:start*/
 // fix bug in dnn 08.00.04 drag-drop functionality - it has an incorrect regex
-if($ && $.fn && $.fn.dnnModuleDragDrop)
+if ($ && $.fn && $.fn.dnnModuleDragDrop)
     eval("$.fn.dnnModuleDragDrop = "
         + $.fn.dnnModuleDragDrop.toString()
             .replace(".match(/DnnModule-([0-9]+)/)", ".match(/DnnModule-([0-9]+)(?:\W|$)/)"));
@@ -955,7 +953,7 @@ if($ && $.fn && $.fn.dnnModuleDragDrop)
             getManageInfo: getManageInfo,
             getAdditionalDashboardConfig: getAdditionalDashboardConfig,
             getCommands: getCommands,
-            scrollToTarget: function() {
+            scrollToTarget: function () {
                 $('body').animate({ scrollTop: $(activeWrapper).offset().top - SCROLL_TOP_OFFSET });
             },
             toggle: function () {
@@ -984,7 +982,7 @@ if($ && $.fn && $.fn.dnnModuleDragDrop)
         function toggle(show) {
             var action = show === undefined ? (activeDialog != iframe) : show,
                 dirty;
-            
+
             if (action) {
                 if (activeDialog == iframe) return false;
                 if (activeDialog !== undefined) {
@@ -2010,15 +2008,22 @@ $(function () {
     return Shake;
 }));
 
-
 // Toolbar bootstrapping (initialize all toolbars after loading page)
+console.log("aaaaa");
+$(function() {
+console.log("this is a test asdasdasd")
+})
+console.log($);
 $(document).ready(function () {
+    console.log("this is a test")
     // Prevent propagation of the click (if menu was clicked)
     $(".sc-menu").click(function (e) {
         e.stopPropagation();
     });
 
     var modules = $("div[data-edit-context]");
+
+    console.log("this is a test")
 
     if ($2sxc.debug.load && console) console.log("found " + modules.length + " content blocks");
 

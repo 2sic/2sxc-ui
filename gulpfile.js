@@ -10,8 +10,8 @@
         debug: true,
         autostart: true,
         autopublish: true,
-        autopublishTarget: "./../2SexyContent/Web/DesktopModules/ToSIC_SexyContent/dist",
-        autopublishTargetJs: "./../2SexyContent/Web/DesktopModules/ToSIC_SexyContent/js",
+        autopublishTarget: "./../2SexyContent/WebDNN9/DesktopModules/ToSIC_SexyContent/dist",
+        autopublishTargetJs: "./../2SexyContent/WebDNN9/DesktopModules/ToSIC_SexyContent/js",
         rootDist: "dist/" // "tmp-gulp/dist/"
     };
 

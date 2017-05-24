@@ -8,7 +8,7 @@
 
 /*jshint ignore:start*/
 // fix bug in dnn 08.00.04 drag-drop functionality - it has an incorrect regex
-if($ && $.fn && $.fn.dnnModuleDragDrop)
+if ($ && $.fn && $.fn.dnnModuleDragDrop)
     eval("$.fn.dnnModuleDragDrop = "
         + $.fn.dnnModuleDragDrop.toString()
             .replace(".match(/DnnModule-([0-9]+)/)", ".match(/DnnModule-([0-9]+)(?:\W|$)/)"));
