@@ -1,7 +1,7 @@
 // this enhances the $2sxc client controller with stuff only needed when logged in
 (function() {
-    if ($2sxc) {
-
+    if (window['$2sxc']) {
+        
         //#region System Commands - at the moment only finishUpgrade
         $2sxc.system = {
             // upgrade command - started when an error contains a link to start this
@@ -23,8 +23,8 @@
 })();
 // this enhances the $2sxc client controller with stuff only needed when logged in
 (function() {
-    if ($2sxc) {
-
+    if (window[$2sxc]) {
+        
         //#region contentItem Commands - at the moment only finishUpgrade
         $2sxc.contentItems = {
             // delete command - try to really delete a content-item
@@ -490,14 +490,11 @@
                 };
                 var link = cmc._linkToNgDialog(settings);
 
-                if (settings.newWindow || (event && event.shiftKey))
-                    return window.open(link);
-                else {
-                    if (settings.inlineWindow)
-                        return $2sxc._dialog(sxc, targetTag, link, callback);
-                    else
-                        return $2sxc.totalPopup.open(link, callback);
-                }
+                console.log("target", targetTag);
+
+                if (settings.newWindow || (event && event.shiftKey)) return window.open(link);
+                if (settings.inlineWindow) return $2sxc._dialog(sxc, targetTag, link, callback);
+                return $2sxc.totalPopup.open(link, callback);
             },
 
             executeAction: function (nameOrSettings, settings, event) {
@@ -904,7 +901,7 @@ if ($ && $.fn && $.fn.dnnModuleDragDrop)
 // - we never got around to making the height adjust automatically
 (function () {
     $2sxc._dialog = Dialog;
-
+    
     var RESIZE_INTERVAL = 200,
         SHOW_DELAY = 400,
         SCROLL_TOP_OFFSET = 80,
@@ -939,7 +936,7 @@ if ($ && $.fn && $.fn.dnnModuleDragDrop)
         var iframe, // frame inside the dialog (HTMLElement)
             resizeInterval,
             wrapperParent = $(wrapperTag).parent().eq(0);
-
+        
         init();
         /**
          * Assign properties to the iframe for later use.
@@ -2009,47 +2006,39 @@ $(function () {
 }));
 
 // Toolbar bootstrapping (initialize all toolbars after loading page)
-console.log("aaaaa");
-$(function() {
-console.log("this is a test asdasdasd")
-})
-console.log($);
-$(document).ready(function () {
-    console.log("this is a test")
+$(function () {
+    var modules = [];
+    
     // Prevent propagation of the click (if menu was clicked)
     $(".sc-menu").click(function (e) {
         e.stopPropagation();
     });
-
-    var modules = $("div[data-edit-context]");
-
-    console.log("this is a test")
-
-    if ($2sxc.debug.load && console) console.log("found " + modules.length + " content blocks");
-
-    // Ensure the _processToolbar is called after the next event cycle to make sure that the Angular app (template selector) is loaded first
-    window.setTimeout(function () {
-        modules.each(function () {
-            // 2016-10-09 2dm disabled try, as it only makes debugging harder...
-            // not sure if we really need it
-            //try {
-            var ctl = $2sxc(this);
-            if(ctl.manage)
-                ctl.manage._toolbar._processToolbars(this);
-            //} catch (e) { // Make sure that if one app breaks, others continue to work
-            //    if (console && console.error) console.error(e);
-            //}
-        });
-    }, 0);
-
-
+    
+    setInterval(function () {
+        $("div[data-edit-context]").each(function () {
+            var newModule = this;
+            return modules.find(function (m) {
+                return m[0] === newModule[0];
+            }) ? undefined : processToolbar(newModule);
+        })
+    }, 1000);
+    
+    // if ($2sxc.debug && $2sxc.debug.load && console) console.log("found " + modules.length + " content blocks");
+    
+    function processToolbar(module) {
+        if ($(module).parents('.DnnModule.floating').length > 0) return false;
+        modules.push(module);
+        var ctl = $2sxc(module);
+        if (ctl.manage) ctl.manage._toolbar._processToolbars(module);
+    }
+    
     // this will add a css-class to auto-show all toolbars (or remove it again)
     function toggleAllToolbars() {
         $(document.body).toggleClass("sc-tb-show-all");
     }
-
+    
     // start shake-event monitoring, which will then generate a window-event
-    var myShakeEvent = new Shake({ callback: toggleAllToolbars});
+    var myShakeEvent = new Shake({ callback: toggleAllToolbars });
     myShakeEvent.start();
 
 });

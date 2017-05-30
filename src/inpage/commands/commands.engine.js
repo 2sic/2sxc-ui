@@ -98,14 +98,11 @@
                 };
                 var link = cmc._linkToNgDialog(settings);
 
-                if (settings.newWindow || (event && event.shiftKey))
-                    return window.open(link);
-                else {
-                    if (settings.inlineWindow)
-                        return $2sxc._dialog(sxc, targetTag, link, callback);
-                    else
-                        return $2sxc.totalPopup.open(link, callback);
-                }
+                console.log("target", targetTag);
+
+                if (settings.newWindow || (event && event.shiftKey)) return window.open(link);
+                if (settings.inlineWindow) return $2sxc._dialog(sxc, targetTag, link, callback);
+                return $2sxc.totalPopup.open(link, callback);
             },
 
             executeAction: function (nameOrSettings, settings, event) {

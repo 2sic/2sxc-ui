@@ -1,7 +1,7 @@
 ﻿// this enhances the $2sxc client controller with stuff only needed when logged in
 (function() {
-    if ($2sxc) {
-
+    if (window[$2sxc]) {
+        
         //#region contentItem Commands - at the moment only finishUpgrade
         $2sxc.contentItems = {
             // delete command - try to really delete a content-item

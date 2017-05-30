@@ -65,7 +65,7 @@
                 <div class="tile" [ngClass]="{ active: template?.TemplateId === t.TemplateId }" [attr.title]="t.Name" (click)="updateTemplateSubject.next({ template: t })"
                     *ngFor="let t of templates">
                     <div class="bg">
-                        <img *ngIf="t.Thumbnail !== null && t.Thumbnail !== ''" class="bg-img" [attr.src]="t.thumbnail + '?w=176&h=176'">
+                        <img *ngIf="t.Thumbnail !== null && t.Thumbnail !== ''" class="bg-img" [attr.src]="t.Thumbnail + '?w=176&h=176'">
                         <div *ngIf="t.Thumbnail === null || t.Thumbnail === ''" class="bg-icon">
                             <md-icon *ngIf="isContentApp">view_carousel</md-icon>
                             <md-icon *ngIf="!isContentApp">view_quilt</md-icon>
