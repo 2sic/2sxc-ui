@@ -1,7 +1,7 @@
 // this enhances the $2sxc client controller with stuff only needed when logged in
 (function() {
     if (window['$2sxc']) {
-        
+
         //#region System Commands - at the moment only finishUpgrade
         $2sxc.system = {
             // upgrade command - started when an error contains a link to start this
@@ -481,16 +481,13 @@
 
                 return cmd.generateLink();
             },
-
+            
             // open a new dialog of the angular-ui
             _openNgDialog: function (settings, event, closeCallback) {
                 var callback = function () {
                     cmc.manage.contentBlock.reloadAndReInitialize();
                     closeCallback();
-                };
-                var link = cmc._linkToNgDialog(settings);
-
-                console.log("target", targetTag);
+                }, link = cmc._linkToNgDialog(settings);
 
                 if (settings.newWindow || (event && event.shiftKey)) return window.open(link);
                 if (settings.inlineWindow) return $2sxc._dialog(sxc, targetTag, link, callback);
@@ -878,7 +875,6 @@ var $2sxcActionMenuMapper = function (moduleId) {
         develop: function () {                  run("template-develop"); }
     };
 };
-
 // The following script fixes a bug in DNN 08.00.04
 // the bug tries to detect a module-ID based on classes in a tag, 
 // but uses a bad regex and captures the number 2 on all 2sxc-modules 
@@ -887,11 +883,14 @@ var $2sxcActionMenuMapper = function (moduleId) {
 // documented here https://github.com/2sic/2sxc/issues/986
 
 /*jshint ignore:start*/
-// fix bug in dnn 08.00.04 drag-drop functionality - it has an incorrect regex
-if ($ && $.fn && $.fn.dnnModuleDragDrop)
+(function () {
+    if (!$ || !$.fn || !$.fn.dnnModuleDragDrop) return false;
+
+    // fix bug in dnn 08.00.04 drag-drop functionality - it has an incorrect regex
     eval("$.fn.dnnModuleDragDrop = "
         + $.fn.dnnModuleDragDrop.toString()
-            .replace(".match(/DnnModule-([0-9]+)/)", ".match(/DnnModule-([0-9]+)(?:\W|$)/)"));
+            .replace(".match(/DnnModule-([0-9]+)/)", ".match(/DnnModule-([0-9]+)(?:\\W|$)/)"));
+})();
 /*jshint ignore:end*/
 // this is a dialog handler which will create in-page dialogs for 
 // - the template / view picker
@@ -911,14 +910,6 @@ if ($ && $.fn && $.fn.dnnModuleDragDrop)
         inpageFrame = container.find('.inpage-frame');
 
     $('body').append(container);
-
-    $("body").on("mouseover", ".inpage-frame-wrapper", function () {
-        $('body').animate({ scrollTop: $(activeWrapper).offset().top - SCROLL_TOP_OFFSET });
-    });
-
-    $("body").on("mouseout", ".inpage-frame-wrapper", function () {
-        $(this).toggleClass("dia-mouseover", false);
-    });
 
     setInterval(function () {
         try {
@@ -2023,8 +2014,6 @@ $(function () {
         })
     }, 1000);
     
-    // if ($2sxc.debug && $2sxc.debug.load && console) console.log("found " + modules.length + " content blocks");
-    
     function processToolbar(module) {
         if ($(module).parents('.DnnModule.floating').length > 0) return false;
         modules.push(module);
@@ -2063,7 +2052,7 @@ $(function () {
                 queryId: cg.QueryId,
                 appResourcesId: cg.AppResourcesId,
                 appSettingsId: cg.AppSettingsId
-    });
+            });
 
         // #region helper functions
         function createToolbarConfig(context) {
@@ -2074,7 +2063,7 @@ $(function () {
                 moduleId: ce.InstanceId,
                 version: ce.SxcVersion,
 
-                contentGroupId: cg.Guid, 
+                contentGroupId: cg.Guid,
                 cbIsEntity: cb.IsEntity,
                 cbId: cb.Id,
                 appPath: cg.AppUrl,
@@ -2105,9 +2094,11 @@ $(function () {
             config: createToolbarConfig(editContext),
             refreshConfig: function () { tb.config = createToolbarConfig(editContext); },
             actions: allActions,
+            
             // Generate a button (an <a>-tag) for one specific toolbar-action. 
             // Expects: settings, an object containing the specs for the expected buton
             getButton: function (actDef, groupIndex) {
+
                 // if the button belongs to a content-item, move the specs up to the item into the settings-object
                 flattenActionDefinition(actDef);
 
@@ -2132,18 +2123,13 @@ $(function () {
                 return button[0].outerHTML;
             },
 
-
             // Builds the toolbar and returns it as HTML
             // expects settings - either for 1 button or for an array of buttons
             getToolbar: function (tbConfig, moreSettings) {
-                //if ($2sxc.debug.load) {
-                //    console.log("creating toolbar");
-                //    console.log(settings);
-                //}
 
                 // if it has an action or is an array, keep that. Otherwise get standard buttons
                 tbConfig = tbConfig || {};// if null/undefined, use empty object
-                var btnList = tbConfig; 
+                var btnList = tbConfig;
                 if (!tbConfig.action && !tbConfig.groups && !tbConfig.buttons && !Array.isArray(tbConfig))
                     btnList = tbManager.standardButtons(editContext.User.CanDesign, tbConfig);
 
@@ -2162,7 +2148,7 @@ $(function () {
                 var tbClasses = "sc-menu group-0 "
                     + behaviourClasses + " "
                     + ((tbConfig.sortOrder === -1) ? " listContent" : "")
-                    + (tlbDef.settings.classes ? " " + tlbDef.settings.classes: "");
+                    + (tlbDef.settings.classes ? " " + tlbDef.settings.classes : "");
                 var toolbar = $("<ul />", { 'class': tbClasses, 'onclick': "var e = arguments[0] || window.event; e.stopPropagation();" });
 
                 for (var g = 0; g < btnGroups.length; g++) {
@@ -2197,7 +2183,7 @@ $(function () {
                     var contentTag = outsideCb ? parentTag.find("div.sc-content-block") : parentTag;
                     contentTag.addClass("sc-element");
                     // todo: make the empty-toolbar-default-settings used below as well...
-                    var  settingsString = JSON.stringify(settingsForEmptyToolbar);
+                    var settingsString = JSON.stringify(settingsForEmptyToolbar);
                     contentTag.prepend($("<ul class='sc-menu' toolbar='' settings='" + settingsString + "'/>"));
                     toolbars = getToolbars();
                 }
@@ -2210,7 +2196,7 @@ $(function () {
                             data = tag.attr("toolbar") || tag.attr("data-toolbar");
                             toolbarConfig = data ? JSON.parse(data) : {};
                         }
-                        catch(err) {
+                        catch (err) {
                             console.error("error on toolbar JSON - probably invalid - make sure you also quote your properties like \"name\": ...", data, err);
                             return;
                         }

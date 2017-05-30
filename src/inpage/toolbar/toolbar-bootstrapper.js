@@ -16,8 +16,6 @@ $(function () {
         })
     }, 1000);
     
-    // if ($2sxc.debug && $2sxc.debug.load && console) console.log("found " + modules.length + " content blocks");
-    
     function processToolbar(module) {
         if ($(module).parents('.DnnModule.floating').length > 0) return false;
         modules.push(module);

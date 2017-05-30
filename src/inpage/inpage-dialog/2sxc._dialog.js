@@ -17,14 +17,6 @@
 
     $('body').append(container);
 
-    $("body").on("mouseover", ".inpage-frame-wrapper", function () {
-        $('body').animate({ scrollTop: $(activeWrapper).offset().top - SCROLL_TOP_OFFSET });
-    });
-
-    $("body").on("mouseout", ".inpage-frame-wrapper", function () {
-        $(this).toggleClass("dia-mouseover", false);
-    });
-
     setInterval(function () {
         try {
             var iframe = inpageFrame.find('iframe')[0], height;

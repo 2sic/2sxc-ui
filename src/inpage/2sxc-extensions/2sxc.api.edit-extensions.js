@@ -1,7 +1,7 @@
 ﻿// this enhances the $2sxc client controller with stuff only needed when logged in
 (function() {
     if (window['$2sxc']) {
-        
+
         //#region System Commands - at the moment only finishUpgrade
         $2sxc.system = {
             // upgrade command - started when an error contains a link to start this

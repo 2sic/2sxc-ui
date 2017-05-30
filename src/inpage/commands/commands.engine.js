@@ -89,16 +89,13 @@
 
                 return cmd.generateLink();
             },
-
+            
             // open a new dialog of the angular-ui
             _openNgDialog: function (settings, event, closeCallback) {
                 var callback = function () {
                     cmc.manage.contentBlock.reloadAndReInitialize();
                     closeCallback();
-                };
-                var link = cmc._linkToNgDialog(settings);
-
-                console.log("target", targetTag);
+                }, link = cmc._linkToNgDialog(settings);
 
                 if (settings.newWindow || (event && event.shiftKey)) return window.open(link);
                 if (settings.inlineWindow) return $2sxc._dialog(sxc, targetTag, link, callback);
