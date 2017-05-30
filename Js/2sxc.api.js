@@ -3,7 +3,7 @@
 // a template developer will typically use this to use the data-api to read 2sxc-data from the server
 // read more about this in the wiki: https://github.com/2sic/2sxc/wiki/JavaScript-%242sxc
 (function () {
-    if (window['$2sxc']) return;   // prevent double execution
+    if (window.$2sxc) return;   // prevent double execution
 
     window.$2sxc = function (id, cbid) {
         // if it's a dom-element, use auto-find

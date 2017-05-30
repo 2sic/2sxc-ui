@@ -1,7 +1,7 @@
 // this enhances the $2sxc client controller with stuff only needed when logged in
 (function() {
-    if (window['$2sxc']) {
-
+    if (window.$2sxc) {
+        
         //#region System Commands - at the moment only finishUpgrade
         $2sxc.system = {
             // upgrade command - started when an error contains a link to start this
@@ -23,7 +23,7 @@
 })();
 // this enhances the $2sxc client controller with stuff only needed when logged in
 (function() {
-    if (window[$2sxc]) {
+    if (window.$2sxc) {
         
         //#region contentItem Commands - at the moment only finishUpgrade
         $2sxc.contentItems = {
@@ -884,12 +884,15 @@ var $2sxcActionMenuMapper = function (moduleId) {
 
 /*jshint ignore:start*/
 (function () {
-    if (!$ || !$.fn || !$.fn.dnnModuleDragDrop) return false;
+    replaceModuleDragDrop();
 
     // fix bug in dnn 08.00.04 drag-drop functionality - it has an incorrect regex
-    eval("$.fn.dnnModuleDragDrop = "
-        + $.fn.dnnModuleDragDrop.toString()
-            .replace(".match(/DnnModule-([0-9]+)/)", ".match(/DnnModule-([0-9]+)(?:\\W|$)/)"));
+    function replaceModuleDragDrop() {
+        if (!$ || !$.fn || !$.fn.dnnModuleDragDrop) return setTimeout(replaceModuleDragDrop, 1000);
+        eval("$.fn.dnnModuleDragDrop = "
+            + $.fn.dnnModuleDragDrop.toString()
+                .replace(".match(/DnnModule-([0-9]+)/)", ".match(/DnnModule-([0-9]+)(?:\\W|$)/)"));
+    }
 })();
 /*jshint ignore:end*/
 // this is a dialog handler which will create in-page dialogs for 
@@ -1996,40 +1999,56 @@ $(function () {
     return Shake;
 }));
 
-// Toolbar bootstrapping (initialize all toolbars after loading page)
+// toolbar bootstrapping (initialize all toolbars after loading page)
 $(function () {
     var modules = [];
-    
-    // Prevent propagation of the click (if menu was clicked)
+
+    // prevent propagation of the click (if menu was clicked)
     $(".sc-menu").click(function (e) {
         e.stopPropagation();
     });
-    
-    setInterval(function () {
+
+    initModules(true);
+    setInterval(initModules, 1000);
+
+    function initModules(onPageLoad) {
         $("div[data-edit-context]").each(function () {
             var newModule = this;
-            return modules.find(function (m) {
-                return m[0] === newModule[0];
-            }) ? undefined : processToolbar(newModule);
-        })
-    }, 1000);
-    
+
+            // check if the module has already been initialized
+            if (modules.find(function (m) {
+                return m === newModule;
+            })) return;
+            
+            if (!onPageLoad) {
+
+                // wait one second, because DNN does not set the class 'floating' instantly
+                setTimeout(function () {
+                    if ($(newModule).parents('.DnnModule.floating').length > 0) return false;
+                    console.log("processed toolbar with delay");
+                    processToolbar(newModule);
+                }, 1000);
+            } else {
+                console.log("processed toolbar without delay");
+                processToolbar(newModule);
+            }
+        });
+    }
+
     function processToolbar(module) {
-        if ($(module).parents('.DnnModule.floating').length > 0) return false;
         modules.push(module);
         var ctl = $2sxc(module);
         if (ctl.manage) ctl.manage._toolbar._processToolbars(module);
     }
-    
+
     // this will add a css-class to auto-show all toolbars (or remove it again)
     function toggleAllToolbars() {
         $(document.body).toggleClass("sc-tb-show-all");
     }
-    
+
     // start shake-event monitoring, which will then generate a window-event
     var myShakeEvent = new Shake({ callback: toggleAllToolbars });
     myShakeEvent.start();
-
 });
 // the toolbar manager is an internal helper
 // taking care of toolbars, buttons etc.

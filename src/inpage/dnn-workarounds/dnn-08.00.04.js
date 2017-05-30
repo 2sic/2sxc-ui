@@ -7,11 +7,14 @@
 
 /*jshint ignore:start*/
 (function () {
-    if (!$ || !$.fn || !$.fn.dnnModuleDragDrop) return false;
+    replaceModuleDragDrop();
 
     // fix bug in dnn 08.00.04 drag-drop functionality - it has an incorrect regex
-    eval("$.fn.dnnModuleDragDrop = "
-        + $.fn.dnnModuleDragDrop.toString()
-            .replace(".match(/DnnModule-([0-9]+)/)", ".match(/DnnModule-([0-9]+)(?:\\W|$)/)"));
+    function replaceModuleDragDrop() {
+        if (!$ || !$.fn || !$.fn.dnnModuleDragDrop) return setTimeout(replaceModuleDragDrop, 1000);
+        eval("$.fn.dnnModuleDragDrop = "
+            + $.fn.dnnModuleDragDrop.toString()
+                .replace(".match(/DnnModule-([0-9]+)/)", ".match(/DnnModule-([0-9]+)(?:\\W|$)/)"));
+    }
 })();
 /*jshint ignore:end*/
