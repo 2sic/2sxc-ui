@@ -19,23 +19,17 @@ $(function () {
                 return m === newModule;
             })) return;
             
-            if (!onPageLoad) {
-
-                // wait one second, because DNN does not set the class 'floating' instantly
-                setTimeout(function () {
-                    if ($(newModule).parents('.DnnModule.floating').length > 0) return false;
-                    console.log("processed toolbar with delay");
-                    processToolbar(newModule);
-                }, 1000);
-            } else {
-                console.log("processed toolbar without delay");
+            // wait two seconds, because DNN does not set the class 'floating' instantly
+            setTimeout(function () {
+                if ($(newModule).parents('.DnnModule.floating').length > 0) return false;
+                modules.push(newModule);
+                console.log("processed toolbar with delay", $(newModule).parents('.DnnModule').length);
                 processToolbar(newModule);
-            }
+            }, 2000);
         });
     }
 
     function processToolbar(module) {
-        modules.push(module);
         var ctl = $2sxc(module);
         if (ctl.manage) ctl.manage._toolbar._processToolbars(module);
     }
