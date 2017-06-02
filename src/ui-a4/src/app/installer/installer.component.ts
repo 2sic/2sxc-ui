@@ -5,7 +5,6 @@ import { DomSanitizer, SafeResourceUrl, SafeUrl } from '@angular/platform-browse
 
 declare const $2sxc: any;
 declare const window: any;
-declare const console: any;
 
 @Component({
   selector: 'app-installer',
@@ -19,7 +18,7 @@ export class InstallerComponent implements OnInit {
   currentPackage: any;
   remoteInstallerUrl: string = '';
   ready: boolean = false;
-  
+
   constructor(
     private installer: InstallerService,
     private api: ModuleApiService,
@@ -46,12 +45,10 @@ export class InstallerComponent implements OnInit {
 
       if (~~data.moduleId !== ~~$2sxc.urlParams.require('mid')) return;
       if (data.action !== 'install') return;
-      
+
       let
         packages = Object.values(data.packages),
         packagesDisplayNames = packages.reduce((t, c) => `${t} - ${c.displayName}\n`, '');
-
-      console.log(data);
 
       if (!confirm(`
           Do you want to install these packages?\n\n
@@ -60,13 +57,10 @@ export class InstallerComponent implements OnInit {
 
       this.showProgress = true;
       this.installer.installPackages(packages)
-        .subscribe(
-        p => this.currentPackage = p,
-        e => {
+        .subscribe(p => this.currentPackage = p, e => {
           this.showProgress = false;
           alert('An error occurred.');
-        },
-        () => {
+        }, () => {
           this.showProgress = false;
           alert('Installation complete. If you saw no errors, everything worked.');
           window.top.location.reload();

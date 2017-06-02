@@ -12,7 +12,7 @@ export class InstallerService {
   constructor(
     private http: Http
   ) { }
-  
+
   installPackages(packages: any[]): Observable<any> {
     const
       subject = new Subject<any>(),
@@ -22,9 +22,7 @@ export class InstallerService {
           subject.next(c);
           return <Observable<any>>this.http.get(`app-sys/installer/installpackage?packageUrl=${c.url}`);
         }), Observable.from([true]))
-        .subscribe(
-          () => subject.complete(),
-          e => subject.error(e));
+        .subscribe(() => subject.complete(), e => subject.error(e));
 
     return subject.asObservable();
   }
