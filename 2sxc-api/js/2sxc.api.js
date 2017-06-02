@@ -253,7 +253,7 @@
 
     $2sxc._controllers = {};
     $2sxc.sysinfo = {
-        version: "09.01.00",
+        version: "09.01.03",
         description: "The 2sxc Controller object"
     };
 
