@@ -6,7 +6,7 @@
 // - we never got around to making the height adjust automatically
 (function () {
     $2sxc._dialog = Dialog;
-    
+
     var RESIZE_INTERVAL = 200,
         SHOW_DELAY = 400,
         SCROLL_TOP_OFFSET = 80,
@@ -33,7 +33,7 @@
         var iframe, // frame inside the dialog (HTMLElement)
             resizeInterval,
             wrapperParent = $(wrapperTag).parent().eq(0);
-        
+
         init();
         /**
          * Assign properties to the iframe for later use.
@@ -58,7 +58,8 @@
             },
             isVisible: function () {
                 return !container.hasClass("hidden");
-            }
+            },
+            persistDia: persistDia
         });
 
         function init() {
@@ -71,6 +72,10 @@
 
             iframe = document.createElement('iframe');
             toggle(true);
+        }
+
+        function persistDia() {
+            sessionStorage.setItem('dia-cbid', sxc.cbid);
         }
 
         function toggle(show) {

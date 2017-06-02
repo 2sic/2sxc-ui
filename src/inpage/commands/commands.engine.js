@@ -96,7 +96,7 @@
                     cmc.manage.contentBlock.reloadAndReInitialize();
                     closeCallback();
                 }, link = cmc._linkToNgDialog(settings);
-
+                
                 if (settings.newWindow || (event && event.shiftKey)) return window.open(link);
                 if (settings.inlineWindow) return $2sxc._dialog(sxc, targetTag, link, callback);
                 return $2sxc.totalPopup.open(link, callback);

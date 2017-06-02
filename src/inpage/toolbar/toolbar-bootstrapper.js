@@ -8,30 +8,31 @@ $(function () {
     });
 
     initModules(true);
-    setInterval(initModules, 1000);
+    document.body.addEventListener('DOMSubtreeModified', initModules, false);
 
-    function initModules(onPageLoad) {
+    function initModules(initial) {
         $("div[data-edit-context]").each(function () {
-            var newModule = this;
-
-            // check if the module has already been initialized
-            if (modules.find(function (m) {
-                return m === newModule;
-            })) return;
-            
-            // wait two seconds, because DNN does not set the class 'floating' instantly
-            setTimeout(function () {
-                if ($(newModule).parents('.DnnModule.floating').length > 0) return false;
-                modules.push(newModule);
-                console.log("processed toolbar with delay", $(newModule).parents('.DnnModule').length);
-                processToolbar(newModule);
-            }, 2000);
+            processToolbar(this, initial);
         });
     }
 
-    function processToolbar(module) {
-        var ctl = $2sxc(module);
-        if (ctl.manage) ctl.manage._toolbar._processToolbars(module);
+    function processToolbar(module, initial) {
+        var ctl;
+        
+        // check if module is already initialized
+        if (modules.find(function (m) {
+            return m === module;
+        })) return false;
+
+        // new element or moved
+        modules.push(module);
+        ctl = $2sxc(module);
+        
+        // the tag might have changed
+        ctl.manage.reloadContentBlockTag();
+        ctl.manage.initGlassesButton();
+
+        if (initial) ctl.manage._toolbar._processToolbars(module);
     }
 
     // this will add a css-class to auto-show all toolbars (or remove it again)

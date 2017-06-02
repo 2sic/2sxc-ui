@@ -85,7 +85,7 @@ export class TemplatePickerComponent implements OnInit {
                     this.appRef.tick();
                   });
               });
-
+            
             this.frame.sxc.manage.contentBlock.reloadNoLivePreview(`<p class="no-live-preview-available">Reloading App. Please wait.</p>`)
               .then(() => {
                 this.loading = false;
@@ -93,6 +93,7 @@ export class TemplatePickerComponent implements OnInit {
                 this.appRef.tick();
               });
 
+            this.frame.persistDia();
             win.parent.location.reload();
           })
       });
@@ -199,7 +200,7 @@ export class TemplatePickerComponent implements OnInit {
     contentTypes
       .filter(c => (this.template && c.TemplateId === this.template.TemplateId) || (this.contentType && c.StaticName === this.contentType.StaticName))
       .forEach(c => c.IsHidden = false);
-
+    
     // option for no content types
     if (this.templates.find(t => t.ContentTypeStaticName === '')) {
       let name = "TemplatePicker.LayoutElement";

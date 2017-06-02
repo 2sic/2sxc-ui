@@ -55,7 +55,7 @@
             config: createToolbarConfig(editContext),
             refreshConfig: function () { tb.config = createToolbarConfig(editContext); },
             actions: allActions,
-            
+
             // Generate a button (an <a>-tag) for one specific toolbar-action. 
             // Expects: settings, an object containing the specs for the expected buton
             getButton: function (actDef, groupIndex) {
@@ -125,39 +125,46 @@
 
             // find all toolbar-info-attributes in the HTML, convert to <ul><li> toolbar
             _processToolbars: function (parentTag) {
-                parentTag = parentTag ? $(parentTag) : $(".DnnModule-" + id);
-                // find current toolbars on this tag
-                function getToolbars() { return $(".sc-menu[toolbar],.sc-menu[data-toolbar]", parentTag); }
+                var disableAutoAdd, toolbars, settingsForEmptyToolbar = {
+                    hover: "left",
+                    autoAddMore: "left"
+                };
+                parentTag = $(parentTag || '.DnnModule-' + id);
 
                 // don't add, if it is has un-initialized content
-                var disableAutoAdd = $(".sc-uninitialized", parentTag).length !== 0;
+                disableAutoAdd = $(".sc-uninitialized", parentTag).length !== 0;
 
-                var toolbars = getToolbars(),
-                    settingsForEmptyToolbar = {
-                        hover: "left",
-                        autoAddMore: "left"
-                    };
-                if (toolbars.length === 0 && !disableAutoAdd) // no toolbars found, must help a bit because otherwise editing is hard
-                {
-                    //console.log("didn't find a toolbar, so will create an automatic one to help for the block", parentTag);
+                toolbars = getToolbars();
+
+                // no toolbars found, must help a bit because otherwise editing is hard
+                if (toolbars.length === 0 && !disableAutoAdd) {
+
+                    // console.log("didn't find a toolbar, so will create an automatic one to help for the block", parentTag);
                     var outsideCb = !parentTag.hasClass('sc-content-block');
                     var contentTag = outsideCb ? parentTag.find("div.sc-content-block") : parentTag;
                     contentTag.addClass("sc-element");
+
                     // todo: make the empty-toolbar-default-settings used below as well...
                     var settingsString = JSON.stringify(settingsForEmptyToolbar);
                     contentTag.prepend($("<ul class='sc-menu' toolbar='' settings='" + settingsString + "'/>"));
                     toolbars = getToolbars();
                 }
 
-                function initToolbar() {
-                    try {
-                        var tag = $(this), data, toolbarConfig, toolbarSettings;
+                toolbars.each(initToolbar);
 
+                // find current toolbars on this tag
+                function getToolbars() {
+                    return $(".sc-menu[toolbar],.sc-menu[data-toolbar]", parentTag);
+                }
+
+                function initToolbar() {
+                    var tag = $(this), data, toolbarConfig, toolbarSettings;
+
+                    try {
                         try {
                             data = tag.attr("toolbar") || tag.attr("data-toolbar");
                             toolbarConfig = data ? JSON.parse(data) : {};
-                        }
-                        catch (err) {
+                        } catch (err) {
                             console.error("error on toolbar JSON - probably invalid - make sure you also quote your properties like \"name\": ...", data, err);
                             return;
                         }
@@ -167,21 +174,17 @@
                             toolbarSettings = data ? JSON.parse(data) : {};
                             if (toolbarConfig === {} && toolbarSettings === {})
                                 toolbarSettings = settingsForEmptyToolbar;
-                        }
-                        catch (err) {
+                        } catch (err) {
                             console.error("error on settings JSON - probably invalid - make sure you also quote your properties like \"name\": ...", data, err);
                             return;
                         }
 
-                        var newTb = $2sxc(tag).manage.getToolbar(toolbarConfig, toolbarSettings);
-                        tag.replaceWith(newTb);
+                        tag.replaceWith($2sxc(tag).manage.getToolbar(toolbarConfig, toolbarSettings));
                     } catch (err) {
                         // note: errors can happen a lot on custom toolbars, must be sure the others are still rendered
                         console.error("error creating toolbar - will skip this one", err);
                     }
                 }
-
-                toolbars.each(initToolbar);
             }
 
         };

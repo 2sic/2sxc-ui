@@ -203,6 +203,8 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
 
             var isVisible = diag.isVisible();
             if (manage._editContext.ContentBlock.ShowTemplatePicker === isVisible) return;
+
+            // 2017-06-01 change to not send to server, as not used any more
             cb._setTemplateChooserState(isVisible)
                 .then(function () {
                     manage._editContext.ContentBlock.ShowTemplatePicker = isVisible;
@@ -243,8 +245,7 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
 
                 cb.editContext.ContentBlock.ShowTemplatePicker = false; // cb.minfo.templateChooserVisible = false;
 
-                if (manage.dialog)
-                    manage.dialog.justHide();
+                if (manage.dialog) manage.dialog.justHide();
 
                 if (!cb.editContext.ContentGroup.HasContent) // if it didn't have content, then it only has now...
                     cb.editContext.ContentGroup.HasContent = forceCreate;

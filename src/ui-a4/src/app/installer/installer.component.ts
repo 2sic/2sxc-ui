@@ -19,7 +19,7 @@ export class InstallerComponent implements OnInit {
   currentPackage: any;
   remoteInstallerUrl: string = '';
   ready: boolean = false;
-
+  
   constructor(
     private installer: InstallerService,
     private api: ModuleApiService,
@@ -51,11 +51,12 @@ export class InstallerComponent implements OnInit {
         packages = Object.values(data.packages),
         packagesDisplayNames = packages.reduce((t, c) => `${t} - ${c.displayName}\n`, '');
 
+      console.log(data);
+
       if (!confirm(`
           Do you want to install these packages?\n\n
           ${packagesDisplayNames}\nThis could take 10 to 60 seconds per package, 
-          please don't reload the page while it's installing.
-          You will see a message once it's done and progess is logged to the JS-console.`)) return;
+          please don't reload the page while it's installing.`)) return;
 
       this.showProgress = true;
       this.installer.installPackages(packages)
