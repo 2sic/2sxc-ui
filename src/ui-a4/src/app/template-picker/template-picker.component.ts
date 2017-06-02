@@ -97,7 +97,7 @@ export class TemplatePickerComponent implements OnInit {
             win.parent.location.reload();
           })
       });
-
+    
     this.updateTemplateSubject
       .debounceTime(400)
       .subscribe(({ template }) => {
@@ -118,7 +118,7 @@ export class TemplatePickerComponent implements OnInit {
             this.frame.scrollToTarget();
             this.appRef.tick();
           });
-
+        
         // TODO: Not sure why we need to set this value before calling persistTemplate. Clean up!
         this.frame.sxc.manage.contentBlock.templateId = this.template.TemplateId;
 

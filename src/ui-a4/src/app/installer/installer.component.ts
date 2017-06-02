@@ -42,7 +42,7 @@ export class InstallerComponent implements OnInit {
       } catch (e) {
         return false;
       }
-
+      
       if (~~data.moduleId !== ~~$2sxc.urlParams.require('mid')) return;
       if (data.action !== 'install') return;
 
