@@ -43,10 +43,10 @@
       src = typeof src === "string" ? src : src.url;
       var script = document.createElement('script');
       script.src = src + jsVersionCacheId;
-      if (async)
-        document.getElementsByTagName("head")[0].appendChild(script);
-      else
-        document.write(script.outerHTML); // needs doc.write to ensure in-sync loading of the files
+
+      // needs doc.write to ensure in-sync loading of the files
+      if (async) return document.getElementsByTagName("head")[0].appendChild(script);
+      document.write(script.outerHTML);
     }
 
     function addStyle(src) {
@@ -61,9 +61,9 @@
       'inline.bundle.js',     // ? purpose unknown yet    
       // todo: i18n probably...
       // '../i18n/lib/angular-i18n/angular-locale_' + langTwoLetter + '.js',
-      'polyfills.bundle.js',  // js polyfills for older browsers
-      'vendor.bundle.js',     // default set needed for all UIs like angular, animate, translate
-      'main.bundle.js',        // our app, with everything
+      'polyfills.bundle.js', // js polyfills for older browsers
+      'vendor.bundle.js', // default set needed for all UIs like angular, animate, translate
+      'main.bundle.js', // our app, with everything
       'styles.bundle.js'
     ], styles = [
       'styles.bundle.css'
