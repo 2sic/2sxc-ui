@@ -10,8 +10,8 @@
         debug: true,
         autostart: true,
         autopublish: true,
-        autopublishTarget: "./../2SexyContent/Web/DesktopModules/ToSIC_SexyContent/dist",
-        autopublishTargetJs: "./../2SexyContent/Web/DesktopModules/ToSIC_SexyContent/js",
+        autopublishTarget: "./../2SexyContent/WebDNN9/DesktopModules/ToSIC_SexyContent/dist",
+        autopublishTargetJs: "./../2SexyContent/WebDNN9/DesktopModules/ToSIC_SexyContent/js",
         rootDist: "dist/" // "tmp-gulp/dist/"
     };
 
@@ -24,9 +24,7 @@ gulp.task("A-watch-our-code", function () {
     watchDnnUi();
 });
 
-gulp.task("import-libs", function() {
-    importDependencies();
-});
+gulp.task("import-libs", importDependencies);
 
 gulp.task("C-watch-snippets", function() {
     watchSnippets();
@@ -64,7 +62,6 @@ function watchSnippets() {
 //    });
 }
 
-
 function importDependencies() {
     var bwr = "bower_components/";
     //gulp.watch("src/dnn/" + "**/*", function() {
@@ -89,8 +86,7 @@ function importDependencies() {
     // i18n files
     gulp.src(bwr + "2sxc-eav-languages/dist/i18n/**/*.js")
         .pipe(gulp.dest(config.rootDist + "i18n/"));
-
-
+    
     // lib angular-ui-ace
     gulp.src(bwr + "angular-ui-ace/*.js")
         .pipe(gulp.dest(config.rootDist + "lib/angular-ui-ace/"));

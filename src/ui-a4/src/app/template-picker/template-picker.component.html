@@ -12,8 +12,9 @@
         </div>
         <md-tab-group [(selectedIndex)]="tabIndex">
             <md-tab [label]="(isContentApp ? (contentType?.Name || 'Choose a content type!') : (app?.name || 'Choose an app!'))">
-                <div *ngIf="!isContentApp; else contentApp">
-                    <div class="tile" [ngClass]="{ active: app?.appId === a.appId }" [attr.title]="a.name" (click)="app?.appId === a.appId ? switchTab() : updateApp(a)" (dblclick)="switchTab()" *ngFor="let a of apps">
+                <div *ngIf="!isContentApp; else contentApp" class="tiles">
+                    <div class="tile" [ngClass]="{ active: app?.appId === a.appId }" [attr.title]="a.name" (click)="app?.appId === a.appId ? switchTab() : updateApp(a)"
+                        (dblclick)="switchTab()" *ngFor="let a of apps">
                         <div class="bg">
                             <img *ngIf="a.thumbnail !== null && a.thumbnail !== ''" class="bg-img" [attr.src]="a.thumbnail + '?w=176&h=176'">
                             <div *ngIf="a.thumbnail === null || a.thumbnail === ''" class="bg-icon">
@@ -46,43 +47,49 @@
                     </div>
                 </div>
                 <ng-template #contentApp>
-                    <div class="tile" [ngClass]="{ active: contentType?.StaticName === c.StaticName, blocked: !allowContentTypeChange }" [attr.title]="c.Label"
-                        (click)="contentType?.StaticName === c.StaticName ? switchTab() : updateContentType(c)" (dblclick)="switchTab()" *ngFor="let c of contentTypes">
-                        <div class="bg">
-                            <img *ngIf="c.Thumbnail !== null && c.Thumbnail !== ''" class="bg-img" [attr.src]="c.Thumbnail + '?w=176&h=176'">
-                            <div *ngIf="c.Thumbnail === null || c.Thumbnail === ''" class="bg-icon">
-                                <md-icon>bubble_chart</md-icon>
+                    <div class="tiles">
+                        <div class="tile" [ngClass]="{ active: contentType?.StaticName === c.StaticName, blocked: !allowContentTypeChange }" [attr.title]="c.Label"
+                            (click)="contentType?.StaticName === c.StaticName ? switchTab() : updateContentType(c)" (dblclick)="switchTab()"
+                            *ngFor="let c of contentTypes">
+                            <div class="bg">
+                                <img *ngIf="c.Thumbnail !== null && c.Thumbnail !== ''" class="bg-img" [attr.src]="c.Thumbnail + '?w=176&h=176'">
+                                <div *ngIf="c.Thumbnail === null || c.Thumbnail === ''" class="bg-icon">
+                                    <md-icon>bubble_chart</md-icon>
+                                </div>
                             </div>
-                        </div>
-                        <div class="title" [ngClass]="{ show: c.Thumbnail === null || c.Thumbnail === '' }">
-                            <span>{{c.Label}}</span>
+                            <div class="title" [ngClass]="{ show: c.Thumbnail === null || c.Thumbnail === '' }">
+                                <span>{{c.Label}}</span>
+                            </div>
                         </div>
                     </div>
                 </ng-template>
             </md-tab>
             <md-tab *ngIf="isContentApp ? contentType : app" [label]="'Change View (' + templates.length + ')'">
-                <md-spinner class="templates-spinner" *ngIf="loadingTemplates"></md-spinner>
-                <div class="tile" [ngClass]="{ active: template?.TemplateId === t.TemplateId }" [attr.title]="t.Name" (click)="updateTemplateSubject.next({ template: t })"
-                    *ngFor="let t of templates">
-                    <div class="bg">
-                        <img *ngIf="t.Thumbnail !== null && t.Thumbnail !== ''" class="bg-img" [attr.src]="t.thumbnail + '?w=176&h=176'">
-                        <div *ngIf="t.Thumbnail === null || t.Thumbnail === ''" class="bg-icon">
-                            <md-icon *ngIf="isContentApp">view_carousel</md-icon>
-                            <md-icon *ngIf="!isContentApp">view_quilt</md-icon>
+                <div class="tiles">
+
+                    <md-spinner class="templates-spinner" *ngIf="loadingTemplates"></md-spinner>
+                    <div class="tile" [ngClass]="{ active: template?.TemplateId === t.TemplateId }" [attr.title]="t.Name" (click)="updateTemplateSubject.next({ template: t })"
+                        *ngFor="let t of templates">
+                        <div class="bg">
+                            <img *ngIf="t.Thumbnail !== null && t.Thumbnail !== ''" class="bg-img" [attr.src]="t.Thumbnail + '?w=176&h=176'">
+                            <div *ngIf="t.Thumbnail === null || t.Thumbnail === ''" class="bg-icon">
+                                <md-icon *ngIf="isContentApp">view_carousel</md-icon>
+                                <md-icon *ngIf="!isContentApp">view_quilt</md-icon>
+                            </div>
+                        </div>
+                        <div class="title" [ngClass]="{ show: t.Thumbnail === null || t.Thumbnail === '' }">
+                            <span>{{t.Name}}</span>
                         </div>
                     </div>
-                    <div class="title" [ngClass]="{ show: t.Thumbnail === null || t.Thumbnail === '' }">
-                        <span>{{t.Name}}</span>
-                    </div>
-                </div>
-                <div class="tile config" *ngIf="showAdvanced && !isContentApp && app?.appId !== null" (click)="frame.sxc.manage.run('app')">
-                    <div class="bg">
-                        <div class="bg-icon">
-                            <md-icon>settings</md-icon>
+                    <div class="tile config" *ngIf="showAdvanced && !isContentApp && app?.appId !== null" (click)="frame.sxc.manage.run('app')">
+                        <div class="bg">
+                            <div class="bg-icon">
+                                <md-icon>settings</md-icon>
+                            </div>
                         </div>
-                    </div>
-                    <div class="title show">
-                        <span>Manage Views</span>
+                        <div class="title show">
+                            <span>Manage Views</span>
+                        </div>
                     </div>
                 </div>
             </md-tab>

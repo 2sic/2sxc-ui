@@ -28,9 +28,7 @@
             // todo: probably move the user into the dashboard info
             user: { canDesign: editContext.User.CanDesign, canDevelop: editContext.User.CanDesign },
             approot: editContext.ContentGroup.AppUrl || null // this is the only value which doesn't have a slash by default.  note that the app-root doesn't exist when opening "manage-app"
-        };
-
-        var dashConfig = {
+        }, dashConfig = {
             appId: editContext.ContentGroup.AppId,
             isContent: editContext.ContentGroup.IsContent,
             hasContent: editContext.ContentGroup.HasContent,
@@ -47,24 +45,19 @@
 
         var editManager = sxc.manage = {
             //#region Official, public properties and commands, which are stable for use from the outside
-
             // run a command - often used in toolbars and custom buttons
             run: cmds.executeAction,
 
             // get a button or a toolbar for something
             getButton: toolsAndButtons.getButton,
             getToolbar: toolsAndButtons.getToolbar,
-
             //#endregion official, public properties - everything below this can change at any time
 
             // internal method to find out if it's in edit-mode
             _isEditMode: function () { return editContext.Environment.IsEditable; },
-
             _reloadWithAjax: editContext.ContentGroup.SupportsAjax,
-            
             _dialogParameters: ngDialogParams,      // used for various dialogs
             _toolbarConfig: toolsAndButtons.config, // used to configure buttons / toolbars
-
             _editContext: editContext,              // metadata necessary to know what/how to edit
             _dashboardConfig: dashConfig,           // used for in-page dialogs
             _commands: cmds,                        // used to handle the commands for this content-block
@@ -79,30 +72,39 @@
                 // enhance UI in case there are known errors / issues
                 if (editContext.error.type)
                     editManager._handleErrors(editContext.error.type, contentBlockTag);
-                
+
                 // finish init of sub-objects
                 editManager._commands.init(editManager);
                 editManager.contentBlock = $2sxc._contentBlock.create(sxc, editManager, contentBlockTag);
-                
-                if (editManager.contentBlock.templateId === 0) ensureInlineGlassesButton();
 
                 // display the dialog
-                if (!editContext.error.type && editContext.ContentBlock.ShowTemplatePicker) {
-                    editManager.run("layout");
-                }
-                
-                function ensureInlineGlassesButton() {
-                    if ($(contentBlockTag).find(".sc-uninitialized").length !== 0) return;
-                    // note: title is added on mouseover, as the translation isn't ready at page-load
-                    var placeholder = '<div class="sc-uninitialized" onmouseover="this.title = $2sxc.translate(this.title)" title="InPage.NewElement"><div class="icon-sxc-glasses"></div></div>';
-                    var btn = $(placeholder);
-                    btn.on("click", function() {
-                        editManager.run("layout");
-                    });
-                    $(contentBlockTag).append(btn);
-                }
+                var openDialogId = sessionStorage.getItem('dia-cbid');
+                if (editContext.error.type || !openDialogId || openDialogId !== sxc.cbid) return false;
+                sessionStorage.removeItem('dia-cbid');
+                editManager.run("layout");
             },
-            
+
+            reloadContentBlockTag: function() {
+                contentBlockTag = getContentBlockTag(sxc);
+            },
+
+            initGlassesButton: function () {
+
+                // already initialized
+                if (editManager.contentBlock.templateId !== 0) return false;
+
+                // has already a glasses button
+                if ($(contentBlockTag).find(".sc-uninitialized").length !== 0) return false;
+
+                // note: title is added on mouseover, as the translation isn't ready at page-load
+                var btn = $('<div class="sc-uninitialized" onmouseover="this.title = $2sxc.translate(this.title)" title="InPage.NewElement"><div class="icon-sxc-glasses"></div></div>');
+                btn.on("click", function () {
+                    editManager.run("layout");
+                });
+
+                $(contentBlockTag).append(btn);
+            },
+
             // private: show error when the app-data hasn't been installed yet for this imported-module
             _handleErrors: function (errType, cbTag) {
                 var errWrapper = $("<div class=\"dnnFormMessage dnnFormWarning sc-element\"></div>");
@@ -116,20 +118,16 @@
                 errWrapper.append(toolbar);
                 $(cbTag).append(errWrapper);
             },
-
             // change config by replacing the guid, and refreshing dependend sub-objects
             _updateContentGroupGuid: function (newGuid) {
                 editContext.ContentGroup.Guid = newGuid;
                 toolsAndButtons.refreshConfig();
                 editManager._toolbarConfig = toolsAndButtons.config;
             },
-
             _getCbManipulator: function () {
                 return $2sxc._contentBlock.manipulator(sxc);
             },
-
             //#region deprecated properties - these all should have been undocumented/ private till now
-
             // 2016-11-03 v.08.06 deprecated command "action", it was only for internal use till now
             action: function () {
                 console.error("Obsolete: you are using a deprecated method 'action' which will be removed in 2sxc v9. you must change it to 'run'");
@@ -140,9 +138,7 @@
                 console.error("Obsolete: you are using a deprecated method 'createDefaultToolbar' which will be removed in 2sxc v9. you must change it to 'getToolbar'");
                 return toolsAndButtons.defaultButtonList.apply(undefined, arguments);
             }
-
             //#endregion
-
         };
 
         editManager.init();

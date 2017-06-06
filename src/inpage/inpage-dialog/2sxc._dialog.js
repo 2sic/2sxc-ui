@@ -17,14 +17,6 @@
 
     $('body').append(container);
 
-    $("body").on("mouseover", ".inpage-frame-wrapper", function () {
-        $('body').animate({ scrollTop: $(activeWrapper).offset().top - SCROLL_TOP_OFFSET });
-    });
-
-    $("body").on("mouseout", ".inpage-frame-wrapper", function () {
-        $(this).toggleClass("dia-mouseover", false);
-    });
-
     setInterval(function () {
         try {
             var iframe = inpageFrame.find('iframe')[0], height;
@@ -55,7 +47,7 @@
             getManageInfo: getManageInfo,
             getAdditionalDashboardConfig: getAdditionalDashboardConfig,
             getCommands: getCommands,
-            scrollToTarget: function() {
+            scrollToTarget: function () {
                 $('body').animate({ scrollTop: $(activeWrapper).offset().top - SCROLL_TOP_OFFSET });
             },
             toggle: function () {
@@ -66,7 +58,8 @@
             },
             isVisible: function () {
                 return !container.hasClass("hidden");
-            }
+            },
+            persistDia: persistDia
         });
 
         function init() {
@@ -81,10 +74,14 @@
             toggle(true);
         }
 
+        function persistDia() {
+            sessionStorage.setItem('dia-cbid', sxc.cbid);
+        }
+
         function toggle(show) {
             var action = show === undefined ? (activeDialog != iframe) : show,
                 dirty;
-            
+
             if (action) {
                 if (activeDialog == iframe) return false;
                 if (activeDialog !== undefined) {
