@@ -53,13 +53,12 @@
       var style = document.createElement("link");
       style.setAttribute("rel", "stylesheet");
       style.setAttribute("type", "text/css");
-      style.setAttribute("href", src);// + "?" + sxcVersionParam);
+      style.setAttribute("href", src);
       document.getElementsByTagName("head")[0].appendChild(style);
     }
 
     var scripts = [
       'inline.bundle.js',     // ? purpose unknown yet    
-      // todo: i18n probably...
       // '../i18n/lib/angular-i18n/angular-locale_' + langTwoLetter + '.js',
       'polyfills.bundle.js', // js polyfills for older browsers
       'vendor.bundle.js', // default set needed for all UIs like angular, animate, translate
