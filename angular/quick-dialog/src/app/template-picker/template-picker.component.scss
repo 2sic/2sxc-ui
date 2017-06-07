@@ -62,12 +62,11 @@
                     }
                     &:active,
                     &.active {
-                        box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+                        box-shadow: 0 14px 28px rgba(0, 120, 220, 0.25), 0 10px 10px rgba(0, 120, 220, 0.22);
                     }
                     &.active,
                     &:focus {
                         color: #fff;
-                        transform: translate(0, -8px);
                     }
                     &.config {
                         box-shadow: none;

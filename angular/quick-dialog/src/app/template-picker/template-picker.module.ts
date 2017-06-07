@@ -1,6 +1,7 @@
+import { TranslateModule } from '@ngx-translate/core';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { MdMenuModule, MdTabsModule, MdProgressBarModule } from '@angular/material';
+import { MdMenuModule, MdTabsModule, MdProgressBarModule, MaterialModule } from '@angular/material';
 import { CommonModule } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TemplatePickerComponent } from './template-picker.component';
@@ -23,12 +24,14 @@ const appId = $2sxc.urlParams.require('appId');
     CommonModule,
     MdMenuModule,
     MdTabsModule,
+    MaterialModule,
     BrowserAnimationsModule,
     MdProgressBarModule,
     CoreModule,
     FormsModule,
     FlexLayoutModule,
-    InstallerModule
+    InstallerModule,
+    TranslateModule
   ],
   providers: [
     TemplateFilterPipe

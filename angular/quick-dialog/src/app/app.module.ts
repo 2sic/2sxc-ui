@@ -11,7 +11,7 @@ import { TemplatePickerComponent } from "app/template-picker/template-picker.com
 import { RouterModule } from "@angular/router";
 
 export function HttpLoaderFactory(http: Http) {
-  return new TranslateHttpLoader(http, "../i18n/lib/angular-locale_", ".json");
+  return new TranslateHttpLoader(http, "../i18n/sxc-admin-", ".js");
 }
 
 const appRoutes = [
@@ -28,6 +28,9 @@ const appRoutes = [
 @NgModule({
   declarations: [
     AppComponent
+  ],
+  exports: [
+    TranslateModule
   ],
   imports: [
     BrowserModule,

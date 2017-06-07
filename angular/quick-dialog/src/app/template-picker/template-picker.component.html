@@ -2,16 +2,16 @@
     <md-progress-bar [ngStyle]="{ opacity: (!ready || loading) ? 1 : 0 }" [mode]="'indeterminate'"></md-progress-bar>
     <div *ngIf="ready" class="card">
         <div class="top-controls" fxLayout="row" fxLayoutAlign="center center">
-            <button md-fab *ngIf="template" (click)="persistTemplate()" title="{{ 'TemplatePicker.Save' }}">
+            <button md-fab *ngIf="template" (click)="persistTemplate()" [attr.title]="'TemplatePicker.Save' | translate">
                 <md-icon>check</md-icon>
             </button>
             <button md-mini-fab class="secondary" *ngIf="undoTemplateId !== null" (click)="frame.sxc.manage.contentBlock._cancelTemplateChange()"
-                title="{{ 'TemplatePicker.' + (isContentApp ? 'Cancel' : 'Close') }}">
+                [attr.title]="('TemplatePicker.' + (isContentApp ? 'Cancel' : 'Close')) | translate">
                 <md-icon>close</md-icon>
             </button>
         </div>
         <md-tab-group [(selectedIndex)]="tabIndex">
-            <md-tab [label]="(isContentApp ? (contentType?.Name || 'Choose a content type!') : (app?.name || 'Choose an app!'))">
+            <md-tab [label]="(isContentApp ? (contentType?.Name || ('TemplatePicker.ContentTypePickerDefault' | translate)) : (app?.name || ('TemplatePicker.AppPickerDefault' | translate)))">
                 <div *ngIf="!isContentApp; else contentApp" class="tiles">
                     <div class="tile" [ngClass]="{ active: app?.appId === a.appId }" [attr.title]="a.name" (click)="app?.appId === a.appId ? switchTab() : updateApp(a)"
                         (dblclick)="switchTab()" *ngFor="let a of apps">
@@ -25,24 +25,24 @@
                             <span>{{a.name}}</span>
                         </div>
                     </div>
-                    <div class="tile config" *ngIf="showAdvanced && !isContentApp" (click)="frame.sxc.manage.run('app-import')">
+                    <div class="tile config" *ngIf="showAdvanced && !isContentApp" (click)="frame.sxc.manage.run('app-import')" [attr.title]="'TemplatePicker.Install' | translate">
                         <div class="bg">
                             <div class="bg-icon">
                                 <md-icon>get_app</md-icon>
                             </div>
                         </div>
                         <div class="title show">
-                            <span>Install Apps</span>
+                            <span>{{"TemplatePicker.Install" | translate}}</span>
                         </div>
                     </div>
-                    <div class="tile config" *ngIf="showAdvanced && !isContentApp" (click)="frame.sxc.manage.run('zone')">
+                    <div class="tile config" *ngIf="showAdvanced && !isContentApp" (click)="frame.sxc.manage.run('zone')" [attr.title]="'TemplatePicker.Zone' | translate">
                         <div class="bg">
                             <div class="bg-icon">
                                 <md-icon>apps</md-icon>
                             </div>
                         </div>
                         <div class="title show">
-                            <span>Manage Apps</span>
+                            <span>{{"TemplatePicker.Zone" | translate}}</span>
                         </div>
                     </div>
                 </div>
@@ -64,7 +64,7 @@
                     </div>
                 </ng-template>
             </md-tab>
-            <md-tab *ngIf="isContentApp ? contentType : app" [label]="'Change View (' + templates.length + ')'">
+            <md-tab *ngIf="isContentApp ? contentType : app" [label]="('TemplatePicker.ChangeView' | translate) + '(' + templates.length + ')'">
                 <div class="tiles">
 
                     <md-spinner class="templates-spinner" *ngIf="loadingTemplates"></md-spinner>
@@ -81,14 +81,14 @@
                             <span>{{t.Name}}</span>
                         </div>
                     </div>
-                    <div class="tile config" *ngIf="showAdvanced && !isContentApp && app?.appId !== null" (click)="frame.sxc.manage.run('app')">
+                    <div class="tile config" *ngIf="showAdvanced && !isContentApp && app?.appId !== null" (click)="frame.sxc.manage.run('app')" [attr.title]="'TemplatePicker.App' | translate">
                         <div class="bg">
                             <div class="bg-icon">
                                 <md-icon>settings</md-icon>
                             </div>
                         </div>
                         <div class="title show">
-                            <span>Manage Views</span>
+                            <span>{{"TemplatePicker.App" | translate}}</span>
                         </div>
                     </div>
                 </div>
