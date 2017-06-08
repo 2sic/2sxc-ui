@@ -5,16 +5,14 @@
 // this patch replaces the faulty regex with the correct one
 // documented here https://github.com/2sic/2sxc/issues/986
 
-/*jshint ignore:start*/
+/**
+ * Fix bug in dnn 08.00.04 drag-drop functionality - it has an incorrect regex
+ */
 (function () {
-    replaceModuleDragDrop();
-
-    // fix bug in dnn 08.00.04 drag-drop functionality - it has an incorrect regex
-    function replaceModuleDragDrop() {
-        if (!$ || !$.fn || !$.fn.dnnModuleDragDrop) return setTimeout(replaceModuleDragDrop, 1000);
-        eval("$.fn.dnnModuleDragDrop = "
-            + $.fn.dnnModuleDragDrop.toString()
-                .replace(".match(/DnnModule-([0-9]+)/)", ".match(/DnnModule-([0-9]+)(?:\\W|$)/)"));
-    }
+    var fn = $.fn.attr;
+    $.fn.attr = function () {
+        var val = fn.apply(this, arguments);
+        if (arguments[0] !== 'class' || typeof val !== 'string') return val;
+        return val.replace('DnnModule-2sxc ', '') + ' DnnModule-2sxc';
+    };
 })();
-/*jshint ignore:end*/

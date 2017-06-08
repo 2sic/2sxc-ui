@@ -29,9 +29,7 @@ const appRoutes = [
   declarations: [
     AppComponent
   ],
-  exports: [
-    TranslateModule
-  ],
+  exports: [],
   imports: [
     BrowserModule,
     FormsModule,

@@ -23,7 +23,7 @@ export class InstallerService {
           return <Observable<any>>this.http.get(`app-sys/installer/installpackage?packageUrl=${c.url}`);
         }), Observable.from([true]))
         .subscribe(() => subject.complete(), e => subject.error(e));
-
+        
     return subject.asObservable();
   }
 }

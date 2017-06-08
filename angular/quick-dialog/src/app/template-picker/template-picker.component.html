@@ -66,7 +66,6 @@
             </md-tab>
             <md-tab *ngIf="isContentApp ? contentType : app" [label]="('TemplatePicker.ChangeView' | translate) + '(' + templates.length + ')'">
                 <div class="tiles">
-
                     <md-spinner class="templates-spinner" *ngIf="loadingTemplates"></md-spinner>
                     <div class="tile" [ngClass]="{ active: template?.TemplateId === t.TemplateId }" [attr.title]="t.Name" (click)="updateTemplateSubject.next({ template: t })"
                         *ngFor="let t of templates">
@@ -81,7 +80,8 @@
                             <span>{{t.Name}}</span>
                         </div>
                     </div>
-                    <div class="tile config" *ngIf="showAdvanced && !isContentApp && app?.appId !== null" (click)="frame.sxc.manage.run('app')" [attr.title]="'TemplatePicker.App' | translate">
+                    <div class="tile config" *ngIf="showAdvanced && !isContentApp && app?.appId !== null" (click)="frame.sxc.manage.run('app')"
+                        [attr.title]="'TemplatePicker.App' | translate">
                         <div class="bg">
                             <div class="bg-icon">
                                 <md-icon>settings</md-icon>

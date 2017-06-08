@@ -1,4 +1,4 @@
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe, TranslateModule } from '@ngx-translate/core';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MdMenuModule, MdTabsModule, MdProgressBarModule, MaterialModule } from '@angular/material';

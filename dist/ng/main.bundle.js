@@ -1,6 +1,6 @@
 webpackJsonp([1,4],{
 
-/***/ 114:
+/***/ 115:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -52,7 +52,7 @@ var _a;
 
 /***/ }),
 
-/***/ 115:
+/***/ 116:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -70,7 +70,7 @@ var TemplateFilterPipe = (function () {
     }
     TemplateFilterPipe.prototype.transform = function (templates, args) {
         return templates
-            .filter(function (t) { return !t.IsHidden && (!args.isContentApp || t.ContentTypeStaticName === (args.contentTypeId || '')); });
+            .filter(function (t) { return !t.IsHidden && (!args.isContentApp || t.ContentTypeStaticName === (args.contentTypeId === '_LayoutElement' ? '' : (args.contentTypeId || ''))); });
     };
     return TemplateFilterPipe;
 }());
@@ -84,18 +84,19 @@ TemplateFilterPipe = __decorate([
 
 /***/ }),
 
-/***/ 116:
+/***/ 117:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_app_core_module_api_service__ = __webpack_require__(75);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_Rx__ = __webpack_require__(133);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_Rx___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_rxjs_Rx__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_router__ = __webpack_require__(53);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_app_template_picker_template_filter_pipe__ = __webpack_require__(115);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_rxjs_Subject__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_rxjs_Subject___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_rxjs_Subject__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ngx_translate_core__ = __webpack_require__(76);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_app_core_module_api_service__ = __webpack_require__(75);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_Rx__ = __webpack_require__(133);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_Rx___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_rxjs_Rx__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__angular_router__ = __webpack_require__(53);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_app_template_picker_template_filter_pipe__ = __webpack_require__(116);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_rxjs_Subject__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_rxjs_Subject___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_rxjs_Subject__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TemplatePickerComponent; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -112,14 +113,16 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 var win = window;
 var TemplatePickerComponent = (function () {
-    function TemplatePickerComponent(api, route, templateFilter, appRef) {
+    function TemplatePickerComponent(api, route, templateFilter, appRef, translate) {
         var _this = this;
         this.api = api;
         this.route = route;
         this.templateFilter = templateFilter;
         this.appRef = appRef;
+        this.translate = translate;
         this.apps = [];
         this.templates = [];
         this.contentTypes = [];
@@ -129,15 +132,15 @@ var TemplatePickerComponent = (function () {
         this.loadingTemplates = false;
         this.ready = false;
         this.tabIndex = 0;
-        this.updateTemplateSubject = new __WEBPACK_IMPORTED_MODULE_5_rxjs_Subject__["Subject"]();
-        this.updateAppSubject = new __WEBPACK_IMPORTED_MODULE_5_rxjs_Subject__["Subject"]();
+        this.updateTemplateSubject = new __WEBPACK_IMPORTED_MODULE_6_rxjs_Subject__["Subject"]();
+        this.updateAppSubject = new __WEBPACK_IMPORTED_MODULE_6_rxjs_Subject__["Subject"]();
         this.allTemplates = [];
         this.cViewWithoutContent = '_LayoutElement';
         this.cAppActionImport = -1;
         this.frame = win.frameElement;
         this.dashInfo = this.frame.getAdditionalDashboardConfig();
         this.allowContentTypeChange = !(this.dashInfo.hasContent || this.dashInfo.isList);
-        __WEBPACK_IMPORTED_MODULE_2_rxjs_Rx__["Observable"].merge(this.updateTemplateSubject.asObservable(), this.updateAppSubject.asObservable()).subscribe(function (res) {
+        __WEBPACK_IMPORTED_MODULE_3_rxjs_Rx__["Observable"].merge(this.updateTemplateSubject.asObservable(), this.updateAppSubject.asObservable()).subscribe(function (res) {
             _this.loading = true;
         });
         this.updateAppSubject
@@ -207,7 +210,7 @@ var TemplatePickerComponent = (function () {
             .subscribe(function (templates) { return _this.setTemplates(templates, _this.dashInfo.templateId); });
         this.api.contentTypes
             .subscribe(function (contentTypes) { return _this.setContentTypes(contentTypes, _this.dashInfo.contentTypeId); });
-        __WEBPACK_IMPORTED_MODULE_2_rxjs_Rx__["Observable"].combineLatest([
+        __WEBPACK_IMPORTED_MODULE_3_rxjs_Rx__["Observable"].combineLatest([
             this.api.templates,
             this.api.contentTypes,
             this.api.apps
@@ -220,6 +223,7 @@ var TemplatePickerComponent = (function () {
         });
     }
     TemplatePickerComponent.prototype.ngOnInit = function () {
+        var _this = this;
         this.isContentApp = this.dashInfo.isContent;
         this.supportsAjax = this.isContentApp || this.dashInfo.supportsAjax;
         this.showAdvanced = this.dashInfo.user.canDesign;
@@ -228,10 +232,9 @@ var TemplatePickerComponent = (function () {
         this.savedAppId = this.dashInfo.appId;
         this.frame.isDirty = this.isDirty;
         this.dashInfo.templateChooserVisible = true;
-        __WEBPACK_IMPORTED_MODULE_2_rxjs_Rx__["Observable"].concat([
-            this.api.loadTemplates(),
-            this.api.loadContentTypes()
-        ]);
+        this.api.loadTemplates()
+            .take(1)
+            .subscribe(function (templates) { return _this.api.loadContentTypes(); });
         this.api.loadApps();
     };
     TemplatePickerComponent.prototype.isDirty = function () {
@@ -264,12 +267,13 @@ var TemplatePickerComponent = (function () {
             .filter(function (c) { return (_this.template && c.TemplateId === _this.template.TemplateId) || (_this.contentType && c.StaticName === _this.contentType.StaticName); })
             .forEach(function (c) { return c.IsHidden = false; });
         // option for no content types
-        if (this.templates.find(function (t) { return t.ContentTypeStaticName === ''; })) {
+        if (this.allTemplates.find(function (t) { return t.ContentTypeStaticName === ''; })) {
             var name = "TemplatePicker.LayoutElement";
             contentTypes.push({
                 StaticName: this.cViewWithoutContent,
                 Name: name,
-                Label: name,
+                Thumbnail: null,
+                Label: this.translate.transform(name),
                 IsHidden: false,
             });
         }
@@ -315,15 +319,16 @@ var TemplatePickerComponent = (function () {
     return TemplatePickerComponent;
 }());
 TemplatePickerComponent = __decorate([
-    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_11" /* Component */])({
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__angular_core__["_11" /* Component */])({
         selector: 'app-template-picker',
         template: __webpack_require__(282),
-        styles: [__webpack_require__(277)]
+        styles: [__webpack_require__(277)],
+        providers: [__WEBPACK_IMPORTED_MODULE_0__ngx_translate_core__["d" /* TranslatePipe */]],
     }),
-    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1_app_core_module_api_service__["a" /* ModuleApiService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_app_core_module_api_service__["a" /* ModuleApiService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_3__angular_router__["b" /* ActivatedRoute */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__angular_router__["b" /* ActivatedRoute */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_4_app_template_picker_template_filter_pipe__["a" /* TemplateFilterPipe */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4_app_template_picker_template_filter_pipe__["a" /* TemplateFilterPipe */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["j" /* ApplicationRef */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["j" /* ApplicationRef */]) === "function" && _d || Object])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2_app_core_module_api_service__["a" /* ModuleApiService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2_app_core_module_api_service__["a" /* ModuleApiService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_4__angular_router__["b" /* ActivatedRoute */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__angular_router__["b" /* ActivatedRoute */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_5_app_template_picker_template_filter_pipe__["a" /* TemplateFilterPipe */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_5_app_template_picker_template_filter_pipe__["a" /* TemplateFilterPipe */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_1__angular_core__["j" /* ApplicationRef */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_core__["j" /* ApplicationRef */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_0__ngx_translate_core__["d" /* TranslatePipe */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__ngx_translate_core__["d" /* TranslatePipe */]) === "function" && _e || Object])
 ], TemplatePickerComponent);
 
-var _a, _b, _c, _d;
+var _a, _b, _c, _d, _e;
 //# sourceMappingURL=template-picker.component.js.map
 
 /***/ }),
@@ -367,7 +372,7 @@ __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__angular_platform_browser_dyna
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ngx_translate_core__ = __webpack_require__(117);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ngx_translate_core__ = __webpack_require__(76);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(2);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppComponent; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -411,13 +416,13 @@ var _a;
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ngx_translate_http_loader__ = __webpack_require__(220);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__(29);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ngx_translate_core__ = __webpack_require__(117);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ngx_translate_core__ = __webpack_require__(76);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_platform_browser__ = __webpack_require__(25);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__angular_core__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__angular_forms__ = __webpack_require__(74);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__app_component__ = __webpack_require__(210);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_app_template_picker_template_picker_module__ = __webpack_require__(218);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_app_template_picker_template_picker_component__ = __webpack_require__(116);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_app_template_picker_template_picker_component__ = __webpack_require__(117);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__angular_router__ = __webpack_require__(53);
 /* unused harmony export HttpLoaderFactory */
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppModule; });
@@ -460,9 +465,7 @@ AppModule = __decorate([
         declarations: [
             __WEBPACK_IMPORTED_MODULE_6__app_component__["a" /* AppComponent */]
         ],
-        exports: [
-            __WEBPACK_IMPORTED_MODULE_2__ngx_translate_core__["a" /* TranslateModule */]
-        ],
+        exports: [],
         imports: [
             __WEBPACK_IMPORTED_MODULE_3__angular_platform_browser__["a" /* BrowserModule */],
             __WEBPACK_IMPORTED_MODULE_5__angular_forms__["a" /* FormsModule */],
@@ -636,7 +639,7 @@ var _a, _b, _c;
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_app_installer_installer_service__ = __webpack_require__(114);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_app_installer_installer_service__ = __webpack_require__(115);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_app_core_module_api_service__ = __webpack_require__(75);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_platform_browser__ = __webpack_require__(25);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return InstallerComponent; });
@@ -724,8 +727,8 @@ var _a, _b, _c;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common__ = __webpack_require__(19);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__installer_component__ = __webpack_require__(215);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_app_installer_installer_service__ = __webpack_require__(114);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__angular_material__ = __webpack_require__(113);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_app_installer_installer_service__ = __webpack_require__(115);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__angular_material__ = __webpack_require__(114);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return InstallerModule; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -801,14 +804,14 @@ ContentTypeFilterPipe = __decorate([
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ngx_translate_core__ = __webpack_require__(117);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ngx_translate_core__ = __webpack_require__(76);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_forms__ = __webpack_require__(74);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_material__ = __webpack_require__(113);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_material__ = __webpack_require__(114);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__angular_common__ = __webpack_require__(19);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__angular_platform_browser_animations__ = __webpack_require__(209);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__template_picker_component__ = __webpack_require__(116);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__template_filter_pipe__ = __webpack_require__(115);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__template_picker_component__ = __webpack_require__(117);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__template_filter_pipe__ = __webpack_require__(116);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_app_core_core_module__ = __webpack_require__(212);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__content_type_filter_pipe__ = __webpack_require__(217);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__angular_flex_layout__ = __webpack_require__(204);
@@ -955,7 +958,7 @@ module.exports = "<div class=\"progress\" *ngIf=\"showProgress\">\r\n  <md-progr
 /***/ 282:
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"content\">\r\n    <md-progress-bar [ngStyle]=\"{ opacity: (!ready || loading) ? 1 : 0 }\" [mode]=\"'indeterminate'\"></md-progress-bar>\r\n    <div *ngIf=\"ready\" class=\"card\">\r\n        <div class=\"top-controls\" fxLayout=\"row\" fxLayoutAlign=\"center center\">\r\n            <button md-fab *ngIf=\"template\" (click)=\"persistTemplate()\" [attr.title]=\"'TemplatePicker.Save' | translate\">\r\n                <md-icon>check</md-icon>\r\n            </button>\r\n            <button md-mini-fab class=\"secondary\" *ngIf=\"undoTemplateId !== null\" (click)=\"frame.sxc.manage.contentBlock._cancelTemplateChange()\"\r\n                [attr.title]=\"('TemplatePicker.' + (isContentApp ? 'Cancel' : 'Close')) | translate\">\r\n                <md-icon>close</md-icon>\r\n            </button>\r\n        </div>\r\n        <md-tab-group [(selectedIndex)]=\"tabIndex\">\r\n            <md-tab [label]=\"(isContentApp ? (contentType?.Name || ('TemplatePicker.ContentTypePickerDefault' | translate)) : (app?.name || ('TemplatePicker.AppPickerDefault' | translate)))\">\r\n                <div *ngIf=\"!isContentApp; else contentApp\" class=\"tiles\">\r\n                    <div class=\"tile\" [ngClass]=\"{ active: app?.appId === a.appId }\" [attr.title]=\"a.name\" (click)=\"app?.appId === a.appId ? switchTab() : updateApp(a)\"\r\n                        (dblclick)=\"switchTab()\" *ngFor=\"let a of apps\">\r\n                        <div class=\"bg\">\r\n                            <img *ngIf=\"a.thumbnail !== null && a.thumbnail !== ''\" class=\"bg-img\" [attr.src]=\"a.thumbnail + '?w=176&h=176'\">\r\n                            <div *ngIf=\"a.thumbnail === null || a.thumbnail === ''\" class=\"bg-icon\">\r\n                                <md-icon>star</md-icon>\r\n                            </div>\r\n                        </div>\r\n                        <div class=\"title\" [ngClass]=\"{ show: a.thumbnail === null || a.thumbnail === '' }\">\r\n                            <span>{{a.name}}</span>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"tile config\" *ngIf=\"showAdvanced && !isContentApp\" (click)=\"frame.sxc.manage.run('app-import')\" [attr.title]=\"'TemplatePicker.Install' | translate\">\r\n                        <div class=\"bg\">\r\n                            <div class=\"bg-icon\">\r\n                                <md-icon>get_app</md-icon>\r\n                            </div>\r\n                        </div>\r\n                        <div class=\"title show\">\r\n                            <span>{{\"TemplatePicker.Install\" | translate}}</span>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"tile config\" *ngIf=\"showAdvanced && !isContentApp\" (click)=\"frame.sxc.manage.run('zone')\" [attr.title]=\"'TemplatePicker.Zone' | translate\">\r\n                        <div class=\"bg\">\r\n                            <div class=\"bg-icon\">\r\n                                <md-icon>apps</md-icon>\r\n                            </div>\r\n                        </div>\r\n                        <div class=\"title show\">\r\n                            <span>{{\"TemplatePicker.Zone\" | translate}}</span>\r\n                        </div>\r\n                    </div>\r\n                </div>\r\n                <ng-template #contentApp>\r\n                    <div class=\"tiles\">\r\n                        <div class=\"tile\" [ngClass]=\"{ active: contentType?.StaticName === c.StaticName, blocked: !allowContentTypeChange }\" [attr.title]=\"c.Label\"\r\n                            (click)=\"contentType?.StaticName === c.StaticName ? switchTab() : updateContentType(c)\" (dblclick)=\"switchTab()\"\r\n                            *ngFor=\"let c of contentTypes\">\r\n                            <div class=\"bg\">\r\n                                <img *ngIf=\"c.Thumbnail !== null && c.Thumbnail !== ''\" class=\"bg-img\" [attr.src]=\"c.Thumbnail + '?w=176&h=176'\">\r\n                                <div *ngIf=\"c.Thumbnail === null || c.Thumbnail === ''\" class=\"bg-icon\">\r\n                                    <md-icon>bubble_chart</md-icon>\r\n                                </div>\r\n                            </div>\r\n                            <div class=\"title\" [ngClass]=\"{ show: c.Thumbnail === null || c.Thumbnail === '' }\">\r\n                                <span>{{c.Label}}</span>\r\n                            </div>\r\n                        </div>\r\n                    </div>\r\n                </ng-template>\r\n            </md-tab>\r\n            <md-tab *ngIf=\"isContentApp ? contentType : app\" [label]=\"('TemplatePicker.ChangeView' | translate) + '(' + templates.length + ')'\">\r\n                <div class=\"tiles\">\r\n\r\n                    <md-spinner class=\"templates-spinner\" *ngIf=\"loadingTemplates\"></md-spinner>\r\n                    <div class=\"tile\" [ngClass]=\"{ active: template?.TemplateId === t.TemplateId }\" [attr.title]=\"t.Name\" (click)=\"updateTemplateSubject.next({ template: t })\"\r\n                        *ngFor=\"let t of templates\">\r\n                        <div class=\"bg\">\r\n                            <img *ngIf=\"t.Thumbnail !== null && t.Thumbnail !== ''\" class=\"bg-img\" [attr.src]=\"t.Thumbnail + '?w=176&h=176'\">\r\n                            <div *ngIf=\"t.Thumbnail === null || t.Thumbnail === ''\" class=\"bg-icon\">\r\n                                <md-icon *ngIf=\"isContentApp\">view_carousel</md-icon>\r\n                                <md-icon *ngIf=\"!isContentApp\">view_quilt</md-icon>\r\n                            </div>\r\n                        </div>\r\n                        <div class=\"title\" [ngClass]=\"{ show: t.Thumbnail === null || t.Thumbnail === '' }\">\r\n                            <span>{{t.Name}}</span>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"tile config\" *ngIf=\"showAdvanced && !isContentApp && app?.appId !== null\" (click)=\"frame.sxc.manage.run('app')\" [attr.title]=\"'TemplatePicker.App' | translate\">\r\n                        <div class=\"bg\">\r\n                            <div class=\"bg-icon\">\r\n                                <md-icon>settings</md-icon>\r\n                            </div>\r\n                        </div>\r\n                        <div class=\"title show\">\r\n                            <span>{{\"TemplatePicker.App\" | translate}}</span>\r\n                        </div>\r\n                    </div>\r\n                </div>\r\n            </md-tab>\r\n        </md-tab-group>\r\n        <app-installer *ngIf=\"showInstaller\" [isContentApp]=\"isContentApp\"></app-installer>\r\n    </div>\r\n</div>"
+module.exports = "<div class=\"content\">\r\n    <md-progress-bar [ngStyle]=\"{ opacity: (!ready || loading) ? 1 : 0 }\" [mode]=\"'indeterminate'\"></md-progress-bar>\r\n    <div *ngIf=\"ready\" class=\"card\">\r\n        <div class=\"top-controls\" fxLayout=\"row\" fxLayoutAlign=\"center center\">\r\n            <button md-fab *ngIf=\"template\" (click)=\"persistTemplate()\" [attr.title]=\"'TemplatePicker.Save' | translate\">\r\n                <md-icon>check</md-icon>\r\n            </button>\r\n            <button md-mini-fab class=\"secondary\" *ngIf=\"undoTemplateId !== null\" (click)=\"frame.sxc.manage.contentBlock._cancelTemplateChange()\"\r\n                [attr.title]=\"('TemplatePicker.' + (isContentApp ? 'Cancel' : 'Close')) | translate\">\r\n                <md-icon>close</md-icon>\r\n            </button>\r\n        </div>\r\n        <md-tab-group [(selectedIndex)]=\"tabIndex\">\r\n            <md-tab [label]=\"(isContentApp ? (contentType?.Name || ('TemplatePicker.ContentTypePickerDefault' | translate)) : (app?.name || ('TemplatePicker.AppPickerDefault' | translate)))\">\r\n                <div *ngIf=\"!isContentApp; else contentApp\" class=\"tiles\">\r\n                    <div class=\"tile\" [ngClass]=\"{ active: app?.appId === a.appId }\" [attr.title]=\"a.name\" (click)=\"app?.appId === a.appId ? switchTab() : updateApp(a)\"\r\n                        (dblclick)=\"switchTab()\" *ngFor=\"let a of apps\">\r\n                        <div class=\"bg\">\r\n                            <img *ngIf=\"a.thumbnail !== null && a.thumbnail !== ''\" class=\"bg-img\" [attr.src]=\"a.thumbnail + '?w=176&h=176'\">\r\n                            <div *ngIf=\"a.thumbnail === null || a.thumbnail === ''\" class=\"bg-icon\">\r\n                                <md-icon>star</md-icon>\r\n                            </div>\r\n                        </div>\r\n                        <div class=\"title\" [ngClass]=\"{ show: a.thumbnail === null || a.thumbnail === '' }\">\r\n                            <span>{{a.name}}</span>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"tile config\" *ngIf=\"showAdvanced && !isContentApp\" (click)=\"frame.sxc.manage.run('app-import')\" [attr.title]=\"'TemplatePicker.Install' | translate\">\r\n                        <div class=\"bg\">\r\n                            <div class=\"bg-icon\">\r\n                                <md-icon>get_app</md-icon>\r\n                            </div>\r\n                        </div>\r\n                        <div class=\"title show\">\r\n                            <span>{{\"TemplatePicker.Install\" | translate}}</span>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"tile config\" *ngIf=\"showAdvanced && !isContentApp\" (click)=\"frame.sxc.manage.run('zone')\" [attr.title]=\"'TemplatePicker.Zone' | translate\">\r\n                        <div class=\"bg\">\r\n                            <div class=\"bg-icon\">\r\n                                <md-icon>apps</md-icon>\r\n                            </div>\r\n                        </div>\r\n                        <div class=\"title show\">\r\n                            <span>{{\"TemplatePicker.Zone\" | translate}}</span>\r\n                        </div>\r\n                    </div>\r\n                </div>\r\n                <ng-template #contentApp>\r\n                    <div class=\"tiles\">\r\n                        <div class=\"tile\" [ngClass]=\"{ active: contentType?.StaticName === c.StaticName, blocked: !allowContentTypeChange }\" [attr.title]=\"c.Label\"\r\n                            (click)=\"contentType?.StaticName === c.StaticName ? switchTab() : updateContentType(c)\" (dblclick)=\"switchTab()\"\r\n                            *ngFor=\"let c of contentTypes\">\r\n                            <div class=\"bg\">\r\n                                <img *ngIf=\"c.Thumbnail !== null && c.Thumbnail !== ''\" class=\"bg-img\" [attr.src]=\"c.Thumbnail + '?w=176&h=176'\">\r\n                                <div *ngIf=\"c.Thumbnail === null || c.Thumbnail === ''\" class=\"bg-icon\">\r\n                                    <md-icon>bubble_chart</md-icon>\r\n                                </div>\r\n                            </div>\r\n                            <div class=\"title\" [ngClass]=\"{ show: c.Thumbnail === null || c.Thumbnail === '' }\">\r\n                                <span>{{c.Label}}</span>\r\n                            </div>\r\n                        </div>\r\n                    </div>\r\n                </ng-template>\r\n            </md-tab>\r\n            <md-tab *ngIf=\"isContentApp ? contentType : app\" [label]=\"('TemplatePicker.ChangeView' | translate) + '(' + templates.length + ')'\">\r\n                <div class=\"tiles\">\r\n                    <md-spinner class=\"templates-spinner\" *ngIf=\"loadingTemplates\"></md-spinner>\r\n                    <div class=\"tile\" [ngClass]=\"{ active: template?.TemplateId === t.TemplateId }\" [attr.title]=\"t.Name\" (click)=\"updateTemplateSubject.next({ template: t })\"\r\n                        *ngFor=\"let t of templates\">\r\n                        <div class=\"bg\">\r\n                            <img *ngIf=\"t.Thumbnail !== null && t.Thumbnail !== ''\" class=\"bg-img\" [attr.src]=\"t.Thumbnail + '?w=176&h=176'\">\r\n                            <div *ngIf=\"t.Thumbnail === null || t.Thumbnail === ''\" class=\"bg-icon\">\r\n                                <md-icon *ngIf=\"isContentApp\">view_carousel</md-icon>\r\n                                <md-icon *ngIf=\"!isContentApp\">view_quilt</md-icon>\r\n                            </div>\r\n                        </div>\r\n                        <div class=\"title\" [ngClass]=\"{ show: t.Thumbnail === null || t.Thumbnail === '' }\">\r\n                            <span>{{t.Name}}</span>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"tile config\" *ngIf=\"showAdvanced && !isContentApp && app?.appId !== null\" (click)=\"frame.sxc.manage.run('app')\"\r\n                        [attr.title]=\"'TemplatePicker.App' | translate\">\r\n                        <div class=\"bg\">\r\n                            <div class=\"bg-icon\">\r\n                                <md-icon>settings</md-icon>\r\n                            </div>\r\n                        </div>\r\n                        <div class=\"title show\">\r\n                            <span>{{\"TemplatePicker.App\" | translate}}</span>\r\n                        </div>\r\n                    </div>\r\n                </div>\r\n            </md-tab>\r\n        </md-tab-group>\r\n        <app-installer *ngIf=\"showInstaller\" [isContentApp]=\"isContentApp\"></app-installer>\r\n    </div>\r\n</div>"
 
 /***/ }),
 

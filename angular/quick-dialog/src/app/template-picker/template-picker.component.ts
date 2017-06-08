@@ -1,3 +1,4 @@
+import { TranslatePipe } from '@ngx-translate/core';
 import { Component, OnInit, Input, NgModule, Inject, ApplicationRef } from '@angular/core';
 import { IDialogFrameElement } from "app/core/dialog-frame-element";
 import { ModuleApiService } from "app/core/module-api.service";
@@ -18,7 +19,8 @@ var win = window;
 @Component({
   selector: 'app-template-picker',
   templateUrl: './template-picker.component.html',
-  styleUrls: ['./template-picker.component.scss']
+  styleUrls: ['./template-picker.component.scss'],
+  providers: [TranslatePipe],
 })
 export class TemplatePickerComponent implements OnInit {
   apps: App[] = [];
@@ -53,7 +55,8 @@ export class TemplatePickerComponent implements OnInit {
     private api: ModuleApiService,
     private route: ActivatedRoute,
     private templateFilter: TemplateFilterPipe,
-    private appRef: ApplicationRef
+    private appRef: ApplicationRef,
+    private translate: TranslatePipe
   ) {
     this.frame = <IDialogFrameElement>win.frameElement;
     this.dashInfo = this.frame.getAdditionalDashboardConfig();
@@ -85,7 +88,7 @@ export class TemplatePickerComponent implements OnInit {
                     this.appRef.tick();
                   });
               });
-            
+
             this.frame.sxc.manage.contentBlock.reloadNoLivePreview(`<p class="no-live-preview-available">Reloading App. Please wait.</p>`)
               .then(() => {
                 this.loading = false;
@@ -97,7 +100,7 @@ export class TemplatePickerComponent implements OnInit {
             win.parent.location.reload();
           })
       });
-    
+
     this.updateTemplateSubject
       .debounceTime(400)
       .subscribe(({ template }) => {
@@ -118,7 +121,7 @@ export class TemplatePickerComponent implements OnInit {
             this.frame.scrollToTarget();
             this.appRef.tick();
           });
-        
+
         // TODO: Not sure why we need to set this value before calling persistTemplate. Clean up!
         this.frame.sxc.manage.contentBlock.templateId = this.template.TemplateId;
 
@@ -162,10 +165,10 @@ export class TemplatePickerComponent implements OnInit {
     this.frame.isDirty = this.isDirty;
     this.dashInfo.templateChooserVisible = true;
 
-    Observable.concat([
-      this.api.loadTemplates(),
-      this.api.loadContentTypes()
-    ]);
+    this.api.loadTemplates()
+      .take(1)
+      .subscribe(templates => this.api.loadContentTypes())
+
     this.api.loadApps();
   }
 
@@ -200,14 +203,15 @@ export class TemplatePickerComponent implements OnInit {
     contentTypes
       .filter(c => (this.template && c.TemplateId === this.template.TemplateId) || (this.contentType && c.StaticName === this.contentType.StaticName))
       .forEach(c => c.IsHidden = false);
-    
+
     // option for no content types
-    if (this.templates.find(t => t.ContentTypeStaticName === '')) {
+    if (this.allTemplates.find(t => t.ContentTypeStaticName === '')) {
       let name = "TemplatePicker.LayoutElement";
       contentTypes.push({
         StaticName: this.cViewWithoutContent,
         Name: name,
-        Label: name,
+        Thumbnail: null,
+        Label: this.translate.transform(name),
         IsHidden: false,
       });
     }
