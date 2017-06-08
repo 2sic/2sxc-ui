@@ -880,7 +880,8 @@ var $2sxcActionMenuMapper = function (moduleId) {
 // the bug tries to detect a module-ID based on classes in a tag, 
 // but uses a bad regex and captures the number 2 on all 2sxc-modules 
 // instead of the real id
-// this patch changes the order of the className of 2sxc modules
+// this patch changes the order of the className of 2sxc modules when
+// they are accessed through '$.fn.attr'
 // 'DnnModule-2sxc DnnModule-xxx' -> DNN thinks the mod id is 2 (false)
 // 'DnnModule-xxx DnnModule-2sxc' -> DNN thinks the mod id is xxx (correct)
 // documented here https://github.com/2sic/2sxc/issues/986

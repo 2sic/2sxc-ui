@@ -175,7 +175,7 @@ export class TemplatePickerComponent implements OnInit {
   isDirty(): boolean {
     return false;
   }
-
+  
   persistTemplate() {
     let cb = this.frame.sxc.manage.contentBlock;
     cb.templateId = this.template.TemplateId;
