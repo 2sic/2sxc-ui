@@ -891,6 +891,7 @@ var $2sxcActionMenuMapper = function (moduleId) {
     $.fn.attr = function () {
         var val = fn.apply(this, arguments);
         if (arguments[0] !== 'class' || typeof val !== 'string') return val;
+        if (val.search('DnnModule-2sxc ') === -1) return val;
         return val.replace('DnnModule-2sxc ', '') + ' DnnModule-2sxc';
     };
 })();
