@@ -1,0 +1,7 @@
+<div class="progress" *ngIf="showProgress">
+  <md-progress-spinner [mode]="'indeterminate'"></md-progress-spinner>
+  <span>Installing {{ currentPackage?.displayName }}..</span>
+</div>
+<div *ngIf="ready">
+  <iframe class="fr-getting-started" id="frGettingStarted" [src]="remoteInstallerUrl" width="100%" height="300px"></iframe>
+</div>
