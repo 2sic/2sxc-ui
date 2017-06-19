@@ -1,6 +1,5 @@
 ﻿// the toolbar manager is an internal helper
 // taking care of toolbars, buttons etc.
-
 (function () {
     var tools = $2sxc._toolbarManager.buttonHelpers = {
 
@@ -20,13 +19,13 @@
         // just a command (detected by "action"): { entityId: 17, action: "edit" }
         // array of commands: [{entityId: 17, action: "edit"}, {contentType: "blog", action: "new"}]
         buildFullDefinition: function (unstructuredConfig, allActions, instanceConfig, moreSettings) {
-            if (unstructuredConfig.debug)
-                console.log("toolbar: detailed debug on; start build full Def");
             var fullConfig = tools.ensureDefinitionTree(unstructuredConfig, moreSettings);
+
+            // ToDo: don't use console.log in production
+            if (unstructuredConfig.debug) console.log("toolbar: detailed debug on; start build full Def");
             tools.expandButtonGroups(fullConfig, allActions);
             tools.removeButtonsWithUnmetConditions(fullConfig, instanceConfig);
-            if (fullConfig.debug)
-                console.log("after remove: ", fullConfig);
+            if (fullConfig.debug) console.log("after remove: ", fullConfig);
 
             tools.customize(fullConfig);
 
@@ -46,8 +45,7 @@
             if (!original) throw ("preparing toolbar, with nothing to work on: " + original);
 
             // ensure that if it's just actions or buttons, they are then processed as arrays with 1 entry
-            if (!Array.isArray(original) && (original.action || original.buttons))
-                original = [original];
+            if (!Array.isArray(original) && (original.action || original.buttons)) original = [original];
 
             // ensure that arrays of actions or buttons are re-mapped to the right structure node
             if (Array.isArray(original) && original.length) {
@@ -58,17 +56,17 @@
                 // array of items having an action, so these are buttons
                 else if (original[0].command || original[0].action)
                     original = { groups: [{ buttons: original }] };
-                else 
+                else
                     console.warn("toolbar tried to build toolbar but couldn't detect type of this:", original);
             }
 
             // build an object with this structure
             return {
-                name: original.name || "toolbar",   // name, no real use
-                debug: original.debug || false,     // show more debug info
-                groups: original.groups || [],      // the groups of buttons
-                defaults: original.defaults || {},  // the button defaults like icon, etc.
-                params: original.params || {},      // these are the default command parameters
+                name: original.name || "toolbar", // name, no real use
+                debug: original.debug || false, // show more debug info
+                groups: original.groups || [], // the groups of buttons
+                defaults: original.defaults || {}, // the button defaults like icon, etc.
+                params: original.params || {}, // these are the default command parameters
                 settings: $2sxc._lib.extend({}, tools.defaultSettings, original.settings, moreSettings)
             };
         },
@@ -76,7 +74,7 @@
 
         // this will traverse a groups-tree and expand each group
         // so if groups were just strings like "edit,new" or compact buttons, they will be expanded afterwards
-        expandButtonGroups: function(fullSet, actions){ //, itemSettings) {
+        expandButtonGroups: function (fullSet, actions) { //, itemSettings) {
             // by now we should have a structure, let's check/fix the buttons
             for (var g = 0; g < fullSet.groups.length; g++) {
                 // expand a verb-list like "edit,new" into objects like [{ action: "edit" }, {action: "new"}]
@@ -189,8 +187,6 @@
             }
         },
 
-
-
         btnProperties: [
             "classes",
             "icon",
@@ -206,7 +202,7 @@
         ],
 
         // enhance button-object with default icons, etc.
-        addDefaultBtnSettings: function(btn, group, groups, actions) {
+        addDefaultBtnSettings: function (btn, group, groups, actions) {
             for (var d = 0; d < tools.btnProperties.length; d++)
                 fallbackBtnSetting(btn, actions, tools.btnProperties[d]);
 
@@ -219,7 +215,7 @@
             }
         },
 
-        customize: function(toolbar) {
+        customize: function (toolbar) {
             //if (!toolbar.settings) return;
             //var set = toolbar.settings;
             //if (set.autoAddMore) {

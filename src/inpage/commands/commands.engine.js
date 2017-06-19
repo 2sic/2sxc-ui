@@ -13,7 +13,7 @@
                 var ngDialogUrl = cmc.manage._editContext.Environment.SxcRootUrl + "desktopmodules/tosic_sexycontent/dist/dnn/ui.html?sxcver="
                     + cmc.manage._editContext.Environment.SxcVersion;
                 var isDebug = $2sxc.urlParams.get("debug") ? "&debug=true" : "";
-
+                
                 var cmd = {
                     settings: settings,
                     items: settings.items || [], // use predefined or create empty array
@@ -25,8 +25,9 @@
                         var itm = {}, ct = cmd.settings.contentType || cmd.settings.attributeSetName; // two ways to name the content-type-name this, v 7.2+ and older
                         if (cmd.settings.entityId) itm.EntityId = cmd.settings.entityId;
                         if (ct) itm.ContentTypeName = ct;
-                        if (itm.EntityId || itm.ContentTypeName) // only add if there was stuff to add
-                            cmd.items.push(itm);
+
+                        // only add if there was stuff to add
+                        if (itm.EntityId || itm.ContentTypeName) cmd.items.push(itm);
                     },
 
                     // this adds an item of the content-group, based on the group GUID and the sequence number
@@ -39,18 +40,16 @@
 
                     // this will tell the command to edit a item from the sorted list in the group, optionally together with the presentation item
                     addContentGroupItemSetsToEditList: function (withPresentation) {
-                        var isContentAndNotHeader = (cmd.settings.sortOrder !== -1);
-                        var index = isContentAndNotHeader ? cmd.settings.sortOrder : 0;
-                        var prefix = isContentAndNotHeader ? "" : "List";
-                        var cTerm = prefix + "Content";
-                        var pTerm = prefix + "Presentation";
-                        var isAdd = cmd.settings.action === "new";
-                        var groupId = cmd.settings.contentGroupId;
+                        var isContentAndNotHeader = (cmd.settings.sortOrder !== -1),
+                            index = isContentAndNotHeader ? cmd.settings.sortOrder : 0,
+                            prefix = isContentAndNotHeader ? "" : "List",
+                            cTerm = prefix + "Content",
+                            pTerm = prefix + "Presentation",
+                            isAdd = cmd.settings.action === "new",
+                            groupId = cmd.settings.contentGroupId;
                         cmd.addContentGroupItem(groupId, index, cTerm.toLowerCase(), isAdd, cmd.settings.cbIsEntity, cmd.settings.cbId, "EditFormTitle." + cTerm);
 
-                        if (withPresentation)
-                            cmd.addContentGroupItem(groupId, index, pTerm.toLowerCase(), isAdd, cmd.settings.cbIsEntity, cmd.settings.cbId, "EditFormTitle." + pTerm);
-
+                        if (withPresentation) cmd.addContentGroupItem(groupId, index, pTerm.toLowerCase(), isAdd, cmd.settings.cbIsEntity, cmd.settings.cbId, "EditFormTitle." + pTerm);
                     },
 
                     generateLink: function () {
@@ -73,60 +72,61 @@
                 };
                 return cmd;
             },
-
+            
             // create a dialog link
             _linkToNgDialog: function (specialSettings) {
                 var cmd = cmc.manage._commands.create(specialSettings);
 
-                if (cmd.settings.useModuleList)
-                    cmd.addContentGroupItemSetsToEditList(true);
-                else
-                    cmd.addSimpleItem();
+                if (cmd.settings.useModuleList) cmd.addContentGroupItemSetsToEditList(true);
+                else cmd.addSimpleItem();
 
                 // if the command has own configuration stuff, do that now
-                if (cmd.settings.configureCommand)
-                    cmd.settings.configureCommand(cmd);
+                if (cmd.settings.configureCommand) cmd.settings.configureCommand(cmd);
 
                 return cmd.generateLink();
             },
-            
+
             // open a new dialog of the angular-ui
             _openNgDialog: function (settings, event, closeCallback) {
                 var callback = function () {
                     cmc.manage.contentBlock.reloadAndReInitialize();
                     closeCallback();
                 }, link = cmc._linkToNgDialog(settings);
-                
+
                 if (settings.newWindow || (event && event.shiftKey)) return window.open(link);
                 if (settings.inlineWindow) return $2sxc._dialog(sxc, targetTag, link, callback);
                 return $2sxc.totalPopup.open(link, callback);
             },
 
+            // ToDo: remove dead code
             executeAction: function (nameOrSettings, settings, event) {
+                var conf,
+                    // ToDo: review this code
+                    // pre-save event because afterwards we have a promise, so the event-object changes; funky syntax is because of browser differences
+                    origEvent = event || window.event;
+                
                 // check if name is name (string) or object (settings)
-                if (!event && settings && (typeof settings.altKey !== "undefined")) { // no event param, but settings contains the event-object
+                if (!event && settings && typeof settings.altKey !== 'undefined') { // no event param, but settings contains the event-object
                     event = settings;   // move it to the correct variable
                     settings = {};      // clear the settings variable
                 }
+
                 settings = (typeof nameOrSettings === "string")
                     ? $2sxc._lib.extend(settings || {}, { "action": nameOrSettings }) // place the name as an action-name into a command-object
                     : nameOrSettings;
 
-                var conf = cmc.manage._toolbar.actions[settings.action];
+                conf = cmc.manage._toolbar.actions[settings.action];
                 settings = $2sxc._lib.extend({}, conf, settings); // merge conf & settings, but settings has higher priority
 
                 if (!settings.dialog) settings.dialog = settings.action; // old code uses "action" as the parameter, now use verb ? dialog
                 if (!settings.code) settings.code = cmc._openNgDialog; // decide what action to perform
 
-                var origEvent = event || window.event; // pre-save event because afterwards we have a promise, so the event-object changes; funky syntax is because of browser differences
-
-                if (conf.uiActionOnly)
-                    return settings.code(settings, origEvent, sxc);// 2016-11-03 cmc.manage);
+                if (conf.uiActionOnly) return settings.code(settings, origEvent, sxc); // 2016-11-03 cmc.manage);
 
                 // if more than just a UI-action, then it needs to be sure the content-group is created first
                 cmc.manage.contentBlock.prepareToAddContent()
                     .then(function () {
-                        return settings.code(settings, origEvent, sxc);// 2016-11-03 cmc.manage);
+                        return settings.code(settings, origEvent, sxc); // 2016-11-03 cmc.manage);
                     });
             }
         };

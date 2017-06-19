@@ -46,11 +46,7 @@
             }
         }
 
-
         //#endregion helper functions
-
-
-
         var tb = {
             config: createToolbarConfig(editContext),
             refreshConfig: function () { tb.config = createToolbarConfig(editContext); },
@@ -87,35 +83,29 @@
             // Builds the toolbar and returns it as HTML
             // expects settings - either for 1 button or for an array of buttons
             getToolbar: function (tbConfig, moreSettings) {
+                var btnList, tlbDef, btnGroups, behaviourClasses, tbClasses, toolbar, btns, i, h;
 
                 // if it has an action or is an array, keep that. Otherwise get standard buttons
                 tbConfig = tbConfig || {};// if null/undefined, use empty object
-                var btnList = tbConfig;
-                if (!tbConfig.action && !tbConfig.groups && !tbConfig.buttons && !Array.isArray(tbConfig))
-                    btnList = tbManager.standardButtons(editContext.User.CanDesign, tbConfig);
+                btnList = tbConfig;
+                if (!tbConfig.action && !tbConfig.groups && !tbConfig.buttons && !Array.isArray(tbConfig)) btnList = tbManager.standardButtons(editContext.User.CanDesign, tbConfig);
 
                 // whatever we had, if more settings were provided, override with these...
-                //if (moreSettings)
-                //    $2sxc._lib.extend(btnList.settings, moreSettings);
-
-                var tlbDef = tbManager.buttonHelpers.buildFullDefinition(btnList, allActions, tb.config, moreSettings);
-                var btnGroups = tlbDef.groups;
-                var behaviourClasses = " sc-tb-hover-" + tlbDef.settings.hover
+                tlbDef = tbManager.buttonHelpers.buildFullDefinition(btnList, allActions, tb.config, moreSettings);
+                btnGroups = tlbDef.groups;
+                behaviourClasses = " sc-tb-hover-" + tlbDef.settings.hover
                     + " sc-tb-show-" + tlbDef.settings.show;
 
-
-
-                // todo: this settings assumes it's not in an array...
-                var tbClasses = "sc-menu group-0 "
+                // todo: these settings assume it's not in an array...
+                tbClasses = "sc-menu group-0 "
                     + behaviourClasses + " "
-                    + ((tbConfig.sortOrder === -1) ? " listContent" : "")
-                    + (tlbDef.settings.classes ? " " + tlbDef.settings.classes : "");
-                var toolbar = $("<ul />", { 'class': tbClasses, 'onclick': "var e = arguments[0] || window.event; e.stopPropagation();" });
+                    + ((tbConfig.sortOrder === -1) ? ' listContent' : '')
+                    + (tlbDef.settings.classes ? " " + tlbDef.settings.classes : '');
+                toolbar = $("<ul />", { 'class': tbClasses, 'onclick': "var e = arguments[0] || window.event; e.stopPropagation();" });
 
-                for (var g = 0; g < btnGroups.length; g++) {
-                    var btns = btnGroups[g].buttons;
-                    for (var i = 0; i < btns.length; i++)
-                        toolbar.append($("<li />").append($(tb.getButton(btns[i], g))));
+                for (i = 0; i < btnGroups.length; i++) {
+                    btns = btnGroups[i].buttons;
+                    for (h = 0; h < btns.length; h++) toolbar.append($("<li />").append($(tb.getButton(btns[h], i))));
                 }
 
                 toolbar.attr("group-count", btnGroups.length);
@@ -161,24 +151,18 @@
                     var tag = $(this), data, toolbarConfig, toolbarSettings;
 
                     try {
-                        try {
-                            data = tag.attr("toolbar") || tag.attr("data-toolbar");
-                            toolbarConfig = data ? JSON.parse(data) : {};
-                        } catch (err) {
-                            console.error("error on toolbar JSON - probably invalid - make sure you also quote your properties like \"name\": ...", data, err);
-                            return;
-                        }
+                        data = tag.attr("toolbar") || tag.attr("data-toolbar");
+                        toolbarConfig = data ? JSON.parse(data) : {};
+                        data = tag.attr("settings") || tag.attr("data-settings");
+                        toolbarSettings = data ? JSON.parse(data) : {};
+                        if (toolbarConfig === {} && toolbarSettings === {})
+                            toolbarSettings = settingsForEmptyToolbar;
+                    } catch (err) {
+                        console.error("error in settings JSON - probably invalid - make sure you also quote your properties like \"name\": ...", data, err);
+                        return;
+                    }
 
-                        try {
-                            data = tag.attr("settings") || tag.attr("data-settings");
-                            toolbarSettings = data ? JSON.parse(data) : {};
-                            if (toolbarConfig === {} && toolbarSettings === {})
-                                toolbarSettings = settingsForEmptyToolbar;
-                        } catch (err) {
-                            console.error("error on settings JSON - probably invalid - make sure you also quote your properties like \"name\": ...", data, err);
-                            return;
-                        }
-
+                    try {
                         tag.replaceWith($2sxc(tag).manage.getToolbar(toolbarConfig, toolbarSettings));
                     } catch (err) {
                         // note: errors can happen a lot on custom toolbars, must be sure the others are still rendered
@@ -186,12 +170,7 @@
                     }
                 }
             }
-
         };
         return tb;
     };
-
-
-
-
 })();

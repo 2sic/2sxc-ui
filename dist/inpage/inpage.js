@@ -192,6 +192,7 @@
                         .changeOrder(settings.sortOrder, Math.max(settings.sortOrder - 1, 0));
                 }
             }),
+
             'movedown': makeDef("movedown", "MoveDown", "move-down", false, {
                 showCondition: function (settings, modConfig) {
                     return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1;
@@ -210,15 +211,14 @@
                     return settings.isPublished === false;
                 },
                 code: function (settings, event, sxc) {
-                    if (settings.isPublished)
-                        return alert($2sxc.translate("Toolbar.AlreadyPublished"));
+                    var part, index;
+                    if (settings.isPublished) return alert($2sxc.translate("Toolbar.AlreadyPublished"));
 
                     // if we have an entity-id, publish based on that
-                    if (settings.entityId)
-                        return sxc.manage.contentBlock.publishId(settings.entityId);
+                    if (settings.entityId) return sxc.manage.contentBlock.publishId(settings.entityId);
 
-                    var part = settings.sortOrder === -1 ? "listcontent" : "content";
-                    var index = settings.sortOrder === -1 ? 0 : settings.sortOrder;
+                    part = settings.sortOrder === -1 ? 'listcontent' : 'content';
+                    index = settings.sortOrder === -1 ? 0 : settings.sortOrder;
                     return sxc.manage.contentBlock.publish(part, index);
                 }
             }),
@@ -227,10 +227,7 @@
                 showCondition: function (settings) { return settings.useModuleList; }
             }),
 
-
-
             //#region app-actions: app-settings, app-resources
-
             'app-settings': makeDef("app-settings", "AppSettings", "sliders", true, {
                 dialog: "edit",
                 disabled: editContext.appSettingsId === null,
@@ -263,23 +260,22 @@
             //#endregion
 
             //#region app & zone
-
             'app': makeDef("app", "App", "settings", true, {
                 showCondition: enableTools
             }),
 
             'zone': makeDef("zone", "Zone", "manage", true, {
                 showCondition: enableTools
-            })
+            }),
             //#endregion
-
         };
 
         // quick helper so we can better debug the creation of definitions
-        function addDef(def) { act[def.name] = def; }
+        function addDef(def) {
+            act[def.name] = def;
+        }
 
         //#region template commands: contenttype, contentitems, template-query, template-develop, template-settings
-
         addDef(makeDef("contenttype", "ContentType", "fields", true, {
             showCondition: enableTools
         }));
@@ -308,7 +304,6 @@
             }
         }));
 
-
         addDef(makeDef("template-develop", "Develop", "code", true, {
             newWindow: true,
             dialog: "develop",
@@ -328,11 +323,12 @@
                 return enableTools && !isContent;
             },
             dynamicClasses: function (settings) {
-                return editContext.queryId ? "" : "empty"; // if it doesn't have a query, make it less strong
+                return editContext.queryId ? '' : 'empty'; // if it doesn't have a query, make it less strong
             }
-            //configureCommand: function (cmd) {
+            // ToDo: remove dead code
+            // configureCommand: function (cmd) {
             //    cmd.params.pipelineId = editContext.queryId;
-            //}
+            // }
         }));
 
         addDef(makeDef("template-settings", "TemplateSettings", "sliders", true, {
@@ -348,13 +344,14 @@
         //#region custom code buttons
         addDef(makeDef("custom", "Custom", "bomb", true, {
             code: function (settings, event, sxc) {
+                var fn;
                 console.log("custom action with code - BETA feature, may change");
                 if (!settings.customCode) {
                     console.warn("custom code action, but no onclick found to run", settings);
                     return;
                 }
                 try {
-                    var fn = new Function("settings", "event", "sxc", settings.customCode); // jshint ignore:line
+                    fn = new Function("settings", "event", "sxc", settings.customCode); // jshint ignore:line
                     fn(settings, event, sxc);
                 } catch (err) {
                     console.error("error in custom button-code: ", settings);
@@ -387,7 +384,6 @@
         //#endregion
         return act;
     };
-
 })();
 
 
@@ -405,7 +401,7 @@
                 var ngDialogUrl = cmc.manage._editContext.Environment.SxcRootUrl + "desktopmodules/tosic_sexycontent/dist/dnn/ui.html?sxcver="
                     + cmc.manage._editContext.Environment.SxcVersion;
                 var isDebug = $2sxc.urlParams.get("debug") ? "&debug=true" : "";
-
+                
                 var cmd = {
                     settings: settings,
                     items: settings.items || [], // use predefined or create empty array
@@ -417,8 +413,9 @@
                         var itm = {}, ct = cmd.settings.contentType || cmd.settings.attributeSetName; // two ways to name the content-type-name this, v 7.2+ and older
                         if (cmd.settings.entityId) itm.EntityId = cmd.settings.entityId;
                         if (ct) itm.ContentTypeName = ct;
-                        if (itm.EntityId || itm.ContentTypeName) // only add if there was stuff to add
-                            cmd.items.push(itm);
+
+                        // only add if there was stuff to add
+                        if (itm.EntityId || itm.ContentTypeName) cmd.items.push(itm);
                     },
 
                     // this adds an item of the content-group, based on the group GUID and the sequence number
@@ -431,18 +428,16 @@
 
                     // this will tell the command to edit a item from the sorted list in the group, optionally together with the presentation item
                     addContentGroupItemSetsToEditList: function (withPresentation) {
-                        var isContentAndNotHeader = (cmd.settings.sortOrder !== -1);
-                        var index = isContentAndNotHeader ? cmd.settings.sortOrder : 0;
-                        var prefix = isContentAndNotHeader ? "" : "List";
-                        var cTerm = prefix + "Content";
-                        var pTerm = prefix + "Presentation";
-                        var isAdd = cmd.settings.action === "new";
-                        var groupId = cmd.settings.contentGroupId;
+                        var isContentAndNotHeader = (cmd.settings.sortOrder !== -1),
+                            index = isContentAndNotHeader ? cmd.settings.sortOrder : 0,
+                            prefix = isContentAndNotHeader ? "" : "List",
+                            cTerm = prefix + "Content",
+                            pTerm = prefix + "Presentation",
+                            isAdd = cmd.settings.action === "new",
+                            groupId = cmd.settings.contentGroupId;
                         cmd.addContentGroupItem(groupId, index, cTerm.toLowerCase(), isAdd, cmd.settings.cbIsEntity, cmd.settings.cbId, "EditFormTitle." + cTerm);
 
-                        if (withPresentation)
-                            cmd.addContentGroupItem(groupId, index, pTerm.toLowerCase(), isAdd, cmd.settings.cbIsEntity, cmd.settings.cbId, "EditFormTitle." + pTerm);
-
+                        if (withPresentation) cmd.addContentGroupItem(groupId, index, pTerm.toLowerCase(), isAdd, cmd.settings.cbIsEntity, cmd.settings.cbId, "EditFormTitle." + pTerm);
                     },
 
                     generateLink: function () {
@@ -465,60 +460,61 @@
                 };
                 return cmd;
             },
-
+            
             // create a dialog link
             _linkToNgDialog: function (specialSettings) {
                 var cmd = cmc.manage._commands.create(specialSettings);
 
-                if (cmd.settings.useModuleList)
-                    cmd.addContentGroupItemSetsToEditList(true);
-                else
-                    cmd.addSimpleItem();
+                if (cmd.settings.useModuleList) cmd.addContentGroupItemSetsToEditList(true);
+                else cmd.addSimpleItem();
 
                 // if the command has own configuration stuff, do that now
-                if (cmd.settings.configureCommand)
-                    cmd.settings.configureCommand(cmd);
+                if (cmd.settings.configureCommand) cmd.settings.configureCommand(cmd);
 
                 return cmd.generateLink();
             },
-            
+
             // open a new dialog of the angular-ui
             _openNgDialog: function (settings, event, closeCallback) {
                 var callback = function () {
                     cmc.manage.contentBlock.reloadAndReInitialize();
                     closeCallback();
                 }, link = cmc._linkToNgDialog(settings);
-                
+
                 if (settings.newWindow || (event && event.shiftKey)) return window.open(link);
                 if (settings.inlineWindow) return $2sxc._dialog(sxc, targetTag, link, callback);
                 return $2sxc.totalPopup.open(link, callback);
             },
 
+            // ToDo: remove dead code
             executeAction: function (nameOrSettings, settings, event) {
+                var conf,
+                    // ToDo: review this code
+                    // pre-save event because afterwards we have a promise, so the event-object changes; funky syntax is because of browser differences
+                    origEvent = event || window.event;
+                
                 // check if name is name (string) or object (settings)
-                if (!event && settings && (typeof settings.altKey !== "undefined")) { // no event param, but settings contains the event-object
+                if (!event && settings && typeof settings.altKey !== 'undefined') { // no event param, but settings contains the event-object
                     event = settings;   // move it to the correct variable
                     settings = {};      // clear the settings variable
                 }
+
                 settings = (typeof nameOrSettings === "string")
                     ? $2sxc._lib.extend(settings || {}, { "action": nameOrSettings }) // place the name as an action-name into a command-object
                     : nameOrSettings;
 
-                var conf = cmc.manage._toolbar.actions[settings.action];
+                conf = cmc.manage._toolbar.actions[settings.action];
                 settings = $2sxc._lib.extend({}, conf, settings); // merge conf & settings, but settings has higher priority
 
                 if (!settings.dialog) settings.dialog = settings.action; // old code uses "action" as the parameter, now use verb ? dialog
                 if (!settings.code) settings.code = cmc._openNgDialog; // decide what action to perform
 
-                var origEvent = event || window.event; // pre-save event because afterwards we have a promise, so the event-object changes; funky syntax is because of browser differences
-
-                if (conf.uiActionOnly)
-                    return settings.code(settings, origEvent, sxc);// 2016-11-03 cmc.manage);
+                if (conf.uiActionOnly) return settings.code(settings, origEvent, sxc); // 2016-11-03 cmc.manage);
 
                 // if more than just a UI-action, then it needs to be sure the content-group is created first
                 cmc.manage.contentBlock.prepareToAddContent()
                     .then(function () {
-                        return settings.code(settings, origEvent, sxc);// 2016-11-03 cmc.manage);
+                        return settings.code(settings, origEvent, sxc); // 2016-11-03 cmc.manage);
                     });
             }
         };
@@ -887,7 +883,7 @@ var $2sxcActionMenuMapper = function (moduleId) {
 // documented here https://github.com/2sic/2sxc/issues/986
 
 /**
- * Fix bug in dnn 08.00.04 drag-drop functionality - it has an incorrect regex
+ * Fix drag-drop functionality in dnn 08.00.04 - it has an incorrect regex
  */
 (function () {
     var fn = $.fn.attr;
@@ -2015,7 +2011,7 @@ $(function () {
 
     initModules(true);
     document.body.addEventListener('DOMSubtreeModified', initModules, false);
-
+    
     function initModules(initial) {
         $("div[data-edit-context]").each(function () {
             processToolbar(this, initial);
@@ -2104,11 +2100,7 @@ $(function () {
             }
         }
 
-
         //#endregion helper functions
-
-
-
         var tb = {
             config: createToolbarConfig(editContext),
             refreshConfig: function () { tb.config = createToolbarConfig(editContext); },
@@ -2145,35 +2137,29 @@ $(function () {
             // Builds the toolbar and returns it as HTML
             // expects settings - either for 1 button or for an array of buttons
             getToolbar: function (tbConfig, moreSettings) {
+                var btnList, tlbDef, btnGroups, behaviourClasses, tbClasses, toolbar, btns, i, h;
 
                 // if it has an action or is an array, keep that. Otherwise get standard buttons
                 tbConfig = tbConfig || {};// if null/undefined, use empty object
-                var btnList = tbConfig;
-                if (!tbConfig.action && !tbConfig.groups && !tbConfig.buttons && !Array.isArray(tbConfig))
-                    btnList = tbManager.standardButtons(editContext.User.CanDesign, tbConfig);
+                btnList = tbConfig;
+                if (!tbConfig.action && !tbConfig.groups && !tbConfig.buttons && !Array.isArray(tbConfig)) btnList = tbManager.standardButtons(editContext.User.CanDesign, tbConfig);
 
                 // whatever we had, if more settings were provided, override with these...
-                //if (moreSettings)
-                //    $2sxc._lib.extend(btnList.settings, moreSettings);
-
-                var tlbDef = tbManager.buttonHelpers.buildFullDefinition(btnList, allActions, tb.config, moreSettings);
-                var btnGroups = tlbDef.groups;
-                var behaviourClasses = " sc-tb-hover-" + tlbDef.settings.hover
+                tlbDef = tbManager.buttonHelpers.buildFullDefinition(btnList, allActions, tb.config, moreSettings);
+                btnGroups = tlbDef.groups;
+                behaviourClasses = " sc-tb-hover-" + tlbDef.settings.hover
                     + " sc-tb-show-" + tlbDef.settings.show;
 
-
-
-                // todo: this settings assumes it's not in an array...
-                var tbClasses = "sc-menu group-0 "
+                // todo: these settings assume it's not in an array...
+                tbClasses = "sc-menu group-0 "
                     + behaviourClasses + " "
-                    + ((tbConfig.sortOrder === -1) ? " listContent" : "")
-                    + (tlbDef.settings.classes ? " " + tlbDef.settings.classes : "");
-                var toolbar = $("<ul />", { 'class': tbClasses, 'onclick': "var e = arguments[0] || window.event; e.stopPropagation();" });
+                    + ((tbConfig.sortOrder === -1) ? ' listContent' : '')
+                    + (tlbDef.settings.classes ? " " + tlbDef.settings.classes : '');
+                toolbar = $("<ul />", { 'class': tbClasses, 'onclick': "var e = arguments[0] || window.event; e.stopPropagation();" });
 
-                for (var g = 0; g < btnGroups.length; g++) {
-                    var btns = btnGroups[g].buttons;
-                    for (var i = 0; i < btns.length; i++)
-                        toolbar.append($("<li />").append($(tb.getButton(btns[i], g))));
+                for (i = 0; i < btnGroups.length; i++) {
+                    btns = btnGroups[i].buttons;
+                    for (h = 0; h < btns.length; h++) toolbar.append($("<li />").append($(tb.getButton(btns[h], i))));
                 }
 
                 toolbar.attr("group-count", btnGroups.length);
@@ -2219,24 +2205,18 @@ $(function () {
                     var tag = $(this), data, toolbarConfig, toolbarSettings;
 
                     try {
-                        try {
-                            data = tag.attr("toolbar") || tag.attr("data-toolbar");
-                            toolbarConfig = data ? JSON.parse(data) : {};
-                        } catch (err) {
-                            console.error("error on toolbar JSON - probably invalid - make sure you also quote your properties like \"name\": ...", data, err);
-                            return;
-                        }
+                        data = tag.attr("toolbar") || tag.attr("data-toolbar");
+                        toolbarConfig = data ? JSON.parse(data) : {};
+                        data = tag.attr("settings") || tag.attr("data-settings");
+                        toolbarSettings = data ? JSON.parse(data) : {};
+                        if (toolbarConfig === {} && toolbarSettings === {})
+                            toolbarSettings = settingsForEmptyToolbar;
+                    } catch (err) {
+                        console.error("error in settings JSON - probably invalid - make sure you also quote your properties like \"name\": ...", data, err);
+                        return;
+                    }
 
-                        try {
-                            data = tag.attr("settings") || tag.attr("data-settings");
-                            toolbarSettings = data ? JSON.parse(data) : {};
-                            if (toolbarConfig === {} && toolbarSettings === {})
-                                toolbarSettings = settingsForEmptyToolbar;
-                        } catch (err) {
-                            console.error("error on settings JSON - probably invalid - make sure you also quote your properties like \"name\": ...", data, err);
-                            return;
-                        }
-
+                    try {
                         tag.replaceWith($2sxc(tag).manage.getToolbar(toolbarConfig, toolbarSettings));
                     } catch (err) {
                         // note: errors can happen a lot on custom toolbars, must be sure the others are still rendered
@@ -2244,18 +2224,12 @@ $(function () {
                     }
                 }
             }
-
         };
         return tb;
     };
-
-
-
-
 })();
 // the toolbar manager is an internal helper
 // taking care of toolbars, buttons etc.
-
 (function () {
     var tools = $2sxc._toolbarManager.buttonHelpers = {
 
@@ -2275,13 +2249,13 @@ $(function () {
         // just a command (detected by "action"): { entityId: 17, action: "edit" }
         // array of commands: [{entityId: 17, action: "edit"}, {contentType: "blog", action: "new"}]
         buildFullDefinition: function (unstructuredConfig, allActions, instanceConfig, moreSettings) {
-            if (unstructuredConfig.debug)
-                console.log("toolbar: detailed debug on; start build full Def");
             var fullConfig = tools.ensureDefinitionTree(unstructuredConfig, moreSettings);
+
+            // ToDo: don't use console.log in production
+            if (unstructuredConfig.debug) console.log("toolbar: detailed debug on; start build full Def");
             tools.expandButtonGroups(fullConfig, allActions);
             tools.removeButtonsWithUnmetConditions(fullConfig, instanceConfig);
-            if (fullConfig.debug)
-                console.log("after remove: ", fullConfig);
+            if (fullConfig.debug) console.log("after remove: ", fullConfig);
 
             tools.customize(fullConfig);
 
@@ -2301,8 +2275,7 @@ $(function () {
             if (!original) throw ("preparing toolbar, with nothing to work on: " + original);
 
             // ensure that if it's just actions or buttons, they are then processed as arrays with 1 entry
-            if (!Array.isArray(original) && (original.action || original.buttons))
-                original = [original];
+            if (!Array.isArray(original) && (original.action || original.buttons)) original = [original];
 
             // ensure that arrays of actions or buttons are re-mapped to the right structure node
             if (Array.isArray(original) && original.length) {
@@ -2313,17 +2286,17 @@ $(function () {
                 // array of items having an action, so these are buttons
                 else if (original[0].command || original[0].action)
                     original = { groups: [{ buttons: original }] };
-                else 
+                else
                     console.warn("toolbar tried to build toolbar but couldn't detect type of this:", original);
             }
 
             // build an object with this structure
             return {
-                name: original.name || "toolbar",   // name, no real use
-                debug: original.debug || false,     // show more debug info
-                groups: original.groups || [],      // the groups of buttons
-                defaults: original.defaults || {},  // the button defaults like icon, etc.
-                params: original.params || {},      // these are the default command parameters
+                name: original.name || "toolbar", // name, no real use
+                debug: original.debug || false, // show more debug info
+                groups: original.groups || [], // the groups of buttons
+                defaults: original.defaults || {}, // the button defaults like icon, etc.
+                params: original.params || {}, // these are the default command parameters
                 settings: $2sxc._lib.extend({}, tools.defaultSettings, original.settings, moreSettings)
             };
         },
@@ -2331,7 +2304,7 @@ $(function () {
 
         // this will traverse a groups-tree and expand each group
         // so if groups were just strings like "edit,new" or compact buttons, they will be expanded afterwards
-        expandButtonGroups: function(fullSet, actions){ //, itemSettings) {
+        expandButtonGroups: function (fullSet, actions) { //, itemSettings) {
             // by now we should have a structure, let's check/fix the buttons
             for (var g = 0; g < fullSet.groups.length; g++) {
                 // expand a verb-list like "edit,new" into objects like [{ action: "edit" }, {action: "new"}]
@@ -2444,8 +2417,6 @@ $(function () {
             }
         },
 
-
-
         btnProperties: [
             "classes",
             "icon",
@@ -2461,7 +2432,7 @@ $(function () {
         ],
 
         // enhance button-object with default icons, etc.
-        addDefaultBtnSettings: function(btn, group, groups, actions) {
+        addDefaultBtnSettings: function (btn, group, groups, actions) {
             for (var d = 0; d < tools.btnProperties.length; d++)
                 fallbackBtnSetting(btn, actions, tools.btnProperties[d]);
 
@@ -2474,7 +2445,7 @@ $(function () {
             }
         },
 
-        customize: function(toolbar) {
+        customize: function (toolbar) {
             //if (!toolbar.settings) return;
             //var set = toolbar.settings;
             //if (set.autoAddMore) {
@@ -2492,24 +2463,21 @@ $(function () {
 })();
 // the toolbar manager is an internal helper
 // taking care of toolbars, buttons etc.
-
 (function () {
-
     $2sxc._toolbarManager.standardButtons = function (canDesign, sharedParameters) {
         // create a deep-copy of the original object
         var btns = $.extend(true, {}, $2sxc._toolbarManager.toolbarTemplate);
         btns.params = sharedParameters && (Array.isArray(sharedParameters) && sharedParameters[0]) || sharedParameters;
-        if (!canDesign)
-            btns.groups.splice(2, 1); // remove this menu
+        if (!canDesign) btns.groups.splice(2, 1); // remove this menu
         return btns;
     };
-
 })();
 // the default / initial buttons in a standard toolbar
 
 (function () {
     $2sxc._toolbarManager.toolbarTemplate = {
         groups: [
+            // ToDo: remove dead code
             //{
             //    name: "test",
             //    buttons: [
@@ -2537,23 +2505,19 @@ $(function () {
             {
                 name: "default",
                 buttons: "edit,new,metadata,publish,layout"
-            },
-            {
+            }, {
                 name: "list",
                 buttons: "add,remove,moveup,movedown,instance-list,replace"
-            },
-            {
+            }, {
                 name: "data",
                 buttons: "delete"
-            },
-            {
+            }, {
                 name: "instance",
                 buttons: "template-develop,template-settings,contentitems,template-query,contenttype",
                 defaults: {
                     classes: "group-pro"
                 }
-            },
-            {
+            }, {
                 name: "app",
                 buttons: "app,app-settings,app-resources,zone",
                 defaults: {
@@ -2566,7 +2530,7 @@ $(function () {
         settings: {
             autoAddMore: "right",
             // these are defaults, don't set again
-            //hover: "right",
+            // hover: "right",
         }
     };
 })();

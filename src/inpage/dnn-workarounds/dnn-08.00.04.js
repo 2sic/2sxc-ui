@@ -9,7 +9,7 @@
 // documented here https://github.com/2sic/2sxc/issues/986
 
 /**
- * Fix bug in dnn 08.00.04 drag-drop functionality - it has an incorrect regex
+ * Fix drag-drop functionality in dnn 08.00.04 - it has an incorrect regex
  */
 (function () {
     var fn = $.fn.attr;

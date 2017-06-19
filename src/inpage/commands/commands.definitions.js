@@ -132,6 +132,7 @@
                         .changeOrder(settings.sortOrder, Math.max(settings.sortOrder - 1, 0));
                 }
             }),
+
             'movedown': makeDef("movedown", "MoveDown", "move-down", false, {
                 showCondition: function (settings, modConfig) {
                     return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1;
@@ -150,15 +151,14 @@
                     return settings.isPublished === false;
                 },
                 code: function (settings, event, sxc) {
-                    if (settings.isPublished)
-                        return alert($2sxc.translate("Toolbar.AlreadyPublished"));
+                    var part, index;
+                    if (settings.isPublished) return alert($2sxc.translate("Toolbar.AlreadyPublished"));
 
                     // if we have an entity-id, publish based on that
-                    if (settings.entityId)
-                        return sxc.manage.contentBlock.publishId(settings.entityId);
+                    if (settings.entityId) return sxc.manage.contentBlock.publishId(settings.entityId);
 
-                    var part = settings.sortOrder === -1 ? "listcontent" : "content";
-                    var index = settings.sortOrder === -1 ? 0 : settings.sortOrder;
+                    part = settings.sortOrder === -1 ? 'listcontent' : 'content';
+                    index = settings.sortOrder === -1 ? 0 : settings.sortOrder;
                     return sxc.manage.contentBlock.publish(part, index);
                 }
             }),
@@ -167,10 +167,7 @@
                 showCondition: function (settings) { return settings.useModuleList; }
             }),
 
-
-
             //#region app-actions: app-settings, app-resources
-
             'app-settings': makeDef("app-settings", "AppSettings", "sliders", true, {
                 dialog: "edit",
                 disabled: editContext.appSettingsId === null,
@@ -203,23 +200,22 @@
             //#endregion
 
             //#region app & zone
-
             'app': makeDef("app", "App", "settings", true, {
                 showCondition: enableTools
             }),
 
             'zone': makeDef("zone", "Zone", "manage", true, {
                 showCondition: enableTools
-            })
+            }),
             //#endregion
-
         };
 
         // quick helper so we can better debug the creation of definitions
-        function addDef(def) { act[def.name] = def; }
+        function addDef(def) {
+            act[def.name] = def;
+        }
 
         //#region template commands: contenttype, contentitems, template-query, template-develop, template-settings
-
         addDef(makeDef("contenttype", "ContentType", "fields", true, {
             showCondition: enableTools
         }));
@@ -248,7 +244,6 @@
             }
         }));
 
-
         addDef(makeDef("template-develop", "Develop", "code", true, {
             newWindow: true,
             dialog: "develop",
@@ -268,11 +263,12 @@
                 return enableTools && !isContent;
             },
             dynamicClasses: function (settings) {
-                return editContext.queryId ? "" : "empty"; // if it doesn't have a query, make it less strong
+                return editContext.queryId ? '' : 'empty'; // if it doesn't have a query, make it less strong
             }
-            //configureCommand: function (cmd) {
+            // ToDo: remove dead code
+            // configureCommand: function (cmd) {
             //    cmd.params.pipelineId = editContext.queryId;
-            //}
+            // }
         }));
 
         addDef(makeDef("template-settings", "TemplateSettings", "sliders", true, {
@@ -288,13 +284,14 @@
         //#region custom code buttons
         addDef(makeDef("custom", "Custom", "bomb", true, {
             code: function (settings, event, sxc) {
+                var fn;
                 console.log("custom action with code - BETA feature, may change");
                 if (!settings.customCode) {
                     console.warn("custom code action, but no onclick found to run", settings);
                     return;
                 }
                 try {
-                    var fn = new Function("settings", "event", "sxc", settings.customCode); // jshint ignore:line
+                    fn = new Function("settings", "event", "sxc", settings.customCode); // jshint ignore:line
                     fn(settings, event, sxc);
                 } catch (err) {
                     console.error("error in custom button-code: ", settings);
@@ -327,5 +324,4 @@
         //#endregion
         return act;
     };
-
 })();

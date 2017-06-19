@@ -9,7 +9,7 @@ $(function () {
 
     initModules(true);
     document.body.addEventListener('DOMSubtreeModified', initModules, false);
-
+    
     function initModules(initial) {
         $("div[data-edit-context]").each(function () {
             processToolbar(this, initial);

@@ -3,6 +3,7 @@
 (function () {
     $2sxc._toolbarManager.toolbarTemplate = {
         groups: [
+            // ToDo: remove dead code
             //{
             //    name: "test",
             //    buttons: [
@@ -30,23 +31,19 @@
             {
                 name: "default",
                 buttons: "edit,new,metadata,publish,layout"
-            },
-            {
+            }, {
                 name: "list",
                 buttons: "add,remove,moveup,movedown,instance-list,replace"
-            },
-            {
+            }, {
                 name: "data",
                 buttons: "delete"
-            },
-            {
+            }, {
                 name: "instance",
                 buttons: "template-develop,template-settings,contentitems,template-query,contenttype",
                 defaults: {
                     classes: "group-pro"
                 }
-            },
-            {
+            }, {
                 name: "app",
                 buttons: "app,app-settings,app-resources,zone",
                 defaults: {
@@ -59,7 +56,7 @@
         settings: {
             autoAddMore: "right",
             // these are defaults, don't set again
-            //hover: "right",
+            // hover: "right",
         }
     };
 })();
