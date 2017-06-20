@@ -15,7 +15,7 @@ $(function () {
             processToolbar(this, initial);
         });
     }
-
+    
     function processToolbar(module, initial) {
         var ctl;
         

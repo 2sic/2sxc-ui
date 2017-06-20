@@ -13,10 +13,10 @@
     <div fxFlex>User</div>
     <div fxFlex="10"></div>
   </div>
-  <div [ngClass]="{ selected: selected === version }" class="record" *ngFor="let version of versions">
+  <div [@detailAnim]="focused === version" [ngClass]="{ selected: selected === version }" class="record" *ngFor="let version of versions">
     <div class="row" fxLayout="row">
       <div fxFlex="10">
-        <md-checkbox [hidden]="selected && selected !== version" (change)="selectOrDeselect($event, version)"></md-checkbox>
+        <md-checkbox [ngModel]="selected === version" (change)="selectOrDeselect($event, version)"></md-checkbox>
       </div>
       <div fxFlex>{{version.version}}</div>
       <div fxFlex>{{version.timestamp}}</div>
@@ -30,7 +30,7 @@
         </a>
       </div>
     </div>
-    <div class="detail" *ngIf="focused === version">
+    <div class="detail">
       <div fxLayout="row" *ngFor="let data of version.data">
         <div fxFlex="10"></div>
         <div fxFlex="14" class="label">{{data.label}}:</div>
@@ -39,8 +39,8 @@
     </div>
   </div>
 </div>
-<footer *ngIf="selected" fxLayout="row">
+<footer fxLayout="row">
   <div fxFlex></div>
-  <button md-raised-button>restore as draft</button>
-  <button md-raised-button>restore live</button>
+  <button md-raised-button [disabled]="!selected" (click)="restoreDraft(selected)">restore as draft</button>
+  <button md-raised-button [disabled]="!selected" (click)="restoreLive(selected)">restore live</button>
 </footer>

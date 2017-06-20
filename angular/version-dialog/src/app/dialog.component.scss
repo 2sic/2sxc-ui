@@ -1,10 +1,10 @@
 :host {
     width: 1000px;
     max-width: 100%;
-    min-height: 420px;
     display: block;
     md-toolbar {
-        background: #2196F3;
+        background: transparent;
+        color: rgba(0, 0, 0, 1);
         .spacer {
             flex: 1 1 auto;
         }
@@ -21,6 +21,8 @@
             border-bottom: 1px solid rgba(0, 0, 0, .1);
         }
         .record {
+            background: #fff;
+            overflow: hidden;
             border-bottom: 1px solid rgba(0, 0, 0, .1);
             .row {
                 line-height: 48px;
@@ -36,6 +38,7 @@
             .detail {
                 padding: 16px 22px;
                 line-height: 28px;
+                box-sizing: border-box;
             }
             .label {
                 color: rgba(0, 0, 0, .6);

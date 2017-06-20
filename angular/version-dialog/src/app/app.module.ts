@@ -7,19 +7,17 @@ import { MaterialModule, MdDialogModule, MdToolbarModule } from "@angular/materi
 import { FlexLayoutModule } from "@angular/flex-layout";
 
 import { AppComponent } from './app.component';
-import { DialogComponent, ConfirmRestoreDialog, ConfirmRestoreDraftDialog } from './dialog.component';
+import { DialogComponent, ConfirmRestoreDialog } from './dialog.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     DialogComponent,
     ConfirmRestoreDialog,
-    ConfirmRestoreDraftDialog
   ],
   entryComponents: [
     DialogComponent,
     ConfirmRestoreDialog,
-    ConfirmRestoreDraftDialog
   ],
   imports: [
     BrowserModule,
@@ -29,7 +27,7 @@ import { DialogComponent, ConfirmRestoreDialog, ConfirmRestoreDraftDialog } from
     MdToolbarModule,
     BrowserAnimationsModule,
     MaterialModule,
-    FlexLayoutModule
+    FlexLayoutModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

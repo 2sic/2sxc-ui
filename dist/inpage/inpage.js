@@ -95,6 +95,14 @@
             // show the basic dashboard which allows view-changing
             "dash-view": makeDef("dash-view", "Dashboard", "", true, { inlineWindow: true }),
 
+            // show the version dialog
+            "version-dialog": makeDef("version-dialog", "", "", true, {
+                inlineWindow: true,
+                code: function (settings, event, sxc) {
+                    sxc.manage._commands._openNgDialog($2sxc._lib.extend({}, settings, { modernAngular: true }), event);
+                }
+            }),
+
             // open the import dialog
             "app-import": makeDef("app-import", "Dashboard", "", true, {}),
 
@@ -359,8 +367,6 @@
             }
         }));
         //#endregion
-
-        //#region UI actions: layout, more
         addDef(makeDef("layout", "ChangeLayout", "glasses", true, {
             code: function (settings, event, sxc) {
                 sxc.manage.contentBlock.dialogToggle();
@@ -381,7 +387,12 @@
             }
         }));
 
-        //#endregion
+        addDef(makeDef('version', 'version', 'clock', true, {
+            code: function (settings, event, sxc) {
+                sxc.manage.contentBlock.showVersionDialog();
+            }
+        }));
+
         return act;
     };
 })();
@@ -398,10 +409,10 @@
             // assemble an object which will store the configuration and execute it
             create: function (specialSettings) {
                 var settings = $2sxc._lib.extend({}, cmc.manage._toolbarConfig, specialSettings); // merge button with general toolbar-settings
-                var ngDialogUrl = cmc.manage._editContext.Environment.SxcRootUrl + "desktopmodules/tosic_sexycontent/dist/dnn/ui.html?sxcver="
+                var ngDialogUrl = cmc.manage._editContext.Environment.SxcRootUrl + "desktopmodules/tosic_sexycontent/dist/" + (specialSettings.modernAngular ? 'ng/version-dialog/index.' : 'dnn/ui.') + "html?sxcver="
                     + cmc.manage._editContext.Environment.SxcVersion;
                 var isDebug = $2sxc.urlParams.get("debug") ? "&debug=true" : "";
-                
+
                 var cmd = {
                     settings: settings,
                     items: settings.items || [], // use predefined or create empty array
@@ -445,10 +456,11 @@
                         if (!cmd.settings.items) cmd.settings.items = [];
                         //#region steps for all actions: prefill, serialize, open-dialog
                         // when doing new, there may be a prefill in the link to initialize the new item
-                        if (cmd.settings.prefill)
-                            for (var i = 0; i < cmd.items.length; i++)
+                        if (cmd.settings.prefill) {
+                            for (var i = 0; i < cmd.items.length; i++) {
                                 cmd.items[i].Prefill = cmd.settings.prefill;
-
+                            }
+                        }
                         cmd.params.items = JSON.stringify(cmd.items); // Serialize/json-ify the complex items-list
 
                         return ngDialogUrl
@@ -460,7 +472,7 @@
                 };
                 return cmd;
             },
-            
+
             // create a dialog link
             _linkToNgDialog: function (specialSettings) {
                 var cmd = cmc.manage._commands.create(specialSettings);
@@ -480,9 +492,11 @@
                     cmc.manage.contentBlock.reloadAndReInitialize();
                     closeCallback();
                 }, link = cmc._linkToNgDialog(settings);
-
                 if (settings.newWindow || (event && event.shiftKey)) return window.open(link);
-                if (settings.inlineWindow) return $2sxc._dialog(sxc, targetTag, link, callback);
+                if (settings.inlineWindow) {
+                    if (settings.modernAngular) return $2sxc._modernDialog.create(sxc, link, true);
+                    return $2sxc._dialog(sxc, targetTag, link, callback);
+                }
                 return $2sxc.totalPopup.open(link, callback);
             },
 
@@ -492,7 +506,7 @@
                     // ToDo: review this code
                     // pre-save event because afterwards we have a promise, so the event-object changes; funky syntax is because of browser differences
                     origEvent = event || window.event;
-                
+
                 // check if name is name (string) or object (settings)
                 if (!event && settings && typeof settings.altKey !== 'undefined') { // no event param, but settings contains the event-object
                     event = settings;   // move it to the correct variable
@@ -734,6 +748,10 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
                     manage._editContext.ContentBlock.ShowTemplatePicker = isVisible;
                 });
         },
+        
+        showVersionDialog: function() {
+            manage.run("version-dialog");
+        },
 
         prepareToAddContent: function () {
             return cb.persistTemplate(true, false);
@@ -911,7 +929,7 @@ var $2sxcActionMenuMapper = function (moduleId) {
         activeWrapper,
         container = $('<div class="inpage-frame-wrapper"><div class="inpage-frame"></div></div>'),
         inpageFrame = container.find('.inpage-frame');
-
+    
     $('body').append(container);
 
     setInterval(function () {
@@ -1063,7 +1081,7 @@ if (typeof Object.assign != 'function') {
     $2sxc._manage.attach = function (sxc) {
         var contentBlockTag = getContentBlockTag(sxc);
         var editContext = getContextInfo(contentBlockTag);
-
+        
         // assemble all parameters needed for the dialogs if we open anything
         var ngDialogParams = {
             zoneId: editContext.ContentGroup.ZoneId,
@@ -1206,6 +1224,45 @@ if (typeof Object.assign != 'function') {
         return JSON.parse(attr || "");
     }
     //#endregion
+})();
+(function () {
+    $2sxc._modernDialog = Dialog();
+
+    function Dialog() {
+        var frame;
+        return {
+            create: create,
+            remove: remove,
+        };
+
+        /**
+         * Creates a new dialog.
+         * @param {*object} sxc sxc instance
+         * @param {*string} url the frame src
+         * @param {*boolean} fullscreen fullscreen flag
+         */
+        function create(sxc, url, fullscreen) {
+            if (frame) remove();
+            frame = document.createElement('iframe');
+            if (fullscreen) {
+                frame.style.width = frame.style.height = '100%';
+                frame.style.position = 'fixed';
+                frame.style.top = frame.style.left = 0;
+            }
+            frame.setAttribute('src', url);
+            document.body.appendChild(frame);
+            window.addEventListener('message', function (ev) {
+                if (ev.data === 'closeFrame') remove();
+            });
+        }
+
+        /**
+         * Remove the dialog.
+         */
+        function remove() {
+            frame.remove();
+        }
+    }
 })();
 $(function () {
     "use strict";
@@ -2017,7 +2074,7 @@ $(function () {
             processToolbar(this, initial);
         });
     }
-
+    
     function processToolbar(module, initial) {
         var ctl;
         
@@ -2504,7 +2561,7 @@ $(function () {
             //},
             {
                 name: "default",
-                buttons: "edit,new,metadata,publish,layout"
+                buttons: "edit,new,metadata,publish,layout,version"
             }, {
                 name: "list",
                 buttons: "add,remove,moveup,movedown,instance-list,replace"

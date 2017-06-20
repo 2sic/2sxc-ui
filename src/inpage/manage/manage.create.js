@@ -12,7 +12,7 @@
     $2sxc._manage.attach = function (sxc) {
         var contentBlockTag = getContentBlockTag(sxc);
         var editContext = getContextInfo(contentBlockTag);
-
+        
         // assemble all parameters needed for the dialogs if we open anything
         var ngDialogParams = {
             zoneId: editContext.ContentGroup.ZoneId,

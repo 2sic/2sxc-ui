@@ -14,7 +14,7 @@
         activeWrapper,
         container = $('<div class="inpage-frame-wrapper"><div class="inpage-frame"></div></div>'),
         inpageFrame = container.find('.inpage-frame');
-
+    
     $('body').append(container);
 
     setInterval(function () {

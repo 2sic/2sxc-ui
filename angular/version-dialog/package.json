@@ -10,7 +10,8 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "prod": "ng build --prod --output-hashing=none --sourcemaps=true",
-    "watch": "ng build --watch --output-hashing=none"
+    "watch": " ng build --watch --output-hashing=none",
+    "develop": "concurrently \"npm run watch\" \"gulp B-watch-publish-to-2sxc\""
   },
   "private": true,
   "dependencies": {

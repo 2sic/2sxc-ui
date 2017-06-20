@@ -70,7 +70,7 @@ function importDependencies() {
         .pipe(gulp.dest(config.rootDist + "edit/extensions/field-string-wysiwyg-tinymce/"));
 
     // icon-fonts and font-definitions
-    var src = bwr + "2sxc-icons/";
+    var src = "../2sxc-icons/";
     gulp.src([src + "**/*.woff", src + "**/*.ttf", src + "**/*.eot"])
         .pipe($.rename({ dirname: "" }))
         .pipe(gulp.dest(config.rootDist + "lib/fonts"));

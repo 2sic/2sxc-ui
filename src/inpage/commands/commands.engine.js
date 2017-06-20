@@ -10,10 +10,10 @@
             // assemble an object which will store the configuration and execute it
             create: function (specialSettings) {
                 var settings = $2sxc._lib.extend({}, cmc.manage._toolbarConfig, specialSettings); // merge button with general toolbar-settings
-                var ngDialogUrl = cmc.manage._editContext.Environment.SxcRootUrl + "desktopmodules/tosic_sexycontent/dist/dnn/ui.html?sxcver="
+                var ngDialogUrl = cmc.manage._editContext.Environment.SxcRootUrl + "desktopmodules/tosic_sexycontent/dist/" + (specialSettings.modernAngular ? 'ng/version-dialog/index.' : 'dnn/ui.') + "html?sxcver="
                     + cmc.manage._editContext.Environment.SxcVersion;
                 var isDebug = $2sxc.urlParams.get("debug") ? "&debug=true" : "";
-                
+
                 var cmd = {
                     settings: settings,
                     items: settings.items || [], // use predefined or create empty array
@@ -57,10 +57,11 @@
                         if (!cmd.settings.items) cmd.settings.items = [];
                         //#region steps for all actions: prefill, serialize, open-dialog
                         // when doing new, there may be a prefill in the link to initialize the new item
-                        if (cmd.settings.prefill)
-                            for (var i = 0; i < cmd.items.length; i++)
+                        if (cmd.settings.prefill) {
+                            for (var i = 0; i < cmd.items.length; i++) {
                                 cmd.items[i].Prefill = cmd.settings.prefill;
-
+                            }
+                        }
                         cmd.params.items = JSON.stringify(cmd.items); // Serialize/json-ify the complex items-list
 
                         return ngDialogUrl
@@ -72,7 +73,7 @@
                 };
                 return cmd;
             },
-            
+
             // create a dialog link
             _linkToNgDialog: function (specialSettings) {
                 var cmd = cmc.manage._commands.create(specialSettings);
@@ -92,9 +93,11 @@
                     cmc.manage.contentBlock.reloadAndReInitialize();
                     closeCallback();
                 }, link = cmc._linkToNgDialog(settings);
-
                 if (settings.newWindow || (event && event.shiftKey)) return window.open(link);
-                if (settings.inlineWindow) return $2sxc._dialog(sxc, targetTag, link, callback);
+                if (settings.inlineWindow) {
+                    if (settings.modernAngular) return $2sxc._modernDialog.create(sxc, link, true);
+                    return $2sxc._dialog(sxc, targetTag, link, callback);
+                }
                 return $2sxc.totalPopup.open(link, callback);
             },
 
@@ -104,7 +107,7 @@
                     // ToDo: review this code
                     // pre-save event because afterwards we have a promise, so the event-object changes; funky syntax is because of browser differences
                     origEvent = event || window.event;
-                
+
                 // check if name is name (string) or object (settings)
                 if (!event && settings && typeof settings.altKey !== 'undefined') { // no event param, but settings contains the event-object
                     event = settings;   // move it to the correct variable

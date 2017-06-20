@@ -35,6 +35,14 @@
             // show the basic dashboard which allows view-changing
             "dash-view": makeDef("dash-view", "Dashboard", "", true, { inlineWindow: true }),
 
+            // show the version dialog
+            "version-dialog": makeDef("version-dialog", "", "", true, {
+                inlineWindow: true,
+                code: function (settings, event, sxc) {
+                    sxc.manage._commands._openNgDialog($2sxc._lib.extend({}, settings, { modernAngular: true }), event);
+                }
+            }),
+
             // open the import dialog
             "app-import": makeDef("app-import", "Dashboard", "", true, {}),
 
@@ -299,8 +307,6 @@
             }
         }));
         //#endregion
-
-        //#region UI actions: layout, more
         addDef(makeDef("layout", "ChangeLayout", "glasses", true, {
             code: function (settings, event, sxc) {
                 sxc.manage.contentBlock.dialogToggle();
@@ -321,7 +327,12 @@
             }
         }));
 
-        //#endregion
+        addDef(makeDef('version', 'version', 'clock', true, {
+            code: function (settings, event, sxc) {
+                sxc.manage.contentBlock.showVersionDialog();
+            }
+        }));
+
         return act;
     };
 })();
