@@ -1,0 +1,51 @@
+:host {
+    width: 1000px;
+    max-width: 100%;
+    min-height: 420px;
+    display: block;
+    md-toolbar {
+        background: #2196F3;
+        .spacer {
+            flex: 1 1 auto;
+        }
+        .title {
+            font-weight: 300;
+        }
+    }
+    .table {
+        .header {
+            line-height: 48px;
+            font-weight: 400;
+            padding: 0 22px;
+            color: rgba(0, 0, 0, .6);
+            border-bottom: 1px solid rgba(0, 0, 0, .1);
+        }
+        .record {
+            border-bottom: 1px solid rgba(0, 0, 0, .1);
+            .row {
+                line-height: 48px;
+                font-weight: 400;
+                padding: 0 22px;
+                .right {
+                    text-align: right;
+                }
+            }
+            &.selected {
+                background: rgba(0, 0, 0, .04);
+            }
+            .detail {
+                padding: 16px 22px;
+                line-height: 28px;
+            }
+            .label {
+                color: rgba(0, 0, 0, .6);
+            }
+        }
+    }
+    footer {
+        padding: 16px 22px;
+        button {
+            margin-left: 8px;
+        }
+    }
+}
