@@ -9,7 +9,7 @@ import { trigger, style, transition, animate, state } from "@angular/animations"
   animations: [
     trigger('detailAnim', [
       state('true', style({ height: '*' })),
-      state('false', style({ height: '49px' })),
+      state('false', style({ height: '48px' })),
       transition('1 => 0', animate('.2s ease')),
       transition('0 => 1', animate('.2s ease'))
     ])

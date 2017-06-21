@@ -93,7 +93,6 @@ function importDependencies() {
 
     gulp.src(bwr + "shake.js/shake.js")
         .pipe(gulp.dest("src/inpage/toolbar/libs/"));
-    //});
 }
 
 //#region basic functions I'll need a lot
