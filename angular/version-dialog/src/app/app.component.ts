@@ -1,6 +1,6 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { MdDialog } from '@angular/material';
-import { DialogComponent } from "app/dialog.component";
+import { DialogComponent } from "app/version-dialog/dialog.component";
 
 declare const window;
 

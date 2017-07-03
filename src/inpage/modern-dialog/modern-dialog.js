@@ -17,6 +17,7 @@
         function create(sxc, url, fullscreen) {
             if (frame) remove();
             frame = document.createElement('iframe');
+            frame.style.zIndex = 999;
             if (fullscreen) {
                 frame.style.width = frame.style.height = '100%';
                 frame.style.position = 'fixed';

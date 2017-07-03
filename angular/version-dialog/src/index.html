@@ -13,11 +13,20 @@
 
 <body>
   <app-root>Loading...</app-root>
-  <script src="/desktopmodules/tosic_sexycontent/dist/ng/version-dialog/inline.bundle.js"></script>
-  <script src="/desktopmodules/tosic_sexycontent/dist/ng/version-dialog/polyfills.bundle.js"></script>
-  <script src="/desktopmodules/tosic_sexycontent/dist/ng/version-dialog/styles.bundle.js"></script>
-  <script src="/desktopmodules/tosic_sexycontent/dist/ng/version-dialog/vendor.bundle.js"></script>
-  <script src="/desktopmodules/tosic_sexycontent/dist/ng/version-dialog/main.bundle.js"></script>
+  <script>
+    (function () {
+      var
+        jsVersionCacheId = window.location.search,
+        tag = document.createElement('script');
+      tag.src = window.location.pathname.replace('index.html', '') + '../../../js/2sxc.api.min.js' + jsVersionCacheId;
+      document.body.appendChild(tag);
+    })();
+  </script>
+  <script deferred src="/desktopmodules/tosic_sexycontent/dist/ng/version-dialog/inline.bundle.js"></script>
+  <script deferred src="/desktopmodules/tosic_sexycontent/dist/ng/version-dialog/polyfills.bundle.js"></script>
+  <script deferred src="/desktopmodules/tosic_sexycontent/dist/ng/version-dialog/styles.bundle.js"></script>
+  <script deferred src="/desktopmodules/tosic_sexycontent/dist/ng/version-dialog/vendor.bundle.js"></script>
+  <script deferred src="/desktopmodules/tosic_sexycontent/dist/ng/version-dialog/main.bundle.js"></script>
   <!-- </body> -->
 </body>
 

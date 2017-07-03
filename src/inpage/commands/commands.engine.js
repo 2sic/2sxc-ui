@@ -10,7 +10,7 @@
             // assemble an object which will store the configuration and execute it
             create: function (specialSettings) {
                 var settings = $2sxc._lib.extend({}, cmc.manage._toolbarConfig, specialSettings); // merge button with general toolbar-settings
-                var ngDialogUrl = cmc.manage._editContext.Environment.SxcRootUrl + "desktopmodules/tosic_sexycontent/dist/" + (specialSettings.modernAngular ? 'ng/version-dialog/index.' : 'dnn/ui.') + "html?sxcver="
+                var ngDialogUrl = cmc.manage._editContext.Environment.SxcRootUrl + "desktopmodules/tosic_sexycontent/dist/dnn/ui.html?sxcver="
                     + cmc.manage._editContext.Environment.SxcVersion;
                 var isDebug = $2sxc.urlParams.get("debug") ? "&debug=true" : "";
 
@@ -25,7 +25,7 @@
                         var itm = {}, ct = cmd.settings.contentType || cmd.settings.attributeSetName; // two ways to name the content-type-name this, v 7.2+ and older
                         if (cmd.settings.entityId) itm.EntityId = cmd.settings.entityId;
                         if (ct) itm.ContentTypeName = ct;
-
+                        
                         // only add if there was stuff to add
                         if (itm.EntityId || itm.ContentTypeName) cmd.items.push(itm);
                     },
@@ -37,7 +37,7 @@
                             Title: $2sxc.translate(sectionLanguageKey)
                         });
                     },
-
+                    
                     // this will tell the command to edit a item from the sorted list in the group, optionally together with the presentation item
                     addContentGroupItemSetsToEditList: function (withPresentation) {
                         var isContentAndNotHeader = (cmd.settings.sortOrder !== -1),
@@ -52,7 +52,7 @@
                         if (withPresentation) cmd.addContentGroupItem(groupId, index, pTerm.toLowerCase(), isAdd, cmd.settings.cbIsEntity, cmd.settings.cbId, "EditFormTitle." + pTerm);
                     },
 
-                    generateLink: function () {
+                    generateLink: function (dialogUrl) {
                         // if there is no items-array, create an empty one (it's required later on)
                         if (!cmd.settings.items) cmd.settings.items = [];
                         //#region steps for all actions: prefill, serialize, open-dialog
@@ -64,7 +64,7 @@
                         }
                         cmd.params.items = JSON.stringify(cmd.items); // Serialize/json-ify the complex items-list
 
-                        return ngDialogUrl
+                        return (dialogUrl || ngDialogUrl)
                             + "#" + $.param(cmc.manage._dialogParameters)
                             + "&" + $.param(cmd.params)
                             + isDebug;
@@ -75,7 +75,7 @@
             },
 
             // create a dialog link
-            _linkToNgDialog: function (specialSettings) {
+            _linkToNgDialog: function (specialSettings, url) {
                 var cmd = cmc.manage._commands.create(specialSettings);
 
                 if (cmd.settings.useModuleList) cmd.addContentGroupItemSetsToEditList(true);
@@ -84,9 +84,16 @@
                 // if the command has own configuration stuff, do that now
                 if (cmd.settings.configureCommand) cmd.settings.configureCommand(cmd);
 
-                return cmd.generateLink();
+                return cmd.generateLink(url);
             },
 
+            _openModernDialog: function (settings) {
+                var modernDialogUrl = cmc.manage._editContext.Environment.SxcRootUrl + "desktopmodules/tosic_sexycontent/dist/ng/version-dialog/index.html?sxcver="
+                    + cmc.manage._editContext.Environment.SxcVersion,
+                    link = cmc._linkToNgDialog(settings, modernDialogUrl);
+                return $2sxc._modernDialog.create(sxc, link, true);
+            },
+            
             // open a new dialog of the angular-ui
             _openNgDialog: function (settings, event, closeCallback) {
                 var callback = function () {
@@ -95,7 +102,7 @@
                 }, link = cmc._linkToNgDialog(settings);
                 if (settings.newWindow || (event && event.shiftKey)) return window.open(link);
                 if (settings.inlineWindow) {
-                    if (settings.modernAngular) return $2sxc._modernDialog.create(sxc, link, true);
+                    console.log(settings);
                     return $2sxc._dialog(sxc, targetTag, link, callback);
                 }
                 return $2sxc.totalPopup.open(link, callback);
@@ -107,7 +114,7 @@
                     // ToDo: review this code
                     // pre-save event because afterwards we have a promise, so the event-object changes; funky syntax is because of browser differences
                     origEvent = event || window.event;
-
+                
                 // check if name is name (string) or object (settings)
                 if (!event && settings && typeof settings.altKey !== 'undefined') { // no event param, but settings contains the event-object
                     event = settings;   // move it to the correct variable
@@ -117,7 +124,7 @@
                 settings = (typeof nameOrSettings === "string")
                     ? $2sxc._lib.extend(settings || {}, { "action": nameOrSettings }) // place the name as an action-name into a command-object
                     : nameOrSettings;
-
+                
                 conf = cmc.manage._toolbar.actions[settings.action];
                 settings = $2sxc._lib.extend({}, conf, settings); // merge conf & settings, but settings has higher priority
 

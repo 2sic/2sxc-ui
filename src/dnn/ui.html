@@ -19,8 +19,7 @@
         function createFakeSf(apiUrl) {
             if ($2sxc.urlParams.require("mid") === "")
                 alert("ModuleId (mid) missing - cannot continue");
-            if (window.$ === undefined)
-                window.$ = {};
+            if (window.$ === undefined) window.$ = {};
             window.$.ServicesFramework = function (id) {
                 return {
                     name: "This is a fake DNN ServicesFramework",

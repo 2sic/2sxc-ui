@@ -11,8 +11,7 @@ $(function () {
         },
         mod: {
             "delete": function (clip) {
-                if (!confirm("are you sure?"))
-                    return;
+                if (!confirm("are you sure?")) return;
                 var modId = $quickE.modManage.getModuleId(clip.item.className);
                 $quickE.modManage.delete(modId);
             },

@@ -1,6 +1,6 @@
 webpackJsonp([1,4],{
 
-/***/ 113:
+/***/ 117:
 /***/ (function(module, exports) {
 
 function webpackEmptyContext(req) {
@@ -9,20 +9,20 @@ function webpackEmptyContext(req) {
 webpackEmptyContext.keys = function() { return []; };
 webpackEmptyContext.resolve = webpackEmptyContext;
 module.exports = webpackEmptyContext;
-webpackEmptyContext.id = 113;
+webpackEmptyContext.id = 117;
 
 
 /***/ }),
 
-/***/ 114:
+/***/ 118:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser_dynamic__ = __webpack_require__(135);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__app_app_module__ = __webpack_require__(138);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__environments_environment__ = __webpack_require__(139);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser_dynamic__ = __webpack_require__(139);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__app_app_module__ = __webpack_require__(142);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__environments_environment__ = __webpack_require__(144);
 
 
 
@@ -35,13 +35,13 @@ __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__angular_platform_browser_dyna
 
 /***/ }),
 
-/***/ 137:
+/***/ 141:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_material__ = __webpack_require__(51);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_app_dialog_component__ = __webpack_require__(86);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_material__ = __webpack_require__(37);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_app_version_dialog_dialog_component__ = __webpack_require__(87);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppComponent; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -58,16 +58,16 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var AppComponent = (function () {
     function AppComponent(dialog) {
         this.dialog = dialog;
-        this.dialog.open(__WEBPACK_IMPORTED_MODULE_2_app_dialog_component__["a" /* DialogComponent */]).afterClosed()
+        this.dialog.open(__WEBPACK_IMPORTED_MODULE_2_app_version_dialog_dialog_component__["a" /* DialogComponent */]).afterClosed()
             .subscribe(function () { return window.parent.postMessage('closeFrame', window.origin); });
     }
     return AppComponent;
 }());
 AppComponent = __decorate([
-    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_4" /* Component */])({
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["c" /* Component */])({
         selector: 'app-root',
         template: '',
-        styles: [__webpack_require__(194)]
+        styles: [__webpack_require__(199)]
     }),
     __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_material__["d" /* MdDialog */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_material__["d" /* MdDialog */]) === "function" && _a || Object])
 ], AppComponent);
@@ -77,19 +77,19 @@ var _a;
 
 /***/ }),
 
-/***/ 138:
+/***/ 142:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_animations__ = __webpack_require__(136);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_animations__ = __webpack_require__(140);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser__ = __webpack_require__(18);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_forms__ = __webpack_require__(84);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__angular_http__ = __webpack_require__(85);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__angular_material__ = __webpack_require__(51);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__angular_flex_layout__ = __webpack_require__(132);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__app_component__ = __webpack_require__(137);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__dialog_component__ = __webpack_require__(86);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_forms__ = __webpack_require__(86);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__angular_http__ = __webpack_require__(52);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__angular_material__ = __webpack_require__(37);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__angular_flex_layout__ = __webpack_require__(136);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__app_component__ = __webpack_require__(141);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_app_version_dialog_version_dialog_module__ = __webpack_require__(143);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppModule; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -115,12 +115,6 @@ AppModule = __decorate([
     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__angular_core__["b" /* NgModule */])({
         declarations: [
             __WEBPACK_IMPORTED_MODULE_7__app_component__["a" /* AppComponent */],
-            __WEBPACK_IMPORTED_MODULE_8__dialog_component__["a" /* DialogComponent */],
-            __WEBPACK_IMPORTED_MODULE_8__dialog_component__["b" /* ConfirmRestoreDialog */],
-        ],
-        entryComponents: [
-            __WEBPACK_IMPORTED_MODULE_8__dialog_component__["a" /* DialogComponent */],
-            __WEBPACK_IMPORTED_MODULE_8__dialog_component__["b" /* ConfirmRestoreDialog */],
         ],
         imports: [
             __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser__["a" /* BrowserModule */],
@@ -131,6 +125,7 @@ AppModule = __decorate([
             __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_animations__["a" /* BrowserAnimationsModule */],
             __WEBPACK_IMPORTED_MODULE_5__angular_material__["c" /* MaterialModule */],
             __WEBPACK_IMPORTED_MODULE_6__angular_flex_layout__["a" /* FlexLayoutModule */],
+            __WEBPACK_IMPORTED_MODULE_8_app_version_dialog_version_dialog_module__["a" /* VersionDialogModule */]
         ],
         providers: [],
         bootstrap: [__WEBPACK_IMPORTED_MODULE_7__app_component__["a" /* AppComponent */]]
@@ -141,7 +136,60 @@ AppModule = __decorate([
 
 /***/ }),
 
-/***/ 139:
+/***/ 143:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_app_version_dialog_sxc_versions_service__ = __webpack_require__(88);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_app_version_dialog_dialog_component__ = __webpack_require__(87);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__angular_material__ = __webpack_require__(37);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return VersionDialogModule; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+
+
+
+
+
+var VersionDialogModule = (function () {
+    function VersionDialogModule() {
+    }
+    return VersionDialogModule;
+}());
+VersionDialogModule = __decorate([
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["b" /* NgModule */])({
+        exports: [
+            __WEBPACK_IMPORTED_MODULE_3_app_version_dialog_dialog_component__["a" /* DialogComponent */]
+        ],
+        imports: [
+            __WEBPACK_IMPORTED_MODULE_1__angular_common__["a" /* CommonModule */],
+            __WEBPACK_IMPORTED_MODULE_4__angular_material__["c" /* MaterialModule */]
+        ],
+        providers: [
+            __WEBPACK_IMPORTED_MODULE_2_app_version_dialog_sxc_versions_service__["a" /* SxcVersionsService */]
+        ],
+        declarations: [
+            __WEBPACK_IMPORTED_MODULE_3_app_version_dialog_dialog_component__["a" /* DialogComponent */],
+            __WEBPACK_IMPORTED_MODULE_3_app_version_dialog_dialog_component__["b" /* ConfirmRestoreDialog */]
+        ],
+        entryComponents: [
+            __WEBPACK_IMPORTED_MODULE_3_app_version_dialog_dialog_component__["a" /* DialogComponent */],
+            __WEBPACK_IMPORTED_MODULE_3_app_version_dialog_dialog_component__["b" /* ConfirmRestoreDialog */],
+        ],
+    })
+], VersionDialogModule);
+
+//# sourceMappingURL=version-dialog.module.js.map
+
+/***/ }),
+
+/***/ 144:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -158,10 +206,10 @@ var environment = {
 
 /***/ }),
 
-/***/ 194:
+/***/ 199:
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(33)();
+exports = module.exports = __webpack_require__(34)();
 // imports
 
 
@@ -176,15 +224,15 @@ module.exports = module.exports.toString();
 
 /***/ }),
 
-/***/ 195:
+/***/ 200:
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(33)();
+exports = module.exports = __webpack_require__(34)();
 // imports
 
 
 // module
-exports.push([module.i, ":host {\n  width: 1000px;\n  max-width: 100%;\n  display: block; }\n  :host md-toolbar {\n    background: transparent;\n    color: black; }\n    :host md-toolbar .spacer {\n      -webkit-box-flex: 1;\n          -ms-flex: 1 1 auto;\n              flex: 1 1 auto; }\n    :host md-toolbar .title {\n      font-weight: 300; }\n  :host .table .header {\n    line-height: 48px;\n    font-weight: 400;\n    padding: 0 22px;\n    color: rgba(0, 0, 0, 0.6);\n    border-bottom: 1px solid rgba(0, 0, 0, 0.1); }\n  :host .table .record {\n    background: #fff;\n    overflow: hidden;\n    border-bottom: 1px solid rgba(0, 0, 0, 0.1); }\n    :host .table .record .row {\n      line-height: 48px;\n      font-weight: 400;\n      padding: 0 22px; }\n      :host .table .record .row .right {\n        text-align: right; }\n    :host .table .record.selected {\n      background: rgba(0, 0, 0, 0.04); }\n    :host .table .record .detail {\n      padding: 16px 22px;\n      line-height: 28px;\n      box-sizing: border-box; }\n    :host .table .record .label {\n      color: rgba(0, 0, 0, 0.6); }\n  :host footer {\n    padding: 16px 22px; }\n    :host footer button {\n      margin-left: 8px; }\n", ""]);
+exports.push([module.i, ":host {\n  width: 1000px;\n  max-width: 100%;\n  display: block;\n  background: #fafafa; }\n  :host md-toolbar {\n    background: transparent;\n    color: black; }\n    :host md-toolbar .spacer {\n      -webkit-box-flex: 1;\n          -ms-flex: 1 1 auto;\n              flex: 1 1 auto; }\n    :host md-toolbar .title {\n      font-weight: 300; }\n  :host .table {\n    padding: 8px; }\n    :host .table .header {\n      line-height: 48px;\n      font-weight: 400;\n      padding: 0 22px;\n      color: rgba(0, 0, 0, 0.6); }\n    :host .table .record md-expansion-panel {\n      transition: box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1), margin 280ms ease; }\n      :host .table .record md-expansion-panel.mat-expanded {\n        margin: 16px 0 !important; }\n      :host .table .record md-expansion-panel .detail {\n        padding: 8px 0;\n        line-height: 28px;\n        box-sizing: border-box; }\n        :host .table .record md-expansion-panel .detail .label {\n          color: rgba(0, 0, 0, 0.6); }\n      :host .table .record md-expansion-panel md-action-row button {\n        margin-left: 8px; }\n  :host footer {\n    padding: 16px 22px; }\n    :host footer button {\n      margin-left: 8px; }\n", ""]);
 
 // exports
 
@@ -194,28 +242,28 @@ module.exports = module.exports.toString();
 
 /***/ }),
 
-/***/ 196:
+/***/ 201:
 /***/ (function(module, exports) {
 
-module.exports = "<md-toolbar color=\"primary\">\n  <span class=\"title\">Versions of this item</span>\n  <span class=\"spacer\"></span>\n  <button md-dialog-close md-icon-button>\n    <md-icon class=\"example-icon\">close</md-icon>\n  </button>\n</md-toolbar>\n<div class=\"table\">\n  <div fxLayout=\"row\" class=\"header\">\n    <div fxFlex=\"42px\"></div>\n    <div fxFlex>Version</div>\n    <div fxFlex>Timestamp</div>\n    <div fxFlex>User</div>\n    <div fxFlex=\"42px\"></div>\n  </div>\n  <div [@detailAnim]=\"focused === version\" [ngClass]=\"{ selected: selected === version }\" class=\"record\" *ngFor=\"let version of versions\">\n    <div class=\"row\" fxLayout=\"row\">\n      <div fxFlex=\"42px\">\n        <md-checkbox [ngModel]=\"selected === version\" (change)=\"selectOrDeselect($event, version)\"></md-checkbox>\n      </div>\n      <div fxFlex>{{version.version}}</div>\n      <div fxFlex>{{version.timestamp}}</div>\n      <div fxFlex>{{version.user}}</div>\n      <div fxFlex=\"42px\" class=\"right\">\n        <a *ngIf=\"focused === version\" md-icon-button (click)=\"focusOrBlur(version)\">\n          <md-icon class=\"example-icon\">remove</md-icon>\n        </a>\n        <a *ngIf=\"focused !== version\" md-icon-button (click)=\"focusOrBlur(version)\">\n          <md-icon class=\"example-icon\">add</md-icon>\n        </a>\n      </div>\n    </div>\n    <div class=\"detail\">\n      <div fxLayout=\"row\" *ngFor=\"let data of version.data\">\n        <div fxFlex=\"42px\"></div>\n        <div fxFlex=\"14\" class=\"label\">{{data.label}}:</div>\n        <div fxFlex class=\"value\">{{data.value}}</div>\n      </div>\n    </div>\n  </div>\n</div>\n<footer fxLayout=\"row\">\n  <div fxFlex></div>\n  <button md-raised-button [disabled]=\"!selected\" (click)=\"restoreDraft(selected)\">restore as draft</button>\n  <button md-raised-button [disabled]=\"!selected\" (click)=\"restoreLive(selected)\">restore live</button>\n</footer>"
+module.exports = "<md-toolbar color=\"primary\">\n  <span class=\"title\">Versions of this item</span>\n  <span class=\"spacer\"></span>\n  <button md-dialog-close md-icon-button>\n    <md-icon class=\"example-icon\">close</md-icon>\n  </button>\n</md-toolbar>\n<div class=\"table\">\n  <div class=\"record\" *ngFor=\"let version of sxcVersion.versions | async\">\n    <md-expansion-panel>\n      <md-expansion-panel-header>\n        <md-panel-title fxFlex=\"108px\">Version {{version.VersionNumber}}</md-panel-title>\n        <md-panel-description>{{version.TimeStamp}}, by {{version.User}}</md-panel-description>\n      </md-expansion-panel-header>\n      <!--<div class=\"detail\">\n        <div fxLayout=\"row\" *ngFor=\"let data of version.data\">\n          <div fxFlex=\"96px\" class=\"label\">{{data.label}}:</div>\n          <div fxFlex class=\"value\">{{data.value}}</div>\n        </div>\n      </div>-->\n      <md-action-row>\n        <button md-button (click)=\"restoreDraft(version)\">RESTORE AS DRAFT</button>\n        <button md-button (click)=\"restoreLive(version)\">RESTORE LIVE</button>\n      </md-action-row>\n    </md-expansion-panel>\n  </div>\n</div>"
 
 /***/ }),
 
-/***/ 245:
+/***/ 255:
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(114);
+module.exports = __webpack_require__(118);
 
 
 /***/ }),
 
-/***/ 86:
+/***/ 87:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_material__ = __webpack_require__(51);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_animations__ = __webpack_require__(35);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_material__ = __webpack_require__(37);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_app_version_dialog_sxc_versions_service__ = __webpack_require__(88);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return DialogComponent; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return ConfirmRestoreDialog; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -234,74 +282,11 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 
 
 var DialogComponent = (function () {
-    function DialogComponent(dialog) {
+    function DialogComponent(dialog, sxcVersion) {
         this.dialog = dialog;
-        this.versions = [
-            {
-                version: 19,
-                timestamp: '2017-04-02 12:42',
-                user: 'Daniel01',
-                data: [{
-                        label: 'Title',
-                        value: 'Blogging about 2017'
-                    }, {
-                        label: 'Released',
-                        value: '2017-06-03'
-                    }, {
-                        label: 'Content',
-                        value: 'lorem ipsum dolor sit..'
-                    }]
-            }, {
-                version: 18,
-                timestamp: '2017-03-28 17:04',
-                user: 'Daniel01',
-                data: [{
-                        label: 'Title',
-                        value: 'Blogging about 2017'
-                    }, {
-                        label: 'Released',
-                        value: '2017-06-03'
-                    }, {
-                        label: 'Content',
-                        value: 'lorem ipsum dolor sit..'
-                    }]
-            }, {
-                version: 17,
-                timestamp: '2017-03-26 08:09',
-                user: 'Daniel01',
-                data: [{
-                        label: 'Title',
-                        value: 'Blogging about 2017'
-                    }, {
-                        label: 'Released',
-                        value: '2017-06-03'
-                    }, {
-                        label: 'Content',
-                        value: 'lorem ipsum dolor sit..'
-                    }]
-            }, {
-                version: 16,
-                timestamp: '2017-03-25 10:25',
-                user: 'Daniel01',
-                data: [{
-                        label: 'Title',
-                        value: 'Blogging about 2017'
-                    }, {
-                        label: 'Released',
-                        value: '2017-06-03'
-                    }, {
-                        label: 'Content',
-                        value: 'lorem ipsum dolor sit..'
-                    }]
-            }
-        ];
+        this.sxcVersion = sxcVersion;
+        this.versions = [];
     }
-    DialogComponent.prototype.selectOrDeselect = function ($event, version) {
-        this.selected = $event.checked ? version : undefined;
-    };
-    DialogComponent.prototype.focusOrBlur = function (version) {
-        this.focused = this.focused === version ? undefined : version;
-    };
     DialogComponent.prototype.restoreLive = function (version) {
         this.dialog
             .open(ConfirmRestoreDialog, {
@@ -318,20 +303,12 @@ var DialogComponent = (function () {
     return DialogComponent;
 }());
 DialogComponent = __decorate([
-    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_4" /* Component */])({
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["c" /* Component */])({
         selector: 'app-dialog',
-        template: __webpack_require__(196),
-        styles: [__webpack_require__(195)],
-        animations: [
-            __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__angular_animations__["a" /* trigger */])('detailAnim', [
-                __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__angular_animations__["b" /* state */])('true', __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__angular_animations__["c" /* style */])({ height: '*' })),
-                __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__angular_animations__["b" /* state */])('false', __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__angular_animations__["c" /* style */])({ height: '48px' })),
-                __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__angular_animations__["d" /* transition */])('1 => 0', __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__angular_animations__["e" /* animate */])('.2s ease')),
-                __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__angular_animations__["d" /* transition */])('0 => 1', __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__angular_animations__["e" /* animate */])('.2s ease'))
-            ])
-        ]
+        template: __webpack_require__(201),
+        styles: [__webpack_require__(200)],
     }),
-    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_material__["d" /* MdDialog */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_material__["d" /* MdDialog */]) === "function" && _a || Object])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_material__["d" /* MdDialog */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_material__["d" /* MdDialog */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2_app_version_dialog_sxc_versions_service__["a" /* SxcVersionsService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2_app_version_dialog_sxc_versions_service__["a" /* SxcVersionsService */]) === "function" && _b || Object])
 ], DialogComponent);
 
 var ConfirmRestoreDialog = (function () {
@@ -342,23 +319,75 @@ var ConfirmRestoreDialog = (function () {
     return ConfirmRestoreDialog;
 }());
 ConfirmRestoreDialog = __decorate([
-    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_4" /* Component */])({
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["c" /* Component */])({
         selector: 'confirm-restore-dialog',
         template: "\n    <div class=\"content\">\n      <div class=\"title\">Restoring {{data.isDraft ? 'draft' : 'live'}} to version <b>{{data.version.version}}</b>.</div>\n      <div fxLayout=\"row\">\n        <button md-button [md-dialog-close]=\"false\">abort</button>\n        <span fxFlex></span>\n        <button md-raised-button [md-dialog-close]=\"true\">proceed</button>\n      </div>\n    </div>\n  ",
     }),
-    __param(1, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["g" /* Inject */])(__WEBPACK_IMPORTED_MODULE_1__angular_material__["e" /* MD_DIALOG_DATA */])),
-    __metadata("design:paramtypes", [typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1__angular_material__["f" /* MdDialogRef */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_material__["f" /* MdDialogRef */]) === "function" && _b || Object, Object])
+    __param(1, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["d" /* Inject */])(__WEBPACK_IMPORTED_MODULE_1__angular_material__["e" /* MD_DIALOG_DATA */])),
+    __metadata("design:paramtypes", [typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_1__angular_material__["f" /* MdDialogRef */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_material__["f" /* MdDialogRef */]) === "function" && _c || Object, Object])
 ], ConfirmRestoreDialog);
 
-var Version = (function () {
-    function Version() {
-    }
-    return Version;
-}());
-var _a, _b;
+var _a, _b, _c;
 //# sourceMappingURL=dialog.component.js.map
+
+/***/ }),
+
+/***/ 88:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__(52);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_ReplaySubject__ = __webpack_require__(204);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_ReplaySubject___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_rxjs_ReplaySubject__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SxcVersionsService; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+var SxcVersionsService = (function () {
+    function SxcVersionsService(http) {
+        this.http = http;
+        this.versionsSubject = new __WEBPACK_IMPORTED_MODULE_2_rxjs_ReplaySubject__["ReplaySubject"](1);
+        this.versions = this.versionsSubject.asObservable();
+        this.apiUrl = $2sxc.urlParams.require('portalroot') + 'desktopmodules/2sxc/api/';
+        this.loadVersions();
+    }
+    SxcVersionsService.prototype.loadVersions = function () {
+        var _this = this;
+        var appId = $2sxc.urlParams.require('appId');
+        var tabId = $2sxc.urlParams.require('tid');
+        var cbId = $2sxc.urlParams.require('cbid');
+        var modId = $2sxc.urlParams.require('mid');
+        var url = this.apiUrl + "eav/entities/history?appId=" + appId + "&entityId=3581";
+        var headers = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["c" /* Headers */]();
+        headers.append('TabId', tabId);
+        headers.append('ModuleId', modId);
+        headers.append('ContentBlockId', cbId);
+        var options = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["d" /* RequestOptions */]({ headers: headers });
+        this.http.get(url, options)
+            .map(function (res) { return res.json(); })
+            .subscribe(function (v) { return _this.versionsSubject.next(v); });
+    };
+    return SxcVersionsService;
+}());
+SxcVersionsService = __decorate([
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Injectable */])(),
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */]) === "function" && _a || Object])
+], SxcVersionsService);
+
+var _a;
+//# sourceMappingURL=sxc-versions.service.js.map
 
 /***/ })
 
-},[245]);
+},[255]);
 //# sourceMappingURL=main.bundle.js.map
