@@ -35,14 +35,6 @@
             // show the basic dashboard which allows view-changing
             "dash-view": makeDef("dash-view", "Dashboard", "", true, { inlineWindow: true }),
 
-            // show the version dialog
-            "version-dialog": makeDef("version-dialog", "", "", true, {
-                inlineWindow: true,
-                code: function (settings, event, sxc) {
-                    sxc.manage._commands._openModernDialog(settings, event);
-                }
-            }),
-
             // open the import dialog
             "app-import": makeDef("app-import", "Dashboard", "", true, {}),
 
@@ -327,10 +319,23 @@
             }
         }));
 
-        addDef(makeDef('version', 'version', 'clock', true, {
-            code: function (settings, event, sxc) {
-                sxc.manage.contentBlock.showVersionDialog();
-            }
+        //addDef(makeDef('version', 'version', 'clock', true, {
+        //    code: function (settings, event, sxc) {
+        //        sxc.manage.contentBlock.showVersionDialog();
+        //    }
+        //}));
+
+        //// show the version dialog
+        //addDef(makeDef("version-dialog", "version-dialog", "clock", true, {
+        //    inlineWindow: true,
+        //    code: function(settings, event, sxc) {
+        //        sxc.manage._commands._openModernDialog(settings, event);
+        //    }
+        //}));
+
+        // show the version dialog
+        addDef(makeDef("item-history", "ItemHistory", "clock", true, {
+            inlineWindow: true
         }));
 
         return act;

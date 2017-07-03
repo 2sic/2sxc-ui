@@ -30,7 +30,7 @@
             //},
             {
                 name: "default",
-                buttons: "edit,new,metadata,publish,layout,version"
+                buttons: "edit,new,metadata,publish,layout,item-history"
             }, {
                 name: "list",
                 buttons: "add,remove,moveup,movedown,instance-list,replace"

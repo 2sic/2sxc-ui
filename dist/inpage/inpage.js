@@ -95,14 +95,6 @@
             // show the basic dashboard which allows view-changing
             "dash-view": makeDef("dash-view", "Dashboard", "", true, { inlineWindow: true }),
 
-            // show the version dialog
-            "version-dialog": makeDef("version-dialog", "", "", true, {
-                inlineWindow: true,
-                code: function (settings, event, sxc) {
-                    sxc.manage._commands._openModernDialog(settings, event);
-                }
-            }),
-
             // open the import dialog
             "app-import": makeDef("app-import", "Dashboard", "", true, {}),
 
@@ -387,10 +379,23 @@
             }
         }));
 
-        addDef(makeDef('version', 'version', 'clock', true, {
-            code: function (settings, event, sxc) {
-                sxc.manage.contentBlock.showVersionDialog();
-            }
+        //addDef(makeDef('version', 'version', 'clock', true, {
+        //    code: function (settings, event, sxc) {
+        //        sxc.manage.contentBlock.showVersionDialog();
+        //    }
+        //}));
+
+        //// show the version dialog
+        //addDef(makeDef("version-dialog", "version-dialog", "clock", true, {
+        //    inlineWindow: true,
+        //    code: function(settings, event, sxc) {
+        //        sxc.manage._commands._openModernDialog(settings, event);
+        //    }
+        //}));
+
+        // show the version dialog
+        addDef(makeDef("item-history", "ItemHistory", "clock", true, {
+            inlineWindow: true
         }));
 
         return act;
@@ -756,10 +761,6 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
                 });
         },
         
-        showVersionDialog: function() {
-            manage.run("version-dialog");
-        },
-
         prepareToAddContent: function () {
             return cb.persistTemplate(true, false);
         },
@@ -2568,7 +2569,7 @@ $(function () {
             //},
             {
                 name: "default",
-                buttons: "edit,new,metadata,publish,layout,version"
+                buttons: "edit,new,metadata,publish,layout,item-history"
             }, {
                 name: "list",
                 buttons: "add,remove,moveup,movedown,instance-list,replace"

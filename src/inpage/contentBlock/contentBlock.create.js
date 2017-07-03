@@ -211,10 +211,6 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
                 });
         },
         
-        showVersionDialog: function() {
-            manage.run("version-dialog");
-        },
-
         prepareToAddContent: function () {
             return cb.persistTemplate(true, false);
         },
