@@ -4,7 +4,6 @@ import { IDialogFrameElement } from "app/core/dialog-frame-element";
 import { ModuleApiService } from "app/core/module-api.service";
 import { Observable } from 'rxjs/Rx';
 import { Subscription } from "rxjs/Subscription";
-import { ActivatedRoute, Router, Params } from "@angular/router";
 import { TemplateFilterPipe } from "app/template-picker/template-filter.pipe";
 import { DomSanitizer, SafeResourceUrl, SafeUrl } from '@angular/platform-browser';
 import { $2sxcService } from "app/core/$2sxc.service";
@@ -53,7 +52,6 @@ export class TemplatePickerComponent implements OnInit {
 
   constructor(
     private api: ModuleApiService,
-    private route: ActivatedRoute,
     private templateFilter: TemplateFilterPipe,
     private appRef: ApplicationRef,
     private translate: TranslatePipe

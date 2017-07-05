@@ -14,7 +14,7 @@
         activeWrapper,
         container = $('<div class="inpage-frame-wrapper"><div class="inpage-frame"></div></div>'),
         inpageFrame = container.find('.inpage-frame');
-    
+
     $('body').append(container);
 
     setInterval(function () {
@@ -29,7 +29,7 @@
         } catch (e) { }
     }, RESIZE_INTERVAL);
 
-    function Dialog(sxc, wrapperTag, url, closeCallback) {
+    function Dialog(sxc, wrapperTag, url, closeCallback, fullScreen) {
         var iframe, // frame inside the dialog (HTMLElement)
             resizeInterval,
             wrapperParent = $(wrapperTag).parent().eq(0);
@@ -71,6 +71,7 @@
             } catch (e) { }
 
             iframe = document.createElement('iframe');
+            container.css('height', fullScreen ? '100%' : '230px');
             toggle(true);
         }
 

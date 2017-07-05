@@ -114,7 +114,7 @@
                     // can never be used for a modulelist item, as it is always in use somewhere
                     if (settings.useModuleList)
                         return false;
-
+                    
                     // check if all data exists required for deleting
                     return settings.entityId && settings.entityGuid && settings.entityTitle;
                 },
@@ -318,24 +318,11 @@
                     .attr("data-state", newState);
             }
         }));
-
-        //addDef(makeDef('version', 'version', 'clock', true, {
-        //    code: function (settings, event, sxc) {
-        //        sxc.manage.contentBlock.showVersionDialog();
-        //    }
-        //}));
-
-        //// show the version dialog
-        //addDef(makeDef("version-dialog", "version-dialog", "clock", true, {
-        //    inlineWindow: true,
-        //    code: function(settings, event, sxc) {
-        //        sxc.manage._commands._openModernDialog(settings, event);
-        //    }
-        //}));
-
+        
         // show the version dialog
         addDef(makeDef("item-history", "ItemHistory", "clock", true, {
-            inlineWindow: true
+            inlineWindow: true,
+            angularDialog: true,
         }));
 
         return act;

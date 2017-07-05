@@ -9,21 +9,11 @@ import { AppComponent } from './app.component';
 import { TemplatePickerModule } from "app/template-picker/template-picker.module";
 import { TemplatePickerComponent } from "app/template-picker/template-picker.component";
 import { RouterModule } from "@angular/router";
+import { VersionDialogModule } from "app/version-dialog/version-dialog.module";
 
 export function HttpLoaderFactory(http: Http) {
   return new TranslateHttpLoader(http, "../i18n/sxc-admin-", ".js");
 }
-
-const appRoutes = [
-  {
-    path: '',
-    component: TemplatePickerComponent
-  },
-  {
-    path: 'index.html',
-    component: TemplatePickerComponent
-  }
-];
 
 @NgModule({
   declarations: [
@@ -34,15 +24,14 @@ const appRoutes = [
     BrowserModule,
     FormsModule,
     TemplatePickerModule,
-    RouterModule,
-    RouterModule.forRoot(appRoutes),
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
         useFactory: HttpLoaderFactory,
         deps: [Http]
       }
-    })
+    }),
+    VersionDialogModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

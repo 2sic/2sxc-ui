@@ -9,7 +9,6 @@ import { TemplateFilterPipe } from './template-filter.pipe';
 import { CoreModule } from "app/core/core.module";
 import { ContentTypeFilterPipe } from './content-type-filter.pipe';
 import { FlexLayoutModule } from "@angular/flex-layout";
-import { ActivatedRoute, Router } from "@angular/router/src";
 import { $2sxcService } from "app/core/$2sxc.service";
 import { InstallerModule } from "app/installer/installer.module";
 

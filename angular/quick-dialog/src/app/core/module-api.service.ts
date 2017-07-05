@@ -1,5 +1,4 @@
 import { Injectable, Inject } from '@angular/core';
-import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Observable, BehaviorSubject } from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
 import { $2sxcService } from "app/core/$2sxc.service";
@@ -9,10 +8,10 @@ import { Subject } from "rxjs/Subject";
 
 @Injectable()
 export class ModuleApiService {
-  public apps: Observable<any[]>;
-  public contentTypes: Observable<any[]>;
-  public gettingStarted: Observable<string>;
-  public templates: Observable<any[]>;
+  apps: Observable<any[]>;
+  contentTypes: Observable<any[]>;
+  gettingStarted: Observable<string>;
+  templates: Observable<any[]>;
 
   private readonly base: string = 'http://2sxc.dev/desktopmodules/2sxc/api/';
   private appSubject: Subject<any[]> = new Subject<any[]>();
@@ -33,14 +32,14 @@ export class ModuleApiService {
   public setAppId(appId: string): Observable<any> {
     return this.http.get(`view/Module/SetAppId?appId=${appId}`);
   }
-  
+
   public loadGettingStarted(isContentApp: boolean): Observable<string> {
     let obs = this.http.get(`View/Module/RemoteInstallDialogUrl?dialog=gettingstarted&isContentApp=${isContentApp}`)
       .map(response => response.json());
     obs.subscribe(json => this.gettingStartedSubject.next(json));
     return obs;
   }
-  
+
   public loadTemplates(): Observable<any> {
     let obs = this.http.get('View/Module/GetSelectableTemplates')
       .map(response => response.json() || []);

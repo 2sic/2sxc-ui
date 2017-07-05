@@ -1,0 +1,27 @@
+<md-toolbar color="primary">
+  <span class="title">Versions of this item</span>
+  <span class="spacer"></span>
+  <button md-dialog-close md-icon-button>
+    <md-icon class="example-icon">close</md-icon>
+  </button>
+</md-toolbar>
+<div class="table">
+  <div class="record" *ngFor="let version of sxcVersion.versions | async">
+    <md-expansion-panel>
+      <md-expansion-panel-header>
+        <md-panel-title fxFlex="108px">Version {{version.VersionNumber}}</md-panel-title>
+        <md-panel-description>{{version.TimeStamp}}, by {{version.User}}</md-panel-description>
+      </md-expansion-panel-header>
+      <div class="detail">
+        <div fxLayout="row" *ngFor="let data of version.Data">
+          <div fxFlex="96px" class="label">{{data.key}}:</div>
+          <div fxFlex class="value">{{data.value['en-us']}}</div>
+        </div>
+      </div>
+      <md-action-row>
+        <!--<button md-button (click)="restoreDraft(version)">RESTORE AS DRAFT</button>-->
+        <button md-button (click)="restoreLive(version)">RESTORE LIVE</button>
+      </md-action-row>
+    </md-expansion-panel>
+  </div>
+</div>

@@ -4,4 +4,5 @@ export interface IDialogFrameElement extends HTMLIFrameElement {
     scrollToTarget(): void;
     persistDia(): void;
     sxc: any;
+    toggle(action: boolean): void;
 }
