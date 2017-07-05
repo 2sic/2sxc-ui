@@ -14,8 +14,8 @@
       </md-expansion-panel-header>
       <div class="detail">
         <div fxLayout="row" *ngFor="let data of version.Data">
-          <div fxFlex="96px" class="label">{{data.key}}:</div>
-          <div fxFlex class="value">{{data.value['en-us']}}</div>
+          <div fxFlex="140px" class="label">{{data.key}}:</div>
+          <div fxFlex class="value" [innerHTML]="data.value['en-us']"></div>
         </div>
       </div>
       <md-action-row>

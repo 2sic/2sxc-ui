@@ -31,8 +31,19 @@
                     padding: 8px 0;
                     line-height: 28px;
                     box-sizing: border-box;
-                    .label {
-                        color: rgba(0, 0, 0, .6);
+                    >div {
+                        margin-bottom: 4px;
+                        .label {
+                            color: rgba(0, 0, 0, .6);
+                        }
+                        .value {
+                            background: rgba(0, 0, 0, .02);
+                            border: 1px solid rgba(0, 0, 0, .1);
+                            padding: 8px;
+                            p {
+                                margin: 0;
+                            }
+                        }
                     }
                 }
                 md-action-row {

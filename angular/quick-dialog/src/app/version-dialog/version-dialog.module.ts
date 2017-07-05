@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { SxcVersionsService } from "app/version-dialog/sxc-versions.service";
 import { DialogComponent, ConfirmRestoreDialog } from "app/version-dialog/dialog.component";
 import { MaterialModule } from "@angular/material";
+import { FlexLayoutModule } from "@angular/flex-layout";
 
 @NgModule({
   exports: [
@@ -10,7 +11,8 @@ import { MaterialModule } from "@angular/material";
   ],
   imports: [
     CommonModule,
-    MaterialModule
+    MaterialModule,
+    FlexLayoutModule
   ],
   providers: [
     SxcVersionsService
