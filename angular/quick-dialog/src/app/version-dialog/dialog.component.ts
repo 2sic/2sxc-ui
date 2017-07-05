@@ -43,7 +43,7 @@ export class DialogComponent {
   selector: 'confirm-restore-dialog',
   template: `
     <div class="content">
-      <div class="title">Restoring {{data.isDraft ? 'draft' : 'live'}} to version <b>{{data.version.version}}</b>.</div>
+      <div class="title">Restoring {{data.isDraft ? 'draft' : 'live'}} to version <b>{{data.version.ChangeSetId}}</b>.</div>
       <div fxLayout="row">
         <button md-button [md-dialog-close]="false">abort</button>
         <span fxFlex></span>

@@ -153,7 +153,7 @@ var ConfirmRestoreDialog = (function () {
 ConfirmRestoreDialog = __decorate([
     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["c" /* Component */])({
         selector: 'confirm-restore-dialog',
-        template: "\n    <div class=\"content\">\n      <div class=\"title\">Restoring {{data.isDraft ? 'draft' : 'live'}} to version <b>{{data.version.version}}</b>.</div>\n      <div fxLayout=\"row\">\n        <button md-button [md-dialog-close]=\"false\">abort</button>\n        <span fxFlex></span>\n        <button md-raised-button [md-dialog-close]=\"true\">proceed</button>\n      </div>\n    </div>\n  ",
+        template: "\n    <div class=\"content\">\n      <div class=\"title\">Restoring {{data.isDraft ? 'draft' : 'live'}} to version <b>{{data.version.ChangeSetId}}</b>.</div>\n      <div fxLayout=\"row\">\n        <button md-button [md-dialog-close]=\"false\">abort</button>\n        <span fxFlex></span>\n        <button md-raised-button [md-dialog-close]=\"true\">proceed</button>\n      </div>\n    </div>\n  ",
     }),
     __param(1, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["d" /* Inject */])(__WEBPACK_IMPORTED_MODULE_1__angular_material__["c" /* MD_DIALOG_DATA */])),
     __metadata("design:paramtypes", [typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_1__angular_material__["d" /* MdDialogRef */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_material__["d" /* MdDialogRef */]) === "function" && _c || Object, Object])
@@ -221,12 +221,26 @@ var SxcVersionsService = (function () {
         headers.append('ContentBlockId', cbId);
         var options = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["c" /* RequestOptions */]({ headers: headers });
         this.http.post(url, item, options)
-            .map(function (res) { return res.json().map(function (v) { return Object.assign(v, {
-            Data: Object.entries(JSON.parse(v.Json).Entity.Attributes)
-                .reduce(function (t, c) { return Array.prototype.concat(t, Object.entries(c[1]).map(function (_a) {
-                var key = _a[0], value = _a[1];
-                return ({ key: key, value: value, type: c[0] });
-            })); }, [])
+            .map(function (res) { return res.json()
+            .map(function (v, i, all) { return Object.assign(v, {
+            Data: (function () {
+                var lastVersion = all.find(function (v2) { return v2.VersionNumber === v.VersionNumber - 1; });
+                var attr = JSON.parse(v.Json).Entity.Attributes;
+                if (lastVersion) {
+                    lastVersion = JSON.parse(lastVersion.Json).Entity.Attributes;
+                }
+                return Object.entries(attr)
+                    .reduce(function (t, c) { return Array.prototype.concat(t, Object.entries(c[1])
+                    .map(function (_a, i2) {
+                    var key = _a[0], value = _a[1];
+                    console.log(lastVersion, c, key);
+                    return { key: key, value: value, type: c[0], hasChanged: lastVersion ? JSON.stringify(lastVersion[c[0]][key]) !== JSON.stringify(value) : false };
+                })); }, []);
+            })(),
+            TimeStamp: (function (timestamp) {
+                var date = new Date(timestamp), y = date.getFullYear(), m = date.getUTCMonth(), d = date.getDate();
+                return y + "-" + (m < 10 ? '0' : '') + m + "-" + (d < 10 ? '0' : '') + d;
+            })(v.TimeStamp),
         }); }); })
             .subscribe(function (v) { return _this.versionsSubject.next(v); });
     };
@@ -1137,7 +1151,7 @@ exports = module.exports = __webpack_require__(33)();
 
 
 // module
-exports.push([module.i, ":host {\n  width: 1000px;\n  max-width: 100%;\n  display: block;\n  background: #fafafa; }\n  :host md-toolbar {\n    background: transparent;\n    color: black; }\n    :host md-toolbar .spacer {\n      -webkit-box-flex: 1;\n          -ms-flex: 1 1 auto;\n              flex: 1 1 auto; }\n    :host md-toolbar .title {\n      font-weight: 300; }\n  :host .table {\n    padding: 8px; }\n    :host .table .header {\n      line-height: 48px;\n      font-weight: 400;\n      padding: 0 22px;\n      color: rgba(0, 0, 0, 0.6); }\n    :host .table .record md-expansion-panel {\n      transition: box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1), margin 280ms ease; }\n      :host .table .record md-expansion-panel.mat-expanded {\n        margin: 16px 0 !important; }\n      :host .table .record md-expansion-panel .detail {\n        padding: 8px 0;\n        line-height: 28px;\n        box-sizing: border-box; }\n        :host .table .record md-expansion-panel .detail > div {\n          margin-bottom: 4px; }\n          :host .table .record md-expansion-panel .detail > div .label {\n            color: rgba(0, 0, 0, 0.6); }\n          :host .table .record md-expansion-panel .detail > div .value {\n            background: rgba(0, 0, 0, 0.02);\n            border: 1px solid rgba(0, 0, 0, 0.1);\n            padding: 8px; }\n            :host .table .record md-expansion-panel .detail > div .value p {\n              margin: 0; }\n      :host .table .record md-expansion-panel md-action-row button {\n        margin-left: 8px; }\n  :host footer {\n    padding: 16px 22px; }\n    :host footer button {\n      margin-left: 8px; }\n", ""]);
+exports.push([module.i, ":host {\n  width: 1000px;\n  max-width: 100%;\n  display: block;\n  background: #fafafa; }\n  :host md-toolbar {\n    background: transparent;\n    color: black; }\n    :host md-toolbar .spacer {\n      -webkit-box-flex: 1;\n          -ms-flex: 1 1 auto;\n              flex: 1 1 auto; }\n    :host md-toolbar .title {\n      font-weight: 300; }\n  :host .table {\n    padding: 8px; }\n    :host .table .header {\n      line-height: 48px;\n      font-weight: 400;\n      padding: 0 22px;\n      color: rgba(0, 0, 0, 0.6); }\n    :host .table .record md-expansion-panel {\n      transition: box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1), margin 280ms ease; }\n      :host .table .record md-expansion-panel.mat-expanded {\n        margin: 16px 0 !important; }\n      :host .table .record md-expansion-panel .detail {\n        line-height: 28px;\n        box-sizing: border-box; }\n        :host .table .record md-expansion-panel .detail > div {\n          border-bottom: 1px solid rgba(0, 0, 0, 0.1);\n          margin-bottom: 4px;\n          padding: 4px 0; }\n          :host .table .record md-expansion-panel .detail > div.changed .label,\n          :host .table .record md-expansion-panel .detail > div.changed .value {\n            color: #2196F3; }\n          :host .table .record md-expansion-panel .detail > div:last-of-type {\n            border-bottom: none; }\n          :host .table .record md-expansion-panel .detail > div .label {\n            vertical-align: top;\n            color: rgba(0, 0, 0, 0.6);\n            height: 28px; }\n          :host .table .record md-expansion-panel .detail > div .value {\n            cursor: pointer;\n            vertical-align: top;\n            height: 28px;\n            overflow: hidden;\n            display: inline-block;\n            white-space: nowrap;\n            text-overflow: ellipsis; }\n            :host .table .record md-expansion-panel .detail > div .value.expand {\n              height: auto; }\n            :host .table .record md-expansion-panel .detail > div .value /deep/ * {\n              margin: 0; }\n          :host .table .record md-expansion-panel .detail > div i {\n            height: 28px;\n            color: rgba(0, 0, 0, 0.6);\n            text-align: right;\n            font-size: 8pt; }\n      :host .table .record md-expansion-panel md-action-row button {\n        margin-left: 8px; }\n  :host footer {\n    padding: 16px 22px; }\n    :host footer button {\n      margin-left: 8px; }\n", ""]);
 
 // exports
 
@@ -1189,7 +1203,7 @@ module.exports = "<div class=\"content\">\r\n    <md-progress-bar [ngStyle]=\"{ 
 /***/ 281:
 /***/ (function(module, exports) {
 
-module.exports = "<md-toolbar color=\"primary\">\n  <span class=\"title\">Versions of this item</span>\n  <span class=\"spacer\"></span>\n  <button md-dialog-close md-icon-button>\n    <md-icon class=\"example-icon\">close</md-icon>\n  </button>\n</md-toolbar>\n<div class=\"table\">\n  <div class=\"record\" *ngFor=\"let version of sxcVersion.versions | async\">\n    <md-expansion-panel>\n      <md-expansion-panel-header>\n        <md-panel-title fxFlex=\"108px\">Version {{version.VersionNumber}}</md-panel-title>\n        <md-panel-description>{{version.TimeStamp}}, by {{version.User}}</md-panel-description>\n      </md-expansion-panel-header>\n      <div class=\"detail\">\n        <div fxLayout=\"row\" *ngFor=\"let data of version.Data\">\n          <div fxFlex=\"140px\" class=\"label\">{{data.key}}:</div>\n          <div fxFlex class=\"value\" [innerHTML]=\"data.value['en-us']\"></div>\n        </div>\n      </div>\n      <md-action-row>\n        <!--<button md-button (click)=\"restoreDraft(version)\">RESTORE AS DRAFT</button>-->\n        <button md-button (click)=\"restoreLive(version)\">RESTORE LIVE</button>\n      </md-action-row>\n    </md-expansion-panel>\n  </div>\n</div>"
+module.exports = "<md-toolbar color=\"primary\">\n  <span class=\"title\">Versions of this item</span>\n  <span class=\"spacer\"></span>\n  <button md-dialog-close md-icon-button>\n    <md-icon class=\"example-icon\">close</md-icon>\n  </button>\n</md-toolbar>\n<div class=\"table\">\n  <div class=\"record\" *ngFor=\"let version of sxcVersion.versions | async\">\n    <md-expansion-panel>\n      <md-expansion-panel-header>\n        <md-panel-title fxFlex=\"108px\">Version {{version.VersionNumber}}</md-panel-title>\n        <md-panel-description>{{version.TimeStamp}}</md-panel-description>\n      </md-expansion-panel-header>\n      <div class=\"detail\">\n        <div fxLayout=\"row\" [class.changed]=\"data.hasChanged\" *ngFor=\"let data of version.Data\">\n          <div fxFlex=\"160px\" class=\"label\">{{data.key}}:</div>\n          <div fxFlex [class.expand]=\"data.expand\" class=\"value\" title=\"expand content\" (click)=\"data.expand=!data.expand\" [innerHTML]=\"data.value['en-us']\"></div>\n          <i fxFlex=\"60px\">[{{data.type}}]</i>\n        </div>\n      </div>\n      <md-action-row>\n        <!--<button md-button (click)=\"restoreDraft(version)\">RESTORE AS DRAFT</button>-->\n        <button md-button (click)=\"restoreLive(version)\">RESTORE LIVE</button>\n      </md-action-row>\n    </md-expansion-panel>\n  </div>\n</div>"
 
 /***/ }),
 

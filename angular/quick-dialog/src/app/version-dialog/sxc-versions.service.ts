@@ -55,10 +55,32 @@ export class SxcVersionsService {
     let options = new RequestOptions({ headers: headers });
 
     this.http.post(url, item, options)
-      .map(res => res.json().map(v => Object.assign(v, {
-        Data: Object.entries(JSON.parse(v.Json).Entity.Attributes)
-          .reduce((t, c) => Array.prototype.concat(t, Object.entries(c[1]).map(([key, value]) => ({ key, value, type: c[0] }))), [])
-      })))
+      .map(res => res.json()
+        .map((v, i, all) => Object.assign(v, {
+          Data: (() => {
+            let lastVersion = all.find(v2 => v2.VersionNumber === v.VersionNumber - 1);
+            const attr = JSON.parse(v.Json).Entity.Attributes;
+            
+            if (lastVersion) {
+              lastVersion = JSON.parse(lastVersion.Json).Entity.Attributes;
+            }
+
+            return Object.entries(attr)
+              .reduce((t, c) => Array.prototype.concat(t, Object.entries(c[1])
+                .map(([key, value], i2) => {
+                  console.log(lastVersion, c, key);
+                  return { key, value, type: c[0], hasChanged: lastVersion ? JSON.stringify(lastVersion[c[0]][key]) !== JSON.stringify(value) : false };
+                })), []);
+          })(),
+          TimeStamp: (timestamp => {
+            let
+              date = new Date(timestamp),
+              y = date.getFullYear(),
+              m = date.getUTCMonth(),
+              d = date.getDate();
+            return `${y}-${m < 10 ? '0' : ''}${m}-${d < 10 ? '0' : ''}${d}`;
+          })(v.TimeStamp),
+        })))
       .subscribe(v => this.versionsSubject.next(v));
   }
 }

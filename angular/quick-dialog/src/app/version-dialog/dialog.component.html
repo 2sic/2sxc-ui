@@ -10,12 +10,13 @@
     <md-expansion-panel>
       <md-expansion-panel-header>
         <md-panel-title fxFlex="108px">Version {{version.VersionNumber}}</md-panel-title>
-        <md-panel-description>{{version.TimeStamp}}, by {{version.User}}</md-panel-description>
+        <md-panel-description>{{version.TimeStamp}}</md-panel-description>
       </md-expansion-panel-header>
       <div class="detail">
-        <div fxLayout="row" *ngFor="let data of version.Data">
-          <div fxFlex="140px" class="label">{{data.key}}:</div>
-          <div fxFlex class="value" [innerHTML]="data.value['en-us']"></div>
+        <div fxLayout="row" [class.changed]="data.hasChanged" *ngFor="let data of version.Data">
+          <div fxFlex="160px" class="label">{{data.key}}:</div>
+          <div fxFlex [class.expand]="data.expand" class="value" title="expand content" (click)="data.expand=!data.expand" [innerHTML]="data.value['en-us']"></div>
+          <i fxFlex="60px">[{{data.type}}]</i>
         </div>
       </div>
       <md-action-row>
