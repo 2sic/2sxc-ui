@@ -64,7 +64,7 @@ export class SxcVersionsService {
             if (lastVersion) {
               lastVersion = JSON.parse(lastVersion.Json).Entity.Attributes;
             }
-
+            
             return Object.entries(attr)
               .reduce((t, c) => Array.prototype.concat(t, Object.entries(c[1])
                 .map(([key, value], i2) => ({ key, value: Object.entries(value), type: c[0], hasChanged: lastVersion ? JSON.stringify(lastVersion[c[0]][key]) !== JSON.stringify(value) : false }))), []);
@@ -74,8 +74,10 @@ export class SxcVersionsService {
               date = new Date(timestamp),
               y = date.getFullYear(),
               m = date.getUTCMonth(),
-              d = date.getDate();
-            return `${y}-${m < 10 ? '0' : ''}${m}-${d < 10 ? '0' : ''}${d}`;
+              d = date.getDate(),
+              h = date.getHours(),
+              min = date.getMinutes();
+            return `${y}-${m < 10 ? '0' : ''}${m}-${d < 10 ? '0' : ''}${d} ${h < 10 ? '0' : ''}${h}:${min < 10 ? '0' : ''}${min}`;
           })(v.TimeStamp),
         })))
       .subscribe(v => this.versionsSubject.next(v));

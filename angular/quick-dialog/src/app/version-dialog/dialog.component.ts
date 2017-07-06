@@ -13,6 +13,7 @@ declare const $2sxc;
 })
 export class DialogComponent {
   versions: Version[] = [];
+  versionParam: any;
 
   constructor(
     private dialog: MdDialog,
@@ -20,15 +21,8 @@ export class DialogComponent {
   ) { }
 
   restoreLive(version: Version) {
-    this.dialog
-      .open(ConfirmRestoreDialog, {
-        data: { version },
-      })
-      .afterClosed()
-      .subscribe(res => res
-        ? this.sxcVersion.restore(version.ChangeSetId)
-          .subscribe(res => res ? window.parent.location.reload() : alert('restore failed miserably'))
-        : undefined);
+    this.sxcVersion.restore(version.ChangeSetId)
+      .subscribe(res => res ? window.parent.location.reload() : alert('restore failed miserably'));
   }
 
   restoreDraft(version) {

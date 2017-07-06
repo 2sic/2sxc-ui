@@ -20,11 +20,8 @@ export class AppComponent {
   ) {
     const langs = ['en','de','es','fr','it','nl','uk'];
     translate.addLangs(langs);
-    translate.setDefaultLang('en');
-    
-    let browserLang = translate.getBrowserLang();
-    console.log(browserLang.match(langs.join('|')));
-    translate.use(browserLang.match(langs.join('|')) ? browserLang : 'en');
+    translate.setDefaultLang($2sxc.urlParams.require('langpri').split('-')[0]);
+    translate.use($2sxc.urlParams.require('lang').split('-')[0]);
     this.name = $2sxc.urlParams.require('dialog');
     
     let frame = <IDialogFrameElement>window.frameElement;
