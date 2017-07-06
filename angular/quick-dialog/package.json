@@ -10,7 +10,7 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "watch": "ng build --watch --output-hashing=none",
-    "prod": "ng build --prod --output-hashing=none --sourcemaps=true"
+    "prod": "ng build --prod --output-hashing=none --sourcemaps=false"
   },
   "private": true,
   "dependencies": {

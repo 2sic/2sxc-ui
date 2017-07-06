@@ -55,14 +55,32 @@
                             display: inline-block;
                             white-space: nowrap;
                             text-overflow: ellipsis;
+                            .lang {
+                                display: none;
+                            }
                             &.expand {
                                 height: auto;
+                                .lang-wrapper {
+                                    position: relative;
+                                    padding: 8px 0;
+                                    .lang {
+                                        display: block;
+                                        position: absolute;
+                                        font-size: 10pt;
+                                        left: 0;
+                                        top: 0;
+                                        color: rgba(0, 0, 0, .6);
+                                        line-height: 12px;
+                                        font-style: italic;
+                                    }
+                                }
                             }
                             /deep/ * {
                                 margin: 0;
                             }
                         }
                         i {
+                            vertical-align: top;
                             height: 28px;
                             color: rgba(0, 0, 0, .6);
                             text-align: right;

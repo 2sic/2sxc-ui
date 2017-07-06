@@ -67,7 +67,7 @@ export class SxcVersionsService {
 
             return Object.entries(attr)
               .reduce((t, c) => Array.prototype.concat(t, Object.entries(c[1])
-                .map(([key, value], i2) => ({ key, value, type: c[0], hasChanged: lastVersion ? JSON.stringify(lastVersion[c[0]][key]) !== JSON.stringify(value) : false }))), []);
+                .map(([key, value], i2) => ({ key, value: Object.entries(value), type: c[0], hasChanged: lastVersion ? JSON.stringify(lastVersion[c[0]][key]) !== JSON.stringify(value) : false }))), []);
           })(),
           TimeStamp: (timestamp => {
             let
