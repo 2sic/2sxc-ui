@@ -936,7 +936,8 @@ var $2sxcActionMenuMapper = function (moduleId) {
             height = iframe.contentDocument.body.offsetHeight;
             if (iframe.previousHeight === height) return;
             window.diagBox = iframe;
-            iframe.height = height + "px";
+            iframe.style.minHeight = container.css('min-height');
+            iframe.style.height = height + "px";
             iframe.previousHeight = height;
         } catch (e) { }
     }, RESIZE_INTERVAL);
@@ -945,7 +946,7 @@ var $2sxcActionMenuMapper = function (moduleId) {
         var iframe, // frame inside the dialog (HTMLElement)
             resizeInterval,
             wrapperParent = $(wrapperTag).parent().eq(0);
-
+        
         init();
         /**
          * Assign properties to the iframe for later use.
@@ -983,7 +984,7 @@ var $2sxcActionMenuMapper = function (moduleId) {
             } catch (e) { }
 
             iframe = document.createElement('iframe');
-            container.css('height', fullScreen ? '100%' : '230px');
+            container.css('min-height', fullScreen ? '100%' : '230px');
             toggle(true);
         }
 
@@ -2519,10 +2520,10 @@ $(function () {
             //},
             {
                 name: "default",
-                buttons: "edit,new,metadata,publish,layout,item-history"
+                buttons: "edit,new,metadata,publish,layout"
             }, {
                 name: "list",
-                buttons: "add,remove,moveup,movedown,instance-list,replace"
+                buttons: "add,remove,moveup,movedown,instance-list,replace,item-history"
             }, {
                 name: "data",
                 buttons: "delete"

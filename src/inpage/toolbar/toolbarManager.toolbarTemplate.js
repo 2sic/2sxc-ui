@@ -30,10 +30,10 @@
             //},
             {
                 name: "default",
-                buttons: "edit,new,metadata,publish,layout,item-history"
+                buttons: "edit,new,metadata,publish,layout"
             }, {
                 name: "list",
-                buttons: "add,remove,moveup,movedown,instance-list,replace"
+                buttons: "add,remove,moveup,movedown,instance-list,replace,item-history"
             }, {
                 name: "data",
                 buttons: "delete"

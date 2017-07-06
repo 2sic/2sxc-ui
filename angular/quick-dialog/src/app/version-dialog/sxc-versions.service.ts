@@ -60,17 +60,14 @@ export class SxcVersionsService {
           Data: (() => {
             let lastVersion = all.find(v2 => v2.VersionNumber === v.VersionNumber - 1);
             const attr = JSON.parse(v.Json).Entity.Attributes;
-            
+
             if (lastVersion) {
               lastVersion = JSON.parse(lastVersion.Json).Entity.Attributes;
             }
 
             return Object.entries(attr)
               .reduce((t, c) => Array.prototype.concat(t, Object.entries(c[1])
-                .map(([key, value], i2) => {
-                  console.log(lastVersion, c, key);
-                  return { key, value, type: c[0], hasChanged: lastVersion ? JSON.stringify(lastVersion[c[0]][key]) !== JSON.stringify(value) : false };
-                })), []);
+                .map(([key, value], i2) => ({ key, value, type: c[0], hasChanged: lastVersion ? JSON.stringify(lastVersion[c[0]][key]) !== JSON.stringify(value) : false }))), []);
           })(),
           TimeStamp: (timestamp => {
             let

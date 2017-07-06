@@ -24,7 +24,8 @@
             height = iframe.contentDocument.body.offsetHeight;
             if (iframe.previousHeight === height) return;
             window.diagBox = iframe;
-            iframe.height = height + "px";
+            iframe.style.minHeight = container.css('min-height');
+            iframe.style.height = height + "px";
             iframe.previousHeight = height;
         } catch (e) { }
     }, RESIZE_INTERVAL);
@@ -33,7 +34,7 @@
         var iframe, // frame inside the dialog (HTMLElement)
             resizeInterval,
             wrapperParent = $(wrapperTag).parent().eq(0);
-
+        
         init();
         /**
          * Assign properties to the iframe for later use.
@@ -71,7 +72,7 @@
             } catch (e) { }
 
             iframe = document.createElement('iframe');
-            container.css('height', fullScreen ? '100%' : '230px');
+            container.css('min-height', fullScreen ? '100%' : '230px');
             toggle(true);
         }
 

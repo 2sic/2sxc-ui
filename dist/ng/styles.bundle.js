@@ -1,6 +1,6 @@
 webpackJsonp([2,4],{
 
-/***/ 180:
+/***/ 181:
 /***/ (function(module, exports) {
 
 /*
@@ -253,7 +253,7 @@ function updateLink(linkElement, obj) {
 
 /***/ }),
 
-/***/ 184:
+/***/ 185:
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -262,7 +262,7 @@ function updateLink(linkElement, obj) {
 var content = __webpack_require__(272);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
-var update = __webpack_require__(180)(content, {});
+var update = __webpack_require__(181)(content, {});
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -280,7 +280,7 @@ if(false) {
 
 /***/ }),
 
-/***/ 185:
+/***/ 186:
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -289,7 +289,7 @@ if(false) {
 var content = __webpack_require__(273);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
-var update = __webpack_require__(180)(content, {});
+var update = __webpack_require__(181)(content, {});
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -330,7 +330,7 @@ exports = module.exports = __webpack_require__(33)();
 
 
 // module
-exports.push([module.i, "/* You can add global styles to this file, and also import other style files */\r\nbody {\r\n    margin: 0;\r\n    font-family: 'Roboto', sans-serif;\r\n}", ""]);
+exports.push([module.i, "/* You can add global styles to this file, and also import other style files */\r\n\r\nbody {\r\n    margin: 0;\r\n    font-family: 'Roboto', sans-serif;\r\n}\r\n\r\n.cdk-overlay-pane {\r\n    max-height: 100%;\r\n    overflow: auto;\r\n}\r\n\r\nmd-dialog-container {\r\n    background: #fafafa !important;\r\n    padding: 12px !important;\r\n}", ""]);
 
 // exports
 
@@ -397,8 +397,8 @@ module.exports = function() {
 /***/ 538:
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(185);
-module.exports = __webpack_require__(184);
+__webpack_require__(186);
+module.exports = __webpack_require__(185);
 
 
 /***/ })
