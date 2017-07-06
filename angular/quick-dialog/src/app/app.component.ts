@@ -18,13 +18,15 @@ export class AppComponent {
     public translate: TranslateService,
     private dialog: MdDialog,
   ) {
-    translate.addLangs(["en", "fr"]);
+    const langs = ['en','de','es','fr','it','nl','uk'];
+    translate.addLangs(langs);
     translate.setDefaultLang('en');
     
     let browserLang = translate.getBrowserLang();
-    translate.use(browserLang.match(/en|fr/) ? browserLang : 'en');
+    console.log(browserLang.match(langs.join('|')));
+    translate.use(browserLang.match(langs.join('|')) ? browserLang : 'en');
     this.name = $2sxc.urlParams.require('dialog');
-
+    
     let frame = <IDialogFrameElement>window.frameElement;
     if (this.name === 'item-history') {
       this.dialog.open(DialogComponent).afterClosed()

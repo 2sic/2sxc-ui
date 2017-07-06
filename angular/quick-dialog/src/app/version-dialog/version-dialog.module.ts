@@ -1,3 +1,4 @@
+import {TranslateModule} from '@ngx-translate/core';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SxcVersionsService } from "app/version-dialog/sxc-versions.service";
@@ -12,7 +13,8 @@ import { FlexLayoutModule } from "@angular/flex-layout";
   imports: [
     CommonModule,
     MaterialModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    TranslateModule
   ],
   providers: [
     SxcVersionsService

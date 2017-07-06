@@ -12,9 +12,6 @@ import { FlexLayoutModule } from "@angular/flex-layout";
 import { $2sxcService } from "app/core/$2sxc.service";
 import { InstallerModule } from "app/installer/installer.module";
 
-declare const $2sxc: any;
-const appId = $2sxc.urlParams.require('appId');
-
 @NgModule({
   exports: [
     TemplatePickerComponent
