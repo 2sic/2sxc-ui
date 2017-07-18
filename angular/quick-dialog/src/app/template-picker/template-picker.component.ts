@@ -197,7 +197,10 @@ export class TemplatePickerComponent implements OnInit {
   }
 
   private setContentTypes(contentTypes: any[], selectedContentTypeId) {
-    if (selectedContentTypeId) this.contentType = contentTypes.find(c => c.StaticName === selectedContentTypeId);
+    if (selectedContentTypeId) {
+      this.contentType = contentTypes.find(c => c.StaticName === selectedContentTypeId);
+      this.tabIndex = 1;
+    }
     contentTypes
       .filter(c => (this.template && c.TemplateId === this.template.TemplateId) || (this.contentType && c.StaticName === this.contentType.StaticName))
       .forEach(c => c.IsHidden = false);
