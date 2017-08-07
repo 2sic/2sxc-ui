@@ -24,6 +24,10 @@
             enableContentBlocks : false
         };
 
+        vm.adamModeConfig = {
+            usePortalRoot: false
+        };
+
         vm.activate = function () {
 
             enableContentBlocksIfPossible(settings);

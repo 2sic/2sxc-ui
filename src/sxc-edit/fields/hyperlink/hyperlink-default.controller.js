@@ -32,6 +32,9 @@
 
             vm.icon = function () { return fileType.getIconClass(vm.testLink); };
             vm.tooltipUrl = function (str) { return str.replace(/\//g, "/&#8203;"); };
+            vm.adamModeConfig = {
+                usePortalRoot: false
+            };
 
             function ensureDefaultConfig() {
                 var merged = $scope.to.settings.merged;
@@ -101,8 +104,9 @@
 
             $scope.afterUpload = vm.setValue;   // binding for dropzone
 
-            vm.toggleAdam = function toggle() {
-                vm.adam.toggle();
+            vm.toggleAdam = function toggle(usePortalRoot, imagesOnly) {
+                vm.adamModeConfig.usePortalRoot = !!usePortalRoot;
+                vm.adam.toggle({showImagesOnly: imagesOnly});
             };
 
             //#endregion

@@ -35,7 +35,8 @@
     </div>
 
     <!-- folder list - not always shown -->
-    <div ng-show="vm.showFolders || vm.debug.on" class="dz-preview" ng-repeat="item in vm.items | filter: { IsFolder: true }  | orderBy:'Name'" ng-click="vm.goIntoFolder(item)">
+    <div ng-show="vm.showFolders || vm.debug.on" class="dz-preview" ng-repeat="item in vm.items | filter: { IsFolder: true } | filter: { Name: '!2sxc' } | filter: { Name: '!adam' } | orderBy:'Name'"
+         ng-click="vm.goIntoFolder(item)">
         <div class="dz-image adam-blur adam-browse-background-icon adam-browse-background">
             <i class="eav-icon-folder-empty"></i>
             <div class="short-label">{{ item.Name }}</div>

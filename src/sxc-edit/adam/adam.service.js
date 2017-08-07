@@ -3,7 +3,7 @@ angular.module("Adam")
     .factory("adamSvc", function ($http, eavConfig, sxc, svcCreator, appRoot) {
 
         // Construct a service for this specific appId
-        return function createSvc(contentType, entityGuid, field, subfolder, usePortalRoot) {
+        return function createSvc(contentType, entityGuid, field, subfolder, serviceConfig) {
             var svc = {
                 url: sxc.resolveServiceUrl("app-content/" + contentType + "/" + entityGuid + "/" + field),
                 subfolder: subfolder,
@@ -13,9 +13,11 @@ angular.module("Adam")
 
             // get the correct url for uploading as it is needed by external services (dropzone)
             svc.uploadUrl = function(targetSubfolder) {
-                return (targetSubfolder === "")
+                var url = (targetSubfolder === "")
                     ? svc.url
                     : svc.url + "?subfolder=" + targetSubfolder;
+                url += (url.indexOf("?") == -1 ? "?" : "&") + "usePortalRoot=" + serviceConfig.usePortalRoot;
+                return url;
             };
 
             // extend a json-response with a path (based on the adam-root) to also have a fullPath
@@ -24,7 +26,7 @@ angular.module("Adam")
             };
 
             svc = angular.extend(svc, svcCreator.implementLiveList(function getAll() {
-                return $http.get(svc.url + "/items", { params: { subfolder: svc.subfolder, usePortalRoot: true } })
+                return $http.get(svc.url + "/items", { params: { subfolder: svc.subfolder, usePortalRoot: serviceConfig.usePortalRoot } })
                     .then(function (result) {
                         angular.forEach(result.data, svc.addFullPath);
                         return result;
@@ -33,7 +35,7 @@ angular.module("Adam")
 
             // create folder
             svc.addFolder = function add(newfolder) {
-                return $http.post(svc.url + "/folder", {}, { params: { subfolder: svc.subfolder, newFolder: newfolder } })
+                return $http.post(svc.url + "/folder", {}, { params: { subfolder: svc.subfolder, newFolder: newfolder, usePortalRoot: serviceConfig.usePortalRoot } })
                     .then(svc.liveListReload);
             };
 
@@ -71,9 +73,11 @@ angular.module("Adam")
             // delete, then reload
             // IF verb DELETE fails, so I'm using get for now
             svc.delete = function del(item) {
-                return $http.get(svc.url + "/delete", { params: { subfolder: svc.subfolder, isFolder: item.IsFolder, id: item.Id } })
+                return $http.get(svc.url + "/delete", { params: { subfolder: svc.subfolder, isFolder: item.IsFolder, id: item.Id, usePortalRoot: serviceConfig.usePortalRoot  } })
                     .then(svc.liveListReload);
             };
+            
+            svc.reload = svc.liveListReload;
 
             return svc;
         };

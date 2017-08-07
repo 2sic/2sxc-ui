@@ -1,4 +1,5 @@
 ﻿<div class="dropzone">
+    {{vm.adamModeConfig | json}}
     <div class="clearfix">
         <div ng-if="value.Value && vm.isImage()"
              class="thumbnail-before-input"
@@ -37,10 +38,10 @@ ADAM - sponsored with ♥ by 2sic.com">
                     </button>
                 </span>
                 <ul class="dropdown-menu pull-right" uib-dropdown-menu role="menu">
-                    <li role="menuitem" ng-if="to.settings['merged'].ShowAdam"><a class="dropzone-adam" ng-click="vm.toggleAdam()" href="javascript:void(0);"><i class="eav-icon-apple"></i> <span translate="Edit.Fields.Hyperlink.Default.MenuAdam"></span></a></li>
+                    <li role="menuitem" ng-if="to.settings['merged'].ShowAdam"><a class="dropzone-adam" ng-click="vm.toggleAdam(false)" href="javascript:void(0);"><i class="eav-icon-apple"></i> <span translate="Edit.Fields.Hyperlink.Default.MenuAdam"></span></a></li>
                     <li role="menuitem" ng-if="to.settings['merged'].ShowPagePicker"><a ng-click="vm.openDialog('pagepicker')" href="javascript:void(0)"><i class="eav-icon-sitemap" xicon="home"></i> <span translate="Edit.Fields.Hyperlink.Default.MenuPage"></span></a></li>
-                    <li role="menuitem" ng-if="to.settings['merged'].ShowImageManager"><a ng-click="vm.openDialog('imagemanager')" href="javascript:void(0)"><i class="eav-icon-file-image" xicon="picture"></i> <span translate="Edit.Fields.Hyperlink.Default.MenuImage"></span></a></li>
-                    <li role="menuitem" ng-if="to.settings['merged'].ShowFileManager"><a ng-click="vm.openDialog('documentmanager')" href="javascript:void(0)"><i class="eav-icon-file" xicon="file"></i> <span translate="Edit.Fields.Hyperlink.Default.MenuDocs"></span></a></li>
+                    <li role="menuitem" ng-if="to.settings['merged'].ShowImageManager"><a ng-click="vm.toggleAdam(true, true)" href="javascript:void(0)"><i class="eav-icon-file-image" xicon="picture"></i> <span translate="Edit.Fields.Hyperlink.Default.MenuImage"></span></a></li>
+                    <li role="menuitem" ng-if="to.settings['merged'].ShowFileManager"><a ng-click="vm.toggleAdam(true, false)" href="javascript:void(0)"><i class="eav-icon-file" xicon="file"></i> <span translate="Edit.Fields.Hyperlink.Default.MenuDocs"></span></a></li>
                 </ul>
             </div>
             <div ng-if="vm.showPreview" style="position: relative">
@@ -68,6 +69,7 @@ ADAM - sponsored with ♥ by 2sic.com">
                       sub-folder=""
                       update-callback="vm.setValue"
                       register-self="vm.registerAdam"
+                      adam-mode-config="vm.adamModeConfig"
                       ng-disabled="to.disabled"></adam-browser>
 
         <!-- the preview of the uploader -->

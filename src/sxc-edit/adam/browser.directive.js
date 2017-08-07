@@ -30,6 +30,7 @@
                     metadataContentTypes: "=",
                     allowAssetsInRoot: "=",
                     showImagesOnly: "=?",
+                    adamModeConfig: "=",
 
                     // binding and cross-component communication
                     autoLoad: "=",
