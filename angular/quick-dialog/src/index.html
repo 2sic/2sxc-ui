@@ -5,24 +5,20 @@
   <script>
     var
       path = window.location.pathname,
-      isDevMode = window.location.hostname === 'localhost',
-      apiUrl;
-    
-    document.write('<base href="' + path + '">');
+      jsVersionCacheId = window.location.search;
 
-    var
-      jsVersionCacheId = window.location.search,
-      devPath = 'http://2sxc.dev/desktopmodules/tosic_sexycontent/dist/a4/';
-    document.write('<script src="' + (isDevMode ? devPath : '') + '../../js/2sxc.api.js' + jsVersionCacheId + '"></scr' + 'ipt>');
+    document.write('<base href="' + path + '">');
+    document.write('<script src="../../js/2sxc.api.js' + jsVersionCacheId + '"></scr' + 'ipt>');
     // must now close the script tag, so that the added tag is parsed before all other code
   </script>
   <script>
-    apiUrl = $2sxc.urlParams.require("portalroot") + "desktopmodules/2sxc/api/";
+    var apiUrl = $2sxc.urlParams.require('portalroot') + 'desktopmodules/2sxc/api/';
     createFakeSf(apiUrl);
 
     // Create a fake DNN Service-Framework, required by $2sxc to work properly
     function createFakeSf(apiUrl) {
-      if ($2sxc.urlParams.require("mid") === "") alert("ModuleId (mid) missing - cannot continue"); if (window.$ === undefined) window.$ = {};
+      if ($2sxc.urlParams.require('mid') === '') alert('ModuleId (mid) missing - cannot continue');
+      if (window.$ === undefined) window.$ = {};
       window.$.ServicesFramework = function (id) {
         return {
           name: "This is a fake DNN ServicesFramework", description:

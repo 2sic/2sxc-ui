@@ -166,7 +166,7 @@ export class TemplatePickerComponent implements OnInit {
     this.api.loadTemplates()
       .take(1)
       .subscribe(templates => this.api.loadContentTypes())
-
+  
     this.api.loadApps();
   }
 
