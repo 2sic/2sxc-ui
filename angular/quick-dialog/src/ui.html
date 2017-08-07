@@ -57,8 +57,7 @@
       'inline.bundle.js', // purpose unknown    
       'polyfills.bundle.js', // js polyfills for older browsers
       'vendor.bundle.js', // default set needed for all UIs like angular, animate, translate
-      'main.bundle.js', // our app, with everything
-      'styles.bundle.js'
+      'main.bundle.js' // our app, with everything
     ], styles = [
       'styles.bundle.css'
     ];
@@ -69,6 +68,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link href="//fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <!-- </head> -->
 </head>
 
 <body>
@@ -79,6 +79,7 @@
     for (s = 0; s < scripts.length; s++) addScript(scripts[s]);
     for (s = 0; s < styles.length; s++) addStyle(styles[s]);
   </script>
+  <!-- </body> -->
 </body>
 
 </html>
