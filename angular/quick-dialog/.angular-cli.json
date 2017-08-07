@@ -12,7 +12,7 @@
         "ui.html",
         "favicon.ico"
       ],
-      "index": "index.html",
+      "index": "ui.html",
       "main": "main.ts",
       "polyfills": "polyfills.ts",
       "test": "test.ts",
