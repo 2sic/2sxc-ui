@@ -49,7 +49,7 @@
       var style = document.createElement("link");
       style.setAttribute("rel", "stylesheet");
       style.setAttribute("type", "text/css");
-      style.setAttribute("href", src);
+      style.setAttribute("href", src + jsVersionCacheId);
       document.getElementsByTagName("head")[0].appendChild(style);
     }
 
