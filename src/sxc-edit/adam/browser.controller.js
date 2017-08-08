@@ -58,13 +58,23 @@
         vm.toggle = function toggle(newConfig) {
             // Reload configuration
             initConfig();
+            var configChanged = false;
             if (newConfig) {
+                // Detect changes in config, allows correct toggle behaviour
+                if (JSON.stringify(newConfig) != vm.oldConfig)
+                    configChanged = true;
+                vm.oldConfig = JSON.stringify(newConfig);
+
                 vm.showImagesOnly = newConfig.showImagesOnly;
+                $scope.adamModeConfig.usePortalRoot = !!(newConfig.usePortalRoot);
             }
-            vm.show = !vm.show;
+
+            vm.show = configChanged || !vm.show;
+            
             if (!vm.show)
                 $scope.adamModeConfig.usePortalRoot = false;
-            
+
+            // Override configuration in portal mode
             if ($scope.adamModeConfig.usePortalRoot) {
                 vm.showFolders = true;
                 vm.folderDepth = 99;
@@ -184,6 +194,20 @@
             return fileType.getIconClass(item.Name);
         };
         //#endregion
+
+        vm.allowedFileTypes = [];
+        if ($scope.fileFilter) {
+            vm.allowedFileTypes = $scope.fileFilter.split(',').map(function (i) {
+                return i.replace('*', '').trim();
+            });
+        }
+
+        vm.fileEndingFilter = function (item) {
+            if (vm.allowedFileTypes.length == 0)
+                return true;
+            var extension = item.Name.match(/(?:\.([^.]+))?$/)[0];
+            return vm.allowedFileTypes.indexOf(extension) != -1;
+        };
 
         vm.activate();
     }

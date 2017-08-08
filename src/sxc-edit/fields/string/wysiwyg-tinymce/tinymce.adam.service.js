@@ -26,8 +26,11 @@ angular.module("sxcFieldTemplates")
 
             vm.toggleAdam = function toggle(imagesOnly, usePortalRoot) {
                 vm.adamModeImage = imagesOnly;
-                vm.adamModeConfig.usePortalRoot = !!usePortalRoot;
-                vm.adam.toggle({ showImagesOnly: imagesOnly });
+                //vm.adamModeConfig.usePortalRoot = !!usePortalRoot;
+                vm.adam.toggle({
+                    showImagesOnly: imagesOnly,
+                    usePortalRoot: usePortalRoot
+                });
                 $scope.$apply();
             };
         }

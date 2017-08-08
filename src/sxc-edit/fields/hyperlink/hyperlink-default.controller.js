@@ -105,8 +105,11 @@
             $scope.afterUpload = vm.setValue;   // binding for dropzone
 
             vm.toggleAdam = function toggle(usePortalRoot, imagesOnly) {
-                vm.adamModeConfig.usePortalRoot = !!usePortalRoot;
-                vm.adam.toggle({showImagesOnly: imagesOnly});
+                
+                vm.adam.toggle({
+                    showImagesOnly: imagesOnly,
+                    usePortalRoot: usePortalRoot
+                });
             };
 
             //#endregion

@@ -31,6 +31,7 @@
                     allowAssetsInRoot: "=",
                     showImagesOnly: "=?",
                     adamModeConfig: "=",
+                    fileFilter: "=?",
 
                     // binding and cross-component communication
                     autoLoad: "=",
