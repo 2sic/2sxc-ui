@@ -76,6 +76,12 @@ angular.module("Adam")
                 return $http.get(svc.url + "/delete", { params: { subfolder: svc.subfolder, isFolder: item.IsFolder, id: item.Id, usePortalRoot: serviceConfig.usePortalRoot  } })
                     .then(svc.liveListReload);
             };
+
+            // rename, then reload
+            svc.rename = function rename(item, newName) {
+                return $http.get(svc.url + "/rename", { params: { subfolder: svc.subfolder, isFolder: item.IsFolder, id: item.Id, usePortalRoot: serviceConfig.usePortalRoot, newName: newName } })
+                    .then(svc.liveListReload);
+            };
             
             svc.reload = svc.liveListReload;
 

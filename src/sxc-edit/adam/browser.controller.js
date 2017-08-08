@@ -111,6 +111,12 @@
                 vm.svc.delete(item);
         };
 
+        vm.rename = function rename(item) {
+            var newName = window.prompt('Rename the file / folder to: ', item.Name);
+            if(newName)
+                vm.svc.rename(item, newName);
+        }
+
         //#region Folder Navigation
         vm.goIntoFolder = function (folder) {
             var subFolder = vm.svc.goIntoFolder(folder);
