@@ -44,7 +44,8 @@
 
         <div class="dz-details file-type-{{item.Type}}">
             <span ng-click="vm.del(item)" stop-event="click" class="adam-delete-button"><i class="eav-icon-cancel"></i></span>
-            <div class="adam-full-name-area" ng-dblclick="vm.rename(item)">
+            <span ng-click="vm.rename(item)" stop-event="click" class="adam-rename-button"><i class="eav-icon-pencil"></i></span>
+            <div class="adam-full-name-area">
                 <div class="adam-full-name">{{ item.Name }}</div>
             </div>
         </div>
@@ -74,7 +75,8 @@
 
         <div class="dz-details file-type-{{item.Type}}">
             <span ng-click="vm.del(item)" stop-event="click" class="adam-delete-button"><i class="eav-icon-cancel"></i></span>
-            <div class="adam-full-name-area" ng-dblclick="vm.rename(item)">
+            <span ng-click="vm.rename(item)" stop-event="click" class="adam-rename-button"><i class="eav-icon-pencil"></i></span>
+            <div class="adam-full-name-area">
                 <div class="adam-full-name">{{ item.Name }}</div>
             </div>
             <div class="dz-filename adam-short-label">
