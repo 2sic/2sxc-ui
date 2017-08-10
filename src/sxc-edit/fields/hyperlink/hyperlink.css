@@ -39,9 +39,13 @@ div.dropzone div.input-group div.tooltip-inner {
 
 .field-hints {
     visibility: hidden;
+    opacity: 0;
+    transition-duration: 200ms, 200ms;
+    transition-property: opacity, visibility;
+    transition-delay: 0, 200ms;
 }
-
 
 div.focused .field-hints {
     visibility: visible;
+    opacity:1;
 }
