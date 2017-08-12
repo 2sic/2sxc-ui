@@ -24,9 +24,13 @@ angular.module("sxcFieldTemplates")
                 vm.setValue(fileItem, fileItem.Type === "image");
             };
 
-            vm.toggleAdam = function toggle(imagesOnly) {
+            vm.toggleAdam = function toggle(imagesOnly, usePortalRoot) {
                 vm.adamModeImage = imagesOnly;
-                vm.adam.toggle({ showImagesOnly: imagesOnly });
+                //vm.adamModeConfig.usePortalRoot = !!usePortalRoot;
+                vm.adam.toggle({
+                    showImagesOnly: imagesOnly,
+                    usePortalRoot: usePortalRoot
+                });
                 $scope.$apply();
             };
         }
@@ -47,14 +51,14 @@ angular.module("sxcFieldTemplates")
                         tooltip: "Link.AdamFile.Tooltip",
                         icon: " eav-icon-file-pdf",
                         onclick: function () {
-                            vm.toggleAdam(false);
+                            vm.toggleAdam(false, false);
                         }
                     }, {
                         text: "Link.DnnFile",
                         tooltip: "Link.DnnFile.Tooltip",
                         icon: " eav-icon-file",
                         onclick: function () {
-                            vm.openDnnDialog("documentmanager");
+                            vm.toggleAdam(false, true);
                         }
                     }
                 ]
@@ -79,7 +83,7 @@ angular.module("sxcFieldTemplates")
                         text: "Image.DnnImage",
                         tooltip: "Image.DnnImage.Tooltip",
                         icon: "image",
-                        onclick: function () { vm.openDnnDialog("imagemanager"); }
+                        onclick: function () { vm.toggleAdam(true, true); }
                     }, {
                         text: "Insert\/edit image", // i18n tinyMce standard
                         icon: "image",

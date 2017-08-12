@@ -35,7 +35,8 @@
     </div>
 
     <!-- folder list - not always shown -->
-    <div ng-show="vm.showFolders || vm.debug.on" class="dz-preview" ng-repeat="item in vm.items | filter: { IsFolder: true }  | orderBy:'Name'" ng-click="vm.goIntoFolder(item)">
+    <div ng-show="vm.showFolders || vm.debug.on" class="dz-preview" ng-repeat="item in vm.items | filter: { IsFolder: true } | filter: { Name: '!2sxc' } | filter: { Name: '!adam' } | orderBy:'Name'"
+         ng-click="vm.goIntoFolder(item)">
         <div class="dz-image adam-blur adam-browse-background-icon adam-browse-background">
             <i class="eav-icon-folder-empty"></i>
             <div class="short-label">{{ item.Name }}</div>
@@ -43,6 +44,7 @@
 
         <div class="dz-details file-type-{{item.Type}}">
             <span ng-click="vm.del(item)" stop-event="click" class="adam-delete-button"><i class="eav-icon-cancel"></i></span>
+            <span ng-click="vm.rename(item)" stop-event="click" class="adam-rename-button"><i class="eav-icon-pencil"></i></span>
             <div class="adam-full-name-area">
                 <div class="adam-full-name">{{ item.Name }}</div>
             </div>
@@ -59,7 +61,7 @@
 
 
     <!-- files -->
-    <div class="dz-preview" ng-class="{ 'dz-success': value.Value.toLowerCase() == 'file:' + item.Id }" ng-repeat="item in (vm.items | filter: { IsFolder: false }) | filter: (vm.showImagesOnly ? {Type: 'image'} : {})  | orderBy:'Name'" ng-click="vm.select(item)" ng-disabled="vm.disabled || !vm.enableSelect">
+    <div class="dz-preview" ng-class="{ 'dz-success': value.Value.toLowerCase() == 'file:' + item.Id }" ng-repeat="item in (vm.items | filter: vm.fileEndingFilter | filter: { IsFolder: false }) | filter: (vm.showImagesOnly ? {Type: 'image'} : {})  | orderBy:'Name'" ng-click="vm.select(item)" ng-disabled="vm.disabled || !vm.enableSelect">
         <div ng-if="item.Type !== 'image'" class="dz-image adam-blur  adam-browse-background-icon adam-browse-background">
             <i ng-class="vm.icon(item)"></i>
             <div class="adam-short-label">{{ item.Name }}</div>
@@ -73,6 +75,7 @@
 
         <div class="dz-details file-type-{{item.Type}}">
             <span ng-click="vm.del(item)" stop-event="click" class="adam-delete-button"><i class="eav-icon-cancel"></i></span>
+            <span ng-click="vm.rename(item)" stop-event="click" class="adam-rename-button"><i class="eav-icon-pencil"></i></span>
             <div class="adam-full-name-area">
                 <div class="adam-full-name">{{ item.Name }}</div>
             </div>

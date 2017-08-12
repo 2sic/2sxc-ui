@@ -33,9 +33,7 @@ angular.module("sxcFieldTemplates")
                 "lists", // should fix bug with fonts in list-items (https://github.com/tinymce/tinymce/issues/2330),
                 "textpattern" // enable typing like "1. text" to create lists etc.
             ],
-
-
-
+            
             validateAlso: '@[class]' // allow classes on all elements, 
                     + ',i' // allow i elements (allows icon-font tags like <i class="fa fa-...">)
                     + ",hr[sxc|guid]" // experimental: allow inline content-blocks

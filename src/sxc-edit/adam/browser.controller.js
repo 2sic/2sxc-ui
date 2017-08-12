@@ -11,23 +11,26 @@
     function BrowserController($scope, adamSvc, debugState, eavConfig, eavAdminDialogs, appRoot, fileType) {
         var vm = this;
         vm.debug = debugState;
-        vm.contentTypeName = $scope.contentTypeName;
-        vm.entityGuid = $scope.entityGuid;
-        vm.fieldName = $scope.fieldName;
+
+        var initConfig = function initConfig() {
+            vm.contentTypeName = $scope.contentTypeName;
+            vm.entityGuid = $scope.entityGuid;
+            vm.fieldName = $scope.fieldName;
+            vm.subFolder = $scope.subFolder || "";
+            vm.showImagesOnly = $scope.showImagesOnly = $scope.showImagesOnly || false;
+
+            vm.folderDepth = (typeof $scope.folderDepth !== 'undefined' && $scope.folderDepth !== null)
+                ? $scope.folderDepth
+                : 2;
+            vm.showFolders = !!vm.folderDepth;
+            vm.allowAssetsInRoot = $scope.allowAssetsInRoot || true;
+            vm.metadataContentTypes = $scope.metadataContentTypes || "";
+        };
+
+        initConfig();
+        
         vm.show = false;
-        vm.subFolder = $scope.subFolder || "";
-        vm.appRoot = appRoot;
-
-        //$scope.showImagesOnly = ;
-        vm.showImagesOnly = $scope.showImagesOnly = $scope.showImagesOnly || false;
-
-        vm.folderDepth = (typeof $scope.folderDepth !== 'undefined' && $scope.folderDepth !== null)
-            ? $scope.folderDepth
-            : 2;
-        vm.showFolders = !!vm.folderDepth;
-        vm.allowAssetsInRoot = $scope.allowAssetsInRoot || true;
-        vm.metadataContentTypes = $scope.metadataContentTypes || "";
-
+        vm.appRoot = appRoot;        
 
         vm.disabled = $scope.ngDisabled;
         vm.enableSelect = ($scope.enableSelect === false) ? false : true; // must do it like this, $scope.enableSelect || true will not work
@@ -41,7 +44,7 @@
 
 
         // load svc...
-        vm.svc = adamSvc(vm.contentTypeName, vm.entityGuid, vm.fieldName, vm.subFolder);
+        vm.svc = adamSvc(vm.contentTypeName, vm.entityGuid, vm.fieldName, vm.subFolder, $scope.adamModeConfig);
 
         // refresh - also used by callback after an upload completed
         vm.refresh = vm.svc.liveListReload;
@@ -49,15 +52,34 @@
         vm.get = function () {
             vm.items = vm.svc.liveList();
             vm.folders = vm.svc.folders;
+            vm.svc.liveListReload();
         };
 
         vm.toggle = function toggle(newConfig) {
-            var settingsChanged = false;
+            // Reload configuration
+            initConfig();
+            var configChanged = false;
             if (newConfig) {
-                settingsChanged = (vm.showImagesOnly !== newConfig.showImagesOnly);
+                // Detect changes in config, allows correct toggle behaviour
+                if (JSON.stringify(newConfig) != vm.oldConfig)
+                    configChanged = true;
+                vm.oldConfig = JSON.stringify(newConfig);
+
                 vm.showImagesOnly = newConfig.showImagesOnly;
+                $scope.adamModeConfig.usePortalRoot = !!(newConfig.usePortalRoot);
             }
-            vm.show = settingsChanged || !vm.show;      // if settings changed, always show
+
+            vm.show = configChanged || !vm.show;
+            
+            if (!vm.show)
+                $scope.adamModeConfig.usePortalRoot = false;
+
+            // Override configuration in portal mode
+            if ($scope.adamModeConfig.usePortalRoot) {
+                vm.showFolders = true;
+                vm.folderDepth = 99;
+            }
+
             if (vm.show)
                 vm.get();
         };
@@ -88,6 +110,12 @@
             if (ok)
                 vm.svc.delete(item);
         };
+
+        vm.rename = function rename(item) {
+            var newName = window.prompt('Rename the file / folder to: ', item.Name);
+            if(newName)
+                vm.svc.rename(item, newName);
+        }
 
         //#region Folder Navigation
         vm.goIntoFolder = function (folder) {
@@ -172,6 +200,20 @@
             return fileType.getIconClass(item.Name);
         };
         //#endregion
+
+        vm.allowedFileTypes = [];
+        if ($scope.fileFilter) {
+            vm.allowedFileTypes = $scope.fileFilter.split(',').map(function (i) {
+                return i.replace('*', '').trim();
+            });
+        }
+
+        vm.fileEndingFilter = function (item) {
+            if (vm.allowedFileTypes.length == 0)
+                return true;
+            var extension = item.Name.match(/(?:\.([^.]+))?$/)[0];
+            return vm.allowedFileTypes.indexOf(extension) != -1;
+        };
 
         vm.activate();
     }
