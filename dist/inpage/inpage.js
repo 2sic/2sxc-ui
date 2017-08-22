@@ -490,6 +490,7 @@
 
             // open a new dialog of the angular-ui
             _openNgDialog: function (settings, event, closeCallback) {
+                settings.params.versioningRequirements = sxc.manage._editContext.ContentBlock.VersioningRequirements;
                 var callback = function () {
                     cmc.manage.contentBlock.reloadAndReInitialize();
                     closeCallback();

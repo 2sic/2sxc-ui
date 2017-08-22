@@ -1,5 +1,4 @@
 (function () { 
-
     angular.module("DialogHost", [
         "SxcAdminUi",
         "EavAdminUi",
@@ -8,15 +7,13 @@
         "eavEditEntity" // new it must be added here, so it's available in the entire application - not good architecture, must fix someday
     ])
          
-        .controller("DialogHost", DialogHostController)
-        ;
+        .controller("DialogHost", DialogHostController);
 
     function preLoadAgGrid($ocLazyLoad) {
         return $ocLazyLoad.load([
             "../lib/ag-grid/ag-grid.min.js",
             "../lib/ag-grid/ag-grid.min.css"
         ]);
-
     }
 
     /*@ngInject*/
