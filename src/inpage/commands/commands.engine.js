@@ -63,7 +63,7 @@
                             }
                         }
                         cmd.params.items = JSON.stringify(cmd.items); // Serialize/json-ify the complex items-list
-
+                        
                         return (dialogUrl || ngDialogUrl)
                             + "#" + $.param(cmc.manage._dialogParameters)
                             + "&" + $.param(cmd.params)
@@ -99,7 +99,7 @@
 
             // open a new dialog of the angular-ui
             _openNgDialog: function (settings, event, closeCallback) {
-                settings.params.versioningRequirements = sxc.manage._editContext.ContentBlock.VersioningRequirements;
+                if (settings.params) settings.params.versioningRequirements = sxc.manage._editContext.ContentBlock.VersioningRequirements;
                 var callback = function () {
                     cmc.manage.contentBlock.reloadAndReInitialize();
                     closeCallback();

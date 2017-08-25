@@ -43,6 +43,7 @@
         isFullscreen = fullScreen;
 
         init();
+        
         /**
          * Assign properties to the iframe for later use.
          */
