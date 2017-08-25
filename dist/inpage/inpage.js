@@ -454,7 +454,7 @@
                             }
                         }
                         cmd.params.items = JSON.stringify(cmd.items); // Serialize/json-ify the complex items-list
-
+                        
                         return (dialogUrl || ngDialogUrl)
                             + "#" + $.param(cmc.manage._dialogParameters)
                             + "&" + $.param(cmd.params)
@@ -490,6 +490,7 @@
 
             // open a new dialog of the angular-ui
             _openNgDialog: function (settings, event, closeCallback) {
+                if (settings.params) settings.params.versioningRequirements = sxc.manage._editContext.ContentBlock.VersioningRequirements;
                 var callback = function () {
                     cmc.manage.contentBlock.reloadAndReInitialize();
                     closeCallback();
@@ -953,6 +954,7 @@ var $2sxcActionMenuMapper = function (moduleId) {
         isFullscreen = fullScreen;
 
         init();
+        
         /**
          * Assign properties to the iframe for later use.
          */
@@ -1098,6 +1100,7 @@ if (typeof Object.assign != 'function') {
             langs: JSON.stringify(editContext.Language.All),
             portalroot: editContext.Environment.WebsiteUrl,
             websiteroot: editContext.Environment.SxcRootUrl,
+            partOfPage: true,
             // todo: probably move the user into the dashboard info
             user: { canDesign: editContext.User.CanDesign, canDevelop: editContext.User.CanDesign },
             approot: editContext.ContentGroup.AppUrl || null // this is the only value which doesn't have a slash by default.  note that the app-root doesn't exist when opening "manage-app"
@@ -1229,6 +1232,50 @@ if (typeof Object.assign != 'function') {
     }
     //#endregion
 })();
+// https://tc39.github.io/ecma262/#sec-array.prototype.find
+if (!Array.prototype.find) {
+    Object.defineProperty(Array.prototype, 'find', {
+        value: function (predicate) {
+            // 1. Let O be ? ToObject(this value).
+            if (this == null) {
+                throw new TypeError('"this" is null or not defined');
+            }
+
+            var o = Object(this);
+
+            // 2. Let len be ? ToLength(? Get(O, "length")).
+            var len = o.length >>> 0;
+
+            // 3. If IsCallable(predicate) is false, throw a TypeError exception.
+            if (typeof predicate !== 'function') {
+                throw new TypeError('predicate must be a function');
+            }
+
+            // 4. If thisArg was supplied, let T be thisArg; else let T be undefined.
+            var thisArg = arguments[1];
+
+            // 5. Let k be 0.
+            var k = 0;
+
+            // 6. Repeat, while k < len
+            while (k < len) {
+                // a. Let Pk be ! ToString(k).
+                // b. Let kValue be ? Get(O, Pk).
+                // c. Let testResult be ToBoolean(? Call(predicate, T, « kValue, k, O »)).
+                // d. If testResult is true, return kValue.
+                var kValue = o[k];
+                if (predicate.call(thisArg, kValue, k, o)) {
+                    return kValue;
+                }
+                // e. Increase k by 1.
+                k++;
+            }
+
+            // 7. Return undefined.
+            return undefined;
+        }
+    });
+}
 $(function () {
     "use strict";
 

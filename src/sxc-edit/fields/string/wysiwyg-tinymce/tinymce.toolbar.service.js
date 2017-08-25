@@ -119,7 +119,7 @@ angular.module("sxcFieldTemplates")
                         text: "Image.DnnImage",
                         tooltip: "Image.DnnImage.Tooltip",
                         icon: "image",
-                        onclick: function () { vm.openDnnDialog("imagemanager"); }
+                        onclick: function () { vm.toggleAdam(true, true); }
                     }, {
                         text: "Insert\/edit image", // i18n tinyMce standard
                         icon: "image",
