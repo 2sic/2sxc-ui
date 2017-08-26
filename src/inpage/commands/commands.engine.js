@@ -52,6 +52,7 @@
                         if (withPresentation) cmd.addContentGroupItem(groupId, index, pTerm.toLowerCase(), isAdd, cmd.settings.cbIsEntity, cmd.settings.cbId, "EditFormTitle." + pTerm);
                     },
 
+                    // build the link, combining specific params with global ones and put all in the url
                     generateLink: function (dialogUrl) {
                         // if there is no items-array, create an empty one (it's required later on)
                         if (!cmd.settings.items) cmd.settings.items = [];
@@ -92,47 +93,44 @@
                 return cmd.generateLink();
             },
 
-            _openModernDialog: function (settings) {
-                var link = cmc._linkToNgDialog(settings);
-                return $2sxc._angularDialog.open(url, settings.name);
-            },
-
             // open a new dialog of the angular-ui
             _openNgDialog: function (settings, event, closeCallback) {
-                if (settings.params) settings.params.versioningRequirements = sxc.manage._editContext.ContentBlock.VersioningRequirements;
-                var callback = function () {
-                    cmc.manage.contentBlock.reloadAndReInitialize();
-                    closeCallback();
-                }, link = cmc._linkToNgDialog(settings);
-                if (settings.newWindow || (event && event.shiftKey)) return window.open(link);
+                // the callback will handle events after closing the dialog
+                // and reload the in-page view w/ajax or page reload
+                var callback = function() {
+                        cmc.manage.contentBlock.reloadAndReInitialize();
+                        closeCallback();
+                    },
+                    link = cmc._linkToNgDialog(settings); // the link contains everything to open a full dialog (lots of params added)
                 if (settings.inlineWindow) return $2sxc._dialog(sxc, targetTag, link, callback, settings.dialog === 'item-history');
+                if (settings.newWindow || (event && event.shiftKey)) return window.open(link);
                 return $2sxc.totalPopup.open(link, callback);
             },
 
             // ToDo: remove dead code
             executeAction: function (nameOrSettings, settings, event) {
-                var conf,
-                    // ToDo: review this code
-                    // pre-save event because afterwards we have a promise, so the event-object changes; funky syntax is because of browser differences
-                    origEvent = event || window.event;
 
-                // check if name is name (string) or object (settings)
-                if (!event && settings && typeof settings.altKey !== 'undefined') { // no event param, but settings contains the event-object
+                // cycle parameters, in case it was called with 2 params only
+                if (!event && settings && typeof settings.altKey !== "undefined") { // no event param, but settings contains the event-object
                     event = settings;   // move it to the correct variable
-                    settings = {};      // clear the settings variable
+                    settings = {};      // clear the settings variable, as none was provided
                 }
 
+                // pre-save event because afterwards we have a promise, so the event-object changes; funky syntax is because of browser differences
+                var origEvent = event || window.event;
+
+                // check if name is name (string) or object (settings)
                 settings = (typeof nameOrSettings === "string")
                     ? $2sxc._lib.extend(settings || {}, { "action": nameOrSettings }) // place the name as an action-name into a command-object
                     : nameOrSettings;
 
-                conf = cmc.manage._toolbar.actions[settings.action];
+                var conf = cmc.manage._toolbar.actions[settings.action];
                 settings = $2sxc._lib.extend({}, conf, settings); // merge conf & settings, but settings has higher priority
 
                 if (!settings.dialog) settings.dialog = settings.action; // old code uses "action" as the parameter, now use verb ? dialog
                 if (!settings.code) settings.code = cmc._openNgDialog; // decide what action to perform
 
-                if (conf.uiActionOnly) return settings.code(settings, origEvent, sxc); // 2016-11-03 cmc.manage);
+                if (conf.uiActionOnly) return settings.code(settings, origEvent, sxc); 
 
                 // if more than just a UI-action, then it needs to be sure the content-group is created first
                 cmc.manage.contentBlock.prepareToAddContent()

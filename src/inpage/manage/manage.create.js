@@ -13,7 +13,7 @@
         var contentBlockTag = getContentBlockTag(sxc);
         var editContext = getContextInfo(contentBlockTag);
         
-        // assemble all parameters needed for the dialogs if we open anything
+        // assemble all parameters needed for the common dialogs if we open anything
         var ngDialogParams = {
             zoneId: editContext.ContentGroup.ZoneId,
             appId: editContext.ContentGroup.AppId,
@@ -26,6 +26,8 @@
             portalroot: editContext.Environment.WebsiteUrl,
             websiteroot: editContext.Environment.SxcRootUrl,
             partOfPage: true,
+            versioningRequirements: editContext.ContentBlock.VersioningRequirements,
+
             // todo: probably move the user into the dashboard info
             user: { canDesign: editContext.User.CanDesign, canDevelop: editContext.User.CanDesign },
             approot: editContext.ContentGroup.AppUrl || null // this is the only value which doesn't have a slash by default.  note that the app-root doesn't exist when opening "manage-app"

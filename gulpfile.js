@@ -1,8 +1,9 @@
 ﻿(() => {
     const
         dests = {
-            default: './../2SexyContent/Web',
-            evoq: '../TestWebsites/Evoq 9.1.0',
+            current: "default",
+            default: "./../2SexyContent/Web",
+            evoq: "../TestWebsites/Evoq 9.1.0",
         },
         gulp = require("gulp"),
         $ = require("gulp-load-plugins")({ lazy: false }),
@@ -15,13 +16,13 @@
             debug: true,
             autostart: true,
             autopublish: true,
-            autopublishTarget: '/DesktopModules/ToSIC_SexyContent/dist',
-            autopublishTargetJs: '/DesktopModules/ToSIC_SexyContent/js',
-            rootDist: 'dist/' // "tmp-gulp/dist/"
+            autopublishTarget: "/DesktopModules/ToSIC_SexyContent/dist",
+            autopublishTargetJs: "/DesktopModules/ToSIC_SexyContent/js",
+            rootDist: "dist/" // "tmp-gulp/dist/"
         };
 
-    gulp.task('develop', ['A-watch-our-code', 'B-watch-publish-to-2sxc']);
-    gulp.task('watch-publish', ['B-watch-publish-to-2sxc']);
+    gulp.task("develop", ["A-watch-our-code", "B-watch-publish-to-2sxc"]);
+    gulp.task("watch-publish", ["B-watch-publish-to-2sxc"]);
 
     // register all watches & run them
     gulp.task("A-watch-our-code", function () {
@@ -38,12 +39,12 @@
     // deploy to the current 2sxc-dev
     gulp.task("publish-dist-to-2sxc", function () {
         gulp.src(["./dist/**/*"])
-            .pipe(gulp.dest(dests.evoq + config.autopublishTarget));
+            .pipe(gulp.dest(dests[dests.current] + config.autopublishTarget));
     });
 
     gulp.task("publish-js-to-2sxc", function () {
         gulp.src(["./js/**/*"])
-            .pipe(gulp.dest(dests.evoq + config.autopublishTargetJs));
+            .pipe(gulp.dest(dests[dests.current] + config.autopublishTargetJs));
     });
 
     gulp.task("B-watch-publish-to-2sxc", function () {
