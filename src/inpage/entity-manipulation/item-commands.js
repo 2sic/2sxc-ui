@@ -2,7 +2,7 @@
 (function() {
     if (window.$2sxc) {
         
-        //#region contentItem Commands - at the moment only finishUpgrade
+        //#region contentItem Commands
         $2sxc.contentItems = {
             // delete command - try to really delete a content-item
             "delete": function (sxc, itemId, itemGuid, itemTitle) {
@@ -17,14 +17,11 @@
                         location.reload();
                     }).error(function (error) {
                         var msgJs = $2sxc.translate("Delete.ErrCheckConsole");
-                        // check if it's a permission config problem
                         console.log(error);
-                        if (error.status === 401) {
-                            alert($2sxc.translate("Delete.ErrPermission") + msgJs);
-                        }
-                        if (error.status === 400) {
-                            alert($2sxc.translate("Delete.ErrInUse") + msgJs);
-                        }
+
+                        // check if it's a permission config problem
+                        if (error.status === 401) alert($2sxc.translate("Delete.ErrPermission") + msgJs);
+                        if (error.status === 400) alert($2sxc.translate("Delete.ErrInUse") + msgJs);
                     });
             }
         };
