@@ -4,7 +4,8 @@
   "description": "Create awesome, responsive content for DNN",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "develop": "gulp develop"
   },
   "repository": {
     "type": "git",
@@ -26,7 +27,7 @@
   },
   "homepage": "https://github.com/2sic/2sxc-ui",
   "devDependencies": {
-    "gulp": "3.9.1",
+    "gulp": "^3.9.1",
     "gulp-angular-templatecache": "1.8.0",
     "gulp-clean": "0.3.2",
     "gulp-clean-css": "2.0.3",

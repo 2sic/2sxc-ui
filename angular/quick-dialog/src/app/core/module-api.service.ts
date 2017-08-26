@@ -13,7 +13,6 @@ export class ModuleApiService {
   gettingStarted: Observable<string>;
   templates: Observable<any[]>;
 
-  private readonly base: string = 'http://2sxc.dev/desktopmodules/2sxc/api/';
   private appSubject: Subject<any[]> = new Subject<any[]>();
   private contentTypeSubject: Subject<any[]> = new Subject<any[]>();
   private gettingStartedSubject: Subject<string> = new Subject<string>();

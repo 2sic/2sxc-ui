@@ -1,5 +1,4 @@
 (function () { 
-
     angular.module("DialogHost", [
         "SxcAdminUi",
         "EavAdminUi",
@@ -8,30 +7,28 @@
         "eavEditEntity" // new it must be added here, so it's available in the entire application - not good architecture, must fix someday
     ])
          
-        .controller("DialogHost", DialogHostController)
-        ;
+        .controller("DialogHost", DialogHostController);
 
     function preLoadAgGrid($ocLazyLoad) {
         return $ocLazyLoad.load([
             "../lib/ag-grid/ag-grid.min.js",
             "../lib/ag-grid/ag-grid.min.css"
         ]);
-
     }
-
+    
     /*@ngInject*/
     function DialogHostController(zoneId, appId, items, $2sxc, dialog, sxcDialogs, contentTypeName, eavAdminDialogs, $ocLazyLoad) {
         var vm = this;
         vm.dialog = dialog;
         var initialDialog = dialog;
-
+        
         vm.close = function close() {
             sxcDialogs.closeThis();
         };
-
+        
         switch (initialDialog) {
             case "edit":
-                eavAdminDialogs.openEditItems(items, vm.close);
+                eavAdminDialogs.openEditItems(items, vm.close, { partOfPage: $2sxc.urlParams.get('partOfPage') });
                 break;
             case "zone":
                 // this is the zone-config dialog showing mainly all the apps

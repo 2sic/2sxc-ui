@@ -134,7 +134,6 @@
         vm.allowCreateFolder = function() {
             return vm.svc.folders.length < vm.folderDepth;
         };
-
         //#endregion
 
         //#region Metadata
@@ -144,7 +143,6 @@
             ];
 
             eavAdminDialogs.openEditItems(items, vm.refresh);
-
         };
 
         vm.getMetadataType = function(item) {

@@ -454,7 +454,7 @@
                             }
                         }
                         cmd.params.items = JSON.stringify(cmd.items); // Serialize/json-ify the complex items-list
-
+                        
                         return (dialogUrl || ngDialogUrl)
                             + "#" + $.param(cmc.manage._dialogParameters)
                             + "&" + $.param(cmd.params)
@@ -490,6 +490,7 @@
 
             // open a new dialog of the angular-ui
             _openNgDialog: function (settings, event, closeCallback) {
+                if (settings.params) settings.params.versioningRequirements = sxc.manage._editContext.ContentBlock.VersioningRequirements;
                 var callback = function () {
                     cmc.manage.contentBlock.reloadAndReInitialize();
                     closeCallback();
@@ -953,6 +954,7 @@ var $2sxcActionMenuMapper = function (moduleId) {
         isFullscreen = fullScreen;
 
         init();
+        
         /**
          * Assign properties to the iframe for later use.
          */
@@ -1098,6 +1100,7 @@ if (typeof Object.assign != 'function') {
             langs: JSON.stringify(editContext.Language.All),
             portalroot: editContext.Environment.WebsiteUrl,
             websiteroot: editContext.Environment.SxcRootUrl,
+            partOfPage: true,
             // todo: probably move the user into the dashboard info
             user: { canDesign: editContext.User.CanDesign, canDevelop: editContext.User.CanDesign },
             approot: editContext.ContentGroup.AppUrl || null // this is the only value which doesn't have a slash by default.  note that the app-root doesn't exist when opening "manage-app"
