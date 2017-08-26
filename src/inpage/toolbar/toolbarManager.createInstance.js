@@ -1,7 +1,4 @@
 ﻿(function () {
-    // quick debug - set to false if not needed for production
-    var dbg = true;
-
     // #region helper functions - without state
     function createToolbarConfig(context) {
         var c = context, ce = c.Environment, cg = c.ContentGroup, cb = c.ContentBlock;
@@ -33,54 +30,33 @@
         }
     }
 
-    var settingsForEmptyToolbar = {
-        hover: "left",
-        autoAddMore: "left"
-    };
-
-    function generateFallbackToolbar() {
-        var settingsString = JSON.stringify(settingsForEmptyToolbar);
-        return $("<ul class='sc-menu' toolbar='' settings='" + settingsString + "'/>");
-    }
-
-
-    // find current toolbars inside this wrapper-tag
-    function getToolbarTags(parentTag) {
-        var allInner = $(".sc-menu[toolbar],.sc-menu[data-toolbar]", parentTag);
-
-        // return only those, which don't belong to a sub-item
-        var res = allInner.filter(function(i, e) {
-            return $(e).closest(".sc-content-block")[0] === parentTag[0];
-        });
-        if(dbg) console.log("found toolbars for parent", parentTag, res);
-        return res;
-    }
-
-
     //#endregion helper functions
 
 
     var tbManager = $2sxc._toolbarManager;
-    tbManager.create = function(sxc, editContext) {
-        var id = sxc.id,
-            cbid = sxc.cbid,
-            ec = editContext,
-            cg = ec.ContentGroup,
-            allActions = $2sxc._commands.definitions.create({
-                canDesign: ec.User.CanDesign,
-                templateId: cg.TemplateId,
-                contentTypeId: cg.ContentTypeName,
-                isContent: cg.IsContent,
-                queryId: cg.QueryId,
-                appResourcesId: cg.AppResourcesId,
-                appSettingsId: cg.AppSettingsId
-            });
+
+
+
+    tbManager.createInstance = function (sxc, editContext) {
+        //var // id = sxc.id,
+        //    // cbid = sxc.cbid,
+        //    // ec = editContext,
+        //    cg = editContext.ContentGroup,
+        //    allActions = $2sxc._commands.definitions.create({
+        //        canDesign: editContext.User.CanDesign,
+        //        templateId: cg.TemplateId,
+        //        contentTypeId: cg.ContentTypeName,
+        //        isContent: cg.IsContent,
+        //        queryId: cg.QueryId,
+        //        appResourcesId: cg.AppResourcesId,
+        //        appSettingsId: cg.AppSettingsId
+        //    });
 
 
         var tb = {
             config: createToolbarConfig(editContext),
             refreshConfig: function() { tb.config = createToolbarConfig(editContext); },
-            actions: allActions,
+            //actions: allActions,
 
             // Generate a button (an <a>-tag) for one specific toolbar-action. 
             // Expects: settings, an object containing the specs for the expected buton
@@ -96,7 +72,7 @@
                     symbol = $("<i class=\"" + actDef.icon + "\" aria-hidden=\"true\"></i>"),
                     onclick = actDef.disabled
                         ? ""
-                        : "$2sxc(" + id + ", " + cbid + ").manage.run(" + JSON.stringify(actDef.command) + ", event);";
+                        : "$2sxc(" + sxc.id + ", " + sxc.cbid + ").manage.run(" + JSON.stringify(actDef.command) + ", event);";
 
                 for (var c = 0; c < classesList.length; c++)
                     showClasses += " " + classesList[c];
@@ -124,7 +100,7 @@
                     btnList = tbManager.standardButtons(editContext.User.CanDesign, tbConfig);
 
                 // whatever we had, if more settings were provided, override with these...
-                var tlbDef = tbManager.buttonHelpers.buildFullDefinition(btnList, allActions, tb.config, moreSettings);
+                var tlbDef = tbManager.buttonHelpers.buildFullDefinition(btnList, sxc.manage._actions, tb.config, moreSettings);
                 var btnGroups = tlbDef.groups;
                 var behaviourClasses = " sc-tb-hover-" + tlbDef.settings.hover + " sc-tb-show-" + tlbDef.settings.show;
 
@@ -144,58 +120,14 @@
                 toolbar.attr("group-count", btnGroups.length);
 
                 return toolbar[0].outerHTML;
-            },
-
-            // find all toolbar-info-attributes in the HTML, convert to <ul><li> toolbar
-            _processToolbars: function(parentTag) {
-                parentTag = $(parentTag || ".DnnModule-" + id);
-
-                // todo: change mechanism, this uses a secret class name which the toolbar shouldn't know
-                // don't add, if it is has un-initialized content
-                var disableAutoAdd = $(".sc-uninitialized", parentTag).length !== 0;
-
-                var toolbars = getToolbarTags(parentTag);
-
-                // no toolbars found, must help a bit because otherwise editing is hard
-                if (toolbars.length === 0 && !disableAutoAdd) {
-                    if (dbg) console.log("didn't find toolbar, so will create an automatic one to help for the block", parentTag);
-
-                    var outsideCb = !parentTag.hasClass("sc-content-block");
-                    var contentTag = outsideCb ? parentTag.find("div.sc-content-block") : parentTag;
-                    contentTag.addClass("sc-element");
-
-                    contentTag.prepend(generateFallbackToolbar());
-                    toolbars = getToolbarTags(parentTag);
-                }
-
-                toolbars.each(initToolbar);
-
-                function initToolbar() {
-                    var tag = $(this), data = null, toolbarConfig, toolbarSettings;
-
-                    try {
-                        data = tag.attr("toolbar") || tag.attr("data-toolbar");
-                        toolbarConfig = data ? JSON.parse(data) : {};
-                        data = tag.attr("settings") || tag.attr("data-settings");
-                        toolbarSettings = data ? JSON.parse(data) : {};
-                        if (toolbarConfig === {} && toolbarSettings === {})
-                            toolbarSettings = settingsForEmptyToolbar;
-                    } catch (err) {
-                        console.error("error in settings JSON - probably invalid - make sure you also quote your properties like \"name\": ...", data, err);
-                        return;
-                    }
-
-                    try {
-                        tag.replaceWith($2sxc(tag).manage.getToolbar(toolbarConfig, toolbarSettings));
-                    } catch (err2) {
-                        // note: errors can happen a lot on custom toolbars, must be sure the others are still rendered
-                        console.error("error creating toolbar - will skip this one", err2);
-                    }
-                }
             }
+
         };
         return tb;
     };
+
+
+
 
 
 })();

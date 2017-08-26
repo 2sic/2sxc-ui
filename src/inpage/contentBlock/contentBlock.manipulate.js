@@ -30,7 +30,7 @@ $2sxc._contentBlock.manipulator = function(sxc) {
 
 
                 var sxcNew = $2sxc(newTag);
-                sxcNew.manage._toolbar._processToolbars(newTag);
+                $2sxc._toolbarManager.generateHtml(newTag);
 
             });
         },

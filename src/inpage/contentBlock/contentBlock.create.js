@@ -42,7 +42,7 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
                 $(cbTag).replaceWith(newStuff);
                 cbTag = newStuff;
                 cb.buttonsAreLoaded = false;
-                //$2sxc(newStuff).manage._toolbar._processToolbars(newStuff); // init it...
+                //$2sxc._toolbarManager.generateHtml(newStuff); // init it...
             } catch (e) {
                 console.log("Error while rendering template:");
                 console.log(e);
@@ -66,7 +66,8 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
                     if (manage._reloadWithAjax && sxc.manage.dialog) sxc.manage.dialog.destroy(); // only remove on force, which is an app-change
                     if (preview) return;
                     cb.sxc = cb.sxc.recreate(); // create new sxc-object
-                    cb.sxc.manage._toolbar._processToolbars(); // sub-optimal deep dependency
+                    $2sxc._toolbarManager.generateHtml(null, cb.sxc.id);// sub-optimal deep dependency
+                    //cb.sxc.manage._toolbar._processToolbars(); // sub-optimal deep dependency
                     cb.buttonsAreLoaded = true;
                 }, function () {
                     // nothing to load

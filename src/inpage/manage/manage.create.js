@@ -30,7 +30,8 @@
             // todo: probably move the user into the dashboard info
             user: { canDesign: editContext.User.CanDesign, canDevelop: editContext.User.CanDesign },
             approot: editContext.ContentGroup.AppUrl || null // this is the only value which doesn't have a slash by default.  note that the app-root doesn't exist when opening "manage-app"
-        }, dashConfig = {
+        };
+        var dashConfig = {
             appId: editContext.ContentGroup.AppId,
             isContent: editContext.ContentGroup.IsContent,
             hasContent: editContext.ContentGroup.HasContent,
@@ -41,8 +42,23 @@
             user: { canDesign: editContext.User.CanDesign, canDevelop: editContext.User.CanDesign },
             supportsAjax: editContext.ContentGroup.SupportsAjax
         };
+        
+        function initializeInstance(editContext) {
+            var cg = editContext.ContentGroup;
+            return $2sxc._commands.definitions.create({
+                canDesign: editContext.User.CanDesign,
+                templateId: cg.TemplateId,
+                contentTypeId: cg.ContentTypeName,
+                isContent: cg.IsContent,
+                queryId: cg.QueryId,
+                appResourcesId: cg.AppResourcesId,
+                appSettingsId: cg.AppSettingsId
+            });
+        }
 
-        var toolsAndButtons = $2sxc._toolbarManager.create(sxc, editContext);
+
+        var instanceCommands = initializeInstance(editContext);
+        var toolsAndButtons = $2sxc._toolbarManager.createInstance(sxc, editContext);
         var cmds = $2sxc._commands.engine(sxc, contentBlockTag);
 
         var editManager = sxc.manage = {
@@ -54,6 +70,9 @@
             getButton: toolsAndButtons.getButton,
             getToolbar: toolsAndButtons.getToolbar,
             //#endregion official, public properties - everything below this can change at any time
+
+            // 2017-08-26 2dm temp - moving commands/actions to here from toolbar
+            _actions: instanceCommands,
 
             // internal method to find out if it's in edit-mode
             _isEditMode: function () { return editContext.Environment.IsEditable; },
@@ -84,27 +103,6 @@
                 sessionStorage.removeItem('dia-cbid');
                 editManager.run("layout");
             },
-
-            //reloadContentBlockTag: function() {
-            //    editManager._tag = getContentBlockTag(sxc);
-            //},
-
-            //_showGlassesButtonIfUninitialized: function () {
-            //    // already initialized
-            //    if (sxc.manage.contentBlock.templateId !== 0) return false;
-
-            //    // already has a glasses button
-            //    if ($(sxc.manage._tag).find(".sc-uninitialized").length !== 0) return false;
-
-            //    // note: title is added on mouseover, as the translation isn't ready at page-load
-            //    var btn = $('<div class="sc-uninitialized" onmouseover="this.title = $2sxc.translate(this.title)" title="InPage.NewElement"><div class="icon-sxc-glasses"></div></div>');
-            //    btn.on("click", function () {
-            //        sxc.manage.run("layout");
-            //    });
-
-            //    $(sxc.manage._tag).append(btn);
-            //    return true;
-            //},
 
             // private: show error when the app-data hasn't been installed yet for this imported-module
             _handleErrors: function (errType, cbTag) {
