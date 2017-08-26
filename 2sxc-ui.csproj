@@ -31,6 +31,7 @@
     <Content Include="src\config\eav-configuration-in-sxc.js" />
     <Content Include="src\dnn\ui.html" />
     <Content Include="src\inpage\2sxc-extensions\2sxc.consts.js" />
+    <Content Include="src\inpage\commands\commands.instanceCommands.js" />
     <Content Include="src\inpage\entity-manipulation\item-commands.js" />
     <Content Include="src\inpage\dnn-workarounds\dnn-08.00.04.js" />
     <Content Include="src\inpage\manage\manage.{}.js" />
@@ -61,7 +62,9 @@
     <Content Include="src\inpage\toolbar\toolbar-events.js" />
     <Content Include="src\inpage\toolbar\toolbar-shake.js" />
     <Content Include="src\inpage\bootstrap\module-bootstrapper.js" />
-    <Content Include="src\inpage\toolbar\toolbarManager.generateHtml.js" />
+    <Content Include="src\inpage\toolbar\toolbarManager.generateToolbarHtml.js" />
+    <Content Include="src\inpage\toolbar\toolbarManager.generateButtonHtml.js" />
+    <Content Include="src\inpage\toolbar\toolbarManager.buildToolbars.js" />
     <Content Include="src\inpage\toolbar\toolbarManager.createInstance.js" />
     <Content Include="src\inpage\toolbar\toolbarManager.helpers.js" />
     <Content Include="src\inpage\toolbar\toolbarManager.standardButtons.js" />

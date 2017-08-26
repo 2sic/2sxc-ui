@@ -27,7 +27,7 @@ $(function () {
         var uninitialized = showGlassesButtonIfUninitialized(sxc);
         //var uninitialized = ctl.manage._showGlassesButtonIfUninitialized();
 
-        if (isFirstRun && !uninitialized) $2sxc._toolbarManager.generateHtml(module);
+        if (isFirstRun && !uninitialized) $2sxc._toolbarManager.buildToolbars(module);
 
         return true;
     }

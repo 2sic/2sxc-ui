@@ -1,6 +1,6 @@
 ﻿(function () {
     // quick debug - set to false if not needed for production
-    var dbg = true;
+    var dbg = false;
 
     // default / fallback settings for toolbars when nothings is specified
     var settingsForEmptyToolbar = {
@@ -27,7 +27,7 @@
     }
 
     // create a process-toolbar command to generate toolbars inside a tag
-    $2sxc._toolbarManager.generateHtml = function(parentTag, optionalId) {
+    $2sxc._toolbarManager.buildToolbars = function(parentTag, optionalId) {
         parentTag = $(parentTag || ".DnnModule-" + optionalId);
 
         // todo: change mechanism to not render toolbar, this uses a secret class name which the toolbar shouldn't know

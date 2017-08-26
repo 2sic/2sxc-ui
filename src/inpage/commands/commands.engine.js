@@ -9,7 +9,7 @@
 
             // assemble an object which will store the configuration and execute it
             create: function (specialSettings) {
-                var settings = $2sxc._lib.extend({}, cmc.manage._toolbarConfig, specialSettings); // merge button with general toolbar-settings
+                var settings = $2sxc._lib.extend({}, cmc.manage._instanceConfig, specialSettings); // merge button with general toolbar-settings
                 var ngDialogUrl = cmc.manage._editContext.Environment.SxcRootUrl + "desktopmodules/tosic_sexycontent/dist/dnn/ui.html?sxcver="
                     + cmc.manage._editContext.Environment.SxcVersion;
                 var isDebug = $2sxc.urlParams.get("debug") ? "&debug=true" : "";

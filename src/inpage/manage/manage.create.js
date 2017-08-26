@@ -11,6 +11,8 @@
     $2sxc._manage.attach = function (sxc) {
         var contentBlockTag = getContentBlockTag(sxc);
         var editContext = getContextInfo(contentBlockTag);
+        var userInfo = { canDesign: editContext.User.CanDesign, canDevelop: editContext.User.CanDesign };
+
         
         // assemble all parameters needed for the common dialogs if we open anything
         var ngDialogParams = {
@@ -28,7 +30,7 @@
             versioningRequirements: editContext.ContentBlock.VersioningRequirements,
 
             // todo: probably move the user into the dashboard info
-            user: { canDesign: editContext.User.CanDesign, canDevelop: editContext.User.CanDesign },
+            user: userInfo,//{ canDesign: editContext.User.CanDesign, canDevelop: editContext.User.CanDesign },
             approot: editContext.ContentGroup.AppUrl || null // this is the only value which doesn't have a slash by default.  note that the app-root doesn't exist when opening "manage-app"
         };
         var dashConfig = {
@@ -39,25 +41,32 @@
             templateId: editContext.ContentGroup.TemplateId,
             contentTypeId: editContext.ContentGroup.ContentTypeName,
             templateChooserVisible: editContext.ContentBlock.ShowTemplatePicker, // todo: maybe move to content-goup
-            user: { canDesign: editContext.User.CanDesign, canDevelop: editContext.User.CanDesign },
+            user: userInfo,// { canDesign: editContext.User.CanDesign, canDevelop: editContext.User.CanDesign },
             supportsAjax: editContext.ContentGroup.SupportsAjax
         };
         
-        function initializeInstance(editContext) {
-            var cg = editContext.ContentGroup;
-            return $2sxc._commands.definitions.create({
-                canDesign: editContext.User.CanDesign,
-                templateId: cg.TemplateId,
-                contentTypeId: cg.ContentTypeName,
-                isContent: cg.IsContent,
-                queryId: cg.QueryId,
-                appResourcesId: cg.AppResourcesId,
-                appSettingsId: cg.AppSettingsId
-            });
+        // #region helper functions
+        function createInstanceConfig(editContext) {
+            var ce = editContext.Environment, cg = editContext.ContentGroup, cb = editContext.ContentBlock;
+            return {
+                portalId: ce.WebsiteId,
+                tabId: ce.PageId,
+                moduleId: ce.InstanceId,
+                version: ce.SxcVersion,
+
+                contentGroupId: cg.Guid,
+                cbIsEntity: cb.IsEntity,
+                cbId: cb.Id,
+                appPath: cg.AppUrl,
+                isList: cg.IsList
+            };
         }
 
+        //#endregion helper functions
 
-        var instanceCommands = initializeInstance(editContext);
+
+        // todo: move instanceCommands into cmds somehow...
+        var instanceCommands = $2sxc._commands.initializeInstanceCommands(editContext);
         var toolsAndButtons = $2sxc._toolbarManager.createInstance(sxc, editContext);
         var cmds = $2sxc._commands.engine(sxc, contentBlockTag);
 
@@ -78,11 +87,12 @@
             _isEditMode: function () { return editContext.Environment.IsEditable; },
             _reloadWithAjax: editContext.ContentGroup.SupportsAjax,
             _dialogParameters: ngDialogParams,      // used for various dialogs
-            _toolbarConfig: toolsAndButtons.config, // used to configure buttons / toolbars
+            _instanceConfig: createInstanceConfig(editContext),// toolsAndButtons.config, // used to configure buttons / toolbars
             _editContext: editContext,              // metadata necessary to know what/how to edit
             _dashboardConfig: dashConfig,           // used for in-page dialogs
             _commands: cmds,                        // used to handle the commands for this content-block
             _tag: contentBlockTag,
+            _user: userInfo,
             //#region toolbar quick-access commands - might be used by other scripts, so I'm keeping them here for the moment, but may just delete them later
             _toolbar: toolsAndButtons, // should use this from now on when accessing from outside
             //#endregion
@@ -120,8 +130,8 @@
             // change config by replacing the guid, and refreshing dependend sub-objects
             _updateContentGroupGuid: function (newGuid) {
                 editContext.ContentGroup.Guid = newGuid;
-                toolsAndButtons.refreshConfig();
-                editManager._toolbarConfig = toolsAndButtons.config;
+                //toolsAndButtons.refreshConfig();
+                editManager._instanceConfig = createInstanceConfig(editContext);// = toolsAndButtons.config;
             },
             _getCbManipulator: function () {
                 return $2sxc._contentBlock.manipulator(sxc);
