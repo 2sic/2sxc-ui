@@ -44,6 +44,7 @@
     <Content Include="src\inpage\inpage-dialog\2sxc._dialog.js" />
     <Content Include="src\inpage\inpage-icons-codes.css" />
     <Content Include="src\inpage\lib-helpers\2sxc._lib.extend.js" />
+    <Content Include="src\inpage\polyfills\array.prototype.find.js" />
     <Content Include="src\inpage\quick-edit\%24quickE.cmds.js" />
     <Content Include="src\inpage\quick-edit\%24quickE.clipboard.js" />
     <Content Include="src\inpage\quick-edit\%24quickE.content-block.js" />
@@ -138,7 +139,6 @@
     <Content Include="src\sxc-edit\app-icons-codes.css" />
     <Content Include="src\sxc-edit\app-icons.css" />
     <Content Include="src\sxc-edit\fields\dnn-bridge\dnn-bridge.service.js" />
-    <Content Include="src\sxc-edit\fields\dnn-bridge\hyperlink-default-filemanager.html" />
     <Content Include="src\sxc-edit\fields\dnn-bridge\hyperlink-default-pagepicker.html" />
     <Content Include="src\sxc-edit\fields\dnn-bridge\web-forms-bridge.directive.js" />
     <Content Include="src\sxc-edit\fields\entity\entity-content-blocks.js" />

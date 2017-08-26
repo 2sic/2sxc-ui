@@ -60,39 +60,28 @@
                     vm.testLink = newValue;
             });
 
-            //#region dnn-bridge dialogs
+            //#region dnn-page picker dialog
 
             // the callback when something was selected
-            vm.processResultOfDnnBridge = function(value, type) {
+            vm.processResultOfPagePicker = function (value) {
                 $scope.$apply(function() {
-                    if (!value) return;
-                    
-                    // Convert file path to file ID if type file is specified
-                    if (type === "page") {
+                    // Convert to page:xyz format (if it wasn't cancelled)
+                    if (value)
                         $scope.value.Value = "page:" + value.id;
-                    }
-                    if (type === "file" || type === "image") {
-                        dnnBridgeSvc.convertPathToId(value, type)
-                            .then(function (result) {
-                                $scope.value.Value = (result.data)
-                                    ? "file:" + result.data.FileId // default case, found number for this
-                                    : value; // this happens when it couldn't be resolved, for example on a secure file ticket
-                            });
-                    }
                 });
             };
 
             // open the dialog
-            vm.openDialog = function (type) {
+            vm.openPageDialog = function () {
                 dnnBridgeSvc.open(
-                    type,
                     $scope.value.Value,
                     {
                         Paths: $scope.to.settings.merged ? $scope.to.settings.merged.Paths : "",
                         FileFilter: $scope.to.settings.merged ? $scope.to.settings.merged.FileFilter : ""
                     },
-                    vm.processResultOfDnnBridge);
+                    vm.processResultOfPagePicker);
             };
+            //#endregion dnn page picker
 
             //#region new adam: callbacks only
             vm.registerAdam = function(adam) {

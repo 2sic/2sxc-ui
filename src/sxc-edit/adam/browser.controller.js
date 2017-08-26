@@ -23,7 +23,7 @@
                 ? $scope.folderDepth
                 : 2;
             vm.showFolders = !!vm.folderDepth;
-            vm.allowAssetsInRoot = $scope.allowAssetsInRoot || true;
+            vm.allowAssetsInRoot = $scope.allowAssetsInRoot || true;    // if true, the initial folder can have files, otherwise only subfolders
             vm.metadataContentTypes = $scope.metadataContentTypes || "";
         };
 
@@ -31,6 +31,7 @@
         
         vm.show = false;
         vm.appRoot = appRoot;        
+        vm.adamModeConfig = $scope.adamModeConfig;
 
         vm.disabled = $scope.ngDisabled;
         vm.enableSelect = ($scope.enableSelect === false) ? false : true; // must do it like this, $scope.enableSelect || true will not work
@@ -41,7 +42,6 @@
             if ($scope.registerSelf)
                 $scope.registerSelf(vm);
         };
-
 
         // load svc...
         vm.svc = adamSvc(vm.contentTypeName, vm.entityGuid, vm.fieldName, vm.subFolder, $scope.adamModeConfig);
@@ -61,7 +61,7 @@
             var configChanged = false;
             if (newConfig) {
                 // Detect changes in config, allows correct toggle behaviour
-                if (JSON.stringify(newConfig) != vm.oldConfig)
+                if (JSON.stringify(newConfig) !== vm.oldConfig)
                     configChanged = true;
                 vm.oldConfig = JSON.stringify(newConfig);
 
@@ -113,9 +113,9 @@
 
         vm.rename = function rename(item) {
             var newName = window.prompt('Rename the file / folder to: ', item.Name);
-            if(newName)
+            if (newName)
                 vm.svc.rename(item, newName);
-        }
+        };
 
         //#region Folder Navigation
         vm.goIntoFolder = function (folder) {
@@ -209,7 +209,7 @@
         }
 
         vm.fileEndingFilter = function (item) {
-            if (vm.allowedFileTypes.length == 0)
+            if (vm.allowedFileTypes.length === 0)
                 return true;
             var extension = item.Name.match(/(?:\.([^.]+))?$/)[0];
             return vm.allowedFileTypes.indexOf(extension) != -1;

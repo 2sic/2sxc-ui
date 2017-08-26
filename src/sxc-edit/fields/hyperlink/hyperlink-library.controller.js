@@ -22,6 +22,10 @@
             vm.modalInstance = null;
             vm.testLink = "";
 
+            vm.adamModeConfig = {
+                usePortalRoot: false
+            };
+
             //#region new adam: callbacks only
             vm.registerAdam = function(adam) {
                 vm.adam = adam;
