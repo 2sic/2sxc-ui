@@ -8,7 +8,7 @@
 // - isEditMode
 
 (function () {
-    $2sxc._manage.attach = function (sxc) {
+    $2sxc._manage.initInstance = function (sxc) {
         var contentBlockTag = getContentBlockTag(sxc);
         var editContext = getContextInfo(contentBlockTag);
         var userInfo = { canDesign: editContext.User.CanDesign, canDevelop: editContext.User.CanDesign };
@@ -33,7 +33,8 @@
             user: userInfo,//{ canDesign: editContext.User.CanDesign, canDevelop: editContext.User.CanDesign },
             approot: editContext.ContentGroup.AppUrl || null // this is the only value which doesn't have a slash by default.  note that the app-root doesn't exist when opening "manage-app"
         };
-        var dashConfig = {
+        // configuration needed by the quick-dialogs
+        var quickDialogConfig = {
             appId: editContext.ContentGroup.AppId,
             isContent: editContext.ContentGroup.IsContent,
             hasContent: editContext.ContentGroup.HasContent,
@@ -46,6 +47,7 @@
         };
         
         // #region helper functions
+        // todo: should probably move this away later on, not yet sure to where
         function createInstanceConfig(editContext) {
             var ce = editContext.Environment, cg = editContext.ContentGroup, cb = editContext.ContentBlock;
             return {
@@ -65,23 +67,19 @@
         //#endregion helper functions
 
 
-        // todo: move instanceCommands into cmds somehow...
-        var instanceCommands = $2sxc._commands.initializeInstanceCommands(editContext);
         var toolsAndButtons = $2sxc._toolbarManager.createInstance(sxc, editContext);
-        var cmds = $2sxc._commands.engine(sxc, contentBlockTag);
+        var cmdEngine = $2sxc._commands.instanceEngine(sxc, contentBlockTag, editContext);
 
         var editManager = sxc.manage = {
             //#region Official, public properties and commands, which are stable for use from the outside
             // run a command - often used in toolbars and custom buttons
-            run: cmds.executeAction,
+            run: cmdEngine.executeAction,
 
             // get a button or a toolbar for something
             getButton: toolsAndButtons.getButton,
             getToolbar: toolsAndButtons.getToolbar,
             //#endregion official, public properties - everything below this can change at any time
 
-            // 2017-08-26 2dm temp - moving commands/actions to here from toolbar
-            _actions: instanceCommands,
 
             // internal method to find out if it's in edit-mode
             _isEditMode: function () { return editContext.Environment.IsEditable; },
@@ -89,8 +87,9 @@
             _dialogParameters: ngDialogParams,      // used for various dialogs
             _instanceConfig: createInstanceConfig(editContext),// toolsAndButtons.config, // used to configure buttons / toolbars
             _editContext: editContext,              // metadata necessary to know what/how to edit
-            _dashboardConfig: dashConfig,           // used for in-page dialogs
-            _commands: cmds,                        // used to handle the commands for this content-block
+            _quickDialogConfig: quickDialogConfig,           // used for in-page dialogs
+            _dashboardConfig: quickDialogConfig, // temp 2017-08-27 - keep till the angular uses the new name
+            _commands: cmdEngine,                        // used to handle the commands for this content-block
             _tag: contentBlockTag,
             _user: userInfo,
             //#region toolbar quick-access commands - might be used by other scripts, so I'm keeping them here for the moment, but may just delete them later
@@ -104,7 +103,7 @@
                     editManager._handleErrors(editContext.error.type, editManager._tag);
 
                 // finish init of sub-objects
-                editManager._commands.init(editManager);
+                //editManager._commands.init(editManager);
                 editManager.contentBlock = $2sxc._contentBlock.create(sxc, editManager, editManager._tag);
 
                 // display the dialog
@@ -130,8 +129,7 @@
             // change config by replacing the guid, and refreshing dependend sub-objects
             _updateContentGroupGuid: function (newGuid) {
                 editContext.ContentGroup.Guid = newGuid;
-                //toolsAndButtons.refreshConfig();
-                editManager._instanceConfig = createInstanceConfig(editContext);// = toolsAndButtons.config;
+                editManager._instanceConfig = createInstanceConfig(editContext);
             },
             _getCbManipulator: function () {
                 return $2sxc._contentBlock.manipulator(sxc);

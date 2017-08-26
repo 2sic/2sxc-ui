@@ -1,17 +1,15 @@
 ﻿
 (function () {
-    $2sxc._commands.engine = function (sxc, targetTag) {
-        var cmc = {
-            manage: "must-be-added-after-initialization",
-            init: function (manage) {
-                cmc.manage = manage;
-            },
+    $2sxc._commands.instanceEngine = function (sxc, targetTag, editContext) {
+        var engine = {
+            commands: $2sxc._commands.initializeInstanceCommands(editContext),
 
             // assemble an object which will store the configuration and execute it
             create: function (specialSettings) {
-                var settings = $2sxc._lib.extend({}, cmc.manage._instanceConfig, specialSettings); // merge button with general toolbar-settings
-                var ngDialogUrl = cmc.manage._editContext.Environment.SxcRootUrl + "desktopmodules/tosic_sexycontent/dist/dnn/ui.html?sxcver="
-                    + cmc.manage._editContext.Environment.SxcVersion;
+                var settings = $2sxc._lib.extend({}, sxc.manage._instanceConfig, specialSettings); // merge button with general toolbar-settings
+                var ngDialogUrl = sxc.manage._editContext.Environment.SxcRootUrl
+                    + "desktopmodules/tosic_sexycontent/dist/dnn/ui.html?sxcver="
+                    + sxc.manage._editContext.Environment.SxcVersion;
                 var isDebug = $2sxc.urlParams.get("debug") ? "&debug=true" : "";
 
                 var cmd = {
@@ -66,7 +64,7 @@
                         cmd.params.items = JSON.stringify(cmd.items); // Serialize/json-ify the complex items-list
                         
                         return (dialogUrl || ngDialogUrl)
-                            + "#" + $.param(cmc.manage._dialogParameters)
+                            + "#" + $.param(sxc.manage._dialogParameters)
                             + "&" + $.param(cmd.params)
                             + isDebug;
                         //#endregion
@@ -77,7 +75,7 @@
 
             // create a dialog link
             _linkToNgDialog: function (specialSettings) {
-                var cmd = cmc.manage._commands.create(specialSettings);
+                var cmd = sxc.manage._commands.create(specialSettings);
 
                 if (cmd.settings.useModuleList) cmd.addContentGroupItemSetsToEditList(true);
                 else cmd.addSimpleItem();
@@ -86,8 +84,8 @@
                 if (cmd.settings.configureCommand) cmd.settings.configureCommand(cmd);
 
                 if (specialSettings.angularDialog) {
-                    var modernDialogUrl = cmc.manage._editContext.Environment.SxcRootUrl + "desktopmodules/tosic_sexycontent/dist/ng/ui.html?sxcver="
-                        + cmc.manage._editContext.Environment.SxcVersion;
+                    var modernDialogUrl = sxc.manage._editContext.Environment.SxcRootUrl + "desktopmodules/tosic_sexycontent/dist/ng/ui.html?sxcver="
+                        + sxc.manage._editContext.Environment.SxcVersion;
                     return cmd.generateLink(modernDialogUrl);
                 }
                 return cmd.generateLink();
@@ -98,10 +96,10 @@
                 // the callback will handle events after closing the dialog
                 // and reload the in-page view w/ajax or page reload
                 var callback = function() {
-                        cmc.manage.contentBlock.reloadAndReInitialize();
+                        sxc.manage.contentBlock.reloadAndReInitialize();
                         closeCallback();
                     },
-                    link = cmc._linkToNgDialog(settings); // the link contains everything to open a full dialog (lots of params added)
+                    link = engine._linkToNgDialog(settings); // the link contains everything to open a full dialog (lots of params added)
                 if (settings.inlineWindow) return $2sxc._quickDialog(sxc, targetTag, link, callback, settings.dialog === 'item-history');
                 if (settings.newWindow || (event && event.shiftKey)) return window.open(link);
                 return $2sxc.totalPopup.open(link, callback);
@@ -124,22 +122,22 @@
                     ? $2sxc._lib.extend(settings || {}, { "action": nameOrSettings }) // place the name as an action-name into a command-object
                     : nameOrSettings;
 
-                var conf = cmc.manage._actions[settings.action];
+                var conf = /*sxc.manage._actions*/ engine.commands[settings.action];
                 settings = $2sxc._lib.extend({}, conf, settings); // merge conf & settings, but settings has higher priority
 
                 if (!settings.dialog) settings.dialog = settings.action; // old code uses "action" as the parameter, now use verb ? dialog
-                if (!settings.code) settings.code = cmc._openNgDialog; // decide what action to perform
+                if (!settings.code) settings.code = engine._openNgDialog; // decide what action to perform
 
                 if (conf.uiActionOnly) return settings.code(settings, origEvent, sxc); 
 
                 // if more than just a UI-action, then it needs to be sure the content-group is created first
-                cmc.manage.contentBlock.prepareToAddContent()
+                sxc.manage.contentBlock.prepareToAddContent()
                     .then(function () {
-                        return settings.code(settings, origEvent, sxc); // 2016-11-03 cmc.manage);
+                        return settings.code(settings, origEvent, sxc); // 2016-11-03 sxc.manage);
                     });
             }
         };
 
-        return cmc;
+        return engine;
     };
 })();

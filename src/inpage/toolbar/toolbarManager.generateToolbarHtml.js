@@ -10,7 +10,7 @@
             btnList = tbManager.standardButtons(sxc.manage._user.canDesign /* editContext.User.CanDesign */, tbConfig);
 
         // whatever we had, if more settings were provided, override with these...
-        var tlbDef = tbManager.buttonHelpers.buildFullDefinition(btnList, sxc.manage._actions, sxc.manage._instanceConfig /* tb.config */, moreSettings);
+        var tlbDef = tbManager.buttonHelpers.buildFullDefinition(btnList, sxc.manage._commands.commands, sxc.manage._instanceConfig /* tb.config */, moreSettings);
         var btnGroups = tlbDef.groups;
         var behaviourClasses = " sc-tb-hover-" + tlbDef.settings.hover + " sc-tb-show-" + tlbDef.settings.show;
 

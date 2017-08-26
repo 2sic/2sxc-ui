@@ -116,7 +116,7 @@
         }
 
         function getAdditionalDashboardConfig() {
-            return sxc.manage._dashboardConfig;
+            return sxc.manage._quickDialogConfig;
         }
 
         function getCommands() {
