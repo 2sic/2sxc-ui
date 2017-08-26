@@ -102,7 +102,7 @@
                         closeCallback();
                     },
                     link = cmc._linkToNgDialog(settings); // the link contains everything to open a full dialog (lots of params added)
-                if (settings.inlineWindow) return $2sxc._dialog(sxc, targetTag, link, callback, settings.dialog === 'item-history');
+                if (settings.inlineWindow) return $2sxc._quickDialog(sxc, targetTag, link, callback, settings.dialog === 'item-history');
                 if (settings.newWindow || (event && event.shiftKey)) return window.open(link);
                 return $2sxc.totalPopup.open(link, callback);
             },

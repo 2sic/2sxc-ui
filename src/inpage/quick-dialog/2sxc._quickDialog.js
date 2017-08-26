@@ -5,7 +5,7 @@
 // known issues
 // - we never got around to making the height adjust automatically
 (function () {
-    $2sxc._dialog = Dialog;
+    $2sxc._quickDialog = Dialog;
 
     var isFullscreen = false,
         RESIZE_INTERVAL = 200,
