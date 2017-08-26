@@ -8,7 +8,6 @@
 // - isEditMode
 
 (function () {
-    $2sxc._manage = {};
     $2sxc._manage.attach = function (sxc) {
         var contentBlockTag = getContentBlockTag(sxc);
         var editContext = getContextInfo(contentBlockTag);
@@ -71,7 +70,6 @@
 
             // init this object 
             init: function init() {
-
                 // enhance UI in case there are known errors / issues
                 if (editContext.error.type)
                     editManager._handleErrors(editContext.error.type, contentBlockTag);
@@ -92,7 +90,6 @@
             },
 
             initGlassesButton: function () {
-
                 // already initialized
                 if (editManager.contentBlock.templateId !== 0) return false;
 
@@ -129,24 +126,15 @@
             },
             _getCbManipulator: function () {
                 return $2sxc._contentBlock.manipulator(sxc);
-            },
-            //#region deprecated properties - these all should have been undocumented/ private till now
-            // 2016-11-03 v.08.06 deprecated command "action", it was only for internal use till now
-            action: function () {
-                console.error("Obsolete: you are using a deprecated method 'action' which will be removed in 2sxc v9. you must change it to 'run'");
-                return cmds.executeAction.apply(undefined, arguments);
-            },
-            // 2016-10-11 v08.06 maybe breaking change, but shouldn't be exposed
-            createDefaultToolbar: function () {
-                console.error("Obsolete: you are using a deprecated method 'createDefaultToolbar' which will be removed in 2sxc v9. you must change it to 'getToolbar'");
-                return toolsAndButtons.defaultButtonList.apply(undefined, arguments);
             }
-            //#endregion
         };
 
         editManager.init();
         return editManager;
     };
+
+
+
 
     //#region helper functions
     function getContentBlockTag(sxci) {

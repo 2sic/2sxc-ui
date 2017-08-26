@@ -32,6 +32,7 @@
     <Content Include="src\dnn\ui.html" />
     <Content Include="src\inpage\entity-manipulation\item-commands.js" />
     <Content Include="src\inpage\dnn-workarounds\dnn-08.00.04.js" />
+    <Content Include="src\inpage\manage\manage.{}.js" />
     <Content Include="src\inpage\quick-dialog\quick-dialog.css" />
     <Content Include="src\inpage\quick-dialog\polyfill.js" />
     <Content Include="src\inpage\manage\manage.create.js" />
@@ -205,6 +206,7 @@
     <Content Include="src\inpage\quick-edit\readme.md" />
     <Content Include="src\inpage\toolbar\readme.md" />
     <Content Include="src\inpage\translate\readme.md" />
+    <Content Include="src\inpage\manage\readme.md" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">12.0</VisualStudioVersion>
