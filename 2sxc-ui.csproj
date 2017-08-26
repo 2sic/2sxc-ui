@@ -57,7 +57,9 @@
     <Content Include="src\inpage\quick-edit\%24quickE.{}.js" />
     <Content Include="src\inpage\quick-edit\quickE.css" />
     <Content Include="src\inpage\toolbar\libs\shake.js" />
-    <Content Include="src\inpage\toolbar\toolbar-bootstrapper.js" />
+    <Content Include="src\inpage\toolbar\toolbar-events.js" />
+    <Content Include="src\inpage\toolbar\toolbar-shake.js" />
+    <Content Include="src\inpage\bootstrap\module-bootstrapper.js" />
     <Content Include="src\inpage\toolbar\toolbarManager.create.js" />
     <Content Include="src\inpage\toolbar\toolbarManager.helpers.js" />
     <Content Include="src\inpage\toolbar\toolbarManager.standardButtons.js" />

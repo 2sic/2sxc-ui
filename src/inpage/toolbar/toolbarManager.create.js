@@ -1,6 +1,67 @@
 ﻿(function () {
+    // quick debug - set to false if not needed for production
+    var dbg = true;
+
+    // #region helper functions - without state
+    function createToolbarConfig(context) {
+        var c = context, ce = c.Environment, cg = c.ContentGroup, cb = c.ContentBlock;
+        return {
+            portalId: ce.WebsiteId,
+            tabId: ce.PageId,
+            moduleId: ce.InstanceId,
+            version: ce.SxcVersion,
+
+            contentGroupId: cg.Guid,
+            cbIsEntity: cb.IsEntity,
+            cbId: cb.Id,
+            appPath: cg.AppUrl,
+            isList: cg.IsList
+        };
+    }
+
+    // does some clean-up work on a button-definition object
+    // because the target item could be specified directly, or in a complex internal object called entity
+    function flattenActionDefinition(actDef) {
+        if (actDef.entity && actDef.entity._2sxcEditInformation) {
+            var editInfo = actDef.entity._2sxcEditInformation;
+            actDef.useModuleList = (editInfo.sortOrder !== undefined); // has sort-order, so use list
+            if (editInfo.entityId !== undefined)
+                actDef.entityId = editInfo.entityId;
+            if (editInfo.sortOrder !== undefined)
+                actDef.sortOrder = editInfo.sortOrder;
+            delete actDef.entity; // clean up edit-info
+        }
+    }
+
+    var settingsForEmptyToolbar = {
+        hover: "left",
+        autoAddMore: "left"
+    };
+
+    function generateFallbackToolbar() {
+        var settingsString = JSON.stringify(settingsForEmptyToolbar);
+        return $("<ul class='sc-menu' toolbar='' settings='" + settingsString + "'/>");
+    }
+
+
+    // find current toolbars inside this wrapper-tag
+    function getToolbarTags(parentTag) {
+        var allInner = $(".sc-menu[toolbar],.sc-menu[data-toolbar]", parentTag);
+
+        // return only those, which don't belong to a sub-item
+        var res = allInner.filter(function(i, e) {
+            return $(e).closest(".sc-content-block")[0] === parentTag[0];
+        });
+        if(dbg) console.log("found toolbars for parent", parentTag, res);
+        return res;
+    }
+
+
+    //#endregion helper functions
+
+
     var tbManager = $2sxc._toolbarManager;
-    tbManager.create = function (sxc, editContext) {
+    tbManager.create = function(sxc, editContext) {
         var id = sxc.id,
             cbid = sxc.cbid,
             ec = editContext,
@@ -15,46 +76,15 @@
                 appSettingsId: cg.AppSettingsId
             });
 
-        // #region helper functions
-        function createToolbarConfig(context) {
-            var c = context, ce = c.Environment, cg = c.ContentGroup, cb = c.ContentBlock;
-            return {
-                portalId: ce.WebsiteId,
-                tabId: ce.PageId,
-                moduleId: ce.InstanceId,
-                version: ce.SxcVersion,
 
-                contentGroupId: cg.Guid,
-                cbIsEntity: cb.IsEntity,
-                cbId: cb.Id,
-                appPath: cg.AppUrl,
-                isList: cg.IsList
-            };
-        }
-
-        // does some clean-up work on a button-definition object
-        // because the target item could be specified directly, or in a complex internal object called entity
-        function flattenActionDefinition(actDef) {
-            if (actDef.entity && actDef.entity._2sxcEditInformation) {
-                var editInfo = actDef.entity._2sxcEditInformation;
-                actDef.useModuleList = (editInfo.sortOrder !== undefined); // has sort-order, so use list
-                if (editInfo.entityId !== undefined)
-                    actDef.entityId = editInfo.entityId;
-                if (editInfo.sortOrder !== undefined)
-                    actDef.sortOrder = editInfo.sortOrder;
-                delete actDef.entity;   // clean up edit-info
-            }
-        }
-
-        //#endregion helper functions
         var tb = {
             config: createToolbarConfig(editContext),
-            refreshConfig: function () { tb.config = createToolbarConfig(editContext); },
+            refreshConfig: function() { tb.config = createToolbarConfig(editContext); },
             actions: allActions,
 
             // Generate a button (an <a>-tag) for one specific toolbar-action. 
             // Expects: settings, an object containing the specs for the expected buton
-            getButton: function (actDef, groupIndex) {
+            getButton: function(actDef, groupIndex) {
 
                 // if the button belongs to a content-item, move the specs up to the item into the settings-object
                 flattenActionDefinition(actDef);
@@ -64,13 +94,17 @@
                     classesList = (actDef.classes || "").split(","),
                     box = $("<div/>"),
                     symbol = $("<i class=\"" + actDef.icon + "\" aria-hidden=\"true\"></i>"),
-                    onclick = actDef.disabled ? "" : "$2sxc(" + id + ", " + cbid + ").manage.run(" + JSON.stringify(actDef.command /*, tb._jsonifyFilterGroup*/) + ", event);";
+                    onclick = actDef.disabled
+                        ? ""
+                        : "$2sxc(" + id + ", " + cbid + ").manage.run(" + JSON.stringify(actDef.command) + ", event);";
 
                 for (var c = 0; c < classesList.length; c++)
                     showClasses += " " + classesList[c];
 
-                var button = $("<a />", {
-                    'class': "sc-" + actDef.action + " " + showClasses + (actDef.dynamicClasses ? " " + actDef.dynamicClasses(actDef) : ""),
+                var button = $("<a />",
+                {
+                    'class': "sc-" + actDef.action + " " + showClasses +
+                        (actDef.dynamicClasses ? " " + actDef.dynamicClasses(actDef) : ""),
                     'onclick': onclick,
                     'data-i18n': "[title]" + actDef.title
                 });
@@ -82,30 +116,29 @@
 
             // Builds the toolbar and returns it as HTML
             // expects settings - either for 1 button or for an array of buttons
-            getToolbar: function (tbConfig, moreSettings) {
-                var btnList, tlbDef, btnGroups, behaviourClasses, tbClasses, toolbar, btns, i, h;
-
+            getToolbar: function(tbConfig, moreSettings) {
                 // if it has an action or is an array, keep that. Otherwise get standard buttons
-                tbConfig = tbConfig || {};// if null/undefined, use empty object
-                btnList = tbConfig;
-                if (!tbConfig.action && !tbConfig.groups && !tbConfig.buttons && !Array.isArray(tbConfig)) btnList = tbManager.standardButtons(editContext.User.CanDesign, tbConfig);
+                tbConfig = tbConfig || {}; // if null/undefined, use empty object
+                var btnList = tbConfig;
+                if (!tbConfig.action && !tbConfig.groups && !tbConfig.buttons && !Array.isArray(tbConfig))
+                    btnList = tbManager.standardButtons(editContext.User.CanDesign, tbConfig);
 
                 // whatever we had, if more settings were provided, override with these...
-                tlbDef = tbManager.buttonHelpers.buildFullDefinition(btnList, allActions, tb.config, moreSettings);
-                btnGroups = tlbDef.groups;
-                behaviourClasses = " sc-tb-hover-" + tlbDef.settings.hover
-                    + " sc-tb-show-" + tlbDef.settings.show;
+                var tlbDef = tbManager.buttonHelpers.buildFullDefinition(btnList, allActions, tb.config, moreSettings);
+                var btnGroups = tlbDef.groups;
+                var behaviourClasses = " sc-tb-hover-" + tlbDef.settings.hover + " sc-tb-show-" + tlbDef.settings.show;
 
                 // todo: these settings assume it's not in an array...
-                tbClasses = "sc-menu group-0 "
-                    + behaviourClasses + " "
-                    + ((tbConfig.sortOrder === -1) ? ' listContent' : '')
-                    + (tlbDef.settings.classes ? " " + tlbDef.settings.classes : '');
-                toolbar = $("<ul />", { 'class': tbClasses, 'onclick': "var e = arguments[0] || window.event; e.stopPropagation();" });
+                var tbClasses = "sc-menu group-0 " + behaviourClasses + " " +
+                    ((tbConfig.sortOrder === -1) ? " listContent" : "") +
+                    (tlbDef.settings.classes ? " " + tlbDef.settings.classes : "");
+                var toolbar = $("<ul />",
+                    { 'class': tbClasses, 'onclick': "var e = arguments[0] || window.event; e.stopPropagation();" });
 
-                for (i = 0; i < btnGroups.length; i++) {
-                    btns = btnGroups[i].buttons;
-                    for (h = 0; h < btns.length; h++) toolbar.append($("<li />").append($(tb.getButton(btns[h], i))));
+                for (var i = 0; i < btnGroups.length; i++) {
+                    var btns = btnGroups[i].buttons;
+                    for (var h = 0; h < btns.length; h++)
+                        toolbar.append($("<li />").append($(tb.getButton(btns[h], i))));
                 }
 
                 toolbar.attr("group-count", btnGroups.length);
@@ -114,41 +147,31 @@
             },
 
             // find all toolbar-info-attributes in the HTML, convert to <ul><li> toolbar
-            _processToolbars: function (parentTag) {
-                var disableAutoAdd, toolbars, settingsForEmptyToolbar = {
-                    hover: "left",
-                    autoAddMore: "left"
-                };
-                parentTag = $(parentTag || '.DnnModule-' + id);
+            _processToolbars: function(parentTag) {
+                parentTag = $(parentTag || ".DnnModule-" + id);
 
+                // todo: change mechanism, this uses a secret class name which the toolbar shouldn't know
                 // don't add, if it is has un-initialized content
-                disableAutoAdd = $(".sc-uninitialized", parentTag).length !== 0;
+                var disableAutoAdd = $(".sc-uninitialized", parentTag).length !== 0;
 
-                toolbars = getToolbars();
+                var toolbars = getToolbarTags(parentTag);
 
                 // no toolbars found, must help a bit because otherwise editing is hard
                 if (toolbars.length === 0 && !disableAutoAdd) {
+                    if (dbg) console.log("didn't find toolbar, so will create an automatic one to help for the block", parentTag);
 
-                    // console.log("didn't find a toolbar, so will create an automatic one to help for the block", parentTag);
-                    var outsideCb = !parentTag.hasClass('sc-content-block');
+                    var outsideCb = !parentTag.hasClass("sc-content-block");
                     var contentTag = outsideCb ? parentTag.find("div.sc-content-block") : parentTag;
                     contentTag.addClass("sc-element");
 
-                    // todo: make the empty-toolbar-default-settings used below as well...
-                    var settingsString = JSON.stringify(settingsForEmptyToolbar);
-                    contentTag.prepend($("<ul class='sc-menu' toolbar='' settings='" + settingsString + "'/>"));
-                    toolbars = getToolbars();
+                    contentTag.prepend(generateFallbackToolbar());
+                    toolbars = getToolbarTags(parentTag);
                 }
 
                 toolbars.each(initToolbar);
 
-                // find current toolbars on this tag
-                function getToolbars() {
-                    return $(".sc-menu[toolbar],.sc-menu[data-toolbar]", parentTag);
-                }
-
                 function initToolbar() {
-                    var tag = $(this), data, toolbarConfig, toolbarSettings;
+                    var tag = $(this), data = null, toolbarConfig, toolbarSettings;
 
                     try {
                         data = tag.attr("toolbar") || tag.attr("data-toolbar");
@@ -164,13 +187,15 @@
 
                     try {
                         tag.replaceWith($2sxc(tag).manage.getToolbar(toolbarConfig, toolbarSettings));
-                    } catch (err) {
+                    } catch (err2) {
                         // note: errors can happen a lot on custom toolbars, must be sure the others are still rendered
-                        console.error("error creating toolbar - will skip this one", err);
+                        console.error("error creating toolbar - will skip this one", err2);
                     }
                 }
             }
         };
         return tb;
     };
+
+
 })();

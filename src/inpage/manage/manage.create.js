@@ -63,7 +63,7 @@
             _editContext: editContext,              // metadata necessary to know what/how to edit
             _dashboardConfig: dashConfig,           // used for in-page dialogs
             _commands: cmds,                        // used to handle the commands for this content-block
-
+            _tag: contentBlockTag,
             //#region toolbar quick-access commands - might be used by other scripts, so I'm keeping them here for the moment, but may just delete them later
             _toolbar: toolsAndButtons, // should use this from now on when accessing from outside
             //#endregion
@@ -72,11 +72,11 @@
             init: function init() {
                 // enhance UI in case there are known errors / issues
                 if (editContext.error.type)
-                    editManager._handleErrors(editContext.error.type, contentBlockTag);
+                    editManager._handleErrors(editContext.error.type, editManager._tag);
 
                 // finish init of sub-objects
                 editManager._commands.init(editManager);
-                editManager.contentBlock = $2sxc._contentBlock.create(sxc, editManager, contentBlockTag);
+                editManager.contentBlock = $2sxc._contentBlock.create(sxc, editManager, editManager._tag);
 
                 // display the dialog
                 var openDialogId = sessionStorage.getItem('dia-cbid');
@@ -85,25 +85,26 @@
                 editManager.run("layout");
             },
 
-            reloadContentBlockTag: function() {
-                contentBlockTag = getContentBlockTag(sxc);
-            },
+            //reloadContentBlockTag: function() {
+            //    editManager._tag = getContentBlockTag(sxc);
+            //},
 
-            initGlassesButton: function () {
-                // already initialized
-                if (editManager.contentBlock.templateId !== 0) return false;
+            //_showGlassesButtonIfUninitialized: function () {
+            //    // already initialized
+            //    if (sxc.manage.contentBlock.templateId !== 0) return false;
 
-                // has already a glasses button
-                if ($(contentBlockTag).find(".sc-uninitialized").length !== 0) return false;
+            //    // already has a glasses button
+            //    if ($(sxc.manage._tag).find(".sc-uninitialized").length !== 0) return false;
 
-                // note: title is added on mouseover, as the translation isn't ready at page-load
-                var btn = $('<div class="sc-uninitialized" onmouseover="this.title = $2sxc.translate(this.title)" title="InPage.NewElement"><div class="icon-sxc-glasses"></div></div>');
-                btn.on("click", function () {
-                    editManager.run("layout");
-                });
+            //    // note: title is added on mouseover, as the translation isn't ready at page-load
+            //    var btn = $('<div class="sc-uninitialized" onmouseover="this.title = $2sxc.translate(this.title)" title="InPage.NewElement"><div class="icon-sxc-glasses"></div></div>');
+            //    btn.on("click", function () {
+            //        sxc.manage.run("layout");
+            //    });
 
-                $(contentBlockTag).append(btn);
-            },
+            //    $(sxc.manage._tag).append(btn);
+            //    return true;
+            //},
 
             // private: show error when the app-data hasn't been installed yet for this imported-module
             _handleErrors: function (errType, cbTag) {
