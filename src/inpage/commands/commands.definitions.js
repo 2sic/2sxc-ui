@@ -301,7 +301,8 @@
         //#endregion
         addDef(makeDef("layout", "ChangeLayout", "glasses", true, {
             code: function (settings, event, sxc) {
-                sxc.manage.contentBlock.dialogToggle();
+                //sxc.manage.contentBlock.dialogToggle();
+                $2sxc._contentBlock.dialogToggle(sxc);
             }
         }));
 

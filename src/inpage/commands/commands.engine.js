@@ -95,8 +95,9 @@
             _openNgDialog: function (settings, event, closeCallback) {
                 // the callback will handle events after closing the dialog
                 // and reload the in-page view w/ajax or page reload
-                var callback = function() {
-                        sxc.manage.contentBlock.reloadAndReInitialize();
+                var callback = function () {
+                        $2sxc._contentBlock.reloadAndReInitialize(sxc);
+                        //sxc.manage.contentBlock.reloadAndReInitialize();
                         closeCallback();
                     },
                     link = engine._linkToNgDialog(settings); // the link contains everything to open a full dialog (lots of params added)

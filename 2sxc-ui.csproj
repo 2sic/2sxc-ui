@@ -32,6 +32,11 @@
     <Content Include="src\dnn\ui.html" />
     <Content Include="src\inpage\2sxc-extensions\2sxc.consts.js" />
     <Content Include="src\inpage\commands\commands.instanceCommands.js" />
+    <Content Include="src\inpage\contentBlock\contentBlock.render.js" />
+    <Content Include="src\inpage\contentBlock\contentBlock.templates.js" />
+    <Content Include="src\inpage\contentBlock\contentBlock.dialog-todo-move.js" />
+    <Content Include="src\inpage\contentBlock\contentBlock.webApiPromises.js" />
+    <Content Include="src\inpage\contentBlock\contentBlock.{}.js" />
     <Content Include="src\inpage\entity-manipulation\item-commands.js" />
     <Content Include="src\inpage\dnn-workarounds\dnn-08.00.04.js" />
     <Content Include="src\inpage\manage\manage.{}.js" />
