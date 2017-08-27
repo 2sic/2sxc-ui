@@ -53,7 +53,10 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
         },
 
         // this one assumes a replace / change has already happened, but now must be finalized...
-        reloadAndReInitialize: function (forceAjax, preview) {
+        reloadAndReInitialize: function (forceAjax, preview, dummyParamToCatchPromiseParams) {
+            // if this is called from a .then(...) it has parameters which we don't want and cause trouble, so reset them
+            if (dummyParamToCatchPromiseParams) forceAjax = preview = undefined;
+
             // force ajax is set when a new app was chosen, and the new app supports ajax
             // this value can only be true, or not exist at all
             if (forceAjax) manage._reloadWithAjax = true;
@@ -104,19 +107,15 @@ $2sxc._contentBlock.create = function (sxc, manage, cbTag) {
 
         //#region simple item commands like publish, remove, add, re-order
         // set a content-item in this block to published, then reload
-        publish: function (part, sortOrder) {
+        _publish: function (params) {
             return cb.sxc.webApi.get({
                 url: "view/module/publish",
-                params: { part: part, sortOrder: sortOrder }
+                params: params
             }).then(cb.reloadAndReInitialize);
         },
+        publish: function (part, sortOrder) { return cb._publish({ part: part, sortOrder: sortOrder }); },
 
-        publishId: function (entityId) {
-            return cb.sxc.webApi.get({
-                url: "view/module/publish",
-                params: { id: entityId }
-            }).then(cb.reloadAndReInitialize);
-        },
+        publishId: function (entityId) { return cb._publish({ id: entityId }); },
 
         // remove an item from a list, then reload
         removeFromList: function (sortOrder) {
