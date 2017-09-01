@@ -11,7 +11,7 @@
             enable: null    // default: auto-detect
         }
     };
-
+    
     $quickE._readPageConfig = function () {
         var configs = $("[" + configAttr + "]"), finalConfig = {}, confJ, confO;
 
@@ -34,12 +34,10 @@
 
         // re-check "auto" or "null"
         // if it has inner-content, then it's probably a details page, where quickly adding modules would be a problem, so for now, disable modules in this case
-        if (conf.modules.enable === null || conf.modules.enable === "auto")
-            conf.modules.enable = !hasInnerCBs;
+        if (conf.modules.enable === null || conf.modules.enable === 'auto') conf.modules.enable = !hasInnerCBs;
 
         // for now, ContentBlocks are only enabled if they exist on the page
-        if (conf.innerBlocks.enable === null || conf.innerBlocks.enable === "auto")
-            conf.innerBlocks.enable = hasInnerCBs;  
+        if (conf.innerBlocks.enable === null || conf.innerBlocks.enable === 'auto') conf.innerBlocks.enable = hasInnerCBs;  
     };
 
 });

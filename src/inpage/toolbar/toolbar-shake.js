@@ -3,10 +3,9 @@ $(function () {
 
     // this will add a css-class to auto-show all toolbars (or remove it again)
     function toggleAllToolbars() {
-        $(document.body).toggleClass("sc-tb-show-all");
+        $(document.body).toggleClass('sc-tb-show-all');
     }
-
+    
     // start shake-event monitoring, which will then generate a window-event
-    var myShakeEvent = new Shake({ callback: toggleAllToolbars });
-    myShakeEvent.start();
+    (new Shake({ callback: toggleAllToolbars })).start();
 });

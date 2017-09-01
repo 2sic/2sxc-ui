@@ -9,14 +9,12 @@
  * it should be able to render itself
  */
 (function () {
-
     var cbm = $2sxc._contentBlock;
 
     //#region functions working only with what they are given
     // 2017-08-27 2dm: I'm working on cleaning up this code, and an important part 
     // is to have code which doesn't use old state (like object-properties initialized earlier)
     // extracting these methods is part of the work
-
     cbm.persistTemplate = function (sxc, forceCreate, selectorVisibility) {
         var manage = sxc.manage,
             cb = manage.contentBlock,
@@ -26,7 +24,7 @@
             promiseToSetState;
 
         if (groupExistsAndTemplateUnchanged)
-            promiseToSetState = (ec.ContentBlock.ShowTemplatePicker)//.minfo.templateChooserVisible)
+            promiseToSetState = (ec.ContentBlock.ShowTemplatePicker) //.minfo.templateChooserVisible)
                 ? cbm.setTemplateChooserState(sxc, false) // hide in case it was visible
                 : $.when(null); // all is ok, create empty promise to allow chaining the result
         else
@@ -46,30 +44,22 @@
 
         // todo: should move things like remembering undo etc. back into the contentBlock state manager
         // or just reset it, so it picks up the right values again ?
-        var promiseToCorrectUi = promiseToSetState.then(function () {
-            cb.undoTemplateId = cb.templateId; // remember for future undo
-            cb.undoContentTypeId = cb.contentTypeId; // remember ...
+        return promiseToSetState
+            .then(function () {
+                cb.undoTemplateId = cb.templateId; // remember for future undo
+                cb.undoContentTypeId = cb.contentTypeId; // remember ...
+                
+                ec.ContentBlock.ShowTemplatePicker = false; // cb.minfo.templateChooserVisible = false;
 
-            ec.ContentBlock.ShowTemplatePicker = false; // cb.minfo.templateChooserVisible = false;
+                if (manage.dialog) manage.dialog.justHide();
 
-            if (manage.dialog) manage.dialog.justHide();
+                if (!ec.ContentGroup.HasContent) // if it didn't have content, then it only has now...
+                    ec.ContentGroup.HasContent = forceCreate;
 
-            if (!ec.ContentGroup.HasContent) // if it didn't have content, then it only has now...
-                ec.ContentGroup.HasContent = forceCreate;
-
-            // only re-load on content, not on app as that was already re-loaded on the preview
-            if (!cb.buttonsAreLoaded || (!groupExistsAndTemplateUnchanged && manage._reloadWithAjax))      // necessary to show the original template again
-                cbm.reloadAndReInitialize(sxc);
-        });
-
-        return promiseToCorrectUi;
+                // only re-load on content, not on app as that was already re-loaded on the preview
+                if (!cb.buttonsAreLoaded || (!groupExistsAndTemplateUnchanged && manage._reloadWithAjax))      // necessary to show the original template again
+                    cbm.reloadAndReInitialize(sxc);
+            });
     };
-
-
-
-
     //#endregion
-
-
-    
 })();

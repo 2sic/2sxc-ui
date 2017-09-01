@@ -16,45 +16,65 @@
 (function () {
     // the content-block-manager contains many stateless methods to do things with content-blocks
     var cbm = $2sxc._contentBlock;
+    $2sxc._contentBlock.createCbInstance = createCbInstance;
+    return createCbInstance;
 
-$2sxc._contentBlock.createCbInstance = function (sxc, manage) {
-    //#region loads of old stuff, should be cleaned, mostly just copied from the angulare code
+    function createCbInstance(sxc, manage) {
+        var cViewWithoutContent = "_LayoutElement"; // needed to differentiate the "select item" from the "empty-is-selected" which are both empty
+        var editContext = manage._editContext;
+        var ctid = (editContext.ContentGroup.ContentTypeName === "" && editContext.ContentGroup.TemplateId !== null)
+            ? cViewWithoutContent // has template but no content, use placeholder
+            : editContext.ContentGroup.ContentTypeName;
 
-    var cViewWithoutContent = "_LayoutElement"; // needed to differentiate the "select item" from the "empty-is-selected" which are both empty
-    var editContext = manage._editContext;
-    var ctid = (editContext.ContentGroup.ContentTypeName === "" && editContext.ContentGroup.TemplateId !== null)
-        ? cViewWithoutContent // has template but no content, use placeholder
-        : editContext.ContentGroup.ContentTypeName;
+        console.log("context", editContext);
 
-    //#endregion
-
-    var cb = {
-        //sxc: sxc,
-        templateId: editContext.ContentGroup.TemplateId,
-        undoTemplateId: editContext.ContentGroup.TemplateId,
-        contentTypeId: ctid,
-        undoContentTypeId: ctid,
-        buttonsAreLoaded: true,
+        var cb = {
+            templateId: editContext.ContentGroup.TemplateId,
+            undoTemplateId: editContext.ContentGroup.TemplateId,
+            contentTypeId: ctid,
+            undoContentTypeId: ctid,
+            buttonsAreLoaded: true,
+            replace: replace,
+            reloadAndReInitialize: reloadAndReInitialize,
+            reload: reload,
+            reloadNoLivePreview: reloadNoLivePreview,
+            publish: publish,
+            publishId: publishId,
+            removeFromList: removeFromList,
+            changeOrder: changeOrder,
+            addItem: addItem,
+            _cancelTemplateChange: _cancelTemplateChange,
+            prepareToAddContent: prepareToAddContent,
+            persistTemplate: persistTemplate
+        }
+        return cb;
 
         // ajax update/replace the content of the content-block
-        replace: function(newContent, justPreview) { cbm.replace(sxc, newContent, justPreview); },
+        function replace(newContent, justPreview) {
+            cbm.replace(sxc, newContent, justPreview);
+        }
 
         //2017-08-27 todo 2dm seems unused, but should be used for the preview...
         //replacePreview: function (newContent) { cb.replace(newContent, true); },
 
         // this one assumes a replace / change has already happened, but now must be finalized...
         // note: have a deep dependency on the angular-ui, must change
-        reloadAndReInitialize: function(forceAjax, preview) {return cbm.reloadAndReInitialize(sxc, forceAjax, preview);},
+        function reloadAndReInitialize(forceAjax, preview) {
+            return cbm.reloadAndReInitialize(sxc, forceAjax, preview);
+        }
 
-        reload: function (templateId) { return cbm.reload(sxc, templateId); },
+        function reload(templateId) {
+            return cbm.reload(sxc, templateId);
+        }
 
         // this shows a message that there is no ajax-preview for something
         // note: also used with deep dependency from angular-ui
-        reloadNoLivePreview: function (msg) {
-            cb.replace(msg);
+        function reloadNoLivePreview(msg) {
+            replace(msg);
             return $.when();
-        },
+        }
 
+        // ToDo: remove dead code
         //_getAndReload: function(url, params) {
         //    return sxc.webApi.get({
         //            url: url,
@@ -64,22 +84,36 @@ $2sxc._contentBlock.createCbInstance = function (sxc, manage) {
 
         //#region simple item commands like publish, remove, add, re-order
         // set a content-item in this block to published, then reload
-        publish: function (part, sortOrder) { return cbm.getAndReload(sxc, "view/module/publish", { part: part, sortOrder: sortOrder }); },
+        function publish(part, sortOrder) {
+            return cbm.getAndReload(sxc, "view/module/publish", { part: part, sortOrder: sortOrder });
+        }
 
-        publishId: function (entityId) { return cbm.getAndReload(sxc, "view/module/publish", { id: entityId }); },
+        function publishId(entityId) {
+            return cbm.getAndReload(sxc, 'view/module/publish', { id: entityId });
+        }
 
         // remove an item from a list, then reload
-        removeFromList: function (sortOrder) { return cbm.getAndReload(sxc, "view/module/removefromlist", { sortOrder: sortOrder }); },
+        function removeFromList(sortOrder) {
+            return cbm.getAndReload(sxc, 'view/module/removefromlist', { sortOrder: sortOrder });
+        }
 
         // change the order of an item in a list, then reload
-        changeOrder: function (initOrder, newOrder) { return cbm.getAndReload(sxc, "view/module/changeorder", { sortOrder: initOrder, destinationSortOrder: newOrder }); },
+        function changeOrder(initOrder, newOrder, partOfPage) {
+            return cbm.getAndReload(sxc, 'view/module/changeorder', {
+                sortOrder: initOrder,
+                destinationSortOrder: newOrder,
+                partOfPage: partOfPage === undefined ? false : partOfPage
+            });
+        }
 
         // add an item to the list at this position
-        addItem: function (sortOrder) { return cbm.getAndReload(sxc, "view/module/additem", { sortOrder: sortOrder }); },
+        function addItem(sortOrder) {
+            return cbm.getAndReload(sxc, "view/module/additem", { sortOrder: sortOrder });
+        }
 
         // Cancel and reset back to original state
         // note: is accessed from the angular-ui
-        _cancelTemplateChange: function () {
+        function _cancelTemplateChange() {
             cb.templateId = cb.undoTemplateId;
             cb.contentTypeId = cb.undoContentTypeId;
 
@@ -89,18 +123,16 @@ $2sxc._contentBlock.createCbInstance = function (sxc, manage) {
             //cb._setTemplateChooserState(false)
             cbm.setTemplateChooserState(sxc, false)
                 .then(function () { cbm.reloadAndReInitialize(sxc); });
-        },
+        }
 
         // prepare the instance so content can be added (requires that the content-group has been created)
-        prepareToAddContent: function () { return cb.persistTemplate(true, false); },
+        function prepareToAddContent() {
+            return persistTemplate(true, false);
+        }
 
         // persist the template state - needed if the template was more in preview than really changed
-        persistTemplate: function (forceCreate, selectorVisibility) { return cbm.persistTemplate(sxc, forceCreate, selectorVisibility); }
-        
-    };
-
-
-    return cb;
-};
-
+        function persistTemplate(forceCreate, selectorVisibility) {
+            return cbm.persistTemplate(sxc, forceCreate, selectorVisibility);
+        }
+    }
 })();

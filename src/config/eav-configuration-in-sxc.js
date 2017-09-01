@@ -4,7 +4,6 @@
 // the following config-stuff is not in angular, because some settings are needed in dialogs which are not built with angularJS yet.
 // they are included in the same file for conveniance and to motivate the remaining dialogs to get migrated to AngularJS
 
-/*jshint laxbreak:true */
 (function () {
     var runningInDnn = location.href.indexOf("ui.html") === -1;
 

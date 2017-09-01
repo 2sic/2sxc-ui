@@ -9,7 +9,6 @@
  * it should be able to render itself
  */
 (function () {
-
     var cbm = $2sxc._contentBlock;
 
     // ajax update/replace the content of the content-block
@@ -35,6 +34,7 @@
     cbm.reload = function (sxc, templateId) {
         var manage = sxc.manage,
             cb = manage.contentBlock;
+            
         // if nothing specified, use stored id
         if (!templateId) templateId = cb.templateId;
 

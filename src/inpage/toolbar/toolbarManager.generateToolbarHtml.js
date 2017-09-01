@@ -28,7 +28,6 @@
         }
 
         toolbar.attr("group-count", btnGroups.length);
-
         return toolbar[0].outerHTML;
     };
 })();

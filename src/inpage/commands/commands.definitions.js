@@ -112,8 +112,7 @@
                 // disabled: true,
                 showCondition: function (settings) {
                     // can never be used for a modulelist item, as it is always in use somewhere
-                    if (settings.useModuleList)
-                        return false;
+                    if (settings.useModuleList) return false;
                     
                     // check if all data exists required for deleting
                     return settings.entityId && settings.entityGuid && settings.entityTitle;
@@ -128,22 +127,23 @@
                     return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1 && settings.sortOrder !== 0;
                 },
                 code: function (settings, event, sxc) {
-                    sxc.manage.contentBlock
-                        .changeOrder(settings.sortOrder, Math.max(settings.sortOrder - 1, 0));
+                    sxc.manage.contentBlock.changeOrder(settings.sortOrder, Math.max(settings.sortOrder - 1, 0), sxc.manage._editContext.ContentBlock.PartOfPage);
                 }
             }),
 
-            'movedown': makeDef("movedown", "MoveDown", "move-down", false, {
+            'movedown': makeDef('movedown', 'MoveDown', 'move-down', false, {
                 showCondition: function (settings, modConfig) {
                     return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1;
                 },
                 code: function (settings, event, sxc) {
-                    sxc.manage.contentBlock.changeOrder(settings.sortOrder, settings.sortOrder + 1);
+                    sxc.manage.contentBlock.changeOrder(settings.sortOrder, settings.sortOrder + 1, sxc.manage._editContext.ContentBlock.PartOfPage);
                 }
             }),
 
             'instance-list': makeDef("instance-list", "Sort", "list-numbered", false, {
-                showCondition: function (settings, modConfig) { return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1; }
+                showCondition: function (settings, modConfig) {
+                    return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1;
+                }
             }),
 
             'publish': makeDef("publish", "Unpublished", "eye-off", false, {
