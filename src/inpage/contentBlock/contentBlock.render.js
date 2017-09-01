@@ -30,6 +30,7 @@
             console.log("Error while rendering template:");
             console.log(e);
         }
+        return sxc.recreate();
     };
 
     cbm.reload = function (sxc, templateId) {

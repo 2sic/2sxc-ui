@@ -640,7 +640,6 @@ $2sxc._contentBlock.createCbInstance = function (sxc, manage) {
     //#endregion
 
     var cb = {
-        //sxc: sxc,
         templateId: editContext.ContentGroup.TemplateId,
         undoTemplateId: editContext.ContentGroup.TemplateId,
         contentTypeId: ctid,
@@ -648,7 +647,8 @@ $2sxc._contentBlock.createCbInstance = function (sxc, manage) {
         buttonsAreLoaded: true,
 
         // ajax update/replace the content of the content-block
-        replace: function(newContent, justPreview) { cbm.replace(sxc, newContent, justPreview); },
+        // todo 2017-09-01 2dm temp - keep returned sxc, till we get this content-block to be stateless
+        replace: function(newContent, justPreview) { sxc = cbm.replace(sxc, newContent, justPreview); },
 
         //2017-08-27 todo 2dm seems unused, but should be used for the preview...
         //replacePreview: function (newContent) { cb.replace(newContent, true); },
@@ -657,7 +657,7 @@ $2sxc._contentBlock.createCbInstance = function (sxc, manage) {
         // note: have a deep dependency on the angular-ui, must change
         reloadAndReInitialize: function(forceAjax, preview) {return cbm.reloadAndReInitialize(sxc, forceAjax, preview);},
 
-        reload: function (templateId) { return cbm.reload(sxc, templateId); },
+        reload: function(templateId) { return cbm.reload(sxc, templateId); },
 
         // this shows a message that there is no ajax-preview for something
         // note: also used with deep dependency from angular-ui
@@ -865,6 +865,7 @@ $2sxc._contentBlock.manipulator = function(sxc) {
             console.log("Error while rendering template:");
             console.log(e);
         }
+        return sxc.recreate();
     };
 
     cbm.reload = function (sxc, templateId) {
