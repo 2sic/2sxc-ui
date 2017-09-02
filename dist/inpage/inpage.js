@@ -175,8 +175,9 @@ $(function () {
                     return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1;
                 },
                 code: function (settings, event, sxc) {
-                    sxc.manage.contentBlock
-                        .addItem(settings.sortOrder + 1);
+                    $2sxc._contentBlock.addItem(sxc, settings.sortOrder + 1);
+                    //sxc.manage.contentBlock
+                    //    .addItem(settings.sortOrder + 1);
                 }
             }),
 
@@ -208,8 +209,9 @@ $(function () {
                 },
                 code: function (settings, event, sxc) {
                     if (confirm($2sxc.translate("Toolbar.ConfirmRemove"))) {
-                        sxc.manage.contentBlock
-                            .removeFromList(settings.sortOrder);
+                        $2sxc._contentBlock.removeFromList(sxc, settings.sortOrder);
+                        //sxc.manage.contentBlock
+                        //    .removeFromList(settings.sortOrder);
                     }
                 }
             }),
@@ -235,8 +237,9 @@ $(function () {
                     return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1 && settings.sortOrder !== 0;
                 },
                 code: function (settings, event, sxc) {
-                    sxc.manage.contentBlock
-                        .changeOrder(settings.sortOrder, Math.max(settings.sortOrder - 1, 0));
+                    $2sxc._contentBlock.changeOrder(sxc, settings.sortOrder, Math.max(settings.sortOrder - 1, 0));
+                    //sxc.manage.contentBlock
+                    //    .changeOrder(settings.sortOrder, Math.max(settings.sortOrder - 1, 0));
                 }
             }),
 
@@ -245,7 +248,8 @@ $(function () {
                     return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1;
                 },
                 code: function (settings, event, sxc) {
-                    sxc.manage.contentBlock.changeOrder(settings.sortOrder, settings.sortOrder + 1);
+                    $2sxc._contentBlock.changeOrder(sxc, settings.sortOrder, settings.sortOrder + 1);
+                    //sxc.manage.contentBlock.changeOrder(settings.sortOrder, settings.sortOrder + 1);
                 }
             }),
 
@@ -258,15 +262,16 @@ $(function () {
                     return settings.isPublished === false;
                 },
                 code: function (settings, event, sxc) {
-                    var part, index;
                     if (settings.isPublished) return alert($2sxc.translate("Toolbar.AlreadyPublished"));
 
                     // if we have an entity-id, publish based on that
-                    if (settings.entityId) return sxc.manage.contentBlock.publishId(settings.entityId);
+                    if (settings.entityId) return $2sxc._contentBlock.publishId(sxc, settings.entityId);
+                    //if (settings.entityId) return sxc.manage.contentBlock.publishId(settings.entityId);
 
-                    part = settings.sortOrder === -1 ? 'listcontent' : 'content';
-                    index = settings.sortOrder === -1 ? 0 : settings.sortOrder;
-                    return sxc.manage.contentBlock.publish(part, index);
+                    var part = settings.sortOrder === -1 ? 'listcontent' : 'content';
+                    var index = settings.sortOrder === -1 ? 0 : settings.sortOrder;
+                    return $2sxc._contentBlock.publish(sxc, part, index);
+                    //return sxc.manage.contentBlock.publish(part, index);
                 }
             }),
 
@@ -571,7 +576,8 @@ $(function () {
                 if (conf.uiActionOnly) return settings.code(settings, origEvent, sxc); 
 
                 // if more than just a UI-action, then it needs to be sure the content-group is created first
-                sxc.manage.contentBlock.prepareToAddContent()
+                $2sxc._contentBlock.prepareToAddContent(sxc)
+                //sxc.manage.contentBlock.prepareToAddContent() 
                     .then(function () {
                         return settings.code(settings, origEvent, sxc); // 2016-11-03 sxc.manage);
                     });
@@ -607,7 +613,54 @@ $(function () {
  * it should be able to render itself
  */
 (function () {
+    /* 
+     */
     $2sxc._contentBlock = {};
+})();
+/* 
+ * this is a content block in the browser
+ * 
+ * A Content Block is a standalone unit of content, with it's own definition of
+ * 1. content items
+ * 2. template
+ * + some other stuff
+ *
+ * it should be able to render itself
+ */
+(function () {
+
+    var cbm = $2sxc._contentBlock;
+
+    // internal helper, to do something and reload the content block
+    cbm.getAndReload = function (sxc, url, params) {
+        return sxc.webApi.get({
+            url: url,
+            params: params
+        }).then(function () { cbm.reloadAndReInitialize(sxc); });
+    };
+
+    // remove an item from a list, then reload
+    cbm.removeFromList = function(sxc, sortOrder) {
+        return cbm.getAndReload(sxc, "view/module/removefromlist", { sortOrder: sortOrder });
+    };
+
+    // change the order of an item in a list, then reload
+    cbm.changeOrder = function(sxc, initOrder, newOrder) {
+        return cbm.getAndReload(sxc, "view/module/changeorder",
+            { sortOrder: initOrder, destinationSortOrder: newOrder });
+    };
+
+    // add an item to the list at this position
+    cbm.addItem = function(sxc, sortOrder) {
+        return cbm.getAndReload(sxc, "view/module/additem", { sortOrder: sortOrder });
+    };
+
+    // set a content-item in this block to published, then reload
+    cbm.publish = function (sxc, part, sortOrder) { return cbm.getAndReload(sxc, "view/module/publish", { part: part, sortOrder: sortOrder }); };
+
+    cbm.publishId = function(sxc, entityId) { return cbm.getAndReload(sxc, "view/module/publish", { id: entityId }); };
+
+
 })();
 // Todo: Refactoring
 // Todo: then find out where these commands are used, and try to replace with the stateless version
@@ -666,27 +719,7 @@ $2sxc._contentBlock.createCbInstance = function (sxc, manage) {
             return $.when();
         },
 
-        //_getAndReload: function(url, params) {
-        //    return sxc.webApi.get({
-        //            url: url,
-        //            params: params
-        //        }).then(function() { cbm.reloadAndReInitialize(sxc); });
-        //},
-
         //#region simple item commands like publish, remove, add, re-order
-        // set a content-item in this block to published, then reload
-        publish: function (part, sortOrder) { return cbm.getAndReload(sxc, "view/module/publish", { part: part, sortOrder: sortOrder }); },
-
-        publishId: function (entityId) { return cbm.getAndReload(sxc, "view/module/publish", { id: entityId }); },
-
-        // remove an item from a list, then reload
-        removeFromList: function (sortOrder) { return cbm.getAndReload(sxc, "view/module/removefromlist", { sortOrder: sortOrder }); },
-
-        // change the order of an item in a list, then reload
-        changeOrder: function (initOrder, newOrder) { return cbm.getAndReload(sxc, "view/module/changeorder", { sortOrder: initOrder, destinationSortOrder: newOrder }); },
-
-        // add an item to the list at this position
-        addItem: function (sortOrder) { return cbm.getAndReload(sxc, "view/module/additem", { sortOrder: sortOrder }); },
 
         // Cancel and reset back to original state
         // note: is accessed from the angular-ui
@@ -696,17 +729,15 @@ $2sxc._contentBlock.createCbInstance = function (sxc, manage) {
 
             // dialog...
             // todo: ugly kind of callback, this only works, because this method is called from inside this dialog, so it exist at that time
-            sxc.manage.dialog.justHide();
+            $2sxc._dialogManager.hide();
+            //sxc.manage.dialog.justHide();
             //cb._setTemplateChooserState(false)
             cbm.setTemplateChooserState(sxc, false)
                 .then(function () { cbm.reloadAndReInitialize(sxc); });
         },
 
-        // prepare the instance so content can be added (requires that the content-group has been created)
-        prepareToAddContent: function () { return cb.persistTemplate(true, false); },
-
         // persist the template state - needed if the template was more in preview than really changed
-        persistTemplate: function (forceCreate, selectorVisibility) { return cbm.persistTemplate(sxc, forceCreate, selectorVisibility); }
+        //persistTemplate: function (forceCreate, selectorVisibility) { return cbm.persistTemplate(sxc, forceCreate, selectorVisibility); }
         
     };
 
@@ -865,7 +896,11 @@ $2sxc._contentBlock.manipulator = function(sxc) {
             console.log("Error while rendering template:");
             console.log(e);
         }
-        return sxc.recreate();
+        return sxc.recreate(true);
+    };
+
+    cbm.message = function(sxc, newContent) {
+        $(sxc.manage._tag).html(newContent);
     };
 
     cbm.reload = function (sxc, templateId) {
@@ -907,7 +942,7 @@ $2sxc._contentBlock.manipulator = function(sxc) {
             .then(function () {
                 if (manage._reloadWithAjax && manage.dialog) manage.dialog.destroy(); // only remove on force, which is an app-change
                 if (preview) return;
-                sxc = sxc.recreate(); // create new sxc-object
+                sxc = sxc.recreate(true); // create new sxc-object
                 $2sxc._toolbarManager.buildToolbars(null, sxc.id);// sub-optimal deep dependency
                 //cb.sxc.manage._toolbar._processToolbars(); // sub-optimal deep dependency
                 sxc.manage.contentBlock.buttonsAreLoaded = true;
@@ -936,6 +971,11 @@ $2sxc._contentBlock.manipulator = function(sxc) {
     // 2017-08-27 2dm: I'm working on cleaning up this code, and an important part 
     // is to have code which doesn't use old state (like object-properties initialized earlier)
     // extracting these methods is part of the work
+
+
+    // prepare the instance so content can be added (requires that the content-group has been created)
+    cbm.prepareToAddContent = function(sxc) { return cbm.persistTemplate(sxc, true, false); };
+
 
     cbm.persistTemplate = function (sxc, forceCreate, selectorVisibility) {
         var manage = sxc.manage,
@@ -972,7 +1012,8 @@ $2sxc._contentBlock.manipulator = function(sxc) {
 
             ec.ContentBlock.ShowTemplatePicker = false; // cb.minfo.templateChooserVisible = false;
 
-            if (manage.dialog) manage.dialog.justHide();
+            $2sxc._dialogManager.hide();
+            //if (manage.dialog) manage.dialog.justHide();
 
             if (!ec.ContentGroup.HasContent) // if it didn't have content, then it only has now...
                 ec.ContentGroup.HasContent = forceCreate;
@@ -1011,13 +1052,6 @@ $2sxc._contentBlock.manipulator = function(sxc) {
     // 2017-08-27 2dm: I'm working on cleaning up this code, and an important part 
     // is to have code which doesn't use old state (like object-properties initialized earlier)
     // extracting these methods is part of the work
-
-    cbm.getAndReload = function(sxc, url, params) {
-        return sxc.webApi.get({
-            url: url,
-            params: params
-        }).then(function() { cbm.reloadAndReInitialize(sxc); });
-    };
 
 
     cbm.setTemplateChooserState = function(sxc, state) {
@@ -1361,25 +1395,31 @@ if (!Array.prototype.find) {
 (function () {
     $2sxc._quickDialog = Dialog;
 
+    // dialog manager - the currently active dialog object
+    var diagManager = $2sxc._dialogManager = {
+        current: null,
+        hide: function() { if (diagManager.current) diagManager.current.justHide(); }
+    };
+
     var isFullscreen = false,
         RESIZE_INTERVAL = 200,
-        SHOW_DELAY = 400,
+        //SHOW_DELAY = 400,
         SCROLL_TOP_OFFSET = 80,
         activeDialog,
         activeWrapper,
         container = $('<div class="inpage-frame-wrapper"><div class="inpage-frame"></div></div>'),
-        inpageFrame = container.find('.inpage-frame');
+        inpageFrame = container.find(".inpage-frame");
     
-    $('body').append(container);
+    $("body").append(container);
 
     setInterval(function () {
         try {
-            var iframe = inpageFrame.find('iframe')[0], height;
+            var iframe = inpageFrame.find("iframe")[0];
             if (!iframe) return;
-            height = iframe.contentDocument.body.offsetHeight;
+            var height = iframe.contentDocument.body.offsetHeight;
             if (iframe.previousHeight === height) return;
             window.diagBox = iframe;
-            iframe.style.minHeight = container.css('min-height');
+            iframe.style.minHeight = container.css("min-height");
             iframe.style.height = height + "px";
             iframe.previousHeight = height;
             if (isFullscreen) {
@@ -1389,21 +1429,24 @@ if (!Array.prototype.find) {
         } catch (e) { }
     }, RESIZE_INTERVAL);
 
+    // ReSharper disable once InconsistentNaming
     function Dialog(sxc, wrapperTag, url, closeCallback, fullScreen) {
         var iframe, // frame inside the dialog (HTMLElement)
-            resizeInterval,
+            // resizeInterval,
             wrapperParent = $(wrapperTag).parent().eq(0);
 
         isFullscreen = fullScreen;
 
         init();
-        
+       
         /**
+         * build an iframe object, tell $2sxc that it's the current one, and
+         * give it back all initialized to do work on this sxc-instance
          * Assign properties to the iframe for later use.
          */
-        return Object.assign(iframe, {
+        diagManager.current = Object.assign(iframe, {
             closeCallback: closeCallback,
-            sxc: sxc,
+            //sxc: sxc,
             destroy: function () {
                 // TODO: evaluate what to do here
             },
@@ -1411,7 +1454,7 @@ if (!Array.prototype.find) {
             getAdditionalDashboardConfig: getAdditionalDashboardConfig,
             getCommands: getCommands,
             scrollToTarget: function () {
-                $('body').animate({ scrollTop: $(activeWrapper).offset().top - SCROLL_TOP_OFFSET });
+                $("body").animate({ scrollTop: $(activeWrapper).offset().top - SCROLL_TOP_OFFSET });
             },
             toggle: function () {
                 return toggle();
@@ -1422,8 +1465,33 @@ if (!Array.prototype.find) {
             isVisible: function () {
                 return !container.hasClass("hidden");
             },
-            persistDia: persistDia
+            persistDia: persistDia, 
+
+            // 2017-09-02 2dm - moving all api calls out of angular
+            // todo: once this works, go to stateless calls
+            run: function(verb) { 
+                 sxc.recreate().manage.run(verb);
+            },
+            cancelTemplateChange: function() {
+                sxc.recreate().manage.contentBlock._cancelTemplateChange();
+            },
+            showMessage: function (message) {
+                $2sxc._contentBlock.message(sxc.recreate(), '<p class="no-live-preview-available">' + message + "</p>");
+            },
+            reloadAndReInit:function() {
+                return sxc.recreate().manage.contentBlock.reloadAndReInitialize(true, true);
+            },
+            saveTemplate: function(templateId) {
+                sxc = sxc.recreate(); 
+                sxc.manage.contentBlock.templateId = templateId; // temporary, must refactor
+                return $2sxc._contentBlock.persistTemplate(sxc, false, false);
+            },
+            previewTemplate: function(templateId) {
+                return sxc.recreate().manage.contentBlock.reload(templateId);
+            }
         });
+
+        return diagManager.current;
 
         function init() {
             url = url.replace("dist/dnn/ui.html?", "dist/ng/ui.html?");
@@ -1433,27 +1501,27 @@ if (!Array.prototype.find) {
                 if (devMode && ~~devMode) url = url.replace("/desktopmodules/tosic_sexycontent/dist/ng/ui.html", "http://localhost:4200");
             } catch (e) { }
 
-            iframe = document.createElement('iframe');
-            container.css('min-height', fullScreen ? '100%' : '230px');
+            iframe = document.createElement("iframe");
+            container.css("min-height", fullScreen ? "100%" : "230px");
             toggle(true);
         }
 
         function persistDia() {
-            sessionStorage.setItem('dia-cbid', sxc.cbid);
+            sessionStorage.setItem("dia-cbid", sxc.cbid);
         }
 
         function toggle(show) {
-            var action = show === undefined ? (activeDialog != iframe) : show,
+            var action = show === undefined ? (activeDialog !== iframe) : show,
                 dirty;
 
             if (action) {
-                if (activeDialog == iframe) return false;
+                if (activeDialog === iframe) return false;
                 if (activeDialog !== undefined) {
                     dirty = false; // activeDialog.vm.isDirty();
                     // TODO: i18n
                     if (dirty && !window.confirm("Unsaved changes detected. Would you like to continue?")) return false;
                 }
-                iframe.setAttribute('src', url);
+                iframe.setAttribute("src", url);
                 $(inpageFrame).html(iframe);
                 activeDialog = iframe;
                 activeWrapper = wrapperParent;

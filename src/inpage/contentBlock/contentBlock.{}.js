@@ -9,5 +9,7 @@
  * it should be able to render itself
  */
 (function () {
+    /* 
+     */
     $2sxc._contentBlock = {};
 })();

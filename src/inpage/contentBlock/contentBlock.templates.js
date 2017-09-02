@@ -17,6 +17,11 @@
     // is to have code which doesn't use old state (like object-properties initialized earlier)
     // extracting these methods is part of the work
 
+
+    // prepare the instance so content can be added (requires that the content-group has been created)
+    cbm.prepareToAddContent = function(sxc) { return cbm.persistTemplate(sxc, true, false); };
+
+
     cbm.persistTemplate = function (sxc, forceCreate, selectorVisibility) {
         var manage = sxc.manage,
             cb = manage.contentBlock,
@@ -52,7 +57,8 @@
 
             ec.ContentBlock.ShowTemplatePicker = false; // cb.minfo.templateChooserVisible = false;
 
-            if (manage.dialog) manage.dialog.justHide();
+            $2sxc._dialogManager.hide();
+            //if (manage.dialog) manage.dialog.justHide();
 
             if (!ec.ContentGroup.HasContent) // if it didn't have content, then it only has now...
                 ec.ContentGroup.HasContent = forceCreate;

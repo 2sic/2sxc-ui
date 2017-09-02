@@ -30,7 +30,11 @@
             console.log("Error while rendering template:");
             console.log(e);
         }
-        return sxc.recreate();
+        return sxc.recreate(true);
+    };
+
+    cbm.message = function(sxc, newContent) {
+        $(sxc.manage._tag).html(newContent);
     };
 
     cbm.reload = function (sxc, templateId) {
@@ -72,7 +76,7 @@
             .then(function () {
                 if (manage._reloadWithAjax && manage.dialog) manage.dialog.destroy(); // only remove on force, which is an app-change
                 if (preview) return;
-                sxc = sxc.recreate(); // create new sxc-object
+                sxc = sxc.recreate(true); // create new sxc-object
                 $2sxc._toolbarManager.buildToolbars(null, sxc.id);// sub-optimal deep dependency
                 //cb.sxc.manage._toolbar._processToolbars(); // sub-optimal deep dependency
                 sxc.manage.contentBlock.buttonsAreLoaded = true;

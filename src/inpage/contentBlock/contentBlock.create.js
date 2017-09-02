@@ -55,27 +55,7 @@ $2sxc._contentBlock.createCbInstance = function (sxc, manage) {
             return $.when();
         },
 
-        //_getAndReload: function(url, params) {
-        //    return sxc.webApi.get({
-        //            url: url,
-        //            params: params
-        //        }).then(function() { cbm.reloadAndReInitialize(sxc); });
-        //},
-
         //#region simple item commands like publish, remove, add, re-order
-        // set a content-item in this block to published, then reload
-        publish: function (part, sortOrder) { return cbm.getAndReload(sxc, "view/module/publish", { part: part, sortOrder: sortOrder }); },
-
-        publishId: function (entityId) { return cbm.getAndReload(sxc, "view/module/publish", { id: entityId }); },
-
-        // remove an item from a list, then reload
-        removeFromList: function (sortOrder) { return cbm.getAndReload(sxc, "view/module/removefromlist", { sortOrder: sortOrder }); },
-
-        // change the order of an item in a list, then reload
-        changeOrder: function (initOrder, newOrder) { return cbm.getAndReload(sxc, "view/module/changeorder", { sortOrder: initOrder, destinationSortOrder: newOrder }); },
-
-        // add an item to the list at this position
-        addItem: function (sortOrder) { return cbm.getAndReload(sxc, "view/module/additem", { sortOrder: sortOrder }); },
 
         // Cancel and reset back to original state
         // note: is accessed from the angular-ui
@@ -85,17 +65,15 @@ $2sxc._contentBlock.createCbInstance = function (sxc, manage) {
 
             // dialog...
             // todo: ugly kind of callback, this only works, because this method is called from inside this dialog, so it exist at that time
-            sxc.manage.dialog.justHide();
+            $2sxc._dialogManager.hide();
+            //sxc.manage.dialog.justHide();
             //cb._setTemplateChooserState(false)
             cbm.setTemplateChooserState(sxc, false)
                 .then(function () { cbm.reloadAndReInitialize(sxc); });
         },
 
-        // prepare the instance so content can be added (requires that the content-group has been created)
-        prepareToAddContent: function () { return cb.persistTemplate(true, false); },
-
         // persist the template state - needed if the template was more in preview than really changed
-        persistTemplate: function (forceCreate, selectorVisibility) { return cbm.persistTemplate(sxc, forceCreate, selectorVisibility); }
+        //persistTemplate: function (forceCreate, selectorVisibility) { return cbm.persistTemplate(sxc, forceCreate, selectorVisibility); }
         
     };
 

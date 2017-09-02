@@ -68,8 +68,9 @@
                     return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1;
                 },
                 code: function (settings, event, sxc) {
-                    sxc.manage.contentBlock
-                        .addItem(settings.sortOrder + 1);
+                    $2sxc._contentBlock.addItem(sxc, settings.sortOrder + 1);
+                    //sxc.manage.contentBlock
+                    //    .addItem(settings.sortOrder + 1);
                 }
             }),
 
@@ -101,8 +102,9 @@
                 },
                 code: function (settings, event, sxc) {
                     if (confirm($2sxc.translate("Toolbar.ConfirmRemove"))) {
-                        sxc.manage.contentBlock
-                            .removeFromList(settings.sortOrder);
+                        $2sxc._contentBlock.removeFromList(sxc, settings.sortOrder);
+                        //sxc.manage.contentBlock
+                        //    .removeFromList(settings.sortOrder);
                     }
                 }
             }),
@@ -128,8 +130,9 @@
                     return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1 && settings.sortOrder !== 0;
                 },
                 code: function (settings, event, sxc) {
-                    sxc.manage.contentBlock
-                        .changeOrder(settings.sortOrder, Math.max(settings.sortOrder - 1, 0));
+                    $2sxc._contentBlock.changeOrder(sxc, settings.sortOrder, Math.max(settings.sortOrder - 1, 0));
+                    //sxc.manage.contentBlock
+                    //    .changeOrder(settings.sortOrder, Math.max(settings.sortOrder - 1, 0));
                 }
             }),
 
@@ -138,7 +141,8 @@
                     return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1;
                 },
                 code: function (settings, event, sxc) {
-                    sxc.manage.contentBlock.changeOrder(settings.sortOrder, settings.sortOrder + 1);
+                    $2sxc._contentBlock.changeOrder(sxc, settings.sortOrder, settings.sortOrder + 1);
+                    //sxc.manage.contentBlock.changeOrder(settings.sortOrder, settings.sortOrder + 1);
                 }
             }),
 
@@ -151,15 +155,16 @@
                     return settings.isPublished === false;
                 },
                 code: function (settings, event, sxc) {
-                    var part, index;
                     if (settings.isPublished) return alert($2sxc.translate("Toolbar.AlreadyPublished"));
 
                     // if we have an entity-id, publish based on that
-                    if (settings.entityId) return sxc.manage.contentBlock.publishId(settings.entityId);
+                    if (settings.entityId) return $2sxc._contentBlock.publishId(sxc, settings.entityId);
+                    //if (settings.entityId) return sxc.manage.contentBlock.publishId(settings.entityId);
 
-                    part = settings.sortOrder === -1 ? 'listcontent' : 'content';
-                    index = settings.sortOrder === -1 ? 0 : settings.sortOrder;
-                    return sxc.manage.contentBlock.publish(part, index);
+                    var part = settings.sortOrder === -1 ? 'listcontent' : 'content';
+                    var index = settings.sortOrder === -1 ? 0 : settings.sortOrder;
+                    return $2sxc._contentBlock.publish(sxc, part, index);
+                    //return sxc.manage.contentBlock.publish(part, index);
                 }
             }),
 

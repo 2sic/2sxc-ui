@@ -17,13 +17,6 @@
     // is to have code which doesn't use old state (like object-properties initialized earlier)
     // extracting these methods is part of the work
 
-    cbm.getAndReload = function(sxc, url, params) {
-        return sxc.webApi.get({
-            url: url,
-            params: params
-        }).then(function() { cbm.reloadAndReInitialize(sxc); });
-    };
-
 
     cbm.setTemplateChooserState = function(sxc, state) {
         return sxc.webApi.get({

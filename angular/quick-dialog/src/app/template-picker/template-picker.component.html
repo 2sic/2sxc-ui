@@ -5,7 +5,7 @@
             <button md-fab *ngIf="template" (click)="persistTemplate()" [attr.title]="'TemplatePicker.Save' | translate">
                 <md-icon>check</md-icon>
             </button>
-            <button md-mini-fab class="secondary" *ngIf="undoTemplateId !== null" (click)="frame.sxc.manage.contentBlock._cancelTemplateChange()"
+            <button md-mini-fab class="secondary" *ngIf="undoTemplateId !== null" (click)="frame.cancelTemplateChange()"
                 [attr.title]="('TemplatePicker.' + (isContentApp ? 'Cancel' : 'Close')) | translate">
                 <md-icon>close</md-icon>
             </button>
@@ -25,7 +25,7 @@
                             <span>{{a.name}}</span>
                         </div>
                     </div>
-                    <div class="tile config" *ngIf="showAdvanced && !isContentApp" (click)="frame.sxc.manage.run('app-import')" [attr.title]="'TemplatePicker.Install' | translate">
+                    <div class="tile config" *ngIf="showAdvanced && !isContentApp" (click)="frame.run('app-import')" [attr.title]="'TemplatePicker.Install' | translate">
                         <div class="bg">
                             <div class="bg-icon">
                                 <md-icon>get_app</md-icon>
@@ -35,7 +35,7 @@
                             <span>{{"TemplatePicker.Install" | translate}}</span>
                         </div>
                     </div>
-                    <div class="tile config" *ngIf="showAdvanced && !isContentApp" (click)="frame.sxc.manage.run('zone')" [attr.title]="'TemplatePicker.Zone' | translate">
+                    <div class="tile config" *ngIf="showAdvanced && !isContentApp" (click)="frame.run('zone')" [attr.title]="'TemplatePicker.Zone' | translate">
                         <div class="bg">
                             <div class="bg-icon">
                                 <md-icon>apps</md-icon>
@@ -80,7 +80,7 @@
                             <span>{{t.Name}}</span>
                         </div>
                     </div>
-                    <div class="tile config" *ngIf="showAdvanced && !isContentApp && app?.appId !== null" (click)="frame.sxc.manage.run('app')"
+                    <div class="tile config" *ngIf="showAdvanced && !isContentApp && app?.appId !== null" (click)="frame.run('app')"
                         [attr.title]="'TemplatePicker.App' | translate">
                         <div class="bg">
                             <div class="bg-icon">
