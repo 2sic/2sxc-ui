@@ -20,26 +20,58 @@
         }).then(function () { cbm.reloadAndReInitialize(sxc); });
     };
 
-    // remove an item from a list, then reload
+    /**
+     * remove an item from a list, then reload
+     * @param {} sxc 
+     * @param {} sortOrder 
+     * @returns {} 
+     */
     cbm.removeFromList = function(sxc, sortOrder) {
         return cbm.getAndReload(sxc, "view/module/removefromlist", { sortOrder: sortOrder });
     };
 
-    // change the order of an item in a list, then reload
+    /**
+     * change the order of an item in a list, then reload
+     * @param {} sxc 
+     * @param {} initOrder 
+     * @param {} newOrder 
+     * @returns {} 
+     */
     cbm.changeOrder = function(sxc, initOrder, newOrder) {
         return cbm.getAndReload(sxc, "view/module/changeorder",
             { sortOrder: initOrder, destinationSortOrder: newOrder });
     };
 
-    // add an item to the list at this position
+    /**
+     * add an item to the list at this position
+     * @param {} sxc 
+     * @param {} sortOrder 
+     * @returns {} 
+     */
     cbm.addItem = function(sxc, sortOrder) {
         return cbm.getAndReload(sxc, "view/module/additem", { sortOrder: sortOrder });
     };
 
-    // set a content-item in this block to published, then reload
-    cbm.publish = function (sxc, part, sortOrder) { return cbm.getAndReload(sxc, "view/module/publish", { part: part, sortOrder: sortOrder }); };
+    /**
+     * set a content-item in this block to published, then reload
+     * @param {} sxc 
+     * @param {} part 
+     * @param {} sortOrder 
+     * @returns {} 
+     */
+    cbm.publish = function(sxc, part, sortOrder) {
+        return cbm.getAndReload(sxc, "view/module/publish", { part: part, sortOrder: sortOrder });
+    };
 
-    cbm.publishId = function(sxc, entityId) { return cbm.getAndReload(sxc, "view/module/publish", { id: entityId }); };
+    /**
+     * publish an item using it's ID
+     * @param {} sxc 
+     * @param {} entityId 
+     * @returns {} 
+     */
+    cbm.publishId = function(sxc, entityId) {
+        return cbm.getAndReload(sxc, "view/module/publish", { id: entityId });
+    };
 
 
 })();

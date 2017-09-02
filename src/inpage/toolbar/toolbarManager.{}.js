@@ -2,5 +2,13 @@
 // taking care of toolbars, buttons etc.
 
 (function () {
-    $2sxc._toolbarManager = {};
+    /**
+     * Toolbar manager for the whole page - basically a set of APIs
+     */
+    $2sxc._toolbarManager = {
+
+        // internal constants
+        cDisableAttrName: "data-disable-toolbar"
+
+    };
 })();

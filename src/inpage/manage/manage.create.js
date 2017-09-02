@@ -104,7 +104,7 @@
 
                 // finish init of sub-objects
                 //editManager._commands.init(editManager);
-                editManager.contentBlock = $2sxc._contentBlock.createCbInstance(sxc, editManager, editManager._tag);
+                //editManager.contentBlock = $2sxc._contentBlock.createCbInstance(sxc, editManager, editManager._tag);
 
                 // display the dialog
                 var openDialogId = sessionStorage.getItem('dia-cbid');

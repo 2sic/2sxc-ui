@@ -17,28 +17,47 @@
     // is to have code which doesn't use old state (like object-properties initialized earlier)
     // extracting these methods is part of the work
 
+    /**
+     * TODO - unclear if still in use
+     * @param {object} sxc 
+     * @param {boolean} state 
+     * @returns {promise} 
+     */
+    // 2017-09-02 2dm removed, deprecated, it's not stored on the server any more
+    //cbm.setTemplateChooserState = function(sxc, state) {
+    //    return sxc.webApi.get({
+    //        url: "view/module/SetTemplateChooserState",
+    //        params: { state: state }
+    //    });
+    //};
 
-    cbm.setTemplateChooserState = function(sxc, state) {
-        return sxc.webApi.get({
-            url: "view/module/SetTemplateChooserState",
-            params: { state: state }
-        });
-    };
-
-
-    cbm.saveTemplate = function(sxc, templateId, forceCreateContentGroup, newTemplateChooserState) {
+    /**
+     * Save the template configuration for this instance
+     * @param {object} sxc 
+     * @param {int} templateId 
+     * @param {boolean} [forceCreateContentGroup]
+     * @returns {promise} 
+     */
+    cbm.saveTemplate = function(sxc, templateId, forceCreateContentGroup) {//}, newTemplateChooserState) {
         return sxc.webApi.get({
             url: "view/module/savetemplateid",
             params: {
                 templateId: templateId,
                 forceCreateContentGroup: forceCreateContentGroup,
-                newTemplateChooserState: newTemplateChooserState
+                newTemplateChooserState: false//  newTemplateChooserState
             }
         });
     };
 
+    /**
+     * Retrieve the preview from the web-api
+     * @param {object} sxc 
+     * @param {int} templateId 
+     * @returns {promise} promise with the html in the result
+     */
     cbm.getPreviewWithTemplate = function(sxc, templateId) {
         var ec = sxc.manage._editContext;
+        templateId = templateId || -1; // fallback, meaning use saved ID
         return sxc.webApi.get({
             url: "view/module/rendertemplate",
             params: {

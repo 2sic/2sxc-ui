@@ -9,7 +9,15 @@
  * it should be able to render itself
  */
 (function () {
-    /* 
+    /**
+     * The main content-block manager
      */
-    $2sxc._contentBlock = {};
+    $2sxc._contentBlock = {
+
+        // constants
+        cViewWithoutContent: "_LayoutElement", // needed to differentiate the "select item" from the "empty-is-selected" which are both empty
+        cUseExistingTemplate: -1
+    };
+
+
 })();

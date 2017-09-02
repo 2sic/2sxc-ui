@@ -101,7 +101,7 @@ export class TemplatePickerComponent implements OnInit {
         this.appRef.tick();
 
         if (this.supportsAjax) 
-          return this.frame.previewTemplate(template.TemplateId)//.sxc.manage.contentBlock.reload(template.TemplateId)
+          return this.frame.previewTemplate(template.TemplateId)
             .then(() => { doPostAjaxScrolling(this); });
 
         this.frame.showMessage(`refreshing <b>${template.Name}</b>...`);
