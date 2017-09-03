@@ -30,6 +30,9 @@
     $2sxc._toolbarManager.buildToolbars = function(parentTag, optionalId) {
         parentTag = $(parentTag || ".DnnModule-" + optionalId);
 
+        // if something says the toolbars are disabled, then skip
+        if (parentTag.attr($2sxc._toolbarManager.cDisableAttrName)) return;
+
         // todo: change mechanism to not render toolbar, this uses a secret class name which the toolbar shouldn't know
         // don't add, if it is has un-initialized content
         var disableAutoAdd = $(".sc-uninitialized", parentTag).length !== 0;
@@ -72,4 +75,15 @@
             }
         });
     };
+
+    $2sxc._toolbarManager.disable = function(tag) {
+        tag = $(tag);
+        tag.attr($2sxc._toolbarManager.cDisableAttrName, true);
+    };
+
+    $2sxc._toolbarManager.isDisabled = function(sxc) {
+        var tag = $(sxc.manage._tag);
+        return !!tag.attr($2sxc._toolbarManager.cDisableAttrName);
+    };
+
 })();

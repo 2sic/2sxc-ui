@@ -97,7 +97,6 @@
                 // and reload the in-page view w/ajax or page reload
                 var callback = function () {
                         $2sxc._contentBlock.reloadAndReInitialize(sxc);
-                        //sxc.manage.contentBlock.reloadAndReInitialize();
                         closeCallback();
                     },
                     link = engine._linkToNgDialog(settings); // the link contains everything to open a full dialog (lots of params added)
@@ -123,7 +122,7 @@
                     ? $2sxc._lib.extend(settings || {}, { "action": nameOrSettings }) // place the name as an action-name into a command-object
                     : nameOrSettings;
 
-                var conf = /*sxc.manage._actions*/ engine.commands[settings.action];
+                var conf = engine.commands[settings.action];
                 settings = $2sxc._lib.extend({}, conf, settings); // merge conf & settings, but settings has higher priority
 
                 if (!settings.dialog) settings.dialog = settings.action; // old code uses "action" as the parameter, now use verb ? dialog
@@ -132,9 +131,9 @@
                 if (conf.uiActionOnly) return settings.code(settings, origEvent, sxc); 
 
                 // if more than just a UI-action, then it needs to be sure the content-group is created first
-                sxc.manage.contentBlock.prepareToAddContent()
+                return $2sxc._contentBlock.prepareToAddContent(sxc)
                     .then(function () {
-                        return settings.code(settings, origEvent, sxc); // 2016-11-03 sxc.manage);
+                        return settings.code(settings, origEvent, sxc); 
                     });
             }
         };

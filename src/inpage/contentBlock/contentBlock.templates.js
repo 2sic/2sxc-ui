@@ -1,34 +1,38 @@
 ﻿/* 
- * this is a content block in the browser
- * 
- * A Content Block is a standalone unit of content, with it's own definition of
- * 1. content items
- * 2. template
- * + some other stuff
- *
- * it should be able to render itself
+ * this is part of the content block manager
  */
 (function () {
+
     var cbm = $2sxc._contentBlock;
 
-    //#region functions working only with what they are given
-    // 2017-08-27 2dm: I'm working on cleaning up this code, and an important part 
-    // is to have code which doesn't use old state (like object-properties initialized earlier)
-    // extracting these methods is part of the work
-    cbm.persistTemplate = function (sxc, forceCreate, selectorVisibility) {
-        var manage = sxc.manage,
-            cb = manage.contentBlock,
-            ec = manage._editContext,
-            // Save only if the currently saved is not the same as the new
-            groupExistsAndTemplateUnchanged = !!ec.ContentGroup.HasContent && (cb.undoTemplateId === cb.templateId),
-            promiseToSetState;
+    /**
+     * prepare the instance so content can be added
+     * this ensure the content-group has been created, which is required to add content
+     * @param {} sxc 
+     * @returns {} 
+     */
+    cbm.prepareToAddContent = function(sxc) {
+        return cbm.persistTemplate(sxc, null, true);
+    };
 
-        if (groupExistsAndTemplateUnchanged)
-            promiseToSetState = (ec.ContentBlock.ShowTemplatePicker) //.minfo.templateChooserVisible)
-                ? cbm.setTemplateChooserState(sxc, false) // hide in case it was visible
-                : $.when(null); // all is ok, create empty promise to allow chaining the result
-        else
-            promiseToSetState = cbm.saveTemplate(sxc, cb.templateId, forceCreate, selectorVisibility)
+    /**
+     * Save / Store the current preview - and optionally ensure that it's final enough to add content-items
+     * @param {} sxc 
+     * @param {} forceCreate 
+     * @returns {} 
+     */
+    cbm.persistTemplate = function (sxc, templateId, forceCreate) {
+        var manage = sxc.manage,
+            contentGroup = manage._editContext.ContentGroup,
+            isPreview = $2sxc._toolbarManager.isDisabled(sxc),
+            // Save only if the currently saved is not the same as the new
+            groupExistsAndTemplateUnchanged = !!contentGroup.HasContent && !isPreview;
+
+        templateId = templateId || manage._editContext.ContentGroup.TemplateId;
+
+        var promiseToSetState = (groupExistsAndTemplateUnchanged)
+            ? $.when(null) // all is ok, create empty promise to allow chaining the result
+            : cbm.saveTemplate(sxc, templateId, forceCreate)
                 .then(function (data, textStatus, xhr) {
                     if (xhr.status !== 200) { // only continue if ok
                         alert("error - result not ok, was not able to create ContentGroup");
@@ -44,22 +48,19 @@
 
         // todo: should move things like remembering undo etc. back into the contentBlock state manager
         // or just reset it, so it picks up the right values again ?
-        return promiseToSetState
-            .then(function () {
-                cb.undoTemplateId = cb.templateId; // remember for future undo
-                cb.undoContentTypeId = cb.contentTypeId; // remember ...
-                
-                ec.ContentBlock.ShowTemplatePicker = false; // cb.minfo.templateChooserVisible = false;
+        var promiseToCorrectUi = promiseToSetState.then(function () {
+            $2sxc._dialogManager.hide();
 
-                if (manage.dialog) manage.dialog.justHide();
+            // if it didn't have content, then it only has now...
+            if (!contentGroup.HasContent) contentGroup.HasContent = forceCreate;
 
-                if (!ec.ContentGroup.HasContent) // if it didn't have content, then it only has now...
-                    ec.ContentGroup.HasContent = forceCreate;
+            // only re-load on ajax, not on app as that was already re-loaded on the preview
+            if (isPreview)      // necessary to show the original template again
+                cbm.reloadAndReInitialize(sxc);
+        });
 
-                // only re-load on content, not on app as that was already re-loaded on the preview
-                if (!cb.buttonsAreLoaded || (!groupExistsAndTemplateUnchanged && manage._reloadWithAjax))      // necessary to show the original template again
-                    cbm.reloadAndReInitialize(sxc);
-            });
+        return promiseToCorrectUi;
     };
-    //#endregion
+
+    
 })();

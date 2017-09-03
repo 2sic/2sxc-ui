@@ -15,6 +15,8 @@ import { ContentType } from "app/template-picker/content-type";
 declare const $2sxc: any;
 var win = window;
 
+
+
 @Component({
   selector: 'app-template-picker',
   templateUrl: './template-picker.component.html',
@@ -67,12 +69,13 @@ export class TemplatePickerComponent implements OnInit {
       this.loading = true;
     });
 
+
     this.updateAppSubject
       .debounceTime(400)
       .subscribe(({ app }) => {
         this.api.setAppId(app.appId.toString()).toPromise()
           .then(res => {
-            if (app.supportsAjaxReload) return this.frame.sxc.manage.contentBlock.reloadAndReInitialize(true, true)
+            if (app.supportsAjaxReload) return this.frame.reloadAndReInit()
               .then(() => {
                 return this.api.loadTemplates().toPromise()
                   .then(() => {
@@ -80,23 +83,14 @@ export class TemplatePickerComponent implements OnInit {
                     this.template = this.templates[0];
                     this.appRef.tick();
                   })
-                  .then(() => {
-                    this.loading = false;
-                    this.frame.scrollToTarget();
-                    this.appRef.tick();
-                  });
+                  .then(() => { doPostAjaxScrolling(this); });
               });
 
-            this.frame.sxc.manage.contentBlock.reloadNoLivePreview(`<p class="no-live-preview-available">Reloading App. Please wait.</p>`)
-              .then(() => {
-                this.loading = false;
-                this.frame.scrollToTarget();
-                this.appRef.tick();
-              });
-
+            this.frame.showMessage("loading App...");
+            doPostAjaxScrolling(this);
             this.frame.persistDia();
             win.parent.location.reload();
-          })
+          });
       });
 
     this.updateTemplateSubject
@@ -106,24 +100,14 @@ export class TemplatePickerComponent implements OnInit {
         this.template = template;
         this.appRef.tick();
 
-        if (this.supportsAjax) return this.frame.sxc.manage.contentBlock.reload(template.TemplateId)
-          .then(() => {
-            this.loading = false;
-            this.frame.scrollToTarget();
-            this.appRef.tick();
-          });
+        if (this.supportsAjax) 
+          return this.frame.previewTemplate(template.TemplateId)
+            .then(() => { doPostAjaxScrolling(this); });
 
-        this.frame.sxc.manage.contentBlock.reloadNoLivePreview(`<p class="no-live-preview-available">Reloading content type <b>${template.Name}</b>. Please wait.</p>`)
-          .then(() => {
-            this.loading = false;
-            this.frame.scrollToTarget();
-            this.appRef.tick();
-          });
-
-        // TODO: Not sure why we need to set this value before calling persistTemplate. Clean up!
-        this.frame.sxc.manage.contentBlock.templateId = this.template.TemplateId;
-
-        return this.frame.sxc.manage.contentBlock.persistTemplate(false)
+        this.frame.showMessage(`refreshing <b>${template.Name}</b>...`);
+        doPostAjaxScrolling(this);
+        this.frame.persistDia();
+        return this.frame.saveTemplate(this.template.TemplateId)
           .then(() => win.parent.location.reload());
       });
 
@@ -173,11 +157,12 @@ export class TemplatePickerComponent implements OnInit {
   isDirty(): boolean {
     return false;
   }
+
+
+
   
   persistTemplate() {
-    let cb = this.frame.sxc.manage.contentBlock;
-    cb.templateId = this.template.TemplateId;
-    cb.persistTemplate(false, false)
+    this.frame.saveTemplate(this.template.TemplateId);
   }
 
   private appStore() {
@@ -257,4 +242,11 @@ export class TemplatePickerComponent implements OnInit {
       app,
     });
   }
+
+}
+
+function doPostAjaxScrolling(target) {
+  target.loading = false;
+  target.frame.scrollToTarget();
+  target.appRef.tick();
 }

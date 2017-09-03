@@ -8,7 +8,7 @@
     window.$2sxc = function (id, cbid) {
 
         // if it's a dom-element, use auto-find
-        if (typeof id === 'object') return window.$2sxc.autoFind(id);
+        if (typeof id === "object") return window.$2sxc.autoFind(id);
 
         if (!cbid) cbid = id;           // if content-block is unknown, use id of module
         var cacheKey = id + ":" + cbid; // neutralize the id from old "34" format to the new "35:353" format
@@ -120,8 +120,8 @@
             isEditMode: function () {
                 return controller.manage && controller.manage._isEditMode();
             },
-            recreate: function () {
-                delete $2sxc._controllers[cacheKey];    // clear cache
+            recreate: function (resetCache) {
+                if(resetCache) delete $2sxc._controllers[cacheKey];    // clear cache
                 return $2sxc(controller.id, controller.cbid);   // generate new
             },
             webApi: {

@@ -35,7 +35,7 @@ $(function () {
     
     function showGlassesButtonIfUninitialized (sxc) {
         // already initialized
-        if (sxc.manage.contentBlock.templateId !== 0) return false;
+        if (sxc.manage._editContext.ContentGroup.TemplateId !== 0) return false;
 
         // already has a glasses button
         if ($(sxc.manage._tag).find(".sc-uninitialized").length !== 0) return false;
