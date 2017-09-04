@@ -23,12 +23,13 @@
         //else
         {
             // didn't find an own dialog, so check if we must cancel another one first
-            $2sxc._dialogManager.cancel();
+            //$2sxc._dialogManager.cancel();
 
             // now create the new one
             // sxc.manage.dialog =
 
             sxc.manage.run("dash-view"); // not ideal, must improve
+            //sxc.manage.run("layout"); // not ideal, must improve
             // todo 2cb - this just doesn't work right
             //sxc.manage.dialog.toggle(true); // just in case it was hidden before, and wasn't fully restored
         }

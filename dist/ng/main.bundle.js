@@ -34,7 +34,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/app.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<app-template-picker *ngIf=\"name === 'dash-view'\"></app-template-picker>"
+module.exports = "<app-template-picker *ngIf=\"name === 'dash-view' || name === 'layout'\"></app-template-picker>"
 
 /***/ }),
 
@@ -185,6 +185,43 @@ $2sxcService = __decorate([
 ], $2sxcService);
 
 //# sourceMappingURL=$2sxc.service.js.map
+
+/***/ }),
+
+/***/ "../../../../../src/app/core/boot-control.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return BootController; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_rxjs_Subject__ = __webpack_require__("../../../../rxjs/Subject.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_rxjs_Subject___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_rxjs_Subject__);
+
+/**
+ * Special reboot controller, to restart the angular app
+ * when critical parameters were changes
+ */
+var BootController = (function () {
+    function BootController() {
+        this._reboot = new __WEBPACK_IMPORTED_MODULE_0_rxjs_Subject__["Subject"]();
+        this.reboot$ = this._reboot.asObservable();
+    }
+    BootController.getbootControl = function () {
+        if (!BootController.instance) {
+            BootController.instance = new BootController();
+        }
+        return BootController.instance;
+    };
+    BootController.prototype.watchReboot = function () {
+        return this.reboot$;
+    };
+    BootController.prototype.restart = function () {
+        console.log("restarting...");
+        this._reboot.next(true);
+    };
+    return BootController;
+}());
+
+//# sourceMappingURL=boot-control.js.map
 
 /***/ }),
 
@@ -1300,6 +1337,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser_dynamic__ = __webpack_require__("../../../platform-browser-dynamic/@angular/platform-browser-dynamic.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__app_app_module__ = __webpack_require__("../../../../../src/app/app.module.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__environments_environment__ = __webpack_require__("../../../../../src/environments/environment.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__app_core_boot_control__ = __webpack_require__("../../../../../src/app/core/boot-control.ts");
+
 
 
 
@@ -1307,7 +1346,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 if (__WEBPACK_IMPORTED_MODULE_3__environments_environment__["a" /* environment */].production) {
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_21" /* enableProdMode */])();
 }
-Object(__WEBPACK_IMPORTED_MODULE_1__angular_platform_browser_dynamic__["a" /* platformBrowserDynamic */])().bootstrapModule(__WEBPACK_IMPORTED_MODULE_2__app_app_module__["a" /* AppModule */]);
+var init = function () {
+    Object(__WEBPACK_IMPORTED_MODULE_1__angular_platform_browser_dynamic__["a" /* platformBrowserDynamic */])()
+        .bootstrapModule(__WEBPACK_IMPORTED_MODULE_2__app_app_module__["a" /* AppModule */])
+        .then(function () { return (window).appBootstrap && (window).appBootstrap(); })
+        .catch(function (err) { return console.error('NG Bootstrap Error =>', err); });
+};
+// Init on first load
+init();
+// provide hook for outside reboot calls
+var bootController = window.bootController = __WEBPACK_IMPORTED_MODULE_4__app_core_boot_control__["a" /* BootController */].getbootControl();
+// Init on reboot request
+var boot = bootController.watchReboot().subscribe(function () { return init(); });
 //# sourceMappingURL=main.js.map
 
 /***/ }),
