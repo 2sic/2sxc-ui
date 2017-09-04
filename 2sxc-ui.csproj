@@ -83,7 +83,6 @@
     <Content Include="src\inpage\toolbar\toolbarManager.generateToolbarHtml.js" />
     <Content Include="src\inpage\toolbar\toolbarManager.generateButtonHtml.js" />
     <Content Include="src\inpage\toolbar\toolbarManager.buildToolbars.js" />
-    <Content Include="src\inpage\toolbar\toolbarManager.createInstance.js" />
     <Content Include="src\inpage\toolbar\toolbarManager.helpers.js" />
     <Content Include="src\inpage\toolbar\toolbarManager.standardButtons.js" />
     <Content Include="src\inpage\toolbar\toolbarManager.toolbarTemplate.js" />

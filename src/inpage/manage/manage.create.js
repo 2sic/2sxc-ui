@@ -26,7 +26,7 @@
             langs: JSON.stringify(editContext.Language.All),
             portalroot: editContext.Environment.WebsiteUrl,
             websiteroot: editContext.Environment.SxcRootUrl,
-            partOfPage: true,
+            partOfPage: editContext.ContentBlock.PartOfPage,
             versioningRequirements: editContext.ContentBlock.VersioningRequirements,
 
             // todo: probably move the user into the dashboard info
@@ -67,7 +67,6 @@
         //#endregion helper functions
 
 
-        var toolsAndButtons = $2sxc._toolbarManager.createInstance(sxc, editContext);
         var cmdEngine = $2sxc._commands.instanceEngine(sxc, contentBlockTag, editContext);
 
         var editManager = sxc.manage = {
@@ -75,9 +74,25 @@
             // run a command - often used in toolbars and custom buttons
             run: cmdEngine.executeAction,
 
-            // get a button or a toolbar for something
-            getButton: toolsAndButtons.getButton,
-            getToolbar: toolsAndButtons.getToolbar,
+            /**
+             * Generate a button (an <a>-tag) for one specific toolbar-action.
+             * @param {Object<any>} actDef - settings, an object containing the specs for the expected buton
+             * @param {int} groupIndex - number what button-group it's in'
+             * @returns {string} html of a button
+             */
+            getButton: function (actDef, groupIndex) {
+                return $2sxc._toolbarManager.generateButtonHtml(sxc, actDef, groupIndex);
+            },
+
+            /**
+             * Builds the toolbar and returns it as HTML
+             * @param {Object<any>} tbConfig - general toolbar config
+             * @param {Object<any>} moreSettings - additional / override settings
+             * @returns {string} html of the current toolbar
+             */
+            getToolbar: function (tbConfig, moreSettings) {
+                return $2sxc._toolbarManager.generateToolbarHtml(sxc, tbConfig, moreSettings);
+            },
             //#endregion official, public properties - everything below this can change at any time
 
 
@@ -85,7 +100,7 @@
             _isEditMode: function () { return editContext.Environment.IsEditable; },
             _reloadWithAjax: editContext.ContentGroup.SupportsAjax,
             _dialogParameters: ngDialogParams,      // used for various dialogs
-            _instanceConfig: createInstanceConfig(editContext),// toolsAndButtons.config, // used to configure buttons / toolbars
+            _instanceConfig: createInstanceConfig(editContext), // used to configure buttons / toolbars
             _editContext: editContext,              // metadata necessary to know what/how to edit
             _quickDialogConfig: quickDialogConfig,           // used for in-page dialogs
             _dashboardConfig: quickDialogConfig, // temp 2017-08-27 - keep till the angular uses the new name
@@ -93,7 +108,8 @@
             _tag: contentBlockTag,
             _user: userInfo,
             //#region toolbar quick-access commands - might be used by other scripts, so I'm keeping them here for the moment, but may just delete them later
-            _toolbar: toolsAndButtons, // should use this from now on when accessing from outside
+            // 2017-09-04 2dm deprecated
+            //_toolbar: toolsAndButtons, // should use this from now on when accessing from outside
             //#endregion
 
             // init this object 
