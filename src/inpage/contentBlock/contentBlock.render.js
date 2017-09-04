@@ -65,7 +65,7 @@
             .then(function () {
                     // 2017-09-02 2dm - believe this was meant to re-init the dialog manager, but it doesn't actually work
                     // must check for side-effects, which would need the manager to re-build the configuration
-                    $2sxc._dialogManager.hide();
+                    $2sxc._quickDialog.hide();
             });  
     };
 

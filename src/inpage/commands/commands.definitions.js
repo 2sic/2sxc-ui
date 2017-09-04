@@ -307,7 +307,7 @@
         addDef(makeDef("layout", "ChangeLayout", "glasses", true, {
              inlineWindow: true 
             //code: function (settings, event, sxc) {
-            //    $2sxc._contentBlock.dialogToggle(sxc);
+            //    todo!
             //}
         }));
 

@@ -49,7 +49,7 @@
         // todo: should move things like remembering undo etc. back into the contentBlock state manager
         // or just reset it, so it picks up the right values again ?
         var promiseToCorrectUi = promiseToSetState.then(function () {
-            $2sxc._dialogManager.hide();
+            $2sxc._quickDialog.hide();
 
             // if it didn't have content, then it only has now...
             if (!contentGroup.HasContent) contentGroup.HasContent = forceCreate;

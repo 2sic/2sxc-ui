@@ -47,14 +47,13 @@
     <Content Include="src\inpage\contentBlock\contentBlock.actions.js" />
     <Content Include="src\inpage\contentBlock\contentBlock.render.js" />
     <Content Include="src\inpage\contentBlock\contentBlock.templates.js" />
-    <Content Include="src\inpage\contentBlock\contentBlock.toggleDialog.js" />
     <Content Include="src\inpage\contentBlock\contentBlock.webApiPromises.js" />
     <Content Include="src\inpage\contentBlock\contentBlock.{}.js" />
     <Content Include="src\inpage\entity-manipulation\item-commands.js" />
     <Content Include="src\inpage\dnn-workarounds\dnn-08.00.04.js" />
     <Content Include="src\inpage\manage\manage.api.js" />
     <Content Include="src\inpage\manage\manage.{}.js" />
-    <Content Include="src\inpage\quick-dialog\2sxc._dialogManager.js" />
+    <Content Include="src\inpage\quick-dialog\2sxc._quickDialog.js" />
     <Content Include="src\inpage\quick-dialog\quick-dialog.css" />
     <Content Include="src\inpage\quick-dialog\polyfill.js" />
     <Content Include="src\inpage\manage\manage.create.js" />
@@ -63,7 +62,6 @@
     <Content Include="src\inpage\commands\commands.{}.js" />
     <Content Include="src\inpage\dnn-menu-helper\dnn-inpage-edit.js" />
     <Content Include="src\inpage\edit.css" />
-    <Content Include="src\inpage\quick-dialog\2sxc._quickDialog.js" />
     <Content Include="src\inpage\inpage-icons-codes.css" />
     <Content Include="src\inpage\lib-helpers\2sxc._lib.extend.js" />
     <Content Include="src\inpage\polyfills\array.prototype.find.js" />

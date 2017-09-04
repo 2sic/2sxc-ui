@@ -419,7 +419,7 @@ $(function () {
         addDef(makeDef("layout", "ChangeLayout", "glasses", true, {
              inlineWindow: true 
             //code: function (settings, event, sxc) {
-            //    $2sxc._contentBlock.dialogToggle(sxc);
+            //    todo!
             //}
         }));
 
@@ -549,7 +549,7 @@ $(function () {
                         closeCallback();
                     },
                     link = engine._linkToNgDialog(settings); // the link contains everything to open a full dialog (lots of params added)
-                if (settings.inlineWindow) return $2sxc._quickDialog(sxc, /* targetTag, */ link, callback, settings.dialog === 'item-history');
+                if (settings.inlineWindow) return $2sxc._quickDialog.show(sxc, link, callback, settings.dialog === 'item-history');
                 if (settings.newWindow || (event && event.shiftKey)) return window.open(link);
                 return $2sxc.totalPopup.open(link, callback);
             },
@@ -847,7 +847,7 @@ $2sxc._contentBlock.manipulator = function (sxc) {
             .then(function () {
                     // 2017-09-02 2dm - believe this was meant to re-init the dialog manager, but it doesn't actually work
                     // must check for side-effects, which would need the manager to re-build the configuration
-                    $2sxc._dialogManager.hide();
+                    $2sxc._quickDialog.hide();
             });  
     };
 
@@ -903,7 +903,7 @@ $2sxc._contentBlock.manipulator = function (sxc) {
         // todo: should move things like remembering undo etc. back into the contentBlock state manager
         // or just reset it, so it picks up the right values again ?
         var promiseToCorrectUi = promiseToSetState.then(function () {
-            $2sxc._dialogManager.hide();
+            $2sxc._quickDialog.hide();
 
             // if it didn't have content, then it only has now...
             if (!contentGroup.HasContent) contentGroup.HasContent = forceCreate;
@@ -915,46 +915,6 @@ $2sxc._contentBlock.manipulator = function (sxc) {
 
         return promiseToCorrectUi;
     };
-
-    
-})();
-/* 
- * this is a content block in the browser
- * 
- * A Content Block is a standalone unit of content, with it's own definition of
- * 1. content items
- * 2. template
- * + some other stuff
- *
- * it should be able to render itself
- */
-(function () {
-
-    var cbm = $2sxc._contentBlock;
-
-    cbm.dialogToggle = function (sxc) {
-        // check if the dialog already exists, if yes, use that
-        // it can already exist as part of the manage-object, 
-        // ...or if the manage object was reset, we must find it in the DOM
-
-        //var diag = sxc.manage.dialog;
-        //if (diag)
-        //    diag.toggle();
-        //else
-        {
-            // didn't find an own dialog, so check if we must cancel another one first
-            //$2sxc._dialogManager.cancel();
-
-            // now create the new one
-            // sxc.manage.dialog =
-
-            sxc.manage.run("dash-view"); // not ideal, must improve
-            //sxc.manage.run("layout"); // not ideal, must improve
-            // todo 2cb - this just doesn't work right
-            //sxc.manage.dialog.toggle(true); // just in case it was hidden before, and wasn't fully restored
-        }
-    };
-
 
     
 })();
@@ -1404,7 +1364,7 @@ if (!Array.prototype.find) {
     /**
      * dialog manager - the currently active dialog object
      */
-    var diagManager = $2sxc._dialogManager = {
+    var diagManager = $2sxc._quickDialog = {
         current: null,
 
         /**
@@ -1422,15 +1382,14 @@ if (!Array.prototype.find) {
         },
 
         hide: function() {
-            if (diagManager.current) diagManager.current.toggle(false);
+            if (diagManager.current) diagManager.toggle(false);
         },
 
         /**
          * cancel the current dialog
          */
         cancel: function() {
-            if (diagManager.current)
-                diagManager.current.cancel(); // cancel & hide
+            if (diagManager.current) diagManager.current.cancel(); // cancel & hide
         },
 
         /**
@@ -1438,10 +1397,6 @@ if (!Array.prototype.find) {
          */
         persistDialog: function(sxc) {
             sessionStorage.setItem("dia-cbid", sxc.cbid);
-        },
-
-        isShowing: function(sxc) {
-            return diagManager.getIFrame().sxc().cacheKey === sxc.cacheKey;
         },
 
         /**
@@ -1472,8 +1427,9 @@ if (!Array.prototype.find) {
          * @returns {} 
          */
         show: function(sxc, url, closeCallback, fullScreen) {
-            diagManager.setSize(fullScreen);
+            setSize(fullScreen);
             var iFrame = diagManager.getIFrame();
+
             iFrame.rewire(sxc, closeCallback);
             iFrame.setAttribute("src", rewriteUrl(url));
             // if the window had already been loaded, re-init
@@ -1483,57 +1439,15 @@ if (!Array.prototype.find) {
             // make sure it's visible'
             iFrame.toggle(true);
             return iFrame;
-        },
-
-
-        setSize: function (fullScreen) {
-            var container = diagManager.getContainer();
-            // set container height
-            container.css("min-height", fullScreen ? "100%" : "230px");
-
-            // remember...
-            container.isFullscreen = fullScreen;
-        },
-
-
-        /**
-         * create watcher which monitors the iframe size and adjusts the container as needed
-         * @returns {} 
-         */
-        watchForResize: function (keepWatching) {
-            if (keepWatching === false && resizeWatcher) {
-                clearInterval(resizeWatcher);
-                resizeWatcher = null;
-                return null;
-            }
-
-            var cont = diagManager.getContainer();
-            resizeWatcher = setInterval(function () {
-                try {
-                    var frm = diagManager.getIFrame(cont);
-                    if (!frm) return;
-                    var height = frm.contentDocument.body.offsetHeight;
-                    if (frm.previousHeight === height) return;
-                    frm.style.minHeight = cont.css("min-height");
-                    frm.style.height = height + "px";
-                    frm.previousHeight = height;
-                    if (cont.isFullscreen) {
-                        frm.style.height = "100%";
-                        frm.style.position = "absolute";
-                    }
-                } catch (e) {
-                }
-            }, resizeInterval);
-            return resizeWatcher;
-        },
-
-
-        rewriteUrl: rewriteUrl
-
+        }
 
     };
 
 
+    /**
+     * build the container in the dom w/iframe for re-use
+     * @return {jquery} jquery dom-object 
+     */
     function buildContainerAndIFrame() {
         var container = $('<div class="inpage-frame-wrapper"><div class="inpage-frame"></div></div>');
         container.isFullscreen = false;
@@ -1541,9 +1455,19 @@ if (!Array.prototype.find) {
         newIFrame = extendIFrameWithSxcState(newIFrame);
         container.find(".inpage-frame").html(newIFrame);
         $("body").append(container);
+
+        watchForResize();
         return container;
     }
 
+    function setSize(fullScreen) {
+        var container = diagManager.getContainer();
+        // set container height
+        container.css("min-height", fullScreen ? "100%" : "230px");
+
+        // remember...
+        container.isFullscreen = fullScreen;
+    }
 
     function extendIFrameWithSxcState(iFrame) {
         var hiddenSxc = null,
@@ -1618,26 +1542,39 @@ if (!Array.prototype.find) {
         return url;
     }
 
+    /**
+     * create watcher which monitors the iframe size and adjusts the container as needed
+     * @returns {} 
+     */
+    function watchForResize(keepWatching) {
+        if (keepWatching === false && resizeWatcher) {
+            clearInterval(resizeWatcher);
+            resizeWatcher = null;
+            return null;
+        }
 
-})();
-// this is a dialog handler which will create in-page dialogs for 
-// - the template / view picker
-// - the getting-started / install-templates dialog
-// 
-
-(function () {
-    $2sxc._quickDialog = Dialog;
-
-    var diagManager = $2sxc._dialogManager;
-
-    diagManager.watchForResize();
-
-    // ReSharper disable once InconsistentNaming
-    function Dialog(sxc, url, closeCallback, fullScreen) {
-
-         return diagManager.show(sxc, url, closeCallback, fullScreen);
-        
+        var cont = diagManager.getContainer();
+        if (!resizeWatcher) // only add a timer if not already running
+            resizeWatcher = setInterval(function () {
+                try {
+                    var frm = diagManager.getIFrame(cont);
+                    if (!frm) return;
+                    var height = frm.contentDocument.body.offsetHeight;
+                    if (frm.previousHeight === height) return;
+                    frm.style.minHeight = cont.css("min-height");
+                    frm.style.height = height + "px";
+                    frm.previousHeight = height;
+                    if (cont.isFullscreen) {
+                        frm.style.height = "100%";
+                        frm.style.position = "absolute";
+                    }
+                } catch (e) {
+                }
+            },
+                resizeInterval);
+        return resizeWatcher;
     }
+
 })();
 if (typeof Object.assign != 'function') {
     Object.assign = function (target, varArgs) { // .length of function is 2
