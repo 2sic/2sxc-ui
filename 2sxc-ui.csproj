@@ -52,6 +52,7 @@
     <Content Include="src\inpage\contentBlock\contentBlock.{}.js" />
     <Content Include="src\inpage\entity-manipulation\item-commands.js" />
     <Content Include="src\inpage\dnn-workarounds\dnn-08.00.04.js" />
+    <Content Include="src\inpage\manage\manage.api.js" />
     <Content Include="src\inpage\manage\manage.{}.js" />
     <Content Include="src\inpage\quick-dialog\2sxc._dialogManager.js" />
     <Content Include="src\inpage\quick-dialog\quick-dialog.css" />

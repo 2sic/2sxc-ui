@@ -82,7 +82,7 @@
     };
 
     $2sxc._toolbarManager.isDisabled = function(sxc) {
-        var tag = $(sxc.manage._tag);
+        var tag = $($2sxc._manage.getTag(sxc));
         return !!tag.attr($2sxc._toolbarManager.cDisableAttrName);
     };
 

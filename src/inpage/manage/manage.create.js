@@ -8,70 +8,18 @@
 // - isEditMode
 
 (function () {
+    var mngApi = $2sxc._manage;
     $2sxc._manage.initInstance = function (sxc) {
-        var contentBlockTag = getContentBlockTag(sxc);
-        var editContext = getContextInfo(contentBlockTag);
-        var userInfo = { canDesign: editContext.User.CanDesign, canDevelop: editContext.User.CanDesign };
+        var editContext = mngApi.getEditContext(sxc);
+        var userInfo = mngApi.getUserOfEditContext(editContext);
 
-        
-        // assemble all parameters needed for the common dialogs if we open anything
-        var ngDialogParams = {
-            zoneId: editContext.ContentGroup.ZoneId,
-            appId: editContext.ContentGroup.AppId,
-            tid: editContext.Environment.PageId,
-            mid: editContext.Environment.InstanceId,
-            cbid: sxc.cbid,
-            lang: editContext.Language.Current,
-            langpri: editContext.Language.Primary,
-            langs: JSON.stringify(editContext.Language.All),
-            portalroot: editContext.Environment.WebsiteUrl,
-            websiteroot: editContext.Environment.SxcRootUrl,
-            partOfPage: editContext.ContentBlock.PartOfPage,
-            versioningRequirements: editContext.ContentBlock.VersioningRequirements,
-
-            // todo: probably move the user into the dashboard info
-            user: userInfo,//{ canDesign: editContext.User.CanDesign, canDevelop: editContext.User.CanDesign },
-            approot: editContext.ContentGroup.AppUrl || null // this is the only value which doesn't have a slash by default.  note that the app-root doesn't exist when opening "manage-app"
-        };
-        // configuration needed by the quick-dialogs
-        var quickDialogConfig = {
-            appId: editContext.ContentGroup.AppId,
-            isContent: editContext.ContentGroup.IsContent,
-            hasContent: editContext.ContentGroup.HasContent,
-            isList: editContext.ContentGroup.IsList,
-            templateId: editContext.ContentGroup.TemplateId,
-            contentTypeId: editContext.ContentGroup.ContentTypeName,
-            templateChooserVisible: editContext.ContentBlock.ShowTemplatePicker, // todo: maybe move to content-goup
-            user: userInfo,// { canDesign: editContext.User.CanDesign, canDevelop: editContext.User.CanDesign },
-            supportsAjax: editContext.ContentGroup.SupportsAjax
-        };
-        
-        // #region helper functions
-        // todo: should probably move this away later on, not yet sure to where
-        function createInstanceConfig(editContext) {
-            var ce = editContext.Environment, cg = editContext.ContentGroup, cb = editContext.ContentBlock;
-            return {
-                portalId: ce.WebsiteId,
-                tabId: ce.PageId,
-                moduleId: ce.InstanceId,
-                version: ce.SxcVersion,
-
-                contentGroupId: cg.Guid,
-                cbIsEntity: cb.IsEntity,
-                cbId: cb.Id,
-                appPath: cg.AppUrl,
-                isList: cg.IsList
-            };
-        }
-
-        //#endregion helper functions
-
-
-        var cmdEngine = $2sxc._commands.instanceEngine(sxc, contentBlockTag, editContext);
+        var cmdEngine = $2sxc._commands.instanceEngine(sxc, /* contentBlockTag, */ editContext);
 
         var editManager = sxc.manage = {
             //#region Official, public properties and commands, which are stable for use from the outside
-            // run a command - often used in toolbars and custom buttons
+            /**
+             * run a command - often used in toolbars and custom buttons
+             */
             run: cmdEngine.executeAction,
 
             /**
@@ -99,35 +47,28 @@
             // internal method to find out if it's in edit-mode
             _isEditMode: function () { return editContext.Environment.IsEditable; },
             _reloadWithAjax: editContext.ContentGroup.SupportsAjax,
-            _dialogParameters: ngDialogParams,      // used for various dialogs
-            _instanceConfig: createInstanceConfig(editContext), // used to configure buttons / toolbars
+            _dialogParameters: mngApi.buildNgDialogParams(sxc, editContext),      // used for various dialogs
+            _instanceConfig: mngApi.buildInstanceConfig(editContext), // used to configure buttons / toolbars
             _editContext: editContext,              // metadata necessary to know what/how to edit
-            _quickDialogConfig: quickDialogConfig,           // used for in-page dialogs
-            _dashboardConfig: quickDialogConfig, // temp 2017-08-27 - keep till the angular uses the new name
+            _quickDialogConfig: mngApi.buildQuickDialogConfig(editContext),           // used for in-page dialogs
             _commands: cmdEngine,                        // used to handle the commands for this content-block
-            _tag: contentBlockTag,
             _user: userInfo,
-            //#region toolbar quick-access commands - might be used by other scripts, so I'm keeping them here for the moment, but may just delete them later
-            // 2017-09-04 2dm deprecated
-            //_toolbar: toolsAndButtons, // should use this from now on when accessing from outside
-            //#endregion
+
 
             // init this object 
             init: function init() {
                 // enhance UI in case there are known errors / issues
                 if (editContext.error.type)
-                    editManager._handleErrors(editContext.error.type, editManager._tag);
+                    editManager._handleErrors(editContext.error.type, $2sxc._manage.getTag(sxc));
 
-                // finish init of sub-objects
-                //editManager._commands.init(editManager);
-                //editManager.contentBlock = $2sxc._contentBlock.createCbInstance(sxc, editManager, editManager._tag);
-
+                // todo: move this to dialog-handling
                 // display the dialog
-                var openDialogId = sessionStorage.getItem('dia-cbid');
+                var openDialogId = sessionStorage.getItem("dia-cbid");
                 if (editContext.error.type || !openDialogId || openDialogId !== sxc.cbid) return false;
-                sessionStorage.removeItem('dia-cbid');
+                sessionStorage.removeItem("dia-cbid");
                 editManager.run("layout");
             },
+
 
             // private: show error when the app-data hasn't been installed yet for this imported-module
             _handleErrors: function (errType, cbTag) {
@@ -142,11 +83,15 @@
                 errWrapper.append(toolbar);
                 $(cbTag).append(errWrapper);
             },
+
+
             // change config by replacing the guid, and refreshing dependend sub-objects
             _updateContentGroupGuid: function (newGuid) {
                 editContext.ContentGroup.Guid = newGuid;
-                editManager._instanceConfig = createInstanceConfig(editContext);
+                editManager._instanceConfig = mngApi.buildInstanceConfig(editContext);
             },
+
+
             _getCbManipulator: function () {
                 return $2sxc._contentBlock.manipulator(sxc);
             }
@@ -158,15 +103,4 @@
 
 
 
-
-    //#region helper functions
-    function getContentBlockTag(sxci) {
-        return $("div[data-cb-id='" + sxci.cbid + "']")[0];
-    }
-
-    function getContextInfo(cb) {
-        var attr = cb.getAttribute("data-edit-context");
-        return JSON.parse(attr || "");
-    }
-    //#endregion
 })();

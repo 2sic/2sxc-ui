@@ -1,53 +1,58 @@
 // this enhances the $2sxc client controller with stuff only needed when logged in
-(function() {
-    if (window.$2sxc && !window.$2sxc.consts) {
-        $2sxc.c = $2sxc.consts = {
-            // classes
-            cls: {
-                scMenu: "sc-menu",
-                scCb: "sc-content-block",
-                scElm: "sc-element"
-            },
+(function () {
+    if (!window.$2sxc || window.$2sxc.consts) return false;
+    $2sxc.c = $2sxc.consts = {
+        // classes
+        cls: {
+            scMenu: "sc-menu",
+            scCb: "sc-content-block",
+            scElm: "sc-element"
+        },
+        
+        // attribs
+        attr: {
+            toolbar: "toolbar",
+            toolbarData: "data-toolbar",
+            settings: "settings",
+            settingsData: "data-settings"
+        }
 
-            // attribs
-            attr: {
-                toolbar: "toolbar",
-                toolbarData: "data-toolbar",
-                settings: "settings",
-                settingsData: "data-settings"
-            }
+    };
 
-        };
+    // selectors
+    var sel = $2sxc.c.sel = {};
+    Object.keys($2sxc.c.cls).forEach(function (key, index) {
+        sel[key] = "." + $2sxc.c.cls[key];
+    });
 
-        // selectors
-        var sel = $2sxc.c.sel = {};
-        Object.keys($2sxc.c.cls).forEach(function (key, index) {
-            sel[key] = "." + $2sxc.c.cls[key];
-        });
-
-    }
+    /*
+    ToDo: functional programming
+    $2sxc.c.sel = Object.entries($2sxc.c.cls).reduce((res, current) => {
+        res[entry[0]] = entry[1];
+        return t;
+    }, {});
+    */
 })();
 // this enhances the $2sxc client controller with stuff only needed when logged in
-(function() {
-    if (window.$2sxc) {
-        
-        //#region System Commands - at the moment only finishUpgrade
-        $2sxc.system = {
-            // upgrade command - started when an error contains a link to start this
-            finishUpgrade: function(domElement) {
-                var mc = $2sxc(domElement);
-                $.ajax({
-                    type: "get",
-                    url: mc.resolveServiceUrl("view/module/finishinstallation"),
-                    beforeSend: $.ServicesFramework(mc.id).setModuleHeaders
-                }).success(function() {
-                    alert("Upgrade ok, restarting the CMS and reloading...");
-                    location.reload();
-                });
-                alert("starting upgrade. This could take a few minutes. You'll see an 'ok' when it's done. Please wait...");
-            }
-        };
-        //#endregion
+(function () {
+    if (!window.$2sxc || window.$2sxc.system) return;
+
+    $2sxc.system = {
+        finishUpgrade: finishUpgrade
+    };
+
+    // upgrade command - started when an error contains a link to start this
+    function finishUpgrade(domElement) {
+        var mc = $2sxc(domElement);
+        $.ajax({
+            type: "get",
+            url: mc.resolveServiceUrl("view/module/finishinstallation"),
+            beforeSend: $.ServicesFramework(mc.id).setModuleHeaders
+        }).success(function () {
+            alert("Upgrade ok, restarting the CMS and reloading...");
+            location.reload();
+        });
+        alert("starting upgrade. This could take a few minutes. You'll see an 'ok' when it's done. Please wait...");
     }
 })();
 // module & toolbar bootstrapping (initialize all toolbars after loading page)
@@ -56,7 +61,7 @@ $(function () {
     var initializedModules = [];
 
     initAllModules(true);
-    document.body.addEventListener('DOMSubtreeModified', initAllModules, false);
+    document.body.addEventListener("DOMSubtreeModified", initAllModules, false);
     
     function initAllModules(isFirstRun) {
         $("div[data-edit-context]").each(function () { initModule(this, isFirstRun); });
@@ -77,7 +82,6 @@ $(function () {
         // the tag might have changed
         //ctl.manage.reloadContentBlockTag();
         var uninitialized = showGlassesButtonIfUninitialized(sxc);
-        //var uninitialized = ctl.manage._showGlassesButtonIfUninitialized();
 
         if (isFirstRun && !uninitialized) $2sxc._toolbarManager.buildToolbars(module);
 
@@ -90,7 +94,8 @@ $(function () {
         if (sxc.manage._editContext.ContentGroup.TemplateId !== 0) return false;
 
         // already has a glasses button
-        if ($(sxc.manage._tag).find(".sc-uninitialized").length !== 0) return false;
+        var tag = $($2sxc._manage.getTag(sxc));
+        if (tag.find(".sc-uninitialized").length !== 0) return false;
 
         // note: title is added on mouseover, as the translation isn't ready at page-load
         var btn = $('<div class="sc-uninitialized" onmouseover="this.title = $2sxc.translate(this.title)" title="InPage.NewElement"><div class="icon-sxc-glasses"></div></div>');
@@ -98,7 +103,7 @@ $(function () {
             sxc.manage.run("layout");
         });
 
-        $(sxc.manage._tag).append(btn);
+        tag.append(btn);
         return true;
     }
 });
@@ -443,7 +448,7 @@ $(function () {
 
 
 (function () {
-    $2sxc._commands.instanceEngine = function (sxc, targetTag, editContext) {
+    $2sxc._commands.instanceEngine = function (sxc, /* targetTag, */ editContext) {
         var engine = {
             commands: $2sxc._commands.initializeInstanceCommands(editContext),
 
@@ -543,7 +548,7 @@ $(function () {
                         closeCallback();
                     },
                     link = engine._linkToNgDialog(settings); // the link contains everything to open a full dialog (lots of params added)
-                if (settings.inlineWindow) return $2sxc._quickDialog(sxc, targetTag, link, callback, settings.dialog === 'item-history');
+                if (settings.inlineWindow) return $2sxc._quickDialog(sxc, /* targetTag, */ link, callback, settings.dialog === 'item-history');
                 if (settings.newWindow || (event && event.shiftKey)) return window.open(link);
                 return $2sxc.totalPopup.open(link, callback);
             },
@@ -608,6 +613,11 @@ $(function () {
  * + some other stuff
  *
  * it should be able to render itself
+ * 
+ * Maybe ToDo 2cb:
+ * 2sxc should have one entry point (interface to browser context) only.
+ * Otherwise, we cannot know, when which part will be executed and debugging becomes very difficult.
+ * 
  */
 (function () {
     /**
@@ -701,25 +711,29 @@ $(function () {
 })();
 // contains commands to create/move/delete a contentBlock in a page
 
-$2sxc._contentBlock.manipulator = function(sxc) {
+$2sxc._contentBlock.manipulator = function (sxc) {
     return {
-        create: function(parentId, fieldName, index, appName, container, newGuid) {
-            // the wrapper, into which this will be placed and the list of pre-existing blocks
-            var listTag = container;
-            if (listTag.length === 0) return alert("can't add content-block as we couldn't find the list");
-            var cblockList = listTag.find("div.sc-content-block");
-            if (index > cblockList.length)
-                index = cblockList.length; // make sure index is never greater than the amount of items
-            return sxc.webApi.get({
-                url: "view/module/generatecontentblock",
-                params: {
-                    parentId: parentId,
-                    field: fieldName,
-                    sortOrder: index,
-                    app: appName,
-                    guid: newGuid
-                }
-            }).then(function(result) {
+        create: create,
+        move: move,
+        delete: remove
+    };
+
+    function create(parentId, fieldName, index, appName, container, newGuid) {
+        // the wrapper, into which this will be placed and the list of pre-existing blocks
+        var listTag = container;
+        if (listTag.length === 0) return alert('can\'t add content-block as we couldn\'t find the list');
+        var cblockList = listTag.find('div.sc-content-block');
+        if (index > cblockList.length) index = cblockList.length; // make sure index is never greater than the amount of items
+
+        var params = {
+            parentId: parentId,
+            field: fieldName,
+            sortOrder: index,
+            app: appName,
+            guid: newGuid,
+        };
+        return sxc.webApi.get({ url: 'view/module/generatecontentblock', params: params })
+            .then(function (result) {
                 var newTag = $(result); // prepare tag for inserting
 
                 // should I add it to a specific position...
@@ -729,43 +743,41 @@ $2sxc._contentBlock.manipulator = function(sxc) {
                 else //...or just at the beginning?
                     listTag.prepend(newTag);
 
-
                 var sxcNew = $2sxc(newTag);
                 $2sxc._toolbarManager.buildToolbars(newTag);
-
             });
-        },
+    }
 
+    function move(parentId, field, indexFrom, indexTo) {
+        var params = {
+            parentId: parentId,
+            field: field,
+            indexFrom: indexFrom,
+            indexTo: indexTo,
+        };
 
-        move: function(parentId, field, indexFrom, indexTo) {
-            // todo: need sxc!
-            return sxc.webApi.get({
-                url: "view/module/moveiteminlist",
-                params: {
-                    parentId: parentId,
-                    field: field,
-                    indexFrom: indexFrom,
-                    indexTo: indexTo
-                }
-            }).then(function() {
+        // todo: need sxc!
+        return sxc.webApi.get({ url: 'view/module/moveiteminlist', params: params })
+            .then(function () {
                 console.log("done moving!");
                 window.location.reload();
             });
-        },
+    }
 
-        // delete a content-block inside a list of content-blocks
-        "delete": function(parentId, field, index) {
-            if (confirm($2sxc.translate("QuickInsertMenu.ConfirmDelete")))
-                return sxc.webApi.get({
-                    url: "view/module/RemoveItemInList",
-                    params: { parentId: parentId, field: field, index: index }
-                }).then(function() {
-                    console.log("done deleting!");
-                    window.location.reload();
-                });
-            return null;
-        }
-    };
+    // delete a content-block inside a list of content-blocks
+    function remove(parentId, field, index) {
+        if (!confirm($2sxc.translate('QuickInsertMenu.ConfirmDelete'))) return null;
+        var params = {
+            parentId: parentId,
+            field: field,
+            index: index,
+        };
+        return sxc.webApi.get({ url: 'view/module/RemoveItemInList', params: params })
+            .then(function () {
+                console.log('done deleting!');
+                window.location.reload();
+            });
+    }
 };
 /* 
  * this is the content block manager in the browser
@@ -796,7 +808,7 @@ $2sxc._contentBlock.manipulator = function(sxc) {
             // Must disable toolbar before we attach to DOM
             if (justPreview) $2sxc._toolbarManager.disable(newStuff);
 
-            $(sxc.manage._tag).replaceWith(newStuff);
+            $($2sxc._manage.getTag(sxc)).replaceWith(newStuff);
 
             // reset the cache, so the sxc-object is refreshed
             sxc.recreate(true);
@@ -812,7 +824,7 @@ $2sxc._contentBlock.manipulator = function(sxc) {
      * @returns {} - nothing
      */
     cbm.showMessage = function(sxc, newContent) {
-        $(sxc.manage._tag).html(newContent);
+        $($2sxc._manage.getTag(sxc)).html(newContent);
     };
 
 
@@ -924,17 +936,20 @@ $2sxc._contentBlock.manipulator = function(sxc) {
         // it can already exist as part of the manage-object, 
         // ...or if the manage object was reset, we must find it in the DOM
 
-        var diag = sxc.manage.dialog;
-        if (diag)
-            diag.toggle();
-        else {
+        //var diag = sxc.manage.dialog;
+        //if (diag)
+        //    diag.toggle();
+        //else
+        {
             // didn't find an own dialog, so check if we must cancel another one first
             $2sxc._dialogManager.cancel();
 
             // now create the new one
-            sxc.manage.dialog = sxc.manage.run("dash-view"); // not ideal, must improve
+            // sxc.manage.dialog =
+
+            sxc.manage.run("dash-view"); // not ideal, must improve
             // todo 2cb - this just doesn't work right
-            sxc.manage.dialog.toggle(true); // just in case it was hidden before, and wasn't fully restored
+            //sxc.manage.dialog.toggle(true); // just in case it was hidden before, and wasn't fully restored
         }
     };
 
@@ -1017,19 +1032,16 @@ $2sxc._contentBlock.manipulator = function(sxc) {
 
 
 })();
-
-
-
 // Maps actions of the module menu to JS actions - needed because onclick event can't be set (actually, a bug in DNN)
 var $2sxcActionMenuMapper = function (moduleId) {
     var run = $2sxc(moduleId).manage.run;
     return {
-        changeLayoutOrContent: function () {    run("layout");  },
-        addItem: function () {                  run("add", { "useModuleList": true, "sortOrder": 0 }); },
-        edit: function () {                     run("edit", { "useModuleList": true, "sortOrder": 0 });},
-        adminApp: function () {                 run("app"); },
-        adminZone: function () {                run("zone");},
-        develop: function () {                  run("template-develop"); }
+        changeLayoutOrContent: function () { run('layout'); },
+        addItem: function () { run('add', { useModuleList: true, sortOrder: 0 }); },
+        edit: function () { run("edit", { useModuleList: true, sortOrder: 0 }); },
+        adminApp: function () { run('app'); },
+        adminZone: function () { run('zone'); },
+        develop: function () { run('template-develop'); },
     };
 };
 // The following script fixes a bug in DNN 08.00.04
@@ -1112,24 +1124,100 @@ var $2sxcActionMenuMapper = function (moduleId) {
 (function () {
     $2sxc._manage = {};
 })();
-// A helper-controller in charge of opening edit-dialogs + creating the toolbars for it
-// all in-page toolbars etc.
-// if loaded, it's found under the $2sxc(module).manage
-// it has commands to
-// - getButton
-// - getToolbar
-// - run(...)
-// - isEditMode
 
-(function () {
-    $2sxc._manage.initInstance = function (sxc) {
-        var contentBlockTag = getContentBlockTag(sxc);
-        var editContext = getContextInfo(contentBlockTag);
-        var userInfo = { canDesign: editContext.User.CanDesign, canDevelop: editContext.User.CanDesign };
+(function() {
+    var mngApi = $2sxc._manage;
 
-        
-        // assemble all parameters needed for the common dialogs if we open anything
-        var ngDialogParams = {
+    /**
+     * Get a html tag of the current sxc instance
+     * @param {any} sxci
+     * @return {jquery} - resulting html
+     */
+    $2sxc._manage.getTag = function(sxci) {
+        return $("div[data-cb-id='" + sxci.cbid + "']")[0];
+    };
+
+
+
+    /**
+     * get the edit-context object (a json object) of the current tag/sxc-instance
+     * @param {any} htmlTag
+     * @return {any} edit-context object
+     */
+    $2sxc._manage.getEditContextOfTag = function getEditContextOfTag(htmlTag) {
+        var attr = htmlTag.getAttribute("data-edit-context");
+        return JSON.parse(attr || "");
+    };
+
+
+
+    /**
+     * get edit-context info of an sxc-object
+     * @param {any} sxc
+     * @return {any} edit context info
+     */
+    $2sxc._manage.getEditContext = function getEditContext(sxc) {
+        return $2sxc._manage.getEditContextOfTag(mngApi.getTag(sxc));
+    };
+
+
+    /**
+     * builds a config object used in the toolbar system
+     * @param {any} editContext 
+     * @returns {any} object containing various properties for this current sxc-instance
+     */
+    $2sxc._manage.buildInstanceConfig = function(editContext) {
+        var ce = editContext.Environment, cg = editContext.ContentGroup, cb = editContext.ContentBlock;
+        return {
+            portalId: ce.WebsiteId,
+            tabId: ce.PageId,
+            moduleId: ce.InstanceId,
+            version: ce.SxcVersion,
+
+            contentGroupId: cg.Guid,
+            cbIsEntity: cb.IsEntity,
+            cbId: cb.Id,
+            appPath: cg.AppUrl,
+            isList: cg.IsList
+        };
+    };
+
+
+    $2sxc._manage.getUserOfEditContext = function getUserOfEditContext(editContext) {
+        return { canDesign: editContext.User.CanDesign, canDevelop: editContext.User.CanDesign };
+    };
+
+
+
+    /**
+     * create a config-object for the quick-dialog, with all settings which the quick-dialog will need
+     * @param {any} editContext
+     * @returns {any} 
+     */
+
+    $2sxc._manage.buildQuickDialogConfig = function buildQuickDialogConfig(editContext) {
+        return {
+            appId: editContext.ContentGroup.AppId,
+            isContent: editContext.ContentGroup.IsContent,
+            hasContent: editContext.ContentGroup.HasContent,
+            isList: editContext.ContentGroup.IsList,
+            templateId: editContext.ContentGroup.TemplateId,
+            contentTypeId: editContext.ContentGroup.ContentTypeName,
+            templateChooserVisible: editContext.ContentBlock.ShowTemplatePicker, // todo: maybe move to content-goup
+            user: $2sxc._manage.getUserOfEditContext(editContext),
+            supportsAjax: editContext.ContentGroup.SupportsAjax
+        };
+    };
+
+    /**
+        * get all parameters needed by NG dialogs from an sxc
+        * @param {any} sxc
+        * @param {any} [editContext]
+        * @return {any} special object containing the ng-dialog parameters
+        */
+    $2sxc._manage.buildNgDialogParams = function buildNgDialogParams(sxc, editContext) {
+        if (!editContext) editContext = mngApi.getEditContext(sxc);
+        return {
             zoneId: editContext.ContentGroup.ZoneId,
             appId: editContext.ContentGroup.AppId,
             tid: editContext.Environment.PageId,
@@ -1140,92 +1228,86 @@ var $2sxcActionMenuMapper = function (moduleId) {
             langs: JSON.stringify(editContext.Language.All),
             portalroot: editContext.Environment.WebsiteUrl,
             websiteroot: editContext.Environment.SxcRootUrl,
-            partOfPage: true,
+            partOfPage: editContext.ContentBlock.PartOfPage,
             versioningRequirements: editContext.ContentBlock.VersioningRequirements,
 
             // todo: probably move the user into the dashboard info
-            user: userInfo,//{ canDesign: editContext.User.CanDesign, canDevelop: editContext.User.CanDesign },
+            user: $2sxc._manage.getUserOfEditContext(editContext),
             approot: editContext.ContentGroup.AppUrl || null // this is the only value which doesn't have a slash by default.  note that the app-root doesn't exist when opening "manage-app"
         };
-        // configuration needed by the quick-dialogs
-        var quickDialogConfig = {
-            appId: editContext.ContentGroup.AppId,
-            isContent: editContext.ContentGroup.IsContent,
-            hasContent: editContext.ContentGroup.HasContent,
-            isList: editContext.ContentGroup.IsList,
-            templateId: editContext.ContentGroup.TemplateId,
-            contentTypeId: editContext.ContentGroup.ContentTypeName,
-            templateChooserVisible: editContext.ContentBlock.ShowTemplatePicker, // todo: maybe move to content-goup
-            user: userInfo,// { canDesign: editContext.User.CanDesign, canDevelop: editContext.User.CanDesign },
-            supportsAjax: editContext.ContentGroup.SupportsAjax
-        };
-        
-        // #region helper functions
-        // todo: should probably move this away later on, not yet sure to where
-        function createInstanceConfig(editContext) {
-            var ce = editContext.Environment, cg = editContext.ContentGroup, cb = editContext.ContentBlock;
-            return {
-                portalId: ce.WebsiteId,
-                tabId: ce.PageId,
-                moduleId: ce.InstanceId,
-                version: ce.SxcVersion,
+    };
+})();
+// A helper-controller in charge of opening edit-dialogs + creating the toolbars for it
+// all in-page toolbars etc.
+// if loaded, it's found under the $2sxc(module).manage
+// it has commands to
+// - getButton
+// - getToolbar
+// - run(...)
+// - isEditMode
 
-                contentGroupId: cg.Guid,
-                cbIsEntity: cb.IsEntity,
-                cbId: cb.Id,
-                appPath: cg.AppUrl,
-                isList: cg.IsList
-            };
-        }
+(function () {
+    var mngApi = $2sxc._manage;
+    $2sxc._manage.initInstance = function (sxc) {
+        var editContext = mngApi.getEditContext(sxc);
+        var userInfo = mngApi.getUserOfEditContext(editContext);
 
-        //#endregion helper functions
-
-
-        var toolsAndButtons = $2sxc._toolbarManager.createInstance(sxc, editContext);
-        var cmdEngine = $2sxc._commands.instanceEngine(sxc, contentBlockTag, editContext);
+        var cmdEngine = $2sxc._commands.instanceEngine(sxc, /* contentBlockTag, */ editContext);
 
         var editManager = sxc.manage = {
             //#region Official, public properties and commands, which are stable for use from the outside
-            // run a command - often used in toolbars and custom buttons
+            /**
+             * run a command - often used in toolbars and custom buttons
+             */
             run: cmdEngine.executeAction,
 
-            // get a button or a toolbar for something
-            getButton: toolsAndButtons.getButton,
-            getToolbar: toolsAndButtons.getToolbar,
+            /**
+             * Generate a button (an <a>-tag) for one specific toolbar-action.
+             * @param {Object<any>} actDef - settings, an object containing the specs for the expected buton
+             * @param {int} groupIndex - number what button-group it's in'
+             * @returns {string} html of a button
+             */
+            getButton: function (actDef, groupIndex) {
+                return $2sxc._toolbarManager.generateButtonHtml(sxc, actDef, groupIndex);
+            },
+
+            /**
+             * Builds the toolbar and returns it as HTML
+             * @param {Object<any>} tbConfig - general toolbar config
+             * @param {Object<any>} moreSettings - additional / override settings
+             * @returns {string} html of the current toolbar
+             */
+            getToolbar: function (tbConfig, moreSettings) {
+                return $2sxc._toolbarManager.generateToolbarHtml(sxc, tbConfig, moreSettings);
+            },
             //#endregion official, public properties - everything below this can change at any time
 
 
             // internal method to find out if it's in edit-mode
             _isEditMode: function () { return editContext.Environment.IsEditable; },
             _reloadWithAjax: editContext.ContentGroup.SupportsAjax,
-            _dialogParameters: ngDialogParams,      // used for various dialogs
-            _instanceConfig: createInstanceConfig(editContext),// toolsAndButtons.config, // used to configure buttons / toolbars
+            _dialogParameters: mngApi.buildNgDialogParams(sxc, editContext),      // used for various dialogs
+            _instanceConfig: mngApi.buildInstanceConfig(editContext), // used to configure buttons / toolbars
             _editContext: editContext,              // metadata necessary to know what/how to edit
-            _quickDialogConfig: quickDialogConfig,           // used for in-page dialogs
-            _dashboardConfig: quickDialogConfig, // temp 2017-08-27 - keep till the angular uses the new name
+            _quickDialogConfig: mngApi.buildQuickDialogConfig(editContext),           // used for in-page dialogs
             _commands: cmdEngine,                        // used to handle the commands for this content-block
-            _tag: contentBlockTag,
             _user: userInfo,
-            //#region toolbar quick-access commands - might be used by other scripts, so I'm keeping them here for the moment, but may just delete them later
-            _toolbar: toolsAndButtons, // should use this from now on when accessing from outside
-            //#endregion
+
 
             // init this object 
             init: function init() {
                 // enhance UI in case there are known errors / issues
                 if (editContext.error.type)
-                    editManager._handleErrors(editContext.error.type, editManager._tag);
+                    editManager._handleErrors(editContext.error.type, $2sxc._manage.getTag(sxc));
 
-                // finish init of sub-objects
-                //editManager._commands.init(editManager);
-                //editManager.contentBlock = $2sxc._contentBlock.createCbInstance(sxc, editManager, editManager._tag);
-
+                // todo: move this to dialog-handling
                 // display the dialog
-                var openDialogId = sessionStorage.getItem('dia-cbid');
+                var openDialogId = sessionStorage.getItem("dia-cbid");
                 if (editContext.error.type || !openDialogId || openDialogId !== sxc.cbid) return false;
-                sessionStorage.removeItem('dia-cbid');
+                sessionStorage.removeItem("dia-cbid");
                 editManager.run("layout");
             },
+
 
             // private: show error when the app-data hasn't been installed yet for this imported-module
             _handleErrors: function (errType, cbTag) {
@@ -1240,11 +1322,15 @@ var $2sxcActionMenuMapper = function (moduleId) {
                 errWrapper.append(toolbar);
                 $(cbTag).append(errWrapper);
             },
+
+
             // change config by replacing the guid, and refreshing dependend sub-objects
             _updateContentGroupGuid: function (newGuid) {
                 editContext.ContentGroup.Guid = newGuid;
-                editManager._instanceConfig = createInstanceConfig(editContext);
+                editManager._instanceConfig = mngApi.buildInstanceConfig(editContext);
             },
+
+
             _getCbManipulator: function () {
                 return $2sxc._contentBlock.manipulator(sxc);
             }
@@ -1256,17 +1342,6 @@ var $2sxcActionMenuMapper = function (moduleId) {
 
 
 
-
-    //#region helper functions
-    function getContentBlockTag(sxci) {
-        return $("div[data-cb-id='" + sxci.cbid + "']")[0];
-    }
-
-    function getContextInfo(cb) {
-        var attr = cb.getAttribute("data-edit-context");
-        return JSON.parse(attr || "");
-    }
-    //#endregion
 })();
 // https://tc39.github.io/ecma262/#sec-array.prototype.find
 if (!Array.prototype.find) {
@@ -1376,7 +1451,11 @@ if (!Array.prototype.find) {
     }, RESIZE_INTERVAL);
 
     // ReSharper disable once InconsistentNaming
-    function Dialog(sxc, wrapperTag, url, closeCallback, fullScreen) {
+    function Dialog(sxc, url, closeCallback, fullScreen) {
+
+        // 2017-09-04 2dm - removed wrapper-tag from call, temporarily will find it myself...
+        var wrapperTag = $2sxc._manage.getTag(sxc);
+
         var iframe, // frame inside the dialog (HTMLElement)
             // resizeInterval,
             wrapperParent = $(wrapperTag).parent().eq(0);
@@ -1739,7 +1818,7 @@ $(function () {
             enable: null    // default: auto-detect
         }
     };
-
+    
     $quickE._readPageConfig = function () {
         var configs = $("[" + configAttr + "]"), finalConfig = {}, confJ, confO;
 
@@ -1762,12 +1841,10 @@ $(function () {
 
         // re-check "auto" or "null"
         // if it has inner-content, then it's probably a details page, where quickly adding modules would be a problem, so for now, disable modules in this case
-        if (conf.modules.enable === null || conf.modules.enable === "auto")
-            conf.modules.enable = !hasInnerCBs;
+        if (conf.modules.enable === null || conf.modules.enable === 'auto') conf.modules.enable = !hasInnerCBs;
 
         // for now, ContentBlocks are only enabled if they exist on the page
-        if (conf.innerBlocks.enable === null || conf.innerBlocks.enable === "auto")
-            conf.innerBlocks.enable = hasInnerCBs;  
+        if (conf.innerBlocks.enable === null || conf.innerBlocks.enable === 'auto') conf.innerBlocks.enable = hasInnerCBs;  
     };
 
 });
@@ -2301,31 +2378,26 @@ $(function () {
     return Shake;
 }));
 
-
-
 (function () {
-
+    
     // prevent propagation of the click (if menu was clicked)
     $($2sxc.c.sel.scMenu /*".sc-menu"*/).click(function (e) {
         e.stopPropagation();
     });
-
 })();
 // enable shake detection on all toolbars
 $(function () {
 
     // this will add a css-class to auto-show all toolbars (or remove it again)
     function toggleAllToolbars() {
-        $(document.body).toggleClass("sc-tb-show-all");
+        $(document.body).toggleClass('sc-tb-show-all');
     }
-
+    
     // start shake-event monitoring, which will then generate a window-event
-    var myShakeEvent = new Shake({ callback: toggleAllToolbars });
-    myShakeEvent.start();
+    (new Shake({ callback: toggleAllToolbars })).start();
 });
 // the toolbar manager is an internal helper
 // taking care of toolbars, buttons etc.
-
 (function () {
     /**
      * Toolbar manager for the whole page - basically a set of APIs
@@ -2421,45 +2493,8 @@ $(function () {
     };
 
     $2sxc._toolbarManager.isDisabled = function(sxc) {
-        var tag = $(sxc.manage._tag);
+        var tag = $($2sxc._manage.getTag(sxc));
         return !!tag.attr($2sxc._toolbarManager.cDisableAttrName);
-    };
-
-})();
-(function () {
-
-    var tbManager = $2sxc._toolbarManager;
-
-    // create an object oriented simple call to access toolbar actions of an instance
-    $2sxc._toolbarManager.createInstance = function (sxc) {
-
-        var tb = {
-            // 
-            // Expects: settings, an object containing the specs for the expected buton
-            /**
-             * Generate a button (an <a>-tag) for one specific toolbar-action.
-             * @param {Object<any>} actDef - settings, an object containing the specs for the expected buton
-             * @param {int} groupIndex - number what button-group it's in'
-             * @returns {string} html of a button
-             */
-            getButton: function(actDef, groupIndex) {
-                return tbManager.generateButtonHtml(sxc, actDef, groupIndex);
-            },
-
-            // Builds the toolbar and returns it as HTML
-            // expects settings - either for 1 button or for an array of buttons
-            /**
-             * Builds the toolbar and returns it as HTML
-             * @param {Object<any>} tbConfig - general toolbar config
-             * @param {Object<any>} moreSettings - additional / override settings
-             * @returns {string} html of the current toolbar
-             */
-            getToolbar: function(tbConfig, moreSettings) {
-                return tbManager.generateToolbarHtml(sxc, tbConfig, moreSettings);
-            }
-
-        };
-        return tb;
     };
 
 })();
@@ -2468,15 +2503,13 @@ $(function () {
     // does some clean-up work on a button-definition object
     // because the target item could be specified directly, or in a complex internal object called entity
     function flattenActionDefinition(actDef) {
-        if (actDef.entity && actDef.entity._2sxcEditInformation) {
-            var editInfo = actDef.entity._2sxcEditInformation;
-            actDef.useModuleList = (editInfo.sortOrder !== undefined); // has sort-order, so use list
-            if (editInfo.entityId !== undefined)
-                actDef.entityId = editInfo.entityId;
-            if (editInfo.sortOrder !== undefined)
-                actDef.sortOrder = editInfo.sortOrder;
-            delete actDef.entity; // clean up edit-info
-        }
+        if (!actDef.entity || !actDef.entity._2sxcEditInformation) return;
+
+        var editInfo = actDef.entity._2sxcEditInformation;
+        actDef.useModuleList = (editInfo.sortOrder !== undefined); // has sort-order, so use list
+        if (editInfo.entityId !== undefined) actDef.entityId = editInfo.entityId;
+        if (editInfo.sortOrder !== undefined) actDef.sortOrder = editInfo.sortOrder;
+        delete actDef.entity; // clean up edit-info
     }
 
     // generate the html for a button
@@ -2494,24 +2527,19 @@ $(function () {
             onclick = actDef.disabled
                 ? ""
                 : "$2sxc(" + sxc.id + ", " + sxc.cbid + ").manage.run(" + JSON.stringify(actDef.command) + ", event);";
-
-        for (var c = 0; c < classesList.length; c++)
-            showClasses += " " + classesList[c];
+        
+        for (var c = 0; c < classesList.length; c++) showClasses += " " + classesList[c];
 
         var button = $("<a />",
-        {
-            'class': "sc-" + actDef.action + " " + showClasses +
+            {
+                'class': "sc-" + actDef.action + " " + showClasses +
                 (actDef.dynamicClasses ? " " + actDef.dynamicClasses(actDef) : ""),
-            'onclick': onclick,
-            'data-i18n': "[title]" + actDef.title
-        });
-
+                'onclick': onclick,
+                'data-i18n': "[title]" + actDef.title
+            });
         button.html(box.html(symbol));
-
         return button[0].outerHTML;
     };
-
-
 })();
 (function () {
 
@@ -2543,7 +2571,6 @@ $(function () {
         }
 
         toolbar.attr("group-count", btnGroups.length);
-
         return toolbar[0].outerHTML;
     };
 })();

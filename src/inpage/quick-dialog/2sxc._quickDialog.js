@@ -38,7 +38,11 @@
     }, RESIZE_INTERVAL);
 
     // ReSharper disable once InconsistentNaming
-    function Dialog(sxc, wrapperTag, url, closeCallback, fullScreen) {
+    function Dialog(sxc, url, closeCallback, fullScreen) {
+
+        // 2017-09-04 2dm - removed wrapper-tag from call, temporarily will find it myself...
+        var wrapperTag = $2sxc._manage.getTag(sxc);
+
         var iframe, // frame inside the dialog (HTMLElement)
             // resizeInterval,
             wrapperParent = $(wrapperTag).parent().eq(0);
@@ -54,6 +58,7 @@
          */
         diagManager.current = Object.assign(iframe, {
             closeCallback: closeCallback,
+            mid: sxc.id,
 
             getManageInfo: getManageInfo,
             getAdditionalDashboardConfig: getAdditionalDashboardConfig,

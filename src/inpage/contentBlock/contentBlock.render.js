@@ -27,7 +27,7 @@
             // Must disable toolbar before we attach to DOM
             if (justPreview) $2sxc._toolbarManager.disable(newStuff);
 
-            $(sxc.manage._tag).replaceWith(newStuff);
+            $($2sxc._manage.getTag(sxc)).replaceWith(newStuff);
 
             // reset the cache, so the sxc-object is refreshed
             sxc.recreate(true);
@@ -43,7 +43,7 @@
      * @returns {} - nothing
      */
     cbm.showMessage = function(sxc, newContent) {
-        $(sxc.manage._tag).html(newContent);
+        $($2sxc._manage.getTag(sxc)).html(newContent);
     };
 
 

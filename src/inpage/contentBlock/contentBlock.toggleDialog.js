@@ -17,17 +17,20 @@
         // it can already exist as part of the manage-object, 
         // ...or if the manage object was reset, we must find it in the DOM
 
-        var diag = sxc.manage.dialog;
-        if (diag)
-            diag.toggle();
-        else {
+        //var diag = sxc.manage.dialog;
+        //if (diag)
+        //    diag.toggle();
+        //else
+        {
             // didn't find an own dialog, so check if we must cancel another one first
             $2sxc._dialogManager.cancel();
 
             // now create the new one
-            sxc.manage.dialog = sxc.manage.run("dash-view"); // not ideal, must improve
+            // sxc.manage.dialog =
+
+            sxc.manage.run("dash-view"); // not ideal, must improve
             // todo 2cb - this just doesn't work right
-            sxc.manage.dialog.toggle(true); // just in case it was hidden before, and wasn't fully restored
+            //sxc.manage.dialog.toggle(true); // just in case it was hidden before, and wasn't fully restored
         }
     };
 

@@ -166,7 +166,7 @@ export class TemplatePickerComponent implements OnInit {
   }
 
   private appStore() {
-    win.open("http://2sxc.org/en/apps");
+    win.open("https://2sxc.org/apps");
   }
 
   private filterTemplates(contentType: ContentType) {
