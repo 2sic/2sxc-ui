@@ -68,6 +68,12 @@
             return container.find("iframe")[0];
         },
 
+        /**
+         * check if the dialog is showing for the current sxc-instance
+         * @param {Object<>} sxc 
+         * @param {string} dialogName 
+         * @returns {boolean} 
+         */
         isShowing: function(sxc, dialogName) {
             return (diagManager.current // there is a current dialog
                 && diagManager.current.sxcCacheKey === sxc.cacheKey // the iframe is showing for the current sxc
@@ -99,10 +105,7 @@
             // make sure it's visible'
             iFrame.toggle(true);
             return iFrame;
-        }, 
-
-        //showOrToggle: function(sxc, url, closeCallback, fullScreen, allowToggle, newView) {
-        //}
+        }
 
     };
 
@@ -121,6 +124,7 @@
         watchForResize();
         return container;
     }
+
 
     function setSize(fullScreen) {
         var container = diagManager.getContainer();

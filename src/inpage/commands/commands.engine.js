@@ -1,6 +1,6 @@
 ﻿
 (function () {
-    $2sxc._commands.instanceEngine = function (sxc, /* targetTag, */ editContext) {
+    $2sxc._commands.instanceEngine = function (sxc, editContext) {
         var engine = {
             commands: $2sxc._commands.initializeInstanceCommands(editContext),
 
@@ -83,11 +83,13 @@
                 // if the command has own configuration stuff, do that now
                 if (cmd.settings.configureCommand) cmd.settings.configureCommand(cmd);
 
-                if (specialSettings.angularDialog) {
-                    var modernDialogUrl = sxc.manage._editContext.Environment.SxcRootUrl + "desktopmodules/tosic_sexycontent/dist/ng/ui.html?sxcver="
-                        + sxc.manage._editContext.Environment.SxcVersion;
-                    return cmd.generateLink(modernDialogUrl);
-                }
+                //if (specialSettings.angularDialog) {
+                //    var modernDialogUrl = sxc.manage._editContext.Environment.SxcRootUrl
+                //        + "desktopmodules/tosic_sexycontent/dist/ng/ui.html?sxcver="
+                //        + sxc.manage._editContext.Environment.SxcVersion;
+                //    return cmd.generateLink(modernDialogUrl);
+                //}
+
                 return cmd.generateLink();
             },
 
@@ -101,7 +103,7 @@
                     },
                     link = engine._linkToNgDialog(settings); // the link contains everything to open a full dialog (lots of params added)
                 if (settings.inlineWindow)
-                    return $2sxc._quickDialog.showOrToggle(sxc, link, callback, settings.dialog === "item-history", settings.dialog);
+                    return $2sxc._quickDialog.showOrToggle(sxc, link, callback, settings.fullScreen /* settings.dialog === "item-history"*/, settings.dialog);
                 if (settings.newWindow || (event && event.shiftKey))
                     return window.open(link);
                 return $2sxc.totalPopup.open(link, callback);

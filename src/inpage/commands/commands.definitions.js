@@ -69,8 +69,6 @@
                 },
                 code: function (settings, event, sxc) {
                     $2sxc._contentBlock.addItem(sxc, settings.sortOrder + 1);
-                    //sxc.manage.contentBlock
-                    //    .addItem(settings.sortOrder + 1);
                 }
             }),
 
@@ -131,8 +129,6 @@
                 },
                 code: function (settings, event, sxc) {
                     $2sxc._contentBlock.changeOrder(sxc, settings.sortOrder, Math.max(settings.sortOrder - 1, 0));
-                    //sxc.manage.contentBlock
-                    //    .changeOrder(settings.sortOrder, Math.max(settings.sortOrder - 1, 0));
                 }
             }),
 
@@ -142,7 +138,6 @@
                 },
                 code: function (settings, event, sxc) {
                     $2sxc._contentBlock.changeOrder(sxc, settings.sortOrder, settings.sortOrder + 1);
-                    //sxc.manage.contentBlock.changeOrder(settings.sortOrder, settings.sortOrder + 1);
                 }
             }),
 
@@ -159,12 +154,10 @@
 
                     // if we have an entity-id, publish based on that
                     if (settings.entityId) return $2sxc._contentBlock.publishId(sxc, settings.entityId);
-                    //if (settings.entityId) return sxc.manage.contentBlock.publishId(settings.entityId);
 
-                    var part = settings.sortOrder === -1 ? 'listcontent' : 'content';
+                    var part = settings.sortOrder === -1 ? "listcontent" : "content";
                     var index = settings.sortOrder === -1 ? 0 : settings.sortOrder;
                     return $2sxc._contentBlock.publish(sxc, part, index);
-                    //return sxc.manage.contentBlock.publish(part, index);
                 }
             }),
 
@@ -178,7 +171,7 @@
                 disabled: editContext.appSettingsId === null,
                 title: "Toolbar.AppSettings" + (editContext.appSettingsId === null ? "Disabled" : ""),
                 showCondition: function (settings, modConfig) {
-                    return enableTools && !isContent /*&& editContext.appSettingsId !== null*/; // only if settings exist, or are 0 (to be created)
+                    return enableTools && !isContent; // only if settings exist, or are 0 (to be created)
                 },
                 configureCommand: function (cmd) {
                     cmd.items = [{ EntityId: editContext.appSettingsId }];
@@ -193,7 +186,7 @@
                 disabled: editContext.appResourcesId === null,
                 title: "Toolbar.AppResources" + (editContext.appResourcesId === null ? "Disabled" : ""),
                 showCondition: function (settings, modConfig) {
-                    return enableTools && !isContent /*&& editContext.appResourcesId !== null*/; // only if resources exist or are 0 (to be created)...
+                    return enableTools && !isContent; // only if resources exist or are 0 (to be created)...
                 },
                 configureCommand: function (cmd) {
                     cmd.items = [{ EntityId: editContext.appResourcesId }];
@@ -211,7 +204,7 @@
 
             'zone': makeDef("zone", "Zone", "manage", true, {
                 showCondition: enableTools
-            }),
+            })
             //#endregion
         };
 
@@ -268,12 +261,8 @@
                 return enableTools && !isContent;
             },
             dynamicClasses: function (settings) {
-                return editContext.queryId ? '' : 'empty'; // if it doesn't have a query, make it less strong
+                return editContext.queryId ? "" : "empty"; // if it doesn't have a query, make it less strong
             }
-            // ToDo: remove dead code
-            // configureCommand: function (cmd) {
-            //    cmd.params.pipelineId = editContext.queryId;
-            // }
         }));
 
         addDef(makeDef("template-settings", "TemplateSettings", "sliders", true, {
@@ -304,11 +293,10 @@
             }
         }));
         //#endregion
+
+
         addDef(makeDef("layout", "ChangeLayout", "glasses", true, {
              inlineWindow: true 
-            //code: function (settings, event, sxc) {
-            //    todo!
-            //}
         }));
 
         addDef(makeDef("more", "MoreActions", "options btn-mode", true, {
@@ -328,8 +316,7 @@
         // show the version dialog
         addDef(makeDef("item-history", "ItemHistory", "clock", true, {
             inlineWindow: true,
-            // todo: add full-screen param here
-            angularDialog: true, // todo: 2dm- check if we need this
+            fullScreen: true
         }));
 
         return act;

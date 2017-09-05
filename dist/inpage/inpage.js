@@ -181,8 +181,6 @@ $(function () {
                 },
                 code: function (settings, event, sxc) {
                     $2sxc._contentBlock.addItem(sxc, settings.sortOrder + 1);
-                    //sxc.manage.contentBlock
-                    //    .addItem(settings.sortOrder + 1);
                 }
             }),
 
@@ -243,8 +241,6 @@ $(function () {
                 },
                 code: function (settings, event, sxc) {
                     $2sxc._contentBlock.changeOrder(sxc, settings.sortOrder, Math.max(settings.sortOrder - 1, 0));
-                    //sxc.manage.contentBlock
-                    //    .changeOrder(settings.sortOrder, Math.max(settings.sortOrder - 1, 0));
                 }
             }),
 
@@ -254,7 +250,6 @@ $(function () {
                 },
                 code: function (settings, event, sxc) {
                     $2sxc._contentBlock.changeOrder(sxc, settings.sortOrder, settings.sortOrder + 1);
-                    //sxc.manage.contentBlock.changeOrder(settings.sortOrder, settings.sortOrder + 1);
                 }
             }),
 
@@ -271,12 +266,10 @@ $(function () {
 
                     // if we have an entity-id, publish based on that
                     if (settings.entityId) return $2sxc._contentBlock.publishId(sxc, settings.entityId);
-                    //if (settings.entityId) return sxc.manage.contentBlock.publishId(settings.entityId);
 
-                    var part = settings.sortOrder === -1 ? 'listcontent' : 'content';
+                    var part = settings.sortOrder === -1 ? "listcontent" : "content";
                     var index = settings.sortOrder === -1 ? 0 : settings.sortOrder;
                     return $2sxc._contentBlock.publish(sxc, part, index);
-                    //return sxc.manage.contentBlock.publish(part, index);
                 }
             }),
 
@@ -290,7 +283,7 @@ $(function () {
                 disabled: editContext.appSettingsId === null,
                 title: "Toolbar.AppSettings" + (editContext.appSettingsId === null ? "Disabled" : ""),
                 showCondition: function (settings, modConfig) {
-                    return enableTools && !isContent /*&& editContext.appSettingsId !== null*/; // only if settings exist, or are 0 (to be created)
+                    return enableTools && !isContent; // only if settings exist, or are 0 (to be created)
                 },
                 configureCommand: function (cmd) {
                     cmd.items = [{ EntityId: editContext.appSettingsId }];
@@ -305,7 +298,7 @@ $(function () {
                 disabled: editContext.appResourcesId === null,
                 title: "Toolbar.AppResources" + (editContext.appResourcesId === null ? "Disabled" : ""),
                 showCondition: function (settings, modConfig) {
-                    return enableTools && !isContent /*&& editContext.appResourcesId !== null*/; // only if resources exist or are 0 (to be created)...
+                    return enableTools && !isContent; // only if resources exist or are 0 (to be created)...
                 },
                 configureCommand: function (cmd) {
                     cmd.items = [{ EntityId: editContext.appResourcesId }];
@@ -380,12 +373,8 @@ $(function () {
                 return enableTools && !isContent;
             },
             dynamicClasses: function (settings) {
-                return editContext.queryId ? '' : 'empty'; // if it doesn't have a query, make it less strong
+                return editContext.queryId ? "" : "empty"; // if it doesn't have a query, make it less strong
             }
-            // ToDo: remove dead code
-            // configureCommand: function (cmd) {
-            //    cmd.params.pipelineId = editContext.queryId;
-            // }
         }));
 
         addDef(makeDef("template-settings", "TemplateSettings", "sliders", true, {
@@ -416,11 +405,10 @@ $(function () {
             }
         }));
         //#endregion
+
+
         addDef(makeDef("layout", "ChangeLayout", "glasses", true, {
              inlineWindow: true 
-            //code: function (settings, event, sxc) {
-            //    todo!
-            //}
         }));
 
         addDef(makeDef("more", "MoreActions", "options btn-mode", true, {
@@ -440,8 +428,7 @@ $(function () {
         // show the version dialog
         addDef(makeDef("item-history", "ItemHistory", "clock", true, {
             inlineWindow: true,
-            // todo: add full-screen param here
-            angularDialog: true, // todo: 2dm- check if we need this
+            fullScreen: true
         }));
 
         return act;
@@ -450,7 +437,7 @@ $(function () {
 
 
 (function () {
-    $2sxc._commands.instanceEngine = function (sxc, /* targetTag, */ editContext) {
+    $2sxc._commands.instanceEngine = function (sxc, editContext) {
         var engine = {
             commands: $2sxc._commands.initializeInstanceCommands(editContext),
 
@@ -533,11 +520,13 @@ $(function () {
                 // if the command has own configuration stuff, do that now
                 if (cmd.settings.configureCommand) cmd.settings.configureCommand(cmd);
 
-                if (specialSettings.angularDialog) {
-                    var modernDialogUrl = sxc.manage._editContext.Environment.SxcRootUrl + "desktopmodules/tosic_sexycontent/dist/ng/ui.html?sxcver="
-                        + sxc.manage._editContext.Environment.SxcVersion;
-                    return cmd.generateLink(modernDialogUrl);
-                }
+                //if (specialSettings.angularDialog) {
+                //    var modernDialogUrl = sxc.manage._editContext.Environment.SxcRootUrl
+                //        + "desktopmodules/tosic_sexycontent/dist/ng/ui.html?sxcver="
+                //        + sxc.manage._editContext.Environment.SxcVersion;
+                //    return cmd.generateLink(modernDialogUrl);
+                //}
+
                 return cmd.generateLink();
             },
 
@@ -551,7 +540,7 @@ $(function () {
                     },
                     link = engine._linkToNgDialog(settings); // the link contains everything to open a full dialog (lots of params added)
                 if (settings.inlineWindow)
-                    return $2sxc._quickDialog.showOrToggle(sxc, link, callback, settings.dialog === "item-history", settings.dialog);
+                    return $2sxc._quickDialog.showOrToggle(sxc, link, callback, settings.fullScreen /* settings.dialog === "item-history"*/, settings.dialog);
                 if (settings.newWindow || (event && event.shiftKey))
                     return window.open(link);
                 return $2sxc.totalPopup.open(link, callback);
@@ -1422,6 +1411,12 @@ if (!Array.prototype.find) {
             return container.find("iframe")[0];
         },
 
+        /**
+         * check if the dialog is showing for the current sxc-instance
+         * @param {Object<>} sxc 
+         * @param {string} dialogName 
+         * @returns {boolean} 
+         */
         isShowing: function(sxc, dialogName) {
             return (diagManager.current // there is a current dialog
                 && diagManager.current.sxcCacheKey === sxc.cacheKey // the iframe is showing for the current sxc
@@ -1453,10 +1448,7 @@ if (!Array.prototype.find) {
             // make sure it's visible'
             iFrame.toggle(true);
             return iFrame;
-        }, 
-
-        //showOrToggle: function(sxc, url, closeCallback, fullScreen, allowToggle, newView) {
-        //}
+        }
 
     };
 
@@ -1475,6 +1467,7 @@ if (!Array.prototype.find) {
         watchForResize();
         return container;
     }
+
 
     function setSize(fullScreen) {
         var container = diagManager.getContainer();
