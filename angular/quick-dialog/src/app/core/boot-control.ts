@@ -22,7 +22,7 @@ export class BootController {
   }
 
   public restart() {
-      console.log("restarting...")
+    console.log("restarting...");
     this._reboot.next(true);
   }
 }

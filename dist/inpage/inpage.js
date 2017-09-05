@@ -440,7 +440,8 @@ $(function () {
         // show the version dialog
         addDef(makeDef("item-history", "ItemHistory", "clock", true, {
             inlineWindow: true,
-            angularDialog: true,
+            // todo: add full-screen param here
+            angularDialog: true, // todo: 2dm- check if we need this
         }));
 
         return act;
@@ -550,7 +551,7 @@ $(function () {
                     },
                     link = engine._linkToNgDialog(settings); // the link contains everything to open a full dialog (lots of params added)
                 if (settings.inlineWindow)
-                    return $2sxc._quickDialog.showOrToggle(sxc, link, callback, settings.dialog === "item-history", true, settings.dialog);
+                    return $2sxc._quickDialog.showOrToggle(sxc, link, callback, settings.dialog === "item-history", settings.dialog);
                 if (settings.newWindow || (event && event.shiftKey))
                     return window.open(link);
                 return $2sxc.totalPopup.open(link, callback);
@@ -1361,7 +1362,8 @@ if (!Array.prototype.find) {
     var resizeInterval = 200,
         scrollTopOffset = 80,
         resizeWatcher = null,
-        diagShowClass = "dia-select";
+        diagShowClass = "dia-select",
+        isFullscreen = false;
 
     /**
      * dialog manager - the currently active dialog object
@@ -1420,7 +1422,7 @@ if (!Array.prototype.find) {
             return container.find("iframe")[0];
         },
 
-        isShowing: function(sxc) {
+        isShowing: function(sxc, dialogName) {
             return (diagManager.current // there is a current dialog
                 && diagManager.current.sxcCacheKey === sxc.cacheKey // the iframe is showing for the current sxc
                 && diagManager.current.dialogName === dialogName); // the view is the same as previously
@@ -1434,12 +1436,12 @@ if (!Array.prototype.find) {
          * @param {} fullScreen 
          * @returns {} 
          */
-        showOrToggle: function(sxc, url, closeCallback, fullScreen, allowToggle, dialogName) {
+        showOrToggle: function(sxc, url, closeCallback, fullScreen, dialogName) {
             setSize(fullScreen);
             var iFrame = diagManager.getIFrame();
 
             // in case it's a toggle
-            if (allowToggle && diagManager.isShowing(sxc))
+            if (dialogName && diagManager.isShowing(sxc, dialogName))
                 return diagManager.hide();
 
             iFrame.rewire(sxc, closeCallback, dialogName);
@@ -1465,7 +1467,6 @@ if (!Array.prototype.find) {
      */
     function buildContainerAndIFrame() {
         var container = $('<div class="inpage-frame-wrapper"><div class="inpage-frame"></div></div>');
-        container.isFullscreen = false;
         var newIFrame = document.createElement("iframe");
         newIFrame = extendIFrameWithSxcState(newIFrame);
         container.find(".inpage-frame").html(newIFrame);
@@ -1481,7 +1482,7 @@ if (!Array.prototype.find) {
         container.css("min-height", fullScreen ? "100%" : "230px");
 
         // remember...
-        container.isFullscreen = fullScreen;
+        isFullscreen = fullScreen;
     }
 
     function extendIFrameWithSxcState(iFrame) {
@@ -1506,7 +1507,7 @@ if (!Array.prototype.find) {
                 tagModule = $($($2sxc._manage.getTag(sxc)).parent().eq(0));
                 newFrm.sxcCacheKey = sxc.cacheKey;
                 newFrm.closeCallback = callback;
-                newFrm.dialogName = dialogName;
+                if(dialogName) newFrm.dialogName = dialogName;
             },
 
             getManageInfo: function () { return reSxc().manage._dialogParameters; },
@@ -1581,7 +1582,7 @@ if (!Array.prototype.find) {
                     frm.style.minHeight = cont.css("min-height");
                     frm.style.height = height + "px";
                     frm.previousHeight = height;
-                    if (cont.isFullscreen) {
+                    if (isFullscreen) {
                         frm.style.height = "100%";
                         frm.style.position = "absolute";
                     }

@@ -328,7 +328,8 @@
         // show the version dialog
         addDef(makeDef("item-history", "ItemHistory", "clock", true, {
             inlineWindow: true,
-            angularDialog: true,
+            // todo: add full-screen param here
+            angularDialog: true, // todo: 2dm- check if we need this
         }));
 
         return act;
