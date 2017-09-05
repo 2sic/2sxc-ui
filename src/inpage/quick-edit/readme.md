@@ -1,4 +1,5 @@
-﻿# Quick Edit - aka QuickE
+﻿
+# Quick Edit - aka QuickE
 
 These parts contain the in-line hover-bar to 
 

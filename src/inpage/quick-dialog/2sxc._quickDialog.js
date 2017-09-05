@@ -19,8 +19,7 @@
 
         /**
          * toggle visibility
-         * @param {boolean} [show]
-         * @returns {} 
+         * @param {boolean} [show] true/false optional
          */
         toggle: function (show) {
             var cont = $(diagManager.getContainer());
@@ -44,6 +43,7 @@
 
         /**
          * Remember dialog state across page-reload
+         * @param {Object<any>} sxc - the sxc which is persisted for
          */
         persistDialog: function(sxc) {
             sessionStorage.setItem("dia-cbid", sxc.cbid);
@@ -55,12 +55,12 @@
          */
         getContainer: function() {
             var container = $(".inpage-frame-wrapper");
-            return (container.length > 0) ? container : buildContainerAndIFrame();
+            return container.length > 0 ? container : buildContainerAndIFrame();
         },
 
         /**
          * find the iframe which hosts the dialog
-         * @param {html} [container]
+         * @param {html} [container] - html-container as jQuery object
          * @returns {html} iframe object
          */
         getIFrame: function(container) {
@@ -70,23 +70,24 @@
 
         /**
          * check if the dialog is showing for the current sxc-instance
-         * @param {Object<>} sxc 
-         * @param {string} dialogName 
-         * @returns {boolean} 
+         * @param {Object<any>} sxc - sxc object
+         * @param {string} dialogName - name of dialog
+         * @returns {boolean} true if it's currently showing for this sxc-instance
          */
         isShowing: function(sxc, dialogName) {
-            return (diagManager.current // there is a current dialog
+            return diagManager.current // there is a current dialog
                 && diagManager.current.sxcCacheKey === sxc.cacheKey // the iframe is showing for the current sxc
-                && diagManager.current.dialogName === dialogName); // the view is the same as previously
+                && diagManager.current.dialogName === dialogName; // the view is the same as previously
         },
 
         /**
          * show / reset the current iframe to use new url and callback
-         * @param {} sxc 
-         * @param {} url 
-         * @param {} closeCallback 
-         * @param {} fullScreen 
-         * @returns {} 
+         * @param {any} sxc - sxc object
+         * @param {string} url - url to show
+         * @param {function()} closeCallback - callback event
+         * @param {boolean} fullScreen - if it should open full screen
+         * @param {string} [dialogName] - optional name of dialog, to check if it's already open
+         * @returns {any} jquery object of the iframe
          */
         showOrToggle: function(sxc, url, closeCallback, fullScreen, dialogName) {
             setSize(fullScreen);
@@ -142,7 +143,6 @@
 
         /**
         * get the sxc-object of this iframe
-        * @param {Object<any>} [newSxc]
         * @returns {Object<any>} refreshed sxc-object
         */
         function reSxc() {
@@ -193,7 +193,7 @@
     /**
      * rewrite the url to fit the quick-dialog situation
      * optionally with a live-compiled version from ng-serve
-     * @param {string} url 
+     * @param {string} url - original url pointing to the "wrong" dialog
      * @returns {string} new url
      */
     function rewriteUrl(url) {
@@ -206,13 +206,16 @@
             var devMode = localStorage.getItem("devMode");
             if (devMode && ~~devMode)
                 url = url.replace("/desktopmodules/tosic_sexycontent/dist/ng/ui.html", "http://localhost:4200");
-        } catch (e) { }
+        } catch (e) {
+            // ignore
+        }
         return url;
     }
 
     /**
      * create watcher which monitors the iframe size and adjusts the container as needed
-     * @returns {} 
+     * @param {boolean} [keepWatching] optional true/false to start/stop the watcher
+     * @returns {null} nothing
      */
     function watchForResize(keepWatching) {
         if (keepWatching === false && resizeWatcher) {
@@ -237,6 +240,7 @@
                         frm.style.position = "absolute";
                     }
                 } catch (e) {
+                    // ignore
                 }
             },
                 resizeInterval);
