@@ -549,8 +549,10 @@ $(function () {
                         closeCallback();
                     },
                     link = engine._linkToNgDialog(settings); // the link contains everything to open a full dialog (lots of params added)
-                if (settings.inlineWindow) return $2sxc._quickDialog.show(sxc, link, callback, settings.dialog === 'item-history');
-                if (settings.newWindow || (event && event.shiftKey)) return window.open(link);
+                if (settings.inlineWindow)
+                    return $2sxc._quickDialog.showOrToggle(sxc, link, callback, settings.dialog === "item-history", true, settings.dialog);
+                if (settings.newWindow || (event && event.shiftKey))
+                    return window.open(link);
                 return $2sxc.totalPopup.open(link, callback);
             },
 
@@ -1418,6 +1420,12 @@ if (!Array.prototype.find) {
             return container.find("iframe")[0];
         },
 
+        isShowing: function(sxc) {
+            return (diagManager.current // there is a current dialog
+                && diagManager.current.sxcCacheKey === sxc.cacheKey // the iframe is showing for the current sxc
+                && diagManager.current.dialogName === dialogName); // the view is the same as previously
+        },
+
         /**
          * show / reset the current iframe to use new url and callback
          * @param {} sxc 
@@ -1426,11 +1434,15 @@ if (!Array.prototype.find) {
          * @param {} fullScreen 
          * @returns {} 
          */
-        show: function(sxc, url, closeCallback, fullScreen) {
+        showOrToggle: function(sxc, url, closeCallback, fullScreen, allowToggle, dialogName) {
             setSize(fullScreen);
             var iFrame = diagManager.getIFrame();
 
-            iFrame.rewire(sxc, closeCallback);
+            // in case it's a toggle
+            if (allowToggle && diagManager.isShowing(sxc))
+                return diagManager.hide();
+
+            iFrame.rewire(sxc, closeCallback, dialogName);
             iFrame.setAttribute("src", rewriteUrl(url));
             // if the window had already been loaded, re-init
             if (iFrame.contentWindow && iFrame.contentWindow.reboot)
@@ -1439,7 +1451,10 @@ if (!Array.prototype.find) {
             // make sure it's visible'
             iFrame.toggle(true);
             return iFrame;
-        }
+        }, 
+
+        //showOrToggle: function(sxc, url, closeCallback, fullScreen, allowToggle, newView) {
+        //}
 
     };
 
@@ -1486,10 +1501,12 @@ if (!Array.prototype.find) {
 
         var newFrm = Object.assign(iFrame, {
             closeCallback: null,
-            rewire: function(sxc, callback) {
+            rewire: function(sxc, callback, dialogName) {
                 hiddenSxc = sxc;
-                tagModule = $( $($2sxc._manage.getTag(sxc)).parent().eq(0));
+                tagModule = $($($2sxc._manage.getTag(sxc)).parent().eq(0));
+                newFrm.sxcCacheKey = sxc.cacheKey;
                 newFrm.closeCallback = callback;
+                newFrm.dialogName = dialogName;
             },
 
             getManageInfo: function () { return reSxc().manage._dialogParameters; },
