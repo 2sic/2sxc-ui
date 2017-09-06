@@ -26,7 +26,7 @@
     <Content Include=".gitignore" />
     <Content Include="2sxc-api\angularjs\2sxc4ng.js" />
     <Content Include="2sxc-api\angularjs\bootstrapper.js" />
-    <Content Include="2sxc-api\js\2sxc.api.js" />
+    <TypeScriptCompile Include="2sxc-api\js\2sxc.api.ts" />
     <Content Include="gulpfile.js" />
     <Content Include="License.txt" />
     <Content Include="src\config\eav-configuration-in-sxc.js" />
@@ -39,17 +39,20 @@
     <Content Include="src\inpage\contentBlock\contentBlock.webApiPromises.js" />
     <Content Include="src\inpage\contentBlock\contentBlock.{}.js" />
     <Content Include="src\inpage\entity-manipulation\item-commands.js" />
-    <Content Include="src\inpage\dnn-workarounds\dnn-08.00.04.js" />
+    <TypeScriptCompile Include="typings\2sxc-js\deprecated\2sxcDeprecated.d.ts" />
+    <TypeScriptCompile Include="typings\2sxc-js\internals\2sxcInternals.d.ts" />
+    <TypeScriptCompile Include="typings\2sxc-js\2sxcInterfaces.d.ts" />
+    <TypeScriptCompile Include="src\inpage\dnn-workarounds\dnn-08.00.04.ts" />
     <Content Include="src\inpage\manage\manage.api.js" />
     <Content Include="src\inpage\manage\manage.{}.js" />
     <Content Include="src\inpage\quick-dialog\2sxc._quickDialog.js" />
     <Content Include="src\inpage\quick-dialog\quick-dialog.css" />
-    <Content Include="src\inpage\quick-dialog\polyfill.js" />
+    <Content Include="src\inpage\polyfills\Object.assign.js" />
     <Content Include="src\inpage\manage\manage.create.js" />
     <Content Include="src\inpage\commands\commands.definitions.js" />
     <Content Include="src\inpage\commands\commands.engine.js" />
     <Content Include="src\inpage\commands\commands.{}.js" />
-    <Content Include="src\inpage\dnn-menu-helper\dnn-inpage-edit.js" />
+    <TypeScriptCompile Include="src\inpage\dnn-menu-helper\dnn-inpage-edit.ts" />
     <Content Include="src\inpage\edit.css" />
     <Content Include="src\inpage\inpage-icons-codes.css" />
     <Content Include="src\inpage\lib-helpers\2sxc._lib.extend.js" />
@@ -207,6 +210,7 @@
     <Content Include="2sxc-api\angular\readme.md" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="2sxc-api\js\tsconfig.json" />
     <None Include="src\inpage\2sxc-extensions\readme.md" />
     <None Include="src\inpage\beta\readme.md" />
     <Content Include="src\inpage\dnn-menu-helper\readme.md" />

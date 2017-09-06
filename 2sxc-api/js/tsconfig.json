@@ -1,0 +1,25 @@
+{
+  "compileOnSave": true,
+  "compilerOptions": {
+    "outFile": "2sxc.api.js",
+    "noImplicitAny": false,
+    //"noEmitOnError": true,
+    "removeComments": true,
+    "sourceMap": true,
+    "inlineSources": true,
+    "target": "es5"
+    //"module":  "amd"
+    //"allowJs": true
+  },
+  "include": [
+    "./*.ts",
+    "../../typings/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "wwwroot"
+  ]
+  //"files": [
+  //  "../../typings/2sxcInterfaces.d.ts"
+  //]
+}

@@ -316,7 +316,7 @@ $(function () {
 
             'zone': makeDef("zone", "Zone", "manage", true, {
                 showCondition: enableTools
-            }),
+            })
             //#endregion
         };
 
@@ -990,14 +990,15 @@ $2sxc._contentBlock.manipulator = function (sxc) {
 var $2sxcActionMenuMapper = function (moduleId) {
     var run = $2sxc(moduleId).manage.run;
     return {
-        changeLayoutOrContent: function () { run('layout'); },
-        addItem: function () { run('add', { useModuleList: true, sortOrder: 0 }); },
+        changeLayoutOrContent: function () { run("layout"); },
+        addItem: function () { run("add", { useModuleList: true, sortOrder: 0 }); },
         edit: function () { run("edit", { useModuleList: true, sortOrder: 0 }); },
-        adminApp: function () { run('app'); },
-        adminZone: function () { run('zone'); },
-        develop: function () { run('template-develop'); },
+        adminApp: function () { run("app"); },
+        adminZone: function () { run("zone"); },
+        develop: function () { run("template-develop"); },
     };
 };
+//# sourceMappingURL=dnn-inpage-edit.js.map
 // The following script fixes a bug in DNN 08.00.04
 // the bug tries to detect a module-ID based on classes in a tag, 
 // but uses a bad regex and captures the number 2 on all 2sxc-modules 
@@ -1007,20 +1008,18 @@ var $2sxcActionMenuMapper = function (moduleId) {
 // 'DnnModule-2sxc DnnModule-xxx' -> DNN thinks the mod id is 2 (false)
 // 'DnnModule-xxx DnnModule-2sxc' -> DNN thinks the mod id is xxx (correct)
 // documented here https://github.com/2sic/2sxc/issues/986
-
-/**
- * Fix drag-drop functionality in dnn 08.00.04 - it has an incorrect regex
- */
 (function () {
     var fn = $.fn.attr;
     $.fn.attr = function () {
         var val = fn.apply(this, arguments);
-        if (arguments[0] !== 'class'
-            || typeof val !== 'string'
-            || val.search('DnnModule-2sxc ') === -1) return val;
-        return val.replace('DnnModule-2sxc ', '') + ' DnnModule-2sxc';
+        if (arguments[0] !== "class"
+            || typeof val !== "string"
+            || val.search("DnnModule-2sxc ") === -1)
+            return val;
+        return val.replace("DnnModule-2sxc ", "") + " DnnModule-2sxc";
     };
 })();
+//# sourceMappingURL=dnn-08.00.04.js.map
 // this enhances the $2sxc client controller with stuff only needed when logged in
 (function() {
     if (window.$2sxc) {
@@ -1341,6 +1340,30 @@ if (!Array.prototype.find) {
         }
     });
 }
+if (typeof Object.assign != 'function') {
+    Object.assign = function (target, varArgs) { // .length of function is 2
+        'use strict';
+        if (target === null) { // TypeError if undefined or null
+            throw new TypeError('Cannot convert undefined or null to object');
+        }
+
+        var to = Object(target);
+
+        for (var index = 1; index < arguments.length; index++) {
+            var nextSource = arguments[index];
+
+            if (nextSource !== null) { // Skip over if undefined or null
+                for (var nextKey in nextSource) {
+                    // Avoid bugs when hasOwnProperty is shadowed
+                    if (Object.prototype.hasOwnProperty.call(nextSource, nextKey)) {
+                        to[nextKey] = nextSource[nextKey];
+                    }
+                }
+            }
+        }
+        return to;
+    };
+}
 
 // this is a dialog manager which is in charge of all
 // quick-dialogs. 
@@ -1362,8 +1385,7 @@ if (!Array.prototype.find) {
 
         /**
          * toggle visibility
-         * @param {boolean} [show]
-         * @returns {} 
+         * @param {boolean} [show] true/false optional
          */
         toggle: function (show) {
             var cont = $(diagManager.getContainer());
@@ -1387,6 +1409,7 @@ if (!Array.prototype.find) {
 
         /**
          * Remember dialog state across page-reload
+         * @param {Object<any>} sxc - the sxc which is persisted for
          */
         persistDialog: function(sxc) {
             sessionStorage.setItem("dia-cbid", sxc.cbid);
@@ -1398,12 +1421,12 @@ if (!Array.prototype.find) {
          */
         getContainer: function() {
             var container = $(".inpage-frame-wrapper");
-            return (container.length > 0) ? container : buildContainerAndIFrame();
+            return container.length > 0 ? container : buildContainerAndIFrame();
         },
 
         /**
          * find the iframe which hosts the dialog
-         * @param {html} [container]
+         * @param {html} [container] - html-container as jQuery object
          * @returns {html} iframe object
          */
         getIFrame: function(container) {
@@ -1413,23 +1436,24 @@ if (!Array.prototype.find) {
 
         /**
          * check if the dialog is showing for the current sxc-instance
-         * @param {Object<>} sxc 
-         * @param {string} dialogName 
-         * @returns {boolean} 
+         * @param {Object<any>} sxc - sxc object
+         * @param {string} dialogName - name of dialog
+         * @returns {boolean} true if it's currently showing for this sxc-instance
          */
         isShowing: function(sxc, dialogName) {
-            return (diagManager.current // there is a current dialog
+            return diagManager.current // there is a current dialog
                 && diagManager.current.sxcCacheKey === sxc.cacheKey // the iframe is showing for the current sxc
-                && diagManager.current.dialogName === dialogName); // the view is the same as previously
+                && diagManager.current.dialogName === dialogName; // the view is the same as previously
         },
 
         /**
          * show / reset the current iframe to use new url and callback
-         * @param {} sxc 
-         * @param {} url 
-         * @param {} closeCallback 
-         * @param {} fullScreen 
-         * @returns {} 
+         * @param {any} sxc - sxc object
+         * @param {string} url - url to show
+         * @param {function()} closeCallback - callback event
+         * @param {boolean} fullScreen - if it should open full screen
+         * @param {string} [dialogName] - optional name of dialog, to check if it's already open
+         * @returns {any} jquery object of the iframe
          */
         showOrToggle: function(sxc, url, closeCallback, fullScreen, dialogName) {
             setSize(fullScreen);
@@ -1485,7 +1509,6 @@ if (!Array.prototype.find) {
 
         /**
         * get the sxc-object of this iframe
-        * @param {Object<any>} [newSxc]
         * @returns {Object<any>} refreshed sxc-object
         */
         function reSxc() {
@@ -1536,7 +1559,7 @@ if (!Array.prototype.find) {
     /**
      * rewrite the url to fit the quick-dialog situation
      * optionally with a live-compiled version from ng-serve
-     * @param {string} url 
+     * @param {string} url - original url pointing to the "wrong" dialog
      * @returns {string} new url
      */
     function rewriteUrl(url) {
@@ -1549,13 +1572,16 @@ if (!Array.prototype.find) {
             var devMode = localStorage.getItem("devMode");
             if (devMode && ~~devMode)
                 url = url.replace("/desktopmodules/tosic_sexycontent/dist/ng/ui.html", "http://localhost:4200");
-        } catch (e) { }
+        } catch (e) {
+            // ignore
+        }
         return url;
     }
 
     /**
      * create watcher which monitors the iframe size and adjusts the container as needed
-     * @returns {} 
+     * @param {boolean} [keepWatching] optional true/false to start/stop the watcher
+     * @returns {null} nothing
      */
     function watchForResize(keepWatching) {
         if (keepWatching === false && resizeWatcher) {
@@ -1580,6 +1606,7 @@ if (!Array.prototype.find) {
                         frm.style.position = "absolute";
                     }
                 } catch (e) {
+                    // ignore
                 }
             },
                 resizeInterval);
@@ -1587,30 +1614,6 @@ if (!Array.prototype.find) {
     }
 
 })();
-if (typeof Object.assign != 'function') {
-    Object.assign = function (target, varArgs) { // .length of function is 2
-        'use strict';
-        if (target === null) { // TypeError if undefined or null
-            throw new TypeError('Cannot convert undefined or null to object');
-        }
-
-        var to = Object(target);
-
-        for (var index = 1; index < arguments.length; index++) {
-            var nextSource = arguments[index];
-
-            if (nextSource !== null) { // Skip over if undefined or null
-                for (var nextKey in nextSource) {
-                    // Avoid bugs when hasOwnProperty is shadowed
-                    if (Object.prototype.hasOwnProperty.call(nextSource, nextKey)) {
-                        to[nextKey] = nextSource[nextKey];
-                    }
-                }
-            }
-        }
-        return to;
-    };
-}
 $(function () {
     "use strict";
 
