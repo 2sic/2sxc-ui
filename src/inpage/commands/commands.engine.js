@@ -51,7 +51,7 @@
                     },
 
                     // build the link, combining specific params with global ones and put all in the url
-                    generateLink: function (dialogUrl) {
+                    generateLink: function () {
                         // if there is no items-array, create an empty one (it's required later on)
                         if (!cmd.settings.items) cmd.settings.items = [];
                         //#region steps for all actions: prefill, serialize, open-dialog
@@ -62,9 +62,16 @@
                             }
                         }
                         cmd.params.items = JSON.stringify(cmd.items); // Serialize/json-ify the complex items-list
-                        
-                        return (dialogUrl || ngDialogUrl)
-                            + "#" + $.param(sxc.manage._dialogParameters)
+
+                        // clone the params and adjust parts based on partOfPage settings...
+                        var sharedParams = $2sxc._lib.extend({}, sxc.manage._dialogParameters);
+                        if (!cmd.settings.partOfPage) {
+                            delete sharedParams.versioningRequirements;
+                            sharedParams.partOfPage = false;
+                        }
+
+                        return ngDialogUrl
+                            + "#" + $.param(sharedParams)
                             + "&" + $.param(cmd.params)
                             + isDebug;
                         //#endregion
@@ -82,13 +89,6 @@
 
                 // if the command has own configuration stuff, do that now
                 if (cmd.settings.configureCommand) cmd.settings.configureCommand(cmd);
-
-                //if (specialSettings.angularDialog) {
-                //    var modernDialogUrl = sxc.manage._editContext.Environment.SxcRootUrl
-                //        + "desktopmodules/tosic_sexycontent/dist/ng/ui.html?sxcver="
-                //        + sxc.manage._editContext.Environment.SxcVersion;
-                //    return cmd.generateLink(modernDialogUrl);
-                //}
 
                 return cmd.generateLink();
             },

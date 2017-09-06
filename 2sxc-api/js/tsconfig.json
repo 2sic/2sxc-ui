@@ -19,7 +19,4 @@
     "node_modules",
     "wwwroot"
   ]
-  //"files": [
-  //  "../../typings/2sxcInterfaces.d.ts"
-  //]
 }

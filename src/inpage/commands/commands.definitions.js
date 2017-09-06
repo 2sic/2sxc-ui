@@ -17,12 +17,16 @@
 
 (function () {
     // helper function to create the configuration object
-    function makeDef(name, translateKey, icon, uiOnly, more) {
+    function makeDef(name, translateKey, icon, uiOnly, partOfPage, more) {
+        if (typeof (partOfPage) !== "boolean")
+            throw "partOfPage in commands not provided, order will be wrong!";
+
         return $2sxc._lib.extend({
             name: name,
             title: "Toolbar." + translateKey,
             icon: "icon-sxc-" + icon,
-            uiActionOnly: uiOnly
+            uiActionOnly: uiOnly,
+            partOfPage: partOfPage
         }, more);
     }
 
@@ -33,13 +37,15 @@
 
         var act = {
             // show the basic dashboard which allows view-changing
-            "dash-view": makeDef("dash-view", "Dashboard", "", true, { inlineWindow: true }),
+            // 2017-09-06 2dm "dash-view" deprecated - old name for now "layout" - should not be used any more!
+            //"dash-view": makeDef("dash-view", "Dashboard", "", true, { inlineWindow: true }),
 
             // open the import dialog
-            "app-import": makeDef("app-import", "Dashboard", "", true, {}),
+            "app-import": makeDef("app-import", "Dashboard", "", true, false, {}),
 
             // open an edit-item dialog
-            'edit': makeDef("edit", "Edit", "pencil", false, {
+            // todo: IS partOfPage
+            'edit': makeDef("edit", "Edit", "pencil", false, true, {
                 params: { mode: "edit" },
                 showCondition: function (settings, modConfig) {
                     return settings.entityId || settings.useModuleList; // need ID or a "slot", otherwise edit won't work
@@ -50,7 +56,8 @@
             // new can also be used for mini-toolbars which just add an entity not attached to a module
             // in that case it's essential to add a contentType like 
             // <ul class="sc-menu" data-toolbar='{"action":"new", "contentType": "Category"}'></ul>
-            'new': makeDef("new", "New", "plus", false, {
+            // todo: IS partOfPage
+            'new': makeDef("new", "New", "plus", false, true, {
                 params: { mode: "new" },
                 dialog: "edit", // don't use "new" (default) but use "edit"
                 showCondition: function (settings, modConfig) {
@@ -63,7 +70,8 @@
             }),
 
             // add brings no dialog, just add an empty item
-            'add': makeDef("add", "AddDemo", "plus-circled", false, {
+            // todo: IS partOfPage
+            'add': makeDef("add", "AddDemo", "plus-circled", false, true, {
                 showCondition: function (settings, modConfig) {
                     return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1;
                 },
@@ -73,7 +81,8 @@
             }),
 
             // create a metadata toolbar
-            "metadata": makeDef("metadata", "Metadata", "tag", false, {
+            // todo: not partOfPage
+            "metadata": makeDef("metadata", "Metadata", "tag", false, false, {
                 params: { mode: "new" },
                 dialog: "edit", // don't use "new" (default) but use "edit"
                 dynamicClasses: function (settings) {
@@ -94,7 +103,8 @@
             }),
 
             // remove an item from the placeholder (usually for lists)
-            'remove': makeDef("remove", "Remove", "minus-circled", false, {
+            // todo: IS partOfPage
+            'remove': makeDef("remove", "Remove", "minus-circled", false, true, {
                 showCondition: function (settings, modConfig) {
                     return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1;
                 },
@@ -108,7 +118,7 @@
             }),
 
             // todo: work in progress related to https://github.com/2sic/2sxc/issues/618
-            'delete': makeDef("deleteItem", "Delete", "cancel", true, {
+            'delete': makeDef("deleteItem", "Delete", "cancel", true, false, {
                 // disabled: true,
                 showCondition: function (settings) {
                     // can never be used for a modulelist item, as it is always in use somewhere
@@ -123,7 +133,8 @@
                 }
             }),
 
-            'moveup': makeDef("moveup", "MoveUp", "move-up", false, {
+            // todo: IS partOfPage
+            'moveup': makeDef("moveup", "MoveUp", "move-up", false, true, {
                 showCondition: function (settings, modConfig) {
                     return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1 && settings.sortOrder !== 0;
                 },
@@ -132,7 +143,8 @@
                 }
             }),
 
-            'movedown': makeDef("movedown", "MoveDown", "move-down", false, {
+            // todo: IS partOfPage
+            'movedown': makeDef("movedown", "MoveDown", "move-down", false, true, {
                 showCondition: function (settings, modConfig) {
                     return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1;
                 },
@@ -141,11 +153,14 @@
                 }
             }),
 
-            'instance-list': makeDef("instance-list", "Sort", "list-numbered", false, {
+            // todo: IS partOfPage
+            'instance-list': makeDef("instance-list", "Sort", "list-numbered", false, true, {
                 showCondition: function (settings, modConfig) { return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1; }
             }),
 
-            'publish': makeDef("publish", "Unpublished", "eye-off", false, {
+            // todo: not partOfPage 
+            // todo: shouldn't be available if changes are not allowed
+            'publish': makeDef("publish", "Unpublished", "eye-off", false, false, {
                 showCondition: function (settings, modConfig) {
                     return settings.isPublished === false;
                 },
@@ -161,12 +176,14 @@
                 }
             }),
 
-            'replace': makeDef("replace", "Replace", "replace", false, {
+            // todo: IS partOfPage
+            'replace': makeDef("replace", "Replace", "replace", false, true, {
                 showCondition: function (settings) { return settings.useModuleList; }
             }),
 
             //#region app-actions: app-settings, app-resources
-            'app-settings': makeDef("app-settings", "AppSettings", "sliders", true, {
+            // todo: not partOfPage
+            'app-settings': makeDef("app-settings", "AppSettings", "sliders", true, false, {
                 dialog: "edit",
                 disabled: editContext.appSettingsId === null,
                 title: "Toolbar.AppSettings" + (editContext.appSettingsId === null ? "Disabled" : ""),
@@ -181,7 +198,8 @@
                 }
             }),
 
-            'app-resources': makeDef("app-resources", "AppResources", "language", true, {
+            // todo: not partOfPage
+            'app-resources': makeDef("app-resources", "AppResources", "language", true, false, {
                 dialog: "edit",
                 disabled: editContext.appResourcesId === null,
                 title: "Toolbar.AppResources" + (editContext.appResourcesId === null ? "Disabled" : ""),
@@ -198,11 +216,13 @@
             //#endregion
 
             //#region app & zone
-            'app': makeDef("app", "App", "settings", true, {
+            // todo: not partOfPage
+            'app': makeDef("app", "App", "settings", true, false, {
                 showCondition: enableTools
             }),
 
-            'zone': makeDef("zone", "Zone", "manage", true, {
+            // todo: not partOfPage
+            'zone': makeDef("zone", "Zone", "manage", true, false, {
                 showCondition: enableTools
             })
             //#endregion
@@ -214,11 +234,13 @@
         }
 
         //#region template commands: contenttype, contentitems, template-query, template-develop, template-settings
-        addDef(makeDef("contenttype", "ContentType", "fields", true, {
+        // todo: not partOfPage
+        addDef(makeDef("contenttype", "ContentType", "fields", true, false, {
             showCondition: enableTools
         }));
 
-        addDef(makeDef("contentitems", "ContentItems", "table", true, {
+        // todo: not partOfPage
+        addDef(makeDef("contentitems", "ContentItems", "table", true, false, {
             params: { contentTypeName: editContext.contentTypeId },
             showCondition: function (settings, modConfig) {
                 return enableTools && (settings.contentType || editContext.contentTypeId);
@@ -242,7 +264,7 @@
             }
         }));
 
-        addDef(makeDef("template-develop", "Develop", "code", true, {
+        addDef(makeDef("template-develop", "Develop", "code", true, false, {
             newWindow: true,
             dialog: "develop",
             showCondition: enableTools,
@@ -251,7 +273,8 @@
             }
         }));
 
-        addDef(makeDef("template-query", "QueryEdit", "filter", true, {
+        // todo: not partOfPage
+        addDef(makeDef("template-query", "QueryEdit", "filter", true, false, {
             dialog: "pipeline-designer",
             params: { pipelineId: editContext.queryId },
             newWindow: true,
@@ -265,7 +288,8 @@
             }
         }));
 
-        addDef(makeDef("template-settings", "TemplateSettings", "sliders", true, {
+        // todo: not partOfPage
+        addDef(makeDef("template-settings", "TemplateSettings", "sliders", true, false, {
             dialog: "edit",
             showCondition: enableTools,
             configureCommand: function (cmd) {
@@ -276,7 +300,8 @@
         //#endregion template commands
 
         //#region custom code buttons
-        addDef(makeDef("custom", "Custom", "bomb", true, {
+        // todo: not partOfPage
+        addDef(makeDef("custom", "Custom", "bomb", true, false, {
             code: function (settings, event, sxc) {
                 var fn;
                 console.log("custom action with code - BETA feature, may change");
@@ -295,11 +320,11 @@
         //#endregion
 
 
-        addDef(makeDef("layout", "ChangeLayout", "glasses", true, {
+        addDef(makeDef("layout", "ChangeLayout", "glasses", true, true, {
              inlineWindow: true 
         }));
 
-        addDef(makeDef("more", "MoreActions", "options btn-mode", true, {
+        addDef(makeDef("more", "MoreActions", "options btn-mode", true, false, {
             code: function (settings, event) {
                 var btn = $(event.target),
                     fullMenu = btn.closest("ul.sc-menu"),
@@ -314,7 +339,7 @@
         }));
         
         // show the version dialog
-        addDef(makeDef("item-history", "ItemHistory", "clock", true, {
+        addDef(makeDef("item-history", "ItemHistory", "clock", true, false, {
             inlineWindow: true,
             fullScreen: true
         }));
