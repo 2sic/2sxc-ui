@@ -388,4 +388,3 @@ interface Window { $2sxc: SxcControllerWithInternals; }
     };
 })();
 // ReSharper restore InconsistentNaming
-
