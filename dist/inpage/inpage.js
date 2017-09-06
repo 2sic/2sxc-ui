@@ -61,7 +61,9 @@ $(function () {
     var initializedModules = [];
 
     initAllModules(true);
-    document.body.addEventListener("DOMSubtreeModified", initAllModules, false);
+
+    // watch for ajax reloads on edit or view-changes, to re-init the toolbars etc.
+    document.body.addEventListener("DOMSubtreeModified", function(event) { initAllModules(false); }, false);
     
     function initAllModules(isFirstRun) {
         $("div[data-edit-context]").each(function () { initModule(this, isFirstRun); });
@@ -76,14 +78,18 @@ $(function () {
         // add to modules-list
         initializedModules.push(module);
 
+
+
         var sxc = $2sxc(module);
 
-        // note: this can't work - just re-finding the tag will cause many side-effects
-        // the tag might have changed
-        //ctl.manage.reloadContentBlockTag();
-        var uninitialized = showGlassesButtonIfUninitialized(sxc);
+        // check if the sxc must be re-created. This is necessary when modules are dynamically changed
+        // because the configuration may change, and that is cached otherwise, resulting in toolbars with wrong config
+        if (!isFirstRun) sxc = sxc.recreate(true);
 
-        if (isFirstRun && !uninitialized) $2sxc._toolbarManager.buildToolbars(module);
+        // only try to add the glasses if it's the first run...
+        var uninitialized = isFirstRun && showGlassesButtonIfUninitialized(sxc);
+
+        if (!uninitialized) $2sxc._toolbarManager.buildToolbars(module);
 
         return true;
     }
