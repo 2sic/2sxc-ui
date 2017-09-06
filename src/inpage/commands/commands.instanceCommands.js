@@ -8,7 +8,8 @@
             isContent: cg.IsContent,
             queryId: cg.QueryId,
             appResourcesId: cg.AppResourcesId,
-            appSettingsId: cg.AppSettingsId
+            appSettingsId: cg.AppSettingsId,
+            allowPublish: editContext.ContentBlock.VersioningRequirements === $2sxc.c.publishAllowed
         });
     };
 

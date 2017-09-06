@@ -13,7 +13,7 @@
         var editContext = mngApi.getEditContext(sxc);
         var userInfo = mngApi.getUserOfEditContext(editContext);
 
-        var cmdEngine = $2sxc._commands.instanceEngine(sxc, /* contentBlockTag, */ editContext);
+        var cmdEngine = $2sxc._commands.instanceEngine(sxc, editContext);
 
         var editManager = sxc.manage = {
             //#region Official, public properties and commands, which are stable for use from the outside

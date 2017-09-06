@@ -15,7 +15,9 @@
             toolbarData: "data-toolbar",
             settings: "settings",
             settingsData: "data-settings"
-        }
+        },
+
+        publishAllowed: "DraftOptional"
 
     };
 
