@@ -181,3 +181,4 @@ _/
 # build dest
 # dist/
 # Js/
+.vs/
