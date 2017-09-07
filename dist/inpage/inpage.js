@@ -273,7 +273,10 @@ $(function () {
             // todo: shouldn't be available if changes are not allowed
             'publish': makeDef("publish", "Unpublished", "eye-off", false, false, {
                 showCondition: function (settings, modConfig) {
-                    return settings.isPublished === false && cmdSpecs.allowPublish;
+                    return settings.isPublished === false;
+                },
+                disabled: function(settings, modConfig) {
+                    return !cmdSpecs.allowPublish;
                 },
                 code: function (settings, event, sxc) {
                     if (settings.isPublished) return alert($2sxc.translate("Toolbar.AlreadyPublished"));
@@ -518,6 +521,7 @@ $(function () {
                         var sharedParams = $2sxc._lib.extend({}, sxc.manage._dialogParameters);
                         if (!cmd.settings.partOfPage) {
                             delete sharedParams.versioningRequirements;
+                            delete sharedParams.publishing;
                             sharedParams.partOfPage = false;
                         }
 
@@ -1197,7 +1201,8 @@ var $2sxcActionMenuMapper = function (moduleId) {
             portalroot: editContext.Environment.WebsiteUrl,
             websiteroot: editContext.Environment.SxcRootUrl,
             partOfPage: editContext.ContentBlock.PartOfPage,
-            versioningRequirements: editContext.ContentBlock.VersioningRequirements,
+            //versioningRequirements: editContext.ContentBlock.VersioningRequirements,
+            publishing: editContext.ContentBlock.VersioningRequirements,
 
             // todo: probably move the user into the dashboard info
             user: $2sxc._manage.getUserOfEditContext(editContext),
@@ -2561,7 +2566,7 @@ $(function () {
         flattenActionDefinition(actDef);
 
         // retrieve configuration for this button
-        var showClasses = "group-" + groupIndex,
+        var showClasses = "group-" + groupIndex + (actDef.disabled ? " disabled" : ""),
             classesList = (actDef.classes || "").split(","),
             box = $("<div/>"),
             symbol = $("<i class=\"" + actDef.icon + "\" aria-hidden=\"true\"></i>"),
@@ -2641,7 +2646,7 @@ $(function () {
             // ToDo: don't use console.log in production
             if (unstructuredConfig.debug) console.log("toolbar: detailed debug on; start build full Def");
             tools.expandButtonGroups(fullConfig, allActions);
-            tools.removeButtonsWithUnmetConditions(fullConfig, instanceConfig);
+            tools.removeDisableButtons(fullConfig, instanceConfig);
             if (fullConfig.debug) console.log("after remove: ", fullConfig);
 
             tools.customize(fullConfig);
@@ -2783,25 +2788,33 @@ $(function () {
         },
 
         // remove buttons which are not valid based on add condition
-        removeButtonsWithUnmetConditions: function (full, config) {
+        removeDisableButtons: function (full, config) {
             var btnGroups = full.groups;
             for (var g = 0; g < btnGroups.length; g++) {
                 var btns = btnGroups[g].buttons;
-                removeButtonsIfAddUnmet(btns, config);
+                removeUnfitButtons(btns, config);
+                disableButtons(btns, config);
 
                 // remove the group, if no buttons left, or only "more"
                 if (btns.length === 0 || (btns.length === 1 && btns[0].command.action === "more"))
                     btnGroups.splice(g--, 1);   // remove, and decrement counter
             }
 
-            function removeButtonsIfAddUnmet(btns, config) {
+            function removeUnfitButtons(btns, config) {
                 for (var i = 0; i < btns.length; i++) {
-                    var add = btns[i].showCondition;
-                    if (add !== undefined)
-                        if (typeof (add) === "function" ? !add(btns[i].command, config) : !add)
-                            btns.splice(i--, 1);
+                    //var add = btns[i].showCondition;
+                    //if (add !== undefined)
+                    //    if (typeof (add) === "function" ? !add(btns[i].command, config) : !add)
+                    if (!tools.evalPropOrFunction(btns[i].showCondition, btns[i].command, config, true))
+                        btns.splice(i--, 1);
                 }
             }
+
+            function disableButtons(btns, config) {
+                for (var i = 0; i < btns.length; i++) 
+                    btns[i].disabled = tools.evalPropOrFunction(btns[i].disabled, btns[i].command, config, false);
+            }
+
         },
 
         btnProperties: [
@@ -2844,6 +2857,12 @@ $(function () {
             //        }
             //    }
             //}
+        },
+
+        evalPropOrFunction: function(propOrFunction, settings, config, fallback) {
+            if (propOrFunction === undefined || propOrFunction === null)
+                return fallback;
+            return typeof (propOrFunction) === "function" ? propOrFunction(settings, config) : propOrFunction;
         }
     };
 

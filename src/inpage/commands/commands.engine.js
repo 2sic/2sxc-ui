@@ -67,6 +67,7 @@
                         var sharedParams = $2sxc._lib.extend({}, sxc.manage._dialogParameters);
                         if (!cmd.settings.partOfPage) {
                             delete sharedParams.versioningRequirements;
+                            delete sharedParams.publishing;
                             sharedParams.partOfPage = false;
                         }
 

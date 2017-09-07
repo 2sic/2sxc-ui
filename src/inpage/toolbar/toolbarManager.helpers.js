@@ -24,7 +24,7 @@
             // ToDo: don't use console.log in production
             if (unstructuredConfig.debug) console.log("toolbar: detailed debug on; start build full Def");
             tools.expandButtonGroups(fullConfig, allActions);
-            tools.removeButtonsWithUnmetConditions(fullConfig, instanceConfig);
+            tools.removeDisableButtons(fullConfig, instanceConfig);
             if (fullConfig.debug) console.log("after remove: ", fullConfig);
 
             tools.customize(fullConfig);
@@ -166,25 +166,33 @@
         },
 
         // remove buttons which are not valid based on add condition
-        removeButtonsWithUnmetConditions: function (full, config) {
+        removeDisableButtons: function (full, config) {
             var btnGroups = full.groups;
             for (var g = 0; g < btnGroups.length; g++) {
                 var btns = btnGroups[g].buttons;
-                removeButtonsIfAddUnmet(btns, config);
+                removeUnfitButtons(btns, config);
+                disableButtons(btns, config);
 
                 // remove the group, if no buttons left, or only "more"
                 if (btns.length === 0 || (btns.length === 1 && btns[0].command.action === "more"))
                     btnGroups.splice(g--, 1);   // remove, and decrement counter
             }
 
-            function removeButtonsIfAddUnmet(btns, config) {
+            function removeUnfitButtons(btns, config) {
                 for (var i = 0; i < btns.length; i++) {
-                    var add = btns[i].showCondition;
-                    if (add !== undefined)
-                        if (typeof (add) === "function" ? !add(btns[i].command, config) : !add)
-                            btns.splice(i--, 1);
+                    //var add = btns[i].showCondition;
+                    //if (add !== undefined)
+                    //    if (typeof (add) === "function" ? !add(btns[i].command, config) : !add)
+                    if (!tools.evalPropOrFunction(btns[i].showCondition, btns[i].command, config, true))
+                        btns.splice(i--, 1);
                 }
             }
+
+            function disableButtons(btns, config) {
+                for (var i = 0; i < btns.length; i++) 
+                    btns[i].disabled = tools.evalPropOrFunction(btns[i].disabled, btns[i].command, config, false);
+            }
+
         },
 
         btnProperties: [
@@ -227,6 +235,12 @@
             //        }
             //    }
             //}
+        },
+
+        evalPropOrFunction: function(propOrFunction, settings, config, fallback) {
+            if (propOrFunction === undefined || propOrFunction === null)
+                return fallback;
+            return typeof (propOrFunction) === "function" ? propOrFunction(settings, config) : propOrFunction;
         }
     };
 

@@ -153,7 +153,10 @@
             // todo: shouldn't be available if changes are not allowed
             'publish': makeDef("publish", "Unpublished", "eye-off", false, false, {
                 showCondition: function (settings, modConfig) {
-                    return settings.isPublished === false && cmdSpecs.allowPublish;
+                    return settings.isPublished === false;
+                },
+                disabled: function(settings, modConfig) {
+                    return !cmdSpecs.allowPublish;
                 },
                 code: function (settings, event, sxc) {
                     if (settings.isPublished) return alert($2sxc.translate("Toolbar.AlreadyPublished"));

@@ -103,7 +103,8 @@
             portalroot: editContext.Environment.WebsiteUrl,
             websiteroot: editContext.Environment.SxcRootUrl,
             partOfPage: editContext.ContentBlock.PartOfPage,
-            versioningRequirements: editContext.ContentBlock.VersioningRequirements,
+            //versioningRequirements: editContext.ContentBlock.VersioningRequirements,
+            publishing: editContext.ContentBlock.VersioningRequirements,
 
             // todo: probably move the user into the dashboard info
             user: $2sxc._manage.getUserOfEditContext(editContext),

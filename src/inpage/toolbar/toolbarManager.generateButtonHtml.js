@@ -20,7 +20,7 @@
         flattenActionDefinition(actDef);
 
         // retrieve configuration for this button
-        var showClasses = "group-" + groupIndex,
+        var showClasses = "group-" + groupIndex + (actDef.disabled ? " disabled" : ""),
             classesList = (actDef.classes || "").split(","),
             box = $("<div/>"),
             symbol = $("<i class=\"" + actDef.icon + "\" aria-hidden=\"true\"></i>"),
