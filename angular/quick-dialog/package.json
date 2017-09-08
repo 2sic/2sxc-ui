@@ -10,7 +10,8 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "watch": "ng build --watch --output-hashing=none",
-    "prod": "ng build --prod --output-hashing=none --sourcemaps=false"
+    "prod": "ng build --prod --output-hashing=none --sourcemaps=false",
+    "prod-source-maps": "ng build --prod --output-hashing=none --sourcemaps=true"
   },
   "private": true,
   "dependencies": {
@@ -51,6 +52,7 @@
     "protractor": "~5.1.0",
     "ts-node": "~2.0.0",
     "tslint": "~4.5.0",
-    "typescript": "~2.2.0"
+    "typescript": "~2.2.0",
+    "uglify-js": "^2.8.29"
   }
 }

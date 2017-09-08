@@ -29,10 +29,11 @@ $(function () {
         // because the configuration may change, and that is cached otherwise, resulting in toolbars with wrong config
         if (!isFirstRun) sxc = sxc.recreate(true);
 
-        // only try to add the glasses if it's the first run...
-        var uninitialized = isFirstRun && showGlassesButtonIfUninitialized(sxc);
+        // check if we must show the glasses
+        // this must run even after first-run, because it can be added ajax-style
+        var wasEmpty = showGlassesButtonIfUninitialized(sxc);
 
-        if (!uninitialized) $2sxc._toolbarManager.buildToolbars(module);
+        if (isFirstRun || !wasEmpty) $2sxc._toolbarManager.buildToolbars(module);
 
         return true;
     }

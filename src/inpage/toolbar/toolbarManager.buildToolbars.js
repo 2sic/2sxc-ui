@@ -35,12 +35,13 @@
 
         // todo: change mechanism to not render toolbar, this uses a secret class name which the toolbar shouldn't know
         // don't add, if it is has un-initialized content
-        var disableAutoAdd = $(".sc-uninitialized", parentTag).length !== 0;
+        // 2017-09-08 2dm disabled this, I believe the bootstrapping should never call this any more, if sc-uninitialized. if ok, then delete this in a few days
+        //var disableAutoAdd = $(".sc-uninitialized", parentTag).length !== 0;
 
         var toolbars = getToolbarTags(parentTag);
 
         // no toolbars found, must help a bit because otherwise editing is hard
-        if (toolbars.length === 0 && !disableAutoAdd) {
+        if (toolbars.length === 0){// && !disableAutoAdd) {
             if (dbg) console.log("didn't find toolbar, so will auto-create", parentTag);
 
             var outsideCb = !parentTag.hasClass($2sxc.c.cls.scCb); // "sc-content-block");
