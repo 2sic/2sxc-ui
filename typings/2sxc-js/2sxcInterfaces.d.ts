@@ -90,15 +90,42 @@ interface SxcWebApi {
     /**
      * returns an http-get promise
      * @param settingsOrUrl the url to get
-     * @param params 
-     * @param data 
+     * @param params jQuery style ajax parameters
+     * @param data jQuery style data for post/put requests
      * @param preventAutoFail 
-     * @returns {} 
+     * @returns {Promise} jQuery ajax promise object
      */
-    get(settingsOrUrl, params?, data?, preventAutoFail?): any,
-    post(settings, params?, data?, preventAutoFail?): any,
-    delete(settings, params?, data?, preventAutoFail?): any,
-    put(settings, params?, data?, preventAutoFail?): any,
+    get(settingsOrUrl, params?, data?, preventAutoFail?: boolean): any,
+
+    /**
+     * returns an http-get promise
+     * @param settingsOrUrl the url to get
+     * @param params jQuery style ajax parameters
+     * @param data jQuery style data for post/put requests
+     * @param preventAutoFail 
+     * @returns {Promise} jQuery ajax promise object
+     */
+    post(settings, params?, data?, preventAutoFail?: boolean): any,
+
+    /**
+     * returns an http-get promise
+     * @param settingsOrUrl the url to get
+     * @param params jQuery style ajax parameters
+     * @param data jQuery style data for post/put requests
+     * @param preventAutoFail 
+     * @returns {Promise} jQuery ajax promise object
+     */
+    delete(settings, params?, data?, preventAutoFail?: boolean): any,
+
+    /**
+     * returns an http-get promise
+     * @param settingsOrUrl the url to get
+     * @param params jQuery style ajax parameters
+     * @param data jQuery style data for post/put requests
+     * @param preventAutoFail 
+     * @returns {Promise} jQuery ajax promise object
+     */
+    put(settings, params?, data?, preventAutoFail?: boolean): any,
 }
 
 
