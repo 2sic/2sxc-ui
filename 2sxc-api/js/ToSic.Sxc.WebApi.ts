@@ -1,7 +1,11 @@
 ﻿
 module ToSic.Sxc {
 
-
+    /**
+    * helper API to run ajax / REST calls to the server
+    * it will ensure that the headers etc. are set correctly
+    * and that urls are rewritten
+    */
     export class SxcWebApiWithInternals {
         constructor(
             private readonly controller: SxcInstance,
