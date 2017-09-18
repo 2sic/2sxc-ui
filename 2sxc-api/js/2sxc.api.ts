@@ -8,18 +8,19 @@ declare const $;
 // ReSharper disable InconsistentNaming
 interface Window { $2sxc: SxcControllerWithInternals; }
 
+
 (() => {
     if (window.$2sxc) return;   // prevent double execution
 
-    var $2sxc = window.$2sxc = getInstance as SxcControllerWithInternals;
-
-    function getInstance(id: number | HTMLElement, cbid?: number) : SxcInstanceWithInternals  {
+    var $2sxc = window.$2sxc = getInstance as any as SxcControllerWithInternals;
+    
+    function getInstance(id: number | HTMLElement, cbid?: number): ToSic.Sxc.SxcInstanceWithInternals  {
 
         // if it's a dom-element, use auto-find
         if (typeof id === "object") return autoFind(id);
 
         if (!cbid) cbid = id;           // if content-block is unknown, use id of module
-        var cacheKey = id + ":" + cbid; // neutralize the id from old "34" format to the new "35:353" format
+        const cacheKey = id + ":" + cbid; // neutralize the id from old "34" format to the new "35:353" format
 
         // either get the cached controller from previous calls, or create a new one
         if ($2sxc._controllers[cacheKey]) return $2sxc._controllers[cacheKey];
@@ -27,252 +28,9 @@ interface Window { $2sxc: SxcControllerWithInternals; }
         // also init the data-cache in case it's ever needed
         if (!$2sxc._data[cacheKey]) $2sxc._data[cacheKey] = {};
 
-        var controller:SxcInstanceWithInternals = $2sxc._controllers[cacheKey] = {
-            serviceScopes: ["app", "app-sys", "app-api", "app-query", "app-content", "eav", "view", "dnn"],
-            serviceRoot: $.ServicesFramework(id).getServiceRoot("2sxc"),
-            resolveServiceUrl(virtualPath: string) {
-                const scope = virtualPath.split("/")[0].toLowerCase();
-
-                // stop if it's not one of our special paths
-                if (controller.serviceScopes.indexOf(scope) === -1)
-                    return virtualPath;
-
-                return controller.serviceRoot + scope + "/" + virtualPath.substring(virtualPath.indexOf("/") + 1);
-            },
-
-            data: {
-                // source path defaulting to current page + optional params
-                sourceUrl(params?: string): string {
-                    let url = controller.resolveServiceUrl("app-sys/appcontent/GetContentBlockData");
-                    if (typeof params == "string") // text like 'id=7'
-                        url += "&" + params;
-                    return url;
-                },
-
-                source: undefined as any,
-
-                // in-streams
-                "in": {} as any,
-
-                // Will hold the default stream (["in"]["Default"].List
-                List: [] as any,
-
-                // 2017-09-05 2dm: remove this, don't believe anybody is using this - leave comment till 2018, then remove completely
-                //controller: null,
-
-                // Load data via ajax
-                load(source?: any) {
-                    // If source is already the data, set it
-                    if (source && source.List) {
-                        // 2017-09-05 2dm: discoverd a call to an inexisting function
-                        // since this is an old API which is being deprecated, please don't fix unless we get active feedback
-                        //controller.data.setData(source);
-                        return controller.data;
-                    } else {
-                        if (!source)
-                            source = {};
-                        if (!source.url)
-                            source.url = controller.data.sourceUrl();
-                        source.origSuccess = source.success;
-                        source.success = data => {
-
-                            for (let dataSetName in data) {
-                                if (data.hasOwnProperty(dataSetName))
-                                    if (data[dataSetName].List !== null) {
-                                        controller.data["in"][dataSetName] = data[dataSetName];
-                                        controller.data["in"][dataSetName].name = dataSetName;
-                                    }
-                            }
-
-                            if (controller.data["in"].Default)
-                            // 2017-09-05 2dm: previously wrote it to controller.List, but this is almost certainly a mistake
-                            // since it's an old API which is being deprecated, we won't fix it
-                                controller.data.List = controller.data["in"].Default.List;
-
-                            if (source.origSuccess)
-                                source.origSuccess(controller.data);
-
-                            controller.isLoaded = true;
-                            controller.lastRefresh = new Date();
-                            (<any>controller.data)._triggerLoaded();
-                        };
-                        source.error = request => { alert(request.statusText); };
-                        source.preventAutoFail = true; // use our fail message
-                        controller.data.source = source;
-                        return controller.data.reload();
-                    }
-                },
-                reload() {
-                    controller.webApi.get(controller.data.source)
-                        .then(controller.data.source.success, controller.data.source.error);
-                    return controller.data;
-
-                },
-                on(events, callback) {
-                    return $(controller.data).bind("2scLoad", callback)[0]._triggerLoaded();
-                },
-                _triggerLoaded() {
-                    return controller.isLoaded
-                        ? $(controller.data).trigger("2scLoad", [controller.data])[0]
-                        : controller.data;
-                },
-                one(events, callback) {
-                    if (!controller.isLoaded)
-                        return $(controller.data).one("2scLoad", callback)[0];
-                    callback({}, controller.data);
-                    return controller.data;
-                }
-            } as SxcDataWithInternals,
-
-            id: id,
-            cbid: cbid,
-            cacheKey: cacheKey,
-            source: null,
-            isLoaded: false,
-            lastRefresh: null as Date,
-            manage: null as any, // initialize correctly later on
-
-            /**
-             * true/false if it's currently edit mode or not
-             */
-            isEditMode() {
-                return controller.manage && controller.manage._isEditMode();
-            },
-            recreate(resetCache: boolean): SxcInstanceWithInternals {
-                if (resetCache) delete $2sxc._controllers[cacheKey]; // clear cache
-                return <SxcInstanceWithInternals>$2sxc(controller.id, controller.cbid); // generate new
-            },
-            webApi: {
-                get(s, p?, d?, paf?) { return controller.webApi._action(s, p, d, paf, "GET"); },
-                post(s, p?, d?, paf?) { return controller.webApi._action(s, p, d, paf, "POST"); },
-                "delete"(s, p?, d?, paf?) { return controller.webApi._action(s, p, d, paf, "DELETE"); },
-                put(s, p?, d?, paf?) { return (controller.webApi as any)._action(s, p, d, paf, "PUT"); },
-                _action(settings: string | any, params, data, preventAutoFail, method) {
-
-                    // Url parameter: autoconvert a single value (instead of object of values) to an id=... parameter
-                    if (typeof params != "object" && typeof params != "undefined")
-                        params = { id: params };
-
-                    // If the first parameter is a string, resolve settings
-                    if (typeof settings == "string") {
-                        const controllerAction = settings.split("/");
-                        const controllerName = controllerAction[0];
-                        const actionName = controllerAction[1];
-
-                        if (controllerName === "" || actionName === "")
-                            alert("Error: controller or action not defined. Will continue with likely errors.");
-
-                        settings = {
-                            controller: controllerName,
-                            action: actionName,
-                            params: params,
-                            data: data,
-                            url: controllerAction.length > 2 ? settings : null,
-                            preventAutoFail: preventAutoFail
-                        };
-                    }
-
-                    const defaults = {
-                        method: method === null ? "POST" : method,
-                        params: null,
-                        preventAutoFail: false
-                    };
-                    settings = $.extend({}, defaults, settings);
-                    var sf = $.ServicesFramework(id);
-
-                    const promise = $.ajax({
-                        type: settings.method,
-                        dataType: settings.dataType || "json", // default is json if not specified
-                        async: true,
-                        data: JSON.stringify(settings.data),
-                        contentType: "application/json",
-                        url: controller.webApi.getActionUrl(settings),
-                        beforeSend(xhr) {
-                            xhr.setRequestHeader("ContentBlockId", cbid);
-                            sf.setModuleHeaders(xhr);
-                        }
-                    });
-
-                    if (!settings.preventAutoFail)
-                        promise.fail(controller.showDetailedHttpError);
-
-                    return promise;
-                },
-                getActionUrl(settings: any): string {
-                    const sf = $.ServicesFramework(id);
-                    const base = (settings.url)
-                        ? controller.resolveServiceUrl(settings.url)
-                        : sf.getServiceRoot("2sxc") + "app/auto/api/" + settings.controller + "/" + settings.action;
-                    return base + (settings.params === null ? "" : ("?" + $.param(settings.params)));
-                }
-            } as SxcWebApiWithInternals,
-
-            // Show a nice error with more infos around 2sxc
-            showDetailedHttpError(result: any): any {
-                if (window.console)
-                    console.log(result);
-
-                if (result.status === 404 &&
-                    result.config &&
-                    result.config.url &&
-                    result.config.url.indexOf("/dist/i18n/") > -1) {
-                    if (window.console)
-                        console.log("just fyi: failed to load language resource; will have to use default");
-                    return result;
-                }
-
-
-                // if it's an unspecified 0-error, it's probably not an error but a cancelled request, (happens when closing popups containing angularJS)
-                if (result.status === 0 || result.status === -1)
-                    return result;
-
-                // let's try to show good messages in most cases
-                let infoText = "Had an error talking to the server (status " + result.status + ").";
-                const srvResp = result.responseText
-                    ? JSON.parse(result.responseText) // for jquery ajax errors
-                    : result.data; // for angular $http
-                if (srvResp) {
-                    const msg = srvResp.Message;
-                    if (msg) infoText += "\nMessage: " + msg;
-                    const msgDet = srvResp.MessageDetail || srvResp.ExceptionMessage;
-                    if (msgDet) infoText += "\nDetail: " + msgDet;
-
-
-                    if (msgDet && msgDet.indexOf("No action was found") === 0)
-                        if (msgDet.indexOf("that matches the name") > 0)
-                            infoText += "\n\nTip from 2sxc: you probably got the action-name wrong in your JS.";
-                        else if (msgDet.indexOf("that matches the request.") > 0)
-                            infoText += "\n\nTip from 2sxc: Seems like the parameters are the wrong amount or type.";
-
-                    if (msg && msg.indexOf("Controller") === 0 && msg.indexOf("not found") > 0)
-                        infoText +=
-                            "\n\nTip from 2sxc: you probably spelled the controller name wrong or forgot to remove the word 'controller' from the call in JS. To call a controller called 'DemoController' only use 'Demo'.";
-
-                }
-                infoText += "\n\nif you are an advanced user you can learn more about what went wrong - discover how on 2sxc.org/help?tag=debug";
-                alert(infoText);
-
-                return result;
-            }
-        };//as SxcInstanceWithInternals;
-
-        // add manage property, but not within initializer, because inside the manage-initializer it may reference 2sxc again
-        try { // sometimes the manage can't be built, like before installing
-            controller.manage = null;
-            if ($2sxc._manage) $2sxc._manage.initInstance(controller);
-        } catch (e) {
-            throw e;
-        }
-
-        // this only works when manage exists (not installing) and translator exists too
-        if ($2sxc._translateInit && controller.manage) $2sxc._translateInit(controller.manage);    // init translate, not really nice, but ok for now
-
-        // Make sure back-reference to controller is set
-        // 2017-09-05 2dm: remove this, don't believe anybody is using this - leave comment till 2018, then remove completely
-        //controller.data.controller = controller;
-
-        return controller;
+        return $2sxc._controllers[cacheKey] = new ToSic.Sxc.SxcInstanceWithInternals(id, cbid, cacheKey, $2sxc, $.ServicesFramework);
     };
+    
 
     $2sxc._controllers = {} as any;
     $2sxc.sysinfo = {
@@ -360,13 +118,13 @@ interface Window { $2sxc: SxcControllerWithInternals; }
         }
     };
 
-    function autoFind(domElement:HTMLElement): SxcInstanceWithInternals {
+    function autoFind(domElement: HTMLElement): ToSic.Sxc.SxcInstanceWithInternals {
         const containerTag = $(domElement).closest(".sc-content-block")[0];
         if (!containerTag) return null;
         const iid = containerTag.getAttribute("data-cb-instance"),
             cbid = containerTag.getAttribute("data-cb-id");
         if (!iid || !cbid) return null;
-        return <SxcInstanceWithInternals>$2sxc(iid, cbid);
+        return $2sxc(iid, cbid) as any as ToSic.Sxc.SxcInstanceWithInternals;
     };
 
     // note: I would like to remove this from $2sxc, but it's currently used both in the inpage-edit and in the dialogs
@@ -386,5 +144,16 @@ interface Window { $2sxc: SxcControllerWithInternals; }
             return r;
         }
     };
+
+
+
+    /**
+    * helper API to run ajax / REST calls to the server
+    * it will ensure that the headers etc. are set correctly
+    * and that urls are rewritten
+    */
+
+
+    // var test = new _2sxc.T17();
 })();
 // ReSharper restore InconsistentNaming
