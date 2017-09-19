@@ -26,7 +26,7 @@ module ToSic.Sxc {
             protected readonly dnnSf: any
         ) {
             this.serviceRoot = dnnSf(id).getServiceRoot("2sxc");
-            this.webApi = new ToSic.Sxc.SxcWebApiWithInternals(this, id, cbid);
+            this.webApi = new Sxc.SxcWebApiWithInternals(this, id, cbid);
         }
 
         /**

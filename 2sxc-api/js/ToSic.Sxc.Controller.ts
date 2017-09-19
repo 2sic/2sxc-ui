@@ -38,7 +38,7 @@ module ToSic.Sxc {
      * @param cbid
      * @returns {} 
      */
-    export function SxcController(id: number | HTMLElement, cbid?: number): ToSic.Sxc.SxcInstanceWithInternals {
+    function SxcController(id: number | HTMLElement, cbid?: number): Sxc.SxcInstanceWithInternals {
         let $2sxc = window.$2sxc as SxcControllerWithInternals;
         if (!$2sxc._controllers)
             throw "$2sxc not initialized yet";
@@ -59,11 +59,14 @@ module ToSic.Sxc {
         // also init the data-cache in case it's ever needed
         if (!$2sxc._data[cacheKey]) $2sxc._data[cacheKey] = {};
 
-        return ($2sxc._controllers[cacheKey] = new ToSic.Sxc.SxcInstanceWithInternals(id, cbid, cacheKey, $2sxc, $.ServicesFramework));
+        return ($2sxc._controllers[cacheKey] = new Sxc.SxcInstanceWithInternals(id, cbid, cacheKey, $2sxc, $.ServicesFramework));
     }
 
+    /**
+     * Build a SXC Controller for the page. Should only ever be executed once
+     */
     export function buildSxcController(): SxcController | SxcControllerWithInternals {
-        const url = new ToSic.Sxc.UrlParamManager();
+        const url = new Sxc.UrlParamManager();
         const debug = {
             load: (url.get("debug") === "true"),
             uncache: url.get("sxcver")
@@ -78,7 +81,7 @@ module ToSic.Sxc {
                 beta: {},
                 _data: {},
                 // this creates a full-screen iframe-popup and provides a close-command to finish the dialog as needed
-                totalPopup: new ToSic.Sxc.TotalPopup(),
+                totalPopup: new Sxc.TotalPopup(),
                 urlParams: url,
                 // note: I would like to remove this from $2sxc, but it's currently used both in the inpage-edit and in the dialogs
                 // debug state which is needed in various places
@@ -98,14 +101,7 @@ module ToSic.Sxc {
                 SxcController[property] = addOn[property];
         return SxcController as any as SxcControllerWithInternals;
     }
-
-    //function applyMixins(derivedCtor: any, baseCtors: any[]) {
-    //    baseCtors.forEach(baseCtor => {
-    //        Object.getOwnPropertyNames(baseCtor.prototype).forEach(name => {
-    //            derivedCtor.prototype[name] = baseCtor.prototype[name];
-    //        });
-    //    });
-    //}
+    
     
     function autoFind(domElement: HTMLElement): [number, number] { // ToSic.Sxc.SxcInstanceWithInternals {
         const containerTag = $(domElement).closest(".sc-content-block")[0];

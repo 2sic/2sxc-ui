@@ -28,11 +28,10 @@ var ToSic;
                 return $2sxc._controllers[cacheKey];
             if (!$2sxc._data[cacheKey])
                 $2sxc._data[cacheKey] = {};
-            return ($2sxc._controllers[cacheKey] = new ToSic.Sxc.SxcInstanceWithInternals(id, cbid, cacheKey, $2sxc, $.ServicesFramework));
+            return ($2sxc._controllers[cacheKey] = new Sxc.SxcInstanceWithInternals(id, cbid, cacheKey, $2sxc, $.ServicesFramework));
         }
-        Sxc.SxcController = SxcController;
         function buildSxcController() {
-            var url = new ToSic.Sxc.UrlParamManager();
+            var url = new Sxc.UrlParamManager();
             var debug = {
                 load: (url.get("debug") === "true"),
                 uncache: url.get("sxcver")
@@ -45,7 +44,7 @@ var ToSic;
                 },
                 beta: {},
                 _data: {},
-                totalPopup: new ToSic.Sxc.TotalPopup(),
+                totalPopup: new Sxc.TotalPopup(),
                 urlParams: url,
                 debug: debug,
                 parts: {
@@ -159,7 +158,7 @@ var ToSic;
                 this.dnnSf = dnnSf;
                 this.serviceScopes = ["app", "app-sys", "app-api", "app-query", "app-content", "eav", "view", "dnn"];
                 this.serviceRoot = dnnSf(id).getServiceRoot("2sxc");
-                this.webApi = new ToSic.Sxc.SxcWebApiWithInternals(this, id, cbid);
+                this.webApi = new Sxc.SxcWebApiWithInternals(this, id, cbid);
             }
             SxcInstance.prototype.resolveServiceUrl = function (virtualPath) {
                 var scope = virtualPath.split("/")[0].toLowerCase();
