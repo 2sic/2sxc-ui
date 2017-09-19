@@ -37,6 +37,6 @@ module ToSic.Sxc {
             }
             return found;
         }
-    };
+    }
 
 }

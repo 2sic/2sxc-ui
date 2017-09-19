@@ -1,6 +1,7 @@
 ﻿// ReSharper disable InconsistentNaming
 
 module ToSic.Sxc {
+    declare const $: any;
 
     /**
      * This is the interface for the main $2sxc object on the window
@@ -58,7 +59,7 @@ module ToSic.Sxc {
         // also init the data-cache in case it's ever needed
         if (!$2sxc._data[cacheKey]) $2sxc._data[cacheKey] = {};
 
-        return $2sxc._controllers[cacheKey] = new ToSic.Sxc.SxcInstanceWithInternals(id, cbid, cacheKey, $2sxc, $.ServicesFramework);
+        return ($2sxc._controllers[cacheKey] = new ToSic.Sxc.SxcInstanceWithInternals(id, cbid, cacheKey, $2sxc, $.ServicesFramework));
     }
 
     export function buildSxcController(): SxcController | SxcControllerWithInternals {
@@ -71,7 +72,7 @@ module ToSic.Sxc {
         const addOn = {
                 _controllers: {} as any,
                 sysinfo: {
-                    version: "09.05.00",
+                    version: "09.05.02",
                     description: "The 2sxc Controller object - read more about it on 2sxc.org"
                 },
                 beta: {},
@@ -98,13 +99,13 @@ module ToSic.Sxc {
         return SxcController as any as SxcControllerWithInternals;
     }
 
-    function applyMixins(derivedCtor: any, baseCtors: any[]) {
-        baseCtors.forEach(baseCtor => {
-            Object.getOwnPropertyNames(baseCtor.prototype).forEach(name => {
-                derivedCtor.prototype[name] = baseCtor.prototype[name];
-            });
-        });
-    }
+    //function applyMixins(derivedCtor: any, baseCtors: any[]) {
+    //    baseCtors.forEach(baseCtor => {
+    //        Object.getOwnPropertyNames(baseCtor.prototype).forEach(name => {
+    //            derivedCtor.prototype[name] = baseCtor.prototype[name];
+    //        });
+    //    });
+    //}
     
     function autoFind(domElement: HTMLElement): [number, number] { // ToSic.Sxc.SxcInstanceWithInternals {
         const containerTag = $(domElement).closest(".sc-content-block")[0];

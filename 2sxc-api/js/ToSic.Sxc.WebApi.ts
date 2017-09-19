@@ -1,5 +1,6 @@
 ﻿
 module ToSic.Sxc {
+    declare const $: any;
 
     /**
     * helper API to run ajax / REST calls to the server
@@ -23,8 +24,8 @@ module ToSic.Sxc {
          * @returns {Promise} jQuery ajax promise object
          */
         get(settingsOrUrl, params?, data?, preventAutoFail?: boolean): any {
-            this.request(settingsOrUrl, params, data, preventAutoFail, "GET");
-        };
+            return this.request(settingsOrUrl, params, data, preventAutoFail, "GET");
+        }
 
         /**
          * returns an http-get promise
@@ -35,8 +36,8 @@ module ToSic.Sxc {
          * @returns {Promise} jQuery ajax promise object
          */
         post(settingsOrUrl, params?, data?, preventAutoFail?: boolean): any {
-            this.request(settingsOrUrl, params, data, preventAutoFail, "POST");
-        };
+            return this.request(settingsOrUrl, params, data, preventAutoFail, "POST");
+        }
 
         /**
          * returns an http-get promise
@@ -47,8 +48,8 @@ module ToSic.Sxc {
          * @returns {Promise} jQuery ajax promise object
          */
         delete(settingsOrUrl, params?, data?, preventAutoFail?: boolean): any {
-            this.request(settingsOrUrl, params, data, preventAutoFail, "DELETE");
-        };
+            return this.request(settingsOrUrl, params, data, preventAutoFail, "DELETE");
+        }
 
         /**
          * returns an http-get promise
@@ -59,8 +60,8 @@ module ToSic.Sxc {
          * @returns {Promise} jQuery ajax promise object
          */
         put(settingsOrUrl, params?, data?, preventAutoFail?: boolean): any {
-            this.request(settingsOrUrl, params, data, preventAutoFail, "PUT");
-        };
+            return this.request(settingsOrUrl, params, data, preventAutoFail, "PUT");
+        }
 
         private request(settings: string | any, params, data, preventAutoFail, method): any {
 
@@ -112,7 +113,7 @@ module ToSic.Sxc {
                 promise.fail(this.controller.showDetailedHttpError);
 
             return promise;
-        };
+        }
 
         private getActionUrl(settings: any): string {
             const sf = $.ServicesFramework(this.id);
