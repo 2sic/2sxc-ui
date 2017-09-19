@@ -1,5 +1,6 @@
 ﻿
 module ToSic.Sxc {
+    declare const $: any;
 
     export class SxcDataWithInternals {
         source: any = undefined;
@@ -7,11 +8,11 @@ module ToSic.Sxc {
         // in-streams
         "in": any = {};
 
-        // Will hold the default stream (["in"]["Default"].List
+        // will hold the default stream (["in"]["Default"].List
         List: any = [];
 
         constructor(
-            private controller: SxcInstanceWithInternals
+            private controller: SxcInstanceWithInternals,
         ) {
 
         }
@@ -19,19 +20,19 @@ module ToSic.Sxc {
         // source path defaulting to current page + optional params
         sourceUrl(params?: string): string {
             let url = this.controller.resolveServiceUrl("app-sys/appcontent/GetContentBlockData");
-            if (typeof params == "string") // text like 'id=7'
+            if (typeof params === "string") // text like 'id=7'
                 url += "&" + params;
             return url;
         }
 
 
-        // Load data via ajax
+        // load data via ajax
         load(source?: any) {
-            // If source is already the data, set it
+            // if source is already the data, set it
             if (source && source.List) {
                 // 2017-09-05 2dm: discoverd a call to an inexisting function
                 // since this is an old API which is being deprecated, please don't fix unless we get active feedback
-                //controller.data.setData(source);
+                // controller.data.setData(source);
                 return this.controller.data;
             } else {
                 if (!source)
@@ -39,9 +40,9 @@ module ToSic.Sxc {
                 if (!source.url)
                     source.url = this.controller.data.sourceUrl();
                 source.origSuccess = source.success;
-                source.success = data => {
+                source.success = (data: any) => {
 
-                    for (let dataSetName in data) {
+                    for (const dataSetName in data) {
                         if (data.hasOwnProperty(dataSetName))
                             if (data[dataSetName].List !== null) {
                                 this.controller.data["in"][dataSetName] = data[dataSetName];
@@ -61,31 +62,30 @@ module ToSic.Sxc {
                     this.controller.lastRefresh = new Date();
                     (<any>this)._triggerLoaded();
                 };
-                source.error = request => { alert(request.statusText); };
+                source.error = (request: any) => { alert(request.statusText); };
                 source.preventAutoFail = true; // use our fail message
                 this.source = source;
                 return this.reload();
             }
         }
 
-        reload() {
+        reload():SxcDataWithInternals {
             this.controller.webApi.get(this.source)
                 .then(this.source.success, this.source.error);
             return this;
-
         }
 
-        on(events, callback) {
+        on(events:Event, callback:Function):Promise<any> {
             return $(this).bind("2scLoad", callback)[0]._triggerLoaded();
         }
 
-        _triggerLoaded() {
+        _triggerLoaded():Promise<any> {
             return this.controller.isLoaded
                 ? $(this).trigger("2scLoad", [this])[0]
                 : this;
         }
 
-        one(events, callback) {
+        one(events:Event, callback:Function):SxcDataWithInternals {
             if (!this.controller.isLoaded)
                 return $(this).one("2scLoad", callback)[0];
             callback({}, this);

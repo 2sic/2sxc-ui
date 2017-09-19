@@ -1,9 +1,9 @@
 ﻿
 module ToSic.Sxc {
     export class UrlParamManager {
-        get(name) {
-            // warning: this method is duplicated in 2 places - keep them in sync. 
-            // locations are eav and 2sxc4ng 
+        get(name: string) {
+            // warning: this method is duplicated in 2 places - keep them in sync.
+            // locations are eav and 2sxc4ng
             name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
             const searchRx = new RegExp("[\\?&]" + name + "=([^&#]*)", "i");
             let results = searchRx.exec(location.search),
@@ -28,7 +28,7 @@ module ToSic.Sxc {
             return strResult === null || strResult === undefined ? "" : decodeURIComponent(strResult.replace(/\+/g, " "));
         }
 
-        require(name) {
+        require(name: string) {
             const found = this.get(name);
             if (found === "") {
                 const message = `Required parameter (${name}) missing from url - cannot continue`;

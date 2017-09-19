@@ -1,7 +1,11 @@
 ﻿// ReSharper disable InconsistentNaming
 
-module ToSic.Sxc {
+export interface Window { $2sxc: ToSic.Sxc.SxcController | ToSic.Sxc.SxcControllerWithInternals; }
+
+export namespace ToSic.Sxc {
     declare const $: any;
+
+    declare const window: Window;
 
     /**
      * This is the interface for the main $2sxc object on the window
@@ -9,9 +13,9 @@ module ToSic.Sxc {
     export interface SxcController {
         /**
          * returns a 2sxc-instance of the id or html-tag passed in
-         * @param id 
+         * @param id
          * @param cbid
-         * @returns {} 
+         * @returns {}
          */
         (id: number | HTMLElement, cbid?: number): SxcInstance | SxcInstanceWithInternals,
 
@@ -34,9 +38,9 @@ module ToSic.Sxc {
 
     /**
      * returns a 2sxc-instance of the id or html-tag passed in
-     * @param id 
+     * @param id
      * @param cbid
-     * @returns {} 
+     * @returns {}
      */
     function SxcController(id: number | HTMLElement, cbid?: number): Sxc.SxcInstanceWithInternals {
         let $2sxc = window.$2sxc as SxcControllerWithInternals;
@@ -72,7 +76,7 @@ module ToSic.Sxc {
             uncache: url.get("sxcver")
         };
 
-        const addOn = {
+        const addOn: any = {
                 _controllers: {} as any,
                 sysinfo: {
                     version: "09.05.02",
@@ -93,16 +97,15 @@ module ToSic.Sxc {
                         if (debug.uncache && r.indexOf("sxcver") === -1)
                             r = r + ((r.indexOf("?") === -1) ? "?" : "&") + "sxcver=" + debug.uncache;
                         return r;
-                    }
+                    },
                 },
         };
-        for (var property in addOn)
+        for (const property in addOn)
             if (addOn.hasOwnProperty(property))
-                SxcController[property] = addOn[property];
+                SxcController[property] = addOn[property] as any;
         return SxcController as any as SxcControllerWithInternals;
     }
-    
-    
+
     function autoFind(domElement: HTMLElement): [number, number] { // ToSic.Sxc.SxcInstanceWithInternals {
         const containerTag = $(domElement).closest(".sc-content-block")[0];
         if (!containerTag) return null;
@@ -111,8 +114,6 @@ module ToSic.Sxc {
         if (!iid || !cbid) return null;
         return [iid, cbid]; // $2sxc(iid, cbid) as any as ToSic.Sxc.SxcInstanceWithInternals;
     }
-
-
 
     export interface SxcControllerWithInternals extends SxcController {
         (id: number | HTMLElement, cbid?: number): SxcInstance | SxcInstanceWithInternals,

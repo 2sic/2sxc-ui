@@ -3,10 +3,10 @@ module ToSic.Sxc {
     declare const $: any;
 
     /**
-    * helper API to run ajax / REST calls to the server
-    * it will ensure that the headers etc. are set correctly
-    * and that urls are rewritten
-    */
+     * helper API to run ajax / REST calls to the server
+     * it will ensure that the headers etc. are set correctly
+     * and that urls are rewritten
+     */
     export class SxcWebApiWithInternals {
         constructor(
             private readonly controller: SxcInstance,
@@ -20,10 +20,10 @@ module ToSic.Sxc {
          * @param settingsOrUrl the url to get
          * @param params jQuery style ajax parameters
          * @param data jQuery style data for post/put requests
-         * @param preventAutoFail 
+         * @param preventAutoFail
          * @returns {Promise} jQuery ajax promise object
          */
-        get(settingsOrUrl, params?, data?, preventAutoFail?: boolean): any {
+        get(settingsOrUrl: string | any, params?:any, data?:any, preventAutoFail?: boolean): any {
             return this.request(settingsOrUrl, params, data, preventAutoFail, "GET");
         }
 
@@ -32,10 +32,10 @@ module ToSic.Sxc {
          * @param settingsOrUrl the url to get
          * @param params jQuery style ajax parameters
          * @param data jQuery style data for post/put requests
-         * @param preventAutoFail 
+         * @param preventAutoFail
          * @returns {Promise} jQuery ajax promise object
          */
-        post(settingsOrUrl, params?, data?, preventAutoFail?: boolean): any {
+        post(settingsOrUrl: string | any, params?:any, data?:any, preventAutoFail?: boolean): any {
             return this.request(settingsOrUrl, params, data, preventAutoFail, "POST");
         }
 
@@ -44,10 +44,10 @@ module ToSic.Sxc {
          * @param settingsOrUrl the url to get
          * @param params jQuery style ajax parameters
          * @param data jQuery style data for post/put requests
-         * @param preventAutoFail 
+         * @param preventAutoFail
          * @returns {Promise} jQuery ajax promise object
          */
-        delete(settingsOrUrl, params?, data?, preventAutoFail?: boolean): any {
+        delete(settingsOrUrl: string | any, params?:any, data?:any, preventAutoFail?: boolean): any {
             return this.request(settingsOrUrl, params, data, preventAutoFail, "DELETE");
         }
 
@@ -56,21 +56,22 @@ module ToSic.Sxc {
          * @param settingsOrUrl the url to get
          * @param params jQuery style ajax parameters
          * @param data jQuery style data for post/put requests
-         * @param preventAutoFail 
+         * @param preventAutoFail
          * @returns {Promise} jQuery ajax promise object
          */
-        put(settingsOrUrl, params?, data?, preventAutoFail?: boolean): any {
+        put(settingsOrUrl: string | any, params?:any, data?:any, preventAutoFail?: boolean): any {
             return this.request(settingsOrUrl, params, data, preventAutoFail, "PUT");
         }
 
-        private request(settings: string | any, params, data, preventAutoFail, method): any {
+        private request(settings: string | any, params:any, data:any, preventAutoFail:boolean, method:string): any {
 
-            // Url parameter: autoconvert a single value (instead of object of values) to an id=... parameter
-            if (typeof params != "object" && typeof params != "undefined")
+            // url parameter: autoconvert a single value (instead of object of values) to an id=... parameter
+            // tslint:disable-next-line:curly
+            if (typeof params !== "object" && typeof params !== "undefined")
                 params = { id: params };
 
-            // If the first parameter is a string, resolve settings
-            if (typeof settings == "string") {
+            // if the first parameter is a string, resolve settings
+            if (typeof settings === "string") {
                 const controllerAction = settings.split("/");
                 const controllerName = controllerAction[0];
                 const actionName = controllerAction[1];
@@ -81,32 +82,32 @@ module ToSic.Sxc {
                 settings = {
                     controller: controllerName,
                     action: actionName,
-                    params: params,
-                    data: data,
+                    params,
+                    data,
                     url: controllerAction.length > 2 ? settings : null,
-                    preventAutoFail: preventAutoFail
+                    preventAutoFail
                 };
             }
 
             const defaults = {
                 method: method === null ? "POST" : method,
-                params: null,
-                preventAutoFail: false
+                params: null as any,
+                preventAutoFail: false,
             };
             settings = $.extend({}, defaults, settings);
-            var sf = $.ServicesFramework(this.id);
+            const sf = $.ServicesFramework(this.id);
 
             const promise = $.ajax({
-                type: settings.method,
-                dataType: settings.dataType || "json", // default is json if not specified
                 async: true,
+                dataType: settings.dataType || "json", // default is json if not specified
                 data: JSON.stringify(settings.data),
                 contentType: "application/json",
+                type: settings.method,
                 url: this.getActionUrl(settings),
-                beforeSend(xhr) {
+                beforeSend(xhr: any) {
                     xhr.setRequestHeader("ContentBlockId", this.cbid);
                     sf.setModuleHeaders(xhr);
-                }
+                },
             });
 
             if (!settings.preventAutoFail)
