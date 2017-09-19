@@ -26,7 +26,7 @@
     <Content Include=".gitignore" />
     <Content Include="2sxc-api\angularjs\2sxc4ng.js" />
     <Content Include="2sxc-api\angularjs\bootstrapper.js" />
-    <TypeScriptCompile Include="2sxc-api\js\2sxc.api.ts" />
+    <TypeScriptCompile Include="2sxc-api\js\ToSic.Sxc.Z.ts" />
     <Content Include="gulpfile.js" />
     <Content Include="License.txt" />
     <Content Include="src\config\eav-configuration-in-sxc.js" />
@@ -39,6 +39,12 @@
     <Content Include="src\inpage\contentBlock\contentBlock.webApiPromises.js" />
     <Content Include="src\inpage\contentBlock\contentBlock.{}.js" />
     <Content Include="src\inpage\entity-manipulation\item-commands.js" />
+    <TypeScriptCompile Include="2sxc-api\js\ToSic.Sxc.Data.ts" />
+    <TypeScriptCompile Include="2sxc-api\js\ToSic.Sxc.Controller.ts" />
+    <TypeScriptCompile Include="2sxc-api\js\ToSic.Sxc.Url.ts" />
+    <TypeScriptCompile Include="2sxc-api\js\ToSic.Sxc.TotalPopup.ts" />
+    <TypeScriptCompile Include="2sxc-api\js\ToSic.Sxc.WebApi.ts" />
+    <TypeScriptCompile Include="2sxc-api\js\ToSic.Sxc.Instance.ts" />
     <TypeScriptCompile Include="typings\2sxc-js\deprecated\2sxcDeprecated.d.ts" />
     <TypeScriptCompile Include="typings\2sxc-js\internals\2sxcInternals.d.ts" />
     <TypeScriptCompile Include="typings\2sxc-js\2sxcInterfaces.d.ts" />
