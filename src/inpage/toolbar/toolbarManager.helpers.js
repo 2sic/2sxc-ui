@@ -1,6 +1,8 @@
 ﻿// the toolbar manager is an internal helper
 // taking care of toolbars, buttons etc.
 (function () {
+
+    // ToDo: refactor to avoid side-effects
     var tools = $2sxc._toolbarManager.buttonHelpers = {
 
         defaultSettings: {

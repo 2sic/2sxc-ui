@@ -8,6 +8,12 @@
         autoAddMore: "left"
     };
 
+    $2sxc._toolbarManager.buildToolbars = buildToolbars;
+    $2sxc._toolbarManager.disable = disable;
+    $2sxc._toolbarManager.isDisabled = isDisabled;
+
+    return;
+
     // generate an empty / fallback toolbar tag
     function generateFallbackToolbar() {
         var settingsString = JSON.stringify(settingsForEmptyToolbar);
@@ -27,7 +33,7 @@
     }
 
     // create a process-toolbar command to generate toolbars inside a tag
-    $2sxc._toolbarManager.buildToolbars = function(parentTag, optionalId) {
+    function buildToolbars(parentTag, optionalId) {
         parentTag = $(parentTag || ".DnnModule-" + optionalId);
 
         // if something says the toolbars are disabled, then skip
@@ -41,7 +47,7 @@
         var toolbars = getToolbarTags(parentTag);
 
         // no toolbars found, must help a bit because otherwise editing is hard
-        if (toolbars.length === 0){// && !disableAutoAdd) {
+        if (toolbars.length === 0) { // && !disableAutoAdd) {
             if (dbg) console.log("didn't find toolbar, so will auto-create", parentTag);
 
             var outsideCb = !parentTag.hasClass($2sxc.c.cls.scCb); // "sc-content-block");
@@ -53,7 +59,9 @@
         }
 
         toolbars.each(function initToolbar() {
-            var tag = $(this), data = null, toolbarConfig, toolbarSettings, at = $2sxc.c.attr;
+            var tag = $(this),
+                data = null,
+                toolbarConfig, toolbarSettings, at = $2sxc.c.attr;
 
             try {
                 data = tag.attr(at.toolbar) || tag.attr(at.toolbarData) || "{}";
@@ -75,16 +83,15 @@
                 console.error("error creating toolbar - will skip this one", err2);
             }
         });
-    };
-
-    $2sxc._toolbarManager.disable = function(tag) {
+    }
+    
+    function disable(tag) {
         tag = $(tag);
         tag.attr($2sxc._toolbarManager.cDisableAttrName, true);
-    };
+    }
 
-    $2sxc._toolbarManager.isDisabled = function(sxc) {
+    function isDisabled(sxc) {
         var tag = $($2sxc._manage.getTag(sxc));
         return !!tag.attr($2sxc._toolbarManager.cDisableAttrName);
-    };
-
+    }
 })();

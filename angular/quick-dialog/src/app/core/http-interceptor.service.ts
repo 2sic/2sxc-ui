@@ -25,9 +25,9 @@ export class Http2sxc extends Http {
     super(backend, defaultOptions);
     this.configure(defaultOptions);
   }
-  
+
   request(url: string | Request, options: RequestOptionsArgs = new RequestOptions()): Observable<Response> {
-    let isDevMode = window.location.hostname === 'localhost';
+    const isDevMode = window.location.hostname === 'localhost';
     this.configure(options);
     if (typeof url === 'string') url = this.sxc.sxc.resolveServiceUrl(<string>url);
     else url.url = this.sxc.sxc.resolveServiceUrl(<string>url.url);
@@ -35,7 +35,7 @@ export class Http2sxc extends Http {
   }
 
   private configure(options: RequestOptionsArgs): RequestOptionsArgs {
-    let
+    const
       mid = $2sxc.urlParams.require('mid'),
       tid = $2sxc.urlParams.require('tid'),
       cbid = $2sxc.urlParams.require('cbid');

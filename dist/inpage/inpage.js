@@ -61,26 +61,45 @@
 // this will run onReady...
 $(function () {
     var initializedModules = [];
+    var showTemplatePicker = false;
 
     initAllModules(true);
 
     // watch for ajax reloads on edit or view-changes, to re-init the toolbars etc.
-    document.body.addEventListener("DOMSubtreeModified", function(event) { initAllModules(false); }, false);
-    
+    document.body.addEventListener("DOMSubtreeModified", function (event) {
+        initAllModules(false);
+    }, false);
+
+    return; // avoid side-effects
+
     function initAllModules(isFirstRun) {
-        $("div[data-edit-context]").each(function () { initModule(this, isFirstRun); });
+        $("div[data-edit-context]").each(function () {
+            initModule(this, isFirstRun);
+        });
+        tryShowTemplatePicker();
+    }
+
+    function tryShowTemplatePicker() {
+        var uninitializedModules = $('.sc-uninitialized'), module;
+
+        if (showTemplatePicker) return false;
+
+        // not exactly one uninitialized module
+        if (uninitializedModules.length !== 1) return false;
+        
+        // show the template picker of this module
+        module = uninitializedModules.parent('div[data-edit-context]')[0];
+        $2sxc(module).manage.run('layout');
     }
 
     function initModule(module, isFirstRun) {
         // check if module is already in the list of initialized modules
-        if (initializedModules.find(function(m) {
-            return m === module;
-        })) return false;
+        if (initializedModules.find(function (m) {
+                return m === module;
+            })) return false;
 
         // add to modules-list
         initializedModules.push(module);
-
-
 
         var sxc = $2sxc(module);
 
@@ -97,8 +116,7 @@ $(function () {
         return true;
     }
 
-    
-    function showGlassesButtonIfUninitialized (sxc) {
+    function showGlassesButtonIfUninitialized(sxc) {
         // already initialized
         if (sxc.manage._editContext.ContentGroup.TemplateId !== 0) return false;
 
@@ -2453,7 +2471,6 @@ $(function () {
 
         // internal constants
         cDisableAttrName: "data-disable-toolbar"
-
     };
 })();
 (function () {
@@ -2465,6 +2482,12 @@ $(function () {
         hover: "left",
         autoAddMore: "left"
     };
+
+    $2sxc._toolbarManager.buildToolbars = buildToolbars;
+    $2sxc._toolbarManager.disable = disable;
+    $2sxc._toolbarManager.isDisabled = isDisabled;
+
+    return;
 
     // generate an empty / fallback toolbar tag
     function generateFallbackToolbar() {
@@ -2485,7 +2508,7 @@ $(function () {
     }
 
     // create a process-toolbar command to generate toolbars inside a tag
-    $2sxc._toolbarManager.buildToolbars = function(parentTag, optionalId) {
+    function buildToolbars(parentTag, optionalId) {
         parentTag = $(parentTag || ".DnnModule-" + optionalId);
 
         // if something says the toolbars are disabled, then skip
@@ -2499,7 +2522,7 @@ $(function () {
         var toolbars = getToolbarTags(parentTag);
 
         // no toolbars found, must help a bit because otherwise editing is hard
-        if (toolbars.length === 0){// && !disableAutoAdd) {
+        if (toolbars.length === 0) { // && !disableAutoAdd) {
             if (dbg) console.log("didn't find toolbar, so will auto-create", parentTag);
 
             var outsideCb = !parentTag.hasClass($2sxc.c.cls.scCb); // "sc-content-block");
@@ -2511,7 +2534,9 @@ $(function () {
         }
 
         toolbars.each(function initToolbar() {
-            var tag = $(this), data = null, toolbarConfig, toolbarSettings, at = $2sxc.c.attr;
+            var tag = $(this),
+                data = null,
+                toolbarConfig, toolbarSettings, at = $2sxc.c.attr;
 
             try {
                 data = tag.attr(at.toolbar) || tag.attr(at.toolbarData) || "{}";
@@ -2533,20 +2558,21 @@ $(function () {
                 console.error("error creating toolbar - will skip this one", err2);
             }
         });
-    };
-
-    $2sxc._toolbarManager.disable = function(tag) {
+    }
+    
+    function disable(tag) {
         tag = $(tag);
         tag.attr($2sxc._toolbarManager.cDisableAttrName, true);
-    };
+    }
 
-    $2sxc._toolbarManager.isDisabled = function(sxc) {
+    function isDisabled(sxc) {
         var tag = $($2sxc._manage.getTag(sxc));
         return !!tag.attr($2sxc._toolbarManager.cDisableAttrName);
-    };
-
+    }
 })();
 (function () {
+    $2sxc._toolbarManager.generateButtonHtml = generateButtonHtml;
+    return;
 
     // does some clean-up work on a button-definition object
     // because the target item could be specified directly, or in a complex internal object called entity
@@ -2562,7 +2588,7 @@ $(function () {
 
     // generate the html for a button
     // Expects: instance sxc, action-definition, + group-index in which the button is shown
-    $2sxc._toolbarManager.generateButtonHtml = function (sxc, actDef, groupIndex) {
+    function generateButtonHtml(sxc, actDef, groupIndex) {
 
         // if the button belongs to a content-item, move the specs up to the item into the settings-object
         flattenActionDefinition(actDef);
@@ -2572,36 +2598,36 @@ $(function () {
             classesList = (actDef.classes || "").split(","),
             box = $("<div/>"),
             symbol = $("<i class=\"" + actDef.icon + "\" aria-hidden=\"true\"></i>"),
-            onclick = actDef.disabled
-                ? ""
-                : "$2sxc(" + sxc.id + ", " + sxc.cbid + ").manage.run(" + JSON.stringify(actDef.command) + ", event);";
-        
+            onclick = actDef.disabled ?
+            "" :
+            "$2sxc(" + sxc.id + ", " + sxc.cbid + ").manage.run(" + JSON.stringify(actDef.command) + ", event);";
+
         for (var c = 0; c < classesList.length; c++) showClasses += " " + classesList[c];
 
-        var button = $("<a />",
-            {
-                'class': "sc-" + actDef.action + " " + showClasses +
+        var button = $("<a />", {
+            'class': "sc-" + actDef.action + " " + showClasses +
                 (actDef.dynamicClasses ? " " + actDef.dynamicClasses(actDef) : ""),
-                'onclick': onclick,
-                'data-i18n': "[title]" + actDef.title
-            });
+            'onclick': onclick,
+            'data-i18n': "[title]" + actDef.title
+        });
         button.html(box.html(symbol));
         return button[0].outerHTML;
-    };
+    }
 })();
 (function () {
-
     var tbManager = $2sxc._toolbarManager;
+    $2sxc._toolbarManager.generateToolbarHtml = generateToolbarHtml;
+    return;
 
-    $2sxc._toolbarManager.generateToolbarHtml = function(sxc, tbConfig, moreSettings) {
+    function generateToolbarHtml(sxc, tbConfig, moreSettings) {
         // if it has an action or is an array, keep that. Otherwise get standard buttons
         tbConfig = tbConfig || {}; // if null/undefined, use empty object
         var btnList = tbConfig;
         if (!tbConfig.action && !tbConfig.groups && !tbConfig.buttons && !Array.isArray(tbConfig))
-            btnList = tbManager.standardButtons(sxc.manage._user.canDesign /* editContext.User.CanDesign */, tbConfig);
+            btnList = tbManager.standardButtons(sxc.manage._user.canDesign /* editContext.User.CanDesign */ , tbConfig);
 
         // whatever we had, if more settings were provided, override with these...
-        var tlbDef = tbManager.buttonHelpers.buildFullDefinition(btnList, sxc.manage._commands.commands, sxc.manage._instanceConfig /* tb.config */, moreSettings);
+        var tlbDef = tbManager.buttonHelpers.buildFullDefinition(btnList, sxc.manage._commands.commands, sxc.manage._instanceConfig /* tb.config */ , moreSettings);
         var btnGroups = tlbDef.groups;
         var behaviourClasses = " sc-tb-hover-" + tlbDef.settings.hover + " sc-tb-show-" + tlbDef.settings.show;
 
@@ -2609,8 +2635,10 @@ $(function () {
         var tbClasses = "sc-menu group-0 " + behaviourClasses + " " +
             ((tbConfig.sortOrder === -1) ? " listContent" : "") +
             (tlbDef.settings.classes ? " " + tlbDef.settings.classes : "");
-        var toolbar = $("<ul />",
-            { 'class': tbClasses, 'onclick': "var e = arguments[0] || window.event; e.stopPropagation();" });
+        var toolbar = $("<ul />", {
+            'class': tbClasses,
+            'onclick': "var e = arguments[0] || window.event; e.stopPropagation();"
+        });
 
         for (var i = 0; i < btnGroups.length; i++) {
             var btns = btnGroups[i].buttons;
@@ -2625,6 +2653,8 @@ $(function () {
 // the toolbar manager is an internal helper
 // taking care of toolbars, buttons etc.
 (function () {
+
+    // ToDo: refactor to avoid side-effects
     var tools = $2sxc._toolbarManager.buttonHelpers = {
 
         defaultSettings: {
@@ -2872,7 +2902,10 @@ $(function () {
 // the toolbar manager is an internal helper
 // taking care of toolbars, buttons etc.
 (function () {
-    $2sxc._toolbarManager.standardButtons = function (canDesign, sharedParameters) {
+    $2sxc._toolbarManager.standardButtons = standardButtons;
+    return;
+    
+    function standardButtons(canDesign, sharedParameters) {
         // create a deep-copy of the original object
         var btns = $.extend(true, {}, $2sxc._toolbarManager.toolbarTemplate);
         btns.params = sharedParameters && (Array.isArray(sharedParameters) && sharedParameters[0]) || sharedParameters;
@@ -2881,8 +2914,9 @@ $(function () {
     };
 })();
 // the default / initial buttons in a standard toolbar
-
 (function () {
+
+    // ToDo: refactor to avoid side-effects
     $2sxc._toolbarManager.toolbarTemplate = {
         groups: [
             // ToDo: remove dead code

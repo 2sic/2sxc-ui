@@ -2,26 +2,45 @@
 // this will run onReady...
 $(function () {
     var initializedModules = [];
+    var showTemplatePicker = false;
 
     initAllModules(true);
 
     // watch for ajax reloads on edit or view-changes, to re-init the toolbars etc.
-    document.body.addEventListener("DOMSubtreeModified", function(event) { initAllModules(false); }, false);
-    
+    document.body.addEventListener("DOMSubtreeModified", function (event) {
+        initAllModules(false);
+    }, false);
+
+    return; // avoid side-effects
+
     function initAllModules(isFirstRun) {
-        $("div[data-edit-context]").each(function () { initModule(this, isFirstRun); });
+        $("div[data-edit-context]").each(function () {
+            initModule(this, isFirstRun);
+        });
+        tryShowTemplatePicker();
+    }
+
+    function tryShowTemplatePicker() {
+        var uninitializedModules = $('.sc-uninitialized'), module;
+
+        if (showTemplatePicker) return false;
+
+        // not exactly one uninitialized module
+        if (uninitializedModules.length !== 1) return false;
+        
+        // show the template picker of this module
+        module = uninitializedModules.parent('div[data-edit-context]')[0];
+        $2sxc(module).manage.run('layout');
     }
 
     function initModule(module, isFirstRun) {
         // check if module is already in the list of initialized modules
-        if (initializedModules.find(function(m) {
-            return m === module;
-        })) return false;
+        if (initializedModules.find(function (m) {
+                return m === module;
+            })) return false;
 
         // add to modules-list
         initializedModules.push(module);
-
-
 
         var sxc = $2sxc(module);
 
@@ -38,8 +57,7 @@ $(function () {
         return true;
     }
 
-    
-    function showGlassesButtonIfUninitialized (sxc) {
+    function showGlassesButtonIfUninitialized(sxc) {
         // already initialized
         if (sxc.manage._editContext.ContentGroup.TemplateId !== 0) return false;
 

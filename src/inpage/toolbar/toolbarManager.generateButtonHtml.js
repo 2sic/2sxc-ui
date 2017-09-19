@@ -1,4 +1,6 @@
 ﻿(function () {
+    $2sxc._toolbarManager.generateButtonHtml = generateButtonHtml;
+    return;
 
     // does some clean-up work on a button-definition object
     // because the target item could be specified directly, or in a complex internal object called entity
@@ -14,7 +16,7 @@
 
     // generate the html for a button
     // Expects: instance sxc, action-definition, + group-index in which the button is shown
-    $2sxc._toolbarManager.generateButtonHtml = function (sxc, actDef, groupIndex) {
+    function generateButtonHtml(sxc, actDef, groupIndex) {
 
         // if the button belongs to a content-item, move the specs up to the item into the settings-object
         flattenActionDefinition(actDef);
@@ -24,20 +26,19 @@
             classesList = (actDef.classes || "").split(","),
             box = $("<div/>"),
             symbol = $("<i class=\"" + actDef.icon + "\" aria-hidden=\"true\"></i>"),
-            onclick = actDef.disabled
-                ? ""
-                : "$2sxc(" + sxc.id + ", " + sxc.cbid + ").manage.run(" + JSON.stringify(actDef.command) + ", event);";
-        
+            onclick = actDef.disabled ?
+            "" :
+            "$2sxc(" + sxc.id + ", " + sxc.cbid + ").manage.run(" + JSON.stringify(actDef.command) + ", event);";
+
         for (var c = 0; c < classesList.length; c++) showClasses += " " + classesList[c];
 
-        var button = $("<a />",
-            {
-                'class': "sc-" + actDef.action + " " + showClasses +
+        var button = $("<a />", {
+            'class': "sc-" + actDef.action + " " + showClasses +
                 (actDef.dynamicClasses ? " " + actDef.dynamicClasses(actDef) : ""),
-                'onclick': onclick,
-                'data-i18n': "[title]" + actDef.title
-            });
+            'onclick': onclick,
+            'data-i18n': "[title]" + actDef.title
+        });
         button.html(box.html(symbol));
         return button[0].outerHTML;
-    };
+    }
 })();
