@@ -39,6 +39,12 @@
     <Content Include="src\inpage\contentBlock\contentBlock.webApiPromises.js" />
     <Content Include="src\inpage\contentBlock\contentBlock.{}.js" />
     <Content Include="src\inpage\entity-manipulation\item-commands.js" />
+    <TypeScriptCompile Include="2sxc-api\js\ToSic.Sxc.Data.ts" />
+    <TypeScriptCompile Include="2sxc-api\js\ToSic.Sxc.Controller.ts" />
+    <TypeScriptCompile Include="2sxc-api\js\ToSic.Sxc.Url.ts" />
+    <TypeScriptCompile Include="2sxc-api\js\ToSic.Sxc.TotalPopup.ts" />
+    <TypeScriptCompile Include="2sxc-api\js\ToSic.Sxc.WebApi.ts" />
+    <TypeScriptCompile Include="2sxc-api\js\ToSic.Sxc.Instance.ts" />
     <TypeScriptCompile Include="typings\2sxc-js\deprecated\2sxcDeprecated.d.ts" />
     <TypeScriptCompile Include="typings\2sxc-js\internals\2sxcInternals.d.ts" />
     <TypeScriptCompile Include="typings\2sxc-js\2sxcInterfaces.d.ts" />
@@ -204,13 +210,8 @@
     <Content Include="2sxc-api\angularjs\readme.md" />
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Include="2sxc-api\angular\2sxc4angular.ts" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="2sxc-api\angular\readme.md" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="2sxc-api\js\tsconfig.json" />
+    <Content Include="2sxc-api\js\readme.md" />
     <None Include="src\inpage\2sxc-extensions\readme.md" />
     <None Include="src\inpage\beta\readme.md" />
     <Content Include="src\inpage\dnn-menu-helper\readme.md" />

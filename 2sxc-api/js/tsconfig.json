@@ -13,7 +13,7 @@
   },
   "include": [
     "./*.ts",
-    "../../typings/**/*.ts"
+    // "../../typings/**/*.ts"
   ],
   "exclude": [
     "node_modules",

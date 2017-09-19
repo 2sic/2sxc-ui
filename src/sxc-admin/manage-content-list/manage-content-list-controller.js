@@ -66,7 +66,7 @@
                 },
                 Title: $translate.instant("EditFormTitle.ListPresentation")
             });
-            eavAdminDialogs.openEditItems(items, vm.reloadHeader);
+            eavAdminDialogs.openEditItems(items, vm.reloadHeader, { partOfPage: $2sxc.urlParams.get('partOfPage'), publishing: $2sxc.urlParams.get('publishing') });
 
         };
 
