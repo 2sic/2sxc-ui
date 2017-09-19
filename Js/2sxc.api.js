@@ -427,8 +427,6 @@ var ToSic;
         ;
     })(Sxc = ToSic.Sxc || (ToSic.Sxc = {}));
 })(ToSic || (ToSic = {}));
-(function () {
-    if (!window.$2sxc)
-        window.$2sxc = ToSic.Sxc.buildSxcController();
-})();
+if (!window.$2sxc)
+    window.$2sxc = ToSic.Sxc.buildSxcController();
 //# sourceMappingURL=2sxc.api.js.map

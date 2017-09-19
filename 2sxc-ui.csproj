@@ -26,7 +26,7 @@
     <Content Include=".gitignore" />
     <Content Include="2sxc-api\angularjs\2sxc4ng.js" />
     <Content Include="2sxc-api\angularjs\bootstrapper.js" />
-    <TypeScriptCompile Include="2sxc-api\js\ToSic.Sxc.Z.ts" />
+    <TypeScriptCompile Include="2sxc-api\js\2sxc.api.ts" />
     <Content Include="gulpfile.js" />
     <Content Include="License.txt" />
     <Content Include="src\config\eav-configuration-in-sxc.js" />
@@ -210,13 +210,8 @@
     <Content Include="2sxc-api\angularjs\readme.md" />
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Include="2sxc-api\angular\2sxc4angular.ts" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="2sxc-api\angular\readme.md" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="2sxc-api\js\tsconfig.json" />
+    <Content Include="2sxc-api\js\readme.md" />
     <None Include="src\inpage\2sxc-extensions\readme.md" />
     <None Include="src\inpage\beta\readme.md" />
     <Content Include="src\inpage\dnn-menu-helper\readme.md" />
