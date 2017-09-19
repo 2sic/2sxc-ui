@@ -43,7 +43,6 @@
             },
             //#endregion official, public properties - everything below this can change at any time
 
-
             // internal method to find out if it's in edit-mode
             _isEditMode: function () { return editContext.Environment.IsEditable; },
             _reloadWithAjax: editContext.ContentGroup.SupportsAjax,
@@ -53,7 +52,6 @@
             _quickDialogConfig: mngApi.buildQuickDialogConfig(editContext),           // used for in-page dialogs
             _commands: cmdEngine,                        // used to handle the commands for this content-block
             _user: userInfo,
-
 
             // init this object 
             init: function init() {
@@ -69,7 +67,6 @@
                 editManager.run("layout");
             },
 
-
             // private: show error when the app-data hasn't been installed yet for this imported-module
             _handleErrors: function (errType, cbTag) {
                 var errWrapper = $("<div class=\"dnnFormMessage dnnFormWarning sc-element\"></div>");
@@ -84,13 +81,11 @@
                 $(cbTag).append(errWrapper);
             },
 
-
             // change config by replacing the guid, and refreshing dependend sub-objects
             _updateContentGroupGuid: function (newGuid) {
                 editContext.ContentGroup.Guid = newGuid;
                 editManager._instanceConfig = mngApi.buildInstanceConfig(editContext);
             },
-
 
             _getCbManipulator: function () {
                 return $2sxc._contentBlock.manipulator(sxc);
@@ -100,7 +95,4 @@
         editManager.init();
         return editManager;
     };
-
-
-
 })();

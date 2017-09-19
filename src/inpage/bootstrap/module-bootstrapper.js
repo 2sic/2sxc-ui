@@ -2,7 +2,7 @@
 // this will run onReady...
 $(function () {
     var initializedModules = [];
-    var showTemplatePicker = false;
+    var openedTemplatePickerOnce = false;
 
     initAllModules(true);
 
@@ -21,16 +21,21 @@ $(function () {
     }
 
     function tryShowTemplatePicker() {
-        var uninitializedModules = $('.sc-uninitialized'), module;
+        var uninitializedModules = $('.sc-uninitialized');
+        var module;
 
-        if (showTemplatePicker) return false;
+        if (openedTemplatePickerOnce) return false;
+
+        // already showing a dialog
+        if ($2sxc._quickDialog.current !== null) return false;
 
         // not exactly one uninitialized module
         if (uninitializedModules.length !== 1) return false;
-        
+
         // show the template picker of this module
         module = uninitializedModules.parent('div[data-edit-context]')[0];
         $2sxc(module).manage.run('layout');
+        openedTemplatePickerOnce = true;
     }
 
     function initModule(module, isFirstRun) {
@@ -38,20 +43,20 @@ $(function () {
         if (initializedModules.find(function (m) {
                 return m === module;
             })) return false;
-
+        
         // add to modules-list
         initializedModules.push(module);
-
+        
         var sxc = $2sxc(module);
-
+        
         // check if the sxc must be re-created. This is necessary when modules are dynamically changed
         // because the configuration may change, and that is cached otherwise, resulting in toolbars with wrong config
         if (!isFirstRun) sxc = sxc.recreate(true);
-
+        
         // check if we must show the glasses
         // this must run even after first-run, because it can be added ajax-style
         var wasEmpty = showGlassesButtonIfUninitialized(sxc);
-
+        
         if (isFirstRun || !wasEmpty) $2sxc._toolbarManager.buildToolbars(module);
 
         return true;

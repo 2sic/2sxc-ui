@@ -9,7 +9,6 @@
  * it should be able to render itself
  */
 (function () {
-
     var cbm = $2sxc._contentBlock;
 
     /**
@@ -42,15 +41,16 @@
      * @param {string} newContent 
      * @returns {} - nothing
      */
-    cbm.showMessage = function(sxc, newContent) {
+    cbm.showMessage = function (sxc, newContent) {
         $($2sxc._manage.getTag(sxc)).html(newContent);
     };
-
 
     cbm.ajaxLoad = function (sxc, alternateTemplateId, justPreview) {
         // ajax-call, then replace
         return cbm.getPreviewWithTemplate(sxc, alternateTemplateId)
-            .then(function (result) { return cbm.replaceCb(sxc, result, justPreview); })
+            .then(function (result) {
+                return cbm.replaceCb(sxc, result, justPreview);
+            })
             .then($quickE.reset); // reset quick-edit, because the config could have changed
     };
 
@@ -63,10 +63,10 @@
 
         return cbm.ajaxLoad(sxc, cbm.cUseExistingTemplate, !!preview)
             .then(function () {
-                    // 2017-09-02 2dm - believe this was meant to re-init the dialog manager, but it doesn't actually work
-                    // must check for side-effects, which would need the manager to re-build the configuration
-                    $2sxc._quickDialog.hide();
-            });  
+                // 2017-09-02 2dm - believe this was meant to re-init the dialog manager, but it doesn't actually work
+                // must check for side-effects, which would need the manager to re-build the configuration
+                $2sxc._quickDialog.hide();
+            });
     };
 
 })();

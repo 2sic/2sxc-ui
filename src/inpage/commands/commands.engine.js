@@ -1,5 +1,4 @@
-﻿
-(function () {
+﻿(function () {
     $2sxc._commands.instanceEngine = function (sxc, editContext) {
         var engine = {
             commands: $2sxc._commands.initializeInstanceCommands(editContext),
@@ -7,9 +6,9 @@
             // assemble an object which will store the configuration and execute it
             create: function (specialSettings) {
                 var settings = $2sxc._lib.extend({}, sxc.manage._instanceConfig, specialSettings); // merge button with general toolbar-settings
-                var ngDialogUrl = sxc.manage._editContext.Environment.SxcRootUrl
-                    + "desktopmodules/tosic_sexycontent/dist/dnn/ui.html?sxcver="
-                    + sxc.manage._editContext.Environment.SxcVersion;
+                var ngDialogUrl = sxc.manage._editContext.Environment.SxcRootUrl +
+                    "desktopmodules/tosic_sexycontent/dist/dnn/ui.html?sxcver=" +
+                    sxc.manage._editContext.Environment.SxcVersion;
                 var isDebug = $2sxc.urlParams.get("debug") ? "&debug=true" : "";
 
                 var cmd = {
@@ -20,7 +19,8 @@
                     }, settings.params),
 
                     addSimpleItem: function () {
-                        var itm = {}, ct = cmd.settings.contentType || cmd.settings.attributeSetName; // two ways to name the content-type-name this, v 7.2+ and older
+                        var itm = {},
+                            ct = cmd.settings.contentType || cmd.settings.attributeSetName; // two ways to name the content-type-name this, v 7.2+ and older
                         if (cmd.settings.entityId) itm.EntityId = cmd.settings.entityId;
                         if (ct) itm.ContentTypeName = ct;
 
@@ -31,7 +31,12 @@
                     // this adds an item of the content-group, based on the group GUID and the sequence number
                     addContentGroupItem: function (guid, index, part, isAdd, isEntity, cbid, sectionLanguageKey) {
                         cmd.items.push({
-                            Group: { Guid: guid, Index: index, Part: part, Add: isAdd },
+                            Group: {
+                                Guid: guid,
+                                Index: index,
+                                Part: part,
+                                Add: isAdd
+                            },
                             Title: $2sxc.translate(sectionLanguageKey)
                         });
                     },
@@ -71,10 +76,10 @@
                             sharedParams.partOfPage = false;
                         }
 
-                        return ngDialogUrl
-                            + "#" + $.param(sharedParams)
-                            + "&" + $.param(cmd.params)
-                            + isDebug;
+                        return ngDialogUrl +
+                            "#" + $.param(sharedParams) +
+                            "&" + $.param(cmd.params) +
+                            isDebug;
                         //#endregion
                     }
                 };
@@ -99,12 +104,12 @@
                 // the callback will handle events after closing the dialog
                 // and reload the in-page view w/ajax or page reload
                 var callback = function () {
-                        $2sxc._contentBlock.reloadAndReInitialize(sxc);
-                        closeCallback();
-                    },
-                    link = engine._linkToNgDialog(settings); // the link contains everything to open a full dialog (lots of params added)
+                    $2sxc._contentBlock.reloadAndReInitialize(sxc);
+                    closeCallback();
+                };
+                var link = engine._linkToNgDialog(settings); // the link contains everything to open a full dialog (lots of params added)
                 if (settings.inlineWindow)
-                    return $2sxc._quickDialog.showOrToggle(sxc, link, callback, settings.fullScreen /* settings.dialog === "item-history"*/, settings.dialog);
+                    return $2sxc._quickDialog.showOrToggle(sxc, link, callback, settings.fullScreen /* settings.dialog === "item-history"*/ , settings.dialog);
                 if (settings.newWindow || (event && event.shiftKey))
                     return window.open(link);
                 return $2sxc.totalPopup.open(link, callback);
@@ -115,17 +120,20 @@
 
                 // cycle parameters, in case it was called with 2 params only
                 if (!event && settings && typeof settings.altKey !== "undefined") { // no event param, but settings contains the event-object
-                    event = settings;   // move it to the correct variable
-                    settings = {};      // clear the settings variable, as none was provided
+                    event = settings; // move it to the correct variable
+                    settings = {}; // clear the settings variable, as none was provided
                 }
 
                 // pre-save event because afterwards we have a promise, so the event-object changes; funky syntax is because of browser differences
                 var origEvent = event || window.event;
 
                 // check if name is name (string) or object (settings)
-                settings = (typeof nameOrSettings === "string")
-                    ? $2sxc._lib.extend(settings || {}, { "action": nameOrSettings }) // place the name as an action-name into a command-object
-                    : nameOrSettings;
+                settings = (typeof nameOrSettings === "string") ?
+                    $2sxc._lib.extend(settings || {}, {
+                        "action": nameOrSettings
+                    }) // place the name as an action-name into a command-object
+                    :
+                    nameOrSettings;
 
                 var conf = engine.commands[settings.action];
                 settings = $2sxc._lib.extend({}, conf, settings); // merge conf & settings, but settings has higher priority
@@ -133,12 +141,12 @@
                 if (!settings.dialog) settings.dialog = settings.action; // old code uses "action" as the parameter, now use verb ? dialog
                 if (!settings.code) settings.code = engine._openNgDialog; // decide what action to perform
 
-                if (conf.uiActionOnly) return settings.code(settings, origEvent, sxc); 
+                if (conf.uiActionOnly) return settings.code(settings, origEvent, sxc);
 
                 // if more than just a UI-action, then it needs to be sure the content-group is created first
                 return $2sxc._contentBlock.prepareToAddContent(sxc)
                     .then(function () {
-                        return settings.code(settings, origEvent, sxc); 
+                        return settings.code(settings, origEvent, sxc);
                     });
             }
         };

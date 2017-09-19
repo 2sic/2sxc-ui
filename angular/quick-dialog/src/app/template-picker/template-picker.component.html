@@ -48,7 +48,7 @@
                 </div>
                 <ng-template #contentApp>
                     <div class="tiles">
-                        <div class="tile" [ngClass]="{ active: contentType?.StaticName === c.StaticName, blocked: !allowContentTypeChange }" [attr.title]="c.Label"
+                        <div md-button class="tile" [ngClass]="{ active: contentType?.StaticName === c.StaticName, blocked: !allowContentTypeChange }" [attr.title]="c.Label"
                             (click)="contentType?.StaticName === c.StaticName ? switchTab() : updateContentType(c)" (dblclick)="switchTab()"
                             *ngFor="let c of contentTypes">
                             <div class="bg">

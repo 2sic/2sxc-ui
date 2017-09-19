@@ -61,7 +61,7 @@
 // this will run onReady...
 $(function () {
     var initializedModules = [];
-    var showTemplatePicker = false;
+    var openedTemplatePickerOnce = false;
 
     initAllModules(true);
 
@@ -80,16 +80,21 @@ $(function () {
     }
 
     function tryShowTemplatePicker() {
-        var uninitializedModules = $('.sc-uninitialized'), module;
+        var uninitializedModules = $('.sc-uninitialized');
+        var module;
 
-        if (showTemplatePicker) return false;
+        if (openedTemplatePickerOnce) return false;
+
+        // already showing a dialog
+        if ($2sxc._quickDialog.current !== null) return false;
 
         // not exactly one uninitialized module
         if (uninitializedModules.length !== 1) return false;
-        
+
         // show the template picker of this module
         module = uninitializedModules.parent('div[data-edit-context]')[0];
         $2sxc(module).manage.run('layout');
+        openedTemplatePickerOnce = true;
     }
 
     function initModule(module, isFirstRun) {
@@ -97,20 +102,20 @@ $(function () {
         if (initializedModules.find(function (m) {
                 return m === module;
             })) return false;
-
+        
         // add to modules-list
         initializedModules.push(module);
-
+        
         var sxc = $2sxc(module);
-
+        
         // check if the sxc must be re-created. This is necessary when modules are dynamically changed
         // because the configuration may change, and that is cached otherwise, resulting in toolbars with wrong config
         if (!isFirstRun) sxc = sxc.recreate(true);
-
+        
         // check if we must show the glasses
         // this must run even after first-run, because it can be added ajax-style
         var wasEmpty = showGlassesButtonIfUninitialized(sxc);
-
+        
         if (isFirstRun || !wasEmpty) $2sxc._toolbarManager.buildToolbars(module);
 
         return true;
@@ -442,7 +447,6 @@ $(function () {
         }));
         //#endregion
 
-
         addDef(makeDef("layout", "ChangeLayout", "glasses", true, true, {
              inlineWindow: true 
         }));
@@ -471,7 +475,6 @@ $(function () {
     };
 })();
 
-
 (function () {
     $2sxc._commands.instanceEngine = function (sxc, editContext) {
         var engine = {
@@ -480,9 +483,9 @@ $(function () {
             // assemble an object which will store the configuration and execute it
             create: function (specialSettings) {
                 var settings = $2sxc._lib.extend({}, sxc.manage._instanceConfig, specialSettings); // merge button with general toolbar-settings
-                var ngDialogUrl = sxc.manage._editContext.Environment.SxcRootUrl
-                    + "desktopmodules/tosic_sexycontent/dist/dnn/ui.html?sxcver="
-                    + sxc.manage._editContext.Environment.SxcVersion;
+                var ngDialogUrl = sxc.manage._editContext.Environment.SxcRootUrl +
+                    "desktopmodules/tosic_sexycontent/dist/dnn/ui.html?sxcver=" +
+                    sxc.manage._editContext.Environment.SxcVersion;
                 var isDebug = $2sxc.urlParams.get("debug") ? "&debug=true" : "";
 
                 var cmd = {
@@ -493,7 +496,8 @@ $(function () {
                     }, settings.params),
 
                     addSimpleItem: function () {
-                        var itm = {}, ct = cmd.settings.contentType || cmd.settings.attributeSetName; // two ways to name the content-type-name this, v 7.2+ and older
+                        var itm = {},
+                            ct = cmd.settings.contentType || cmd.settings.attributeSetName; // two ways to name the content-type-name this, v 7.2+ and older
                         if (cmd.settings.entityId) itm.EntityId = cmd.settings.entityId;
                         if (ct) itm.ContentTypeName = ct;
 
@@ -504,7 +508,12 @@ $(function () {
                     // this adds an item of the content-group, based on the group GUID and the sequence number
                     addContentGroupItem: function (guid, index, part, isAdd, isEntity, cbid, sectionLanguageKey) {
                         cmd.items.push({
-                            Group: { Guid: guid, Index: index, Part: part, Add: isAdd },
+                            Group: {
+                                Guid: guid,
+                                Index: index,
+                                Part: part,
+                                Add: isAdd
+                            },
                             Title: $2sxc.translate(sectionLanguageKey)
                         });
                     },
@@ -544,10 +553,10 @@ $(function () {
                             sharedParams.partOfPage = false;
                         }
 
-                        return ngDialogUrl
-                            + "#" + $.param(sharedParams)
-                            + "&" + $.param(cmd.params)
-                            + isDebug;
+                        return ngDialogUrl +
+                            "#" + $.param(sharedParams) +
+                            "&" + $.param(cmd.params) +
+                            isDebug;
                         //#endregion
                     }
                 };
@@ -572,12 +581,12 @@ $(function () {
                 // the callback will handle events after closing the dialog
                 // and reload the in-page view w/ajax or page reload
                 var callback = function () {
-                        $2sxc._contentBlock.reloadAndReInitialize(sxc);
-                        closeCallback();
-                    },
-                    link = engine._linkToNgDialog(settings); // the link contains everything to open a full dialog (lots of params added)
+                    $2sxc._contentBlock.reloadAndReInitialize(sxc);
+                    closeCallback();
+                };
+                var link = engine._linkToNgDialog(settings); // the link contains everything to open a full dialog (lots of params added)
                 if (settings.inlineWindow)
-                    return $2sxc._quickDialog.showOrToggle(sxc, link, callback, settings.fullScreen /* settings.dialog === "item-history"*/, settings.dialog);
+                    return $2sxc._quickDialog.showOrToggle(sxc, link, callback, settings.fullScreen /* settings.dialog === "item-history"*/ , settings.dialog);
                 if (settings.newWindow || (event && event.shiftKey))
                     return window.open(link);
                 return $2sxc.totalPopup.open(link, callback);
@@ -588,17 +597,20 @@ $(function () {
 
                 // cycle parameters, in case it was called with 2 params only
                 if (!event && settings && typeof settings.altKey !== "undefined") { // no event param, but settings contains the event-object
-                    event = settings;   // move it to the correct variable
-                    settings = {};      // clear the settings variable, as none was provided
+                    event = settings; // move it to the correct variable
+                    settings = {}; // clear the settings variable, as none was provided
                 }
 
                 // pre-save event because afterwards we have a promise, so the event-object changes; funky syntax is because of browser differences
                 var origEvent = event || window.event;
 
                 // check if name is name (string) or object (settings)
-                settings = (typeof nameOrSettings === "string")
-                    ? $2sxc._lib.extend(settings || {}, { "action": nameOrSettings }) // place the name as an action-name into a command-object
-                    : nameOrSettings;
+                settings = (typeof nameOrSettings === "string") ?
+                    $2sxc._lib.extend(settings || {}, {
+                        "action": nameOrSettings
+                    }) // place the name as an action-name into a command-object
+                    :
+                    nameOrSettings;
 
                 var conf = engine.commands[settings.action];
                 settings = $2sxc._lib.extend({}, conf, settings); // merge conf & settings, but settings has higher priority
@@ -606,12 +618,12 @@ $(function () {
                 if (!settings.dialog) settings.dialog = settings.action; // old code uses "action" as the parameter, now use verb ? dialog
                 if (!settings.code) settings.code = engine._openNgDialog; // decide what action to perform
 
-                if (conf.uiActionOnly) return settings.code(settings, origEvent, sxc); 
+                if (conf.uiActionOnly) return settings.code(settings, origEvent, sxc);
 
                 // if more than just a UI-action, then it needs to be sure the content-group is created first
                 return $2sxc._contentBlock.prepareToAddContent(sxc)
                     .then(function () {
-                        return settings.code(settings, origEvent, sxc); 
+                        return settings.code(settings, origEvent, sxc);
                     });
             }
         };
@@ -821,7 +833,6 @@ $2sxc._contentBlock.manipulator = function (sxc) {
  * it should be able to render itself
  */
 (function () {
-
     var cbm = $2sxc._contentBlock;
 
     /**
@@ -854,15 +865,16 @@ $2sxc._contentBlock.manipulator = function (sxc) {
      * @param {string} newContent 
      * @returns {} - nothing
      */
-    cbm.showMessage = function(sxc, newContent) {
+    cbm.showMessage = function (sxc, newContent) {
         $($2sxc._manage.getTag(sxc)).html(newContent);
     };
-
 
     cbm.ajaxLoad = function (sxc, alternateTemplateId, justPreview) {
         // ajax-call, then replace
         return cbm.getPreviewWithTemplate(sxc, alternateTemplateId)
-            .then(function (result) { return cbm.replaceCb(sxc, result, justPreview); })
+            .then(function (result) {
+                return cbm.replaceCb(sxc, result, justPreview);
+            })
             .then($quickE.reset); // reset quick-edit, because the config could have changed
     };
 
@@ -875,10 +887,10 @@ $2sxc._contentBlock.manipulator = function (sxc) {
 
         return cbm.ajaxLoad(sxc, cbm.cUseExistingTemplate, !!preview)
             .then(function () {
-                    // 2017-09-02 2dm - believe this was meant to re-init the dialog manager, but it doesn't actually work
-                    // must check for side-effects, which would need the manager to re-build the configuration
-                    $2sxc._quickDialog.hide();
-            });  
+                // 2017-09-02 2dm - believe this was meant to re-init the dialog manager, but it doesn't actually work
+                // must check for side-effects, which would need the manager to re-build the configuration
+                $2sxc._quickDialog.hide();
+            });
     };
 
 })();
@@ -1274,7 +1286,6 @@ var $2sxcActionMenuMapper = function (moduleId) {
             },
             //#endregion official, public properties - everything below this can change at any time
 
-
             // internal method to find out if it's in edit-mode
             _isEditMode: function () { return editContext.Environment.IsEditable; },
             _reloadWithAjax: editContext.ContentGroup.SupportsAjax,
@@ -1284,7 +1295,6 @@ var $2sxcActionMenuMapper = function (moduleId) {
             _quickDialogConfig: mngApi.buildQuickDialogConfig(editContext),           // used for in-page dialogs
             _commands: cmdEngine,                        // used to handle the commands for this content-block
             _user: userInfo,
-
 
             // init this object 
             init: function init() {
@@ -1300,7 +1310,6 @@ var $2sxcActionMenuMapper = function (moduleId) {
                 editManager.run("layout");
             },
 
-
             // private: show error when the app-data hasn't been installed yet for this imported-module
             _handleErrors: function (errType, cbTag) {
                 var errWrapper = $("<div class=\"dnnFormMessage dnnFormWarning sc-element\"></div>");
@@ -1315,13 +1324,11 @@ var $2sxcActionMenuMapper = function (moduleId) {
                 $(cbTag).append(errWrapper);
             },
 
-
             // change config by replacing the guid, and refreshing dependend sub-objects
             _updateContentGroupGuid: function (newGuid) {
                 editContext.ContentGroup.Guid = newGuid;
                 editManager._instanceConfig = mngApi.buildInstanceConfig(editContext);
             },
-
 
             _getCbManipulator: function () {
                 return $2sxc._contentBlock.manipulator(sxc);
@@ -1331,9 +1338,6 @@ var $2sxcActionMenuMapper = function (moduleId) {
         editManager.init();
         return editManager;
     };
-
-
-
 })();
 // https://tc39.github.io/ecma262/#sec-array.prototype.find
 if (!Array.prototype.find) {
@@ -1403,18 +1407,16 @@ if (typeof Object.assign != 'function') {
         return to;
     };
 }
-
 // this is a dialog manager which is in charge of all
 // quick-dialogs. 
 // it always has a reference to the latest dialog created by any module instance
 
-(function() {
-
-    var resizeInterval = 200,
-        scrollTopOffset = 80,
-        resizeWatcher = null,
-        diagShowClass = "dia-select",
-        isFullscreen = false;
+(function () {
+    var resizeInterval = 200;
+    var scrollTopOffset = 80;
+    var resizeWatcher = null;
+    var diagShowClass = "dia-select";
+    var isFullscreen = false;
 
     /**
      * dialog manager - the currently active dialog object
@@ -1435,14 +1437,14 @@ if (typeof Object.assign != 'function') {
             diagManager.current = show ? diagManager.getIFrame() : null;
         },
 
-        hide: function() {
+        hide: function () {
             if (diagManager.current) diagManager.toggle(false);
         },
 
         /**
          * cancel the current dialog
          */
-        cancel: function() {
+        cancel: function () {
             if (diagManager.current) diagManager.current.cancel(); // cancel & hide
         },
 
@@ -1450,7 +1452,7 @@ if (typeof Object.assign != 'function') {
          * Remember dialog state across page-reload
          * @param {Object<any>} sxc - the sxc which is persisted for
          */
-        persistDialog: function(sxc) {
+        persistDialog: function (sxc) {
             sessionStorage.setItem("dia-cbid", sxc.cbid);
         },
 
@@ -1458,7 +1460,7 @@ if (typeof Object.assign != 'function') {
          * get the current container
          * @returns {element} html element of the div
          */
-        getContainer: function() {
+        getContainer: function () {
             var container = $(".inpage-frame-wrapper");
             return container.length > 0 ? container : buildContainerAndIFrame();
         },
@@ -1468,7 +1470,7 @@ if (typeof Object.assign != 'function') {
          * @param {html} [container] - html-container as jQuery object
          * @returns {html} iframe object
          */
-        getIFrame: function(container) {
+        getIFrame: function (container) {
             if (!container) container = diagManager.getContainer();
             return container.find("iframe")[0];
         },
@@ -1479,10 +1481,12 @@ if (typeof Object.assign != 'function') {
          * @param {string} dialogName - name of dialog
          * @returns {boolean} true if it's currently showing for this sxc-instance
          */
-        isShowing: function(sxc, dialogName) {
+        isShowing: function (sxc, dialogName) {
             return diagManager.current // there is a current dialog
-                && diagManager.current.sxcCacheKey === sxc.cacheKey // the iframe is showing for the current sxc
-                && diagManager.current.dialogName === dialogName; // the view is the same as previously
+                &&
+                diagManager.current.sxcCacheKey === sxc.cacheKey // the iframe is showing for the current sxc
+                &&
+                diagManager.current.dialogName === dialogName; // the view is the same as previously
         },
 
         /**
@@ -1494,7 +1498,7 @@ if (typeof Object.assign != 'function') {
          * @param {string} [dialogName] - optional name of dialog, to check if it's already open
          * @returns {any} jquery object of the iframe
          */
-        showOrToggle: function(sxc, url, closeCallback, fullScreen, dialogName) {
+        showOrToggle: function (sxc, url, closeCallback, fullScreen, dialogName) {
             setSize(fullScreen);
             var iFrame = diagManager.getIFrame();
 
@@ -1512,9 +1516,7 @@ if (typeof Object.assign != 'function') {
             iFrame.toggle(true);
             return iFrame;
         }
-
     };
-
 
     /**
      * build the container in the dom w/iframe for re-use
@@ -1531,7 +1533,6 @@ if (typeof Object.assign != 'function') {
         return container;
     }
 
-
     function setSize(fullScreen) {
         var container = diagManager.getContainer();
         // set container height
@@ -1547,9 +1548,9 @@ if (typeof Object.assign != 'function') {
             tagModule = null;
 
         /**
-        * get the sxc-object of this iframe
-        * @returns {Object<any>} refreshed sxc-object
-        */
+         * get the sxc-object of this iframe
+         * @returns {Object<any>} refreshed sxc-object
+         */
         function reSxc() {
             if (!hiddenSxc) throw "can't find sxc-instance of IFrame, probably it wasn't initialized yet";
             return hiddenSxc.recreate();
@@ -1557,43 +1558,62 @@ if (typeof Object.assign != 'function') {
 
         var newFrm = Object.assign(iFrame, {
             closeCallback: null,
-            rewire: function(sxc, callback, dialogName) {
+            rewire: function (sxc, callback, dialogName) {
                 hiddenSxc = sxc;
                 tagModule = $($($2sxc._manage.getTag(sxc)).parent().eq(0));
                 newFrm.sxcCacheKey = sxc.cacheKey;
                 newFrm.closeCallback = callback;
-                if(dialogName) newFrm.dialogName = dialogName;
+                if (dialogName) newFrm.dialogName = dialogName;
             },
 
-            getManageInfo: function () { return reSxc().manage._dialogParameters; },
-            getAdditionalDashboardConfig: function() { return reSxc().manage._quickDialogConfig; },
+            getManageInfo: function () {
+                return reSxc().manage._dialogParameters;
+            },
+            getAdditionalDashboardConfig: function () {
+                return reSxc().manage._quickDialogConfig;
+            },
 
-            persistDia: function() { diagManager.persistDialog(reSxc()); },
+            persistDia: function () {
+                diagManager.persistDialog(reSxc());
+            },
 
             scrollToTarget: function () {
-                $("body").animate({ scrollTop: tagModule.offset().top - scrollTopOffset });
+                $("body").animate({
+                    scrollTop: tagModule.offset().top - scrollTopOffset
+                });
             },
 
-            toggle: function (show) { diagManager.toggle(show); },
+            toggle: function (show) {
+                diagManager.toggle(show);
+            },
 
-            cancel: function() {
+            cancel: function () {
                 newFrm.toggle(false);
                 //todo: only re-init if something was changed?
-                return cbApi.reloadAndReInitialize(reSxc());
+                // return cbApi.reloadAndReInitialize(reSxc());
+
+                return newFrm.closeCallback();
             },
 
-            run: function(verb) { reSxc().manage.run(verb); },
-            showMessage: function(message) {
+            run: function (verb) {
+                reSxc().manage.run(verb);
+            },
+            showMessage: function (message) {
                 cbApi.showMessage(reSxc(), '<p class="no-live-preview-available">' + message + "</p>");
             },
-            reloadAndReInit: function() { return cbApi.reloadAndReInitialize(reSxc(), true, true); },
-            saveTemplate: function(templateId) { return cbApi.persistTemplate(reSxc(), templateId, false); },
-            previewTemplate: function(templateId) { return cbApi.ajaxLoad(reSxc(), templateId, true); }
+            reloadAndReInit: function () {
+                return cbApi.reloadAndReInitialize(reSxc(), true, true);
+            },
+            saveTemplate: function (templateId) {
+                return cbApi.persistTemplate(reSxc(), templateId, false);
+            },
+            previewTemplate: function (templateId) {
+                return cbApi.ajaxLoad(reSxc(), templateId, true);
+            }
 
-            });
+        });
         return newFrm;
     }
-    
 
     /**
      * rewrite the url to fit the quick-dialog situation
@@ -1632,22 +1652,22 @@ if (typeof Object.assign != 'function') {
         var cont = diagManager.getContainer();
         if (!resizeWatcher) // only add a timer if not already running
             resizeWatcher = setInterval(function () {
-                try {
-                    var frm = diagManager.getIFrame(cont);
-                    if (!frm) return;
-                    var height = frm.contentDocument.body.offsetHeight;
-                    if (frm.previousHeight === height) return;
-                    frm.style.minHeight = cont.css("min-height");
-                    frm.style.height = height + "px";
-                    frm.previousHeight = height;
-                    if (isFullscreen) {
-                        frm.style.height = "100%";
-                        frm.style.position = "absolute";
+                    try {
+                        var frm = diagManager.getIFrame(cont);
+                        if (!frm) return;
+                        var height = frm.contentDocument.body.offsetHeight;
+                        if (frm.previousHeight === height) return;
+                        frm.style.minHeight = cont.css("min-height");
+                        frm.style.height = height + "px";
+                        frm.previousHeight = height;
+                        if (isFullscreen) {
+                            frm.style.height = "100%";
+                            frm.style.position = "absolute";
+                        }
+                    } catch (e) {
+                        // ignore
                     }
-                } catch (e) {
-                    // ignore
-                }
-            },
+                },
                 resizeInterval);
         return resizeWatcher;
     }
