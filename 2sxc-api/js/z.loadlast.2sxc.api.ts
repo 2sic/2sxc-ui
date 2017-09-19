@@ -4,15 +4,10 @@
 // read more about this in the wiki: https://github.com/2sic/2sxc/wiki/JavaScript-%242sxc
 
 import * as Ct from "./ToSic.Sxc.Controller";
-import "./ToSic.Sxc.Data";
-import "./ToSic.Sxc.Instance";
-import "./ToSic.Sxc.TotalPopup";
-import "./ToSic.Sxc.Url";
-import "./ToSic.Sxc.WebApi";
 
 // ReSharper disable InconsistentNaming
 declare const window: Ct.Window;
 
 if (!window.$2sxc) // prevent double execution
-    window.$2sxc = ToSic.Sxc.buildSxcController();
+    window.$2sxc = Ct.buildSxcController();
 // ReSharper restore InconsistentNaming

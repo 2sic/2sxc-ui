@@ -9,7 +9,9 @@
         "no-namespace": false,
         "member-access": false,
         "no-internal-module": false,
-        "object-literal-sort-keys":false
+        "object-literal-sort-keys":false,
+        "interface-name": false,
+        "no-consecutive-blank-lines": false
     },
     "rulesDirectory": []
 }

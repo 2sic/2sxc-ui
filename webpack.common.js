@@ -45,7 +45,7 @@ const sxcDevConfig = {
 
 const sxcProdConfig = merge(sxcDevConfig, {
     devtool: 'source-map',
-    plugins: [
+    plugins: [ plugins[0],
         new webpack.optimize.UglifyJsPlugin({
             sourceMap: true
         }),
@@ -60,4 +60,4 @@ const sxcProdConfig = merge(sxcDevConfig, {
     }
 })
 
-module.exports = [sxcDevConfig];//, sxcProdConfig];
+module.exports = [sxcDevConfig, sxcProdConfig];
