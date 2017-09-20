@@ -266,8 +266,8 @@
         var develop = createConfig('sxc-develop', 'DevTemplates');
         sets.push(develop);
 
-        var api = createConfig('2sxc.api', 'templates', 'js/', '2sxc.api.js', undefined, '2sxc-api/js/');
-        sets.push(api);
+        // var api = createConfig('2sxc.api', 'templates', 'js/', '2sxc.api.js', undefined, '2sxc-api/js/');
+        // sets.push(api);
 
         var ang1 = createConfig('2sxc4ng', 'templates', 'js/angularjs/', '2sxc4ng.js', undefined, '2sxc-api/angularjs/');
         sets.push(ang1);
