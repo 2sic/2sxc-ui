@@ -4,20 +4,19 @@ const WebpackShellPlugin = require('webpack-shell-plugin');
 const merge = require('webpack-merge');
 
 const sxcJsFileBase = '2sxc.api';
-const SxcApiPath = './2sxc-api/js/z.loadlast.2sxc.api.ts';
+const SxcApiPath = './2sxc-api/js/2sxc.api.ts';
 const SxcDevWebPath = "C:\\Projects\\2SexyContent\\Web\\DesktopModules\\ToSIC_SexyContent\\";
 
 const sxcJsDist = path.resolve(__dirname, 'js');
 
-var plugins = [];
 
-plugins.push(new WebpackShellPlugin({
-    // onBuildStart: ['echo "Starting"'],
+var copyAfterBuild = new WebpackShellPlugin({
+    onBuildStart: ['echo "Starting"'],
     onBuildEnd: [
         'echo copying...',
         'copy ' + sxcJsDist + "\\" + sxcJsFileBase + "*.* " + SxcDevWebPath + "js\\"
     ]
-}));
+});
 
 const sxcDevConfig = {
     entry: {
@@ -40,12 +39,11 @@ const sxcDevConfig = {
         filename: sxcJsFileBase + '.js',
         path: sxcJsDist
     },
-    plugins: plugins
 };
 
 const sxcProdConfig = merge(sxcDevConfig, {
     devtool: 'source-map',
-    plugins: [ plugins[0],
+    plugins: [
         new webpack.optimize.UglifyJsPlugin({
             sourceMap: true
         }),
@@ -53,7 +51,9 @@ const sxcProdConfig = merge(sxcDevConfig, {
             'process.env': {
                 'NODE_ENV': JSON.stringify('production')
             }
-        })
+        }
+            // , copyAfterBuild
+        )
     ],
     output: {
         filename: sxcJsFileBase + '.min.js',
