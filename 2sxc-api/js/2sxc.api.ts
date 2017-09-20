@@ -10,4 +10,5 @@ declare const window: Window;
 
 if (!window.$2sxc) // prevent double execution
     window.$2sxc = buildSxcController();
+
 // ReSharper restore InconsistentNaming

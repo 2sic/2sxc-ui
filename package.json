@@ -6,9 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "develop": "gulp develop",
-    "webpack-js": "webpack --config webpack.common.js --watch",
-    "copy-js": "cpx \"js/**/*.*\" \"c:/temp/x/\" -v -w",
-    "dev-js": "concurrently --kill-others \"npm run webpack-js\" \"npm run copy-js\""
+    "webpack-js": "webpack --config webpack.common.js --watch"
   },
   "repository": {
     "type": "git",
@@ -30,8 +28,6 @@
   },
   "homepage": "https://github.com/2sic/2sxc-ui",
   "devDependencies": {
-    "concurrently": "^3.5.0",
-    "cpx": "^1.5.0",
     "gulp": "^3.9.1",
     "gulp-angular-templatecache": "1.8.0",
     "gulp-clean": "0.3.2",

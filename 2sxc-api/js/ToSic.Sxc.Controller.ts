@@ -7,7 +7,6 @@ import { UrlParamManager } from "./ToSic.Sxc.Url";
 export interface Window { $2sxc: SxcController | SxcControllerWithInternals; }
 
 declare const $: any;
-
 declare const window: Window;
 
 /**
