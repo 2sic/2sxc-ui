@@ -26,7 +26,7 @@
     <Content Include=".gitignore" />
     <Content Include="2sxc-api\angularjs\2sxc4ng.js" />
     <Content Include="2sxc-api\angularjs\bootstrapper.js" />
-    <TypeScriptCompile Include="2sxc-api\js\2sxc.api.ts" />
+    <TypeScriptCompile Include="2sxc-api\js\z.loadlast.2sxc.api.ts" />
     <Content Include="gulpfile.js" />
     <Content Include="License.txt" />
     <Content Include="src\config\eav-configuration-in-sxc.js" />

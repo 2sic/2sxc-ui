@@ -2,12 +2,15 @@
     "use strict";
 
     angular.module("sxcFieldTemplates")
-        .config(function(formlyConfigProvider) {
+        .config(function (formlyConfigProvider, defaultFieldWrappers) {
+
+            var wrappers = defaultFieldWrappers.slice(0); // copy the array
+            wrappers.splice(defaultFieldWrappers.indexOf("eavLocalization"), 1); // remove the localization...
 
             formlyConfigProvider.setType({
                 name: "entity-content-blocks",
                 templateUrl: "fields/entity/entity-default.html",
-                wrapper: ["eavLabel", "bootstrapHasError", "collapsible"],
+                wrapper: wrappers, // ["eavLabel", "bootstrapHasError", "collapsible"],
                 controller: "FieldTemplate-EntityContentBlockCtrl"
             });
         })
