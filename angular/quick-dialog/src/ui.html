@@ -37,7 +37,7 @@
       };
     };
 
-    // add a script right then and there to the document, correctly cache-busting 
+    // add a script right then and there to the document, correctly cache-busting
     function addScript(src) {
       var async = src.async || false;
       src = typeof src === "string" ? src : src.url;
@@ -62,7 +62,8 @@
         'inline.bundle.js', // purpose unknown
         'polyfills.bundle.js', // js polyfills
         'vendor.bundle.js', // dependencies
-        'main.bundle.js' // our app, with everything
+        'main.bundle.js', // our app, with everything
+        'styles.bundle.js'
       ],
       styles = [
         'styles.bundle.css'

@@ -9,7 +9,10 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
+    "develop": "concurrently \"npm run watch:publish:2sxc-ui\" \"npm run watch:publish:2sxc\" \"npm run watch\" --kill-others -n \"publish to 2sxc,publish to 2sxc-ui,build angular\"",
     "watch": "ng build --watch --output-hashing=none",
+    "watch:publish:2sxc-ui": "cpx \"./dist/**/*.*\" \"../../dist/\" -w -v",
+    "watch:publish:2sxc": "cpx \"./dist/**/*.*\" \"/Projects/2SexyContent/Web/DesktopModules/ToSIC_SexyContent/dist/\" -w -v",
     "prod": "ng build --prod --output-hashing=none --sourcemaps=false",
     "prod-source-maps": "ng build --prod --output-hashing=none --sourcemaps=true"
   },
@@ -33,6 +36,7 @@
     "zone.js": "0.8.17"
   },
   "devDependencies": {
+    "concurrently": "^3.5.0",
     "@angular/cdk": "2.0.0-beta.10",
     "@angular/cli": "1.4.2",
     "@angular/compiler-cli": "4.4.2",
@@ -41,6 +45,7 @@
     "@types/jasmine": "2.5.38",
     "@types/node": "7.0.18",
     "codelyzer": "~2.0.0",
+    "cpx": "^1.5.0",
     "jasmine-core": "~2.5.2",
     "jasmine-spec-reporter": "~3.2.0",
     "karma": "~1.4.1",

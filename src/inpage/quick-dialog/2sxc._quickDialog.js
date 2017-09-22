@@ -156,28 +156,23 @@
                 newFrm.closeCallback = callback;
                 if (dialogName) newFrm.dialogName = dialogName;
             },
-
             getManageInfo: function () {
                 return reSxc().manage._dialogParameters;
             },
             getAdditionalDashboardConfig: function () {
                 return reSxc().manage._quickDialogConfig;
             },
-
             persistDia: function () {
                 diagManager.persistDialog(reSxc());
             },
-
             scrollToTarget: function () {
                 $("body").animate({
                     scrollTop: tagModule.offset().top - scrollTopOffset
                 });
             },
-
             toggle: function (show) {
                 diagManager.toggle(show);
             },
-
             cancel: function () {
                 newFrm.toggle(false);
                 //todo: only re-init if something was changed?
@@ -185,7 +180,6 @@
 
                 return newFrm.closeCallback();
             },
-
             run: function (verb) {
                 reSxc().manage.run(verb);
             },
