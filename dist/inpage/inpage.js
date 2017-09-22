@@ -1536,9 +1536,7 @@ if (typeof Object.assign != 'function') {
     function setSize(fullScreen) {
         var container = diagManager.getContainer();
         // set container height
-        container.css("min-height", fullScreen ? "100%" : "230px");
-
-        // remember...
+        container.css("min-height", fullScreen ? "100%" : "225px");
         isFullscreen = fullScreen;
     }
 
