@@ -6,8 +6,8 @@
   </button>
 </md-toolbar>
 <div class="table">
-  {{(sxcVersion.versions | async)?.length}}
-  <div *ngIf="(sxcVersion.versions | async)?.length === 0">test{{'ItemHistory.NoHistory' | translate}}</div>
+  <div class="no-items" *ngIf="sxcVersion.error | async">{{ sxcVersion.error | async }}</div>
+  <div class="no-items" *ngIf="(sxcVersion.versions | async)?.length === 0">{{'ItemHistory.NoHistory' | translate}}</div>
   <div class="record" *ngFor="let version of sxcVersion.versions | async">
     <md-expansion-panel>
       <md-expansion-panel-header>

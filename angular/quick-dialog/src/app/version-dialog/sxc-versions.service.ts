@@ -10,8 +10,10 @@ declare const $2sxc;
 @Injectable()
 export class SxcVersionsService {
   versions: Observable<Version[]>;
+  error: Observable<string>;
 
   private versionsSubject: ReplaySubject<Version[]>;
+  private errorSubject: ReplaySubject<string>;
   private apiUrl;
 
   constructor(
@@ -19,6 +21,10 @@ export class SxcVersionsService {
   ) {
     this.versionsSubject = new ReplaySubject<Version[]>(1);
     this.versions = this.versionsSubject.asObservable();
+
+    this.errorSubject = new ReplaySubject<string>(1);
+    this.error = this.errorSubject.asObservable();
+
     this.apiUrl = $2sxc.urlParams.require('portalroot') + 'desktopmodules/2sxc/api/';
     this.loadVersions();
   }
@@ -45,7 +51,8 @@ export class SxcVersionsService {
     const cbId = $2sxc.urlParams.require('cbid');
     const modId = $2sxc.urlParams.require('mid');
     const item = JSON.parse($2sxc.urlParams.require('items'))[0];
-    const url = `${this.apiUrl}eav/entities/history?appId=${appId}`;
+    const url = $2sxc(modId).resolveServiceUrl(`eav/entities/history?appId=${appId}`);
+    // const url = `${this.apiUrl}eav/entities/history?appId=${appId}`;
 
     const headers = new Headers();
     headers.append('TabId', tabId);
@@ -85,6 +92,8 @@ export class SxcVersionsService {
             return `${y}-${m < 10 ? '0' : ''}${m}-${d < 10 ? '0' : ''}${d} ${h < 10 ? '0' : ''}${h}:${min < 10 ? '0' : ''}${min}`;
           })(v.TimeStamp),
         })))
-      .subscribe(v => this.versionsSubject.next(v));
+      .subscribe(v => this.versionsSubject.next(v), e => {
+        this.errorSubject.next('Could not load versions for this item. Please make sure to assign an initial content.');
+      });
   }
 }
