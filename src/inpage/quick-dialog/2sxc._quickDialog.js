@@ -176,6 +176,8 @@
                 //todo: only re-init if something was changed?
                 // return cbApi.reloadAndReInitialize(reSxc());
 
+                // cancel the dialog
+                localStorage.setItem('cancelled-dialog', true);
                 return newFrm.closeCallback();
             },
             run: function (verb) {

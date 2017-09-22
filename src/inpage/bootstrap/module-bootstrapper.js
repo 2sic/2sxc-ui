@@ -3,6 +3,9 @@
 $(function () {
     var initializedModules = [];
     var openedTemplatePickerOnce = false;
+    var cancelledDialog = localStorage.getItem('cancelled-dialog');
+
+    if (cancelledDialog) localStorage.removeItem('cancelled-dialog');
 
     initAllModules(true);
 
@@ -20,11 +23,18 @@ $(function () {
         tryShowTemplatePicker();
     }
 
+    /**
+     * Show the template picker if
+     * - template picker has not yet been opened
+     * - dialog has not been cancelled
+     * - only one uninitialized module on page
+     * @returns
+     */
     function tryShowTemplatePicker() {
         var uninitializedModules = $('.sc-uninitialized');
         var module;
 
-        if (openedTemplatePickerOnce) return false;
+        if (cancelledDialog || openedTemplatePickerOnce) return false;
 
         // already showing a dialog
         if ($2sxc._quickDialog.current !== null) return false;
@@ -39,6 +49,7 @@ $(function () {
     }
 
     function initModule(module, isFirstRun) {
+
         // check if module is already in the list of initialized modules
         if (initializedModules.find(function (m) {
                 return m === module;
@@ -63,6 +74,7 @@ $(function () {
     }
 
     function showGlassesButtonIfUninitialized(sxc) {
+
         // already initialized
         if (sxc.manage._editContext.ContentGroup.TemplateId !== 0) return false;
 
