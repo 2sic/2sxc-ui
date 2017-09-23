@@ -15,8 +15,6 @@ import { ContentType } from "app/template-picker/content-type";
 declare const $2sxc: any;
 var win = window;
 
-
-
 @Component({
   selector: 'app-template-picker',
   templateUrl: './template-picker.component.html',
@@ -69,7 +67,6 @@ export class TemplatePickerComponent implements OnInit {
       this.loading = true;
     });
 
-
     this.updateAppSubject
       .debounceTime(400)
       .subscribe(({ app }) => {
@@ -100,7 +97,7 @@ export class TemplatePickerComponent implements OnInit {
         this.template = template;
         this.appRef.tick();
 
-        if (this.supportsAjax) 
+        if (this.supportsAjax)
           return this.frame.previewTemplate(template.TemplateId)
             .then(() => { doPostAjaxScrolling(this); });
 
@@ -150,7 +147,7 @@ export class TemplatePickerComponent implements OnInit {
     this.api.loadTemplates()
       .take(1)
       .subscribe(templates => this.api.loadContentTypes())
-  
+
     this.api.loadApps();
   }
 
@@ -160,7 +157,7 @@ export class TemplatePickerComponent implements OnInit {
 
 
 
-  
+
   persistTemplate() {
     this.frame.saveTemplate(this.template.TemplateId);
   }

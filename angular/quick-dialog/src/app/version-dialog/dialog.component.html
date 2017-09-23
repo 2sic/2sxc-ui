@@ -6,6 +6,8 @@
   </button>
 </md-toolbar>
 <div class="table">
+  <div class="no-items" *ngIf="sxcVersion.error | async">{{'ItemHistory.NoHistory' | translate}}</div>
+  <div class="no-items" *ngIf="(sxcVersion.versions | async)?.length === 0">{{'ItemHistory.NoHistory' | translate}}</div>
   <div class="record" *ngFor="let version of sxcVersion.versions | async">
     <md-expansion-panel>
       <md-expansion-panel-header>
@@ -29,7 +31,7 @@
       </div>
       <md-action-row>
         <!--<button md-button (click)="restoreDraft(version)">{{"ItemHistory.Buttons.RestoreDraft" | translate}}</button>-->
-        <button md-button (click)="restoreLive(version)">{{"ItemHistory.Buttons.RestoreLive" | translate}}</button>
+        <button md-button (click)="restoreLive(version)">{{'ItemHistory.Buttons.RestoreLive' | translate}}</button>
       </md-action-row>
     </md-expansion-panel>
   </div>

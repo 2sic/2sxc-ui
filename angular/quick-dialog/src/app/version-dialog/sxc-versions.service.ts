@@ -10,8 +10,10 @@ declare const $2sxc;
 @Injectable()
 export class SxcVersionsService {
   versions: Observable<Version[]>;
+  error: Observable<string>;
 
   private versionsSubject: ReplaySubject<Version[]>;
+  private errorSubject: ReplaySubject<string>;
   private apiUrl;
 
   constructor(
@@ -19,40 +21,44 @@ export class SxcVersionsService {
   ) {
     this.versionsSubject = new ReplaySubject<Version[]>(1);
     this.versions = this.versionsSubject.asObservable();
+
+    this.errorSubject = new ReplaySubject<string>(1);
+    this.error = this.errorSubject.asObservable();
+
     this.apiUrl = $2sxc.urlParams.require('portalroot') + 'desktopmodules/2sxc/api/';
     this.loadVersions();
   }
 
   restore(changeId: number): Observable<Response> {
-    let appId = $2sxc.urlParams.require('appId');
-    let tabId = $2sxc.urlParams.require('tid');
-    let cbId = $2sxc.urlParams.require('cbid');
-    let modId = $2sxc.urlParams.require('mid');
-    let item = JSON.parse($2sxc.urlParams.require('items'))[0];
-    let url = `${this.apiUrl}eav/entities/restore?appId=${appId}&changeId=${changeId}`;
+    const appId = $2sxc.urlParams.require('appId');
+    const tabId = $2sxc.urlParams.require('tid');
+    const cbId = $2sxc.urlParams.require('cbid');
+    const modId = $2sxc.urlParams.require('mid');
+    const item = JSON.parse($2sxc.urlParams.require('items'))[0];
+    const url = `${this.apiUrl}eav/entities/restore?appId=${appId}&changeId=${changeId}`;
 
-    let headers = new Headers();
-
+    const headers = new Headers();
     headers.append('TabId', tabId);
     headers.append('ModuleId', modId);
     headers.append('ContentBlockId', cbId);
-    let options = new RequestOptions({ headers: headers });
+    const options = new RequestOptions({ headers: headers });
     return this.http.post(url, item, options);
   }
 
   private loadVersions(): void {
-    let appId = $2sxc.urlParams.require('appId');
-    let tabId = $2sxc.urlParams.require('tid');
-    let cbId = $2sxc.urlParams.require('cbid');
-    let modId = $2sxc.urlParams.require('mid');
-    let item = JSON.parse($2sxc.urlParams.require('items'))[0];
-    let url = `${this.apiUrl}eav/entities/history?appId=${appId}`;
+    const appId = $2sxc.urlParams.require('appId');
+    const tabId = $2sxc.urlParams.require('tid');
+    const cbId = $2sxc.urlParams.require('cbid');
+    const modId = $2sxc.urlParams.require('mid');
+    const item = JSON.parse($2sxc.urlParams.require('items'))[0];
+    const url = $2sxc(modId).resolveServiceUrl(`eav/entities/history?appId=${appId}`);
+    // const url = `${this.apiUrl}eav/entities/history?appId=${appId}`;
 
-    let headers = new Headers();
+    const headers = new Headers();
     headers.append('TabId', tabId);
     headers.append('ModuleId', modId);
     headers.append('ContentBlockId', cbId);
-    let options = new RequestOptions({ headers: headers });
+    const options = new RequestOptions({ headers: headers });
 
     this.http.post(url, item, options)
       .map(res => res.json()
@@ -64,22 +70,30 @@ export class SxcVersionsService {
             if (lastVersion) {
               lastVersion = JSON.parse(lastVersion.Json).Entity.Attributes;
             }
-            
+
             return Object.entries(attr)
               .reduce((t, c) => Array.prototype.concat(t, Object.entries(c[1])
-                .map(([key, value], i2) => ({ key, value: Object.entries(value), type: c[0], hasChanged: lastVersion ? JSON.stringify(lastVersion[c[0]][key]) !== JSON.stringify(value) : false }))), []);
+                .map(([key, value], i2) => ({
+                  key,
+                  value: Object.entries(value),
+                  type: c[0],
+                  hasChanged: lastVersion
+                    ? JSON.stringify(lastVersion[c[0]][key]) !== JSON.stringify(value)
+                    : false
+                }))), []);
           })(),
           TimeStamp: (timestamp => {
-            let
-              date = new Date(timestamp),
-              y = date.getFullYear(),
-              m = date.getUTCMonth(),
-              d = date.getDate(),
-              h = date.getHours(),
-              min = date.getMinutes();
+            const date = new Date(timestamp);
+            const y = date.getFullYear();
+            const m = date.getUTCMonth();
+            const d = date.getDate();
+            const h = date.getHours();
+            const min = date.getMinutes();
             return `${y}-${m < 10 ? '0' : ''}${m}-${d < 10 ? '0' : ''}${d} ${h < 10 ? '0' : ''}${h}:${min < 10 ? '0' : ''}${min}`;
           })(v.TimeStamp),
         })))
-      .subscribe(v => this.versionsSubject.next(v));
+      .subscribe(v => this.versionsSubject.next(v), e => {
+        this.errorSubject.next('Could not load versions for this item. Please make sure to assign an initial content.');
+      });
   }
 }

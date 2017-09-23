@@ -303,7 +303,6 @@
         }));
         //#endregion
 
-
         addDef(makeDef("layout", "ChangeLayout", "glasses", true, true, {
              inlineWindow: true 
         }));

@@ -10,6 +10,7 @@
     document.write('<base href="' + path + '">');
     document.write('<script src="../../js/2sxc.api.js' + jsVersionCacheId + '"></scr' + 'ipt>');
     // must now close the script tag, so that the added tag is parsed before all other code
+
   </script>
   <script>
     var apiUrl = $2sxc.urlParams.require('portalroot') + 'desktopmodules/2sxc/api/';
@@ -21,24 +22,27 @@
       if (window.$ === undefined) window.$ = {};
       window.$.ServicesFramework = function (id) {
         return {
-          name: "This is a fake DNN ServicesFramework", description:
-          "It enables stuff requiring (but not really needing) the sf to work", getTabId: function () {
+          name: "This is a fake DNN ServicesFramework",
+          description: "It enables stuff requiring (but not really needing) the sf to work",
+          getTabId: function () {
             return $2sxc.urlParams.require("tid");
-          }, getAntiForgeryValue: function () {
+          },
+          getAntiForgeryValue: function () {
             return "abcdefgihjklmnop";
-          }, getServiceRoot: function () {
+          },
+          getServiceRoot: function () {
             return apiUrl;
           }
         }
       };
     };
 
-    // add a script right then and there to the document, correctly cache-busting 
+    // add a script right then and there to the document, correctly cache-busting
     function addScript(src) {
       var async = src.async || false;
       src = typeof src === "string" ? src : src.url;
       var script = document.createElement('script');
-	  script.setAttribute('defer', 'defer');
+      script.setAttribute('defer', 'defer');
       script.src = src + jsVersionCacheId;
 
       // needs doc.write to ensure in-sync loading of the files
@@ -55,19 +59,22 @@
     }
 
     var scripts = [
-      'inline.bundle.js', // purpose unknown
-	  'polyfills.bundle.js', // js polyfills for older browsers
-	  'vendor.bundle.js', // default set needed for all UIs like angular, animate, translate
-      'main.bundle.js' // our app, with everything
-    ], styles = [
-      'styles.bundle.css'
-    ];
+        'inline.bundle.js', // purpose unknown
+        'polyfills.bundle.js', // js polyfills
+        'vendor.bundle.js', // dependencies
+        'main.bundle.js', // our app, with everything
+        'styles.bundle.js'
+      ],
+      styles = [
+        'styles.bundle.css'
+      ];
 
     // send message to the angular-observable to restart the app
-    window.reboot = function() {
-      if(window.bootController)
+    window.reboot = function () {
+      if (window.bootController)
         window.bootController.restart();
     }
+
   </script>
   <meta charset="utf-8">
   <title>Quick Dialog</title>
@@ -85,6 +92,7 @@
     // now add the scripts as needed
     for (s = 0; s < scripts.length; s++) addScript(scripts[s]);
     for (s = 0; s < styles.length; s++) addStyle(styles[s]);
+
   </script>
   <!-- </body> -->
 </body>

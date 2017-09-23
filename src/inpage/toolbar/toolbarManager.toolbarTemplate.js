@@ -1,6 +1,7 @@
 ﻿// the default / initial buttons in a standard toolbar
-
 (function () {
+
+    // ToDo: refactor to avoid side-effects
     $2sxc._toolbarManager.toolbarTemplate = {
         groups: [
             // ToDo: remove dead code

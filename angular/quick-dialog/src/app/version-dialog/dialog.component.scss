@@ -14,6 +14,11 @@
     }
     .table {
         padding: 8px;
+        .no-items {
+            color: rgba(0, 0 ,0, .6);
+            text-align: center;
+            margin: 16px;
+        }
         .header {
             line-height: 48px;
             font-weight: 400;

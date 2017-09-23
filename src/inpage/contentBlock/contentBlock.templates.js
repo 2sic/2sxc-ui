@@ -24,9 +24,10 @@
     cbm.persistTemplate = function (sxc, templateId, forceCreate) {
         var manage = sxc.manage,
             contentGroup = manage._editContext.ContentGroup,
-            isPreview = $2sxc._toolbarManager.isDisabled(sxc),
+            showingAjaxPreview = $2sxc._toolbarManager.isDisabled(sxc),
             // Save only if the currently saved is not the same as the new
-            groupExistsAndTemplateUnchanged = !!contentGroup.HasContent && !isPreview;
+            templateIdHasChanged = templateId !== undefined && templateId !== manage._editContext.ContentGroup.TemplateId,
+            groupExistsAndTemplateUnchanged = !!contentGroup.HasContent && !showingAjaxPreview && !templateIdHasChanged;
 
         templateId = templateId || manage._editContext.ContentGroup.TemplateId;
 
@@ -55,7 +56,7 @@
             if (!contentGroup.HasContent) contentGroup.HasContent = forceCreate;
 
             // only re-load on ajax, not on app as that was already re-loaded on the preview
-            if (isPreview)      // necessary to show the original template again
+            if (showingAjaxPreview)      // necessary to show the original template again
                 cbm.reloadAndReInitialize(sxc);
         });
 

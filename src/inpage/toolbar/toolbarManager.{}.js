@@ -8,6 +8,5 @@
 
         // internal constants
         cDisableAttrName: "data-disable-toolbar"
-
     };
 })();

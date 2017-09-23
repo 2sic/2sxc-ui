@@ -1,15 +1,13 @@
-﻿
-// this is a dialog manager which is in charge of all
+﻿// this is a dialog manager which is in charge of all
 // quick-dialogs. 
 // it always has a reference to the latest dialog created by any module instance
 
-(function() {
-
-    var resizeInterval = 200,
-        scrollTopOffset = 80,
-        resizeWatcher = null,
-        diagShowClass = "dia-select",
-        isFullscreen = false;
+(function () {
+    var resizeInterval = 200;
+    var scrollTopOffset = 80;
+    var resizeWatcher = null;
+    var diagShowClass = "dia-select";
+    var isFullscreen = false;
 
     /**
      * dialog manager - the currently active dialog object
@@ -30,14 +28,14 @@
             diagManager.current = show ? diagManager.getIFrame() : null;
         },
 
-        hide: function() {
+        hide: function () {
             if (diagManager.current) diagManager.toggle(false);
         },
 
         /**
          * cancel the current dialog
          */
-        cancel: function() {
+        cancel: function () {
             if (diagManager.current) diagManager.current.cancel(); // cancel & hide
         },
 
@@ -45,7 +43,7 @@
          * Remember dialog state across page-reload
          * @param {Object<any>} sxc - the sxc which is persisted for
          */
-        persistDialog: function(sxc) {
+        persistDialog: function (sxc) {
             sessionStorage.setItem("dia-cbid", sxc.cbid);
         },
 
@@ -53,7 +51,7 @@
          * get the current container
          * @returns {element} html element of the div
          */
-        getContainer: function() {
+        getContainer: function () {
             var container = $(".inpage-frame-wrapper");
             return container.length > 0 ? container : buildContainerAndIFrame();
         },
@@ -63,7 +61,7 @@
          * @param {html} [container] - html-container as jQuery object
          * @returns {html} iframe object
          */
-        getIFrame: function(container) {
+        getIFrame: function (container) {
             if (!container) container = diagManager.getContainer();
             return container.find("iframe")[0];
         },
@@ -74,10 +72,12 @@
          * @param {string} dialogName - name of dialog
          * @returns {boolean} true if it's currently showing for this sxc-instance
          */
-        isShowing: function(sxc, dialogName) {
+        isShowing: function (sxc, dialogName) {
             return diagManager.current // there is a current dialog
-                && diagManager.current.sxcCacheKey === sxc.cacheKey // the iframe is showing for the current sxc
-                && diagManager.current.dialogName === dialogName; // the view is the same as previously
+                &&
+                diagManager.current.sxcCacheKey === sxc.cacheKey // the iframe is showing for the current sxc
+                &&
+                diagManager.current.dialogName === dialogName; // the view is the same as previously
         },
 
         /**
@@ -89,7 +89,7 @@
          * @param {string} [dialogName] - optional name of dialog, to check if it's already open
          * @returns {any} jquery object of the iframe
          */
-        showOrToggle: function(sxc, url, closeCallback, fullScreen, dialogName) {
+        showOrToggle: function (sxc, url, closeCallback, fullScreen, dialogName) {
             setSize(fullScreen);
             var iFrame = diagManager.getIFrame();
 
@@ -107,9 +107,7 @@
             iFrame.toggle(true);
             return iFrame;
         }
-
     };
-
 
     /**
      * build the container in the dom w/iframe for re-use
@@ -126,13 +124,10 @@
         return container;
     }
 
-
     function setSize(fullScreen) {
         var container = diagManager.getContainer();
         // set container height
-        container.css("min-height", fullScreen ? "100%" : "230px");
-
-        // remember...
+        container.css("min-height", fullScreen ? "100%" : "225px");
         isFullscreen = fullScreen;
     }
 
@@ -142,9 +137,9 @@
             tagModule = null;
 
         /**
-        * get the sxc-object of this iframe
-        * @returns {Object<any>} refreshed sxc-object
-        */
+         * get the sxc-object of this iframe
+         * @returns {Object<any>} refreshed sxc-object
+         */
         function reSxc() {
             if (!hiddenSxc) throw "can't find sxc-instance of IFrame, probably it wasn't initialized yet";
             return hiddenSxc.recreate();
@@ -152,43 +147,58 @@
 
         var newFrm = Object.assign(iFrame, {
             closeCallback: null,
-            rewire: function(sxc, callback, dialogName) {
+            rewire: function (sxc, callback, dialogName) {
                 hiddenSxc = sxc;
                 tagModule = $($($2sxc._manage.getTag(sxc)).parent().eq(0));
                 newFrm.sxcCacheKey = sxc.cacheKey;
                 newFrm.closeCallback = callback;
-                if(dialogName) newFrm.dialogName = dialogName;
+                if (dialogName) newFrm.dialogName = dialogName;
             },
-
-            getManageInfo: function () { return reSxc().manage._dialogParameters; },
-            getAdditionalDashboardConfig: function() { return reSxc().manage._quickDialogConfig; },
-
-            persistDia: function() { diagManager.persistDialog(reSxc()); },
-
+            getManageInfo: function () {
+                return reSxc().manage._dialogParameters;
+            },
+            getAdditionalDashboardConfig: function () {
+                return reSxc().manage._quickDialogConfig;
+            },
+            persistDia: function () {
+                diagManager.persistDialog(reSxc());
+            },
             scrollToTarget: function () {
-                $("body").animate({ scrollTop: tagModule.offset().top - scrollTopOffset });
+                $("body").animate({
+                    scrollTop: tagModule.offset().top - scrollTopOffset
+                });
             },
-
-            toggle: function (show) { diagManager.toggle(show); },
-
-            cancel: function() {
+            toggle: function (show) {
+                diagManager.toggle(show);
+            },
+            cancel: function () {
                 newFrm.toggle(false);
                 //todo: only re-init if something was changed?
-                return cbApi.reloadAndReInitialize(reSxc());
-            },
+                // return cbApi.reloadAndReInitialize(reSxc());
 
-            run: function(verb) { reSxc().manage.run(verb); },
-            showMessage: function(message) {
+                // cancel the dialog
+                localStorage.setItem('cancelled-dialog', true);
+                return newFrm.closeCallback();
+            },
+            run: function (verb) {
+                reSxc().manage.run(verb);
+            },
+            showMessage: function (message) {
                 cbApi.showMessage(reSxc(), '<p class="no-live-preview-available">' + message + "</p>");
             },
-            reloadAndReInit: function() { return cbApi.reloadAndReInitialize(reSxc(), true, true); },
-            saveTemplate: function(templateId) { return cbApi.persistTemplate(reSxc(), templateId, false); },
-            previewTemplate: function(templateId) { return cbApi.ajaxLoad(reSxc(), templateId, true); }
+            reloadAndReInit: function () {
+                return cbApi.reloadAndReInitialize(reSxc(), true, true);
+            },
+            saveTemplate: function (templateId) {
+                return cbApi.persistTemplate(reSxc(), templateId, false);
+            },
+            previewTemplate: function (templateId) {
+                return cbApi.ajaxLoad(reSxc(), templateId, true);
+            }
 
-            });
+        });
         return newFrm;
     }
-    
 
     /**
      * rewrite the url to fit the quick-dialog situation
@@ -227,22 +237,22 @@
         var cont = diagManager.getContainer();
         if (!resizeWatcher) // only add a timer if not already running
             resizeWatcher = setInterval(function () {
-                try {
-                    var frm = diagManager.getIFrame(cont);
-                    if (!frm) return;
-                    var height = frm.contentDocument.body.offsetHeight;
-                    if (frm.previousHeight === height) return;
-                    frm.style.minHeight = cont.css("min-height");
-                    frm.style.height = height + "px";
-                    frm.previousHeight = height;
-                    if (isFullscreen) {
-                        frm.style.height = "100%";
-                        frm.style.position = "absolute";
+                    try {
+                        var frm = diagManager.getIFrame(cont);
+                        if (!frm) return;
+                        var height = frm.contentDocument.body.offsetHeight;
+                        if (frm.previousHeight === height) return;
+                        frm.style.minHeight = cont.css("min-height");
+                        frm.style.height = height + "px";
+                        frm.previousHeight = height;
+                        if (isFullscreen) {
+                            frm.style.height = "100%";
+                            frm.style.position = "absolute";
+                        }
+                    } catch (e) {
+                        // ignore
                     }
-                } catch (e) {
-                    // ignore
-                }
-            },
+                },
                 resizeInterval);
         return resizeWatcher;
     }
