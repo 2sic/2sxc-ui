@@ -144,7 +144,7 @@
                 if (conf.uiActionOnly) return settings.code(settings, origEvent, sxc);
 
                 // if more than just a UI-action, then it needs to be sure the content-group is created first
-                return $2sxc._contentBlock.prepareToAddContent(sxc)
+                return $2sxc._contentBlock.prepareToAddContent(sxc, settings.useModuleList)
                     .then(function () {
                         return settings.code(settings, origEvent, sxc);
                     });

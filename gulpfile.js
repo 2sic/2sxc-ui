@@ -6,7 +6,9 @@
             evoq: '../TestWebsites/Evoq 9.1.0',
         },
         gulp = require('gulp'),
-        $ = require('gulp-load-plugins')({ lazy: false }),
+        $ = require('gulp-load-plugins')({
+            lazy: false
+        }),
         packageJSON = require('./package'), // would need this to always auto-publish after compile... runSequence = require('run-sequence'),
         jshintConfig = packageJSON.jshintConfig,
         merge = require('merge-stream'),
@@ -20,7 +22,7 @@
             autopublishTargetJs: '/DesktopModules/ToSIC_SexyContent/js',
             rootDist: 'dist/' // 'tmp-gulp/dist/'
         };
-
+    
     gulp.task('develop', () => {
         watchSet(createSetsForOurCode());
         watchDnnUi();
@@ -69,8 +71,12 @@
         var root = 'src/sxc-develop/source-editor/snippets.';
         var src = root + 'xlsx';
         gulp.src(src)
-            .pipe($.jsXlsx.run({ parseWorksheet: 'row_array' }))
-            .pipe($.rename({ extname: '.json.js' }))
+            .pipe($.jsXlsx.run({
+                parseWorksheet: 'row_array'
+            }))
+            .pipe($.rename({
+                extname: '.json.js'
+            }))
             .pipe(gulp.dest(config.rootDist + 'sxc-develop/'));
     }
 
@@ -83,7 +89,9 @@
         // icon-fonts and font-definitions
         var src = '../2sxc-icons/';
         gulp.src([src + '**/*.woff', src + '**/*.ttf', src + '**/*.eot'])
-            .pipe($.rename({ dirname: '' }))
+            .pipe($.rename({
+                dirname: ''
+            }))
             .pipe(gulp.dest(config.rootDist + 'lib/fonts'));
 
         // icon-definition file for app-icons
@@ -129,14 +137,14 @@
                 templateSetName: tmplSetName,
                 autoSort: true,
                 alsoRunMin: true
-            } 
+            }
         }
     }
 
     // package a JS set
     function packageJs(set) {
         if (config.debug) console.log('bundling start: ' + set.name);
-        
+
         var js = gulp.src(set.js.files);
         if (set.js.autoSort)
             js = js.pipe($.sort());
@@ -167,16 +175,20 @@
         result = result.pipe($.concat(set.js.concat))
             .pipe(gulp.dest(set.dist));
 
+        console.log(`copy to ${set.dist}`);
+
         if (config.debug) console.log('ready to create min for: ' + set.name);
         if (set.js.alsoRunMin) {
-            gulp.src(set.dist + set.js.concat)  // reload the dist as new src for source-map
-                .pipe($.rename({ extname: '.min.js' }))
+            gulp.src(set.dist + set.js.concat) // reload the dist as new src for source-map
+                .pipe($.rename({
+                    extname: '.min.js'
+                }))
                 // 2016-04-23 2dm had to disable source-maps for now, something is buggy inside
                 // 2016-09-07 2dm re-enabled it, seems to work now...
                 // 2016-09-08 2rm had to disable it again, sourcmap generator throws an error
                 // 2016-10-08 2dm enabled it again, now that we're not loading previous maps I think it should work
 
-                .pipe($.sourcemaps.init())//{ loadMaps: true }))
+                .pipe($.sourcemaps.init()) //{ loadMaps: true }))
                 .pipe($.uglify())
                 .on('error', $.util.log)
                 .pipe($.sourcemaps.write('./'))
@@ -199,7 +211,7 @@
         // lint the css - not enabled right now, too many fix-suggestions
         //.pipe($.csslint())
         //.pipe($.csslint.reporter())
-        var libs = gulp.src(set.css.libs);  // don't sort libs
+        var libs = gulp.src(set.css.libs); // don't sort libs
 
         result = merge(result, libs)
 
@@ -209,13 +221,17 @@
 
         if (set.css.alsoRunMin)
             result
-                // minify and save
-                .pipe($.rename({ extname: '.min.css' }))
-                .pipe($.sourcemaps.init())
-                .pipe($.cleanCss({ compatibility: '*', processImportFrom: ['!fonts.googleapis.com'] /* ie9 compatibility */ }))
-                .pipe($.sourcemaps.write('./'))
-                .pipe(gulp.dest(set.dist));
-        ;
+            // minify and save
+            .pipe($.rename({
+                extname: '.min.css'
+            }))
+            .pipe($.sourcemaps.init())
+            .pipe($.cleanCss({
+                compatibility: '*',
+                processImportFrom: ['!fonts.googleapis.com'] /* ie9 compatibility */
+            }))
+            .pipe($.sourcemaps.write('./'))
+            .pipe(gulp.dest(set.dist));;
         if (config.debug) console.log($.util.colors.cyan('css packaging done: ' + set.name));
         return result;
     }
@@ -229,7 +245,10 @@
             call(set);
             console.log(`finished ${set.name} ${new Date()}`);
         }
-        if (config.autostart) run({ path: '[none]', type: 'autostart' });
+        if (config.autostart) run({
+            path: '[none]',
+            type: 'autostart'
+        });
         return run;
     }
     //#endregion

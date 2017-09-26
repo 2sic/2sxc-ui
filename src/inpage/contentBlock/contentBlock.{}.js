@@ -14,15 +14,14 @@
  * 
  */
 (function () {
+
     /**
      * The main content-block manager
      */
     $2sxc._contentBlock = {
 
         // constants
-        cViewWithoutContent: "_LayoutElement", // needed to differentiate the "select item" from the "empty-is-selected" which are both empty
+        cViewWithoutContent: '_LayoutElement', // needed to differentiate the "select item" from the "empty-is-selected" which are both empty
         cUseExistingTemplate: -1
     };
-
-
 })();

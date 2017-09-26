@@ -4,13 +4,15 @@
 
     // default / fallback settings for toolbars when nothings is specified
     var settingsForEmptyToolbar = {
-        hover: "left",
-        autoAddMore: "left"
+        hover: 'left',
+        autoAddMore: 'left'
     };
 
-    $2sxc._toolbarManager.buildToolbars = buildToolbars;
-    $2sxc._toolbarManager.disable = disable;
-    $2sxc._toolbarManager.isDisabled = isDisabled;
+    Object.assign($2sxc._toolbarManager, {
+        buildToolbars: buildToolbars,
+        disable: disable,
+        isDisabled: isDisabled
+    });
 
     return;
 

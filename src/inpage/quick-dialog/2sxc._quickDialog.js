@@ -132,9 +132,9 @@
     }
 
     function extendIFrameWithSxcState(iFrame) {
-        var hiddenSxc = null,
-            cbApi = $2sxc._contentBlock,
-            tagModule = null;
+        var hiddenSxc = null;
+        var cbApi = $2sxc._contentBlock;
+        var tagModule = null;
 
         /**
          * get the sxc-object of this iframe
@@ -190,12 +190,11 @@
                 return cbApi.reloadAndReInitialize(reSxc(), true, true);
             },
             saveTemplate: function (templateId) {
-                return cbApi.persistTemplate(reSxc(), templateId, false);
+                return cbApi.updateTemplateFromDia(reSxc(), templateId, false);
             },
             previewTemplate: function (templateId) {
                 return cbApi.ajaxLoad(reSxc(), templateId, true);
             }
-
         });
         return newFrm;
     }
@@ -237,24 +236,22 @@
         var cont = diagManager.getContainer();
         if (!resizeWatcher) // only add a timer if not already running
             resizeWatcher = setInterval(function () {
-                    try {
-                        var frm = diagManager.getIFrame(cont);
-                        if (!frm) return;
-                        var height = frm.contentDocument.body.offsetHeight;
-                        if (frm.previousHeight === height) return;
-                        frm.style.minHeight = cont.css("min-height");
-                        frm.style.height = height + "px";
-                        frm.previousHeight = height;
-                        if (isFullscreen) {
-                            frm.style.height = "100%";
-                            frm.style.position = "absolute";
-                        }
-                    } catch (e) {
-                        // ignore
+                try {
+                    var frm = diagManager.getIFrame(cont);
+                    if (!frm) return;
+                    var height = frm.contentDocument.body.offsetHeight;
+                    if (frm.previousHeight === height) return;
+                    frm.style.minHeight = cont.css("min-height");
+                    frm.style.height = height + "px";
+                    frm.previousHeight = height;
+                    if (isFullscreen) {
+                        frm.style.height = "100%";
+                        frm.style.position = "absolute";
                     }
-                },
-                resizeInterval);
+                } catch (e) {
+                    // ignore
+                }
+            }, resizeInterval);
         return resizeWatcher;
     }
-
 })();

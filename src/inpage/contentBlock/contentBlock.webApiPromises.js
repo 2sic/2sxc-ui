@@ -38,13 +38,13 @@
      * @param {boolean} [forceCreateContentGroup]
      * @returns {promise} 
      */
-    cbm.saveTemplate = function(sxc, templateId, forceCreateContentGroup) {//}, newTemplateChooserState) {
+    cbm.saveTemplate = function(sxc, templateId, forceCreateContentGroup) {
         return sxc.webApi.get({
             url: "view/module/savetemplateid",
             params: {
                 templateId: templateId,
                 forceCreateContentGroup: forceCreateContentGroup,
-                newTemplateChooserState: false//  newTemplateChooserState
+                newTemplateChooserState: false
             }
         });
     };

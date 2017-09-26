@@ -73,17 +73,15 @@ export class TemplatePickerComponent implements OnInit {
         this.api.setAppId(app.appId.toString()).toPromise()
           .then(res => {
             if (app.supportsAjaxReload) return this.frame.reloadAndReInit()
+              .then(() => this.api.loadTemplates().toPromise())
               .then(() => {
-                return this.api.loadTemplates().toPromise()
-                  .then(() => {
-                    this.loadingTemplates = false;
-                    this.template = this.templates[0];
-                    this.appRef.tick();
-                  })
-                  .then(() => { doPostAjaxScrolling(this); });
+                this.loadingTemplates = false;
+                this.template = this.templates[0];
+                this.appRef.tick();
+                doPostAjaxScrolling(this)
               });
 
-            this.frame.showMessage("loading App...");
+            this.frame.showMessage('loading App..');
             doPostAjaxScrolling(this);
             this.frame.persistDia();
             win.parent.location.reload();
@@ -97,9 +95,8 @@ export class TemplatePickerComponent implements OnInit {
         this.template = template;
         this.appRef.tick();
 
-        if (this.supportsAjax)
-          return this.frame.previewTemplate(template.TemplateId)
-            .then(() => { doPostAjaxScrolling(this); });
+        if (this.supportsAjax) return this.frame.previewTemplate(template.TemplateId)
+          .then(() => doPostAjaxScrolling(this));
 
         this.frame.showMessage(`refreshing <b>${template.Name}</b>...`);
         doPostAjaxScrolling(this);
@@ -154,9 +151,6 @@ export class TemplatePickerComponent implements OnInit {
   isDirty(): boolean {
     return false;
   }
-
-
-
 
   persistTemplate() {
     this.frame.saveTemplate(this.template.TemplateId);
