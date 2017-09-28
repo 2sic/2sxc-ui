@@ -16,8 +16,8 @@ export class InstallerComponent implements OnInit {
 
   showProgress: boolean;
   currentPackage: any;
-  remoteInstallerUrl: string = '';
-  ready: boolean = false;
+  remoteInstallerUrl = '';
+  ready = false;
 
   constructor(
     private installer: InstallerService,
@@ -42,7 +42,7 @@ export class InstallerComponent implements OnInit {
       } catch (e) {
         return false;
       }
-      
+
       if (~~data.moduleId !== ~~$2sxc.urlParams.require('mid')) return;
       if (data.action !== 'install') return;
 
@@ -52,7 +52,7 @@ export class InstallerComponent implements OnInit {
 
       if (!confirm(`
           Do you want to install these packages?\n\n
-          ${packagesDisplayNames}\nThis could take 10 to 60 seconds per package, 
+          ${packagesDisplayNames}\nThis could take 10 to 60 seconds per package,
           please don't reload the page while it's installing.`)) return;
 
       this.showProgress = true;

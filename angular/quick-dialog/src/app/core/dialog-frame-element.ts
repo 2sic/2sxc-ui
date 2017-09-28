@@ -6,6 +6,7 @@ export interface IDialogFrameElement extends HTMLIFrameElement {
     //sxc: any;
     toggle(action: boolean): void;
     run(verb): void;
+    getManageInfo(): any;
     showMessage(message);
     reloadAndReInit(): Promise<any>;
     saveTemplate(templateId): Promise<any>;

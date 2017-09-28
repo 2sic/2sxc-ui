@@ -95,6 +95,7 @@
         </div>
       </md-tab>
     </md-tab-group>
-    <app-installer *ngIf="showInstaller" [isContentApp]="isContentApp"></app-installer>
+    <span class="no-install-allowed" *ngIf="isInnerContent && showInstaller">No {{isContentApp ? 'Content Apps' : 'Apps'}} installed yet. Please persue the installation by creating a new {{isContentApp ? 'Content' : 'App'}} in the root of your website.</span>
+    <app-installer *ngIf="!isInnerContent && showInstaller" [isContentApp]="isContentApp"></app-installer>
   </div>
 </div>

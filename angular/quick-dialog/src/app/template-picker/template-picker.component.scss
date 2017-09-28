@@ -9,6 +9,7 @@
         .card {
             max-width: 1200px;
             margin: 0 auto;
+            min-height: 164px;
             .top-controls {
                 position: absolute;
                 height: 56px;
@@ -138,6 +139,17 @@
             .fr-getting-started {
                 border: none;
             }
+        }
+
+        .no-install-allowed {
+            background: #F44336;
+            display: block;
+            padding: 16px;
+            border-radius: 2px;
+            color: #fff;
+            line-height: 24px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+            text-align: center;
         }
     }
 }

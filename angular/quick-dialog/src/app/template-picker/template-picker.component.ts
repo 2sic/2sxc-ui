@@ -3,14 +3,14 @@ import { Component, OnInit, Input, NgModule, Inject, ApplicationRef } from '@ang
 import { IDialogFrameElement } from "app/core/dialog-frame-element";
 import { ModuleApiService } from "app/core/module-api.service";
 import { Observable } from 'rxjs/Rx';
-import { Subscription } from "rxjs/Subscription";
-import { TemplateFilterPipe } from "app/template-picker/template-filter.pipe";
+import { Subscription } from 'rxjs/Subscription';
+import { TemplateFilterPipe } from 'app/template-picker/template-filter.pipe';
 import { DomSanitizer, SafeResourceUrl, SafeUrl } from '@angular/platform-browser';
-import { $2sxcService } from "app/core/$2sxc.service";
-import { App } from "app/core/app";
-import { Subject } from "rxjs/Subject";
-import { Template } from "app/template-picker/template";
-import { ContentType } from "app/template-picker/content-type";
+import { $2sxcService } from 'app/core/$2sxc.service';
+import { App } from 'app/core/app';
+import { Subject } from 'rxjs/Subject';
+import { Template } from 'app/template-picker/template';
+import { ContentType } from 'app/template-picker/content-type';
 
 declare const $2sxc: any;
 var win = window;
@@ -33,20 +33,21 @@ export class TemplatePickerComponent implements OnInit {
   undoContentTypeId: number;
   dashInfo: any;
   isContentApp: boolean;
-  showProgress: boolean = false;
+  showProgress = false;
   showAdvanced: boolean;
-  showInstaller: boolean = false;
-  loading: boolean = false;
-  loadingTemplates: boolean = false;
-  ready: boolean = false;
-  tabIndex: number = 0;
+  showInstaller = false;
+  loading = false;
+  loadingTemplates = false;
+  ready = false;
+  tabIndex = 0;
   updateTemplateSubject: Subject<any> = new Subject<any>();
   updateAppSubject: Subject<any> = new Subject<any>();
   allowContentTypeChange: boolean;
+  isInnerContent = false;
 
   private allTemplates: any[] = [];
   private frame: IDialogFrameElement;
-  private cViewWithoutContent: string = '_LayoutElement';
+  private cViewWithoutContent = '_LayoutElement';
   private cAppActionImport: number = -1;
   private supportsAjax: boolean;
 
@@ -59,6 +60,9 @@ export class TemplatePickerComponent implements OnInit {
     this.frame = <IDialogFrameElement>win.frameElement;
     this.dashInfo = this.frame.getAdditionalDashboardConfig();
     this.allowContentTypeChange = !(this.dashInfo.hasContent || this.dashInfo.isList);
+
+    const info = this.frame.getManageInfo();
+    this.isInnerContent = info.mid != info.cbid;
 
     Observable.merge(
       this.updateTemplateSubject.asObservable(),
@@ -127,7 +131,7 @@ export class TemplatePickerComponent implements OnInit {
       this.ready = true;
       this.showInstaller = this.isContentApp
         ? res[0].length === 0
-        : res[2].filter(a => a.appId !== this.cAppActionImport).length === 0
+        : res[2].filter(a => a.appId !== this.cAppActionImport).length === 0;
     });
   }
 
@@ -157,7 +161,7 @@ export class TemplatePickerComponent implements OnInit {
   }
 
   private appStore() {
-    win.open("https://2sxc.org/apps");
+    win.open('https://2sxc.org/apps');
   }
 
   private filterTemplates(contentType: ContentType) {
@@ -183,7 +187,7 @@ export class TemplatePickerComponent implements OnInit {
 
     // option for no content types
     if (this.allTemplates.find(t => t.ContentTypeStaticName === '')) {
-      let name = "TemplatePicker.LayoutElement";
+      let name = 'TemplatePicker.LayoutElement';
       contentTypes.push({
         StaticName: this.cViewWithoutContent,
         Name: name,
