@@ -63,6 +63,12 @@
 
         return cbm.ajaxLoad(sxc, cbm.cUseExistingTemplate, !!preview)
             .then(function () {
+
+                // ToDo: tell Evoq that page has changed if it has changed (Ajax call)
+                // maybe check if already publish
+                // compare to HTML module
+                // if (publishing is required (FROM CONTENT BLOCK) and publish button not visible) show publish button
+
                 // 2017-09-02 2dm - believe this was meant to re-init the dialog manager, but it doesn't actually work
                 // must check for side-effects, which would need the manager to re-build the configuration
                 $2sxc._quickDialog.hide();
