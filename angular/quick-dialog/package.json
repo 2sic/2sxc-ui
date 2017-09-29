@@ -13,6 +13,7 @@
     "watch": "ng build --watch --output-hashing=none --extract-css=true",
     "watch:publish:2sxc-ui": "cpx \"./dist/**/*.*\" \"../../dist/\" -w -v",
     "watch:publish:2sxc": "cpx \"./dist/**/*.*\" \"/Projects/2SexyContent/Web/DesktopModules/ToSIC_SexyContent/dist/\" -w -v",
+    "build:prod": "ng build --prod --output-hashing=none --sourcemaps=true",
     "prod": "concurrently \"npm run watch:publish:2sxc-ui\" \"npm run watch:publish:2sxc\" \"ng build --prod --output-hashing=none --sourcemaps=true\""
   },
   "private": true,

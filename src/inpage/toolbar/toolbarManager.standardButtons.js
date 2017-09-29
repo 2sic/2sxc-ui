@@ -10,5 +10,5 @@
         btns.params = sharedParameters && (Array.isArray(sharedParameters) && sharedParameters[0]) || sharedParameters;
         if (!canDesign) btns.groups.splice(2, 1); // remove this menu
         return btns;
-    };
+    }
 })();

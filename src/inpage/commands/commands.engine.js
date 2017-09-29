@@ -100,12 +100,12 @@
             },
 
             // open a new dialog of the angular-ui
-            _openNgDialog: function (settings, event, closeCallback) {
+            _openNgDialog: function (settings, event, sxc /*, closeCallback*/) {
                 // the callback will handle events after closing the dialog
                 // and reload the in-page view w/ajax or page reload
                 var callback = function () {
                     $2sxc._contentBlock.reloadAndReInitialize(sxc);
-                    closeCallback();
+                    // 2017-09-29 2dm: no call of _openNgDialog seems to give a callback ATM closeCallback();
                 };
                 var link = engine._linkToNgDialog(settings); // the link contains everything to open a full dialog (lots of params added)
                 if (settings.inlineWindow)

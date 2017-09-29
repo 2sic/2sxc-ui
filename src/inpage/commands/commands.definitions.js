@@ -63,7 +63,7 @@
                 },
                 code: function (settings, event, sxc) {
                     // todo - should refactor this to be a toolbarManager.contentBlock command
-                    sxc.manage._commands._openNgDialog($2sxc._lib.extend({}, settings, { sortOrder: settings.sortOrder + 1 }), event);
+                    sxc.manage._commands._openNgDialog($2sxc._lib.extend({}, settings, { sortOrder: settings.sortOrder + 1 }), event, sxc);
                 }
             }),
 

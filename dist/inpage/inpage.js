@@ -219,7 +219,7 @@ $(function () {
                 },
                 code: function (settings, event, sxc) {
                     // todo - should refactor this to be a toolbarManager.contentBlock command
-                    sxc.manage._commands._openNgDialog($2sxc._lib.extend({}, settings, { sortOrder: settings.sortOrder + 1 }), event);
+                    sxc.manage._commands._openNgDialog($2sxc._lib.extend({}, settings, { sortOrder: settings.sortOrder + 1 }), event, sxc);
                 }
             }),
 
@@ -589,12 +589,12 @@ $(function () {
             },
 
             // open a new dialog of the angular-ui
-            _openNgDialog: function (settings, event, closeCallback) {
+            _openNgDialog: function (settings, event, sxc /*, closeCallback*/) {
                 // the callback will handle events after closing the dialog
                 // and reload the in-page view w/ajax or page reload
                 var callback = function () {
                     $2sxc._contentBlock.reloadAndReInitialize(sxc);
-                    closeCallback();
+                    // 2017-09-29 2dm: no call of _openNgDialog seems to give a callback ATM closeCallback();
                 };
                 var link = engine._linkToNgDialog(settings); // the link contains everything to open a full dialog (lots of params added)
                 if (settings.inlineWindow)
@@ -1589,9 +1589,6 @@ if (typeof Object.assign != 'function') {
 
         var newFrm = Object.assign(iFrame, {
             closeCallback: null,
-            getSxc: function() {
-                return hiddenSxc;
-            },
             rewire: function (sxc, callback, dialogName) {
                 hiddenSxc = sxc;
                 tagModule = $($($2sxc._manage.getTag(sxc)).parent().eq(0));
@@ -2697,7 +2694,7 @@ $(function () {
 
         toolbar.attr("group-count", btnGroups.length);
         return toolbar[0].outerHTML;
-    };
+    }
 })();
 // the toolbar manager is an internal helper
 // taking care of toolbars, buttons etc.
@@ -2960,7 +2957,7 @@ $(function () {
         btns.params = sharedParameters && (Array.isArray(sharedParameters) && sharedParameters[0]) || sharedParameters;
         if (!canDesign) btns.groups.splice(2, 1); // remove this menu
         return btns;
-    };
+    }
 })();
 // the default / initial buttons in a standard toolbar
 (function () {
