@@ -14,7 +14,7 @@
         } catch (e) {
             console.error("error in 2sxc - will log but not throw", e);
         }
-    }
+    };
 
     var mngApi = $2sxc._manage;
     function initInstance(sxc) {
