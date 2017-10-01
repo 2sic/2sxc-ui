@@ -190,7 +190,7 @@
     <Content Include="src\sxc-edit\fields\_sxc-fieldtemplates-app.js" />
     <Content Include="src\sxc-edit\import-export.css" />
     <Content Include="src\sxc-edit\temp-icon-fix.css" />
-    <Content Include="webpack.config.js" />
+    <Content Include="webpack.common.js" />
   </ItemGroup>
   <ItemGroup>
     <Content Include=".bowerrc" />

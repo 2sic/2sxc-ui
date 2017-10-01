@@ -8,8 +8,16 @@
 // - isEditMode
 
 (function () {
+    $2sxc._manage.initInstance = function(sxc) {
+        try {
+            initInstance(sxc);
+        } catch (e) {
+            console.error("error in 2sxc - will log but not throw", e);
+        }
+    }
+
     var mngApi = $2sxc._manage;
-    $2sxc._manage.initInstance = function (sxc) {
+    function initInstance(sxc) {
         var editContext = mngApi.getEditContext(sxc);
         var userInfo = mngApi.getUserOfEditContext(editContext);
 
@@ -94,5 +102,5 @@
 
         editManager.init();
         return editManager;
-    };
+    }
 })();

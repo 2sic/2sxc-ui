@@ -113,6 +113,7 @@ export class SxcInstanceWithEditing extends SxcInstance {
     constructor(
         public id: number,
         public cbid: number,
+// ReSharper disable once InconsistentNaming
         protected $2sxc: SxcControllerWithInternals,
         protected readonly dnnSf: any,
     ) {
@@ -122,7 +123,8 @@ export class SxcInstanceWithEditing extends SxcInstance {
         try { // sometimes the manage can't be built, like before installing
             if ($2sxc._manage) $2sxc._manage.initInstance(this);
         } catch (e) {
-            throw e;
+            console.error('error in 2sxc - will only log but not throw', e);
+            // throw e;
         }
 
         // this only works when manage exists (not installing) and translator exists too
@@ -150,6 +152,7 @@ export class SxcInstanceWithInternals extends SxcInstanceWithEditing {
         public id: number,
         public cbid: number,
         private cacheKey: string,
+// ReSharper disable once InconsistentNaming
         protected $2sxc: SxcControllerWithInternals,
         protected readonly dnnSf: any,
     ) {
