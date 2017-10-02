@@ -63,6 +63,10 @@
 
         return cbm.ajaxLoad(sxc, cbm.cUseExistingTemplate, !!preview)
             .then(function () {
+                
+                if (dnn_tabVersioningEnabled) {
+                    dnn.ContentEditorManager.triggerChangeOnPageContentEvent();
+                }
 
                 // ToDo: tell Evoq that page has changed if it has changed (Ajax call)
                 // maybe check if already publish
