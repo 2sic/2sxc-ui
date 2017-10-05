@@ -32,7 +32,6 @@ $(function () {
      */
     function tryShowTemplatePicker() {
         var uninitializedModules = $('.sc-uninitialized');
-        var module;
 
         if (cancelledDialog || openedTemplatePickerOnce) return false;
 
@@ -43,7 +42,7 @@ $(function () {
         if (uninitializedModules.length !== 1) return false;
 
         // show the template picker of this module
-        module = uninitializedModules.parent('div[data-edit-context]')[0];
+        var module = uninitializedModules.parent('div[data-edit-context]')[0];
         $2sxc(module).manage.run('layout');
         openedTemplatePickerOnce = true;
     }

@@ -44,6 +44,7 @@
     <TypeScriptCompile Include="2sxc-api\js\ToSic.Sxc.TotalPopup.ts" />
     <TypeScriptCompile Include="2sxc-api\js\ToSic.Sxc.WebApi.ts" />
     <TypeScriptCompile Include="2sxc-api\js\ToSic.Sxc.Instance.ts" />
+    <None Include="src\inpage\x-bootstrap\x-readme.md" />
     <TypeScriptCompile Include="typings\2sxc-js\deprecated\2sxcDeprecated.d.ts" />
     <TypeScriptCompile Include="typings\2sxc-js\internals\2sxcInternals.d.ts" />
     <TypeScriptCompile Include="typings\2sxc-js\2sxcInterfaces.d.ts" />
@@ -75,7 +76,7 @@
     <Content Include="src\inpage\toolbar\libs\shake.js" />
     <Content Include="src\inpage\toolbar\toolbar-events.js" />
     <Content Include="src\inpage\toolbar\toolbar-shake.js" />
-    <Content Include="src\inpage\bootstrap\module-bootstrapper.js" />
+    <Content Include="src\inpage\x-bootstrap\module-bootstrapper.js" />
     <Content Include="src\inpage\toolbar\toolbarManager.generateToolbarHtml.js" />
     <Content Include="src\inpage\toolbar\toolbarManager.generateButtonHtml.js" />
     <Content Include="src\inpage\toolbar\toolbarManager.buildToolbars.js" />
@@ -224,14 +225,12 @@
     <Content Include="src\inpage\toolbar\readme.md" />
     <Content Include="src\inpage\translate\readme.md" />
     <Content Include="src\inpage\manage\readme.md" />
-    <Content Include="src\inpage\bootstrap\readme.md" />
+    <Content Include="src\inpage\x-bootstrap\readme.md" />
     <Content Include="src\inpage\commands\readme.md" />
     <Content Include="src\inpage\contentBlock\readme.md" />
     <Content Include="src\inpage\tsconfig.json" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="dist-ts\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">12.0</VisualStudioVersion>
   </PropertyGroup>

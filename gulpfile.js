@@ -1,7 +1,7 @@
 ﻿(() => {
     const
         dests = {
-            current: 'evoq',
+            current: 'default',
             default: './../2SexyContent/Web',
             evoq: '../TestWebsites/Evoq 9.1.0',
         },
