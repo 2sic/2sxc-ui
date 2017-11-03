@@ -1,7 +1,7 @@
 {
   "name": "2sic.com-2sxc",
   "dependencies": {
-    "2sxc-eav-languages": "2sic/2sxc-eav-languages#61ef31ecfce7c2c8947bce3cdcaeae18be8792e3",
+    "2sxc-eav-languages": "2sic/2sxc-eav-languages#a0ad8ba8ea0868595f6596c879f18c1e7eaa4455",
     "2sxc-icons": "2sic/2sxc-icons#c4e5dd9000b360128b1f590f3e4decf6371c4054",
     "angular-ui-ace": "0.2.3",
     "angular-ui-tinymce": "2sic/ui-tinymce#b1769d255386164b097edacc12b03e9df30f7c20",
