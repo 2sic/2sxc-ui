@@ -90,5 +90,13 @@
 .eav-icon-git-branch:before { content: '\e858'; } /* '' */
 .eav-icon-git-pull-request:before { content: '\e859'; } /* '' */
 .eav-icon-clock:before { content: '\e85a'; } /* '' */
+.eav-icon-play:before { content: '\e85b'; } /* '' */
+.eav-icon-help-circled:before { content: '\e85c'; } /* '' */
+.eav-icon-attention:before { content: '\e85d'; } /* '' */
+.eav-icon-search:before { content: '\e85e'; } /* '' */
+.eav-icon-target:before { content: '\e85f'; } /* '' */
 .eav-icon-content-block:before { content: '\e9bd'; } /* '' */
 .eav-icon-app:before { content: '\e9bf'; } /* '' */
+.eav-icon-help:before { content: '\f128'; } /* '' */
+.eav-icon-sort-alt-up:before { content: '\f160'; } /* '' */
+.eav-icon-history:before { content: '\f1da'; } /* '' */
