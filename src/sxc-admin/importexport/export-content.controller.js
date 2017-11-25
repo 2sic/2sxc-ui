@@ -7,22 +7,17 @@
 
     /*@ngInject*/
     function ExportContentController(ExportContentService, eavAdminDialogs, eavConfig, debugState, $uibModalInstance, $filter) {
-        var vm = this;
-
-        vm.debug = debugState;
-
-        vm.IsExporting = false;
-
-        vm.ExportScope = "2SexyContent";
-
-        vm.ContentInfo = null;
-
-        vm.getContentInfo = getContentInfo;
-        vm.exportContent = exportContent;
-        vm.changeExportScope = changeExportScope;
-
-        vm.close = close;
-
+        var vm = Object.assign(this,
+            {
+                debug: debugState,
+                IsExporting: false,
+                ExportScope: "2SexyContent",
+                ContentInfo: null,
+                getContentInfo: getContentInfo,
+                exportContent: exportContent,
+                changeExportScope: changeExportScope,
+                close: close
+            });
 
         activate();
 
@@ -48,7 +43,6 @@
                 vm.IsExporting = false;
             });
         }
-
 
         function selectedContentTypes() {
             return $filter("filter")(vm.ContentInfo.ContentTypes, { _export: true });
