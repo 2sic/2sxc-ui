@@ -7,12 +7,10 @@
 
     /*@ngInject*/
     function ExportContentService(appId, zoneId, eavConfig, $http, $q) {
-        var srvc = {
+        return {
             getContentInfo: getContentInfo,
             exportContent: exportContent
         };
-        return srvc;
-
 
         function getContentInfo(scope) {
             return $http.get(eavConfig.getUrlPrefix("api") + "/app-sys/ImportExport/GetContentInfo", { params: { appId: appId, zoneId: zoneId, scope: scope || "2SexyContent" } }).then(function (result) { return result.data; });
@@ -22,6 +20,7 @@
             window.open(eavConfig.getUrlPrefix("api") + "/app-sys/ImportExport/ExportContent?appId=" + appId + "&zoneId=" + zoneId + "&contentTypeIdsString=" + contentTypeIds.join(";") + "&entityIdsString=" + entityIds.join(";") + "&templateIdsString=" + templateIds.join(";"), "_self", "");
             return $q.when(true);
         }
+
     }
 
 }());

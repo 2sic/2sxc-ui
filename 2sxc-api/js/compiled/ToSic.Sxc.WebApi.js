@@ -41,6 +41,7 @@ var SxcWebApiWithInternals = (function () {
         };
         settings = $.extend({}, defaults, settings);
         var sf = $.ServicesFramework(this.id);
+        var cbid = this.cbid;
         var promise = $.ajax({
             async: true,
             dataType: settings.dataType || "json",
@@ -49,7 +50,7 @@ var SxcWebApiWithInternals = (function () {
             type: settings.method,
             url: this.getActionUrl(settings),
             beforeSend: function (xhr) {
-                xhr.setRequestHeader("ContentBlockId", this.cbid);
+                xhr.setRequestHeader("ContentBlockId", cbid);
                 sf.setModuleHeaders(xhr);
             },
         });

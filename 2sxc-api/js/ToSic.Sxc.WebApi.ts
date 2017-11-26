@@ -96,6 +96,7 @@ export class SxcWebApiWithInternals {
         };
         settings = $.extend({}, defaults, settings);
         const sf = $.ServicesFramework(this.id);
+        const cbid = this.cbid; // must read here, as the "this" will change inside the method
 
         const promise = $.ajax({
             async: true,
@@ -105,7 +106,7 @@ export class SxcWebApiWithInternals {
             type: settings.method,
             url: this.getActionUrl(settings),
             beforeSend(xhr: any) {
-                xhr.setRequestHeader("ContentBlockId", this.cbid);
+                xhr.setRequestHeader("ContentBlockId", cbid);
                 sf.setModuleHeaders(xhr);
             },
         });
