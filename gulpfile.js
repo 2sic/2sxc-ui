@@ -2,7 +2,7 @@
     const
         dests = {
             current: 'default',
-            default: './../2SexyContent/Web',
+            default: './../2sxc-dnn742/Website',
             evoq: '../TestWebsites/Evoq 9.1.0',
         },
         gulp = require('gulp'),

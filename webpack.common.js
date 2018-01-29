@@ -5,7 +5,7 @@ const merge = require('webpack-merge');
 
 const sxcJsFileBase = '2sxc.api';
 const SxcApiPath = './2sxc-api/js/2sxc.api.ts';
-const SxcDevWebPath = "C:\\Projects\\2SexyContent\\Web\\DesktopModules\\ToSIC_SexyContent\\";
+const SxcDevWebPath = "C:\\Projects\\2sxc-dnn742\\Website\\DesktopModules\\ToSIC_SexyContent\\";
 // const SxcDevWebPath = "c:\\temp\\x\\";
 
 const sxcJsDist = path.resolve(__dirname, 'js');
