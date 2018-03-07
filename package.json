@@ -28,6 +28,7 @@
   },
   "homepage": "https://github.com/2sic/2sxc-ui",
   "devDependencies": {
+    "babel-eslint": "^8.2.1",
     "gulp": "^3.9.1",
     "gulp-angular-templatecache": "1.8.0",
     "gulp-clean": "0.3.2",
