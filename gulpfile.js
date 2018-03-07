@@ -59,6 +59,21 @@
         gulp.watch('./js/**/*', ['publish-js-to-2sxc']);
     });
 
+    gulp.task('copy-all-with.data', () => copyAll(dests.default));
+
+    // special helper - necessary to copy everything incl the ".data" folders
+    // which are otherwise skipped
+    function copyAll(dest) {
+        gulp.src([
+                        'dist/**/*', 'dist/.**/*'
+                    ],
+                    {
+                        dot: true
+                    }).pipe($.debug())
+                .pipe(gulp.dest(dest + autopublishTarget))
+            ;
+    }
+
     // watch the dnn ui.html for changes and republish
     function watchDnnUi() {
         gulp.watch('src/dnn/' + '**/*', function () {
@@ -137,6 +152,12 @@
                 templateSetName: tmplSetName,
                 autoSort: true,
                 alsoRunMin: true
+            },
+            json: {
+                run: false,
+                files: [`${cwd}**/*.json`,
+                    `!${cwd}**/*spec.json`,
+                    `!${cwd}**/tests*`],
             }
         }
     }
@@ -202,6 +223,15 @@
         return result;
     }
 
+
+    function packageJsonTypes(set) {
+        if (config.debug) console.log(`json start: ${set.name}`);
+        gulp.src(set.json.files)
+            .pipe($.flatten())
+            .pipe(gulp.dest(set.dist + ".data/contenttypes/"));
+    }
+
+
     // package a set of CSS
     function packageCss(set) {
         if (config.debug) console.log('css packaging start: ' + set.name);
@@ -241,7 +271,11 @@
         if (config.debug) console.log('creating watcher callback for ' + set.name);
         var run = function (event) {
             if (config.debug) console.log('File ' + event.path + ' was ' + event.type + ', running tasks on set ' + set.name);
-            var call = (part === js) ? packageJs : packageCss;
+            var call = (part === 'js'
+                ? packageJs
+                : part === 'json'
+                    ? packageJsonTypes
+                    : packageCss);
             call(set);
             console.log(`finished ${set.name} ${new Date()}`);
         }
@@ -263,6 +297,7 @@
 
         // setup edit & extended
         var edit = createConfig('sxc-edit', 'SxcEditTemplates');
+        edit.json.run = true;
         sets.push(edit);
 
         // setup inpage stuff
@@ -294,10 +329,11 @@
         return sets;
     }
 
-    /// let gulp watch a series of packs
+    // let gulp watch a series of packs
     function watchSet(setList) {
         setList.forEach(set => {
             if (set.js.run) gulp.watch(set.cwd + '**/*', createWatchCallback(set, js));
+            if (set.json.run) gulp.watch(set.cwd + "**/*", createWatchCallback(set, 'json'));
             if (set.css.run) gulp.watch(set.cwd + '**/*css', createWatchCallback(set, css));
         });
     }

@@ -38,6 +38,8 @@
     <Content Include="src\inpage\contentBlock\contentBlock.webApiPromises.js" />
     <Content Include="src\inpage\contentBlock\contentBlock.{}.js" />
     <Content Include="src\inpage\entity-manipulation\item-commands.js" />
+    <Content Include="src\sxc-edit\fields\hyperlink\System.%40hyperlink-library.json" />
+    <Content Include="src\sxc-edit\fields\hyperlink\System.%40Hyperlink.json" />
     <TypeScriptCompile Include="2sxc-api\js\ToSic.Sxc.Data.ts" />
     <TypeScriptCompile Include="2sxc-api\js\ToSic.Sxc.Controller.ts" />
     <TypeScriptCompile Include="2sxc-api\js\ToSic.Sxc.Url.ts" />
