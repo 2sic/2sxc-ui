@@ -70,7 +70,7 @@
                     {
                         dot: true
                     }).pipe($.debug())
-                .pipe(gulp.dest(dest + autopublishTarget))
+                .pipe(gulp.dest(dest + config.autopublishTarget))
             ;
     }
 
