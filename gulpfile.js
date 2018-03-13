@@ -306,7 +306,9 @@
         inpage.js.libs = [
             'src/inpage/translate/libs/**.js'
         ];
-        sets.push(inpage);
+        // 2018-03-13 2dm disabled in-page build for now, as we'll use the new github project just for in-page
+        // new repo is https://github.com/2sic/2sxc-inpage
+        // sets.push(inpage);
 
         // setup inpage dialogs
         var inpDialog = createConfig('inpage-dialogs', 'SxcInpageTemplates', 'dist/inpage/');
