@@ -1,8 +1,8 @@
-window.angular.module('Adam')
+// note: don't prefix angular with window - something fails in production build if you do that
+// ReSharper disable PossiblyUnassignedProperty
+angular.module('Adam')
     /*@ngInject*/
     .factory('adamSvc', function ($http, eavConfig, sxc, svcCreator, appRoot, appId) {
-
-        console.log('using new cahnged adam');
 
         // Construct a service for this specific appId
         return function createSvc(contentType, entityGuid, field, subfolder, serviceConfig) {
@@ -29,7 +29,7 @@ window.angular.module('Adam')
                 value.fullPath = svc.adamRoot + value.Path;
             };
 
-            svc = window.angular.extend(svc, svcCreator.implementLiveList(function getAll() {
+            svc = angular.extend(svc, svcCreator.implementLiveList(function getAll() {
                 return $http.get(svc.url + '/items',
                         {
                             params: {
@@ -39,7 +39,7 @@ window.angular.module('Adam')
                             }
                         })
                     .then(function(result) {
-                        window.angular.forEach(result.data, svc.addFullPath);
+                        angular.forEach(result.data, svc.addFullPath);
                         return result;
                     });
             }));
@@ -127,3 +127,4 @@ window.angular.module('Adam')
             return svc;
         };
     });
+// ReSharper restore PossiblyUnassignedProperty

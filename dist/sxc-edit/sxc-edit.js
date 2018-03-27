@@ -22,11 +22,11 @@
             };
         });
 })();
-window.angular.module('Adam')
+// note: don't prefix angular with window - something fails in production build if you do that
+// ReSharper disable PossiblyUnassignedProperty
+angular.module('Adam')
     /*@ngInject*/
-    .factory('adamSvc', function ($http, eavConfig, sxc, svcCreator, appRoot, appId) {
-
-        console.log('using new cahnged adam');
+    .factory('adamSvc', ["$http", "eavConfig", "sxc", "svcCreator", "appRoot", "appId", function ($http, eavConfig, sxc, svcCreator, appRoot, appId) {
 
         // Construct a service for this specific appId
         return function createSvc(contentType, entityGuid, field, subfolder, serviceConfig) {
@@ -53,7 +53,7 @@ window.angular.module('Adam')
                 value.fullPath = svc.adamRoot + value.Path;
             };
 
-            svc = window.angular.extend(svc, svcCreator.implementLiveList(function getAll() {
+            svc = angular.extend(svc, svcCreator.implementLiveList(function getAll() {
                 return $http.get(svc.url + '/items',
                         {
                             params: {
@@ -63,7 +63,7 @@ window.angular.module('Adam')
                             }
                         })
                     .then(function(result) {
-                        window.angular.forEach(result.data, svc.addFullPath);
+                        angular.forEach(result.data, svc.addFullPath);
                         return result;
                     });
             }));
@@ -150,7 +150,9 @@ window.angular.module('Adam')
 
             return svc;
         };
-    });
+    }]);
+// ReSharper restore PossiblyUnassignedProperty
+
 (function () {
     /* jshint laxbreak:true */
     "use strict";
@@ -607,21 +609,9 @@ angular.module("sxcFieldTemplates")
             return connector.modalInstance;
         };
 
-        // 2017-08-12 2dm looks unused now
-        // convert the url to a Id-code
-        //svc.convertPathToId = function(path, type) {
-        //    var pathWithoutVersion = path.replace(/\?ver=[0-9\-]*$/gi, "");
-        //    // todo: working on https://github.com/2sic/2sxc/issues/656 but can't reproduce error
-        //    // this is why I tried ignoreErrors and promisetoaster, but atm there is nothing to work on...
-        //    var promise = $http.get("dnn/Hyperlink/GetFileByPath?relativePath=" + encodeURIComponent(pathWithoutVersion),
-        //    {
-        //        //ignoreErrors: true
-        //    });
-        //    return promiseToastr(promise, "Edit.Field.Hyperlink.Message.Loading", "Edit.Field.Hyperlink.Message.Ok", "Edit.Field.Hyperlink.Message.Error", 0, 0, 1000);
-        //};
 
         // handle short-ID links like file:17
-        svc.getUrlOfId = function(idCode) {
+        svc.getUrlOfId = function(idCode, entityId) {
             var linkLowered = idCode.toLowerCase();
             if (linkLowered.indexOf("file:") !== -1 || linkLowered.indexOf("page:") !== -1)
                 return $http.get("dnn/Hyperlink/ResolveHyperlink?hyperlink=" + encodeURIComponent(idCode));
