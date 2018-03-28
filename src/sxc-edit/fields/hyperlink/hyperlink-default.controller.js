@@ -92,7 +92,8 @@
             // depending on settings, use the id or not
             if ($scope.to.settings.merged.ServerResourceMapping &&
               $scope.to.settings.merged.ServerResourceMapping === 'url')
-              $scope.value.Value = fileItem.Path;
+              $scope.value.Value = fileItem.fullPath // this is the one coming from the adam-browser
+                || fileItem.Path; // or the server request
             else
               $scope.value.Value = 'file:' + fileItem.Id;
           };
