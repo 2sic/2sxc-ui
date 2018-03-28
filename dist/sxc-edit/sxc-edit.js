@@ -735,38 +735,38 @@ angular.module("sxcFieldTemplates")
 })();
 
 (function() {
-    "use strict";
+    'use strict';
 
-    angular.module("sxcFieldTemplates")
+    angular.module('sxcFieldTemplates')
         .config(["formlyConfigProvider", "fieldWrappersWithPreview", function (formlyConfigProvider, fieldWrappersWithPreview) {
 
             formlyConfigProvider.setType({
-                name: "hyperlink-default",
-                templateUrl: "fields/hyperlink/hyperlink-default.html",
+                name: 'hyperlink-default',
+                templateUrl: 'fields/hyperlink/hyperlink-default.html',
                 wrapper: fieldWrappersWithPreview,
-                controller: "FieldTemplate-HyperlinkCtrl as vm"
+                controller: 'FieldTemplate-HyperlinkCtrl as vm'
             });
         }])
         /*@ngInject*/
-        .controller("FieldTemplate-HyperlinkCtrl", ["$uibModal", "$scope", "$http", "sxc", "adamSvc", "debugState", "dnnBridgeSvc", "fileType", function ($uibModal, $scope, $http, sxc, adamSvc, debugState, dnnBridgeSvc, fileType) {
+        .controller('FieldTemplate-HyperlinkCtrl', ["$uibModal", "$scope", "$http", "sxc", "adamSvc", "debugState", "dnnBridgeSvc", "fileType", function ($uibModal, $scope, $http, sxc, adamSvc, debugState, dnnBridgeSvc, fileType) {
 
             var vm = this;
             vm.debug = debugState;
-            vm.testLink = "";
+            vm.testLink = '';
 
             vm.isImage = function () { return fileType.isImage(vm.testLink); };
             vm.thumbnailUrl = function thumbnailUrl(size, quote) {
                 var result = vm.testLink;
                 if (size === 1)
-                    result = result + "?w=64&h=64&mode=crop";
+                    result = result + '?w=64&h=64&mode=crop';
                 if (size === 2)
-                    result = result + "?w=500&h=400&mode=max";
-                var qt = quote ? "\"" : "";
+                    result = result + '?w=500&h=400&mode=max';
+                var qt = quote ? '"' : '';
                 return qt + result + qt;
             };
 
             vm.icon = function () { return fileType.getIconClass(vm.testLink); };
-            vm.tooltipUrl = function (str) { return str.replace(/\//g, "/&#8203;"); };
+            vm.tooltipUrl = function (str) { return str.replace(/\//g, '/&#8203;'); };
             vm.adamModeConfig = {
                 usePortalRoot: false
             };
@@ -774,13 +774,13 @@ angular.module("sxcFieldTemplates")
             function ensureDefaultConfig() {
                 var merged = $scope.to.settings.merged;
                 if (merged.ShowAdam === undefined || merged.ShowAdam === null) merged.ShowAdam = true;
-                if (merged.Buttons === undefined || merged.Buttons === null) merged.Buttons = "adam,more";
+                if (merged.Buttons === undefined || merged.Buttons === null) merged.Buttons = 'adam,more';
             }
 
             ensureDefaultConfig();
 
             // Update test-link if necessary - both when typing or if link was set by dialogs
-            $scope.$watch("value.Value", function(newValue, oldValue) {
+            $scope.$watch('value.Value', function(newValue, oldValue) {
                 if (!newValue)
                     return;
 
@@ -802,7 +802,7 @@ angular.module("sxcFieldTemplates")
                 $scope.$apply(function() {
                     // Convert to page:xyz format (if it wasn't cancelled)
                     if (value)
-                        $scope.value.Value = "page:" + value.id;
+                        $scope.value.Value = 'page:' + value.id;
                 });
             };
 
@@ -811,20 +811,26 @@ angular.module("sxcFieldTemplates")
                 dnnBridgeSvc.open(
                     $scope.value.Value,
                     {
-                        Paths: $scope.to.settings.merged ? $scope.to.settings.merged.Paths : "",
-                        FileFilter: $scope.to.settings.merged ? $scope.to.settings.merged.FileFilter : ""
+                        Paths: $scope.to.settings.merged ? $scope.to.settings.merged.Paths : '',
+                        FileFilter: $scope.to.settings.merged ? $scope.to.settings.merged.FileFilter : ''
                     },
                     vm.processResultOfPagePicker);
             };
             //#endregion dnn page picker
 
-            //#region new adam: callbacks only
-            vm.registerAdam = function(adam) {
-                vm.adam = adam;
-            };
-            vm.setValue = function(fileItem) {
-                $scope.value.Value = "File:" + fileItem.Id;
-            };
+          //#region new adam: callbacks only
+          vm.registerAdam = function(adam) {
+              vm.adam = adam;
+          };
+
+          vm.setValue = function (fileItem) {
+            // depending on settings, use the id or not
+            if ($scope.to.settings.merged.ServerResourceMapping &&
+              $scope.to.settings.merged.ServerResourceMapping === 'url')
+              $scope.value.Value = fileItem.Path;
+            else
+              $scope.value.Value = 'file:' + fileItem.Id;
+          };
 
             $scope.afterUpload = vm.setValue;   // binding for dropzone
 
