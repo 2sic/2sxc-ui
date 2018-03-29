@@ -68,6 +68,7 @@ var AppComponent = (function () {
     function AppComponent(translate, dialog) {
         this.translate = translate;
         this.dialog = dialog;
+        console.log("init app component");
         var langs = ['en', 'de', 'es', 'fr', 'it', 'nl', 'uk'];
         translate.addLangs(langs);
         translate.setDefaultLang($2sxc.urlParams.require('langpri').split('-')[0]);
@@ -529,13 +530,17 @@ var InstallerComponent = (function () {
             _this.ready = true;
         });
     }
+    InstallerComponent.prototype.ngOnDestroy = function () {
+        console.log("destroy!!!!!!!");
+    };
     InstallerComponent.prototype.ngOnInit = function () {
         var _this = this;
         console.log('DEBUG INSTALLER INIT -> if this happens more than one, we\'ve found the issue..');
+        var id = Math.random();
         var alreadyProcessing = false;
         this.api.loadGettingStarted(this.isContentApp);
         Object(__WEBPACK_IMPORTED_MODULE_4_rxjs_observable_fromEvent__["fromEvent"])(window, 'message')
-            .do(function () { return console.log('DEBUG INSTALLER A'); })
+            .do(function (msg) { return console.log(msg, alreadyProcessing, 'DEBUG INSTALLER A', id); })
             .filter(function () { return !alreadyProcessing; })
             .map(function (evt) {
             console.log('DEBUG INSTALLER B');
@@ -679,13 +684,15 @@ var InstallerService = (function () {
     }
     InstallerService.prototype.installPackages = function (packages) {
         var _this = this;
-        var subject = new __WEBPACK_IMPORTED_MODULE_3_rxjs_Subject__["Subject"](), res = packages.reduce(function (t, c) { return t
+        var subject = new __WEBPACK_IMPORTED_MODULE_3_rxjs_Subject__["Subject"]();
+        var res = packages.reduce(function (t, c) { return t
             .switchMap(function () {
             if (!c.url)
-                return __WEBPACK_IMPORTED_MODULE_1_rxjs_Rx__["Observable"].from([true]);
+                return __WEBPACK_IMPORTED_MODULE_1_rxjs_Rx__["Observable"].of(true);
+            console.log('one step');
             subject.next(c);
             return _this.http.get("app-sys/installer/installpackage?packageUrl=" + c.url);
-        }); }, __WEBPACK_IMPORTED_MODULE_1_rxjs_Rx__["Observable"].from([true]))
+        }); }, __WEBPACK_IMPORTED_MODULE_1_rxjs_Rx__["Observable"].of(true))
             .subscribe(function () { return subject.complete(); }, function (e) { return subject.error(e); });
         return subject.asObservable();
     };

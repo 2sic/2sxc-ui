@@ -14,16 +14,16 @@ export class InstallerService {
   ) { }
 
   installPackages(packages: any[]): Observable<any> {
-    const
-      subject = new Subject<any>(),
-      res = packages.reduce((t: Observable<Response>, c) => t
+    const subject = new Subject<any>();
+    const res = packages.reduce((t: Observable<Response>, c) => t
         .switchMap(() => {
-          if (!c.url) return Observable.from([true]);
+          if (!c.url) return Observable.of(true);
+          console.log('one step');
           subject.next(c);
           return <Observable<any>>this.http.get(`app-sys/installer/installpackage?packageUrl=${c.url}`);
-        }), Observable.from([true]))
+        }), Observable.of(true))
         .subscribe(() => subject.complete(), e => subject.error(e));
-        
+
     return subject.asObservable();
   }
 }

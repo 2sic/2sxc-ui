@@ -52,6 +52,7 @@
          * @returns {element} html element of the div
          */
         getContainer: function () {
+            console.log('get container', new Date());
             var container = $(".inpage-frame-wrapper");
             return container.length > 0 ? container : buildContainerAndIFrame();
         },

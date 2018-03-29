@@ -18,6 +18,7 @@ export class AppComponent {
     public translate: TranslateService,
     private dialog: MdDialog,
   ) {
+    console.log("init app component");
     const langs = ['en','de','es','fr','it','nl','uk'];
     translate.addLangs(langs);
     translate.setDefaultLang($2sxc.urlParams.require('langpri').split('-')[0]);

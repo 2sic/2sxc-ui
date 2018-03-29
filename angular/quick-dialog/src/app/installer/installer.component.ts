@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { InstallerService } from "app/installer/installer.service";
 import { ModuleApiService } from "app/core/module-api.service";
 import { DomSanitizer, SafeResourceUrl, SafeUrl } from '@angular/platform-browser';
@@ -12,7 +12,7 @@ declare const window: any;
   templateUrl: './installer.component.html',
   styleUrls: ['./installer.component.scss']
 })
-export class InstallerComponent implements OnInit {
+export class InstallerComponent implements OnInit, OnDestroy {
   @Input() isContentApp: boolean;
 
   showProgress: boolean;
@@ -32,14 +32,18 @@ export class InstallerComponent implements OnInit {
       });
   }
 
+  ngOnDestroy(): void {
+    console.log("destroy!!!!!!!");
+  }
+
   ngOnInit() {
     console.log('DEBUG INSTALLER INIT -> if this happens more than one, we\'ve found the issue..');
-
+    const id = Math.random();
     let alreadyProcessing = false;
     this.api.loadGettingStarted(this.isContentApp);
 
     fromEvent(window, 'message')
-      .do(() => console.log('DEBUG INSTALLER A'))
+      .do(msg => console.log(msg, alreadyProcessing, 'DEBUG INSTALLER A', id))
 
       // Ensure only one installation is processed.
       .filter(() => !alreadyProcessing)
