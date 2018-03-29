@@ -25,9 +25,16 @@ angular.module('Adam')
             };
 
             // extend a json-response with a path (based on the adam-root) to also have a fullPath
-            svc.addFullPath = function(value, key) {
-                value.fullPath = svc.adamRoot + value.Path;
-            };
+          svc.addFullPath = function(value, key) {
+            // 2dm 2018-03-29 special fix - sometimes the path already has the full path, sometimes not
+            // it should actually be resolved properly, but because I don't have time
+            // ATM (data comes from different web-services, which are also used in other places
+            // I'll just check if it's already in there
+            value.fullPath = value.Path;
+            debugger;
+            if(value.Path && value.Path.toLowerCase().indexOf(svc.adamRoot.toLowerCase()) === -1)
+              value.fullPath = svc.adamRoot + value.Path;
+          };
 
             svc = angular.extend(svc, svcCreator.implementLiveList(function getAll() {
                 return $http.get(svc.url + '/items',
