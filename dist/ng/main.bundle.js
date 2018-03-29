@@ -499,6 +499,8 @@ module.exports = module.exports.toString();
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_app_installer_installer_service__ = __webpack_require__("../../../../../src/app/installer/installer.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_app_core_module_api_service__ = __webpack_require__("../../../../../src/app/core/module-api.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_platform_browser__ = __webpack_require__("../../../platform-browser/@angular/platform-browser.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_observable_fromEvent__ = __webpack_require__("../../../../rxjs/observable/fromEvent.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_observable_fromEvent___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_rxjs_observable_fromEvent__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -508,6 +510,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+
 
 
 
@@ -528,33 +531,55 @@ var InstallerComponent = (function () {
     }
     InstallerComponent.prototype.ngOnInit = function () {
         var _this = this;
+        console.log('DEBUG INSTALLER INIT -> if this happens more than one, we\'ve found the issue..');
+        var alreadyProcessing = false;
         this.api.loadGettingStarted(this.isContentApp);
-        window.addEventListener('message', function (evt) {
-            var data;
+        Object(__WEBPACK_IMPORTED_MODULE_4_rxjs_observable_fromEvent__["fromEvent"])(window, 'message')
+            .do(function () { return console.log('DEBUG INSTALLER A'); })
+            .filter(function () { return !alreadyProcessing; })
+            .map(function (evt) {
+            console.log('DEBUG INSTALLER B');
             try {
-                data = JSON.parse(evt.data);
+                return JSON.parse(evt.data);
             }
             catch (e) {
-                return false;
+                return void 0;
             }
-            if (~~data.moduleId !== ~~$2sxc.urlParams.require('mid'))
-                return;
-            if (data.action !== 'install')
-                return;
-            var packages = Object.values(data.packages), packagesDisplayNames = packages.reduce(function (t, c) { return t + " - " + c.displayName + "\n"; }, '');
+        })
+            .filter(function (data) { return data
+            && ~~data.moduleId === ~~$2sxc.urlParams.require('mid')
+            && data.action === 'install'; })
+            .map(function (data) { return Object.values(data.packages); })
+            .filter(function (packages) {
+            console.log('DEBUG INSTALLER C');
+            var packagesDisplayNames = packages
+                .reduce(function (t, c) { return t + " - " + c.displayName + "\n"; }, '');
             if (!confirm("\n          Do you want to install these packages?\n\n\n          " + packagesDisplayNames + "\nThis could take 10 to 60 seconds per package,\n          please don't reload the page while it's installing."))
-                return;
+                return false;
+            return true;
+        })
+            .switchMap(function (packages) {
+            console.log('DEBUG INSTALLER D');
+            alreadyProcessing = true;
             _this.showProgress = true;
-            _this.installer.installPackages(packages)
-                .subscribe(function (p) { return _this.currentPackage = p; }, function (e) {
-                _this.showProgress = false;
-                alert('An error occurred.');
-            }, function () {
-                _this.showProgress = false;
-                alert('Installation complete. If you saw no errors, everything worked.');
-                window.top.location.reload();
-            });
-        }, false);
+            return _this.installer.installPackages(packages);
+        })
+            .subscribe(function (p) {
+            console.log(_this.currentPackage);
+            _this.currentPackage = p;
+            // An error occured while installing.
+        }, function (e) {
+            console.log('DEBUG INSTALLER ERROR');
+            _this.showProgress = false;
+            alert('An error occurred.');
+            alreadyProcessing = false;
+            // Installation complete.
+        }, function () {
+            console.log('DEBUG INSTALLER E');
+            _this.showProgress = false;
+            alert('Installation complete. If you saw no errors, everything worked.');
+            window.top.location.reload();
+        });
     };
     return InstallerComponent;
 }());

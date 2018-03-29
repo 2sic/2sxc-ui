@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { InstallerService } from "app/installer/installer.service";
 import { ModuleApiService } from "app/core/module-api.service";
 import { DomSanitizer, SafeResourceUrl, SafeUrl } from '@angular/platform-browser';
+import { fromEvent } from 'rxjs/observable/fromEvent';
 
 declare const $2sxc: any;
 declare const window: any;
@@ -32,39 +33,76 @@ export class InstallerComponent implements OnInit {
   }
 
   ngOnInit() {
+    console.log('DEBUG INSTALLER INIT -> if this happens more than one, we\'ve found the issue..');
+
+    let alreadyProcessing = false;
     this.api.loadGettingStarted(this.isContentApp);
 
-    window.addEventListener('message', evt => {
-      var data;
+    fromEvent(window, 'message')
+      .do(() => console.log('DEBUG INSTALLER A'))
 
-      try {
-        data = JSON.parse(evt.data);
-      } catch (e) {
-        return false;
-      }
+      // Ensure only one installation is processed.
+      .filter(() => !alreadyProcessing)
 
-      if (~~data.moduleId !== ~~$2sxc.urlParams.require('mid')) return;
-      if (data.action !== 'install') return;
+      // Get data from event.
+      .map((evt: MessageEvent) => {
+        console.log('DEBUG INSTALLER B');
+        try {
+          return JSON.parse(evt.data);
+        } catch (e) {
+          return void 0;
+        }
+      })
 
-      let
-        packages = Object.values(data.packages),
-        packagesDisplayNames = packages.reduce((t, c) => `${t} - ${c.displayName}\n`, '');
+      // Check if data is correct.
+      .filter(data => data
+        && ~~data.moduleId === ~~$2sxc.urlParams.require('mid')
+        && data.action === 'install')
 
-      if (!confirm(`
+      // Get packages from data.
+      .map(data => Object.values(data.packages))
+
+      // Show confirm dialog.
+      .filter(packages => {
+        console.log('DEBUG INSTALLER C');
+
+        const packagesDisplayNames = packages
+          .reduce((t, c) => `${t} - ${c.displayName}\n`, '');
+
+        if (!confirm(`
           Do you want to install these packages?\n\n
           ${packagesDisplayNames}\nThis could take 10 to 60 seconds per package,
-          please don't reload the page while it's installing.`)) return;
+          please don't reload the page while it's installing.`)) return false;
+        return true;
+      })
 
-      this.showProgress = true;
-      this.installer.installPackages(packages)
-        .subscribe(p => this.currentPackage = p, e => {
-          this.showProgress = false;
-          alert('An error occurred.');
-        }, () => {
-          this.showProgress = false;
-          alert('Installation complete. If you saw no errors, everything worked.');
-          window.top.location.reload();
-        });
-    }, false);
+      .switchMap(packages => {
+        console.log('DEBUG INSTALLER D');
+
+        alreadyProcessing = true;
+        this.showProgress = true;
+        return this.installer.installPackages(packages);
+      })
+
+      .subscribe(p => {
+        console.log(this.currentPackage);
+        this.currentPackage = p;
+
+      // An error occured while installing.
+      }, e => {
+        console.log('DEBUG INSTALLER ERROR');
+
+        this.showProgress = false;
+        alert('An error occurred.');
+        alreadyProcessing = false;
+
+      // Installation complete.
+      }, () => {
+        console.log('DEBUG INSTALLER E');
+
+        this.showProgress = false;
+        alert('Installation complete. If you saw no errors, everything worked.');
+        window.top.location.reload();
+      });
   }
 }
