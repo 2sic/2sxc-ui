@@ -68,7 +68,6 @@ var AppComponent = (function () {
     function AppComponent(translate, dialog) {
         this.translate = translate;
         this.dialog = dialog;
-        console.log("init app component");
         var langs = ['en', 'de', 'es', 'fr', 'it', 'nl', 'uk'];
         translate.addLangs(langs);
         translate.setDefaultLang($2sxc.urlParams.require('langpri').split('-')[0]);
@@ -531,19 +530,16 @@ var InstallerComponent = (function () {
         });
     }
     InstallerComponent.prototype.ngOnDestroy = function () {
-        console.log("destroy!!!!!!!");
+        this.subscription.unsubscribe();
     };
     InstallerComponent.prototype.ngOnInit = function () {
         var _this = this;
-        console.log('DEBUG INSTALLER INIT -> if this happens more than one, we\'ve found the issue..');
         var id = Math.random();
         var alreadyProcessing = false;
         this.api.loadGettingStarted(this.isContentApp);
-        Object(__WEBPACK_IMPORTED_MODULE_4_rxjs_observable_fromEvent__["fromEvent"])(window, 'message')
-            .do(function (msg) { return console.log(msg, alreadyProcessing, 'DEBUG INSTALLER A', id); })
+        this.subscription = Object(__WEBPACK_IMPORTED_MODULE_4_rxjs_observable_fromEvent__["fromEvent"])(window, 'message')
             .filter(function () { return !alreadyProcessing; })
             .map(function (evt) {
-            console.log('DEBUG INSTALLER B');
             try {
                 return JSON.parse(evt.data);
             }
@@ -556,7 +552,6 @@ var InstallerComponent = (function () {
             && data.action === 'install'; })
             .map(function (data) { return Object.values(data.packages); })
             .filter(function (packages) {
-            console.log('DEBUG INSTALLER C');
             var packagesDisplayNames = packages
                 .reduce(function (t, c) { return t + " - " + c.displayName + "\n"; }, '');
             if (!confirm("\n          Do you want to install these packages?\n\n\n          " + packagesDisplayNames + "\nThis could take 10 to 60 seconds per package,\n          please don't reload the page while it's installing."))
@@ -564,23 +559,19 @@ var InstallerComponent = (function () {
             return true;
         })
             .switchMap(function (packages) {
-            console.log('DEBUG INSTALLER D');
             alreadyProcessing = true;
             _this.showProgress = true;
             return _this.installer.installPackages(packages);
         })
             .subscribe(function (p) {
-            console.log(_this.currentPackage);
             _this.currentPackage = p;
             // An error occured while installing.
         }, function (e) {
-            console.log('DEBUG INSTALLER ERROR');
             _this.showProgress = false;
             alert('An error occurred.');
             alreadyProcessing = false;
             // Installation complete.
         }, function () {
-            console.log('DEBUG INSTALLER E');
             _this.showProgress = false;
             alert('Installation complete. If you saw no errors, everything worked.');
             window.top.location.reload();
@@ -1402,8 +1393,10 @@ if (__WEBPACK_IMPORTED_MODULE_3__environments_environment__["a" /* environment *
 }
 var init = function () {
     Object(__WEBPACK_IMPORTED_MODULE_1__angular_platform_browser_dynamic__["a" /* platformBrowserDynamic */])()
+        .destroy();
+    Object(__WEBPACK_IMPORTED_MODULE_1__angular_platform_browser_dynamic__["a" /* platformBrowserDynamic */])()
         .bootstrapModule(__WEBPACK_IMPORTED_MODULE_2__app_app_module__["a" /* AppModule */])
-        .then(function () { return (window).appBootstrap && (window).appBootstrap(); })
+        .then(function () { return window.appBootstrap && window.appBootstrap(); })
         .catch(function (err) { return console.error('NG Bootstrap Error =>', err); });
 };
 // Init on first load
@@ -1411,7 +1404,9 @@ init();
 // provide hook for outside reboot calls
 var bootController = window.bootController = __WEBPACK_IMPORTED_MODULE_4__app_core_boot_control__["a" /* BootController */].getbootControl();
 // Init on reboot request
-var boot = bootController.watchReboot().subscribe(function () { return init(); });
+var boot = bootController.watchReboot()
+    .do(function () { return init(); })
+    .subscribe();
 //# sourceMappingURL=main.js.map
 
 /***/ }),

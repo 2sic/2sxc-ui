@@ -3,6 +3,7 @@ import { InstallerService } from "app/installer/installer.service";
 import { ModuleApiService } from "app/core/module-api.service";
 import { DomSanitizer, SafeResourceUrl, SafeUrl } from '@angular/platform-browser';
 import { fromEvent } from 'rxjs/observable/fromEvent';
+import { Subscription } from 'rxjs';
 
 declare const $2sxc: any;
 declare const window: any;
@@ -20,6 +21,8 @@ export class InstallerComponent implements OnInit, OnDestroy {
   remoteInstallerUrl = '';
   ready = false;
 
+  private subscription: Subscription;
+
   constructor(
     private installer: InstallerService,
     private api: ModuleApiService,
@@ -33,24 +36,21 @@ export class InstallerComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    console.log("destroy!!!!!!!");
+    this.subscription.unsubscribe();
   }
 
   ngOnInit() {
-    console.log('DEBUG INSTALLER INIT -> if this happens more than one, we\'ve found the issue..');
     const id = Math.random();
     let alreadyProcessing = false;
     this.api.loadGettingStarted(this.isContentApp);
 
-    fromEvent(window, 'message')
-      .do(msg => console.log(msg, alreadyProcessing, 'DEBUG INSTALLER A', id))
+    this.subscription = fromEvent(window, 'message')
 
       // Ensure only one installation is processed.
       .filter(() => !alreadyProcessing)
 
       // Get data from event.
       .map((evt: MessageEvent) => {
-        console.log('DEBUG INSTALLER B');
         try {
           return JSON.parse(evt.data);
         } catch (e) {
@@ -68,8 +68,6 @@ export class InstallerComponent implements OnInit, OnDestroy {
 
       // Show confirm dialog.
       .filter(packages => {
-        console.log('DEBUG INSTALLER C');
-
         const packagesDisplayNames = packages
           .reduce((t, c) => `${t} - ${c.displayName}\n`, '');
 
@@ -81,29 +79,22 @@ export class InstallerComponent implements OnInit, OnDestroy {
       })
 
       .switchMap(packages => {
-        console.log('DEBUG INSTALLER D');
-
         alreadyProcessing = true;
         this.showProgress = true;
         return this.installer.installPackages(packages);
       })
 
       .subscribe(p => {
-        console.log(this.currentPackage);
         this.currentPackage = p;
 
       // An error occured while installing.
       }, e => {
-        console.log('DEBUG INSTALLER ERROR');
-
         this.showProgress = false;
         alert('An error occurred.');
         alreadyProcessing = false;
 
       // Installation complete.
       }, () => {
-        console.log('DEBUG INSTALLER E');
-
         this.showProgress = false;
         alert('Installation complete. If you saw no errors, everything worked.');
         window.top.location.reload();

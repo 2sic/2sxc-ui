@@ -10,15 +10,17 @@ if (environment.production) {
 }
 
 // platformBrowserDynamic().bootstrapModule(AppModule);
-
 // 2dm: now with reboot capabilities
 
 declare const window;
 
 const init = () => {
   platformBrowserDynamic()
+    .destroy();
+
+  platformBrowserDynamic()
     .bootstrapModule(AppModule)
-      .then(() => (window).appBootstrap && (window).appBootstrap())
+      .then(() => window.appBootstrap && window.appBootstrap())
       .catch(err => console.error('NG Bootstrap Error =>', err));
 }
 
@@ -29,4 +31,6 @@ init();
 const bootController = window.bootController = BootController.getbootControl();
 
 // Init on reboot request
-const boot = bootController.watchReboot().subscribe(() => init());
+const boot = bootController.watchReboot()
+  .do(() => init())
+  .subscribe();
