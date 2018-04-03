@@ -24,13 +24,12 @@ const init = () => {
       .catch(err => console.error('NG Bootstrap Error =>', err));
 }
 
-// Init on first load
-init();
-
 // provide hook for outside reboot calls
 const bootController = window.bootController = BootController.getbootControl();
 
-// Init on reboot request
+// Init on reboot request.
 const boot = bootController.watchReboot()
+  .startWith(true) // Init on first load.
+  .debounceTime(200)
   .do(() => init())
   .subscribe();

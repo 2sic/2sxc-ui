@@ -1391,12 +1391,12 @@ var init = function () {
         .then(function () { return window.appBootstrap && window.appBootstrap(); })
         .catch(function (err) { return console.error('NG Bootstrap Error =>', err); });
 };
-// Init on first load
-init();
 // provide hook for outside reboot calls
 var bootController = window.bootController = __WEBPACK_IMPORTED_MODULE_4__app_core_boot_control__["a" /* BootController */].getbootControl();
-// Init on reboot request
+// Init on reboot request.
 var boot = bootController.watchReboot()
+    .startWith(true) // Init on first load.
+    .debounceTime(200)
     .do(function () { return init(); })
     .subscribe();
 //# sourceMappingURL=main.js.map
