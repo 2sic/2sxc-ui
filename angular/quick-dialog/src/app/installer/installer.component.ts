@@ -82,23 +82,19 @@ export class InstallerComponent implements OnInit, OnDestroy {
       .switchMap(packages => {
         alreadyProcessing = true;
         this.showProgress = true;
-        return this.installer.installPackages(packages);
+        return this.installer.installPackages(packages, p => this.currentPackage = p);
       })
 
-      .subscribe(p => {
-        this.currentPackage = p;
-
-      // An error occured while installing.
-      }, e => {
-        this.showProgress = false;
-        alert('An error occurred.');
-        alreadyProcessing = false;
-
-      // Installation complete.
-      }, () => {
+      .do(() => {
         this.showProgress = false;
         alert('Installation complete. If you saw no errors, everything worked.');
         window.top.location.reload();
+      })
+
+      .subscribe(null, e => { // An error occured while installing.
+        this.showProgress = false;
+        alert('An error occurred.');
+        alreadyProcessing = false;
       }));
   }
 }

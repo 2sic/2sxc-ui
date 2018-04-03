@@ -563,20 +563,17 @@ var InstallerComponent = (function () {
             .switchMap(function (packages) {
             alreadyProcessing = true;
             _this.showProgress = true;
-            return _this.installer.installPackages(packages);
+            return _this.installer.installPackages(packages, function (p) { return _this.currentPackage = p; });
         })
-            .subscribe(function (p) {
-            _this.currentPackage = p;
-            // An error occured while installing.
-        }, function (e) {
-            _this.showProgress = false;
-            alert('An error occurred.');
-            alreadyProcessing = false;
-            // Installation complete.
-        }, function () {
+            .do(function () {
             _this.showProgress = false;
             alert('Installation complete. If you saw no errors, everything worked.');
             window.top.location.reload();
+        })
+            .subscribe(null, function (e) {
+            _this.showProgress = false;
+            alert('An error occurred.');
+            alreadyProcessing = false;
         }));
     };
     return InstallerComponent;
@@ -656,8 +653,6 @@ InstallerModule = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_Rx__ = __webpack_require__("../../../../rxjs/Rx.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_Rx___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_rxjs_Rx__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_http__ = __webpack_require__("../../../http/@angular/http.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_Subject__ = __webpack_require__("../../../../rxjs/Subject.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_Subject___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_rxjs_Subject__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -670,24 +665,19 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
-
 var InstallerService = (function () {
     function InstallerService(http) {
         this.http = http;
     }
-    InstallerService.prototype.installPackages = function (packages) {
+    InstallerService.prototype.installPackages = function (packages, step) {
         var _this = this;
-        var subject = new __WEBPACK_IMPORTED_MODULE_3_rxjs_Subject__["Subject"]();
-        var res = packages.reduce(function (t, c) { return t
+        return packages.reduce(function (t, c) { return t
             .switchMap(function () {
             if (!c.url)
                 return __WEBPACK_IMPORTED_MODULE_1_rxjs_Rx__["Observable"].of(true);
-            console.log('one step');
-            subject.next(c);
+            step(c);
             return _this.http.get("app-sys/installer/installpackage?packageUrl=" + c.url);
-        }); }, __WEBPACK_IMPORTED_MODULE_1_rxjs_Rx__["Observable"].of(true))
-            .subscribe(function () { return subject.complete(); }, function (e) { return subject.error(e); });
-        return subject.asObservable();
+        }); }, __WEBPACK_IMPORTED_MODULE_1_rxjs_Rx__["Observable"].of(true));
     };
     return InstallerService;
 }());
