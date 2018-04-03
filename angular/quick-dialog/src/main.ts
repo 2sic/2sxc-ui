@@ -9,20 +9,23 @@ if (environment.production) {
   enableProdMode();
 }
 
+
 // platformBrowserDynamic().bootstrapModule(AppModule);
 // 2dm: now with reboot capabilities
 
 declare const window;
 
+const platform = platformBrowserDynamic();
+
 const init = () => {
-  platformBrowserDynamic()
+  platform
     .destroy();
 
-  platformBrowserDynamic()
+  platform
     .bootstrapModule(AppModule)
       .then(() => window.appBootstrap && window.appBootstrap())
       .catch(err => console.error('NG Bootstrap Error =>', err));
-}
+};
 
 // provide hook for outside reboot calls
 const bootController = window.bootController = BootController.getbootControl();
