@@ -21,22 +21,23 @@ export class InstallerComponent implements OnInit, OnDestroy {
   remoteInstallerUrl = '';
   ready = false;
 
-  private subscription: Subscription;
+  private subscriptions: Subscription[] = [];
 
   constructor(
     private installer: InstallerService,
     private api: ModuleApiService,
     private sanitizer: DomSanitizer
   ) {
-    this.api.gettingStarted
+    this.subscriptions.push(this.api.gettingStarted
       .subscribe(url => {
         this.remoteInstallerUrl = <string>this.sanitizer.bypassSecurityTrustResourceUrl(url);
         this.ready = true;
-      });
+      }));
   }
 
   ngOnDestroy(): void {
-    this.subscription.unsubscribe();
+    this.subscriptions
+      .forEach(sub => sub.unsubscribe());
   }
 
   ngOnInit() {
@@ -44,7 +45,7 @@ export class InstallerComponent implements OnInit, OnDestroy {
     let alreadyProcessing = false;
     this.api.loadGettingStarted(this.isContentApp);
 
-    this.subscription = fromEvent(window, 'message')
+    this.subscriptions.push(fromEvent(window, 'message')
 
       // Ensure only one installation is processed.
       .filter(() => !alreadyProcessing)
@@ -98,6 +99,6 @@ export class InstallerComponent implements OnInit, OnDestroy {
         this.showProgress = false;
         alert('Installation complete. If you saw no errors, everything worked.');
         window.top.location.reload();
-      });
+      }));
   }
 }

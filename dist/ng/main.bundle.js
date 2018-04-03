@@ -523,21 +523,23 @@ var InstallerComponent = (function () {
         this.sanitizer = sanitizer;
         this.remoteInstallerUrl = '';
         this.ready = false;
-        this.api.gettingStarted
+        this.subscriptions = [];
+        this.subscriptions.push(this.api.gettingStarted
             .subscribe(function (url) {
             _this.remoteInstallerUrl = _this.sanitizer.bypassSecurityTrustResourceUrl(url);
             _this.ready = true;
-        });
+        }));
     }
     InstallerComponent.prototype.ngOnDestroy = function () {
-        this.subscription.unsubscribe();
+        this.subscriptions
+            .forEach(function (sub) { return sub.unsubscribe(); });
     };
     InstallerComponent.prototype.ngOnInit = function () {
         var _this = this;
         var id = Math.random();
         var alreadyProcessing = false;
         this.api.loadGettingStarted(this.isContentApp);
-        this.subscription = Object(__WEBPACK_IMPORTED_MODULE_4_rxjs_observable_fromEvent__["fromEvent"])(window, 'message')
+        this.subscriptions.push(Object(__WEBPACK_IMPORTED_MODULE_4_rxjs_observable_fromEvent__["fromEvent"])(window, 'message')
             .filter(function () { return !alreadyProcessing; })
             .map(function (evt) {
             try {
@@ -575,7 +577,7 @@ var InstallerComponent = (function () {
             _this.showProgress = false;
             alert('Installation complete. If you saw no errors, everything worked.');
             window.top.location.reload();
-        });
+        }));
     };
     return InstallerComponent;
 }());
