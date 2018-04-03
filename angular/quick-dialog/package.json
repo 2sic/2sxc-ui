@@ -15,7 +15,7 @@
     "watch:publish:2sxc-ui": "cpx \"./dist/**/*.*\" \"../../dist/\" -w -v",
     "watch:publish:2sxc": "cpx \"./dist/**/*.*\" \"/Projects/2SexyContent/Web/DesktopModules/ToSIC_SexyContent/dist/\" -w -v",
     "watch:publish:dnn9:2cb": "cpx \"./dist/**/*.*\" \"/Projects/2SexyContent/WebDNN9/DesktopModules/ToSIC_SexyContent/dist/\" -w -v",
-    "prod": "concurrently \"npm run watch:publish:2sxc-ui\" \"npm run watch:publish:2sxc\" \"npm build:prod\""
+    "prod": "concurrently \"npm run watch:publish:2sxc-ui\" \"npm run watch:publish:2sxc\" \"npm run watch:publish:dnn9:2cb\" \"npm build:prod\""
   },
   "private": true,
   "dependencies": {
