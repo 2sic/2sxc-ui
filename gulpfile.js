@@ -1,9 +1,10 @@
 ﻿(() => {
     const
         dests = {
-            current: 'default',
+            current: 'dnn92cb',
             default: './../2sxc-dnn742/Website',
             evoq: '../TestWebsites/Evoq 9.1.0',
+            dnn92cb: '../2SexyContent/WebDNN9',
         },
         gulp = require('gulp'),
         $ = require('gulp-load-plugins')({
@@ -58,6 +59,21 @@
         gulp.watch('./dist/**/*', ['publish-dist-to-2sxc']);
         gulp.watch('./js/**/*', ['publish-js-to-2sxc']);
     });
+
+    gulp.task('copy-all-with.data', () => copyAll(dests.default));
+
+    // special helper - necessary to copy everything incl the ".data" folders
+    // which are otherwise skipped
+    function copyAll(dest) {
+        gulp.src([
+                        'dist/**/*', 'dist/.**/*'
+                    ],
+                    {
+                        dot: true
+                    }).pipe($.debug())
+                .pipe(gulp.dest(dest + config.autopublishTarget))
+            ;
+    }
 
     // watch the dnn ui.html for changes and republish
     function watchDnnUi() {
@@ -137,6 +153,12 @@
                 templateSetName: tmplSetName,
                 autoSort: true,
                 alsoRunMin: true
+            },
+            json: {
+                run: false,
+                files: [`${cwd}**/*.json`,
+                    `!${cwd}**/*spec.json`,
+                    `!${cwd}**/tests*`],
             }
         }
     }
@@ -202,6 +224,15 @@
         return result;
     }
 
+
+    function packageJsonTypes(set) {
+        if (config.debug) console.log(`json start: ${set.name}`);
+        gulp.src(set.json.files)
+            .pipe($.flatten())
+            .pipe(gulp.dest(set.dist + ".data/contenttypes/"));
+    }
+
+
     // package a set of CSS
     function packageCss(set) {
         if (config.debug) console.log('css packaging start: ' + set.name);
@@ -241,7 +272,11 @@
         if (config.debug) console.log('creating watcher callback for ' + set.name);
         var run = function (event) {
             if (config.debug) console.log('File ' + event.path + ' was ' + event.type + ', running tasks on set ' + set.name);
-            var call = (part === js) ? packageJs : packageCss;
+            var call = (part === 'js'
+                ? packageJs
+                : part === 'json'
+                    ? packageJsonTypes
+                    : packageCss);
             call(set);
             console.log(`finished ${set.name} ${new Date()}`);
         }
@@ -263,6 +298,7 @@
 
         // setup edit & extended
         var edit = createConfig('sxc-edit', 'SxcEditTemplates');
+        edit.json.run = true;
         sets.push(edit);
 
         // setup inpage stuff
@@ -271,7 +307,9 @@
         inpage.js.libs = [
             'src/inpage/translate/libs/**.js'
         ];
-        sets.push(inpage);
+        // 2018-03-13 2dm disabled in-page build for now, as we'll use the new github project just for in-page
+        // new repo is https://github.com/2sic/2sxc-inpage
+        // sets.push(inpage);
 
         // setup inpage dialogs
         var inpDialog = createConfig('inpage-dialogs', 'SxcInpageTemplates', 'dist/inpage/');
@@ -294,10 +332,11 @@
         return sets;
     }
 
-    /// let gulp watch a series of packs
+    // let gulp watch a series of packs
     function watchSet(setList) {
         setList.forEach(set => {
             if (set.js.run) gulp.watch(set.cwd + '**/*', createWatchCallback(set, js));
+            if (set.json.run) gulp.watch(set.cwd + "**/*", createWatchCallback(set, 'json'));
             if (set.css.run) gulp.watch(set.cwd + '**/*css', createWatchCallback(set, css));
         });
     }

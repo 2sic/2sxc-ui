@@ -9,24 +9,30 @@ if (environment.production) {
   enableProdMode();
 }
 
-// platformBrowserDynamic().bootstrapModule(AppModule);
 
+// platformBrowserDynamic().bootstrapModule(AppModule);
 // 2dm: now with reboot capabilities
 
 declare const window;
 
-const init = () => {
-  platformBrowserDynamic()
-    .bootstrapModule(AppModule)
-      .then(() => (window).appBootstrap && (window).appBootstrap())
-      .catch(err => console.error('NG Bootstrap Error =>', err));
-}
+const platform = platformBrowserDynamic();
 
-// Init on first load
-init();
+const init = () => {
+  platform
+    .destroy();
+
+  platform
+    .bootstrapModule(AppModule)
+      .then(() => window.appBootstrap && window.appBootstrap())
+      .catch(err => console.error('NG Bootstrap Error =>', err));
+};
 
 // provide hook for outside reboot calls
 const bootController = window.bootController = BootController.getbootControl();
 
-// Init on reboot request
-const boot = bootController.watchReboot().subscribe(() => init());
+// Init on reboot request.
+const boot = bootController.watchReboot()
+  .startWith(true) // Init on first load.
+  .debounceTime(200)
+  .do(() => init())
+  .subscribe();

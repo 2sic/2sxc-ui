@@ -40,21 +40,9 @@ angular.module("sxcFieldTemplates")
             return connector.modalInstance;
         };
 
-        // 2017-08-12 2dm looks unused now
-        // convert the url to a Id-code
-        //svc.convertPathToId = function(path, type) {
-        //    var pathWithoutVersion = path.replace(/\?ver=[0-9\-]*$/gi, "");
-        //    // todo: working on https://github.com/2sic/2sxc/issues/656 but can't reproduce error
-        //    // this is why I tried ignoreErrors and promisetoaster, but atm there is nothing to work on...
-        //    var promise = $http.get("dnn/Hyperlink/GetFileByPath?relativePath=" + encodeURIComponent(pathWithoutVersion),
-        //    {
-        //        //ignoreErrors: true
-        //    });
-        //    return promiseToastr(promise, "Edit.Field.Hyperlink.Message.Loading", "Edit.Field.Hyperlink.Message.Ok", "Edit.Field.Hyperlink.Message.Error", 0, 0, 1000);
-        //};
 
         // handle short-ID links like file:17
-        svc.getUrlOfId = function(idCode) {
+        svc.getUrlOfId = function(idCode, entityId) {
             var linkLowered = idCode.toLowerCase();
             if (linkLowered.indexOf("file:") !== -1 || linkLowered.indexOf("page:") !== -1)
                 return $http.get("dnn/Hyperlink/ResolveHyperlink?hyperlink=" + encodeURIComponent(idCode));

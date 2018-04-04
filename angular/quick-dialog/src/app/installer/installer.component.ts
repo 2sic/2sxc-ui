@@ -1,7 +1,9 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { InstallerService } from "app/installer/installer.service";
 import { ModuleApiService } from "app/core/module-api.service";
 import { DomSanitizer, SafeResourceUrl, SafeUrl } from '@angular/platform-browser';
+import { fromEvent } from 'rxjs/observable/fromEvent';
+import { Subscription } from 'rxjs';
 
 declare const $2sxc: any;
 declare const window: any;
@@ -11,7 +13,7 @@ declare const window: any;
   templateUrl: './installer.component.html',
   styleUrls: ['./installer.component.scss']
 })
-export class InstallerComponent implements OnInit {
+export class InstallerComponent implements OnInit, OnDestroy {
   @Input() isContentApp: boolean;
 
   showProgress: boolean;
@@ -19,52 +21,80 @@ export class InstallerComponent implements OnInit {
   remoteInstallerUrl = '';
   ready = false;
 
+  private subscriptions: Subscription[] = [];
+
   constructor(
     private installer: InstallerService,
     private api: ModuleApiService,
     private sanitizer: DomSanitizer
   ) {
-    this.api.gettingStarted
+    this.subscriptions.push(this.api.gettingStarted
       .subscribe(url => {
         this.remoteInstallerUrl = <string>this.sanitizer.bypassSecurityTrustResourceUrl(url);
         this.ready = true;
-      });
+      }));
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions
+      .forEach(sub => sub.unsubscribe());
   }
 
   ngOnInit() {
+    const id = Math.random();
+    let alreadyProcessing = false;
     this.api.loadGettingStarted(this.isContentApp);
 
-    window.addEventListener('message', evt => {
-      var data;
+    this.subscriptions.push(fromEvent(window, 'message')
 
-      try {
-        data = JSON.parse(evt.data);
-      } catch (e) {
-        return false;
-      }
+      // Ensure only one installation is processed.
+      .filter(() => !alreadyProcessing)
 
-      if (~~data.moduleId !== ~~$2sxc.urlParams.require('mid')) return;
-      if (data.action !== 'install') return;
+      // Get data from event.
+      .map((evt: MessageEvent) => {
+        try {
+          return JSON.parse(evt.data);
+        } catch (e) {
+          return void 0;
+        }
+      })
 
-      let
-        packages = Object.values(data.packages),
-        packagesDisplayNames = packages.reduce((t, c) => `${t} - ${c.displayName}\n`, '');
+      // Check if data is correct.
+      .filter(data => data
+        && ~~data.moduleId === ~~$2sxc.urlParams.require('mid')
+        && data.action === 'install')
 
-      if (!confirm(`
+      // Get packages from data.
+      .map(data => Object.values(data.packages))
+
+      // Show confirm dialog.
+      .filter(packages => {
+        const packagesDisplayNames = packages
+          .reduce((t, c) => `${t} - ${c.displayName}\n`, '');
+
+        if (!confirm(`
           Do you want to install these packages?\n\n
           ${packagesDisplayNames}\nThis could take 10 to 60 seconds per package,
-          please don't reload the page while it's installing.`)) return;
+          please don't reload the page while it's installing.`)) return false;
+        return true;
+      })
 
-      this.showProgress = true;
-      this.installer.installPackages(packages)
-        .subscribe(p => this.currentPackage = p, e => {
-          this.showProgress = false;
-          alert('An error occurred.');
-        }, () => {
-          this.showProgress = false;
-          alert('Installation complete. If you saw no errors, everything worked.');
-          window.top.location.reload();
-        });
-    }, false);
+      .switchMap(packages => {
+        alreadyProcessing = true;
+        this.showProgress = true;
+        return this.installer.installPackages(packages, p => this.currentPackage = p);
+      })
+
+      .do(() => {
+        this.showProgress = false;
+        alert('Installation complete. If you saw no errors, everything worked.');
+        window.top.location.reload();
+      })
+
+      .subscribe(null, e => { // An error occured while installing.
+        this.showProgress = false;
+        alert('An error occurred.');
+        alreadyProcessing = false;
+      }));
   }
 }

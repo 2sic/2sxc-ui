@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from "rxjs/Rx";
+import { Observable, ReplaySubject } from "rxjs/Rx";
 import { Http } from "@angular/http";
 import { Subject } from "rxjs/Subject";
 
@@ -13,17 +13,12 @@ export class InstallerService {
     private http: Http
   ) { }
 
-  installPackages(packages: any[]): Observable<any> {
-    const
-      subject = new Subject<any>(),
-      res = packages.reduce((t: Observable<Response>, c) => t
+  installPackages(packages: any[], step: Function): Observable<any> {
+    return packages.reduce((t: Observable<Response>, c) => t
         .switchMap(() => {
-          if (!c.url) return Observable.from([true]);
-          subject.next(c);
+          if (!c.url) return Observable.of(true);
+          step(c);
           return <Observable<any>>this.http.get(`app-sys/installer/installpackage?packageUrl=${c.url}`);
-        }), Observable.from([true]))
-        .subscribe(() => subject.complete(), e => subject.error(e));
-        
-    return subject.asObservable();
+        }), Observable.of(true));
   }
 }
