@@ -31,7 +31,7 @@ angular.module('Adam')
             // ATM (data comes from different web-services, which are also used in other places
             // I'll just check if it's already in there
             value.fullPath = value.Path;
-            debugger;
+            // debugger;
             if(value.Path && value.Path.toLowerCase().indexOf(svc.adamRoot.toLowerCase()) === -1)
               value.fullPath = svc.adamRoot + value.Path;
           };

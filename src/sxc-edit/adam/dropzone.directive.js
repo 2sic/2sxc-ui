@@ -44,6 +44,7 @@
 
                 var eventHandlers = {
                     'addedfile': function (file) {
+                        // debugger;
                         $timeout(function () {
                             // anything you want can go here and will safely be run on the next digest.
                             scope.$apply(function () { // this must run in a timeout
@@ -52,11 +53,18 @@
                         });
                     },
 
+                    'drop': function (event) {
+                        // debugger;
+                        console.log('stv: drop', event);
+                    },
+
                     "processing": function (file) {
+                        // debugger;
                         this.options.url = svc.uploadUrl(controller.adam.subFolder);
                     },
 
                     'success': function (file, response) {
+                        // debugger;
                         if (response.Success) {
                             svc.addFullPath(response); // calculate additional infos
                             scope.$parent.afterUpload(response);
@@ -86,7 +94,16 @@
 
                     scope.processDropzone = function() { dropzone.processQueue(); };
                     scope.resetDropzone = function() { dropzone.removeAllFiles(); };
-                    controller.openUpload = function() { dropzone.hiddenFileInput.click(); };
+                    controller.openUpload = function () { dropzone.hiddenFileInput.click(); };
+
+                    //controller.emit = function (dropzoneEvent, file) { dropzone.emit(dropzoneEvent, file); }; // needed for clipboard paste
+                    //controller.createThumbnailFromUrl = function (file, imageUrl, callback, crossOrigin) { dropzone.createThumbnailFromUrl(file, imageUrl, callback, crossOrigin); }; // needed for clipboard paste
+                    //controller.options = dropzone.options; // needed for clipboard paste
+                    //controller.files = dropzone.files; // needed for clipboard paste
+                    //controller.uploadFiles = dropzone.uploadFiles;  // needed for clipboard paste
+                    controller.dz = dropzone; // needed for clipboard paste
+
+                    // debugger;
 
                 }, 0);
             }
