@@ -84,7 +84,8 @@
                 vm.get();
         };
 
-        vm.openUpload = function() {
+        vm.openUpload = function () {
+            // debugger;
             vm.dropzone.openUpload();
         };
 
@@ -214,6 +215,36 @@
         };
 
         vm.activate();
+
+        $scope.copyPasted = function (event) {
+            var clipData = event.clipboardData;
+            angular.forEach(clipData.items, function (item, key) {
+                if (clipData.items[key]['type'].match(/image.*/)) {
+                    // debugger;
+                    // if it is a image
+                    var img = clipData.items[key].getAsFile();
+
+                    var imgFile = twoSxcFile(img, 'ttt.png');
+
+                    console.log('stv: imgFile', imgFile);
+
+                    vm.dropzone.dz.processFile(imgFile);
+
+                };
+            });
+        };
+
+        /**
+         * creates new customized file
+         * @param {File} file
+         * @param {string} fileName
+         */
+        function twoSxcFile(file, fileName) {
+            var data = new FormData();
+            data.append('file', file, fileName);
+            var newFile = data.get('file');
+            return newFile;
+        };
     }
 
 })();
