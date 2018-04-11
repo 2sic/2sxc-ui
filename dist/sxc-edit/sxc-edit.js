@@ -387,9 +387,11 @@ angular.module('Adam')
                     // if it is a image form clipboard
                     var img = clipData.items[key].getAsFile();
 
-                    var imgFile = twoSxcFile(img, 'ttt.png');
+                    var imageFileName = 'image.png';
 
-                    console.log('stv: imgFile', imgFile);
+                    imageFileName = window.prompt('Enter clipboard image file name: ', imageFileName); // todo i18n 
+
+                    var imgFile = twoSxcFile(img, imageFileName);
 
                     vm.dropzone.dz.processFile(imgFile);
 
