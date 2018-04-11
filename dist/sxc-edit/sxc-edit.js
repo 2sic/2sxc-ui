@@ -384,7 +384,7 @@ angular.module('Adam')
             angular.forEach(clipData.items, function (item, key) {
                 if (clipData.items[key]['type'].match(/image.*/)) {
                     // debugger;
-                    // if it is a image
+                    // if it is a image form clipboard
                     var img = clipData.items[key].getAsFile();
 
                     var imgFile = twoSxcFile(img, 'ttt.png');

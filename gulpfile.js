@@ -126,6 +126,7 @@
         gulp.src(bwr + 'angular-ui-ace/*.js')
             .pipe(gulp.dest(config.rootDist + 'lib/angular-ui-ace/'));
 
+        // lib shake
         gulp.src(bwr + 'shake.js/shake.js')
             .pipe(gulp.dest('src/inpage/toolbar/libs/'));
     }
