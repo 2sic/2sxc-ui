@@ -95,15 +95,7 @@
                     scope.processDropzone = function() { dropzone.processQueue(); };
                     scope.resetDropzone = function() { dropzone.removeAllFiles(); };
                     controller.openUpload = function () { dropzone.hiddenFileInput.click(); };
-
-                    //controller.emit = function (dropzoneEvent, file) { dropzone.emit(dropzoneEvent, file); }; // needed for clipboard paste
-                    //controller.createThumbnailFromUrl = function (file, imageUrl, callback, crossOrigin) { dropzone.createThumbnailFromUrl(file, imageUrl, callback, crossOrigin); }; // needed for clipboard paste
-                    //controller.options = dropzone.options; // needed for clipboard paste
-                    //controller.files = dropzone.files; // needed for clipboard paste
-                    //controller.uploadFiles = dropzone.uploadFiles;  // needed for clipboard paste
-                    controller.dz = dropzone; // needed for clipboard paste
-
-                    // debugger;
+                    controller.processFile = function (file) { dropzone.processFile(file); }; // needed for clipboard paste
 
                 }, 0);
             }
