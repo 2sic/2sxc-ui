@@ -219,30 +219,83 @@
         $scope.copyPasted = function (event) {
             var clipData = event.clipboardData;
             angular.forEach(clipData.items, function (item, key) {
-                if (clipData.items[key]['type'].match(/image.*/)) {
-                    // debugger;
+                if (clipData.items[key].type.match(/image.*/)) {
                     // if it is a image form clipboard
                     var img = clipData.items[key].getAsFile();
-
                     // input image filename
                     if (browser() !== 'Edge') {
-
                         var imageFileName = 'image.png';
-
-                        // todo: generate has sha256 for name
-
-                        imageFileName = window.prompt('Enter clipboard image file name: ', imageFileName); // todo i18n 
-
+                        // todo: generate hash sha256 for name
+                        imageFileName = window.prompt('Enter clipboard image file name: ', imageFileName); // todo: i18n 
                         img = twoSxcFile(img, imageFileName);
                     }
-
                     // todo: convert png to jpg
-
-                    vm.dropzone.dz.processFile(img);
-
-                };
+                    vm.dropzone.processFile(img);
+                }
             });
         };
+
+
+        /**
+         * convert blob image to jpeg
+         * @param {any} file
+         * @param {any} quality
+         * @param {any} outputFormat
+         */
+        function convertImageFormat(file, quality, outputFormat) {
+
+            var mimeType;
+            if (outputFormat === 'png') {
+                mimeType = 'image/png';
+            } else if (outputFormat === 'webp') {
+                mimeType = 'image/webp';
+            } else {
+                mimeType = 'image/jpeg';
+            }
+
+            var img = new Image();
+            img.src = URL.createObjectURL(file);
+            URL.revokeObjectURL(img.src); // free up memory
+
+            var canvas = document.createElement('canvas'); // create a temp. canvas
+            canvas.width = img.width;
+            canvas.height = img.height;
+            var ctx = canvas.getContext('2d').drawImage(img, 0, 0);
+
+            // convert to File object, NOTE: we're using binary mime-type for the final Blob/File
+            canvas.toBlob(function (blob) {
+                file = new File([blob], file.name, { type: 'application/octet-stream' });
+            }, mimeType, quality / 100);
+        }
+
+
+        /**
+         * compress image to jpeg, png or webp
+         * @param {Image} sourceImgObj
+         * @param {integer} quality
+         * @param {string} outputFormat
+         */
+        function compress(sourceImgObj, quality, outputFormat) {
+
+            var mimeType;
+            if (outputFormat === 'png') {
+                mimeType = 'image/png';
+            } else if (outputFormat === 'webp') {
+                mimeType = 'image/webp';
+            } else {
+                mimeType = 'image/jpeg';
+            }
+
+            var canvas = document.createElement('canvas');
+            canvas.width = sourceImgObj.naturalWidth;
+            canvas.height = sourceImgObj.naturalHeight;
+            var ctx = canvas.getContext('2d').drawImage(sourceImgObj, 0, 0);
+
+            var newImageData = canvas.toDataURL(mimeType, quality / 100);
+            var resultImageObj = new Image();
+            resultImageObj.src = newImageData;
+            return resultImageObj;
+        }
 
         /**
          * creates new customized file
@@ -254,7 +307,7 @@
             data.append('file', file, fileName);
             var newFile = data.get('file');
             return newFile;
-        };
+        }
 
         /**
          * Gets the browser name or returns an empty string if unknown. 
@@ -276,7 +329,7 @@
             var isFirefox = typeof InstallTrigger !== 'undefined';
 
             // Safari 3.0+ "[object HTMLElementConstructor]" 
-            var isSafari = /constructor/i.test(window.HTMLElement) || (function (p) { return p.toString() === "[object SafariRemoteNotification]"; })(!window['safari'] || safari.pushNotification);
+            var isSafari = /constructor/i.test(window.HTMLElement) || (function (p) { return p.toString() === "[object SafariRemoteNotification]"; })(!window.safari || safari.pushNotification);
 
             // Internet Explorer 6-11
             var isIE = /*@cc_on!@*/false || !!document.documentMode;
@@ -290,7 +343,7 @@
             // Blink engine detection
             var isBlink = (isChrome || isOpera) && !!window.CSS;
 
-            return browser.prototype._cachedResult =
+            browser.prototype._cachedResult =
                 isOpera ? 'Opera' :
                 isFirefox ? 'Firefox' :
                 isSafari ? 'Safari' :
@@ -299,7 +352,9 @@
                 isEdge ? 'Edge' :
                 isBlink ? 'Blink' :
                 "Don't know";
-        };
+
+            return browser.prototype._cachedResult;
+        }
 
     }
 
