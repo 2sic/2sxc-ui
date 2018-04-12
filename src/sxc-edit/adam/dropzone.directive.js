@@ -104,19 +104,18 @@
                     pasteInstance = $(element[0]).children("div:first").children("div.after-preview:first").children("div:first").children("input:first");
                     if (pasteInstance.length > 0) {
                         pasteInstance.pastableTextarea();
-                        pasteInstance.on('pasteImage', function (ev, data) {
-                            pasteImageInDropzone(ev, data, dropzone);
-                        });
+                        //pasteInstance.on('pasteImage', function (ev, data) {
+                        //    pasteImageInDropzone(ev, data, dropzone);
+                        //});
 
                         // pastableNonInputable
-                        //pasteInstance = $(element[0]);
-                        //if (pasteInstance.length > 0) {
-                        //    pasteInstance.pastableNonInputable();
-                        //    pasteInstance.on('pasteImage', function (ev, data) {
-                        //        pasteImageInDropzone(ev, data, dropzone);
-                        //    });
-                        //}
-
+                        pasteInstance = $(element[0]);
+                        if (pasteInstance.length > 0) {
+                            pasteInstance.pastableNonInputable();
+                            pasteInstance.on('pasteImage', function (ev, data) {
+                                pasteImageInDropzone(ev, data, dropzone);
+                            });
+                        }
                     }
 
                     // pastableContenteditable - for tinymce
@@ -127,9 +126,6 @@
                             pasteImageInDropzone(ev, data, dropzone);
                         });
                     }
-
-                    
-
 
                     //.on('pasteText', function (ev, data) {
                     //    debugger;
@@ -147,12 +143,19 @@
 
                 function pasteImageInDropzone(ev, data, dropzone) {
                     var img = data.file;
-                    // input image filename
+                    var imageFileName = 'image.png';
+                    // todo: generate hash sha256 for name
+                    imageFileName = window.prompt('Enter clipboard image file name: ', imageFileName); // todo: i18n 
                     if (browser() !== 'Edge') {
-                        var imageFileName = 'image.png';
-                        // todo: generate hash sha256 for name
-                        imageFileName = window.prompt('Enter clipboard image file name: ', imageFileName); // todo: i18n 
                         img = twoSxcFile(img, imageFileName);
+                    } else {
+                        // fix this for Edge and IE
+                        //try {
+                        //    img = new File(data.file, imageFileName);
+                        //} catch (e) {
+                        //    console.log('paste image error', e);
+                        //}
+                        
                     }
                     // todo: convert png to jpg
                     dropzone.processFile(img);

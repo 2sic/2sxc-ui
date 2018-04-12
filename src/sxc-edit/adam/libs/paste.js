@@ -292,7 +292,9 @@ https://github.com/layerssss/paste.js
                                             file: clipboardImageAsFile,
                                             originalEvent: _this.originalEvent
                                         });
-                                    } catch (error) { }
+                                    } catch (error) {
+                                        console.log('clipboard paste image error', error);
+                                    }
                                     ev.preventDefault();
                                     break;
                                 }
@@ -449,8 +451,63 @@ https://github.com/layerssss/paste.js
             })(this), 1);
         };
 
+        function convertImageFormat(file, quality, outputFormat) {
+
+            var mimeType;
+            if (outputFormat === 'png') {
+                mimeType = 'image/png';
+            } else if (outputFormat === 'webp') {
+                mimeType = 'image/webp';
+            } else {
+                mimeType = 'image/jpeg';
+            }
+
+            var img = new Image();
+            img.src = URL.createObjectURL(file);
+            URL.revokeObjectURL(img.src); // free up memory
+
+            var canvas = document.createElement('canvas'); // create a temp. canvas
+            canvas.width = img.width;
+            canvas.height = img.height;
+            var ctx = canvas.getContext('2d').drawImage(img, 0, 0);
+
+            // convert to File object, NOTE: we're using binary mime-type for the final Blob/File
+            canvas.toBlob(function (blob) {
+                file = new File([blob], file.name, { type: 'application/octet-stream' });
+            }, mimeType, quality / 100);
+        }
+
+
         /**
-         * creates new customized file
+         * wip: compress image to jpeg, png or webp
+         * @param {Image} sourceImgObj
+         * @param {integer} quality
+         * @param {string} outputFormat
+         */
+        function compress(sourceImgObj, quality, outputFormat) {
+
+            var mimeType;
+            if (outputFormat === 'png') {
+                mimeType = 'image/png';
+            } else if (outputFormat === 'webp') {
+                mimeType = 'image/webp';
+            } else {
+                mimeType = 'image/jpeg';
+            }
+
+            var canvas = document.createElement('canvas');
+            canvas.width = sourceImgObj.naturalWidth;
+            canvas.height = sourceImgObj.naturalHeight;
+            var ctx = canvas.getContext('2d').drawImage(sourceImgObj, 0, 0);
+
+            var newImageData = canvas.toDataURL(mimeType, quality / 100);
+            var resultImageObj = new Image();
+            resultImageObj.src = newImageData;
+            return resultImageObj;
+        }
+
+        /**
+         * wip: creates new customized file
          * @param {File} file
          * @param {string} fileName
          */
