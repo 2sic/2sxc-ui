@@ -30,6 +30,7 @@
     <Content Include="License.txt" />
     <Content Include="src\config\eav-configuration-in-sxc.js" />
     <Content Include="src\dnn\ui.html" />
+    <Content Include="src\sxc-edit\adam\paste.js" />
     <Content Include="src\sxc-edit\fields\custom\custom-json.js" />
     <Content Include="src\sxc-edit\fields\hyperlink\System.%40hyperlink-library.json" />
     <Content Include="src\sxc-edit\fields\hyperlink\System.%40Hyperlink.json" />
