@@ -63,7 +63,7 @@
             return vm.items.length > 0;
         };
 
-        // Open a content-type configuration dialog for a type (for settings / resources) 
+        /// Open a content-type configuration dialog for a type (for settins / resources) 
         vm.config = function openConf(staticName) {
             return svc.openConfig(staticName);
         };
@@ -72,11 +72,7 @@
             return svc.edit(staticName);
         };
 
-      vm.editPackage = svc.editPackage;
-
-      vm.permissions = function permissions() {
-        
-      }
+        vm.editPackage = svc.editPackage;
 
     }
 
