@@ -104,18 +104,14 @@
                     pasteInstance = $(element[0]).children("div:first").children("div.after-preview:first").children("div:first").children("input:first");
                     if (pasteInstance.length > 0) {
                         pasteInstance.pastableTextarea();
-                        //pasteInstance.on('pasteImage', function (ev, data) {
-                        //    pasteImageInDropzone(ev, data, dropzone);
-                        //});
 
                         // pastableNonInputable
-                        pasteInstance = $(element[0]);
-                        if (pasteInstance.length > 0) {
-                            pasteInstance.pastableNonInputable();
-                            pasteInstance.on('pasteImage', function (ev, data) {
-                                pasteImageInDropzone(ev, data, dropzone);
-                            });
-                        }
+                        pasteInstance = $(element[0]); // whole dropzone
+                        pasteInstance.pastableNonInputable();
+
+                        pasteInstance.on('pasteImage', function (ev, data) {
+                            pasteImageInDropzone(ev, data, dropzone);
+                        });
                     }
 
                     // pastableContenteditable - for tinymce
@@ -127,98 +123,46 @@
                         });
                     }
 
-                    //.on('pasteText', function (ev, data) {
-                    //    debugger;
-                    //    //$('<div class="result"></div>').text('text: "' + data.text + '"').insertAfter(this);
-                    //}).on('pasteTextRich', function (ev, data) {
-                    //    debugger;
-                    //    //$('<div class="result"></div>').text('rtf: "' + data.text + '"').insertAfter(this);
-                    //}).on('pasteTextHtml', function (ev, data) {
-                    //    debugger;
-                    //    //$('<div class="result"></div>').text('html: "' + data.text + '"').insertAfter(this);
-                    //});
-
-
                 }, 0);
 
                 function pasteImageInDropzone(ev, data, dropzone) {
-                    var img = data.file;
+
+                    // todo: generate hash sha256 for file name and avoid duplicate files
                     var imageFileName = 'image.png';
-                    // todo: generate hash sha256 for name
                     imageFileName = window.prompt('Enter clipboard image file name: ', imageFileName); // todo: i18n 
-                    if (browser() !== 'Edge') {
-                        img = twoSxcFile(img, imageFileName);
-                    } else {
-                        // fix this for Edge and IE
-                        //try {
-                        //    img = new File(data.file, imageFileName);
-                        //} catch (e) {
-                        //    console.log('paste image error', e);
-                        //}
-                        
-                    }
-                    // todo: convert png to jpg
+
+                    // todo: convert png to jpg to reduce file size
+                    var img = getFile(data, imageFileName);
+
                     dropzone.processFile(img);
                 }
 
                 /**
-                 * creates new customized file
+                 * creates new file with custom fileName
                  * @param {File} file
                  * @param {string} fileName
                  */
-                function twoSxcFile(file, fileName) {
-                    var data = new FormData();
-                    data.append('file', file, fileName);
-                    var newFile = data.get('file');
+                function getFile(data, fileName) {
+                    var newFile = data.file; // for fallback
+
+                    try {
+                        if (!document.documentMode && !/Edge/.test(navigator.userAgent)) {
+                            // File.name is readonly so we do this
+                            var formData = new FormData();
+                            formData.append('file', data.file, fileName);
+                            newFile = formData.get('file');
+                        } else {
+                            // fix this for Edge and IE
+                            newFile = new Blob([data.file], { type: data.file.type });
+                            newFile.lastModifiedDate = data.file.lastModifiedDate;
+                            newFile.name = fileName;
+                        }
+                    } catch (e) {
+                        console.log('paste image error', e);
+                    }
                     return newFile;
                 }
 
-                /**
-                 * Gets the browser name or returns an empty string if unknown. 
-                 * This function also caches the result to provide for any 
-                 * future calls this function has.
-                 * https://stackoverflow.com/questions/9847580/how-to-detect-safari-chrome-ie-firefox-and-opera-browser
-                 *
-                 * @returns {string}
-                 */
-                function browser() {
-                    // Return cached result if avalible, else get result then cache it.
-                    if (browser.prototype._cachedResult)
-                        return browser.prototype._cachedResult;
-
-                    // Opera 8.0+
-                    var isOpera = (!!window.opr && !!opr.addons) || !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
-
-                    // Firefox 1.0+
-                    var isFirefox = typeof InstallTrigger !== 'undefined';
-
-                    // Safari 3.0+ "[object HTMLElementConstructor]" 
-                    var isSafari = /constructor/i.test(window.HTMLElement) || (function (p) { return p.toString() === "[object SafariRemoteNotification]"; })(!window.safari || safari.pushNotification);
-
-                    // Internet Explorer 6-11
-                    var isIE = /*@cc_on!@*/false || !!document.documentMode;
-
-                    // Edge 20+
-                    var isEdge = !isIE && !!window.StyleMedia;
-
-                    // Chrome 1+
-                    var isChrome = !!window.chrome && !!window.chrome.webstore;
-
-                    // Blink engine detection
-                    var isBlink = (isChrome || isOpera) && !!window.CSS;
-
-                    browser.prototype._cachedResult =
-                        isOpera ? 'Opera' :
-                            isFirefox ? 'Firefox' :
-                                isSafari ? 'Safari' :
-                                    isChrome ? 'Chrome' :
-                                        isIE ? 'IE' :
-                                            isEdge ? 'Edge' :
-                                                isBlink ? 'Blink' :
-                                                    "Don't know";
-
-                    return browser.prototype._cachedResult;
-                }
 
             }
 

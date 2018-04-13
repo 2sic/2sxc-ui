@@ -552,18 +552,14 @@ angular.module('Adam')
                     pasteInstance = $(element[0]).children("div:first").children("div.after-preview:first").children("div:first").children("input:first");
                     if (pasteInstance.length > 0) {
                         pasteInstance.pastableTextarea();
-                        //pasteInstance.on('pasteImage', function (ev, data) {
-                        //    pasteImageInDropzone(ev, data, dropzone);
-                        //});
 
                         // pastableNonInputable
-                        pasteInstance = $(element[0]);
-                        if (pasteInstance.length > 0) {
-                            pasteInstance.pastableNonInputable();
-                            pasteInstance.on('pasteImage', function (ev, data) {
-                                pasteImageInDropzone(ev, data, dropzone);
-                            });
-                        }
+                        pasteInstance = $(element[0]); // whole dropzone
+                        pasteInstance.pastableNonInputable();
+
+                        pasteInstance.on('pasteImage', function (ev, data) {
+                            pasteImageInDropzone(ev, data, dropzone);
+                        });
                     }
 
                     // pastableContenteditable - for tinymce
@@ -575,98 +571,46 @@ angular.module('Adam')
                         });
                     }
 
-                    //.on('pasteText', function (ev, data) {
-                    //    debugger;
-                    //    //$('<div class="result"></div>').text('text: "' + data.text + '"').insertAfter(this);
-                    //}).on('pasteTextRich', function (ev, data) {
-                    //    debugger;
-                    //    //$('<div class="result"></div>').text('rtf: "' + data.text + '"').insertAfter(this);
-                    //}).on('pasteTextHtml', function (ev, data) {
-                    //    debugger;
-                    //    //$('<div class="result"></div>').text('html: "' + data.text + '"').insertAfter(this);
-                    //});
-
-
                 }, 0);
 
                 function pasteImageInDropzone(ev, data, dropzone) {
-                    var img = data.file;
+
+                    // todo: generate hash sha256 for file name and avoid duplicate files
                     var imageFileName = 'image.png';
-                    // todo: generate hash sha256 for name
                     imageFileName = window.prompt('Enter clipboard image file name: ', imageFileName); // todo: i18n 
-                    if (browser() !== 'Edge') {
-                        img = twoSxcFile(img, imageFileName);
-                    } else {
-                        // fix this for Edge and IE
-                        //try {
-                        //    img = new File(data.file, imageFileName);
-                        //} catch (e) {
-                        //    console.log('paste image error', e);
-                        //}
-                        
-                    }
-                    // todo: convert png to jpg
+
+                    // todo: convert png to jpg to reduce file size
+                    var img = getFile(data, imageFileName);
+
                     dropzone.processFile(img);
                 }
 
                 /**
-                 * creates new customized file
+                 * creates new file with custom fileName
                  * @param {File} file
                  * @param {string} fileName
                  */
-                function twoSxcFile(file, fileName) {
-                    var data = new FormData();
-                    data.append('file', file, fileName);
-                    var newFile = data.get('file');
+                function getFile(data, fileName) {
+                    var newFile = data.file; // for fallback
+
+                    try {
+                        if (!document.documentMode && !/Edge/.test(navigator.userAgent)) {
+                            // File.name is readonly so we do this
+                            var formData = new FormData();
+                            formData.append('file', data.file, fileName);
+                            newFile = formData.get('file');
+                        } else {
+                            // fix this for Edge and IE
+                            newFile = new Blob([data.file], { type: data.file.type });
+                            newFile.lastModifiedDate = data.file.lastModifiedDate;
+                            newFile.name = fileName;
+                        }
+                    } catch (e) {
+                        console.log('paste image error', e);
+                    }
                     return newFile;
                 }
 
-                /**
-                 * Gets the browser name or returns an empty string if unknown. 
-                 * This function also caches the result to provide for any 
-                 * future calls this function has.
-                 * https://stackoverflow.com/questions/9847580/how-to-detect-safari-chrome-ie-firefox-and-opera-browser
-                 *
-                 * @returns {string}
-                 */
-                function browser() {
-                    // Return cached result if avalible, else get result then cache it.
-                    if (browser.prototype._cachedResult)
-                        return browser.prototype._cachedResult;
-
-                    // Opera 8.0+
-                    var isOpera = (!!window.opr && !!opr.addons) || !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
-
-                    // Firefox 1.0+
-                    var isFirefox = typeof InstallTrigger !== 'undefined';
-
-                    // Safari 3.0+ "[object HTMLElementConstructor]" 
-                    var isSafari = /constructor/i.test(window.HTMLElement) || (function (p) { return p.toString() === "[object SafariRemoteNotification]"; })(!window.safari || safari.pushNotification);
-
-                    // Internet Explorer 6-11
-                    var isIE = /*@cc_on!@*/false || !!document.documentMode;
-
-                    // Edge 20+
-                    var isEdge = !isIE && !!window.StyleMedia;
-
-                    // Chrome 1+
-                    var isChrome = !!window.chrome && !!window.chrome.webstore;
-
-                    // Blink engine detection
-                    var isBlink = (isChrome || isOpera) && !!window.CSS;
-
-                    browser.prototype._cachedResult =
-                        isOpera ? 'Opera' :
-                            isFirefox ? 'Firefox' :
-                                isSafari ? 'Safari' :
-                                    isChrome ? 'Chrome' :
-                                        isIE ? 'IE' :
-                                            isEdge ? 'Edge' :
-                                                isBlink ? 'Blink' :
-                                                    "Don't know";
-
-                    return browser.prototype._cachedResult;
-                }
 
             }
 
@@ -687,34 +631,23 @@ angular.module('Adam')
 
 
 })();
-// Generated by CoffeeScript 1.12.7
-
 /*
-paste.js is an interface to read data ( text / image ) from clipboard in different browsers. It also contains several hacks.
-
-https://github.com/layerssss/paste.js
- */
+paste.js is an interface to read image from clipboard in different browsers. It also contains several hacks.
+implementation is based on https://github.com/layerssss/paste.js
+*/
 
 (function () {
-    var $, Paste, createHiddenEditable, dataURLtoBlob, isFocusable;
-
-    // debugger;
-
-    $ = window.jQuery;
+    var $ = window.jQuery;
 
     $.paste = function (pasteContainer) {
-        var pm;
-        if (typeof console !== "undefined" && console !== null) {
-            console.log("DEPRECATED: This method is deprecated. Please use $.fn.pastableNonInputable() instead.");
-        }
-        pm = Paste.mountNonInputable(pasteContainer);
+        var pm = Paste.mountNonInputable(pasteContainer);
         return pm._container;
     };
 
     $.fn.pastableNonInputable = function () {
-        // debugger;
-        var el, j, len, ref;
-        ref = this;
+        var el, j, len;
+        var ref = this;
+
         for (j = 0, len = ref.length; j < len; j++) {
             el = ref[j];
             if (el._pastable || $(el).is('textarea, input:text, [contenteditable]')) {
@@ -727,8 +660,9 @@ https://github.com/layerssss/paste.js
     };
 
     $.fn.pastableTextarea = function () {
-        var el, j, len, ref;
-        ref = this;
+        var el, j, len;
+        var ref = this;
+
         for (j = 0, len = ref.length; j < len; j++) {
             el = ref[j];
             if (el._pastable || $(el).is(':not(textarea, input:text)')) {
@@ -741,8 +675,9 @@ https://github.com/layerssss/paste.js
     };
 
     $.fn.pastableContenteditable = function () {
-        var el, j, len, ref;
-        ref = this;
+        var el, j, len;
+        var ref = this;
+
         for (j = 0, len = ref.length; j < len; j++) {
             el = ref[j];
             if (el._pastable || $(el).is(':not([contenteditable])')) {
@@ -754,36 +689,7 @@ https://github.com/layerssss/paste.js
         return this;
     };
 
-    dataURLtoBlob = function (dataURL, sliceSize) {
-        var b64Data, byteArray, byteArrays, byteCharacters, byteNumbers, contentType, i, m, offset, ref, slice;
-        if (sliceSize == null) {
-            sliceSize = 512;
-        }
-        if (!(m = dataURL.match(/^data\:([^\;]+)\;base64\,(.+)$/))) {
-            return null;
-        }
-        ref = m, m = ref[0], contentType = ref[1], b64Data = ref[2];
-        byteCharacters = atob(b64Data);
-        byteArrays = [];
-        offset = 0;
-        while (offset < byteCharacters.length) {
-            slice = byteCharacters.slice(offset, offset + sliceSize);
-            byteNumbers = new Array(slice.length);
-            i = 0;
-            while (i < slice.length) {
-                byteNumbers[i] = slice.charCodeAt(i);
-                i++;
-            }
-            byteArray = new Uint8Array(byteNumbers);
-            byteArrays.push(byteArray);
-            offset += sliceSize;
-        }
-        return new Blob(byteArrays, {
-            type: contentType
-        });
-    };
-
-    createHiddenEditable = function () {
+    var createHiddenEditable = function () {
         return $(document.createElement('div')).attr('contenteditable', true).attr('aria-hidden', true).attr('tabindex', -1).css({
             width: 1,
             height: 1,
@@ -794,14 +700,14 @@ https://github.com/layerssss/paste.js
         });
     };
 
-    isFocusable = function (element, hasTabindex) {
-        var fieldset, focusableIfVisible, img, map, mapName, nodeName;
-        map = void 0;
-        mapName = void 0;
-        img = void 0;
-        focusableIfVisible = void 0;
-        fieldset = void 0;
-        nodeName = element.nodeName.toLowerCase();
+    var isFocusable = function (element, hasTabindex) {
+        var fieldset;
+        var focusableIfVisible;
+        var map;
+        var mapName;
+        var img;
+        var nodeName = element.nodeName.toLowerCase();
+
         if ('area' === nodeName) {
             map = element.parentNode;
             mapName = map.name;
@@ -828,30 +734,29 @@ https://github.com/layerssss/paste.js
         return focusableIfVisible && $(element).is(':visible');
     };
 
-    Paste = (function () {
+    var Paste = (function () {
         Paste.prototype._target = null;
 
         Paste.prototype._container = null;
 
         Paste.mountNonInputable = function (nonInputable) {
-            var paste;
-            paste = new Paste(createHiddenEditable().appendTo(nonInputable), nonInputable);
+            var paste = new Paste(createHiddenEditable().appendTo(nonInputable), nonInputable);
+
             $(nonInputable).on('click', (function (_this) {
-                // debugger;
                 return function (ev) {
                     if (!isFocusable(ev.target, false)) {
                         return paste._container.focus();
                     }
                 };
             })(this));
+
             paste._container.on('focus', (function (_this) {
-                // debugger;
                 return function () {
                     return $(nonInputable).addClass('pastable-focus');
                 };
             })(this));
+
             return paste._container.on('blur', (function (_this) {
-                // debugger;
                 return function () {
                     return $(nonInputable).removeClass('pastable-focus');
                 };
@@ -859,12 +764,17 @@ https://github.com/layerssss/paste.js
         };
 
         Paste.mountTextarea = function (textarea) {
-            var ctlDown, paste, ref, ref1;
-            if ((typeof DataTransfer !== "undefined" && DataTransfer !== null ? DataTransfer.prototype : void 0) && ((ref = Object.getOwnPropertyDescriptor) != null ? (ref1 = ref.call(Object, DataTransfer.prototype, 'items')) != null ? ref1.get : void 0 : void 0)) {
+            var ref, ref1;
+            if ((typeof DataTransfer !== "undefined" && DataTransfer !== null ? DataTransfer.prototype : void 0) &&
+                ((ref = Object.getOwnPropertyDescriptor) != null ?
+                    (ref1 = ref.call(Object, DataTransfer.prototype, 'items')) != null ? ref1.get : void 0
+                    : void 0)) {
                 return this.mountContenteditable(textarea);
             }
-            paste = new Paste(createHiddenEditable().insertBefore(textarea), textarea);
-            ctlDown = false;
+
+            var paste = new Paste(createHiddenEditable().insertBefore(textarea), textarea);
+            var ctlDown = false;
+
             $(textarea).on('keyup', function (ev) {
                 var ref2;
                 if ((ref2 = ev.keyCode) === 17 || ref2 === 224) {
@@ -872,6 +782,7 @@ https://github.com/layerssss/paste.js
                 }
                 return null;
             });
+
             $(textarea).on('keydown', function (ev) {
                 var ref2;
                 if ((ref2 = ev.keyCode) === 17 || ref2 === 224) {
@@ -895,9 +806,11 @@ https://github.com/layerssss/paste.js
                 }
                 return null;
             });
+
             $(textarea).on('paste', (function (_this) {
                 return function () { };
             })(this));
+
             $(textarea).on('focus', (function (_this) {
                 return function () {
                     if (!paste._textarea_focus_stolen) {
@@ -905,6 +818,7 @@ https://github.com/layerssss/paste.js
                     }
                 };
             })(this));
+
             $(textarea).on('blur', (function (_this) {
                 return function () {
                     if (!paste._textarea_focus_stolen) {
@@ -912,18 +826,19 @@ https://github.com/layerssss/paste.js
                     }
                 };
             })(this));
+
             $(paste._target).on('_pasteCheckContainerDone', (function (_this) {
                 return function () {
                     $(textarea).focus();
                     return paste._textarea_focus_stolen = false;
                 };
             })(this));
+
             return $(paste._target).on('pasteText', (function (_this) {
                 return function (ev, data) {
-                    var content, curEnd, curStart;
-                    curStart = $(textarea).prop('selectionStart');
-                    curEnd = $(textarea).prop('selectionEnd');
-                    content = $(textarea).val();
+                    var curStart = $(textarea).prop('selectionStart');
+                    var curEnd = $(textarea).prop('selectionEnd');
+                    var content = $(textarea).val();
                     $(textarea).val("" + content.slice(0, curStart) + data.text + content.slice(curEnd));
                     $(textarea)[0].setSelectionRange(curStart + data.text.length, curStart + data.text.length);
                     return $(textarea).trigger('change');
@@ -932,13 +847,14 @@ https://github.com/layerssss/paste.js
         };
 
         Paste.mountContenteditable = function (contenteditable) {
-            var paste;
-            paste = new Paste(contenteditable, contenteditable);
+            var paste = new Paste(contenteditable, contenteditable);
+
             $(contenteditable).on('focus', (function (_this) {
                 return function () {
                     return $(contenteditable).addClass('pastable-focus');
                 };
             })(this));
+
             return $(contenteditable).on('blur', (function (_this) {
                 return function () {
                     return $(contenteditable).removeClass('pastable-focus');
@@ -951,26 +867,19 @@ https://github.com/layerssss/paste.js
             this._target = _target;
             this._container = $(this._container);
             this._target = $(this._target).addClass('pastable');
-            // debugger;
+
             this._container.on('paste', (function (_this) {
-                // debugger;
                 return function (ev) {
-                    // debugger;
                     var _i, clipboardData, file, fileType, item, j, k, l, len, len1, len2, pastedFilename, reader, ref, ref1, ref2, ref3, ref4, stringIsFilename, text;
+
                     _this.originalEvent = (ev.originalEvent !== null ? ev.originalEvent : null);
                     _this._paste_event_fired = true;
-                    if (((ref = ev.originalEvent) != null ? ref.clipboardData : void 0) != null) {
+
+                    if (((ref = ev.originalEvent) != null ? ref.clipboardData : undefined) != null) {
                         clipboardData = ev.originalEvent.clipboardData;
                         if (clipboardData.items) {
                             pastedFilename = null;
                             _this.originalEvent.pastedTypes = [];
-                            ref1 = clipboardData.items;
-                            for (j = 0, len = ref1.length; j < len; j++) {
-                                item = ref1[j];
-                                if (item.type.match(/^text\/(plain|rtf|html)/)) {
-                                    _this.originalEvent.pastedTypes.push(item.type);
-                                }
-                            }
                             ref2 = clipboardData.items;
                             for (_i = k = 0, len1 = ref2.length; k < len1; _i = ++k) {
                                 item = ref2[_i];
@@ -987,271 +896,23 @@ https://github.com/layerssss/paste.js
                                     ev.preventDefault();
                                     break;
                                 }
-                                if (item.type === 'text/plain') {
-                                    if (_i === 0 && clipboardData.items.length > 1 && clipboardData.items[1].type.match(/^image\//)) {
-                                        stringIsFilename = true;
-                                        fileType = clipboardData.items[1].type;
-                                    }
-                                    item.getAsString(function (string) {
-                                        if (stringIsFilename) {
-                                            pastedFilename = string;
-                                            return _this._target.trigger('pasteText', {
-                                                text: string,
-                                                isFilename: true,
-                                                fileType: fileType,
-                                                originalEvent: _this.originalEvent
-                                            });
-                                        } else {
-                                            return _this._target.trigger('pasteText', {
-                                                text: string,
-                                                originalEvent: _this.originalEvent
-                                            });
-                                        }
-                                    });
-                                }
-                                if (item.type === 'text/rtf') {
-                                    item.getAsString(function (string) {
-                                        return _this._target.trigger('pasteTextRich', {
-                                            text: string,
-                                            originalEvent: _this.originalEvent
-                                        });
-                                    });
-                                }
-                                if (item.type === 'text/html') {
-                                    item.getAsString(function (string) {
-                                        return _this._target.trigger('pasteTextHtml', {
-                                            text: string,
-                                            originalEvent: _this.originalEvent
-                                        });
-                                    });
-                                }
                             }
-                        } else {
-                            if (-1 !== Array.prototype.indexOf.call(clipboardData.types, 'text/plain')) {
-                                text = clipboardData.getData('Text');
-                                setTimeout(function () {
-                                    return _this._target.trigger('pasteText', {
-                                        text: text,
-                                        originalEvent: _this.originalEvent
-                                    });
-                                }, 1);
-                            }
-                            //_this._checkImagesInContainer(function (src) {
-                            //    return _this._handleImage(src, _this.originalEvent);
-                            //});
                         }
                     }
-                    if (clipboardData = window.clipboardData) {
-                        if ((ref3 = (text = clipboardData.getData('Text'))) != null ? ref3.length : void 0) {
-                            setTimeout(function () {
-                                _this._target.trigger('pasteText', {
-                                    text: text,
-                                    originalEvent: _this.originalEvent
-                                });
-                                return _this._target.trigger('_pasteCheckContainerDone');
-                            }, 1);
-                        } else {
-                            ref4 = clipboardData.files;
-                            for (l = 0, len2 = ref4.length; l < len2; l++) {
-                                file = ref4[l];
-                                _this._target.trigger('pasteImage', {
-                                    file: file,
-                                    originalEvent: _this.originalEvent
-                                });
-                            }
-                            _this._checkImagesInContainer(function (src) { });
+                    if (window.clipboardData) {
+                        ref4 = window.clipboardData.files;
+                        for (l = 0, len2 = ref4.length; l < len2; l++) {
+                            file = ref4[l];
+                            _this._target.trigger('pasteImage', {
+                                file: file,
+                                originalEvent: _this.originalEvent
+                            });
                         }
                     }
                     return null;
                 };
             })(this));
 
-        }
-
-        //Paste.prototype._handleImage = function (src, e, name) {
-        //    var loader;
-        //    if (src.match(/^webkit\-fake\-url\:\/\//)) {
-        //        return this._target.trigger('pasteImageError', {
-        //            message: "You are trying to paste an image in Safari, however we are unable to retieve its data."
-        //        });
-        //    }
-        //    this._target.trigger('pasteImageStart');
-        //    //loader = new Image();
-        //    //loader.crossOrigin = "anonymous";
-        //    //loader.onload = (function (_this) {
-        //    //    return function () {
-        //    //        var blob, canvas, ctx, dataURL;
-        //    //        canvas = document.createElement('canvas');
-        //    //        canvas.width = loader.width;
-        //    //        canvas.height = loader.height;
-        //    //        ctx = canvas.getContext('2d');
-        //    //        ctx.drawImage(loader, 0, 0, canvas.width, canvas.height);
-        //    //        dataURL = null;
-        //    //        try {
-        //    //            dataURL = canvas.toDataURL('image/png');
-        //    //            blob = dataURLtoBlob(dataURL);
-        //    //        } catch (error) { }
-        //    //        if (dataURL) {
-        //    //            _this._target.trigger('pasteImage', {
-        //    //                blob: blob,
-        //    //                dataURL: dataURL,
-        //    //                width: loader.width,
-        //    //                height: loader.height,
-        //    //                originalEvent: e,
-        //    //                name: name
-        //    //            });
-        //    //        }
-        //    //        return _this._target.trigger('pasteImageEnd');
-        //    //    };
-        //    //})(this);
-        //    //loader.onerror = (function (_this) {
-        //    //    return function () {
-        //    //        _this._target.trigger('pasteImageError', {
-        //    //            message: "Failed to get image from: " + src,
-        //    //            url: src
-        //    //        });
-        //    //        return _this._target.trigger('pasteImageEnd');
-        //    //    };
-        //    //})(this);
-        //    //return loader.src = src;
-        //};
-
-        Paste.prototype._checkImagesInContainer = function (cb) {
-            var img, j, len, ref, timespan;
-            timespan = Math.floor(1000 * Math.random());
-            ref = this._container.find('img');
-            for (j = 0, len = ref.length; j < len; j++) {
-                img = ref[j];
-                img["_paste_marked_" + timespan] = true;
-            }
-            return setTimeout((function (_this) {
-                return function () {
-                    var k, len1, ref1;
-                    ref1 = _this._container.find('img');
-                    for (k = 0, len1 = ref1.length; k < len1; k++) {
-                        img = ref1[k];
-                        if (!img["_paste_marked_" + timespan]) {
-                            cb(img.src);
-                            $(img).remove();
-                        }
-                    }
-                    return _this._target.trigger('_pasteCheckContainerDone');
-                };
-            })(this), 1);
-        };
-
-        function convertImageFormat(file, quality, outputFormat) {
-
-            var mimeType;
-            if (outputFormat === 'png') {
-                mimeType = 'image/png';
-            } else if (outputFormat === 'webp') {
-                mimeType = 'image/webp';
-            } else {
-                mimeType = 'image/jpeg';
-            }
-
-            var img = new Image();
-            img.src = URL.createObjectURL(file);
-            URL.revokeObjectURL(img.src); // free up memory
-
-            var canvas = document.createElement('canvas'); // create a temp. canvas
-            canvas.width = img.width;
-            canvas.height = img.height;
-            var ctx = canvas.getContext('2d').drawImage(img, 0, 0);
-
-            // convert to File object, NOTE: we're using binary mime-type for the final Blob/File
-            canvas.toBlob(function (blob) {
-                file = new File([blob], file.name, { type: 'application/octet-stream' });
-            }, mimeType, quality / 100);
-        }
-
-
-        /**
-         * wip: compress image to jpeg, png or webp
-         * @param {Image} sourceImgObj
-         * @param {integer} quality
-         * @param {string} outputFormat
-         */
-        function compress(sourceImgObj, quality, outputFormat) {
-
-            var mimeType;
-            if (outputFormat === 'png') {
-                mimeType = 'image/png';
-            } else if (outputFormat === 'webp') {
-                mimeType = 'image/webp';
-            } else {
-                mimeType = 'image/jpeg';
-            }
-
-            var canvas = document.createElement('canvas');
-            canvas.width = sourceImgObj.naturalWidth;
-            canvas.height = sourceImgObj.naturalHeight;
-            var ctx = canvas.getContext('2d').drawImage(sourceImgObj, 0, 0);
-
-            var newImageData = canvas.toDataURL(mimeType, quality / 100);
-            var resultImageObj = new Image();
-            resultImageObj.src = newImageData;
-            return resultImageObj;
-        }
-
-        /**
-         * wip: creates new customized file
-         * @param {File} file
-         * @param {string} fileName
-         */
-        function twoSxcFile(file, fileName) {
-            var data = new FormData();
-            data.append('file', file, fileName);
-            var newFile = data.get('file');
-            return newFile;
-        }
-
-        /**
-         * Gets the browser name or returns an empty string if unknown. 
-         * This function also caches the result to provide for any 
-         * future calls this function has.
-         * https://stackoverflow.com/questions/9847580/how-to-detect-safari-chrome-ie-firefox-and-opera-browser
-         *
-         * @returns {string}
-         */
-        function browser() {
-            // Return cached result if avalible, else get result then cache it.
-            if (browser.prototype._cachedResult)
-                return browser.prototype._cachedResult;
-
-            // Opera 8.0+
-            var isOpera = (!!window.opr && !!opr.addons) || !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
-
-            // Firefox 1.0+
-            var isFirefox = typeof InstallTrigger !== 'undefined';
-
-            // Safari 3.0+ "[object HTMLElementConstructor]" 
-            var isSafari = /constructor/i.test(window.HTMLElement) || (function (p) { return p.toString() === "[object SafariRemoteNotification]"; })(!window.safari || safari.pushNotification);
-
-            // Internet Explorer 6-11
-            var isIE = /*@cc_on!@*/false || !!document.documentMode;
-
-            // Edge 20+
-            var isEdge = !isIE && !!window.StyleMedia;
-
-            // Chrome 1+
-            var isChrome = !!window.chrome && !!window.chrome.webstore;
-
-            // Blink engine detection
-            var isBlink = (isChrome || isOpera) && !!window.CSS;
-
-            browser.prototype._cachedResult =
-                isOpera ? 'Opera' :
-                    isFirefox ? 'Firefox' :
-                        isSafari ? 'Safari' :
-                            isChrome ? 'Chrome' :
-                                isIE ? 'IE' :
-                                    isEdge ? 'Edge' :
-                                        isBlink ? 'Blink' :
-                                            "Don't know";
-
-            return browser.prototype._cachedResult;
         }
 
         return Paste;
@@ -2367,6 +2028,16 @@ angular.module("sxcFieldTemplates")
                 language: svc.defaultLanguage,
 
                 debounce: false // DONT slow-down model updates - otherwise we sometimes miss the last changes
+
+                //paste_preprocess: function (plugin, args) {
+                //    console.log(args.content);
+                //    args.content += ' preprocess';
+                //},
+
+                //paste_postprocess: function (plugin, args) {
+                //    console.log(args.node);
+                //    args.node.setAttribute('id', '42');
+                //}
             };
         };
 
