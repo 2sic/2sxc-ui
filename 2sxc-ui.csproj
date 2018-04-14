@@ -162,7 +162,7 @@
     <Content Include="2sxc-api\js\readme.md" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="src\sxc-edit\fields\custom\System.%40custom-json-editor.json" />
+    <Folder Include="src\inpage\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">12.0</VisualStudioVersion>
