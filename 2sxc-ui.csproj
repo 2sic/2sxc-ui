@@ -30,14 +30,6 @@
     <Content Include="License.txt" />
     <Content Include="src\config\eav-configuration-in-sxc.js" />
     <Content Include="src\dnn\ui.html" />
-    <Content Include="src\inpage\2sxc-extensions\2sxc.consts.js" />
-    <Content Include="src\inpage\commands\commands.instanceCommands.js" />
-    <Content Include="src\inpage\contentBlock\contentBlock.actions.js" />
-    <Content Include="src\inpage\contentBlock\contentBlock.render.js" />
-    <Content Include="src\inpage\contentBlock\contentBlock.templates.js" />
-    <Content Include="src\inpage\contentBlock\contentBlock.webApiPromises.js" />
-    <Content Include="src\inpage\contentBlock\contentBlock.{}.js" />
-    <Content Include="src\inpage\entity-manipulation\item-commands.js" />
     <Content Include="src\sxc-edit\fields\custom\custom-json.js" />
     <Content Include="src\sxc-edit\fields\hyperlink\System.%40hyperlink-library.json" />
     <Content Include="src\sxc-edit\fields\hyperlink\System.%40Hyperlink.json" />
@@ -47,51 +39,9 @@
     <TypeScriptCompile Include="2sxc-api\js\ToSic.Sxc.TotalPopup.ts" />
     <TypeScriptCompile Include="2sxc-api\js\ToSic.Sxc.WebApi.ts" />
     <TypeScriptCompile Include="2sxc-api\js\ToSic.Sxc.Instance.ts" />
-    <None Include="src\inpage\x-bootstrap\x-readme.md" />
     <TypeScriptCompile Include="typings\2sxc-js\deprecated\2sxcDeprecated.d.ts" />
     <TypeScriptCompile Include="typings\2sxc-js\internals\2sxcInternals.d.ts" />
     <TypeScriptCompile Include="typings\2sxc-js\2sxcInterfaces.d.ts" />
-    <TypeScriptCompile Include="src\inpage\dnn-workarounds\dnn-08.00.04.ts" />
-    <Content Include="src\inpage\manage\manage.api.js" />
-    <Content Include="src\inpage\manage\manage.{}.js" />
-    <Content Include="src\inpage\quick-dialog\2sxc._quickDialog.js" />
-    <Content Include="src\inpage\quick-dialog\quick-dialog.css" />
-    <Content Include="src\inpage\polyfills\Object.assign.js" />
-    <Content Include="src\inpage\manage\manage.create.js" />
-    <Content Include="src\inpage\commands\commands.definitions.js" />
-    <Content Include="src\inpage\commands\commands.engine.js" />
-    <Content Include="src\inpage\commands\commands.{}.js" />
-    <TypeScriptCompile Include="src\inpage\dnn-menu-helper\dnn-inpage-edit.ts" />
-    <Content Include="src\inpage\edit.css" />
-    <Content Include="src\inpage\inpage-icons-codes.css" />
-    <Content Include="src\inpage\lib-helpers\2sxc._lib.extend.js" />
-    <Content Include="src\inpage\polyfills\array.prototype.find.js" />
-    <Content Include="src\inpage\quick-edit\%24quickE.cmds.js" />
-    <Content Include="src\inpage\quick-edit\%24quickE.clipboard.js" />
-    <Content Include="src\inpage\quick-edit\%24quickE.content-block.js" />
-    <Content Include="src\inpage\quick-edit\%24quickE.modManage.js" />
-    <Content Include="src\inpage\quick-edit\%24quickE.positioning.js" />
-    <Content Include="src\inpage\quick-edit\%24quickE.module.js" />
-    <Content Include="src\inpage\quick-edit\%24quickE.config.js" />
-    <Content Include="src\inpage\quick-edit\%24quickE.start.js" />
-    <Content Include="src\inpage\quick-edit\%24quickE.{}.js" />
-    <Content Include="src\inpage\quick-edit\quickE.css" />
-    <Content Include="src\inpage\toolbar\libs\shake.js" />
-    <Content Include="src\inpage\toolbar\toolbar-events.js" />
-    <Content Include="src\inpage\toolbar\toolbar-shake.js" />
-    <Content Include="src\inpage\x-bootstrap\module-bootstrapper.js" />
-    <Content Include="src\inpage\toolbar\toolbarManager.generateToolbarHtml.js" />
-    <Content Include="src\inpage\toolbar\toolbarManager.generateButtonHtml.js" />
-    <Content Include="src\inpage\toolbar\toolbarManager.buildToolbars.js" />
-    <Content Include="src\inpage\toolbar\toolbarManager.helpers.js" />
-    <Content Include="src\inpage\toolbar\toolbarManager.standardButtons.js" />
-    <Content Include="src\inpage\toolbar\toolbarManager.toolbarTemplate.js" />
-    <Content Include="src\inpage\toolbar\toolbarManager.{}.js" />
-    <Content Include="src\inpage\translate\2sxc.translate.js" />
-    <Content Include="src\inpage\translate\2sxc._translateInit.js" />
-    <Content Include="src\inpage\translate\libs\i18next.min.js" />
-    <Content Include="src\inpage\translate\libs\i18nextXHRBackend.min.js" />
-    <Content Include="src\inpage\translate\libs\jquery-i18next.min.js" />
     <Content Include="src\sxc-admin\app-main\app-main-controller.js" />
     <Content Include="src\sxc-admin\app-main\app-main.html" />
     <Content Include="src\sxc-admin\app-settings\app-settings-controller.js" />
@@ -205,35 +155,15 @@
     <Content Include="src\sxc-develop\source-editor\snippets.xlsx" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="src\inpage\contentBlock\contentBlock.manipulate.js" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="src\inpage\2sxc-extensions\2sxc.system.js" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="2sxc-api\angularjs\readme.md" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="2sxc-api\js\tsconfig.json" />
     <Content Include="2sxc-api\js\readme.md" />
-    <None Include="src\inpage\2sxc-extensions\readme.md" />
-    <None Include="src\inpage\beta\readme.md" />
-    <Content Include="src\inpage\dnn-menu-helper\readme.md" />
-    <Content Include="src\inpage\dnn-workarounds\readme.md" />
-    <Content Include="src\inpage\entity-manipulation\readme.md" />
-    <Content Include="src\inpage\lib-helpers\readme.md" />
-    <Content Include="src\inpage\polyfills\readme.md" />
-    <Content Include="src\inpage\quick-dialog\readme.md" />
-    <Content Include="src\inpage\quick-edit\readme.md" />
-    <Content Include="src\inpage\toolbar\readme.md" />
-    <Content Include="src\inpage\translate\readme.md" />
-    <Content Include="src\inpage\manage\readme.md" />
-    <Content Include="src\inpage\x-bootstrap\readme.md" />
-    <Content Include="src\inpage\commands\readme.md" />
-    <Content Include="src\inpage\contentBlock\readme.md" />
-    <Content Include="src\inpage\tsconfig.json" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="src\sxc-edit\fields\custom\System.%40custom-json-editor.json" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">12.0</VisualStudioVersion>
   </PropertyGroup>

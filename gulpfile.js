@@ -1,7 +1,7 @@
 ﻿(() => {
     const
         dests = {
-            current: 'dnn92cb',
+          current: 'default',
             default: './../2sxc-dnn742/Website',
             evoq: '../TestWebsites/Evoq 9.1.0',
             dnn92cb: '../2SexyContent/WebDNN9',
