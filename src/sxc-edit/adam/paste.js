@@ -6,7 +6,7 @@ implementation is based on https://github.com/layerssss/paste.js
 (function () {
     var $ = window.jQuery;
 
-    $.paste = function (pasteContainer) {
+    $.fn.paste = function (pasteContainer) {
         var pm = Paste.mountNonInputable(pasteContainer);
         return pm._container;
     };

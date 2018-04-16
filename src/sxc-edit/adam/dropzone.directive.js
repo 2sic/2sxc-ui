@@ -2,7 +2,7 @@
 (function () {
     angular.module('Adam')
         /*@ngInject*/
-        .directive('dropzone', function (sxc, tabId, AppInstanceId, ContentBlockId, dragClass, adamSvc, $timeout, $translate) {
+        .directive('dropzone', function (sxc, tabId, AppInstanceId, ContentBlockId, dragClass, adamSvc, $timeout, $translate, featuresSvc) {
 
             return {
                 restrict: 'C',
@@ -97,16 +97,42 @@
                     controller.openUpload = function () { dropzone.hiddenFileInput.click(); };
                     controller.processFile = function (file) { dropzone.processFile(file); }; // needed for clipboard paste
 
+                    clipboardPasteImageFeature(element[0], dropzone); // add clipboard paste image feature if enabled
+
+                }, 0);
+
+
+                /**
+                 * add clipboard paste image feature if enabled
+                 * @param {any} element
+                 * @param {any} dropzone
+                 */
+                function clipboardPasteImageFeature(element, dropzone) {
+                    featuresSvc.enabled('f6b8d6da-4744-453b-9543-0de499aa2352').then(
+                        function(enabled) {
+                            if (enabled) {
+                                clipboardPasteImageFunctionalityEnable(element, dropzone);
+                            }
+                        });
+                }
+
+
+                /**
+                 * attach paste functionality to UI elements in dropzone
+                 * @param {any} element
+                 * @param {any} dropzone
+                 */
+                function clipboardPasteImageFunctionalityEnable(element, dropzone) {
 
                     var pasteInstance;
 
                     // pastableTextarea - for adam input
-                    pasteInstance = $(element[0]).children("div:first").children("div.after-preview:first").children("div:first").children("input:first");
+                    pasteInstance = $(element).children("div:first").children("div.after-preview:first").children("div:first").children("input:first");
                     if (pasteInstance.length > 0) {
                         pasteInstance.pastableTextarea();
 
                         // pastableNonInputable
-                        pasteInstance = $(element[0]); // whole dropzone
+                        pasteInstance = $(element); // whole dropzone
                         pasteInstance.pastableNonInputable();
 
                         pasteInstance.on('pasteImage', function (ev, data) {
@@ -115,7 +141,7 @@
                     }
 
                     // pastableContenteditable - for tinymce
-                    pasteInstance = $(element[0]).children("div:first").children("div[contenteditable]:first");
+                    pasteInstance = $(element).children("div:first").children("div[contenteditable]:first");
                     if (pasteInstance.length > 0) {
                         pasteInstance.pastableContenteditable();
                         pasteInstance.on('pasteImage', function (ev, data) {
@@ -123,8 +149,15 @@
                         });
                     }
 
-                }, 0);
+                }
 
+
+                /**
+                 * handle clipboard image after paste and prompt for new image filename
+                 * @param {any} ev event
+                 * @param {any} data clipboard image data
+                 * @param {any} dropzone
+                 */
                 function pasteImageInDropzone(ev, data, dropzone) {
 
                     // todo: generate hash sha256 for file name and avoid duplicate files
@@ -162,11 +195,7 @@
                     }
                     return newFile;
                 }
-
-
             }
-
-
 
             /*@ngInject*/
             function controller() {
