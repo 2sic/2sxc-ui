@@ -127,24 +127,23 @@
                     var pasteInstance;
 
                     // pastableTextarea - for adam input
-                    pasteInstance = $(element).children("div:first").children("div.after-preview:first").children("div:first").children("input:first");
-                    if (pasteInstance.length > 0) {
+                    pasteInstance = element.querySelector('div > div.after-preview > div > input');
+                    if (pasteInstance) {
                         pasteInstance.pastableTextarea();
-
-                        // pastableNonInputable
-                        pasteInstance = $(element); // whole dropzone
-                        pasteInstance.pastableNonInputable();
-
-                        pasteInstance.on('pasteImage', function (ev, data) {
+                        pasteInstance.addEventListener('pasteImage', function (ev, data) {
                             pasteImageInDropzone(ev, data, dropzone);
                         });
+
+                        // pastableNonInputable
+                        pasteInstance = element; // whole dropzone
+                        pasteInstance.pastableNonInputable();
                     }
 
                     // pastableContenteditable - for tinymce
-                    pasteInstance = $(element).children("div:first").children("div[contenteditable]:first");
-                    if (pasteInstance.length > 0) {
+                    pasteInstance = element.querySelector('div > div[contenteditable]');
+                    if (pasteInstance) {
                         pasteInstance.pastableContenteditable();
-                        pasteInstance.on('pasteImage', function (ev, data) {
+                        pasteInstance.addEventListener('pasteImage', function (ev, data) {
                             pasteImageInDropzone(ev, data, dropzone);
                         });
                     }
@@ -159,6 +158,10 @@
                  * @param {any} dropzone
                  */
                 function pasteImageInDropzone(ev, data, dropzone) {
+
+                    if (ev.detail && !data) {
+                        data = ev.detail;
+                    }
 
                     // todo: generate hash sha256 for file name and avoid duplicate files
                     var imageFileName = 'image.png';
