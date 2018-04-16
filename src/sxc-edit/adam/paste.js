@@ -6,15 +6,11 @@ implementation is based on https://github.com/layerssss/paste.js
 (function () {
     var $ = window.jQuery;
 
+    var matches = function (el, selector) {
+        return (el.matches || el.matchesSelector || el.msMatchesSelector || el.mozMatchesSelector || el.webkitMatchesSelector || el.oMatchesSelector).call(el, selector);
+    };
+
     function createHiddenEditable() {
-        //return $(document.createElement('div')).attr('contenteditable', true).attr('aria-hidden', true).attr('tabindex', -1).css({
-        //    width: 1,
-        //    height: 1,
-        //    position: 'fixed',
-        //    left: -100,
-        //    overflow: 'hidden',
-        //    opacity: 1e-17
-        //});
         var hiddenEditable = document.createElement('div');
         hiddenEditable.setAttribute('contenteditable', true);
         hiddenEditable.setAttribute('aria-hidden', true);
@@ -31,24 +27,12 @@ implementation is based on https://github.com/layerssss/paste.js
     var isFocusable = function (element, hasTabindex) {
         var fieldset;
         var focusableIfVisible;
-        var map;
-        var mapName;
-        var img;
         var nodeName = element.nodeName.toLowerCase();
 
-        if ('area' === nodeName) {
-            map = element.parentNode;
-            mapName = map.name;
-            if (!element.href || !mapName || map.nodeName.toLowerCase() !== 'map') {
-                return false;
-            }
-            img = $('img[usemap=\'#' + mapName + '\']');
-            return img.length > 0 && img.is(':visible');
-        }
         if (/^(input|select|textarea|button|object)$/.test(nodeName)) {
             focusableIfVisible = !element.disabled;
             if (focusableIfVisible) {
-                fieldset = $(element).closest('fieldset')[0];
+                fieldset = element.closest('fieldset');
                 if (fieldset) {
                     focusableIfVisible = !fieldset.disabled;
                 }
@@ -58,8 +42,8 @@ implementation is based on https://github.com/layerssss/paste.js
         } else {
             focusableIfVisible = hasTabindex;
         }
-        focusableIfVisible = focusableIfVisible || $(element).is('[contenteditable]');
-        return focusableIfVisible && $(element).is(':visible');
+        focusableIfVisible = focusableIfVisible || matches(element, '[contenteditable]');
+        return focusableIfVisible;
     };
 
     var Paste = (function () {
@@ -75,31 +59,33 @@ implementation is based on https://github.com/layerssss/paste.js
             $(nonInputable).on('click', (function (_this) {
                 return function (ev) {
                     if (!isFocusable(ev.target, false)) {
-                        return paste._container.focus();
+                        paste._container.focus();
+                        return;
                     }
                 };
             })(this));
 
             paste._container.on('focus', (function (_this) {
                 return function () {
-                    return $(nonInputable).addClass('pastable-focus');
+                    $(nonInputable).addClass('pastable-focus');
+                    return;
                 };
             })(this));
 
             return paste._container.on('blur', (function (_this) {
                 return function () {
-                    return $(nonInputable).removeClass('pastable-focus');
+                    $(nonInputable).removeClass('pastable-focus');
+                    return;
                 };
             })(this));
         };
 
         Paste.mountTextarea = function (textarea) {
             var ref, ref1;
-            if ((typeof DataTransfer !== "undefined" && DataTransfer !== null ? DataTransfer.prototype : void 0) &&
-                ((ref = Object.getOwnPropertyDescriptor) != null ?
-                    (ref1 = ref.call(Object, DataTransfer.prototype, 'items')) != null ? ref1.get : void 0
-                    : void 0)) {
-                return this.mountContenteditable(textarea);
+            if ((typeof DataTransfer !== "undefined" && DataTransfer !== null ? DataTransfer.prototype : undefined) &&
+                ((ref = Object.getOwnPropertyDescriptor) != null ? (ref1 = ref.call(Object, DataTransfer.prototype, 'items')) != null ? ref1.get : undefined : undefined)) {
+                this.mountContenteditable(textarea);
+                return;
             }
 
             var paste = new Paste(createHiddenEditable().insertBefore(textarea), textarea);
@@ -110,7 +96,7 @@ implementation is based on https://github.com/layerssss/paste.js
                 if ((ref2 = ev.keyCode) === 17 || ref2 === 224) {
                     ctlDown = false;
                 }
-                return null;
+                return;
             });
 
             $(textarea).on('keydown', function (ev) {
@@ -129,12 +115,13 @@ implementation is based on https://github.com/layerssss/paste.js
                         return function () {
                             if (!paste._paste_event_fired) {
                                 $(textarea).focus();
-                                return paste._textarea_focus_stolen = false;
+                                paste._textarea_focus_stolen = false;
+                                return;
                             }
                         };
                     })(this), 1);
                 }
-                return null;
+                return;
             });
 
             $(textarea).on('paste', (function (_this) {
@@ -144,7 +131,8 @@ implementation is based on https://github.com/layerssss/paste.js
             $(textarea).on('focus', (function (_this) {
                 return function () {
                     if (!paste._textarea_focus_stolen) {
-                        return $(textarea).addClass('pastable-focus');
+                        $(textarea).addClass('pastable-focus');
+                        return;
                     }
                 };
             })(this));
@@ -152,7 +140,8 @@ implementation is based on https://github.com/layerssss/paste.js
             $(textarea).on('blur', (function (_this) {
                 return function () {
                     if (!paste._textarea_focus_stolen) {
-                        return $(textarea).removeClass('pastable-focus');
+                        $(textarea).removeClass('pastable-focus');
+                        return;
                     }
                 };
             })(this));
@@ -160,18 +149,20 @@ implementation is based on https://github.com/layerssss/paste.js
             $(paste._target).on('_pasteCheckContainerDone', (function (_this) {
                 return function () {
                     $(textarea).focus();
-                    return paste._textarea_focus_stolen = false;
+                    paste._textarea_focus_stolen = false;
+                    return;
                 };
             })(this));
 
-            return $(paste._target).on('pasteText', (function (_this) {
+            $(paste._target).on('pasteText', (function (_this) {
                 return function (ev, data) {
                     var curStart = $(textarea).prop('selectionStart');
                     var curEnd = $(textarea).prop('selectionEnd');
                     var content = $(textarea).val();
                     $(textarea).val("" + content.slice(0, curStart) + data.text + content.slice(curEnd));
                     $(textarea)[0].setSelectionRange(curStart + data.text.length, curStart + data.text.length);
-                    return $(textarea).trigger('change');
+                    $(textarea).trigger('change');
+                    return;
                 };
             })(this));
         };
@@ -181,13 +172,15 @@ implementation is based on https://github.com/layerssss/paste.js
 
             $(contenteditable).on('focus', (function (_this) {
                 return function () {
-                    return $(contenteditable).addClass('pastable-focus');
+                    $(contenteditable).addClass('pastable-focus');
+                    return;
                 };
             })(this));
 
             $(contenteditable).on('blur', (function (_this) {
                 return function () {
-                    return $(contenteditable).removeClass('pastable-focus');
+                    $(contenteditable).removeClass('pastable-focus');
+                    return;
                 };
             })(this));
 
@@ -243,7 +236,7 @@ implementation is based on https://github.com/layerssss/paste.js
                                 });
                         }
                     }
-                    return null;
+                    return;
                 };
             })(this));
 
@@ -273,31 +266,31 @@ implementation is based on https://github.com/layerssss/paste.js
     Element.prototype.pastableNonInputable = function () {
         var el = this;
         if (el._pastable || $(el).is('textarea, input:text, [contenteditable]')) {
-            return this;
+            return;
         }
         Paste.mountNonInputable(el);
         el._pastable = true;
-        return this;
+        return;
     };
 
     Element.prototype.pastableTextarea = function () {
         var el = this;
         if (el._pastable || $(el).is(':not(textarea, input:text)')) {
-            return this;
+            return;
         }
         Paste.mountTextarea(el);
         el._pastable = true;
-        return this;
+        return;
     };
 
     Element.prototype.pastableContenteditable = function () {
         var el = this;
         if (el._pastable || $(el).is(':not([contenteditable])')) {
-            return this;
+            return;
         }
         Paste.mountContenteditable(el);
         el._pastable = true;
-        return this;
+        return;
     };
 
 }).call(this);
