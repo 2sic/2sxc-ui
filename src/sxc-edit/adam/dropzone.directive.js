@@ -137,6 +137,9 @@
                         // pastableNonInputable
                         pasteInstance = element; // whole dropzone
                         pasteInstance.pastableNonInputable();
+                        pasteInstance.addEventListener('pasteImage', function (ev, data) {
+                            pasteImageInDropzone(ev, data, dropzone);
+                        });
                     }
 
                     // pastableContenteditable - for tinymce
