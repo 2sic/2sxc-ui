@@ -22,6 +22,7 @@ angular.module('sxcFieldTemplates')
 
             // this is the event called by dropzone as something is dropped
             $scope.afterUpload = function (fileItem) {
+                // debugger;
                 vm.setValue(fileItem, fileItem.Type === 'image');
             };
 

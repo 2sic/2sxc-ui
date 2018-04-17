@@ -84,7 +84,8 @@
                 vm.get();
         };
 
-        vm.openUpload = function() {
+        vm.openUpload = function () {
+            // debugger;
             vm.dropzone.openUpload();
         };
 
@@ -214,6 +215,7 @@
         };
 
         vm.activate();
+
     }
 
 })();

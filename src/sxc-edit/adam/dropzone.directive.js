@@ -1,8 +1,8 @@
 ﻿/* js/fileAppDirectives */
-(function() {
+(function () {
     angular.module('Adam')
         /*@ngInject*/
-        .directive('dropzone', function (sxc, tabId, AppInstanceId, ContentBlockId, dragClass, adamSvc, $timeout, $translate) {
+        .directive('dropzone', function (sxc, tabId, AppInstanceId, ContentBlockId, dragClass, adamSvc, $timeout, $translate, featuresSvc) {
 
             return {
                 restrict: 'C',
@@ -44,6 +44,7 @@
 
                 var eventHandlers = {
                     'addedfile': function (file) {
+                        // debugger;
                         $timeout(function () {
                             // anything you want can go here and will safely be run on the next digest.
                             scope.$apply(function () { // this must run in a timeout
@@ -52,11 +53,18 @@
                         });
                     },
 
+                    'drop': function (event) {
+                        // debugger;
+                        console.log('stv: drop', event);
+                    },
+
                     "processing": function (file) {
+                        // debugger;
                         this.options.url = svc.uploadUrl(controller.adam.subFolder);
                     },
 
                     'success': function (file, response) {
+                        // debugger;
                         if (response.Success) {
                             svc.addFullPath(response); // calculate additional infos
                             scope.$parent.afterUpload(response);
@@ -80,15 +88,119 @@
                 $timeout(function () {
                     var dropzone = new Dropzone(element[0], config);
 
-                    angular.forEach(eventHandlers, function(handler, event) {
+                    angular.forEach(eventHandlers, function (handler, event) {
                         dropzone.on(event, handler);
                     });
 
-                    scope.processDropzone = function() { dropzone.processQueue(); };
-                    scope.resetDropzone = function() { dropzone.removeAllFiles(); };
-                    controller.openUpload = function() { dropzone.hiddenFileInput.click(); };
+                    scope.processDropzone = function () { dropzone.processQueue(); };
+                    scope.resetDropzone = function () { dropzone.removeAllFiles(); };
+                    controller.openUpload = function () { dropzone.hiddenFileInput.click(); };
+                    controller.processFile = function (file) { dropzone.processFile(file); }; // needed for clipboard paste
+
+                    clipboardPasteImageFeature(element[0], dropzone); // add clipboard paste image feature if enabled
 
                 }, 0);
+
+
+                /**
+                 * add clipboard paste image feature if enabled
+                 * @param {any} element
+                 * @param {any} dropzone
+                 */
+                function clipboardPasteImageFeature(element, dropzone) {
+                    featuresSvc.enabled('f6b8d6da-4744-453b-9543-0de499aa2352').then(
+                        function(enabled) {
+                            if (enabled) {
+                                clipboardPasteImageFunctionalityEnable(element, dropzone);
+                            }
+                        });
+                }
+
+
+                /**
+                 * attach paste functionality to UI elements in dropzone
+                 * @param {any} element
+                 * @param {any} dropzone
+                 */
+                function clipboardPasteImageFunctionalityEnable(element, dropzone) {
+
+                    var pasteInstance;
+
+                    // pastableTextarea - for adam input
+                    pasteInstance = element.querySelector('div > div.after-preview > div > input');
+                    if (pasteInstance) {
+                        pasteInstance.pastableTextarea();
+                        pasteInstance.addEventListener('pasteImage', function (ev, data) {
+                            pasteImageInDropzone(ev, data, dropzone);
+                        });
+
+                        // pastableNonInputable
+                        pasteInstance = element; // whole dropzone
+                        pasteInstance.pastableNonInputable();
+                        pasteInstance.addEventListener('pasteImage', function (ev, data) {
+                            pasteImageInDropzone(ev, data, dropzone);
+                        });
+                    }
+
+                    // pastableContenteditable - for tinymce
+                    pasteInstance = element.querySelector('div > div[contenteditable]');
+                    if (pasteInstance) {
+                        pasteInstance.pastableContenteditable();
+                        pasteInstance.addEventListener('pasteImage', function (ev, data) {
+                            pasteImageInDropzone(ev, data, dropzone);
+                        });
+                    }
+
+                }
+
+
+                /**
+                 * handle clipboard image after paste and prompt for new image filename
+                 * @param {any} ev event
+                 * @param {any} data clipboard image data
+                 * @param {any} dropzone
+                 */
+                function pasteImageInDropzone(ev, data, dropzone) {
+
+                    if (ev.detail && !data) {
+                        data = ev.detail;
+                    }
+
+                    // todo: generate hash sha256 for file name and avoid duplicate files
+                    var imageFileName = 'image.png';
+                    imageFileName = window.prompt('Enter clipboard image file name: ', imageFileName); // todo: i18n 
+
+                    // todo: convert png to jpg to reduce file size
+                    var img = getFile(data, imageFileName);
+
+                    dropzone.processFile(img);
+                }
+
+                /**
+                 * creates new file with custom fileName
+                 * @param {File} file
+                 * @param {string} fileName
+                 */
+                function getFile(data, fileName) {
+                    var newFile = data.file; // for fallback
+
+                    try {
+                        if (!document.documentMode && !/Edge/.test(navigator.userAgent)) {
+                            // File.name is readonly so we do this
+                            var formData = new FormData();
+                            formData.append('file', data.file, fileName);
+                            newFile = formData.get('file');
+                        } else {
+                            // fix this for Edge and IE
+                            newFile = new Blob([data.file], { type: data.file.type });
+                            newFile.lastModifiedDate = data.file.lastModifiedDate;
+                            newFile.name = fileName;
+                        }
+                    } catch (e) {
+                        console.log('paste image error', e);
+                    }
+                    return newFile;
+                }
             }
 
             /*@ngInject*/
