@@ -15,6 +15,16 @@ angular.module("SxcServices")
                 return $http.get("app-sys/system/managefeaturesurl");
             };
 
+            svc.saveFeatures = function saveFeatures(features) {
+                return $http.post("app-sys/system/savefeatures", { params: { features: features } })
+                    .then(function (result) {
+                        if (result.data === false) // must check for an explicit false, to avoid undefineds
+                            alert("server reported that save feature failed"); // todo: i18n
+                        return result;
+                    })
+                    .then(svc.liveListReload);
+            };
+
             return svc;
         };
     });

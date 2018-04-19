@@ -80,29 +80,24 @@
                 }
             }).then(() => {
                 vm.featuresShow = false;
+                sxcDialogs.openTotal(vm.manageFeaturesUrl, vm.featuresCallback);
             }).catch((error) => {
                 console.log('error', error);
                 alert(error);
             });
-            // todo: first do a call to system-ManageFeaturesUrl api
-            // call is: app-sys/system/managefeaturesurl
-            // then show the iframe
-            // and give it the url
-
-            // todo: if it's not the host, just return an error-string
-            //if (!UserInfo.IsSuperUser) {
-            //    return "error: user needs host permissions";
-            //}
-            // the js will then have to mention that it needs host permissions
 
             // also register this 
         };
 
         // todo STV
-        vm.featuresCallback = function () {
+        vm.featuresCallback = function (features) {
             // this should await callbacks from the iframe
-            // and if it gets a valid callback containing a json, it should send it to the server
-            // call: app-sys/system/savefeatures
+            try {
+                // and if it gets a valid callback containing a json, it should send it to the server
+                var featuresString = JSON.stringify(features);
+                // call: app-sys/system/savefeatures
+                featureService.savefeatures(featuresString);                
+            } catch (e) {} 
             // you can find examples how this is done in the app/content installer, where the iframe also gives back data to the page
         };
 
