@@ -1,6 +1,6 @@
 angular.module("SxcServices")
     /*@ngInject*/
-    .factory("featuresSvc", function ($http, eavConfig, svcCreator) {
+    .factory("featuresConfigSvc", function ($http, eavConfig, svcCreator) {
 
         // Construct a service for this specific appId
         return function createSvc() {

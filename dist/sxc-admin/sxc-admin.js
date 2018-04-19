@@ -83,7 +83,7 @@
 }());
 (function () { // TN: this is a helper construct, research iife or read https://github.com/johnpapa/angularjs-styleguide#iife
 
-    AppListController.$inject = ["appsSvc", "eavAdminDialogs", "sxcDialogs", "eavConfig", "appSettings", "appId", "zoneId", "$uibModalInstance", "$translate", "featuresSvc"];
+    AppListController.$inject = ["appsSvc", "eavAdminDialogs", "sxcDialogs", "eavConfig", "appSettings", "appId", "zoneId", "$uibModalInstance", "$translate", "featuresConfigSvc"];
     angular.module("AppsManagementApp", [
         "EavServices",
         "EavConfiguration",
@@ -102,7 +102,7 @@
         ;
 
     /*@ngInject*/
-    function AppListController(appsSvc, eavAdminDialogs, sxcDialogs, eavConfig, appSettings, appId, zoneId, $uibModalInstance, $translate, featuresSvc) {
+    function AppListController(appsSvc, eavAdminDialogs, sxcDialogs, eavConfig, appSettings, appId, zoneId, $uibModalInstance, $translate, featuresConfigSvc) {
         var vm = this;
 
         function blankCallback() { }
@@ -145,8 +145,8 @@
         // when the user changes to the settings-tab
         // it should load the features and show in the table
         // call app-sys/system/features
-        var featureService = featuresSvc();
-        vm.loadFeatures = featureService.liveList();
+        var featureConfigService = featuresConfigSvc();
+        vm.loadFeatures = featureConfigService.liveList();
 
 
         vm.featuresShow = true; // initially shows table with list of features and hides iframe (until manage Features button is clicked)
@@ -154,18 +154,18 @@
         // todo STV
         vm.features = function features() {
 
-            Promise.resolve(featureService.getManageFeaturesUrl())
-            .then((response) => {
+            Promise.resolve(featureConfigService.getManageFeaturesUrl())
+            .then(function(response) {
                 var url = response.data;
                 if (url.indexOf("error: user needs host permissions") === -1) {
                     vm.manageFeaturesUrl = url;
                 } else {
                     throw "User needs host permissions!";
                 }
-            }).then(() => {
+            }).then(function() {
                 vm.featuresShow = false;
                 sxcDialogs.openTotal(vm.manageFeaturesUrl, vm.featuresCallback);
-            }).catch((error) => {
+            }).catch(function(error) {
                 console.log('error', error);
                 alert(error);
             });
@@ -180,7 +180,7 @@
                 // and if it gets a valid callback containing a json, it should send it to the server
                 var featuresString = JSON.stringify(features);
                 // call: app-sys/system/savefeatures
-                featureService.savefeatures(featuresString);                
+                featureConfigService.saveFeatures(featuresString);                
             } catch (e) {} 
             // you can find examples how this is done in the app/content installer, where the iframe also gives back data to the page
         };
@@ -1118,7 +1118,7 @@ angular.module("SxcServices")
     }]);
 angular.module("SxcServices")
     /*@ngInject*/
-    .factory("featuresSvc", ["$http", "eavConfig", "svcCreator", function ($http, eavConfig, svcCreator) {
+    .factory("featuresConfigSvc", ["$http", "eavConfig", "svcCreator", function ($http, eavConfig, svcCreator) {
 
         // Construct a service for this specific appId
         return function createSvc() {
