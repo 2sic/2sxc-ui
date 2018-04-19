@@ -10,6 +10,11 @@ angular.module("SxcServices")
                 return $http.get("app-sys/system/features");
             }));
 
+            // this will retrieve an advanced getting-started url to use in an the iframe
+            svc.getManageFeaturesUrl = function gettingManageFeaturesUrl() {
+                return $http.get("app-sys/system/managefeaturesurl");
+            };
+
             return svc;
         };
     });

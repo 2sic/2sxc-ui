@@ -33,15 +33,15 @@
                 svc.create(result);
         };
 
-        
+
         vm.tryToDelete = function tryToDelete(item) {
-            var result = prompt($translate.instant("AppManagement.Prompt.DeleteApp", { name: item.Name, id: item.Id}));
-                //prompt("This cannot be undone. To really delete this app, type (or copy/past) the app-name here: Delete '" + item.Name + "' (" + item.Id + ") ?");
+            var result = prompt($translate.instant("AppManagement.Prompt.DeleteApp", { name: item.Name, id: item.Id }));
+            //prompt("This cannot be undone. To really delete this app, type (or copy/past) the app-name here: Delete '" + item.Name + "' (" + item.Id + ") ?");
             if (result === null)
                 return;
-            if(result === item.Name)
+            if (result === item.Name)
                 svc.delete(item.Id);
-            else 
+            else
                 alert($translate.instant("AppManagement.Prompt.FailedDelete"));
         };
 
@@ -65,18 +65,41 @@
         vm.loadFeatures = featureService.liveList();
 
 
+        vm.featuresShow = true; // initially shows table with list of features and hides iframe (until manage Features button is clicked)
+
         // todo STV
-        vm.features = function() {
+        vm.features = function features() {
+
+            Promise.resolve(featureService.getManageFeaturesUrl())
+            .then((response) => {
+                var url = response.data;
+                if (url.indexOf("error: user needs host permissions") === -1) {
+                    vm.manageFeaturesUrl = url;
+                } else {
+                    throw "User needs host permissions!";
+                }
+            }).then(() => {
+                vm.featuresShow = false;
+            }).catch((error) => {
+                console.log('error', error);
+                alert(error);
+            });
             // todo: first do a call to system-ManageFeaturesUrl api
             // call is: app-sys/system/managefeaturesurl
             // then show the iframe
             // and give it the url
 
+            // todo: if it's not the host, just return an error-string
+            //if (!UserInfo.IsSuperUser) {
+            //    return "error: user needs host permissions";
+            //}
+            // the js will then have to mention that it needs host permissions
+
             // also register this 
         };
 
         // todo STV
-        vm.featuresCallback = function() {
+        vm.featuresCallback = function () {
             // this should await callbacks from the iframe
             // and if it gets a valid callback containing a json, it should send it to the server
             // call: app-sys/system/savefeatures
@@ -84,7 +107,7 @@
         };
 
 
-        vm.browseCatalog = function() {
+        vm.browseCatalog = function () {
             window.open("http://2sxc.org/apps");
         };
 
@@ -110,7 +133,7 @@
             sxcDialogs.openLanguages(zoneId, vm.refresh);
         };
 
-        vm.close = function () { $uibModalInstance.dismiss("cancel");};
+        vm.close = function () { $uibModalInstance.dismiss("cancel"); };
     }
 
-} ());
+}());
