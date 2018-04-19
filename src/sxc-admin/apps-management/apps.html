@@ -90,11 +90,11 @@ Guid: {{item.Guid}}">{{item.Name}}</span>
                     </thead>
                     <tbody>
                         <tr ng-repeat="item in vm.loadFeatures">
-                            <td>{{item.Id}}</td>
-                            <td>{{item.Enabled}}</td>
-                            <td>{{item.Expires}}</td>
-                            <td>{{item.Public}}</td>
-                            <td>{{item.Ui}}</td>
+                            <td>{{item.id}}</td>
+                            <td>{{item.enabled}}</td>
+                            <td>{{item.expires}}</td>
+                            <td>{{item.public}}</td>
+                            <td>{{item.ui}}</td>
                         </tr>
                         <tr ng-if="!vm.loadFeatures.length">
                             <td colspan="100" translate="General.Messages.NothingFound"></td>
