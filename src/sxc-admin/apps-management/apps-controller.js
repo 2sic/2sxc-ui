@@ -27,14 +27,6 @@
         vm.items = svc.liveList();
         vm.refresh = svc.liveListReload;
 
-        // config from here fails, because it has to open the full dialog in another app
-        //vm.config = function config(item) {
-        //    var settings = appSettings(item.Id);
-        //    settings.editPackage(svc.liveListReload);
-        //    //alert("known bug: atm in this beta this feature has a bug - it only works for the app, in which you opened this dialog. ");
-        //    //eavAdminDialogs.openItemEditWithEntityId(item.ConfigurationId, svc.liveListReload);
-        //};
-
         vm.add = function add() {
             var result = prompt($translate.instant("AppManagement.Prompt.NewApp"));
             if (result)
@@ -63,6 +55,31 @@
                 .replace("dialog=zone", "dialog=app");
 
             sxcDialogs.openTotal(url, svc.liveListReload);
+        };
+
+        // todo STV
+        vm.loadFeatures = function() {
+            // when the user changes to the settings-tab
+            // it should load the features and show in the table
+            // call app-sys/system/features
+        };
+
+        // todo STV
+        vm.features = function() {
+            // todo: first do a call to system-ManageFeaturesUrl api
+            // call is: app-sys/system/managefeaturesurl
+            // then show the iframe
+            // and give it the url
+
+            // also register this 
+        };
+
+        // todo STV
+        vm.featuresCallback = function() {
+            // this should await callbacks from the iframe
+            // and if it gets a valid callback containing a json, it should send it to the server
+            // call: app-sys/system/savefeatures
+            // you can find examples how this is done in the app/content installer, where the iframe also gives back data to the page
         };
 
 
