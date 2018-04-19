@@ -77,20 +77,40 @@ Guid: {{item.Guid}}">{{item.Name}}</span>
                         {{ 'AppManagement.Buttons.Features' | translate }}
                     </button>
                 </span>
-                
-                
-                <!-- todo STV 
+                <!-- todo STV
                 show a table here with the features, from the API call system/features
-                    hide the table if manage features is clicked, because then it should show the iframe
+                hide the table if manage features is clicked, because then it should show the iframe
                 -->
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Enabled</th>
+                            <th>Expires</th>
+                            <th>Public</th>
+                            <th>Ui</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="item in vm.loadFeatures">
+                            <td>{{item.Id}}</td>
+                            <td>{{item.Enabled}}</td>
+                            <td>{{item.Expires}}</td>
+                            <td>{{item.Public}}</td>
+                            <td>{{item.Ui}}</td>
+                        </tr>
+                        <tr ng-if="!vm.loadFeatures.length">
+                            <td colspan="100" translate="General.Messages.NothingFound"></td>
+                        </tr>
+                    </tbody>
+                </table>
 
                 <!-- todo STV -->
-                <!-- 
-                put iframe here - which will call the special router url from system-ManageFeaturesUrl 
-                    note that the iframe should be hidden, till someone clicks manage-features
-                
-                -->
+                <!--
+    put iframe here - which will call the special router url from system-ManageFeaturesUrl
+        note that the iframe should be hidden, till someone clicks manage-features
 
+    -->
                 <!-- todo 2dm: icons & languages-->
 
             </uib-tab>

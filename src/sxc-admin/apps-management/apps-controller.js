@@ -18,7 +18,7 @@
         ;
 
     /*@ngInject*/
-    function AppListController(appsSvc, eavAdminDialogs, sxcDialogs, eavConfig, appSettings, appId, zoneId, $uibModalInstance, $translate) {
+    function AppListController(appsSvc, eavAdminDialogs, sxcDialogs, eavConfig, appSettings, appId, zoneId, $uibModalInstance, $translate, featuresSvc) {
         var vm = this;
 
         function blankCallback() { }
@@ -57,12 +57,13 @@
             sxcDialogs.openTotal(url, svc.liveListReload);
         };
 
-        // todo STV
-        vm.loadFeatures = function() {
-            // when the user changes to the settings-tab
-            // it should load the features and show in the table
-            // call app-sys/system/features
-        };
+
+        // when the user changes to the settings-tab
+        // it should load the features and show in the table
+        // call app-sys/system/features
+        var featureService = featuresSvc();
+        vm.loadFeatures = featureService.liveList();
+
 
         // todo STV
         vm.features = function() {
