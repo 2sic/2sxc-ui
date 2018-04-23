@@ -18,7 +18,7 @@
         ;
 
     /*@ngInject*/
-    function AppListController(appsSvc, eavAdminDialogs, sxcDialogs, eavConfig, appSettings, appId, zoneId, $uibModalInstance, $translate, featuresConfigSvc) {
+    function AppListController(appsSvc, eavAdminDialogs, sxcDialogs, eavConfig, appSettings, appId, zoneId, $uibModalInstance, $window, $translate, featuresConfigSvc) {
         var vm = this;
 
         function blankCallback() { }
@@ -80,7 +80,6 @@
                 }
             }).then(function() {
                 vm.featuresShow = false;
-                sxcDialogs.openTotal(vm.manageFeaturesUrl, vm.featuresCallback);
             }).catch(function(error) {
                 console.log('error', error);
                 alert(error);
@@ -88,6 +87,19 @@
 
             // also register this 
         };
+
+        // event to receive message from iframe
+        $window.addEventListener('message', function(event) {
+            if (typeof (event.data) !== 'undefined') {
+                // handle message   
+                if (event.origin.endsWith('2sxc.org') === false) {
+                    // something from an unknown domain, let's ignore it
+                    return;
+                }
+                vm.featuresCallback(event.data);
+                vm.featuresShow = true;
+            }
+        });
 
         // todo STV
         vm.featuresCallback = function (features) {
