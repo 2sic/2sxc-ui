@@ -167,7 +167,8 @@ Guid: {{item.Guid}}">{{item.Name}}</span>
                     </tbody>
                 </table>
 
-                <iframe ng-src="{{ vm.manageFeaturesUrl | trustAsResourceUrl }}" ng-show="!vm.featuresShow" style="border: none; width: 100%; height: 500px"></iframe>
+                <div class="sxc-spinner" ng-show="vm.featureSpinner" class="sxc-import-spinner"><i class="eav-icon-spinner animate-spin"></i></div>
+                <iframe ng-repeat="url in vm.manageFeaturesUrl" ng-src="{{ url | trustAsResourceUrl }}" ng-show="!vm.featuresShow" style="border: none; width: 100%; height: 500px"></iframe>
 
                 <!-- todo 2dm: icons & languages-->
 

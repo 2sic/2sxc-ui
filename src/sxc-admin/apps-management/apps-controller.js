@@ -18,7 +18,7 @@
         ;
 
     /*@ngInject*/
-    function AppListController(appsSvc, eavAdminDialogs, sxcDialogs, eavConfig, appSettings, appId, zoneId, $uibModalInstance, $window, $translate, featuresConfigSvc) {
+    function AppListController(appsSvc, eavAdminDialogs, sxcDialogs, eavConfig, appSettings, appId, zoneId, $uibModalInstance, $scope, $window, $translate, featuresConfigSvc) {
         var vm = this;
 
         function blankCallback() { }
@@ -64,30 +64,33 @@
         var featureConfigService = featuresConfigSvc();
         vm.loadFeatures = featureConfigService.liveList();
 
-
+        vm.featureSpinner = false;
         vm.featuresShow = true; // initially shows table with list of features and hides iframe (until manage Features button is clicked)
 
-        // todo STV
         vm.features = function features() {
-
-            Promise.resolve(featureConfigService.getManageFeaturesUrl())
-            .then(function(response) {
+            vm.featureSpinner = true; // show spinner
+            vm.featuresShow = false; // show iframe
+            new Promise(function (resolve, reject) {
+                vm.manageFeaturesUrl = [""]; // set empty iframe
+                return resolve(featureConfigService.getManageFeaturesUrl());
+            }).then(function (response) {
                 var url = response.data;
                 if (url.indexOf("error: user needs host permissions") === -1) {
-                    vm.manageFeaturesUrl = url;
+                    vm.manageFeaturesUrl = [url]; // load "Installation and Feature Management" in iframe
+                    return url;
                 } else {
                     throw "User needs host permissions!";
                 }
-            }).then(function() {
-                vm.featuresShow = false;
-            }).catch(function(error) {
+            }).then(function (url) {
+                vm.featureSpinner = false; // hide spinner
+                $scope.$apply(); // refresh
+            }).catch(function (error) {
+                vm.featureSpinner = false;
+                vm.featuresShow = true;
                 console.log('error', error);
                 alert(error);
             });
-
-            // also register this 
         };
-
 
         vm.featureReload = function() {
             featureConfigService.reload();
@@ -106,7 +109,6 @@
             }
         });
 
-        // todo STV
         vm.featuresCallback = function (features) {
             // this should await callbacks from the iframe
             try {
