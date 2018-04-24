@@ -94,13 +94,17 @@ Guid: {{item.Guid}}">{{item.Name}}</span>
                 <p>
                     {{ "AppManagement.Features.Intro" | translate | trustHtml }}
                 </p>
-                
+
                 <button type="button" class="btn btn-primary" ng-click="vm.features()">
                     <span class="eav-icon-sliders" uib-tooltip="{{ 'AppManagement.Features.Manage.Help' | translate }}"></span>
                     {{ 'AppManagement.Features.Manage' | translate }}
                 </button>
-                
-                
+                <button type="button" class="btn btn-primary" ng-click="vm.featureReload()">
+                    <span class="eav-icon-reload" todo-uib-tooltip="{{ 'AppManagement.Features.Manage.Help' | translate }}"></span>
+                    Reload
+                </button>
+
+
                 <table class="table table-hover" ng-show="vm.featuresShow">
                     <thead>
                         <tr>
@@ -141,7 +145,8 @@ Guid: {{item.Guid}}">{{item.Name}}</span>
                     </thead>
                     <tbody>
                         <tr ng-repeat="item in vm.loadFeatures">
-                            <td><i ng-class=" item.enabled ? 'eav-icon-toggle-on' : 'eav-icon-toggle-off'" 
+                            <td>
+                                <i ng-class=" item.enabled ? 'eav-icon-toggle-on' : 'eav-icon-toggle-off'"
                                    uib-tooltip="{{'General.State.OnOff.' + item.enabled | translate }}"></i>
                             </td>
                             <td>(name lookup still WIP)</td>
@@ -156,9 +161,9 @@ Guid: {{item.Guid}}">{{item.Name}}</span>
                                    style="color: green"></i>
                             </td>
                         </tr>
-                    <tr ng-if="!vm.loadFeatures.length">
-                        <td colspan="100" translate="General.Messages.NothingFound"></td>
-                    </tr>
+                        <tr ng-if="!vm.loadFeatures.length">
+                            <td colspan="100" translate="General.Messages.NothingFound"></td>
+                        </tr>
                     </tbody>
                 </table>
 

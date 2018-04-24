@@ -88,6 +88,11 @@
             // also register this 
         };
 
+
+        vm.featureReload = function() {
+            featureConfigService.reload();
+        };
+
         // event to receive message from iframe
         $window.addEventListener('message', function(event) {
             if (typeof (event.data) !== 'undefined') {
