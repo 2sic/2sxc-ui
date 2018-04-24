@@ -89,6 +89,11 @@
             // also register this 
         };
 
+
+        vm.featureReload = function() {
+            featureConfigService.reload();
+        };
+
         // todo STV
         vm.featuresCallback = function (features) {
             // this should await callbacks from the iframe
