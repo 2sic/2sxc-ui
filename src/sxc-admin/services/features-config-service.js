@@ -21,7 +21,7 @@ angular.module("SxcServices")
             };
 
             svc.saveFeatures = function saveFeatures(features) {
-                return $http.post("app-sys/system/savefeatures", { params: { features: features } })
+                return $http.post("app-sys/system/SaveFeatures", features )
                     .then(function (result) {
                         if (result.data === false) // must check for an explicit false, to avoid undefineds
                             alert("server reported that save feature failed"); // todo: i18n
