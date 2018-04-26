@@ -149,7 +149,7 @@ Guid: {{item.Guid}}">{{item.Name}}</span>
                                 <i ng-class=" item.enabled ? 'eav-icon-toggle-on' : 'eav-icon-toggle-off'"
                                    uib-tooltip="{{'General.State.OnOff.' + item.enabled | translate }}"></i>
                             </td>
-                            <td>(name lookup still WIP)</td>
+                            <td><a href="{{ 'https://2sxc.org/r/f/' + item.id }}" target="_blank">details</a> (name lookup still WIP)</td>
                             <td style="font-family: monospace">{{item.id}}</td>
                             <td><span uib-tooltip="{{item.expires}}">{{item.expires | date:'yyyy-MM-dd' }}</span></td>
                             <td><i ng-class="item.ui ? 'eav-icon-eye' : 'eav-icon-minus'"></i></td>
