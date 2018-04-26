@@ -67,9 +67,19 @@
         vm.featureSpinner = false;
         vm.featuresShow = true; // initially shows table with list of features and hides iframe (until manage Features button is clicked)
 
-        vm.features = function features() {
+        vm.featuresSwitch = function featuresSwitch() {
+            vm.featuresShow = flip(vm.featuresShow); // false - show iframe
+            if (!vm.featuresShow) {
+                featuresManagement();
+            }
+        };
+
+        function flip(flag) {
+            return !flag;
+        }
+
+        function featuresManagement() {
             vm.featureSpinner = true; // show spinner
-            vm.featuresShow = false; // show iframe
             new Promise(function (resolve, reject) {
                 vm.manageFeaturesUrl = [""]; // set empty iframe
                 return resolve(featureConfigService.getManageFeaturesUrl());
@@ -90,7 +100,7 @@
                 console.log('error', error);
                 alert(error);
             });
-        };
+        }
 
         vm.featureReload = function() {
             featureConfigService.reload();
