@@ -44,7 +44,6 @@
 
                 var eventHandlers = {
                     'addedfile': function (file) {
-                        // debugger;
                         $timeout(function () {
                             // anything you want can go here and will safely be run on the next digest.
                             scope.$apply(function () { // this must run in a timeout
@@ -54,17 +53,14 @@
                     },
 
                     'drop': function (event) {
-                        // debugger;
-                        console.log('stv: drop', event);
+                        // console.log('stv: drop', event);
                     },
 
                     "processing": function (file) {
-                        // debugger;
                         this.options.url = svc.uploadUrl(controller.adam.subFolder);
                     },
 
                     'success': function (file, response) {
-                        // debugger;
                         if (response.Success) {
                             svc.addFullPath(response); // calculate additional infos
                             scope.$parent.afterUpload(response);
@@ -161,14 +157,15 @@
                  * @param {any} dropzone
                  */
                 function pasteImageInDropzone(ev, data, dropzone) {
-
                     if (ev.detail && !data) {
                         data = ev.detail;
                     }
 
                     // todo: generate hash sha256 for file name and avoid duplicate files
                     var imageFileName = 'image';
-                    imageFileName = window.prompt('Enter clipboard image file name: ', imageFileName); // todo: i18n
+                    if (!/MSIE/.test(navigator.userAgent) && !/rv:11/.test(navigator.userAgent)) {
+                        imageFileName = window.prompt('Enter clipboard image file name: ', imageFileName); // todo: i18n
+                    }
                     if (!imageFileName || imageFileName.trim().length === 0) imageFileName = 'image';
                     if (imageFileName.endsWith('.png') === false) imageFileName = imageFileName + '.png';
 
@@ -187,7 +184,7 @@
                     var newFile = data.file; // for fallback
 
                     try {
-                        if (!document.documentMode && !/Edge/.test(navigator.userAgent)) {
+                        if (!document.documentMode && !/Edge/.test(navigator.userAgent) && !/MSIE/.test(navigator.userAgent) && !/rv:11/.test(navigator.userAgent)) {
                             // File.name is readonly so we do this
                             var formData = new FormData();
                             formData.append('file', data.file, fileName);
