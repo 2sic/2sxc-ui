@@ -100,6 +100,16 @@ angular.module("sxcFieldTemplates")
                 language: svc.defaultLanguage,
 
                 debounce: false // DONT slow-down model updates - otherwise we sometimes miss the last changes
+
+                //paste_preprocess: function (plugin, args) {
+                //    console.log(args.content);
+                //    args.content += ' preprocess';
+                //},
+
+                //paste_postprocess: function (plugin, args) {
+                //    console.log(args.node);
+                //    args.node.setAttribute('id', '42');
+                //}
             };
         };
 

@@ -1,8 +1,8 @@
 ﻿(() => {
     const
         dests = {
-            current: 'dnn92cb',
-            default: './../2sxc-dnn742/Website',
+          current: 'default',
+            default: '../2sxc-dnn742/Website',
             evoq: '../TestWebsites/Evoq 9.1.0',
             dnn92cb: '../2SexyContent/WebDNN9',
         },
@@ -114,20 +114,23 @@
         gulp.src(src + 'full-system/css/app-icons-codes.css')
             .pipe(gulp.dest('src/sxc-edit/'));
 
+        // 2018-04-13 2dm disabled, not part of this project - moved to 2sxc-inpage
         // icon-definition for inpage-icons
-        gulp.src(src + 'in-page-icons/css/inpage-icons-codes.css')
-            .pipe(gulp.dest('src/inpage/'));
+        //gulp.src(src + 'in-page-icons/css/inpage-icons-codes.css')
+        //    .pipe(gulp.dest('src/inpage/'));
 
+        // 2018-04-13 2dm disabled, now copying directly from project
         // i18n files
-        gulp.src(bwr + '2sxc-eav-languages/dist/i18n/**/*.js')
-            .pipe(gulp.dest(config.rootDist + 'i18n/'));
+        //gulp.src(bwr + '2sxc-eav-languages/dist/i18n/**/*.js')
+        //    .pipe(gulp.dest(config.rootDist + 'i18n/'));
 
         // lib angular-ui-ace
         gulp.src(bwr + 'angular-ui-ace/*.js')
             .pipe(gulp.dest(config.rootDist + 'lib/angular-ui-ace/'));
 
-        gulp.src(bwr + 'shake.js/shake.js')
-            .pipe(gulp.dest('src/inpage/toolbar/libs/'));
+        // 2018-04-13 2dm disabled, as shake is now in 2sxc-inpage and not here any more
+        //gulp.src(bwr + 'shake.js/shake.js')
+        //    .pipe(gulp.dest('src/inpage/toolbar/libs/'));
     }
 
     //#region basic functions I'll need a lot

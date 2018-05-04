@@ -2,7 +2,7 @@
 
 angular.module("sxcFieldTemplates")
     /*@ngInject*/
-    .factory("dnnBridgeSvc", function ($uibModal, $http, promiseToastr) {
+    .factory("dnnBridgeSvc", function ($uibModal, $http, appId, promiseToastr) {
         var svc = {};
         svc.open = function open(oldValue, params, callback) {
             var type = "pagepicker";
@@ -42,10 +42,15 @@ angular.module("sxcFieldTemplates")
 
 
         // handle short-ID links like file:17
-        svc.getUrlOfId = function(idCode, entityId) {
+        svc.getUrlOfId = function(idCode, contentType, guid, field) {
             var linkLowered = idCode.toLowerCase();
             if (linkLowered.indexOf("file:") !== -1 || linkLowered.indexOf("page:") !== -1)
-                return $http.get("dnn/Hyperlink/ResolveHyperlink?hyperlink=" + encodeURIComponent(idCode));
+                return $http.get("dnn/Hyperlink/ResolveHyperlink?hyperlink="
+                    + encodeURIComponent(idCode)
+                    + "&guid=" + guid
+                    + "&contentType=" + contentType
+                    + "&field=" + field
+                    + "&appId=" + appId);
             return null;
         };
 

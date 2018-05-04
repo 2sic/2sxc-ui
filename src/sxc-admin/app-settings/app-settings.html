@@ -34,6 +34,7 @@
         </div>
     </div>
     <br/>
+
     <div>
         <div class="pull-left btn-group-vertical">
             <button uib-tooltip="{{'AppConfig.Definition.Edit' | translate}}" ng-disabled="!vm.ready()" ng-click="vm.editPackage()" class="btn btn-primary btn-square" type="button">
@@ -44,6 +45,19 @@
 
             <h4 class="modal-title" translate="AppConfig.Definition.Title"></h4>
             <div translate="AppConfig.Definition.Intro"></div>
+        </div>
+    </div>
+    <br/>
+    
+    <div class="clearfix">
+        <div class="pull-left btn-group-vertical">
+            <button uib-tooltip="{{'AppConfig.Permissions.Edit' | translate}}" ng-disabled="!vm.ready()" ng-click="vm.permissions()" class="btn btn-square btn-primary" type="button">
+                <i icon="user"></i>
+            </button>
+        </div>
+        <div style="margin-left: 50px">
+            <h4 class="modal-title" translate="AppConfig.Permissions.Title"></h4>
+            <div translate="AppConfig.Permissions.Intro"></div>
         </div>
     </div>
 

@@ -13,7 +13,7 @@
             });
         })
         /*@ngInject*/
-        .controller('FieldTemplate-HyperlinkCtrl', function ($uibModal, $scope, $http, sxc, adamSvc, debugState, dnnBridgeSvc, fileType) {
+        .controller('FieldTemplate-HyperlinkCtrl', function ($uibModal, $scope, $http, appId, sxc, adamSvc, debugState, dnnBridgeSvc, fileType) {
 
             var vm = this;
             vm.debug = debugState;
@@ -42,6 +42,9 @@
                 if (merged.Buttons === undefined || merged.Buttons === null) merged.Buttons = 'adam,more';
             }
 
+            // test to get correct infos
+            console.log('debug from hyperlink', $scope);
+
             ensureDefaultConfig();
 
             // Update test-link if necessary - both when typing or if link was set by dialogs
@@ -50,10 +53,12 @@
                     return;
 
                 // handle short-ID links like file:17
-                var promise = dnnBridgeSvc.getUrlOfId(newValue);
+                var promise = dnnBridgeSvc.getUrlOfId(newValue,
+                    $scope.to.header.ContentTypeName, $scope.to.header.Guid, $scope.options.key);
+
                 if(promise)
                     promise.then(function (result) {
-                        if (result.data) 
+                        if (result.data)
                             vm.testLink = result.data;
                     });
                 else 

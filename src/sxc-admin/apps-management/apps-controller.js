@@ -18,7 +18,7 @@
         ;
 
     /*@ngInject*/
-    function AppListController(appsSvc, eavAdminDialogs, sxcDialogs, eavConfig, appSettings, appId, zoneId, $uibModalInstance, $translate) {
+    function AppListController(appsSvc, eavAdminDialogs, sxcDialogs, eavConfig, appSettings, appId, zoneId, $uibModalInstance, $scope, $window, $translate, featuresConfigSvc) {
         var vm = this;
 
         function blankCallback() { }
@@ -27,29 +27,21 @@
         vm.items = svc.liveList();
         vm.refresh = svc.liveListReload;
 
-        // config from here fails, because it has to open the full dialog in another app
-        //vm.config = function config(item) {
-        //    var settings = appSettings(item.Id);
-        //    settings.editPackage(svc.liveListReload);
-        //    //alert("known bug: atm in this beta this feature has a bug - it only works for the app, in which you opened this dialog. ");
-        //    //eavAdminDialogs.openItemEditWithEntityId(item.ConfigurationId, svc.liveListReload);
-        //};
-
         vm.add = function add() {
             var result = prompt($translate.instant("AppManagement.Prompt.NewApp"));
             if (result)
                 svc.create(result);
         };
 
-        
+
         vm.tryToDelete = function tryToDelete(item) {
-            var result = prompt($translate.instant("AppManagement.Prompt.DeleteApp", { name: item.Name, id: item.Id}));
-                //prompt("This cannot be undone. To really delete this app, type (or copy/past) the app-name here: Delete '" + item.Name + "' (" + item.Id + ") ?");
+            var result = prompt($translate.instant("AppManagement.Prompt.DeleteApp", { name: item.Name, id: item.Id }));
+            //prompt("This cannot be undone. To really delete this app, type (or copy/past) the app-name here: Delete '" + item.Name + "' (" + item.Id + ") ?");
             if (result === null)
                 return;
-            if(result === item.Name)
+            if (result === item.Name)
                 svc.delete(item.Id);
-            else 
+            else
                 alert($translate.instant("AppManagement.Prompt.FailedDelete"));
         };
 
@@ -66,7 +58,80 @@
         };
 
 
-        vm.browseCatalog = function() {
+        // when the user changes to the settings-tab
+        // it should load the features and show in the table
+        // call app-sys/system/features
+        var featureConfigService = featuresConfigSvc();
+        vm.loadFeatures = featureConfigService.liveList();
+
+        vm.featureSpinner = false;
+        vm.featuresShow = true; // initially shows table with list of features and hides iframe (until manage Features button is clicked)
+
+        vm.featuresSwitch = function featuresSwitch() {
+            vm.featuresShow = flip(vm.featuresShow); // false - show iframe
+            if (!vm.featuresShow) {
+                featuresManagement();
+            }
+        };
+
+        function flip(flag) {
+            return !flag;
+        }
+
+        function featuresManagement() {
+            vm.featureSpinner = true; // show spinner
+            new Promise(function (resolve, reject) {
+                vm.manageFeaturesUrl = [""]; // set empty iframe
+                return resolve(featureConfigService.getManageFeaturesUrl());
+            }).then(function (response) {
+                var url = response.data;
+                if (url.indexOf("error: user needs host permissions") === -1) {
+                    vm.manageFeaturesUrl = [url]; // load "Installation and Feature Management" in iframe
+                    return url;
+                } else {
+                    throw "User needs host permissions!";
+                }
+            }).then(function (url) {
+                vm.featureSpinner = false; // hide spinner
+                $scope.$apply(); // refresh
+            }).catch(function (error) {
+                vm.featureSpinner = false;
+                vm.featuresShow = true;
+                console.log('error', error);
+                alert(error);
+            });
+        }
+
+        vm.featureReload = function() {
+            featureConfigService.reload();
+        };
+
+        // event to receive message from iframe
+        $window.addEventListener('message', function(event) {
+            if (typeof (event.data) !== 'undefined') {
+                // handle message   
+                if (event.origin.endsWith('2sxc.org') === false) {
+                    // something from an unknown domain, let's ignore it
+                    return;
+                }
+                vm.featuresCallback(event.data);
+                vm.featuresShow = true;
+            }
+        });
+
+        vm.featuresCallback = function (features) {
+            // this should await callbacks from the iframe
+            try {
+                // and if it gets a valid callback containing a json, it should send it to the server
+                var featuresString = JSON.stringify(features);
+                // call: app-sys/system/savefeatures
+                featureConfigService.saveFeatures(featuresString);                
+            } catch (e) {} 
+            // you can find examples how this is done in the app/content installer, where the iframe also gives back data to the page
+        };
+
+
+        vm.browseCatalog = function () {
             window.open("http://2sxc.org/apps");
         };
 
@@ -92,7 +157,7 @@
             sxcDialogs.openLanguages(zoneId, vm.refresh);
         };
 
-        vm.close = function () { $uibModalInstance.dismiss("cancel");};
+        vm.close = function () { $uibModalInstance.dismiss("cancel"); };
     }
 
-} ());
+}());
