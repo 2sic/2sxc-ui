@@ -573,14 +573,14 @@ angular.module('Adam')
                     pasteInstance = element.querySelector('div > div.after-preview > div > input');
                     if (pasteInstance) {
                         pasteInstance.pastableTextarea();
-                        pasteInstance.addEventListener('pasteImage', function (ev, data) {
+                        pasteInstance.addEventListener('handleImage', function (ev, data) {
                             pasteImageInDropzone(ev, data, dropzone);
                         });
 
                         // pastableNonInputable
                         pasteInstance = element; // whole dropzone
                         pasteInstance.pastableNonInputable();
-                        pasteInstance.addEventListener('pasteImage', function (ev, data) {
+                        pasteInstance.addEventListener('handleImage', function (ev, data) {
                             pasteImageInDropzone(ev, data, dropzone);
                         });
                     }
@@ -589,7 +589,7 @@ angular.module('Adam')
                     pasteInstance = element.querySelector('div > div[contenteditable]');
                     if (pasteInstance) {
                         pasteInstance.pastableContenteditable();
-                        pasteInstance.addEventListener('pasteImage', function (ev, data) {
+                        pasteInstance.addEventListener('handleImage', function (ev, data) {
                             pasteImageInDropzone(ev, data, dropzone);
                         });
                     }
@@ -612,6 +612,11 @@ angular.module('Adam')
                     var imageFileName = 'image';
                     if (!/MSIE/.test(navigator.userAgent) && !/rv:11/.test(navigator.userAgent)) {
                         imageFileName = window.prompt('Enter clipboard image file name: ', imageFileName); // todo: i18n
+                        if (imageFileName === null) {
+                            ev.preventDefault();
+                            ev.stopImmediatePropagation();
+                            return; //break out of the function early because user click on Cancel
+                        }
                     }
                     if (!imageFileName || imageFileName.trim().length === 0) imageFileName = 'image';
                     if (imageFileName.endsWith('.png') === false) imageFileName = imageFileName + '.png';
@@ -620,6 +625,9 @@ angular.module('Adam')
                     var img = getFile(data, imageFileName);
 
                     dropzone.processFile(img);
+
+                    ev.stopImmediatePropagation();
+                    ev.preventDefault();
                 }
 
                 /**
@@ -742,19 +750,19 @@ implementation is based on https://github.com/layerssss/paste.js
                             for (_i = k = 0, len1 = ref2.length; k < len1; _i = ++k) {
                                 item = ref2[_i];
                                 if (item.type.match(/^image\//)) {
+                                    ev.preventDefault();
+                                    ev.stopPropagation();
                                     try {
                                         var clipboardImageAsFile = item.getAsFile();
                                         triggerCustomEvent(
-                                            _this._target, 'pasteImage', {
+                                            _this._target, 'handleImage', {
                                                 file: clipboardImageAsFile,
                                                 originalEvent: _this.originalEvent
                                             });
-                                        // ev.stopImmediatePropagation();
-                                        ev.stopPropagation();
                                     } catch (error) {
                                         console.log('clipboard paste image error', error);
+                                        ev.stopImmediatePropagation();
                                     }
-                                    // ev.preventDefault();
                                     break;
                                 }
                             }
@@ -768,7 +776,7 @@ implementation is based on https://github.com/layerssss/paste.js
                     //        ev.stopPropagation();
                     //        file = ref4[l];
                     //        triggerCustomEvent(
-                    //            _this._target, 'pasteImage', {
+                    //            _this._target, 'handleImage', {
                     //                file: file,
                     //                originalEvent: _this.originalEvent
                     //            });

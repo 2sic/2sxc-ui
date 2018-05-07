@@ -126,14 +126,14 @@
                     pasteInstance = element.querySelector('div > div.after-preview > div > input');
                     if (pasteInstance) {
                         pasteInstance.pastableTextarea();
-                        pasteInstance.addEventListener('pasteImage', function (ev, data) {
+                        pasteInstance.addEventListener('handleImage', function (ev, data) {
                             pasteImageInDropzone(ev, data, dropzone);
                         });
 
                         // pastableNonInputable
                         pasteInstance = element; // whole dropzone
                         pasteInstance.pastableNonInputable();
-                        pasteInstance.addEventListener('pasteImage', function (ev, data) {
+                        pasteInstance.addEventListener('handleImage', function (ev, data) {
                             pasteImageInDropzone(ev, data, dropzone);
                         });
                     }
@@ -142,7 +142,7 @@
                     pasteInstance = element.querySelector('div > div[contenteditable]');
                     if (pasteInstance) {
                         pasteInstance.pastableContenteditable();
-                        pasteInstance.addEventListener('pasteImage', function (ev, data) {
+                        pasteInstance.addEventListener('handleImage', function (ev, data) {
                             pasteImageInDropzone(ev, data, dropzone);
                         });
                     }
@@ -165,6 +165,11 @@
                     var imageFileName = 'image';
                     if (!/MSIE/.test(navigator.userAgent) && !/rv:11/.test(navigator.userAgent)) {
                         imageFileName = window.prompt('Enter clipboard image file name: ', imageFileName); // todo: i18n
+                        if (imageFileName === null) {
+                            ev.preventDefault();
+                            ev.stopImmediatePropagation();
+                            return; //break out of the function early because user click on Cancel
+                        }
                     }
                     if (!imageFileName || imageFileName.trim().length === 0) imageFileName = 'image';
                     if (imageFileName.endsWith('.png') === false) imageFileName = imageFileName + '.png';
@@ -173,6 +178,9 @@
                     var img = getFile(data, imageFileName);
 
                     dropzone.processFile(img);
+
+                    ev.stopImmediatePropagation();
+                    ev.preventDefault();
                 }
 
                 /**
