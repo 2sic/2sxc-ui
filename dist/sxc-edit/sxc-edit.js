@@ -608,26 +608,11 @@ angular.module('Adam')
                         data = ev.detail;
                     }
 
-                    // todo: generate hash sha256 for file name and avoid duplicate files
-                    var imageFileName = 'image';
-                    if (!/MSIE/.test(navigator.userAgent) && !/rv:11/.test(navigator.userAgent)) {
-                        imageFileName = window.prompt('Enter clipboard image file name: ', imageFileName); // todo: i18n
-                        if (imageFileName === null) {
-                            ev.preventDefault();
-                            ev.stopImmediatePropagation();
-                            return; //break out of the function early because user click on Cancel
-                        }
-                    }
-                    if (!imageFileName || imageFileName.trim().length === 0) imageFileName = 'image';
-                    if (imageFileName.endsWith('.png') === false) imageFileName = imageFileName + '.png';
-
                     // todo: convert png to jpg to reduce file size
-                    var img = getFile(data, imageFileName);
-
+                    var img = getFile(data, ev.imageFileName);
                     dropzone.processFile(img);
-
-                    ev.stopImmediatePropagation();
-                    ev.preventDefault();
+                    //ev.stopImmediatePropagation();
+                    //ev.preventDefault();
                 }
 
                 /**
@@ -752,12 +737,26 @@ implementation is based on https://github.com/layerssss/paste.js
                                 if (item.type.match(/^image\//)) {
                                     ev.preventDefault();
                                     ev.stopPropagation();
+                                    // todo: generate hash sha256 for file name and avoid duplicate files
+                                    var imageFileName = 'image'; 
+                                    if (!/MSIE/.test(navigator.userAgent) && !/rv:11/.test(navigator.userAgent)) {
+                                        imageFileName = window.prompt('Enter clipboard image file name: ', imageFileName); // todo: i18n
+                                        if (imageFileName === null) { // user click Cancel
+                                             ev.preventDefault();
+                                             ev.stopImmediatePropagation();
+                                             return; //break out of the function early because user click on Cancel
+                                        } else { // user click OK
+                                            if (imageFileName.trim().length === 0) imageFileName = 'image';
+                                        }
+                                    }
+                                    if (imageFileName.endsWith('.png') === false) imageFileName = imageFileName + '.png';
                                     try {
                                         var clipboardImageAsFile = item.getAsFile();
                                         triggerCustomEvent(
                                             _this._target, 'handleImage', {
                                                 file: clipboardImageAsFile,
-                                                originalEvent: _this.originalEvent
+                                                originalEvent: _this.originalEvent,
+                                                imageFileName: imageFileName
                                             });
                                     } catch (error) {
                                         console.log('clipboard paste image error', error);
