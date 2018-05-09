@@ -122,7 +122,17 @@
 
                     var pasteInstance;
 
-                    // pastableTextarea - for adam input
+                    // 1. pastableContenteditable - for tinymce
+                    pasteInstance = element.querySelector('div > div[contenteditable]');
+                    if (pasteInstance) {
+                        pasteInstance.pastableContenteditable();
+                        pasteInstance.addEventListener('handleImage', function (ev, data) {
+                            pasteImageInDropzone(ev, data, dropzone);
+                        });
+                        return;
+                    }
+
+                    // 2. pastableTextarea - for adam input
                     pasteInstance = element.querySelector('div > div.after-preview > div > input');
                     if (pasteInstance) {
                         pasteInstance.pastableTextarea();
@@ -136,17 +146,22 @@
                         pasteInstance.addEventListener('handleImage', function (ev, data) {
                             pasteImageInDropzone(ev, data, dropzone);
                         });
+
+                        return;
                     }
 
-                    // pastableContenteditable - for tinymce
-                    pasteInstance = element.querySelector('div > div[contenteditable]');
+                    // 3. pastableTextarea - for adam library
+                    pasteInstance = element.querySelector('div.paste-image');
                     if (pasteInstance) {
-                        pasteInstance.pastableContenteditable();
+                        // pastableNonInputable
+                        pasteInstance = element; // whole dropzone
+                        pasteInstance.pastableNonInputable();
                         pasteInstance.addEventListener('handleImage', function (ev, data) {
                             pasteImageInDropzone(ev, data, dropzone);
                         });
-                    }
 
+                        return;
+                    }
                 }
 
 
@@ -157,12 +172,14 @@
                  * @param {any} dropzone
                  */
                 function pasteImageInDropzone(ev, data, dropzone) {
+
                     if (ev.detail && !data) {
                         data = ev.detail;
                     }
 
                     // todo: convert png to jpg to reduce file size
-                    var img = getFile(data, ev.imageFileName);
+                    var filename = ev.imageFileName ? ev.imageFileName : ev.detail.imageFileName;
+                    var img = getFile(data, filename);
                     dropzone.processFile(img);
                     //ev.stopImmediatePropagation();
                     //ev.preventDefault();
@@ -177,16 +194,16 @@
                     var newFile = data.file; // for fallback
 
                     try {
-                        if (!document.documentMode && !/Edge/.test(navigator.userAgent) && !/MSIE/.test(navigator.userAgent) && !/rv:11/.test(navigator.userAgent)) {
-                            // File.name is readonly so we do this
-                            var formData = new FormData();
-                            formData.append('file', data.file, fileName);
-                            newFile = formData.get('file');
-                        } else {
+                        if (document.documentMode || /Edge/.test(navigator.userAgent) || /MSIE/.test(navigator.userAgent) || /rv:11/.test(navigator.userAgent)) {
                             // fix this for Edge and IE
                             newFile = new Blob([data.file], { type: data.file.type });
                             newFile.lastModifiedDate = data.file.lastModifiedDate;
                             newFile.name = fileName;
+                        } else {
+                            // File.name is readonly so we do this
+                            var formData = new FormData();
+                            formData.append('file', data.file, fileName);
+                            newFile = formData.get('file');
                         }
                     } catch (e) {
                         console.log('paste image error', e);

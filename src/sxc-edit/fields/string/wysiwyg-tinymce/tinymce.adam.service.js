@@ -12,12 +12,21 @@ angular.module('sxcFieldTemplates')
             };
 
             vm.setValue = function (fileItem, modeImage) {
-              if (modeImage === undefined) // if not supplied, use the setting in the adam
-                modeImage = vm.adamModeImage;
-              var fileName = fileItem.Name.substr(0, fileItem.Name.lastIndexOf('.'));
-              vm.editor.insertContent(modeImage
-                ? '<img src="' + fileItem.fullPath + '" + alt="' + fileName + '">'
-                : '<a href="' + fileItem.fullPath + '">' + fileName + '</a>');
+
+                if (modeImage === undefined) // if not supplied, use the setting in the adam
+                    modeImage = vm.adamModeImage;
+                var fileName = fileItem.Name.substr(0, fileItem.Name.lastIndexOf('.'));
+
+                var content = modeImage
+                    ? '<img src="' + fileItem.fullPath + '" + alt="' + fileName + '">'
+                    : '<a href="' + fileItem.fullPath + '">' + fileName + '</a>';
+
+                //var body = vm.editor.getBody();
+                //vm.editor.selection.setCursorLocation(body, 0);
+                //debugger;
+                //var range = window.savedRange;
+                //vm.editor.selection.setCursorLocation(range.startContainer, range.startOffset);
+                vm.editor.insertContent(content);
             };
 
             // this is the event called by dropzone as something is dropped

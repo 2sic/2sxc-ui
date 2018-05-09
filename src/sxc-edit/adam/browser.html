@@ -7,6 +7,14 @@
         </div>
     </div>
 
+    <!-- info for paste image from clipboard here -->
+    <div class="dz-preview dropzone-adam paste-image" ng-disabled="vm.clipboardPasteImageFunctionalityDisabled" uib-tooltip="click here and press [Ctrl]+[V] to paste image from clipboard">
+        <div class="dz-image adam-browse-background-icon adam-browse-background" xstyle="background-color: whitesmoke">
+            <i class="eav-icon-file-image"></i>
+            <div class="adam-short-label">paste image</div>
+        </div>
+    </div>
+
     <!-- add folder - not always shown -->
     <div ng-show="vm.allowCreateFolder() || vm.debug.on" class="dz-preview" ng-disabled="vm.disabled" ng-click="vm.addFolder()">
         <div class="dz-image adam-browse-background-icon adam-browse-background">
