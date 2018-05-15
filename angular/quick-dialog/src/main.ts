@@ -18,8 +18,10 @@ declare const window;
 const platform = platformBrowserDynamic();
 
 const init = () => {
-  platform
-    .destroy();
+  if (!platform.destroyed) {
+    platform
+      .destroy();
+  }
 
   platform
     .bootstrapModule(AppModule)
