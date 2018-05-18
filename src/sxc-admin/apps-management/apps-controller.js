@@ -18,7 +18,7 @@
         ;
 
     /*@ngInject*/
-    function AppListController(appsSvc, eavAdminDialogs, sxcDialogs, eavConfig, appSettings, appId, zoneId, $uibModalInstance, $scope, $window, $translate, featuresConfigSvc) {
+    function AppListController(appsSvc, eavAdminDialogs, sxcDialogs, eavConfig, appSettings, appId, zoneId, $uibModalInstance, $scope, $window, $translate, featuresConfigSvc, sxc) {
         var vm = this;
 
         function blankCallback() { }
@@ -26,6 +26,10 @@
         var svc = appsSvc(zoneId);
         vm.items = svc.liveList();
         vm.refresh = svc.liveListReload;
+        vm.insightsUrl = sxc.resolveServiceUrl('app-sys/insights/help').replace('app-sys', 'sys');
+        console.debug('insights url' + vm.insightsUrl);
+
+        
 
         vm.add = function add() {
             var result = prompt($translate.instant("AppManagement.Prompt.NewApp"));

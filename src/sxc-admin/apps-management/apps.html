@@ -170,11 +170,32 @@ Guid: {{item.Guid}}">{{item.Name}}</span>
                 <div class="sxc-spinner" ng-show="vm.featureSpinner" class="sxc-import-spinner"><i class="eav-icon-spinner animate-spin"></i></div>
                 <iframe ng-repeat="url in vm.manageFeaturesUrl" ng-src="{{ url | trustAsResourceUrl }}" ng-show="!vm.featuresShow" style="border: none; width: 100%; height: 500px"></iframe>
 
-                <!-- todo 2dm: icons & languages-->
 
             </uib-tab>
             
-            
+            <uib-tab>
+                <uib-tab-heading>
+                    <span uib-tooltip="Insights">
+                        <i class="eav-icon-database"></i> 2sxc Insights
+                    </span>
+                </uib-tab-heading>
+                
+                <h4>2sxc Insights for Super Users</h4>
+                <p>
+                    This is to access a special section to see what is really in the server memory. It's intended for extensive debugging - see also 
+                    <a href="https://2sxc.org/en/blog/post/using-2sxc-insights" target="_blank">this blog post</a>. 
+                </p>
+
+                <span class="btn-group">
+                    <a type="button" class="btn btn-primary" ng-href="{{vm.insightsUrl}}" target="_blank">
+                        <i class="eav-icon-database"></i>
+                        Open 2sxc Insights
+                    </a>
+                </span>
+
+
+
+            </uib-tab>
             
 
 
