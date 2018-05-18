@@ -24,7 +24,7 @@
                 vm.ImportResult = result.data;
                 vm.IsImporting = false;
                 // The app could not be installed because the app-folder already exists. Install app in different folder?
-                if (vm.ImportResult && vm.ImportResult.Messages && vm.ImportResult.Messages[0] && vm.ImportResult.Messages[0].MessageType === 1) {
+                if (vm.ImportResult && vm.ImportResult.Messages && vm.ImportResult.Messages[0] && vm.ImportResult.Messages[0].MessageType === 0) {
                     vm.ImportName = prompt(vm.ImportResult.Messages[0].Text + ' Would you like to install it using another folder name?');
                     if (vm.ImportName) {
                         return importApp();
