@@ -12,7 +12,7 @@
         return srvc;
 
 
-        function importApp(file) {
+        function importApp(file, name) {
             return $http({
                 method: "POST",
                 url: "app-sys/ImportExport/ImportApp",
@@ -22,9 +22,10 @@
                     formData.append("AppId", data.AppId);
                     formData.append("ZoneId", data.ZoneId);
                     formData.append("File", data.File);
+                    formData.append("Name", data.Name ? data.Name : '');
                     return formData;
                 },
-                data: { AppId: appId, ZoneId: zoneId, File: file }
+                data: { AppId: appId, ZoneId: zoneId, File: file, Name: name }
             });
         }
     }

@@ -8,9 +8,11 @@
     app.controller("BrowserController", BrowserController);
     
     /*@ngInject*/
-    function BrowserController($scope, adamSvc, debugState, eavConfig, eavAdminDialogs, appRoot, fileType) {
+    function BrowserController($scope, adamSvc, debugState, eavConfig, eavAdminDialogs, appRoot, fileType, featuresSvc) {
         var vm = this;
         vm.debug = debugState;
+
+        vm.clipboardPasteImageFunctionalityDisabled = true;
 
         var initConfig = function initConfig() {
             vm.contentTypeName = $scope.contentTypeName;
@@ -25,6 +27,14 @@
             vm.showFolders = !!vm.folderDepth;
             vm.allowAssetsInRoot = $scope.allowAssetsInRoot || true;    // if true, the initial folder can have files, otherwise only subfolders
             vm.metadataContentTypes = $scope.metadataContentTypes || "";
+
+            // add clipboard paste image feature if enabled
+            featuresSvc.enabled('f6b8d6da-4744-453b-9543-0de499aa2352').then(
+                function (enabled) {
+                    if (enabled) {
+                        vm.clipboardPasteImageFunctionalityDisabled = (enabled === false);
+                    }
+                });
         };
 
         initConfig();
