@@ -2118,17 +2118,21 @@ angular.module("sxcFieldTemplates")
                 paste_convert_middot_lists: true,
                 paste_convert_headers_to_strong: false,
                 paste_remove_spans: true,
-                paste_remove_styles: true
+                paste_remove_styles: true,
 
                 //paste_preprocess: function (plugin, args) {
                 //    console.log(args.content);
                 //    args.content += ' preprocess';
                 //},
 
-                //paste_postprocess: function (plugin, args) {
-                //    console.log(args.node);
-                //    args.node.setAttribute('id', '42');
-                //}
+                paste_postprocess: function (plugin, args) {
+                    var anchors = args.node.getElementsByTagName('a');
+                    for (var i = 0; i < anchors.length; i++) {
+                        if (anchors[i].hostname != window.location.hostname) {
+                            anchors[i].setAttribute('target', '_blank');
+                        }
+                    }
+                }
             };
         };
 
