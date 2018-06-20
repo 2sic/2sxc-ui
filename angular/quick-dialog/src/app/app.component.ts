@@ -1,8 +1,8 @@
 import { TranslateService } from '@ngx-translate/core';
 import { Component, Inject } from '@angular/core';
-import { IDialogFrameElement } from "app/core/dialog-frame-element";
-import { DialogComponent } from "app/version-dialog/dialog.component";
-import { MdDialog } from "@angular/material";
+import { IDialogFrameElement } from 'app/core/dialog-frame-element';
+import { DialogComponent } from 'app/version-dialog/dialog.component';
+import { MdDialog } from '@angular/material';
 
 declare const window, $2sxc;
 
@@ -18,7 +18,7 @@ export class AppComponent {
     public translate: TranslateService,
     private dialog: MdDialog,
   ) {
-    const langs = ['en','de','es','fr','it','nl','uk'];
+    const langs = ['en', 'de', 'es', 'fr', 'it', 'nl', 'uk'];
     translate.addLangs(langs);
     translate.setDefaultLang($2sxc.urlParams.require('langpri').split('-')[0]);
     translate.use($2sxc.urlParams.require('lang').split('-')[0]);

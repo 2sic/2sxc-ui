@@ -1,6 +1,7 @@
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
-import { InstallerService } from "app/installer/installer.service";
-import { ModuleApiService } from "app/core/module-api.service";
+import {debounceTime} from 'rxjs/operator/debounceTime';
+import { Component, OnInit, Input, OnDestroy, ElementRef } from '@angular/core';
+import { InstallerService } from 'app/installer/installer.service';
+import { ModuleApiService } from 'app/core/module-api.service';
 import { DomSanitizer, SafeResourceUrl, SafeUrl } from '@angular/platform-browser';
 import { fromEvent } from 'rxjs/observable/fromEvent';
 import { Subscription } from 'rxjs';
@@ -13,7 +14,7 @@ declare const window: any;
   templateUrl: './installer.component.html',
   styleUrls: ['./installer.component.scss']
 })
-export class InstallerComponent implements OnInit, OnDestroy {
+export class InstallerComponent implements OnInit {
   @Input() isContentApp: boolean;
 
   showProgress: boolean;
@@ -26,22 +27,28 @@ export class InstallerComponent implements OnInit, OnDestroy {
   constructor(
     private installer: InstallerService,
     private api: ModuleApiService,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private elRef: ElementRef,
   ) {
     this.subscriptions.push(this.api.gettingStarted
       .subscribe(url => {
         this.remoteInstallerUrl = <string>this.sanitizer.bypassSecurityTrustResourceUrl(url);
         this.ready = true;
       }));
+      // bootController.watchReboot()
+      window.bootController.watchReboot()
+        .debounceTime(1000)
+        .do(() => this.destroy())
+        .subscribe();
   }
 
-  ngOnDestroy(): void {
+  destroy(): void {
     this.subscriptions
       .forEach(sub => sub.unsubscribe());
+    console.log('destroy subs', this.subscriptions);
   }
 
   ngOnInit() {
-    const id = Math.random();
     let alreadyProcessing = false;
     this.api.loadGettingStarted(this.isContentApp);
 
