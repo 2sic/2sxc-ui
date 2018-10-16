@@ -85,7 +85,7 @@ export class SxcVersionsService {
           TimeStamp: (timestamp => {
             const date = new Date(timestamp);
             const y = date.getFullYear();
-            const m = date.getUTCMonth();
+            const m = date.getUTCMonth() + 1;
             const d = date.getDate();
             const h = date.getHours();
             const min = date.getMinutes();
