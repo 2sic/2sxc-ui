@@ -84,11 +84,11 @@
       </md-tab>
 
 
-      <md-tab *ngIf="isContentApp ? contentType : app" [label]="('TemplatePicker.ChangeView' | translate) + '(' + templates.length + ')'">
+      <md-tab *ngIf="isContentApp ? contentType : app" [label]="('TemplatePicker.ChangeView' | translate) + '(' + state.templates.length + ')'">
         <div class="tiles">
           <md-spinner class="templates-spinner" *ngIf="loadingTemplates"></md-spinner>
           <div class="tile" [ngClass]="{ active: state.template?.TemplateId === t.TemplateId }" [attr.title]="t.Name" (click)="setTemplate(t)"
-            *ngFor="let t of templates">
+            *ngFor="let t of state.templates">
             <div class="bg">
               <img *ngIf="t.Thumbnail !== null && t.Thumbnail !== ''" class="bg-img" [attr.src]="t.Thumbnail + '?w=176&h=176'">
               <div *ngIf="t.Thumbnail === null || t.Thumbnail === ''" class="bg-icon">

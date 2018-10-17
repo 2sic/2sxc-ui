@@ -2,7 +2,6 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { Component, OnInit, ApplicationRef } from '@angular/core';
 import { IDialogFrameElement } from 'app/interfaces-shared/idialog-frame-element';
 import { Observable, BehaviorSubject } from 'rxjs/Rx';
-import { TemplateFilterPipe } from 'app/template-picker/template-filter.pipe';
 import { App } from 'app/core/app';
 import { Template } from 'app/template-picker/template';
 import { ContentType } from 'app/template-picker/content-type';
@@ -29,13 +28,9 @@ export class TemplatePickerComponent implements OnInit {
 
   //#region properties
   apps$: Observable<App[]>;
-  // currentApp$: Observable<App>;
-  // template$: Observable<Template[]>;
-
 
   savedAppId: number;
-  templates: Template[] = [];
-  // template: Template;
+  // templates: Template[] = [];
   undoTemplateId: number;
   contentTypes: ContentType[] = [];
   contentType: ContentType;
@@ -52,13 +47,13 @@ export class TemplatePickerComponent implements OnInit {
   isInnerContent = false;
 
   private loadingSubject = new BehaviorSubject<boolean>(false);
-  private allTemplates: Template[] = [];
+  // private allTemplates: Template[] = [];
   private supportsAjax: boolean;
   //#endregion
 
   constructor(
     private api: PickerService,
-    private templateFilter: TemplateFilterPipe,
+    // private templateFilter: TemplateFilterPipe,
     private appRef: ApplicationRef,
     private translate: TranslatePipe,
     public state: CurrentDataService
@@ -72,10 +67,6 @@ export class TemplatePickerComponent implements OnInit {
     this.isInnerContent = info.mid !== info.cbid;
     this.ready$ = Observable.combineLatest(this.api.ready$, this.loadingSubject, (r, l) => r && !l);
     this.apps$ = this.api.apps$;
-    // this.currentApp$ = this.current.app$;
-    // this.current.activateCurrentApp(this.dashInfo.appId);
-
-    // this.api.currentApp$.subscribe(a => log.add(`active app is ${a && a.appId}`));
     this.wireUpOldObservableChangeWatchers();
   }
 
@@ -92,8 +83,8 @@ export class TemplatePickerComponent implements OnInit {
    */
   private wireUpOldObservableChangeWatchers(): void {
 
-    this.api.templates$
-      .subscribe(templates => this.allTemplates = templates); // this.initTemplates(templates, this.dashInfo.templateId));
+    // this.api.templates$
+    //   .subscribe(templates => this.allTemplates = templates);
 
     this.api.contentTypes$
       .subscribe(contentTypes => this.initContentTypes(contentTypes, this.dashInfo.contentTypeId));
@@ -103,7 +94,8 @@ export class TemplatePickerComponent implements OnInit {
       this.api.contentTypes$,
       this.api.apps$
     ]).subscribe(res => {
-      this.templates = this.findTemplatesForContentType(this.contentType);
+      this.state.activateContentType(this.contentType);
+      // this.state.templates = this.findTemplatesForContentType(this.contentType);
       this.showInstaller = this.isContentApp
         ? res[0].length === 0
         : res[2].filter(a => a.appId !== cAppActionImport).length === 0;
@@ -132,21 +124,12 @@ export class TemplatePickerComponent implements OnInit {
   persistTemplate() { this.bridge.saveTemplate(this.state.template.TemplateId); }
 
 
-  private findTemplatesForContentType(contentType: ContentType): Template[] {
-    return this.templateFilter.transform(this.allTemplates, {
-      contentTypeId: contentType ? contentType.StaticName : undefined,
-      isContentApp: this.isContentApp
-    });
-  }
-
-
-  private initTemplates(templates: Template[], selectedTemplateId: number) {
-    // if (selectedTemplateId) {
-    //   this.state.template = templates.find(t => t.TemplateId === selectedTemplateId);
-    // }
-    this.allTemplates = templates;
-  }
-
+  // private findTemplatesForContentType(contentType: ContentType): Template[] {
+  //   return this.templateFilter.transform(this.allTemplates, {
+  //     contentTypeId: contentType ? contentType.StaticName : undefined,
+  //     isContentApp: this.isContentApp
+  //   });
+  // }
 
   private initContentTypes(contentTypes: ContentType[], selectedContentTypeId) {
     if (selectedContentTypeId) {
@@ -159,7 +142,7 @@ export class TemplatePickerComponent implements OnInit {
       .forEach(c => c.IsHidden = false);
 
     // option for no content types
-    if (this.allTemplates.find(t => t.ContentTypeStaticName === '')) {
+    if (this.state.allTemplates.find(t => t.ContentTypeStaticName === '')) {
       const name = 'TemplatePicker.LayoutElement';
       contentTypes.push({
         StaticName: cViewWithoutContent,
@@ -183,11 +166,12 @@ export class TemplatePickerComponent implements OnInit {
     this.contentType = contentType;
     this.switchTab();
     this.loadingTemplates = true;
-    this.templates = this.findTemplatesForContentType(contentType);
+    this.state.activateContentType(this.contentType);
+    // this.state.templates = this.findTemplatesForContentType(contentType);
 
-    if (this.templates.length === 0) return false;
+    if (this.state.templates.length === 0) return false;
     this.setTemplate(
-      (keepTemplate ? (this.state.template || this.templates[0]) : this.templates[0]),
+      (keepTemplate ? (this.state.template || this.state.templates[0]) : this.state.templates[0]),
     );
     return true;
   }
@@ -199,7 +183,7 @@ export class TemplatePickerComponent implements OnInit {
 
   updateApp(app: App) {
     this.state.activateCurrentApp(app.appId);
-    this.templates = [];
+    this.state.templates = [];
     this.loadingTemplates = true;
     this.updateAppAndReloadCorrectly(app);
   }
@@ -221,7 +205,7 @@ private updateAppAndReloadCorrectly(newApp: App): void {
         this.api.templates$.take(1).do(() => {
           log.add('reloaded templates, will reset some stuff');
           this.loadingTemplates = false;
-          this.state.template = this.templates[0];
+          this.state.template = this.state.templates[0];
           this.appRef.tick();
           this.doPostAjaxScrolling();
         });
