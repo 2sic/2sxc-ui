@@ -3,7 +3,6 @@ import { Observable, BehaviorSubject, ReplaySubject } from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
 import { Http } from '@angular/http';
 import { App } from 'app/core/app';
-import { Subject } from 'rxjs/Subject';
 import { ContentType } from 'app/template-picker/content-type';
 import { Template } from 'app/template-picker/template';
 import { log } from 'app/core/log';
@@ -12,25 +11,38 @@ import { Constants } from 'app/core/constants';
 
 @Injectable()
 export class PickerService {
+  currentApp$: Observable<App>;
   apps$: Observable<App[]>;
   contentTypes$: Observable<ContentType[]>;
   templates$: Observable<Template[]>;
   ready$ = new Observable<boolean>();
 
-  private appSubject = new ReplaySubject<App[]>();
-  private contentTypeSubject: Subject<ContentType[]> = new Subject<ContentType[]>();
-  private templateSubject: Subject<Template[]> = new Subject<Template[]>();
+  private currentAppIdSubject = new ReplaySubject<number>();
+  private appsSubject = new ReplaySubject<App[]>();
+  private contentTypesSubject = new ReplaySubject<ContentType[]>();
+  private templatesSubject = new ReplaySubject<Template[]>();
 
   constructor(private http: Http) {
-    this.apps$ = this.appSubject.asObservable();
-    this.contentTypes$ = this.contentTypeSubject.asObservable();
-    this.templates$ = this.templateSubject.asObservable();
+    this.apps$ = this.appsSubject.asObservable();
+    this.contentTypes$ = this.contentTypesSubject.asObservable();
+    this.templates$ = this.templatesSubject.asObservable();
     this.ready$ = Observable
       .combineLatest(this.apps$, this.contentTypes$, this.templates$)
       .map(() => true)
       .startWith(false);
 
+    this.currentApp$ = Observable
+      .combineLatest(this.apps$, this.currentAppIdSubject,
+        (apps, appId) => apps.find(a => a.appId === appId));
+      // .filter(app => app !== undefined);
+
     this.ready$.do(r => log.add(`ready:${r}`) ).subscribe();
+  }
+
+  activateCurrentApp(appId: number) {
+    this.currentAppIdSubject.next(appId);
+    // this.currentApp$ = this.apps$.map(apps => );
+    // this.app = apps.find(a => a.appId === this.dashInfo.appId);
   }
 
   public setAppId(appId: string): Observable<any> {
@@ -52,7 +64,7 @@ export class PickerService {
   public loadTemplates(): Observable<Template> {
     const obs = this.http.get(`${Constants.apiRoot}GetSelectableTemplates`)
       .map(response => response.json() || []);
-    obs.subscribe(json => this.templateSubject.next(json));
+    obs.subscribe(json => this.templatesSubject.next(json));
     return obs;
   }
 
@@ -67,7 +79,7 @@ export class PickerService {
           : x.Name;
         return x;
       }))
-      .subscribe(json => this.contentTypeSubject.next(json));
+      .subscribe(json => this.contentTypesSubject.next(json));
   }
 
   /**
@@ -76,7 +88,7 @@ export class PickerService {
   private loadApps(): void {
     this.http.get(`${Constants.apiRoot}GetSelectableApps`)
       .map(response => response.json().map(this.parseResultObject))
-      .subscribe(json => this.appSubject.next(json));
+      .subscribe(json => this.appsSubject.next(json));
   }
 
   private parseResultObject(obj): any {

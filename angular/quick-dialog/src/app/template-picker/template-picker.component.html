@@ -1,32 +1,9 @@
-<div class="content">
+<div class="content" *ngFor="let app of [currentApp$ | async]">
 
-    pre-len: 
-    <ng-container *ngIf="apps$ | async as apps2">
-        len: {{apps2.length}}
-    </ng-container>
-    post-len
-
-  <!-- test: {{(apps$ | async)[3].thumbnail}} -->
-  <!-- <div class="tile" [ngClass]="{ active: app?.appId === a.appId }" 
-  [attr.title]="a.name" 
-  (click)="app?.appId === a.appId ? switchTab() : updateApp(a)"
-  (dblclick)="switchTab()" *ngFor="let a of apps$ | async">
-  <div class="bg">
-      <img *ngIf="a.thumbnail !== null && a.thumbnail !== ''" class="bg-img" [attr.src]="a.thumbnail + '?w=176&h=176'">
-      <div *ngIf="a.thumbnail === null || a.thumbnail === ''" class="bg-icon">
-        <md-icon>star</md-icon>
-      </div>
-    </div>
-
-    <div class="title" [ngClass]="{ show: a.thumbnail === null || a.thumbnail === '' }">
-      <span>{{a.name}}</span>
-    </div>
-  </div>
-   -->
-  second: {{apps}}
   <!-- loading indicator -->
   <md-progress-bar [ngStyle]="{ opacity: (ready$ | async) ? 0 : 1 }" [mode]="'indeterminate'"></md-progress-bar>
 
+  <!-- main dialog -->
   <div *ngIf="ready$ | async" class="card">
     <div class="top-controls" fxLayout="row" fxLayoutAlign="center center">
       <button md-fab *ngIf="template" (click)="persistTemplate()" [attr.title]="'TemplatePicker.Save' | translate">
@@ -37,12 +14,6 @@
       </button>
     </div>
 
-    pre-len: 
-    <ng-container *ngIf="apps$ | async as apps2">
-        len: {{apps2.length}}
-    </ng-container>
-    post-len
-
     <!-- tabs -->
     <md-tab-group [(selectedIndex)]="tabIndex">
       <md-tab>
@@ -52,16 +23,11 @@
 
         <!-- App Selector -->
         <div *ngIf="!isContentApp; else contentApp" class="tiles">
-          <ng-container *ngIf="apps$ | async as apps2">
-            len: {{apps2.length}}
-          </ng-container>
-          showing apps - kind of {{apps$ | async}} ...
 
           <div class="tile" [ngClass]="{ active: app?.appId === a.appId }" 
             [attr.title]="a.name" 
             (click)="app?.appId === a.appId ? switchTab() : updateApp(a)"
             (dblclick)="switchTab()" *ngFor="let a of apps$ | async">
-            found!!
             <div class="bg">
               <img *ngIf="a.thumbnail !== null && a.thumbnail !== ''" class="bg-img" [attr.src]="a.thumbnail + '?w=176&h=176'">
               <div *ngIf="a.thumbnail === null || a.thumbnail === ''" class="bg-icon">

@@ -22,10 +22,14 @@ const win = window;
   providers: [TranslatePipe],
 })
 export class TemplatePickerComponent implements OnInit {
+  //#region iframe connection
+  dashInfo: IQuickDialogConfig;
+  private bridge: IIFrameBridge;
+  //#endregion
   //#region properties
-  apps: App[] = [];
   apps$: Observable<App[]>;
-  app: App;
+  currentApp$: Observable<App>;
+  // template$: Observable<Template[]>;
   savedAppId: number;
   templates: Template[] = [];
   template: Template;
@@ -33,7 +37,6 @@ export class TemplatePickerComponent implements OnInit {
   contentTypes: ContentType[] = [];
   contentType: ContentType;
   undoContentTypeId: string;
-  dashInfo: IQuickDialogConfig;
   isContentApp: boolean;
   showProgress = false;
   showAdvanced: boolean;
@@ -48,8 +51,6 @@ export class TemplatePickerComponent implements OnInit {
   isInnerContent = false;
 
   private allTemplates: Template[] = [];
-  private frame: IDialogFrameElement;
-  private bridge: IIFrameBridge;
   private supportsAjax: boolean;
   //#endregion
 
@@ -59,8 +60,7 @@ export class TemplatePickerComponent implements OnInit {
     private appRef: ApplicationRef,
     private translate: TranslatePipe
   ) {
-    this.frame = <IDialogFrameElement>win.frameElement;
-    this.bridge = this.frame.bridge;
+    this.bridge = (<IDialogFrameElement>win.frameElement).bridge;
     this.dashInfo = this.bridge.getAdditionalDashboardConfig();
     this.allowContentTypeChange = !(this.dashInfo.hasContent || this.dashInfo.isList);
 
@@ -68,6 +68,10 @@ export class TemplatePickerComponent implements OnInit {
     this.isInnerContent = info.mid !== info.cbid;
     this.ready$ = this.api.ready$;
     this.apps$ = this.api.apps$;
+    this.currentApp$ = this.api.currentApp$;
+    this.api.activateCurrentApp(this.dashInfo.appId);
+
+    // this.api.currentApp$.subscribe(a => log.add(`active app is ${a && a.appId}`));
 
     // this.apps$.do(() => {log.add('got apps$');}).subscribe();
     this.wireUpOldObservableChangeWatchers();
@@ -77,6 +81,11 @@ export class TemplatePickerComponent implements OnInit {
     this.initializeValuesFromBridge();
   }
 
+  private wireUpNewObservableChangeWatchers(): void {
+    this.api.currentApp$.subscribe(app => {
+      if (app) this.switchTab();
+    });
+  }
 
   /**
    * This wires up the old model of observable watchers
@@ -88,7 +97,6 @@ export class TemplatePickerComponent implements OnInit {
 
     Observable.merge(
       this.updateTemplateSubject.asObservable(),
-      // this.updateAppSubject.asObservable()
     ).subscribe(() => {
         this.loading = true;
       });
@@ -109,12 +117,6 @@ export class TemplatePickerComponent implements OnInit {
           .then(() => win.parent.location.reload());
       });
 
-    this.api.apps$
-      .subscribe(apps => {
-        this.app = apps.find(a => a.appId === this.dashInfo.appId);
-        if (this.app) this.tabIndex = 1;
-        this.apps = apps;
-      });
 
     this.api.templates$
       .subscribe(templates => this.setTemplates(templates, this.dashInfo.templateId));
@@ -174,7 +176,7 @@ export class TemplatePickerComponent implements OnInit {
   private setContentTypes(contentTypes: ContentType[], selectedContentTypeId) {
     if (selectedContentTypeId) {
       this.contentType = contentTypes.find(c => c.StaticName === selectedContentTypeId);
-      this.tabIndex = 1;
+      this.switchTab();
     }
     contentTypes
       .filter(c => (this.template && c.TemplateId === this.template.TemplateId)
@@ -204,7 +206,7 @@ export class TemplatePickerComponent implements OnInit {
   updateContentType(contentType: ContentType, keepTemplate: boolean = false): boolean {
     if (!this.allowContentTypeChange) return false;
     this.contentType = contentType;
-    this.tabIndex = 1;
+    this.switchTab();
     this.templates = [];
     this.loadingTemplates = true;
 
@@ -221,11 +223,12 @@ export class TemplatePickerComponent implements OnInit {
   }
 
   switchTab() {
+    log.add('switchTab()');
     this.tabIndex = 1;
   }
 
   updateApp(app: App) {
-    this.app = app;
+    this.api.activateCurrentApp(app.appId);
     this.templates = [];
     this.loadingTemplates = true;
     this.updateAppAndReloadCorrectly(app);
@@ -238,12 +241,12 @@ export class TemplatePickerComponent implements OnInit {
   }
 
     // todo: must verify both previous and new apps support ajax!
-    private updateAppAndReloadCorrectly(app: App): void {
-      const newAppAjax = app.supportsAjaxReload;
-      log.add(`changing app to ${app.appId}; new app-ajax:${newAppAjax}`);
-      this.api.setAppId(app.appId.toString())
+    private updateAppAndReloadCorrectly(newApp: App): void {
+      const newAppAjax = newApp.supportsAjaxReload;
+      log.add(`changing app to ${newApp.appId}; new app-ajax:${newAppAjax}`);
+      this.api.setAppId(newApp.appId.toString())
         .subscribe(() => {
-          if (app.supportsAjaxReload) {
+          if (newApp.supportsAjaxReload) {
             // 2018-10-17 2dm new
             this.api.templates$.take(1).do(() => {
               log.add('reloaded templates, will reset some stuff');
