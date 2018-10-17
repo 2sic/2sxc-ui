@@ -69,7 +69,7 @@
       <md-tab *ngIf="isContentApp ? contentType : app" [label]="('TemplatePicker.ChangeView' | translate) + '(' + templates.length + ')'">
         <div class="tiles">
           <md-spinner class="templates-spinner" *ngIf="loadingTemplates"></md-spinner>
-          <div class="tile" [ngClass]="{ active: template?.TemplateId === t.TemplateId }" [attr.title]="t.Name" (click)="updateTemplateSubject.next({ template: t })"
+          <div class="tile" [ngClass]="{ active: template?.TemplateId === t.TemplateId }" [attr.title]="t.Name" (click)="setTemplate(t)"
             *ngFor="let t of templates">
             <div class="bg">
               <img *ngIf="t.Thumbnail !== null && t.Thumbnail !== ''" class="bg-img" [attr.src]="t.Thumbnail + '?w=176&h=176'">

@@ -1,5 +1,5 @@
 import { TranslatePipe } from '@ngx-translate/core';
-import { Component, OnInit, Input, NgModule, Inject, ApplicationRef } from '@angular/core';
+import { Component, OnInit, ApplicationRef } from '@angular/core';
 import { IDialogFrameElement } from 'app/interfaces-shared/idialog-frame-element';
 import { ModuleApiService } from 'app/core/module-api.service';
 import { Observable } from 'rxjs/Rx';
@@ -10,6 +10,7 @@ import { Template } from 'app/template-picker/template';
 import { ContentType } from 'app/template-picker/content-type';
 import { IIFrameBridge } from 'app/interfaces-shared/iiframe-bridge';
 import { IQuickDialogConfig } from 'app/interfaces-shared/iquick-dialog-config';
+import { cAppActionImport, cViewWithoutContent } from './constants';
 
 const win = window;
 
@@ -20,13 +21,14 @@ const win = window;
   providers: [TranslatePipe],
 })
 export class TemplatePickerComponent implements OnInit {
+  //#region properties
   apps: App[] = [];
   app: App;
   savedAppId: number;
-  templates: any[] = [];
+  templates: Template[] = [];
   template: Template;
   undoTemplateId: number;
-  contentTypes: any[] = [];
+  contentTypes: ContentType[] = [];
   contentType: ContentType;
   undoContentTypeId: string;
   dashInfo: IQuickDialogConfig;
@@ -38,17 +40,16 @@ export class TemplatePickerComponent implements OnInit {
   loadingTemplates = false;
   ready = false;
   tabIndex = 0;
-  updateTemplateSubject: Subject<any> = new Subject<any>();
-  updateAppSubject: Subject<any> = new Subject<any>();
+  updateTemplateSubject: Subject<Template> = new Subject<Template>();
+  updateAppSubject: Subject<App> = new Subject<App>();
   allowContentTypeChange: boolean;
   isInnerContent = false;
 
-  private allTemplates: any[] = [];
+  private allTemplates: Template[] = [];
   private frame: IDialogFrameElement;
   private bridge: IIFrameBridge;
-  private cViewWithoutContent = '_LayoutElement';
-  private cAppActionImport: number = -1;
   private supportsAjax: boolean;
+  //#endregion
 
   constructor(
     private api: ModuleApiService,
@@ -66,6 +67,11 @@ export class TemplatePickerComponent implements OnInit {
     this.wireUpOldObservableChangeWatchers();
   }
 
+  ngOnInit() {
+    this.initializeValuesFromBridge();
+  }
+
+
   /**
    * This wires up the old model of observable watchers
    * It's not a good solution, because it's not clean observables,
@@ -77,34 +83,34 @@ export class TemplatePickerComponent implements OnInit {
     Observable.merge(
       this.updateTemplateSubject.asObservable(),
       this.updateAppSubject.asObservable()
-    ).subscribe(res => {
-      this.loading = true;
-    });
+    ).subscribe(() => {
+        this.loading = true;
+      });
 
     this.updateAppSubject
       .debounceTime(400)
-      .subscribe(({ app }) => {
+      .subscribe((app) => {
         this.api.setAppId(app.appId.toString()).toPromise()
-          .then(res => {
-            if (app.supportsAjaxReload) return this.bridge.reloadAndReInit()
-              .then(() => this.api.loadTemplates().toPromise())
-              .then(() => {
-                this.loadingTemplates = false;
-                this.template = this.templates[0];
-                this.appRef.tick();
-                this.doPostAjaxScrolling()
-              });
-
-            this.bridge.showMessage('loading App..');
-            this.doPostAjaxScrolling();
-            this.bridge.persistDia();
-            win.parent.location.reload();
-          });
+          .then(() => {
+              if (app.supportsAjaxReload)
+                return this.bridge.reloadAndReInit()
+                  .then(() => this.api.loadTemplates().toPromise())
+                  .then(() => {
+                    this.loadingTemplates = false;
+                    this.template = this.templates[0];
+                    this.appRef.tick();
+                    this.doPostAjaxScrolling();
+                  });
+              this.bridge.showMessage('loading App..');
+              this.doPostAjaxScrolling();
+              this.bridge.persistDia();
+              win.parent.location.reload();
+            });
       });
 
     this.updateTemplateSubject
       .debounceTime(400)
-      .subscribe(({ template }) => {
+      .subscribe((template) => {
         this.loadingTemplates = false;
         this.template = template;
         this.appRef.tick();
@@ -141,11 +147,12 @@ export class TemplatePickerComponent implements OnInit {
       this.ready = true;
       this.showInstaller = this.isContentApp
         ? res[0].length === 0
-        : res[2].filter(a => a.appId !== this.cAppActionImport).length === 0;
+        : res[2].filter(a => a.appId !== cAppActionImport).length === 0;
     });
   }
 
-  ngOnInit() {
+
+  private initializeValuesFromBridge(): void {
     this.isContentApp = this.dashInfo.isContent;
     this.supportsAjax = this.isContentApp || this.dashInfo.supportsAjax;
     this.showAdvanced = this.dashInfo.user.canDesign;
@@ -156,7 +163,7 @@ export class TemplatePickerComponent implements OnInit {
 
     this.api.loadTemplates()
       .take(1)
-      .subscribe(templates => this.api.loadContentTypes());
+      .subscribe(() => this.api.loadContentTypes());
 
     this.api.loadApps();
   }
@@ -167,6 +174,7 @@ export class TemplatePickerComponent implements OnInit {
 
   persistTemplate() { this.bridge.saveTemplate(this.template.TemplateId); }
 
+  setTemplate(template: Template) { this.updateTemplateSubject.next(template); }
 
   private filterTemplates(contentType: ContentType) {
     this.templates = this.templateFilter.transform(this.allTemplates, {
@@ -176,13 +184,13 @@ export class TemplatePickerComponent implements OnInit {
   }
 
 
-  private setTemplates(templates: any[], selectedTemplateId: number) {
+  private setTemplates(templates: Template[], selectedTemplateId: number) {
     if (selectedTemplateId) this.template = templates.find(t => t.TemplateId === selectedTemplateId);
     this.allTemplates = templates;
   }
 
 
-  private setContentTypes(contentTypes: any[], selectedContentTypeId) {
+  private setContentTypes(contentTypes: ContentType[], selectedContentTypeId) {
     if (selectedContentTypeId) {
       this.contentType = contentTypes.find(c => c.StaticName === selectedContentTypeId);
       this.tabIndex = 1;
@@ -196,12 +204,12 @@ export class TemplatePickerComponent implements OnInit {
     if (this.allTemplates.find(t => t.ContentTypeStaticName === '')) {
       const name = 'TemplatePicker.LayoutElement';
       contentTypes.push({
-        StaticName: this.cViewWithoutContent,
+        StaticName: cViewWithoutContent,
         Name: name,
         Thumbnail: null,
         Label: this.translate.transform(name),
         IsHidden: false,
-      });
+      } as ContentType);
     }
 
     this.contentTypes = contentTypes
@@ -221,9 +229,9 @@ export class TemplatePickerComponent implements OnInit {
 
     this.filterTemplates(contentType);
     if (this.templates.length === 0) return false;
-    this.updateTemplateSubject.next({
-      template: keepTemplate ? (this.template || this.templates[0]) : this.templates[0],
-    });
+    this.updateTemplateSubject.next(
+      (keepTemplate ? (this.template || this.templates[0]) : this.templates[0]),
+    );
     return true;
   }
 
@@ -240,9 +248,7 @@ export class TemplatePickerComponent implements OnInit {
     this.templates = [];
     this.loadingTemplates = true;
 
-    this.updateAppSubject.next({
-      app,
-    });
+    this.updateAppSubject.next(app);
   }
 
   doPostAjaxScrolling() {
