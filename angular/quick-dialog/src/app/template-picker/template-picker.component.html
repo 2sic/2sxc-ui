@@ -1,4 +1,4 @@
-<div class="content" *ngFor="let app of [currentApp$ | async]">
+<div class="content" *ngFor="let app of [state.app$ | async]">
 
   <!-- loading indicator -->
   <md-progress-bar [ngStyle]="{ opacity: (ready$ | async) ? 0 : 1 }" [mode]="'indeterminate'"></md-progress-bar>
@@ -6,7 +6,7 @@
   <!-- main dialog -->
   <div *ngIf="ready$ | async" class="card">
     <div class="top-controls" fxLayout="row" fxLayoutAlign="center center">
-      <button md-fab *ngIf="template" (click)="persistTemplate()" [attr.title]="'TemplatePicker.Save' | translate">
+      <button md-fab *ngIf="state.template" (click)="persistTemplate()" [attr.title]="'TemplatePicker.Save' | translate">
         <md-icon>check</md-icon>
       </button>
       <button md-mini-fab class="secondary" *ngIf="undoTemplateId !== null" (click)="cancel()" [attr.title]="('TemplatePicker.' + (isContentApp ? 'Cancel' : 'Close')) | translate">
@@ -87,7 +87,7 @@
       <md-tab *ngIf="isContentApp ? contentType : app" [label]="('TemplatePicker.ChangeView' | translate) + '(' + templates.length + ')'">
         <div class="tiles">
           <md-spinner class="templates-spinner" *ngIf="loadingTemplates"></md-spinner>
-          <div class="tile" [ngClass]="{ active: template?.TemplateId === t.TemplateId }" [attr.title]="t.Name" (click)="setTemplate(t)"
+          <div class="tile" [ngClass]="{ active: state.template?.TemplateId === t.TemplateId }" [attr.title]="t.Name" (click)="setTemplate(t)"
             *ngFor="let t of templates">
             <div class="bg">
               <img *ngIf="t.Thumbnail !== null && t.Thumbnail !== ''" class="bg-img" [attr.src]="t.Thumbnail + '?w=176&h=176'">

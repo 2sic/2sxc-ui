@@ -4,7 +4,6 @@ import { IDialogFrameElement } from 'app/interfaces-shared/idialog-frame-element
 import { Observable, BehaviorSubject } from 'rxjs/Rx';
 import { TemplateFilterPipe } from 'app/template-picker/template-filter.pipe';
 import { App } from 'app/core/app';
-import { Subject } from 'rxjs/Subject';
 import { Template } from 'app/template-picker/template';
 import { ContentType } from 'app/template-picker/content-type';
 import { IIFrameBridge } from 'app/interfaces-shared/iiframe-bridge';
@@ -30,13 +29,13 @@ export class TemplatePickerComponent implements OnInit {
 
   //#region properties
   apps$: Observable<App[]>;
-  currentApp$: Observable<App>;
-  template$: Observable<Template[]>;
+  // currentApp$: Observable<App>;
+  // template$: Observable<Template[]>;
 
 
   savedAppId: number;
   templates: Template[] = [];
-  template: Template;
+  // template: Template;
   undoTemplateId: number;
   contentTypes: ContentType[] = [];
   contentType: ContentType;
@@ -62,18 +61,19 @@ export class TemplatePickerComponent implements OnInit {
     private templateFilter: TemplateFilterPipe,
     private appRef: ApplicationRef,
     private translate: TranslatePipe,
-    public current: CurrentDataService
+    public state: CurrentDataService
   ) {
     this.bridge = (<IDialogFrameElement>win.frameElement).bridge;
     this.dashInfo = this.bridge.getAdditionalDashboardConfig();
+    this.state.init(this.dashInfo);
     this.allowContentTypeChange = !(this.dashInfo.hasContent || this.dashInfo.isList);
 
     const info = this.bridge.getManageInfo();
     this.isInnerContent = info.mid !== info.cbid;
     this.ready$ = Observable.combineLatest(this.api.ready$, this.loadingSubject, (r, l) => r && !l);
     this.apps$ = this.api.apps$;
-    this.currentApp$ = this.current.currentApp$;
-    this.current.activateCurrentApp(this.dashInfo.appId);
+    // this.currentApp$ = this.current.app$;
+    // this.current.activateCurrentApp(this.dashInfo.appId);
 
     // this.api.currentApp$.subscribe(a => log.add(`active app is ${a && a.appId}`));
     this.wireUpOldObservableChangeWatchers();
@@ -83,11 +83,6 @@ export class TemplatePickerComponent implements OnInit {
     this.initializeValuesFromBridge();
   }
 
-  private wireUpNewObservableChangeWatchers(): void {
-    this.current.currentApp$.subscribe(app => {
-      if (app) this.switchTab();
-    });
-  }
 
   /**
    * This wires up the old model of observable watchers
@@ -98,7 +93,7 @@ export class TemplatePickerComponent implements OnInit {
   private wireUpOldObservableChangeWatchers(): void {
 
     this.api.templates$
-      .subscribe(templates => this.initTemplates(templates, this.dashInfo.templateId));
+      .subscribe(templates => this.allTemplates = templates); // this.initTemplates(templates, this.dashInfo.templateId));
 
     this.api.contentTypes$
       .subscribe(contentTypes => this.initContentTypes(contentTypes, this.dashInfo.contentTypeId));
@@ -134,7 +129,7 @@ export class TemplatePickerComponent implements OnInit {
 
   run(action: string): void { this.bridge.run(action); }
 
-  persistTemplate() { this.bridge.saveTemplate(this.template.TemplateId); }
+  persistTemplate() { this.bridge.saveTemplate(this.state.template.TemplateId); }
 
 
   private findTemplatesForContentType(contentType: ContentType): Template[] {
@@ -146,9 +141,9 @@ export class TemplatePickerComponent implements OnInit {
 
 
   private initTemplates(templates: Template[], selectedTemplateId: number) {
-    if (selectedTemplateId) {
-      this.template = templates.find(t => t.TemplateId === selectedTemplateId);
-    }
+    // if (selectedTemplateId) {
+    //   this.state.template = templates.find(t => t.TemplateId === selectedTemplateId);
+    // }
     this.allTemplates = templates;
   }
 
@@ -159,7 +154,7 @@ export class TemplatePickerComponent implements OnInit {
       this.switchTab();
     }
     contentTypes
-      .filter(c => (this.template && c.TemplateId === this.template.TemplateId)
+      .filter(c => (this.state.template && c.TemplateId === this.state.template.TemplateId)
         || (this.contentType && c.StaticName === this.contentType.StaticName))
       .forEach(c => c.IsHidden = false);
 
@@ -192,7 +187,7 @@ export class TemplatePickerComponent implements OnInit {
 
     if (this.templates.length === 0) return false;
     this.setTemplate(
-      (keepTemplate ? (this.template || this.templates[0]) : this.templates[0]),
+      (keepTemplate ? (this.state.template || this.templates[0]) : this.templates[0]),
     );
     return true;
   }
@@ -203,7 +198,7 @@ export class TemplatePickerComponent implements OnInit {
   }
 
   updateApp(app: App) {
-    this.current.activateCurrentApp(app.appId);
+    this.state.activateCurrentApp(app.appId);
     this.templates = [];
     this.loadingTemplates = true;
     this.updateAppAndReloadCorrectly(app);
@@ -226,7 +221,7 @@ private updateAppAndReloadCorrectly(newApp: App): void {
         this.api.templates$.take(1).do(() => {
           log.add('reloaded templates, will reset some stuff');
           this.loadingTemplates = false;
-          this.template = this.templates[0];
+          this.state.template = this.templates[0];
           this.appRef.tick();
           this.doPostAjaxScrolling();
         });
@@ -254,7 +249,7 @@ private updateAppAndReloadCorrectly(newApp: App): void {
     log.add(`set template ${template.TemplateId}, ajax is ${this.supportsAjax}`);
     this.loadingSubject.next(true);
     this.loadingTemplates = false;
-    this.template = template;
+    this.state.template = template;
     this.appRef.tick();
 
     if (this.supportsAjax) {
@@ -264,7 +259,7 @@ private updateAppAndReloadCorrectly(newApp: App): void {
     } else {
       this.setInpageMessageBeforeReload(`refreshing <b>${template.Name}</b>...`);
       this.bridge
-        .saveTemplate(this.template.TemplateId)
+        .saveTemplate(this.state.template.TemplateId)
         .then(() => win.parent.location.reload());
     }
   }
