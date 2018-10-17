@@ -9,7 +9,6 @@ import { IQuickDialogConfig } from './iquick-dialog-config';
  */
 export interface IIFrameBridge {
   getAdditionalDashboardConfig(): IQuickDialogConfig; // HACK: it was `any` in original
-  // isDirty(): boolean; // HACK: we do not have it here
   scrollToTarget(): void;
   persistDia(): void;
   toggle(action: boolean): void;

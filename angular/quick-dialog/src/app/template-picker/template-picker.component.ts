@@ -63,6 +63,16 @@ export class TemplatePickerComponent implements OnInit {
 
     const info = this.bridge.getManageInfo();
     this.isInnerContent = info.mid !== info.cbid;
+    this.wireUpOldObservableChangeWatchers();
+  }
+
+  /**
+   * This wires up the old model of observable watchers
+   * It's not a good solution, because it's not clean observables,
+   * but more a "watch changes, then put into static variable"
+   * Todo: try to refactor into clean observables
+   */
+  private wireUpOldObservableChangeWatchers(): void {
 
     Observable.merge(
       this.updateTemplateSubject.asObservable(),
@@ -142,27 +152,21 @@ export class TemplatePickerComponent implements OnInit {
     this.undoTemplateId = this.dashInfo.templateId;
     this.undoContentTypeId = this.dashInfo.contentTypeId;
     this.savedAppId = this.dashInfo.appId;
-    this.frame.isDirty = this.isDirty;
     this.dashInfo.templateChooserVisible = true;
 
     this.api.loadTemplates()
       .take(1)
-      .subscribe(templates => this.api.loadContentTypes())
+      .subscribe(templates => this.api.loadContentTypes());
 
     this.api.loadApps();
   }
 
-  isDirty(): boolean {
-    return false;
-  }
+  cancel(): void { this.bridge.cancel(); }
 
-  persistTemplate() {
-    this.bridge.saveTemplate(this.template.TemplateId);
-  }
+  run(action: string): void { this.bridge.run(action); }
 
-  private appStore() {
-    win.open('https://2sxc.org/apps');
-  }
+  persistTemplate() { this.bridge.saveTemplate(this.template.TemplateId); }
+
 
   private filterTemplates(contentType: ContentType) {
     this.templates = this.templateFilter.transform(this.allTemplates, {
@@ -171,10 +175,12 @@ export class TemplatePickerComponent implements OnInit {
     });
   }
 
+
   private setTemplates(templates: any[], selectedTemplateId: number) {
     if (selectedTemplateId) this.template = templates.find(t => t.TemplateId === selectedTemplateId);
     this.allTemplates = templates;
   }
+
 
   private setContentTypes(contentTypes: any[], selectedContentTypeId) {
     if (selectedContentTypeId) {
