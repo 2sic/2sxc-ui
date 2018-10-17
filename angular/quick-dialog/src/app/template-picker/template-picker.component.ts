@@ -1,7 +1,7 @@
 import { TranslatePipe } from '@ngx-translate/core';
 import { Component, OnInit, ApplicationRef } from '@angular/core';
 import { IDialogFrameElement } from 'app/interfaces-shared/idialog-frame-element';
-import { Observable } from 'rxjs/Rx';
+import { Observable, BehaviorSubject } from 'rxjs/Rx';
 import { TemplateFilterPipe } from 'app/template-picker/template-filter.pipe';
 import { App } from 'app/core/app';
 import { Subject } from 'rxjs/Subject';
@@ -22,10 +22,11 @@ const win = window;
   providers: [TranslatePipe],
 })
 export class TemplatePickerComponent implements OnInit {
-  //#region iframe connection
+  //#region iframe bridge
   dashInfo: IQuickDialogConfig;
   private bridge: IIFrameBridge;
   //#endregion
+  
   //#region properties
   apps$: Observable<App[]>;
   currentApp$: Observable<App>;
@@ -41,7 +42,7 @@ export class TemplatePickerComponent implements OnInit {
   showProgress = false;
   showAdvanced: boolean;
   showInstaller = false;
-  loading = false;
+  // loading = false;
   ready$: Observable<boolean>;
   loadingTemplates = false;
 
@@ -50,6 +51,7 @@ export class TemplatePickerComponent implements OnInit {
   allowContentTypeChange: boolean;
   isInnerContent = false;
 
+  private loadingSubject = new BehaviorSubject<boolean>(false);
   private allTemplates: Template[] = [];
   private supportsAjax: boolean;
   //#endregion
@@ -66,14 +68,12 @@ export class TemplatePickerComponent implements OnInit {
 
     const info = this.bridge.getManageInfo();
     this.isInnerContent = info.mid !== info.cbid;
-    this.ready$ = this.api.ready$;
+    this.ready$ = Observable.combineLatest(this.api.ready$, this.loadingSubject, (r, l) => r && !l);
     this.apps$ = this.api.apps$;
     this.currentApp$ = this.api.currentApp$;
     this.api.activateCurrentApp(this.dashInfo.appId);
 
     // this.api.currentApp$.subscribe(a => log.add(`active app is ${a && a.appId}`));
-
-    // this.apps$.do(() => {log.add('got apps$');}).subscribe();
     this.wireUpOldObservableChangeWatchers();
   }
 
@@ -98,7 +98,8 @@ export class TemplatePickerComponent implements OnInit {
     Observable.merge(
       this.updateTemplateSubject.asObservable(),
     ).subscribe(() => {
-        this.loading = true;
+        // this.loading = true;
+        this.loadingSubject.next(true);
       });
 
     this.updateTemplateSubject
@@ -235,7 +236,8 @@ export class TemplatePickerComponent implements OnInit {
   }
 
   doPostAjaxScrolling() {
-    this.loading = false;
+    // this.loading = false;
+    this.loadingSubject.next(false);
     this.bridge.scrollToTarget();
     this.appRef.tick();
   }
