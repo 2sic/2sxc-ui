@@ -23,6 +23,7 @@ export class AppComponent {
     translate.setDefaultLang($2sxc.urlParams.require('langpri').split('-')[0]);
     translate.use($2sxc.urlParams.require('lang').split('-')[0]);
     this.name = $2sxc.urlParams.require('dialog');
+    console.log(`quick-edit: loading ${this.name}`);
     const frame = <IDialogFrameElement>window.frameElement;
     if (this.name === 'item-history') {
       this.dialog.open(DialogComponent).afterClosed()

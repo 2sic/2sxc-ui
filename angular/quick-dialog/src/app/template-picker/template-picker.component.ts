@@ -41,7 +41,7 @@ export class TemplatePickerComponent implements OnInit {
   ready = false;
   tabIndex = 0;
   updateTemplateSubject: Subject<Template> = new Subject<Template>();
-  updateAppSubject: Subject<App> = new Subject<App>();
+  // updateAppSubject: Subject<App> = new Subject<App>();
   allowContentTypeChange: boolean;
   isInnerContent = false;
 
@@ -82,34 +82,34 @@ export class TemplatePickerComponent implements OnInit {
 
     Observable.merge(
       this.updateTemplateSubject.asObservable(),
-      this.updateAppSubject.asObservable()
+      // this.updateAppSubject.asObservable()
     ).subscribe(() => {
         this.loading = true;
       });
 
-    this.updateAppSubject
-      .debounceTime(400)
-      .subscribe((app) => {
-        this.api.setAppId(app.appId.toString()).toPromise()
-          .then(() => {
-              if (app.supportsAjaxReload)
-                return this.bridge.reloadAndReInit()
-                  .then(() => this.api.loadTemplates().toPromise())
-                  .then(() => {
-                    this.loadingTemplates = false;
-                    this.template = this.templates[0];
-                    this.appRef.tick();
-                    this.doPostAjaxScrolling();
-                  });
-              this.bridge.showMessage('loading App..');
-              this.doPostAjaxScrolling();
-              this.bridge.persistDia();
-              win.parent.location.reload();
-            });
-      });
+    // this.updateAppSubject
+    //   .subscribe((app) => {
+    //     this.api.setAppId(app.appId.toString())
+    //       .switchMap(() => {
+    //           if (app.supportsAjaxReload) {
+    //             return this.bridge.reloadAndReInit()
+    //               .then(() => this.api.loadTemplates().toPromise())
+    //               .then(() => {
+    //                 this.loadingTemplates = false;
+    //                 this.template = this.templates[0];
+    //                 this.appRef.tick();
+    //                 this.doPostAjaxScrolling();
+    //               });
+    //           } else {
+    //             this.bridge.showMessage('loading App..');
+    //             this.doPostAjaxScrolling();
+    //             this.bridge.persistDia();
+    //             win.parent.location.reload();
+    //           }
+    //         });
+    //   });
 
     this.updateTemplateSubject
-      .debounceTime(400)
       .subscribe((template) => {
         this.loadingTemplates = false;
         this.template = template;
@@ -125,23 +125,23 @@ export class TemplatePickerComponent implements OnInit {
           .then(() => win.parent.location.reload());
       });
 
-    this.api.apps
+    this.api.apps$
       .subscribe(apps => {
         this.app = apps.find(a => a.appId === this.dashInfo.appId);
         if (this.app) this.tabIndex = 1;
         this.apps = apps;
       });
 
-    this.api.templates
+    this.api.templates$
       .subscribe(templates => this.setTemplates(templates, this.dashInfo.templateId));
 
-    this.api.contentTypes
+    this.api.contentTypes$
       .subscribe(contentTypes => this.setContentTypes(contentTypes, this.dashInfo.contentTypeId));
 
     Observable.combineLatest([
-      this.api.templates,
-      this.api.contentTypes,
-      this.api.apps
+      this.api.templates$,
+      this.api.contentTypes$,
+      this.api.apps$
     ]).subscribe(res => {
       this.filterTemplates(this.contentType);
       this.ready = true;
@@ -149,6 +149,28 @@ export class TemplatePickerComponent implements OnInit {
         ? res[0].length === 0
         : res[2].filter(a => a.appId !== cAppActionImport).length === 0;
     });
+  }
+
+  private updateAppAndReloadCorrectly(app: App): void {
+    console.log(`changing app to ${app.appId}`);
+    this.api.setAppId(app.appId.toString())
+      .switchMap(() => {
+        if (app.supportsAjaxReload) {
+          return this.bridge.reloadAndReInit()
+            .then(() => this.api.loadTemplates().toPromise())
+            .then(() => {
+              this.loadingTemplates = false;
+              this.template = this.templates[0];
+              this.appRef.tick();
+              this.doPostAjaxScrolling();
+            });
+        } else {
+          this.bridge.showMessage('loading App..');
+          this.doPostAjaxScrolling();
+          this.bridge.persistDia();
+          win.parent.location.reload();
+        }
+      });
   }
 
 
@@ -161,11 +183,7 @@ export class TemplatePickerComponent implements OnInit {
     this.savedAppId = this.dashInfo.appId;
     this.dashInfo.templateChooserVisible = true;
 
-    this.api.loadTemplates()
-      .take(1)
-      .subscribe(() => this.api.loadContentTypes());
-
-    this.api.loadApps();
+    this.api.loadEverything();
   }
 
   cancel(): void { this.bridge.cancel(); }
@@ -247,8 +265,8 @@ export class TemplatePickerComponent implements OnInit {
     this.app = app;
     this.templates = [];
     this.loadingTemplates = true;
-
-    this.updateAppSubject.next(app);
+    this.updateAppAndReloadCorrectly(app);
+    // this.updateAppSubject.next(app);
   }
 
   doPostAjaxScrolling() {

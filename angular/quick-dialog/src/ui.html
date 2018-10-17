@@ -70,8 +70,9 @@
 
     // send message to the angular-observable to restart the app
     window.reboot = function () {
+      // if called to early, the bootController doesn't exist yet
       if (window.bootController)
-        window.bootController.restart();
+        window.bootController.reboot();
     }
 
   </script>

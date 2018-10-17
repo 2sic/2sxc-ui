@@ -9,46 +9,32 @@ if (environment.production) {
   enableProdMode();
 }
 
-// platformBrowserDynamic().bootstrapModule(AppModule);
-// 2dm: now with reboot capabilities
+console.log('quick-edit loading');
 
 declare const window;
-
 const platform = platformBrowserDynamic();
 
 const init = () => {
-  // if (!platform.destroyed) {
-  //   console.log('init bbb');
-  //   platform
-  //     .destroy();
-  // } else {
-
-  // }
+  console.log('quick-edit init()');
 
   try {
     // kill listeners
-    platform
-      .destroy();
-  } catch(e) {
+    if (!platform.destroyed)
+      platform.destroy();
+  } catch (e) {
     console.log('platform destroy error', e);
   }
 
-  console.log('init ccc');
-
-  platform
-    .bootstrapModule(AppModule)
-      .then(() => window.appBootstrap && window.appBootstrap())
-      .catch(err => console.error('NG Bootstrap Error =>', err));
+  platform.bootstrapModule(AppModule)
+    .then(() => window.appBootstrap && window.appBootstrap())
+    .catch(err => console.error('NG Bootstrap Error =>', err));
 };
 
-console.log('init aaa');
 
 // provide hook for outside reboot calls
-const bootController = window.bootController = BootController.getbootControl();
+const bootController = window.bootController = BootController.getRebootController();
 
 // Init on reboot request.
-const boot = bootController.watchReboot()
+bootController.rebootRequest$
   .startWith(true) // Init on first load.
-  .debounceTime(1000)
-  .do(() => init())
-  .subscribe();
+  .subscribe(() => init());

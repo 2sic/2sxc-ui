@@ -9,10 +9,10 @@ import { Template } from 'app/template-picker/template';
 
 @Injectable()
 export class ModuleApiService {
-  apps: Observable<App[]>;
-  contentTypes: Observable<ContentType[]>;
-  gettingStarted: Observable<string>;
-  templates: Observable<Template[]>;
+  apps$: Observable<App[]>;
+  contentTypes$: Observable<ContentType[]>;
+  gettingStarted$: Observable<string>;
+  templates$: Observable<Template[]>;
 
   private appSubject: Subject<App[]> = new Subject<App[]>();
   private contentTypeSubject: Subject<ContentType[]> = new Subject<ContentType[]>();
@@ -20,21 +20,26 @@ export class ModuleApiService {
   private templateSubject: Subject<Template[]> = new Subject<Template[]>();
 
   constructor(private http: Http) {
-    this.apps = this.appSubject.asObservable();
-    this.contentTypes = this.contentTypeSubject.asObservable();
-    this.gettingStarted = this.gettingStartedSubject.asObservable();
-    this.templates = this.templateSubject.asObservable();
+    this.apps$ = this.appSubject.asObservable();
+    this.contentTypes$ = this.contentTypeSubject.asObservable();
+    this.gettingStarted$ = this.gettingStartedSubject.asObservable();
+    this.templates$ = this.templateSubject.asObservable();
   }
 
   public setAppId(appId: string): Observable<any> {
     return this.http.get(`view/Module/SetAppId?appId=${appId}`);
   }
 
-  public loadGettingStarted(isContentApp: boolean): Observable<string> {
-    const obs = this.http.get(`View/Module/RemoteInstallDialogUrl?dialog=gettingstarted&isContentApp=${isContentApp}`)
-      .map(response => response.json());
-    obs.subscribe(json => this.gettingStartedSubject.next(json));
-    return obs;
+  public loadGettingStarted(isContentApp: boolean): void {
+    this.http.get(`View/Module/RemoteInstallDialogUrl?dialog=gettingstarted&isContentApp=${isContentApp}`)
+      .map(response => response.json())
+      .subscribe(json => this.gettingStartedSubject.next(json));
+  }
+
+  public loadEverything() {
+    this.loadTemplates();
+    this.loadContentTypes();
+    this.loadApps();
   }
 
   public loadTemplates(): Observable<Template> {
@@ -44,23 +49,27 @@ export class ModuleApiService {
     return obs;
   }
 
-  public loadContentTypes(): Observable<ContentType> {
-    const obs = this.http.get('View/Module/GetSelectableContentTypes')
+  /**
+   * Load the ContentTypes - only needed on first initialization
+   */
+  private loadContentTypes(): void {
+    this.http.get('View/Module/GetSelectableContentTypes')
       .map(response => (response.json() || []).map(x => {
         x.Label = (x.Metadata && x.Metadata.Label)
           ? x.Metadata.Label
           : x.Name;
         return x;
-      }));
-    obs.subscribe(json => this.contentTypeSubject.next(json));
-    return obs;
+      }))
+      .subscribe(json => this.contentTypeSubject.next(json));
   }
 
-  public loadApps(): Observable<App[]> {
-    const obs = this.http.get('View/Module/GetSelectableApps')
-      .map(response => response.json().map(this.parseResultObject));
-    obs.subscribe(json => this.appSubject.next(json));
-    return obs;
+  /**
+   * Load all Apps, only needed on first initialization
+   */
+  private loadApps(): void {
+    this.http.get('View/Module/GetSelectableApps')
+      .map(response => response.json().map(this.parseResultObject))
+      .subscribe(json => this.appSubject.next(json));
   }
 
   private parseResultObject(obj): any {

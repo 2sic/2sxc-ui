@@ -1,13 +1,12 @@
-import {debounceTime} from 'rxjs/operator/debounceTime';
-import { Component, OnInit, Input, OnDestroy, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, ElementRef } from '@angular/core';
 import { InstallerService } from 'app/installer/installer.service';
 import { ModuleApiService } from 'app/core/module-api.service';
-import { DomSanitizer, SafeResourceUrl, SafeUrl } from '@angular/platform-browser';
+import { DomSanitizer } from '@angular/platform-browser';
 import { fromEvent } from 'rxjs/observable/fromEvent';
-import { Subscription } from 'rxjs';
+import { Subscription } from 'rxjs/Subscription';
 
 declare const $2sxc: any;
-declare const window: any;
+// declare const window: Window;
 
 @Component({
   selector: 'app-installer',
@@ -28,18 +27,17 @@ export class InstallerComponent implements OnInit {
     private installer: InstallerService,
     private api: ModuleApiService,
     private sanitizer: DomSanitizer,
-    private elRef: ElementRef,
   ) {
-    this.subscriptions.push(this.api.gettingStarted
-      .subscribe(url => {
+    this.subscriptions.push(
+      this.api.gettingStarted$.subscribe(url => {
         this.remoteInstallerUrl = <string>this.sanitizer.bypassSecurityTrustResourceUrl(url);
         this.ready = true;
       }));
+
       // bootController.watchReboot()
-      window.bootController.watchReboot()
+      window.bootController.rebootRequest$
         .debounceTime(1000)
-        .do(() => this.destroy())
-        .subscribe();
+        .subscribe(() => this.destroy());
   }
 
   destroy(): void {
@@ -98,10 +96,10 @@ export class InstallerComponent implements OnInit {
         window.top.location.reload();
       })
 
-      .subscribe(null, e => { // An error occured while installing.
-        this.showProgress = false;
-        alert('An error occurred.');
-        alreadyProcessing = false;
-      }));
+      .subscribe(null, () => {
+          this.showProgress = false;
+          alert('An error occurred.');
+          alreadyProcessing = false;
+        }));
   }
 }
