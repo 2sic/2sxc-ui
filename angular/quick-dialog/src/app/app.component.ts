@@ -1,8 +1,8 @@
 import { TranslateService } from '@ngx-translate/core';
 import { Component, Inject } from '@angular/core';
-import { IDialogFrameElement } from 'app/core/dialog-frame-element';
 import { DialogComponent } from 'app/version-dialog/dialog.component';
 import { MdDialog } from '@angular/material';
+import { IDialogFrameElement } from './interfaces-shared/idialog-frame-element';
 
 declare const window, $2sxc;
 
@@ -26,7 +26,7 @@ export class AppComponent {
     const frame = <IDialogFrameElement>window.frameElement;
     if (this.name === 'item-history') {
       this.dialog.open(DialogComponent).afterClosed()
-        .subscribe(() => frame.toggle(false));
+        .subscribe(() => frame.bridge.toggle(false));
     }
   }
 }
