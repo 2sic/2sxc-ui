@@ -24,6 +24,7 @@ const win = window;
 export class TemplatePickerComponent implements OnInit {
   //#region properties
   apps: App[] = [];
+  apps$: Observable<App[]>;
   app: App;
   savedAppId: number;
   templates: Template[] = [];
@@ -40,7 +41,6 @@ export class TemplatePickerComponent implements OnInit {
   loading = false;
   ready$: Observable<boolean>;
   loadingTemplates = false;
-  // ready = false;
 
   tabIndex = 0;
   updateTemplateSubject: Subject<Template> = new Subject<Template>();
@@ -67,6 +67,9 @@ export class TemplatePickerComponent implements OnInit {
     const info = this.bridge.getManageInfo();
     this.isInnerContent = info.mid !== info.cbid;
     this.ready$ = this.api.ready$;
+    this.apps$ = this.api.apps$;
+
+    // this.apps$.do(() => {log.add('got apps$');}).subscribe();
     this.wireUpOldObservableChangeWatchers();
   }
 
@@ -125,7 +128,6 @@ export class TemplatePickerComponent implements OnInit {
       this.api.apps$
     ]).subscribe(res => {
       this.filterTemplates(this.contentType);
-      // this.ready = true;
       this.showInstaller = this.isContentApp
         ? res[0].length === 0
         : res[2].filter(a => a.appId !== cAppActionImport).length === 0;

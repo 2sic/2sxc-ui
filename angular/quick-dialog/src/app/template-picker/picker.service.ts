@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Rx';
+import { Observable, BehaviorSubject, ReplaySubject } from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
 import { Http } from '@angular/http';
 import { App } from 'app/core/app';
@@ -17,7 +17,7 @@ export class PickerService {
   templates$: Observable<Template[]>;
   ready$ = new Observable<boolean>();
 
-  private appSubject: Subject<App[]> = new Subject<App[]>();
+  private appSubject = new ReplaySubject<App[]>();
   private contentTypeSubject: Subject<ContentType[]> = new Subject<ContentType[]>();
   private templateSubject: Subject<Template[]> = new Subject<Template[]>();
 
