@@ -1,4 +1,5 @@
 import { Subject } from 'rxjs/Subject';
+import { log } from './log';
 
 /**
  * Special reboot controller, to restart the angular app
@@ -17,7 +18,7 @@ export class BootController {
   }
 
   public reboot() {
-    console.log('restarting...');
+    log.add('restarting...');
     this._reboot.next(true);
   }
 }

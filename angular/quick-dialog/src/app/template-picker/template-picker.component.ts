@@ -1,7 +1,6 @@
 import { TranslatePipe } from '@ngx-translate/core';
 import { Component, OnInit, ApplicationRef } from '@angular/core';
 import { IDialogFrameElement } from 'app/interfaces-shared/idialog-frame-element';
-import { ModuleApiService } from 'app/core/module-api.service';
 import { Observable } from 'rxjs/Rx';
 import { TemplateFilterPipe } from 'app/template-picker/template-filter.pipe';
 import { App } from 'app/core/app';
@@ -11,6 +10,8 @@ import { ContentType } from 'app/template-picker/content-type';
 import { IIFrameBridge } from 'app/interfaces-shared/iiframe-bridge';
 import { IQuickDialogConfig } from 'app/interfaces-shared/iquick-dialog-config';
 import { cAppActionImport, cViewWithoutContent } from './constants';
+import { log } from 'app/core/log';
+import { PickerService } from './picker.service';
 
 const win = window;
 
@@ -37,11 +38,12 @@ export class TemplatePickerComponent implements OnInit {
   showAdvanced: boolean;
   showInstaller = false;
   loading = false;
+  ready$: Observable<boolean>;
   loadingTemplates = false;
   ready = false;
+  
   tabIndex = 0;
   updateTemplateSubject: Subject<Template> = new Subject<Template>();
-  // updateAppSubject: Subject<App> = new Subject<App>();
   allowContentTypeChange: boolean;
   isInnerContent = false;
 
@@ -52,7 +54,7 @@ export class TemplatePickerComponent implements OnInit {
   //#endregion
 
   constructor(
-    private api: ModuleApiService,
+    private api: PickerService,
     private templateFilter: TemplateFilterPipe,
     private appRef: ApplicationRef,
     private translate: TranslatePipe
@@ -64,6 +66,7 @@ export class TemplatePickerComponent implements OnInit {
 
     const info = this.bridge.getManageInfo();
     this.isInnerContent = info.mid !== info.cbid;
+    this.ready$ = this.api.ready$;
     this.wireUpOldObservableChangeWatchers();
   }
 
@@ -86,28 +89,6 @@ export class TemplatePickerComponent implements OnInit {
     ).subscribe(() => {
         this.loading = true;
       });
-
-    // this.updateAppSubject
-    //   .subscribe((app) => {
-    //     this.api.setAppId(app.appId.toString())
-    //       .switchMap(() => {
-    //           if (app.supportsAjaxReload) {
-    //             return this.bridge.reloadAndReInit()
-    //               .then(() => this.api.loadTemplates().toPromise())
-    //               .then(() => {
-    //                 this.loadingTemplates = false;
-    //                 this.template = this.templates[0];
-    //                 this.appRef.tick();
-    //                 this.doPostAjaxScrolling();
-    //               });
-    //           } else {
-    //             this.bridge.showMessage('loading App..');
-    //             this.doPostAjaxScrolling();
-    //             this.bridge.persistDia();
-    //             win.parent.location.reload();
-    //           }
-    //         });
-    //   });
 
     this.updateTemplateSubject
       .subscribe((template) => {
@@ -151,27 +132,7 @@ export class TemplatePickerComponent implements OnInit {
     });
   }
 
-  private updateAppAndReloadCorrectly(app: App): void {
-    console.log(`changing app to ${app.appId}`);
-    this.api.setAppId(app.appId.toString())
-      .switchMap(() => {
-        if (app.supportsAjaxReload) {
-          return this.bridge.reloadAndReInit()
-            .then(() => this.api.loadTemplates().toPromise())
-            .then(() => {
-              this.loadingTemplates = false;
-              this.template = this.templates[0];
-              this.appRef.tick();
-              this.doPostAjaxScrolling();
-            });
-        } else {
-          this.bridge.showMessage('loading App..');
-          this.doPostAjaxScrolling();
-          this.bridge.persistDia();
-          win.parent.location.reload();
-        }
-      });
-  }
+
 
 
   private initializeValuesFromBridge(): void {
@@ -266,7 +227,6 @@ export class TemplatePickerComponent implements OnInit {
     this.templates = [];
     this.loadingTemplates = true;
     this.updateAppAndReloadCorrectly(app);
-    // this.updateAppSubject.next(app);
   }
 
   doPostAjaxScrolling() {
@@ -274,4 +234,41 @@ export class TemplatePickerComponent implements OnInit {
     this.bridge.scrollToTarget();
     this.appRef.tick();
   }
+
+    // todo: must verify both previous and new apps support ajax!
+    private updateAppAndReloadCorrectly(app: App): void {
+      const newAppAjax = app.supportsAjaxReload;
+      log.add(`changing app to ${app.appId}; new app-ajax:${newAppAjax}`);
+      this.api.setAppId(app.appId.toString())
+        .subscribe(() => {
+          if (app.supportsAjaxReload) {
+            // 2018-10-17 2dm new
+            this.api.templates$.take(1).do(() => {
+              log.add('reloaded templates, will reset some stuff');
+              this.loadingTemplates = false;
+              this.template = this.templates[0];
+              this.appRef.tick();
+              this.doPostAjaxScrolling();
+            });
+            log.add('calling reloadAndReInit()');
+            /* return */
+            this.bridge.reloadAndReInit()
+              .then(() => this.api.loadTemplates());
+              // 2018-10-17 2dm old
+              // .toPromise())
+              // .then(() => {
+              //   this.loadingTemplates = false;
+              //   this.template = this.templates[0];
+              //   this.appRef.tick();
+              //   this.doPostAjaxScrolling();
+              // });
+          } else {
+            log.add('no ajax, will reload page...');
+            this.bridge.showMessage('loading App...');
+            this.doPostAjaxScrolling();
+            this.bridge.persistDia();
+            win.parent.location.reload();
+          }
+        });
+    }
 }

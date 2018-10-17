@@ -4,18 +4,19 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { AppModule } from './app/app.module';
 import { environment } from './environments/environment';
 import { BootController } from './app/core/boot-control';
+import { log } from 'app/core/log';
 
 if (environment.production) {
   enableProdMode();
 }
 
-console.log('quick-edit loading');
+log.add('loading main.ts');
 
 declare const window;
 const platform = platformBrowserDynamic();
 
 const init = () => {
-  console.log('quick-edit init()');
+  log.add('init()');
 
   try {
     // kill listeners

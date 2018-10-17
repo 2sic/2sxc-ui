@@ -1,9 +1,9 @@
-import { Component, OnInit, Input, ElementRef } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { InstallerService } from 'app/installer/installer.service';
-import { ModuleApiService } from 'app/core/module-api.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { fromEvent } from 'rxjs/observable/fromEvent';
 import { Subscription } from 'rxjs/Subscription';
+import { GettingStartedService } from './getting-started.service';
 
 declare const $2sxc: any;
 // declare const window: Window;
@@ -25,7 +25,7 @@ export class InstallerComponent implements OnInit {
 
   constructor(
     private installer: InstallerService,
-    private api: ModuleApiService,
+    private api: GettingStartedService,
     private sanitizer: DomSanitizer,
   ) {
     this.subscriptions.push(
