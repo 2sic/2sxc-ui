@@ -1,5 +1,5 @@
 <div class="content">
-  <md-progress-bar [ngStyle]="{ opacity: (!ready || !(ready$ | async)) ? 1 : 0 }" [mode]="'indeterminate'"></md-progress-bar>
+  <md-progress-bar [ngStyle]="{ opacity: (ready$ | async) ? 0 : 1 }" [mode]="'indeterminate'"></md-progress-bar>
   <div *ngIf="ready" class="card">
     <div class="top-controls" fxLayout="row" fxLayoutAlign="center center">
       <button md-fab *ngIf="template" (click)="persistTemplate()" [attr.title]="'TemplatePicker.Save' | translate">

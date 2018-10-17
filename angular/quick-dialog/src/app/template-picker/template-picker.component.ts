@@ -40,8 +40,8 @@ export class TemplatePickerComponent implements OnInit {
   loading = false;
   ready$: Observable<boolean>;
   loadingTemplates = false;
-  ready = false;
-  
+  // ready = false;
+
   tabIndex = 0;
   updateTemplateSubject: Subject<Template> = new Subject<Template>();
   allowContentTypeChange: boolean;
@@ -125,7 +125,7 @@ export class TemplatePickerComponent implements OnInit {
       this.api.apps$
     ]).subscribe(res => {
       this.filterTemplates(this.contentType);
-      this.ready = true;
+      // this.ready = true;
       this.showInstaller = this.isContentApp
         ? res[0].length === 0
         : res[2].filter(a => a.appId !== cAppActionImport).length === 0;

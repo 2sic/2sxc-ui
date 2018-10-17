@@ -11,6 +11,7 @@ export class BootController {
   rebootRequest$ = this._reboot.asObservable();
 
   static getRebootController() {
+    log.add('getRebootController()');
     if (!BootController.instance) {
       BootController.instance = new BootController();
     }
