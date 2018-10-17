@@ -10,4 +10,6 @@ export class TemplateFilterPipe implements PipeTransform {
       .filter(t => !t.IsHidden && (!args.isContentApp
         || t.ContentTypeStaticName === (args.contentTypeId === cViewWithoutContent ? '' : (args.contentTypeId || ''))));
   }
+
+
 }

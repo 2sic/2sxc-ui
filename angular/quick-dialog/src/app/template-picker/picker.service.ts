@@ -11,13 +11,13 @@ import { Constants } from 'app/core/constants';
 
 @Injectable()
 export class PickerService {
-  currentApp$: Observable<App>;
+  // currentApp$: Observable<App>;
   apps$: Observable<App[]>;
   contentTypes$: Observable<ContentType[]>;
   templates$: Observable<Template[]>;
   ready$ = new Observable<boolean>();
 
-  private currentAppIdSubject = new ReplaySubject<number>();
+  // private currentAppIdSubject = new ReplaySubject<number>();
   private appsSubject = new ReplaySubject<App[]>();
   private contentTypesSubject = new ReplaySubject<ContentType[]>();
   private templatesSubject = new ReplaySubject<Template[]>();
@@ -31,19 +31,19 @@ export class PickerService {
       .map(() => true)
       .startWith(false);
 
-    this.currentApp$ = Observable
-      .combineLatest(this.apps$, this.currentAppIdSubject,
-        (apps, appId) => apps.find(a => a.appId === appId));
+    // this.currentApp$ = Observable
+    //   .combineLatest(this.apps$, this.currentAppIdSubject,
+    //     (apps, appId) => apps.find(a => a.appId === appId));
       // .filter(app => app !== undefined);
 
     this.ready$.do(r => log.add(`ready:${r}`) ).subscribe();
   }
 
-  activateCurrentApp(appId: number) {
-    this.currentAppIdSubject.next(appId);
-    // this.currentApp$ = this.apps$.map(apps => );
-    // this.app = apps.find(a => a.appId === this.dashInfo.appId);
-  }
+  // activateCurrentApp(appId: number) {
+  //   this.currentAppIdSubject.next(appId);
+  //   // this.currentApp$ = this.apps$.map(apps => );
+  //   // this.app = apps.find(a => a.appId === this.dashInfo.appId);
+  // }
 
   public setAppId(appId: string): Observable<any> {
     const appSet$ = this.http.get(`${Constants.apiRoot}SetAppId?appId=${appId}`);

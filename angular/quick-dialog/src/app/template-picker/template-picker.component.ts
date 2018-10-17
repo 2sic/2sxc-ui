@@ -12,6 +12,7 @@ import { IQuickDialogConfig } from 'app/interfaces-shared/iquick-dialog-config';
 import { cAppActionImport, cViewWithoutContent } from './constants';
 import { log } from 'app/core/log';
 import { PickerService } from './picker.service';
+import { CurrentDataService } from './current-data.service';
 
 const win = window;
 
@@ -26,11 +27,13 @@ export class TemplatePickerComponent implements OnInit {
   dashInfo: IQuickDialogConfig;
   private bridge: IIFrameBridge;
   //#endregion
-  
+
   //#region properties
   apps$: Observable<App[]>;
   currentApp$: Observable<App>;
-  // template$: Observable<Template[]>;
+  template$: Observable<Template[]>;
+
+
   savedAppId: number;
   templates: Template[] = [];
   template: Template;
@@ -42,12 +45,10 @@ export class TemplatePickerComponent implements OnInit {
   showProgress = false;
   showAdvanced: boolean;
   showInstaller = false;
-  // loading = false;
   ready$: Observable<boolean>;
   loadingTemplates = false;
 
   tabIndex = 0;
-  updateTemplateSubject: Subject<Template> = new Subject<Template>();
   allowContentTypeChange: boolean;
   isInnerContent = false;
 
@@ -60,7 +61,8 @@ export class TemplatePickerComponent implements OnInit {
     private api: PickerService,
     private templateFilter: TemplateFilterPipe,
     private appRef: ApplicationRef,
-    private translate: TranslatePipe
+    private translate: TranslatePipe,
+    public current: CurrentDataService
   ) {
     this.bridge = (<IDialogFrameElement>win.frameElement).bridge;
     this.dashInfo = this.bridge.getAdditionalDashboardConfig();
@@ -70,8 +72,8 @@ export class TemplatePickerComponent implements OnInit {
     this.isInnerContent = info.mid !== info.cbid;
     this.ready$ = Observable.combineLatest(this.api.ready$, this.loadingSubject, (r, l) => r && !l);
     this.apps$ = this.api.apps$;
-    this.currentApp$ = this.api.currentApp$;
-    this.api.activateCurrentApp(this.dashInfo.appId);
+    this.currentApp$ = this.current.currentApp$;
+    this.current.activateCurrentApp(this.dashInfo.appId);
 
     // this.api.currentApp$.subscribe(a => log.add(`active app is ${a && a.appId}`));
     this.wireUpOldObservableChangeWatchers();
@@ -82,7 +84,7 @@ export class TemplatePickerComponent implements OnInit {
   }
 
   private wireUpNewObservableChangeWatchers(): void {
-    this.api.currentApp$.subscribe(app => {
+    this.current.currentApp$.subscribe(app => {
       if (app) this.switchTab();
     });
   }
@@ -95,42 +97,18 @@ export class TemplatePickerComponent implements OnInit {
    */
   private wireUpOldObservableChangeWatchers(): void {
 
-    Observable.merge(
-      this.updateTemplateSubject.asObservable(),
-    ).subscribe(() => {
-        // this.loading = true;
-        this.loadingSubject.next(true);
-      });
-
-    this.updateTemplateSubject
-      .subscribe((template) => {
-        this.loadingTemplates = false;
-        this.template = template;
-        this.appRef.tick();
-
-        if (this.supportsAjax) return this.bridge.previewTemplate(template.TemplateId)
-          .then(() => this.doPostAjaxScrolling());
-
-        this.bridge.showMessage(`refreshing <b>${template.Name}</b>...`);
-        this.doPostAjaxScrolling();
-        this.bridge.persistDia();
-        return this.bridge.saveTemplate(this.template.TemplateId)
-          .then(() => win.parent.location.reload());
-      });
-
-
     this.api.templates$
-      .subscribe(templates => this.setTemplates(templates, this.dashInfo.templateId));
+      .subscribe(templates => this.initTemplates(templates, this.dashInfo.templateId));
 
     this.api.contentTypes$
-      .subscribe(contentTypes => this.setContentTypes(contentTypes, this.dashInfo.contentTypeId));
+      .subscribe(contentTypes => this.initContentTypes(contentTypes, this.dashInfo.contentTypeId));
 
     Observable.combineLatest([
       this.api.templates$,
       this.api.contentTypes$,
       this.api.apps$
     ]).subscribe(res => {
-      this.filterTemplates(this.contentType);
+      this.templates = this.findTemplatesForContentType(this.contentType);
       this.showInstaller = this.isContentApp
         ? res[0].length === 0
         : res[2].filter(a => a.appId !== cAppActionImport).length === 0;
@@ -158,23 +136,24 @@ export class TemplatePickerComponent implements OnInit {
 
   persistTemplate() { this.bridge.saveTemplate(this.template.TemplateId); }
 
-  setTemplate(template: Template) { this.updateTemplateSubject.next(template); }
 
-  private filterTemplates(contentType: ContentType) {
-    this.templates = this.templateFilter.transform(this.allTemplates, {
+  private findTemplatesForContentType(contentType: ContentType): Template[] {
+    return this.templateFilter.transform(this.allTemplates, {
       contentTypeId: contentType ? contentType.StaticName : undefined,
       isContentApp: this.isContentApp
     });
   }
 
 
-  private setTemplates(templates: Template[], selectedTemplateId: number) {
-    if (selectedTemplateId) this.template = templates.find(t => t.TemplateId === selectedTemplateId);
+  private initTemplates(templates: Template[], selectedTemplateId: number) {
+    if (selectedTemplateId) {
+      this.template = templates.find(t => t.TemplateId === selectedTemplateId);
+    }
     this.allTemplates = templates;
   }
 
 
-  private setContentTypes(contentTypes: ContentType[], selectedContentTypeId) {
+  private initContentTypes(contentTypes: ContentType[], selectedContentTypeId) {
     if (selectedContentTypeId) {
       this.contentType = contentTypes.find(c => c.StaticName === selectedContentTypeId);
       this.switchTab();
@@ -208,19 +187,14 @@ export class TemplatePickerComponent implements OnInit {
     if (!this.allowContentTypeChange) return false;
     this.contentType = contentType;
     this.switchTab();
-    this.templates = [];
     this.loadingTemplates = true;
+    this.templates = this.findTemplatesForContentType(contentType);
 
-    this.filterTemplates(contentType);
     if (this.templates.length === 0) return false;
-    this.updateTemplateSubject.next(
+    this.setTemplate(
       (keepTemplate ? (this.template || this.templates[0]) : this.templates[0]),
     );
     return true;
-  }
-
-  reloadContentType() {
-    this.updateContentType(this.contentType, true);
   }
 
   switchTab() {
@@ -229,53 +203,76 @@ export class TemplatePickerComponent implements OnInit {
   }
 
   updateApp(app: App) {
-    this.api.activateCurrentApp(app.appId);
+    this.current.activateCurrentApp(app.appId);
     this.templates = [];
     this.loadingTemplates = true;
     this.updateAppAndReloadCorrectly(app);
   }
 
   doPostAjaxScrolling() {
-    // this.loading = false;
     this.loadingSubject.next(false);
     this.bridge.scrollToTarget();
     this.appRef.tick();
   }
 
-    // todo: must verify both previous and new apps support ajax!
-    private updateAppAndReloadCorrectly(newApp: App): void {
-      const newAppAjax = newApp.supportsAjaxReload;
-      log.add(`changing app to ${newApp.appId}; new app-ajax:${newAppAjax}`);
-      this.api.setAppId(newApp.appId.toString())
-        .subscribe(() => {
-          if (newApp.supportsAjaxReload) {
-            // 2018-10-17 2dm new
-            this.api.templates$.take(1).do(() => {
-              log.add('reloaded templates, will reset some stuff');
-              this.loadingTemplates = false;
-              this.template = this.templates[0];
-              this.appRef.tick();
-              this.doPostAjaxScrolling();
-            });
-            log.add('calling reloadAndReInit()');
-            /* return */
-            this.bridge.reloadAndReInit()
-              .then(() => this.api.loadTemplates());
-              // 2018-10-17 2dm old
-              // .toPromise())
-              // .then(() => {
-              //   this.loadingTemplates = false;
-              //   this.template = this.templates[0];
-              //   this.appRef.tick();
-              //   this.doPostAjaxScrolling();
-              // });
-          } else {
-            log.add('no ajax, will reload page...');
-            this.bridge.showMessage('loading App...');
-            this.doPostAjaxScrolling();
-            this.bridge.persistDia();
-            win.parent.location.reload();
-          }
+// todo: must verify both previous and new apps support ajax!
+private updateAppAndReloadCorrectly(newApp: App): void {
+  const newAppAjax = newApp.supportsAjaxReload;
+  log.add(`changing app to ${newApp.appId}; new app-ajax:${newAppAjax}`);
+  this.api.setAppId(newApp.appId.toString())
+    .subscribe(() => {
+      if (newApp.supportsAjaxReload) {
+        // 2018-10-17 2dm new
+        this.api.templates$.take(1).do(() => {
+          log.add('reloaded templates, will reset some stuff');
+          this.loadingTemplates = false;
+          this.template = this.templates[0];
+          this.appRef.tick();
+          this.doPostAjaxScrolling();
         });
+        log.add('calling reloadAndReInit()');
+        /* return */
+        this.bridge.reloadAndReInit()
+          .then(() => this.api.loadTemplates());
+          // 2018-10-17 2dm old
+          // .toPromise())
+          // .then(() => {
+          //   this.loadingTemplates = false;
+          //   this.template = this.templates[0];
+          //   this.appRef.tick();
+          //   this.doPostAjaxScrolling();
+          // });
+      } else {
+        this.setInpageMessageBeforeReload('loading App...');
+        win.parent.location.reload();
+      }
+    });
+  }
+
+
+  setTemplate(template: Template): void {
+    log.add(`set template ${template.TemplateId}, ajax is ${this.supportsAjax}`);
+    this.loadingSubject.next(true);
+    this.loadingTemplates = false;
+    this.template = template;
+    this.appRef.tick();
+
+    if (this.supportsAjax) {
+      this.bridge
+        .previewTemplate(template.TemplateId)
+        .then(() => this.doPostAjaxScrolling());
+    } else {
+      this.setInpageMessageBeforeReload(`refreshing <b>${template.Name}</b>...`);
+      this.bridge
+        .saveTemplate(this.template.TemplateId)
+        .then(() => win.parent.location.reload());
     }
+  }
+
+  private setInpageMessageBeforeReload(msg: string) {
+    log.add('no ajax, will reload page...');
+    this.bridge.showMessage(msg);
+    this.doPostAjaxScrolling();
+    this.bridge.persistDia();
+  }
 }
