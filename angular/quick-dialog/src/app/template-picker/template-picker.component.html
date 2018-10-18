@@ -1,9 +1,9 @@
 <div class="content" *ngFor="let app of [state.app$ | async]">
-
+  <span (click)="tabIndex = 0">testing</span>
   <!-- loading indicator -->
   <md-progress-bar [ngStyle]="{ opacity: (ready$ | async) ? 0 : 1 }" [mode]="'indeterminate'"></md-progress-bar>
 
-  <!-- main dialog -->
+  <!-- main dialog, starting with save/cancel button -->
   <div *ngIf="ready$ | async" class="card">
     <div class="top-controls" fxLayout="row" fxLayoutAlign="center center">
       <button md-fab *ngIf="state.template" (click)="persistTemplate()" [attr.title]="'TemplatePicker.Save' | translate">
@@ -18,7 +18,9 @@
     <md-tab-group [(selectedIndex)]="tabIndex">
       <md-tab>
         <ng-template md-tab-label>
-          {{(isContentApp ? (contentType?.Name || ('TemplatePicker.ContentTypePickerDefault' | translate)) : (app?.name || ('TemplatePicker.AppPickerDefault' | translate)))}}
+          {{(isContentApp 
+            ? (state.contentType?.Name || ('TemplatePicker.ContentTypePickerDefault' | translate)) 
+            : (app?.name || ('TemplatePicker.AppPickerDefault' | translate)))}}
         </ng-template>
 
         <!-- App Selector -->
@@ -66,9 +68,9 @@
         <!-- Content-Type selection (when not a generic app, but the default content-app -->
         <ng-template #contentApp>
           <div class="tiles">
-            <div md-button class="tile" [ngClass]="{ active: contentType?.StaticName === c.StaticName, blocked: !allowContentTypeChange }"
-              [attr.title]="c.Label" (click)="contentType?.StaticName === c.StaticName ? switchTab() : updateContentType(c)"
-              (dblclick)="switchTab()" *ngFor="let c of contentTypes">
+            <div md-button class="tile" [ngClass]="{ active: state.contentType?.StaticName === c.StaticName, blocked: !allowContentTypeChange }"
+              [attr.title]="c.Label | translate" (click)="state.contentType?.StaticName === c.StaticName ? switchTab() : updateContentType(c)"
+              (dblclick)="switchTab()" *ngFor="let c of state.contentTypes">
               <div class="bg">
                 <img *ngIf="c.Thumbnail !== null && c.Thumbnail !== ''" class="bg-img" [attr.src]="c.Thumbnail + '?w=176&h=176'">
                 <div *ngIf="c.Thumbnail === null || c.Thumbnail === ''" class="bg-icon">
@@ -76,15 +78,15 @@
                 </div>
               </div>
               <div class="title" [ngClass]="{ show: c.Thumbnail === null || c.Thumbnail === '' }">
-                <span>{{c.Label}}</span>
+                <span>{{c.Label | translate}}</span>
               </div>
             </div>
           </div>
         </ng-template>
       </md-tab>
 
-
-      <md-tab *ngIf="isContentApp ? contentType : app" [label]="('TemplatePicker.ChangeView' | translate) + '(' + state.templates.length + ')'">
+      <!-- template selection after app/content-type selection -->
+      <md-tab *ngIf="isContentApp ? state.contentType : app" [label]="('TemplatePicker.ChangeView' | translate) + '(' + state.templates.length + ')'">
         <div class="tiles">
           <md-spinner class="templates-spinner" *ngIf="loadingTemplates"></md-spinner>
           <div class="tile" [ngClass]="{ active: state.template?.TemplateId === t.TemplateId }" [attr.title]="t.Name" (click)="setTemplate(t)"

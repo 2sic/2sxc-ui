@@ -30,7 +30,8 @@ import { InstallerModule } from "app/installer/installer.module";
     TranslateModule
   ],
   providers: [
-    TemplateFilterPipe
+    TemplateFilterPipe,
+    // TranslatePipe
   ],
   declarations: [TemplatePickerComponent, TemplateFilterPipe, ContentTypeFilterPipe]
 })
