@@ -8,12 +8,11 @@ import { IQuickDialogConfig } from './iquick-dialog-config';
  * Connection object between inpage and quick-edit dialog for messaging back and forth
  */
 export interface IIFrameBridge {
-  getAdditionalDashboardConfig(): IQuickDialogConfig; // HACK: it was `any` in original
+  getAdditionalDashboardConfig(): IQuickDialogConfig;
   scrollToTarget(): void;
   persistDia(): void;
   toggle(action: boolean): void;
   run(verb: string): void;
-  getManageInfo(): any;
   showMessage(message: string): void;
   reloadAndReInit(): Promise<any>;
   saveTemplate(templateId: number): Promise<any>;

@@ -55,8 +55,7 @@ export class TemplatePickerComponent {
     this.state.init(dashInfo);
     this.allowContentTypeChange = !(dashInfo.hasContent || dashInfo.isList);
 
-    const info = this.bridge.getManageInfo();
-    this.isInnerContent = info.mid !== info.cbid;
+    this.isInnerContent = dashInfo.isInnerContent;
     this.ready$ = Observable.combineLatest(this.api.ready$, this.loadingSubject, (r, l) => r && !l);
     this.apps$ = this.api.apps$;
     this.wireUpOldObservableChangeWatchers();

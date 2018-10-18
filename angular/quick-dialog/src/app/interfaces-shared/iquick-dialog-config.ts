@@ -10,6 +10,7 @@ import { IUserOfEditContext } from './iuser-of-edit-context';
 export interface IQuickDialogConfig {
   appId: number;
   isContent: boolean;
+  isInnerContent: boolean;
   hasContent: boolean;
   isList: boolean;
   templateId: number;
