@@ -4,12 +4,14 @@
   <md-progress-bar [ngStyle]="{ opacity: (ready$ | async) ? 0 : 1 }" [mode]="'indeterminate'"></md-progress-bar>
 
   <!-- main dialog, starting with save/cancel button -->
-  <div *ngIf="ready$ | async" class="card">
+  <div class="card"
+    [ngClass]="{ blocked: !(ready$ | async) }"
+  >
     <div class="top-controls" fxLayout="row" fxLayoutAlign="center center">
       <button md-fab *ngIf="state.template" (click)="persistTemplate()" [attr.title]="'TemplatePicker.Save' | translate">
         <md-icon>check</md-icon>
       </button>
-      <button md-mini-fab class="secondary" *ngIf="undoTemplateId !== null" (click)="cancel()" [attr.title]="('TemplatePicker.' + (isContentApp ? 'Cancel' : 'Close')) | translate">
+      <button md-mini-fab class="secondary" *ngIf="showCancel" (click)="cancel()" [attr.title]="('TemplatePicker.' + (isContentApp ? 'Cancel' : 'Close')) | translate">
         <md-icon>close</md-icon>
       </button>
     </div>
@@ -69,7 +71,7 @@
         <ng-template #contentApp>
           <div class="tiles">
             <div md-button class="tile" [ngClass]="{ active: state.contentType?.StaticName === c.StaticName, blocked: !allowContentTypeChange }"
-              [attr.title]="c.Label | translate" (click)="state.contentType?.StaticName === c.StaticName ? switchTab() : updateContentType(c)"
+              [attr.title]="c.Label | translate" (click)="state.contentType?.StaticName === c.StaticName ? switchTab() : selectContentType(c)"
               (dblclick)="switchTab()" *ngFor="let c of state.contentTypes">
               <div class="bg">
                 <img *ngIf="c.Thumbnail !== null && c.Thumbnail !== ''" class="bg-img" [attr.src]="c.Thumbnail + '?w=176&h=176'">
@@ -89,7 +91,7 @@
       <md-tab *ngIf="isContentApp ? state.contentType : app" [label]="('TemplatePicker.ChangeView' | translate) + '(' + state.templates.length + ')'">
         <div class="tiles">
           <md-spinner class="templates-spinner" *ngIf="loadingTemplates"></md-spinner>
-          <div class="tile" [ngClass]="{ active: state.template?.TemplateId === t.TemplateId }" [attr.title]="t.Name" (click)="setTemplate(t)"
+          <div class="tile" [ngClass]="{ active: state.template?.TemplateId === t.TemplateId }" [attr.title]="t.Name" (click)="selectTemplate(t)"
             *ngFor="let t of state.templates">
             <div class="bg">
               <img *ngIf="t.Thumbnail !== null && t.Thumbnail !== ''" class="bg-img" [attr.src]="t.Thumbnail + '?w=176&h=176'">
@@ -116,7 +118,7 @@
       </md-tab>
     </md-tab-group>
 
-    <span class="no-install-allowed" *ngIf="isInnerContent && showInstaller">No {{isContentApp ? 'Content Apps' : 'Apps'}} installed yet. Please persue the installation by creating a new {{isContentApp ? 'Content' : 'App'}} in the root of your website.</span>
-    <app-installer *ngIf="!isInnerContent && showInstaller" [isContentApp]="isContentApp"></app-installer>
+    <span class="no-install-allowed" *ngIf="isBadContextForInstaller && showInstaller">No {{isContentApp ? 'Content Apps' : 'Apps'}} installed yet. Please persue the installation by creating a new {{isContentApp ? 'Content' : 'App'}} in the root of your website.</span>
+    <app-installer *ngIf="!isBadContextForInstaller && showInstaller" [isContentApp]="isContentApp"></app-installer>
   </div>
 </div>

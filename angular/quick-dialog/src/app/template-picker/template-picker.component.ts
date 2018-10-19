@@ -1,5 +1,6 @@
+//#region imports
 import { TranslatePipe } from '@ngx-translate/core';
-import { Component, OnInit, ApplicationRef } from '@angular/core';
+import { Component, ApplicationRef } from '@angular/core';
 import { IDialogFrameElement } from 'app/interfaces-shared/idialog-frame-element';
 import { Observable, BehaviorSubject } from 'rxjs/Rx';
 import { App } from 'app/core/app';
@@ -12,7 +13,7 @@ import { log } from 'app/core/log';
 import { PickerService } from './picker.service';
 import { CurrentDataService } from './current-data.service';
 
-const win = window;
+//#endregion
 
 @Component({
   selector: 'app-template-picker',
@@ -21,26 +22,36 @@ const win = window;
   providers: [TranslatePipe],
 })
 export class TemplatePickerComponent {
-  private bridge: IIFrameBridge;
-
   //#region properties
+  /** Stream of all apps */
   apps$: Observable<App[]>;
 
   savedAppId: number;
-  undoTemplateId: number;
+  showCancel: boolean;
   undoContentTypeId: string;
   isContentApp: boolean;
   showProgress = false;
   showAdvanced: boolean;
   showInstaller = false;
+
+  /** Stream to indicate ready, for loading-indicator */
   ready$: Observable<boolean>;
   loadingTemplates = false;
 
+  /** Tab-id, when we set it, the tab switches */
   tabIndex = 0;
-  allowContentTypeChange: boolean;
-  isInnerContent = false;
 
+  /** Indicate if the user is allowed to change content-types or not */
+  allowContentTypeChange: boolean;
+
+  /** Indicates whether the installer can be shown in this dialog or not */
+  isBadContextForInstaller = false;
+
+  /** The communication-object to the parent */
+  private bridge: IIFrameBridge;
+  /** internal loading state */
   private loadingSubject = new BehaviorSubject<boolean>(false);
+  /** Ajax-support changes how saving/changing is handled */
   private supportsAjax: boolean;
   //#endregion
 
@@ -50,56 +61,49 @@ export class TemplatePickerComponent {
     public translate: TranslatePipe, // for the UI
     public state: CurrentDataService
   ) {
-    this.bridge = (<IDialogFrameElement>win.frameElement).bridge;
-    const dashInfo = this.bridge.getAdditionalDashboardConfig();
-    this.state.init(dashInfo);
-    this.allowContentTypeChange = !(dashInfo.hasContent || dashInfo.isList);
-
-    this.isInnerContent = dashInfo.isInnerContent;
-    this.ready$ = Observable.combineLatest(this.api.ready$, this.loadingSubject, (r, l) => r && !l);
-    this.apps$ = this.api.apps$;
-    this.wireUpOldObservableChangeWatchers();
-
-    this.initializeValuesFromBridge(dashInfo);
+    // start data-loading
     this.api.loadEverything();
+
+    // get configuration from iframe-bridge and set everything
+    this.bridge = (<IDialogFrameElement>window.frameElement).bridge;
+    const dashInfo = this.bridge.getAdditionalDashboardConfig();
+
+    // init parts, variables, observables
+    this.state.init(dashInfo);
+    this.initObservables();
+    this.initValuesFromBridge(dashInfo);
   }
 
-
   /**
-   * This wires up the old model of observable watchers
-   * It's not a good solution, because it's not clean observables,
-   * but more a "watch changes, then put into static variable"
-   * Todo: try to refactor into clean observables
+   * wire up observables for this component
    */
-  private wireUpOldObservableChangeWatchers(): void {
+  private initObservables(): void {
+    // wire up basic observables
+    this.ready$ = Observable.combineLatest(this.api.ready$, this.loadingSubject, (r, l) => r && !l);
+    this.apps$ = this.api.apps$;
 
-    this.state.contentType$
-      .do(() => this.switchTab())
-      .subscribe();
+    // if the content-type is set, switch tabs
+    this.state.contentType$.subscribe(() => this.switchTab());
 
-    Observable.combineLatest([
-      this.api.templates$,
-      this.api.contentTypes$,
-      this.api.apps$
-    ]).subscribe(res => {
+    // once the data is known, check if installer is needed
+    Observable.combineLatest(this.api.templates$, this.api.contentTypes$, this.api.apps$,
+      (templates, c, apps) => {
       this.showInstaller = this.isContentApp
-        ? res[0].length === 0
-        : res[2].filter(a => a.appId !== cAppActionImport).length === 0;
+        ? templates.length === 0
+        : apps.filter(a => a.appId !== cAppActionImport).length === 0;
     });
   }
 
 
-
-
-  private initializeValuesFromBridge(config: IQuickDialogConfig): void {
+  private initValuesFromBridge(config: IQuickDialogConfig): void {
+    this.allowContentTypeChange = !(config.hasContent || config.isList);
+    this.isBadContextForInstaller = config.isInnerContent;
     this.isContentApp = config.isContent;
     this.supportsAjax = this.isContentApp || config.supportsAjax;
     this.showAdvanced = config.user.canDesign;
-    this.undoTemplateId = config.templateId;
+    this.showCancel = config.templateId != null;
     this.undoContentTypeId = config.contentTypeId;
     this.savedAppId = config.appId;
-    config.templateChooserVisible = true;
-
   }
 
   cancel(): void { this.bridge.cancel(); }
@@ -110,16 +114,16 @@ export class TemplatePickerComponent {
 
 
 
-  updateContentType(contentType: ContentType, keepTemplate: boolean = false): void {
+  selectContentType(contentType: ContentType, keepTemplate: boolean = false): void {
     log.add(`select content-type '${contentType.Name}'; allowed: ${this.allowContentTypeChange}`);
     if (!this.allowContentTypeChange) return;
     this.state.activateContentType(contentType);
     this.loadingTemplates = true;
 
     if (this.state.templates.length === 0) return;
-    this.setTemplate(
-      (keepTemplate ? (this.state.template || this.state.templates[0]) : this.state.templates[0]),
-    );
+    this.selectTemplate(keepTemplate
+      ? (this.state.template || this.state.templates[0])
+      : this.state.templates[0]);
   }
 
   switchTab() {
@@ -134,48 +138,50 @@ export class TemplatePickerComponent {
     this.updateAppAndReloadCorrectly(app);
   }
 
-  doPostAjaxScrolling() {
+  private doPostAjaxScrolling() {
     this.loadingSubject.next(false);
     this.bridge.scrollToTarget();
     this.appRef.tick();
   }
 
-// todo: must verify both previous and new apps support ajax!
-private updateAppAndReloadCorrectly(newApp: App): void {
-  const newAppAjax = newApp.supportsAjaxReload;
-  log.add(`changing app to ${newApp.appId}; new app-ajax:${newAppAjax}`);
-  this.api.setAppId(newApp.appId.toString())
-    .subscribe(() => {
-      if (newApp.supportsAjaxReload) {
-        // 2018-10-17 2dm new
-        this.api.templates$.take(1).do(() => {
-          log.add('reloaded templates, will reset some stuff');
-          this.loadingTemplates = false;
-          this.state.template = this.state.templates[0];
-          this.appRef.tick();
-          this.doPostAjaxScrolling();
-        });
-        log.add('calling reloadAndReInit()');
-        /* return */
-        this.bridge.reloadAndReInit()
-          .then(() => this.api.loadTemplates());
-          // 2018-10-17 2dm old
-          // .toPromise())
-          // .then(() => {
-          //   this.loadingTemplates = false;
-          //   this.template = this.templates[0];
-          //   this.appRef.tick();
-          //   this.doPostAjaxScrolling();
-          // });
-      } else {
-        this.setInpageMessageBeforeReload('loading App...');
-        win.parent.location.reload();
-      }
+
+  private updateAppAndReloadCorrectly(newApp: App): void {
+    // ajax-support can change as apps are changed; for ajax, both the previous and new must support it
+    this.supportsAjax = this.supportsAjax && newApp.supportsAjaxReload;
+    log.add(`changing app to ${newApp.appId}; use-ajax:${this.supportsAjax}`);
+
+    this.api.setAppId(newApp.appId.toString())
+      .subscribe(() => {
+        if (this.supportsAjax) {
+          // 2018-10-17 2dm new
+          this.api.templates$.take(1).do(() => {
+            log.add('reloaded templates, will reset some stuff');
+            this.loadingTemplates = false;
+            this.state.template = this.state.templates[0];
+            this.appRef.tick();
+            this.doPostAjaxScrolling();
+          });
+          log.add('calling reloadAndReInit()');
+          /* return */
+          this.bridge.reloadAndReInit()
+            .then(() => this.api.loadTemplates());
+            // 2018-10-17 2dm old
+            // .toPromise())
+            // .then(() => {
+            //   this.loadingTemplates = false;
+            //   this.template = this.templates[0];
+            //   this.appRef.tick();
+            //   this.doPostAjaxScrolling();
+            // });
+        } else {
+          this.setInpageMessageBeforeReload('loading App...');
+          window.parent.location.reload();
+        }
     });
   }
 
 
-  setTemplate(template: Template): void {
+  selectTemplate(template: Template): void {
     log.add(`set template ${template.TemplateId}, ajax is ${this.supportsAjax}`);
     this.loadingSubject.next(true);
     this.loadingTemplates = false;
@@ -190,7 +196,7 @@ private updateAppAndReloadCorrectly(newApp: App): void {
       this.setInpageMessageBeforeReload(`refreshing <b>${template.Name}</b>...`);
       this.bridge
         .saveTemplate(this.state.template.TemplateId)
-        .then(() => win.parent.location.reload());
+        .then(() => window.parent.location.reload());
     }
   }
 
