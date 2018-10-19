@@ -112,9 +112,17 @@ export class TemplatePickerComponent {
 
   persistTemplate() { this.bridge.saveTemplate(this.state.template.TemplateId); }
 
+  selectApp(before: App, after: App): void {
+    if (before && before.appId === after.appId) this.switchTab();
+    else this.updateApp(after);
+  }
 
+  selectContentType(before: ContentType, after: ContentType): void {
+    if (before && before.StaticName === after.StaticName) this.switchTab();
+    else this.setContentType(after);
+  }
 
-  selectContentType(contentType: ContentType, keepTemplate: boolean = false): void {
+  private setContentType(contentType: ContentType, keepTemplate: boolean = false): void {
     log.add(`select content-type '${contentType.Name}'; allowed: ${this.allowContentTypeChange}`);
     if (!this.allowContentTypeChange) return;
     this.state.activateContentType(contentType);

@@ -1,5 +1,5 @@
 <div class="content" *ngFor="let app of [state.app$ | async]">
-  <span (click)="tabIndex = 0">testing</span>
+  <!-- <span (click)="tabIndex = 0">testing</span> -->
   <!-- loading indicator -->
   <md-progress-bar [ngStyle]="{ opacity: (ready$ | async) ? 0 : 1 }" [mode]="'indeterminate'"></md-progress-bar>
 
@@ -30,7 +30,7 @@
 
           <div class="tile" [ngClass]="{ active: app?.appId === a.appId }" 
             [attr.title]="a.name" 
-            (click)="app?.appId === a.appId ? switchTab() : updateApp(a)"
+            (click)="selectApp(app, a)"
             (dblclick)="switchTab()" *ngFor="let a of apps$ | async">
             <div class="bg">
               <img *ngIf="a.thumbnail !== null && a.thumbnail !== ''" class="bg-img" [attr.src]="a.thumbnail + '?w=176&h=176'">
@@ -70,9 +70,13 @@
         <!-- Content-Type selection (when not a generic app, but the default content-app -->
         <ng-template #contentApp>
           <div class="tiles">
-            <div md-button class="tile" [ngClass]="{ active: state.contentType?.StaticName === c.StaticName, blocked: !allowContentTypeChange }"
-              [attr.title]="c.Label | translate" (click)="state.contentType?.StaticName === c.StaticName ? switchTab() : selectContentType(c)"
-              (dblclick)="switchTab()" *ngFor="let c of state.contentTypes">
+            <div md-button class="tile" 
+              [ngClass]="{ active: state.contentType?.StaticName === c.StaticName, blocked: !allowContentTypeChange }"
+              [attr.title]="c.Label | translate" 
+              (click)="selectContentType(state.contentType, c)"
+              (dblclick)="switchTab()" 
+              *ngFor="let c of state.contentTypes"
+            >
               <div class="bg">
                 <img *ngIf="c.Thumbnail !== null && c.Thumbnail !== ''" class="bg-img" [attr.src]="c.Thumbnail + '?w=176&h=176'">
                 <div *ngIf="c.Thumbnail === null || c.Thumbnail === ''" class="bg-icon">
