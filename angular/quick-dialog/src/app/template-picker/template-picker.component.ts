@@ -89,7 +89,7 @@ export class TemplatePickerComponent {
     this.apps$ = this.api.apps$;
 
     // if the content-type is set, switch tabs
-    this.state.contentType$.subscribe(() => this.switchTab());
+    this.state.type$.subscribe(() => this.switchTab());
 
     // once the data is known, check if installer is needed
     Observable.combineLatest(this.api.templates$, this.api.contentTypes$, this.api.apps$,
@@ -141,16 +141,14 @@ export class TemplatePickerComponent {
   }
   //#endregion
 
-  private setContentType(contentType: ContentType, keepTemplate: boolean = false): void {
+  private setContentType(contentType: ContentType): void {
     log.add(`select content-type '${contentType.Name}'; allowed: ${this.allowContentTypeChange}`);
     if (!this.allowContentTypeChange) return;
     this.state.activateContentType(contentType);
     this.loadingTemplates = true;
 
     if (this.state.templates.length === 0) return;
-    this.setTemplate(keepTemplate
-      ? (this.state.template || this.state.templates[0])
-      : this.state.templates[0]);
+    this.setTemplate(this.state.templates[0]);
   }
 
   switchTab() {
@@ -214,6 +212,10 @@ export class TemplatePickerComponent {
     this.state.template = template;
     this.appRef.tick();
 
+    this.reloadAfterSetTemplate(template);
+  }
+
+  private reloadAfterSetTemplate(template: Template):void {
     if (this.supportsAjax) {
       this.bridge
         .previewTemplate(template.TemplateId)
