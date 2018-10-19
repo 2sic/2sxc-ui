@@ -170,7 +170,7 @@ export class TemplatePickerComponent {
     log.add(`changing app to ${newApp.appId}; use-ajax:${this.supportsAjax}`);
 
     this.state.activateCurrentApp(newApp.appId);
-    this.state.templates = [];
+    // this.state.templates = [];
     this.loadingTemplates = true;
 
     this.api.setAppId(newApp.appId.toString())
@@ -180,7 +180,8 @@ export class TemplatePickerComponent {
           this.api.templates$.take(1).do(() => {
             log.add('reloaded templates, will reset some stuff');
             this.loadingTemplates = false;
-            this.state.template = this.state.templates[0];
+            // 2018-01-19 2dm should now be automatic
+            // this.state.template = this.state.templates[0];
             this.appRef.tick();
             this.doPostAjaxScrolling();
           });
@@ -209,7 +210,8 @@ export class TemplatePickerComponent {
     log.add(`set template ${template.TemplateId}, ajax is ${this.supportsAjax}`);
     this.loadingSubject.next(true);
     this.loadingTemplates = false;
-    this.state.template = template;
+    this.state.activateTemplate(template);
+    // this.state.template = template;
     this.appRef.tick();
 
     this.reloadAfterSetTemplate(template);

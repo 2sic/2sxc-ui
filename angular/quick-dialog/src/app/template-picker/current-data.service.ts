@@ -17,12 +17,14 @@ export class CurrentDataService {
   relevantTypes$: Observable<ContentType[]>;
 
   template: Template;
+  template$: Observable<Template>;
   templates: Template[]; // = [];
   templates$: Observable<Template[]>;
-  private allTemplates: Template[] = [];
+  // private allTemplates: Template[] = [];
 
   private appIdSubject = new ReplaySubject<number>();
   private ctSubject = new ReplaySubject<ContentType>();
+  private templateSubject = new ReplaySubject<Template>();
   type$ = this.ctSubject.asObservable();
 
   private config: IQuickDialogConfig;
@@ -54,6 +56,18 @@ export class CurrentDataService {
     ).startWith(new Array<Template>());
     this.templates$.subscribe(all => this.templates = all); // temp till fixed
 
+    this.template$ = Observable.combineLatest(
+      this.api.templates$,
+      this.templateSubject.asObservable(),
+      (all, selected) => {
+        if (selected) return selected;
+        if (all && all.length) return all[0];
+        return undefined;
+      });
+
+    // temp till we don't need the template any more
+    this.template$.subscribe(t => this.template = t);
+
     // todo: get rid of this - as soon as template$ works
     // Observable.combineLatest(
     //   this.api.templates$,
@@ -65,8 +79,8 @@ export class CurrentDataService {
     // });
 
     // load all templates into the array for further use
-    this.api.templates$
-      .subscribe(templates => this.allTemplates = templates);
+    // this.api.templates$
+    //   .subscribe(templates => this.allTemplates = templates);
   }
 
 
@@ -83,7 +97,7 @@ export class CurrentDataService {
       .take(1)
       .do(templates => {
         if (config.templateId)
-          this.template = templates.find(t => t.TemplateId === config.templateId);
+          this.activateTemplate(templates.find(t => t.TemplateId === config.templateId));
       })
       .subscribe();
 
@@ -96,6 +110,10 @@ export class CurrentDataService {
   activateContentType(contentType: ContentType) {
     this.ctSubject.next(contentType);
     // this.activateTemplatesOfType(contentType);
+  }
+
+  activateTemplate(template: Template) {
+    this.templateSubject.next(template);
   }
 
   // private activateTemplatesOfType(contentType: ContentType) {
