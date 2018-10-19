@@ -26,12 +26,16 @@ export class TemplatePickerComponent {
   /** Stream of all apps */
   apps$: Observable<App[]>;
 
-  savedAppId: number;
-  showCancel: boolean;
-  undoContentTypeId: string;
+  /** is cancelling possible */
+  showCancel = true;
+
+  /** is in the main content-app or a generic app */
   isContentApp: boolean;
-  showProgress = false;
-  showAdvanced: boolean;
+
+  /** show advanced features (admin/host only) */
+  showAdvanced = false;
+
+  /** show the installer */
   showInstaller = false;
 
   /** Stream to indicate ready, for loading-indicator */
@@ -49,8 +53,10 @@ export class TemplatePickerComponent {
 
   /** The communication-object to the parent */
   private bridge: IIFrameBridge;
+
   /** internal loading state */
   private loadingSubject = new BehaviorSubject<boolean>(false);
+
   /** Ajax-support changes how saving/changing is handled */
   private supportsAjax: boolean;
   //#endregion
@@ -102,25 +108,38 @@ export class TemplatePickerComponent {
     this.supportsAjax = this.isContentApp || config.supportsAjax;
     this.showAdvanced = config.user.canDesign;
     this.showCancel = config.templateId != null;
-    this.undoContentTypeId = config.contentTypeId;
-    this.savedAppId = config.appId;
   }
 
+  //#region basic UI action binding
   cancel(): void { this.bridge.cancel(); }
 
   run(action: string): void { this.bridge.run(action); }
 
   persistTemplate() { this.bridge.saveTemplate(this.state.template.TemplateId); }
 
+  /**
+   * app selection from UI
+   */
   selectApp(before: App, after: App): void {
     if (before && before.appId === after.appId) this.switchTab();
     else this.updateApp(after);
   }
 
+  /**
+   * content-type selection from UI
+   */
   selectContentType(before: ContentType, after: ContentType): void {
     if (before && before.StaticName === after.StaticName) this.switchTab();
     else this.setContentType(after);
   }
+
+  /**
+   * activate a template from the UI
+   */
+  selectTemplate(template: Template): void {
+    this.setTemplate(template);
+  }
+  //#endregion
 
   private setContentType(contentType: ContentType, keepTemplate: boolean = false): void {
     log.add(`select content-type '${contentType.Name}'; allowed: ${this.allowContentTypeChange}`);
@@ -129,7 +148,7 @@ export class TemplatePickerComponent {
     this.loadingTemplates = true;
 
     if (this.state.templates.length === 0) return;
-    this.selectTemplate(keepTemplate
+    this.setTemplate(keepTemplate
       ? (this.state.template || this.state.templates[0])
       : this.state.templates[0]);
   }
@@ -139,12 +158,7 @@ export class TemplatePickerComponent {
     this.tabIndex = 1;
   }
 
-  updateApp(app: App) {
-    this.state.activateCurrentApp(app.appId);
-    this.state.templates = [];
-    this.loadingTemplates = true;
-    this.updateAppAndReloadCorrectly(app);
-  }
+
 
   private doPostAjaxScrolling() {
     this.loadingSubject.next(false);
@@ -152,11 +166,14 @@ export class TemplatePickerComponent {
     this.appRef.tick();
   }
 
-
-  private updateAppAndReloadCorrectly(newApp: App): void {
+  private updateApp(newApp: App): void {
     // ajax-support can change as apps are changed; for ajax, both the previous and new must support it
     this.supportsAjax = this.supportsAjax && newApp.supportsAjaxReload;
     log.add(`changing app to ${newApp.appId}; use-ajax:${this.supportsAjax}`);
+
+    this.state.activateCurrentApp(newApp.appId);
+    this.state.templates = [];
+    this.loadingTemplates = true;
 
     this.api.setAppId(newApp.appId.toString())
       .subscribe(() => {
@@ -189,7 +206,8 @@ export class TemplatePickerComponent {
   }
 
 
-  selectTemplate(template: Template): void {
+
+  private setTemplate(template: Template): void {
     log.add(`set template ${template.TemplateId}, ajax is ${this.supportsAjax}`);
     this.loadingSubject.next(true);
     this.loadingTemplates = false;

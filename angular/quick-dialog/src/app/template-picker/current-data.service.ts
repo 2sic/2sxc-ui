@@ -8,39 +8,52 @@ import { Template } from './template';
 import { ContentType } from './content-type';
 import { TemplateFilterPipe } from './template-filter.pipe';
 import { cViewWithoutContent, i18nTemplatePicker } from './constants';
+import { log } from 'app/core/log';
 
 
 @Injectable()
 export class CurrentDataService {
   config: IQuickDialogConfig;
   app$: Observable<App>;
-  contentType$: Observable<ContentType>;
+
+  relevantTypes$: Observable<ContentType[]>;
 
 
   template: Template;
   templates: Template[] = [];
   private allTemplates: Template[] = [];
 
-  contentTypes: ContentType[] = [];
-  contentType: ContentType; // todo: try to remove, and use stream only...
+  // contentTypes: ContentType[] = [];
+  // contentType: ContentType; // todo: try to remove, and use stream only...
 
   private appIdSubject = new ReplaySubject<number>();
   private ctSubject = new ReplaySubject<ContentType>();
+  contentType$ = this.ctSubject.asObservable();
 
   constructor(
     private api: PickerService,
     private templateFilter: TemplateFilterPipe,
-    ) {
-
-    this.app$ = Observable
-      .combineLatest(this.api.apps$, this.appIdSubject,
+  ) {
+    // app-stream should contain selected app
+    this.app$ = Observable.combineLatest(this.api.apps$, this.appIdSubject.asObservable(),
         (apps, appId) => apps.find(a => a.appId === appId));
 
-    this.contentType$ = this.ctSubject.asObservable();
+    // content-type stream should contain current content-type
+    // this.contentType$ = this.ctSubject.asObservable();
+
+    // construct list of relevant types for the UI
+    this.relevantTypes$ = this.api.contentTypes$.combineLatest(
+      this.contentType$,
+      this.api.templates$).do(() => log.add('do')).map(set => {
+        console.log('...');
+        const unhide = unhideSelectedType(set[0], set[1], this.template);
+        return addEmptyTypeIfNeeded(unhide, set[2]);
+      });
+    this.relevantTypes$.subscribe(list => log.add(`got relevant types: ${list.length}`));
 
     // load all templates into the array for further use
     this.api.templates$
-        .subscribe(templates => this.allTemplates = templates);
+      .subscribe(templates => this.allTemplates = templates);
   }
 
 
@@ -48,10 +61,13 @@ export class CurrentDataService {
     this.config = config;
     this.activateCurrentApp(config.appId);
 
+    // automatically set the current type once the types are loaded
     this.api.contentTypes$
-      .subscribe(contentTypes => this.initContentTypes(contentTypes, config.contentTypeId));
+      .subscribe(contentTypes => this.initSelectedContentTypes(contentTypes, config.contentTypeId));
 
-    this.contentType$.do(ct => this.contentType = ct).subscribe();
+    // todo: change all users to use the observable instead
+    // update the provided contentType on every change
+    // this.contentType$.do(ct => this.contentType = ct).subscribe();
 
     // start with the current template, if it was selected
     this.api.templates$
@@ -62,16 +78,14 @@ export class CurrentDataService {
       })
       .subscribe();
 
-      Observable.combineLatest([
-        this.api.templates$,
-        this.api.contentTypes$,
-        this.api.apps$
-      ]).subscribe(res => {
-        this.activateContentType(this.contentType);
-        // this.showInstaller = this.isContentApp
-        //   ? res[0].length === 0
-        //   : res[2].filter(a => a.appId !== cAppActionImport).length === 0;
-      });
+    Observable.combineLatest(
+      this.api.templates$,
+      this.api.contentTypes$,
+      this.api.apps$,
+      this.contentType$,
+    ).subscribe(res => {
+      this.acivateCurrentTemplates(res[3]);
+    });
   }
 
   activateCurrentApp(appId: number) {
@@ -79,8 +93,11 @@ export class CurrentDataService {
   }
 
   activateContentType(contentType: ContentType) {
-    // this.contentType = contentType;
     this.ctSubject.next(contentType);
+    this.acivateCurrentTemplates(contentType);
+  }
+
+  acivateCurrentTemplates(contentType: ContentType) {
     this.templates = this.findTemplatesForContentType(contentType);
   }
 
@@ -91,36 +108,55 @@ export class CurrentDataService {
     });
   }
 
-  private initContentTypes(contentTypes: ContentType[], selectedContentTypeId: string) {
-    let ct: ContentType;
+  private initSelectedContentTypes(contentTypes: ContentType[], selectedContentTypeId: string): void {
+    log.add(`initSelectedContentTypes(..., ${selectedContentTypeId}`);
     if (selectedContentTypeId) {
-      ct = contentTypes.find(c => c.StaticName === selectedContentTypeId);
-      if (ct)
+      const ct = contentTypes.find(c => c.StaticName === selectedContentTypeId);
+      // if (ct)
         this.ctSubject.next(ct);
-    }
-    contentTypes
-      .filter(c => (this.template && c.TemplateId === this.template.TemplateId)
-        || (ct && c.StaticName === ct.StaticName))
-      .forEach(c => c.IsHidden = false);
-
-    // option for no content types
-    // const name = 'TemplatePicker.LayoutElement';
-    if (this.allTemplates.find(t => t.ContentTypeStaticName === '')) {
-      contentTypes.push({
-        StaticName: cViewWithoutContent,
-        Name: i18nTemplatePicker,
-        Thumbnail: null,
-        Label: i18nTemplatePicker, // todo this.translate.transform(name),
-        IsHidden: false,
-      } as ContentType);
+    } else {
+      this.ctSubject.next(undefined);
     }
 
-    this.contentTypes = contentTypes
-      .sort((a, b) => {
-        if (a.Name > b.Name) return 1;
-        if (a.Name < b.Name) return -1;
-        return 0;
-      });
   }
 
+
+
+
+
+}
+
+function addEmptyTypeIfNeeded(contentTypes: ContentType[], templates: Template[]): ContentType[] {
+  // add option for empty content type
+  if (templates && templates.find(t => t.ContentTypeStaticName === '')) {
+    contentTypes = contentTypes.slice(); // copy it first to not change original
+    contentTypes.push({
+      StaticName: cViewWithoutContent,
+      Name: i18nTemplatePicker,
+      Thumbnail: null,
+      Label: i18nTemplatePicker,
+      IsHidden: false,
+    } as ContentType);
+    return contentTypes;
+  }
+
+  return sortTypes(contentTypes);
+}
+
+/**
+ * Ensure current content-type is visible, just in case it's configured as hidden
+ */
+function unhideSelectedType(contentTypes: ContentType[], currentType: ContentType, currentTemplate: Template): ContentType[] {
+  
+  contentTypes
+    .filter(c => (currentTemplate && currentTemplate.TemplateId === c.TemplateId)
+      || (currentType && c.StaticName === currentType.StaticName))
+    .forEach(c => c.IsHidden = false);
+  return contentTypes;
+}
+
+
+function sortTypes(contentTypes: ContentType[]): ContentType[] {
+  // https://stackoverflow.com/questions/51165/how-to-sort-strings-in-javascript
+  return contentTypes.sort((a, b) => ('' + a.Name).localeCompare(b.Name));
 }

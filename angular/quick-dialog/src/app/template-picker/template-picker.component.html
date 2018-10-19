@@ -1,3 +1,5 @@
+<ng-container *ngFor="let contentType of [state.contentType$ | async]">
+
 <div class="content" *ngFor="let app of [state.app$ | async]">
   <!-- <span (click)="tabIndex = 0">testing</span> -->
   <!-- loading indicator -->
@@ -21,7 +23,7 @@
       <md-tab>
         <ng-template md-tab-label>
           {{(isContentApp 
-            ? (state.contentType?.Name || ('TemplatePicker.ContentTypePickerDefault' | translate)) 
+            ? (contentType?.Name || ('TemplatePicker.ContentTypePickerDefault' | translate)) 
             : (app?.name || ('TemplatePicker.AppPickerDefault' | translate)))}}
         </ng-template>
 
@@ -71,11 +73,11 @@
         <ng-template #contentApp>
           <div class="tiles">
             <div md-button class="tile" 
-              [ngClass]="{ active: state.contentType?.StaticName === c.StaticName, blocked: !allowContentTypeChange }"
+              [ngClass]="{ active: contentType?.StaticName === c.StaticName, blocked: !allowContentTypeChange }"
               [attr.title]="c.Label | translate" 
-              (click)="selectContentType(state.contentType, c)"
+              (click)="selectContentType(contentType, c)"
               (dblclick)="switchTab()" 
-              *ngFor="let c of state.contentTypes"
+              *ngFor="let c of state.relevantTypes$ | async"
             >
               <div class="bg">
                 <img *ngIf="c.Thumbnail !== null && c.Thumbnail !== ''" class="bg-img" [attr.src]="c.Thumbnail + '?w=176&h=176'">
@@ -92,7 +94,7 @@
       </md-tab>
 
       <!-- template selection after app/content-type selection -->
-      <md-tab *ngIf="isContentApp ? state.contentType : app" [label]="('TemplatePicker.ChangeView' | translate) + '(' + state.templates.length + ')'">
+      <md-tab *ngIf="isContentApp ? contentType : app" [label]="('TemplatePicker.ChangeView' | translate) + '(' + state.templates.length + ')'">
         <div class="tiles">
           <md-spinner class="templates-spinner" *ngIf="loadingTemplates"></md-spinner>
           <div class="tile" [ngClass]="{ active: state.template?.TemplateId === t.TemplateId }" [attr.title]="t.Name" (click)="selectTemplate(t)"
@@ -126,3 +128,4 @@
     <app-installer *ngIf="!isBadContextForInstaller && showInstaller" [isContentApp]="isContentApp"></app-installer>
   </div>
 </div>
+</ng-container>
