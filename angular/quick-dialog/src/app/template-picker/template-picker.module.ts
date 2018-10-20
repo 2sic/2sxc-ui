@@ -11,6 +11,7 @@ import { ContentTypeFilterPipe } from './content-type-filter.pipe';
 import { FlexLayoutModule } from "@angular/flex-layout";
 import { $2sxcService } from "app/core/$2sxc.service";
 import { InstallerModule } from "app/installer/installer.module";
+import { DebugPipe } from './debug.pipe';
 
 @NgModule({
   exports: [
@@ -33,6 +34,6 @@ import { InstallerModule } from "app/installer/installer.module";
     TemplateFilterPipe,
     // TranslatePipe
   ],
-  declarations: [TemplatePickerComponent, TemplateFilterPipe, ContentTypeFilterPipe]
+  declarations: [TemplatePickerComponent, TemplateFilterPipe, ContentTypeFilterPipe, DebugPipe]
 })
 export class TemplatePickerModule { }
