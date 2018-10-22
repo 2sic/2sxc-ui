@@ -101,7 +101,7 @@
       <!-- template selection after app/content-type selection -->
       <md-tab *ngIf="isContentApp ? contentType : app" [label]="('TemplatePicker.ChangeView' | translate) + '(' + templates.length + ')'">
         <div class="tiles">
-          <md-spinner class="templates-spinner" *ngIf="loadingTemplates"></md-spinner>
+          <md-spinner class="templates-spinner" *ngIf="templatesLoading$ | async"></md-spinner>
           <div class="tile" [ngClass]="{ active: template?.TemplateId === t.TemplateId }" [attr.title]="t.Name" (click)="selectTemplate(t)"
             *ngFor="let t of templates">
             <div class="bg">

@@ -7,9 +7,10 @@ import { IQuickDialogConfig } from 'app/interfaces-shared/iquick-dialog-config';
 import { Template } from './template';
 import { ContentType } from './content-type';
 import { TemplateFilterPipe } from './template-filter.pipe';
-import { log } from 'app/core/log';
+import { log as parentLog } from 'app/core/log';
 import { TemplateData } from './data/template-data';
 
+const log = parentLog.subLog('state');
 
 @Injectable()
 export class CurrentDataService {
@@ -61,17 +62,24 @@ export class CurrentDataService {
     this.templates$ = Observable.combineLatest(
       this.api.templates$,
       this.type$,
-      (all, current) => this.findTemplatesForContentType(all, current)
+      (all, current) => this.findTemplatesForTypeOrAll(all, current)
     ).startWith(new Array<Template>());
 
     this.templates$.subscribe(all => this.templates = all); // temp till fixed
 
     this.template$ = Observable.combineLatest(
-      this.api.templates$,
       this.templateSubject.asObservable(),
-      (all, selected) => {
+      this.templates$,
+      this.type$,
+      this.app$,
+      (selected, templates, type, app) => {
+        // if one is selected, return that
         if (selected) return selected;
-        if (all && all.length) return all[0];
+
+        // if none is selected, return the first; assuming a type or app has been selected
+        if ((type || app) && templates && templates.length) return templates[0];
+
+        // nothing valid, get null
         return null;
       })
       .startWith(null);
@@ -94,8 +102,10 @@ export class CurrentDataService {
     // start with the current template, if it was selected (looks for template w/ID)
     this.api.templates$.take(1)
       .do(templates => {
-        if (config.templateId)
+        if (config.templateId) {
+          console.log(`starting with templateId = ${config.templateId}`);
           this.activateTemplate(templates.find(t => t.TemplateId === config.templateId));
+        }
         // hacky - find better solution in the future
         this.initDoneSubject.next(true);
       }).subscribe();
@@ -126,7 +136,7 @@ export class CurrentDataService {
   activateTemplate(template: Template) { this.templateSubject.next(template); }
   //#endregion
 
-  private findTemplatesForContentType(allTemplates: Template[], contentType: ContentType): Template[] {
+  private findTemplatesForTypeOrAll(allTemplates: Template[], contentType: ContentType): Template[] {
     return this.templateFilter.transform(allTemplates, {
       typeId: contentType ? contentType.StaticName : undefined,
       isContent: this.config.isContent

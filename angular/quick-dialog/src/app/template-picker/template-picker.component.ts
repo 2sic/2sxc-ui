@@ -9,11 +9,13 @@ import { ContentType } from 'app/template-picker/content-type';
 import { IIFrameBridge } from 'app/interfaces-shared/iiframe-bridge';
 import { IQuickDialogConfig } from 'app/interfaces-shared/iquick-dialog-config';
 import { cAppActionImport } from './constants';
-import { log } from 'app/core/log';
+import { log as parentLog } from 'app/core/log';
 import { PickerService } from './picker.service';
 import { CurrentDataService } from './current-data.service';
 
 //#endregion
+
+const log = parentLog.subLog('picker');
 
 @Component({
   selector: 'app-template-picker',
@@ -40,7 +42,7 @@ export class TemplatePickerComponent {
 
   /** Stream to indicate ready, for loading-indicator */
   ready$: Observable<boolean>;
-  loadingTemplates = false;
+  templatesLoading$: Observable<boolean>;
 
   /** Tab-id, when we set it, the tab switches */
   tabIndex = 0;
@@ -78,6 +80,8 @@ export class TemplatePickerComponent {
     this.state.init(dashInfo);
     this.initObservables();
     this.initValuesFromBridge(dashInfo);
+
+    this.templatesLoading$.subscribe(t => log.add(`templates loading: ${t}`));
   }
 
   /**
@@ -99,22 +103,22 @@ export class TemplatePickerComponent {
         : apps.filter(a => a.appId !== cAppActionImport).length === 0;
     }).subscribe();
 
+    // template loading is true, when the template-list or selected template are not ready
+    this.templatesLoading$ = Observable.combineLatest(
+      this.state.templates$,
+      this.state.template$,
+      (all, selected) => !(all && selected))
+      .startWith(false);
+
     // whenever the template changes, ensure the preview reloads
     // but don't do this when initializing, that's why we listen to initDone$
     const validTemplate$ = this.state.template$
-      // .do(t => log.add('valT: got another'))
       .distinctUntilChanged()
-      // .do(t => log.add('valT: changed'))
-      .filter(t => t !== null && t !== undefined)
-      // .do(t => log.add('valT: is usable, not null/empty'));
-
+      .filter(t => t !== null && t !== undefined);
     Observable.combineLatest(
       validTemplate$,
       this.state.initDone$,
-      (selected) => {
-        log.add('valT: template changed, will select', selected);
-        this.setTemplate(selected); /* todo do template refresh ! */
-      }
+      (selected) => this.setTemplate(selected)
     ).subscribe();
   }
 
@@ -166,12 +170,6 @@ export class TemplatePickerComponent {
     log.add(`select content-type '${contentType.Name}'; allowed: ${this.allowContentTypeChange}`);
     if (!this.allowContentTypeChange) return;
     this.state.activateType(contentType);
-    this.loadingTemplates = true;
-
-    // this.setTemplate();
-    // modified
-    // if (this.state.templates.length === 0) return;
-    // this.setTemplate(this.state.templates[0]);
   }
 
   switchTab() {
@@ -194,7 +192,6 @@ export class TemplatePickerComponent {
 
     this.state.activateCurrentApp(newApp.appId);
     // this.state.templates = [];
-    this.loadingTemplates = true;
 
     this.api.setAppId(newApp.appId.toString())
       .subscribe(() => {
@@ -202,7 +199,6 @@ export class TemplatePickerComponent {
           // 2018-10-17 2dm new
           this.api.templates$.take(1).do(() => {
             log.add('reloaded templates, will reset some stuff');
-            this.loadingTemplates = false;
             // 2018-01-19 2dm should now be automatic
             // this.state.template = this.state.templates[0];
             this.appRef.tick();
@@ -232,7 +228,6 @@ export class TemplatePickerComponent {
   private setTemplate(template: Template): void {
     log.add(`set template ${template.TemplateId}, ajax is ${this.supportsAjax}`);
     this.loadingSubject.next(true);
-    this.loadingTemplates = false;
     // this.state.activateTemplate(template);
     // this.state.template = template;
     this.appRef.tick();
