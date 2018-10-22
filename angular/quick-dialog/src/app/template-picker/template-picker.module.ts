@@ -6,12 +6,12 @@ import { CommonModule } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TemplatePickerComponent } from './template-picker.component';
 import { TemplateFilterPipe } from './template-filter.pipe';
-import { CoreModule } from "app/core/core.module";
+import { CoreModule } from 'app/core/core.module';
 import { ContentTypeFilterPipe } from './content-type-filter.pipe';
-import { FlexLayoutModule } from "@angular/flex-layout";
-import { $2sxcService } from "app/core/$2sxc.service";
-import { InstallerModule } from "app/installer/installer.module";
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { InstallerModule } from 'app/installer/installer.module';
 import { DebugPipe } from './debug.pipe';
+import { ContentTypeSortPipe } from './data/content-type-sort.pipe';
 
 @NgModule({
   exports: [
@@ -32,8 +32,13 @@ import { DebugPipe } from './debug.pipe';
   ],
   providers: [
     TemplateFilterPipe,
-    // TranslatePipe
   ],
-  declarations: [TemplatePickerComponent, TemplateFilterPipe, ContentTypeFilterPipe, DebugPipe]
+  declarations: [
+    TemplatePickerComponent,
+    TemplateFilterPipe,
+    ContentTypeFilterPipe,
+    DebugPipe,
+    // ContentTypeSortPipe
+  ]
 })
 export class TemplatePickerModule { }

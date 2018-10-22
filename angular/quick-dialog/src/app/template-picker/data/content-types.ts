@@ -2,7 +2,13 @@ import { ContentType } from '../content-type';
 import { cViewWithoutContent, i18nTemplatePicker } from '../constants';
 import { Template } from '../template';
 
-export class TemplateData {
+export class ContentTypes {
+
+  static getRelevantTypesAndSort(allTypes, type, allTemplates, template): ContentType[] {
+    let unhide = ContentTypes.unhideSelectedType(allTypes, type, template);
+    unhide = ContentTypes.addEmptyTypeIfNeeded(unhide, allTemplates);
+    return ContentTypes.sortTypes(unhide);
+  }
 
   static addEmptyTypeIfNeeded(contentTypes: ContentType[], templates: Template[]): ContentType[] {
     // add option for empty content type

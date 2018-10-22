@@ -66,7 +66,6 @@ export class TemplatePickerComponent {
   constructor(
     private api: PickerService,
     private appRef: ApplicationRef,
-    public translate: TranslatePipe, // for the UI
     public state: CurrentDataService
   ) {
     // start data-loading
@@ -138,7 +137,6 @@ export class TemplatePickerComponent {
 
   run(action: string): void { this.bridge.run(action); }
 
-  // persistTemplate() { this.bridge.saveTemplate(this.state.template.TemplateId); }
   persistTemplate(template: Template) { this.bridge.saveTemplate(template.TemplateId); }
 
   /**
@@ -162,7 +160,6 @@ export class TemplatePickerComponent {
    */
   selectTemplate(template: Template): void {
     this.state.activateTemplate(template);
-    // this.setTemplate(template);
   }
   //#endregion
 
@@ -228,8 +225,6 @@ export class TemplatePickerComponent {
   private setTemplate(template: Template): void {
     log.add(`set template ${template.TemplateId}, ajax is ${this.supportsAjax}`);
     this.loadingSubject.next(true);
-    // this.state.activateTemplate(template);
-    // this.state.template = template;
     this.appRef.tick();
 
     this.reloadAfterSetTemplate(template);
@@ -243,7 +238,6 @@ export class TemplatePickerComponent {
     } else {
       this.setInpageMessageBeforeReload(`refreshing <b>${template.Name}</b>...`);
       this.bridge
-        // .saveTemplate(this.state.template.TemplateId)
         .saveTemplate(template.TemplateId)
         .then(() => window.parent.location.reload());
     }

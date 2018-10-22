@@ -8,7 +8,7 @@ import { Template } from './template';
 import { ContentType } from './content-type';
 import { TemplateFilterPipe } from './template-filter.pipe';
 import { log as parentLog } from 'app/core/log';
-import { TemplateData } from './data/template-data';
+import { ContentTypes } from './data/content-types';
 
 const log = parentLog.subLog('state');
 
@@ -73,14 +73,22 @@ export class CurrentDataService {
       this.type$,
       this.api.templates$,
       this.template$,
-      (allTypes, type, allTemplates, template) => {
-        let unhide = TemplateData.unhideSelectedType(allTypes, type, template);
-        unhide = TemplateData.addEmptyTypeIfNeeded(unhide, allTemplates);
-        return TemplateData.sortTypes(unhide);
-      });
+      ContentTypes.getRelevantTypesAndSort
+      // (allTypes, type, allTemplates, template) => {
+      //   let unhide = TemplateData.unhideSelectedType(allTypes, type, template);
+      //   unhide = TemplateData.addEmptyTypeIfNeeded(unhide, allTemplates);
+      //   return TemplateData.sortTypes(unhide);
+      // }
+      );
 
     this.initObservableLogging();
   }
+
+  // private getRelevantTypesAndSort(allTypes, type, allTemplates, template): ContentType[] {
+  //   let unhide = ContentTypes.unhideSelectedType(allTypes, type, template);
+  //   unhide = ContentTypes.addEmptyTypeIfNeeded(unhide, allTemplates);
+  //   return ContentTypes.sortTypes(unhide);
+  // }
 
 
   init(config: IQuickDialogConfig) {
