@@ -20,14 +20,10 @@ export class CurrentDataService {
   private initDoneSubject = new BehaviorSubject<boolean>(false);
   initDone$ = this.initDoneSubject.filter(i => i); // don't fire till ready
 
-  template: Template;
-
   /** Stream containing the currently selected template or null if not selected */
   template$: Observable<Template>;
 
-  templates: Template[]; // = [];
   templates$: Observable<Template[]>;
-  // private allTemplates: Template[] = [];
 
   private appIdSubject = new ReplaySubject<number>();
   private ctSubject = new ReplaySubject<ContentType>();
@@ -47,25 +43,12 @@ export class CurrentDataService {
       (apps, appId) => apps.find(a => a.appId === appId)
     );
 
-    // construct list of relevant types for the UI
-    this.relevantTypes$ = Observable.combineLatest(
-      this.api.contentTypes$,
-      this.type$,
-      this.api.templates$,
-      (types, type, templates) => {
-        let unhide = TemplateData.unhideSelectedType(types, type, this.template);
-        unhide = TemplateData.addEmptyTypeIfNeeded(unhide, templates);
-        return TemplateData.sortTypes(unhide);
-      });
-
     // the templates-list is always filtered by the currently selected type
     this.templates$ = Observable.combineLatest(
       this.api.templates$,
       this.type$,
       (all, current) => this.findTemplatesForTypeOrAll(all, current)
     ).startWith(new Array<Template>());
-
-    this.templates$.subscribe(all => this.templates = all); // temp till fixed
 
     this.template$ = Observable.combineLatest(
       this.templateSubject.asObservable(),
@@ -79,13 +62,22 @@ export class CurrentDataService {
         // if none is selected, return the first; assuming a type or app has been selected
         if ((type || app) && templates && templates.length) return templates[0];
 
-        // nothing valid, get null
+        // nothing valid, get
         return null;
       })
       .startWith(null);
 
-    // temp till we don't need the template any more
-    this.template$.subscribe(t => this.template = t);
+    // construct list of relevant types for the UI
+    this.relevantTypes$ = Observable.combineLatest(
+      this.api.contentTypes$,
+      this.type$,
+      this.api.templates$,
+      this.template$,
+      (allTypes, type, allTemplates, template) => {
+        let unhide = TemplateData.unhideSelectedType(allTypes, type, template);
+        unhide = TemplateData.addEmptyTypeIfNeeded(unhide, allTemplates);
+        return TemplateData.sortTypes(unhide);
+      });
 
     this.initObservableLogging();
   }
