@@ -21,7 +21,7 @@ const log = parentLog.subLog('picker');
   selector: 'app-template-picker',
   templateUrl: './template-picker.component.html',
   styleUrls: ['./template-picker.component.scss'],
-  providers: [TranslatePipe],
+  // providers: [TranslatePipe],
 })
 export class TemplatePickerComponent {
   //#region properties

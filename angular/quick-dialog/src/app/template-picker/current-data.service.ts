@@ -8,7 +8,7 @@ import { Template } from './template';
 import { ContentType } from './content-type';
 import { TemplateFilterPipe } from './template-filter.pipe';
 import { log as parentLog } from 'app/core/log';
-import { ContentTypes } from './data/content-types';
+import { ContentTypesProcessor } from './data/content-types-processor.service';
 
 const log = parentLog.subLog('state');
 
@@ -35,6 +35,7 @@ export class CurrentDataService {
   constructor(
     private api: PickerService,
     private templateFilter: TemplateFilterPipe,
+    private ctProcessor: ContentTypesProcessor
   ) {
     // app-stream should contain selected app
     this.app$ = Observable.combineLatest(
@@ -73,23 +74,10 @@ export class CurrentDataService {
       this.type$,
       this.api.templates$,
       this.template$,
-      ContentTypes.getRelevantTypesAndSort
-      // (allTypes, type, allTemplates, template) => {
-      //   let unhide = TemplateData.unhideSelectedType(allTypes, type, template);
-      //   unhide = TemplateData.addEmptyTypeIfNeeded(unhide, allTemplates);
-      //   return TemplateData.sortTypes(unhide);
-      // }
-      );
+      this.ctProcessor.getRelevantTypesAndSort);
 
     this.initObservableLogging();
   }
-
-  // private getRelevantTypesAndSort(allTypes, type, allTemplates, template): ContentType[] {
-  //   let unhide = ContentTypes.unhideSelectedType(allTypes, type, template);
-  //   unhide = ContentTypes.addEmptyTypeIfNeeded(unhide, allTemplates);
-  //   return ContentTypes.sortTypes(unhide);
-  // }
-
 
   init(config: IQuickDialogConfig) {
     this.config = config;

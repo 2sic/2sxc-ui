@@ -1,4 +1,4 @@
-import { TranslatePipe, TranslateModule } from '@ngx-translate/core';
+import { TranslateModule } from '@ngx-translate/core';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MdMenuModule, MdTabsModule, MdProgressBarModule, MaterialModule } from '@angular/material';
@@ -11,7 +11,9 @@ import { ContentTypeFilterPipe } from './content-type-filter.pipe';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { InstallerModule } from 'app/installer/installer.module';
 import { DebugPipe } from './debug.pipe';
-import { ContentTypeSortPipe } from './data/content-type-sort.pipe';
+// import { ContentTypeSortPipe } from './data/attribute-sort.pipe';
+// import { AttributeTranslate } from './data/attribute-translate.pipe';
+import { ContentTypesProcessor } from './data/content-types-processor.service';
 
 @NgModule({
   exports: [
@@ -32,13 +34,15 @@ import { ContentTypeSortPipe } from './data/content-type-sort.pipe';
   ],
   providers: [
     TemplateFilterPipe,
+    ContentTypesProcessor
   ],
   declarations: [
     TemplatePickerComponent,
     TemplateFilterPipe,
     ContentTypeFilterPipe,
     DebugPipe,
-    // ContentTypeSortPipe
+    // ContentTypeSortPipe,
+    // AttributeTranslate
   ]
 })
 export class TemplatePickerModule { }
