@@ -1,4 +1,9 @@
+
 <ng-container *ngFor="let contentType of [state.type$ | async]">
+<ng-container *ngFor="let template of [state.template$ | async]">
+<ng-container *ngFor="let templates of [state.templates$ | async]">
+<ng-container>
+
 
 <div class="content" *ngFor="let app of [state.app$ | async]">
   <!-- <span (click)="tabIndex = 0">testing</span> -->
@@ -10,7 +15,7 @@
     [ngClass]="{ blocked: !(ready$ | async) }"
   >
     <div class="top-controls" fxLayout="row" fxLayoutAlign="center center">
-      <button md-fab *ngIf="state.template" (click)="persistTemplate()" [attr.title]="'TemplatePicker.Save' | translate">
+      <button md-fab *ngIf="template" (click)="persistTemplate(template)" [attr.title]="'TemplatePicker.Save' | translate">
         <md-icon>check</md-icon>
       </button>
       <button md-mini-fab class="secondary" *ngIf="showCancel" (click)="cancel()" [attr.title]="('TemplatePicker.' + (isContentApp ? 'Cancel' : 'Close')) | translate">
@@ -94,11 +99,11 @@
       </md-tab>
 
       <!-- template selection after app/content-type selection -->
-      <md-tab *ngIf="isContentApp ? contentType : app" [label]="('TemplatePicker.ChangeView' | translate) + '(' + state.templates.length + ')'">
+      <md-tab *ngIf="isContentApp ? contentType : app" [label]="('TemplatePicker.ChangeView' | translate) + '(' + templates.length + ')'">
         <div class="tiles">
           <md-spinner class="templates-spinner" *ngIf="loadingTemplates"></md-spinner>
-          <div class="tile" [ngClass]="{ active: state.template?.TemplateId === t.TemplateId }" [attr.title]="t.Name" (click)="selectTemplate(t)"
-            *ngFor="let t of state.templates">
+          <div class="tile" [ngClass]="{ active: template?.TemplateId === t.TemplateId }" [attr.title]="t.Name" (click)="selectTemplate(t)"
+            *ngFor="let t of templates">
             <div class="bg">
               <img *ngIf="t.Thumbnail !== null && t.Thumbnail !== ''" class="bg-img" [attr.src]="t.Thumbnail + '?w=176&h=176'">
               <div *ngIf="t.Thumbnail === null || t.Thumbnail === ''" class="bg-icon">
@@ -128,4 +133,7 @@
     <app-installer *ngIf="!isBadContextForInstaller && showInstaller" [isContentApp]="isContentApp"></app-installer>
   </div>
 </div>
+</ng-container>
+</ng-container>
+</ng-container>
 </ng-container>

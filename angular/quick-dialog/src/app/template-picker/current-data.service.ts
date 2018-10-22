@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, ReplaySubject } from 'rxjs/Rx';
+import { Observable, ReplaySubject, BehaviorSubject } from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
 import { App } from 'app/core/app';
 import { PickerService } from './picker.service';
@@ -16,8 +16,14 @@ export class CurrentDataService {
   app$: Observable<App>;
   relevantTypes$: Observable<ContentType[]>;
 
+  private initDoneSubject = new BehaviorSubject<boolean>(false);
+  initDone$ = this.initDoneSubject.filter(i => i); // don't fire till ready
+
   template: Template;
+
+  /** Stream containing the currently selected template or null if not selected */
   template$: Observable<Template>;
+
   templates: Template[]; // = [];
   templates$: Observable<Template[]>;
   // private allTemplates: Template[] = [];
@@ -34,8 +40,11 @@ export class CurrentDataService {
     private templateFilter: TemplateFilterPipe,
   ) {
     // app-stream should contain selected app
-    this.app$ = Observable.combineLatest(this.api.apps$, this.appIdSubject.asObservable(),
-      (apps, appId) => apps.find(a => a.appId === appId));
+    this.app$ = Observable.combineLatest(
+      this.api.apps$,
+      this.appIdSubject.asObservable(),
+      (apps, appId) => apps.find(a => a.appId === appId)
+    );
 
     // construct list of relevant types for the UI
     this.relevantTypes$ = Observable.combineLatest(
@@ -54,6 +63,7 @@ export class CurrentDataService {
       this.type$,
       (all, current) => this.findTemplatesForContentType(all, current)
     ).startWith(new Array<Template>());
+
     this.templates$.subscribe(all => this.templates = all); // temp till fixed
 
     this.template$ = Observable.combineLatest(
@@ -62,25 +72,14 @@ export class CurrentDataService {
       (all, selected) => {
         if (selected) return selected;
         if (all && all.length) return all[0];
-        return undefined;
-      });
+        return null;
+      })
+      .startWith(null);
 
     // temp till we don't need the template any more
     this.template$.subscribe(t => this.template = t);
 
-    // todo: get rid of this - as soon as template$ works
-    // Observable.combineLatest(
-    //   this.api.templates$,
-    //   this.api.contentTypes$,
-    //   this.api.apps$,
-    //   this.type$,
-    // ).subscribe(res => {
-    //   this.activateTemplatesOfType(res[3]);
-    // });
-
-    // load all templates into the array for further use
-    // this.api.templates$
-    //   .subscribe(templates => this.allTemplates = templates);
+    this.initObservableLogging();
   }
 
 
@@ -92,33 +91,40 @@ export class CurrentDataService {
     this.api.contentTypes$
       .subscribe(contentTypes => this.initSelectedContentTypes(contentTypes, config.contentTypeId));
 
-    // start with the current template, if it was selected
-    this.api.templates$
-      .take(1)
+    // start with the current template, if it was selected (looks for template w/ID)
+    this.api.templates$.take(1)
       .do(templates => {
         if (config.templateId)
           this.activateTemplate(templates.find(t => t.TemplateId === config.templateId));
-      })
-      .subscribe();
+        // hacky - find better solution in the future
+        this.initDoneSubject.next(true);
+      }).subscribe();
 
   }
 
+  private initObservableLogging(): void {
+    const prefix = 'stream:';
+    function addLog(name: string, obj: any): void {
+      log.add(`${prefix}${name}: ${obj}`);
+    }
+    this.type$.do(t => addLog(`type`, t)).subscribe();
+    this.app$.do(a => addLog(`app`, a)).subscribe();
+    this.template$.do(t => addLog(`template`, t)).subscribe();
+    this.initDone$.do(t => addLog(`initDone`, t)).subscribe();
+  }
+
+
+  //#region activate calls from outside
   activateCurrentApp(appId: number) {
     this.appIdSubject.next(appId);
+    this.templateSubject.next(null);
   }
-
-  activateContentType(contentType: ContentType) {
+  activateType(contentType: ContentType) {
     this.ctSubject.next(contentType);
-    // this.activateTemplatesOfType(contentType);
+    this.templateSubject.next(null);
   }
-
-  activateTemplate(template: Template) {
-    this.templateSubject.next(template);
-  }
-
-  // private activateTemplatesOfType(contentType: ContentType) {
-  //   this.templates = this.findTemplatesForContentType(this.allTemplates, contentType);
-  // }
+  activateTemplate(template: Template) { this.templateSubject.next(template); }
+  //#endregion
 
   private findTemplatesForContentType(allTemplates: Template[], contentType: ContentType): Template[] {
     return this.templateFilter.transform(allTemplates, {
@@ -131,7 +137,7 @@ export class CurrentDataService {
     log.add(`initSelectedContentTypes(..., ${selectedContentTypeId}`);
     this.ctSubject.next(selectedContentTypeId
       ? contentTypes.find(c => c.StaticName === selectedContentTypeId)
-      : undefined);
+      : null);
   }
 
 }

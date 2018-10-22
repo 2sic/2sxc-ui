@@ -97,8 +97,27 @@ export class TemplatePickerComponent {
       this.showInstaller = this.isContentApp
         ? templates.length === 0
         : apps.filter(a => a.appId !== cAppActionImport).length === 0;
-    });
+    }).subscribe();
+
+    // whenever the template changes, ensure the preview reloads
+    // but don't do this when initializing, that's why we listen to initDone$
+    const validTemplate$ = this.state.template$
+      // .do(t => log.add('valT: got another'))
+      .distinctUntilChanged()
+      // .do(t => log.add('valT: changed'))
+      .filter(t => t !== null && t !== undefined)
+      // .do(t => log.add('valT: is usable, not null/empty'));
+
+    Observable.combineLatest(
+      validTemplate$,
+      this.state.initDone$,
+      (selected) => {
+        log.add('valT: template changed, will select', selected);
+        this.setTemplate(selected); /* todo do template refresh ! */
+      }
+    ).subscribe();
   }
+
 
 
   private initValuesFromBridge(config: IQuickDialogConfig): void {
@@ -115,7 +134,8 @@ export class TemplatePickerComponent {
 
   run(action: string): void { this.bridge.run(action); }
 
-  persistTemplate() { this.bridge.saveTemplate(this.state.template.TemplateId); }
+  // persistTemplate() { this.bridge.saveTemplate(this.state.template.TemplateId); }
+  persistTemplate(template: Template) { this.bridge.saveTemplate(template.TemplateId); }
 
   /**
    * app selection from UI
@@ -137,18 +157,21 @@ export class TemplatePickerComponent {
    * activate a template from the UI
    */
   selectTemplate(template: Template): void {
-    this.setTemplate(template);
+    this.state.activateTemplate(template);
+    // this.setTemplate(template);
   }
   //#endregion
 
   private setContentType(contentType: ContentType): void {
     log.add(`select content-type '${contentType.Name}'; allowed: ${this.allowContentTypeChange}`);
     if (!this.allowContentTypeChange) return;
-    this.state.activateContentType(contentType);
+    this.state.activateType(contentType);
     this.loadingTemplates = true;
 
-    if (this.state.templates.length === 0) return;
-    this.setTemplate(this.state.templates[0]);
+    // this.setTemplate();
+    // modified
+    // if (this.state.templates.length === 0) return;
+    // this.setTemplate(this.state.templates[0]);
   }
 
   switchTab() {
@@ -210,14 +233,14 @@ export class TemplatePickerComponent {
     log.add(`set template ${template.TemplateId}, ajax is ${this.supportsAjax}`);
     this.loadingSubject.next(true);
     this.loadingTemplates = false;
-    this.state.activateTemplate(template);
+    // this.state.activateTemplate(template);
     // this.state.template = template;
     this.appRef.tick();
 
     this.reloadAfterSetTemplate(template);
   }
 
-  private reloadAfterSetTemplate(template: Template):void {
+  private reloadAfterSetTemplate(template: Template): void {
     if (this.supportsAjax) {
       this.bridge
         .previewTemplate(template.TemplateId)
@@ -225,7 +248,8 @@ export class TemplatePickerComponent {
     } else {
       this.setInpageMessageBeforeReload(`refreshing <b>${template.Name}</b>...`);
       this.bridge
-        .saveTemplate(this.state.template.TemplateId)
+        // .saveTemplate(this.state.template.TemplateId)
+        .saveTemplate(template.TemplateId)
         .then(() => window.parent.location.reload());
     }
   }
