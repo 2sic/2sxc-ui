@@ -15,7 +15,8 @@ import { CurrentDataService } from './current-data.service';
 
 //#endregion
 
-const log = parentLog.subLog('picker');
+const debug = true;
+const log = parentLog.subLog('picker', debug);
 
 @Component({
   selector: 'app-template-picker',
@@ -76,17 +77,15 @@ export class TemplatePickerComponent {
     const dashInfo = this.bridge.getAdditionalDashboardConfig();
 
     // init parts, variables, observables
-    this.state.init(dashInfo);
-    this.initObservables();
+    const initDone$ = this.state.init(dashInfo);
+    this.initObservables(initDone$);
     this.initValuesFromBridge(dashInfo);
-
-    this.templatesLoading$.subscribe(t => log.add(`templates loading: ${t}`));
   }
 
   /**
    * wire up observables for this component
    */
-  private initObservables(): void {
+  private initObservables(initDone$: Observable<boolean>): void {
     // wire up basic observables
     this.ready$ = Observable.combineLatest(this.api.ready$, this.loadingSubject, (r, l) => r && !l);
     this.apps$ = this.api.apps$;
@@ -111,14 +110,16 @@ export class TemplatePickerComponent {
 
     // whenever the template changes, ensure the preview reloads
     // but don't do this when initializing, that's why we listen to initDone$
-    const validTemplate$ = this.state.template$
-      .distinctUntilChanged()
-      .filter(t => t !== null && t !== undefined);
-    Observable.combineLatest(
-      validTemplate$,
-      this.state.initDone$,
-      (selected) => this.setTemplate(selected)
-    ).subscribe();
+    initDone$.filter(i => i).first().do(() => {
+      this.state.template$
+        .do(t => log.add(`pre skip ${t && t.TemplateId}`))
+        .skip(1) // skip first set value, as that is the initial value
+        .do(t => log.add(`post skip ${t && t.TemplateId}`))
+        .filter(t => t !== null && t !== undefined)
+        .distinctUntilChanged()
+        .do((selected) => this.setTemplate(selected))
+        .subscribe();
+    }).subscribe();
   }
 
 
@@ -188,31 +189,20 @@ export class TemplatePickerComponent {
     log.add(`changing app to ${newApp.appId}; use-ajax:${this.supportsAjax}`);
 
     this.state.activateCurrentApp(newApp.appId);
-    // this.state.templates = [];
+
+    debugger;
 
     this.api.setAppId(newApp.appId.toString())
       .subscribe(() => {
         if (this.supportsAjax) {
-          // 2018-10-17 2dm new
           this.api.templates$.take(1).do(() => {
             log.add('reloaded templates, will reset some stuff');
-            // 2018-01-19 2dm should now be automatic
-            // this.state.template = this.state.templates[0];
             this.appRef.tick();
             this.doPostAjaxScrolling();
           });
           log.add('calling reloadAndReInit()');
-          /* return */
           this.bridge.reloadAndReInit()
             .then(() => this.api.loadTemplates());
-            // 2018-10-17 2dm old
-            // .toPromise())
-            // .then(() => {
-            //   this.loadingTemplates = false;
-            //   this.template = this.templates[0];
-            //   this.appRef.tick();
-            //   this.doPostAjaxScrolling();
-            // });
         } else {
           this.setInpageMessageBeforeReload('loading App...');
           window.parent.location.reload();
@@ -224,13 +214,10 @@ export class TemplatePickerComponent {
 
   private setTemplate(template: Template): void {
     log.add(`set template ${template.TemplateId}, ajax is ${this.supportsAjax}`);
+    debugger;
     this.loadingSubject.next(true);
-    this.appRef.tick();
 
-    this.reloadAfterSetTemplate(template);
-  }
-
-  private reloadAfterSetTemplate(template: Template): void {
+    // Now reload in the preferred way
     if (this.supportsAjax) {
       this.bridge
         .previewTemplate(template.TemplateId)

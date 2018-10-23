@@ -3,13 +3,15 @@ import { cViewWithoutContent, i18nTemplatePicker } from '../constants';
 import { Template } from '../template';
 import { Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { log } from 'app/core/log';
 
+/**
+ * This is a helper to do various transformations for the list of content-types
+ */
 @Injectable()
 export class ContentTypesProcessor {
   constructor(private translate: TranslateService) {}
 
-  public getRelevantTypesAndSort(allTypes, type, allTemplates, template): ContentType[] {
+  public buildList(allTypes, type, allTemplates, template): ContentType[] {
     let unhide = this.unhideSelectedType(allTypes, type, template);
     unhide = this.addEmptyTypeIfNeeded(unhide, allTemplates);
     return this.sortTypes(unhide);
@@ -48,6 +50,9 @@ export class ContentTypesProcessor {
     return contentTypes;
   }
 
+  /**
+   * Sort the types by label
+   */
   private sortTypes(contentTypes: ContentType[]): ContentType[] {
     // https://stackoverflow.com/questions/51165/how-to-sort-strings-in-javascript
     return contentTypes.sort((a, b) => ('' + a.Label).localeCompare(b.Label));

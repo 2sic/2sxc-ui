@@ -82,7 +82,7 @@
               [attr.title]="c.Label | translate" 
               (click)="selectContentType(contentType, c)"
               (dblclick)="switchTab()" 
-              *ngFor="let c of state.relevantTypes$ | async"
+              *ngFor="let c of state.types$ | async"
             >
               <div class="bg">
                 <img *ngIf="c.Thumbnail !== null && c.Thumbnail !== ''" class="bg-img" [attr.src]="c.Thumbnail + '?w=176&h=176'">

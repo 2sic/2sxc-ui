@@ -21,9 +21,10 @@ class Log {
     }
   }
 
-  subLog(name: string): Log {
+  subLog(name: string, enabled: boolean = true): Log {
     const newLog = new Log(name, this);
     newLog.logs = this.logs;
+    newLog.enabled = enabled;
     return newLog;
   }
 }
