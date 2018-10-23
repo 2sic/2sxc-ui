@@ -74,7 +74,7 @@ export class CurrentDataService {
       this.type$,
       this.api.templates$,
       this.template$,
-      this.ctProcessor.getRelevantTypesAndSort);
+      (a, b, c, d) => this.ctProcessor.getRelevantTypesAndSort(a, b, c, d));
 
     this.initObservableLogging();
   }
