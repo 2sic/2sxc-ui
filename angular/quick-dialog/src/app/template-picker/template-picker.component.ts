@@ -110,16 +110,11 @@ export class TemplatePickerComponent {
 
     // whenever the template changes, ensure the preview reloads
     // but don't do this when initializing, that's why we listen to initDone$
-    initDone$.filter(i => i).first().do(() => {
-      this.state.template$
-        .do(t => log.add(`pre skip ${t && t.TemplateId}`))
-        .skip(1) // skip first set value, as that is the initial value
-        .do(t => log.add(`post skip ${t && t.TemplateId}`))
-        .filter(t => t !== null && t !== undefined)
-        .distinctUntilChanged()
-        .do((selected) => this.setTemplate(selected))
-        .subscribe();
-    }).subscribe();
+    this.state.template$
+      .filter(t => !!t)
+      .skipUntil(initDone$.filter(x => x))
+      .do(t => this.setTemplate(t))
+      .subscribe();
   }
 
 
@@ -190,7 +185,7 @@ export class TemplatePickerComponent {
 
     this.state.activateCurrentApp(newApp.appId);
 
-    debugger;
+    // debugger;
 
     this.api.setAppId(newApp.appId.toString())
       .subscribe(() => {
@@ -214,7 +209,8 @@ export class TemplatePickerComponent {
 
   private setTemplate(template: Template): void {
     log.add(`set template ${template.TemplateId}, ajax is ${this.supportsAjax}`);
-    debugger;
+    // debugger;
+
     this.loadingSubject.next(true);
 
     // Now reload in the preferred way

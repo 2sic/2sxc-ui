@@ -53,10 +53,10 @@ export class CurrentDataService {
       (apps, appId) => apps.find(a => a.appId === appId));
 
     // reset template if the app or type changes
-    this.app$.distinctUntilChanged().filter(a => !!a)
-      .subscribe(() => this.activateTemplate(null));
-    this.type$.distinctUntilChanged().filter(t => !!t)
-      .subscribe(() => this.activateTemplate(null));
+    // this.app$.distinctUntilChanged().filter(a => !!a)
+    //   .subscribe(() => this.activateTemplate(null));
+    // this.type$.distinctUntilChanged().filter(t => !!t)
+    //   .subscribe(() => this.activateTemplate(null));
 
     // the templates-list is always filtered by the currently selected type
     this.templates$ = Observable.combineLatest(
@@ -86,11 +86,20 @@ export class CurrentDataService {
   init(config: IQuickDialogConfig): Observable<boolean> {
     this.config = config;
     // app-init is ready, if it has an app or doesn't need to init one
-    const initAppReady$ = this.app$.map(a => !!a).startWith(!config.appId);
-    const initTemplateReady$ = this.template$.map(t => !!t).startWith(!config.templateId);
-    const initTypeReady$ = this.type$.map(t => !!t).startWith(!config.contentTypeId);
-    const initAllReady$ = Observable.combineLatest(initAppReady$, initTemplateReady$, initTypeReady$,
-      (a, tem, typ) => a && tem && typ);
+    log.add(`initializing with config:`, config);
+    const initAppReady$ = this.app$
+      .map(a => config.isContent || !!a)
+      .startWith(config.isContent || !config.appId);
+    const initTypeReady$ = this.type$
+      .map(t => !!t)
+      .startWith(!config.contentTypeId);
+    const initTemplateReady$ = this.template$
+      .map(t => !!t)
+      .debounceTime(100) // need to debounce, because the template might have a value and change again
+      .startWith(!config.templateId);
+    const initAllReady$ = Observable
+      .combineLatest(initAppReady$, initTemplateReady$, initTypeReady$)
+      .map(set => set[0] && set[1] && set[2]);
 
     if (debug) this.initObservableLogging(initAppReady$, initTypeReady$, initTemplateReady$, initAllReady$);
 
@@ -101,7 +110,7 @@ export class CurrentDataService {
       .subscribe(contentTypes => this.initSelectedContentTypes(contentTypes, config.contentTypeId));
 
     // start with the current template, if it was selected (looks for template w/ID)
-    this.api.templates$.first()//take(1)
+    this.api.templates$.first()
       .do(templates => {
         if (config.templateId) {
           log.add(`starting with templateId = ${config.templateId}`);
@@ -149,8 +158,9 @@ export class CurrentDataService {
 
   //#region transformations for observables
   private pickSelectedTemplate(selected: Template, templates: Template[], type: ContentType, app: App): Template {
-    // if one is selected, return that
-    if (selected) return selected;
+    // if one is selected, return that; but only if it's in the list of possible templates
+    if (selected && templates.find(t => t.TemplateId === selected.TemplateId))
+        return selected;
 
     // if none is selected, return the first; assuming a type or app has been selected
     if ((type || app) && templates && templates.length) return templates[0];
