@@ -1,6 +1,6 @@
 //#region imports
 import { TranslatePipe } from '@ngx-translate/core';
-import { Component, ApplicationRef } from '@angular/core';
+import { Component, ApplicationRef, ChangeDetectorRef } from '@angular/core';
 import { IDialogFrameElement } from 'app/interfaces-shared/idialog-frame-element';
 import { Observable, BehaviorSubject } from 'rxjs/Rx';
 import { App } from 'app/core/app';
@@ -13,6 +13,8 @@ import { log as parentLog } from 'app/core/log';
 import { PickerService } from './picker.service';
 import { CurrentDataService } from './current-data.service';
 import { merge } from 'rxjs/operator/merge';
+import { TimerObservable } from 'rxjs/observable/TimerObservable';
+import { timer } from 'rxjs/observable/timer';
 
 //#endregion
 
@@ -24,7 +26,6 @@ const log = parentLog.subLog('picker', debug);
   selector: 'app-template-picker',
   templateUrl: './template-picker.component.html',
   styleUrls: ['./template-picker.component.scss'],
-  // providers: [TranslatePipe],
 })
 export class TemplatePickerComponent {
   //#region properties
@@ -68,18 +69,18 @@ export class TemplatePickerComponent {
   public showDebug = showDebug;
   //#endregion
 
-  //#region data to show
+  //#region data to show - using local variables, because streams didn't update correctly :(
   app: App;
   templates: Template[];
   template: Template;
   contentType: ContentType;
   types: ContentType[];
-
   //#endregion
 
   constructor(
     private api: PickerService,
     private appRef: ApplicationRef,
+    private cdRef: ChangeDetectorRef,
     public state: CurrentDataService
   ) {
     // start data-loading
@@ -104,11 +105,18 @@ export class TemplatePickerComponent {
    */
   private initObservables(initDone$: Observable<boolean>): void {
     // wire up basic observables
-    this.ready$ = Observable.combineLatest(this.api.ready$, this.loadingSubject.asObservable(), (r, l) => r && !l);
+    this.ready$ = Observable.combineLatest(
+      this.api.ready$,
+      this.loadingSubject.asObservable(),
+      (r, l) => r && !l);
     this.apps$ = this.api.apps$;
 
-    // if the content-type is set, switch tabs
-    this.state.type$.subscribe(() => this.switchTab());
+    // quick test
+    // this.state.app$.subscribe(a => `log app is set to: ${a.appId}`);
+
+    // if the content-type or app is set, switch tabs
+    Observable.merge(this.state.type$, this.state.app$)
+      .subscribe(_ => this.switchTab());
 
     // once the data is known, check if installer is needed
     Observable.combineLatest(this.api.templates$, this.api.contentTypes$, this.api.apps$,
@@ -196,7 +204,8 @@ export class TemplatePickerComponent {
 
   switchTab() {
     log.add('switchTab()');
-    this.tabIndex = 1;
+    // must delay change because of a bug in the tabs-updating
+    timer(100).take(1).subscribe(_ => this.tabIndex = 1);
   }
 
 

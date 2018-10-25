@@ -1,4 +1,6 @@
 <div class="content">
+
+  <!-- debug info section -->
   <div *ngIf="showDebug">
     <h4>Debug</h4>
     <ul>
@@ -6,9 +8,10 @@
       <li>Apps: {{ (apps$ | async)?.length }}</li>
       <li>Templates: {{templates?.length}}, current: {{template?.TemplateId}}</li>
       <li>Config: isContent='{{isContent}}'</li>
+      <li>Tab to show: '{{tabIndex}}'</li>
     </ul>
   </div>
-  <!-- <span (click)="tabIndex = 0">testing</span> -->
+
   <!-- loading indicator -->
   <md-progress-bar [ngStyle]="{ opacity: (ready$ | async) ? 0 : 1 }" [mode]="'indeterminate'"></md-progress-bar>
 

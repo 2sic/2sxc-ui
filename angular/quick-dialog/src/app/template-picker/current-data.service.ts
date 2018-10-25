@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, BehaviorSubject, Subject,  } from 'rxjs/Rx';
+import { Observable as O, BehaviorSubject, Subject,  } from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
 import { App } from 'app/core/app';
 import { PickerService } from './picker.service';
@@ -11,7 +11,7 @@ import { log as parentLog } from 'app/core/log';
 import { ContentTypesProcessor } from './data/content-types-processor.service';
 import { TemplateProcessor } from './data/template-processor';
 
-const debug = true;
+const debug = false;
 const debugStreams = true;
 const debugInitValues = true;
 const debugInitDetailed = false;
@@ -20,19 +20,19 @@ const log = parentLog.subLog('state', debug);
 @Injectable()
 export class CurrentDataService {
   /** Currently selected app */
-  app$: Observable<App>;
+  app$: O<App>;
 
   /** Relevant types */
-  types$: Observable<ContentType[]>;
+  types$: O<ContentType[]>;
 
   /** The currently selected type */
-  type$: Observable<ContentType>;
+  type$: O<ContentType>;
 
   /** Stream containing the currently selected template or null if not selected */
-  template$: Observable<Template>;
+  template$: O<Template>;
 
   /** all templates relevant for the UI */
-  templates$: Observable<Template[]>;
+  templates$: O<Template[]>;
 
   private appId = new BehaviorSubject<number>(null);
   private initialTypeId = new Subject<string>();
@@ -48,8 +48,12 @@ export class CurrentDataService {
     private templateFilter: TemplateFilterPipe,
     private ctProcessor: ContentTypesProcessor
   ) {
+    this.buildBasicObservables();
+  }
+
+  private buildBasicObservables() {
     // app-stream should contain selected app, once the ID is known
-    this.app$ = Observable.combineLatest(
+    this.app$ = O.combineLatest(
       this.api.apps$,
       this.appId.asObservable(),
       (apps, appId) => apps.find(a => a.appId === appId));
@@ -58,19 +62,12 @@ export class CurrentDataService {
     const initialType$ = this.initialTypeId.asObservable()
       .combineLatest(this.api.contentTypes$,
       (typeId, all) => ContentTypesProcessor.findContentTypesById(all, typeId));
-    this.type$ = Observable
+    this.type$ = O
       .merge(initialType$, this.selectedType.asObservable())
       .share();
 
-
-    // reset template if the app or type changes
-    // this.app$.distinctUntilChanged().filter(a => !!a)
-    //   .subscribe(() => this.activateTemplate(null));
-    // this.type$.distinctUntilChanged().filter(t => !!t)
-    //   .subscribe(() => this.activateTemplate(null));
-
     // the templates-list is always filtered by the currently selected type
-    this.templates$ = Observable.combineLatest(
+    this.templates$ = O.combineLatest(
       this.api.templates$,
       this.type$,
       (all, current) => this.findTemplatesForTypeOrAll(all, current))
@@ -81,8 +78,8 @@ export class CurrentDataService {
       .combineLatest(this.api.templates$.first(),
         (id, templates) => templates.find(t => t.TemplateId === id))
       .share();
-    const selected$ = Observable.merge(initialTemplate$, this.selectedTemplate.asObservable());
-    this.template$ = Observable.combineLatest(
+    const selected$ = O.merge(initialTemplate$, this.selectedTemplate.asObservable());
+    this.template$ = O.combineLatest(
       selected$,
       this.templates$,
       this.type$,
@@ -92,7 +89,7 @@ export class CurrentDataService {
       .share();
 
     // construct list of relevant types for the UI
-    this.types$ = Observable.combineLatest(
+    this.types$ = O.combineLatest(
       this.api.contentTypes$,
       this.type$,
       this.api.templates$,
@@ -100,7 +97,7 @@ export class CurrentDataService {
       (types, type, templates, template) => this.ctProcessor.buildList(types, type, templates, template));
   }
 
-  init(config: IQuickDialogConfig): Observable<boolean> {
+  init(config: IQuickDialogConfig): O<boolean> {
     this.config = config;
     // app-init is ready, if it has an app or doesn't need to init one
     log.add(`initializing with config:`, config);
@@ -114,11 +111,11 @@ export class CurrentDataService {
       .map(t => !!t)
       .debounceTime(100) // need to debounce, because the template might have a value and change again
       .startWith(!config.templateId);
-    const initAllReady$ = Observable
+    const isEverythingReady$ = O
       .combineLatest(initAppReady$, initTemplateReady$, initTypeReady$)
       .map(set => set[0] && set[1] && set[2]);
 
-    if (debug) this.initObservableLogging(initAppReady$, initTypeReady$, initTemplateReady$, initAllReady$);
+    if (debug) this.initObservableLogging(initAppReady$, initTypeReady$, initTemplateReady$, isEverythingReady$);
 
     this.activateCurrentApp(config.appId);
 
@@ -126,52 +123,34 @@ export class CurrentDataService {
     this.initialTypeId.next(config.contentTypeId);
     this.initialTemplateId.next(config.templateId);
 
-    // this.api.contentTypes$
-    //   .subscribe(contentTypes => this.findContentTypesById(contentTypes, config.contentTypeId));
-
-    // start with the current template, if it was selected (looks for template w/ID)
-    // this.api.templates$.first()
-    //   .do(templates => {
-    //     if (config.templateId) {
-    //       log.add(`starting with templateId = ${config.templateId}`);
-    //       this.activateTemplate(templates.find(t => t.TemplateId === config.templateId));
-    //     }
-    //     // hacky - find better solution in the future
-    //     // this.initDoneSubject.next(true);
-    //   }).subscribe();
-
-
-    return initAllReady$;
+    return isEverythingReady$;
   }
 
-  private initObservableLogging(inita$: Observable<boolean>,
-    inittyp$: Observable<boolean>,
-    initt$: Observable<boolean>,
-    initAll$: Observable<boolean>): void {
-    const prefix = 'stream:';
-    function addLog(name: string, obj: any): void {
-      log.add(`${prefix}${name}:`, obj);
-    }
+  private initObservableLogging(inita$: O<boolean>,
+    inittyp$: O<boolean>,
+    initt$: O<boolean>,
+    initAll$: O<boolean>): void {
+      const slog = log.subLog('stream ');
 
-    if (debugInitValues) {
-      this.initialTypeId.asObservable().do(t => addLog(`initial TypeId:'${t}'`, t)).subscribe();
-      this.initialTemplateId.asObservable().do(t => addLog(`initial TypeId:'${t}'`, t)).subscribe();
-    }
+      if (debugInitValues) {
+        this.initialTypeId.asObservable().do(t => slog.add(`initial TypeId:'${t}'`, t)).subscribe();
+        this.initialTemplateId.asObservable().do(t => slog.add(`initial TypeId:'${t}'`, t)).subscribe();
+      }
 
-    if (debugStreams) {
-      this.type$.do(t => addLog(`type update:'${t && t.Label}'`, t)).subscribe();
-      this.app$.do(a => addLog(`app update:'${a && a.appId}'`, a)).subscribe();
-      this.template$.do(t => addLog(`template update:'${t && t.TemplateId}'`, t)).subscribe();
-      this.templates$.do(t => addLog(`templates count:'${t && t.length}'`, t)).subscribe();
-      this.types$.do(t => addLog(`types count:'${t && t.length}'`, t)).subscribe();
-    }
+      if (debugStreams) {
+        this.type$.do(t => slog.add(`type update:'${t && t.Label}'`, t)).subscribe();
+        this.app$.do(a => slog.add(`app update:'${a && a.appId}'`, a)).subscribe();
+        this.template$.do(t => slog.add(`template update:'${t && t.TemplateId}'`, t)).subscribe();
+        this.templates$.do(t => slog.add(`templates count:'${t && t.length}'`, t)).subscribe();
+        this.types$.do(t => slog.add(`types count:'${t && t.length}'`, t)).subscribe();
+      }
 
-    if (debugInitDetailed) {
-      inita$.do(t => addLog(`init app`, t)).subscribe();
-      inittyp$.do(t => addLog(`init type`, t)).subscribe();
-      initt$.do(t => addLog(`init temp`, t)).subscribe();
-    }
-    initAll$.do(t => addLog(`init all`, t)).subscribe();
+      if (debugInitDetailed) {
+        inita$.do(t => slog.add(`init app`, t)).subscribe();
+        inittyp$.do(t => slog.add(`init type`, t)).subscribe();
+        initt$.do(t => slog.add(`init temp`, t)).subscribe();
+      }
+      initAll$.do(t => slog.add(`init all`, t)).subscribe();
   }
 
 
@@ -179,11 +158,9 @@ export class CurrentDataService {
   //#region activate calls from outside
   activateCurrentApp(appId: number) {
     this.appId.next(appId);
-    // this.activateTemplate(null);
   }
   activateType(contentType: ContentType) {
     this.selectedType.next(contentType);
-    // this.activateTemplate(null);
   }
   activateTemplate(template: Template) {
     this.selectedTemplate.next(template);
