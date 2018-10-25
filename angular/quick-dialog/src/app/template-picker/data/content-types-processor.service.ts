@@ -3,6 +3,7 @@ import { cViewWithoutContent, i18nTemplatePicker } from '../constants';
 import { Template } from '../template';
 import { Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
+import { log } from 'app/core/log';
 
 /**
  * This is a helper to do various transformations for the list of content-types
@@ -15,6 +16,14 @@ export class ContentTypesProcessor {
     let unhide = this.unhideSelectedType(allTypes, type, template);
     unhide = this.addEmptyTypeIfNeeded(unhide, allTemplates);
     return this.sortTypes(unhide);
+  }
+
+  // tslint:disable-next-line:member-ordering
+  static findContentTypesById(contentTypes: ContentType[], selectedContentTypeId: string): ContentType {
+    log.add(`findContentTypesById(..., ${selectedContentTypeId}`);
+    return selectedContentTypeId
+      ? contentTypes.find(c => c.StaticName === selectedContentTypeId)
+      : null;
   }
 
   /**

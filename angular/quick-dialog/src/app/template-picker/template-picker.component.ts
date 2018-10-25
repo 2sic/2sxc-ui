@@ -12,10 +12,12 @@ import { cAppActionImport } from './constants';
 import { log as parentLog } from 'app/core/log';
 import { PickerService } from './picker.service';
 import { CurrentDataService } from './current-data.service';
+import { merge } from 'rxjs/operator/merge';
 
 //#endregion
 
 const debug = true;
+const showDebug = true;
 const log = parentLog.subLog('picker', debug);
 
 @Component({
@@ -33,7 +35,7 @@ export class TemplatePickerComponent {
   showCancel = true;
 
   /** is in the main content-app or a generic app */
-  isContentApp: boolean;
+  isContent: boolean;
 
   /** show advanced features (admin/host only) */
   showAdvanced = false;
@@ -62,6 +64,17 @@ export class TemplatePickerComponent {
 
   /** Ajax-support changes how saving/changing is handled */
   private supportsAjax: boolean;
+
+  public showDebug = showDebug;
+  //#endregion
+
+  //#region data to show
+  app: App;
+  templates: Template[];
+  template: Template;
+  contentType: ContentType;
+  types: ContentType[];
+
   //#endregion
 
   constructor(
@@ -78,8 +91,12 @@ export class TemplatePickerComponent {
 
     // init parts, variables, observables
     const initDone$ = this.state.init(dashInfo);
+    // this is a test, must happen after init...
+
     this.initObservables(initDone$);
     this.initValuesFromBridge(dashInfo);
+    this.transferObservablesToLocalToEnsureUiUpdates();
+    this.debugStreams();
   }
 
   /**
@@ -87,7 +104,7 @@ export class TemplatePickerComponent {
    */
   private initObservables(initDone$: Observable<boolean>): void {
     // wire up basic observables
-    this.ready$ = Observable.combineLatest(this.api.ready$, this.loadingSubject, (r, l) => r && !l);
+    this.ready$ = Observable.combineLatest(this.api.ready$, this.loadingSubject.asObservable(), (r, l) => r && !l);
     this.apps$ = this.api.apps$;
 
     // if the content-type is set, switch tabs
@@ -96,7 +113,7 @@ export class TemplatePickerComponent {
     // once the data is known, check if installer is needed
     Observable.combineLatest(this.api.templates$, this.api.contentTypes$, this.api.apps$,
       (templates, c, apps) => {
-      this.showInstaller = this.isContentApp
+      this.showInstaller = this.isContent
         ? templates.length === 0
         : apps.filter(a => a.appId !== cAppActionImport).length === 0;
     }).subscribe();
@@ -113,8 +130,20 @@ export class TemplatePickerComponent {
     this.state.template$
       .filter(t => !!t)
       .skipUntil(initDone$.filter(x => x))
-      .do(t => this.setTemplate(t))
+      .do(t => this.loadTemplate(t))
       .subscribe();
+  }
+
+  transferObservablesToLocalToEnsureUiUpdates(): any {
+    this.state.app$.subscribe(a => this.app = a);
+    this.state.templates$.subscribe(t => this.templates = t);
+    this.state.template$.subscribe(t => this.template = t);
+    this.state.types$.subscribe(t => this.types = t);
+    this.state.type$.subscribe(t => this.contentType = t);
+  }
+
+  private debugStreams() {
+
   }
 
 
@@ -122,8 +151,8 @@ export class TemplatePickerComponent {
   private initValuesFromBridge(config: IQuickDialogConfig): void {
     this.allowContentTypeChange = !(config.hasContent || config.isList);
     this.isBadContextForInstaller = config.isInnerContent;
-    this.isContentApp = config.isContent;
-    this.supportsAjax = this.isContentApp || config.supportsAjax;
+    this.isContent = config.isContent;
+    this.supportsAjax = this.isContent || config.supportsAjax;
     this.showAdvanced = config.user.canDesign;
     this.showCancel = config.templateId != null;
   }
@@ -171,13 +200,6 @@ export class TemplatePickerComponent {
   }
 
 
-
-  private doPostAjaxScrolling() {
-    this.loadingSubject.next(false);
-    this.bridge.scrollToTarget();
-    this.appRef.tick();
-  }
-
   private updateApp(newApp: App): void {
     // ajax-support can change as apps are changed; for ajax, both the previous and new must support it
     this.supportsAjax = this.supportsAjax && newApp.supportsAjaxReload;
@@ -207,8 +229,8 @@ export class TemplatePickerComponent {
 
 
 
-  private setTemplate(template: Template): void {
-    log.add(`set template ${template.TemplateId}, ajax is ${this.supportsAjax}`);
+  private loadTemplate(template: Template): void {
+    log.add(`load template ${template.TemplateId}, ajax is ${this.supportsAjax}`);
     // debugger;
 
     this.loadingSubject.next(true);
@@ -232,4 +254,11 @@ export class TemplatePickerComponent {
     this.doPostAjaxScrolling();
     this.bridge.persistDia();
   }
+
+  private doPostAjaxScrolling() {
+    this.loadingSubject.next(false);
+    this.bridge.scrollToTarget();
+    this.appRef.tick();
+  }
+
 }
