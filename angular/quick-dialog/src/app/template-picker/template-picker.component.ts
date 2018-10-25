@@ -111,11 +111,9 @@ export class TemplatePickerComponent {
       (r, l) => r && !l);
     this.apps$ = this.api.apps$;
 
-    // quick test
-    // this.state.app$.subscribe(a => `log app is set to: ${a.appId}`);
-
     // if the content-type or app is set, switch tabs
     Observable.merge(this.state.type$, this.state.app$)
+      .filter(t => !!t) // ignore null/empty state changes
       .subscribe(_ => this.switchTab());
 
     // once the data is known, check if installer is needed
@@ -148,6 +146,8 @@ export class TemplatePickerComponent {
     this.state.template$.subscribe(t => this.template = t);
     this.state.types$.subscribe(t => this.types = t);
     this.state.type$.subscribe(t => this.contentType = t);
+
+    this.state.types$.subscribe(t => log.add('type update: ', t));
   }
 
   private debugStreams() {
@@ -216,8 +216,6 @@ export class TemplatePickerComponent {
 
     this.state.activateCurrentApp(newApp.appId);
 
-    // debugger;
-
     this.api.setAppId(newApp.appId.toString())
       .subscribe(() => {
         if (this.supportsAjax) {
@@ -240,7 +238,6 @@ export class TemplatePickerComponent {
 
   private loadTemplate(template: Template): void {
     log.add(`load template ${template.TemplateId}, ajax is ${this.supportsAjax}`);
-    // debugger;
 
     this.loadingSubject.next(true);
 

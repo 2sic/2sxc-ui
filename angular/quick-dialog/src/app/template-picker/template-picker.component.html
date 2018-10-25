@@ -5,7 +5,7 @@
     <h4>Debug</h4>
     <ul>
       <li>Types: {{ types?.length }}, current: {{contentType?.StaticName}}</li>
-      <li>Apps: {{ (apps$ | async)?.length }}</li>
+      <li>Apps: {{ (apps$ | async)?.length }}, current: {{app?.appId }} </li>
       <li>Templates: {{templates?.length}}, current: {{template?.TemplateId}}</li>
       <li>Config: isContent='{{isContent}}'</li>
       <li>Tab to show: '{{tabIndex}}'</li>

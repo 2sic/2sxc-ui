@@ -64,6 +64,7 @@ export class CurrentDataService {
       (typeId, all) => ContentTypesProcessor.findContentTypesById(all, typeId));
     this.type$ = O
       .merge(initialType$, this.selectedType.asObservable())
+      .startWith(null)
       .share();
 
     // the templates-list is always filtered by the currently selected type
@@ -77,6 +78,7 @@ export class CurrentDataService {
     const initialTemplate$ = this.initialTemplateId.asObservable()
       .combineLatest(this.api.templates$.first(),
         (id, templates) => templates.find(t => t.TemplateId === id))
+      .startWith(null)
       .share();
     const selected$ = O.merge(initialTemplate$, this.selectedTemplate.asObservable());
     this.template$ = O.combineLatest(
