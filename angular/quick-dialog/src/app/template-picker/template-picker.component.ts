@@ -83,12 +83,12 @@ export class TemplatePickerComponent {
     private cdRef: ChangeDetectorRef,
     public state: CurrentDataService
   ) {
-    // start data-loading
-    this.api.loadEverything();
-
     // get configuration from iframe-bridge and set everything
     this.bridge = (<IDialogFrameElement>window.frameElement).bridge;
     const dashInfo = this.bridge.getAdditionalDashboardConfig();
+
+    // start data-loading
+    this.api.initLoading(!dashInfo.isContent);
 
     // init parts, variables, observables
     const initDone$ = this.state.init(dashInfo);

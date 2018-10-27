@@ -11,10 +11,10 @@ import { log as parentLog } from 'app/core/log';
 import { ContentTypesProcessor } from './data/content-types-processor.service';
 import { TemplateProcessor } from './data/template-processor';
 
-const debug = false;
+const debug = true;
 const debugStreams = true;
 const debugInitValues = true;
-const debugInitDetailed = false;
+const debugInitDetailed = true;
 const log = parentLog.subLog('state', debug);
 
 @Injectable()
@@ -52,7 +52,7 @@ export class CurrentDataService {
   }
 
   private buildBasicObservables() {
-    // app-stream should contain selected app, once the ID is known
+    // app-stream should contain selected app, once the ID is known - or null
     this.app$ = O.combineLatest(
       this.api.apps$,
       this.appId.asObservable(),
@@ -106,13 +106,18 @@ export class CurrentDataService {
     const initAppReady$ = this.app$
       .map(a => config.isContent || !!a)
       .startWith(config.isContent || !config.appId);
+      // todo: add scan
+
     const initTypeReady$ = this.type$
       .map(t => !!t)
-      .startWith(!config.contentTypeId);
+      // .startWith(!config.contentTypeId)
+      .scan((acc, value) => acc || value, !config.contentTypeId);
     const initTemplateReady$ = this.template$
       .map(t => !!t)
       .debounceTime(100) // need to debounce, because the template might have a value and change again
       .startWith(!config.templateId);
+      // todo addScan
+
     const isEverythingReady$ = O
       .combineLatest(initAppReady$, initTemplateReady$, initTypeReady$)
       .map(set => set[0] && set[1] && set[2]);
@@ -140,19 +145,19 @@ export class CurrentDataService {
       }
 
       if (debugStreams) {
-        this.type$.do(t => slog.add(`type update:'${t && t.Label}'`, t)).subscribe();
-        this.app$.do(a => slog.add(`app update:'${a && a.appId}'`, a)).subscribe();
-        this.template$.do(t => slog.add(`template update:'${t && t.TemplateId}'`, t)).subscribe();
-        this.templates$.do(t => slog.add(`templates count:'${t && t.length}'`, t)).subscribe();
-        this.types$.do(t => slog.add(`types count:'${t && t.length}'`, t)).subscribe();
+        this.type$.do(t => slog.add(`type$ update:'${t && t.Label}'`, t)).subscribe();
+        this.app$.do(a => slog.add(`app$ update:'${a && a.appId}'`, a)).subscribe();
+        this.template$.do(t => slog.add(`template$ update:'${t && t.TemplateId}'`, t)).subscribe();
+        this.templates$.do(t => slog.add(`templates$ count:'${t && t.length}'`, t)).subscribe();
+        this.types$.do(t => slog.add(`types$ count:'${t && t.length}'`, t)).subscribe();
       }
 
       if (debugInitDetailed) {
-        inita$.do(t => slog.add(`init app`, t)).subscribe();
-        inittyp$.do(t => slog.add(`init type`, t)).subscribe();
-        initt$.do(t => slog.add(`init temp`, t)).subscribe();
+        inita$.do(t => slog.add(`init app$`, t)).subscribe();
+        inittyp$.do(t => slog.add(`init type$`, t)).subscribe();
+        initt$.do(t => slog.add(`init temp$`, t)).subscribe();
       }
-      initAll$.do(t => slog.add(`init all`, t)).subscribe();
+      initAll$.do(t => slog.add(`init all$`, t)).subscribe();
   }
 
 

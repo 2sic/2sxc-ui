@@ -3,7 +3,10 @@ import { cViewWithoutContent, i18nTemplatePicker } from '../constants';
 import { Template } from '../template';
 import { Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { log } from 'app/core/log';
+import { log as parentLog } from 'app/core/log';
+
+const debug = true;
+const log = parentLog.subLog('ct-processor', debug);
 
 /**
  * This is a helper to do various transformations for the list of content-types
@@ -13,6 +16,7 @@ export class ContentTypesProcessor {
   constructor(private translate: TranslateService) {}
 
   public buildList(allTypes, type, allTemplates, template): ContentType[] {
+    log.add('build list of content-types to show');
     let unhide = this.unhideSelectedType(allTypes, type, template);
     unhide = this.addEmptyTypeIfNeeded(unhide, allTemplates);
     return this.sortTypes(unhide);
