@@ -55,7 +55,7 @@ export class PickerService {
     this.ready$ = Observable
       .combineLatest(this.apps$, this.contentTypes$, this.templates$,
         (a, ct, t) => ({ apps: a, types: ct, templates: t }))
-      .filter(set => this.mustLoadApps || !!set.apps)
+      .filter(set => !this.mustLoadApps || !!(set.apps && set.apps.length))
       .map(() => true)
       .startWith(false)
       .share();
@@ -67,6 +67,7 @@ export class PickerService {
     if (!this.loadApps) return;
 
     const appSet$ = this.http.get(`${Constants.apiRoot}SetAppId?appId=${appId}`);
+    // 2018-10-27 2dm - moving this to the caller, as that requires the bridge-update first
     // if (reloadParts)
     //   appSet$.subscribe(() => this.reloadAppParts());
     return appSet$;

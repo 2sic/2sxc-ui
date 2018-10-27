@@ -105,7 +105,7 @@ export class CurrentDataService {
   init(config: IQuickDialogConfig): O<boolean> {
     this.config = config;
     // app-init is ready, if it has an app or doesn't need to init one
-    log.add(`initializing with config:`, config);
+    log.add(`initializing with config:${JSON.stringify(config)}`, config);
     const appReady$ = this.app$
       .map(a => config.isContent || !!a)
       .startWith(config.isContent || !config.appId);

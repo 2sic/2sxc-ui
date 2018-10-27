@@ -113,7 +113,10 @@ export class TemplatePickerComponent {
       .subscribe(_ => this.switchTab());
 
     // once the data is known, check if installer is needed
-    Observable.combineLatest(this.api.templates$, this.api.contentTypes$, this.api.apps$,
+    Observable.combineLatest(this.api.templates$,
+      this.api.contentTypes$,
+      this.api.apps$,
+      this.api.ready$.filter(r => !!r),
       (templates, c, apps) => {
       this.showInstaller = this.isContent
         ? templates.length === 0
