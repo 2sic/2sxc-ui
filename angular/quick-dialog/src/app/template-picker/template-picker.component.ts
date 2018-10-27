@@ -1,6 +1,5 @@
 //#region imports
-import { TranslatePipe } from '@ngx-translate/core';
-import { Component, ApplicationRef, ChangeDetectorRef } from '@angular/core';
+import { Component, ApplicationRef } from '@angular/core';
 import { IDialogFrameElement } from 'app/interfaces-shared/idialog-frame-element';
 import { Observable, BehaviorSubject } from 'rxjs/Rx';
 import { App } from 'app/core/app';
@@ -12,15 +11,12 @@ import { cAppActionImport } from './constants';
 import { log as parentLog } from 'app/core/log';
 import { PickerService } from './picker.service';
 import { CurrentDataService } from './current-data.service';
-import { merge } from 'rxjs/operator/merge';
-import { TimerObservable } from 'rxjs/observable/TimerObservable';
 import { timer } from 'rxjs/observable/timer';
+import { DebugConfig } from 'app/debug-config';
 
 //#endregion
 
-const debug = true;
-const showDebug = true;
-const log = parentLog.subLog('picker', debug);
+const log = parentLog.subLog('picker', DebugConfig.picker);
 
 @Component({
   selector: 'app-template-picker',
@@ -28,7 +24,7 @@ const log = parentLog.subLog('picker', debug);
   styleUrls: ['./template-picker.component.scss'],
 })
 export class TemplatePickerComponent {
-  //#region properties
+  // #region properties
   /** Stream of all apps */
   apps$: Observable<App[]>;
 
@@ -66,10 +62,10 @@ export class TemplatePickerComponent {
   /** Ajax-support changes how saving/changing is handled */
   private supportsAjax: boolean;
 
-  public showDebug = showDebug;
-  //#endregion
+  public showDebug = DebugConfig.showInUi;
+  // #endregion
 
-  //#region data to show - using local variables, because streams didn't update correctly :(
+  // #region data to show - using local variables, because streams didn't update correctly :(
   app: App;
   templates: Template[];
   template: Template;
@@ -80,7 +76,6 @@ export class TemplatePickerComponent {
   constructor(
     private api: PickerService,
     private appRef: ApplicationRef,
-    private cdRef: ChangeDetectorRef,
     public state: CurrentDataService
   ) {
     // get configuration from iframe-bridge and set everything
@@ -92,7 +87,6 @@ export class TemplatePickerComponent {
 
     // init parts, variables, observables
     const initDone$ = this.state.init(dashInfo);
-    // this is a test, must happen after init...
 
     this.initObservables(initDone$);
     this.initValuesFromBridge(dashInfo);
@@ -216,22 +210,40 @@ export class TemplatePickerComponent {
 
     this.state.activateCurrentApp(newApp.appId);
 
-    this.api.setAppId(newApp.appId.toString())
-      .subscribe(() => {
-        if (this.supportsAjax) {
-          this.api.templates$.take(1).do(() => {
-            log.add('reloaded templates, will reset some stuff');
-            this.appRef.tick();
-            this.doPostAjaxScrolling();
-          });
-          log.add('calling reloadAndReInit()');
-          this.bridge.reloadAndReInit()
-            .then(() => this.api.loadTemplates());
-        } else {
+    const save = this.api.saveAppId(newApp.appId.toString(), this.supportsAjax);
+    if (this.supportsAjax) {
+      save.subscribe(() => {
+        this.api.templates$.take(1).subscribe(() => {
+          log.add('reloaded templates, will reset some stuff');
+          this.appRef.tick();
+          this.doPostAjaxScrolling();
+        });
+        log.add('calling reloadAndReInit()');
+        // todo - we have multiple releases of reload, this one looks more correct...
+        this.bridge.reloadAndReInit()
+          .then(() => this.api.reloadAppParts());
+      });
+    } else {
+      save.subscribe(() => {
           this.setInpageMessageBeforeReload('loading App...');
           window.parent.location.reload();
-        }
-    });
+        });
+    }
+    //   .subscribe(() => {
+    //     if (this.supportsAjax) {
+    //       this.api.templates$.take(1).do(() => {
+    //         log.add('reloaded templates, will reset some stuff');
+    //         this.appRef.tick();
+    //         this.doPostAjaxScrolling();
+    //       });
+    //       log.add('calling reloadAndReInit()');
+    //       this.bridge.reloadAndReInit()
+    //         .then(() => this.api.loadTemplates());
+    //     } else {
+    //       this.setInpageMessageBeforeReload('loading App...');
+    //       window.parent.location.reload();
+    //     }
+    // });
   }
 
 

@@ -1,5 +1,6 @@
+// #region imports
 import { Injectable } from '@angular/core';
-import { Observable as O, BehaviorSubject, Subject,  } from 'rxjs/Rx';
+import { Observable as O, BehaviorSubject, Subject, } from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
 import { App } from 'app/core/app';
 import { PickerService } from './picker.service';
@@ -10,12 +11,12 @@ import { TemplateFilterPipe } from './template-filter.pipe';
 import { log as parentLog } from 'app/core/log';
 import { ContentTypesProcessor } from './data/content-types-processor.service';
 import { TemplateProcessor } from './data/template-processor';
+import { DebugConfig } from 'app/debug-config';
+// #endregion
 
-const debug = true;
-const debugStreams = true;
 const debugInitValues = true;
 const debugInitDetailed = true;
-const log = parentLog.subLog('state', debug);
+const log = parentLog.subLog('state', DebugConfig.state);
 
 @Injectable()
 export class CurrentDataService {
@@ -35,8 +36,8 @@ export class CurrentDataService {
   templates$: O<Template[]>;
 
   private appId = new BehaviorSubject<number>(null);
-  private initialTypeId = new Subject<string>();
-  private initialTemplateId = new Subject<number>();
+  private initialTypeId = new BehaviorSubject<string>(null);
+  private initialTemplateId = new BehaviorSubject<number>(null);
   private selectedType = new BehaviorSubject<ContentType>(null);
   private selectedTemplate = new BehaviorSubject<Template>(null);
 
@@ -59,8 +60,9 @@ export class CurrentDataService {
       (apps, appId) => apps.find(a => a.appId === appId));
 
     // current type should be either the initial type, or a manually selected type
-    const initialType$ = this.initialTypeId.asObservable()
-      .combineLatest(this.api.contentTypes$,
+    const initialType$ = O.combineLatest(
+      this.initialTypeId.asObservable(),
+      this.api.contentTypes$,
       (typeId, all) => ContentTypesProcessor.findContentTypesById(all, typeId));
     this.type$ = O
       .merge(initialType$, this.selectedType.asObservable())
@@ -75,9 +77,10 @@ export class CurrentDataService {
       .startWith(new Array<Template>());
 
     // the current template is either the last selected, or auto-selected when conditions change
-    const initialTemplate$ = this.initialTemplateId.asObservable()
-      .combineLatest(this.api.templates$.first(),
-        (id, templates) => templates.find(t => t.TemplateId === id))
+    const initialTemplate$ = O.combineLatest(
+      this.initialTemplateId.asObservable(),
+      this.api.templates$.first(),
+      (id, templates) => templates.find(t => t.TemplateId === id))
       .startWith(null)
       .share();
     const selected$ = O.merge(initialTemplate$, this.selectedTemplate.asObservable());
@@ -103,61 +106,57 @@ export class CurrentDataService {
     this.config = config;
     // app-init is ready, if it has an app or doesn't need to init one
     log.add(`initializing with config:`, config);
-    const initAppReady$ = this.app$
+    const appReady$ = this.app$
       .map(a => config.isContent || !!a)
       .startWith(config.isContent || !config.appId);
-      // todo: add scan
+    // todo: add scan
 
-    const initTypeReady$ = this.type$
+    const typeReady$ = this.type$
       .map(t => !!t)
       // .startWith(!config.contentTypeId)
       .scan((acc, value) => acc || value, !config.contentTypeId);
-    const initTemplateReady$ = this.template$
+    const templReady$ = this.template$
       .map(t => !!t)
       .debounceTime(100) // need to debounce, because the template might have a value and change again
       .startWith(!config.templateId);
-      // todo addScan
+    // todo addScan
 
-    const isEverythingReady$ = O
-      .combineLatest(initAppReady$, initTemplateReady$, initTypeReady$)
+    const loadAll$ = O.combineLatest(appReady$, templReady$, typeReady$)
       .map(set => set[0] && set[1] && set[2]);
 
-    if (debug) this.initObservableLogging(initAppReady$, initTypeReady$, initTemplateReady$, isEverythingReady$);
+    this.initLogging(appReady$, typeReady$, templReady$, loadAll$);
 
     this.activateCurrentApp(config.appId);
 
+
     // automatically set the current type once the types are loaded
     this.initialTypeId.next(config.contentTypeId);
+
+
     this.initialTemplateId.next(config.templateId);
 
-    return isEverythingReady$;
+
+    return loadAll$;
   }
 
-  private initObservableLogging(inita$: O<boolean>,
+  private initLogging(inita$: O<boolean>,
     inittyp$: O<boolean>,
     initt$: O<boolean>,
     initAll$: O<boolean>): void {
-      const slog = log.subLog('stream ');
+    const slog = log.subLog('stream', DebugConfig.stateStreams);
+    this.type$.subscribe(t => slog.add(`type$ update:'${t && t.Label}'`, t));
+    this.app$.subscribe(a => slog.add(`app$ update:'${a && a.appId}'`, a));
+    this.template$.subscribe(t => slog.add(`template$ update:'${t && t.TemplateId}'`, t));
+    this.templates$.subscribe(t => slog.add(`templates$ count:'${t && t.length}'`, t));
+    this.types$.subscribe(t => slog.add(`types$ count:'${t && t.length}'`, t));
 
-      if (debugInitValues) {
-        this.initialTypeId.asObservable().do(t => slog.add(`initial TypeId:'${t}'`, t)).subscribe();
-        this.initialTemplateId.asObservable().do(t => slog.add(`initial TypeId:'${t}'`, t)).subscribe();
-      }
-
-      if (debugStreams) {
-        this.type$.do(t => slog.add(`type$ update:'${t && t.Label}'`, t)).subscribe();
-        this.app$.do(a => slog.add(`app$ update:'${a && a.appId}'`, a)).subscribe();
-        this.template$.do(t => slog.add(`template$ update:'${t && t.TemplateId}'`, t)).subscribe();
-        this.templates$.do(t => slog.add(`templates$ count:'${t && t.length}'`, t)).subscribe();
-        this.types$.do(t => slog.add(`types$ count:'${t && t.length}'`, t)).subscribe();
-      }
-
-      if (debugInitDetailed) {
-        inita$.do(t => slog.add(`init app$`, t)).subscribe();
-        inittyp$.do(t => slog.add(`init type$`, t)).subscribe();
-        initt$.do(t => slog.add(`init temp$`, t)).subscribe();
-      }
-      initAll$.do(t => slog.add(`init all$`, t)).subscribe();
+    const initLog = log.subLog('stream-init', DebugConfig.stateInits);
+    this.initialTypeId.asObservable().do(t => initLog.add(`initial TypeId:'${t}'`, t)).subscribe();
+    this.initialTemplateId.asObservable().do(t => initLog.add(`initial TypeId:'${t}'`, t)).subscribe();
+    inita$.do(t => initLog.add(`init app$`, t)).subscribe();
+    inittyp$.do(t => initLog.add(`init type$`, t)).subscribe();
+    initt$.do(t => initLog.add(`init temp$`, t)).subscribe();
+    initAll$.subscribe(t => initLog.add(`init all$`, t));
   }
 
 
