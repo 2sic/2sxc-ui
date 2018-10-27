@@ -1,6 +1,7 @@
 import { Subject } from 'rxjs/Subject';
-import { log } from './log';
+import { log as parentLog } from './log';
 
+const log = parentLog.subLog('boot-controller');
 /**
  * Special reboot controller, to restart the angular app
  * when critical parameters were changed

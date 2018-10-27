@@ -17,4 +17,5 @@ export interface IQuickDialogConfig {
   contentTypeId: string;
   user: IUserOfEditContext; // not part of the interface, which is shared to the angular project
   supportsAjax: boolean;
+  debug: boolean;
 }

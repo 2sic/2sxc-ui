@@ -109,32 +109,24 @@ export class CurrentDataService {
     const appReady$ = this.app$
       .map(a => config.isContent || !!a)
       .startWith(config.isContent || !config.appId);
-    // todo: add scan
 
     const typeReady$ = this.type$
       .map(t => !!t)
-      // .startWith(!config.contentTypeId)
       .scan((acc, value) => acc || value, !config.contentTypeId);
     const templReady$ = this.template$
       .map(t => !!t)
       .debounceTime(100) // need to debounce, because the template might have a value and change again
       .startWith(!config.templateId);
-    // todo addScan
 
     const loadAll$ = O.combineLatest(appReady$, templReady$, typeReady$)
       .map(set => set[0] && set[1] && set[2]);
 
     this.initLogging(appReady$, typeReady$, templReady$, loadAll$);
 
+    // automatically set the app, type and template
     this.activateCurrentApp(config.appId);
-
-
-    // automatically set the current type once the types are loaded
     this.initialTypeId.next(config.contentTypeId);
-
-
     this.initialTemplateId.next(config.templateId);
-
 
     return loadAll$;
   }

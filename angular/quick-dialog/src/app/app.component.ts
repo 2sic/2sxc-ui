@@ -3,6 +3,7 @@ import { Component, Inject } from '@angular/core';
 import { DialogComponent } from 'app/version-dialog/dialog.component';
 import { MdDialog } from '@angular/material';
 import { IDialogFrameElement } from './interfaces-shared/idialog-frame-element';
+import { log } from './core/log';
 
 declare const window, $2sxc;
 
@@ -23,7 +24,7 @@ export class AppComponent {
     translate.setDefaultLang($2sxc.urlParams.require('langpri').split('-')[0]);
     translate.use($2sxc.urlParams.require('lang').split('-')[0]);
     this.name = $2sxc.urlParams.require('dialog');
-    console.log(`quick-edit: loading ${this.name}`);
+    log.add(`loading '${this.name}'`);
     const frame = <IDialogFrameElement>window.frameElement;
     if (this.name === 'item-history') {
       this.dialog.open(DialogComponent).afterClosed()

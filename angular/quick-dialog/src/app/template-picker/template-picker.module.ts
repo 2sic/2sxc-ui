@@ -7,12 +7,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TemplatePickerComponent } from './template-picker.component';
 import { TemplateFilterPipe } from './template-filter.pipe';
 import { CoreModule } from 'app/core/core.module';
-import { ContentTypeFilterPipe } from './content-type-filter.pipe';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { InstallerModule } from 'app/installer/installer.module';
 import { DebugPipe } from './debug.pipe';
-// import { ContentTypeSortPipe } from './data/attribute-sort.pipe';
-// import { AttributeTranslate } from './data/attribute-translate.pipe';
 import { ContentTypesProcessor } from './data/content-types-processor.service';
 
 @NgModule({
@@ -39,10 +36,7 @@ import { ContentTypesProcessor } from './data/content-types-processor.service';
   declarations: [
     TemplatePickerComponent,
     TemplateFilterPipe,
-    ContentTypeFilterPipe,
     DebugPipe,
-    // ContentTypeSortPipe,
-    // AttributeTranslate
   ]
 })
 export class TemplatePickerModule { }

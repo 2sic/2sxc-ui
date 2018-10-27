@@ -82,6 +82,8 @@ export class TemplatePickerComponent {
     this.bridge = (<IDialogFrameElement>window.frameElement).bridge;
     const dashInfo = this.bridge.getAdditionalDashboardConfig();
 
+    this.showDebug = dashInfo.debug;
+
     // start data-loading
     this.api.initLoading(!dashInfo.isContent);
 
