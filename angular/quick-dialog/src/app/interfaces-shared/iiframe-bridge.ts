@@ -9,10 +9,10 @@ import { IQuickDialogConfig } from './iquick-dialog-config';
  */
 export interface IIFrameBridge {
   getAdditionalDashboardConfig(): IQuickDialogConfig;
-  toggle(action: boolean): void;
+  hide(): void;
   run(verb: string): void;
   showMessage(message: string): void;
-  reloadAndReInit(): Promise<any>;
+  reloadAndReInit(): Promise<IQuickDialogConfig>;
   setTemplate(templateId: number, templateName: string, closeDialog: boolean): Promise<any>;
 
   /**

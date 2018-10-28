@@ -61,12 +61,12 @@ export class PickerService {
       .share();
   }
 
-  public saveAppId(appId: string, reloadParts: boolean): Observable<any> {
+  public saveAppId(appId: string, reloadParts: boolean): Promise<any> {
     log.add(`saveAppId(${appId}, ${reloadParts})`);
     // skip doing anything here, if we're in content-mode (which doesn't use/change apps)
     if (!this.loadApps) return;
 
-    return this.http.get(`${Constants.apiRoot}SetAppId?appId=${appId}`);
+    return this.http.get(`${Constants.apiRoot}SetAppId?appId=${appId}`).toPromise();
     // return appSet$;
   }
 

@@ -28,7 +28,7 @@ export class AppComponent {
     const frame = <IDialogFrameElement>window.frameElement;
     if (this.name === 'item-history') {
       this.dialog.open(DialogComponent).afterClosed()
-        .subscribe(() => frame.bridge.toggle(false));
+        .subscribe(() => frame.bridge.hide());
     }
   }
 }

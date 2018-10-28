@@ -1,5 +1,5 @@
 //#region imports
-import { Component, ApplicationRef } from '@angular/core';
+import { Component } from '@angular/core';
 import { IDialogFrameElement } from 'app/interfaces-shared/idialog-frame-element';
 import { Observable, BehaviorSubject } from 'rxjs/Rx';
 import { App } from 'app/core/app';
@@ -57,10 +57,12 @@ export class TemplatePickerComponent {
   private bridge: IIFrameBridge;
 
   /** internal loading state */
-  private loadingSubject = new BehaviorSubject<boolean>(false);
+  private loading = new BehaviorSubject<boolean>(false);
 
   /** Ajax-support changes how saving/changing is handled */
   private supportsAjax: boolean;
+
+  private preventAppSwich = false;
 
   public showDebug = DebugConfig.showInUi;
   // #endregion
@@ -75,7 +77,6 @@ export class TemplatePickerComponent {
 
   constructor(
     private api: PickerService,
-    private appRef: ApplicationRef,
     public state: CurrentDataService
   ) {
     // get configuration from iframe-bridge and set everything
@@ -103,7 +104,7 @@ export class TemplatePickerComponent {
     // wire up basic observables
     this.ready$ = Observable.combineLatest(
       this.api.ready$,
-      this.loadingSubject.asObservable(),
+      this.loading.asObservable(),
       (r, l) => r && !l);
     this.apps$ = this.api.apps$;
 
@@ -135,7 +136,7 @@ export class TemplatePickerComponent {
     this.state.template$
       .filter(t => !!t)
       .skipUntil(initDone$.filter(x => x))
-      .do(t => this.loadTemplate(t))
+      .do(t => this.previewTemplate(t))
       .subscribe();
   }
 
@@ -161,6 +162,11 @@ export class TemplatePickerComponent {
     this.isContent = config.isContent;
     this.supportsAjax = this.isContent || config.supportsAjax;
     this.showAdvanced = config.user.canDesign;
+    this.preventAppSwich = config.hasContent;
+    this.showCancel = config.templateId != null;
+  }
+
+  private updateConfigAfterAppChange(config: IQuickDialogConfig): void {
     this.showCancel = config.templateId != null;
   }
 
@@ -175,6 +181,7 @@ export class TemplatePickerComponent {
    * app selection from UI
    */
   selectApp(before: App, after: App): void {
+    console.log('selectApp()');
     if (before && before.appId === after.appId) this.switchTab();
     else this.updateApp(after);
   }
@@ -209,81 +216,48 @@ export class TemplatePickerComponent {
 
 
   private updateApp(newApp: App): void {
-    // ajax-support can change as apps are changed; for ajax, both the previous and new must support it
-    this.supportsAjax = this.supportsAjax && newApp.supportsAjaxReload;
-    log.add(`changing app to ${newApp.appId}; use-ajax:${this.supportsAjax}`);
+    // ajax-support can change as apps are changed; for ajax, maybe both the previous and new must support it
+    // or just new? still WIP
+    this.supportsAjax = /* this.supportsAjax && */ newApp.supportsAjaxReload;
+    log.add(`changing app to ${newApp.appId}; prevent-switch: ${this.preventAppSwich} use-ajax:${this.supportsAjax}`);
+    if (this.preventAppSwich) return;
 
     this.state.activateCurrentApp(newApp.appId);
 
     const save = this.api.saveAppId(newApp.appId.toString(), this.supportsAjax);
-    if (!!save) return;
+    if (!save) return;
 
     if (this.supportsAjax) {
-      save.toPromise().then(() => {
-        // this.api.templates$.take(1).subscribe(() => {
+      save.then(() => {
         log.add('reloaded templates, will reset some stuff');
-        this.appRef.tick();
-        this.setLoadingDone();
-        // });
+        this.loading.next(false);
         log.add('calling reloadAndReInit()');
         // todo - we have multiple releases of reload, this one looks more correct...
         this.bridge.reloadAndReInit()
-          .then(() => this.api.reloadAppParts());
+          .then(newConfig => {
+            this.updateConfigAfterAppChange(newConfig);
+            // app-parts will auto-reload correctly, because the API behind it knows what app is set on the module
+            this.api.reloadAppParts();
+
+          });
       });
     } else {
-      save.subscribe(() => {
-          this.setInpageMessageBeforeReload('loading App...');
+      save.then(() => {
+        this.bridge.showMessage('loading App...');
           window.parent.location.reload();
         });
     }
-    //   .subscribe(() => {
-    //     if (this.supportsAjax) {
-    //       this.api.templates$.take(1).do(() => {
-    //         log.add('reloaded templates, will reset some stuff');
-    //         this.appRef.tick();
-    //         this.doPostAjaxScrolling();
-    //       });
-    //       log.add('calling reloadAndReInit()');
-    //       this.bridge.reloadAndReInit()
-    //         .then(() => this.api.loadTemplates());
-    //     } else {
-    //       this.setInpageMessageBeforeReload('loading App...');
-    //       window.parent.location.reload();
-    //     }
-    // });
+
   }
 
 
 
-  private loadTemplate(template: Template): void {
-    log.add(`load template ${template.TemplateId}, ajax is ${this.supportsAjax}`);
-
-    this.loadingSubject.next(true);
-    this.bridge.setTemplate(template.TemplateId, template.Name, false)
-      .then(() => this.setLoadingDone());
-
-    // Now reload in the preferred way
-    // if (this.supportsAjax) {
-    //   this.bridge
-    //     .previewTemplate(template.TemplateId)
-    //     .then(() => this.setLoadingDone());
-    // } else {
-    //   this.setInpageMessageBeforeReload(`refreshing <b>${template.Name}</b>...`);
-    //   this.bridge
-    //     .saveTemplate(template.TemplateId)
-    //     .then(() => window.parent.location.reload());
-    // }
-  }
-
-  private setInpageMessageBeforeReload(msg: string) {
-    log.add('no ajax, will reload page...');
-    this.bridge.showMessage(msg);
-    this.setLoadingDone();
-  }
-
-  private setLoadingDone() {
-    this.loadingSubject.next(false);
-    this.appRef.tick();
+  private previewTemplate(t: Template): void {
+    log.add(`previewTemplate(${t.TemplateId}), ajax is ${this.supportsAjax}`);
+    this.loading.next(true);
+    this.bridge
+      .setTemplate(t.TemplateId, t.Name, false)
+      .then(() => this.loading.next(false));
   }
 
 }
