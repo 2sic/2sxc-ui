@@ -66,11 +66,8 @@ export class PickerService {
     // skip doing anything here, if we're in content-mode (which doesn't use/change apps)
     if (!this.loadApps) return;
 
-    const appSet$ = this.http.get(`${Constants.apiRoot}SetAppId?appId=${appId}`);
-    // 2018-10-27 2dm - moving this to the caller, as that requires the bridge-update first
-    // if (reloadParts)
-    //   appSet$.subscribe(() => this.reloadAppParts());
-    return appSet$;
+    return this.http.get(`${Constants.apiRoot}SetAppId?appId=${appId}`);
+    // return appSet$;
   }
 
   public reloadAppParts(): void {

@@ -9,14 +9,11 @@ import { IQuickDialogConfig } from './iquick-dialog-config';
  */
 export interface IIFrameBridge {
   getAdditionalDashboardConfig(): IQuickDialogConfig;
-  scrollToTarget(): void;
-  persistDia(): void;
   toggle(action: boolean): void;
   run(verb: string): void;
   showMessage(message: string): void;
   reloadAndReInit(): Promise<any>;
-  saveTemplate(templateId: number): Promise<any>;
-  previewTemplate(templateId: number): Promise<any>;
+  setTemplate(templateId: number, templateName: string, closeDialog: boolean): Promise<any>;
 
   /**
    * the cancel callback to close this dialog cancelling changes

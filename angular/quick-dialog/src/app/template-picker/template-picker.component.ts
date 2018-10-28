@@ -169,7 +169,7 @@ export class TemplatePickerComponent {
 
   run(action: string): void { this.bridge.run(action); }
 
-  persistTemplate(template: Template) { this.bridge.saveTemplate(template.TemplateId); }
+  persistTemplate(template: Template) { this.bridge.setTemplate(template.TemplateId, template.Name, true); }
 
   /**
    * app selection from UI
@@ -216,13 +216,15 @@ export class TemplatePickerComponent {
     this.state.activateCurrentApp(newApp.appId);
 
     const save = this.api.saveAppId(newApp.appId.toString(), this.supportsAjax);
+    if (!!save) return;
+
     if (this.supportsAjax) {
-      save.subscribe(() => {
-        this.api.templates$.take(1).subscribe(() => {
-          log.add('reloaded templates, will reset some stuff');
-          this.appRef.tick();
-          this.doPostAjaxScrolling();
-        });
+      save.toPromise().then(() => {
+        // this.api.templates$.take(1).subscribe(() => {
+        log.add('reloaded templates, will reset some stuff');
+        this.appRef.tick();
+        this.setLoadingDone();
+        // });
         log.add('calling reloadAndReInit()');
         // todo - we have multiple releases of reload, this one looks more correct...
         this.bridge.reloadAndReInit()
@@ -257,30 +259,30 @@ export class TemplatePickerComponent {
     log.add(`load template ${template.TemplateId}, ajax is ${this.supportsAjax}`);
 
     this.loadingSubject.next(true);
+    this.bridge.setTemplate(template.TemplateId, template.Name, false)
+      .then(() => this.setLoadingDone());
 
     // Now reload in the preferred way
-    if (this.supportsAjax) {
-      this.bridge
-        .previewTemplate(template.TemplateId)
-        .then(() => this.doPostAjaxScrolling());
-    } else {
-      this.setInpageMessageBeforeReload(`refreshing <b>${template.Name}</b>...`);
-      this.bridge
-        .saveTemplate(template.TemplateId)
-        .then(() => window.parent.location.reload());
-    }
+    // if (this.supportsAjax) {
+    //   this.bridge
+    //     .previewTemplate(template.TemplateId)
+    //     .then(() => this.setLoadingDone());
+    // } else {
+    //   this.setInpageMessageBeforeReload(`refreshing <b>${template.Name}</b>...`);
+    //   this.bridge
+    //     .saveTemplate(template.TemplateId)
+    //     .then(() => window.parent.location.reload());
+    // }
   }
 
   private setInpageMessageBeforeReload(msg: string) {
     log.add('no ajax, will reload page...');
     this.bridge.showMessage(msg);
-    this.doPostAjaxScrolling();
-    this.bridge.persistDia();
+    this.setLoadingDone();
   }
 
-  private doPostAjaxScrolling() {
+  private setLoadingDone() {
     this.loadingSubject.next(false);
-    this.bridge.scrollToTarget();
     this.appRef.tick();
   }
 
