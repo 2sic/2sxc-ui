@@ -17,7 +17,7 @@ log.add('loading main.ts');
 declare const window;
 const platform = platformBrowserDynamic();
 
-const init = () => {
+function init() {
   log.add('init()');
 
   try {
@@ -28,7 +28,7 @@ const init = () => {
     console.log('platform destroy error', e);
   }
 
-  platform.bootstrapModule(AppModule)
+  platformBrowserDynamic().bootstrapModule(AppModule)
     .then(() => window.appBootstrap && window.appBootstrap())
     .catch(err => console.error('NG Bootstrap Error =>', err));
 };

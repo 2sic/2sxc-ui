@@ -61,6 +61,7 @@
 
     var scripts = [
         // 'inline.bundle.js', // purpose unknown
+        'runtime.js', // webpack?
         'polyfills.js', // js polyfills
         'vendor.js', // dependencies
         'main.js' // our app, with everything
@@ -83,8 +84,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link href="//fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <!-- </head> -->
-</head>
+<!-- 
+  dummy area to capture automatically added style tag which doesn't have cache-breaker
+  </head>
+ -->
+
+  <script>
+    document.write("</head>");
+  </script>
 
 <body>
   <app-root></app-root>
@@ -95,7 +102,9 @@
     for (s = 0; s < styles.length; s++) addStyle(styles[s]);
 
   </script>
-  <!-- </body> -->
-</body>
+<!-- 
+  dummy area to capture automatically added script tags which don't have cache-breaker
+  </body>
+-->
 
 </html>

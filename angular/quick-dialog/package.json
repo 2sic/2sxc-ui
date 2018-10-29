@@ -12,9 +12,10 @@
     "e2e": "ng e2e",
     "develop": "concurrently \"npm run watch:publish:2sxc-ui\" \"npm run watch:publish:2sxc\" \"npm run watch:publish:dnn9:2cb\" \"npm run watch\" --kill-others -n \"publish to 2sxc,publish to 2sxc-ui,publish to DNN9,build angular\"",
     "dev2dm": "concurrently \"npm run watch:publish:2sxc-ui\" \"npm run watch:publish:2sxc\" \"npm run watch\" --kill-others -n \"publish to 2sxc,publish to 2sxc-ui,build angular\"",
+
     "watch": "ng build --watch --output-hashing=none --extract-css=true",
     "watch:2web": "ng build --watch --output-hashing=none --extract-css=true --output-path=\"/Projects/2sxc-dnn742/Website/DesktopModules/ToSIC_SexyContent/dist/ng/\"",
-    "watch:prod:2web": "ng build --watch --output-hashing=none --extract-css=true --output-hashing=none --sourcemaps=true -op=\"/Projects/2sxc-dnn742/Website/DesktopModules/ToSIC_SexyContent/dist/ng/\"",
+    "watch:prod:2web": "ng build --prod --watch --output-path=\"/Projects/2sxc-dnn742/Website/DesktopModules/ToSIC_SexyContent/dist/ng/\" ",
     "watch:publish:2sxc-ui": "cpx \"./dist/**/*.*\" \"../../dist/\" -w -v",
     "watch:publish:2sxc": "cpx \"./dist/**/*.*\" \"/Projects/2sxc-dnn742/Website/DesktopModules/ToSIC_SexyContent/dist/\" -w -v",
     "watch:publish:dnn9:2cb": "cpx \"./dist/**/*.*\" \"/Projects/2SexyContent/WebDNN9/DesktopModules/ToSIC_SexyContent/dist/\" -w -v",
