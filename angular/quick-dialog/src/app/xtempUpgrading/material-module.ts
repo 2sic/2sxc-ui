@@ -25,14 +25,14 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatInputModule } from '@angular/material/input';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { MatTabsModule } from '@angular/material';
+import { MatTabsModule, MatExpansionModule } from '@angular/material';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatExpansionPanel } from '@angular/material';
+// import { MatExpansionPanel } from '@angular/material';
 import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
 import { MatPaginatorModule } from '@angular/material/paginator';
@@ -48,6 +48,7 @@ MatCheckboxModule,
 MatDatepickerModule,
 MatTableModule,
 MatDialogModule,
+MatExpansionModule,
 MatFormFieldModule,
 MatGridListModule,
 MatIconModule,
@@ -77,7 +78,7 @@ ObserversModule
 ];
 @NgModule({
 imports: MATERIAL_MODULES,
-declarations: [MatExpansionPanel, MatRadioButton],
+// declarations: [MatExpansionPanel, MatRadioButton],
 exports: MATERIAL_MODULES,
 })
 export class MaterialModule { }

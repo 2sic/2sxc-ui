@@ -5,6 +5,7 @@ import { SxcVersionsService } from 'app/version-dialog/sxc-versions.service';
 import { DialogComponent, ConfirmRestoreDialog } from 'app/version-dialog/dialog.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MaterialModule } from 'app/xtempUpgrading/material-module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   exports: [
@@ -14,6 +15,7 @@ import { MaterialModule } from 'app/xtempUpgrading/material-module';
     CommonModule,
     FlexLayoutModule,
     TranslateModule,
+    BrowserAnimationsModule,
     MaterialModule,
   ],
   providers: [
