@@ -1,7 +1,10 @@
 // #region imports
+import {combineLatest} from 'rxjs';
+
+import {map, filter, startWith, share} from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import { Observable, BehaviorSubject, Subject } from 'rxjs/Rx';
-import 'rxjs/add/operator/map';
+import { Observable, BehaviorSubject, Subject } from 'rxjs';
+
 import { Http } from '@angular/http';
 import { App } from 'app/core/app';
 import { ContentType } from 'app/template-picker/content-type';
@@ -52,13 +55,13 @@ export class PickerService {
     this.templates$ = this.templatesSubject.asObservable();
 
     // ready requires all to have data, but app can be skipped if not required
-    this.ready$ = Observable
-      .combineLatest(this.apps$, this.contentTypes$, this.templates$,
-        (a, ct, t) => ({ apps: a, types: ct, templates: t }))
-      .filter(set => !this.mustLoadApps || !!(set.apps && set.apps.length))
-      .map(() => true)
-      .startWith(false)
-      .share();
+    this.ready$ = combineLatest(this.apps$, this.contentTypes$, this.templates$,
+        (a, ct, t) => ({ apps: a, types: ct, templates: t })).pipe(
+      filter(set => !this.mustLoadApps || !!(set.apps && set.apps.length)))
+        .pipe(
+      map(() => true),
+      startWith(false),
+      share());
   }
 
   public saveAppId(appId: string, reloadParts: boolean): Promise<any> {
@@ -88,8 +91,8 @@ export class PickerService {
    */
   public loadTemplates(): void {
     log.add('loadTemplates()');
-    const obs = this.http.get(`${Constants.apiRoot}GetSelectableTemplates`)
-      .map(response => response.json() || []);
+    const obs = this.http.get(`${Constants.apiRoot}GetSelectableTemplates`).pipe(
+      map(response => response.json() || []));
     obs.subscribe(json => this.templatesSubject.next(json));
   }
 
@@ -98,13 +101,13 @@ export class PickerService {
    */
   private loadContentTypes(): void {
     log.add(`loadContentTypes()`);
-    this.http.get(`${Constants.apiRoot}GetSelectableContentTypes`)
-      .map(response => (response.json() || []).map(x => {
+    this.http.get(`${Constants.apiRoot}GetSelectableContentTypes`).pipe(
+      map(response => (response.json() || []).map(x => {
         x.Label = (x.Metadata && x.Metadata.Label)
           ? x.Metadata.Label
           : x.Name;
         return x;
-      }))
+      })))
       .subscribe(json => this.contentTypesSubject.next(json));
   }
 
@@ -113,15 +116,15 @@ export class PickerService {
    */
   private loadApps(): void {
     log.add('loadApps()');
-    this.http.get(`${Constants.apiRoot}GetSelectableApps`)
-      .map(response => response.json().map(this.pascalCaseToCamelCase))
+    this.http.get(`${Constants.apiRoot}GetSelectableApps`).pipe(
+      map(response => response.json().map(this.pascalCaseToCamelCase)))
       .subscribe(json => this.appsSubject.next(json));
   }
 
   private pascalCaseToCamelCase(obj): any {
     return Object.keys(obj)
       .reduce((t, v) => {
-        t[v.split('').reduce((t, v, k) => t + (k === 0 ? v.toLowerCase() : v), '')] = obj[v];
+        t[v.split('').reduce((prev, current, i) => prev + (i === 0 ? current.toLowerCase() : current), '')] = obj[v];
         return t;
       }, {});
   }

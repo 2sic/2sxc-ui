@@ -1,7 +1,9 @@
+
 // #region imports
+import { scan, first, debounceTime, share, startWith, map, tap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import { Observable as O, BehaviorSubject, Subject, } from 'rxjs/Rx';
-import 'rxjs/add/operator/map';
+import { Observable as O, BehaviorSubject, combineLatest, merge } from 'rxjs';
+
 import { App } from 'app/core/app';
 import { PickerService } from './picker.service';
 import { IQuickDialogConfig } from 'app/interfaces-shared/iquick-dialog-config';
@@ -52,47 +54,48 @@ export class CurrentDataService {
 
   private buildBasicObservables() {
     // app-stream should contain selected app, once the ID is known - or null
-    this.app$ = O.combineLatest(
+    this.app$ = combineLatest(
       this.api.apps$,
       this.appId.asObservable(),
       (apps, appId) => apps.find(a => a.appId === appId));
 
     // current type should be either the initial type, or a manually selected type
-    const initialType$ = O.combineLatest(
+    const initialType$ = combineLatest(
       this.initialTypeId.asObservable(),
       this.api.contentTypes$,
       (typeId, all) => ContentTypesProcessor.findContentTypesById(all, typeId));
-    this.type$ = O
-      .merge(initialType$, this.selectedType.asObservable())
-      .startWith(null)
-      .share();
+    this.type$ = merge(initialType$, this.selectedType.asObservable()).pipe(
+      startWith(null),
+      share());
 
     // the templates-list is always filtered by the currently selected type
-    this.templates$ = O.combineLatest(
+    this.templates$ = combineLatest(
       this.api.templates$,
       this.type$,
       (all, current) => this.findTemplatesForTypeOrAll(all, current))
       .startWith(new Array<Template>());
 
     // the current template is either the last selected, or auto-selected when conditions change
-    const initialTemplate$ = O.combineLatest(
+    const initialTemplate$ = combineLatest(
       this.initialTemplateId.asObservable(),
-      this.api.templates$.first(),
-      (id, templates) => templates.find(t => t.TemplateId === id))
-      .startWith(null)
-      .share();
-    const selected$ = O.merge(initialTemplate$, this.selectedTemplate.asObservable());
-    this.template$ = O.combineLatest(
+      this.api.templates$.pipe(first()),
+      (id, templates) => templates.find(t => t.TemplateId === id)).pipe(
+        startWith(null),
+        share());
+
+    const selected$ = merge(initialTemplate$, this.selectedTemplate.asObservable());
+    this.template$ = combineLatest(
       selected$,
       this.templates$,
       this.type$,
       this.app$,
       (selected, templates, type, app) => TemplateProcessor.pickSelected(selected, templates, type, app))
-      .startWith(null)
-      .share();
+      .pipe(
+        startWith(null),
+        share());
 
     // construct list of relevant types for the UI
-    this.types$ = O.combineLatest(
+    this.types$ = combineLatest(
       this.api.contentTypes$,
       this.type$,
       this.api.templates$,
@@ -104,20 +107,20 @@ export class CurrentDataService {
     this.config = config;
     // app-init is ready, if it has an app or doesn't need to init one
     log.add(`initializing with config:${JSON.stringify(config)}`, config);
-    const appReady$ = this.app$
-      .map(a => config.isContent || !!a)
-      .startWith(config.isContent || !config.appId);
+    const appReady$ = this.app$.pipe(
+      map(a => config.isContent || !!a),
+      startWith(config.isContent || !config.appId));
 
-    const typeReady$ = this.type$
-      .map(t => !!t)
-      .scan((acc, value) => acc || value, !config.contentTypeId);
-    const templReady$ = this.template$
-      .map(t => !!t)
-      .debounceTime(100) // need to debounce, because the template might have a value and change again
-      .startWith(!config.templateId);
+    const typeReady$ = this.type$.pipe(
+      map(t => !!t),
+      scan((acc, value) => acc || value, !config.contentTypeId));
+    const templReady$ = this.template$.pipe(
+      map(t => !!t),
+      debounceTime(100), // need to debounce, because the template might have a value and change again
+      startWith(!config.templateId));
 
-    const loadAll$ = O.combineLatest(appReady$, templReady$, typeReady$)
-      .map(set => set[0] && set[1] && set[2]);
+    const loadAll$ = combineLatest(appReady$, templReady$, typeReady$)
+      .pipe(map(set => set[0] && set[1] && set[2]));
 
     this.initLogging(appReady$, typeReady$, templReady$, loadAll$);
 
@@ -141,11 +144,11 @@ export class CurrentDataService {
     this.types$.subscribe(t => slog.add(`types$ count:'${t && t.length}'`, t));
 
     const initLog = log.subLog('stream-init', DebugConfig.stateInits);
-    this.initialTypeId.asObservable().do(t => initLog.add(`initial TypeId:'${t}'`, t)).subscribe();
-    this.initialTemplateId.asObservable().do(t => initLog.add(`initial TypeId:'${t}'`, t)).subscribe();
-    inita$.do(t => initLog.add(`init app$`, t)).subscribe();
-    inittyp$.do(t => initLog.add(`init type$`, t)).subscribe();
-    initt$.do(t => initLog.add(`init temp$`, t)).subscribe();
+    this.initialTypeId.asObservable().pipe(tap(t => initLog.add(`initial TypeId:'${t}'`, t))).subscribe();
+    this.initialTemplateId.asObservable().pipe(tap(t => initLog.add(`initial TypeId:'${t}'`, t))).subscribe();
+    inita$.pipe(tap(t => initLog.add(`init app$`, t))).subscribe();
+    inittyp$.pipe(tap(t => initLog.add(`init type$`, t))).subscribe();
+    initt$.pipe(tap(t => initLog.add(`init temp$`, t))).subscribe();
     initAll$.subscribe(t => initLog.add(`init all$`, t));
   }
 

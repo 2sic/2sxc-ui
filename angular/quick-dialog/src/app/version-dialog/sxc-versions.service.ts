@@ -1,9 +1,9 @@
+
+import {map} from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Response, Headers, RequestOptions, RequestOptionsArgs, Http } from '@angular/http';
-import { BehaviorSubject } from "rxjs/BehaviorSubject";
-import { ReplaySubject } from "rxjs/ReplaySubject";
+import { BehaviorSubject ,  ReplaySubject ,  Observable } from "rxjs";
 import { Version } from "app/version-dialog/version";
-import { Observable } from "rxjs/Observable";
 
 declare const $2sxc;
 
@@ -60,8 +60,8 @@ export class SxcVersionsService {
     headers.append('ContentBlockId', cbId);
     const options = new RequestOptions({ headers: headers });
 
-    this.http.post(url, item, options)
-      .map(res => res.json()
+    this.http.post(url, item, options).pipe(
+      map(res => res.json()
         .map((v, i, all) => Object.assign(v, {
           Data: (() => {
             let lastVersion = all.find(v2 => v2.VersionNumber === v.VersionNumber - 1);
@@ -91,7 +91,7 @@ export class SxcVersionsService {
             const min = date.getMinutes();
             return `${y}-${m < 10 ? '0' : ''}${m}-${d < 10 ? '0' : ''}${d} ${h < 10 ? '0' : ''}${h}:${min < 10 ? '0' : ''}${min}`;
           })(v.TimeStamp),
-        })))
+        }))))
       .subscribe(v => this.versionsSubject.next(v), e => {
         this.errorSubject.next('Could not load versions for this item. Please make sure to assign an initial content.');
       });

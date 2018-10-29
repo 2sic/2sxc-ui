@@ -1,7 +1,7 @@
 import { TranslateModule } from '@ngx-translate/core';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { MdMenuModule, MdTabsModule, MdProgressBarModule, MaterialModule } from '@angular/material';
+import { MatMenuModule, MatTabsModule, MatProgressBarModule, /* Materialmodule */ } from '@angular/material';
 import { CommonModule } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TemplatePickerComponent } from './template-picker.component';
@@ -11,6 +11,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { InstallerModule } from 'app/installer/installer.module';
 import { DebugPipe } from './debug.pipe';
 import { ContentTypesProcessor } from './data/content-types-processor.service';
+import { MaterialModule } from 'app/xtempUpgrading/material-module';
 
 @NgModule({
   exports: [
@@ -18,11 +19,11 @@ import { ContentTypesProcessor } from './data/content-types-processor.service';
   ],
   imports: [
     CommonModule,
-    MdMenuModule,
-    MdTabsModule,
-    MaterialModule,
     BrowserAnimationsModule,
-    MdProgressBarModule,
+    MatMenuModule,
+    MatTabsModule,
+    MaterialModule,
+    MatProgressBarModule,
     CoreModule,
     FormsModule,
     FlexLayoutModule,

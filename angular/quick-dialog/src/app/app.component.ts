@@ -1,7 +1,7 @@
 import { TranslateService } from '@ngx-translate/core';
 import { Component, Inject } from '@angular/core';
 import { DialogComponent } from 'app/version-dialog/dialog.component';
-import { MdDialog } from '@angular/material';
+import { MatDialog } from '@angular/material';
 import { IDialogFrameElement } from './interfaces-shared/idialog-frame-element';
 import { log } from './core/log';
 
@@ -17,7 +17,7 @@ export class AppComponent {
 
   constructor(
     public translate: TranslateService,
-    private dialog: MdDialog,
+    private dialog: MatDialog,
   ) {
     const langs = ['en', 'de', 'es', 'fr', 'it', 'nl', 'uk'];
     translate.addLangs(langs);

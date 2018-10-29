@@ -1,3 +1,5 @@
+
+import {startWith} from 'rxjs/operators';
 import { enableProdMode } from '@angular/core';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
@@ -36,6 +38,6 @@ const init = () => {
 const bootController = window.bootController = BootController.getRebootController();
 
 // Init on reboot request.
-bootController.rebootRequest$
-  .startWith(true) // Init on first load.
+bootController.rebootRequest$.pipe(
+  startWith(true)) // Init on first load.
   .subscribe(() => init());

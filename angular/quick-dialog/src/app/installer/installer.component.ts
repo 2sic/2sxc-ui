@@ -1,8 +1,9 @@
+
+import {tap, switchMap, map, filter, debounceTime} from 'rxjs/operators';
 import { Component, OnInit, Input } from '@angular/core';
 import { InstallerService } from 'app/installer/installer.service';
 import { DomSanitizer } from '@angular/platform-browser';
-import { fromEvent } from 'rxjs/observable/fromEvent';
-import { Subscription } from 'rxjs/Subscription';
+import { fromEvent ,  Subscription } from 'rxjs';
 import { GettingStartedService } from './getting-started.service';
 
 declare const $2sxc: any;
@@ -35,8 +36,8 @@ export class InstallerComponent implements OnInit {
       }));
 
       // bootController.watchReboot()
-      window.bootController.rebootRequest$
-        .debounceTime(1000)
+      window.bootController.rebootRequest$.pipe(
+        debounceTime(1000))
         .subscribe(() => this.destroy());
   }
 
@@ -50,51 +51,51 @@ export class InstallerComponent implements OnInit {
     let alreadyProcessing = false;
     this.api.loadGettingStarted(this.isContentApp);
 
-    this.subscriptions.push(fromEvent(window, 'message')
+    this.subscriptions.push(fromEvent(window, 'message').pipe(
 
       // Ensure only one installation is processed.
-      .filter(() => !alreadyProcessing)
+      filter(() => !alreadyProcessing),
 
       // Get data from event.
-      .map((evt: MessageEvent) => {
+      map((evt: MessageEvent) => {
         try {
           return JSON.parse(evt.data);
         } catch (e) {
           return void 0;
         }
-      })
+      }),
 
       // Check if data is correct.
-      .filter(data => data
+      filter(data => data
         && ~~data.moduleId === ~~$2sxc.urlParams.require('mid')
-        && data.action === 'install')
+        && data.action === 'install'),
 
       // Get packages from data.
-      .map(data => Object.values(data.packages))
+      map(data => Object.values(data.packages)),
 
       // Show confirm dialog.
-      .filter(packages => {
+      filter(packages => {
         const packagesDisplayNames = packages
-          .reduce((t, c) => `${t} - ${c.displayName}\n`, '');
+          .reduce((t, c) => `${t} - ${(c as any).displayName }\n`, '');
 
         if (!confirm(`
           Do you want to install these packages?\n\n
           ${packagesDisplayNames}\nThis could take 10 to 60 seconds per package,
           please don't reload the page while it's installing.`)) return false;
         return true;
-      })
+      }),
 
-      .switchMap(packages => {
+      switchMap(packages => {
         alreadyProcessing = true;
         this.showProgress = true;
         return this.installer.installPackages(packages, p => this.currentPackage = p);
-      })
+      }),
 
-      .do(() => {
+      tap(() => {
         this.showProgress = false;
         alert('Installation complete. If you saw no errors, everything worked.');
         window.top.location.reload();
-      })
+      }),)
 
       .subscribe(null, () => {
           this.showProgress = false;

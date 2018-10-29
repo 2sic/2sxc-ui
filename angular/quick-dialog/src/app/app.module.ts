@@ -1,4 +1,4 @@
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import { Http } from '@angular/http';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { BrowserModule } from '@angular/platform-browser';
@@ -8,8 +8,11 @@ import { FormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
 import { TemplatePickerModule } from 'app/template-picker/template-picker.module';
 import { VersionDialogModule } from 'app/version-dialog/version-dialog.module';
+import { HttpClient } from '@angular/common/http';
+import { MaterialModule } from './xtempUpgrading/material-module';
+import { MatExpansionModule } from '@angular/material';
 
-export function HttpLoaderFactory(http: Http) {
+export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, '../i18n/sxc-admin-', '.js');
 }
 
@@ -17,7 +20,7 @@ export function HttpLoaderFactory(http: Http) {
   declarations: [
     AppComponent
   ],
-  exports: [],
+  exports: [ ],
   imports: [
     BrowserModule,
     FormsModule,
@@ -29,6 +32,7 @@ export function HttpLoaderFactory(http: Http) {
         deps: [Http]
       }
     }),
+    MaterialModule, // must be after BrowserModule
     VersionDialogModule,
   ],
   providers: [

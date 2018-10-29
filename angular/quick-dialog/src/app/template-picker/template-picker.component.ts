@@ -1,3 +1,7 @@
+
+import {merge as observableMerge, combineLatest as observableCombineLatest,  timer } from 'rxjs';
+
+import {take, filter, combineLatest, startWith, skipUntil} from 'rxjs/operators';
 //#region imports
 import { Component } from '@angular/core';
 import { IDialogFrameElement } from 'app/interfaces-shared/idialog-frame-element';
@@ -11,7 +15,6 @@ import { cAppActionImport } from './constants';
 import { log as parentLog } from 'app/core/log';
 import { PickerService } from './picker.service';
 import { CurrentDataService } from './current-data.service';
-import { timer } from 'rxjs/observable/timer';
 import { DebugConfig } from 'app/debug-config';
 
 //#endregion
@@ -101,10 +104,10 @@ export class TemplatePickerComponent {
    * wire up observables for this component
    */
   private initObservables(initDone$: Observable<boolean>): void {
-    const initTrue$ = initDone$.filter(t => t);
+    const initTrue$ = initDone$.pipe(filter(t => t));
 
     // wire up basic observables
-    this.ready$ = Observable.combineLatest(
+    this.ready$ = observableCombineLatest(
       this.api.ready$,
       this.loading.asObservable(),
       (r, l) => r && !l);
@@ -113,14 +116,14 @@ export class TemplatePickerComponent {
     this.apps$ = this.api.apps$;
 
     // if the content-type or app is set, switch tabs (ignore null/empty states)
-    const typeOrAppReady = Observable.merge(this.state.type$, this.state.app$).filter(t => !!t);
-    typeOrAppReady.combineLatest(initTrue$).subscribe(_ => this.switchTab());
+    const typeOrAppReady = observableMerge(this.state.type$, this.state.app$).pipe(filter(t => !!t));
+    typeOrAppReady.pipe(combineLatest(initTrue$)).subscribe(_ => this.switchTab());
 
     // once the data is known, check if installer is needed
-    Observable.combineLatest(this.api.templates$,
+    observableCombineLatest(this.api.templates$,
       this.api.contentTypes$,
       this.api.apps$,
-      this.api.ready$.filter(r => !!r),
+      this.api.ready$.pipe(filter(r => !!r)),
       (templates, c, apps) => {
       this.showInstaller = this.isContent
         ? templates.length === 0
@@ -128,17 +131,17 @@ export class TemplatePickerComponent {
     }).subscribe();
 
     // template loading is true, when the template-list or selected template are not ready
-    this.templatesLoading$ = Observable.combineLatest(
+    this.templatesLoading$ = observableCombineLatest(
       this.state.templates$,
       this.state.template$,
-      (all, selected) => !(all && selected))
-      .startWith(false);
+      (all, selected) => !(all && selected)).pipe(
+      startWith(false));
 
     // whenever the template changes, ensure the preview reloads
     // but don't do this when initializing, that's why we listen to initDone$
-    this.state.template$
-      .filter(t => !!t)
-      .skipUntil(initTrue$)
+    this.state.template$.pipe(
+      filter(t => !!t),
+      skipUntil(initTrue$),)
       .subscribe(t => this.previewTemplate(t));
   }
 
@@ -213,7 +216,7 @@ export class TemplatePickerComponent {
   switchTab() {
     log.add('switchTab()');
     // must delay change because of a bug in the tabs-updating
-    timer(100).take(1).subscribe(_ => this.tabIndex = 1);
+    timer(100).pipe(take(1)).subscribe(_ => this.tabIndex = 1);
   }
 
 

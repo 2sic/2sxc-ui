@@ -132,7 +132,7 @@
                 height: 88px;
                 display: inline-block;
             }
-            md-select {
+            mat-select {
                 width: 320px;
             }
             .row {
@@ -161,10 +161,10 @@
     }
 }
 
-/deep/ md-tab-group {
-    md-tab-header {
+/deep/ mat-tab-group {
+    mat-tab-header {
         border-bottom: none !important;
-        md-ink-bar {
+        mat-ink-bar {
             display: none !important;
         }
         .mat-tab-labels {
