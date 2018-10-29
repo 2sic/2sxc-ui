@@ -101,6 +101,8 @@ export class TemplatePickerComponent {
    * wire up observables for this component
    */
   private initObservables(initDone$: Observable<boolean>): void {
+    const initTrue$ = initDone$.filter(t => t);
+
     // wire up basic observables
     this.ready$ = Observable.combineLatest(
       this.api.ready$,
@@ -108,10 +110,9 @@ export class TemplatePickerComponent {
       (r, l) => r && !l);
     this.apps$ = this.api.apps$;
 
-    // if the content-type or app is set, switch tabs
-    Observable.merge(this.state.type$, this.state.app$)
-      .filter(t => !!t) // ignore null/empty state changes
-      .subscribe(_ => this.switchTab());
+    // if the content-type or app is set, switch tabs (ignore null/empty states)
+    const typeOrAppReady = Observable.merge(this.state.type$, this.state.app$).filter(t => !!t);
+    typeOrAppReady.combineLatest(initTrue$).subscribe(_ => this.switchTab());
 
     // once the data is known, check if installer is needed
     Observable.combineLatest(this.api.templates$,
@@ -135,7 +136,7 @@ export class TemplatePickerComponent {
     // but don't do this when initializing, that's why we listen to initDone$
     this.state.template$
       .filter(t => !!t)
-      .skipUntil(initDone$.filter(x => x))
+      .skipUntil(initTrue$)
       .do(t => this.previewTemplate(t))
       .subscribe();
   }
