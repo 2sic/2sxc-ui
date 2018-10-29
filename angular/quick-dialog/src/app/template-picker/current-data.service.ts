@@ -14,8 +14,6 @@ import { TemplateProcessor } from './data/template-processor';
 import { DebugConfig } from 'app/debug-config';
 // #endregion
 
-const debugInitValues = true;
-const debugInitDetailed = true;
 const log = parentLog.subLog('state', DebugConfig.state);
 
 @Injectable()
@@ -155,12 +153,15 @@ export class CurrentDataService {
 
   //#region activate calls from outside
   activateCurrentApp(appId: number) {
+    log.add(`activateApp(${appId})`);
     this.appId.next(appId);
   }
   activateType(contentType: ContentType) {
+    log.add(`activateType(${contentType.Name})`);
     this.selectedType.next(contentType);
   }
   activateTemplate(template: Template) {
+    log.add(`activateTemplate(${template.TemplateId})`);
     this.selectedTemplate.next(template);
   }
   //#endregion

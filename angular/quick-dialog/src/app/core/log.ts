@@ -29,6 +29,9 @@ class Log {
     this.loggers[name] = newLog;
     newLog.autoDump = typeof(autoDump) === 'boolean'
       ? autoDump : this.autoDump;
+    if (DebugConfig.log)
+      this.add(`logger: subLog(${name}, ${autoDump}) resulting in autoDump=${newLog.autoDump}`);
+
     return newLog;
   }
 

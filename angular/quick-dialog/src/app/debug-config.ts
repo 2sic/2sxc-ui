@@ -2,6 +2,7 @@
 /** configuration what to debug directly to the screen and what to keep secret */
 export const DebugConfig = {
   live: true,
+  log: true,
 
   // api debugging
   api: false,
@@ -12,7 +13,7 @@ export const DebugConfig = {
   showInUi: false,
 
   // template state
-  state: false,
+  state: true,
   stateStreams: false,
   stateInits: false,
 

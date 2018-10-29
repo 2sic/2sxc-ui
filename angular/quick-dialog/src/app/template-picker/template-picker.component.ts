@@ -48,7 +48,7 @@ export class TemplatePickerComponent {
   tabIndex = 0;
 
   /** Indicate if the user is allowed to change content-types or not */
-  allowContentTypeChange: boolean;
+  preventTypeSwitch: boolean;
 
   /** Indicates whether the installer can be shown in this dialog or not */
   isBadContextForInstaller = false;
@@ -108,6 +108,8 @@ export class TemplatePickerComponent {
       this.api.ready$,
       this.loading.asObservable(),
       (r, l) => r && !l);
+
+    // all apps are the same as provided by the api
     this.apps$ = this.api.apps$;
 
     // if the content-type or app is set, switch tabs (ignore null/empty states)
@@ -137,8 +139,7 @@ export class TemplatePickerComponent {
     this.state.template$
       .filter(t => !!t)
       .skipUntil(initTrue$)
-      .do(t => this.previewTemplate(t))
-      .subscribe();
+      .subscribe(t => this.previewTemplate(t));
   }
 
   transferObservablesToLocalToEnsureUiUpdates(): any {
@@ -158,7 +159,7 @@ export class TemplatePickerComponent {
 
 
   private initValuesFromBridge(config: IQuickDialogConfig): void {
-    this.allowContentTypeChange = !(config.hasContent || config.isList);
+    this.preventTypeSwitch = config.hasContent;
     this.isBadContextForInstaller = config.isInnerContent;
     this.isContent = config.isContent;
     this.supportsAjax = this.isContent || config.supportsAjax;
@@ -204,8 +205,8 @@ export class TemplatePickerComponent {
   //#endregion
 
   private setContentType(contentType: ContentType): void {
-    log.add(`select content-type '${contentType.Name}'; allowed: ${this.allowContentTypeChange}`);
-    if (!this.allowContentTypeChange) return;
+    log.add(`select content-type '${contentType.Name}'; prevent: ${this.preventTypeSwitch}`);
+    if (this.preventTypeSwitch) return;
     this.state.activateType(contentType);
   }
 
@@ -219,10 +220,11 @@ export class TemplatePickerComponent {
   private updateApp(newApp: App): void {
     // ajax-support can change as apps are changed; for ajax, maybe both the previous and new must support it
     // or just new? still WIP
-    this.supportsAjax = /* this.supportsAjax && */ newApp.supportsAjaxReload;
-    log.add(`changing app to ${newApp.appId}; prevent-switch: ${this.preventAppSwich} use-ajax:${this.supportsAjax}`);
+    const ajax = /* this.supportsAjax && */ newApp.supportsAjaxReload;
+    log.add(`changing app to ${newApp.appId}; prevent-switch: ${this.preventAppSwich} use-ajax:${ajax}`);
     if (this.preventAppSwich) return;
 
+    this.supportsAjax = ajax;
     this.state.activateCurrentApp(newApp.appId);
 
     const save = this.api.saveAppId(newApp.appId.toString(), this.supportsAjax);

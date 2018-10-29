@@ -8,7 +8,7 @@
       <li>Apps: {{ (apps$ | async)?.length }}, current: {{app?.appId }} </li>
       <li>Templates: {{templates?.length}}, current: {{template?.TemplateId}}</li>
       <li>Config: isContent='{{isContent}}'</li>
-      <li>Tab to show: '{{tabIndex}}'</li>
+      <li>Tab to show: '{{tabIndex}}' / preventTypeSwitch '{{preventTypeSwitch}}' / preventAppSwitch '{{preventAppSwich}}'</li>
     </ul>
   </div>
 
@@ -40,7 +40,8 @@
         <!-- App Selector -->
         <div *ngIf="!isContent; else contentApp" class="tiles">
 
-          <div class="tile" [ngClass]="{ active: app?.appId === a.appId }" 
+          <div class="tile" 
+            [ngClass]="{ active: app?.appId === a.appId, blocked: preventTypeSwitch }" 
             [attr.title]="a.name" 
             (click)="selectApp(app, a)"
             (dblclick)="switchTab()" *ngFor="let a of apps$ | async">
@@ -83,7 +84,7 @@
         <ng-template #contentApp>
           <div class="tiles">
             <div md-button class="tile" 
-              [ngClass]="{ active: contentType?.StaticName === c.StaticName, blocked: !allowContentTypeChange }"
+              [ngClass]="{ active: contentType?.StaticName === c.StaticName, blocked: preventTypeSwitch }"
               [attr.title]="c.Label | translate" 
               (click)="selectContentType(contentType, c)"
               (dblclick)="switchTab()" 

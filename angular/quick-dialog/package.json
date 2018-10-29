@@ -16,6 +16,8 @@
     
     "watch:2web": "ng build --watch --output-hashing=none --extract-css=true -op=\"/Projects/2sxc-dnn742/Website/DesktopModules/ToSIC_SexyContent/dist/ng/\"",
 
+    "watch:prod:2web": "ng build --watch --output-hashing=none --extract-css=true --output-hashing=none --sourcemaps=true -op=\"/Projects/2sxc-dnn742/Website/DesktopModules/ToSIC_SexyContent/dist/ng/\"",
+
     "watch:publish:2sxc-ui": "cpx \"./dist/**/*.*\" \"../../dist/\" -w -v",
     "watch:publish:2sxc": "cpx \"./dist/**/*.*\" \"/Projects/2sxc-dnn742/Website/DesktopModules/ToSIC_SexyContent/dist/\" -w -v",
     "watch:publish:dnn9:2cb": "cpx \"./dist/**/*.*\" \"/Projects/2SexyContent/WebDNN9/DesktopModules/ToSIC_SexyContent/dist/\" -w -v",
