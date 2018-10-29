@@ -15,7 +15,7 @@ import { DebugConfig } from 'app/debug-config';
 // #endregion
 
 const log = parentLog.subLog('api', DebugConfig.api);
-
+const emptyAppList = []; // this must be created as a variable, so we can check later if it's still the original or a new empty list
 @Injectable()
 export class PickerService {
   // #region public properties
@@ -37,7 +37,8 @@ export class PickerService {
   // #region private properties
   private mustLoadApps = false;
   // all the subjects - these are all multi-cast, so don't use share!
-  private appsSubject = new BehaviorSubject<App[]>([]);
+  const 
+  private appsSubject = new BehaviorSubject<App[]>(emptyAppList);
   private contentTypesSubject = new Subject<ContentType[]>();
   private templatesSubject = new Subject<Template[]>();
   // #endregion
@@ -57,7 +58,7 @@ export class PickerService {
     // ready requires all to have data, but app can be skipped if not required
     this.ready$ = combineLatest(this.apps$, this.contentTypes$, this.templates$,
         (a, ct, t) => ({ apps: a, types: ct, templates: t })).pipe(
-      filter(set => !this.mustLoadApps || !!(set.apps && set.apps.length)))
+      filter(set => !this.mustLoadApps || !!(set.apps && set.apps !== emptyAppList)))
         .pipe(
       map(() => true),
       startWith(false),

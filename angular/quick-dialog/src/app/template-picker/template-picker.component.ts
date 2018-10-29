@@ -1,7 +1,7 @@
 
-import {merge as observableMerge, combineLatest as observableCombineLatest,  timer } from 'rxjs';
+import {merge as observableMerge, combineLatest,  timer } from 'rxjs';
 
-import {take, filter, combineLatest, startWith, skipUntil} from 'rxjs/operators';
+import {take, filter, startWith, skipUntil} from 'rxjs/operators';
 //#region imports
 import { Component } from '@angular/core';
 import { IDialogFrameElement } from 'app/interfaces-shared/idialog-frame-element';
@@ -107,7 +107,7 @@ export class TemplatePickerComponent {
     const initTrue$ = initDone$.pipe(filter(t => t));
 
     // wire up basic observables
-    this.ready$ = observableCombineLatest(
+    this.ready$ = combineLatest(
       this.api.ready$,
       this.loading.asObservable(),
       (r, l) => r && !l);
@@ -117,21 +117,22 @@ export class TemplatePickerComponent {
 
     // if the content-type or app is set, switch tabs (ignore null/empty states)
     const typeOrAppReady = observableMerge(this.state.type$, this.state.app$).pipe(filter(t => !!t));
-    typeOrAppReady.pipe(combineLatest(initTrue$)).subscribe(_ => this.switchTab());
+    combineLatest(typeOrAppReady, initTrue$).subscribe(_ => this.switchTab());
 
     // once the data is known, check if installer is needed
-    observableCombineLatest(this.api.templates$,
+    combineLatest(this.api.templates$,
       this.api.contentTypes$,
       this.api.apps$,
       this.api.ready$.pipe(filter(r => !!r)),
       (templates, c, apps) => {
+        log.add('apps/templates loaded, will check if we should show installer')
       this.showInstaller = this.isContent
         ? templates.length === 0
         : apps.filter(a => a.appId !== cAppActionImport).length === 0;
     }).subscribe();
 
     // template loading is true, when the template-list or selected template are not ready
-    this.templatesLoading$ = observableCombineLatest(
+    this.templatesLoading$ = combineLatest(
       this.state.templates$,
       this.state.template$,
       (all, selected) => !(all && selected)).pipe(

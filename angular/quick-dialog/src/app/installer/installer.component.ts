@@ -1,9 +1,9 @@
 
-import {tap, switchMap, map, filter, debounceTime} from 'rxjs/operators';
+import { tap, switchMap, map, filter, debounceTime } from 'rxjs/operators';
 import { Component, OnInit, Input } from '@angular/core';
 import { InstallerService } from 'app/installer/installer.service';
 import { DomSanitizer } from '@angular/platform-browser';
-import { fromEvent ,  Subscription } from 'rxjs';
+import { fromEvent, Subscription } from 'rxjs';
 import { GettingStartedService } from './getting-started.service';
 
 declare const $2sxc: any;
@@ -35,10 +35,10 @@ export class InstallerComponent implements OnInit {
         this.ready = true;
       }));
 
-      // bootController.watchReboot()
-      window.bootController.rebootRequest$.pipe(
-        debounceTime(1000))
-        .subscribe(() => this.destroy());
+    // bootController.watchReboot()
+    window.bootController.rebootRequest$.pipe(
+      debounceTime(1000))
+      .subscribe(() => this.destroy());
   }
 
   destroy(): void {
@@ -76,13 +76,13 @@ export class InstallerComponent implements OnInit {
       // Show confirm dialog.
       filter(packages => {
         const packagesDisplayNames = packages
-          .reduce((t, c) => `${t} - ${(c as any).displayName }\n`, '');
+          .reduce((t, c) => `${t} - ${(c as any).displayName}\n`, '');
 
-        if (!confirm(`
-          Do you want to install these packages?\n\n
-          ${packagesDisplayNames}\nThis could take 10 to 60 seconds per package,
-          please don't reload the page while it's installing.`)) return false;
-        return true;
+        const msg = `Do you want to install these packages?
+
+${packagesDisplayNames}
+This takes 10 to 30 seconds per package. Don't reload the page while it's installing.`;
+        return confirm(msg);
       }),
 
       switchMap(packages => {
@@ -95,12 +95,12 @@ export class InstallerComponent implements OnInit {
         this.showProgress = false;
         alert('Installation complete. If you saw no errors, everything worked.');
         window.top.location.reload();
-      }),)
+      }))
 
       .subscribe(null, () => {
-          this.showProgress = false;
-          alert('An error occurred.');
-          alreadyProcessing = false;
-        }));
+        this.showProgress = false;
+        alert('An error occurred.');
+        alreadyProcessing = false;
+      }));
   }
 }
