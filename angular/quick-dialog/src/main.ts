@@ -28,6 +28,8 @@ function init() {
     console.log('platform destroy error', e);
   }
 
+  // must re-create the object here, otherwise AOT compiler optimizations
+  // break these lines of code
   platformBrowserDynamic().bootstrapModule(AppModule)
     .then(() => window.appBootstrap && window.appBootstrap())
     .catch(err => console.error('NG Bootstrap Error =>', err));
