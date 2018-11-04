@@ -228,15 +228,13 @@ export class TemplatePickerComponent {
     log.add(`changing app to ${newApp.appId}; prevent-switch: ${this.preventAppSwich} use-ajax:${ajax}`);
     if (this.preventAppSwich) return;
 
-    this.supportsAjax = ajax;
-    this.state.activateCurrentApp(newApp.appId);
-
     const save = this.api.saveAppId(newApp.appId.toString(), this.supportsAjax);
-    if (!save) return;
 
-    if (this.supportsAjax) {
+    if (ajax) {
       save.then(() => {
-        log.add('reloaded templates, will reset some stuff');
+        log.add('saved app, will reset some stuff');
+        // do this after save completed, to ensure that the module is ready on the server
+        this.supportsAjax = ajax; // remember new situation
         this.loading.next(false);
         log.add('calling reloadAndReInit()');
         // todo - we have multiple releases of reload, this one looks more correct...
@@ -244,8 +242,8 @@ export class TemplatePickerComponent {
           .then(newConfig => {
             this.updateConfigAfterAppChange(newConfig);
             // app-parts will auto-reload correctly, because the API behind it knows what app is set on the module
-            this.api.reloadAppParts();
-
+            // this.api.reloadAppParts()
+            //   .subscribe(_ => this.state.activateCurrentApp(newApp.appId));
           });
       });
     } else {

@@ -68,15 +68,15 @@ export class PickerService {
   public saveAppId(appId: string, reloadParts: boolean): Promise<any> {
     log.add(`saveAppId(${appId}, ${reloadParts})`);
     // skip doing anything here, if we're in content-mode (which doesn't use/change apps)
-    if (!this.loadApps) return;
+    if (!this.loadApps) throw "can't save app, as we're not in app-mode";
 
     return this.http.get(`${Constants.apiRoot}SetAppId?appId=${appId}`).toPromise();
-    // return appSet$;
   }
 
-  public reloadAppParts(): void {
-        this.loadTemplates();
-        this.loadContentTypes();
+  public reloadAppParts(): Observable<any> {
+    return combineLatest(
+      this.loadTemplates(),
+      this.loadContentTypes());
   }
 
   public initLoading(requireApps: boolean) {
@@ -90,26 +90,30 @@ export class PickerService {
   /**
    * load templates - is sometimes repeated if the app changes
    */
-  public loadTemplates(): void {
+  public loadTemplates(): Observable<any> {
     log.add('loadTemplates()');
     const obs = this.http.get(`${Constants.apiRoot}GetSelectableTemplates`).pipe(
+      share(), // ensure it's only run once
       map(response => response.json() || []));
     obs.subscribe(json => this.templatesSubject.next(json));
+    return obs;
   }
 
   /**
    * Load the ContentTypes - only needed on first initialization
    */
-  private loadContentTypes(): void {
+  private loadContentTypes(): Observable<any> {
     log.add(`loadContentTypes()`);
-    this.http.get(`${Constants.apiRoot}GetSelectableContentTypes`).pipe(
+    const obs = this.http.get(`${Constants.apiRoot}GetSelectableContentTypes`).pipe(
+      share(), // ensure it's only run once
       map(response => (response.json() || []).map(x => {
         x.Label = (x.Metadata && x.Metadata.Label)
           ? x.Metadata.Label
           : x.Name;
         return x;
-      })))
-      .subscribe(json => this.contentTypesSubject.next(json));
+      })));
+    obs.subscribe(json => this.contentTypesSubject.next(json));
+    return obs;
   }
 
   /**
