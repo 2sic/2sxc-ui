@@ -73,7 +73,7 @@ export class CurrentDataService {
       this.api.templates$,
       this.type$,
       (all, current) => this.findTemplatesForTypeOrAll(all, current))
-      .startWith(new Array<Template>());
+      .pipe(startWith(new Array<Template>()));
 
     // the current template is either the last selected, or auto-selected when conditions change
     const initialTemplate$ = combineLatest(

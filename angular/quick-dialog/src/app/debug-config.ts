@@ -9,7 +9,10 @@ export const DebugConfig = {
   apiStreams: false,
 
   // template picker
-  picker: true,
+  picker: { 
+    enabled: true,
+    streams: true
+  },
   showInUi: false,
 
   // template state

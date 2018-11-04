@@ -14,11 +14,11 @@
   </div>
 
   <!-- loading indicator -->
-  <mat-progress-bar [ngStyle]="{ opacity: (ready$ | async) ? 0 : 1 }" [mode]="'indeterminate'"></mat-progress-bar>
+  <mat-progress-bar [ngStyle]="{ opacity: ready ? 0 : 1 }" [mode]="'indeterminate'"></mat-progress-bar>
 
   <!-- main dialog, starting with save/cancel button -->
   <div class="card"
-    [ngClass]="{ blocked: !(ready$ | async) }"
+    [ngClass]="{ blocked: !ready }"
   >
     <div class="top-controls" fxLayout="row" fxLayoutAlign="center center">
       <button mat-fab *ngIf="template" (click)="persistTemplate(template)" [attr.title]="'TemplatePicker.Save' | translate">

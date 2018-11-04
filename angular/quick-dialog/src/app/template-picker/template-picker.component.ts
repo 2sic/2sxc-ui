@@ -16,10 +16,11 @@ import { log as parentLog } from 'app/core/log';
 import { PickerService } from './picker.service';
 import { CurrentDataService } from './current-data.service';
 import { DebugConfig } from 'app/debug-config';
+import { BehaviorObservable } from 'app/core/behavior-observable';
 
 //#endregion
 
-const log = parentLog.subLog('picker', DebugConfig.picker);
+const log = parentLog.subLog('picker', DebugConfig.picker.enabled);
 
 @Component({
   selector: 'app-template-picker',
@@ -60,7 +61,7 @@ export class TemplatePickerComponent {
   private bridge: IIFrameBridge;
 
   /** internal loading state */
-  private loading = new BehaviorSubject<boolean>(false);
+  private loading$ = BehaviorObservable.create<boolean>(false);
 
   /** Ajax-support changes how saving/changing is handled */
   private supportsAjax: boolean;
@@ -76,6 +77,7 @@ export class TemplatePickerComponent {
   template: Template;
   contentType: ContentType;
   types: ContentType[];
+  ready = false;
   //#endregion
 
   constructor(
@@ -86,6 +88,12 @@ export class TemplatePickerComponent {
     this.bridge = (<IDialogFrameElement>window.frameElement).bridge;
     const dashInfo = this.bridge.getAdditionalDashboardConfig();
 
+    this.boot(dashInfo);
+    this.autosyncObservablesToEnsureUiUpdates();
+    this.debugObservables();
+  }
+
+  private boot(dashInfo: IQuickDialogConfig) {
     this.showDebug = dashInfo.debug;
 
     // start data-loading
@@ -93,11 +101,15 @@ export class TemplatePickerComponent {
 
     // init parts, variables, observables
     const initDone$ = this.state.init(dashInfo);
-
     this.initObservables(initDone$);
     this.initValuesFromBridge(dashInfo);
-    this.transferObservablesToLocalToEnsureUiUpdates();
-    this.debugStreams();
+    this.loading$.next(false);
+  }
+
+  private debugObservables() {
+    if (!DebugConfig.picker.streams) return;
+    this.loading$.subscribe(l => log.add(`loading$:${l}`));
+    this.ready$.subscribe(r => log.add(`ready$:${r}`));
   }
 
   /**
@@ -109,7 +121,7 @@ export class TemplatePickerComponent {
     // wire up basic observables
     this.ready$ = combineLatest(
       this.api.ready$,
-      this.loading.asObservable(),
+      this.loading$,
       (r, l) => r && !l);
 
     // all apps are the same as provided by the api
@@ -146,7 +158,8 @@ export class TemplatePickerComponent {
       .subscribe(t => this.previewTemplate(t));
   }
 
-  transferObservablesToLocalToEnsureUiUpdates(): any {
+  /** The UI doesn't update reliably :(, so we copy the data to local variables */
+  private autosyncObservablesToEnsureUiUpdates(): any {
     this.state.app$.subscribe(a => this.app = a);
     this.state.templates$.subscribe(t => this.templates = t);
     this.state.template$.subscribe(t => this.template = t);
@@ -154,12 +167,8 @@ export class TemplatePickerComponent {
     this.state.type$.subscribe(t => this.contentType = t);
 
     this.state.types$.subscribe(t => log.add('type update: ', t));
+    this.ready$.subscribe(r => this.ready = r);
   }
-
-  private debugStreams() {
-
-  }
-
 
 
   private initValuesFromBridge(config: IQuickDialogConfig): void {
@@ -172,9 +181,9 @@ export class TemplatePickerComponent {
     this.showCancel = config.templateId != null;
   }
 
-  private updateConfigAfterAppChange(config: IQuickDialogConfig): void {
-    this.showCancel = config.templateId != null;
-  }
+  // private updateConfigAfterAppChange(config: IQuickDialogConfig): void {
+  //   this.showCancel = config.templateId != null;
+  // }
 
   //#region basic UI action binding
   cancel(): void { this.bridge.cancel(); }
@@ -217,40 +226,32 @@ export class TemplatePickerComponent {
   switchTab() {
     log.add('switchTab()');
     // must delay change because of a bug in the tabs-updating
-    timer(100).pipe(take(1)).subscribe(_ => this.tabIndex = 1);
+    timer(100).toPromise().then(_ => this.tabIndex = 1);
   }
 
 
   private updateApp(newApp: App): void {
     // ajax-support can change as apps are changed; for ajax, maybe both the previous and new must support it
     // or just new? still WIP
-    const ajax = /* this.supportsAjax && */ newApp.supportsAjaxReload;
+    const ajax = newApp.supportsAjaxReload;
     log.add(`changing app to ${newApp.appId}; prevent-switch: ${this.preventAppSwich} use-ajax:${ajax}`);
     if (this.preventAppSwich) return;
 
-    const save = this.api.saveAppId(newApp.appId.toString(), this.supportsAjax);
+
+    this.loading$.next(true);
+    this.bridge.showMessage('loading App...');
+    const savePromise = this.api.saveAppId(newApp.appId.toString(), ajax);
 
     if (ajax) {
-      save.then(() => {
+      savePromise.then(() => {
         log.add('saved app, will reset some stuff');
         // do this after save completed, to ensure that the module is ready on the server
-        this.supportsAjax = ajax; // remember new situation
-        this.loading.next(false);
         log.add('calling reloadAndReInit()');
-        // todo - we have multiple releases of reload, this one looks more correct...
         this.bridge.reloadAndReInit()
-          .then(newConfig => {
-            this.updateConfigAfterAppChange(newConfig);
-            // app-parts will auto-reload correctly, because the API behind it knows what app is set on the module
-            // this.api.reloadAppParts()
-            //   .subscribe(_ => this.state.activateCurrentApp(newApp.appId));
-          });
+          .then(newConfig => this.boot(newConfig));
       });
     } else {
-      save.then(() => {
-        this.bridge.showMessage('loading App...');
-          window.parent.location.reload();
-        });
+      savePromise.then(() => window.parent.location.reload());
     }
 
   }
@@ -259,10 +260,10 @@ export class TemplatePickerComponent {
 
   private previewTemplate(t: Template): void {
     log.add(`previewTemplate(${t.TemplateId}), ajax is ${this.supportsAjax}`);
-    this.loading.next(true);
+    this.loading$.next(true);
     this.bridge
       .setTemplate(t.TemplateId, t.Name, false)
-      .then(isAjax => { if (isAjax) this.loading.next(false); });
+      .then(_ => this.loading$.next(false));
   }
 
 }

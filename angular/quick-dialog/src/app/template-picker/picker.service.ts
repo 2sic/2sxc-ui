@@ -1,7 +1,7 @@
 // #region imports
-import {combineLatest} from 'rxjs';
+import { combineLatest } from 'rxjs';
 
-import {map, filter, startWith, share} from 'rxjs/operators';
+import { map, filter, startWith, share } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject, Subject } from 'rxjs';
 
@@ -12,21 +12,22 @@ import { Template } from 'app/template-picker/template';
 import { log as parentLog } from 'app/core/log';
 import { Constants } from 'app/core/constants';
 import { DebugConfig } from 'app/debug-config';
+import { BehaviorObservable } from 'app/core/behavior-observable';
 // #endregion
 
 const log = parentLog.subLog('api', DebugConfig.api);
-const emptyAppList = []; // this must be created as a variable, so we can check later if it's still the original or a new empty list
+const uninitializedList = []; // this must be created as a variable, so we can check later if it's still the original or a new empty list
 @Injectable()
 export class PickerService {
   // #region public properties
   /** all apps of the zone */
-  apps$: Observable<App[]>;
+  apps$ = BehaviorObservable.create<App[]>(uninitializedList);
 
   /** all types of this app */
-  contentTypes$: Observable<ContentType[]>;
+  contentTypes$ = BehaviorObservable.create<ContentType[]>(uninitializedList);
 
   /** templates/views of this app */
-  templates$: Observable<Template[]>;
+  templates$ = BehaviorObservable.create<Template[]>(uninitializedList);
 
   /**
    * ready is true when all necessary data is loaded
@@ -37,10 +38,6 @@ export class PickerService {
   // #region private properties
   private mustLoadApps = false;
   // all the subjects - these are all multi-cast, so don't use share!
-  const 
-  private appsSubject = new BehaviorSubject<App[]>(emptyAppList);
-  private contentTypesSubject = new Subject<ContentType[]>();
-  private templatesSubject = new Subject<Template[]>();
   // #endregion
 
   constructor(private http: Http) {
@@ -51,26 +48,32 @@ export class PickerService {
 
   private buildObservables() {
     log.add(`buildObservables()`);
-    this.apps$ = this.appsSubject.asObservable();
-    this.contentTypes$ = this.contentTypesSubject.asObservable();
-    this.templates$ = this.templatesSubject.asObservable();
 
     // ready requires all to have data, but app can be skipped if not required
     this.ready$ = combineLatest(this.apps$, this.contentTypes$, this.templates$,
-        (a, ct, t) => ({ apps: a, types: ct, templates: t })).pipe(
-      filter(set => !this.mustLoadApps || !!(set.apps && set.apps !== emptyAppList)))
-        .pipe(
-      map(() => true),
-      startWith(false),
-      share());
+      (a, ct, t) => ({ apps: a, types: ct, templates: t }))
+      .pipe(
+        map(set => set.templates !== uninitializedList
+          && set.types !== uninitializedList
+          && (!this.mustLoadApps || !!(set.apps && set.apps !== uninitializedList))),
+        startWith(false),
+        share());
   }
 
   public saveAppId(appId: string, reloadParts: boolean): Promise<any> {
     log.add(`saveAppId(${appId}, ${reloadParts})`);
     // skip doing anything here, if we're in content-mode (which doesn't use/change apps)
     if (!this.loadApps) throw "can't save app, as we're not in app-mode";
-
     return this.http.get(`${Constants.apiRoot}SetAppId?appId=${appId}`).toPromise();
+  }
+
+
+
+  public initLoading(requireApps: boolean): Observable<any> {
+    log.add(`initLoading(requireApps: ${requireApps})`);
+    this.mustLoadApps = requireApps;
+    if (requireApps) this.loadApps();
+    return this.reloadAppParts();
   }
 
   public reloadAppParts(): Observable<any> {
@@ -79,23 +82,16 @@ export class PickerService {
       this.loadContentTypes());
   }
 
-  public initLoading(requireApps: boolean) {
-    log.add(`initLoading(requireApps: ${requireApps})`);
-    this.mustLoadApps = requireApps;
-    if (requireApps) this.loadApps();
-    this.loadTemplates();
-    this.loadContentTypes();
-  }
-
   /**
    * load templates - is sometimes repeated if the app changes
    */
   public loadTemplates(): Observable<any> {
     log.add('loadTemplates()');
-    const obs = this.http.get(`${Constants.apiRoot}GetSelectableTemplates`).pipe(
-      share(), // ensure it's only run once
-      map(response => response.json() || []));
-    obs.subscribe(json => this.templatesSubject.next(json));
+    this.templates$.reset();
+    const obs = this.http.get(`${Constants.apiRoot}GetSelectableTemplates`)
+      .pipe(share(), /* ensure it's only run once */ );
+
+    obs.subscribe(response => this.templates$.next(response.json() || []));
     return obs;
   }
 
@@ -104,29 +100,35 @@ export class PickerService {
    */
   private loadContentTypes(): Observable<any> {
     log.add(`loadContentTypes()`);
-    const obs = this.http.get(`${Constants.apiRoot}GetSelectableContentTypes`).pipe(
-      share(), // ensure it's only run once
-      map(response => (response.json() || []).map(x => {
+    this.contentTypes$.reset();
+    const obs = this.http.get(`${Constants.apiRoot}GetSelectableContentTypes`)
+      .pipe(share(), /* ensure it's only run once */ );
+    obs.pipe(map(response => (response.json() || []).map(x => {
         x.Label = (x.Metadata && x.Metadata.Label)
           ? x.Metadata.Label
           : x.Name;
         return x;
-      })));
-    obs.subscribe(json => this.contentTypesSubject.next(json));
+      })))
+      .subscribe(json => this.contentTypes$.next(json));
     return obs;
   }
 
   /**
    * Load all Apps, only needed on first initialization
    */
-  private loadApps(): void {
-    log.add('loadApps()');
-    this.http.get(`${Constants.apiRoot}GetSelectableApps`).pipe(
-      map(response => response.json().map(this.pascalCaseToCamelCase)))
-      .subscribe(json => this.appsSubject.next(json));
+  private loadApps(): Observable<any> {
+    const alreadyLoaded = !this.apps$.isInitial();
+    log.add(`loadApps() - skip:${alreadyLoaded}`);
+    if (alreadyLoaded) return;
+
+    const obs = this.http.get(`${Constants.apiRoot}GetSelectableApps`)
+      .pipe(share(), /* ensure it's only run once */ );
+
+    obs.subscribe(response => this.apps$.subject.next(response.json().map(this.pascalCaseToLower)));
+    return obs;
   }
 
-  private pascalCaseToCamelCase(obj): any {
+  private pascalCaseToLower(obj): any {
     return Object.keys(obj)
       .reduce((t, v) => {
         t[v.split('').reduce((prev, current, i) => prev + (i === 0 ? current.toLowerCase() : current), '')] = obj[v];
