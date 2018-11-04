@@ -81,6 +81,7 @@ export class CurrentDataService {
       this.initialTemplateId$,
       this.api.templates$, //.pipe(first()),
       (id, templates) => templates.find(t => t.TemplateId === id)).pipe(
+        filter(t => t != null), // only allow new values which are not null, to guarantee later template$ updates don't affect this
         startWith(null),
         share());
 

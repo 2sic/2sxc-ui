@@ -29,7 +29,7 @@ export const DebugConfig = {
 
   /** template state */
   state: {
-    enabled: true,
+    enabled: false,
     streams: false,
     inits: false,
   },
