@@ -1,25 +1,28 @@
 
 /** configuration what to debug directly to the screen and what to keep secret */
 export const DebugConfig = {
-  live: true,
-  log: true,
+  /** should we stream messages directly to console */
+  live: false,
 
-  // api debugging
+  /** should we log logger events */
+  log: false,
+
+  /** api debugging */
   api: false,
   apiStreams: false,
 
-  // template picker
+  /** template picker */
   picker: { 
-    enabled: true,
-    streams: true
+    enabled: false,
+    streams: false
   },
   showInUi: false,
 
-  // template state
+  /** template state */
   state: true,
   stateStreams: false,
   stateInits: false,
 
-  // content-type processor
+  /** content-type processor */
   ctProcessor: false,
 };
