@@ -4,13 +4,13 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "taskName": "echo",
-            "type": "shell",
-            "command": "echo Hello"
+            "type": "npm",
+            "script": "prod",
+            "problemMatcher": []
         },
         {
             "type": "npm",
-            "script": "prod",
+            "script": "watch:2web",
             "problemMatcher": []
         }
     ]

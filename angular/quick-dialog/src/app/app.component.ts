@@ -28,6 +28,7 @@ export class AppComponent {
     const frame = <IDialogFrameElement>window.frameElement;
     if (this.name === 'item-history') {
       this.dialog.open(DialogComponent).afterClosed()
+      // todo 2dm - probably change to cancel()
         .subscribe(() => frame.bridge.hide());
     }
   }

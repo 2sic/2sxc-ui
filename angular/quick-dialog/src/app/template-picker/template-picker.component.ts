@@ -264,7 +264,7 @@ export class TemplatePickerComponent {
     this.loading.next(true);
     this.bridge
       .setTemplate(t.TemplateId, t.Name, false)
-      .then(() => this.loading.next(false));
+      .then(isAjax => { if (isAjax) this.loading.next(false); });
   }
 
 }

@@ -13,7 +13,7 @@ export interface IIFrameBridge {
   run(verb: string): void;
   showMessage(message: string): void;
   reloadAndReInit(): Promise<IQuickDialogConfig>;
-  setTemplate(templateId: number, templateName: string, closeDialog: boolean): Promise<any>;
+  setTemplate(templateId: number, templateName: string, closeDialog: boolean): Promise<boolean>;
 
   /**
    * the cancel callback to close this dialog cancelling changes
