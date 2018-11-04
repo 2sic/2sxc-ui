@@ -15,7 +15,7 @@ import { DebugConfig } from 'app/debug-config';
 import { BehaviorObservable } from 'app/core/behavior-observable';
 // #endregion
 
-const log = parentLog.subLog('api', DebugConfig.api);
+const log = parentLog.subLog('api', DebugConfig.api.enabled);
 const uninitializedList = []; // this must be created as a variable, so we can check later if it's still the original or a new empty list
 @Injectable()
 export class PickerService {
@@ -138,7 +138,7 @@ export class PickerService {
 
 
   private enableLogging() {
-    const streamLog = parentLog.subLog('api-streams', DebugConfig.apiStreams);
+    const streamLog = parentLog.subLog('api-streams', DebugConfig.api.streams);
     this.apps$.subscribe(a => streamLog.add(`app$:${a && a.length}`));
     this.contentTypes$.subscribe(ct => streamLog.add(`contentTypes$:${ct && ct.length}`));
     this.templates$.subscribe(t => streamLog.add(`templates$:${t && t.length}`));

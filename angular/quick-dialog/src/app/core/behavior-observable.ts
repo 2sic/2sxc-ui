@@ -1,6 +1,9 @@
 import { BehaviorSubject, Observable } from "rxjs";
 
 export class BehaviorObservable<T> extends Observable<T> {
+  private constructor() {
+    super();
+  }
   /** The source subject */
   subject: BehaviorSubject<T>;
 

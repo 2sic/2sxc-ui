@@ -8,7 +8,7 @@
       <li>Types: {{ types?.length }}, current: {{contentType?.StaticName}}</li>
       <li>Apps: {{ (apps$ | async)?.length }}, current: {{app?.appId }} </li>
       <li>Templates: {{templates?.length}}, current: {{template?.TemplateId}}</li>
-      <li>Config: isContent='{{isContent}}'</li>
+      <li>Config: isContent='{{isContent}}' Ready: {{ready}} </li>
       <li>Tab to show: '{{tabIndex}}' / preventTypeSwitch '{{preventTypeSwitch}}' / preventAppSwitch '{{preventAppSwich}}'</li>
     </ul>
   </div>
@@ -86,7 +86,7 @@
           <div class="tiles">
             <div mat-button class="tile" 
               [ngClass]="{ active: contentType?.StaticName === c.StaticName, blocked: preventTypeSwitch }"
-              [attr.title]="c.Label | translate" 
+              [attr.title]="(c.Label | translate) + (showDebug ? ' (' + c.StaticName + ')' : '')" 
               (click)="selectContentType(contentType, c)"
               (dblclick)="switchTab()" 
               *ngFor="let c of types"
@@ -109,7 +109,10 @@
       <mat-tab *ngIf="isContent ? contentType : app" [label]="('TemplatePicker.ChangeView' | translate) + '(' + templates.length + ')'">
         <div class="tiles">
           <mat-spinner class="templates-spinner" *ngIf="templatesLoading$ | async"></mat-spinner>
-          <div class="tile" [ngClass]="{ active: template?.TemplateId === t.TemplateId }" [attr.title]="t.Name" (click)="selectTemplate(t)"
+          <div class="tile" 
+            [ngClass]="{ active: template?.TemplateId === t.TemplateId }" 
+            [attr.title]="t.Name + (showDebug ? ' (' + t.TemplateId + ')' : '')" 
+            (click)="selectTemplate(t)"
             *ngFor="let t of templates">
             <div class="bg">
               <img *ngIf="t.Thumbnail !== null && t.Thumbnail !== ''" class="bg-img" [attr.src]="t.Thumbnail + '?w=176&h=176'">

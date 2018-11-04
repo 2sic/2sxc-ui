@@ -1,6 +1,6 @@
 
 // #region imports
-import { scan, first, debounceTime, share, startWith, map, tap } from 'rxjs/operators';
+import { scan, first, debounceTime, share, startWith, map, tap, filter } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Observable as O, BehaviorSubject, combineLatest, merge } from 'rxjs';
 
@@ -14,9 +14,10 @@ import { log as parentLog } from 'app/core/log';
 import { ContentTypesProcessor } from './data/content-types-processor.service';
 import { TemplateProcessor } from './data/template-processor';
 import { DebugConfig } from 'app/debug-config';
+import { BehaviorObservable } from 'app/core/behavior-observable';
 // #endregion
 
-const log = parentLog.subLog('state', DebugConfig.state);
+const log = parentLog.subLog('state', DebugConfig.state.enabled);
 
 @Injectable()
 export class CurrentDataService {
@@ -35,11 +36,11 @@ export class CurrentDataService {
   /** all templates relevant for the UI */
   templates$: O<Template[]>;
 
-  private appId = new BehaviorSubject<number>(null);
-  private initialTypeId = new BehaviorSubject<string>(null);
-  private initialTemplateId = new BehaviorSubject<number>(null);
-  private selectedType = new BehaviorSubject<ContentType>(null);
-  private selectedTemplate = new BehaviorSubject<Template>(null);
+  private appId$ = BehaviorObservable.create<number>(null);
+  private initialTypeId$ = BehaviorObservable.create<string>(null);
+  private initialTemplateId$ = BehaviorObservable.create<number>(null);
+  private selectedType$ = BehaviorObservable.create<ContentType>(null);
+  private selectedTemplate$ = BehaviorObservable.create<Template>(null);
 
 
   private config: IQuickDialogConfig;
@@ -56,15 +57,15 @@ export class CurrentDataService {
     // app-stream should contain selected app, once the ID is known - or null
     this.app$ = combineLatest(
       this.api.apps$,
-      this.appId.asObservable(),
+      this.appId$,
       (apps, appId) => apps.find(a => a.appId === appId));
 
     // current type should be either the initial type, or a manually selected type
     const initialType$ = combineLatest(
-      this.initialTypeId.asObservable(),
+      this.initialTypeId$,
       this.api.contentTypes$,
       (typeId, all) => ContentTypesProcessor.findContentTypesById(all, typeId));
-    this.type$ = merge(initialType$, this.selectedType.asObservable()).pipe(
+    this.type$ = merge(initialType$, this.selectedType$).pipe(
       startWith(null),
       share());
 
@@ -77,13 +78,13 @@ export class CurrentDataService {
 
     // the current template is either the last selected, or auto-selected when conditions change
     const initialTemplate$ = combineLatest(
-      this.initialTemplateId.asObservable(),
-      this.api.templates$.pipe(first()),
+      this.initialTemplateId$,
+      this.api.templates$, //.pipe(first()),
       (id, templates) => templates.find(t => t.TemplateId === id)).pipe(
         startWith(null),
         share());
 
-    const selected$ = merge(initialTemplate$, this.selectedTemplate.asObservable());
+    const selected$ = merge(initialTemplate$, this.selectedTemplate$.pipe(filter(t => t !== null)));
     this.template$ = combineLatest(
       selected$,
       this.templates$,
@@ -126,8 +127,8 @@ export class CurrentDataService {
 
     // automatically set the app, type and template
     this.activateCurrentApp(config.appId);
-    this.initialTypeId.next(config.contentTypeId);
-    this.initialTemplateId.next(config.templateId);
+    this.initialTypeId$.next(config.contentTypeId);
+    this.initialTemplateId$.next(config.templateId);
 
     return loadAll$;
   }
@@ -136,19 +137,20 @@ export class CurrentDataService {
     inittyp$: O<boolean>,
     initt$: O<boolean>,
     initAll$: O<boolean>): void {
-    const slog = log.subLog('stream', DebugConfig.stateStreams);
+    const slog = log.subLog('stream', DebugConfig.state.streams);
     this.type$.subscribe(t => slog.add(`type$ update:'${t && t.Label}'`, t));
     this.app$.subscribe(a => slog.add(`app$ update:'${a && a.appId}'`, a));
     this.template$.subscribe(t => slog.add(`template$ update:'${t && t.TemplateId}'`, t));
     this.templates$.subscribe(t => slog.add(`templates$ count:'${t && t.length}'`, t));
     this.types$.subscribe(t => slog.add(`types$ count:'${t && t.length}'`, t));
+    this.selectedTemplate$.subscribe(t => slog.add(`selectedTemplate$: ${t && t.TemplateId}`));
 
-    const initLog = log.subLog('stream-init', DebugConfig.stateInits);
-    this.initialTypeId.asObservable().pipe(tap(t => initLog.add(`initial TypeId:'${t}'`, t))).subscribe();
-    this.initialTemplateId.asObservable().pipe(tap(t => initLog.add(`initial TypeId:'${t}'`, t))).subscribe();
-    inita$.pipe(tap(t => initLog.add(`init app$`, t))).subscribe();
-    inittyp$.pipe(tap(t => initLog.add(`init type$`, t))).subscribe();
-    initt$.pipe(tap(t => initLog.add(`init temp$`, t))).subscribe();
+    const initLog = log.subLog('stream-init', DebugConfig.state.inits);
+    this.initialTypeId$.subscribe(t => initLog.add(`initial TypeId:'${t}'`, t));
+    this.initialTemplateId$.subscribe(t => initLog.add(`initial TemplateId:'${t}'`, t));
+    inita$.subscribe(t => initLog.add(`init app$`, t));
+    inittyp$.subscribe(t => initLog.add(`init type$`, t));
+    initt$.subscribe(t => initLog.add(`init temp$`, t));
     initAll$.subscribe(t => initLog.add(`init all$`, t));
   }
 
@@ -157,15 +159,15 @@ export class CurrentDataService {
   //#region activate calls from outside
   activateCurrentApp(appId: number) {
     log.add(`activateApp(${appId})`);
-    this.appId.next(appId);
+    this.appId$.next(appId);
   }
   activateType(contentType: ContentType) {
     log.add(`activateType(${contentType.Name})`);
-    this.selectedType.next(contentType);
+    this.selectedType$.next(contentType);
   }
   activateTemplate(template: Template) {
     log.add(`activateTemplate(${template.TemplateId})`);
-    this.selectedTemplate.next(template);
+    this.selectedTemplate$.next(template);
   }
   //#endregion
 

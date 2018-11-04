@@ -12,7 +12,7 @@ import { ContentType } from 'app/template-picker/content-type';
 import { IIFrameBridge } from 'app/interfaces-shared/iiframe-bridge';
 import { IQuickDialogConfig } from 'app/interfaces-shared/iquick-dialog-config';
 import { cAppActionImport } from './constants';
-import { log as parentLog } from 'app/core/log';
+import { log as parentLog, Log } from 'app/core/log';
 import { PickerService } from './picker.service';
 import { CurrentDataService } from './current-data.service';
 import { DebugConfig } from 'app/debug-config';
@@ -68,7 +68,7 @@ export class TemplatePickerComponent {
 
   private preventAppSwich = false;
 
-  public showDebug = DebugConfig.showInUi;
+  public showDebug = DebugConfig.picker.showDebugPanel;
   // #endregion
 
   // #region data to show - using local variables, because streams didn't update correctly :(
@@ -95,6 +95,7 @@ export class TemplatePickerComponent {
 
   private boot(dashInfo: IQuickDialogConfig) {
     this.showDebug = dashInfo.debug;
+    Log.configureRuntimeLogging(dashInfo.debug);
 
     // start data-loading
     this.api.initLoading(!dashInfo.isContent);

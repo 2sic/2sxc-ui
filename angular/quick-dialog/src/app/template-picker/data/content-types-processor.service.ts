@@ -7,7 +7,7 @@ import { log as parentLog } from 'app/core/log';
 import { DebugConfig } from 'app/debug-config';
 
 // const debug = true;
-const log = parentLog.subLog('ct-processor', DebugConfig.ctProcessor);
+const log = parentLog.subLog('ct-processor', DebugConfig.typeProcessor);
 
 /**
  * This is a helper to do various transformations for the list of content-types
