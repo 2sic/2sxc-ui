@@ -1,6 +1,17 @@
 export class App {
-    appId: number;
-    name: string;
-    thumbnail: string;
-    supportsAjaxReload: boolean;
+    AppId: number;
+    Name: string;
+    Thumbnail: string;
+    SupportsAjaxReload: boolean;
+    Version: string;
+    VersionMain: number;
+
+    constructor(json: any) {
+        Object.assign(this, json);
+
+        try {
+            this.VersionMain = parseInt(this.Version.substr(0,2));
+        } catch(e) { /* ignore */}
+    }
+
 }

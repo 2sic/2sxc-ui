@@ -124,17 +124,17 @@ export class PickerService {
     const obs = this.http.get(`${Constants.apiRoot}GetSelectableApps`)
       .pipe(share(), /* ensure it's only run once */ );
 
-    obs.subscribe(response => this.apps$.subject.next(response.json().map(this.pascalCaseToLower)));
+    obs.subscribe(response => this.apps$.subject.next(response.json().map(a => new App(a)) /*.map(this.pascalCaseToLower)*/));
     return obs;
   }
 
-  private pascalCaseToLower(obj): any {
-    return Object.keys(obj)
-      .reduce((t, v) => {
-        t[v.split('').reduce((prev, current, i) => prev + (i === 0 ? current.toLowerCase() : current), '')] = obj[v];
-        return t;
-      }, {});
-  }
+  // private pascalCaseToLower(obj): any {
+  //   return Object.keys(obj)
+  //     .reduce((t, v) => {
+  //       t[v.split('').reduce((prev, current, i) => prev + (i === 0 ? current.toLowerCase() : current), '')] = obj[v];
+  //       return t;
+  //     }, {});
+  // }
 
 
   private enableLogging() {

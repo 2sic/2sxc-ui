@@ -6,7 +6,7 @@
     <h4>Debug</h4>
     <ul>
       <li>Types: {{ types?.length }}, current: {{contentType?.StaticName}}</li>
-      <li>Apps: {{ (apps$ | async)?.length }}, current: {{app?.appId }} </li>
+      <li>Apps: {{ (apps$ | async)?.length }}, current: {{app?.AppId }} </li>
       <li>Templates: {{templates?.length}}, current: {{template?.TemplateId}}</li>
       <li>Config: isContent='{{isContent}}' Ready: {{ready}} </li>
       <li>Tab to show: '{{tabIndex}}' / preventTypeSwitch '{{preventTypeSwitch}}' / preventAppSwitch '{{preventAppSwich}}'</li>
@@ -35,26 +35,27 @@
         <ng-template mat-tab-label>
           {{(isContent 
             ? (contentType?.Name || ('TemplatePicker.ContentTypePickerDefault' | translate)) 
-            : (app?.name || ('TemplatePicker.AppPickerDefault' | translate)))}}
+            : (app?.Name || ('TemplatePicker.AppPickerDefault' | translate)))}}
         </ng-template>
 
         <!-- App Selector -->
         <div *ngIf="!isContent; else contentApp" class="tiles">
 
           <div class="tile" 
-            [ngClass]="{ active: app?.appId === a.appId, blocked: preventTypeSwitch }" 
-            [attr.title]="a.name" 
+            [ngClass]="{ active: app?.AppId === a.AppId, blocked: preventTypeSwitch }" 
+            [attr.title]="a.Name" 
             (click)="selectApp(app, a)"
             (dblclick)="switchTab()" *ngFor="let a of apps$ | async">
             <div class="bg">
-              <img *ngIf="a.thumbnail !== null && a.thumbnail !== ''" class="bg-img" [attr.src]="a.thumbnail + '?w=176&h=176'">
-              <div *ngIf="a.thumbnail === null || a.thumbnail === ''" class="bg-icon">
+              <img *ngIf="a.Thumbnail !== null && a.Thumbnail !== ''" class="bg-img" [attr.src]="a.Thumbnail + '?w=176&h=176'">
+              <div *ngIf="a.Thumbnail === null || a.Thumbnail === ''" class="bg-icon">
                 <mat-icon>star</mat-icon>
               </div>
             </div>
+            <div class="version"><span>v{{a.VersionMain}}</span></div>
 
-            <div class="title" [ngClass]="{ show: a.thumbnail === null || a.thumbnail === '' }">
-              <span>{{a.name}}</span>
+            <div class="title" [ngClass]="{ show: a.Thumbnail === null || a.Thumbnail === '' }">
+              <span>{{a.Name}}</span>
             </div>
           </div>
 
@@ -125,7 +126,7 @@
               <span>{{t.Name}}</span>
             </div>
           </div>
-          <div class="tile config" *ngIf="showAdvanced && !isContent && app?.appId !== null" (click)="run('app')" [attr.title]="'TemplatePicker.App' | translate">
+          <div class="tile config" *ngIf="showAdvanced && !isContent && app?.AppId !== null" (click)="run('app')" [attr.title]="'TemplatePicker.App' | translate">
             <div class="bg">
               <div class="bg-icon">
                 <mat-icon>settings</mat-icon>

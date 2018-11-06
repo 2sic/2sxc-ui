@@ -58,7 +58,7 @@ export class CurrentDataService {
     this.app$ = combineLatest(
       this.api.apps$,
       this.appId$,
-      (apps, appId) => apps.find(a => a.appId === appId));
+      (apps, appId) => apps.find(a => a.AppId === appId));
 
     // current type should be either the initial type, or a manually selected type
     const initialType$ = combineLatest(
@@ -140,7 +140,7 @@ export class CurrentDataService {
     initAll$: O<boolean>): void {
     const slog = log.subLog('stream', DebugConfig.state.streams);
     this.type$.subscribe(t => slog.add(`type$ update:'${t && t.Label}'`, t));
-    this.app$.subscribe(a => slog.add(`app$ update:'${a && a.appId}'`, a));
+    this.app$.subscribe(a => slog.add(`app$ update:'${a && a.AppId}'`, a));
     this.template$.subscribe(t => slog.add(`template$ update:'${t && t.TemplateId}'`, t));
     this.templates$.subscribe(t => slog.add(`templates$ count:'${t && t.length}'`, t));
     this.types$.subscribe(t => slog.add(`types$ count:'${t && t.length}'`, t));

@@ -141,7 +141,7 @@ export class TemplatePickerComponent {
         log.add('apps/templates loaded, will check if we should show installer')
       this.showInstaller = this.isContent
         ? templates.length === 0
-        : apps.filter(a => a.appId !== cAppActionImport).length === 0;
+        : apps.filter(a => a.AppId !== cAppActionImport).length === 0;
     }).subscribe();
 
     // template loading is true, when the template-list or selected template are not ready
@@ -198,7 +198,7 @@ export class TemplatePickerComponent {
    */
   selectApp(before: App, after: App): void {
     console.log('selectApp()');
-    if (before && before.appId === after.appId) this.switchTab();
+    if (before && before.AppId === after.AppId) this.switchTab();
     else this.updateApp(after);
   }
 
@@ -234,14 +234,14 @@ export class TemplatePickerComponent {
   private updateApp(newApp: App): void {
     // ajax-support can change as apps are changed; for ajax, maybe both the previous and new must support it
     // or just new? still WIP
-    const ajax = newApp.supportsAjaxReload;
-    log.add(`changing app to ${newApp.appId}; prevent-switch: ${this.preventAppSwich} use-ajax:${ajax}`);
+    const ajax = newApp.SupportsAjaxReload;
+    log.add(`changing app to ${newApp.AppId}; prevent-switch: ${this.preventAppSwich} use-ajax:${ajax}`);
     if (this.preventAppSwich) return;
 
 
     this.loading$.next(true);
     this.bridge.showMessage('loading App...');
-    const savePromise = this.api.saveAppId(newApp.appId.toString(), ajax);
+    const savePromise = this.api.saveAppId(newApp.AppId.toString(), ajax);
 
     if (ajax) {
       savePromise.then(() => {

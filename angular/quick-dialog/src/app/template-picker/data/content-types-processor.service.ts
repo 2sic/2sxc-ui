@@ -16,20 +16,22 @@ const log = parentLog.subLog('ct-processor', DebugConfig.typeProcessor);
 export class ContentTypesProcessor {
   constructor(private translate: TranslateService) {}
 
-  public buildList(allTypes, type, allTemplates, template): ContentType[] {
+  public buildList(allTypes: ContentType[], type: ContentType, allTemplates: Template[], template: Template): ContentType[] {
     log.add('buildList(...) of content-types to show');
+    // let unhide = this.hideTypesWithoutTemplates(allTypes, allTemplates);
     let unhide = this.unhideSelectedType(allTypes, type, template);
     unhide = this.addEmptyTypeIfNeeded(unhide, allTemplates);
     return this.sortTypes(unhide);
   }
 
-  // tslint:disable-next-line:member-ordering
-  static findContentTypesById(contentTypes: ContentType[], selectedContentTypeId: string): ContentType {
-    log.add(`findContentTypesById(..., ${selectedContentTypeId}`);
-    return selectedContentTypeId
-      ? contentTypes.find(c => c.StaticName === selectedContentTypeId)
-      : null;
-  }
+  // 2018-11-05 trying to fix https://github.com/2sic/2sxc/issues/1614
+  // but it appears that this is actually not an issue...unclear why it's posted.
+  // private hideTypesWithoutTemplates(types: ContentType[], templates: Template[]): ContentType[] {
+  //   types.filter(c => templates.find(t => t.ContentTypeStaticName == c.StaticName))
+  //     .forEach(c => c.IsHidden = true);
+  //   return types;
+  // }
+
 
   /**
    * Ensure current content-type is visible, just in case it's configured as hidden
@@ -71,5 +73,15 @@ export class ContentTypesProcessor {
     // https://stackoverflow.com/questions/51165/how-to-sort-strings-in-javascript
     return contentTypes.sort((a, b) => ('' + a.Label).localeCompare(b.Label));
   }
+
+
+  // tslint:disable-next-line:member-ordering
+  static findContentTypesById(contentTypes: ContentType[], selectedContentTypeId: string): ContentType {
+    log.add(`findContentTypesById(..., ${selectedContentTypeId}`);
+    return selectedContentTypeId
+      ? contentTypes.find(c => c.StaticName === selectedContentTypeId)
+      : null;
+  }
+
 }
 

@@ -12,6 +12,11 @@
             "type": "npm",
             "script": "watch:2web",
             "problemMatcher": []
+        },
+        {
+            "type": "npm",
+            "script": "watch:prod:2web",
+            "problemMatcher": []
         }
     ]
 }
