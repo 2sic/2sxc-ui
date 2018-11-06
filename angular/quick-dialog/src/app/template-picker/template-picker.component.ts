@@ -1,9 +1,9 @@
 
-import {merge as observableMerge, combineLatest,  timer } from 'rxjs';
+import {merge, combineLatest,  timer } from 'rxjs';
 
 import {take, filter, startWith, skipUntil} from 'rxjs/operators';
 //#region imports
-import { Component } from '@angular/core';
+import { Component, ApplicationRef, ChangeDetectorRef, OnInit } from '@angular/core';
 import { IDialogFrameElement } from 'app/interfaces-shared/idialog-frame-element';
 import { Observable, BehaviorSubject } from 'rxjs/Rx';
 import { App } from 'app/core/app';
@@ -27,7 +27,7 @@ const log = parentLog.subLog('picker', DebugConfig.picker.enabled);
   templateUrl: './template-picker.component.html',
   styleUrls: ['./template-picker.component.scss'],
 })
-export class TemplatePickerComponent {
+export class TemplatePickerComponent implements OnInit {
   // #region properties
   /** Stream of all apps */
   apps$: Observable<App[]>;
@@ -82,16 +82,21 @@ export class TemplatePickerComponent {
 
   constructor(
     private api: PickerService,
-    public state: CurrentDataService
+    public state: CurrentDataService,
+    private cdRef: ChangeDetectorRef
   ) {
     // get configuration from iframe-bridge and set everything
     this.bridge = (<IDialogFrameElement>window.frameElement).bridge;
     const dashInfo = this.bridge.getAdditionalDashboardConfig();
 
     this.boot(dashInfo);
-    this.autosyncObservablesToEnsureUiUpdates();
     this.debugObservables();
   }
+
+  ngOnInit(): void {
+    this.autosyncObservablesToEnsureUiUpdates();
+  }
+
 
   private boot(dashInfo: IQuickDialogConfig) {
     this.showDebug = dashInfo.debug;
@@ -129,7 +134,7 @@ export class TemplatePickerComponent {
     this.apps$ = this.api.apps$;
 
     // if the content-type or app is set, switch tabs (ignore null/empty states)
-    const typeOrAppReady = observableMerge(this.state.type$, this.state.app$).pipe(filter(t => !!t));
+    const typeOrAppReady = merge(this.state.type$, this.state.app$).pipe(filter(t => !!t));
     combineLatest(typeOrAppReady, initTrue$).subscribe(_ => this.switchTab());
 
     // once the data is known, check if installer is needed
@@ -167,8 +172,16 @@ export class TemplatePickerComponent {
     this.state.types$.subscribe(t => this.types = t);
     this.state.type$.subscribe(t => this.contentType = t);
 
-    this.state.types$.subscribe(t => log.add('type update: ', t));
+    // this.state.types$.subscribe(t => log.add('type update: ', t));
     this.ready$.subscribe(r => this.ready = r);
+    merge(
+      this.ready$, 
+      this.state.app$, 
+      this.state.type$, 
+      this.state.types$,
+      this.state.template$, 
+      this.state.templates$, 
+      ).subscribe(x => this.cdRef.detectChanges());
   }
 
 
