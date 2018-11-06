@@ -1,8 +1,8 @@
 
 // #region imports
-import { scan, first, debounceTime, share, startWith, map, tap, filter } from 'rxjs/operators';
+import { scan, debounceTime, share, startWith, map, filter } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import { Observable as O, BehaviorSubject, combineLatest, merge } from 'rxjs';
+import { Observable as O, combineLatest, merge } from 'rxjs';
 
 import { App } from 'app/core/app';
 import { PickerService } from './picker.service';

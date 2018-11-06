@@ -1,11 +1,11 @@
 
 import {merge, combineLatest,  timer } from 'rxjs';
 
-import {take, filter, startWith, skipUntil} from 'rxjs/operators';
+import {filter, startWith, skipUntil} from 'rxjs/operators';
 //#region imports
-import { Component, ApplicationRef, ChangeDetectorRef, OnInit } from '@angular/core';
+import { Component, ChangeDetectorRef, OnInit } from '@angular/core';
 import { IDialogFrameElement } from 'app/interfaces-shared/idialog-frame-element';
-import { Observable, BehaviorSubject } from 'rxjs/Rx';
+import { Observable } from 'rxjs/Rx';
 import { App } from 'app/core/app';
 import { Template } from 'app/template-picker/template';
 import { ContentType } from 'app/template-picker/content-type';
@@ -181,7 +181,7 @@ export class TemplatePickerComponent implements OnInit {
       this.state.types$,
       this.state.template$, 
       this.state.templates$, 
-      ).subscribe(x => this.cdRef.detectChanges());
+      ).subscribe(() => this.cdRef.detectChanges());
   }
 
 

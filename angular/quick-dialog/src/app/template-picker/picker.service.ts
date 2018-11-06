@@ -1,9 +1,9 @@
 // #region imports
 import { combineLatest } from 'rxjs';
 
-import { map, filter, startWith, share } from 'rxjs/operators';
+import { map, startWith, share } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import { Observable, BehaviorSubject, Subject } from 'rxjs';
+import { Observable } from 'rxjs';
 
 import { Http } from '@angular/http';
 import { App } from 'app/core/app';
