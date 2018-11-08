@@ -1,8 +1,8 @@
 import { Component, OnInit, Input, Inject } from '@angular/core';
-import { MdDialog, MdDialogRef, MD_DIALOG_DATA } from "@angular/material";
-import { trigger, style, transition, animate, state } from "@angular/animations";
-import { SxcVersionsService } from "app/version-dialog/sxc-versions.service";
-import { Version } from "app/version-dialog/version";
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { trigger, style, transition, animate, state } from '@angular/animations';
+import { SxcVersionsService } from 'app/version-dialog/sxc-versions.service';
+import { Version } from 'app/version-dialog/version';
 
 declare const $2sxc;
 
@@ -16,7 +16,7 @@ export class DialogComponent {
   versionParam: any;
 
   constructor(
-    private dialog: MdDialog,
+    private dialog: MatDialog,
     public sxcVersion: SxcVersionsService
   ) { }
 
@@ -39,16 +39,16 @@ export class DialogComponent {
     <div class="content">
       <div class="title">Restoring {{data.isDraft ? 'draft' : 'live'}} to version <b>{{data.version.ChangeSetId}}</b>.</div>
       <div fxLayout="row">
-        <button md-button [md-dialog-close]="false">abort</button>
+        <button mat-button [mat-dialog-close]="false">abort</button>
         <span fxFlex></span>
-        <button md-raised-button [md-dialog-close]="true">proceed</button>
+        <button mat-raised-button [mat-dialog-close]="true">proceed</button>
       </div>
     </div>
   `,
 })
 export class ConfirmRestoreDialog {
   constructor(
-    public dialogRef: MdDialogRef<ConfirmRestoreDialog>,
-    @Inject(MD_DIALOG_DATA) public data: any
+    public dialogRef: MatDialogRef<ConfirmRestoreDialog>,
+    @Inject(MAT_DIALOG_DATA) public data: any
   ) { }
 }

@@ -1,247 +1,283 @@
-import { TranslatePipe } from '@ngx-translate/core';
-import { Component, OnInit, Input, NgModule, Inject, ApplicationRef } from '@angular/core';
-import { IDialogFrameElement } from "app/core/dialog-frame-element";
-import { ModuleApiService } from "app/core/module-api.service";
+
+import {merge, combineLatest,  timer } from 'rxjs';
+
+import {filter, startWith, skipUntil} from 'rxjs/operators';
+//#region imports
+import { Component, ChangeDetectorRef, OnInit } from '@angular/core';
+import { IDialogFrameElement } from 'app/interfaces-shared/idialog-frame-element';
 import { Observable } from 'rxjs/Rx';
-import { Subscription } from 'rxjs/Subscription';
-import { TemplateFilterPipe } from 'app/template-picker/template-filter.pipe';
-import { DomSanitizer, SafeResourceUrl, SafeUrl } from '@angular/platform-browser';
-import { $2sxcService } from 'app/core/$2sxc.service';
 import { App } from 'app/core/app';
-import { Subject } from 'rxjs/Subject';
 import { Template } from 'app/template-picker/template';
 import { ContentType } from 'app/template-picker/content-type';
+import { IIFrameBridge } from 'app/interfaces-shared/iiframe-bridge';
+import { IQuickDialogConfig } from 'app/interfaces-shared/iquick-dialog-config';
+import { cAppActionImport } from './constants';
+import { log as parentLog, Log } from 'app/core/log';
+import { PickerService } from './picker.service';
+import { CurrentDataService } from './current-data.service';
+import { DebugConfig } from 'app/debug-config';
+import { BehaviorObservable } from 'app/core/behavior-observable';
 
-declare const $2sxc: any;
-var win = window;
+//#endregion
+
+const log = parentLog.subLog('picker', DebugConfig.picker.enabled);
 
 @Component({
   selector: 'app-template-picker',
   templateUrl: './template-picker.component.html',
   styleUrls: ['./template-picker.component.scss'],
-  providers: [TranslatePipe],
 })
 export class TemplatePickerComponent implements OnInit {
-  apps: App[] = [];
-  app: App;
-  savedAppId: number;
-  templates: any[] = [];
-  template: Template;
-  undoTemplateId: number;
-  contentTypes: any[] = [];
-  contentType: ContentType;
-  undoContentTypeId: number;
-  dashInfo: any;
-  isContentApp: boolean;
-  showProgress = false;
-  showAdvanced: boolean;
-  showInstaller = false;
-  loading = false;
-  loadingTemplates = false;
-  ready = false;
-  tabIndex = 0;
-  updateTemplateSubject: Subject<any> = new Subject<any>();
-  updateAppSubject: Subject<any> = new Subject<any>();
-  allowContentTypeChange: boolean;
-  isInnerContent = false;
+  // #region properties
+  /** Stream of all apps */
+  apps$: Observable<App[]>;
 
-  private allTemplates: any[] = [];
-  private frame: IDialogFrameElement;
-  private cViewWithoutContent = '_LayoutElement';
-  private cAppActionImport: number = -1;
+  /** is cancelling possible */
+  showCancel = true;
+
+  /** is in the main content-app or a generic app */
+  isContent: boolean;
+
+  /** show advanced features (admin/host only) */
+  showAdvanced = false;
+
+  /** show the installer */
+  showInstaller = false;
+
+  /** Stream to indicate ready, for loading-indicator */
+  ready$: Observable<boolean>;
+  templatesLoading$: Observable<boolean>;
+
+  /** Tab-id, when we set it, the tab switches */
+  tabIndex = 0;
+
+  /** Indicate if the user is allowed to change content-types or not */
+  preventTypeSwitch: boolean;
+
+  /** Indicates whether the installer can be shown in this dialog or not */
+  isBadContextForInstaller = false;
+
+  /** The communication-object to the parent */
+  private bridge: IIFrameBridge;
+
+  /** internal loading state */
+  private loading$ = BehaviorObservable.create<boolean>(false);
+
+  /** Ajax-support changes how saving/changing is handled */
   private supportsAjax: boolean;
 
+  private preventAppSwich = false;
+
+  public showDebug = DebugConfig.picker.showDebugPanel;
+  // #endregion
+
+  // #region data to show - using local variables, because streams didn't update correctly :(
+  app: App;
+  templates: Template[];
+  template: Template;
+  contentType: ContentType;
+  types: ContentType[];
+  ready = false;
+  //#endregion
+
   constructor(
-    private api: ModuleApiService,
-    private templateFilter: TemplateFilterPipe,
-    private appRef: ApplicationRef,
-    private translate: TranslatePipe
+    private api: PickerService,
+    public state: CurrentDataService,
+    private cdRef: ChangeDetectorRef
   ) {
-    this.frame = <IDialogFrameElement>win.frameElement;
-    this.dashInfo = this.frame.getAdditionalDashboardConfig();
-    this.allowContentTypeChange = !(this.dashInfo.hasContent || this.dashInfo.isList);
+    // get configuration from iframe-bridge and set everything
+    this.bridge = (<IDialogFrameElement>window.frameElement).bridge;
+    const dashInfo = this.bridge.getAdditionalDashboardConfig();
 
-    const info = this.frame.getManageInfo();
-    this.isInnerContent = info.mid != info.cbid;
-
-    Observable.merge(
-      this.updateTemplateSubject.asObservable(),
-      this.updateAppSubject.asObservable()
-    ).subscribe(res => {
-      this.loading = true;
-    });
-
-    this.updateAppSubject
-      .debounceTime(400)
-      .subscribe(({ app }) => {
-        this.api.setAppId(app.appId.toString()).toPromise()
-          .then(res => {
-            if (app.supportsAjaxReload) return this.frame.reloadAndReInit()
-              .then(() => this.api.loadTemplates().toPromise())
-              .then(() => {
-                this.loadingTemplates = false;
-                this.template = this.templates[0];
-                this.appRef.tick();
-                doPostAjaxScrolling(this)
-              });
-
-            this.frame.showMessage('loading App..');
-            doPostAjaxScrolling(this);
-            this.frame.persistDia();
-            win.parent.location.reload();
-          });
-      });
-
-    this.updateTemplateSubject
-      .debounceTime(400)
-      .subscribe(({ template }) => {
-        this.loadingTemplates = false;
-        this.template = template;
-        this.appRef.tick();
-
-        if (this.supportsAjax) return this.frame.previewTemplate(template.TemplateId)
-          .then(() => doPostAjaxScrolling(this));
-
-        this.frame.showMessage(`refreshing <b>${template.Name}</b>...`);
-        doPostAjaxScrolling(this);
-        this.frame.persistDia();
-        return this.frame.saveTemplate(this.template.TemplateId)
-          .then(() => win.parent.location.reload());
-      });
-
-    this.api.apps
-      .subscribe(apps => {
-        this.app = apps.find(a => a.appId === this.dashInfo.appId);
-        if (this.app) this.tabIndex = 1;
-        this.apps = apps;
-      });
-
-    this.api.templates
-      .subscribe(templates => this.setTemplates(templates, this.dashInfo.templateId));
-
-    this.api.contentTypes
-      .subscribe(contentTypes => this.setContentTypes(contentTypes, this.dashInfo.contentTypeId));
-
-    Observable.combineLatest([
-      this.api.templates,
-      this.api.contentTypes,
-      this.api.apps
-    ]).subscribe(res => {
-      this.filterTemplates(this.contentType);
-      this.ready = true;
-      this.showInstaller = this.isContentApp
-        ? res[0].length === 0
-        : res[2].filter(a => a.appId !== this.cAppActionImport).length === 0;
-    });
+    this.boot(dashInfo);
+    this.debugObservables();
   }
 
-  ngOnInit() {
-    this.isContentApp = this.dashInfo.isContent;
-    this.supportsAjax = this.isContentApp || this.dashInfo.supportsAjax;
-    this.showAdvanced = this.dashInfo.user.canDesign;
-    this.undoTemplateId = this.dashInfo.templateId;
-    this.undoContentTypeId = this.dashInfo.contentTypeId;
-    this.savedAppId = this.dashInfo.appId;
-    this.frame.isDirty = this.isDirty;
-    this.dashInfo.templateChooserVisible = true;
-
-    this.api.loadTemplates()
-      .take(1)
-      .subscribe(templates => this.api.loadContentTypes())
-
-    this.api.loadApps();
+  ngOnInit(): void {
+    this.autosyncObservablesToEnsureUiUpdates();
   }
 
-  isDirty(): boolean {
-    return false;
+
+  private boot(dashInfo: IQuickDialogConfig) {
+    this.showDebug = dashInfo.debug;
+    Log.configureRuntimeLogging(dashInfo.debug);
+
+    // start data-loading
+    this.api.initLoading(!dashInfo.isContent);
+
+    // init parts, variables, observables
+    const initDone$ = this.state.init(dashInfo);
+    this.initObservables(initDone$);
+    this.initValuesFromBridge(dashInfo);
+    this.loading$.next(false);
   }
 
-  persistTemplate() {
-    this.frame.saveTemplate(this.template.TemplateId);
+  private debugObservables() {
+    if (!DebugConfig.picker.streams) return;
+    this.loading$.subscribe(l => log.add(`loading$:${l}`));
+    this.ready$.subscribe(r => log.add(`ready$:${r}`));
   }
 
-  private appStore() {
-    win.open('https://2sxc.org/apps');
+  /**
+   * wire up observables for this component
+   */
+  private initObservables(initDone$: Observable<boolean>): void {
+    const initTrue$ = initDone$.pipe(filter(t => t));
+
+    // wire up basic observables
+    this.ready$ = combineLatest(
+      this.api.ready$,
+      this.loading$,
+      (r, l) => r && !l);
+
+    // all apps are the same as provided by the api
+    this.apps$ = this.api.apps$;
+
+    // if the content-type or app is set, switch tabs (ignore null/empty states)
+    const typeOrAppReady = merge(this.state.type$, this.state.app$).pipe(filter(t => !!t));
+    combineLatest(typeOrAppReady, initTrue$).subscribe(_ => this.switchTab());
+
+    // once the data is known, check if installer is needed
+    combineLatest(this.api.templates$,
+      this.api.contentTypes$,
+      this.api.apps$,
+      this.api.ready$.pipe(filter(r => !!r)),
+      (templates, c, apps) => {
+        log.add('apps/templates loaded, will check if we should show installer')
+      this.showInstaller = this.isContent
+        ? templates.length === 0
+        : apps.filter(a => a.AppId !== cAppActionImport).length === 0;
+    }).subscribe();
+
+    // template loading is true, when the template-list or selected template are not ready
+    this.templatesLoading$ = combineLatest(
+      this.state.templates$,
+      this.state.template$,
+      (all, selected) => !(all && selected)).pipe(
+      startWith(false));
+
+    // whenever the template changes, ensure the preview reloads
+    // but don't do this when initializing, that's why we listen to initDone$
+    this.state.template$.pipe(
+      filter(t => !!t),
+      skipUntil(initTrue$),)
+      .subscribe(t => this.previewTemplate(t));
   }
 
-  private filterTemplates(contentType: ContentType) {
-    this.templates = this.templateFilter.transform(this.allTemplates, {
-      contentTypeId: contentType ? contentType.StaticName : undefined,
-      isContentApp: this.isContentApp
-    });
+  /** The UI doesn't update reliably :(, so we copy the data to local variables */
+  private autosyncObservablesToEnsureUiUpdates(): any {
+    this.state.app$.subscribe(a => this.app = a);
+    this.state.templates$.subscribe(t => this.templates = t);
+    this.state.template$.subscribe(t => this.template = t);
+    this.state.types$.subscribe(t => this.types = t);
+    this.state.type$.subscribe(t => this.contentType = t);
+
+    // this.state.types$.subscribe(t => log.add('type update: ', t));
+    this.ready$.subscribe(r => this.ready = r);
+    merge(
+      this.ready$, 
+      this.state.app$, 
+      this.state.type$, 
+      this.state.types$,
+      this.state.template$, 
+      this.state.templates$, 
+      ).subscribe(() => this.cdRef.detectChanges());
   }
 
-  private setTemplates(templates: any[], selectedTemplateId: number) {
-    if (selectedTemplateId) this.template = templates.find(t => t.TemplateId === selectedTemplateId);
-    this.allTemplates = templates;
+
+  private initValuesFromBridge(config: IQuickDialogConfig): void {
+    this.preventTypeSwitch = config.hasContent;
+    this.isBadContextForInstaller = config.isInnerContent;
+    this.isContent = config.isContent;
+    this.supportsAjax = this.isContent || config.supportsAjax;
+    this.showAdvanced = config.user.canDesign;
+    this.preventAppSwich = config.hasContent;
+    this.showCancel = config.templateId != null;
   }
 
-  private setContentTypes(contentTypes: any[], selectedContentTypeId) {
-    if (selectedContentTypeId) {
-      this.contentType = contentTypes.find(c => c.StaticName === selectedContentTypeId);
-      this.tabIndex = 1;
-    }
-    contentTypes
-      .filter(c => (this.template && c.TemplateId === this.template.TemplateId) || (this.contentType && c.StaticName === this.contentType.StaticName))
-      .forEach(c => c.IsHidden = false);
+  // private updateConfigAfterAppChange(config: IQuickDialogConfig): void {
+  //   this.showCancel = config.templateId != null;
+  // }
 
-    // option for no content types
-    if (this.allTemplates.find(t => t.ContentTypeStaticName === '')) {
-      let name = 'TemplatePicker.LayoutElement';
-      contentTypes.push({
-        StaticName: this.cViewWithoutContent,
-        Name: name,
-        Thumbnail: null,
-        Label: this.translate.transform(name),
-        IsHidden: false,
-      });
-    }
+  //#region basic UI action binding
+  cancel(): void { this.bridge.cancel(); }
 
-    this.contentTypes = contentTypes
-      .sort((a, b) => {
-        if (a.Name > b.Name) return 1;
-        if (a.Name < b.Name) return -1;
-        return 0;
-      });
+  run(action: string): void { this.bridge.run(action); }
+
+  persistTemplate(template: Template) { this.bridge.setTemplate(template.TemplateId, template.Name, true); }
+
+  /**
+   * app selection from UI
+   */
+  selectApp(before: App, after: App): void {
+    console.log('selectApp()');
+    if (before && before.AppId === after.AppId) this.switchTab();
+    else this.updateApp(after);
   }
 
-  updateContentType(contentType: ContentType, keepTemplate: boolean = false): boolean {
-    if (!this.allowContentTypeChange) return false;
-    this.contentType = contentType;
-    this.tabIndex = 1;
-    this.templates = [];
-    this.loadingTemplates = true;
-
-    this.filterTemplates(contentType);
-    if (this.templates.length === 0) return false;
-    this.updateTemplateSubject.next({
-      template: keepTemplate ? (this.template || this.templates[0]) : this.templates[0],
-    });
-    return true;
+  /**
+   * content-type selection from UI
+   */
+  selectContentType(before: ContentType, after: ContentType): void {
+    if (before && before.StaticName === after.StaticName) this.switchTab();
+    else this.setContentType(after);
   }
 
-  reloadContentType() {
-    this.updateContentType(this.contentType, true);
+  /**
+   * activate a template from the UI
+   */
+  selectTemplate(template: Template): void {
+    this.state.activateTemplate(template);
+  }
+  //#endregion
+
+  private setContentType(contentType: ContentType): void {
+    log.add(`select content-type '${contentType.Name}'; prevent: ${this.preventTypeSwitch}`);
+    if (this.preventTypeSwitch) return;
+    this.state.activateType(contentType);
   }
 
   switchTab() {
-    this.tabIndex = 1;
+    log.add('switchTab()');
+    // must delay change because of a bug in the tabs-updating
+    timer(100).toPromise().then(_ => this.tabIndex = 1);
   }
 
-  updateApp(app: App) {
-    this.app = app;
-    this.templates = [];
-    this.loadingTemplates = true;
 
-    this.updateAppSubject.next({
-      app,
-    });
+  private updateApp(newApp: App): void {
+    // ajax-support can change as apps are changed; for ajax, maybe both the previous and new must support it
+    // or just new? still WIP
+    const ajax = newApp.SupportsAjaxReload;
+    log.add(`changing app to ${newApp.AppId}; prevent-switch: ${this.preventAppSwich} use-ajax:${ajax}`);
+    if (this.preventAppSwich) return;
+
+
+    this.loading$.next(true);
+    this.bridge.showMessage('loading App...');
+    const savePromise = this.api.saveAppId(newApp.AppId.toString(), ajax);
+
+    if (ajax) {
+      savePromise.then(() => {
+        log.add('saved app, will reset some stuff');
+        // do this after save completed, to ensure that the module is ready on the server
+        log.add('calling reloadAndReInit()');
+        this.bridge.reloadAndReInit()
+          .then(newConfig => this.boot(newConfig));
+      });
+    } else {
+      savePromise.then(() => window.parent.location.reload());
+    }
+
   }
 
-}
 
-function doPostAjaxScrolling(target) {
-  target.loading = false;
-  target.frame.scrollToTarget();
-  target.appRef.tick();
+
+  private previewTemplate(t: Template): void {
+    log.add(`previewTemplate(${t.TemplateId}), ajax is ${this.supportsAjax}`);
+    this.loading$.next(true);
+    this.bridge
+      .setTemplate(t.TemplateId, t.Name, false)
+      .then(_ => this.loading$.next(false));
+  }
+
 }

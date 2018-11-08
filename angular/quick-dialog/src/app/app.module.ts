@@ -1,39 +1,44 @@
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { Http } from '@angular/http';
+import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
-import { TemplatePickerModule } from "app/template-picker/template-picker.module";
-import { TemplatePickerComponent } from "app/template-picker/template-picker.component";
-import { RouterModule } from "@angular/router";
-import { VersionDialogModule } from "app/version-dialog/version-dialog.module";
+import { TemplatePickerModule } from 'app/template-picker/template-picker.module';
+import { VersionDialogModule } from 'app/version-dialog/version-dialog.module';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { MaterialModule } from './xtempUpgrading/material-module';
+import { log } from './core/log';
 
-export function HttpLoaderFactory(http: Http) {
-  return new TranslateHttpLoader(http, "../i18n/sxc-admin-", ".js");
+export function HttpLoaderFactory(http: HttpClient) {
+  const loader = new TranslateHttpLoader(http, '../i18n/sxc-admin-', '.js');
+  log.add('created translate-loader', loader);
+  return loader;
 }
 
 @NgModule({
   declarations: [
     AppComponent
   ],
-  exports: [],
+  exports: [ ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     FormsModule,
     TemplatePickerModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
         useFactory: HttpLoaderFactory,
-        deps: [Http]
+        deps: [HttpClient]
       }
     }),
+    MaterialModule, // must be after BrowserModule
     VersionDialogModule,
   ],
-  providers: [],
+  providers: [
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

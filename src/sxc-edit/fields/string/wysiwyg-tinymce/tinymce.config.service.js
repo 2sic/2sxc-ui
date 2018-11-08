@@ -1,6 +1,7 @@
 angular.module("sxcFieldTemplates")
     /*@ngInject*/
     .factory("tinyMceConfig", function (beta) {
+
         var svc = {
             // cdn root
             cdnRoot: "//cdn.tinymce.com/4",
@@ -79,7 +80,6 @@ angular.module("sxcFieldTemplates")
                 plugins: svc.plugins.join(" "),
                 contextmenu: modes.standard.contextmenu, //"link image | charmap hr adamimage",
                 autosave_ask_before_unload: false,
-                paste_as_text: true,
                 extended_valid_elements: svc.validateAlso,
                 //'@[class]' // allow classes on all elements, 
                 //+ ',i' // allow i elements (allows icon-font tags like <i class="fa fa-...">)
@@ -99,18 +99,38 @@ angular.module("sxcFieldTemplates")
 
                 language: svc.defaultLanguage,
 
-                debounce: false // DONT slow-down model updates - otherwise we sometimes miss the last changes
+                debounce: false, // DONT slow-down model updates - otherwise we sometimes miss the last changes
 
-                //paste_preprocess: function (plugin, args) {
-                //    console.log(args.content);
-                //    args.content += ' preprocess';
-                //},
-
-                //paste_postprocess: function (plugin, args) {
-                //    console.log(args.node);
-                //    args.node.setAttribute('id', '42');
-                //}
+                paste_as_text: true
             };
+        };
+
+        // add paste wysiwyg ability feature if enabled
+        svc.getPasteWysiwygAbilityOption = {
+            paste_as_text: false,
+            paste_enable_default_filters: true,
+            paste_create_paragraphs: true,
+            paste_create_linebreaks: false,
+            paste_force_cleanup_wordpaste: true,
+            paste_use_dialog: true,
+            paste_auto_cleanup_on_paste: true,
+            paste_convert_middot_lists: true,
+            paste_convert_headers_to_strong: false,
+            paste_remove_spans: true,
+            paste_remove_styles: true,
+
+            paste_postprocess: function (plugin, args) {
+                try {
+                    var anchors = args.node.getElementsByTagName('a');
+                    for (var i = 0; i < anchors.length; i++) {
+                        if (anchors[i].hasAttribute('target') === false) {
+                            anchors[i].setAttribute('target', '_blank');
+                        }
+                    }
+                } catch (e) {
+                    console.error('error in paste postprocess - will only log but not throw', e);
+                }
+            }
         };
 
         return svc;

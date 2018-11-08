@@ -1,10 +1,11 @@
 import {TranslateModule} from '@ngx-translate/core';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SxcVersionsService } from "app/version-dialog/sxc-versions.service";
-import { DialogComponent, ConfirmRestoreDialog } from "app/version-dialog/dialog.component";
-import { MaterialModule } from "@angular/material";
-import { FlexLayoutModule } from "@angular/flex-layout";
+import { SxcVersionsService } from 'app/version-dialog/sxc-versions.service';
+import { DialogComponent, ConfirmRestoreDialog } from 'app/version-dialog/dialog.component';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { MaterialModule } from 'app/xtempUpgrading/material-module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   exports: [
@@ -12,9 +13,10 @@ import { FlexLayoutModule } from "@angular/flex-layout";
   ],
   imports: [
     CommonModule,
-    MaterialModule,
     FlexLayoutModule,
-    TranslateModule
+    TranslateModule,
+    BrowserAnimationsModule,
+    MaterialModule,
   ],
   providers: [
     SxcVersionsService

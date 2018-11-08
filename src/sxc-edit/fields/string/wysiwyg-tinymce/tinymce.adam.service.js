@@ -21,11 +21,6 @@ angular.module('sxcFieldTemplates')
                     ? '<img src="' + fileItem.fullPath + '" + alt="' + fileName + '">'
                     : '<a href="' + fileItem.fullPath + '">' + fileName + '</a>';
 
-                //var body = vm.editor.getBody();
-                //vm.editor.selection.setCursorLocation(body, 0);
-                //debugger;
-                //var range = window.savedRange;
-                //vm.editor.selection.setCursorLocation(range.startContainer, range.startOffset);
                 vm.editor.insertContent(content);
             };
 

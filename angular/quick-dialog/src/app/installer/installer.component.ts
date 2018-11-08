@@ -1,13 +1,13 @@
-import {debounceTime} from 'rxjs/operator/debounceTime';
-import { Component, OnInit, Input, OnDestroy, ElementRef } from '@angular/core';
+
+import { tap, switchMap, map, filter, debounceTime } from 'rxjs/operators';
+import { Component, OnInit, Input } from '@angular/core';
 import { InstallerService } from 'app/installer/installer.service';
-import { ModuleApiService } from 'app/core/module-api.service';
-import { DomSanitizer, SafeResourceUrl, SafeUrl } from '@angular/platform-browser';
-import { fromEvent } from 'rxjs/observable/fromEvent';
-import { Subscription } from 'rxjs';
+import { DomSanitizer } from '@angular/platform-browser';
+import { fromEvent, Subscription } from 'rxjs';
+import { GettingStartedService } from './getting-started.service';
 
 declare const $2sxc: any;
-declare const window: any;
+// declare const window: Window;
 
 @Component({
   selector: 'app-installer',
@@ -26,20 +26,19 @@ export class InstallerComponent implements OnInit {
 
   constructor(
     private installer: InstallerService,
-    private api: ModuleApiService,
+    private api: GettingStartedService,
     private sanitizer: DomSanitizer,
-    private elRef: ElementRef,
   ) {
-    this.subscriptions.push(this.api.gettingStarted
-      .subscribe(url => {
+    this.subscriptions.push(
+      this.api.gettingStarted$.subscribe(url => {
         this.remoteInstallerUrl = <string>this.sanitizer.bypassSecurityTrustResourceUrl(url);
         this.ready = true;
       }));
-      // bootController.watchReboot()
-      window.bootController.watchReboot()
-        .debounceTime(1000)
-        .do(() => this.destroy())
-        .subscribe();
+
+    // bootController.watchReboot()
+    window.bootController.rebootRequest$.pipe(
+      debounceTime(1000))
+      .subscribe(() => this.destroy());
   }
 
   destroy(): void {
@@ -52,53 +51,53 @@ export class InstallerComponent implements OnInit {
     let alreadyProcessing = false;
     this.api.loadGettingStarted(this.isContentApp);
 
-    this.subscriptions.push(fromEvent(window, 'message')
+    this.subscriptions.push(fromEvent(window, 'message').pipe(
 
       // Ensure only one installation is processed.
-      .filter(() => !alreadyProcessing)
+      filter(() => !alreadyProcessing),
 
       // Get data from event.
-      .map((evt: MessageEvent) => {
+      map((evt: MessageEvent) => {
         try {
           return JSON.parse(evt.data);
         } catch (e) {
           return void 0;
         }
-      })
+      }),
 
       // Check if data is correct.
-      .filter(data => data
+      filter(data => data
         && ~~data.moduleId === ~~$2sxc.urlParams.require('mid')
-        && data.action === 'install')
+        && data.action === 'install'),
 
       // Get packages from data.
-      .map(data => Object.values(data.packages))
+      map(data => Object.values(data.packages)),
 
       // Show confirm dialog.
-      .filter(packages => {
+      filter(packages => {
         const packagesDisplayNames = packages
-          .reduce((t, c) => `${t} - ${c.displayName}\n`, '');
+          .reduce((t, c) => `${t} - ${(c as any).displayName}\n`, '');
 
-        if (!confirm(`
-          Do you want to install these packages?\n\n
-          ${packagesDisplayNames}\nThis could take 10 to 60 seconds per package,
-          please don't reload the page while it's installing.`)) return false;
-        return true;
-      })
+        const msg = `Do you want to install these packages?
 
-      .switchMap(packages => {
+${packagesDisplayNames}
+This takes 10 to 30 seconds per package. Don't reload the page while it's installing.`;
+        return confirm(msg);
+      }),
+
+      switchMap(packages => {
         alreadyProcessing = true;
         this.showProgress = true;
         return this.installer.installPackages(packages, p => this.currentPackage = p);
-      })
+      }),
 
-      .do(() => {
+      tap(() => {
         this.showProgress = false;
         alert('Installation complete. If you saw no errors, everything worked.');
         window.top.location.reload();
-      })
+      }))
 
-      .subscribe(null, e => { // An error occured while installing.
+      .subscribe(null, () => {
         this.showProgress = false;
         alert('An error occurred.');
         alreadyProcessing = false;

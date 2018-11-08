@@ -1,46 +1,79 @@
+
 <div class="content">
-  <md-progress-bar [ngStyle]="{ opacity: (!ready || loading) ? 1 : 0 }" [mode]="'indeterminate'"></md-progress-bar>
-  <div *ngIf="ready" class="card">
+
+  <!-- debug info section -->
+  <div *ngIf="showDebug">
+    <h4>Debug</h4>
+    <ul>
+      <li>Types: {{ types?.length }}, current: {{contentType?.StaticName}}</li>
+      <li>Apps: {{ (apps$ | async)?.length }}, current: {{app?.AppId }} </li>
+      <li>Templates: {{templates?.length}}, current: {{template?.TemplateId}}</li>
+      <li>Config: isContent='{{isContent}}' Ready: {{ready}} </li>
+      <li>Tab to show: '{{tabIndex}}' / preventTypeSwitch '{{preventTypeSwitch}}' / preventAppSwitch '{{preventAppSwich}}'</li>
+    </ul>
+  </div>
+
+  <!-- loading indicator -->
+  <mat-progress-bar [ngStyle]="{ opacity: ready ? 0 : 1 }" [mode]="'indeterminate'"></mat-progress-bar>
+
+  <!-- main dialog, starting with save/cancel button -->
+  <div class="card"
+    [ngClass]="{ blocked: !ready }"
+  >
     <div class="top-controls" fxLayout="row" fxLayoutAlign="center center">
-      <button md-fab *ngIf="template" (click)="persistTemplate()" [attr.title]="'TemplatePicker.Save' | translate">
-        <md-icon>check</md-icon>
+      <button mat-fab *ngIf="template" (click)="persistTemplate(template)" [attr.title]="'TemplatePicker.Save' | translate">
+        <mat-icon>check</mat-icon>
       </button>
-      <button md-mini-fab class="secondary" *ngIf="undoTemplateId !== null" (click)="frame.cancel()" [attr.title]="('TemplatePicker.' + (isContentApp ? 'Cancel' : 'Close')) | translate">
-        <md-icon>close</md-icon>
+      <button mat-mini-fab class="secondary" *ngIf="showCancel" (click)="cancel()" [attr.title]="('TemplatePicker.' + (isContent ? 'Cancel' : 'Close')) | translate">
+        <mat-icon>close</mat-icon>
       </button>
     </div>
-    <md-tab-group [(selectedIndex)]="tabIndex">
-      <md-tab>
-        <ng-template md-tab-label>
-          {{(isContentApp ? (contentType?.Name || ('TemplatePicker.ContentTypePickerDefault' | translate)) : (app?.name || ('TemplatePicker.AppPickerDefault' | translate)))}}
+
+    <!-- tabs -->
+    <mat-tab-group [(selectedIndex)]="tabIndex">
+      <mat-tab>
+        <ng-template mat-tab-label>
+          {{(isContent 
+            ? (contentType?.Name || ('TemplatePicker.ContentTypePickerDefault' | translate)) 
+            : (app?.Name || ('TemplatePicker.AppPickerDefault' | translate)))}}
         </ng-template>
-        <div *ngIf="!isContentApp; else contentApp" class="tiles">
-          <div class="tile" [ngClass]="{ active: app?.appId === a.appId }" [attr.title]="a.name" (click)="app?.appId === a.appId ? switchTab() : updateApp(a)"
-            (dblclick)="switchTab()" *ngFor="let a of apps">
+
+        <!-- App Selector -->
+        <div *ngIf="!isContent; else contentApp" class="tiles">
+
+          <div class="tile" 
+            [ngClass]="{ active: app?.AppId === a.AppId, blocked: preventTypeSwitch }" 
+            [attr.title]="a.Name" 
+            (click)="selectApp(app, a)"
+            (dblclick)="switchTab()" *ngFor="let a of apps$ | async">
             <div class="bg">
-              <img *ngIf="a.thumbnail !== null && a.thumbnail !== ''" class="bg-img" [attr.src]="a.thumbnail + '?w=176&h=176'">
-              <div *ngIf="a.thumbnail === null || a.thumbnail === ''" class="bg-icon">
-                <md-icon>star</md-icon>
+              <img *ngIf="a.Thumbnail !== null && a.Thumbnail !== ''" class="bg-img" [attr.src]="a.Thumbnail + '?w=176&h=176'">
+              <div *ngIf="a.Thumbnail === null || a.Thumbnail === ''" class="bg-icon">
+                <mat-icon>star</mat-icon>
               </div>
             </div>
-            <div class="title" [ngClass]="{ show: a.thumbnail === null || a.thumbnail === '' }">
-              <span>{{a.name}}</span>
+            <div class="version"><span>v{{a.VersionMain}}</span></div>
+
+            <div class="title" [ngClass]="{ show: a.Thumbnail === null || a.Thumbnail === '' }">
+              <span>{{a.Name}}</span>
             </div>
           </div>
-          <div class="tile config" *ngIf="showAdvanced && !isContentApp" (click)="frame.run('app-import')" [attr.title]="'TemplatePicker.Install' | translate">
+
+          <!-- install and manage buttons -->
+          <div class="tile config" *ngIf="showAdvanced" (click)="run('app-import')" [attr.title]="'TemplatePicker.Install' | translate">
             <div class="bg">
               <div class="bg-icon">
-                <md-icon>get_app</md-icon>
+                <mat-icon>get_app</mat-icon>
               </div>
             </div>
             <div class="title show">
               <span>{{"TemplatePicker.Install" | translate}}</span>
             </div>
           </div>
-          <div class="tile config" *ngIf="showAdvanced && !isContentApp" (click)="frame.run('zone')" [attr.title]="'TemplatePicker.Zone' | translate">
+          <div class="tile config" *ngIf="showAdvanced" (click)="run('zone')" [attr.title]="'TemplatePicker.Zone' | translate">
             <div class="bg">
               <div class="bg-icon">
-                <md-icon>apps</md-icon>
+                <mat-icon>apps</mat-icon>
               </div>
             </div>
             <div class="title show">
@@ -48,15 +81,21 @@
             </div>
           </div>
         </div>
+
+        <!-- Content-Type selection (when not a generic app, but the default content-app -->
         <ng-template #contentApp>
           <div class="tiles">
-            <div md-button class="tile" [ngClass]="{ active: contentType?.StaticName === c.StaticName, blocked: !allowContentTypeChange }"
-              [attr.title]="c.Label" (click)="contentType?.StaticName === c.StaticName ? switchTab() : updateContentType(c)"
-              (dblclick)="switchTab()" *ngFor="let c of contentTypes">
+            <div mat-button class="tile" 
+              [ngClass]="{ active: contentType?.StaticName === c.StaticName, blocked: preventTypeSwitch }"
+              [attr.title]="(c.Label | translate) + (showDebug ? ' (' + c.StaticName + ')' : '')" 
+              (click)="selectContentType(contentType, c)"
+              (dblclick)="switchTab()" 
+              *ngFor="let c of types"
+            >
               <div class="bg">
                 <img *ngIf="c.Thumbnail !== null && c.Thumbnail !== ''" class="bg-img" [attr.src]="c.Thumbnail + '?w=176&h=176'">
                 <div *ngIf="c.Thumbnail === null || c.Thumbnail === ''" class="bg-icon">
-                  <md-icon>bubble_chart</md-icon>
+                  <mat-icon>bubble_chart</mat-icon>
                 </div>
               </div>
               <div class="title" [ngClass]="{ show: c.Thumbnail === null || c.Thumbnail === '' }">
@@ -65,27 +104,32 @@
             </div>
           </div>
         </ng-template>
-      </md-tab>
-      <md-tab *ngIf="isContentApp ? contentType : app" [label]="('TemplatePicker.ChangeView' | translate) + '(' + templates.length + ')'">
+      </mat-tab>
+
+      <!-- template selection after app/content-type selection -->
+      <mat-tab *ngIf="isContent ? contentType : app" [label]="('TemplatePicker.ChangeView' | translate) + '(' + templates.length + ')'">
         <div class="tiles">
-          <md-spinner class="templates-spinner" *ngIf="loadingTemplates"></md-spinner>
-          <div class="tile" [ngClass]="{ active: template?.TemplateId === t.TemplateId }" [attr.title]="t.Name" (click)="updateTemplateSubject.next({ template: t })"
+          <mat-spinner class="templates-spinner" *ngIf="templatesLoading$ | async"></mat-spinner>
+          <div class="tile" 
+            [ngClass]="{ active: template?.TemplateId === t.TemplateId }" 
+            [attr.title]="t.Name + (showDebug ? ' (' + t.TemplateId + ')' : '')" 
+            (click)="selectTemplate(t)"
             *ngFor="let t of templates">
             <div class="bg">
               <img *ngIf="t.Thumbnail !== null && t.Thumbnail !== ''" class="bg-img" [attr.src]="t.Thumbnail + '?w=176&h=176'">
               <div *ngIf="t.Thumbnail === null || t.Thumbnail === ''" class="bg-icon">
-                <md-icon *ngIf="isContentApp">view_carousel</md-icon>
-                <md-icon *ngIf="!isContentApp">view_quilt</md-icon>
+                <mat-icon *ngIf="isContent">view_carousel</mat-icon>
+                <mat-icon *ngIf="!isContent">view_quilt</mat-icon>
               </div>
             </div>
             <div class="title" [ngClass]="{ show: t.Thumbnail === null || t.Thumbnail === '' }">
               <span>{{t.Name}}</span>
             </div>
           </div>
-          <div class="tile config" *ngIf="showAdvanced && !isContentApp && app?.appId !== null" (click)="frame.run('app')" [attr.title]="'TemplatePicker.App' | translate">
+          <div class="tile config" *ngIf="showAdvanced && !isContent && app?.AppId !== null" (click)="run('app')" [attr.title]="'TemplatePicker.App' | translate">
             <div class="bg">
               <div class="bg-icon">
-                <md-icon>settings</md-icon>
+                <mat-icon>settings</mat-icon>
               </div>
             </div>
             <div class="title show">
@@ -93,9 +137,10 @@
             </div>
           </div>
         </div>
-      </md-tab>
-    </md-tab-group>
-    <span class="no-install-allowed" *ngIf="isInnerContent && showInstaller">No {{isContentApp ? 'Content Apps' : 'Apps'}} installed yet. Please persue the installation by creating a new {{isContentApp ? 'Content' : 'App'}} in the root of your website.</span>
-    <app-installer *ngIf="!isInnerContent && showInstaller" [isContentApp]="isContentApp"></app-installer>
+      </mat-tab>
+    </mat-tab-group>
+
+    <span class="no-install-allowed" *ngIf="isBadContextForInstaller && showInstaller">No {{isContent ? 'Content Apps' : 'Apps'}} installed yet. Please persue the installation by creating a new {{isContent ? 'Content' : 'App'}} in the root of your website.</span>
+    <app-installer *ngIf="!isBadContextForInstaller && showInstaller" [isContentApp]="isContent"></app-installer>
   </div>
 </div>

@@ -1,11 +1,11 @@
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ModuleApiService } from "app/core/module-api.service";
-import { $2sxcService } from "app/core/$2sxc.service";
-import { Http, HttpModule, XHRBackend, RequestOptions } from '@angular/http';
-import { Http2sxc } from "app/core/http-interceptor.service";
-import { Http2SxcHttpProvider } from "app/core/http-interceptor.service.provider";
+import { $2sxcService } from 'app/core/$2sxc.service';
+import { HttpModule } from '@angular/http';
+import { Http2SxcHttpProvider } from 'app/core/http-interceptor.service.provider';
+import { GettingStartedService } from 'app/installer/getting-started.service';
+import { PickerService } from 'app/template-picker/picker.service';
+import { CurrentDataService } from 'app/template-picker/current-data.service';
 
 @NgModule({
   imports: [
@@ -14,7 +14,9 @@ import { Http2SxcHttpProvider } from "app/core/http-interceptor.service.provider
   ],
   declarations: [],
   providers: [
-    ModuleApiService,
+    GettingStartedService,
+    PickerService,
+    CurrentDataService,
     $2sxcService,
     Http2SxcHttpProvider,
   ]

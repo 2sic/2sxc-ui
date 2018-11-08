@@ -1,28 +1,26 @@
-import { Observable } from 'rxjs/Observable';
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
+import { log as parentLog } from './log';
 
+const log = parentLog.subLog('boot-controller');
 /**
  * Special reboot controller, to restart the angular app
- * when critical parameters were changes
+ * when critical parameters were changed
  */
 export class BootController {
   private static instance: BootController;
   private _reboot: Subject<boolean> = new Subject();
-  private reboot$ = this._reboot.asObservable();
+  rebootRequest$ = this._reboot.asObservable();
 
-  static getbootControl() {
+  static getRebootController() {
+    log.add('getRebootController()');
     if (!BootController.instance) {
       BootController.instance = new BootController();
     }
     return BootController.instance;
   }
 
-  public watchReboot() {
-    return this.reboot$;
-  }
-
-  public restart() {
-    console.log("restarting...");
+  public reboot() {
+    log.add('restarting...');
     this._reboot.next(true);
   }
 }

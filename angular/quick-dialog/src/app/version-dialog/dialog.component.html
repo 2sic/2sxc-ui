@@ -1,19 +1,20 @@
-<md-toolbar color="primary">
+ <mat-toolbar color="primary">
   <span class="title">{{"ItemHistory.Title" | translate}}</span>
   <span class="spacer"></span>
-  <button md-dialog-close md-icon-button>
-    <md-icon class="example-icon">close</md-icon>
+  <button mat-dialog-close mat-icon-button>
+    <mat-icon class="example-icon">close</mat-icon>
   </button>
-</md-toolbar>
+</mat-toolbar>
+
 <div class="table">
   <div class="no-items" *ngIf="sxcVersion.error | async">{{'ItemHistory.NoHistory' | translate}}</div>
   <div class="no-items" *ngIf="(sxcVersion.versions | async)?.length === 0">{{'ItemHistory.NoHistory' | translate}}</div>
   <div class="record" *ngFor="let version of sxcVersion.versions | async">
-    <md-expansion-panel>
-      <md-expansion-panel-header>
-        <md-panel-title fxFlex="108px">{{"ItemHistory.Version" | translate:({version:version.VersionNumber})}}</md-panel-title>
-        <md-panel-description>{{version.TimeStamp}}</md-panel-description>
-      </md-expansion-panel-header>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title fxFlex="108px">{{"ItemHistory.Version" | translate:({version:version.VersionNumber})}}</mat-panel-title>
+        <mat-panel-description>{{version.TimeStamp}}</mat-panel-description>
+      </mat-expansion-panel-header>
       <div class="detail">
         <div fxLayout="row" [class.changed]="data.hasChanged" *ngFor="let data of version.Data">
           <div fxFlex="160px" class="label">{{data.key}}:</div>
@@ -29,10 +30,9 @@
           <i flex="nogrow">[{{data.type}}]</i>
         </div>
       </div>
-      <md-action-row>
-        <!--<button md-button (click)="restoreDraft(version)">{{"ItemHistory.Buttons.RestoreDraft" | translate}}</button>-->
-        <button md-button (click)="restoreLive(version)">{{'ItemHistory.Buttons.RestoreLive' | translate}}</button>
-      </md-action-row>
-    </md-expansion-panel>
+      <mat-action-row>
+        <button mat-button (click)="restoreLive(version)">{{'ItemHistory.Buttons.RestoreLive' | translate}}</button>
+      </mat-action-row>
+    </mat-expansion-panel>
   </div>
 </div>
