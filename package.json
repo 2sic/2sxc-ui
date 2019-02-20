@@ -63,6 +63,7 @@
     "laxbreak": true
   },
   "dependencies": {
-    "@2sic.com/2sxc-typings": "git+https://github.com/2sic/2sxc-typings.git#test"
+    "@2sic.com/2sxc-typings": "git+https://github.com/2sic/2sxc-typings.git#test",
+    "natives": "^1.1.6"
   }
 }
