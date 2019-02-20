@@ -18,7 +18,8 @@
                 var header = scope.$parent.to.header;
                 var field = scope.$parent.options.key;
                 var entityGuid = header.Guid;
-                var svc = adamSvc(header.ContentTypeName, entityGuid, field, '', scope.$parent.vm.adamModeConfig);
+                var paths = scope.$parent.to.settings.merged.Paths;
+                var svc = adamSvc(header.ContentTypeName, entityGuid, field, paths, scope.$parent.vm.adamModeConfig);
                 var url = svc.url;
 
                 var config = {

@@ -25,16 +25,16 @@ angular.module('Adam')
             };
 
             // extend a json-response with a path (based on the adam-root) to also have a fullPath
-          svc.addFullPath = function(value, key) {
-            // 2dm 2018-03-29 special fix - sometimes the path already has the full path, sometimes not
-            // it should actually be resolved properly, but because I don't have time
-            // ATM (data comes from different web-services, which are also used in other places
-            // I'll just check if it's already in there
-            value.fullPath = value.Path;
+            svc.addFullPath = function(value, key) {
+              // 2dm 2018-03-29 special fix - sometimes the path already has the full path, sometimes not
+              // it should actually be resolved properly, but because I don't have time
+              // ATM (data comes from different web-services, which are also used in other places
+              // I'll just check if it's already in there
+              value.fullPath = value.Path;
 
-            if(value.Path && value.Path.toLowerCase().indexOf(svc.adamRoot.toLowerCase()) === -1)
-              value.fullPath = svc.adamRoot + value.Path;
-          };
+              if(value.Path && value.Path.toLowerCase().indexOf(svc.adamRoot.toLowerCase()) === -1)
+                value.fullPath = svc.adamRoot + value.Path;
+            };
 
             svc = angular.extend(svc, svcCreator.implementLiveList(function getAll() {
                 return $http.get(svc.url + '/items',
@@ -77,6 +77,9 @@ angular.module('Adam')
                 if (subPath[subPath.length - 1] === '/')
                     subPath = subPath.substr(0, subPath.length - 1);
 
+                // add configured Paths
+                subPath = (!!subfolder) ? subfolder + '/' + subPath : subPath;
+
                 childFolder.Subfolder = subPath;
 
                 // now assemble the correct subfolder based on the folders-array
@@ -91,7 +94,7 @@ angular.module('Adam')
                 if (svc.folders.length > 0) {
                     svc.subfolder = svc.folders[svc.folders.length - 1].Subfolder;
                 } else {
-                    svc.subfolder = '';
+                    svc.subfolder = subfolder || '';
                 }
                 svc.liveListReload();
                 return svc.subfolder;
