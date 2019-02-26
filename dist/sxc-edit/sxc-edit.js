@@ -44,21 +44,20 @@ angular.module('Adam')
       };
 
       checkAllowEdit = function (items) {
-        console.log('stv items', items);
         var currentFolder = $filter('filter')(items, { Name: '.' }, true)[0];
         if (currentFolder) {
-          console.log('stv currentFolder', currentFolder);
           allowEdit = currentFolder.AllowEdit;
           // return currentFolder.AllowEdit;
         }
         else {
-          console.log('stv currentFolder missing');
+          // currentFolder missing
           allowEdit = false;
           // return false;
         }
       };
 
       svc.getAllowEdit = function() {
+        // return true;
         return allowEdit;
       };
 
@@ -194,14 +193,14 @@ angular.module('Adam')
   /* jshint laxbreak:true */
   "use strict";
 
-  BrowserController.$inject = ["$scope", "adamSvc", "debugState", "eavConfig", "eavAdminDialogs", "appRoot", "fileType", "featuresSvc"];
+  BrowserController.$inject = ["$scope", "adamSvc", "debugState", "eavConfig", "eavAdminDialogs", "appRoot", "fileType", "featuresSvc", "toastr"];
   var app = angular.module("Adam");
 
   // The controller for the main form directive
   app.controller("BrowserController", BrowserController);
 
   /*@ngInject*/
-  function BrowserController($scope, adamSvc, debugState, eavConfig, eavAdminDialogs, appRoot, fileType, featuresSvc) {
+  function BrowserController($scope, adamSvc, debugState, eavConfig, eavAdminDialogs, appRoot, fileType, featuresSvc, toastr) {
     var vm = this;
     vm.debug = debugState;
 
@@ -250,7 +249,6 @@ angular.module('Adam')
     vm.svc = adamSvc(vm.contentTypeName, vm.entityGuid, vm.fieldName, vm.subFolder, $scope.adamModeConfig);
 
     vm.allowEdit = function() { 
-      console.log('stv allowEdit', vm.svc.getAllowEdit());
       return vm.svc.getAllowEdit();
     };
 
@@ -308,7 +306,11 @@ angular.module('Adam')
       var folderName = window.prompt("Please enter a folder name"); // todo i18n
       if (folderName)
         vm.svc.addFolder(folderName)
-          .then(vm.refresh);
+          .then(vm.refresh)
+          .catch(function(error) {
+            console.error(error);
+            toastr.error('permission denied', 'can\'t create new folder'); // todo i18n
+          });
     };
 
     vm.del = function del(item) {
@@ -316,13 +318,21 @@ angular.module('Adam')
         return;
       var ok = window.confirm("Are you sure you want to delete this item?"); // todo i18n
       if (ok)
-        vm.svc.delete(item);
+        vm.svc.delete(item)
+        .catch(function(error) {
+          console.error(error);
+          toastr.error('permission denied', 'can\'t delete'); // todo i18n
+        });
     };
 
     vm.rename = function rename(item) {
       var newName = window.prompt('Rename the file / folder to: ', item.Name);
       if (newName)
-        vm.svc.rename(item, newName);
+        vm.svc.rename(item, newName)
+        .catch(function(error) {
+          console.error(error);
+          toastr.error('permission denied', 'can\'t rename'); // todo i18n
+        });
     };
 
     //#region Folder Navigation
@@ -493,7 +503,7 @@ angular.module('Adam')
 (function () {
   angular.module('Adam')
     /*@ngInject*/
-    .directive('dropzone', ["sxc", "tabId", "AppInstanceId", "ContentBlockId", "dragClass", "adamSvc", "$timeout", "$translate", "featuresSvc", function (sxc, tabId, AppInstanceId, ContentBlockId, dragClass, adamSvc, $timeout, $translate, featuresSvc) {
+    .directive('dropzone', ["sxc", "tabId", "AppInstanceId", "ContentBlockId", "dragClass", "adamSvc", "$timeout", "$translate", "featuresSvc", "toastr", function (sxc, tabId, AppInstanceId, ContentBlockId, dragClass, adamSvc, $timeout, $translate, featuresSvc, toastr) {
 
       return {
         restrict: 'C',
@@ -538,6 +548,7 @@ angular.module('Adam')
           'addedfile': function (file) {
             if(svc.getAllowEdit() === false) {
               this.removeFile(file);
+              // toastr.error('permission denied', 'can\'t paste image'); // todo i18n
             } else {
               $timeout(function () {
                 // anything you want can go here and will safely be run on the next digest.
@@ -1026,6 +1037,9 @@ angular.module('Adam')
   .factory('sanitizeSvc', function () {
 
     removeFromStart = function (sanitized, charToRemove) {
+      // check for undefined 
+      if (!sanitized) return sanitized;
+
       while (sanitized.substring(0, 1) === charToRemove) {
         sanitized = sanitized.substring(1);
       }
@@ -1033,6 +1047,8 @@ angular.module('Adam')
     };
 
     removeFromEnd = function (sanitized, charToRemove) {
+      // check for undefined 
+      if (!sanitized) return sanitized;
       while (sanitized.substring(sanitized.length - 1, sanitized.length) === charToRemove) {
         sanitized = sanitized.substring(0, sanitized.length - 1);
       }
@@ -1040,6 +1056,9 @@ angular.module('Adam')
     };
 
     cleanBadPath = function (sanitized) {
+      // check for undefined 
+      if (!sanitized) return sanitized;
+
       var goodChar = "_";
       var illegalRe = /[\?<>\\:\*\|":]/g;
       var controlRe = /[\x00-\x1f\x80-\x9f]/g;
@@ -1058,6 +1077,9 @@ angular.module('Adam')
 
     // sanitize path
     svc.sanitizePath = function (sanitized) {
+      // check for undefined 
+      if (!sanitized) return sanitized;
+
       // remove slashes form start of path
       sanitized = removeFromStart(sanitized, '\/');
 
@@ -1078,6 +1100,9 @@ angular.module('Adam')
 
     // sanitize file or folder name
     svc.sanitizeName = function (sanitized) {
+      // check for undefined 
+      if (!sanitized) return sanitized;
+      
       // in addition to all path validation rules
       // slashes are not valid in file or folder name
       var replacement = "_";

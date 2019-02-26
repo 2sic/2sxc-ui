@@ -8,7 +8,7 @@
   app.controller("BrowserController", BrowserController);
 
   /*@ngInject*/
-  function BrowserController($scope, adamSvc, debugState, eavConfig, eavAdminDialogs, appRoot, fileType, featuresSvc) {
+  function BrowserController($scope, adamSvc, debugState, eavConfig, eavAdminDialogs, appRoot, fileType, featuresSvc, toastr) {
     var vm = this;
     vm.debug = debugState;
 
@@ -57,7 +57,6 @@
     vm.svc = adamSvc(vm.contentTypeName, vm.entityGuid, vm.fieldName, vm.subFolder, $scope.adamModeConfig);
 
     vm.allowEdit = function() { 
-      console.log('stv allowEdit', vm.svc.getAllowEdit());
       return vm.svc.getAllowEdit();
     };
 
@@ -115,7 +114,11 @@
       var folderName = window.prompt("Please enter a folder name"); // todo i18n
       if (folderName)
         vm.svc.addFolder(folderName)
-          .then(vm.refresh);
+          .then(vm.refresh)
+          .catch(function(error) {
+            console.error(error);
+            toastr.error('permission denied', 'can\'t create new folder'); // todo i18n
+          });
     };
 
     vm.del = function del(item) {
@@ -123,13 +126,21 @@
         return;
       var ok = window.confirm("Are you sure you want to delete this item?"); // todo i18n
       if (ok)
-        vm.svc.delete(item);
+        vm.svc.delete(item)
+        .catch(function(error) {
+          console.error(error);
+          toastr.error('permission denied', 'can\'t delete'); // todo i18n
+        });
     };
 
     vm.rename = function rename(item) {
       var newName = window.prompt('Rename the file / folder to: ', item.Name);
       if (newName)
-        vm.svc.rename(item, newName);
+        vm.svc.rename(item, newName)
+        .catch(function(error) {
+          console.error(error);
+          toastr.error('permission denied', 'can\'t rename'); // todo i18n
+        });
     };
 
     //#region Folder Navigation

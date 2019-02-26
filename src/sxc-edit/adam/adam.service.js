@@ -20,21 +20,20 @@ angular.module('Adam')
       };
 
       checkAllowEdit = function (items) {
-        console.log('stv items', items);
         var currentFolder = $filter('filter')(items, { Name: '.' }, true)[0];
         if (currentFolder) {
-          console.log('stv currentFolder', currentFolder);
           allowEdit = currentFolder.AllowEdit;
           // return currentFolder.AllowEdit;
         }
         else {
-          console.log('stv currentFolder missing');
+          // currentFolder missing
           allowEdit = false;
           // return false;
         }
       };
 
       svc.getAllowEdit = function() {
+        // return true;
         return allowEdit;
       };
 

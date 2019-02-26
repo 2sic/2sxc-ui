@@ -2,7 +2,7 @@
 (function () {
   angular.module('Adam')
     /*@ngInject*/
-    .directive('dropzone', function (sxc, tabId, AppInstanceId, ContentBlockId, dragClass, adamSvc, $timeout, $translate, featuresSvc) {
+    .directive('dropzone', function (sxc, tabId, AppInstanceId, ContentBlockId, dragClass, adamSvc, $timeout, $translate, featuresSvc, toastr) {
 
       return {
         restrict: 'C',
@@ -47,6 +47,7 @@
           'addedfile': function (file) {
             if(svc.getAllowEdit() === false) {
               this.removeFile(file);
+              // toastr.error('permission denied', 'can\'t paste image'); // todo i18n
             } else {
               $timeout(function () {
                 // anything you want can go here and will safely be run on the next digest.
