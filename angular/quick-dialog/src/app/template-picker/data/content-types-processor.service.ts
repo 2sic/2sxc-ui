@@ -18,10 +18,15 @@ export class ContentTypesProcessor {
 
   public buildList(allTypes: ContentType[], type: ContentType, allTemplates: Template[], template: Template): ContentType[] {
     log.add('buildList(...) of content-types to show');
-    // let unhide = this.hideTypesWithoutTemplates(allTypes, allTemplates);
     let unhide = this.unhideSelectedType(allTypes, type, template);
     unhide = this.addEmptyTypeIfNeeded(unhide, allTemplates);
-    return this.sortTypes(unhide);
+    // unhide = this.hideTypesWithoutTemplates(unhide, allTemplates);
+    let filtered = this.hideNecessaryTypes(unhide);
+    return this.sortTypes(filtered);
+  }
+
+  private hideNecessaryTypes(types: ContentType[]): ContentType[] {
+    return types.filter(t => !t.IsHidden);
   }
 
   // 2018-11-05 trying to fix https://github.com/2sic/2sxc/issues/1614
@@ -31,7 +36,6 @@ export class ContentTypesProcessor {
   //     .forEach(c => c.IsHidden = true);
   //   return types;
   // }
-
 
   /**
    * Ensure current content-type is visible, just in case it's configured as hidden

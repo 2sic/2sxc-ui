@@ -1,12 +1,12 @@
 {
-  "name": "template-selector-a4",
-  "version": "9.33.0",
+  "name": "template-selector-a7",
+  "version": "9.40.0",
   "license": "MIT",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "build:prod": "ng build --prod --output-hashing=none --sourcemaps=true",
+    "build:prod": "ng build --prod --output-hashing=none",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
