@@ -19,7 +19,7 @@ angular.module('Adam')
       };
 
       getSubfolder = function(serviceConfig, subfolder) {
-        if (serviceConfig.usePortalRoot || serviceConfig.isLibrary) {
+        if (!!subfolder && !!serviceConfig && (serviceConfig.usePortalRoot || serviceConfig.isLibrary)) {
           return subfolder;
         }
         return '';
