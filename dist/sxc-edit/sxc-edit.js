@@ -32,7 +32,7 @@ angular.module('Adam')
     return function createSvc(contentType, entityGuid, field, subfolder, serviceConfig) {
 
       subfolder = sanitizeSvc.sanitizePath(subfolder);
-
+      
       allowEdit = false;
 
       var svc = {
@@ -40,7 +40,13 @@ angular.module('Adam')
         subfolder: subfolder,
         folders: [],
         adamRoot: appRoot.substr(0, appRoot.indexOf('2sxc')),
+      };
 
+      getSubfolder = function(serviceConfig, subfolder) {
+        if (serviceConfig.usePortalRoot || serviceConfig.isLibrary) {
+          return subfolder;
+        }
+        return '';
       };
 
       checkAllowEdit = function (items) {
@@ -63,7 +69,7 @@ angular.module('Adam')
 
       // get the correct url for uploading as it is needed by external services (dropzone)
       svc.uploadUrl = function (targetSubfolder) {
-        targetSubfolder = sanitizeSvc.sanitizePath(targetSubfolder);
+        targetSubfolder = getSubfolder(serviceConfig, sanitizeSvc.sanitizePath(targetSubfolder));
         var url = (targetSubfolder === '')
           ? svc.url
           : svc.url + '?subfolder=' + targetSubfolder;
@@ -89,7 +95,7 @@ angular.module('Adam')
         return $http.get(svc.url + '/items',
           {
             params: {
-              subfolder: svc.subfolder,
+              subfolder: getSubfolder(serviceConfig, svc.subfolder),
               usePortalRoot: serviceConfig.usePortalRoot,
               appId: appId
             }
@@ -156,7 +162,7 @@ angular.module('Adam')
         return $http.get(svc.url + '/delete',
           {
             params: {
-              subfolder: svc.subfolder,
+              subfolder: getSubfolder(serviceConfig, svc.subfolder),
               isFolder: item.IsFolder,
               id: item.Id,
               usePortalRoot: serviceConfig.usePortalRoot,
@@ -171,7 +177,7 @@ angular.module('Adam')
         return $http.get(svc.url + '/rename',
           {
             params: {
-              subfolder: svc.subfolder,
+              subfolder: getSubfolder(serviceConfig, svc.subfolder),
               isFolder: item.IsFolder,
               id: item.Id,
               usePortalRoot: serviceConfig.usePortalRoot,
@@ -1490,7 +1496,8 @@ angular.module('sxcFieldTemplates')
             vm.testLink = "";
 
             vm.adamModeConfig = {
-                usePortalRoot: false
+                usePortalRoot: false,
+                isLibrary: true
             };
 
             //#region new adam: callbacks only

@@ -23,7 +23,8 @@
             vm.testLink = "";
 
             vm.adamModeConfig = {
-                usePortalRoot: false
+                usePortalRoot: false,
+                isLibrary: true
             };
 
             //#region new adam: callbacks only
