@@ -42,7 +42,7 @@
     });
 
     gulp.task('import-libs', importDependencies);
-    gulp.task('C-watch-snippets', watchSnippets);
+    gulp.task('C-snippets-build', watchSnippets);
 
     // deploy to the current 2sxc-dev
     gulp.task('publish-dist-to-2sxc', function () {
