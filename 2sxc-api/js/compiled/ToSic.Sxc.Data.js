@@ -6,9 +6,9 @@ var SxcDataWithInternals = (function () {
         this.List = [];
     }
     SxcDataWithInternals.prototype.sourceUrl = function (params) {
-        var url = this.controller.resolveServiceUrl("app-sys/appcontent/GetContentBlockData");
-        if (typeof params === "string")
-            url += "&" + params;
+        var url = this.controller.resolveServiceUrl('app-sys/appcontent/GetContentBlockData');
+        if (typeof params === 'string')
+            url += '&' + params;
         return url;
     };
     SxcDataWithInternals.prototype.load = function (source) {
@@ -50,16 +50,16 @@ var SxcDataWithInternals = (function () {
         return this;
     };
     SxcDataWithInternals.prototype.on = function (events, callback) {
-        return $(this).bind("2scLoad", callback)[0]._triggerLoaded();
+        return $(this).bind('2scLoad', callback)[0]._triggerLoaded();
     };
     SxcDataWithInternals.prototype._triggerLoaded = function () {
         return this.controller.isLoaded
-            ? $(this).trigger("2scLoad", [this])[0]
+            ? $(this).trigger('2scLoad', [this])[0]
             : this;
     };
     SxcDataWithInternals.prototype.one = function (events, callback) {
         if (!this.controller.isLoaded)
-            return $(this).one("2scLoad", callback)[0];
+            return $(this).one('2scLoad', callback)[0];
         callback({}, this);
         return this;
     };

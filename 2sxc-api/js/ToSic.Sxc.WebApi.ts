@@ -1,6 +1,6 @@
 ﻿
 declare const $: any;
-import { SxcInstance } from "./ToSic.Sxc.Instance";
+import { SxcInstance } from './ToSic.Sxc.Instance';
 
 /**
  * helper API to run ajax / REST calls to the server
@@ -24,7 +24,7 @@ export class SxcWebApiWithInternals {
      * @returns {Promise} jQuery ajax promise object
      */
     get(settingsOrUrl: string | any, params?: any, data?: any, preventAutoFail?: boolean): any {
-        return this.request(settingsOrUrl, params, data, preventAutoFail, "GET");
+        return this.request(settingsOrUrl, params, data, preventAutoFail, 'GET');
     }
 
     /**
@@ -36,7 +36,7 @@ export class SxcWebApiWithInternals {
      * @returns {Promise} jQuery ajax promise object
      */
     post(settingsOrUrl: string | any, params?: any, data?: any, preventAutoFail?: boolean): any {
-        return this.request(settingsOrUrl, params, data, preventAutoFail, "POST");
+        return this.request(settingsOrUrl, params, data, preventAutoFail, 'POST');
     }
 
     /**
@@ -48,7 +48,7 @@ export class SxcWebApiWithInternals {
      * @returns {Promise} jQuery ajax promise object
      */
     delete(settingsOrUrl: string | any, params?: any, data?: any, preventAutoFail?: boolean): any {
-        return this.request(settingsOrUrl, params, data, preventAutoFail, "DELETE");
+        return this.request(settingsOrUrl, params, data, preventAutoFail, 'DELETE');
     }
 
     /**
@@ -60,24 +60,24 @@ export class SxcWebApiWithInternals {
      * @returns {Promise} jQuery ajax promise object
      */
     put(settingsOrUrl: string | any, params?: any, data?: any, preventAutoFail?: boolean): any {
-        return this.request(settingsOrUrl, params, data, preventAutoFail, "PUT");
+        return this.request(settingsOrUrl, params, data, preventAutoFail, 'PUT');
     }
 
     private request(settings: string | any, params: any, data: any, preventAutoFail: boolean, method: string): any {
 
-        // url parameter: autoconvert a single value (instead of object of values) to an id=... parameter
+        // url parameter: auto convert a single value (instead of object of values) to an id=... parameter
         // tslint:disable-next-line:curly
-        if (typeof params !== "object" && typeof params !== "undefined")
+        if (typeof params !== 'object' && typeof params !== 'undefined')
             params = { id: params };
 
         // if the first parameter is a string, resolve settings
-        if (typeof settings === "string") {
-            const controllerAction = settings.split("/");
+        if (typeof settings === 'string') {
+            const controllerAction = settings.split('/');
             const controllerName = controllerAction[0];
             const actionName = controllerAction[1];
 
-            if (controllerName === "" || actionName === "")
-                alert("Error: controller or action not defined. Will continue with likely errors.");
+            if (controllerName === '' || actionName === '')
+                alert('Error: controller or action not defined. Will continue with likely errors.');
 
             settings = {
                 controller: controllerName,
@@ -90,7 +90,7 @@ export class SxcWebApiWithInternals {
         }
 
         const defaults = {
-            method: method === null ? "POST" : method,
+            method: method === null ? 'POST' : method,
             params: null as any,
             preventAutoFail: false,
         };
@@ -100,13 +100,13 @@ export class SxcWebApiWithInternals {
 
         const promise = $.ajax({
             async: true,
-            dataType: settings.dataType || "json", // default is json if not specified
+            dataType: settings.dataType || 'json', // default is json if not specified
             data: JSON.stringify(settings.data),
-            contentType: "application/json",
+            contentType: 'application/json',
             type: settings.method,
             url: this.getActionUrl(settings),
             beforeSend(xhr: any) {
-                xhr.setRequestHeader("ContentBlockId", cbid);
+                xhr.setRequestHeader('ContentBlockId', cbid);
                 sf.setModuleHeaders(xhr);
             },
         });
@@ -121,8 +121,8 @@ export class SxcWebApiWithInternals {
         const sf = $.ServicesFramework(this.id);
         const base = (settings.url)
             ? this.controller.resolveServiceUrl(settings.url)
-            : sf.getServiceRoot("2sxc") + "app/auto/api/" + settings.controller + "/" + settings.action;
-        return base + (settings.params === null ? "" : ("?" + $.param(settings.params)));
+            : sf.getServiceRoot('2sxc') + 'app/auto/api/' + settings.controller + '/' + settings.action;
+        return base + (settings.params === null ? '' : ('?' + $.param(settings.params)));
     }
 
 }
