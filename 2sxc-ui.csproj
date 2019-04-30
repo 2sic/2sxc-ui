@@ -35,6 +35,7 @@
     <Content Include="src\sxc-edit\fields\custom\custom-json.js" />
     <Content Include="src\sxc-edit\fields\hyperlink\System.%40hyperlink-library.json" />
     <Content Include="src\sxc-edit\fields\hyperlink\System.%40Hyperlink.json" />
+    <TypeScriptCompile Include="2sxc-api\js\Stats.ts" />
     <TypeScriptCompile Include="2sxc-api\js\ToSic.Sxc.Data.ts" />
     <TypeScriptCompile Include="2sxc-api\js\ToSic.Sxc.Controller.ts" />
     <TypeScriptCompile Include="2sxc-api\js\ToSic.Sxc.Url.ts" />
@@ -163,9 +164,7 @@
     <Content Include="2sxc-api\js\tsconfig.json" />
     <Content Include="2sxc-api\js\readme.md" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="src\inpage\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">12.0</VisualStudioVersion>
   </PropertyGroup>
