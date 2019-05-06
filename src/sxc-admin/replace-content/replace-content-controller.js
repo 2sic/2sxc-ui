@@ -16,6 +16,7 @@
             part: item.Group.Part,
             index: item.Group.Index
         };
+        vm.typeName = "";
 
         var svc = contentGroupSvc(appId);
 
@@ -23,6 +24,7 @@
             return svc.getItems(vm.item).then(function(result) {
                 vm.options = result.data.Items;
                 vm.item.id = result.data.SelectedId;
+                vm.typeName = result.data.ContentTypeName;
             });
         };
         vm.reload();
@@ -41,7 +43,7 @@
             var selectedId = vm.item.id;
             var items = [
                 {
-                    //ContentTypeName: contentType,
+                    ContentTypeName: vm.typeName,
                     DuplicateEntity: vm.item.id
                 }
             ];
