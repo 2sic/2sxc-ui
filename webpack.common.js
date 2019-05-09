@@ -5,7 +5,7 @@ const merge = require('webpack-merge');
 
 const sxcJsFileBase = '2sxc.api';
 const SxcApiPath = './2sxc-api/js/2sxc.api.ts';
-const SxcDevWebPath = "C:\\Projects\\2sxc-dnn742\\Website\\DesktopModules\\ToSIC_SexyContent\\";
+const SxcDevWebPath = 'C:\\Projects\\2sxc-dnn742\\Website\\DesktopModules\\ToSIC_SexyContent\\';
 // const SxcDevWebPath = "c:\\temp\\x\\";
 
 const sxcJsDist = path.resolve(__dirname, 'js');
@@ -15,7 +15,7 @@ var copyAfterBuild = new WebpackShellPlugin({
     onBuildStart: ['echo will auto-copy once built to ' + SxcDevWebPath ],
     onBuildEnd: [
         // 'echo copying...',
-        'copy "' + sxcJsDist + "\\" + sxcJsFileBase + '*.*" "' + SxcDevWebPath + 'js" /y'
+        'copy "' + sxcJsDist + '\\' + sxcJsFileBase + '*.*" "' + SxcDevWebPath + 'js" /y'
     ],
     dev: false // necessary to execute multiple times
 });
@@ -37,7 +37,7 @@ const sxcDevConfig = {
         ]
     },
     resolve: {
-        extensions: [".tsx", ".ts", ".js"]
+        extensions: ['.tsx', '.ts', '.js']
     },
     output: {
         filename: sxcJsFileBase + '.js',
@@ -62,13 +62,14 @@ const prodPlugins = [
         )
     ];
 if(enableMc) prodPlugins.push(copyAfterBuild);
-const sxcProdConfig = merge(sxcDevConfig, {
-    devtool: 'source-map',
-    plugins: prodPlugins,
-    output: {
-        filename: sxcJsFileBase + '.min.js',
-    }
-})
+const sxcProdConfig = merge(sxcDevConfig,
+    {
+        devtool: 'source-map',
+        plugins: prodPlugins,
+        output: {
+            filename: sxcJsFileBase + '.min.js',
+        }
+    });
 
 
 const compileList = [sxcDevConfig];

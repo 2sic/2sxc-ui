@@ -11,4 +11,7 @@ The one thing that is included is the angular-bridge.
 ## Snippet Management using Excel
 Because we have so many snippets, these are managed in an excel _snippets.xlsx_ .
 
-Since we need json to consume it, they are converted within a grunt-job. This doesn't happen automatically, you must start the _build-snippets_ grunt to create them.
+You will find documentations/instructions for the snippets on azing: 
+https://azing.org/2sxc/l/itSjkSK0/part-code-editor-and-snippets
+
+Since we need json to consume it, they are converted within a grunt-job. This doesn't happen automatically, you must start the _C-snippets-build_ gulp to create them.

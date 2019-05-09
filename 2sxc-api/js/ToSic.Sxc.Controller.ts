@@ -1,8 +1,9 @@
 ﻿// ReSharper disable InconsistentNaming
 
-import { SxcInstance, SxcInstanceWithEditing, SxcInstanceWithInternals } from "./ToSic.Sxc.Instance";
-import { TotalPopup } from "./ToSic.Sxc.TotalPopup";
-import { UrlParamManager } from "./ToSic.Sxc.Url";
+import { SxcInstance, SxcInstanceWithEditing, SxcInstanceWithInternals } from './ToSic.Sxc.Instance';
+import { TotalPopup } from './ToSic.Sxc.TotalPopup';
+import { UrlParamManager } from './ToSic.Sxc.Url';
+import { Stats } from './Stats';
 
 export interface Window { $2sxc: SxcController | SxcControllerWithInternals; }
 
@@ -47,17 +48,17 @@ export interface SxcController {
 function SxcController(id: number | HTMLElement, cbid?: number): SxcInstanceWithInternals {
     const $2sxc = window.$2sxc as SxcControllerWithInternals;
     if (!$2sxc._controllers)
-        throw new Error("$2sxc not initialized yet");
+        throw new Error('$2sxc not initialized yet');
 
     // if it's a dom-element, use auto-find
-    if (typeof id === "object") {
+    if (typeof id === 'object') {
         const idTuple = autoFind(id);
         id = idTuple[0];
         cbid = idTuple[1];
     }
 
     if (!cbid) cbid = id;           // if content-block is unknown, use id of module
-    const cacheKey = id + ":" + cbid; // neutralize the id from old "34" format to the new "35:353" format
+    const cacheKey = id + ':' + cbid; // neutralize the id from old "34" format to the new "35:353" format
 
     // either get the cached controller from previous calls, or create a new one
     if ($2sxc._controllers[cacheKey]) return $2sxc._controllers[cacheKey];
@@ -75,15 +76,16 @@ function SxcController(id: number | HTMLElement, cbid?: number): SxcInstanceWith
 export function buildSxcController(): SxcController | SxcControllerWithInternals {
     const urlManager = new UrlParamManager();
     const debug = {
-        load: (urlManager.get("debug") === "true"),
-        uncache: urlManager.get("sxcver"),
+        load: (urlManager.get('debug') === 'true'),
+        uncache: urlManager.get('sxcver'),
     };
+    const stats = new Stats();
 
     const addOn: any = {
         _controllers: {} as any,
         sysinfo: {
-            version: "09.05.02",
-            description: "The 2sxc Controller object - read more about it on 2sxc.org",
+            version: '09.43.00',
+            description: 'The 2sxc Controller object - read more about it on 2sxc.org',
         },
         beta: {},
         _data: {},
@@ -94,13 +96,14 @@ export function buildSxcController(): SxcController | SxcControllerWithInternals
         // used both in the inpage-edit and in the dialogs
         // debug state which is needed in various places
         debug,
+        stats: stats,
         // mini-helpers to manage 2sxc parts, a bit like a dependency loader
         // which will optimize to load min/max depending on debug state
         parts: {
             getUrl(url: string, preventUnmin: boolean) {
-                let r = (preventUnmin || !debug.load) ? url : url.replace(".min", ""); // use min or not
-                if (debug.uncache && r.indexOf("sxcver") === -1)
-                    r = r + ((r.indexOf("?") === -1) ? "?" : "&") + "sxcver=" + debug.uncache;
+                let r = (preventUnmin || !debug.load) ? url : url.replace('.min', ''); // use min or not
+                if (debug.uncache && r.indexOf('sxcver') === -1)
+                    r = r + ((r.indexOf('?') === -1) ? '?' : '&') + 'sxcver=' + debug.uncache;
                 return r;
             },
         },
@@ -112,10 +115,10 @@ export function buildSxcController(): SxcController | SxcControllerWithInternals
 }
 
 function autoFind(domElement: HTMLElement): [number, number] {
-    const containerTag = $(domElement).closest(".sc-content-block")[0];
+    const containerTag = $(domElement).closest('.sc-content-block')[0];
     if (!containerTag) return null;
-    const iid = containerTag.getAttribute("data-cb-instance");
-    const cbid = containerTag.getAttribute("data-cb-id");
+    const iid = containerTag.getAttribute('data-cb-instance');
+    const cbid = containerTag.getAttribute('data-cb-id');
     if (!iid || !cbid) return null;
     return [iid, cbid];
 }

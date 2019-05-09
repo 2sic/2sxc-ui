@@ -1,4 +1,4 @@
-﻿import { SxcInstanceWithInternals } from "./ToSic.Sxc.Instance";
+﻿import { SxcInstanceWithInternals } from './ToSic.Sxc.Instance';
 
 declare const $: any;
 
@@ -10,6 +10,7 @@ export class SxcDataWithInternals {
     "in": any = {};
 
     // will hold the default stream (["in"]["Default"].List
+// ReSharper disable once InconsistentNaming
     List: any = [];
 
     constructor(
@@ -20,9 +21,9 @@ export class SxcDataWithInternals {
 
     // source path defaulting to current page + optional params
     sourceUrl(params?: string): string {
-        let url = this.controller.resolveServiceUrl("app-sys/appcontent/GetContentBlockData");
-        if (typeof params === "string") // text like 'id=7'
-            url += "&" + params;
+        let url = this.controller.resolveServiceUrl('app-sys/appcontent/GetContentBlockData');
+        if (typeof params === 'string') // text like 'id=7'
+            url += '&' + params;
         return url;
     }
 
@@ -77,18 +78,19 @@ export class SxcDataWithInternals {
     }
 
     on(events: Event, callback: () => void): Promise<any> {
-        return $(this).bind("2scLoad", callback)[0]._triggerLoaded();
+        return $(this).bind('2scLoad', callback)[0]._triggerLoaded();
     }
 
+// ReSharper disable once InconsistentNaming
     _triggerLoaded(): Promise<any> {
         return this.controller.isLoaded
-            ? $(this).trigger("2scLoad", [this])[0]
+            ? $(this).trigger('2scLoad', [this])[0]
             : this;
     }
 
     one(events: Event, callback: (x: any, y: any) => void): SxcDataWithInternals {
         if (!this.controller.isLoaded)
-            return $(this).one("2scLoad", callback)[0];
+            return $(this).one('2scLoad', callback)[0];
         callback({}, this);
         return this;
     }

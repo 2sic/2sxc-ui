@@ -45,16 +45,12 @@
 
         var eventHandlers = {
           'addedfile': function (file) {
-            if(svc.getAllowEdit() === false) {
-              this.removeFile(file);
-            } else {
-              $timeout(function () {
-                // anything you want can go here and will safely be run on the next digest.
-                scope.$apply(function () { // this must run in a timeout
-                  scope.uploading = true;
-                });
+            $timeout(function () {
+              // anything you want can go here and will safely be run on the next digest.
+              scope.$apply(function () { // this must run in a timeout
+                scope.uploading = true;
               });
-            }
+            });
           },
 
           'drop': function (event) {
@@ -177,11 +173,6 @@
          * @param {any} dropzone
          */
         function pasteImageInDropzone(ev, data, dropzone) {
-          if(svc.getAllowEdit() === false) {
-            toastr.error($translate.instant('Errors.NoAllowEdit')); // todo i18n
-            return;
-          }
-
           if (ev.detail && !data) {
             data = ev.detail;
           }

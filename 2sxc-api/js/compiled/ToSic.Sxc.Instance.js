@@ -1,29 +1,32 @@
 var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
     return function (d, b) {
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-import { SxcDataWithInternals } from "./ToSic.Sxc.Data";
-import { SxcWebApiWithInternals } from "./ToSic.Sxc.WebApi";
+import { SxcDataWithInternals } from './ToSic.Sxc.Data';
+import { SxcWebApiWithInternals } from './ToSic.Sxc.WebApi';
 var SxcInstance = (function () {
     function SxcInstance(id, cbid, dnnSf) {
         this.id = id;
         this.cbid = cbid;
         this.dnnSf = dnnSf;
-        this.serviceScopes = ["app", "app-sys", "app-api", "app-query", "app-content", "eav", "view", "dnn"];
-        this.serviceRoot = dnnSf(id).getServiceRoot("2sxc");
+        this.serviceScopes = ['app', 'app-sys', 'app-api', 'app-query', 'app-content', 'eav', 'view', 'dnn'];
+        this.serviceRoot = dnnSf(id).getServiceRoot('2sxc');
         this.webApi = new SxcWebApiWithInternals(this, id, cbid);
     }
     SxcInstance.prototype.resolveServiceUrl = function (virtualPath) {
-        var scope = virtualPath.split("/")[0].toLowerCase();
+        var scope = virtualPath.split('/')[0].toLowerCase();
         if (this.serviceScopes.indexOf(scope) === -1)
             return virtualPath;
-        return this.serviceRoot + scope + "/" + virtualPath.substring(virtualPath.indexOf("/") + 1);
+        return this.serviceRoot + scope + '/' + virtualPath.substring(virtualPath.indexOf('/') + 1);
     };
     SxcInstance.prototype.showDetailedHttpError = function (result) {
         if (window.console)
@@ -31,34 +34,34 @@ var SxcInstance = (function () {
         if (result.status === 404 &&
             result.config &&
             result.config.url &&
-            result.config.url.indexOf("/dist/i18n/") > -1) {
+            result.config.url.indexOf('/dist/i18n/') > -1) {
             if (window.console)
-                console.log("just fyi: failed to load language resource; will have to use default");
+                console.log('just fyi: failed to load language resource; will have to use default');
             return result;
         }
         if (result.status === 0 || result.status === -1)
             return result;
-        var infoText = "Had an error talking to the server (status " + result.status + ").";
+        var infoText = 'Had an error talking to the server (status ' + result.status + ').';
         var srvResp = result.responseText
             ? JSON.parse(result.responseText)
             : result.data;
         if (srvResp) {
             var msg = srvResp.Message;
             if (msg)
-                infoText += "\nMessage: " + msg;
+                infoText += '\nMessage: ' + msg;
             var msgDet = srvResp.MessageDetail || srvResp.ExceptionMessage;
             if (msgDet)
-                infoText += "\nDetail: " + msgDet;
-            if (msgDet && msgDet.indexOf("No action was found") === 0)
-                if (msgDet.indexOf("that matches the name") > 0)
-                    infoText += "\n\nTip from 2sxc: you probably got the action-name wrong in your JS.";
-                else if (msgDet.indexOf("that matches the request.") > 0)
-                    infoText += "\n\nTip from 2sxc: Seems like the parameters are the wrong amount or type.";
-            if (msg && msg.indexOf("Controller") === 0 && msg.indexOf("not found") > 0)
+                infoText += '\nDetail: ' + msgDet;
+            if (msgDet && msgDet.indexOf('No action was found') === 0)
+                if (msgDet.indexOf('that matches the name') > 0)
+                    infoText += '\n\nTip from 2sxc: you probably got the action-name wrong in your JS.';
+                else if (msgDet.indexOf('that matches the request.') > 0)
+                    infoText += '\n\nTip from 2sxc: Seems like the parameters are the wrong amount or type.';
+            if (msg && msg.indexOf('Controller') === 0 && msg.indexOf('not found') > 0)
                 infoText +=
                     "\n\nTip from 2sxc: you probably spelled the controller name wrong or forgot to remove the word 'controller' from the call in JS. To call a controller called 'DemoController' only use 'Demo'.";
         }
-        infoText += "\n\nif you are an advanced user you can learn more about what went wrong - discover how on 2sxc.org/help?tag=debug";
+        infoText += '\n\nif you are an advanced user you can learn more about what went wrong - discover how on 2sxc.org/help?tag=debug';
         alert(infoText);
         return result;
     };
