@@ -12,6 +12,16 @@
             "type": "gulp",
             "task": "develop",
             "problemMatcher": []
+        },
+        {
+            "type": "gulp",
+            "task": "A-watch-our-code",
+            "problemMatcher": []
+        },
+        {
+            "type": "gulp",
+            "task": "B-watch-publish-to-2sxc",
+            "problemMatcher": []
         }
     ]
 }
