@@ -1,0 +1,40 @@
+{
+  "name": "ToSic_ToSxc_Eav_Languages",
+  "description": "Language packs for the 2sic/eav and 2sxc/2sxc",
+  "main": "",
+  "authors": [
+    "2sic Internet Solutions"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "2sic",
+    "eav",
+    "2sxc",
+    "i18n",
+    "l10n"
+  ],
+  "homepage": "https://github.com/2sic/2sxc-eav-languages",
+  "moduleType": [],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests",
+    "src",
+    "analysis",
+    "tmp",
+    ".*/*"
+  ],
+  "dependencies": {
+    "angular-i18n": "^1.5.8"
+  },
+  "_release": "9d7e94f81c",
+  "_resolution": {
+    "type": "commit",
+    "commit": "9d7e94f81ccfa31c6a389cef4e62cf3bc8ede89e"
+  },
+  "_source": "git://github.com/2sic/2sxc-eav-languages.git",
+  "_target": "9d7e94f81ccfa31c6a389cef4e62cf3bc8ede89e",
+  "_originalSource": "2sic/2sxc-eav-languages"
+}

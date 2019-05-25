@@ -1,0 +1,31 @@
+{
+  "name": "jquery-i18next",
+  "main": "./jquery-i18next.min.js",
+  "dependencies": {},
+  "ignore": [
+    "test/",
+    "dist/",
+    "src/",
+    "coverage/",
+    ".babelrc",
+    ".gitignore",
+    ".editorconfig",
+    ".eslintignore",
+    ".eslintrc",
+    ".npmignore",
+    "gulpfile.js",
+    "package.json",
+    "karma.conf.js"
+  ],
+  "homepage": "https://github.com/i18next/jquery-i18next",
+  "version": "1.1.0",
+  "_release": "1.1.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "v1.1.0",
+    "commit": "7e926148fa43fbf3ba2414d758996ca2ebeb8b0f"
+  },
+  "_source": "https://github.com/i18next/jquery-i18next.git",
+  "_target": "1.1.0",
+  "_originalSource": "jquery-i18next"
+}

@@ -32,7 +32,8 @@
           headers: {
             "ModuleId": AppInstanceId,
             "TabId": tabId,
-            "ContentBlockId": ContentBlockId
+            "ContentBlockId": ContentBlockId,
+            "RequestVerificationToken": window.$.ServicesFramework(0).getAntiForgeryValue()
           },
 
           dictDefaultMessage: '',
