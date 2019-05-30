@@ -1,6 +1,6 @@
 {
-  "name": "template-selector-a7",
-  "version": "10.00.00",
+  "name": "2sxc-quick-dialog",
+  "version": "10.01.00",
   "license": "MIT",
   "scripts": {
     "ng": "ng",
@@ -14,7 +14,7 @@
     "dev2dm": "concurrently \"npm run watch:publish:2sxc-ui\" \"npm run watch:publish:2sxc\" \"npm run watch\" --kill-others -n \"publish to 2sxc,publish to 2sxc-ui,build angular\"",
     "watch": "ng build --watch --output-hashing=none --extract-css=true",
     "watch:2web": "ng build --watch --output-hashing=none --extract-css=true --output-path=\"/Projects/2sxc-dnn742/Website/DesktopModules/ToSIC_SexyContent/dist/ng/\"",
-    "watch:prod:2web": "set NODE_ENV=production && ng build --prod --watch --output-path=\"/Projects/2sxc-dnn742/Website/DesktopModules/ToSIC_SexyContent/dist/ng/\" --extraWebpackConfig webpack.extra.js ",
+    "watch:release": "set NODE_ENV=production && ng build --prod --watch --output-path=\"/Projects/2sxc-dnn742/Website/DesktopModules/ToSIC_SexyContent/dist/ng/\" --extraWebpackConfig webpack.extra.js ",
     "//watch:publish:2sxc-ui": "cpx \"./dist/**/*.*\" \"../../dist/\" -w -v",
     "//watch:publish:2sxc": "cpx \"./dist/**/*.*\" \"/Projects/2sxc-dnn742/Website/DesktopModules/ToSIC_SexyContent/dist/\" -w -v",
     "//watch:publish:dnn9:2cb": "cpx \"./dist/**/*.*\" \"/Projects/2SexyContent/WebDNN9/DesktopModules/ToSIC_SexyContent/dist/\" -w -v",
