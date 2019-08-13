@@ -1,6 +1,6 @@
 {
   "name": "template-selector-a7",
-  "version": "9.40.0",
+  "version": "9.43.02",
   "license": "MIT",
   "scripts": {
     "ng": "ng",
@@ -14,12 +14,8 @@
     "dev2dm": "concurrently \"npm run watch:publish:2sxc-ui\" \"npm run watch:publish:2sxc\" \"npm run watch\" --kill-others -n \"publish to 2sxc,publish to 2sxc-ui,build angular\"",
 
     "watch": "ng build --watch --output-hashing=none --extract-css=true",
-    "watch:2web": "ng build --watch --output-hashing=none --extract-css=true --output-path=\"/Projects/2sxc-dnn742/Website/DesktopModules/ToSIC_SexyContent/dist/ng/\"",
-    "watch:prod:2web": "ng build --prod --watch --output-path=\"/Projects/2sxc-dnn742/Website/DesktopModules/ToSIC_SexyContent/dist/ng/\" ",
-    "watch:publish:2sxc-ui": "cpx \"./dist/**/*.*\" \"../../dist/\" -w -v",
-    "watch:publish:2sxc": "cpx \"./dist/**/*.*\" \"/Projects/2sxc-dnn742/Website/DesktopModules/ToSIC_SexyContent/dist/\" -w -v",
-    "watch:publish:dnn9:2cb": "cpx \"./dist/**/*.*\" \"/Projects/2SexyContent/WebDNN9/DesktopModules/ToSIC_SexyContent/dist/\" -w -v",
-    "prod": "concurrently \"npm run watch:publish:2sxc-ui\" \"npm run watch:publish:2sxc\" \"npm run watch:publish:dnn9:2cb\" \"npm build:prod\""
+    "watch:2web": "ng build --watch --output-hashing=none --extract-css=true --output-path=\"/Projects/LTS-09/2sxc-dnn742/Website/DesktopModules/ToSIC_SexyContent/dist/ng/\"",
+    "watch:prod:2web": "ng build --prod --watch --output-path=\"/Projects/LTS-09/2sxc-dnn742/Website/DesktopModules/ToSIC_SexyContent/dist/ng/\" "
   },
   "private": true,
   "dependencies": {
