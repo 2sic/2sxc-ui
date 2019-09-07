@@ -14,7 +14,6 @@ export class SxcVersionsService {
 
   private versionsSubject: ReplaySubject<Version[]>;
   private errorSubject: ReplaySubject<string>;
-  private apiUrl;
 
   constructor(
     private http: Http
@@ -25,42 +24,23 @@ export class SxcVersionsService {
     this.errorSubject = new ReplaySubject<string>(1);
     this.error = this.errorSubject.asObservable();
 
-    this.apiUrl = $2sxc.urlParams.require('portalroot') + 'desktopmodules/2sxc/api/';
     this.loadVersions();
   }
 
   restore(changeId: number): Observable<Response> {
     const appId = $2sxc.urlParams.require('appId');
-    const tabId = $2sxc.urlParams.require('tid');
-    const cbId = $2sxc.urlParams.require('cbid');
-    const modId = $2sxc.urlParams.require('mid');
     const item = JSON.parse($2sxc.urlParams.require('items'))[0];
-    const url = `${this.apiUrl}eav/entities/restore?appId=${appId}&changeId=${changeId}`;
+    const url = `eav/entities/restore?appId=${appId}&changeId=${changeId}`;
 
-    const headers = new Headers();
-    headers.append('TabId', tabId);
-    headers.append('ModuleId', modId);
-    headers.append('ContentBlockId', cbId);
-    const options = new RequestOptions({ headers: headers });
-    return this.http.post(url, item, options);
+    return this.http.post(url, item);
   }
 
   private loadVersions(): void {
     const appId = $2sxc.urlParams.require('appId');
-    const tabId = $2sxc.urlParams.require('tid');
-    const cbId = $2sxc.urlParams.require('cbid');
-    const modId = $2sxc.urlParams.require('mid');
     const item = JSON.parse($2sxc.urlParams.require('items'))[0];
-    const url = $2sxc(modId).resolveServiceUrl(`eav/entities/history?appId=${appId}`);
-    // const url = `${this.apiUrl}eav/entities/history?appId=${appId}`;
+    const url = `eav/entities/history?appId=${appId}`;
 
-    const headers = new Headers();
-    headers.append('TabId', tabId);
-    headers.append('ModuleId', modId);
-    headers.append('ContentBlockId', cbId);
-    const options = new RequestOptions({ headers: headers });
-
-    this.http.post(url, item, options).pipe(
+    this.http.post(url, item).pipe(
       map(res => res.json()
         .map((v, i, all) => Object.assign(v, {
           Data: (() => {

@@ -22,6 +22,11 @@
             "type": "gulp",
             "task": "B-watch-publish-to-2sxc",
             "problemMatcher": []
+        },
+        {
+            "type": "gulp",
+            "task": "copy-all-with.data",
+            "problemMatcher": []
         }
     ]
 }
