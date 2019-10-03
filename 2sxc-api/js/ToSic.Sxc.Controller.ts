@@ -84,7 +84,7 @@ export function buildSxcController(): SxcController | SxcControllerWithInternals
     const addOn: any = {
         _controllers: {} as any,
         sysinfo: {
-            version: '10.05.00',
+            version: '10.07.00',
             description: 'The 2sxc Controller object - read more about it on 2sxc.org',
         },
         beta: {},
