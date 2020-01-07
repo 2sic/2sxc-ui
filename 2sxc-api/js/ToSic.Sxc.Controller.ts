@@ -43,6 +43,7 @@ export interface SxcController {
     };
 
     env: Environment;
+    jQ: JQuery;
 }
 
 /**
@@ -114,6 +115,7 @@ export function buildSxcController(): SxcController | SxcControllerWithInternals
             },
         },
         env: environment,
+        jQ: $2sxc_jQSuperlight,
     };
     for (const property in addOn)
         if (addOn.hasOwnProperty(property))

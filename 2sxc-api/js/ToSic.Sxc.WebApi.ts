@@ -3,7 +3,7 @@ import { SxcInstance } from './ToSic.Sxc.Instance';
 import { HttpAbstractor } from './HttpAbstractor';
 import { Environment } from './Environment';
 
-declare const $2sxc_jQSuperlight: any;
+declare const $2sxc_jQSuperlight: JQuery;
 
 /**
  * helper API to run ajax / REST calls to the server

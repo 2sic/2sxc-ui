@@ -2,31 +2,41 @@ import { JsInfo } from './JsInfo';
 
 const extensionPlaceholder = '{extension}';
 const maxRetries = 5;
+declare const _jsApi: JsInfo;
 
 export class Environment {
-  constructor() {
-    // console.log('loading environment');
-    this.load();
-  }
-
   public header: JsInfo;
   public ready = false;
 
+  constructor() {
+    // console.log('loading environment');
+    if(typeof _jsApi !== typeof undefined)
+    {
+      this.header = _jsApi;
+      this.ready = true;
+    }
+    else
+      this.loadMetaFromHeader();
+  }
+
+  public load(newJsInfo: JsInfo){
+    this.header = newJsInfo;
+    this.ready = true;
+  }
+
   public retries = 0;
 
-  private load(): void {
+  private loadMetaFromHeader(): void {
     const meta = this.getMeta('_jsApi');
     if(!meta) {
       this.retries++;
       if(this.retries < maxRetries) 
-        setTimeout(() => { this.load();}, 0);
+        setTimeout(() => { this.loadMetaFromHeader();}, 0);
       else
-        throw "Tried to load _jsApi header values but failed despite " + maxRetries + 'attempts.';
+        console.warn("Tried to load _jsApi header values but failed despite " + maxRetries + 'attempts.');
       return;
     }
-    this.header = JSON.parse(meta) as JsInfo;
-    this.ready = true;
-    // console.log(this.header);
+    this.load(JSON.parse(meta) as JsInfo);
   }
 
   public apiRoot(name: string): string {

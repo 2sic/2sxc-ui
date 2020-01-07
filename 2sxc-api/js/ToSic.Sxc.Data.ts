@@ -1,6 +1,5 @@
 ﻿import { SxcInstanceWithInternals } from './ToSic.Sxc.Instance';
 
-declare const $: any;
 declare const $2sxc_jQSuperlight: any;
 
 
@@ -11,7 +10,6 @@ export class SxcDataWithInternals {
     "in": any = {};
 
     // will hold the default stream (["in"]["Default"].List
-// ReSharper disable once InconsistentNaming
     List: any = [];
 
     constructor(

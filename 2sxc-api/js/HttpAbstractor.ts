@@ -1,6 +1,6 @@
 import { SxcInstance } from './ToSic.Sxc.Instance';
 
-declare const $2sxc_jQSuperlight: any;
+declare const $2sxc_jQSuperlight: JQuery;
 
 // 2sxc specific header
 const HeaderContentBlockId = 'ContentBlockId';
