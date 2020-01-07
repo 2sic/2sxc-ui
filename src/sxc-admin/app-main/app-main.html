@@ -78,7 +78,7 @@
                         <span icon="unchecked" uib-tooltip="{{'Main.Tab.AppSettings' | translate }}"></span> {{'Main.Tab.AS' | translate }}
                     </uib-tab-heading>
                     <div ng-if="vm.view == 'app'">
-                        <div ng-if="!vm.config.IsContent">
+                        <div xng-if="!vm.config.IsContent">
                             <div ng-controller="AppSettings as vm" ng-include="'app-settings/app-settings.html'"></div>
                             <br />                            
                         </div>

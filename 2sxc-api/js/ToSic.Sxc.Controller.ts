@@ -9,6 +9,7 @@ export interface Window { $2sxc: SxcController | SxcControllerWithInternals; }
 
 declare const $: any;
 declare const window: Window;
+const sxcVersion = '10.24.01';
 
 /**
  * This is the interface for the main $2sxc object on the window
@@ -84,8 +85,8 @@ export function buildSxcController(): SxcController | SxcControllerWithInternals
     const addOn: any = {
         _controllers: {} as any,
         sysinfo: {
-            version: '10.07.00',
-            description: 'The 2sxc Controller object - read more about it on 2sxc.org',
+            version: sxcVersion,
+            description: 'The 2sxc Controller object - read more about it on docs.2sxc.org',
         },
         beta: {},
         _data: {},
