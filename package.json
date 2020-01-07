@@ -1,6 +1,6 @@
 {
   "name": "2sic-2sxc-ui",
-  "version": "10.24.01",
+  "version": "10.25.00",
   "description": "Create awesome, responsive content for DNN",
   "main": "index.js",
   "scripts": {
@@ -64,6 +64,7 @@
   },
   "dependencies": {
     "@2sic.com/2sxc-typings": "git+https://github.com/2sic/2sxc-typings.git#test",
-    "natives": "^1.1.6"
+    "natives": "^1.1.6",
+    "whatwg-fetch": "^3.0.0"
   }
 }

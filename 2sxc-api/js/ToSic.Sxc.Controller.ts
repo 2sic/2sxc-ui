@@ -4,12 +4,15 @@ import { SxcInstance, SxcInstanceWithEditing, SxcInstanceWithInternals } from '.
 import { TotalPopup } from './ToSic.Sxc.TotalPopup';
 import { UrlParamManager } from './ToSic.Sxc.Url';
 import { Stats } from './Stats';
+import { Environment } from './Environment';
 
 export interface Window { $2sxc: SxcController | SxcControllerWithInternals; }
 
-declare const $: any;
+declare const $2sxc_jQSuperlight: any;
 declare const window: Window;
-const sxcVersion = '10.24.01';
+const sxcVersion = '10.25.00';
+
+const environment = new Environment();
 
 /**
  * This is the interface for the main $2sxc object on the window
@@ -38,6 +41,8 @@ export interface SxcController {
          */
         description: string,
     };
+
+    env: Environment;
 }
 
 /**
@@ -68,7 +73,7 @@ function SxcController(id: number | HTMLElement, cbid?: number): SxcInstanceWith
     if (!$2sxc._data[cacheKey]) $2sxc._data[cacheKey] = {};
 
     return ($2sxc._controllers[cacheKey]
-        = new SxcInstanceWithInternals(id, cbid, cacheKey, $2sxc, $.ServicesFramework));
+        = new SxcInstanceWithInternals(id, cbid, cacheKey, $2sxc, environment));
 }
 
 /**
@@ -108,6 +113,7 @@ export function buildSxcController(): SxcController | SxcControllerWithInternals
                 return r;
             },
         },
+        env: environment,
     };
     for (const property in addOn)
         if (addOn.hasOwnProperty(property))
@@ -116,7 +122,7 @@ export function buildSxcController(): SxcController | SxcControllerWithInternals
 }
 
 function autoFind(domElement: HTMLElement): [number, number] {
-    const containerTag = $(domElement).closest('.sc-content-block')[0];
+    const containerTag = $2sxc_jQSuperlight(domElement).closest('.sc-content-block')[0];
     if (!containerTag) return null;
     const iid = containerTag.getAttribute('data-cb-instance');
     const cbid = containerTag.getAttribute('data-cb-id');

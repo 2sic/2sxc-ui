@@ -1,6 +1,9 @@
 ﻿
-declare const $: any;
 import { SxcInstance } from './ToSic.Sxc.Instance';
+import { HttpAbstractor } from './HttpAbstractor';
+import { Environment } from './Environment';
+
+declare const $2sxc_jQSuperlight: any;
 
 /**
  * helper API to run ajax / REST calls to the server
@@ -12,6 +15,7 @@ export class SxcWebApiWithInternals {
         private readonly controller: SxcInstance,
         private readonly id: number,
         private readonly cbid: number,
+        public readonly env: Environment
     ) {
 
     }
@@ -94,35 +98,14 @@ export class SxcWebApiWithInternals {
             params: null as any,
             preventAutoFail: false,
         };
-        settings = $.extend({}, defaults, settings);
-        const sf = $.ServicesFramework(this.id);
-        const cbid = this.cbid; // must read here, as the "this" will change inside the method
+        // new 10.25
+        var http = new HttpAbstractor(this.controller);
 
-        const promise = $.ajax({
-            async: true,
-            dataType: settings.dataType || 'json', // default is json if not specified
-            data: JSON.stringify(settings.data),
-            contentType: 'application/json',
-            type: settings.method,
-            url: this.getActionUrl(settings),
-            beforeSend(xhr: any) {
-                xhr.setRequestHeader('ContentBlockId', cbid);
-                sf.setModuleHeaders(xhr);
-            },
-        });
+        settings = $2sxc_jQSuperlight.extend({}, defaults, settings);
 
-        if (!settings.preventAutoFail)
-            promise.fail(this.controller.showDetailedHttpError);
+        const promise = http.makePromise(settings);
 
         return promise;
-    }
-
-    private getActionUrl(settings: any): string {
-        const sf = $.ServicesFramework(this.id);
-        const base = (settings.url)
-            ? this.controller.resolveServiceUrl(settings.url)
-            : sf.getServiceRoot('2sxc') + 'app/auto/api/' + settings.controller + '/' + settings.action;
-        return base + (settings.params === null ? '' : ('?' + $.param(settings.params)));
     }
 
 }
