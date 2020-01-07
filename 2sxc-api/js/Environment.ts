@@ -1,7 +1,7 @@
 import { JsInfo } from './JsInfo';
 
 const extensionPlaceholder = '{extension}';
-const maxRetries = 5;
+const maxRetries = 3;
 declare const _jsApi: JsInfo;
 
 export class Environment {
@@ -33,10 +33,31 @@ export class Environment {
       if(this.retries < maxRetries) 
         setTimeout(() => { this.loadMetaFromHeader();}, 0);
       else
-        console.warn("Tried to load _jsApi header values but failed despite " + maxRetries + 'attempts.');
+        this.fallbackToDnnSf();
       return;
     }
     this.load(JSON.parse(meta) as JsInfo);
+  }
+
+  /**
+   * This will assume the new parameter injection failed and it will attempt to fallback
+   * it's for backward compatibility, in case something is using $2sxc and doesn't provide the new
+   * implementation
+   */
+  private fallbackToDnnSf(): void {
+    if(typeof $ === 'undefined') 
+      throw "Can't load pageid, moduleid, etc. and $ is not available.";
+    const sf = ($ as any).ServicesFramework as any;
+    if(typeof sf === 'undefined')
+      throw "can't load pageid, moduleid etc. and DNN Services Framework is not available.";
+    const dnnSf = sf(0);
+    var sfJsInfo = {
+      page: dnnSf.getTabId(),
+      root: 'unknown',
+      api: dnnSf.getServiceRoot('2sxc'),
+      rvt: dnnSf.getAntiForgeryValue()
+    };
+    this.load(sfJsInfo);
   }
 
   public apiRoot(name: string): string {
