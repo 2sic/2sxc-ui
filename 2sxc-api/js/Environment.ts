@@ -1,7 +1,8 @@
 import { JsInfo } from './JsInfo';
+import { Log } from './log';
 
 const extensionPlaceholder = '{extension}';
-const maxRetries = 3;
+const maxRetries = 10;
 declare const _jsApi: JsInfo;
 const helpAutoDetect = 'You must either include jQuery on the page or inject the jsApi parameters to prevent auto-detection.';
 
@@ -11,13 +12,22 @@ export class Environment {
   public retries = 0;
   public source = '';
 
+  public log: Log;
+
   constructor() {
+    this.log = new Log('Environment', 'starting');
     // console.log('loading environment');
     // check if a global variable was already set which we should use
     if(typeof _jsApi !== typeof undefined)
+    {
+      this.log.add('found _jsApi, will use');
       this.load(_jsApi, 'global variable _jsApi');
+    }
     else
+    {
+      this.log.add('will start initializing');
       this.loadMetaFromHeader();
+    }
   }
 
   /**
@@ -28,6 +38,7 @@ export class Environment {
     this.header = newJsInfo;
     this.ready = true;
     this.source = source || 'external/unknown';
+    this.log.add('loaded from ' + this.source);
   }
 
 
@@ -44,11 +55,12 @@ export class Environment {
   //#region Initialization from headers
 
   private loadMetaFromHeader(): void {
+    this.log.add('loadMetaFromHeader: start, retry:' + this.retries);
     const meta = this.getMeta('_jsApi');
     if(!meta) {
       this.retries++;
       if(this.retries < maxRetries) 
-        setTimeout(() => { this.loadMetaFromHeader();}, 0);
+        setTimeout(() => { this.loadMetaFromHeader();}, 1);
       else
         this.dnnSfFallback();
       return;
@@ -76,6 +88,7 @@ export class Environment {
    * implementation
    */
   private dnnSfFallback(): void {
+    this.log.add('dnnSfFallback start');
     if(typeof $ === 'undefined') 
       throw `Can't load pageid, moduleid, etc. and $ is not available. \n ${helpAutoDetect}`;
     // await page-ready to then initialize the stuff
@@ -83,6 +96,7 @@ export class Environment {
   }
 
   private dnnSfLoadWhenDocumentReady(): void {
+    this.log.add('dnnSfLoadWhenDocumentReady start');
     const sf = ($ as any).ServicesFramework as any;
     if(typeof sf === 'undefined')
       throw `can't load pageid, moduleid etc. and DNN SF is not available. \n ${helpAutoDetect}`;
