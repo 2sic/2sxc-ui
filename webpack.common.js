@@ -2,6 +2,7 @@
 const webpack = require('webpack');
 const WebpackShellPlugin = require('webpack-shell-plugin');
 const merge = require('webpack-merge');
+const pjson = require('./package.json');
 
 const sxcJsFileBase = '2sxc.api';
 const SxcApiPath = './2sxc-api/js/2sxc.api.ts';
@@ -59,12 +60,18 @@ const prodPlugins = [
             }
         }
             // ,copyAfterBuild
-        )
+        ),
+        // new 10.25 - disable these lines to get a dev-sourcemap, but keep it for production!
+        new webpack.SourceMapDevToolPlugin({
+            // this is the url of our local sourcemap server
+            publicPath: 'https://sources.2sxc.org/' + pjson.version + '/' + 'js' + '/',
+            filename: '[file].map',
+          })
     ];
 if(enableMc) prodPlugins.push(copyAfterBuild);
 const sxcProdConfig = merge(sxcDevConfig,
     {
-        devtool: 'source-map',
+        // devtool: 'source-map',
         plugins: prodPlugins,
         output: {
             filename: sxcJsFileBase + '.min.js',
