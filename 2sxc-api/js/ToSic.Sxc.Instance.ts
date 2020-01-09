@@ -2,6 +2,7 @@
 import { SxcController, SxcControllerWithInternals } from './ToSic.Sxc.Controller';
 import { SxcDataWithInternals } from './ToSic.Sxc.Data';
 import { SxcWebApiWithInternals } from './ToSic.Sxc.WebApi';
+import { Environment } from './Environment';
 /**
  * The typical sxc-instance object for a specific DNN module or content-block
  */
@@ -24,10 +25,10 @@ export class SxcInstance {
          * this is an advanced concept you usually don't care about, otherwise you should research it
          */
         public cbid: number,
-        protected readonly dnnSf: any,
+        public readonly env: Environment,
     ) {
-        this.serviceRoot = dnnSf(id).getServiceRoot('2sxc');
-        this.webApi = new SxcWebApiWithInternals(this, id, cbid);
+        this.serviceRoot = env.apiRoot('2sxc'); // env(id).getServiceRoot('2sxc');
+        this.webApi = new SxcWebApiWithInternals(this, id, cbid, this.env);
     }
 
     /**
@@ -115,9 +116,9 @@ export class SxcInstanceWithEditing extends SxcInstance {
         public cbid: number,
 // ReSharper disable once InconsistentNaming
         protected $2sxc: SxcControllerWithInternals,
-        protected readonly dnnSf: any,
+        public readonly env: Environment,
     ) {
-        super(id, cbid, dnnSf);
+        super(id, cbid, env);
 
         // add manage property, but not within initializer, because inside the manage-initializer it may reference 2sxc again
         try { // sometimes the manage can't be built, like before installing
@@ -152,11 +153,10 @@ export class SxcInstanceWithInternals extends SxcInstanceWithEditing {
         public id: number,
         public cbid: number,
         private cacheKey: string,
-// ReSharper disable once InconsistentNaming
         protected $2sxc: SxcControllerWithInternals,
-        protected readonly dnnSf: any,
+        public readonly env: Environment,
     ) {
-        super(id, cbid, $2sxc, dnnSf);
+        super(id, cbid, $2sxc, env);
         this.data = new SxcDataWithInternals(this);
     }
 

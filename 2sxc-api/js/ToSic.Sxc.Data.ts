@@ -1,6 +1,6 @@
 ﻿import { SxcInstanceWithInternals } from './ToSic.Sxc.Instance';
 
-declare const $: any;
+declare const $2sxc_jQSuperlight: any;
 
 
 export class SxcDataWithInternals {
@@ -10,7 +10,6 @@ export class SxcDataWithInternals {
     "in": any = {};
 
     // will hold the default stream (["in"]["Default"].List
-// ReSharper disable once InconsistentNaming
     List: any = [];
 
     constructor(
@@ -78,19 +77,19 @@ export class SxcDataWithInternals {
     }
 
     on(events: Event, callback: () => void): Promise<any> {
-        return $(this).bind('2scLoad', callback)[0]._triggerLoaded();
+        return $2sxc_jQSuperlight(this).bind('2scLoad', callback)[0]._triggerLoaded();
     }
 
 // ReSharper disable once InconsistentNaming
     _triggerLoaded(): Promise<any> {
         return this.controller.isLoaded
-            ? $(this).trigger('2scLoad', [this])[0]
+            ? $2sxc_jQSuperlight(this).trigger('2scLoad', [this])[0]
             : this;
     }
 
     one(events: Event, callback: (x: any, y: any) => void): SxcDataWithInternals {
         if (!this.controller.isLoaded)
-            return $(this).one('2scLoad', callback)[0];
+            return $2sxc_jQSuperlight(this).one('2scLoad', callback)[0];
         callback({}, this);
         return this;
     }

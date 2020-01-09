@@ -16,6 +16,7 @@
   },
   "include": [
     "./*.ts",
+    "./*.js"
     // "../../typings/**/*.ts"
   ],
   "exclude": [

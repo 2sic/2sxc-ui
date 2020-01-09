@@ -20,3 +20,5 @@ It is separate to keep concerns separate and make contributions simpler (because
 ## Develop / Install 2sxc-api
 
 This uses TypeScript and is built using Webpack. It also contains some older bits like 2sxc4ng (for the old AngularJs) which must be included with 2sxc because older sites may still reference the JS files.
+
+Build with `npm run webpack-js`

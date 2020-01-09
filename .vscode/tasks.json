@@ -27,6 +27,12 @@
             "type": "gulp",
             "task": "copy-all-with.data",
             "problemMatcher": []
+        },
+        {
+            "type": "gulp",
+            "task": "C-snippets-build",
+            "group": "build",
+            "problemMatcher": []
         }
     ]
 }

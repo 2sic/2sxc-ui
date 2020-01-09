@@ -1,6 +1,6 @@
 {
   "name": "2sic-2sxc-ui",
-  "version": "10.07.00",
+  "version": "10.25.00",
   "description": "Create awesome, responsive content for DNN",
   "main": "index.js",
   "scripts": {
@@ -53,7 +53,7 @@
     "jshint-stylish": "2.1.0",
     "merge-stream": "1.0.0",
     "ts-loader": "^2.3.7",
-    "typescript": "^2.8.1",
+    "typescript": "^2.9.2",
     "uglifyjs-webpack-plugin": "^0.4.6",
     "webpack": "^3.12.0",
     "webpack-merge": "^4.1.2",
@@ -64,6 +64,8 @@
   },
   "dependencies": {
     "@2sic.com/2sxc-typings": "git+https://github.com/2sic/2sxc-typings.git#test",
-    "natives": "^1.1.6"
+    "@types/jquery": "^2.0.33",
+    "natives": "^1.1.6",
+    "whatwg-fetch": "^3.0.0"
   }
 }
