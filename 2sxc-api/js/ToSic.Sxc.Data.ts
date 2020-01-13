@@ -77,7 +77,7 @@ export class SxcDataWithInternals {
     }
 
     on(events: Event, callback: () => void): Promise<any> {
-        return $2sxc_jQSuperlight(this).bind('2scLoad', callback)[0]._triggerLoaded();
+        return $2sxc_jQSuperlight(this).on('2scLoad', callback)[0]._triggerLoaded();
     }
 
 // ReSharper disable once InconsistentNaming

@@ -415,7 +415,7 @@ var SxcDataWithInternals = (function () {
         return this;
     };
     SxcDataWithInternals.prototype.on = function (events, callback) {
-        return $2sxc_jQSuperlight(this).bind('2scLoad', callback)[0]._triggerLoaded();
+        return $2sxc_jQSuperlight(this).on('2scLoad', callback)[0]._triggerLoaded();
     };
     SxcDataWithInternals.prototype._triggerLoaded = function () {
         return this.controller.isLoaded
