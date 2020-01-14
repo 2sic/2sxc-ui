@@ -155,14 +155,14 @@ module.exports = __webpack_amd_options__;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ToSic_Sxc_TotalPopup__ = __webpack_require__(9);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ToSic_Sxc_Url__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Stats__ = __webpack_require__(11);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__Environment__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__environment_Environment__ = __webpack_require__(12);
 
 
 
 
 
-var sxcVersion = '10.25.00';
-var environment = new __WEBPACK_IMPORTED_MODULE_4__Environment__["a" /* Environment */]();
+var sxcVersion = '10.25.01';
+var environment = new __WEBPACK_IMPORTED_MODULE_4__environment_Environment__["a" /* Environment */]();
 function SxcController(id, cbid) {
     var $2sxc = window.$2sxc;
     if (!$2sxc._controllers)
@@ -660,23 +660,23 @@ var Stats = (function () {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Environment; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__log__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__envMetaLoader__ = __webpack_require__(14);
+
 
 var extensionPlaceholder = '{extension}';
-var maxRetries = 10;
-var helpAutoDetect = 'You must either include jQuery on the page or inject the jsApi parameters to prevent auto-detection.';
 var Environment = (function () {
     function Environment() {
         this.ready = false;
-        this.retries = 0;
         this.source = '';
         this.log = new __WEBPACK_IMPORTED_MODULE_0__log__["a" /* Log */]('Environment', 'starting');
+        this.metaLoader = new __WEBPACK_IMPORTED_MODULE_1__envMetaLoader__["a" /* EnvironmentMetaLoader */](this);
         if (typeof _jsApi !== typeof undefined) {
             this.log.add('found _jsApi, will use');
             this.load(_jsApi, 'global variable _jsApi');
         }
         else {
             this.log.add('will start initializing');
-            this.loadMetaFromHeader();
+            this.metaLoader.loadMetaFromHeader();
         }
     }
     Environment.prototype.load = function (newJsInfo, source) {
@@ -686,53 +686,25 @@ var Environment = (function () {
         this.log.add('loaded from ' + this.source);
     };
     Environment.prototype.apiRoot = function (name) {
-        if (!this.ready)
-            throw "Can't find API root - something went wrong, pls contact 2sxc.org";
+        this.ensureReadyOrThrow();
         return this.header.api.replace(extensionPlaceholder, name);
     };
-    Environment.prototype.page = function () { return this.header.page; };
-    Environment.prototype.rvt = function () { return this.header.rvt; };
-    Environment.prototype.loadMetaFromHeader = function () {
-        var _this = this;
-        this.log.add('loadMetaFromHeader: start, retry:' + this.retries);
-        var meta = this.getMeta('_jsApi');
-        if (!meta) {
-            this.retries++;
-            if (this.retries < maxRetries)
-                setTimeout(function () { _this.loadMetaFromHeader(); }, 1);
-            else
-                this.dnnSfFallback();
+    Environment.prototype.page = function () {
+        this.ensureReadyOrThrow();
+        return this.header.page;
+    };
+    Environment.prototype.rvt = function () {
+        this.ensureReadyOrThrow();
+        return this.header.rvt;
+    };
+    Environment.prototype.ensureReadyOrThrow = function () {
+        if (this.ready)
             return;
-        }
-        this.load(JSON.parse(meta), 'meta header');
-    };
-    Environment.prototype.getMeta = function (metaName) {
-        var metas = document.getElementsByTagName('meta');
-        for (var i = 0; i < metas.length; i++)
-            if (metas[i].getAttribute('name') === metaName)
-                return metas[i].getAttribute('content');
-        return '';
-    };
-    Environment.prototype.dnnSfFallback = function () {
-        var _this = this;
-        this.log.add('dnnSfFallback start');
-        if (typeof $ === 'undefined')
-            throw "Can't load pageid, moduleid, etc. and $ is not available. \n " + helpAutoDetect;
-        $(function () { return _this.dnnSfLoadWhenDocumentReady(); });
-    };
-    Environment.prototype.dnnSfLoadWhenDocumentReady = function () {
-        this.log.add('dnnSfLoadWhenDocumentReady start');
-        var sf = $.ServicesFramework;
-        if (typeof sf === 'undefined')
-            throw "can't load pageid, moduleid etc. and DNN SF is not available. \n " + helpAutoDetect;
-        var dnnSf = sf(0);
-        var sfJsInfo = {
-            page: dnnSf.getTabId(),
-            root: 'unknown',
-            api: dnnSf.getServiceRoot('2sxc'),
-            rvt: dnnSf.getAntiForgeryValue()
-        };
-        this.load(sfJsInfo, 'dnn SF');
+        this.log.add('ensureReady - force last attempt to load MetaHeader');
+        this.metaLoader.loadMetaFromHeader(true);
+        if (this.ready)
+            return;
+        throw "Can't find apiRoot - something went wrong, pls contact 2sxc.org";
     };
     return Environment;
 }());
@@ -766,6 +738,91 @@ var LogEntry = (function () {
     }
     return LogEntry;
 }());
+
+
+/***/ }),
+/* 14 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return EnvironmentMetaLoader; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__envDnnSfLoader__ = __webpack_require__(16);
+
+var maxRetries = 10;
+var EnvironmentMetaLoader = (function () {
+    function EnvironmentMetaLoader(env) {
+        this.env = env;
+        this.retries = 0;
+        this.log = env.log;
+    }
+    EnvironmentMetaLoader.prototype.loadMetaFromHeader = function (forceFallback) {
+        var _this = this;
+        if (forceFallback === void 0) { forceFallback = false; }
+        if (this.env.ready) {
+            this.log.add('loadMeta - already ready');
+            return;
+        }
+        this.log.add('loadMetaFromHeader: start, retry:' + this.retries + ', force fallback: ' + forceFallback);
+        var meta = this.getMeta('_jsApi');
+        if (!meta) {
+            this.retries++;
+            if (forceFallback || this.retries >= maxRetries)
+                new __WEBPACK_IMPORTED_MODULE_0__envDnnSfLoader__["a" /* EnvironmentDnnSfLoader */](this.env).dnnSfFallback();
+            else {
+                setTimeout(function () { _this.loadMetaFromHeader(); }, 1);
+            }
+            return;
+        }
+        this.env.load(JSON.parse(meta), 'meta header');
+    };
+    EnvironmentMetaLoader.prototype.getMeta = function (metaName) {
+        var metas = document.getElementsByTagName('meta');
+        for (var i = 0; i < metas.length; i++)
+            if (metas[i].getAttribute('name') === metaName)
+                return metas[i].getAttribute('content');
+        return '';
+    };
+    return EnvironmentMetaLoader;
+}());
+
+
+
+/***/ }),
+/* 15 */,
+/* 16 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return EnvironmentDnnSfLoader; });
+var helpAutoDetect = 'You must either include jQuery on the page or inject the jsApi parameters to prevent auto-detection.';
+var EnvironmentDnnSfLoader = (function () {
+    function EnvironmentDnnSfLoader(env) {
+        this.env = env;
+    }
+    EnvironmentDnnSfLoader.prototype.dnnSfFallback = function () {
+        var _this = this;
+        this.env.log.add('dnnSfFallback start');
+        if (typeof $ === 'undefined')
+            throw "Can't load pageid, moduleid, etc. and $ is not available. \n " + helpAutoDetect;
+        $(function () { return _this.dnnSfLoadWhenDocumentReady(); });
+    };
+    EnvironmentDnnSfLoader.prototype.dnnSfLoadWhenDocumentReady = function () {
+        this.env.log.add('dnnSfLoadWhenDocumentReady start');
+        var sf = $.ServicesFramework;
+        if (typeof sf === 'undefined')
+            throw "can't load pageid, moduleid etc. and DNN SF is not available. \n " + helpAutoDetect;
+        var dnnSf = sf(0);
+        var sfJsInfo = {
+            page: dnnSf.getTabId(),
+            root: 'unknown',
+            api: dnnSf.getServiceRoot('2sxc'),
+            rvt: dnnSf.getAntiForgeryValue()
+        };
+        this.env.load(sfJsInfo, 'dnn SF');
+    };
+    return EnvironmentDnnSfLoader;
+}());
+
 
 
 /***/ })

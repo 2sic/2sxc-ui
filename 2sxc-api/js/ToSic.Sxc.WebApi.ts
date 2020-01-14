@@ -1,7 +1,7 @@
 ﻿
 import { SxcInstance } from './ToSic.Sxc.Instance';
 import { HttpAbstractor } from './HttpAbstractor';
-import { Environment } from './Environment';
+import { Environment } from './environment/Environment';
 
 declare const $2sxc_jQSuperlight: JQuery;
 

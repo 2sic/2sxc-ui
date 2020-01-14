@@ -16,7 +16,7 @@
   },
   "include": [
     "./*.ts",
-    "./*.js"
+    "./*.js", "environment/Environment.ts"
     // "../../typings/**/*.ts"
   ],
   "exclude": [

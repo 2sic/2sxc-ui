@@ -4,13 +4,13 @@ import { SxcInstance, SxcInstanceWithEditing, SxcInstanceWithInternals } from '.
 import { TotalPopup } from './ToSic.Sxc.TotalPopup';
 import { UrlParamManager } from './ToSic.Sxc.Url';
 import { Stats } from './Stats';
-import { Environment } from './Environment';
+import { Environment } from './environment/Environment';
 
 export interface Window { $2sxc: SxcController | SxcControllerWithInternals; }
 
 declare const $2sxc_jQSuperlight: any;
 declare const window: Window;
-const sxcVersion = '10.25.00';
+const sxcVersion = '10.25.01';
 
 const environment = new Environment();
 
@@ -43,7 +43,8 @@ export interface SxcController {
     };
 
     env: Environment;
-    jQ: JQuery;
+    // future: make a method to get jQuery from DNN or internal
+    // jQ: JQuery;
 }
 
 /**
