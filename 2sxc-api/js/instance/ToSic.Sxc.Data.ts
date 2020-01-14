@@ -1,4 +1,4 @@
-﻿import { SxcInstanceWithInternals } from './ToSic.Sxc.Instance';
+﻿import { SxcInstanceWithInternals } from './SxcInstanceWithInternals';
 
 declare const $2sxc_jQSuperlight: any;
 

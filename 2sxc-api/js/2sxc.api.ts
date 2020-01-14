@@ -7,7 +7,7 @@
 import './jquery-ajax/ajax203.js'
 
 // the SxcController
-import { buildSxcController, Window } from "./ToSic.Sxc.Controller";
+import { buildSxcController, Window } from "./$2sxc/SxcControllerBuilder";
 
 declare const window: Window;
 

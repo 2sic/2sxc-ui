@@ -1,63 +1,18 @@
-﻿// ReSharper disable InconsistentNaming
+﻿import { TotalPopup } from '../tools/TotalPopup';
+import { UrlParamManager } from '../tools/UrlParamManager';
+import { Stats } from '../Stats';
+import { Environment } from '../environment/Environment';
+import { SxcInstanceWithInternals } from '../instance/SxcInstanceWithInternals';
+import { SxcControllerInternals } from './SxcControllerWithInternals';
+import { SxcController } from './SxcController';
+import { SxcVersion } from '../constants';
 
-import { SxcInstance, SxcInstanceWithEditing, SxcInstanceWithInternals } from './instance/ToSic.Sxc.Instance';
-import { TotalPopup } from './tools/TotalPopup';
-import { UrlParamManager } from './tools/UrlParamManager';
-import { Stats } from './Stats';
-import { Environment } from './environment/Environment';
-
-export interface Window { $2sxc: SxcController | SxcControllerWithInternals; }
+export interface Window { $2sxc: SxcController & SxcControllerInternals; }
 
 declare const $2sxc_jQSuperlight: any;
 declare const window: Window;
-const sxcVersion = '10.25.01';
 
 const environment = new Environment();
-
-/**
- * This is the interface for the main $2sxc object on the window
- */
-export interface SxcController {
-    /**
-     * returns a 2sxc-instance of the id or html-tag passed in
-     * @param id
-     * @param cbid
-     * @returns {}
-     */
-    (id: number | HTMLElement, cbid?: number): SxcInstance | SxcInstanceWithInternals,
-
-    /**
-     * system information, mainly for checking which version of 2sxc is running
-     * note: it's not always updated reliably, but it helps when debugging
-     */
-    sysinfo: {
-        /**
-         * the version using the ##.##.## syntax
-         */
-        version: string,
-
-        /**
-         * a short text description, for people who have no idea what this is
-         */
-        description: string,
-    };
-
-    env: Environment;
-    // future: make a method to get jQuery from DNN or internal
-    // get$(): JQuery;
-    jq(): JQuery;
-
-    _controllers: SxcInstanceWithInternals[];
-    beta: any;
-    _data: any;
-    totalPopup: TotalPopup;
-    urlParams: UrlParamManager;
-    debug: any;
-    stats: Stats;
-
-    /** Very internal bit, probably will be deprecated */
-    parts: any;
-}
 
 /**
  * returns a 2sxc-instance of the id or html-tag passed in
@@ -66,7 +21,7 @@ export interface SxcController {
  * @returns {}
  */
 function SxcController(id: number | HTMLElement, cbid?: number): SxcInstanceWithInternals {
-    const $2sxc = window.$2sxc as SxcControllerWithInternals;
+    const $2sxc = window.$2sxc as SxcController & SxcControllerInternals;
     if (!$2sxc._controllers)
         throw new Error('$2sxc not initialized yet');
 
@@ -93,7 +48,7 @@ function SxcController(id: number | HTMLElement, cbid?: number): SxcInstanceWith
 /**
  * Build a SXC Controller for the page. Should only ever be executed once
  */
-export function buildSxcController(): SxcController | SxcControllerWithInternals {
+export function buildSxcController(): SxcController & SxcControllerInternals {
     const urlManager = new UrlParamManager();
     const debug = {
         load: (urlManager.get('debug') === 'true'),
@@ -101,10 +56,10 @@ export function buildSxcController(): SxcController | SxcControllerWithInternals
     };
     const stats = new Stats();
 
-    const addOn: Partial<SxcController> = {
+    const addOn: Partial<SxcController & SxcControllerInternals> = {
         _controllers: {} as any,
         sysinfo: {
-            version: sxcVersion,
+            version: SxcVersion,
             description: 'The 2sxc Controller object - read more about it on docs.2sxc.org',
         },
         beta: {},
@@ -133,7 +88,7 @@ export function buildSxcController(): SxcController | SxcControllerWithInternals
     for (const property in addOn)
         if (addOn.hasOwnProperty(property))
             SxcController[property] = addOn[property] as any;
-    return SxcController as any as SxcControllerWithInternals;
+    return SxcController as any as SxcController & SxcControllerInternals;
 }
 
 function autoFind(domElement: HTMLElement): [number, number] {
@@ -144,19 +99,3 @@ function autoFind(domElement: HTMLElement): [number, number] {
     if (!iid || !cbid) return null;
     return [iid, cbid];
 }
-
-export interface SxcControllerWithInternals extends SxcController {
-    (id: number | HTMLElement, cbid?: number): SxcInstance | SxcInstanceWithInternals;
-    totalPopup: TotalPopup;
-    urlParams: UrlParamManager;
-    beta: any;
-    _controllers: any;
-    _data: any;
-    _manage: any;
-    _translateInit: any;
-    debug: any;
-    parts: any;
-
-}
-
-// ReSharper restore InconsistentNaming

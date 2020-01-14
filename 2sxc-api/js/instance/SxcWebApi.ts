@@ -1,5 +1,5 @@
 ﻿
-import { SxcInstance } from './ToSic.Sxc.Instance';
+import { SxcInstance } from './SxcInstance';
 import { AjaxPromise } from '../ajax/AjaxPromise';
 import { Environment } from '../environment/Environment';
 import { AjaxSettings } from '../ajax/AjaxSettings';
@@ -11,14 +11,15 @@ declare const $2sxc_jQSuperlight: JQuery;
  * it will ensure that the headers etc. are set correctly
  * and that urls are rewritten
  */
-export class SxcWebApiWithInternals {
+export class SxcWebApi {
+    public readonly env: Environment;
     constructor(
         private readonly controller: SxcInstance,
-        private readonly id: number,
-        private readonly cbid: number,
-        public readonly env: Environment
+        // private readonly id: number,
+        // private readonly cbid: number,
+        // public readonly env: Environment
     ) {
-
+        this.env = controller.env;
     }
     /**
      * returns an http-get promise
@@ -28,7 +29,7 @@ export class SxcWebApiWithInternals {
      * @param preventAutoFail
      * @returns {Promise} jQuery ajax promise object
      */
-    get(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): any {
+    get(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): JQueryPromise<any> {
         return this.request(settingsOrUrl, params, data, preventAutoFail, 'GET');
     }
 
@@ -40,7 +41,7 @@ export class SxcWebApiWithInternals {
      * @param preventAutoFail
      * @returns {Promise} jQuery ajax promise object
      */
-    post(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): any {
+    post(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): JQueryPromise<any> {
         return this.request(settingsOrUrl, params, data, preventAutoFail, 'POST');
     }
 
@@ -52,7 +53,7 @@ export class SxcWebApiWithInternals {
      * @param preventAutoFail
      * @returns {Promise} jQuery ajax promise object
      */
-    delete(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): any {
+    delete(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): JQueryPromise<any> {
         return this.request(settingsOrUrl, params, data, preventAutoFail, 'DELETE');
     }
 
@@ -64,11 +65,11 @@ export class SxcWebApiWithInternals {
      * @param preventAutoFail
      * @returns {Promise} jQuery ajax promise object
      */
-    put(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): any {
+    put(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): JQueryPromise<any> {
         return this.request(settingsOrUrl, params, data, preventAutoFail, 'PUT');
     }
 
-    private request(settings: string | AjaxSettings, params: any, data: any, preventAutoFail: boolean, method: string): any {
+    private request(settings: string | AjaxSettings, params: any, data: any, preventAutoFail: boolean, method: string): JQueryPromise<any> {
 
         // url parameter: auto convert a single value (instead of object of values) to an id=... parameter
         // tslint:disable-next-line:curly

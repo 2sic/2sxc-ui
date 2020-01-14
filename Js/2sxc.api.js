@@ -71,11 +71,11 @@
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__jquery_ajax_ajax203_js__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__jquery_ajax_ajax203_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__jquery_ajax_ajax203_js__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ToSic_Sxc_Controller__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__2sxc_SxcControllerBuilder__ = __webpack_require__(19);
 
 
 if (!window.$2sxc)
-    window.$2sxc = Object(__WEBPACK_IMPORTED_MODULE_1__ToSic_Sxc_Controller__["a" /* buildSxcController */])();
+    window.$2sxc = Object(__WEBPACK_IMPORTED_MODULE_1__2sxc_SxcControllerBuilder__["a" /* buildSxcController */])();
 
 
 /***/ }),
@@ -146,99 +146,289 @@ module.exports = __webpack_amd_options__;
 /* WEBPACK VAR INJECTION */}.call(exports, {}))
 
 /***/ }),
-/* 4 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (immutable) */ __webpack_exports__["a"] = buildSxcController;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__instance_ToSic_Sxc_Instance__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__tools_TotalPopup__ = __webpack_require__(9);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__tools_UrlParamManager__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Stats__ = __webpack_require__(11);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__environment_Environment__ = __webpack_require__(12);
-
-
-
-
-
-var sxcVersion = '10.25.01';
-var environment = new __WEBPACK_IMPORTED_MODULE_4__environment_Environment__["a" /* Environment */]();
-function SxcController(id, cbid) {
-    var $2sxc = window.$2sxc;
-    if (!$2sxc._controllers)
-        throw new Error('$2sxc not initialized yet');
-    if (typeof id === 'object') {
-        var idTuple = autoFind(id);
-        id = idTuple[0];
-        cbid = idTuple[1];
-    }
-    if (!cbid)
-        cbid = id;
-    var cacheKey = id + ':' + cbid;
-    if ($2sxc._controllers[cacheKey])
-        return $2sxc._controllers[cacheKey];
-    if (!$2sxc._data[cacheKey])
-        $2sxc._data[cacheKey] = {};
-    return ($2sxc._controllers[cacheKey]
-        = new __WEBPACK_IMPORTED_MODULE_0__instance_ToSic_Sxc_Instance__["a" /* SxcInstanceWithInternals */](id, cbid, cacheKey, $2sxc, environment));
-}
-function buildSxcController() {
-    var urlManager = new __WEBPACK_IMPORTED_MODULE_2__tools_UrlParamManager__["a" /* UrlParamManager */]();
-    var debug = {
-        load: (urlManager.get('debug') === 'true'),
-        uncache: urlManager.get('sxcver'),
-    };
-    var stats = new __WEBPACK_IMPORTED_MODULE_3__Stats__["a" /* Stats */]();
-    var addOn = {
-        _controllers: {},
-        sysinfo: {
-            version: sxcVersion,
-            description: 'The 2sxc Controller object - read more about it on docs.2sxc.org',
-        },
-        beta: {},
-        _data: {},
-        totalPopup: new __WEBPACK_IMPORTED_MODULE_1__tools_TotalPopup__["a" /* TotalPopup */](),
-        urlParams: urlManager,
-        debug: debug,
-        stats: stats,
-        parts: {
-            getUrl: function (url, preventUnmin) {
-                var r = (preventUnmin || !debug.load) ? url : url.replace('.min', '');
-                if (debug.uncache && r.indexOf('sxcver') === -1)
-                    r = r + ((r.indexOf('?') === -1) ? '?' : '&') + 'sxcver=' + debug.uncache;
-                return r;
-            },
-        },
-        env: environment,
-        jq: function () { return $2sxc_jQSuperlight; },
-    };
-    for (var property in addOn)
-        if (addOn.hasOwnProperty(property))
-            SxcController[property] = addOn[property];
-    return SxcController;
-}
-function autoFind(domElement) {
-    var containerTag = $2sxc_jQSuperlight(domElement).closest('.sc-content-block')[0];
-    if (!containerTag)
-        return null;
-    var iid = containerTag.getAttribute('data-cb-instance');
-    var cbid = containerTag.getAttribute('data-cb-id');
-    if (!iid || !cbid)
-        return null;
-    return [iid, cbid];
-}
-
-
-/***/ }),
+/* 4 */,
 /* 5 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* unused harmony export SxcInstance */
-/* unused harmony export SxcInstanceWithEditing */
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TotalPopup; });
+var TotalPopup = (function () {
+    function TotalPopup() {
+        this.frame = undefined;
+        this.callback = undefined;
+    }
+    TotalPopup.prototype.open = function (url, callback) {
+        var z = 10000010;
+        var p = window;
+        while (p !== window.top && z < 10000100) {
+            z++;
+            p = p.parent;
+        }
+        var wrapper = document.createElement('div');
+        wrapper.setAttribute('style', ' top: 0;left: 0;width: 100%;height: 100%; position:fixed; z-index:' + z);
+        document.body.appendChild(wrapper);
+        var ifrm = document.createElement('iframe');
+        ifrm.setAttribute('allowtransparency', 'true');
+        ifrm.setAttribute('style', 'top: 0;left: 0;width: 100%;height: 100%;');
+        ifrm.setAttribute('src', url);
+        wrapper.appendChild(ifrm);
+        document.body.className += ' sxc-popup-open';
+        this.frame = ifrm;
+        this.callback = callback;
+    };
+    TotalPopup.prototype.close = function () {
+        if (this.frame) {
+            document.body.className = document.body.className.replace('sxc-popup-open', '');
+            var frm = this.frame;
+            frm.parentNode.parentNode.removeChild(frm.parentNode);
+            this.callback();
+        }
+    };
+    TotalPopup.prototype.closeThis = function () {
+        window.parent.$2sxc.totalPopup.close();
+    };
+    return TotalPopup;
+}());
+
+
+
+/***/ }),
+/* 6 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return UrlParamManager; });
+var UrlParamManager = (function () {
+    function UrlParamManager() {
+    }
+    UrlParamManager.prototype.get = function (name) {
+        name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+        var searchRx = new RegExp('[\\?&]' + name + '=([^&#]*)', 'i');
+        var results = searchRx.exec(location.search);
+        var strResult;
+        if (results === null) {
+            var hashRx = new RegExp('[#&]' + name + '=([^&#]*)', 'i');
+            results = hashRx.exec(location.hash);
+        }
+        if (results === null) {
+            var matches = window.location.pathname.match(new RegExp('/' + name + '/([^/]+)', 'i'));
+            if (matches && matches.length > 1)
+                strResult = matches.reverse()[0];
+        }
+        else
+            strResult = results[1];
+        return strResult === null || strResult === undefined
+            ? ''
+            : decodeURIComponent(strResult.replace(/\+/g, ' '));
+    };
+    UrlParamManager.prototype.require = function (name) {
+        var found = this.get(name);
+        if (found === '') {
+            var message = "Required parameter (" + name + ") missing from url - cannot continue";
+            alert(message);
+            throw message;
+        }
+        return found;
+    };
+    return UrlParamManager;
+}());
+
+
+
+/***/ }),
+/* 7 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Stats; });
+var Stats = (function () {
+    function Stats() {
+        this.watchDomChanges = 0;
+    }
+    return Stats;
+}());
+
+
+
+/***/ }),
+/* 8 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Environment; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__tools_Log__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__envMetaLoader__ = __webpack_require__(10);
+
+
+var extensionPlaceholder = '{extension}';
+var Environment = (function () {
+    function Environment() {
+        this.ready = false;
+        this.source = '';
+        this.log = new __WEBPACK_IMPORTED_MODULE_0__tools_Log__["a" /* Log */]('Environment', 'starting');
+        this.metaLoader = new __WEBPACK_IMPORTED_MODULE_1__envMetaLoader__["a" /* EnvironmentMetaLoader */](this);
+        if (typeof _jsApi !== typeof undefined) {
+            this.log.add('found _jsApi, will use');
+            this.load(_jsApi, 'global variable _jsApi');
+        }
+        else {
+            this.log.add('will start initializing');
+            this.metaLoader.loadMetaFromHeader();
+        }
+    }
+    Environment.prototype.load = function (newJsInfo, source) {
+        this.header = newJsInfo;
+        this.ready = true;
+        this.source = source || 'external/unknown';
+        this.log.add('loaded from ' + this.source);
+    };
+    Environment.prototype.apiRoot = function (name) {
+        this.ensureReadyOrThrow();
+        return this.header.api.replace(extensionPlaceholder, name);
+    };
+    Environment.prototype.page = function () {
+        this.ensureReadyOrThrow();
+        return this.header.page;
+    };
+    Environment.prototype.rvt = function () {
+        this.ensureReadyOrThrow();
+        return this.header.rvt;
+    };
+    Environment.prototype.ensureReadyOrThrow = function () {
+        if (this.ready)
+            return;
+        this.log.add('ensureReady - force last attempt to load MetaHeader');
+        this.metaLoader.loadMetaFromHeader(true);
+        if (this.ready)
+            return;
+        throw "Can't find apiRoot - something went wrong, pls contact 2sxc.org";
+    };
+    return Environment;
+}());
+
+
+
+/***/ }),
+/* 9 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Log; });
+var Log = (function () {
+    function Log(name, message) {
+        this.text = "";
+        this.entries = [];
+        this.name = name;
+        this.start = new Date().getTime();
+        if (message)
+            this.add(message);
+    }
+    Log.prototype.add = function (message) {
+        this.text += message + '\n';
+        this.entries.push({ time: new Date().getTime() - this.start, message: message });
+    };
+    return Log;
+}());
+
+var LogEntry = (function () {
+    function LogEntry() {
+    }
+    return LogEntry;
+}());
+
+
+/***/ }),
+/* 10 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return EnvironmentMetaLoader; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__envDnnSfLoader__ = __webpack_require__(11);
+
+var maxRetries = 10;
+var EnvironmentMetaLoader = (function () {
+    function EnvironmentMetaLoader(env) {
+        this.env = env;
+        this.retries = 0;
+        this.log = env.log;
+    }
+    EnvironmentMetaLoader.prototype.loadMetaFromHeader = function (forceFallback) {
+        var _this = this;
+        if (forceFallback === void 0) { forceFallback = false; }
+        if (this.env.ready) {
+            this.log.add('loadMeta - already ready');
+            return;
+        }
+        this.log.add('loadMetaFromHeader: start, retry:' + this.retries + ', force fallback: ' + forceFallback);
+        var meta = this.getMeta('_jsApi');
+        if (!meta) {
+            this.retries++;
+            if (forceFallback || this.retries >= maxRetries)
+                new __WEBPACK_IMPORTED_MODULE_0__envDnnSfLoader__["a" /* EnvironmentDnnSfLoader */](this.env).dnnSfFallback();
+            else {
+                setTimeout(function () { _this.loadMetaFromHeader(); }, 1);
+            }
+            return;
+        }
+        this.env.load(JSON.parse(meta), 'meta header');
+    };
+    EnvironmentMetaLoader.prototype.getMeta = function (metaName) {
+        var metas = document.getElementsByTagName('meta');
+        for (var i = 0; i < metas.length; i++)
+            if (metas[i].getAttribute('name') === metaName)
+                return metas[i].getAttribute('content');
+        return '';
+    };
+    return EnvironmentMetaLoader;
+}());
+
+
+
+/***/ }),
+/* 11 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return EnvironmentDnnSfLoader; });
+var helpAutoDetect = 'You must either include jQuery on the page or inject the jsApi parameters to prevent auto-detection.';
+var EnvironmentDnnSfLoader = (function () {
+    function EnvironmentDnnSfLoader(env) {
+        this.env = env;
+    }
+    EnvironmentDnnSfLoader.prototype.dnnSfFallback = function () {
+        var _this = this;
+        this.env.log.add('dnnSfFallback start');
+        if (typeof $ === 'undefined')
+            throw "Can't load pageid, moduleid, etc. and $ is not available. \n " + helpAutoDetect;
+        $(function () { return _this.dnnSfLoadWhenDocumentReady(); });
+    };
+    EnvironmentDnnSfLoader.prototype.dnnSfLoadWhenDocumentReady = function () {
+        this.env.log.add('dnnSfLoadWhenDocumentReady start');
+        var sf = $.ServicesFramework;
+        if (typeof sf === 'undefined')
+            throw "can't load pageid, moduleid etc. and DNN SF is not available. \n " + helpAutoDetect;
+        var dnnSf = sf(0);
+        var sfJsInfo = {
+            page: dnnSf.getTabId(),
+            root: 'unknown',
+            api: dnnSf.getServiceRoot('2sxc'),
+            rvt: dnnSf.getAntiForgeryValue()
+        };
+        this.env.load(sfJsInfo, 'dnn SF');
+    };
+    return EnvironmentDnnSfLoader;
+}());
+
+
+
+/***/ }),
+/* 12 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SxcInstanceWithInternals; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ToSic_Sxc_Data__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ToSic_Sxc_WebApi__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ToSic_Sxc_Data__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__SxcInstanceWithEditing__ = __webpack_require__(14);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -250,88 +440,6 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 
-
-var SxcInstance = (function () {
-    function SxcInstance(id, cbid, env) {
-        this.id = id;
-        this.cbid = cbid;
-        this.env = env;
-        this.serviceScopes = ['app', 'app-sys', 'app-api', 'app-query', 'app-content', 'eav', 'view', 'dnn'];
-        this.serviceRoot = env.apiRoot('2sxc');
-        this.webApi = new __WEBPACK_IMPORTED_MODULE_1__ToSic_Sxc_WebApi__["a" /* SxcWebApiWithInternals */](this, id, cbid, this.env);
-    }
-    SxcInstance.prototype.resolveServiceUrl = function (virtualPath) {
-        var scope = virtualPath.split('/')[0].toLowerCase();
-        if (this.serviceScopes.indexOf(scope) === -1)
-            return virtualPath;
-        return this.serviceRoot + scope + '/' + virtualPath.substring(virtualPath.indexOf('/') + 1);
-    };
-    SxcInstance.prototype.showDetailedHttpError = function (result) {
-        if (window.console)
-            console.log(result);
-        if (result.status === 404 &&
-            result.config &&
-            result.config.url &&
-            result.config.url.indexOf('/dist/i18n/') > -1) {
-            if (window.console)
-                console.log('just fyi: failed to load language resource; will have to use default');
-            return result;
-        }
-        if (result.status === 0 || result.status === -1)
-            return result;
-        var infoText = 'Had an error talking to the server (status ' + result.status + ').';
-        var srvResp = result.responseText
-            ? JSON.parse(result.responseText)
-            : result.data;
-        if (srvResp) {
-            var msg = srvResp.Message;
-            if (msg)
-                infoText += '\nMessage: ' + msg;
-            var msgDet = srvResp.MessageDetail || srvResp.ExceptionMessage;
-            if (msgDet)
-                infoText += '\nDetail: ' + msgDet;
-            if (msgDet && msgDet.indexOf('No action was found') === 0)
-                if (msgDet.indexOf('that matches the name') > 0)
-                    infoText += '\n\nTip from 2sxc: you probably got the action-name wrong in your JS.';
-                else if (msgDet.indexOf('that matches the request.') > 0)
-                    infoText += '\n\nTip from 2sxc: Seems like the parameters are the wrong amount or type.';
-            if (msg && msg.indexOf('Controller') === 0 && msg.indexOf('not found') > 0)
-                infoText +=
-                    "\n\nTip from 2sxc: you probably spelled the controller name wrong or forgot to remove the word 'controller' from the call in JS. To call a controller called 'DemoController' only use 'Demo'.";
-        }
-        infoText += '\n\nif you are an advanced user you can learn more about what went wrong - discover how on 2sxc.org/help?tag=debug';
-        alert(infoText);
-        return result;
-    };
-    return SxcInstance;
-}());
-
-var SxcInstanceWithEditing = (function (_super) {
-    __extends(SxcInstanceWithEditing, _super);
-    function SxcInstanceWithEditing(id, cbid, $2sxc, env) {
-        var _this = _super.call(this, id, cbid, env) || this;
-        _this.id = id;
-        _this.cbid = cbid;
-        _this.$2sxc = $2sxc;
-        _this.env = env;
-        _this.manage = null;
-        try {
-            if ($2sxc._manage)
-                $2sxc._manage.initInstance(_this);
-        }
-        catch (e) {
-            console.error('error in 2sxc - will only log but not throw', e);
-        }
-        if ($2sxc._translateInit && _this.manage)
-            if (_this.manage.context && _this.manage.context.app && _this.manage.context.app.currentLanguage)
-                $2sxc._translateInit(_this.manage);
-        return _this;
-    }
-    SxcInstanceWithEditing.prototype.isEditMode = function () {
-        return this.manage && this.manage._isEditMode();
-    };
-    return SxcInstanceWithEditing;
-}(SxcInstance));
 
 var SxcInstanceWithInternals = (function (_super) {
     __extends(SxcInstanceWithInternals, _super);
@@ -354,12 +462,12 @@ var SxcInstanceWithInternals = (function (_super) {
         return this.$2sxc(this.id, this.cbid);
     };
     return SxcInstanceWithInternals;
-}(SxcInstanceWithEditing));
+}(__WEBPACK_IMPORTED_MODULE_1__SxcInstanceWithEditing__["a" /* SxcInstanceWithEditing */]));
 
 
 
 /***/ }),
-/* 6 */
+/* 13 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -435,33 +543,144 @@ var SxcDataWithInternals = (function () {
 
 
 /***/ }),
-/* 7 */
+/* 14 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SxcWebApiWithInternals; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ajax_AjaxPromise__ = __webpack_require__(8);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SxcInstanceWithEditing; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__SxcInstance__ = __webpack_require__(15);
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 
-var SxcWebApiWithInternals = (function () {
-    function SxcWebApiWithInternals(controller, id, cbid, env) {
-        this.controller = controller;
+var SxcInstanceWithEditing = (function (_super) {
+    __extends(SxcInstanceWithEditing, _super);
+    function SxcInstanceWithEditing(id, cbid, $2sxc, env) {
+        var _this = _super.call(this, id, cbid, env) || this;
+        _this.id = id;
+        _this.cbid = cbid;
+        _this.$2sxc = $2sxc;
+        _this.env = env;
+        _this.manage = null;
+        try {
+            if ($2sxc._manage)
+                $2sxc._manage.initInstance(_this);
+        }
+        catch (e) {
+            console.error('error in 2sxc - will only log but not throw', e);
+        }
+        if ($2sxc._translateInit && _this.manage)
+            if (_this.manage.context && _this.manage.context.app && _this.manage.context.app.currentLanguage)
+                $2sxc._translateInit(_this.manage);
+        return _this;
+    }
+    SxcInstanceWithEditing.prototype.isEditMode = function () {
+        return this.manage && this.manage._isEditMode();
+    };
+    return SxcInstanceWithEditing;
+}(__WEBPACK_IMPORTED_MODULE_0__SxcInstance__["a" /* SxcInstance */]));
+
+
+
+/***/ }),
+/* 15 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SxcInstance; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__SxcWebApi__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__constants__ = __webpack_require__(18);
+
+
+var serviceScopes = ['app', 'app-sys', 'app-api', 'app-query', 'app-content', 'eav', 'view', 'dnn'];
+var SxcInstance = (function () {
+    function SxcInstance(id, cbid, env) {
         this.id = id;
         this.cbid = cbid;
         this.env = env;
+        this.webApi = new __WEBPACK_IMPORTED_MODULE_0__SxcWebApi__["a" /* SxcWebApi */](this);
     }
-    SxcWebApiWithInternals.prototype.get = function (settingsOrUrl, params, data, preventAutoFail) {
+    SxcInstance.prototype.resolveServiceUrl = function (virtualPath) {
+        var scope = virtualPath.split('/')[0].toLowerCase();
+        if (serviceScopes.indexOf(scope) === -1)
+            return virtualPath;
+        return this.env.apiRoot(__WEBPACK_IMPORTED_MODULE_1__constants__["b" /* ToSxcName */]) + scope + '/' + virtualPath.substring(virtualPath.indexOf('/') + 1);
+    };
+    SxcInstance.prototype.showDetailedHttpError = function (result) {
+        if (window.console)
+            console.log(result);
+        if (result.status === 404 &&
+            result.config &&
+            result.config.url &&
+            result.config.url.indexOf('/dist/i18n/') > -1) {
+            if (window.console)
+                console.log('just fyi: failed to load language resource; will have to use default');
+            return result;
+        }
+        if (result.status === 0 || result.status === -1)
+            return result;
+        var infoText = 'Had an error talking to the server (status ' + result.status + ').';
+        var srvResp = result.responseText
+            ? JSON.parse(result.responseText)
+            : result.data;
+        if (srvResp) {
+            var msg = srvResp.Message;
+            if (msg)
+                infoText += '\nMessage: ' + msg;
+            var msgDet = srvResp.MessageDetail || srvResp.ExceptionMessage;
+            if (msgDet)
+                infoText += '\nDetail: ' + msgDet;
+            if (msgDet && msgDet.indexOf('No action was found') === 0)
+                if (msgDet.indexOf('that matches the name') > 0)
+                    infoText += '\n\nTip from 2sxc: you probably got the action-name wrong in your JS.';
+                else if (msgDet.indexOf('that matches the request.') > 0)
+                    infoText += '\n\nTip from 2sxc: Seems like the parameters are the wrong amount or type.';
+            if (msg && msg.indexOf('Controller') === 0 && msg.indexOf('not found') > 0)
+                infoText +=
+                    "\n\nTip from 2sxc: you probably spelled the controller name wrong or forgot to remove the word 'controller' from the call in JS. To call a controller called 'DemoController' only use 'Demo'.";
+        }
+        infoText += '\n\nif you are an advanced user you can learn more about what went wrong - discover how on 2sxc.org/help?tag=debug';
+        alert(infoText);
+        return result;
+    };
+    return SxcInstance;
+}());
+
+
+
+/***/ }),
+/* 16 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SxcWebApi; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ajax_AjaxPromise__ = __webpack_require__(17);
+
+var SxcWebApi = (function () {
+    function SxcWebApi(controller) {
+        this.controller = controller;
+        this.env = controller.env;
+    }
+    SxcWebApi.prototype.get = function (settingsOrUrl, params, data, preventAutoFail) {
         return this.request(settingsOrUrl, params, data, preventAutoFail, 'GET');
     };
-    SxcWebApiWithInternals.prototype.post = function (settingsOrUrl, params, data, preventAutoFail) {
+    SxcWebApi.prototype.post = function (settingsOrUrl, params, data, preventAutoFail) {
         return this.request(settingsOrUrl, params, data, preventAutoFail, 'POST');
     };
-    SxcWebApiWithInternals.prototype.delete = function (settingsOrUrl, params, data, preventAutoFail) {
+    SxcWebApi.prototype.delete = function (settingsOrUrl, params, data, preventAutoFail) {
         return this.request(settingsOrUrl, params, data, preventAutoFail, 'DELETE');
     };
-    SxcWebApiWithInternals.prototype.put = function (settingsOrUrl, params, data, preventAutoFail) {
+    SxcWebApi.prototype.put = function (settingsOrUrl, params, data, preventAutoFail) {
         return this.request(settingsOrUrl, params, data, preventAutoFail, 'PUT');
     };
-    SxcWebApiWithInternals.prototype.request = function (settings, params, data, preventAutoFail, method) {
+    SxcWebApi.prototype.request = function (settings, params, data, preventAutoFail, method) {
         if (typeof params !== 'object' && typeof params !== 'undefined')
             params = { id: params };
         if (typeof settings === 'string') {
@@ -489,13 +708,13 @@ var SxcWebApiWithInternals = (function () {
         var promise = http.makePromise(settings);
         return promise;
     };
-    return SxcWebApiWithInternals;
+    return SxcWebApi;
 }());
 
 
 
 /***/ }),
-/* 8 */
+/* 17 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -553,278 +772,99 @@ var AjaxPromise = (function () {
 
 
 /***/ }),
-/* 9 */
+/* 18 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TotalPopup; });
-var TotalPopup = (function () {
-    function TotalPopup() {
-        this.frame = undefined;
-        this.callback = undefined;
-    }
-    TotalPopup.prototype.open = function (url, callback) {
-        var z = 10000010;
-        var p = window;
-        while (p !== window.top && z < 10000100) {
-            z++;
-            p = p.parent;
-        }
-        var wrapper = document.createElement('div');
-        wrapper.setAttribute('style', ' top: 0;left: 0;width: 100%;height: 100%; position:fixed; z-index:' + z);
-        document.body.appendChild(wrapper);
-        var ifrm = document.createElement('iframe');
-        ifrm.setAttribute('allowtransparency', 'true');
-        ifrm.setAttribute('style', 'top: 0;left: 0;width: 100%;height: 100%;');
-        ifrm.setAttribute('src', url);
-        wrapper.appendChild(ifrm);
-        document.body.className += ' sxc-popup-open';
-        this.frame = ifrm;
-        this.callback = callback;
-    };
-    TotalPopup.prototype.close = function () {
-        if (this.frame) {
-            document.body.className = document.body.className.replace('sxc-popup-open', '');
-            var frm = this.frame;
-            frm.parentNode.parentNode.removeChild(frm.parentNode);
-            this.callback();
-        }
-    };
-    TotalPopup.prototype.closeThis = function () {
-        window.parent.$2sxc.totalPopup.close();
-    };
-    return TotalPopup;
-}());
-
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return ToSxcName; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SxcVersion; });
+var ToSxcName = '2sxc';
+var SxcVersion = '10.25.01';
 
 
 /***/ }),
-/* 10 */
+/* 19 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return UrlParamManager; });
-var UrlParamManager = (function () {
-    function UrlParamManager() {
+/* harmony export (immutable) */ __webpack_exports__["a"] = buildSxcController;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__tools_TotalPopup__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__tools_UrlParamManager__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Stats__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__environment_Environment__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__instance_SxcInstanceWithInternals__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__constants__ = __webpack_require__(18);
+
+
+
+
+
+
+var environment = new __WEBPACK_IMPORTED_MODULE_3__environment_Environment__["a" /* Environment */]();
+function SxcController(id, cbid) {
+    var $2sxc = window.$2sxc;
+    if (!$2sxc._controllers)
+        throw new Error('$2sxc not initialized yet');
+    if (typeof id === 'object') {
+        var idTuple = autoFind(id);
+        id = idTuple[0];
+        cbid = idTuple[1];
     }
-    UrlParamManager.prototype.get = function (name) {
-        name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
-        var searchRx = new RegExp('[\\?&]' + name + '=([^&#]*)', 'i');
-        var results = searchRx.exec(location.search);
-        var strResult;
-        if (results === null) {
-            var hashRx = new RegExp('[#&]' + name + '=([^&#]*)', 'i');
-            results = hashRx.exec(location.hash);
-        }
-        if (results === null) {
-            var matches = window.location.pathname.match(new RegExp('/' + name + '/([^/]+)', 'i'));
-            if (matches && matches.length > 1)
-                strResult = matches.reverse()[0];
-        }
-        else
-            strResult = results[1];
-        return strResult === null || strResult === undefined
-            ? ''
-            : decodeURIComponent(strResult.replace(/\+/g, ' '));
+    if (!cbid)
+        cbid = id;
+    var cacheKey = id + ':' + cbid;
+    if ($2sxc._controllers[cacheKey])
+        return $2sxc._controllers[cacheKey];
+    if (!$2sxc._data[cacheKey])
+        $2sxc._data[cacheKey] = {};
+    return ($2sxc._controllers[cacheKey]
+        = new __WEBPACK_IMPORTED_MODULE_4__instance_SxcInstanceWithInternals__["a" /* SxcInstanceWithInternals */](id, cbid, cacheKey, $2sxc, environment));
+}
+function buildSxcController() {
+    var urlManager = new __WEBPACK_IMPORTED_MODULE_1__tools_UrlParamManager__["a" /* UrlParamManager */]();
+    var debug = {
+        load: (urlManager.get('debug') === 'true'),
+        uncache: urlManager.get('sxcver'),
     };
-    UrlParamManager.prototype.require = function (name) {
-        var found = this.get(name);
-        if (found === '') {
-            var message = "Required parameter (" + name + ") missing from url - cannot continue";
-            alert(message);
-            throw message;
-        }
-        return found;
+    var stats = new __WEBPACK_IMPORTED_MODULE_2__Stats__["a" /* Stats */]();
+    var addOn = {
+        _controllers: {},
+        sysinfo: {
+            version: __WEBPACK_IMPORTED_MODULE_5__constants__["a" /* SxcVersion */],
+            description: 'The 2sxc Controller object - read more about it on docs.2sxc.org',
+        },
+        beta: {},
+        _data: {},
+        totalPopup: new __WEBPACK_IMPORTED_MODULE_0__tools_TotalPopup__["a" /* TotalPopup */](),
+        urlParams: urlManager,
+        debug: debug,
+        stats: stats,
+        parts: {
+            getUrl: function (url, preventUnmin) {
+                var r = (preventUnmin || !debug.load) ? url : url.replace('.min', '');
+                if (debug.uncache && r.indexOf('sxcver') === -1)
+                    r = r + ((r.indexOf('?') === -1) ? '?' : '&') + 'sxcver=' + debug.uncache;
+                return r;
+            },
+        },
+        env: environment,
+        jq: function () { return $2sxc_jQSuperlight; },
     };
-    return UrlParamManager;
-}());
-
-
-
-/***/ }),
-/* 11 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Stats; });
-var Stats = (function () {
-    function Stats() {
-        this.watchDomChanges = 0;
-    }
-    return Stats;
-}());
-
-
-
-/***/ }),
-/* 12 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Environment; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__tools_Log__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__envMetaLoader__ = __webpack_require__(14);
-
-
-var extensionPlaceholder = '{extension}';
-var Environment = (function () {
-    function Environment() {
-        this.ready = false;
-        this.source = '';
-        this.log = new __WEBPACK_IMPORTED_MODULE_0__tools_Log__["a" /* Log */]('Environment', 'starting');
-        this.metaLoader = new __WEBPACK_IMPORTED_MODULE_1__envMetaLoader__["a" /* EnvironmentMetaLoader */](this);
-        if (typeof _jsApi !== typeof undefined) {
-            this.log.add('found _jsApi, will use');
-            this.load(_jsApi, 'global variable _jsApi');
-        }
-        else {
-            this.log.add('will start initializing');
-            this.metaLoader.loadMetaFromHeader();
-        }
-    }
-    Environment.prototype.load = function (newJsInfo, source) {
-        this.header = newJsInfo;
-        this.ready = true;
-        this.source = source || 'external/unknown';
-        this.log.add('loaded from ' + this.source);
-    };
-    Environment.prototype.apiRoot = function (name) {
-        this.ensureReadyOrThrow();
-        return this.header.api.replace(extensionPlaceholder, name);
-    };
-    Environment.prototype.page = function () {
-        this.ensureReadyOrThrow();
-        return this.header.page;
-    };
-    Environment.prototype.rvt = function () {
-        this.ensureReadyOrThrow();
-        return this.header.rvt;
-    };
-    Environment.prototype.ensureReadyOrThrow = function () {
-        if (this.ready)
-            return;
-        this.log.add('ensureReady - force last attempt to load MetaHeader');
-        this.metaLoader.loadMetaFromHeader(true);
-        if (this.ready)
-            return;
-        throw "Can't find apiRoot - something went wrong, pls contact 2sxc.org";
-    };
-    return Environment;
-}());
-
-
-
-/***/ }),
-/* 13 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Log; });
-var Log = (function () {
-    function Log(name, message) {
-        this.text = "";
-        this.entries = [];
-        this.name = name;
-        this.start = new Date().getTime();
-        if (message)
-            this.add(message);
-    }
-    Log.prototype.add = function (message) {
-        this.text += message + '\n';
-        this.entries.push({ time: new Date().getTime() - this.start, message: message });
-    };
-    return Log;
-}());
-
-var LogEntry = (function () {
-    function LogEntry() {
-    }
-    return LogEntry;
-}());
-
-
-/***/ }),
-/* 14 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return EnvironmentMetaLoader; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__envDnnSfLoader__ = __webpack_require__(15);
-
-var maxRetries = 10;
-var EnvironmentMetaLoader = (function () {
-    function EnvironmentMetaLoader(env) {
-        this.env = env;
-        this.retries = 0;
-        this.log = env.log;
-    }
-    EnvironmentMetaLoader.prototype.loadMetaFromHeader = function (forceFallback) {
-        var _this = this;
-        if (forceFallback === void 0) { forceFallback = false; }
-        if (this.env.ready) {
-            this.log.add('loadMeta - already ready');
-            return;
-        }
-        this.log.add('loadMetaFromHeader: start, retry:' + this.retries + ', force fallback: ' + forceFallback);
-        var meta = this.getMeta('_jsApi');
-        if (!meta) {
-            this.retries++;
-            if (forceFallback || this.retries >= maxRetries)
-                new __WEBPACK_IMPORTED_MODULE_0__envDnnSfLoader__["a" /* EnvironmentDnnSfLoader */](this.env).dnnSfFallback();
-            else {
-                setTimeout(function () { _this.loadMetaFromHeader(); }, 1);
-            }
-            return;
-        }
-        this.env.load(JSON.parse(meta), 'meta header');
-    };
-    EnvironmentMetaLoader.prototype.getMeta = function (metaName) {
-        var metas = document.getElementsByTagName('meta');
-        for (var i = 0; i < metas.length; i++)
-            if (metas[i].getAttribute('name') === metaName)
-                return metas[i].getAttribute('content');
-        return '';
-    };
-    return EnvironmentMetaLoader;
-}());
-
-
-
-/***/ }),
-/* 15 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return EnvironmentDnnSfLoader; });
-var helpAutoDetect = 'You must either include jQuery on the page or inject the jsApi parameters to prevent auto-detection.';
-var EnvironmentDnnSfLoader = (function () {
-    function EnvironmentDnnSfLoader(env) {
-        this.env = env;
-    }
-    EnvironmentDnnSfLoader.prototype.dnnSfFallback = function () {
-        var _this = this;
-        this.env.log.add('dnnSfFallback start');
-        if (typeof $ === 'undefined')
-            throw "Can't load pageid, moduleid, etc. and $ is not available. \n " + helpAutoDetect;
-        $(function () { return _this.dnnSfLoadWhenDocumentReady(); });
-    };
-    EnvironmentDnnSfLoader.prototype.dnnSfLoadWhenDocumentReady = function () {
-        this.env.log.add('dnnSfLoadWhenDocumentReady start');
-        var sf = $.ServicesFramework;
-        if (typeof sf === 'undefined')
-            throw "can't load pageid, moduleid etc. and DNN SF is not available. \n " + helpAutoDetect;
-        var dnnSf = sf(0);
-        var sfJsInfo = {
-            page: dnnSf.getTabId(),
-            root: 'unknown',
-            api: dnnSf.getServiceRoot('2sxc'),
-            rvt: dnnSf.getAntiForgeryValue()
-        };
-        this.env.load(sfJsInfo, 'dnn SF');
-    };
-    return EnvironmentDnnSfLoader;
-}());
-
+    for (var property in addOn)
+        if (addOn.hasOwnProperty(property))
+            SxcController[property] = addOn[property];
+    return SxcController;
+}
+function autoFind(domElement) {
+    var containerTag = $2sxc_jQSuperlight(domElement).closest('.sc-content-block')[0];
+    if (!containerTag)
+        return null;
+    var iid = containerTag.getAttribute('data-cb-instance');
+    var cbid = containerTag.getAttribute('data-cb-id');
+    if (!iid || !cbid)
+        return null;
+    return [iid, cbid];
+}
 
 
 /***/ })

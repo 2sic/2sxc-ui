@@ -1,4 +1,4 @@
-import { SxcInstance } from '../instance/ToSic.Sxc.Instance';
+import { SxcInstance } from '../instance/SxcInstance';
 import { AjaxSettings } from './AjaxSettings';
 
 declare const $2sxc_jQSuperlight: JQuery;

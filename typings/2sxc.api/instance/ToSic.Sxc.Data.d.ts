@@ -1,4 +1,4 @@
-import { SxcInstanceWithInternals } from './ToSic.Sxc.Instance';
+import { SxcInstanceWithInternals } from './SxcInstanceWithInternals';
 export declare class SxcDataWithInternals {
     private controller;
     source: any;
