@@ -1,3 +1,5 @@
+import { LogEntry } from './LogEntry';
+
 export class Log {
   name: string;
   text = "";
@@ -16,8 +18,3 @@ export class Log {
   }
 }
 
-
-class LogEntry {
-  time: number;
-  message: string;
-}

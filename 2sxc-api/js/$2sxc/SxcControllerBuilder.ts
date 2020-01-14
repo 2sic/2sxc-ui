@@ -3,7 +3,7 @@ import { UrlParamManager } from '../tools/UrlParamManager';
 import { Stats } from '../Stats';
 import { Environment } from '../environment/Environment';
 import { SxcInstanceWithInternals } from '../instance/SxcInstanceWithInternals';
-import { SxcControllerInternals } from './SxcControllerWithInternals';
+import { SxcControllerInternals } from './SxcControllerInternals';
 import { SxcController } from './SxcController';
 import { SxcVersion } from '../constants';
 

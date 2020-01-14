@@ -1,6 +1,6 @@
 import { SxcInstance } from './SxcInstance';
 import { Environment } from '../environment/Environment';
-import { SxcControllerInternals } from '../$2sxc/SxcControllerWithInternals';
+import { SxcControllerInternals } from '../$2sxc/SxcControllerInternals';
 import { SxcController } from '../$2sxc/SxcController';
 export declare class SxcInstanceWithEditing extends SxcInstance {
     id: number;

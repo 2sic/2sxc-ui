@@ -1,5 +1,5 @@
 import { SxcInstanceWithInternals } from '../instance/SxcInstanceWithInternals';
-import { SxcControllerInternals } from './SxcControllerWithInternals';
+import { SxcControllerInternals } from './SxcControllerInternals';
 import { SxcController } from './SxcController';
 export interface Window {
     $2sxc: SxcController & SxcControllerInternals;

@@ -1,7 +1,7 @@
 import { SxcDataWithInternals } from './ToSic.Sxc.Data';
 import { Environment } from '../environment/Environment';
 import { SxcInstanceWithEditing } from './SxcInstanceWithEditing';
-import { SxcControllerInternals } from '../$2sxc/SxcControllerWithInternals';
+import { SxcControllerInternals } from '../$2sxc/SxcControllerInternals';
 import { SxcController } from '../$2sxc/SxcController';
 
 export class SxcInstanceWithInternals extends SxcInstanceWithEditing {

@@ -13,7 +13,6 @@
     "outDir": "compiled",
     "declaration": true,
     "declarationDir": "../../../typings/2sxc.api",
-    "typings": "/typings/index.d.ts"
     //"module":  "amd"
     //"allowJs": true
   },

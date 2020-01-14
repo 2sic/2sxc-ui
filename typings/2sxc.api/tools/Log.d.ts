@@ -1,3 +1,4 @@
+import { LogEntry } from './LogEntry';
 export declare class Log {
     name: string;
     text: string;
@@ -6,8 +7,3 @@ export declare class Log {
     constructor(name: string, message: string);
     add(message: string): void;
 }
-declare class LogEntry {
-    time: number;
-    message: string;
-}
-export {};
