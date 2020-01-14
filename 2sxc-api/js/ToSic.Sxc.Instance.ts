@@ -129,7 +129,10 @@ export class SxcInstanceWithEditing extends SxcInstance {
         }
 
         // this only works when manage exists (not installing) and translator exists too
-        if ($2sxc._translateInit && this.manage) $2sxc._translateInit(this.manage);    // init translate, not really nice, but ok for now
+        if ($2sxc._translateInit && this.manage) 
+            // ensure that we really have a manage context, otherwise we can't initialize i18n and it doesn't make sense
+            if(this.manage.context && this.manage.context.app && this.manage.context.app.currentLanguage)
+                $2sxc._translateInit(this.manage);    // init translate, not really nice, but ok for now
 
     }
 
