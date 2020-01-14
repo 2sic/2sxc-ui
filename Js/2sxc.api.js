@@ -210,7 +210,7 @@ function buildSxcController() {
             },
         },
         env: environment,
-        jQ: $2sxc_jQSuperlight,
+        get$: function () { return $2sxc_jQSuperlight; },
     };
     for (var property in addOn)
         if (addOn.hasOwnProperty(property))

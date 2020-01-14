@@ -44,7 +44,18 @@ export interface SxcController {
 
     env: Environment;
     // future: make a method to get jQuery from DNN or internal
-    // jQ: JQuery;
+    get$(): JQuery;
+
+    _controllers: SxcInstanceWithInternals[];
+    beta: any;
+    _data: any;
+    totalPopup: TotalPopup;
+    urlParams: UrlParamManager;
+    debug: any;
+    stats: Stats;
+
+    /** Very internal bit, probably will be deprecated */
+    parts: any;
 }
 
 /**
@@ -89,7 +100,7 @@ export function buildSxcController(): SxcController | SxcControllerWithInternals
     };
     const stats = new Stats();
 
-    const addOn: any = {
+    const addOn: Partial<SxcController> = {
         _controllers: {} as any,
         sysinfo: {
             version: sxcVersion,
@@ -116,7 +127,7 @@ export function buildSxcController(): SxcController | SxcControllerWithInternals
             },
         },
         env: environment,
-        jQ: $2sxc_jQSuperlight,
+        get$: function() { return  $2sxc_jQSuperlight; },
     };
     for (const property in addOn)
         if (addOn.hasOwnProperty(property))
