@@ -44,7 +44,8 @@ export interface SxcController {
 
     env: Environment;
     // future: make a method to get jQuery from DNN or internal
-    get$(): JQuery;
+    // get$(): JQuery;
+    jq(): JQuery;
 
     _controllers: SxcInstanceWithInternals[];
     beta: any;
@@ -127,7 +128,7 @@ export function buildSxcController(): SxcController | SxcControllerWithInternals
             },
         },
         env: environment,
-        get$: function() { return  $2sxc_jQSuperlight; },
+        jq: function() { return  $2sxc_jQSuperlight; },
     };
     for (const property in addOn)
         if (addOn.hasOwnProperty(property))

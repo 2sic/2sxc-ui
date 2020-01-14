@@ -14,7 +14,7 @@ export interface SxcController {
         description: string;
     };
     env: Environment;
-    get$(): JQuery;
+    jq(): JQuery;
     _controllers: SxcInstanceWithInternals[];
     beta: any;
     _data: any;
