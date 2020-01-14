@@ -18,7 +18,7 @@
   },
   "include": [
     "./*.ts",
-    "./*.js", "environment/Environment.ts"
+    "./*.js", "environment/Environment.ts", "environment/JsInfo.ts", "ajax/AjaxPromise.ts", "tools/UrlParamManager.ts", "tools/TotalPopup.ts", "tools/Log.ts", "instance/ToSic.Sxc.Data.ts", "instance/ToSic.Sxc.Instance.ts", "instance/ToSic.Sxc.WebApi.ts"
     // "../../typings/**/*.ts"
   ],
   "exclude": [

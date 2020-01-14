@@ -1,6 +1,6 @@
 import { Environment } from './Environment';
-import { Log } from '../log';
-import { JsInfo } from '../JsInfo';
+import { Log } from '../tools/Log';
+import { JsInfo } from './JsInfo';
 import { EnvironmentDnnSfLoader } from './envDnnSfLoader';
 
 const maxRetries = 10;

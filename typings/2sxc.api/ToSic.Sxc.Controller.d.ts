@@ -1,7 +1,7 @@
 /// <reference types="jquery" />
-import { SxcInstance, SxcInstanceWithInternals } from './ToSic.Sxc.Instance';
-import { TotalPopup } from './ToSic.Sxc.TotalPopup';
-import { UrlParamManager } from './ToSic.Sxc.Url';
+import { SxcInstance, SxcInstanceWithInternals } from './instance/ToSic.Sxc.Instance';
+import { TotalPopup } from './tools/TotalPopup';
+import { UrlParamManager } from './tools/UrlParamManager';
 import { Stats } from './Stats';
 import { Environment } from './environment/Environment';
 export interface Window {

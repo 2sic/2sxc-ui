@@ -1,8 +1,8 @@
 ﻿
-import { SxcController, SxcControllerWithInternals } from './ToSic.Sxc.Controller';
+import { SxcController, SxcControllerWithInternals } from '../ToSic.Sxc.Controller';
 import { SxcDataWithInternals } from './ToSic.Sxc.Data';
 import { SxcWebApiWithInternals } from './ToSic.Sxc.WebApi';
-import { Environment } from './environment/Environment';
+import { Environment } from '../environment/Environment';
 /**
  * The typical sxc-instance object for a specific DNN module or content-block
  */

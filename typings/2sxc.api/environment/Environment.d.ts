@@ -1,5 +1,5 @@
-import { JsInfo } from '../JsInfo';
-import { Log } from '../log';
+import { JsInfo } from './JsInfo';
+import { Log } from '../tools/Log';
 import { EnvironmentMetaLoader } from './envMetaLoader';
 export declare class Environment {
     private header;

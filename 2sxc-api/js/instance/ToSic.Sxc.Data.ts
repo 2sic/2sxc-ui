@@ -2,7 +2,12 @@
 
 declare const $2sxc_jQSuperlight: any;
 
-
+/**
+ * This is a old 2sxc concept from 2sxc ca. V3
+ * The idea was that each module could have it's own data and access it.
+ * It would hide the internals of WebApis and just provide data. 
+ * This model isn't promoted or much in use any more, but included for compatibility
+ */
 export class SxcDataWithInternals {
     source: any = undefined;
 

@@ -151,9 +151,9 @@ module.exports = __webpack_amd_options__;
 
 "use strict";
 /* harmony export (immutable) */ __webpack_exports__["a"] = buildSxcController;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ToSic_Sxc_Instance__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ToSic_Sxc_TotalPopup__ = __webpack_require__(9);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ToSic_Sxc_Url__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__instance_ToSic_Sxc_Instance__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__tools_TotalPopup__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__tools_UrlParamManager__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Stats__ = __webpack_require__(11);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__environment_Environment__ = __webpack_require__(12);
 
@@ -180,10 +180,10 @@ function SxcController(id, cbid) {
     if (!$2sxc._data[cacheKey])
         $2sxc._data[cacheKey] = {};
     return ($2sxc._controllers[cacheKey]
-        = new __WEBPACK_IMPORTED_MODULE_0__ToSic_Sxc_Instance__["a" /* SxcInstanceWithInternals */](id, cbid, cacheKey, $2sxc, environment));
+        = new __WEBPACK_IMPORTED_MODULE_0__instance_ToSic_Sxc_Instance__["a" /* SxcInstanceWithInternals */](id, cbid, cacheKey, $2sxc, environment));
 }
 function buildSxcController() {
-    var urlManager = new __WEBPACK_IMPORTED_MODULE_2__ToSic_Sxc_Url__["a" /* UrlParamManager */]();
+    var urlManager = new __WEBPACK_IMPORTED_MODULE_2__tools_UrlParamManager__["a" /* UrlParamManager */]();
     var debug = {
         load: (urlManager.get('debug') === 'true'),
         uncache: urlManager.get('sxcver'),
@@ -197,7 +197,7 @@ function buildSxcController() {
         },
         beta: {},
         _data: {},
-        totalPopup: new __WEBPACK_IMPORTED_MODULE_1__ToSic_Sxc_TotalPopup__["a" /* TotalPopup */](),
+        totalPopup: new __WEBPACK_IMPORTED_MODULE_1__tools_TotalPopup__["a" /* TotalPopup */](),
         urlParams: urlManager,
         debug: debug,
         stats: stats,
@@ -440,7 +440,7 @@ var SxcDataWithInternals = (function () {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SxcWebApiWithInternals; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__HttpAbstractor__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ajax_AjaxPromise__ = __webpack_require__(8);
 
 var SxcWebApiWithInternals = (function () {
     function SxcWebApiWithInternals(controller, id, cbid, env) {
@@ -469,7 +469,7 @@ var SxcWebApiWithInternals = (function () {
             var controllerName = controllerAction[0];
             var actionName = controllerAction[1];
             if (controllerName === '' || actionName === '')
-                alert('Error: controller or action not defined. Will continue with likely errors.');
+                console.warn('Error: controller or action not defined. Will continue with likely errors.');
             settings = {
                 controller: controllerName,
                 action: actionName,
@@ -484,7 +484,7 @@ var SxcWebApiWithInternals = (function () {
             params: null,
             preventAutoFail: false,
         };
-        var http = new __WEBPACK_IMPORTED_MODULE_0__HttpAbstractor__["a" /* HttpAbstractor */](this.controller);
+        var http = new __WEBPACK_IMPORTED_MODULE_0__ajax_AjaxPromise__["a" /* AjaxPromise */](this.controller);
         settings = $2sxc_jQSuperlight.extend({}, defaults, settings);
         var promise = http.makePromise(settings);
         return promise;
@@ -499,16 +499,16 @@ var SxcWebApiWithInternals = (function () {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return HttpAbstractor; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AjaxPromise; });
 var HeaderContentBlockId = 'ContentBlockId';
 var HeaderModuleId = 'ModuleId';
 var HeaderTabId = 'TabId';
 var HeaderRvt = 'RequestVerificationToken';
-var HttpAbstractor = (function () {
-    function HttpAbstractor(sxc) {
+var AjaxPromise = (function () {
+    function AjaxPromise(sxc) {
         this.sxc = sxc;
     }
-    HttpAbstractor.prototype.makePromise = function (settings) {
+    AjaxPromise.prototype.makePromise = function (settings) {
         var headers = this.GetHeaders();
         var promise = $2sxc_jQSuperlight.ajax({
             async: true,
@@ -527,7 +527,7 @@ var HttpAbstractor = (function () {
             promise.fail(this.sxc.showDetailedHttpError);
         return promise;
     };
-    HttpAbstractor.prototype.GetHeaders = function () {
+    AjaxPromise.prototype.GetHeaders = function () {
         var id = this.sxc.id;
         var cbid = this.sxc.cbid;
         var env = this.sxc.env;
@@ -538,14 +538,16 @@ var HttpAbstractor = (function () {
         fHeaders[HeaderRvt] = env.rvt();
         return fHeaders;
     };
-    HttpAbstractor.prototype.getActionUrl = function (settings) {
+    AjaxPromise.prototype.getActionUrl = function (settings) {
         var base = (settings.url)
             ? this.sxc.resolveServiceUrl(settings.url)
             : this.sxc.env.apiRoot('2sxc')
                 + 'app/auto/api/' + settings.controller + '/' + settings.action;
+        if (settings.endpoint)
+            base = base.replace(this.sxc.env.apiRoot('2sxc'), this.sxc.env.apiRoot(settings.endpoint));
         return base + (!settings.params ? '' : ('?' + $2sxc_jQSuperlight.param(settings.params)));
     };
-    return HttpAbstractor;
+    return AjaxPromise;
 }());
 
 
@@ -660,7 +662,7 @@ var Stats = (function () {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Environment; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__log__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__tools_Log__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__envMetaLoader__ = __webpack_require__(14);
 
 
@@ -669,7 +671,7 @@ var Environment = (function () {
     function Environment() {
         this.ready = false;
         this.source = '';
-        this.log = new __WEBPACK_IMPORTED_MODULE_0__log__["a" /* Log */]('Environment', 'starting');
+        this.log = new __WEBPACK_IMPORTED_MODULE_0__tools_Log__["a" /* Log */]('Environment', 'starting');
         this.metaLoader = new __WEBPACK_IMPORTED_MODULE_1__envMetaLoader__["a" /* EnvironmentMetaLoader */](this);
         if (typeof _jsApi !== typeof undefined) {
             this.log.add('found _jsApi, will use');
