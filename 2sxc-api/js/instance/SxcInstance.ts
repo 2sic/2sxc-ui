@@ -1,7 +1,7 @@
 ﻿
 import { SxcWebApi } from './SxcWebApi';
-import { Environment } from '../environment/Environment';
 import { ToSxcName } from '../constants';
+import { SxcRootV2 } from '../$2/SxcRootV2';
 
 const serviceScopes = ['app', 'app-sys', 'app-api', 'app-query', 'app-content', 'eav', 'view', 'dnn'];
 
@@ -27,7 +27,7 @@ export class SxcInstance {
         public cbid: number,
 
         /** The environment information, important for http-calls */
-        public readonly env: Environment,
+        public readonly root: SxcRootV2,
     ) {
         this.webApi = new SxcWebApi(this);
     }
@@ -38,14 +38,16 @@ export class SxcInstance {
      * @param virtualPath
      * @returns mapped path
      */
+    // TODO: somehow create a new alternative in root.http.apiUrl or something
     resolveServiceUrl(virtualPath: string) {
+        console.warn('used resolveServiceUrl:' + virtualPath);
         const scope = virtualPath.split('/')[0].toLowerCase();
 
         // stop if it's not one of our special paths
         if (serviceScopes.indexOf(scope) === -1)
             return virtualPath;
 
-        return this.env.apiRoot(ToSxcName) + scope + '/' + virtualPath.substring(virtualPath.indexOf('/') + 1);
+        return this.root.http.apiRoot(ToSxcName) + scope + '/' + virtualPath.substring(virtualPath.indexOf('/') + 1);
     }
 
 

@@ -1,5 +1,4 @@
 import { SxcInstance } from './SxcInstance';
-import { Environment } from '../environment/Environment';
 import { SxcControllerInternals } from '../$2sxc/SxcControllerInternals';
 import { SxcController } from '../$2sxc/SxcController';
 
@@ -20,9 +19,8 @@ export class SxcInstanceWithEditing extends SxcInstance {
         public cbid: number,
 // ReSharper disable once InconsistentNaming
         protected $2sxc: SxcController & SxcControllerInternals,
-        public readonly env: Environment,
     ) {
-        super(id, cbid, env);
+        super(id, cbid, $2sxc._root);
 
         // add manage property, but not within initializer, because inside the manage-initializer it may reference 2sxc again
         try { // sometimes the manage can't be built, like before installing

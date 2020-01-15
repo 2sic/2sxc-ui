@@ -68,10 +68,19 @@
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return ToSxcName; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SxcVersion; });
-var ToSxcName = '2sxc';
-var SxcVersion = '10.25.01';
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return ToSxcName; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return SxcVersion; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return HeaderNames; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ApiExtensionPlaceholder; });
+var ToSxcName = "2sxc";
+var SxcVersion = "10.25.01";
+var HeaderNames = {
+    ContentBlockId: "ContentBlockId",
+    ModuleId: "ModuleId",
+    TabId: "TabId",
+    Rvt: "RequestVerificationToken"
+};
+var ApiExtensionPlaceholder = '{extension}';
 
 
 /***/ }),
@@ -83,10 +92,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__jquery_ajax_ajax203_js__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__jquery_ajax_ajax203_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__jquery_ajax_ajax203_js__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__2sxc_SxcControllerBuilder__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__2_SxcRootV2__ = __webpack_require__(20);
 
 
+
+if (!window.$2)
+    window.$2 = new __WEBPACK_IMPORTED_MODULE_2__2_SxcRootV2__["a" /* SxcRootV2 */]();
 if (!window.$2sxc)
-    window.$2sxc = Object(__WEBPACK_IMPORTED_MODULE_1__2sxc_SxcControllerBuilder__["a" /* buildSxcController */])();
+    window.$2sxc = Object(__WEBPACK_IMPORTED_MODULE_1__2sxc_SxcControllerBuilder__["a" /* buildSxcController */])(window.$2);
 
 
 /***/ }),
@@ -165,16 +178,13 @@ module.exports = __webpack_amd_options__;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__tools_TotalPopup__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__tools_UrlParamManager__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Stats__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__environment_Environment__ = __webpack_require__(9);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__instance_SxcInstanceWithInternals__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__constants__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__instance_SxcInstanceWithInternals__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__constants__ = __webpack_require__(0);
 
 
 
 
 
-
-var environment = new __WEBPACK_IMPORTED_MODULE_3__environment_Environment__["a" /* Environment */]();
 function SxcController(id, cbid) {
     var $2sxc = window.$2sxc;
     if (!$2sxc._controllers)
@@ -192,9 +202,9 @@ function SxcController(id, cbid) {
     if (!$2sxc._data[cacheKey])
         $2sxc._data[cacheKey] = {};
     return ($2sxc._controllers[cacheKey]
-        = new __WEBPACK_IMPORTED_MODULE_4__instance_SxcInstanceWithInternals__["a" /* SxcInstanceWithInternals */](id, cbid, cacheKey, $2sxc, environment));
+        = new __WEBPACK_IMPORTED_MODULE_3__instance_SxcInstanceWithInternals__["a" /* SxcInstanceWithInternals */](id, cbid, cacheKey, $2sxc));
 }
-function buildSxcController() {
+function buildSxcController(newRoot) {
     var urlManager = new __WEBPACK_IMPORTED_MODULE_1__tools_UrlParamManager__["a" /* UrlParamManager */]();
     var debug = {
         load: (urlManager.get('debug') === 'true'),
@@ -204,7 +214,7 @@ function buildSxcController() {
     var addOn = {
         _controllers: {},
         sysinfo: {
-            version: __WEBPACK_IMPORTED_MODULE_5__constants__["a" /* SxcVersion */],
+            version: __WEBPACK_IMPORTED_MODULE_4__constants__["c" /* SxcVersion */],
             description: 'The 2sxc Controller object - read more about it on docs.2sxc.org',
         },
         beta: {},
@@ -221,9 +231,10 @@ function buildSxcController() {
                 return r;
             },
         },
-        env: environment,
         jq: function () { return $2sxc_jQSuperlight; },
+        _root: newRoot,
     };
+    addOn.env = newRoot.env;
     for (var property in addOn)
         if (addOn.hasOwnProperty(property))
             SxcController[property] = addOn[property];
@@ -350,175 +361,9 @@ var Stats = (function () {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Environment; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__tools_Log__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__envMetaLoader__ = __webpack_require__(11);
-
-
-var extensionPlaceholder = '{extension}';
-var Environment = (function () {
-    function Environment() {
-        this.ready = false;
-        this.source = '';
-        this.log = new __WEBPACK_IMPORTED_MODULE_0__tools_Log__["a" /* Log */]('Environment', 'starting');
-        this.metaLoader = new __WEBPACK_IMPORTED_MODULE_1__envMetaLoader__["a" /* EnvironmentMetaLoader */](this);
-        if (typeof _jsApi !== typeof undefined) {
-            this.log.add('found _jsApi, will use');
-            this.load(_jsApi, 'global variable _jsApi');
-        }
-        else {
-            this.log.add('will start initializing');
-            this.metaLoader.loadMetaFromHeader();
-        }
-    }
-    Environment.prototype.load = function (newJsInfo, source) {
-        this.header = newJsInfo;
-        this.ready = true;
-        this.source = source || 'external/unknown';
-        this.log.add('loaded from ' + this.source);
-    };
-    Environment.prototype.apiRoot = function (name) {
-        this.ensureReadyOrThrow();
-        return this.header.api.replace(extensionPlaceholder, name);
-    };
-    Environment.prototype.page = function () {
-        this.ensureReadyOrThrow();
-        return this.header.page;
-    };
-    Environment.prototype.rvt = function () {
-        this.ensureReadyOrThrow();
-        return this.header.rvt;
-    };
-    Environment.prototype.ensureReadyOrThrow = function () {
-        if (this.ready)
-            return;
-        this.log.add('ensureReady - force last attempt to load MetaHeader');
-        this.metaLoader.loadMetaFromHeader(true);
-        if (this.ready)
-            return;
-        throw "Can't find apiRoot - something went wrong, pls contact 2sxc.org";
-    };
-    return Environment;
-}());
-
-
-
-/***/ }),
-/* 10 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Log; });
-var Log = (function () {
-    function Log(name, message) {
-        this.text = "";
-        this.entries = [];
-        this.name = name;
-        this.start = new Date().getTime();
-        if (message)
-            this.add(message);
-    }
-    Log.prototype.add = function (message) {
-        this.text += message + '\n';
-        this.entries.push({ time: new Date().getTime() - this.start, message: message });
-    };
-    return Log;
-}());
-
-
-
-/***/ }),
-/* 11 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return EnvironmentMetaLoader; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__envDnnSfLoader__ = __webpack_require__(12);
-
-var maxRetries = 10;
-var EnvironmentMetaLoader = (function () {
-    function EnvironmentMetaLoader(env) {
-        this.env = env;
-        this.retries = 0;
-        this.log = env.log;
-    }
-    EnvironmentMetaLoader.prototype.loadMetaFromHeader = function (forceFallback) {
-        var _this = this;
-        if (forceFallback === void 0) { forceFallback = false; }
-        if (this.env.ready) {
-            this.log.add('loadMeta - already ready');
-            return;
-        }
-        this.log.add('loadMetaFromHeader: start, retry:' + this.retries + ', force fallback: ' + forceFallback);
-        var meta = this.getMeta('_jsApi');
-        if (!meta) {
-            this.retries++;
-            if (forceFallback || this.retries >= maxRetries)
-                new __WEBPACK_IMPORTED_MODULE_0__envDnnSfLoader__["a" /* EnvironmentDnnSfLoader */](this.env).dnnSfFallback();
-            else {
-                setTimeout(function () { _this.loadMetaFromHeader(); }, 1);
-            }
-            return;
-        }
-        this.env.load(JSON.parse(meta), 'meta header');
-    };
-    EnvironmentMetaLoader.prototype.getMeta = function (metaName) {
-        var metas = document.getElementsByTagName('meta');
-        for (var i = 0; i < metas.length; i++)
-            if (metas[i].getAttribute('name') === metaName)
-                return metas[i].getAttribute('content');
-        return '';
-    };
-    return EnvironmentMetaLoader;
-}());
-
-
-
-/***/ }),
-/* 12 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return EnvironmentDnnSfLoader; });
-var helpAutoDetect = 'You must either include jQuery on the page or inject the jsApi parameters to prevent auto-detection.';
-var EnvironmentDnnSfLoader = (function () {
-    function EnvironmentDnnSfLoader(env) {
-        this.env = env;
-    }
-    EnvironmentDnnSfLoader.prototype.dnnSfFallback = function () {
-        var _this = this;
-        this.env.log.add('dnnSfFallback start');
-        if (typeof $ === 'undefined')
-            throw "Can't load pageid, moduleid, etc. and $ is not available. \n " + helpAutoDetect;
-        $(function () { return _this.dnnSfLoadWhenDocumentReady(); });
-    };
-    EnvironmentDnnSfLoader.prototype.dnnSfLoadWhenDocumentReady = function () {
-        this.env.log.add('dnnSfLoadWhenDocumentReady start');
-        var sf = $.ServicesFramework;
-        if (typeof sf === 'undefined')
-            throw "can't load pageid, moduleid etc. and DNN SF is not available. \n " + helpAutoDetect;
-        var dnnSf = sf(0);
-        var sfJsInfo = {
-            page: dnnSf.getTabId(),
-            root: 'unknown',
-            api: dnnSf.getServiceRoot('2sxc'),
-            rvt: dnnSf.getAntiForgeryValue()
-        };
-        this.env.load(sfJsInfo, 'dnn SF');
-    };
-    return EnvironmentDnnSfLoader;
-}());
-
-
-
-/***/ }),
-/* 13 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SxcInstanceWithInternals; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ToSic_Sxc_Data__ = __webpack_require__(14);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__SxcInstanceWithEditing__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ToSic_Sxc_Data__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__SxcInstanceWithEditing__ = __webpack_require__(11);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -533,13 +378,12 @@ var __extends = (this && this.__extends) || (function () {
 
 var SxcInstanceWithInternals = (function (_super) {
     __extends(SxcInstanceWithInternals, _super);
-    function SxcInstanceWithInternals(id, cbid, cacheKey, $2sxc, env) {
-        var _this = _super.call(this, id, cbid, $2sxc, env) || this;
+    function SxcInstanceWithInternals(id, cbid, cacheKey, $2sxc) {
+        var _this = _super.call(this, id, cbid, $2sxc) || this;
         _this.id = id;
         _this.cbid = cbid;
         _this.cacheKey = cacheKey;
         _this.$2sxc = $2sxc;
-        _this.env = env;
         _this.source = null;
         _this.isLoaded = false;
         _this.lastRefresh = null;
@@ -557,7 +401,7 @@ var SxcInstanceWithInternals = (function (_super) {
 
 
 /***/ }),
-/* 14 */
+/* 10 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -633,12 +477,12 @@ var SxcDataWithInternals = (function () {
 
 
 /***/ }),
-/* 15 */
+/* 11 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SxcInstanceWithEditing; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__SxcInstance__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__SxcInstance__ = __webpack_require__(12);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -652,12 +496,11 @@ var __extends = (this && this.__extends) || (function () {
 
 var SxcInstanceWithEditing = (function (_super) {
     __extends(SxcInstanceWithEditing, _super);
-    function SxcInstanceWithEditing(id, cbid, $2sxc, env) {
-        var _this = _super.call(this, id, cbid, env) || this;
+    function SxcInstanceWithEditing(id, cbid, $2sxc) {
+        var _this = _super.call(this, id, cbid, $2sxc._root) || this;
         _this.id = id;
         _this.cbid = cbid;
         _this.$2sxc = $2sxc;
-        _this.env = env;
         _this.manage = null;
         try {
             if ($2sxc._manage)
@@ -680,28 +523,29 @@ var SxcInstanceWithEditing = (function (_super) {
 
 
 /***/ }),
-/* 16 */
+/* 12 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SxcInstance; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__SxcWebApi__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__SxcWebApi__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__constants__ = __webpack_require__(0);
 
 
 var serviceScopes = ['app', 'app-sys', 'app-api', 'app-query', 'app-content', 'eav', 'view', 'dnn'];
 var SxcInstance = (function () {
-    function SxcInstance(id, cbid, env) {
+    function SxcInstance(id, cbid, root) {
         this.id = id;
         this.cbid = cbid;
-        this.env = env;
+        this.root = root;
         this.webApi = new __WEBPACK_IMPORTED_MODULE_0__SxcWebApi__["a" /* SxcWebApi */](this);
     }
     SxcInstance.prototype.resolveServiceUrl = function (virtualPath) {
+        console.warn('used resolveServiceUrl:' + virtualPath);
         var scope = virtualPath.split('/')[0].toLowerCase();
         if (serviceScopes.indexOf(scope) === -1)
             return virtualPath;
-        return this.env.apiRoot(__WEBPACK_IMPORTED_MODULE_1__constants__["b" /* ToSxcName */]) + scope + '/' + virtualPath.substring(virtualPath.indexOf('/') + 1);
+        return this.root.http.apiRoot(__WEBPACK_IMPORTED_MODULE_1__constants__["d" /* ToSxcName */]) + scope + '/' + virtualPath.substring(virtualPath.indexOf('/') + 1);
     };
     SxcInstance.prototype.showDetailedHttpError = function (result) {
         if (window.console)
@@ -746,17 +590,17 @@ var SxcInstance = (function () {
 
 
 /***/ }),
-/* 17 */
+/* 13 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SxcWebApi; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ajax_AjaxPromise__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ajax_AjaxPromise__ = __webpack_require__(14);
 
 var SxcWebApi = (function () {
-    function SxcWebApi(controller) {
-        this.controller = controller;
-        this.env = controller.env;
+    function SxcWebApi(sxc) {
+        this.sxc = sxc;
+        this.env = sxc.root.env;
     }
     SxcWebApi.prototype.get = function (settingsOrUrl, params, data, preventAutoFail) {
         return this.request(settingsOrUrl, params, data, preventAutoFail, 'GET');
@@ -793,10 +637,13 @@ var SxcWebApi = (function () {
             params: null,
             preventAutoFail: false,
         };
-        var http = new __WEBPACK_IMPORTED_MODULE_0__ajax_AjaxPromise__["a" /* AjaxPromise */](this.controller);
+        var http = new __WEBPACK_IMPORTED_MODULE_0__ajax_AjaxPromise__["a" /* AjaxPromise */](this, this.sxc);
         settings = $2sxc_jQSuperlight.extend({}, defaults, settings);
         var promise = http.makePromise(settings);
         return promise;
+    };
+    SxcWebApi.prototype.headers = function () {
+        return this.sxc.root.http.headers(this.sxc.id, this.sxc.cbid);
     };
     return SxcWebApi;
 }());
@@ -804,21 +651,20 @@ var SxcWebApi = (function () {
 
 
 /***/ }),
-/* 18 */
+/* 14 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AjaxPromise; });
-var HeaderContentBlockId = 'ContentBlockId';
-var HeaderModuleId = 'ModuleId';
-var HeaderTabId = 'TabId';
-var HeaderRvt = 'RequestVerificationToken';
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__constants__ = __webpack_require__(0);
+
 var AjaxPromise = (function () {
-    function AjaxPromise(sxc) {
+    function AjaxPromise(api, sxc) {
+        this.api = api;
         this.sxc = sxc;
     }
     AjaxPromise.prototype.makePromise = function (settings) {
-        var headers = this.GetHeaders();
+        var headers = this.api.headers();
         var promise = $2sxc_jQSuperlight.ajax({
             async: true,
             dataType: settings.dataType || 'json',
@@ -836,27 +682,247 @@ var AjaxPromise = (function () {
             promise.fail(this.sxc.showDetailedHttpError);
         return promise;
     };
-    AjaxPromise.prototype.GetHeaders = function () {
-        var id = this.sxc.id;
-        var cbid = this.sxc.cbid;
-        var env = this.sxc.env;
-        var fHeaders = {};
-        fHeaders[HeaderContentBlockId] = cbid;
-        fHeaders[HeaderModuleId] = id;
-        fHeaders[HeaderTabId] = env.page();
-        fHeaders[HeaderRvt] = env.rvt();
-        return fHeaders;
-    };
     AjaxPromise.prototype.getActionUrl = function (settings) {
-        var base = (settings.url)
-            ? this.sxc.resolveServiceUrl(settings.url)
-            : this.sxc.env.apiRoot('2sxc')
-                + 'app/auto/api/' + settings.controller + '/' + settings.action;
-        if (settings.endpoint)
-            base = base.replace(this.sxc.env.apiRoot('2sxc'), this.sxc.env.apiRoot(settings.endpoint));
+        var env = this.sxc.root.env;
+        var endpoint = settings.endpoint || __WEBPACK_IMPORTED_MODULE_0__constants__["d" /* ToSxcName */];
+        var base = this.sxc.root.http.apiUrl(settings.url || 'app/auto/api/' + settings.controller + '/' + settings.action, endpoint);
         return base + (!settings.params ? '' : ('?' + $2sxc_jQSuperlight.param(settings.params)));
     };
     return AjaxPromise;
+}());
+
+
+
+/***/ }),
+/* 15 */,
+/* 16 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Environment; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__tools_Log__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__envMetaLoader__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__constants__ = __webpack_require__(0);
+
+
+
+var Environment = (function () {
+    function Environment() {
+        this.ready = false;
+        this.source = '';
+        this.log = new __WEBPACK_IMPORTED_MODULE_0__tools_Log__["a" /* Log */]('Environment', 'starting');
+        this.metaLoader = new __WEBPACK_IMPORTED_MODULE_1__envMetaLoader__["a" /* EnvironmentMetaLoader */](this);
+        if (typeof _jsApi !== typeof undefined) {
+            this.log.add('found _jsApi, will use');
+            this.load(_jsApi, 'global variable _jsApi');
+        }
+        else {
+            this.log.add('will start initializing');
+            this.metaLoader.loadMetaFromHeader();
+        }
+    }
+    Environment.prototype.load = function (newJsInfo, source) {
+        this.header = newJsInfo;
+        this.ready = true;
+        this.source = source || 'external/unknown';
+        this.log.add('loaded from ' + this.source);
+    };
+    Environment.prototype.api = function () {
+        this.ensureReadyOrThrow();
+        return this.header.api;
+    };
+    Environment.prototype.apiRoot = function (name) {
+        console.error("don't use the env.apiRoot any more, use the http.apiRoot istead. Will be removed in 2sxc 10.27");
+        return this.api().replace(__WEBPACK_IMPORTED_MODULE_2__constants__["a" /* ApiExtensionPlaceholder */], name);
+    };
+    Environment.prototype.page = function () {
+        this.ensureReadyOrThrow();
+        return this.header.page;
+    };
+    Environment.prototype.rvt = function () {
+        this.ensureReadyOrThrow();
+        return this.header.rvt;
+    };
+    Environment.prototype.ensureReadyOrThrow = function () {
+        if (this.ready)
+            return;
+        this.log.add('ensureReady - force last attempt to load MetaHeader');
+        this.metaLoader.loadMetaFromHeader(true);
+        if (this.ready)
+            return;
+        throw "Can't find apiRoot - something went wrong, pls contact 2sxc.org";
+    };
+    return Environment;
+}());
+
+
+
+/***/ }),
+/* 17 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Log; });
+var Log = (function () {
+    function Log(name, message) {
+        this.text = "";
+        this.entries = [];
+        this.name = name;
+        this.start = new Date().getTime();
+        if (message)
+            this.add(message);
+    }
+    Log.prototype.add = function (message) {
+        this.text += message + '\n';
+        this.entries.push({ time: new Date().getTime() - this.start, message: message });
+    };
+    return Log;
+}());
+
+
+
+/***/ }),
+/* 18 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return EnvironmentMetaLoader; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__envDnnSfLoader__ = __webpack_require__(19);
+
+var maxRetries = 10;
+var EnvironmentMetaLoader = (function () {
+    function EnvironmentMetaLoader(env) {
+        this.env = env;
+        this.retries = 0;
+        this.log = env.log;
+    }
+    EnvironmentMetaLoader.prototype.loadMetaFromHeader = function (forceFallback) {
+        var _this = this;
+        if (forceFallback === void 0) { forceFallback = false; }
+        if (this.env.ready) {
+            this.log.add('loadMeta - already ready');
+            return;
+        }
+        this.log.add('loadMetaFromHeader: start, retry:' + this.retries + ', force fallback: ' + forceFallback);
+        var meta = this.getMeta('_jsApi');
+        if (!meta) {
+            this.retries++;
+            if (forceFallback || this.retries >= maxRetries)
+                new __WEBPACK_IMPORTED_MODULE_0__envDnnSfLoader__["a" /* EnvironmentDnnSfLoader */](this.env).dnnSfFallback();
+            else {
+                setTimeout(function () { _this.loadMetaFromHeader(); }, 1);
+            }
+            return;
+        }
+        this.env.load(JSON.parse(meta), 'meta header');
+    };
+    EnvironmentMetaLoader.prototype.getMeta = function (metaName) {
+        var metas = document.getElementsByTagName('meta');
+        for (var i = 0; i < metas.length; i++)
+            if (metas[i].getAttribute('name') === metaName)
+                return metas[i].getAttribute('content');
+        return '';
+    };
+    return EnvironmentMetaLoader;
+}());
+
+
+
+/***/ }),
+/* 19 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return EnvironmentDnnSfLoader; });
+var helpAutoDetect = 'You must either include jQuery on the page or inject the jsApi parameters to prevent auto-detection.';
+var EnvironmentDnnSfLoader = (function () {
+    function EnvironmentDnnSfLoader(env) {
+        this.env = env;
+    }
+    EnvironmentDnnSfLoader.prototype.dnnSfFallback = function () {
+        var _this = this;
+        this.env.log.add('dnnSfFallback start');
+        if (typeof $ === 'undefined')
+            throw "Can't load pageid, moduleid, etc. and $ is not available. \n " + helpAutoDetect;
+        $(function () { return _this.dnnSfLoadWhenDocumentReady(); });
+    };
+    EnvironmentDnnSfLoader.prototype.dnnSfLoadWhenDocumentReady = function () {
+        this.env.log.add('dnnSfLoadWhenDocumentReady start');
+        var sf = $.ServicesFramework;
+        if (typeof sf === 'undefined')
+            throw "can't load pageid, moduleid etc. and DNN SF is not available. \n " + helpAutoDetect;
+        var dnnSf = sf(0);
+        var sfJsInfo = {
+            page: dnnSf.getTabId(),
+            root: 'unknown',
+            api: dnnSf.getServiceRoot('2sxc'),
+            rvt: dnnSf.getAntiForgeryValue()
+        };
+        this.env.load(sfJsInfo, 'dnn SF');
+    };
+    return EnvironmentDnnSfLoader;
+}());
+
+
+
+/***/ }),
+/* 20 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SxcRootV2; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__environment_Environment__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__SxcHttp__ = __webpack_require__(21);
+
+
+var SxcRootV2 = (function () {
+    function SxcRootV2() {
+        this.env = new __WEBPACK_IMPORTED_MODULE_0__environment_Environment__["a" /* Environment */]();
+        this.http = new __WEBPACK_IMPORTED_MODULE_1__SxcHttp__["a" /* SxcHttp */](this);
+    }
+    return SxcRootV2;
+}());
+
+
+
+/***/ }),
+/* 21 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SxcHttp; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__constants__ = __webpack_require__(0);
+
+var SxcHttp = (function () {
+    function SxcHttp(root) {
+        this.root = root;
+    }
+    SxcHttp.prototype.headers = function (id, cbid) {
+        var fHeaders = {};
+        if (id)
+            fHeaders[__WEBPACK_IMPORTED_MODULE_0__constants__["b" /* HeaderNames */].ModuleId] = id;
+        if (cbid)
+            fHeaders[__WEBPACK_IMPORTED_MODULE_0__constants__["b" /* HeaderNames */].ContentBlockId] = cbid;
+        fHeaders[__WEBPACK_IMPORTED_MODULE_0__constants__["b" /* HeaderNames */].TabId] = this.root.env.page();
+        fHeaders[__WEBPACK_IMPORTED_MODULE_0__constants__["b" /* HeaderNames */].Rvt] = this.root.env.rvt();
+        return fHeaders;
+    };
+    SxcHttp.prototype.apiRoot = function (endpointName) {
+        return this.root.env.api().replace(__WEBPACK_IMPORTED_MODULE_0__constants__["a" /* ApiExtensionPlaceholder */], endpointName);
+    };
+    SxcHttp.prototype.apiUrl = function (url, endpointName) {
+        if (!url || url.indexOf('http:') == 0 || url.indexOf('https:') == 0 || url.indexOf('//') == 0)
+            return url;
+        if (!endpointName && (url.indexOf('/') == 0 || url.indexOf('.') == 0))
+            return url;
+        var baseUrl = this.apiRoot(endpointName || __WEBPACK_IMPORTED_MODULE_0__constants__["d" /* ToSxcName */]);
+        if (baseUrl[baseUrl.length - 1] != '/')
+            baseUrl += '/';
+        if (url[0] == '/')
+            url = url.slice(1);
+        return baseUrl + url;
+    };
+    return SxcHttp;
 }());
 
 

@@ -9,6 +9,7 @@ export declare class Environment {
     metaLoader: EnvironmentMetaLoader;
     constructor();
     load(newJsInfo: JsInfo, source?: string): void;
+    api(): string;
     apiRoot(name: string): string;
     page(): number;
     rvt(): string;

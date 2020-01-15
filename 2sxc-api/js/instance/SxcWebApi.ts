@@ -3,6 +3,8 @@ import { SxcInstance } from './SxcInstance';
 import { AjaxPromise } from '../ajax/AjaxPromise';
 import { Environment } from '../environment/Environment';
 import { AjaxSettings } from '../ajax/AjaxSettings';
+import { HeaderNames } from '../constants';
+import { Dictionary } from '../tools/Dictionary_T';
 
 declare const $2sxc_jQSuperlight: JQuery;
 
@@ -14,12 +16,12 @@ declare const $2sxc_jQSuperlight: JQuery;
 export class SxcWebApi {
     public readonly env: Environment;
     constructor(
-        private readonly controller: SxcInstance,
+        private readonly sxc: SxcInstance,
         // private readonly id: number,
         // private readonly cbid: number,
         // public readonly env: Environment
     ) {
-        this.env = controller.env;
+        this.env = sxc.root.env;
     }
     /**
      * returns an http-get promise
@@ -69,7 +71,16 @@ export class SxcWebApi {
         return this.request(settingsOrUrl, params, data, preventAutoFail, 'PUT');
     }
 
-    private request(settings: string | AjaxSettings, params: any, data: any, preventAutoFail: boolean, method: string): JQueryPromise<any> {
+    /**
+     * Generic http request
+     * @param settingsOrUrl the url to get
+     * @param params jQuery style ajax parameters
+     * @param data jQuery style data for post/put requests
+     * @param preventAutoFail
+     * @param method the http verb name
+     * @returns {Promise} jQuery ajax promise object
+     */
+    request(settings: string | AjaxSettings, params: any, data: any, preventAutoFail: boolean, method: string): JQueryPromise<any> {
 
         // url parameter: auto convert a single value (instead of object of values) to an id=... parameter
         // tslint:disable-next-line:curly
@@ -101,7 +112,7 @@ export class SxcWebApi {
             preventAutoFail: false,
         };
         // new 10.25
-        var http = new AjaxPromise(this.controller);
+        var http = new AjaxPromise(this, this.sxc);
 
         settings = $2sxc_jQSuperlight.extend({}, defaults, settings);
 
@@ -110,4 +121,21 @@ export class SxcWebApi {
         return promise;
     }
 
+    /**
+     * All the headers which are needed in an ajax call for this to work reliably.
+     * Use this if you need to get a list of headers in another system
+     */
+    headers(): Dictionary<string> {
+        return this.sxc.root.http.headers(this.sxc.id, this.sxc.cbid);
+        // const id = this.sxc.id;
+        // const cbid = this.sxc.cbid; // must read here, as the "this" will change inside the method
+        // const env = this.sxc.env;
+    
+        // const fHeaders = {};
+        // fHeaders[HeaderNames.ContentBlockId] = this.sxc.cbid;
+        // fHeaders[HeaderNames.ModuleId] = this.sxc.id;
+        // fHeaders[HeaderNames.TabId] = this.sxc.env.page();
+        // fHeaders[HeaderNames.Rvt] = this.sxc.env.rvt();
+        // return fHeaders;
+      }
 }

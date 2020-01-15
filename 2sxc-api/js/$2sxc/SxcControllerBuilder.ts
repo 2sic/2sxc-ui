@@ -1,18 +1,17 @@
 ﻿import { TotalPopup } from '../tools/TotalPopup';
 import { UrlParamManager } from '../tools/UrlParamManager';
 import { Stats } from '../Stats';
-import { Environment } from '../environment/Environment';
 import { SxcInstanceWithInternals } from '../instance/SxcInstanceWithInternals';
 import { SxcControllerInternals } from './SxcControllerInternals';
 import { SxcController } from './SxcController';
 import { SxcVersion } from '../constants';
-
-export interface Window { $2sxc: SxcController & SxcControllerInternals; }
+import { Window } from "../tools/Window";
+import { SxcRootV2 } from '../$2/SxcRootV2';
 
 declare const $2sxc_jQSuperlight: any;
 declare const window: Window;
 
-const environment = new Environment();
+// const environment = new Environment();
 
 /**
  * returns a 2sxc-instance of the id or html-tag passed in
@@ -42,13 +41,13 @@ function SxcController(id: number | HTMLElement, cbid?: number): SxcInstanceWith
     if (!$2sxc._data[cacheKey]) $2sxc._data[cacheKey] = {};
 
     return ($2sxc._controllers[cacheKey]
-        = new SxcInstanceWithInternals(id, cbid, cacheKey, $2sxc, environment));
+        = new SxcInstanceWithInternals(id, cbid, cacheKey, $2sxc));
 }
 
 /**
  * Build a SXC Controller for the page. Should only ever be executed once
  */
-export function buildSxcController(): SxcController & SxcControllerInternals {
+export function buildSxcController(newRoot: SxcRootV2): SxcController & SxcControllerInternals {
     const urlManager = new UrlParamManager();
     const debug = {
         load: (urlManager.get('debug') === 'true'),
@@ -82,9 +81,12 @@ export function buildSxcController(): SxcController & SxcControllerInternals {
                 return r;
             },
         },
-        env: environment,
+        // env: newRoot.env,
         jq: function() { return  $2sxc_jQSuperlight; },
+        _root: newRoot,
     };
+    // temporary workaround, because .env is already used in some iframes we will need to update later
+    (addOn as any).env = newRoot.env;
     for (const property in addOn)
         if (addOn.hasOwnProperty(property))
             SxcController[property] = addOn[property] as any;

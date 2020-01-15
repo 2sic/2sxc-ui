@@ -1,8 +1,5 @@
 import { SxcInstance } from '../instance/SxcInstance';
 import { SxcInstanceWithInternals } from '../instance/SxcInstanceWithInternals';
-import { Environment } from '../environment/Environment';
-import { TotalPopup } from '../tools/TotalPopup';
-import { UrlParamManager } from '../tools/UrlParamManager';
 
 /**
  * This is the interface for the main $2sxc object on the window
@@ -27,7 +24,4 @@ export interface SxcController {
         /** a short text description, for people who have no idea what this is */
         description: string,
     };
-
-    /** Environment information, important for WebApi calls etc.  */
-    env: Environment;
 }

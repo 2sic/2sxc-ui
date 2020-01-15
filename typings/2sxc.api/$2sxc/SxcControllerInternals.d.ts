@@ -3,6 +3,7 @@ import { SxcInstanceWithInternals } from '../instance/SxcInstanceWithInternals';
 import { TotalPopup } from '../tools/TotalPopup';
 import { UrlParamManager } from '../tools/UrlParamManager';
 import { Stats } from '../Stats';
+import { SxcRootV2 } from '../$2/SxcRootV2';
 export interface SxcControllerInternals {
     _controllers: SxcInstanceWithInternals[];
     beta: any;
@@ -15,4 +16,5 @@ export interface SxcControllerInternals {
     jq(): JQuery;
     totalPopup: TotalPopup;
     urlParams: UrlParamManager;
+    _root: SxcRootV2;
 }

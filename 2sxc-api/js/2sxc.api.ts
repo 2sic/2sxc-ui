@@ -5,12 +5,16 @@
 
 // Keep our super-slimmed down jQuery for AJAX
 import './jquery-ajax/ajax203.js'
-
+import { Window } from "./tools/Window";
 // the SxcController
-import { buildSxcController, Window } from "./$2sxc/SxcControllerBuilder";
+import { buildSxcController } from "./$2sxc/SxcControllerBuilder";
+import { SxcRootV2 } from './$2/SxcRootV2';
 
 declare const window: Window;
 
+if(!window.$2)
+    window.$2 = new SxcRootV2();
+
 if (!window.$2sxc) // prevent double execution
-  window.$2sxc = buildSxcController();
+  window.$2sxc = buildSxcController(window.$2);
 

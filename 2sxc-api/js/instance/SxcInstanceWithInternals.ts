@@ -1,5 +1,4 @@
 import { SxcDataWithInternals } from './ToSic.Sxc.Data';
-import { Environment } from '../environment/Environment';
 import { SxcInstanceWithEditing } from './SxcInstanceWithEditing';
 import { SxcControllerInternals } from '../$2sxc/SxcControllerInternals';
 import { SxcController } from '../$2sxc/SxcController';
@@ -15,9 +14,8 @@ export class SxcInstanceWithInternals extends SxcInstanceWithEditing {
         public cbid: number,
         private cacheKey: string,
         protected $2sxc: SxcController & SxcControllerInternals,
-        public readonly env: Environment,
     ) {
-        super(id, cbid, $2sxc, env);
+        super(id, cbid, $2sxc);
         this.data = new SxcDataWithInternals(this);
     }
 

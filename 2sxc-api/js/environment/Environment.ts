@@ -1,8 +1,8 @@
 import { JsInfo } from './JsInfo';
 import { Log } from '../tools/Log';
 import { EnvironmentMetaLoader } from './envMetaLoader';
+import { ApiExtensionPlaceholder } from '../constants';
 
-const extensionPlaceholder = '{extension}';
 declare const _jsApi: JsInfo;
 
 /**
@@ -44,10 +44,15 @@ export class Environment {
     this.log.add('loaded from ' + this.source);
   }
 
-
-  public apiRoot(name: string): string {
+  public api(): string {
     this.ensureReadyOrThrow();
-    return this.header.api.replace(extensionPlaceholder, name);
+    return this.header.api;
+  }
+
+  // TODO: DEPRECATE - only use the $2.http.apiRoot
+  public apiRoot(name: string): string {
+    console.error("don't use the env.apiRoot any more, use the http.apiRoot istead. Will be removed in 2sxc 10.27");
+    return this.api().replace(ApiExtensionPlaceholder, name);
   }
   
 
