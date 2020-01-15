@@ -25,7 +25,7 @@ export class SxcDataWithInternals {
 
     // source path defaulting to current page + optional params
     sourceUrl(params?: string): string {
-        let url = this.controller.resolveServiceUrl('app-sys/appcontent/GetContentBlockData');
+        let url = this.controller.root.http.apiUrl /*.resolveServiceUrl */('app-sys/appcontent/GetContentBlockData');
         if (typeof params === 'string') // text like 'id=7'
             url += '&' + params;
         return url;
