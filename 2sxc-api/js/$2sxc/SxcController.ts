@@ -1,5 +1,9 @@
 import { SxcInstance } from '../instance/SxcInstance';
 import { SxcInstanceWithInternals } from '../instance/SxcInstanceWithInternals';
+import { Environment } from '../environment/Environment';
+import { SxcHttp } from '../http/SxcHttp';
+import { Log } from '../tools/Log';
+import { SxcVersion } from '../constants';
 
 /**
  * This is the interface for the main $2sxc object on the window
@@ -23,5 +27,36 @@ export interface SxcController {
 
         /** a short text description, for people who have no idea what this is */
         description: string,
+    };
+
+    /**
+     * Environment information
+     * @type {Environment}
+     */
+    env: Environment;
+
+    /**
+     * Http helper for API calls and such
+     */
+    http: SxcHttp;
+
+    /**
+     * Internal logger to better see what's happening
+     */
+    log: Log;
+
+}
+
+
+export function getRootParts() : Partial<SxcController> {
+    var env = new Environment();
+    return {
+        sysinfo: {
+            version: SxcVersion,
+            description: 'The 2sxc Controller - read more about it on docs.2sxc.org',
+        },
+        env: env,
+        http: new SxcHttp(env),
+        log: new Log('$2sxc', 'building'),
     };
 }

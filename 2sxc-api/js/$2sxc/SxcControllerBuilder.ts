@@ -3,10 +3,8 @@ import { UrlParamManager } from '../tools/UrlParamManager';
 import { Stats } from '../Stats';
 import { SxcInstanceWithInternals } from '../instance/SxcInstanceWithInternals';
 import { SxcControllerInternals } from './SxcControllerInternals';
-import { SxcController } from './SxcController';
-import { SxcVersion } from '../constants';
+import { SxcController, getRootParts } from './SxcController';
 import { Window } from "../tools/Window";
-import { SxcRootV2 } from '../$2/SxcRootV2';
 
 declare const $2sxc_jQSuperlight: any;
 declare const window: Window;
@@ -47,7 +45,7 @@ function SxcController(id: number | HTMLElement, cbid?: number): SxcInstanceWith
 /**
  * Build a SXC Controller for the page. Should only ever be executed once
  */
-export function buildSxcController(newRoot: SxcRootV2): SxcController & SxcControllerInternals {
+export function buildSxcController(): SxcController & SxcControllerInternals {
     const urlManager = new UrlParamManager();
     const debug = {
         load: (urlManager.get('debug') === 'true'),
@@ -55,12 +53,14 @@ export function buildSxcController(newRoot: SxcRootV2): SxcController & SxcContr
     };
     const stats = new Stats();
 
+    const rootApiV2 = getRootParts();
+
     const addOn: Partial<SxcController & SxcControllerInternals> = {
         _controllers: {} as any,
-        sysinfo: {
-            version: SxcVersion,
-            description: 'The 2sxc Controller object - read more about it on docs.2sxc.org',
-        },
+        // sysinfo: {
+        //     version: SxcVersion,
+        //     description: 'The 2sxc Controller - read more about it on docs.2sxc.org',
+        // },
         beta: {},
         _data: {},
         // this creates a full-screen iframe-popup and provides a close-command to finish the dialog as needed
@@ -81,17 +81,19 @@ export function buildSxcController(newRoot: SxcRootV2): SxcController & SxcContr
                 return r;
             },
         },
-        // env: newRoot.env,
         jq: function() { return  $2sxc_jQSuperlight; },
-        _root: newRoot,
     };
+
+    addOn.jq().extend(SxcController, addOn, rootApiV2);
+
     // temporary workaround, because .env is already used in some iframes we will need to update later
-    (addOn as any).env = newRoot.env;
-    for (const property in addOn)
-        if (addOn.hasOwnProperty(property))
-            SxcController[property] = addOn[property] as any;
+    // (addOn as any).env = newRoot.env;
+    // for (const property in addOn)
+    //     if (addOn.hasOwnProperty(property))
+    //         SxcController[property] = addOn[property] as any;
     return SxcController as any as SxcController & SxcControllerInternals;
 }
+
 
 function autoFind(domElement: HTMLElement): [number, number] {
     const containerTag = $2sxc_jQSuperlight(domElement).closest('.sc-content-block')[0];

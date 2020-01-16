@@ -92,14 +92,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__jquery_ajax_ajax203_js__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__jquery_ajax_ajax203_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__jquery_ajax_ajax203_js__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__2sxc_SxcControllerBuilder__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__2_SxcRootV2__ = __webpack_require__(15);
 
 
-
-if (!window.$2)
-    window.$2 = new __WEBPACK_IMPORTED_MODULE_2__2_SxcRootV2__["a" /* SxcRootV2 */]();
 if (!window.$2sxc)
-    window.$2sxc = Object(__WEBPACK_IMPORTED_MODULE_1__2sxc_SxcControllerBuilder__["a" /* buildSxcController */])(window.$2);
+    window.$2sxc = Object(__WEBPACK_IMPORTED_MODULE_1__2sxc_SxcControllerBuilder__["a" /* buildSxcController */])();
 
 
 /***/ }),
@@ -179,7 +175,7 @@ module.exports = __webpack_amd_options__;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__tools_UrlParamManager__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Stats__ = __webpack_require__(8);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__instance_SxcInstanceWithInternals__ = __webpack_require__(9);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__constants__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__SxcController__ = __webpack_require__(21);
 
 
 
@@ -204,19 +200,16 @@ function SxcController(id, cbid) {
     return ($2sxc._controllers[cacheKey]
         = new __WEBPACK_IMPORTED_MODULE_3__instance_SxcInstanceWithInternals__["a" /* SxcInstanceWithInternals */](id, cbid, cacheKey, $2sxc));
 }
-function buildSxcController(newRoot) {
+function buildSxcController() {
     var urlManager = new __WEBPACK_IMPORTED_MODULE_1__tools_UrlParamManager__["a" /* UrlParamManager */]();
     var debug = {
         load: (urlManager.get('debug') === 'true'),
         uncache: urlManager.get('sxcver'),
     };
     var stats = new __WEBPACK_IMPORTED_MODULE_2__Stats__["a" /* Stats */]();
+    var rootApiV2 = Object(__WEBPACK_IMPORTED_MODULE_4__SxcController__["a" /* getRootParts */])();
     var addOn = {
         _controllers: {},
-        sysinfo: {
-            version: __WEBPACK_IMPORTED_MODULE_4__constants__["c" /* SxcVersion */],
-            description: 'The 2sxc Controller object - read more about it on docs.2sxc.org',
-        },
         beta: {},
         _data: {},
         totalPopup: new __WEBPACK_IMPORTED_MODULE_0__tools_TotalPopup__["a" /* TotalPopup */](),
@@ -232,12 +225,8 @@ function buildSxcController(newRoot) {
             },
         },
         jq: function () { return $2sxc_jQSuperlight; },
-        _root: newRoot,
     };
-    addOn.env = newRoot.env;
-    for (var property in addOn)
-        if (addOn.hasOwnProperty(property))
-            SxcController[property] = addOn[property];
+    addOn.jq().extend(SxcController, addOn, rootApiV2);
     return SxcController;
 }
 function autoFind(domElement) {
@@ -497,7 +486,7 @@ var __extends = (this && this.__extends) || (function () {
 var SxcInstanceWithEditing = (function (_super) {
     __extends(SxcInstanceWithEditing, _super);
     function SxcInstanceWithEditing(id, cbid, $2sxc) {
-        var _this = _super.call(this, id, cbid, $2sxc._root) || this;
+        var _this = _super.call(this, id, cbid, $2sxc) || this;
         _this.id = id;
         _this.cbid = cbid;
         _this.$2sxc = $2sxc;
@@ -694,26 +683,7 @@ var AjaxPromise = (function () {
 
 
 /***/ }),
-/* 15 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SxcRootV2; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__environment_Environment__ = __webpack_require__(16);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__SxcHttp__ = __webpack_require__(20);
-
-
-var SxcRootV2 = (function () {
-    function SxcRootV2() {
-        this.env = new __WEBPACK_IMPORTED_MODULE_0__environment_Environment__["a" /* Environment */]();
-        this.http = new __WEBPACK_IMPORTED_MODULE_1__SxcHttp__["a" /* SxcHttp */](this);
-    }
-    return SxcRootV2;
-}());
-
-
-
-/***/ }),
+/* 15 */,
 /* 16 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -893,8 +863,8 @@ var EnvironmentDnnSfLoader = (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__constants__ = __webpack_require__(0);
 
 var SxcHttp = (function () {
-    function SxcHttp(root) {
-        this.root = root;
+    function SxcHttp(env) {
+        this.env = env;
     }
     SxcHttp.prototype.headers = function (id, cbid) {
         var fHeaders = {};
@@ -902,12 +872,12 @@ var SxcHttp = (function () {
             fHeaders[__WEBPACK_IMPORTED_MODULE_0__constants__["b" /* HeaderNames */].ModuleId] = id;
         if (cbid)
             fHeaders[__WEBPACK_IMPORTED_MODULE_0__constants__["b" /* HeaderNames */].ContentBlockId] = cbid;
-        fHeaders[__WEBPACK_IMPORTED_MODULE_0__constants__["b" /* HeaderNames */].TabId] = this.root.env.page();
-        fHeaders[__WEBPACK_IMPORTED_MODULE_0__constants__["b" /* HeaderNames */].Rvt] = this.root.env.rvt();
+        fHeaders[__WEBPACK_IMPORTED_MODULE_0__constants__["b" /* HeaderNames */].TabId] = this.env.page();
+        fHeaders[__WEBPACK_IMPORTED_MODULE_0__constants__["b" /* HeaderNames */].Rvt] = this.env.rvt();
         return fHeaders;
     };
     SxcHttp.prototype.apiRoot = function (endpointName) {
-        return this.root.env.api().replace(__WEBPACK_IMPORTED_MODULE_0__constants__["a" /* ApiExtensionPlaceholder */], endpointName);
+        return this.env.api().replace(__WEBPACK_IMPORTED_MODULE_0__constants__["a" /* ApiExtensionPlaceholder */], endpointName);
     };
     SxcHttp.prototype.apiUrl = function (url, endpointName) {
         if (!url || url.indexOf('http:') == 0 || url.indexOf('https:') == 0 || url.indexOf('//') == 0)
@@ -924,6 +894,34 @@ var SxcHttp = (function () {
     return SxcHttp;
 }());
 
+
+
+/***/ }),
+/* 21 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["a"] = getRootParts;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__environment_Environment__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__http_SxcHttp__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__tools_Log__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__constants__ = __webpack_require__(0);
+
+
+
+
+function getRootParts() {
+    var env = new __WEBPACK_IMPORTED_MODULE_0__environment_Environment__["a" /* Environment */]();
+    return {
+        sysinfo: {
+            version: __WEBPACK_IMPORTED_MODULE_3__constants__["c" /* SxcVersion */],
+            description: 'The 2sxc Controller - read more about it on docs.2sxc.org',
+        },
+        env: env,
+        http: new __WEBPACK_IMPORTED_MODULE_1__http_SxcHttp__["a" /* SxcHttp */](env),
+        log: new __WEBPACK_IMPORTED_MODULE_2__tools_Log__["a" /* Log */]('$2sxc', 'building'),
+    };
+}
 
 
 /***/ })

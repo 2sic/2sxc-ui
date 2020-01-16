@@ -1,9 +1,9 @@
 import { HeaderNames, ToSxcName, ApiExtensionPlaceholder } from '../constants';
 import { Dictionary } from '../tools/Dictionary_T';
-import { SxcRootV2 } from './SxcRootV2';
+import { Environment } from '../environment/Environment';
 
 export class SxcHttp {
-    constructor(private root: SxcRootV2) {
+    constructor(private env: Environment) {
         
     }
 
@@ -19,8 +19,8 @@ export class SxcHttp {
         const fHeaders = {};
         if(id) fHeaders[HeaderNames.ModuleId] = id;
         if(cbid) fHeaders[HeaderNames.ContentBlockId] = cbid;
-        fHeaders[HeaderNames.TabId] = this.root.env.page();
-        fHeaders[HeaderNames.Rvt] = this.root.env.rvt();
+        fHeaders[HeaderNames.TabId] = this.env.page();
+        fHeaders[HeaderNames.Rvt] = this.env.rvt();
         return fHeaders;
     }
 
@@ -31,7 +31,7 @@ export class SxcHttp {
      * @memberof SxcHttp
      */
     apiRoot(endpointName: string): string {
-        return this.root.env.api().replace(ApiExtensionPlaceholder, endpointName);
+        return this.env.api().replace(ApiExtensionPlaceholder, endpointName);
     }
 
     /**

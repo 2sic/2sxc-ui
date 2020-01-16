@@ -20,7 +20,7 @@ export class SxcInstanceWithEditing extends SxcInstance {
 // ReSharper disable once InconsistentNaming
         protected $2sxc: SxcController & SxcControllerInternals,
     ) {
-        super(id, cbid, $2sxc._root);
+        super(id, cbid, $2sxc);
 
         // add manage property, but not within initializer, because inside the manage-initializer it may reference 2sxc again
         try { // sometimes the manage can't be built, like before installing

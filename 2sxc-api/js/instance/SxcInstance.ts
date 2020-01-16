@@ -1,7 +1,7 @@
 ﻿
 import { SxcWebApi } from './SxcWebApi';
 import { ToSxcName } from '../constants';
-import { SxcRootV2 } from '../$2/SxcRootV2';
+import { SxcController } from '../$2sxc/SxcController';
 
 const serviceScopes = ['app', 'app-sys', 'app-api', 'app-query', 'app-content', 'eav', 'view', 'dnn'];
 
@@ -27,7 +27,7 @@ export class SxcInstance {
         public cbid: number,
 
         /** The environment information, important for http-calls */
-        public readonly root: SxcRootV2,
+        public readonly root: SxcController,
     ) {
         this.webApi = new SxcWebApi(this);
     }
