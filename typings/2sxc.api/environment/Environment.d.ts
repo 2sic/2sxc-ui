@@ -1,11 +1,10 @@
 import { JsInfo } from './JsInfo';
-import { Log } from '../tools/Log';
 import { EnvironmentMetaLoader } from './envMetaLoader';
-export declare class Environment {
+import { HasLog } from '../logging/HasLog';
+export declare class Environment extends HasLog {
     private header;
     ready: boolean;
     source: string;
-    log: Log;
     metaLoader: EnvironmentMetaLoader;
     constructor();
     load(newJsInfo: JsInfo, source?: string): void;

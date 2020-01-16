@@ -21,4 +21,5 @@ It is separate to keep concerns separate and make contributions simpler (because
 
 This uses TypeScript and is built using Webpack. It also contains some older bits like 2sxc4ng (for the old AngularJs) which must be included with 2sxc because older sites may still reference the JS files.
 
-Build with `npm run webpack-js`
+1. Build with `npm run 2sxc-api-dev` for dev-build with source-maps on dev-server.
+1. Build with `npm run 2sxc-api-prod` for production build with source-maps pointing to sources.2sxc.org.

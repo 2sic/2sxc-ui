@@ -12,7 +12,7 @@
         "object-literal-sort-keys":false,
         "interface-name": false,
         "no-consecutive-blank-lines": false,
-        "quotemark": "single"
+        "quotemark": [true, "single"]
     },
     "rulesDirectory": []
 }

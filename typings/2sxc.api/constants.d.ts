@@ -7,3 +7,4 @@ export declare const HeaderNames: {
     Rvt: string;
 };
 export declare const ApiExtensionPlaceholder = "{extension}";
+export declare const MetaHeaderJsApi = "_jsApi";

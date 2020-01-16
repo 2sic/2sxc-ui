@@ -1,6 +1,6 @@
 import { SxcInstance } from './SxcInstance';
-import { SxcControllerInternals } from '../$2sxc/SxcControllerInternals';
-import { SxcController } from '../$2sxc/SxcController';
+import { SxcRootInternals } from '../SxcRoot/SxcRootInternals';
+import { SxcRoot } from '../SxcRoot/SxcRoot';
 
 
 /**
@@ -18,7 +18,7 @@ export class SxcInstanceWithEditing extends SxcInstance {
         public id: number,
         public cbid: number,
 // ReSharper disable once InconsistentNaming
-        protected $2sxc: SxcController & SxcControllerInternals,
+        protected $2sxc: SxcRoot & SxcRootInternals,
     ) {
         super(id, cbid, $2sxc);
 
@@ -27,7 +27,6 @@ export class SxcInstanceWithEditing extends SxcInstance {
             if ($2sxc._manage) $2sxc._manage.initInstance(this);
         } catch (e) {
             console.error('error in 2sxc - will only log but not throw', e);
-            // throw e;
         }
 
         // this only works when manage exists (not installing) and translator exists too
@@ -42,7 +41,7 @@ export class SxcInstanceWithEditing extends SxcInstance {
      * checks if we're currently in edit mode
      * @returns {boolean}
      */
-    isEditMode() {
+    isEditMode(): boolean {
         return this.manage && this.manage._isEditMode();
     }
 

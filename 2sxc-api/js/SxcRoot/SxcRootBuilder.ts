@@ -2,14 +2,12 @@
 import { UrlParamManager } from '../tools/UrlParamManager';
 import { Stats } from '../Stats';
 import { SxcInstanceWithInternals } from '../instance/SxcInstanceWithInternals';
-import { SxcControllerInternals } from './SxcControllerInternals';
-import { SxcController, getRootParts } from './SxcController';
+import { SxcRootInternals } from './SxcRootInternals';
+import { SxcRoot, getRootParts } from './SxcRoot';
 import { Window } from "../tools/Window";
 
 declare const $2sxc_jQSuperlight: any;
 declare const window: Window;
-
-// const environment = new Environment();
 
 /**
  * returns a 2sxc-instance of the id or html-tag passed in
@@ -17,9 +15,10 @@ declare const window: Window;
  * @param cbid
  * @returns {}
  */
-function SxcController(id: number | HTMLElement, cbid?: number): SxcInstanceWithInternals {
-    const $2sxc = window.$2sxc as SxcController & SxcControllerInternals;
-    if (!$2sxc._controllers)
+function FindSxcInstance(id: number | HTMLElement, cbid?: number): SxcInstanceWithInternals {
+    const $2sxc = window.$2sxc as SxcRoot & SxcRootInternals;
+    $2sxc.log.add('FindSxcInstance(' + id + ',' + cbid);
+    if (!$2sxc._controllers) 
         throw new Error('$2sxc not initialized yet');
 
     // if it's a dom-element, use auto-find
@@ -29,13 +28,17 @@ function SxcController(id: number | HTMLElement, cbid?: number): SxcInstanceWith
         cbid = idTuple[1];
     }
 
-    if (!cbid) cbid = id;           // if content-block is unknown, use id of module
-    const cacheKey = id + ':' + cbid; // neutralize the id from old "34" format to the new "35:353" format
+    // if content-block is unknown, use id of module, and create an ID in the cache
+    if (!cbid) cbid = id;
+    const cacheKey = id + ':' + cbid;
 
     // either get the cached controller from previous calls, or create a new one
-    if ($2sxc._controllers[cacheKey]) return $2sxc._controllers[cacheKey];
+    if ($2sxc._controllers[cacheKey]) {
+        $2sxc.log.add('Cache found for: ' + cacheKey);
+        return $2sxc._controllers[cacheKey];
+    }
 
-    // also init the data-cache in case it's ever needed
+    // not found, so also init the data-cache in case it's ever needed
     if (!$2sxc._data[cacheKey]) $2sxc._data[cacheKey] = {};
 
     return ($2sxc._controllers[cacheKey]
@@ -45,7 +48,9 @@ function SxcController(id: number | HTMLElement, cbid?: number): SxcInstanceWith
 /**
  * Build a SXC Controller for the page. Should only ever be executed once
  */
-export function buildSxcController(): SxcController & SxcControllerInternals {
+export function buildSxcRoot(): SxcRoot & SxcRootInternals {
+    const rootApiV2 = getRootParts();
+
     const urlManager = new UrlParamManager();
     const debug = {
         load: (urlManager.get('debug') === 'true'),
@@ -53,14 +58,9 @@ export function buildSxcController(): SxcController & SxcControllerInternals {
     };
     const stats = new Stats();
 
-    const rootApiV2 = getRootParts();
 
-    const addOn: Partial<SxcController & SxcControllerInternals> = {
+    const addOn: Partial<SxcRoot & SxcRootInternals> = {
         _controllers: {} as any,
-        // sysinfo: {
-        //     version: SxcVersion,
-        //     description: 'The 2sxc Controller - read more about it on docs.2sxc.org',
-        // },
         beta: {},
         _data: {},
         // this creates a full-screen iframe-popup and provides a close-command to finish the dialog as needed
@@ -84,14 +84,10 @@ export function buildSxcController(): SxcController & SxcControllerInternals {
         jq: function() { return  $2sxc_jQSuperlight; },
     };
 
-    addOn.jq().extend(SxcController, addOn, rootApiV2);
+    const merged = addOn.jq().extend(FindSxcInstance, addOn, rootApiV2) as SxcRoot & SxcRootInternals;
+    merged.log.add('sxc controller built');
 
-    // temporary workaround, because .env is already used in some iframes we will need to update later
-    // (addOn as any).env = newRoot.env;
-    // for (const property in addOn)
-    //     if (addOn.hasOwnProperty(property))
-    //         SxcController[property] = addOn[property] as any;
-    return SxcController as any as SxcController & SxcControllerInternals;
+    return merged; //FindSxcInstance as SxcRoot & SxcRootInternals;
 }
 
 

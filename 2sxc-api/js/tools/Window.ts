@@ -1,6 +1,6 @@
-import { SxcControllerInternals } from '../$2sxc/SxcControllerInternals';
-import { SxcController } from '../$2sxc/SxcController';
+import { SxcRootInternals } from '../SxcRoot/SxcRootInternals';
+import { SxcRoot } from '../SxcRoot/SxcRoot';
 
 export interface Window { 
-    $2sxc: SxcController & SxcControllerInternals; 
+    $2sxc: SxcRoot & SxcRootInternals; 
 }

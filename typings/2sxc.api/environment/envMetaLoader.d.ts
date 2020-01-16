@@ -1,5 +1,5 @@
 import { Environment } from './Environment';
-import { Log } from '../tools/Log';
+import { Log } from '../logging/Log';
 export declare class EnvironmentMetaLoader {
     private env;
     retries: number;

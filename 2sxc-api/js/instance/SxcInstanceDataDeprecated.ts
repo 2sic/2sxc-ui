@@ -8,7 +8,7 @@ declare const $2sxc_jQSuperlight: any;
  * It would hide the internals of WebApis and just provide data. 
  * This model isn't promoted or much in use any more, but included for compatibility
  */
-export class SxcDataWithInternals {
+export class SxcInstanceDataDeprecated {
     source: any = undefined;
 
     // in-streams
@@ -25,7 +25,7 @@ export class SxcDataWithInternals {
 
     // source path defaulting to current page + optional params
     sourceUrl(params?: string): string {
-        let url = this.controller.root.http.apiUrl /*.resolveServiceUrl */('app-sys/appcontent/GetContentBlockData');
+        let url = this.controller.root.http.apiUrl('app-sys/appcontent/GetContentBlockData');
         if (typeof params === 'string') // text like 'id=7'
             url += '&' + params;
         return url;
@@ -36,9 +36,6 @@ export class SxcDataWithInternals {
     load(source?: any) {
         // if source is already the data, set it
         if (source && source.List) {
-            // 2017-09-05 2dm: discoverd a call to an inexisting function
-            // since this is an old API which is being deprecated, please don't fix unless we get active feedback
-            // controller.data.setData(source);
             return this.controller.data;
         } else {
             if (!source)
@@ -57,8 +54,6 @@ export class SxcDataWithInternals {
                 }
 
                 if (this.controller.data.in.Default)
-                    // 2017-09-05 2dm: previously wrote it to controller.List, but this is almost certainly a mistake
-                    // since it's an old API which is being deprecated, we won't fix it
                     this.List = this.in.Default.List;
 
                 if (source.origSuccess)
@@ -75,7 +70,7 @@ export class SxcDataWithInternals {
         }
     }
 
-    reload(): SxcDataWithInternals {
+    reload(): SxcInstanceDataDeprecated {
         this.controller.webApi.get(this.source)
             .then(this.source.success, this.source.error);
         return this;
@@ -92,7 +87,7 @@ export class SxcDataWithInternals {
             : this;
     }
 
-    one(events: Event, callback: (x: any, y: any) => void): SxcDataWithInternals {
+    one(events: Event, callback: (x: any, y: any) => void): SxcInstanceDataDeprecated {
         if (!this.controller.isLoaded)
             return $2sxc_jQSuperlight(this).one('2scLoad', callback)[0];
         callback({}, this);

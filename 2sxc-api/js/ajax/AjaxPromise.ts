@@ -9,6 +9,12 @@ export class AjaxPromise {
   constructor(private api: SxcWebApi, private sxc: SxcInstance) {
   }
 
+  /**
+   * Make a jQuery style promise request
+   * @param {AjaxSettings} settings
+   * @returns {JQueryPromise<any>}
+   * @memberof AjaxPromise
+   */
   public makePromise(settings: AjaxSettings): JQueryPromise<any> {
     var headers = this.api.headers();
     const promise = $2sxc_jQSuperlight.ajax({
@@ -37,10 +43,9 @@ export class AjaxPromise {
    * @param settings the settings as they would be in jQuery
    */
   private getActionUrl(settings: AjaxSettings): string {
-    let env = this.sxc.root.env;
+    var url = settings.url || 'app/auto/api/' + settings.controller + '/' + settings.action;
     var endpoint = settings.endpoint || ToSxcName;
-    var base = this.sxc.root.http.apiUrl(
-        settings.url || 'app/auto/api/' + settings.controller + '/' + settings.action, endpoint);
+    var base = this.sxc.root.http.apiUrl(url, endpoint);
     // let base = (settings.url)
     //   ? this.sxc.root.http.apiUrl(settings.url) // this.sxc.resolveServiceUrl(settings.url)  // use url -> TODO: change this to use the new root.http.apiUrl
     //   : env.apiRoot('2sxc')               // use controller/action

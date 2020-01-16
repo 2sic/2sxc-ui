@@ -1,14 +1,15 @@
 ﻿
 import { SxcWebApi } from './SxcWebApi';
 import { ToSxcName } from '../constants';
-import { SxcController } from '../$2sxc/SxcController';
+import { SxcRoot } from '../SxcRoot/SxcRoot';
+import { HasLog } from '../logging/HasLog';
 
 const serviceScopes = ['app', 'app-sys', 'app-api', 'app-query', 'app-content', 'eav', 'view', 'dnn'];
 
 /**
  * The typical sxc-instance object for a specific DNN module or content-block
  */
-export class SxcInstance {
+export class SxcInstance extends HasLog {
     /**
      * helpers for ajax calls
      */
@@ -27,8 +28,9 @@ export class SxcInstance {
         public cbid: number,
 
         /** The environment information, important for http-calls */
-        public readonly root: SxcController,
+        public readonly root: SxcRoot,
     ) {
+        super('SxcInstance', 'Generating for ' + id + ':' + cbid);
         this.webApi = new SxcWebApi(this);
     }
 
@@ -56,6 +58,7 @@ export class SxcInstance {
         if (window.console)
             console.log(result);
 
+        // check if the error was just because a language file couldn't be loaded - then don't show a message
         if (result.status === 404 &&
             result.config &&
             result.config.url &&
@@ -64,7 +67,6 @@ export class SxcInstance {
                 console.log('just fyi: failed to load language resource; will have to use default');
             return result;
         }
-
 
         // if it's an unspecified 0-error, it's probably not an error but a cancelled request,
         // (happens when closing popups containing angularJS)

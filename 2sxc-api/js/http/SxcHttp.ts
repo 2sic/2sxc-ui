@@ -12,10 +12,6 @@ export class SxcHttp {
      * Use this if you need to get a list of headers in another system
      */
     headers(id?: number, cbid?: number): Dictionary<string> {
-        // const id = this.sxc.id;
-        // const cbid = this.sxc.cbid; // must read here, as the "this" will change inside the method
-        // const env = this.sxc.env;
-    
         const fHeaders = {};
         if(id) fHeaders[HeaderNames.ModuleId] = id;
         if(cbid) fHeaders[HeaderNames.ContentBlockId] = cbid;

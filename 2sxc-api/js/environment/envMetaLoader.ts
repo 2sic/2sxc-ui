@@ -1,7 +1,8 @@
 import { Environment } from './Environment';
-import { Log } from '../tools/Log';
+import { Log } from '../logging/Log';
 import { JsInfo } from './JsInfo';
 import { EnvironmentDnnSfLoader } from './envDnnSfLoader';
+import { MetaHeaderJsApi } from '../constants';
 
 const maxRetries = 10;
 
@@ -21,12 +22,12 @@ export class EnvironmentMetaLoader {
   public loadMetaFromHeader(forceFallback = false): void {
     // avoid duplicate execution
     if(this.env.ready) {
-        this.log.add('loadMeta - already ready');
+        this.log.add('loadMeta - ready - no further loading');
         return;
     }
 
     this.log.add('loadMetaFromHeader: start, retry:' + this.retries + ', force fallback: ' + forceFallback);
-    const meta = this.getMeta('_jsApi');
+    const meta = this.getMeta(MetaHeaderJsApi);
     if(!meta) {
       this.retries++;
       if(forceFallback || this.retries >= maxRetries)

@@ -1,23 +1,25 @@
 import { JsInfo } from './JsInfo';
-import { Log } from '../tools/Log';
+import { Log } from '../logging/Log';
 import { EnvironmentMetaLoader } from './envMetaLoader';
 import { ApiExtensionPlaceholder } from '../constants';
+import { HasLog } from '../logging/HasLog';
 
 declare const _jsApi: JsInfo;
 
 /**
  * Provides environment information to $2sxc - usually page-id, api-root and stuff like that
  */
-export class Environment {
+export class Environment extends HasLog {
   private header: JsInfo;
   public ready = false;
   public source = '';
 
-  public log: Log;
+//   public log: Log;
   public metaLoader: EnvironmentMetaLoader;
 
   constructor() {
-    this.log = new Log('Environment', 'starting');
+      super('Environment', 'starting');
+    // this.log = new Log();
     this.metaLoader = new EnvironmentMetaLoader(this);
 
     // check if a global variable was already set which we should use

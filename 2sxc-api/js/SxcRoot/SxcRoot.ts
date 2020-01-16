@@ -2,18 +2,18 @@ import { SxcInstance } from '../instance/SxcInstance';
 import { SxcInstanceWithInternals } from '../instance/SxcInstanceWithInternals';
 import { Environment } from '../environment/Environment';
 import { SxcHttp } from '../http/SxcHttp';
-import { Log } from '../tools/Log';
+import { Log } from '../logging/Log';
 import { SxcVersion } from '../constants';
 
 /**
  * This is the interface for the main $2sxc object on the window
  */
-export interface SxcController {
+export interface SxcRoot {
     /**
-     * returns a 2sxc-instance of the id or html-tag passed in
-     * @param id
-     * @param cbid
-     * @returns {}
+     * Get's an SxcInstance
+     * @param id number | HTMLElement
+     * @param cbid number
+     * @returns SxcInstance
      */
     (id: number | HTMLElement, cbid?: number): SxcInstance | SxcInstanceWithInternals,
 
@@ -48,7 +48,7 @@ export interface SxcController {
 }
 
 
-export function getRootParts() : Partial<SxcController> {
+export function getRootParts() : Partial<SxcRoot> {
     var env = new Environment();
     return {
         sysinfo: {

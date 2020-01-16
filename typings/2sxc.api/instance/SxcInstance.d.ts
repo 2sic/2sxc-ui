@@ -1,11 +1,12 @@
 import { SxcWebApi } from './SxcWebApi';
-import { SxcController } from '../$2sxc/SxcController';
-export declare class SxcInstance {
+import { SxcRoot } from '../SxcRoot/SxcRoot';
+import { HasLog } from '../logging/HasLog';
+export declare class SxcInstance extends HasLog {
     id: number;
     cbid: number;
-    readonly root: SxcController;
+    readonly root: SxcRoot;
     webApi: SxcWebApi;
-    constructor(id: number, cbid: number, root: SxcController);
+    constructor(id: number, cbid: number, root: SxcRoot);
     resolveServiceUrl(virtualPath: string): string;
     showDetailedHttpError(result: any): any;
 }

@@ -1,10 +1,10 @@
-import { SxcDataWithInternals } from './ToSic.Sxc.Data';
+import { SxcInstanceDataDeprecated } from './SxcInstanceDataDeprecated';
 import { SxcInstanceWithEditing } from './SxcInstanceWithEditing';
-import { SxcControllerInternals } from '../$2sxc/SxcControllerInternals';
-import { SxcController } from '../$2sxc/SxcController';
+import { SxcRootInternals } from '../SxcRoot/SxcRootInternals';
+import { SxcRoot } from '../SxcRoot/SxcRoot';
 
 export class SxcInstanceWithInternals extends SxcInstanceWithEditing {
-    data: SxcDataWithInternals;
+    data: SxcInstanceDataDeprecated;
     source: any = null;
     isLoaded = false;
     lastRefresh: Date = null;
@@ -13,10 +13,10 @@ export class SxcInstanceWithInternals extends SxcInstanceWithEditing {
         public id: number,
         public cbid: number,
         private cacheKey: string,
-        protected $2sxc: SxcController & SxcControllerInternals,
+        protected $2sxc: SxcRoot & SxcRootInternals,
     ) {
         super(id, cbid, $2sxc);
-        this.data = new SxcDataWithInternals(this);
+        this.data = new SxcInstanceDataDeprecated(this);
     }
 
     recreate(resetCache: boolean): SxcInstanceWithInternals {

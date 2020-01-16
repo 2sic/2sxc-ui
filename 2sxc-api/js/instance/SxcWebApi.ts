@@ -3,7 +3,6 @@ import { SxcInstance } from './SxcInstance';
 import { AjaxPromise } from '../ajax/AjaxPromise';
 import { Environment } from '../environment/Environment';
 import { AjaxSettings } from '../ajax/AjaxSettings';
-import { HeaderNames } from '../constants';
 import { Dictionary } from '../tools/Dictionary_T';
 
 declare const $2sxc_jQSuperlight: JQuery;
@@ -127,15 +126,5 @@ export class SxcWebApi {
      */
     headers(): Dictionary<string> {
         return this.sxc.root.http.headers(this.sxc.id, this.sxc.cbid);
-        // const id = this.sxc.id;
-        // const cbid = this.sxc.cbid; // must read here, as the "this" will change inside the method
-        // const env = this.sxc.env;
-    
-        // const fHeaders = {};
-        // fHeaders[HeaderNames.ContentBlockId] = this.sxc.cbid;
-        // fHeaders[HeaderNames.ModuleId] = this.sxc.id;
-        // fHeaders[HeaderNames.TabId] = this.sxc.env.page();
-        // fHeaders[HeaderNames.Rvt] = this.sxc.env.rvt();
-        // return fHeaders;
-      }
+    }
 }
