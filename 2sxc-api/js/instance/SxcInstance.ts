@@ -42,7 +42,7 @@ export class SxcInstance extends HasLog {
      */
     // TODO: somehow create a new alternative in root.http.apiUrl or something
     resolveServiceUrl(virtualPath: string) {
-        console.warn('used resolveServiceUrl:' + virtualPath);
+        // console.warn('used resolveServiceUrl:' + virtualPath);
         const scope = virtualPath.split('/')[0].toLowerCase();
 
         // stop if it's not one of our special paths
