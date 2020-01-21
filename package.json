@@ -1,6 +1,6 @@
 {
   "name": "2sic-2sxc-ui",
-  "version": "10.25.01",
+  "version": "10.25.02",
   "description": "Create awesome, responsive content for DNN",
   "main": "index.js",
   "scripts": {
