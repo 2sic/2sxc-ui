@@ -1,7 +1,9 @@
 ﻿
-import { SxcInstance } from './ToSic.Sxc.Instance';
-import { HttpAbstractor } from './HttpAbstractor';
-import { Environment } from './Environment';
+import { SxcInstance } from './SxcInstance';
+import { AjaxPromise } from '../ajax/AjaxPromise';
+import { Environment } from '../environment/Environment';
+import { AjaxSettings } from '../ajax/AjaxSettings';
+import { Dictionary } from '../tools/Dictionary_T';
 
 declare const $2sxc_jQSuperlight: JQuery;
 
@@ -10,14 +12,15 @@ declare const $2sxc_jQSuperlight: JQuery;
  * it will ensure that the headers etc. are set correctly
  * and that urls are rewritten
  */
-export class SxcWebApiWithInternals {
+export class SxcWebApi {
+    public readonly env: Environment;
     constructor(
-        private readonly controller: SxcInstance,
-        private readonly id: number,
-        private readonly cbid: number,
-        public readonly env: Environment
+        private readonly sxc: SxcInstance,
+        // private readonly id: number,
+        // private readonly cbid: number,
+        // public readonly env: Environment
     ) {
-
+        this.env = sxc.root.env;
     }
     /**
      * returns an http-get promise
@@ -27,7 +30,7 @@ export class SxcWebApiWithInternals {
      * @param preventAutoFail
      * @returns {Promise} jQuery ajax promise object
      */
-    get(settingsOrUrl: string | any, params?: any, data?: any, preventAutoFail?: boolean): any {
+    get(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): JQueryPromise<any> {
         return this.request(settingsOrUrl, params, data, preventAutoFail, 'GET');
     }
 
@@ -39,7 +42,7 @@ export class SxcWebApiWithInternals {
      * @param preventAutoFail
      * @returns {Promise} jQuery ajax promise object
      */
-    post(settingsOrUrl: string | any, params?: any, data?: any, preventAutoFail?: boolean): any {
+    post(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): JQueryPromise<any> {
         return this.request(settingsOrUrl, params, data, preventAutoFail, 'POST');
     }
 
@@ -51,7 +54,7 @@ export class SxcWebApiWithInternals {
      * @param preventAutoFail
      * @returns {Promise} jQuery ajax promise object
      */
-    delete(settingsOrUrl: string | any, params?: any, data?: any, preventAutoFail?: boolean): any {
+    delete(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): JQueryPromise<any> {
         return this.request(settingsOrUrl, params, data, preventAutoFail, 'DELETE');
     }
 
@@ -63,11 +66,20 @@ export class SxcWebApiWithInternals {
      * @param preventAutoFail
      * @returns {Promise} jQuery ajax promise object
      */
-    put(settingsOrUrl: string | any, params?: any, data?: any, preventAutoFail?: boolean): any {
+    put(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): JQueryPromise<any> {
         return this.request(settingsOrUrl, params, data, preventAutoFail, 'PUT');
     }
 
-    private request(settings: string | any, params: any, data: any, preventAutoFail: boolean, method: string): any {
+    /**
+     * Generic http request
+     * @param settingsOrUrl the url to get
+     * @param params jQuery style ajax parameters
+     * @param data jQuery style data for post/put requests
+     * @param preventAutoFail
+     * @param method the http verb name
+     * @returns {Promise} jQuery ajax promise object
+     */
+    request(settings: string | AjaxSettings, params: any, data: any, preventAutoFail: boolean, method: string): JQueryPromise<any> {
 
         // url parameter: auto convert a single value (instead of object of values) to an id=... parameter
         // tslint:disable-next-line:curly
@@ -81,7 +93,7 @@ export class SxcWebApiWithInternals {
             const actionName = controllerAction[1];
 
             if (controllerName === '' || actionName === '')
-                alert('Error: controller or action not defined. Will continue with likely errors.');
+                console.warn('Error: controller or action not defined. Will continue with likely errors.');
 
             settings = {
                 controller: controllerName,
@@ -99,13 +111,20 @@ export class SxcWebApiWithInternals {
             preventAutoFail: false,
         };
         // new 10.25
-        var http = new HttpAbstractor(this.controller);
+        var http = new AjaxPromise(this, this.sxc);
 
         settings = $2sxc_jQSuperlight.extend({}, defaults, settings);
 
-        const promise = http.makePromise(settings);
+        const promise = http.makePromise(settings as AjaxSettings);
 
         return promise;
     }
 
+    /**
+     * All the headers which are needed in an ajax call for this to work reliably.
+     * Use this if you need to get a list of headers in another system
+     */
+    headers(): Dictionary<string> {
+        return this.sxc.root.http.headers(this.sxc.id, this.sxc.cbid);
+    }
 }
