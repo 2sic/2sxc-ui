@@ -1,8 +1,8 @@
+import * as I from '../../../typings/index';
 import { HeaderNames, ToSxcName, ApiExtensionPlaceholder } from '../constants';
-import { Dictionary } from '../tools/Dictionary_T';
 import { Environment } from '../environment/Environment';
 
-export class SxcHttp {
+export class SxcHttp implements I.SxcHttp {
     constructor(private env: Environment) {
         
     }
@@ -11,7 +11,7 @@ export class SxcHttp {
      * All the headers which are needed in an ajax call for this to work reliably.
      * Use this if you need to get a list of headers in another system
      */
-    headers(id?: number, cbid?: number): Dictionary<string> {
+    headers(id?: number, cbid?: number): I.Dictionary<string> {
         const fHeaders = {};
         if(id) fHeaders[HeaderNames.ModuleId] = id;
         if(cbid) fHeaders[HeaderNames.ContentBlockId] = cbid;

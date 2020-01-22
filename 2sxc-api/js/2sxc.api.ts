@@ -5,10 +5,10 @@
 
 // Keep our super-slimmed down jQuery for AJAX
 import './jquery-ajax/ajax203.js'
-import { Window } from './tools/Window';
+import { WindowInt } from './tools/Window';
 import { buildSxcRoot } from './SxcRoot/SxcRootBuilder';
 
-declare const window: Window;
+declare const window: WindowInt;
 
 if (!window.$2sxc) // prevent double execution
   window.$2sxc = buildSxcRoot();

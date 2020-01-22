@@ -1,22 +1,19 @@
-import * as I from '../../../typings/index';
-import { SxcInstance } from '../instance/SxcInstance';
-import { SxcInstanceWithInternals } from '../instance/SxcInstanceWithInternals';
-import { Environment } from '../environment/Environment';
-import { SxcHttp } from '../http/SxcHttp';
-import { Log } from '../logging/Log';
-import { SxcVersion } from '../constants';
+import { SxcInstance } from '../../2sxc-api/js/instance/SxcInstance';
+import { Environment } from './Environment';
+import { Log } from './Log';
+import { SxcHttp } from './SxcHttp';
 
 /**
  * This is the interface for the main $2sxc object on the window
  */
-export interface SxcRoot extends I.SxcRoot {
+export interface SxcRoot {
     /**
      * Get's an SxcInstance
      * @param id number | HTMLElement
      * @param cbid number
      * @returns SxcInstance
      */
-    (id: number | HTMLElement, cbid?: number): SxcInstance | SxcInstanceWithInternals,
+    (id: number | HTMLElement, cbid?: number): SxcInstance;
 
     /**
      * system information, mainly for checking which version of 2sxc is running
@@ -46,18 +43,4 @@ export interface SxcRoot extends I.SxcRoot {
      */
     log: Log;
 
-}
-
-
-export function getRootParts() : Partial<SxcRoot> {
-    var env = new Environment();
-    return {
-        sysinfo: {
-            version: SxcVersion,
-            description: 'The 2sxc Controller - read more about it on docs.2sxc.org',
-        },
-        env: env,
-        http: new SxcHttp(env),
-        log: new Log('$2sxc', 'building'),
-    };
 }

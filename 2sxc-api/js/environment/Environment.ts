@@ -1,5 +1,5 @@
+import * as I from '../../../typings/index';
 import { JsInfo } from './JsInfo';
-import { Log } from '../logging/Log';
 import { EnvironmentMetaLoader } from './envMetaLoader';
 import { ApiExtensionPlaceholder } from '../constants';
 import { HasLog } from '../logging/HasLog';
@@ -9,7 +9,7 @@ declare const _jsApi: JsInfo;
 /**
  * Provides environment information to $2sxc - usually page-id, api-root and stuff like that
  */
-export class Environment extends HasLog {
+export class Environment extends HasLog implements I.Environment {
   private header: JsInfo;
   public ready = false;
   public source = '';
