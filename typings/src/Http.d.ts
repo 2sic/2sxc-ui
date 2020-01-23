@@ -14,7 +14,7 @@ export interface Http {
      * @returns {string}
      * @memberof SxcHttp
      */
-    apiRoot(endpointName: string): string ;
+    apiRoot(endpointName: string): string;
 
     /**
      * Get the URL for a specific web API endpoint
@@ -24,5 +24,5 @@ export interface Http {
      * @returns
      * @memberof SxcHttp
      */
-    apiUrl(url: string, endpointName?: string);
+    apiUrl(url: string, endpointName?: string): string;
 }

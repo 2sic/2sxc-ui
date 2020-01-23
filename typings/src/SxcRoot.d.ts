@@ -1,4 +1,3 @@
-
 import { Environment } from './Environment';
 import { Log } from './Log';
 import { Http } from './Http';

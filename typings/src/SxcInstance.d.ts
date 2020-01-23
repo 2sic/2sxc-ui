@@ -1,6 +1,5 @@
 import { SxcWebApi } from './WebApi';
 
-
 /**
  * The typical sxc-instance object for a specific DNN module or content-block
  */

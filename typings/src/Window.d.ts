@@ -1,5 +1,5 @@
-import { SxcRoot } from '../../2sxc-api/js/SxcRoot/SxcRoot';
+import { SxcRoot } from './SxcRoot';
 
-export interface Window { 
+export interface WindowWith$2sxc { 
     $2sxc: SxcRoot; 
 }

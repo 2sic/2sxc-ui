@@ -1,10 +1,18 @@
-# 2sxc TypeScript Typings 10.24.00
+# 2sxc TypeScript Typings
 
 This are the public typings for NMP, which should help you write type-safe code when working with 2sxc JavaScript APIs.
 
 Use this to create Angular, React, Vue etc. adaptors. 
 
-We recommend to not use this API in the final SPAs and APPs, as the adapters should then provide an abstraction around this. 
-
 Love from Switzerland, 
 Daniel
+
+## Who this is for
+
+Basically anybody developing JavaScript for the CMS DNN together with 2sxc.
+
+## Installation
+
+`npm install "@2sic.com/2sxc-typings"`
+
+_Note that `@2sic/2sxc-typings` must be in quotes, because it has a dot in the full name_
