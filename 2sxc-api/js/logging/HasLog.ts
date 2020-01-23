@@ -1,7 +1,7 @@
-import * as I from '../../../typings/index';
+import * as Public from '../../../typings/index';
 import { Log } from './Log';
 
-export abstract class HasLog implements I.HasLog {
+export abstract class HasLog implements Public.HasLog {
     constructor(name: string, message?: string) {
         this.log = new Log(name, message);
     }

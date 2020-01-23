@@ -1,4 +1,4 @@
-import * as I from '../../../typings/index';
+import * as Public from '../../../typings/index';
 import { SxcInstance } from '../instance/SxcInstance';
 import { SxcInstanceWithInternals } from '../instance/SxcInstanceWithInternals';
 import { Environment } from '../environment/Environment';
@@ -8,8 +8,9 @@ import { SxcVersion } from '../constants';
 
 /**
  * This is the interface for the main $2sxc object on the window
+ * This definition only extends the public interface
  */
-export interface SxcRoot extends I.SxcRoot {
+export interface SxcRoot extends Public.SxcRoot {
     /**
      * Get's an SxcInstance
      * @param id number | HTMLElement
@@ -17,18 +18,6 @@ export interface SxcRoot extends I.SxcRoot {
      * @returns SxcInstance
      */
     (id: number | HTMLElement, cbid?: number): SxcInstance | SxcInstanceWithInternals,
-
-    /**
-     * system information, mainly for checking which version of 2sxc is running
-     * note: it's not always updated reliably, but it helps when debugging
-     */
-    sysinfo: {
-        /** the version using the ##.##.## syntax */
-        version: string,
-
-        /** a short text description, for people who have no idea what this is */
-        description: string,
-    };
 
     /**
      * Environment information
@@ -40,11 +29,6 @@ export interface SxcRoot extends I.SxcRoot {
      * Http helper for API calls and such
      */
     http: SxcHttp;
-
-    /**
-     * Internal logger to better see what's happening
-     */
-    log: Log;
 
 }
 

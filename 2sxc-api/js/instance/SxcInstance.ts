@@ -1,4 +1,4 @@
-﻿
+﻿import * as Public from '../../../typings/index';
 import { SxcWebApi } from './SxcWebApi';
 import { ToSxcName } from '../constants';
 import { SxcRoot } from '../SxcRoot/SxcRoot';
@@ -9,7 +9,7 @@ const serviceScopes = ['app', 'app-sys', 'app-api', 'app-query', 'app-content', 
 /**
  * The typical sxc-instance object for a specific DNN module or content-block
  */
-export class SxcInstance extends HasLog {
+export class SxcInstance extends HasLog implements Public.SxcInstance {
     /**
      * helpers for ajax calls
      */
@@ -37,10 +37,10 @@ export class SxcInstance extends HasLog {
     /**
      * converts a short api-call path like "/app/Blog/query/xyz" to the DNN full path
      * which varies from installation to installation like "/desktopmodules/api/2sxc/app/..."
+     * @deprecated use http.apiUrl instead
      * @param virtualPath
      * @returns mapped path
      */
-    // TODO: somehow create a new alternative in root.http.apiUrl or something
     resolveServiceUrl(virtualPath: string) {
         // console.warn('used resolveServiceUrl:' + virtualPath);
         const scope = virtualPath.split('/')[0].toLowerCase();

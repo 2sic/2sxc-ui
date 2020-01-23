@@ -1,12 +1,12 @@
 {
   "_args": [
     [
-      "@2sic.com/2sxc-typings@10.25.02",
+      "@2sic.com/2sxc-typings@10.24.00",
       "C:\\Projects\\2sxc-ui\\typings"
     ]
   ],
-  "_from": "@2sic.com/2sxc-typings@10.25.02",
-  "_id": "@2sic.com/2sxc-typings@10.25.02",
+  "_from": "@2sic.com/2sxc-typings@10.24.00",
+  "_id": "@2sic.com/2sxc-typings@10.24.00",
   "_inBundle": false,
   "_integrity": "sha512-qQEzvrCgdmWH3KKEv90EV+PvWiK34dW9YSo3Fx4/nZtrvVIUc5pthMoFi/YeH9o8XZO9forRRem/ByDw1UeQLg==",
   "_location": "/@2sic.com/2sxc-typings",
@@ -14,13 +14,13 @@
   "_requested": {
     "type": "version",
     "registry": true,
-    "raw": "@2sic.com/2sxc-typings@10.25.02",
+    "raw": "@2sic.com/2sxc-typings@10.24.00",
     "name": "@2sic.com/2sxc-typings",
     "escapedName": "@2sic.com%2f2sxc-typings",
     "scope": "@2sic.com",
-    "rawSpec": "10.25.02",
+    "rawSpec": "10.24.00",
     "saveSpec": null,
-    "fetchSpec": "10.25.02"
+    "fetchSpec": "10.24.00"
   },
   "_requiredBy": [
     "/@2sic.com/dnn-sxc-angular"
@@ -58,5 +58,5 @@
   },
   "types": "./index.d.ts",
   "main": "",
-  "version": "10.25.02"
+  "version": "10.24.00"
 }

@@ -1,6 +1,6 @@
-import * as I from '../../../typings/index';
+import * as Public from '../../../typings/index';
 
-export interface JsInfo extends I.JsInfo {
+export interface JsInfo extends Public.JsInfo {
   page: number;
   api: string;
   root: string;

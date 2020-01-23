@@ -1,9 +1,9 @@
-import * as I from '../../../typings/index';
+import * as Public from '../../../typings/index';
 import { LogEntry } from './LogEntry';
 
 const maxEntriesReached = 'Maximum amount of entries added to log, will stop adding more';
 
-export class Log implements I.Log {
+export class Log implements Public.Log {
   name: string;
   text = "";
   entries: LogEntry[] = [];

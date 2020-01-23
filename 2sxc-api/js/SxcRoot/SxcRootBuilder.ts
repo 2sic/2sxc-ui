@@ -4,10 +4,10 @@ import { Stats } from '../Stats';
 import { SxcInstanceWithInternals } from '../instance/SxcInstanceWithInternals';
 import { SxcRootInternals } from './SxcRootInternals';
 import { SxcRoot, getRootParts } from './SxcRoot';
-import { WindowInt } from "../tools/Window";
+import { Window } from "../tools/Window";
 
 declare const $2sxc_jQSuperlight: any;
-declare const window: WindowInt;
+declare const window: Window;
 
 /**
  * returns a 2sxc-instance of the id or html-tag passed in

@@ -1,6 +1,6 @@
 import { Dictionary } from './Dictionary_T';
 
-export interface SxcHttp {
+export interface Http {
 
     /**
      * All the headers which are needed in an ajax call for this to work reliably.

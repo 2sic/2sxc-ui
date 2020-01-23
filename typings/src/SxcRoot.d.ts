@@ -1,7 +1,9 @@
-import { SxcInstance } from '../../2sxc-api/js/instance/SxcInstance';
+
 import { Environment } from './Environment';
 import { Log } from './Log';
-import { SxcHttp } from './SxcHttp';
+import { Http } from './Http';
+import { UrlParams } from './UrlParams';
+import { SxcInstance } from './SxcInstance';
 
 /**
  * This is the interface for the main $2sxc object on the window
@@ -36,11 +38,17 @@ export interface SxcRoot {
     /**
      * Http helper for API calls and such
      */
-    http: SxcHttp;
+    http: Http;
 
     /**
      * Internal logger to better see what's happening
      */
     log: Log;
 
+    /**
+     * Helper to work with url parameters behind ? or #
+     * @type {UrlParams}
+     * @memberof SxcRoot
+     */
+    urlParams: UrlParams
 }

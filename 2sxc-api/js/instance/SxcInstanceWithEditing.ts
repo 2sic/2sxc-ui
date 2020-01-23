@@ -1,3 +1,4 @@
+import * as Public from '../../../typings/index';
 import { SxcInstance } from './SxcInstance';
 import { SxcRootInternals } from '../SxcRoot/SxcRootInternals';
 import { SxcRoot } from '../SxcRoot/SxcRoot';
@@ -7,7 +8,7 @@ import { SxcRoot } from '../SxcRoot/SxcRoot';
  * Enhanced sxc instance with additional editing functionality
  * Use this, if you intend to run content-management commands like "edit" from your JS directly
  */
-export class SxcInstanceWithEditing extends SxcInstance {
+export class SxcInstanceWithEditing extends SxcInstance implements Public.SxcInstanceWithEditing {
     /**
      * manage object which provides access to additional content-management features
      * it only exists if 2sxc is in edit mode (otherwise the JS are not included for these features)

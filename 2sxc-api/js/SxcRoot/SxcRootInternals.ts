@@ -1,6 +1,5 @@
 import { SxcInstanceWithInternals } from '../instance/SxcInstanceWithInternals';
 import { TotalPopup } from '../tools/TotalPopup';
-import { UrlParamManager } from '../tools/UrlParamManager';
 import { Stats } from '../Stats';
 
 export interface SxcRootInternals {
@@ -20,5 +19,4 @@ export interface SxcRootInternals {
     jq(): JQuery;
 
     totalPopup: TotalPopup;
-    urlParams: UrlParamManager;
 }

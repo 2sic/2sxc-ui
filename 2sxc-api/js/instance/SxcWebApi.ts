@@ -1,4 +1,4 @@
-﻿import * as I from '../../../typings/index';
+﻿import * as Public from '../../../typings/index';
 import { SxcInstance } from './SxcInstance';
 import { AjaxPromise } from '../ajax/AjaxPromise';
 import { Environment } from '../environment/Environment';
@@ -11,7 +11,7 @@ declare const $2sxc_jQSuperlight: JQuery;
  * it will ensure that the headers etc. are set correctly
  * and that urls are rewritten
  */
-export class SxcWebApi {
+export class SxcWebApi implements Public.SxcWebApi {
     public readonly env: Environment;
     constructor(
         private readonly sxc: SxcInstance,
@@ -123,7 +123,7 @@ export class SxcWebApi {
      * All the headers which are needed in an ajax call for this to work reliably.
      * Use this if you need to get a list of headers in another system
      */
-    headers(): I.Dictionary<string> {
+    headers(): Public.Dictionary<string> {
         return this.sxc.root.http.headers(this.sxc.id, this.sxc.cbid);
     }
 }

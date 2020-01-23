@@ -1,6 +1,6 @@
-import * as I from '../../../typings/index';
+import * as Public from '../../../typings/index';
 
-export class LogEntry implements I.LogEntry {
+export class LogEntry implements Public.LogEntry {
     time: number;
     message: string;
 }
