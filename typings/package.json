@@ -1,5 +1,6 @@
 {
-  "_args": [
+    "version": "10.24.01",
+    "_args": [
     [
       "@2sic.com/2sxc-typings@10.24.00",
       "C:\\Projects\\2sxc-ui\\typings"
@@ -26,21 +27,20 @@
     "/@2sic.com/dnn-sxc-angular"
   ],
   "_resolved": "https://registry.npmjs.org/@2sic.com/2sxc-typings/-/2sxc-typings-9.0.1.tgz",
-  "_spec": "9.0.1",
-  "_where": "C:\\Projects\\app-dnn-sxc-angular-dev",
+  "_spec": "10.24.0",
+  "_where": "C:\\Projects\\2sxc-ui\\typings",
   "author": {
     "name": "2sic Internet Solutions",
     "url": "Switzerland & Liechtenstein"
   },
   "bugs": {
-    "url": "https://github.com/2sic/2sxc-typings/issues"
+    "url": "https://github.com/2sic/2sxc-ui/issues"
   },
   "description": "Typescript typings to work with core 2sxc objects",
   "homepage": "https://github.com/2sic/2sxc-ui/typings#readme",
   "keywords": [
     "DNN",
     "2sxc",
-    "2SexyContent",
     "Content",
     "Management",
     "CMS",
@@ -57,6 +57,5 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "types": "./index.d.ts",
-  "main": "",
-  "version": "10.24.00"
+  "main": ""
 }

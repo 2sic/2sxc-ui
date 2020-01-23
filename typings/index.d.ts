@@ -1,4 +1,3 @@
-//import './src/main';
 // type definitions for 2sxc 10.25.02
 // project: 2sxc typings
 // definitions by: Daniel Mettler, 2sic <https://2sxc.org/>
