@@ -6,8 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "develop": "gulp develop",
-    "2sxc-api-prod": "webpack --config webpack.common.js --watch --env.prod=true",
-    "2sxc-api-dev": "webpack --config webpack.common.js --watch --env.prod=false"
+    "2sxc-prod": "webpack --config webpack.$2sxc.js --watch --env.prod=true",
+    "2sxc-dev": "webpack --config webpack.$2sxc.js --watch --env.prod=false"
   },
   "repository": {
     "type": "git",
