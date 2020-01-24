@@ -3,6 +3,7 @@ import { SxcWebApi } from './SxcWebApi';
 import { ToSxcName } from '../constants';
 import { SxcRoot } from '../SxcRoot/SxcRoot';
 import { HasLog } from '../logging/HasLog';
+import { SxcRootInternals } from '../SxcRoot/SxcRootInternals';
 
 const serviceScopes = ['app', 'app-sys', 'app-api', 'app-query', 'app-content', 'eav', 'view', 'dnn'];
 
@@ -15,23 +16,39 @@ export class SxcInstance extends HasLog implements Public.SxcInstance {
      */
     webApi: SxcWebApi;
 
+    /**
+     * The manage controller for edit/cms actions
+     *
+     * @type {*}
+     * @memberof SxcInstance
+     */
+    manage: any = null; // initialize correctly later on
+
     constructor(
-        /**
-         * the sxc-instance ID, which is usually the DNN Module Id
-         */
+        /** the sxc-instance ID, which is usually the DNN Module Id */
         public id: number,
-
-        /**
-         * content-block ID, which is either the module ID, or the content-block definitiion entity ID
-         * this is an advanced concept you usually don't care about, otherwise you should research it
-         */
+        /** content-block ID, which is either the module ID, or the content-block definitiion entity ID
+         * this is an advanced concept you usually don't care about, otherwise you should research it */
         public cbid: number,
-
         /** The environment information, important for http-calls */
-        public readonly root: SxcRoot,
+        public readonly root: SxcRoot & SxcRootInternals,
     ) {
         super('SxcInstance', 'Generating for ' + id + ':' + cbid);
         this.webApi = new SxcWebApi(this);
+
+        // add manage property, but not within initializer, because inside the manage-initializer it may reference 2sxc again
+        try { // sometimes the manage can't be built, like before installing
+        if (root._manage) root._manage.initInstance(this);
+        } catch (e) {
+            console.error('error in 2sxc - will only log but not throw', e);
+        }
+
+        // this only works when manage exists (not installing) and translator exists too
+        if (root._translateInit && this.manage) 
+            // ensure that we really have a manage context, otherwise we can't initialize i18n and it doesn't make sense
+            if(this.manage.context && this.manage.context.app && this.manage.context.app.currentLanguage)
+                root._translateInit(this.manage);    // init translate, not really nice, but ok for now
+    
     }
 
     /**
@@ -102,5 +119,13 @@ export class SxcInstance extends HasLog implements Public.SxcInstance {
         alert(infoText);
 
         return result;
+    }
+
+    /**
+     * checks if we're currently in edit mode
+     * @returns {boolean}
+     */
+    isEditMode(): boolean {
+        return this.manage && this.manage._isEditMode();
     }
 }

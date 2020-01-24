@@ -6,12 +6,6 @@
  */
 export interface SxcInstanceWithEditing extends SxcInstance {
     /**
-     * checks if we're currently in edit mode
-     * @returns {boolean}
-     */
-    isEditMode(): boolean,
-
-    /**
      * manage object which provides access to additional content-management features
      * it only exists if 2sxc is in edit mode (otherwise the JS are not included for these features)
      */

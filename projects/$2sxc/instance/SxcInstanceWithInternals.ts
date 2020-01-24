@@ -1,9 +1,9 @@
 import { SxcInstanceDataDeprecated } from './SxcInstanceDataDeprecated';
-import { SxcInstanceWithEditing } from './SxcInstanceWithEditing';
 import { SxcRootInternals } from '../SxcRoot/SxcRootInternals';
 import { SxcRoot } from '../SxcRoot/SxcRoot';
+import { SxcInstance } from './SxcInstance';
 
-export class SxcInstanceWithInternals extends SxcInstanceWithEditing {
+export class SxcInstanceWithInternals extends SxcInstance {
     data: SxcInstanceDataDeprecated;
     source: any = null;
     isLoaded = false;
