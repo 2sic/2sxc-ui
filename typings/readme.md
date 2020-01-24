@@ -1,8 +1,8 @@
 # 2sxc TypeScript Typings
 
-This are the public typings for NMP, which should help you write type-safe code when working with 2sxc JavaScript APIs.
+This are the public typings for NPM, which should help you write type-safe code when working with the core 2sxc JavaScript APIs.
 
-Use this to create Angular, React, Vue etc. adaptors. 
+Use this for your DNN/2sxc TypeScript and to create Angular, React, Vue etc. adaptors. 
 
 Love from Switzerland, 
 Daniel

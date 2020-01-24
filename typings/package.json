@@ -14,7 +14,7 @@
   },
   "files": ["*.d.ts", "src/*.*"],
   "description": "Typescript typings to work with core 2sxc objects",
-  "homepage": "https://github.com/2sic/2sxc-ui/blob/master/typings/readme.md",
+  "homepage": "https://github.com/2sic/2sxc-ui/tree/master/typings#readme",
   "keywords": [
     "DNN",
     "2sxc",
