@@ -1,8 +1,7 @@
 {
-  "version": "10.24.04",
+  "version": "10.24.05",
   "types": "./index.d.ts",
   "scripts": {
-    "publish": "npm publish",
     "dry-run": "npm publish --dry-run"
   },
   "author": {
@@ -12,7 +11,10 @@
   "bugs": {
     "url": "https://github.com/2sic/2sxc-ui/issues"
   },
-  "files": ["*.d.ts", "src/*.*"],
+  "files": [
+    "*.d.ts",
+    "src/*.*"
+  ],
   "description": "Typescript typings to work with core 2sxc objects",
   "homepage": "https://github.com/2sic/2sxc-ui/tree/master/typings#readme",
   "keywords": [
@@ -30,5 +32,8 @@
     "type": "git",
     "url": "git+https://github.com/2sic/2sxc-ui.git"
   },
-  "main": ""
+  "main": "",
+  "dependencies": {
+    "@types/jquery": "^3.3.31"
+  }
 }
