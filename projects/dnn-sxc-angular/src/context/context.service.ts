@@ -30,7 +30,8 @@ export class Context {
     }
 
     private check2sxcVersion() {
-      const requiredVersion = [10,25,2];
+      // Actually the required version is 10.25.2, but 2sxc-ui reports 10.25.1 in 2sxc 10.25.2
+      const requiredVersion = [10,25,1];
       const version = this.$2sxc.sysinfo.version.split('.').map((v) => parseInt(v));
 
       // Reduce version to comparision number - 0 means equal, 1 means version > requiredVersion, -1 means version < requiredVersion
