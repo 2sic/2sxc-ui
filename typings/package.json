@@ -1,5 +1,5 @@
 {
-  "version": "10.25.2-rc.01",
+  "version": "10.25.2",
   "types": "./index.d.ts",
   "scripts": {
     "dry-run": "npm publish --dry-run"
