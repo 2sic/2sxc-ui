@@ -13,9 +13,12 @@ const runtimeDefaults: Partial<ContextInfo> = {
 @Injectable({
     providedIn: 'root',
 })
+// TODO: 2rm - make inherit from cnotext info
+// also put $2sxc on the ContextInfo object
 export class Context {
 
     $2sxc: SxcRoot;
+    // TODO: 2rm drop this 
     contextInfo: ContextInfo;
     appTagService: AppTagService;
 
@@ -46,6 +49,7 @@ export class Context {
      * Configure 2sxc in the context of a HTMLNode.
      * @param htmlNode the HTMLNode
      */
+    // TODO: 2rm drop moduleid etc. and use from current object
     autoConfigure(htmlNode: ElementRef, moduleId?: number, contentBlockId?: number) {
 
         this.appTagService = new AppTagService(htmlNode);
@@ -61,7 +65,7 @@ export class Context {
         settings.sxc = moduleId
             ? this.$2sxc(moduleId, contentBlockId)
             : this.$2sxc(htmlNode.nativeElement);
-            
+
         if (!settings.sxc) {
             throw new Error('couldn\'t get sxc instance - reason unknown');
         }
