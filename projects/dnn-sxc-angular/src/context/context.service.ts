@@ -46,7 +46,7 @@ export class Context {
      * Configure 2sxc in the context of a HTMLNode.
      * @param htmlNode the HTMLNode
      */
-    autoConfigure(htmlNode: ElementRef) {
+    autoConfigure(htmlNode: ElementRef, moduleId?: number, contentBlockId?: number) {
 
         this.appTagService = new AppTagService(htmlNode);
 
@@ -57,7 +57,11 @@ export class Context {
         } as ContextInfo;
 
     
-        settings.sxc = this.$2sxc(htmlNode.nativeElement);
+        // if injector got a module-id, use that, otherwise auto-detect
+        settings.sxc = moduleId
+            ? this.$2sxc(moduleId, contentBlockId)
+            : this.$2sxc(htmlNode.nativeElement);
+            
         if (!settings.sxc) {
             throw new Error('couldn\'t get sxc instance - reason unknown');
         }
