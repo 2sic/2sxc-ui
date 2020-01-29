@@ -1,4 +1,4 @@
-import { SxcInstance } from "@2sic.com/2sxc-typings";
+import { SxcInstance, SxcRoot } from "@2sic.com/2sxc-typings";
 
 // These are the parameters which make up the current context / state of this app.
 // It's mainly needed to ensure that the Http Service is correctly set up.
@@ -10,6 +10,11 @@ import { SxcInstance } from "@2sic.com/2sxc-typings";
  */
 export class ContextInfo {
   
+  /**
+   * The $2sxc root object which is globally accessible through window.$2sxc
+   */
+  $2sxc: SxcRoot;
+
   /**
    * the helper sxc-object to communicate with the server
    */
@@ -35,4 +40,14 @@ export class ContextInfo {
    * usually it's the same as the edition, but in same cases you may want to use another edition, especially when developing
    */
   apiEdition: string;
+
+  /**
+   * The id of the current module
+   */
+  moduleId: number;
+
+  /**
+   * The content block id of the current block
+   */
+  contentBlockId: number;
 }

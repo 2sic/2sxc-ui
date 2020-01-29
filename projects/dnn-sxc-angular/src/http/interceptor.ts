@@ -12,9 +12,9 @@ export class Interceptor implements HttpInterceptor {
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     let url = req.url;
-    let ctx = this.context.contextInfo;
-    if (this.context.$2sxc) {
-      url = this.context.$2sxc.http.apiUrl(req.url);
+    let ctx = this.context;
+    if (ctx.$2sxc) {
+      url = ctx.$2sxc.http.apiUrl(req.url);
     }
 
     // change to use api of an edition, if an edition was specified
@@ -28,8 +28,8 @@ export class Interceptor implements HttpInterceptor {
     }
 
     let headers = {};
-    if(ctx.addHttpHeaders && this.context.contextInfo.sxc) {
-      headers = this.context.contextInfo.sxc.webApi.headers();
+    if(ctx.addHttpHeaders && ctx.sxc) {
+      headers = ctx.sxc.webApi.headers();
       headers = this.convertAllPropertiesToString(headers);
     }
     

@@ -13,18 +13,13 @@ const runtimeDefaults: Partial<ContextInfo> = {
 @Injectable({
     providedIn: 'root',
 })
-// TODO: 2rm - make inherit from cnotext info
-// also put $2sxc on the ContextInfo object
-export class Context {
+export class Context extends ContextInfo {
 
-    $2sxc: SxcRoot;
-    // TODO: 2rm drop this 
-    contextInfo: ContextInfo;
     appTagService: AppTagService;
+    preConfiguration: Partial<ContextInfo>;
 
-    constructor(
-        // @Optional() private runtimeSettings: ContextInfo
-    ) {
+    constructor() {
+        super();
         this.$2sxc = window.$2sxc;
         if (this.$2sxc === undefined) {
             throw new Error('window.$2sxc is null - you probably forgot to include the script before loading angular');
@@ -33,44 +28,59 @@ export class Context {
     }
 
     private check2sxcVersion() {
-      // Actually the required version is 10.25.2, but 2sxc-ui reports 10.25.1 in 2sxc 10.25.2
-      const requiredVersion = [10,25,1];
-      const version = this.$2sxc.sysinfo.version.split('.').map((v) => parseInt(v));
+        // Actually the required version is 10.25.2, but 2sxc-ui reports 10.25.1 in 2sxc 10.25.2
+        const requiredVersion = [10,25,1];
+        const version = this.$2sxc.sysinfo.version.split('.').map((v) => parseInt(v));
 
-      // Reduce version to comparision number - 0 means equal, 1 means version > requiredVersion, -1 means version < requiredVersion
-      const compareVersions = requiredVersion.reduce((acc, _, i) => acc != 0 ? acc : Math.sign(version[i] - requiredVersion[i]), 0);
+        // Reduce version to comparision number - 0 means equal, 1 means version > requiredVersion, -1 means version < requiredVersion
+        const compareVersions = requiredVersion.reduce((acc, _, i) => acc != 0 ? acc : Math.sign(version[i] - requiredVersion[i]), 0);
 
-      if(compareVersions < 0) {
-        throw new Error(`Installed 2sxc version is ${version.join('.')} but ${requiredVersion.join('.')} is required for dnn-sxc-angular.`);
-      }
+        if(compareVersions < 0) {
+            throw new Error(`Installed 2sxc version is ${version.join('.')} but ${requiredVersion.join('.')} is required for dnn-sxc-angular.`);
+        }
+    }
+
+    /**
+     * Pre-Configure this context - can be used to configure values in a subclass
+     * @param preConfig Pre-Configuration values for this context
+     */
+    preConfigure(preConfig: Partial<ContextInfo>) {
+        this.preConfiguration = preConfig;
+        return this;
     }
 
     /**
      * Configure 2sxc in the context of a HTMLNode.
      * @param htmlNode the HTMLNode
      */
-    // TODO: 2rm drop moduleid etc. and use from current object
-    autoConfigure(htmlNode: ElementRef, moduleId?: number, contentBlockId?: number) {
+    autoConfigure(htmlNode: ElementRef) {
 
         this.appTagService = new AppTagService(htmlNode);
 
         let settings = {
             ...runtimeDefaults, // defaults - lowest priority
-            // ...this.runtimeSettings, // use specified runtime settings
-            ...this.getContextFromAppTag() // app tags override settings
+            ...this.getContextFromAppTag(), // app tags override settings
+            ...this.preConfiguration
         } as ContextInfo;
 
-    
-        // if injector got a module-id, use that, otherwise auto-detect
-        settings.sxc = moduleId
-            ? this.$2sxc(moduleId, contentBlockId)
+        // Use pre-configured values already in settings if defined; otherwise
+        // get from HTMLNode
+        settings.sxc = settings.sxc ||
+            settings.moduleId
+            ? this.$2sxc(settings.moduleId, settings.contentBlockId)
             : this.$2sxc(htmlNode.nativeElement);
 
         if (!settings.sxc) {
             throw new Error('couldn\'t get sxc instance - reason unknown');
         }
 
-        this.contextInfo = settings;
+        this.moduleId = settings.sxc.id;
+        this.contentBlockId = settings.sxc.cbid;
+        this.sxc = settings.sxc;
+        this.addHttpHeaders = settings.addHttpHeaders;
+        this.appNameInPath = settings.appNameInPath;
+        this.edition = settings.edition;
+        this.apiEdition = settings.apiEdition;
     }
 
     /**

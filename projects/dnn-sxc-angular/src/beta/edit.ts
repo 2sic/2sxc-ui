@@ -15,7 +15,7 @@ export class SxcToolbarDirective implements OnInit {
   constructor(private elementRef: ElementRef, private context: Context) {}
 
   ngOnInit() {
-    const sxc = this.context.contextInfo.sxc as SxcInstanceWithEditing;
+    const sxc = this.context.sxc as SxcInstanceWithEditing;
     if (!sxc.manage) return; // edit not available, probably not logged in
     this.setHtml(sxc.manage.getToolbar(this.config.toolbar, this.config.settings));
   }
