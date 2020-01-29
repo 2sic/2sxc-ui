@@ -8,7 +8,7 @@ import { SxcInstance, SxcRoot } from "@2sic.com/2sxc-typings";
  * Important to interact with the server
  * or with the DNN around it.
  */
-export class ContextInfo {
+export interface ContextInfo {
   
   /**
    * The $2sxc root object which is globally accessible through window.$2sxc

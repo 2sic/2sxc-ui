@@ -6,7 +6,7 @@ export class AppTagService {
     ) {
     }
     
-    public getTag(attribute: string) {
+    public getAttribute(attribute: string): string {
         // todo: after upgrading to NG8, probably use el.GetAttribute
         return this.el.nativeElement.getAttribute(attribute);
     }

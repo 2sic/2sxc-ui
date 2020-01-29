@@ -1,8 +1,9 @@
-import { WindowWith$2sxc, SxcRoot } from '@2sic.com/2sxc-typings';
+import { WindowWith$2sxc, SxcRoot, SxcInstance } from '@2sic.com/2sxc-typings';
 import { ElementRef, Injectable } from '@angular/core';
 import { appTag } from '../names';
 import { ContextInfo } from './context-info';
 import { AppTagService } from './apptag.service'
+import { ContextInfoPreconfigure } from './context-info-preconfigure'
 
 declare const window: WindowWith$2sxc;
 
@@ -13,13 +14,20 @@ const runtimeDefaults: Partial<ContextInfo> = {
 @Injectable({
     providedIn: 'root',
 })
-export class Context extends ContextInfo {
+export class Context implements ContextInfo {
+    $2sxc: SxcRoot;
+    sxc: SxcInstance;
+    addHttpHeaders: boolean;
+    appNameInPath: string;
+    edition: string;
+    apiEdition: string;
+    moduleId: number;
+    contentBlockId: number;
 
-    appTagService: AppTagService;
-    preConfiguration: Partial<ContextInfo>;
+    private appTagService: AppTagService;
+    private preConfiguration: Partial<ContextInfoPreconfigure>;
 
     constructor() {
-        super();
         this.$2sxc = window.$2sxc;
         if (this.$2sxc === undefined) {
             throw new Error('window.$2sxc is null - you probably forgot to include the script before loading angular');
@@ -44,7 +52,7 @@ export class Context extends ContextInfo {
      * Pre-Configure this context - can be used to configure values in a subclass
      * @param preConfig Pre-Configuration values for this context
      */
-    preConfigure(preConfig: Partial<ContextInfo>) {
+    preConfigure(preConfig: Partial<ContextInfoPreconfigure>) {
         this.preConfiguration = preConfig;
         return this;
     }
@@ -73,14 +81,20 @@ export class Context extends ContextInfo {
         if (!settings.sxc) {
             throw new Error('couldn\'t get sxc instance - reason unknown');
         }
-
-        this.moduleId = settings.sxc.id;
-        this.contentBlockId = settings.sxc.cbid;
+        
         this.sxc = settings.sxc;
         this.addHttpHeaders = settings.addHttpHeaders;
         this.appNameInPath = settings.appNameInPath;
         this.edition = settings.edition;
         this.apiEdition = settings.apiEdition;
+    }
+
+    /**
+     * Get an attribute value from the app-tag
+     * @param name attribute name
+     */
+    public getAppAttribute(name: string): string {
+      return this.appTagService.getAttribute(name);
     }
 
     /**
@@ -91,8 +105,8 @@ export class Context extends ContextInfo {
 
         let contextFromApp = {
             // 2019-09-29 2dm important now
-            edition: this.appTagService.getTag(appTag.edition),
-            apiEdition: this.appTagService.getTag(appTag.apiEdition)
+            edition: this.appTagService.getAttribute(appTag.edition),
+            apiEdition: this.appTagService.getAttribute(appTag.apiEdition)
         }
 
         // Return an object containing only the not-null properties
