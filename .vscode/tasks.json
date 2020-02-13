@@ -31,12 +31,12 @@
         },
         {
             "type": "npm",
-            "script": "2sxc-api-dev",
+            "script": "2sxc-prod",
             "problemMatcher": []
         },
         {
             "type": "npm",
-            "script": "2sxc-api-prod",
+            "script": "2sxc-dev",
             "problemMatcher": []
         }
     ]

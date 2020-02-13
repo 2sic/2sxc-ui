@@ -1,43 +1,22 @@
 {
-    "version": "10.24.01",
-    "_args": [
-    [
-      "@2sic.com/2sxc-typings@10.24.00",
-      "C:\\Projects\\2sxc-ui\\typings"
-    ]
-  ],
-  "_from": "@2sic.com/2sxc-typings@10.24.00",
-  "_id": "@2sic.com/2sxc-typings@10.24.00",
-  "_inBundle": false,
-  "_integrity": "sha512-qQEzvrCgdmWH3KKEv90EV+PvWiK34dW9YSo3Fx4/nZtrvVIUc5pthMoFi/YeH9o8XZO9forRRem/ByDw1UeQLg==",
-  "_location": "/@2sic.com/2sxc-typings",
-  "_phantomChildren": {},
-  "_requested": {
-    "type": "version",
-    "registry": true,
-    "raw": "@2sic.com/2sxc-typings@10.24.00",
-    "name": "@2sic.com/2sxc-typings",
-    "escapedName": "@2sic.com%2f2sxc-typings",
-    "scope": "@2sic.com",
-    "rawSpec": "10.24.00",
-    "saveSpec": null,
-    "fetchSpec": "10.24.00"
+  "version": "10.25.2",
+  "types": "./index.d.ts",
+  "scripts": {
+    "dry-run": "npm publish --dry-run"
   },
-  "_requiredBy": [
-    "/@2sic.com/dnn-sxc-angular"
-  ],
-  "_resolved": "https://registry.npmjs.org/@2sic.com/2sxc-typings/-/2sxc-typings-9.0.1.tgz",
-  "_spec": "10.24.0",
-  "_where": "C:\\Projects\\2sxc-ui\\typings",
   "author": {
-    "name": "2sic Internet Solutions",
-    "url": "Switzerland & Liechtenstein"
+    "name": "2sic Internet Solutions, Switzerland & Liechtenstein",
+    "url": "https://2sic.com/"
   },
   "bugs": {
     "url": "https://github.com/2sic/2sxc-ui/issues"
   },
+  "files": [
+    "*.d.ts",
+    "src/*.*"
+  ],
   "description": "Typescript typings to work with core 2sxc objects",
-  "homepage": "https://github.com/2sic/2sxc-ui/typings#readme",
+  "homepage": "https://github.com/2sic/2sxc-ui/tree/master/typings#readme",
   "keywords": [
     "DNN",
     "2sxc",
@@ -53,9 +32,8 @@
     "type": "git",
     "url": "git+https://github.com/2sic/2sxc-ui.git"
   },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "types": "./index.d.ts",
-  "main": ""
+  "main": "",
+  "dependencies": {
+    "@types/jquery": "^3.3.31"
+  }
 }

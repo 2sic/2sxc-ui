@@ -2,6 +2,8 @@
 // project: 2sxc typings
 // definitions by: Daniel Mettler, 2sic <https://2sxc.org/>
 
+/// <reference types="jquery" />
+
 export * from './src/SxcInstanceWithEditing'
 
 export * from './src/Log'

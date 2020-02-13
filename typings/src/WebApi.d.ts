@@ -14,7 +14,7 @@ export interface SxcWebApi {
      * @param preventAutoFail
      * @returns {Promise} jQuery ajax promise object
      */
-    get(settingsOrUrl: string | any, params?: any, data?: any, preventAutoFail?: boolean): any;
+    get(settingsOrUrl: string | any, params?: any, data?: any, preventAutoFail?: boolean): JQueryPromise<any>;
 
     /**
      * returns an http-post promise
@@ -24,7 +24,7 @@ export interface SxcWebApi {
      * @param preventAutoFail
      * @returns {Promise} jQuery ajax promise object
      */
-    post(settingsOrUrl: string | any, params?: any, data?: any, preventAutoFail?: boolean): any;
+    post(settingsOrUrl: string | any, params?: any, data?: any, preventAutoFail?: boolean): JQueryPromise<any>;
 
     /**
      * returns an http-delete promise
@@ -34,7 +34,7 @@ export interface SxcWebApi {
      * @param preventAutoFail
      * @returns {Promise} jQuery ajax promise object
      */
-    delete(settingsOrUrl: string | any, params?: any, data?: any, preventAutoFail?: boolean): any;
+    delete(settingsOrUrl: string | any, params?: any, data?: any, preventAutoFail?: boolean): JQueryPromise<any>;
 
     /**
      * returns an http-put promise
@@ -44,7 +44,7 @@ export interface SxcWebApi {
      * @param preventAutoFail
      * @returns {Promise} jQuery ajax promise object
      */
-    put(settingsOrUrl: string | any, params?: any, data?: any, preventAutoFail?: boolean): any;
+    put(settingsOrUrl: string | any, params?: any, data?: any, preventAutoFail?: boolean): JQueryPromise<any>;
 
     /**
      * Generic http request

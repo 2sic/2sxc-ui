@@ -8,7 +8,7 @@ It is separate to keep concerns separate and make contributions simpler (because
 ## Two Code Sets
 
 1. `src` contains the 2sxc-ui parts of 2sxc extending the eav-ui
-1. `2sxc-api` contains the API which does things like talk to the server using the dnn-headers etc.
+1. `projects/$2sxc` contains the API which does things like talk to the server using the dnn-headers etc.
 
 ## Develop / Install 2sxc-ui
 

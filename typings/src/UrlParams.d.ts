@@ -6,7 +6,7 @@ export interface UrlParams {
      * @param {string} name
      * @memberof QueryParams
      */
-    get(name: string);
+    get(name: string): string;
 
     /**
      * Get a required param from the url, no matter if it's behind ? or #
@@ -14,5 +14,5 @@ export interface UrlParams {
      * @param {string} name
      * @memberof QueryParams
      */
-    require(name: string);
+    require(name: string): string;
 }
