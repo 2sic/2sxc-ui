@@ -3,8 +3,8 @@ import {of as observableOf } from 'rxjs';
 
 import {switchMap} from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import { Observable } from "rxjs/Rx";
-import { HttpClient } from "@angular/common/http";
+import { Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 
 @Injectable()

@@ -5,7 +5,7 @@ import {filter, startWith, skipUntil} from 'rxjs/operators';
 //#region imports
 import { Component, ChangeDetectorRef, OnInit } from '@angular/core';
 import { IDialogFrameElement } from 'app/interfaces-shared/idialog-frame-element';
-import { Observable } from 'rxjs/Rx';
+import { Observable } from 'rxjs';
 import { App } from 'app/core/app';
 import { Template } from 'app/template-picker/template';
 import { ContentType } from 'app/template-picker/content-type';
@@ -122,7 +122,7 @@ export class TemplatePickerComponent implements OnInit {
    * wire up observables for this component
    */
   private initObservables(initDone$: Observable<boolean>): void {
-    const initTrue$ = initDone$.pipe(filter(t => t));
+    const initTrue$ = initDone$.pipe(filter(t => !!t));
 
     // wire up basic observables
     this.ready$ = combineLatest(
@@ -175,12 +175,12 @@ export class TemplatePickerComponent implements OnInit {
     // this.state.types$.subscribe(t => log.add('type update: ', t));
     this.ready$.subscribe(r => this.ready = r);
     merge(
-      this.ready$, 
-      this.state.app$, 
-      this.state.type$, 
+      this.ready$,
+      this.state.app$,
+      this.state.type$,
       this.state.types$,
-      this.state.template$, 
-      this.state.templates$, 
+      this.state.template$,
+      this.state.templates$,
       ).subscribe(() => this.cdRef.detectChanges());
   }
 
