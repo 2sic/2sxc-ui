@@ -29,7 +29,7 @@
     "@angular/router": "9.0.2",
     "core-js": "2.5.1",
     "hoek": "^4.2.1",
-    "ngx-build-plus": "^7.8.3",
+    "ngx-build-plus": "^9.0.6",
     "node-sass": "^4.13.1",
     "rxjs": "6.5.4",
     "rxjs-compat": "^6.5.4",
