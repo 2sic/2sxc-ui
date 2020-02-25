@@ -80,7 +80,7 @@
                                     }
                                 }
                             }
-                            /deep/ * {
+                            ::ng-deep * {
                                 margin: 0;
                             }
                         }
