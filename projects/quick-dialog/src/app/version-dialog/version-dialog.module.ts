@@ -7,8 +7,8 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { MaterialModule } from 'app/xtempUpgrading/material-module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { $2sxcService } from 'app/core/$2sxc.service';
-import { Http2SxcHttpProvider } from 'app/core/http-interceptor.service.provider';
-import { HttpModule } from '@angular/http';
+// import { Http2SxcHttpProvider } from 'app/core/http-interceptor.service.provider';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   exports: [
@@ -16,7 +16,7 @@ import { HttpModule } from '@angular/http';
   ],
   imports: [
     CommonModule,
-    HttpModule,
+    HttpClientModule,
     FlexLayoutModule,
     TranslateModule,
     BrowserAnimationsModule,
@@ -26,7 +26,7 @@ import { HttpModule } from '@angular/http';
     SxcVersionsService,
     // todo: added, probably should be in core module
     $2sxcService,
-    Http2SxcHttpProvider,
+    // Http2SxcHttpProvider,
   ],
   declarations: [
     DialogComponent,

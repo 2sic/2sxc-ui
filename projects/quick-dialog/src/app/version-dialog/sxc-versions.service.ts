@@ -1,7 +1,7 @@
 
 import {map} from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import { Response, Headers, RequestOptions, Http } from '@angular/http';
+import { /* Response, Headers, RequestOptions, */ HttpClient } from '@angular/common/http';
 import { ReplaySubject ,  Observable } from "rxjs";
 import { Version } from "app/version-dialog/version";
 
@@ -16,7 +16,7 @@ export class SxcVersionsService {
   private errorSubject: ReplaySubject<string>;
 
   constructor(
-    private http: Http
+    private http: HttpClient
   ) {
     this.versionsSubject = new ReplaySubject<Version[]>(1);
     this.versions = this.versionsSubject.asObservable();
@@ -27,12 +27,12 @@ export class SxcVersionsService {
     this.loadVersions();
   }
 
-  restore(changeId: number): Observable<Response> {
+  restore(changeId: number): Observable<any> {
     const appId = $2sxc.urlParams.require('appId');
     const item = JSON.parse($2sxc.urlParams.require('items'))[0];
     const url = `eav/entities/restore?appId=${appId}&changeId=${changeId}`;
 
-    return this.http.post(url, item);
+    return this.http.post<any>(url, item);
   }
 
   private loadVersions(): void {
@@ -40,8 +40,8 @@ export class SxcVersionsService {
     const item = JSON.parse($2sxc.urlParams.require('items'))[0];
     const url = `eav/entities/history?appId=${appId}`;
 
-    this.http.post(url, item).pipe(
-      map(res => res.json()
+    this.http.post<any[]>(url, item).pipe(
+      map(res => res//.json()
         .map((v, i, all) => Object.assign(v, {
           Data: (() => {
             let lastVersion = all.find(v2 => v2.VersionNumber === v.VersionNumber - 1);
