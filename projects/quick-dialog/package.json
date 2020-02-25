@@ -9,8 +9,9 @@
     "develop": "concurrently \"npm run watch:publish:2sxc-ui\" \"npm run watch:publish:2sxc\" \"npm run watch:publish:dnn9:2cb\" \"npm run watch\" --kill-others -n \"publish to 2sxc,publish to 2sxc-ui,publish to DNN9,build angular\"",
     "dev2dm": "concurrently \"npm run watch:publish:2sxc-ui\" \"npm run watch:publish:2sxc\" \"npm run watch\" --kill-others -n \"publish to 2sxc,publish to 2sxc-ui,build angular\"",
     "watch": "ng build --watch --output-hashing=none --extract-css=true",
-    "watch:2web": "ng build --watch --output-hashing=none --extract-css=true --output-path=\"/Projects/2sxc-dnn742/Website/DesktopModules/ToSIC_SexyContent/dist/ng/\"",
-    "watch:release": "set NODE_ENV=production && ng build --prod --watch --output-path=\"/Projects/2sxc-dnn742/Website/DesktopModules/ToSIC_SexyContent/dist/ng/\" --extraWebpackConfig webpack.extra.js "
+    "watch:dev": "ng build --watch --output-hashing=none --extract-css=true --output-path=\"/Projects/2sxc-dnn742/Website/DesktopModules/ToSIC_SexyContent/dist/ng/\"",
+    "watch:release": "set NODE_ENV=production && ng build --prod --watch --output-path=\"/Projects/2sxc-dnn742/Website/DesktopModules/ToSIC_SexyContent/dist/ng/\" ",
+    "old-watch:release": "set NODE_ENV=production && ng build --prod --watch --output-path=\"/Projects/2sxc-dnn742/Website/DesktopModules/ToSIC_SexyContent/dist/ng/\" --extraWebpackConfig webpack.extra.js "
   },
   "private": true,
   "dependencies": {
@@ -37,6 +38,7 @@
     "zone.js": "~0.10.2"
   },
   "devDependencies": {
+    "@angular-builders/custom-webpack": "9.0.0",
     "@angular-devkit/build-angular": "~0.900.3",
     "@angular/cdk": "9.1.0",
     "@angular/cli": "^9.0.3",

@@ -22,7 +22,11 @@ export class AppComponent extends DnnAppComponent {
     el: ElementRef,
     context: Context
   ) {
-    super(el, context, false);
+    super(el, context.preConfigure(
+      {
+        moduleId: $2sxc.urlParams.require('mid'),
+        contentBlockId: $2sxc.urlParams.require('cbid')
+      }), false);
     const langs = ['en', 'de', 'es', 'fr', 'it', 'nl', 'uk'];
     translate.addLangs(langs);
     translate.setDefaultLang($2sxc.urlParams.require('langpri').split('-')[0]);

@@ -12,6 +12,12 @@
         "type": "npm",
         "script": "watch:release",
         "problemMatcher": []
+      },
+      {
+        "type": "npm",
+        "script": "watch:dev",
+        "group": "build",
+        "problemMatcher": []
       }
     ]
 }
