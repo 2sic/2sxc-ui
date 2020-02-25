@@ -1,7 +1,7 @@
 import { TranslateService } from '@ngx-translate/core';
 import { Component, Inject } from '@angular/core';
 import { DialogComponent } from 'app/version-dialog/dialog.component';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { IDialogFrameElement } from './interfaces-shared/idialog-frame-element';
 import { log } from './core/log';
 
