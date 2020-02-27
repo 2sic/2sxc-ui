@@ -1,6 +1,0 @@
-src
-.vscode
-tsconfig.json
-node_modules
-tslint.json
-index.ts

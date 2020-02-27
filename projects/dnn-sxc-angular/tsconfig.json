@@ -1,29 +1,32 @@
 {
-    "compileOnSave": true,
-    "compilerOptions": {
-        "experimentalDecorators": true,
-        "emitDecoratorMetadata": true,
-        "module": "es2015",
-        "moduleResolution": "node",
-        "declaration": true,
-        "noImplicitAny": true,
-        "sourceMap": true,
-        "inlineSources": true,
-        "skipLibCheck": true,
-        "rootDir": "./src",
-        "outDir": "./dist",
-        "lib": [
-            "es2015", 
-            "dom"
-        ],
-        "typeRoots": [
-            "node_modules/@2sic.com"
-        ]
-    },
-    "files": [
-        "./src/index.ts"
+  "compileOnSave": false,
+  "compilerOptions": {
+    "baseUrl": "./",
+    "outDir": "./dist/out-tsc",
+    "sourceMap": true,
+    "declaration": false,
+    "downlevelIteration": true,
+    "experimentalDecorators": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "importHelpers": true,
+    "target": "es2015",
+    "typeRoots": [
+      "node_modules/@types"
     ],
-    "angularCompilerOptions": {
-        "strictMetadataEmit": true
+    "lib": [
+      "es2018",
+      "dom"
+    ],
+    "paths": {
+      "dnn-sxc-angular": [
+        "dist/dnn-sxc-angular/dnn-sxc-angular",
+        "dist/dnn-sxc-angular"
+      ]
     }
+  },
+  "angularCompilerOptions": {
+    "fullTemplateTypeCheck": true,
+    "strictInjectionParameters": true
+  }
 }
