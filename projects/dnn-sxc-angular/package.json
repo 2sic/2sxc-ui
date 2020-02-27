@@ -2,9 +2,10 @@
   "name": "dnn-sxc-angular-workspace",
   "version": "0.0.0",
   "scripts": {
-    "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
+    "build": "ng build --prod",
+    "dsa-copy:dist": "cpx \"dist/dnn-sxc-angular/{,**/}*.**.*\" \"../../../app-dnn-sxc-angular-dev/node_modules/@2sic.com/dnn-sxc-angular\" -w",
+    "dsa-copy:2dm": "cpx \"dist/dnn-sxc-angular/{,**/}*.**.*\" \"../../../app-Directory/node_modules/@2sic.com/dnn-sxc-angular\" -w -v",
+    "dsa-copy:template-ng8": "cpx \"dist/dnn-sxc-angular/{,**/}*.*\" \"../../../app-template-angular8/ng/node_modules/@2sic.com/dnn-sxc-angular/dist\" -w -v",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
