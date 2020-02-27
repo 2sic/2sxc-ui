@@ -1,5 +1,3 @@
-import { query } from '@angular/core/src/render3/query';
-
 export const apiRouteName = 'api';
 export const contentRouteName = 'content';
 export const queryRouteName = 'query';
