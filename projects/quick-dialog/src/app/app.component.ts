@@ -24,8 +24,9 @@ export class AppComponent extends DnnAppComponent {
   ) {
     super(el, context.preConfigure(
       {
-        moduleId: $2sxc.urlParams.require('mid'),
-        contentBlockId: $2sxc.urlParams.require('cbid')
+        sxc: $2sxc($2sxc.urlParams.require('mid'))
+        // moduleId: $2sxc.urlParams.require('mid'),
+        // contentBlockId: $2sxc.urlParams.require('cbid')
       }), false);
     const langs = ['en', 'de', 'es', 'fr', 'it', 'nl', 'uk'];
     translate.addLangs(langs);

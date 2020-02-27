@@ -7,7 +7,6 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { MaterialModule } from 'app/xtempUpgrading/material-module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { $2sxcService } from 'app/core/$2sxc.service';
-// import { Http2SxcHttpProvider } from 'app/core/http-interceptor.service.provider';
 import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
