@@ -74,9 +74,9 @@ export class Context implements ContextInfo {
         // Use pre-configured values already in settings if defined; otherwise
         // get from HTMLNode
         settings.sxc = settings.sxc ||
-            settings.moduleId
+            (settings.moduleId
             ? this.$2sxc(settings.moduleId, settings.contentBlockId)
-            : this.$2sxc(htmlNode.nativeElement);
+            : this.$2sxc(htmlNode.nativeElement));
 
         if (!settings.sxc) {
             throw new Error('couldn\'t get sxc instance - reason unknown');
