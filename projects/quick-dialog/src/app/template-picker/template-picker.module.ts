@@ -1,7 +1,9 @@
 import { TranslateModule } from '@ngx-translate/core';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { MatMenuModule, MatTabsModule, MatProgressBarModule, /* Materialmodule */ } from '@angular/material';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatTabsModule } from '@angular/material/tabs';
 import { CommonModule } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TemplatePickerComponent } from './template-picker.component';

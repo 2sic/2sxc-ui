@@ -3,15 +3,15 @@ import {of as observableOf } from 'rxjs';
 
 import {switchMap} from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import { Observable } from "rxjs/Rx";
-import { Http } from "@angular/http";
+import { Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 
 @Injectable()
 export class InstallerService {
 
   constructor(
-    private http: Http
+    private http: HttpClient
   ) { }
 
   installPackages(packages: any[], step: Function): Observable<any> {

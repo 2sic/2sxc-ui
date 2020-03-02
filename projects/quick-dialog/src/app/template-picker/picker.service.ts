@@ -5,7 +5,7 @@ import { map, startWith, share } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { Http } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 import { App } from 'app/core/app';
 import { ContentType } from 'app/template-picker/content-type';
 import { Template } from 'app/template-picker/template';
@@ -40,7 +40,7 @@ export class PickerService {
   // all the subjects - these are all multi-cast, so don't use share!
   // #endregion
 
-  constructor(private http: Http) {
+  constructor(private http: HttpClient) {
     log.add('constructor()');
     this.buildObservables();
     this.enableLogging();
@@ -88,10 +88,10 @@ export class PickerService {
   public loadTemplates(): Observable<any> {
     log.add('loadTemplates()');
     this.templates$.reset();
-    const obs = this.http.get(`${Constants.apiRoot}GetSelectableTemplates`)
+    const obs = this.http.get<Template[]>(`${Constants.apiRoot}GetSelectableTemplates`)
       .pipe(share(), /* ensure it's only run once */ );
 
-    obs.subscribe(response => this.templates$.next(response.json() || []));
+    obs.subscribe(response => this.templates$.next(response/*.json()*/ || []));
     return obs;
   }
 
@@ -101,9 +101,9 @@ export class PickerService {
   private loadContentTypes(): Observable<any> {
     log.add(`loadContentTypes()`);
     this.contentTypes$.reset();
-    const obs = this.http.get(`${Constants.apiRoot}GetSelectableContentTypes`)
+    const obs = this.http.get<any[]>(`${Constants.apiRoot}GetSelectableContentTypes`)
       .pipe(share(), /* ensure it's only run once */ );
-    obs.pipe(map(response => (response.json() || []).map(x => {
+    obs.pipe(map(response => (response/*.json*/ || []).map(x => {
         x.Label = (x.Metadata && x.Metadata.Label)
           ? x.Metadata.Label
           : x.Name;
@@ -121,10 +121,10 @@ export class PickerService {
     log.add(`loadApps() - skip:${alreadyLoaded}`);
     if (alreadyLoaded) return;
 
-    const obs = this.http.get(`${Constants.apiRoot}GetSelectableApps`)
+    const obs = this.http.get<any[]>(`${Constants.apiRoot}GetSelectableApps`)
       .pipe(share(), /* ensure it's only run once */ );
 
-    obs.subscribe(response => this.apps$.subject.next(response.json().map(a => new App(a)) /*.map(this.pascalCaseToLower)*/));
+    obs.subscribe(response => this.apps$.subject.next(response/*.json()*/.map(a => new App(a)) /*.map(this.pascalCaseToLower)*/));
     return obs;
   }
 
