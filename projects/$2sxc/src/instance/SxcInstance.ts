@@ -1,4 +1,4 @@
-﻿import * as Public from '../../sxc-typings/index';
+﻿import * as Public from '../../../sxc-typings/index';
 import { SxcWebApi } from './SxcWebApi';
 import { ToSxcName } from '../constants';
 import { SxcRoot } from '../SxcRoot/SxcRoot';

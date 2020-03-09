@@ -1,4 +1,4 @@
-import * as Public from '../../sxc-typings/index';
+import * as Public from '../../../sxc-typings/index';
 
 export interface JsInfo extends Public.JsInfo {
   page: number;

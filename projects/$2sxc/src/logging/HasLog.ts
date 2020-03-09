@@ -1,4 +1,4 @@
-import * as Public from '../../sxc-typings/index';
+import * as Public from '../../../sxc-typings/index';
 import { Log } from './Log';
 
 export abstract class HasLog implements Public.HasLog {

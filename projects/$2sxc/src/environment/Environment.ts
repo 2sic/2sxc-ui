@@ -1,4 +1,4 @@
-import * as Public from '../../sxc-typings/index';
+import * as Public from '../../../sxc-typings/index';
 import { JsInfo } from './JsInfo';
 import { EnvironmentMetaLoader } from './envMetaLoader';
 import { ApiExtensionPlaceholder } from '../constants';

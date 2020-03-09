@@ -1,4 +1,4 @@
-import * as Public from '../../sxc-typings/index';
+import * as Public from '../../../sxc-typings/index';
 import { LogEntry } from './LogEntry';
 
 const maxEntriesReached = 'Maximum amount of entries added to log, will stop adding more';

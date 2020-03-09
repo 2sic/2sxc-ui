@@ -1,4 +1,4 @@
-import * as Public from '../../sxc-typings/index';
+import * as Public from '../../../sxc-typings/index';
 import { HeaderNames, ToSxcName, ApiExtensionPlaceholder } from '../constants';
 import { Environment } from '../environment/Environment';
 

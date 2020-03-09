@@ -1,4 +1,4 @@
-import * as Public from '../../sxc-typings/index';
+import * as Public from '../../../sxc-typings/index';
 import { SxcInstance } from '../instance/SxcInstance';
 import { SxcInstanceWithInternals } from '../instance/SxcInstanceWithInternals';
 import { Environment } from '../environment/Environment';
