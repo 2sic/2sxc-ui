@@ -1,4 +1,4 @@
-// import * as Public from '../../../typings/index';
+// import * as Public from '../../sxc-typings/index';
 // import { SxcInstance } from './SxcInstance';
 // import { SxcRootInternals } from '../SxcRoot/SxcRootInternals';
 // import { SxcRoot } from '../SxcRoot/SxcRoot';

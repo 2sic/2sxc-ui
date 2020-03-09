@@ -1,4 +1,4 @@
-﻿import * as Public from '../../../typings/index';
+﻿import * as Public from '../../sxc-typings/index';
 import { SxcInstance } from './SxcInstance';
 import { AjaxPromise } from '../ajax/AjaxPromise';
 import { Environment } from '../environment/Environment';
