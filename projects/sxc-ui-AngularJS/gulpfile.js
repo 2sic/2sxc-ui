@@ -33,16 +33,16 @@
             .pipe(gulp.dest(dests[dests.current] + config.autopublishTarget));
     });
 
-    gulp.task('watch-publish', ['B-watch-publish-to-2sxc']);
+    gulp.task('watch-publish', ['b-publish']);
 
     // register all watches & run them
-    gulp.task('A-watch-our-code', () => {
+    gulp.task('a-compile', () => {
         watchSet(createSetsForOurCode());
         watchDnnUi();
     });
 
     gulp.task('import-libs', importDependencies);
-    gulp.task('C-snippets-build', watchSnippets);
+    gulp.task('c-snippets', watchSnippets);
 
     // deploy to the current 2sxc-dev
     gulp.task('publish-dist-to-2sxc', function () {
@@ -50,17 +50,12 @@
             .pipe(gulp.dest(dests[dests.current] + config.autopublishTarget));
     });
 
-    gulp.task('publish-js-to-2sxc', function () {
-        gulp.src(['./js/**/*'])
-            .pipe(gulp.dest(dests[dests.current] + config.autopublishTargetJs));
-    });
-
-    gulp.task('B-watch-publish-to-2sxc', function () {
+    gulp.task('b-publish', function () {
         gulp.watch('./dist/**/*', ['publish-dist-to-2sxc']);
         gulp.watch('./js/**/*', ['publish-js-to-2sxc']);
     });
 
-    gulp.task('copy-all-with.data', () => copyAll(dests.default));
+    gulp.task('b-copy-all-with.data', () => copyAll(dests.default));
 
     // special helper - necessary to copy everything incl the ".data" folders
     // which are otherwise skipped

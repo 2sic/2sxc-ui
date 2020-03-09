@@ -14,11 +14,7 @@ It is separate to keep concerns separate and make contributions simpler (because
 1. `projects/quick-dialog` Source for the Quick-Dialog (which appears from below in the UI)
 1. `projects/sxc-typings` Source for the NPM package [@2sic/sxc-typings](https://www.npmjs.com/package/@2sic.com/2sxc-typings)
 
-## Folders
-
-1. `dist` contains the built JS UIs, which is deployed to the DNN installation with 2sxc installed
-1. `projects` contains the source code for all the projects except `src` which will be moved later
-1. `src` contains the root project, and must be moved to `/projects` when possible
+Each project has different ways of building / deploying, mostly because they have different histories. Check out each readme for details. 
 
 ## Develop / Install 2sxc-ui
 
