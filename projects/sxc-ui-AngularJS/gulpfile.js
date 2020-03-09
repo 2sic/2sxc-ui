@@ -2,9 +2,9 @@
     const
         dests = {
           current: 'default',
-            default: '../2sxc-dnn742/Website',
-            evoq: '../TestWebsites/Evoq 9.1.0',
-            dnn92cb: '../2SexyContent/WebDNN9',
+            default: 'c:/projects/2sxc-dnn742/Website',
+            evoq: '../../TestWebsites/Evoq 9.1.0',
+            dnn92cb: '../../2SexyContent/WebDNN9',
         },
         gulp = require('gulp'),
         $ = require('gulp-load-plugins')({

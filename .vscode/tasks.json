@@ -5,11 +5,6 @@
     "tasks": [
         {
             "type": "gulp",
-            "task": "develop",
-            "problemMatcher": []
-        },
-        {
-            "type": "gulp",
             "task": "A-watch-our-code",
             "problemMatcher": []
         },
