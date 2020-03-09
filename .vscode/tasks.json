@@ -38,6 +38,18 @@
             "type": "npm",
             "script": "2sxc-dev",
             "problemMatcher": []
+        },
+        {
+            "type": "npm",
+            "script": "2sxc-dev",
+            "path": "projects/$2sxc/",
+            "problemMatcher": []
+        },
+        {
+            "type": "npm",
+            "script": "2sxc-prod",
+            "path": "projects/$2sxc/",
+            "problemMatcher": []
         }
     ]
 }

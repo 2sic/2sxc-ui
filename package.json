@@ -4,10 +4,7 @@
   "description": "Create awesome, responsive content for DNN",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "develop": "gulp develop",
-    "2sxc-prod": "webpack --config webpack.$2sxc.js --watch --env.prod=true",
-    "2sxc-dev": "webpack --config webpack.$2sxc.js --watch --env.prod=false"
   },
   "repository": {
     "type": "git",

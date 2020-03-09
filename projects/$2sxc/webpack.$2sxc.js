@@ -5,7 +5,7 @@ const merge = require("webpack-merge");
 const pjson = require("./package.json");
 
 const sxcJsFileBase = "2sxc.api";
-const SxcApiPath = "./projects/$2sxc/src/2sxc.api.ts";
+const SxcApiPath = "./src/2sxc.api.ts";
 const SxcDevWebPath =
     "C:\\Projects\\2sxc-dnn742\\Website\\DesktopModules\\ToSIC_SexyContent\\";
 
