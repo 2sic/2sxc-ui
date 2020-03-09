@@ -33,7 +33,7 @@
             .pipe(gulp.dest(dests[dests.current] + config.autopublishTarget));
     });
 
-    gulp.task('watch-publish', ['b-publish']);
+    // gulp.task('watch-publish', ['b-publish']);
 
     // register all watches & run them
     gulp.task('a-compile', () => {
