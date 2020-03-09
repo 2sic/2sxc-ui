@@ -1,4 +1,4 @@
-// type definitions for 2sxc 10.25.02
+// type definitions for 2sxc 10.25.03
 // project: 2sxc typings
 // definitions by: Daniel Mettler, 2sic <https://2sxc.org/>
 
