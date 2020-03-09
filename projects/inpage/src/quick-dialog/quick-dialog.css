@@ -1,0 +1,86 @@
+﻿.inpage-frame-wrapper .inpage-frame {
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.inpage-frame-wrapper .inpage-frame iframe {
+  width: 100%;
+  height: 100%;
+  vertical-align: top;
+  box-sizing: content-box;
+  left: 0;
+  top: 0;
+}
+
+.inpage-frame-wrapper {
+  transform: translate3d(0, 100%, 0);
+  transition: transform 0.2s ease-out;
+  display: block;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  z-index: 9999;
+}
+
+.inpage-frame-wrapper.persona-bar-visible {
+  padding-left: 80px;
+}
+
+.DNNModuleContent .sc-uninitialized {
+  cursor: pointer;
+  width: 100%;
+  display: inline-block;
+  text-align: center;
+}
+
+.DNNModuleContent .sc-uninitialized div {
+  margin: 5px auto;
+  color: #fff;
+  background: rgb(2, 139, 255);
+  font-size: 48px;
+  margin: 5px;
+  width: 100px;
+  height: 100px;
+  border-radius: 50px;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 100px;
+  display: inline-block;
+}
+
+.DNNModuleContent .sc-uninitialized div[class^='icon-sxc-']:before,
+.DNNModuleContent .sc-uninitialized div[class*=' icon-sxc-']:before {
+  /* margin-left: 0.3em; */
+  margin-top: 0.6em;
+}
+
+.inpage-frame-wrapper.dia-select {
+  transform: translate3d(0, 0, 0);
+}
+
+.inpage-frame-wrapper.dia-select {
+  min-height: 16px;
+}
+
+.dnnEditState .DnnModule {
+  opacity: 1 !important;
+}
+
+.no-live-preview-available {
+  display: block;
+  background: rgba(0, 0, 0, 0.04);
+  color: #111;
+  line-height: 80px;
+  height: 80px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  text-align: center;
+  font-size: 14px;
+  font-family: 'Roboto', sans-serif;
+}
