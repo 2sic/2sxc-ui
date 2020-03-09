@@ -9,7 +9,7 @@ It is separate to keep concerns separate and make contributions simpler (because
 
 1. `src` contains the 2sxc-ui parts of 2sxc extending the eav-ui
 1. `projects/$2sxc` contains the API which does things like talk to the server using the dnn-headers etc.
-1. `projects/angularjs` old (obsolete) code which was bundled with 2sxc to help with AngularJS 1.x applications
+1. `projects/$2sxc/angularjs` contains old (obsolete) code which was bundled with 2sxc to help with AngularJS 1.x applications
 1. `projects/dnn-sxc-angular` Source for NPM package [@2sic/dnn-sxc-angular](https://www.npmjs.com/package/@2sic.com/dnn-sxc-angular)
 1. `projects/quick-dialog` Source for the Quick-Dialog (which appears from below in the UI)
 1. `projects/sxc-typings` Source for the NPM package [@2sic/sxc-typings](https://www.npmjs.com/package/@2sic.com/2sxc-typings)
@@ -17,7 +17,6 @@ It is separate to keep concerns separate and make contributions simpler (because
 ## Folders
 
 1. `dist` contains the built JS UIs, which is deployed to the DNN installation with 2sxc installed
-1. `js` contains the built JS APIs which is deployed to the DNN installation with 2sxc installed
 1. `projects` contains the source code for all the projects except `src` which will be moved later
 1. `src` contains the root project, and must be moved to `/projects` when possible
 
