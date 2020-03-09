@@ -4,7 +4,7 @@
   "description": "Create awesome, responsive content for DNN",
   "main": "index.js",
   "scripts": {
-    "develop": "gulp develop",
+    "sxc-ui-dev": "gulp develop"
   },
   "repository": {
     "type": "git",

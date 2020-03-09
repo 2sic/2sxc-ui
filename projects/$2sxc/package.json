@@ -3,8 +3,8 @@
   "version": "10.27.00",
   "description": "The $2sxc JS API for 2sxc.org",
   "scripts": {
-    "2sxc-prod": "webpack --config webpack.$2sxc.js --watch --env.prod=true",
-    "2sxc-dev": "webpack --config webpack.$2sxc.js --watch --env.prod=false"
+    "2sxc-js-prod": "webpack --config webpack.$2sxc.js --watch --env.prod=true",
+    "2sxc-js-dev": "webpack --config webpack.$2sxc.js --watch --env.prod=false"
   },
   "repository": {
     "type": "git",
