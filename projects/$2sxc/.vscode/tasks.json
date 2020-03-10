@@ -7,6 +7,11 @@
       "type": "npm",
       "script": "2sxc-js-dev",
       "problemMatcher": []
+    },
+    {
+      "type": "npm",
+      "script": "2sxc-js-prod",
+      "problemMatcher": []
     }
   ]
 }
