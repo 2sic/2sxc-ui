@@ -3,49 +3,34 @@
     // for the documentation about the tasks.json format
     "version": "2.0.0",
     "tasks": [
-      {
-        "type": "gulp",
-        "task": "A-watch-our-code",
-        "problemMatcher": []
-      },
-      {
-        "type": "gulp",
-        "task": "B-watch-publish-to-2sxc",
-        "problemMatcher": []
-      },
-      {
-        "type": "gulp",
-        "task": "copy-all-with.data",
-        "problemMatcher": []
-      },
-      {
-        "type": "gulp",
-        "task": "C-snippets-build",
-        "group": "build",
-        "problemMatcher": []
-      },
-      {
-        "type": "npm",
-        "script": "2sxc-js-dev",
-        "path": "projects/$2sxc/",
-        "problemMatcher": []
-      },
-      {
-        "type": "npm",
-        "script": "2sxc-js-prod",
-        "path": "projects/$2sxc/",
-        "problemMatcher": []
-      },
-      {
-        "type": "npm",
-        "script": "sxc-ui-dev",
-        "problemMatcher": []
-      },
-      {
-        "type": "npm",
-        "script": "dev",
-        "path": "projects/inpage/",
-        "problemMatcher": []
-      }
+        {
+            "type": "npm",
+            "script": "2sxc-js-dev",
+            "path": "projects/$2sxc/",
+            "problemMatcher": []
+        },
+        {
+            "type": "npm",
+            "script": "2sxc-js-prod",
+            "path": "projects/$2sxc/",
+            "problemMatcher": []
+        },
+        {
+            "type": "npm",
+            "script": "sxc-ui-dev",
+            "problemMatcher": []
+        },
+        {
+            "type": "npm",
+            "script": "dev",
+            "path": "projects/inpage/",
+            "problemMatcher": []
+        },
+        {
+            "type": "npm",
+            "script": "release",
+            "path": "projects/inpage/",
+            "problemMatcher": []
+        }
     ]
 }
