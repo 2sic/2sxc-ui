@@ -1,4 +1,4 @@
-﻿import { Commands } from '../../commands/commands';
+﻿import { Commands as Commands } from '../../commands/commands';
 import { Definition } from '../../commands/definition';
 import { ContextOfButton } from '../../context/context-of-button';
 import { Log } from '../../logging/log';
@@ -38,25 +38,25 @@ export function expandButtonConfig(original: any, sharedProps: any[], parentLog:
   return original;
 }
 
-export function getButtonConfigDefaultsV1(name: string,
-                                          icon: string,
-                                          translateKey: string,
-                                          uiOnly: boolean,
-                                          partOfPage: boolean,
-                                          more: Definition): Partial<ButtonConfig> {
-  //
-  // stv: v1 code
-  const partialButtonConfig = {
-    icon: (context: ContextOfButton) => `icon-sxc-${icon}`,
-    title: (context: ContextOfButton) => `Toolbar.${translateKey}`,
-    uiActionOnly: (context: ContextOfButton) => uiOnly,
-    partOfPage: (context: ContextOfButton) => partOfPage,
-  } as Partial<ButtonConfig>;
+// export function getButtonConfigDefaultsV1(name: string,
+//                                           icon: string,
+//                                           translateKey: string,
+//                                           uiOnly: boolean,
+//                                           partOfPage: boolean,
+//                                           more: Definition): Partial<ButtonConfig> {
+//   //
+//   // stv: v1 code
+//   const partialButtonConfig = {
+//     icon: (context: ContextOfButton) => `icon-sxc-${icon}`,
+//     title: (context: ContextOfButton) => `Toolbar.${translateKey}`,
+//     uiActionOnly: (context: ContextOfButton) => uiOnly,
+//     partOfPage: (context: ContextOfButton) => partOfPage,
+//   } as Partial<ButtonConfig>;
 
-  Object.assign(partialButtonConfig, more);
+//   Object.assign(partialButtonConfig, more);
 
-  return partialButtonConfig;
-}
+//   return partialButtonConfig;
+// }
 
 // remove buttons which are not valid based on add condition
 export function removeDisableButtons(context: any, full: ToolbarConfig, config: any, parentLog: Log): void {
@@ -133,7 +133,7 @@ function evalPropOrFunction(propOrFunction: any, context: ContextOfButton, confi
 export function addDefaultBtnSettings(btn: ButtonConfig,
                                       group: GroupConfig,
                                       fullToolbarConfig: ToolbarConfig,
-                                      actions: Commands,
+                                      actions: typeof Commands,
                                       log: Log) {
 
   // log.add(`adding default btn settings for ${btn.action.name}`);
@@ -169,7 +169,7 @@ const prvProperties = [
 function fallbackBtnSetting(btn: ButtonConfig,
                             group: GroupConfig,
                             fullToolbarConfig: ToolbarConfig,
-                            actions: Commands,
+                            actions: typeof Commands,
                             propName: string): void {
   if (btn[propName]) {
 

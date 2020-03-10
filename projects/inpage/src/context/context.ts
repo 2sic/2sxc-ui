@@ -1,7 +1,9 @@
-﻿import { DataEditContext } from '../data-edit-context/data-edit-context';
+﻿import { IDs } from '../2sxc-extensions/2sxc.consts';
+import { DataEditContext } from '../data-edit-context/data-edit-context';
 import { $2sxcInPage as $2sxc } from '../interfaces/sxc-controller-in-page';
 import { SxcIntanceEditable } from '../interfaces/sxc-instance-editable';
 import { getContainerTag, getEditContext } from '../manage/api';
+import { getSxc } from '../plumbing/getSxc';
 import { isSxcInstance } from '../plumbing/is';
 import { SystemContext } from './base-context/system-context';
 import { TenantContext } from './base-context/tenant-context';
@@ -13,7 +15,6 @@ import { InstanceContext } from './instance-context/instance-context';
 import { UiContext } from './instance-context/ui-context';
 import { ItemContext } from './item-context/item-context';
 import { PageContext } from './page-context/page-context';
-import { getSxc } from '../plumbing/getSxc';
 
 
 
@@ -116,7 +117,7 @@ export function createContextFromEditContext(editCtx: DataEditContext) {
     btnCtx.instance.sxcRootUrl = editCtx.Environment.SxcRootUrl; // NgDialogParams.websiteroot
   }
   if (editCtx.ContentBlock) {
-    btnCtx.instance.allowPublish = editCtx.ContentBlock.VersioningRequirements === $2sxc.c.publishAllowed; // NgDialogParams.publishing
+    btnCtx.instance.allowPublish = editCtx.ContentBlock.VersioningRequirements === IDs.publishAllowed; // NgDialogParams.publishing
   }
 
   // this will be about the current app, settings of the app, app - paths, etc.

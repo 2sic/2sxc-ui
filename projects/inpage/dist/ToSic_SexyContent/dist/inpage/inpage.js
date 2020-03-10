@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 102);
+/******/ 	return __webpack_require__(__webpack_require__.s = 101);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -70,29 +70,18 @@
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CommandBase", function() { return CommandBase; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__toolbar_button_expand_button_config__ = __webpack_require__(14);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__command_definition__ = __webpack_require__(98);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__commands__ = __webpack_require__(10);
-
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__command_definition__ = __webpack_require__(32);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__commands__ = __webpack_require__(9);
 
 
 var CommandBase = /** @class */ (function () {
     function CommandBase() {
-        this.commandDefinition = new __WEBPACK_IMPORTED_MODULE_1__command_definition__["CommandDefinition"]();
     }
     // quick helper so we can better debug the creation of definitions
     CommandBase.prototype.makeDef = function (name, translateKey, icon, uiOnly, partOfPage, more) {
-        if (typeof (partOfPage) !== 'boolean') {
-            throw 'partOfPage in commands not provided, order will be wrong!';
-        }
-        // Toolbar API v2
-        this.commandDefinition.name = name;
-        this.commandDefinition.buttonConfig = Object(__WEBPACK_IMPORTED_MODULE_0__toolbar_button_expand_button_config__["getButtonConfigDefaultsV1"])(name, icon, translateKey, uiOnly, partOfPage, more);
-        this.registerInCatalog();
-    };
-    /** register new CommandDefinition with in Commands */
-    CommandBase.prototype.registerInCatalog = function () {
-        __WEBPACK_IMPORTED_MODULE_2__commands__["Commands"].getInstance().addDef(this.commandDefinition);
+        var commandDefinition = __WEBPACK_IMPORTED_MODULE_0__command_definition__["CommandDefinition"].build(name, translateKey, icon, uiOnly, partOfPage, more);
+        __WEBPACK_IMPORTED_MODULE_1__commands__["Commands"].addDef(commandDefinition);
+        return commandDefinition;
     };
     return CommandBase;
 }());
@@ -119,7 +108,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (immutable) */ __webpack_exports__["getEditContext"] = getEditContext;
 /* harmony export (immutable) */ __webpack_exports__["getContainerTag"] = getContainerTag;
 /* harmony export (immutable) */ __webpack_exports__["getTag"] = getTag;
-/* harmony export (immutable) */ __webpack_exports__["getEditContextOfTag"] = getEditContextOfTag;
 /**
  * get edit-context info of html element or sxc-object
  * @param {SxcIntanceEditable} sxc
@@ -169,7 +157,7 @@ function getEditContextOfTag(htmlTag) {
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "$quickE", function() { return $quickE; });
 /* harmony export (immutable) */ __webpack_exports__["prepareToolbarInDom"] = prepareToolbarInDom;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__positioning__ = __webpack_require__(38);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__positioning__ = __webpack_require__(39);
 
 var selectedOverlay = $("<div class='sc-content-block-menu sc-content-block-selected-menu sc-i18n'></div>")
     .append(btn('delete', 'trash-empty', 'Delete'), btn('sendToPane', 'move', 'Move', null, null, 'sc-cb-mod-only'), "<div id='paneList'></div>");
@@ -258,20 +246,20 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (immutable) */ __webpack_exports__["contextCopy"] = contextCopy;
 /* harmony export (immutable) */ __webpack_exports__["getContextInstance"] = getContextInstance;
 /* harmony export (immutable) */ __webpack_exports__["createContextFromEditContext"] = createContextFromEditContext;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__interfaces_sxc_controller_in_page__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__2sxc_extensions_2sxc_consts__ = __webpack_require__(103);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__manage_api__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__plumbing_is__ = __webpack_require__(48);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__base_context_system_context__ = __webpack_require__(49);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__base_context_tenant_context__ = __webpack_require__(50);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__base_context_user_context__ = __webpack_require__(51);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__content_block_context_content_block_context__ = __webpack_require__(52);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__context_of_button__ = __webpack_require__(53);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__instance_context_app_context__ = __webpack_require__(60);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__instance_context_instance_context__ = __webpack_require__(61);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__instance_context_ui_context__ = __webpack_require__(62);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__item_context_item_context__ = __webpack_require__(63);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__page_context_page_context__ = __webpack_require__(64);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__plumbing_getSxc__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__plumbing_getSxc__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__plumbing_is__ = __webpack_require__(49);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__base_context_system_context__ = __webpack_require__(50);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__base_context_tenant_context__ = __webpack_require__(51);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__base_context_user_context__ = __webpack_require__(52);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__content_block_context_content_block_context__ = __webpack_require__(53);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__context_of_button__ = __webpack_require__(54);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__instance_context_app_context__ = __webpack_require__(61);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__instance_context_instance_context__ = __webpack_require__(62);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__instance_context_ui_context__ = __webpack_require__(63);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__item_context_item_context__ = __webpack_require__(64);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__page_context_page_context__ = __webpack_require__(65);
 
 
 
@@ -294,14 +282,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 function context(tagOrSxc, cbid) {
     var sxc;
     var containerTag = null;
-    if (Object(__WEBPACK_IMPORTED_MODULE_2__plumbing_is__["isSxcInstance"])(tagOrSxc)) { // it is SxcInstance
+    if (Object(__WEBPACK_IMPORTED_MODULE_3__plumbing_is__["isSxcInstance"])(tagOrSxc)) { // it is SxcInstance
         sxc = tagOrSxc;
     }
     else if (typeof tagOrSxc === 'number') { // it is number
-        sxc = Object(__WEBPACK_IMPORTED_MODULE_13__plumbing_getSxc__["getSxc"])(tagOrSxc, cbid);
+        sxc = Object(__WEBPACK_IMPORTED_MODULE_2__plumbing_getSxc__["getSxc"])(tagOrSxc, cbid);
     }
     else { // it is HTMLElement
-        sxc = Object(__WEBPACK_IMPORTED_MODULE_13__plumbing_getSxc__["getSxc"])(tagOrSxc);
+        sxc = Object(__WEBPACK_IMPORTED_MODULE_2__plumbing_getSxc__["getSxc"])(tagOrSxc);
         containerTag = Object(__WEBPACK_IMPORTED_MODULE_1__manage_api__["getContainerTag"])(tagOrSxc);
     }
     var contextOfButton = getContextInstance(sxc, containerTag);
@@ -320,7 +308,7 @@ function contextCopy(htmlElementOrId, cbid) {
     // make a copy
     var copyOfContext = JSON.parse(JSON.stringify(contextOfButton));
     // bring sxc back to context
-    contextOfButton.sxc = Object(__WEBPACK_IMPORTED_MODULE_13__plumbing_getSxc__["getSxc"])(htmlElementOrId);
+    contextOfButton.sxc = Object(__WEBPACK_IMPORTED_MODULE_2__plumbing_getSxc__["getSxc"])(htmlElementOrId);
     return copyOfContext;
 }
 /**
@@ -337,36 +325,36 @@ function getContextInstance(sxc, htmlElement) {
  * @param editCtx
  */
 function createContextFromEditContext(editCtx) {
-    var btnCtx = new __WEBPACK_IMPORTED_MODULE_7__context_of_button__["ContextOfButton"]();
+    var btnCtx = new __WEBPACK_IMPORTED_MODULE_8__context_of_button__["ContextOfButton"]();
     // *** ContextOf ***
     // this will be everything about the current system, like system / api -paths etc.
-    btnCtx.system = new __WEBPACK_IMPORTED_MODULE_3__base_context_system_context__["SystemContext"]();
+    btnCtx.system = new __WEBPACK_IMPORTED_MODULE_4__base_context_system_context__["SystemContext"]();
     if (editCtx.error) {
         btnCtx.system.error = editCtx.error.type;
     }
     // empty
     // this will be something about the current tenant(the dnn portal)
-    btnCtx.tenant = new __WEBPACK_IMPORTED_MODULE_4__base_context_tenant_context__["TenantContext"]();
+    btnCtx.tenant = new __WEBPACK_IMPORTED_MODULE_5__base_context_tenant_context__["TenantContext"]();
     if (editCtx.Environment) {
         btnCtx.tenant.id = editCtx.Environment.WebsiteId; // InstanceConfig.portalId
         btnCtx.tenant.url = editCtx.Environment.WebsiteUrl; // NgDialogParams.portalroot
     }
     // things about the user
-    btnCtx.user = new __WEBPACK_IMPORTED_MODULE_5__base_context_user_context__["UserContext"]();
+    btnCtx.user = new __WEBPACK_IMPORTED_MODULE_6__base_context_user_context__["UserContext"]();
     if (editCtx.User) {
         btnCtx.user.canDesign = editCtx.User.CanDesign;
         btnCtx.user.canDevelop = editCtx.User.CanDevelop;
     }
     // *** ContextOfPage ***
     // this will be information related to the current page
-    btnCtx.page = new __WEBPACK_IMPORTED_MODULE_12__page_context_page_context__["PageContext"]();
+    btnCtx.page = new __WEBPACK_IMPORTED_MODULE_13__page_context_page_context__["PageContext"]();
     if (editCtx.Environment) {
         btnCtx.page.id = editCtx.Environment.PageId; // InstanceConfig.tabId, NgDialogParams.tid
         btnCtx.page.url = editCtx.Environment.PageUrl;
     }
     // *** ContextOfInstance ***
     // information related to the current DNN module, incl.instanceId, etc.
-    btnCtx.instance = new __WEBPACK_IMPORTED_MODULE_9__instance_context_instance_context__["InstanceContext"]();
+    btnCtx.instance = new __WEBPACK_IMPORTED_MODULE_10__instance_context_instance_context__["InstanceContext"]();
     if (editCtx.Environment) {
         btnCtx.instance.id = editCtx.Environment.InstanceId; // InstanceConfig.moduleId, NgDialogParams.mid
         btnCtx.instance.isEditable = editCtx.Environment.IsEditable;
@@ -376,10 +364,10 @@ function createContextFromEditContext(editCtx) {
         btnCtx.instance.sxcRootUrl = editCtx.Environment.SxcRootUrl; // NgDialogParams.websiteroot
     }
     if (editCtx.ContentBlock) {
-        btnCtx.instance.allowPublish = editCtx.ContentBlock.VersioningRequirements === __WEBPACK_IMPORTED_MODULE_0__interfaces_sxc_controller_in_page__["$2sxcInPage"].c.publishAllowed; // NgDialogParams.publishing
+        btnCtx.instance.allowPublish = editCtx.ContentBlock.VersioningRequirements === __WEBPACK_IMPORTED_MODULE_0__2sxc_extensions_2sxc_consts__["IDs"].publishAllowed; // NgDialogParams.publishing
     }
     // this will be about the current app, settings of the app, app - paths, etc.
-    btnCtx.app = new __WEBPACK_IMPORTED_MODULE_8__instance_context_app_context__["AppContext"]();
+    btnCtx.app = new __WEBPACK_IMPORTED_MODULE_9__instance_context_app_context__["AppContext"]();
     if (editCtx.ContentGroup) {
         btnCtx.app.id = editCtx.ContentGroup.AppId; // or NgDialogParams.appId
         btnCtx.app.isContent = editCtx.ContentGroup.IsContent;
@@ -397,7 +385,7 @@ function createContextFromEditContext(editCtx) {
         btnCtx.app.allLanguages = editCtx.Language.All; // or NgDialogParams.langs
     }
     // ensure that the UI will load the correct assets to enable editing
-    btnCtx.ui = new __WEBPACK_IMPORTED_MODULE_10__instance_context_ui_context__["UiContext"]();
+    btnCtx.ui = new __WEBPACK_IMPORTED_MODULE_11__instance_context_ui_context__["UiContext"]();
     if (editCtx.Ui) {
         btnCtx.ui.autoToolbar = editCtx.Ui.AutoToolbar; // toolbar auto-show
         if (editCtx.Ui.Form)
@@ -405,7 +393,7 @@ function createContextFromEditContext(editCtx) {
     }
     // *** ContextOfContentBlock ***
     // information related to the current contentBlock
-    btnCtx.contentBlock = new __WEBPACK_IMPORTED_MODULE_6__content_block_context_content_block_context__["ContentBlockContext"]();
+    btnCtx.contentBlock = new __WEBPACK_IMPORTED_MODULE_7__content_block_context_content_block_context__["ContentBlockContext"]();
     if (editCtx.ContentBlock) {
         btnCtx.contentBlock.id = editCtx.ContentBlock.Id; // or sxc.cbid or InstanceConfig.cbid
         btnCtx.contentBlock.isEntity = editCtx.ContentBlock.IsEntity; // ex: InstanceConfig.cbIsEntity
@@ -425,7 +413,7 @@ function createContextFromEditContext(editCtx) {
     }
     // *** ContextOfItem ***
     // information about the current item
-    btnCtx.item = new __WEBPACK_IMPORTED_MODULE_11__item_context_item_context__["ItemContext"]();
+    btnCtx.item = new __WEBPACK_IMPORTED_MODULE_12__item_context_item_context__["ItemContext"]();
     // empty
     // *** ContextOfToolbar ***
     // fill externally
@@ -455,7 +443,7 @@ var $2sxcInPage = __WEBPACK_IMPORTED_MODULE_0__window_in_page__["windowInPage"].
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Log", function() { return Log; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__entry__ = __webpack_require__(65);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__entry__ = __webpack_require__(66);
 
 var maxScopeLen = 3;
 var maxNameLen = 6;
@@ -647,6 +635,43 @@ var selectors = {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Commands", function() { return Commands; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__command_definition__ = __webpack_require__(32);
+
+var CommandsClass = /** @class */ (function () {
+    function CommandsClass() {
+        var _this = this;
+        this.commandList = [];
+        this.list = {}; // hash - table of action definitions, to be used a list()["action - name"]
+        this.get = function (name) { return _this.list[name]; }; // a specific action definition
+    }
+    CommandsClass.prototype.add = function (name, translateKey, icon, uiOnly, partOfPage, more) {
+        return this.addDef(__WEBPACK_IMPORTED_MODULE_0__command_definition__["CommandDefinition"].build(name, translateKey, icon, uiOnly, partOfPage, more));
+    };
+    CommandsClass.prototype.addDef = function (def) {
+        if (!this.list[def.name]) {
+            // add
+            this.commandList.push(def);
+            this.list[def.name] = def;
+        }
+        else if (this.list[def.name] !== def) {
+            // update
+            this.list[def.name] = def;
+        }
+        return def;
+    };
+    return CommandsClass;
+}());
+// only create the catalog once, then use that everywhere
+var Commands = new CommandsClass(); // .getInstance();
+
+
+/***/ }),
+/* 10 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (immutable) */ __webpack_exports__["translate"] = translate;
 /**
  * provide an official translate API for 2sxc - currently internally using a jQuery library, but this may change
@@ -659,54 +684,72 @@ function translate(key) {
 
 
 /***/ }),
-/* 10 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Commands", function() { return Commands; });
-var Commands = /** @class */ (function () {
-    function Commands() {
-        var _this = this;
-        this.commandList = [];
-        this.list = {}; // hash - table of action definitions, to be used a list()["action - name"]
-        this.get = function (name) { return _this.list[name]; }; // a specific action definition
-        this.addDef = function (def) {
-            if (!_this.list[def.name]) {
-                // add
-                _this.commandList.push(def);
-                _this.list[def.name] = def;
-            }
-            else if (_this.list[def.name] !== def) {
-                // update
-                _this.list[def.name] = def;
-            }
-        };
-    }
-    Commands.getInstance = function () {
-        if (!Commands.instance) {
-            Commands.instance = new Commands();
-        }
-        return Commands.instance;
-    };
-    return Commands;
-}());
-
-
-
-/***/ }),
 /* 11 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (immutable) */ __webpack_exports__["removeFromList"] = removeFromList;
-/* harmony export (immutable) */ __webpack_exports__["changeOrder"] = changeOrder;
-/* harmony export (immutable) */ __webpack_exports__["addItem"] = addItem;
-/* harmony export (immutable) */ __webpack_exports__["publish"] = publish;
-/* harmony export (immutable) */ __webpack_exports__["publishId"] = publishId;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__render__ = __webpack_require__(16);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Actions", function() { return Actions; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__contentBlock_render__ = __webpack_require__(15);
 
+/**
+ * These actions make changes to a content-block - like adding, removing or publishing items in the block
+ * @class ActionsCatalog
+ */
+var ActionsCatalog = /** @class */ (function () {
+    function ActionsCatalog() {
+    }
+    /**
+     * add an item to the list at this position
+     * @param {ContextOfButton} context
+     * @param {number} sortOrder
+     */
+    ActionsCatalog.prototype.addItem = function (context, sortOrder) {
+        return getAndReload(context, 'view/module/additem', { sortOrder: sortOrder });
+    };
+    /**
+     * remove an item from a list, then reload
+     * @param {ContextOfButton} context
+     * @param {number} sortOrder
+     */
+    ActionsCatalog.prototype.removeFromList = function (context, sortOrder) {
+        return getAndReload(context, 'view/module/removefromlist', { sortOrder: sortOrder });
+    };
+    /**
+     * change the order of an item in a list, then reload
+     * @param {ContextOfButton} context
+     * @param {number} initOrder
+     * @param {number} newOrder
+     */
+    ActionsCatalog.prototype.changeOrder = function (context, initOrder, newOrder) {
+        return getAndReload(context, 'view/module/changeorder', {
+            sortOrder: initOrder,
+            destinationSortOrder: newOrder,
+        });
+    };
+    /**
+     * set a content-item in this block to published, then reload
+     * @param {ContextOfButton} context
+     * @param {string} part
+     * @param {number} sortOrder
+     */
+    ActionsCatalog.prototype.publish = function (context, part, sortOrder) {
+        return getAndReload(context, 'view/module/publish', {
+            part: part,
+            sortOrder: sortOrder,
+        });
+    };
+    /**
+     * publish an item using it's ID
+     * @param {ContextOfButton} context
+     * @param {number} entityId
+     */
+    ActionsCatalog.prototype.publishId = function (context, entityId) {
+        return getAndReload(context, 'view/module/publish', { id: entityId });
+    };
+    return ActionsCatalog;
+}());
+var Actions = new ActionsCatalog();
 /*
  * this is a content block in the browser
  *
@@ -726,10 +769,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
  */
 function getAndReload(context, url, params) {
     return new Promise(function (resolve, reject) {
-        context.sxc.webApi.get({
+        context.sxc.webApi
+            .get({
             url: url,
             params: params,
-        }).done(function (data, textStatus, jqXHR) {
+        })
+            .done(function (data, textStatus, jqXHR) {
             if (jqXHR.status === 204 || jqXHR.status === 200) {
                 // resolve the promise with the response text
                 resolve(data);
@@ -739,71 +784,12 @@ function getAndReload(context, url, params) {
                 // which will hopefully be a meaningful error
                 reject(Error(textStatus));
             }
-        }).fail(function (jqXHR, textStatus, errorThrown) {
+        })
+            .fail(function (jqXHR, textStatus, errorThrown) {
             reject(Error(errorThrown));
         });
-    })
-        .then(function () {
-        __WEBPACK_IMPORTED_MODULE_0__render__["renderer"].reloadAndReInitialize(context);
-    });
-}
-/**
- * remove an item from a list, then reload
- * @param {ContextOfButton} context
- * @param {number} sortOrder
- * @returns {any}
- */
-function removeFromList(context, sortOrder) {
-    return getAndReload(context, 'view/module/removefromlist', {
-        sortOrder: sortOrder,
-    });
-}
-/**
- * change the order of an item in a list, then reload
- * @param {ContextOfButton} context
- * @param {number} initOrder
- * @param {number} newOrder
- * @returns {any}
- */
-function changeOrder(context, initOrder, newOrder) {
-    return getAndReload(context, 'view/module/changeorder', {
-        sortOrder: initOrder,
-        destinationSortOrder: newOrder,
-    });
-}
-/**
- * add an item to the list at this position
- * @param {ContextOfButton} context
- * @param {number} sortOrder
- * @returns {any}
- */
-function addItem(context, sortOrder) {
-    return getAndReload(context, 'view/module/additem', {
-        sortOrder: sortOrder,
-    });
-}
-/**
- * set a content-item in this block to published, then reload
- * @param {ContextOfButton} context
- * @param {string} part
- * @param {number} sortOrder
- * @returns {any}
- */
-function publish(context, part, sortOrder) {
-    return getAndReload(context, 'view/module/publish', {
-        part: part,
-        sortOrder: sortOrder,
-    });
-}
-/**
- * publish an item using it's ID
- * @param {ContextOfButton} context
- * @param {number} entityId
- * @returns {any}
- */
-function publishId(context, entityId) {
-    return getAndReload(context, 'view/module/publish', {
-        id: entityId,
+    }).then(function () {
+        __WEBPACK_IMPORTED_MODULE_0__contentBlock_render__["renderer"].reloadAndReInitialize(context);
     });
 }
 
@@ -818,15 +804,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (immutable) */ __webpack_exports__["buildToolbarsFromAnyNode"] = buildToolbarsFromAnyNode;
 /* harmony export (immutable) */ __webpack_exports__["disable"] = disable;
 /* harmony export (immutable) */ __webpack_exports__["isDisabled"] = isDisabled;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__constants__ = __webpack_require__(19);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__context_context__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__interfaces_sxc_controller_in_page__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__2sxc_extensions_2sxc_consts__ = __webpack_require__(103);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__constants__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__context_context__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__logging_log__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__manage_api__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__item_render_toolbar__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__tag_toolbar__ = __webpack_require__(30);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__toolbar_toolbar_expand_config__ = __webpack_require__(31);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__toolbar_toolbar_settings__ = __webpack_require__(36);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__toolbar_toolbar_settings__ = __webpack_require__(37);
 
 
 
@@ -838,7 +824,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 // quick debug - set to false if not needed for production
 var dbg = false;
-var toolbarSelector = ".sc-menu[toolbar],.sc-menu[data-toolbar],[" + __WEBPACK_IMPORTED_MODULE_0__constants__["toolbar"].attr.full + "]";
+var toolbarSelector = ".sc-menu[toolbar],.sc-menu[data-toolbar],[" + __WEBPACK_IMPORTED_MODULE_1__constants__["toolbar"].attr.full + "]";
 /**
  * Generate toolbars inside a MODULE tag (usually a div with class sc-edit-context)
  * @param parentLog
@@ -849,7 +835,7 @@ function buildToolbars(parentLog, parentTag, optionalId) {
     var log = new __WEBPACK_IMPORTED_MODULE_3__logging_log__["Log"]('Tlb.BldAll', parentLog);
     parentTag = $(parentTag || '.DnnModule-' + optionalId);
     // if something says the toolbars are disabled, then skip
-    if (parentTag.attr(__WEBPACK_IMPORTED_MODULE_0__constants__["toolbar"].attr.disable))
+    if (parentTag.attr(__WEBPACK_IMPORTED_MODULE_1__constants__["toolbar"].attr.disable))
         return;
     var toolbars = getToolbarTags(parentTag);
     // no toolbars found, must help a bit because otherwise editing is hard
@@ -868,7 +854,7 @@ function buildToolbars(parentLog, parentTag, optionalId) {
  */
 function buildToolbarsFromAnyNode(parentLog, node) {
     var log = new __WEBPACK_IMPORTED_MODULE_3__logging_log__["Log"]('Tlb.BldNde', parentLog);
-    var contextNode = $(node).closest(__WEBPACK_IMPORTED_MODULE_0__constants__["cb"].selectors.ofName)[0];
+    var contextNode = $(node).closest(__WEBPACK_IMPORTED_MODULE_1__constants__["cb"].selectors.ofName)[0];
     // if we have no contextNode (a parent content block), we can
     // assume the node is outside of a 2sxc module so not interesting
     if (contextNode == null)
@@ -908,12 +894,12 @@ function loadAndConvertTag(log, node) {
  */
 function loadConfigFromAttributes(tag) {
     try {
-        var newConfigFormat = tryGetAttrText(tag, __WEBPACK_IMPORTED_MODULE_0__constants__["toolbar"].attr.full);
+        var newConfigFormat = tryGetAttrText(tag, __WEBPACK_IMPORTED_MODULE_1__constants__["toolbar"].attr.full);
         if (newConfigFormat) {
             return JSON.parse(newConfigFormat);
         }
         else {
-            var at = __WEBPACK_IMPORTED_MODULE_2__interfaces_sxc_controller_in_page__["$2sxcInPage"].c.attr;
+            var at = __WEBPACK_IMPORTED_MODULE_0__2sxc_extensions_2sxc_consts__["IDs"].attr;
             var data = getFirstAttribute(tag, at.toolbar, at.toolbarData);
             var settings = getFirstAttribute(tag, at.settings, at.settingsData);
             return {
@@ -934,9 +920,9 @@ function loadConfigFromAttributes(tag) {
  * @param log
  */
 function convertConfigToToolbarTags(tag, config, log) {
-    var cnt = Object(__WEBPACK_IMPORTED_MODULE_1__context_context__["context"])(tag);
+    var cnt = Object(__WEBPACK_IMPORTED_MODULE_2__context_context__["context"])(tag);
     cnt.toolbar = Object(__WEBPACK_IMPORTED_MODULE_7__toolbar_toolbar_expand_config__["expandToolbarConfig"])(cnt, config.toolbar, config.settings, log);
-    if (tag.attr(__WEBPACK_IMPORTED_MODULE_0__constants__["toolbar"].attr.full)) {
+    if (tag.attr(__WEBPACK_IMPORTED_MODULE_1__constants__["toolbar"].attr.full)) {
         // new case, where the full toolbar is included in one setting
         // ReSharper disable once WrongExpressionStatement
         tag.data('2sxc-tagtoolbar', new __WEBPACK_IMPORTED_MODULE_6__tag_toolbar__["TagToolbar"](tag, cnt));
@@ -945,7 +931,7 @@ function convertConfigToToolbarTags(tag, config, log) {
     else {
         var toolbar = Object(__WEBPACK_IMPORTED_MODULE_5__item_render_toolbar__["renderToolbar"])(cnt);
         // default case, tag is the old <ul> tag, so find the sc-element parent before replacing
-        var scElementParent = tag.closest(__WEBPACK_IMPORTED_MODULE_0__constants__["toolbar"].selectors.ofOldHover);
+        var scElementParent = tag.closest(__WEBPACK_IMPORTED_MODULE_1__constants__["toolbar"].selectors.ofOldHover);
         tag.replaceWith(toolbar);
         if (scElementParent.length > 0)
             ensureToolbarHoverClass(scElementParent);
@@ -956,7 +942,7 @@ function getToolbarTags(parentTag) {
     var allInner = $(toolbarSelector, parentTag);
     // return only those, which don't belong to a sub-item
     var onlyDirectDescendents = allInner
-        .filter(function (i, e) { return $(e).closest(__WEBPACK_IMPORTED_MODULE_0__constants__["cb"].selectors.ofName)[0] === parentTag[0]; });
+        .filter(function (i, e) { return $(e).closest(__WEBPACK_IMPORTED_MODULE_1__constants__["cb"].selectors.ofName)[0] === parentTag[0]; });
     if (dbg)
         console.log('found toolbars for parent', parentTag, onlyDirectDescendents);
     return onlyDirectDescendents;
@@ -966,20 +952,20 @@ function ensureToolbarHoverClass(jtag) {
     if (jtag.length <= 0)
         return; // skip in case nothing was given
     var tag = jtag[0];
-    if (!tag.hasAttribute(__WEBPACK_IMPORTED_MODULE_0__constants__["toolbar"].attr.hover))
-        tag.setAttribute(__WEBPACK_IMPORTED_MODULE_0__constants__["toolbar"].attr.hover, '');
+    if (!tag.hasAttribute(__WEBPACK_IMPORTED_MODULE_1__constants__["toolbar"].attr.hover))
+        tag.setAttribute(__WEBPACK_IMPORTED_MODULE_1__constants__["toolbar"].attr.hover, '');
 }
 /** Create a default/fallback toolbar and return it */
 function addFallbackToolbar(parentTag) {
     if (dbg)
         console.log("didn't find toolbar, so will auto-create", parentTag);
-    var outsideCb = !parentTag.hasClass(__WEBPACK_IMPORTED_MODULE_0__constants__["cb"].classes.name);
-    var contentTag = outsideCb ? parentTag.find("div" + __WEBPACK_IMPORTED_MODULE_0__constants__["cb"].selectors.ofName) : parentTag;
+    var outsideCb = !parentTag.hasClass(__WEBPACK_IMPORTED_MODULE_1__constants__["cb"].classes.name);
+    var contentTag = outsideCb ? parentTag.find("div" + __WEBPACK_IMPORTED_MODULE_1__constants__["cb"].selectors.ofName) : parentTag;
     // auto toolbar
-    var ctx = Object(__WEBPACK_IMPORTED_MODULE_1__context_context__["context"])(contentTag);
+    var ctx = Object(__WEBPACK_IMPORTED_MODULE_2__context_context__["context"])(contentTag);
     if (ctx.ui.autoToolbar === false)
         return null;
-    contentTag.attr(__WEBPACK_IMPORTED_MODULE_0__constants__["toolbar"].attr.full, JSON.stringify(__WEBPACK_IMPORTED_MODULE_8__toolbar_toolbar_settings__["emptyToolbar"]));
+    contentTag.attr(__WEBPACK_IMPORTED_MODULE_1__constants__["toolbar"].attr.full, JSON.stringify(__WEBPACK_IMPORTED_MODULE_8__toolbar_toolbar_settings__["emptyToolbar"]));
     return contentTag;
 }
 /** Find the text of one or more attributes in fallback order, till we found one */
@@ -993,11 +979,11 @@ function tryGetAttrText(tag, name) {
 }
 function disable(tag) {
     var jtag = $(tag);
-    jtag.attr(__WEBPACK_IMPORTED_MODULE_0__constants__["toolbar"].attr.disable, 'true');
+    jtag.attr(__WEBPACK_IMPORTED_MODULE_1__constants__["toolbar"].attr.disable, 'true');
 }
 function isDisabled(sxc) {
     var tag = $(Object(__WEBPACK_IMPORTED_MODULE_4__manage_api__["getTag"])(sxc));
-    return !!tag.attr(__WEBPACK_IMPORTED_MODULE_0__constants__["toolbar"].attr.disable);
+    return !!tag.attr(__WEBPACK_IMPORTED_MODULE_1__constants__["toolbar"].attr.disable);
 }
 
 
@@ -1008,7 +994,7 @@ function isDisabled(sxc) {
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (immutable) */ __webpack_exports__["renderToolbar"] = renderToolbar;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__render_groups__ = __webpack_require__(66);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__render_groups__ = __webpack_require__(67);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__render_helpers__ = __webpack_require__(29);
 
 
@@ -1043,8 +1029,352 @@ function renderToolbar(context) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HasLog", function() { return HasLog; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__log__ = __webpack_require__(7);
+
+var HasLog = /** @class */ (function () {
+    /**
+     * initialize the logger
+     * ideally it has a parent-logger to attach to
+     * @param logName name to show in the logger
+     * @param parentLog parent-logger to attach to
+     * @param initialMessage optional start-message to log
+     */
+    function HasLog(logName, parentLog, initialMessage) {
+        var _this = this;
+        this.parentLog = parentLog;
+        this.initLog = function (name, parentLog, initialMessage) { return _this.initLogInternal(name, parentLog, initialMessage); };
+        this.logId = 'unknwn';
+        this.linkLog = function (parentLog) { return _this.log.linkLog(parentLog); };
+        this.initLogInternal(logName, parentLog, initialMessage);
+    }
+    HasLog.prototype.initLogInternal = function (name, parentLog, initialMessage) {
+        if (this.log == null)
+            // standard & most common case: just create log
+            this.log = new __WEBPACK_IMPORTED_MODULE_0__log__["Log"](name, parentLog, initialMessage);
+        else {
+            // late-init case, where the log was already created - just reconfig keeping what was in it
+            this.log.rename(name);
+            this.linkLog(parentLog);
+            if (initialMessage != null)
+                this.log.add(initialMessage);
+        }
+    };
+    return HasLog;
+}());
+
+
+
+/***/ }),
+/* 15 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "renderer", function() { return renderer; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__interfaces_window_in_page__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__manage_api__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__quick_edit_start__ = __webpack_require__(38);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__toolbar_build_toolbars__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__main_content_block__ = __webpack_require__(77);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__web_api_promises__ = __webpack_require__(40);
+
+
+
+
+
+
+/*
+ * this is the content block manager in the browser
+ *
+ * A Content Block is a stand alone unit of content, with it's own definition of
+ * 1. content items
+ * 2. template
+ * + some other stuff
+ *
+ * it should be able to render itself
+ */
+var Renderer = /** @class */ (function () {
+    function Renderer() {
+    }
+    /**
+     * Show a message where the content of a module should be - usually as placeholder till something else happens
+     * @param {ContextOfButton} context
+     * @param {string} newContent
+     * @returns {} nothing
+     */
+    Renderer.prototype.showMessage = function (context, newContent) {
+        $(Object(__WEBPACK_IMPORTED_MODULE_1__manage_api__["getTag"])(context.sxc)).html(newContent);
+    };
+    /**
+     * this one assumes a replace / change has already happened, but now must be finalized...
+     * @param {ContextOfButton} context
+     * @param {boolean} forceAjax
+     * @param {boolean} preview
+     */
+    Renderer.prototype.reloadAndReInitialize = function (context, forceAjax, preview) {
+        // if ajax is not supported, we must reload the whole page
+        if (!forceAjax && !context.app.supportsAjax) {
+            __WEBPACK_IMPORTED_MODULE_0__interfaces_window_in_page__["windowInPage"].location.reload();
+            return Promise.resolve();
+        }
+        return this.ajaxLoad(context, __WEBPACK_IMPORTED_MODULE_4__main_content_block__["MainContentBlock"].cUseExistingTemplate, preview)
+            .then(function (result) {
+            // If Evoq, tell Evoq that page has changed if it has changed (Ajax call)
+            if (__WEBPACK_IMPORTED_MODULE_0__interfaces_window_in_page__["windowInPage"].dnn_tabVersioningEnabled) { // this only exists in evoq or on new DNNs with tabVersioning
+                try {
+                    __WEBPACK_IMPORTED_MODULE_0__interfaces_window_in_page__["windowInPage"].dnn.ContentEditorManager.triggerChangeOnPageContentEvent();
+                }
+                catch (e) {
+                    // ignore
+                }
+            }
+            // 2017-09-02 2dm - believe this was meant to re-init the dialog manager, but it doesn't actually work
+            // must check for side-effects, which would need the manager to re-build the configuration
+            // 2018-11-03 2dm disabled completely for now
+            // quickDialog.hide();
+            return result;
+        }).catch(function (error) { return console.log('Error in reloadAndReInitialize', error); });
+    };
+    /**
+     * ajax-call, then replace
+     * @param {ContextOfButton} context
+     * @param {number} alternateTemplateId
+     * @param {boolean} justPreview
+     */
+    Renderer.prototype.ajaxLoad = function (context, alternateTemplateId, justPreview) {
+        var _this = this;
+        return Object(__WEBPACK_IMPORTED_MODULE_5__web_api_promises__["getPreviewWithTemplate"])(context, alternateTemplateId)
+            .then(function (result) {
+            _this.replaceContentBlock(context, result, justPreview);
+        })
+            .then(function () {
+            Object(__WEBPACK_IMPORTED_MODULE_2__quick_edit_start__["reset"])();
+        }); // reset quick-edit, because the config could have changed
+    };
+    /**
+     * ajax update/replace the content of the content-block
+     * optionally also initialize the toolbar (if not just preview)
+     * @param {ContextOfButton} context
+     * @param {string} newContent
+     * @param {boolean} justPreview
+     */
+    Renderer.prototype.replaceContentBlock = function (context, newContent, justPreview) {
+        try {
+            var newDom = $(newContent);
+            // Must disable toolbar before we attach to DOM
+            if (justPreview)
+                Object(__WEBPACK_IMPORTED_MODULE_3__toolbar_build_toolbars__["disable"])(newDom);
+            $(Object(__WEBPACK_IMPORTED_MODULE_1__manage_api__["getTag"])(context.sxc)).replaceWith(newDom);
+            // reset the cache, so the sxc-object is refreshed
+            context.sxc.recreate(true);
+        }
+        catch (e) {
+            console.log('Error while rendering template:', e);
+        }
+    };
+    return Renderer;
+}());
+var renderer = new Renderer();
+
+
+/***/ }),
+/* 16 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DebugConfig", function() { return DebugConfig; });
+// ReSharper disable once InconsistentNaming
+var DebugConfig = {
+    cms: {
+        autoDump: false,
+        run: true
+    },
+    qDialog: {
+        showHide: true
+    },
+    bootstrap: {
+        initInstance: true
+    },
+    state: {
+        change: true,
+        get: false
+    }
+};
+
+
+/***/ }),
+/* 17 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony export (immutable) */ __webpack_exports__["prepareToAddContent"] = prepareToAddContent;
+/* harmony export (immutable) */ __webpack_exports__["updateTemplateFromDia"] = updateTemplateFromDia;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__toolbar_build_toolbars__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__render__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__web_api_promises__ = __webpack_require__(40);
+
+
+
+/**
+ * prepare the instance so content can be added
+ * this ensure the content-group has been created, which is required to add content
+ * @param {ContextOfButton} context
+ * @returns {any}
+ */
+function prepareToAddContent(context, useModuleList) {
+    var isCreated = context.contentBlock.isCreated;
+    if (isCreated || !useModuleList)
+        return Promise.resolve();
+    // return persistTemplate(sxc, null);
+    // let manage = sxc.manage;
+    // let contentGroup = manage._editContext.ContentGroup;
+    // let showingAjaxPreview = $2sxc._toolbarManager.isDisabled(sxc);
+    // let groupExistsAndTemplateUnchanged = !!contentGroup.HasContent; // && !showingAjaxPreview;
+    var templateId = context.contentBlock.templateId;
+    // template has not changed
+    // if (groupExistsAndTemplateUnchanged) return $.when(null);
+    // persist the template
+    return updateTemplate(context, templateId, true);
+}
+/**
+ * Update the template and adjust UI accordingly.
+ * @param {ContextOfButton} context
+ * @param {number} templateId
+ * @param {boolean} forceCreate
+ */
+function updateTemplateFromDia(context, templateId) {
+    var wasShowingPreview = Object(__WEBPACK_IMPORTED_MODULE_0__toolbar_build_toolbars__["isDisabled"])(context.sxc);
+    return updateTemplate(context, templateId, false)
+        .then(function () {
+        // only reload on ajax, not on app as that was already re-loaded on the preview
+        // necessary to show the original template again
+        if (wasShowingPreview)
+            __WEBPACK_IMPORTED_MODULE_1__render__["renderer"].reloadAndReInitialize(context);
+    });
+}
+/**
+ * Update the template.
+ */
+function updateTemplate(context, templateId, forceCreate) {
+    return Object(__WEBPACK_IMPORTED_MODULE_2__web_api_promises__["saveTemplate"])(context, templateId, forceCreate).then(function (data) {
+        if (!data)
+            return null;
+        // fixes a special case where the guid is given with quotes (depends on version of angularjs) issue #532
+        var newGuid = data.replace(/[\",\']/g, '');
+        if (console)
+            console.log("created content group {" + newGuid + "}");
+        return context.contentBlock.contentGroupId = newGuid;
+    }).catch(function () {
+        // error handling
+        return alert('error - result not ok, was not able to create ContentGroup');
+    });
+}
+
+
+/***/ }),
+/* 18 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "toolbar", function() { return toolbar; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "cb", function() { return cb; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Attributes", function() { return Attributes; });
+/** Toolbar constants */
+var toolbar = {
+    attr: {
+        full: 'sxc-toolbar',
+        hover: 'sxc-toolbar-hover',
+        disable: 'data-disable-toolbar',
+    },
+    classes: {
+        oldHover: 'sc-element',
+    },
+    selectors: {
+        ofOldHover: '.sc-element',
+    },
+};
+/** ContentBlock constants  */
+var cb = {
+    classes: {
+        name: 'sc-content-block',
+    },
+    selectors: {
+        ofName: '.sc-content-block',
+    },
+};
+var Attributes = {
+    InstanceId: 'data-cb-instance',
+    Context: 'data-edit-context',
+    ContentBlockId: 'data-cb-id',
+};
+
+
+/***/ }),
+/* 19 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony export (immutable) */ __webpack_exports__["renderButton"] = renderButton;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__adapters_old_parameters_adapter__ = __webpack_require__(68);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__render_helpers__ = __webpack_require__(29);
+
+
+/**
+ * generate the html for a button
+ * @param sxc instance sxc
+ * @param buttonConfig
+ * @param groupIndex group-index in which the button is shown
+ */
+function renderButton(context, groupIndex) {
+    var buttonConfig = context.button;
+    // retrieve configuration for this button
+    var oldParamsAdapter = Object(__WEBPACK_IMPORTED_MODULE_0__adapters_old_parameters_adapter__["oldParametersAdapter"])(buttonConfig.action);
+    var onclick = '';
+    if (!buttonConfig.disabled) {
+        onclick = "$2sxc(" + context.instance.id + ", " + context.contentBlock.id + ").manage.run(" + JSON.stringify(oldParamsAdapter) + ", event);";
+        // onclick = `$2sxc(${context.instance.id}, ${context.contentBlock.id}).manage.run2($2sxc.context(this), ${JSON.stringify(oldParamsAdapter)}, event);`;
+    }
+    var button = document.createElement('a');
+    if (buttonConfig.action) {
+        button.classList.add("sc-" + buttonConfig.action.name);
+    }
+    button.classList.add("group-" + groupIndex);
+    if (buttonConfig.disabled) {
+        button.classList.add('disabled');
+    }
+    Object(__WEBPACK_IMPORTED_MODULE_1__render_helpers__["addClasses"])(button, buttonConfig.classes, ',');
+    if (buttonConfig.dynamicClasses) {
+        var dynamicClasses = buttonConfig.dynamicClasses(context);
+        Object(__WEBPACK_IMPORTED_MODULE_1__render_helpers__["addClasses"])(button, dynamicClasses, ' ');
+    }
+    button.setAttribute('onclick', onclick); // serialize JavaScript because of ajax
+    if (buttonConfig.title) {
+        button.setAttribute('data-i18n', "[title]" + buttonConfig.title(context)); // localization support
+    }
+    var box = document.createElement('div');
+    var symbol = document.createElement('i');
+    if (buttonConfig.icon) {
+        Object(__WEBPACK_IMPORTED_MODULE_1__render_helpers__["addClasses"])(symbol, buttonConfig.icon(context), ' ');
+    }
+    symbol.setAttribute('aria-hidden', 'true');
+    box.appendChild(symbol);
+    button.appendChild(box);
+    return button;
+}
+
+
+/***/ }),
+/* 20 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (immutable) */ __webpack_exports__["expandButtonConfig"] = expandButtonConfig;
-/* harmony export (immutable) */ __webpack_exports__["getButtonConfigDefaultsV1"] = getButtonConfigDefaultsV1;
 /* harmony export (immutable) */ __webpack_exports__["removeDisableButtons"] = removeDisableButtons;
 /* harmony export (immutable) */ __webpack_exports__["addDefaultBtnSettings"] = addDefaultBtnSettings;
 /* harmony export (immutable) */ __webpack_exports__["customize"] = customize;
@@ -1076,18 +1406,23 @@ function expandButtonConfig(original, sharedProps, parentLog) {
     log.add('done');
     return original;
 }
-function getButtonConfigDefaultsV1(name, icon, translateKey, uiOnly, partOfPage, more) {
-    //
-    // stv: v1 code
-    var partialButtonConfig = {
-        icon: function (context) { return "icon-sxc-" + icon; },
-        title: function (context) { return "Toolbar." + translateKey; },
-        uiActionOnly: function (context) { return uiOnly; },
-        partOfPage: function (context) { return partOfPage; },
-    };
-    Object.assign(partialButtonConfig, more);
-    return partialButtonConfig;
-}
+// export function getButtonConfigDefaultsV1(name: string,
+//                                           icon: string,
+//                                           translateKey: string,
+//                                           uiOnly: boolean,
+//                                           partOfPage: boolean,
+//                                           more: Definition): Partial<ButtonConfig> {
+//   //
+//   // stv: v1 code
+//   const partialButtonConfig = {
+//     icon: (context: ContextOfButton) => `icon-sxc-${icon}`,
+//     title: (context: ContextOfButton) => `Toolbar.${translateKey}`,
+//     uiActionOnly: (context: ContextOfButton) => uiOnly,
+//     partOfPage: (context: ContextOfButton) => partOfPage,
+//   } as Partial<ButtonConfig>;
+//   Object.assign(partialButtonConfig, more);
+//   return partialButtonConfig;
+// }
 // remove buttons which are not valid based on add condition
 function removeDisableButtons(context, full, config, parentLog) {
     var log = new __WEBPACK_IMPORTED_MODULE_0__logging_log__["Log"]("Tlb.RmvDsb', parentLog, 'start remove disabled buttons for " + full.groups.length + " groups");
@@ -1221,351 +1556,6 @@ function customize(toolbar) {
 
 
 /***/ }),
-/* 15 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HasLog", function() { return HasLog; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__log__ = __webpack_require__(7);
-
-var HasLog = /** @class */ (function () {
-    /**
-     * initialize the logger
-     * ideally it has a parent-logger to attach to
-     * @param logName name to show in the logger
-     * @param parentLog parent-logger to attach to
-     * @param initialMessage optional start-message to log
-     */
-    function HasLog(logName, parentLog, initialMessage) {
-        var _this = this;
-        this.parentLog = parentLog;
-        this.initLog = function (name, parentLog, initialMessage) { return _this.initLogInternal(name, parentLog, initialMessage); };
-        this.logId = 'unknwn';
-        this.linkLog = function (parentLog) { return _this.log.linkLog(parentLog); };
-        this.initLogInternal(logName, parentLog, initialMessage);
-    }
-    HasLog.prototype.initLogInternal = function (name, parentLog, initialMessage) {
-        if (this.log == null)
-            // standard & most common case: just create log
-            this.log = new __WEBPACK_IMPORTED_MODULE_0__log__["Log"](name, parentLog, initialMessage);
-        else {
-            // late-init case, where the log was already created - just reconfig keeping what was in it
-            this.log.rename(name);
-            this.linkLog(parentLog);
-            if (initialMessage != null)
-                this.log.add(initialMessage);
-        }
-    };
-    return HasLog;
-}());
-
-
-
-/***/ }),
-/* 16 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "renderer", function() { return renderer; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__interfaces_window_in_page__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__manage_api__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__quick_edit_start__ = __webpack_require__(37);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__toolbar_build_toolbars__ = __webpack_require__(12);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__main_content_block__ = __webpack_require__(76);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__web_api_promises__ = __webpack_require__(39);
-
-
-
-
-
-
-/*
- * this is the content block manager in the browser
- *
- * A Content Block is a stand alone unit of content, with it's own definition of
- * 1. content items
- * 2. template
- * + some other stuff
- *
- * it should be able to render itself
- */
-var Renderer = /** @class */ (function () {
-    function Renderer() {
-    }
-    /**
-     * Show a message where the content of a module should be - usually as placeholder till something else happens
-     * @param {ContextOfButton} context
-     * @param {string} newContent
-     * @returns {} nothing
-     */
-    Renderer.prototype.showMessage = function (context, newContent) {
-        $(Object(__WEBPACK_IMPORTED_MODULE_1__manage_api__["getTag"])(context.sxc)).html(newContent);
-    };
-    /**
-     * this one assumes a replace / change has already happened, but now must be finalized...
-     * @param {ContextOfButton} context
-     * @param {boolean} forceAjax
-     * @param {boolean} preview
-     */
-    Renderer.prototype.reloadAndReInitialize = function (context, forceAjax, preview) {
-        // if ajax is not supported, we must reload the whole page
-        if (!forceAjax && !context.app.supportsAjax) {
-            __WEBPACK_IMPORTED_MODULE_0__interfaces_window_in_page__["windowInPage"].location.reload();
-            return Promise.resolve();
-        }
-        return this.ajaxLoad(context, __WEBPACK_IMPORTED_MODULE_4__main_content_block__["MainContentBlock"].cUseExistingTemplate, preview)
-            .then(function (result) {
-            // If Evoq, tell Evoq that page has changed if it has changed (Ajax call)
-            if (__WEBPACK_IMPORTED_MODULE_0__interfaces_window_in_page__["windowInPage"].dnn_tabVersioningEnabled) { // this only exists in evoq or on new DNNs with tabVersioning
-                try {
-                    __WEBPACK_IMPORTED_MODULE_0__interfaces_window_in_page__["windowInPage"].dnn.ContentEditorManager.triggerChangeOnPageContentEvent();
-                }
-                catch (e) {
-                    // ignore
-                }
-            }
-            // 2017-09-02 2dm - believe this was meant to re-init the dialog manager, but it doesn't actually work
-            // must check for side-effects, which would need the manager to re-build the configuration
-            // 2018-11-03 2dm disabled completely for now
-            // quickDialog.hide();
-            return result;
-        }).catch(function (error) { return console.log('Error in reloadAndReInitialize', error); });
-    };
-    /**
-     * ajax-call, then replace
-     * @param {ContextOfButton} context
-     * @param {number} alternateTemplateId
-     * @param {boolean} justPreview
-     */
-    Renderer.prototype.ajaxLoad = function (context, alternateTemplateId, justPreview) {
-        var _this = this;
-        return Object(__WEBPACK_IMPORTED_MODULE_5__web_api_promises__["getPreviewWithTemplate"])(context, alternateTemplateId)
-            .then(function (result) {
-            _this.replaceContentBlock(context, result, justPreview);
-        })
-            .then(function () {
-            Object(__WEBPACK_IMPORTED_MODULE_2__quick_edit_start__["reset"])();
-        }); // reset quick-edit, because the config could have changed
-    };
-    /**
-     * ajax update/replace the content of the content-block
-     * optionally also initialize the toolbar (if not just preview)
-     * @param {ContextOfButton} context
-     * @param {string} newContent
-     * @param {boolean} justPreview
-     */
-    Renderer.prototype.replaceContentBlock = function (context, newContent, justPreview) {
-        try {
-            var newDom = $(newContent);
-            // Must disable toolbar before we attach to DOM
-            if (justPreview)
-                Object(__WEBPACK_IMPORTED_MODULE_3__toolbar_build_toolbars__["disable"])(newDom);
-            $(Object(__WEBPACK_IMPORTED_MODULE_1__manage_api__["getTag"])(context.sxc)).replaceWith(newDom);
-            // reset the cache, so the sxc-object is refreshed
-            context.sxc.recreate(true);
-        }
-        catch (e) {
-            console.log('Error while rendering template:', e);
-        }
-    };
-    return Renderer;
-}());
-var renderer = new Renderer();
-
-
-/***/ }),
-/* 17 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DebugConfig", function() { return DebugConfig; });
-// ReSharper disable once InconsistentNaming
-var DebugConfig = {
-    cms: {
-        autoDump: false,
-        run: true
-    },
-    qDialog: {
-        showHide: true
-    },
-    bootstrap: {
-        initInstance: true
-    },
-    state: {
-        change: true,
-        get: false
-    }
-};
-
-
-/***/ }),
-/* 18 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (immutable) */ __webpack_exports__["prepareToAddContent"] = prepareToAddContent;
-/* harmony export (immutable) */ __webpack_exports__["updateTemplateFromDia"] = updateTemplateFromDia;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__toolbar_build_toolbars__ = __webpack_require__(12);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__render__ = __webpack_require__(16);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__web_api_promises__ = __webpack_require__(39);
-
-
-
-/**
- * prepare the instance so content can be added
- * this ensure the content-group has been created, which is required to add content
- * @param {ContextOfButton} context
- * @returns {any}
- */
-function prepareToAddContent(context, useModuleList) {
-    var isCreated = context.contentBlock.isCreated;
-    if (isCreated || !useModuleList)
-        return Promise.resolve();
-    // return persistTemplate(sxc, null);
-    // let manage = sxc.manage;
-    // let contentGroup = manage._editContext.ContentGroup;
-    // let showingAjaxPreview = $2sxc._toolbarManager.isDisabled(sxc);
-    // let groupExistsAndTemplateUnchanged = !!contentGroup.HasContent; // && !showingAjaxPreview;
-    var templateId = context.contentBlock.templateId;
-    // template has not changed
-    // if (groupExistsAndTemplateUnchanged) return $.when(null);
-    // persist the template
-    return updateTemplate(context, templateId, true);
-}
-/**
- * Update the template and adjust UI accordingly.
- * @param {ContextOfButton} context
- * @param {number} templateId
- * @param {boolean} forceCreate
- */
-function updateTemplateFromDia(context, templateId) {
-    var wasShowingPreview = Object(__WEBPACK_IMPORTED_MODULE_0__toolbar_build_toolbars__["isDisabled"])(context.sxc);
-    return updateTemplate(context, templateId, false)
-        .then(function () {
-        // only reload on ajax, not on app as that was already re-loaded on the preview
-        // necessary to show the original template again
-        if (wasShowingPreview)
-            __WEBPACK_IMPORTED_MODULE_1__render__["renderer"].reloadAndReInitialize(context);
-    });
-}
-/**
- * Update the template.
- */
-function updateTemplate(context, templateId, forceCreate) {
-    return Object(__WEBPACK_IMPORTED_MODULE_2__web_api_promises__["saveTemplate"])(context, templateId, forceCreate).then(function (data) {
-        if (!data)
-            return null;
-        // fixes a special case where the guid is given with quotes (depends on version of angularjs) issue #532
-        var newGuid = data.replace(/[\",\']/g, '');
-        if (console)
-            console.log("created content group {" + newGuid + "}");
-        return context.contentBlock.contentGroupId = newGuid;
-    }).catch(function () {
-        // error handling
-        return alert('error - result not ok, was not able to create ContentGroup');
-    });
-}
-
-
-/***/ }),
-/* 19 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "toolbar", function() { return toolbar; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "cb", function() { return cb; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Attributes", function() { return Attributes; });
-/** Toolbar constants */
-var toolbar = {
-    attr: {
-        full: 'sxc-toolbar',
-        hover: 'sxc-toolbar-hover',
-        disable: 'data-disable-toolbar',
-    },
-    classes: {
-        oldHover: 'sc-element',
-    },
-    selectors: {
-        ofOldHover: '.sc-element',
-    },
-};
-/** ContentBlock constants  */
-var cb = {
-    classes: {
-        name: 'sc-content-block',
-    },
-    selectors: {
-        ofName: '.sc-content-block',
-    },
-};
-var Attributes = {
-    InstanceId: 'data-cb-instance',
-    Context: 'data-edit-context',
-    ContentBlockId: 'data-cb-id',
-};
-
-
-/***/ }),
-/* 20 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (immutable) */ __webpack_exports__["renderButton"] = renderButton;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__adapters_old_parameters_adapter__ = __webpack_require__(67);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__render_helpers__ = __webpack_require__(29);
-
-
-/**
- * generate the html for a button
- * @param sxc instance sxc
- * @param buttonConfig
- * @param groupIndex group-index in which the button is shown
- */
-function renderButton(context, groupIndex) {
-    var buttonConfig = context.button;
-    // retrieve configuration for this button
-    var oldParamsAdapter = Object(__WEBPACK_IMPORTED_MODULE_0__adapters_old_parameters_adapter__["oldParametersAdapter"])(buttonConfig.action);
-    var onclick = '';
-    if (!buttonConfig.disabled) {
-        onclick = "$2sxc(" + context.instance.id + ", " + context.contentBlock.id + ").manage.run(" + JSON.stringify(oldParamsAdapter) + ", event);";
-        // onclick = `$2sxc(${context.instance.id}, ${context.contentBlock.id}).manage.run2($2sxc.context(this), ${JSON.stringify(oldParamsAdapter)}, event);`;
-    }
-    var button = document.createElement('a');
-    if (buttonConfig.action) {
-        button.classList.add("sc-" + buttonConfig.action.name);
-    }
-    button.classList.add("group-" + groupIndex);
-    if (buttonConfig.disabled) {
-        button.classList.add('disabled');
-    }
-    Object(__WEBPACK_IMPORTED_MODULE_1__render_helpers__["addClasses"])(button, buttonConfig.classes, ',');
-    if (buttonConfig.dynamicClasses) {
-        var dynamicClasses = buttonConfig.dynamicClasses(context);
-        Object(__WEBPACK_IMPORTED_MODULE_1__render_helpers__["addClasses"])(button, dynamicClasses, ' ');
-    }
-    button.setAttribute('onclick', onclick); // serialize JavaScript because of ajax
-    if (buttonConfig.title) {
-        button.setAttribute('data-i18n', "[title]" + buttonConfig.title(context)); // localization support
-    }
-    var box = document.createElement('div');
-    var symbol = document.createElement('i');
-    if (buttonConfig.icon) {
-        Object(__WEBPACK_IMPORTED_MODULE_1__render_helpers__["addClasses"])(symbol, buttonConfig.icon(context), ' ');
-    }
-    symbol.setAttribute('aria-hidden', 'true');
-    box.appendChild(symbol);
-    button.appendChild(box);
-    return button;
-}
-
-
-/***/ }),
 /* 21 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -1623,11 +1613,11 @@ var ButtonConfig = /** @class */ (function () {
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "QuickDialogManager", function() { return QuickDialogManager; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "quickDialog", function() { return quickDialog; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__DebugConfig__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__container__ = __webpack_require__(41);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__container_size__ = __webpack_require__(42);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__state__ = __webpack_require__(43);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__url_handler__ = __webpack_require__(80);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__DebugConfig__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__container__ = __webpack_require__(42);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__container_size__ = __webpack_require__(43);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__state__ = __webpack_require__(44);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__url_handler__ = __webpack_require__(81);
 
 
 
@@ -1776,11 +1766,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (immutable) */ __webpack_exports__["clear"] = clear;
 /* harmony export (immutable) */ __webpack_exports__["createSpecs"] = createSpecs;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__plumbing_getSxc__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__cmds_strategy_factory__ = __webpack_require__(100);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__mod__ = __webpack_require__(45);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__cmds_strategy_factory__ = __webpack_require__(99);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__mod__ = __webpack_require__(46);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__quick_e__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__selectors_instance__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__specs__ = __webpack_require__(101);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__specs__ = __webpack_require__(100);
 
 
 
@@ -1909,11 +1899,11 @@ $('a', __WEBPACK_IMPORTED_MODULE_3__quick_e__["$quickE"].selected).click(functio
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Cms", function() { return Cms; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__commands_engine__ = __webpack_require__(47);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__commands_engine__ = __webpack_require__(48);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__context_context__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__context_context_of_instance__ = __webpack_require__(28);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__DebugConfig__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__logging_has_log__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__DebugConfig__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__logging_has_log__ = __webpack_require__(14);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__logging_log__ = __webpack_require__(7);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
@@ -1986,7 +1976,7 @@ var Cms = /** @class */ (function (_super) {
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ContextOfInstance", function() { return ContextOfInstance; });
 /* harmony export (immutable) */ __webpack_exports__["isContextOfInstance"] = isContextOfInstance;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__context_of_page__ = __webpack_require__(57);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__context_of_page__ = __webpack_require__(58);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -2202,13 +2192,13 @@ var TagToolbar = /** @class */ (function () {
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (immutable) */ __webpack_exports__["expandToolbarConfig"] = expandToolbarConfig;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__logging_log__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__manage_instance_config__ = __webpack_require__(68);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__adapters_old_toolbar_settings_adapter__ = __webpack_require__(69);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__button_expand_button_config__ = __webpack_require__(14);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__button_expand_group_config__ = __webpack_require__(70);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__toolbar_config__ = __webpack_require__(71);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__toolbar_config_templates__ = __webpack_require__(35);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__toolbar_settings__ = __webpack_require__(36);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__manage_instance_config__ = __webpack_require__(69);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__adapters_old_toolbar_settings_adapter__ = __webpack_require__(70);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__button_expand_button_config__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__button_expand_group_config__ = __webpack_require__(71);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__toolbar_config__ = __webpack_require__(72);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__toolbar_config_templates__ = __webpack_require__(36);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__toolbar_settings__ = __webpack_require__(37);
 
 
 
@@ -2326,6 +2316,44 @@ function ensureDefinitionTree(unstructuredConfig, toolbarSettings, parentLog) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CommandDefinition", function() { return CommandDefinition; });
+var CommandDefinition = /** @class */ (function () {
+    function CommandDefinition(name) {
+        this.name = name;
+    }
+    CommandDefinition.prototype.setConfig = function (icon, translateKey, uiOnly, partOfPage, more) {
+        //
+        // stv: v1 code
+        var partialButtonConfig = {
+            icon: function (context) { return "icon-sxc-" + icon; },
+            title: function (context) { return "Toolbar." + translateKey; },
+            uiActionOnly: function (context) { return uiOnly; },
+            partOfPage: function (context) { return partOfPage; },
+        };
+        Object.assign(partialButtonConfig, more);
+        this.buttonConfig = partialButtonConfig;
+    };
+    CommandDefinition.build = function (name, translateKey, icon, uiOnly, partOfPage, more) {
+        if (typeof (partOfPage) !== 'boolean') {
+            throw 'partOfPage in commands not provided, order will be wrong!';
+        }
+        var commandDefinition = new CommandDefinition(name);
+        // Toolbar API v2
+        // this.commandDefinition.name = name;
+        commandDefinition.setConfig(icon, translateKey, uiOnly, partOfPage, more);
+        return commandDefinition;
+    };
+    return CommandDefinition;
+}());
+
+
+
+/***/ }),
+/* 33 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (immutable) */ __webpack_exports__["flattenActionDefinition"] = flattenActionDefinition;
 /**
  * entity support (vertical compatibility for pre 2sxc v9.x)
@@ -2350,7 +2378,7 @@ function flattenActionDefinition(actDef) {
 
 
 /***/ }),
-/* 33 */
+/* 34 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2365,7 +2393,7 @@ function parametersAdapter(oldParameters) {
 
 
 /***/ }),
-/* 34 */
+/* 35 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2433,15 +2461,15 @@ function evalPropOrFunction(propOrFunction) {
 
 
 /***/ }),
-/* 35 */
+/* 36 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ToolbarConfigTemplates", function() { return ToolbarConfigTemplates; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__logging_has_log__ = __webpack_require__(15);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__templates_default_toolbar_template__ = __webpack_require__(72);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__templates_left_toolbar_template__ = __webpack_require__(73);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__logging_has_log__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__templates_default_toolbar_template__ = __webpack_require__(73);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__templates_left_toolbar_template__ = __webpack_require__(74);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -2493,7 +2521,7 @@ var ToolbarConfigTemplates = /** @class */ (function (_super) {
 
 
 /***/ }),
-/* 36 */
+/* 37 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2535,15 +2563,15 @@ var emptyToolbar = {
 
 
 /***/ }),
-/* 37 */
+/* 38 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (immutable) */ __webpack_exports__["start"] = start;
 /* harmony export (immutable) */ __webpack_exports__["reset"] = reset;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__config__ = __webpack_require__(74);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__positioning__ = __webpack_require__(38);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__config__ = __webpack_require__(75);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__positioning__ = __webpack_require__(39);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__quick_e__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__selectors_instance__ = __webpack_require__(8);
 
@@ -2613,7 +2641,7 @@ function reset() {
 
 
 /***/ }),
-/* 38 */
+/* 39 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2623,7 +2651,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (immutable) */ __webpack_exports__["refresh"] = refresh;
 /* harmony export (immutable) */ __webpack_exports__["findNearest"] = findNearest;
 /* harmony export (immutable) */ __webpack_exports__["getCoordinates"] = getCoordinates;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__coords__ = __webpack_require__(75);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__coords__ = __webpack_require__(76);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__quick_e__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__selectors_instance__ = __webpack_require__(8);
 
@@ -2778,7 +2806,7 @@ function getCoordinates(element) {
 
 
 /***/ }),
-/* 39 */
+/* 40 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2879,18 +2907,18 @@ function getPreviewWithTemplate(context, templateId) {
 
 
 /***/ }),
-/* 40 */
+/* 41 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (immutable) */ __webpack_exports__["commandOpenNgDialog"] = commandOpenNgDialog;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__contentBlock_render__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__contentBlock_render__ = __webpack_require__(15);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__interfaces_sxc_controller_in_page__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__interfaces_window_in_page__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__quick_dialog_quick_dialog__ = __webpack_require__(23);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__settings_DialogPaths__ = __webpack_require__(25);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__command_link_to_ng_dialog__ = __webpack_require__(81);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__command_link_to_ng_dialog__ = __webpack_require__(82);
 
 
 
@@ -2950,15 +2978,15 @@ function commandOpenNgDialog(context, event) {
 
 
 /***/ }),
-/* 41 */
+/* 42 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (immutable) */ __webpack_exports__["getOrCreate"] = getOrCreate;
 /* harmony export (immutable) */ __webpack_exports__["getIFrame"] = getIFrame;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__container_size__ = __webpack_require__(42);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iframe_bridge__ = __webpack_require__(77);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__container_size__ = __webpack_require__(43);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iframe_bridge__ = __webpack_require__(78);
 
 
 /**
@@ -3005,14 +3033,14 @@ function buildContainerAndIFrame() {
 
 
 /***/ }),
-/* 42 */
+/* 43 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (immutable) */ __webpack_exports__["setSize"] = setSize;
 /* harmony export (immutable) */ __webpack_exports__["watchForResize"] = watchForResize;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__container__ = __webpack_require__(41);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__container__ = __webpack_require__(42);
 
 /**
  * this is a dialog manager which is in charge of all quick-dialogues
@@ -3060,21 +3088,21 @@ function watchForResize(container) {
 
 
 /***/ }),
-/* 43 */
+/* 44 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "cbId", function() { return cbId; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "cancelled", function() { return cancelled; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__manage_session_state_handler__ = __webpack_require__(79);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__manage_session_state_handler__ = __webpack_require__(80);
 
 var cbId = new __WEBPACK_IMPORTED_MODULE_0__manage_session_state_handler__["SessionStateHandler"]('dia-cbid');
 var cancelled = new __WEBPACK_IMPORTED_MODULE_0__manage_session_state_handler__["SessionStateHandler"]('cancelled-dialog');
 
 
 /***/ }),
-/* 44 */
+/* 45 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3102,13 +3130,13 @@ var Cb = /** @class */ (function () {
 
 
 /***/ }),
-/* 45 */
+/* 46 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Mod", function() { return Mod; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__mod_manage__ = __webpack_require__(46);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__mod_manage__ = __webpack_require__(47);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__quick_e__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__selectors_instance__ = __webpack_require__(8);
 
@@ -3144,7 +3172,7 @@ var Mod = /** @class */ (function () {
 
 
 /***/ }),
-/* 46 */
+/* 47 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3290,19 +3318,19 @@ function createMod(paneName, position, modId) {
 
 
 /***/ }),
-/* 47 */
+/* 48 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Engine", function() { return Engine; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__contentBlock_templates__ = __webpack_require__(18);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__logging_has_log__ = __webpack_require__(15);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__toolbar_adapters_settings_adapter__ = __webpack_require__(34);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__contentBlock_templates__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__logging_has_log__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__toolbar_adapters_settings_adapter__ = __webpack_require__(35);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__toolbar_button_button_action__ = __webpack_require__(21);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__toolbar_button_button_config__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__command_open_ng_dialog__ = __webpack_require__(40);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__commands__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__command_open_ng_dialog__ = __webpack_require__(41);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__commands__ = __webpack_require__(9);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -3365,7 +3393,7 @@ var Engine = /** @class */ (function (_super) {
         this.log.add("run command " + name + " for type " + contentType);
         // Toolbar API v2
         var newButtonAction = new __WEBPACK_IMPORTED_MODULE_3__toolbar_button_button_action__["ButtonAction"](name, contentType, settings);
-        newButtonAction.commandDefinition = __WEBPACK_IMPORTED_MODULE_6__commands__["Commands"].getInstance().get(name);
+        newButtonAction.commandDefinition = __WEBPACK_IMPORTED_MODULE_6__commands__["Commands"].get(name);
         var newButtonConfig = new __WEBPACK_IMPORTED_MODULE_4__toolbar_button_button_config__["ButtonConfig"](newButtonAction);
         newButtonConfig.name = name;
         var button = (context.button = Object.assign(newButtonConfig, newButtonAction.commandDefinition.buttonConfig, Object(__WEBPACK_IMPORTED_MODULE_2__toolbar_adapters_settings_adapter__["settingsAdapter"])(settings))); // merge conf & settings, but settings has higher priority
@@ -3420,7 +3448,7 @@ var Engine = /** @class */ (function (_super) {
     Engine.prototype.expandSettingsWithDefaults = function (settings) {
         var name = settings.action;
         this.log.add("will add defaults for " + name + " from buttonConfig");
-        var conf = __WEBPACK_IMPORTED_MODULE_6__commands__["Commands"].getInstance().get(name).buttonConfig;
+        var conf = __WEBPACK_IMPORTED_MODULE_6__commands__["Commands"].get(name).buttonConfig;
         var full = Object.assign({}, conf, settings); // merge conf & settings, but settings has higher priority
         return full;
     };
@@ -3430,7 +3458,7 @@ var Engine = /** @class */ (function (_super) {
 
 
 /***/ }),
-/* 48 */
+/* 49 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3442,7 +3470,7 @@ function isSxcInstance(thing) {
 
 
 /***/ }),
-/* 49 */
+/* 50 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3460,7 +3488,7 @@ var SystemContext = /** @class */ (function () {
 
 
 /***/ }),
-/* 50 */
+/* 51 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3478,7 +3506,7 @@ var TenantContext = /** @class */ (function () {
 
 
 /***/ }),
-/* 51 */
+/* 52 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3496,7 +3524,7 @@ var UserContext = /** @class */ (function () {
 
 
 /***/ }),
-/* 52 */
+/* 53 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3514,14 +3542,14 @@ var ContentBlockContext = /** @class */ (function () {
 
 
 /***/ }),
-/* 53 */
+/* 54 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ContextOfButton", function() { return ContextOfButton; });
 /* harmony export (immutable) */ __webpack_exports__["isContextOfButton"] = isContextOfButton;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__context_of_toolbar__ = __webpack_require__(54);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__context_of_toolbar__ = __webpack_require__(55);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -3551,13 +3579,13 @@ function isContextOfButton(thing) {
 
 
 /***/ }),
-/* 54 */
+/* 55 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ContextOfToolbar", function() { return ContextOfToolbar; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__context_of_item__ = __webpack_require__(55);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__context_of_item__ = __webpack_require__(56);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -3583,13 +3611,13 @@ var ContextOfToolbar = /** @class */ (function (_super) {
 
 
 /***/ }),
-/* 55 */
+/* 56 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ContextOfItem", function() { return ContextOfItem; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__context_of_content_block__ = __webpack_require__(56);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__context_of_content_block__ = __webpack_require__(57);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -3615,7 +3643,7 @@ var ContextOfItem = /** @class */ (function (_super) {
 
 
 /***/ }),
-/* 56 */
+/* 57 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3647,13 +3675,13 @@ var ContextOfContentBlock = /** @class */ (function (_super) {
 
 
 /***/ }),
-/* 57 */
+/* 58 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ContextOfPage", function() { return ContextOfPage; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__context_of__ = __webpack_require__(58);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__context_of__ = __webpack_require__(59);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -3679,13 +3707,13 @@ var ContextOfPage = /** @class */ (function (_super) {
 
 
 /***/ }),
-/* 58 */
+/* 59 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ContextOf", function() { return ContextOf; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__base_context_base_context__ = __webpack_require__(59);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__base_context_base_context__ = __webpack_require__(60);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -3711,7 +3739,7 @@ var ContextOf = /** @class */ (function (_super) {
 
 
 /***/ }),
-/* 59 */
+/* 60 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3734,7 +3762,7 @@ function isContext(thing) {
 
 
 /***/ }),
-/* 60 */
+/* 61 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3752,7 +3780,7 @@ var AppContext = /** @class */ (function () {
 
 
 /***/ }),
-/* 61 */
+/* 62 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3770,7 +3798,7 @@ var InstanceContext = /** @class */ (function () {
 
 
 /***/ }),
-/* 62 */
+/* 63 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3788,7 +3816,7 @@ var UiContext = /** @class */ (function () {
 
 
 /***/ }),
-/* 63 */
+/* 64 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3806,7 +3834,7 @@ var ItemContext = /** @class */ (function () {
 
 
 /***/ }),
-/* 64 */
+/* 65 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3824,7 +3852,7 @@ var PageContext = /** @class */ (function () {
 
 
 /***/ }),
-/* 65 */
+/* 66 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3843,13 +3871,13 @@ var Entry = /** @class */ (function () {
 
 
 /***/ }),
-/* 66 */
+/* 67 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (immutable) */ __webpack_exports__["renderGroups"] = renderGroups;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__render_button__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__render_button__ = __webpack_require__(19);
 
 /**
  * render groups of buttons in toolbar
@@ -3876,7 +3904,7 @@ function renderGroups(context) {
 
 
 /***/ }),
-/* 67 */
+/* 68 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3897,7 +3925,7 @@ function oldParametersAdapter(action) {
 
 
 /***/ }),
-/* 68 */
+/* 69 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3942,7 +3970,7 @@ var InstanceConfig = /** @class */ (function () {
 
 
 /***/ }),
-/* 69 */
+/* 70 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3965,20 +3993,20 @@ function oldToolbarSettingsAddapter(toolbarSettings) {
 
 
 /***/ }),
-/* 70 */
+/* 71 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (immutable) */ __webpack_exports__["expandButtonGroups"] = expandButtonGroups;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__commands_commands__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__commands_commands__ = __webpack_require__(9);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__logging_log__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__adapters_flatten_action_definition__ = __webpack_require__(32);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__adapters_parameters_adapter__ = __webpack_require__(33);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__adapters_settings_adapter__ = __webpack_require__(34);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__adapters_flatten_action_definition__ = __webpack_require__(33);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__adapters_parameters_adapter__ = __webpack_require__(34);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__adapters_settings_adapter__ = __webpack_require__(35);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__button_action__ = __webpack_require__(21);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__button_config__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__expand_button_config__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__expand_button_config__ = __webpack_require__(20);
 
 
 
@@ -3994,7 +4022,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
  */
 function expandButtonGroups(fullToolbarConfig, parentLog) {
     var log = new __WEBPACK_IMPORTED_MODULE_1__logging_log__["Log"]('Tlb.ExpGrp', parentLog, 'start');
-    var actions = __WEBPACK_IMPORTED_MODULE_0__commands_commands__["Commands"].getInstance();
+    var actions = __WEBPACK_IMPORTED_MODULE_0__commands_commands__["Commands"];
     // by now we should have a structure, let's check/fix the buttons
     log.add("will expand groups - found " + fullToolbarConfig.groups.length + " items");
     for (var g = 0; g < fullToolbarConfig.groups.length; g++) {
@@ -4110,7 +4138,7 @@ function expandButtonList(root, settings, parentLog) {
 
 
 /***/ }),
-/* 71 */
+/* 72 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -4130,7 +4158,7 @@ var ToolbarConfig = /** @class */ (function () {
 
 
 /***/ }),
-/* 72 */
+/* 73 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -4172,7 +4200,7 @@ var defaultToolbarTemplate = {
 
 
 /***/ }),
-/* 73 */
+/* 74 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -4214,7 +4242,7 @@ var leftToolbarTemplate = {
 
 
 /***/ }),
-/* 74 */
+/* 75 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -4268,7 +4296,7 @@ function _readPageConfig() {
 
 
 /***/ }),
-/* 75 */
+/* 76 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -4288,14 +4316,14 @@ var Coords = /** @class */ (function () {
 
 
 /***/ }),
-/* 76 */
+/* 77 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MainContentBlock", function() { return MainContentBlock; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_contentBlock", function() { return _contentBlock; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__templates__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__templates__ = __webpack_require__(17);
 
 /*
  * this is a content block in the browser
@@ -4331,19 +4359,19 @@ var _contentBlock = new MainContentBlock();
 
 
 /***/ }),
-/* 77 */
+/* 78 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (immutable) */ __webpack_exports__["build"] = build;
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "IFrameBridge", function() { return IFrameBridge; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__contentBlock_render__ = __webpack_require__(16);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__contentBlock_templates__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__contentBlock_render__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__contentBlock_templates__ = __webpack_require__(17);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__context_context__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__manage_api__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__quick_dialog__ = __webpack_require__(23);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__quick_dialog_config__ = __webpack_require__(78);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__quick_dialog_config__ = __webpack_require__(79);
 
 
 
@@ -4448,7 +4476,7 @@ function scrollToTarget(target) {
 
 
 /***/ }),
-/* 78 */
+/* 79 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -4490,13 +4518,13 @@ var QuickDialogConfig = /** @class */ (function () {
 
 
 /***/ }),
-/* 79 */
+/* 80 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SessionStateHandler", function() { return SessionStateHandler; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__DebugConfig__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__DebugConfig__ = __webpack_require__(16);
 
 /**
  * This object helps persist / load / reset
@@ -4544,7 +4572,7 @@ var SessionStorageHelper = /** @class */ (function () {
 
 
 /***/ }),
-/* 80 */
+/* 81 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -4585,42 +4613,12 @@ function changePathToLocalhostForDev(url) {
 
 
 /***/ }),
-/* 81 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (immutable) */ __webpack_exports__["commandLinkToNgDialog"] = commandLinkToNgDialog;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__command_create__ = __webpack_require__(82);
-
-/**
- * create a dialog link
- * @param sxc
- * @param specialSettings
- */
-function commandLinkToNgDialog(context) {
-    var cmd = Object(__WEBPACK_IMPORTED_MODULE_0__command_create__["commandCreate"])(context);
-    if (cmd.context.button.action.params.useModuleList) {
-        cmd.addContentGroupItemSetsToEditList(true);
-    }
-    else {
-        cmd.addSimpleItem();
-    }
-    ;
-    // if the command has own configuration stuff, do that now
-    if (cmd.context.button.configureCommand) {
-        cmd.context.button.configureCommand(context, cmd);
-    }
-    return cmd.generateLink(context);
-}
-
-
-/***/ }),
 /* 82 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony export (immutable) */ __webpack_exports__["commandLinkToNgDialog"] = commandLinkToNgDialog;
 /* harmony export (immutable) */ __webpack_exports__["commandCreate"] = commandCreate;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__interfaces_window_in_page__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__settings_DialogPaths__ = __webpack_require__(25);
@@ -4629,12 +4627,33 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /**
+ * create a dialog link
+ * @param sxc
+ * @param specialSettings
+ */
+function commandLinkToNgDialog(context) {
+    var cmd = commandCreate(context);
+    if (cmd.context.button.action.params.useModuleList) {
+        cmd.addContentGroupItemSetsToEditList(true);
+    }
+    else {
+        cmd.addSimpleItem();
+    }
+    // if the command has own configuration stuff, do that now
+    if (cmd.context.button.configureCommand) {
+        cmd.context.button.configureCommand(context, cmd);
+    }
+    return cmd.generateLink(context);
+}
+/**
  * assemble an object which will store the configuration and execute it
  */
 function commandCreate(context) {
     var ngDialogUrl = context.instance.sxcRootUrl +
         'desktopmodules/tosic_sexycontent/' +
-        ((context.ui.form === 'ng8' && context.button.dialog(context) === 'edit') ? __WEBPACK_IMPORTED_MODULE_1__settings_DialogPaths__["DialogPaths"].ng8 : __WEBPACK_IMPORTED_MODULE_1__settings_DialogPaths__["DialogPaths"].ng1) +
+        ((context.ui.form === 'ng8' && context.button.dialog(context) === 'edit')
+            ? __WEBPACK_IMPORTED_MODULE_1__settings_DialogPaths__["DialogPaths"].ng8
+            : __WEBPACK_IMPORTED_MODULE_1__settings_DialogPaths__["DialogPaths"].ng1) +
         '?sxcver=' + context.instance.sxcVersion;
     var debugUrlParam = __WEBPACK_IMPORTED_MODULE_0__interfaces_window_in_page__["windowInPage"].$2sxc.urlParams.get('debug') ? '&debug=true' : '';
     var cmd = new __WEBPACK_IMPORTED_MODULE_2__command__["Command"](context, ngDialogUrl, debugUrlParam);
@@ -4650,7 +4669,7 @@ function commandCreate(context) {
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Command", function() { return Command; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__manage_ng_dialog_params__ = __webpack_require__(84);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__translate_2sxc_translate__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__translate_2sxc_translate__ = __webpack_require__(10);
 var __assign = (this && this.__assign) || function () {
     __assign = Object.assign || function(t) {
         for (var s, i = 1, n = arguments.length; i < n; i++) {
@@ -4937,7 +4956,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EditManager", function() { return EditManager; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__contentBlock_manipulate__ = __webpack_require__(88);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__toolbar_adapters_button_config_adapter__ = __webpack_require__(90);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__toolbar_item_render_button__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__toolbar_item_render_button__ = __webpack_require__(19);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__toolbar_item_render_toolbar__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__toolbar_toolbar_toolbar_expand_config__ = __webpack_require__(31);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__api__ = __webpack_require__(2);
@@ -5081,7 +5100,7 @@ function handleErrors(errType, cbTag) {
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Manipulator", function() { return Manipulator; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__toolbar_toolbar_manager__ = __webpack_require__(89);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__translate_2sxc_translate__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__translate_2sxc_translate__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__plumbing_getSxc__ = __webpack_require__(4);
 
 
@@ -5189,11 +5208,11 @@ var Manipulator = /** @class */ (function () {
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ToolbarManager", function() { return ToolbarManager; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_toolbarManager", function() { return _toolbarManager; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__logging_has_log__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__logging_has_log__ = __webpack_require__(14);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__build_toolbars__ = __webpack_require__(12);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__item_render_button__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__item_render_button__ = __webpack_require__(19);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__item_render_toolbar__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__toolbar_toolbar_config_templates__ = __webpack_require__(35);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__toolbar_toolbar_config_templates__ = __webpack_require__(36);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -5246,13 +5265,13 @@ var _toolbarManager = sharedTbm;
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (immutable) */ __webpack_exports__["buttonConfigAdapter"] = buttonConfigAdapter;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__commands_commands__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__commands_commands__ = __webpack_require__(9);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__button_button_action__ = __webpack_require__(21);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__button_button_config__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__button_expand_button_config__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__button_expand_button_config__ = __webpack_require__(20);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__button_mod_config__ = __webpack_require__(91);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__flatten_action_definition__ = __webpack_require__(32);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__parameters_adapter__ = __webpack_require__(33);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__flatten_action_definition__ = __webpack_require__(33);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__parameters_adapter__ = __webpack_require__(34);
 
 
 
@@ -5349,7 +5368,7 @@ function buttonConfigAdapter(actDef) {
     // parameters adapter from v1 to v2
     var params = Object(__WEBPACK_IMPORTED_MODULE_6__parameters_adapter__["parametersAdapter"])(actDef.command);
     // Toolbar API v2
-    var actions = __WEBPACK_IMPORTED_MODULE_0__commands_commands__["Commands"].getInstance();
+    var actions = __WEBPACK_IMPORTED_MODULE_0__commands_commands__["Commands"];
     var newButtonAction = new __WEBPACK_IMPORTED_MODULE_1__button_button_action__["ButtonAction"](name, contentType, params);
     newButtonAction.commandDefinition = actions.get(name);
     var newButtonConfig = new __WEBPACK_IMPORTED_MODULE_2__button_button_config__["ButtonConfig"](newButtonAction);
@@ -5475,14 +5494,14 @@ void this.loadResources(t)):t()},t.prototype.dir=function(e){e||(e=this.language
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__constants__ = __webpack_require__(19);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__DebugConfig__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__constants__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__DebugConfig__ = __webpack_require__(16);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__interfaces_window_in_page__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__logging_log__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__logging_log_utils__ = __webpack_require__(97);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__manage_api__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__quick_dialog_quick_dialog__ = __webpack_require__(23);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__quick_dialog_state__ = __webpack_require__(43);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__quick_dialog_state__ = __webpack_require__(44);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__toolbar_build_toolbars__ = __webpack_require__(12);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__toolbar_tag_toolbar__ = __webpack_require__(30);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__plumbing_getSxc__ = __webpack_require__(4);
@@ -5706,23 +5725,8 @@ var LogUtils = /** @class */ (function () {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CommandDefinition", function() { return CommandDefinition; });
-var CommandDefinition = /** @class */ (function () {
-    function CommandDefinition() {
-    }
-    return CommandDefinition;
-}());
-
-
-
-/***/ }),
-/* 99 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "contentItems", function() { return contentItems; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__translate_2sxc_translate__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__translate_2sxc_translate__ = __webpack_require__(10);
 
 /**
  * this enhances the $2sxc client controller with stuff only needed when logged in
@@ -5779,14 +5783,14 @@ var contentItems = {
 
 
 /***/ }),
-/* 100 */
+/* 99 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CmdsStrategyFactory", function() { return CmdsStrategyFactory; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__cb__ = __webpack_require__(44);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__mod__ = __webpack_require__(45);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__cb__ = __webpack_require__(45);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__mod__ = __webpack_require__(46);
 
 
 var CmdsStrategyFactory = /** @class */ (function () {
@@ -5810,7 +5814,7 @@ var CmdsStrategyFactory = /** @class */ (function () {
 
 
 /***/ }),
-/* 101 */
+/* 100 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -5825,23 +5829,24 @@ var Specs = /** @class */ (function () {
 
 
 /***/ }),
-/* 102 */
+/* 101 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(103);
+__webpack_require__(102);
 __webpack_require__(93);
 __webpack_require__(94);
 __webpack_require__(95);
+__webpack_require__(103);
 __webpack_require__(104);
 __webpack_require__(105);
+__webpack_require__(11);
 __webpack_require__(27);
 __webpack_require__(0);
-__webpack_require__(82);
-__webpack_require__(98);
-__webpack_require__(81);
-__webpack_require__(40);
-__webpack_require__(83);
 __webpack_require__(106);
+__webpack_require__(32);
+__webpack_require__(82);
+__webpack_require__(41);
+__webpack_require__(83);
 __webpack_require__(107);
 __webpack_require__(108);
 __webpack_require__(109);
@@ -5866,41 +5871,40 @@ __webpack_require__(127);
 __webpack_require__(128);
 __webpack_require__(129);
 __webpack_require__(130);
-__webpack_require__(10);
 __webpack_require__(131);
+__webpack_require__(9);
 __webpack_require__(132);
-__webpack_require__(47);
-__webpack_require__(86);
 __webpack_require__(133);
+__webpack_require__(48);
+__webpack_require__(86);
 __webpack_require__(134);
-__webpack_require__(19);
 __webpack_require__(135);
-__webpack_require__(11);
-__webpack_require__(76);
+__webpack_require__(18);
+__webpack_require__(77);
 __webpack_require__(136);
 __webpack_require__(88);
-__webpack_require__(16);
-__webpack_require__(18);
+__webpack_require__(15);
+__webpack_require__(17);
 __webpack_require__(137);
-__webpack_require__(39);
-__webpack_require__(59);
-__webpack_require__(49);
+__webpack_require__(40);
+__webpack_require__(60);
 __webpack_require__(50);
 __webpack_require__(51);
 __webpack_require__(52);
 __webpack_require__(53);
-__webpack_require__(56);
-__webpack_require__(28);
-__webpack_require__(55);
-__webpack_require__(57);
 __webpack_require__(54);
+__webpack_require__(57);
+__webpack_require__(28);
+__webpack_require__(56);
 __webpack_require__(58);
+__webpack_require__(55);
+__webpack_require__(59);
 __webpack_require__(5);
-__webpack_require__(60);
 __webpack_require__(61);
 __webpack_require__(62);
 __webpack_require__(63);
 __webpack_require__(64);
+__webpack_require__(65);
 __webpack_require__(138);
 __webpack_require__(139);
 __webpack_require__(140);
@@ -5910,10 +5914,10 @@ __webpack_require__(143);
 __webpack_require__(144);
 __webpack_require__(145);
 __webpack_require__(146);
-__webpack_require__(17);
+__webpack_require__(16);
 __webpack_require__(147);
 __webpack_require__(148);
-__webpack_require__(99);
+__webpack_require__(98);
 __webpack_require__(149);
 __webpack_require__(150);
 __webpack_require__(151);
@@ -5926,65 +5930,65 @@ __webpack_require__(156);
 __webpack_require__(1);
 __webpack_require__(157);
 __webpack_require__(158);
-__webpack_require__(65);
-__webpack_require__(15);
+__webpack_require__(66);
+__webpack_require__(14);
 __webpack_require__(159);
 __webpack_require__(97);
 __webpack_require__(7);
 __webpack_require__(2);
 __webpack_require__(87);
-__webpack_require__(68);
+__webpack_require__(69);
 __webpack_require__(85);
 __webpack_require__(84);
-__webpack_require__(79);
+__webpack_require__(80);
 __webpack_require__(24);
 __webpack_require__(4);
-__webpack_require__(48);
-__webpack_require__(42);
-__webpack_require__(41);
-__webpack_require__(160);
-__webpack_require__(77);
-__webpack_require__(78);
-__webpack_require__(23);
+__webpack_require__(49);
 __webpack_require__(43);
-__webpack_require__(80);
-__webpack_require__(161);
+__webpack_require__(42);
+__webpack_require__(160);
+__webpack_require__(78);
+__webpack_require__(79);
+__webpack_require__(23);
 __webpack_require__(44);
+__webpack_require__(81);
+__webpack_require__(161);
+__webpack_require__(45);
 __webpack_require__(26);
-__webpack_require__(100);
+__webpack_require__(99);
 __webpack_require__(162);
-__webpack_require__(74);
-__webpack_require__(163);
 __webpack_require__(75);
+__webpack_require__(163);
+__webpack_require__(76);
 __webpack_require__(164);
 __webpack_require__(165);
+__webpack_require__(47);
 __webpack_require__(46);
-__webpack_require__(45);
 __webpack_require__(166);
-__webpack_require__(38);
+__webpack_require__(39);
 __webpack_require__(3);
 __webpack_require__(8);
 __webpack_require__(167);
-__webpack_require__(101);
-__webpack_require__(37);
+__webpack_require__(100);
+__webpack_require__(38);
 __webpack_require__(25);
 __webpack_require__(90);
-__webpack_require__(32);
-__webpack_require__(67);
-__webpack_require__(69);
 __webpack_require__(33);
+__webpack_require__(68);
+__webpack_require__(70);
 __webpack_require__(34);
+__webpack_require__(35);
 __webpack_require__(12);
 __webpack_require__(21);
 __webpack_require__(22);
 __webpack_require__(168);
-__webpack_require__(14);
-__webpack_require__(70);
+__webpack_require__(20);
+__webpack_require__(71);
 __webpack_require__(169);
 __webpack_require__(91);
 __webpack_require__(170);
-__webpack_require__(20);
-__webpack_require__(66);
+__webpack_require__(19);
+__webpack_require__(67);
 __webpack_require__(29);
 __webpack_require__(13);
 __webpack_require__(30);
@@ -5993,34 +5997,34 @@ __webpack_require__(172);
 __webpack_require__(89);
 __webpack_require__(173);
 __webpack_require__(175);
-__webpack_require__(72);
 __webpack_require__(73);
+__webpack_require__(74);
 __webpack_require__(176);
-__webpack_require__(35);
-__webpack_require__(71);
-__webpack_require__(31);
 __webpack_require__(36);
+__webpack_require__(72);
+__webpack_require__(31);
+__webpack_require__(37);
 __webpack_require__(92);
-__webpack_require__(9);
+__webpack_require__(10);
 module.exports = __webpack_require__(96);
 
 
 /***/ }),
-/* 103 */
+/* 102 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__cms_Cms__ = __webpack_require__(27);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__commands_commands__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__commands_commands__ = __webpack_require__(9);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__context_context__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__interfaces_sxc_controller_in_page__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__interfaces_window_in_page__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__manage_manage__ = __webpack_require__(85);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__quick_edit_quick_e__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__quick_edit_start__ = __webpack_require__(37);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__quick_edit_start__ = __webpack_require__(38);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__translate_2sxc_translateInit__ = __webpack_require__(92);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__translate_2sxc_translate__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__translate_2sxc_translate__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__x_bootstrap_module_bootstrapper__ = __webpack_require__(96);
 
 
@@ -6036,7 +6040,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 __WEBPACK_IMPORTED_MODULE_3__interfaces_sxc_controller_in_page__["$2sxcInPage"].context = __WEBPACK_IMPORTED_MODULE_2__context_context__["context"]; // primary API to get the context
 __WEBPACK_IMPORTED_MODULE_3__interfaces_sxc_controller_in_page__["$2sxcInPage"]._translateInit = __WEBPACK_IMPORTED_MODULE_8__translate_2sxc_translateInit__["_translateInit"]; // reference in ./2sxc-api/js/ToSic.Sxc.Instance.ts
 __WEBPACK_IMPORTED_MODULE_3__interfaces_sxc_controller_in_page__["$2sxcInPage"].translate = __WEBPACK_IMPORTED_MODULE_9__translate_2sxc_translate__["translate"]; // provide an official translate API for 2sxc
-__WEBPACK_IMPORTED_MODULE_3__interfaces_sxc_controller_in_page__["$2sxcInPage"]._commands = __WEBPACK_IMPORTED_MODULE_1__commands_commands__["Commands"].getInstance();
+__WEBPACK_IMPORTED_MODULE_3__interfaces_sxc_controller_in_page__["$2sxcInPage"]._commands = __WEBPACK_IMPORTED_MODULE_1__commands_commands__["Commands"];
 __WEBPACK_IMPORTED_MODULE_3__interfaces_sxc_controller_in_page__["$2sxcInPage"]._manage = new __WEBPACK_IMPORTED_MODULE_5__manage_manage__["Manage"](); // _manage; // used out of this project in ToSic.Sxc.Instance and 2sxc.api.js
 __WEBPACK_IMPORTED_MODULE_4__interfaces_window_in_page__["windowInPage"].$quickE = __WEBPACK_IMPORTED_MODULE_6__quick_edit_quick_e__["$quickE"];
 $(__WEBPACK_IMPORTED_MODULE_7__quick_edit_start__["start"]); // run on-load
@@ -6044,42 +6048,35 @@ __WEBPACK_IMPORTED_MODULE_3__interfaces_sxc_controller_in_page__["$2sxcInPage"].
 
 
 /***/ }),
-/* 104 */
+/* 103 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Constants", function() { return Constants; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__interfaces_sxc_controller_in_page__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__interfaces_window_in_page__ = __webpack_require__(1);
-
-
-var Constants = /** @class */ (function () {
-    function Constants() {
-        // classes
-        this.cls = {
-            scMenu: 'sc-menu',
-        };
-        this.attr = {
-            toolbar: 'toolbar',
-            toolbarData: 'data-toolbar',
-            settings: 'settings',
-            settingsData: 'data-settings',
-        };
-        this.sel = {
-            scMenu: 'sc-menu',
-        };
-    }
-    return Constants;
-}());
-
-if (__WEBPACK_IMPORTED_MODULE_1__interfaces_window_in_page__["windowInPage"].$2sxc && !__WEBPACK_IMPORTED_MODULE_1__interfaces_window_in_page__["windowInPage"].$2sxc.consts) {
-    __WEBPACK_IMPORTED_MODULE_0__interfaces_sxc_controller_in_page__["$2sxcInPage"].c = __WEBPACK_IMPORTED_MODULE_0__interfaces_sxc_controller_in_page__["$2sxcInPage"].consts = new Constants();
-}
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "IDs", function() { return IDs; });
+var IDs = {
+    // classes
+    cls: {
+        scMenu: 'sc-menu',
+    },
+    attr: {
+        toolbar: 'toolbar',
+        toolbarData: 'data-toolbar',
+        settings: 'settings',
+        settingsData: 'data-settings',
+    },
+    publishAllowed: 'DraftOptional',
+    sel: {
+        scMenu: '.sc-menu',
+    },
+};
+// if (window.$2sxc && !window.$2sxc.consts) {
+//   $2sxc.c = $2sxc.consts = new Constants();
+// }
 
 
 /***/ }),
-/* 105 */
+/* 104 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -6119,27 +6116,56 @@ if (__WEBPACK_IMPORTED_MODULE_0__interfaces_window_in_page__["windowInPage"].$2s
 
 
 /***/ }),
-/* 106 */
+/* 105 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Add", function() { return Add; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__contentBlock_actions__ = __webpack_require__(11);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__command_base__ = __webpack_require__(0);
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ActionParams", function() { return ActionParams; });
+/**
+ * params for getAndReload WebAPI
+ */
+var ActionParams = /** @class */ (function () {
+    function ActionParams() {
+    }
+    return ActionParams;
+}());
+
+
+
+/***/ }),
+/* 106 */
+/***/ (function(module, exports) {
+
+// import { ContextOfButton } from '../context/context-of-button';
+// import { windowInPage as window } from '../interfaces/window-in-page';
+// import { DialogPaths as Dialog } from '../settings/DialogPaths';
+// import { Command } from './command';
+// /**
+//  * assemble an object which will store the configuration and execute it
+//  */
+// export function commandCreate(context: ContextOfButton): Command {
+//   const ngDialogUrl = context.instance.sxcRootUrl +
+//     'desktopmodules/tosic_sexycontent/' +
+//     ((context.ui.form === 'ng8' && context.button.dialog(context) === 'edit')
+//         ? Dialog.ng8
+//         : Dialog.ng1
+//     ) +
+//     '?sxcver=' + context.instance.sxcVersion;
+//   const debugUrlParam: string = window.$2sxc.urlParams.get('debug') ? '&debug=true' : '';
+//   const cmd = new Command(context, ngDialogUrl, debugUrlParam);
+//   return cmd;
+// }
+
+
+/***/ }),
+/* 107 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__actions_actions__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__commands__ = __webpack_require__(9);
 
 
 /**
@@ -6147,29 +6173,20 @@ var __extends = (this && this.__extends) || (function () {
  *
  * import this module to commands.ts
  */
-var Add = /** @class */ (function (_super) {
-    __extends(Add, _super);
-    function Add() {
-        var _this = _super.call(this) || this;
-        _this.makeDef('add', 'AddDemo', 'plus-circled', false, true, {
-            showCondition: function (context) {
-                return (context.contentBlock.isList) && (context.button.action.params.useModuleList) && (context.button.action.params.sortOrder !== -1);
-            },
-            code: function (context) {
-                return Object(__WEBPACK_IMPORTED_MODULE_0__contentBlock_actions__["addItem"])(context, context.button.action.params.sortOrder + 1);
-            },
-        });
-        return _this;
-    }
-    return Add;
-}(__WEBPACK_IMPORTED_MODULE_1__command_base__["CommandBase"]));
-
-// ReSharper disable once UnusedLocals
-var cmd = new Add();
+__WEBPACK_IMPORTED_MODULE_1__commands__["Commands"].add('add', 'AddDemo', 'plus-circled', false, true, {
+    showCondition: function (context) {
+        return context.contentBlock.isList &&
+            context.button.action.params.useModuleList &&
+            context.button.action.params.sortOrder !== -1;
+    },
+    code: function (context) {
+        return __WEBPACK_IMPORTED_MODULE_0__actions_actions__["Actions"].addItem(context, context.button.action.params.sortOrder + 1);
+    },
+});
 
 
 /***/ }),
-/* 107 */
+/* 108 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -6210,7 +6227,7 @@ var cmd = new AppImport();
 
 
 /***/ }),
-/* 108 */
+/* 109 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -6264,7 +6281,7 @@ var cmd = new AppResources();
 
 
 /***/ }),
-/* 109 */
+/* 110 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -6318,7 +6335,7 @@ var cmd = new AppSettings();
 
 
 /***/ }),
-/* 110 */
+/* 111 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -6361,7 +6378,7 @@ var cmd = new App();
 
 
 /***/ }),
-/* 111 */
+/* 112 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -6423,7 +6440,7 @@ var cmd = new ContentItems();
 
 
 /***/ }),
-/* 112 */
+/* 113 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -6466,7 +6483,7 @@ var cmd = new ContentType();
 
 
 /***/ }),
-/* 113 */
+/* 114 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -6523,13 +6540,13 @@ var cmd = new Custom();
 
 
 /***/ }),
-/* 114 */
+/* 115 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Delete", function() { return Delete; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__entity_manipulation_item_commands__ = __webpack_require__(99);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__entity_manipulation_item_commands__ = __webpack_require__(98);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__command_base__ = __webpack_require__(0);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
@@ -6581,7 +6598,7 @@ var cmd = new Delete();
 
 
 /***/ }),
-/* 115 */
+/* 116 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -6629,7 +6646,7 @@ var cmd = new Edit();
 
 
 /***/ }),
-/* 116 */
+/* 117 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -6674,7 +6691,7 @@ var cmd = new InstanceList();
 
 
 /***/ }),
-/* 117 */
+/* 118 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -6718,7 +6735,7 @@ var cmd = new ItemHistory();
 
 
 /***/ }),
-/* 118 */
+/* 119 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -6759,7 +6776,7 @@ var cmd = new Layout();
 
 
 /***/ }),
-/* 119 */
+/* 120 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -6820,13 +6837,13 @@ var cmd = new Metadata();
 
 
 /***/ }),
-/* 120 */
+/* 121 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "More", function() { return More; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__constants__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__constants__ = __webpack_require__(18);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__command_base__ = __webpack_require__(0);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
@@ -6899,13 +6916,13 @@ var cmd = new More();
 
 
 /***/ }),
-/* 121 */
+/* 122 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MoveDown", function() { return MoveDown; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__contentBlock_actions__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__actions_actions__ = __webpack_require__(11);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__command_base__ = __webpack_require__(0);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
@@ -6938,7 +6955,7 @@ var MoveDown = /** @class */ (function (_super) {
             },
             code: function (context) {
                 // TODO: make sure index is never greater than the amount of items
-                return Object(__WEBPACK_IMPORTED_MODULE_0__contentBlock_actions__["changeOrder"])(context, context.button.action.params.sortOrder, context.button.action.params.sortOrder + 1);
+                return __WEBPACK_IMPORTED_MODULE_0__actions_actions__["Actions"].changeOrder(context, context.button.action.params.sortOrder, context.button.action.params.sortOrder + 1);
             },
         });
         return _this;
@@ -6951,13 +6968,13 @@ var cmd = new MoveDown();
 
 
 /***/ }),
-/* 122 */
+/* 123 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MoveUp", function() { return MoveUp; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__contentBlock_actions__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__actions_actions__ = __webpack_require__(11);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__command_base__ = __webpack_require__(0);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
@@ -6989,7 +7006,7 @@ var MoveUp = /** @class */ (function (_super) {
                     (context.button.action.params.sortOrder !== 0);
             },
             code: function (context) {
-                return Object(__WEBPACK_IMPORTED_MODULE_0__contentBlock_actions__["changeOrder"])(context, context.button.action.params.sortOrder, Math.max(context.button.action.params.sortOrder - 1, 0));
+                return __WEBPACK_IMPORTED_MODULE_0__actions_actions__["Actions"].changeOrder(context, context.button.action.params.sortOrder, Math.max(context.button.action.params.sortOrder - 1, 0));
             },
         });
         return _this;
@@ -7002,14 +7019,14 @@ var cmd = new MoveUp();
 
 
 /***/ }),
-/* 123 */
+/* 124 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "New", function() { return New; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__command_base__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__command_open_ng_dialog__ = __webpack_require__(40);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__command_open_ng_dialog__ = __webpack_require__(41);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -7062,28 +7079,14 @@ var cmd = new New();
 
 
 /***/ }),
-/* 124 */
+/* 125 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Publish", function() { return Publish; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__contentBlock_actions__ = __webpack_require__(11);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__translate_2sxc_translate__ = __webpack_require__(9);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__command_base__ = __webpack_require__(0);
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__actions_actions__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__translate_2sxc_translate__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__commands__ = __webpack_require__(9);
 
 
 
@@ -7092,51 +7095,41 @@ var __extends = (this && this.__extends) || (function () {
  *
  * import this module to commands.ts
  */
-var Publish = /** @class */ (function (_super) {
-    __extends(Publish, _super);
-    function Publish() {
-        var _this = _super.call(this) || this;
-        _this.makeDef('publish', 'Unpublished', 'eye-off', false, false, {
-            showCondition: function (context) {
-                return (context.button.action.params.isPublished === false);
-            },
-            disabled: function (context) {
-                return !context.instance.allowPublish;
-            },
-            code: function (context, event) {
-                return new Promise(function (resolve, reject) {
-                    if (context.button.action.params.isPublished) {
-                        alert(Object(__WEBPACK_IMPORTED_MODULE_1__translate_2sxc_translate__["translate"])('Toolbar.AlreadyPublished'));
-                        return resolve();
-                    }
-                    // if we have an entity-id, publish based on that
-                    if (context.button.action.params.entityId) {
-                        return Object(__WEBPACK_IMPORTED_MODULE_0__contentBlock_actions__["publishId"])(context, context.button.action.params.entityId);
-                    }
-                    var part = context.button.action.params.sortOrder === -1 ? 'listcontent' : 'content';
-                    var index = context.button.action.params.sortOrder === -1 ? 0 : context.button.action.params.sortOrder;
-                    return Object(__WEBPACK_IMPORTED_MODULE_0__contentBlock_actions__["publish"])(context, part, index);
-                });
-            },
+__WEBPACK_IMPORTED_MODULE_2__commands__["Commands"].add('publish', 'Unpublished', 'eye-off', false, false, {
+    showCondition: function (context) {
+        return (context.button.action.params.isPublished === false);
+    },
+    disabled: function (context) {
+        console.log("disabled:", context.instance);
+        return !context.instance.allowPublish;
+    },
+    code: function (context, event) {
+        return new Promise(function (resolve, reject) {
+            if (context.button.action.params.isPublished) {
+                alert(Object(__WEBPACK_IMPORTED_MODULE_1__translate_2sxc_translate__["translate"])('Toolbar.AlreadyPublished'));
+                return resolve();
+            }
+            // if we have an entity-id, publish based on that
+            if (context.button.action.params.entityId) {
+                return __WEBPACK_IMPORTED_MODULE_0__actions_actions__["Actions"].publishId(context, context.button.action.params.entityId);
+            }
+            var part = context.button.action.params.sortOrder === -1 ? 'listcontent' : 'content';
+            var index = context.button.action.params.sortOrder === -1 ? 0 : context.button.action.params.sortOrder;
+            return __WEBPACK_IMPORTED_MODULE_0__actions_actions__["Actions"].publish(context, part, index);
         });
-        return _this;
-    }
-    return Publish;
-}(__WEBPACK_IMPORTED_MODULE_2__command_base__["CommandBase"]));
-
-// ReSharper disable once UnusedLocals
-var cmd = new Publish();
+    },
+});
 
 
 /***/ }),
-/* 125 */
+/* 126 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Remove", function() { return Remove; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__contentBlock_actions__ = __webpack_require__(11);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__translate_2sxc_translate__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__actions_actions__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__translate_2sxc_translate__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__command_base__ = __webpack_require__(0);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
@@ -7172,7 +7165,7 @@ var Remove = /** @class */ (function (_super) {
             code: function (context) {
                 return new Promise(function (resolve, reject) {
                     if (confirm(Object(__WEBPACK_IMPORTED_MODULE_1__translate_2sxc_translate__["translate"])('Toolbar.ConfirmRemove'))) {
-                        return Object(__WEBPACK_IMPORTED_MODULE_0__contentBlock_actions__["removeFromList"])(context, context.button.action.params.sortOrder);
+                        return __WEBPACK_IMPORTED_MODULE_0__actions_actions__["Actions"].removeFromList(context, context.button.action.params.sortOrder);
                     }
                     return resolve();
                 });
@@ -7188,7 +7181,7 @@ var cmd = new Remove();
 
 
 /***/ }),
-/* 126 */
+/* 127 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -7231,7 +7224,7 @@ var cmd = new Replace();
 
 
 /***/ }),
-/* 127 */
+/* 128 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -7279,7 +7272,7 @@ var cmd = new TemplateDevelop();
 
 
 /***/ }),
-/* 128 */
+/* 129 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -7334,7 +7327,7 @@ var cmd = new TemplateQuery();
 
 
 /***/ }),
-/* 129 */
+/* 130 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -7381,7 +7374,7 @@ var cmd = new TemplateSettings();
 
 
 /***/ }),
-/* 130 */
+/* 131 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -7424,7 +7417,7 @@ var cmd = new Zone();
 
 
 /***/ }),
-/* 131 */
+/* 132 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -7442,13 +7435,13 @@ var Definition = /** @class */ (function () {
 
 
 /***/ }),
-/* 132 */
+/* 133 */
 /***/ (function(module, exports) {
 
 
 
 /***/ }),
-/* 133 */
+/* 134 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -7463,7 +7456,7 @@ var Params = /** @class */ (function () {
 
 
 /***/ }),
-/* 134 */
+/* 135 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -7473,24 +7466,6 @@ var Settings = /** @class */ (function () {
     function Settings() {
     }
     return Settings;
-}());
-
-
-
-/***/ }),
-/* 135 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ActionParams", function() { return ActionParams; });
-/**
- * params for getAndReload WebAPI
- */
-var ActionParams = /** @class */ (function () {
-    function ActionParams() {
-    }
-    return ActionParams;
 }());
 
 
@@ -7861,7 +7836,7 @@ var Conf = /** @class */ (function () {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__cb__ = __webpack_require__(44);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__cb__ = __webpack_require__(45);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__clipboard__ = __webpack_require__(26);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__quick_e__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__selectors_instance__ = __webpack_require__(8);
@@ -7916,7 +7891,7 @@ __WEBPACK_IMPORTED_MODULE_2__quick_e__["$quickE"].cbActions.click(onCbButtonClic
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__clipboard__ = __webpack_require__(26);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__mod_manage__ = __webpack_require__(46);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__mod_manage__ = __webpack_require__(47);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__quick_e__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__selectors_instance__ = __webpack_require__(8);
 
@@ -7947,9 +7922,8 @@ __WEBPACK_IMPORTED_MODULE_2__quick_e__["$quickE"].modActions.click(onModuleButto
 
 /***/ }),
 /* 167 */
-/***/ (function(module, __webpack_exports__) {
+/***/ (function(module, exports) {
 
-"use strict";
 // import { CbOrMod } from './cb-or-mod';
 // /**
 //  * Selectors class used to host all QickE selectors in one place
@@ -8027,10 +8001,10 @@ var ItemRender = /** @class */ (function () {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__interfaces_sxc_controller_in_page__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__2sxc_extensions_2sxc_consts__ = __webpack_require__(103);
 
 // prevent propagation of the click (if menu was clicked)
-$(__WEBPACK_IMPORTED_MODULE_0__interfaces_sxc_controller_in_page__["$2sxcInPage"].c.sel.scMenu).click(function (e) { return e.stopPropagation(); });
+$(__WEBPACK_IMPORTED_MODULE_0__2sxc_extensions_2sxc_consts__["IDs"].sel.scMenu).click(function (e) { return e.stopPropagation(); });
 
 
 /***/ }),

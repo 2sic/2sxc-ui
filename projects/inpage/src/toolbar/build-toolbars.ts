@@ -1,4 +1,5 @@
-﻿import * as Constants from '../constants';
+﻿import { IDs } from '../2sxc-extensions/2sxc.consts';
+import * as Constants from '../constants';
 import { context } from '../context/context';
 import { $2sxcInPage as $2sxc } from '../interfaces/sxc-controller-in-page';
 import { SxcIntanceEditable } from '../interfaces/sxc-instance-editable';
@@ -99,7 +100,7 @@ function loadConfigFromAttributes(tag: HTMLElement): ToolbarInitConfig {
     if (newConfigFormat) {
       return JSON.parse(newConfigFormat) as ToolbarInitConfig;
     } else {
-      const at = $2sxc.c.attr;
+      const at = IDs.attr;
       const data = getFirstAttribute(tag, at.toolbar, at.toolbarData);
       const settings = getFirstAttribute(tag, at.settings, at.settingsData);
       return {

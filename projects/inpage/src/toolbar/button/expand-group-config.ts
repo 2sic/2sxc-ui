@@ -1,4 +1,4 @@
-﻿import { Commands } from '../../commands/commands';
+﻿import { Commands as Commands } from '../../commands/commands';
 import { Log } from '../../logging/log';
 import { flattenActionDefinition } from '../adapters/flatten-action-definition';
 import { parametersAdapter } from '../adapters/parameters-adapter';
@@ -17,7 +17,7 @@ import { addDefaultBtnSettings, expandButtonConfig } from './expand-button-confi
 export function expandButtonGroups(fullToolbarConfig: ToolbarConfig, parentLog: Log): void {
   const log = new Log('Tlb.ExpGrp', parentLog, 'start');
 
-  const actions = Commands.getInstance();
+  const actions = Commands;
 
   // by now we should have a structure, let's check/fix the buttons
   log.add(`will expand groups - found ${fullToolbarConfig.groups.length} items`);

@@ -38,7 +38,7 @@ export function getTag(sxci: SxcIntanceEditable): HTMLElement {
  * get the edit-context object (a json object) of the current tag/sxc-instance
  * @return {DataEditContext} edit-context object
  */
-export function getEditContextOfTag(htmlTag: HTMLElement): DataEditContext {
+function getEditContextOfTag(htmlTag: HTMLElement): DataEditContext {
   const attr = htmlTag.getAttribute('data-edit-context');
   return JSON.parse(attr || '{ }') as DataEditContext;
 }

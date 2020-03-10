@@ -1,16 +1,13 @@
-﻿import { publish, publishId } from '../../contentBlock/actions';
+﻿import { Actions } from '../../actions/actions';
 import { translate } from '../../translate/2sxc.translate';
-import { CommandBase } from '../command-base';
+import { Commands } from '../commands';
 
 /**
  * todo: shouldn't be available if changes are not allowed
  *
  * import this module to commands.ts
  */
-export class Publish extends CommandBase {
-  constructor() {
-    super();
-    this.makeDef('publish',
+Commands.add('publish',
       'Unpublished',
       'eye-off',
       false,
@@ -20,6 +17,7 @@ export class Publish extends CommandBase {
           return (context.button.action.params.isPublished === false);
         },
         disabled(context) {
+            console.log("disabled:", context.instance);
           return !context.instance.allowPublish;
         },
         code(context, event): Promise<any> {
@@ -31,17 +29,12 @@ export class Publish extends CommandBase {
 
             // if we have an entity-id, publish based on that
             if (context.button.action.params.entityId) {
-              return publishId(context, context.button.action.params.entityId);
+              return Actions.publishId(context, context.button.action.params.entityId);
             }
 
             const part: string = context.button.action.params.sortOrder === -1 ? 'listcontent' : 'content';
             const index = context.button.action.params.sortOrder === -1 ? 0 : context.button.action.params.sortOrder;
-            return publish(context, part, index);
+            return Actions.publish(context, part, index);
           });
         },
       });
-  }
-}
-
-// ReSharper disable once UnusedLocals
-const cmd = new Publish();

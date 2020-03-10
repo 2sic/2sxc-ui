@@ -7,7 +7,7 @@ import { settingsAdapter } from '../toolbar/adapters/settings-adapter';
 import { ButtonAction } from '../toolbar/button/button-action';
 import { ButtonConfig } from '../toolbar/button/button-config';
 import { commandOpenNgDialog } from './command-open-ng-dialog';
-import { Commands } from './commands';
+import { Commands as Commands } from './commands';
 import { Settings } from './settings';
 
 export class Engine extends HasLog {
@@ -79,7 +79,7 @@ export class Engine extends HasLog {
 
     // Toolbar API v2
     const newButtonAction = new ButtonAction(name, contentType, settings);
-    newButtonAction.commandDefinition = Commands.getInstance().get(name);
+    newButtonAction.commandDefinition = Commands.get(name);
     const newButtonConfig = new ButtonConfig(newButtonAction);
     newButtonConfig.name = name;
 
@@ -163,7 +163,7 @@ export class Engine extends HasLog {
   expandSettingsWithDefaults(settings: Partial<Settings>): Settings {
     const name = settings.action;
     this.log.add(`will add defaults for ${name} from buttonConfig`);
-    const conf = Commands.getInstance().get(name).buttonConfig;
+    const conf = Commands.get(name).buttonConfig;
     const full = Object.assign({}, conf, settings) as Settings; // merge conf & settings, but settings has higher priority
 
     return full;

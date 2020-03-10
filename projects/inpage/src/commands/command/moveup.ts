@@ -1,4 +1,4 @@
-﻿import { changeOrder } from '../../contentBlock/actions';
+﻿import { Actions } from '../../actions/actions';
 import { CommandBase } from '../command-base';
 
 /**
@@ -20,7 +20,7 @@ export class MoveUp extends CommandBase {
             (context.button.action.params.sortOrder !== 0);
         },
         code(context) {
-          return changeOrder(context, context.button.action.params.sortOrder, Math.max(context.button.action.params.sortOrder - 1, 0));
+          return Actions.changeOrder(context, context.button.action.params.sortOrder, Math.max(context.button.action.params.sortOrder - 1, 0));
         },
       });
   }

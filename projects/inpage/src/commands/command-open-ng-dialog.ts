@@ -13,10 +13,7 @@ import { commandLinkToNgDialog } from './command-link-to-ng-dialog';
  * @param sxc
  * @param editContext
  */
-export function commandOpenNgDialog(
-  context: ContextOfButton,
-  event: MouseEvent,
-): Promise<any> {
+export function commandOpenNgDialog(context: ContextOfButton, event: MouseEvent): Promise<any> {
   // the link contains everything to open a full dialog (lots of params added)
   let link = commandLinkToNgDialog(context);
 

@@ -1,4 +1,4 @@
-﻿import { removeFromList } from '../../contentBlock/actions';
+﻿import { Actions } from '../../actions/actions';
 import { translate } from '../../translate/2sxc.translate';
 import { CommandBase } from '../command-base';
 
@@ -24,7 +24,7 @@ export class Remove extends CommandBase {
         code(context) {
           return new Promise((resolve, reject) => {
             if (confirm(translate('Toolbar.ConfirmRemove'))) {
-              return removeFromList(context, context.button.action.params.sortOrder);
+              return Actions.removeFromList(context, context.button.action.params.sortOrder);
             }
             return resolve();
           });

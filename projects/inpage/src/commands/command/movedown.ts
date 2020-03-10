@@ -1,4 +1,4 @@
-﻿import { changeOrder } from '../../contentBlock/actions';
+﻿import { Actions } from '../../actions/actions';
 import { CommandBase } from '../command-base';
 
 /**
@@ -21,7 +21,7 @@ export class MoveDown extends CommandBase {
         },
         code(context) {
           // TODO: make sure index is never greater than the amount of items
-          return changeOrder(context, context.button.action.params.sortOrder, context.button.action.params.sortOrder + 1);
+          return Actions.changeOrder(context, context.button.action.params.sortOrder, context.button.action.params.sortOrder + 1);
         },
       });
   }

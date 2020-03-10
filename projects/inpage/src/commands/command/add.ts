@@ -1,29 +1,25 @@
-﻿import { addItem } from '../../contentBlock/actions';
-import { CommandBase } from '../command-base';
+﻿import { Actions } from '../../actions/actions';
+import { Commands as Commands } from '../commands';
 
 /**
  * add brings no dialog, just add an empty item
  *
  * import this module to commands.ts
  */
-export class Add extends CommandBase {
-  constructor() {
-    super();
-    this.makeDef('add',
-      'AddDemo',
-      'plus-circled',
-      false,
-      true,
-      {
+Commands.add(
+    'add',
+    'AddDemo',
+    'plus-circled',
+    false,
+    true,
+    {
         showCondition(context) {
-          return (context.contentBlock.isList) && (context.button.action.params.useModuleList) && (context.button.action.params.sortOrder !== -1);
+            return context.contentBlock.isList &&
+                context.button.action.params.useModuleList &&
+                context.button.action.params.sortOrder !== -1;
         },
         code(context) {
-          return addItem(context, context.button.action.params.sortOrder + 1);
+            return Actions.addItem(context, context.button.action.params.sortOrder + 1);
         },
-      });
-  }
-}
-
-// ReSharper disable once UnusedLocals
-const cmd = new Add();
+    },
+);

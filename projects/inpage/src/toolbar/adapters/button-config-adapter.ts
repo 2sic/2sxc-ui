@@ -1,4 +1,4 @@
-﻿import { Commands } from '../../commands/commands';
+﻿import { Commands as Commands } from '../../commands/commands';
 import { ContextOfButton } from '../../context/context-of-button';
 import { ButtonAction } from '../button/button-action';
 import { ButtonConfig } from '../button/button-config';
@@ -122,7 +122,7 @@ export function buttonConfigAdapter(actDef: ButtonDefinition): ButtonConfig {
   const params = parametersAdapter(actDef.command);
 
   // Toolbar API v2
-  const actions = Commands.getInstance();
+  const actions = Commands;
   const newButtonAction = new ButtonAction(name, contentType, params);
   newButtonAction.commandDefinition = actions.get(name);
   const newButtonConfig = new ButtonConfig(newButtonAction);

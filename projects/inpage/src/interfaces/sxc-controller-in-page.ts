@@ -1,8 +1,7 @@
 ﻿import { SxcRootWithInternals } from '../../../$2sxc/src/index';
-import { Constants } from '../2sxc-extensions/2sxc.consts';
 import { SystemUpgrader } from '../2sxc-extensions/2sxc.system';
 import { Cms } from '../cms/Cms';
-import { Commands } from '../commands/commands';
+import { Commands as Commands } from '../commands/commands';
 import { MainContentBlock } from '../contentBlock/main-content-block';
 import { context } from '../context/context';
 import { Manage } from '../manage/manage';
@@ -24,13 +23,13 @@ export interface SxcControllerInPage extends SxcRootWithInternals {
    * @returns SxcInstance
    */
   (id: number | HTMLElement | JQuery, cbid?: number): SxcIntanceEditable;
-  _commands: Commands;
+  _commands: typeof Commands;
   _contentBlock: MainContentBlock;
   _quickDialog: QuickDialogManager;
   _toolbarManager: ToolbarManager;
   _manage: Manage;
-  c: Constants;
-  consts: Constants;
+//   c: Constants;
+//   consts: Constants;
   contentItems: any;
   system: SystemUpgrader;
   translate(key: string): string;
