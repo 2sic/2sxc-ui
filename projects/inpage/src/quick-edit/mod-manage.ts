@@ -15,7 +15,7 @@ export class ModManage {
 
 export const modManage = new ModManage();
 
-function getPaneName(pane: string): any {
+function getPaneName(pane: string): string {
   return $(pane).attr('id').replace('dnn_', '');
 }
 

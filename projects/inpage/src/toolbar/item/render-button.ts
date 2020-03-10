@@ -13,7 +13,7 @@ export function renderButton(context: ContextOfButton, groupIndex: number): HTML
   const buttonConfig = context.button;
 
   // retrieve configuration for this button
-  const oldParamsAdapter: any = oldParametersAdapter(buttonConfig.action);
+  const oldParamsAdapter = oldParametersAdapter(buttonConfig.action);
 
   let onclick: string = '';
 

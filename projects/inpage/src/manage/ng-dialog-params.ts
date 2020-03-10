@@ -9,7 +9,7 @@ export class NgDialogParams {
   cbid: number;
   lang: string;
   langpri: string;
-  langs: any; // string[] | null;
+  langs: string; // string[] | null;
   portalroot: string;
   websiteroot: string;
   partOfPage: boolean;

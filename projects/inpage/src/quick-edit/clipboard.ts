@@ -1,6 +1,4 @@
-﻿import { SxcInstanceWithInternals } from '../../../$2sxc/src/index';
-import { getSxcInstance } from '../x-bootstrap/sxc';
-import { CmdsStrategyFactory } from './cmds-strategy-factory';
+﻿import { CmdsStrategyFactory } from './cmds-strategy-factory';
 import { Mod } from './mod';
 import { $quickE as quickE } from './quick-e';
 import { selectors } from './selectors-instance';
@@ -40,7 +38,7 @@ export function copyPasteInPage(cbAction: string, list: any, index: number, type
         return clear(); // don't do anything
 
       if (type === selectors.cb.id) {
-        const sxc = getSxcInstance(list) as SxcInstanceWithInternals;
+        const sxc = window.$2sxc(list);
         sxc.manage._getCbManipulator().move(newClip.parent, newClip.field, from, to);
       } else {
         // sometimes missing oldClip.item

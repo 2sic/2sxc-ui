@@ -1,7 +1,7 @@
 ﻿
 # Manage: $2sxc.manage
 
-This enhances any module-instance of $2sxc (so a $2sxc(node|moduleId)) with a `.manage` object when the user is logged in and can edit something on this module. 
+This enhances a module-instance of $2sxc (so a $2sxc(node|moduleId)) with a `.manage` object when the user is logged in and can edit something on this module. 
 
 The `.manage` controls all kinds of things that happen to this module, like
 

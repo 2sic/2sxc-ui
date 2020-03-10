@@ -18,7 +18,7 @@ const containerTemplate = `<div class="${containerClass}"><div class="${iframeCl
  * get the current container
  * @returns {element} html element of the div
  */
-export function getOrCreate(): JQuery<HTMLElement> {
+export function getOrCreate(): JQuery {
   const container = $(`.${containerClass}`);
   return container.length > 0 ? container : buildContainerAndIFrame();
 }
@@ -38,10 +38,10 @@ export function getIFrame(container?: JQuery): IDialogFrameElement {
  * build the container in the dom w/iframe for re-use
  * @return {jquery} jquery dom-object
  */
-function buildContainerAndIFrame(): JQuery<HTMLElement> {
+function buildContainerAndIFrame(): JQuery {
   const container = $(containerTemplate);
-  if ($("#personaBar-iframe").length > 0)
-    container.addClass("persona-bar-visible");
+  if ($('#personaBar-iframe').length > 0)
+    container.addClass('persona-bar-visible');
   const newIFrame = document.createElement(iframeTag);
   const extendedIFrame = Iframebridge.build(newIFrame);
   container.find(`.${iframeClass}`).append(extendedIFrame);

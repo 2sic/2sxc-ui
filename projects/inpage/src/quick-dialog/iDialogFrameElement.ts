@@ -5,5 +5,5 @@
 //
 
 export interface IDialogFrameElement extends HTMLIFrameElement {
-  bridge: IFrameBridge
+  bridge: IFrameBridge;
 }

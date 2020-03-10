@@ -1,10 +1,4 @@
-﻿import 'shake.js';
-// import * as Shake from 'shake.js';
-// import {Shake } from 'shake.js';
-// import * as Shake from 'shake.js';
-// import './polyfills/include-polyfills';
-
-import { Cms } from './cms/Cms';
+﻿import { Cms } from './cms/Cms';
 import { Commands } from './commands/commands';
 import { context } from './context/context';
 import { $2sxcInPage as $2sxc } from './interfaces/sxc-controller-in-page';

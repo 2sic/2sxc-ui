@@ -64,10 +64,10 @@ $(window).on('mousemove', (e) => {
 });
 
 export class TagToolbar {
-  toolbarElement = null as JQuery<HTMLElement>;
+  toolbarElement = null as JQuery;
   initialized = false;
 
-  constructor(private readonly tag: JQuery<HTMLElement>, private readonly cnt: ContextOfButton) {
+  constructor(private readonly tag: JQuery, private readonly cnt: ContextOfButton) {
     this.updatePosition = this.updatePosition.bind(this);
 
     // Ensure toolbar gets visible when hovering

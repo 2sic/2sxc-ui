@@ -1,5 +1,5 @@
 ﻿/**
- * helper method to add list of zero to many classes to Element
+ * helper method to add list of zero to mny classes to Element
  * @param element
  * @param classes
  * @param spliter

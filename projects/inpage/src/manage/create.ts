@@ -109,7 +109,7 @@ export class EditManager {
     return renderToolbar(this.context);
   }
 
-  //#endregion official, public properties - everything below this can change at any time
+  //#endregion official, public properties - everything below this can change
 
   _context = this.context;
 
@@ -125,18 +125,18 @@ export class EditManager {
   _reloadWithAjax = this.context.app.supportsAjax;
 
   // #region 2dm disabled / todo q2stv
-  // todo q2stv - I think we don't need this any more
+  // todo q2stv - I think we don't need this a.ny more
   //
   // _dialogParameters = buildNgDialogParams(this.context);
 
    // 2dm disabled
-  // todo q2stv - I think we don't need this any more
+  // todo q2stv - I think we don't need this a.ny more
  /**
    * used to configure buttons / toolbars
    */
   // _instanceConfig = buildInstanceConfig(this.context);
   // 2dm disabled
-  // todo q2stv - I think we don't need this any more
+  // todo q2stv - I think we don't need this a.ny more
   /**
    * used for in-page dialogues
    */

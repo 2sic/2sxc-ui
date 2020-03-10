@@ -37,7 +37,7 @@ export function expandToolbarConfig(context: ContextOfButton, toolbarData: any, 
 }
 
 /**
- * take any common input format and convert it to a full toolbar-structure definition
+ * take various common input format and convert it to a full toolbar-structure definition
  * can handle the following input formats (the param unstructuredConfig):
  * complete tree (detected by "groups): { groups: [ {}, {}], name: ..., defaults: {...} }
  * group of buttons (detected by "buttons): { buttons: "..." | [], name: ..., ... }

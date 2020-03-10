@@ -35,7 +35,7 @@ export class IFrameBridge implements IIFrameBridge {
   private instanceSxc: SxcInstanceWithInternals;
 
   /** The html-tag of the current module */
-  private tagModule: JQuery<HTMLElement>;
+  private tagModule: JQuery;
 
   /**
    * get the sxc-object of this iframe
@@ -113,17 +113,17 @@ export class IFrameBridge implements IIFrameBridge {
   }
 
   /**
-  * check if the dialog is showing for the current sxc-instance
-  * @param {string} dialogName - name of dialog
-  * @returns {boolean} true if it's currently showing for this sxc-instance
-  */
+   * check if the dialog is showing for the current sxc-instance
+   * @param {string} dialogName - name of dialog
+   * @returns {boolean} true if it's currently showing for this sxc-instance
+   */
   isConfiguredFor(instanceId: string, dialogName: string): boolean {
     return this.sxcCacheKey === instanceId // the iframe is showing for the current sxc
       && this.dialogName === dialogName; // the view is the same as previously
   }
 }
 
-function scrollToTarget(target: JQuery<HTMLElement>) {
+function scrollToTarget(target: JQuery) {
   const specs = {
     scrollTop: target.offset().top - scrollTopOffset,
   } as any;

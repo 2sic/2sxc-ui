@@ -14,7 +14,7 @@ export class ToolbarManager extends HasLog {
     super('Tlb.Mngr', parentLog, 'init');
   }
 
-  buildToolbars(parentTag: JQuery<HTMLElement>, optionalId?: number) {
+  buildToolbars(parentTag: JQuery, optionalId?: number) {
     buildToolbars(this.log, parentTag, optionalId);
   }
 

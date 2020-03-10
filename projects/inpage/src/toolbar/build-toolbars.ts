@@ -20,7 +20,7 @@ const toolbarSelector = `.sc-menu[toolbar],.sc-menu[data-toolbar],[${Constants.t
  * @param parentTag
  * @param optionalId
  */
-export function buildToolbars(parentLog: Log, parentTag: JQuery<HTMLElement>, optionalId?: number): void {
+export function buildToolbars(parentLog: Log, parentTag: JQuery, optionalId?: number): void {
   const log = new Log('Tlb.BldAll', parentLog);
   parentTag = $(parentTag || '.DnnModule-' + optionalId);
 
@@ -45,7 +45,7 @@ export function buildToolbars(parentLog: Log, parentTag: JQuery<HTMLElement>, op
  * @param parentLog
  * @param node
  */
-export function buildToolbarsFromAnyNode(parentLog: Log, node: JQuery<HTMLElement>): void {
+export function buildToolbarsFromAnyNode(parentLog: Log, node: JQuery): void {
   const log = new Log('Tlb.BldAny', parentLog);
   const contextNode = $(node).closest(Constants.cb.selectors.ofName)[0];
 
@@ -121,7 +121,7 @@ function loadConfigFromAttributes(tag: HTMLElement): ToolbarInitConfig {
  * @param config
  * @param log
  */
-function convertConfigToToolbarTags(tag: JQuery<HTMLElement>, config: ToolbarInitConfig, log: Log): void {
+function convertConfigToToolbarTags(tag: JQuery, config: ToolbarInitConfig, log: Log): void {
   const cnt = context(tag);
   cnt.toolbar = expandToolbarConfig(cnt, config.toolbar, config.settings, log);
 
@@ -144,7 +144,7 @@ function convertConfigToToolbarTags(tag: JQuery<HTMLElement>, config: ToolbarIni
 
 
 /** find current toolbars inside this wrapper-tag */
-function getToolbarTags(parentTag: JQuery<HTMLElement>): JQuery<HTMLElement> {
+function getToolbarTags(parentTag: JQuery): JQuery {
   const allInner = $(toolbarSelector, parentTag);
 
   // return only those, which don't belong to a sub-item
@@ -156,7 +156,7 @@ function getToolbarTags(parentTag: JQuery<HTMLElement>): JQuery<HTMLElement> {
 }
 
 /** add hover-attribute to tag */
-function ensureToolbarHoverClass(jtag: JQuery<HTMLElement>): void {
+function ensureToolbarHoverClass(jtag: JQuery): void {
   if (jtag.length <= 0) return; // skip in case nothing was given
   const tag = jtag[0];
   if (!tag.hasAttribute(Constants.toolbar.attr.hover))
@@ -164,7 +164,7 @@ function ensureToolbarHoverClass(jtag: JQuery<HTMLElement>): void {
 }
 
 /** Create a default/fallback toolbar and return it */
-function addFallbackToolbar(parentTag: JQuery<HTMLElement>): JQuery<HTMLElement> {
+function addFallbackToolbar(parentTag: JQuery): JQuery {
   if (dbg) console.log("didn't find toolbar, so will auto-create", parentTag);
 
   const outsideCb = !parentTag.hasClass(Constants.cb.classes.name);
@@ -191,7 +191,7 @@ function tryGetAttrText(tag: HTMLElement, name: string): string {
   return item1 && item1.textContent;
 }
 
-export function disable(tag: HTMLElement | JQuery<HTMLElement>): void {
+export function disable(tag: HTMLElement | JQuery): void {
   const jtag = $(tag);
   jtag.attr(Constants.toolbar.attr.disable, 'true');
 }

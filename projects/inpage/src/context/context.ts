@@ -1,8 +1,8 @@
 ﻿import { SxcInstanceWithInternals } from '../../../$2sxc/src/index';
 import { DataEditContext } from '../data-edit-context/data-edit-context';
 import { $2sxcInPage as $2sxc } from '../interfaces/sxc-controller-in-page';
-import { getEditContext, getContainerTag } from '../manage/api';
-import { getSxcInstance } from '../x-bootstrap/sxc';
+import { getContainerTag, getEditContext } from '../manage/api';
+import { isSxcInstance } from '../plumbing/is';
 import { SystemContext } from './base-context/system-context';
 import { TenantContext } from './base-context/tenant-context';
 import { UserContext } from './base-context/user-context';
@@ -10,28 +10,29 @@ import { ContentBlockContext } from './content-block-context/content-block-conte
 import { ContextOfButton } from './context-of-button';
 import { AppContext } from './instance-context/app-context';
 import { InstanceContext } from './instance-context/instance-context';
+import { UiContext } from './instance-context/ui-context';
 import { ItemContext } from './item-context/item-context';
 import { PageContext } from './page-context/page-context';
-import { isSxcInstance } from '../plumbing/is';
-import { UiContext } from './instance-context/ui-context';
+
+
 
 /**
  * Primary API to get the context (context is cached)
  * @param htmlElement or Id (moduleId)
  * @param cbid
  */
-export function context(tagOrSxc: SxcInstanceWithInternals | HTMLElement | JQuery<HTMLElement>| number, cbid?: number): ContextOfButton {
+export function context(tagOrSxc: SxcInstanceWithInternals | HTMLElement | JQuery| number, cbid?: number): ContextOfButton {
   let sxc: SxcInstanceWithInternals;
   let containerTag: any = null;
 
   if (isSxcInstance(tagOrSxc)) { // it is SxcInstance
     sxc = tagOrSxc;
   } else if (typeof tagOrSxc === 'number') { // it is number
-    sxc = getSxcInstance(tagOrSxc, cbid);
+    sxc = window.$2sxc(tagOrSxc, cbid);
   } else { // it is HTMLElement
-    sxc = getSxcInstance(tagOrSxc);
+    sxc = window.$2sxc(tagOrSxc);
     containerTag = getContainerTag(tagOrSxc);
-  };
+  }
 
   const contextOfButton = getContextInstance(sxc, containerTag);
   contextOfButton.sxc = sxc;
@@ -50,7 +51,7 @@ export function contextCopy(htmlElementOrId: HTMLElement | number, cbid?: number
   // make a copy
   const copyOfContext = JSON.parse(JSON.stringify(contextOfButton));
   // bring sxc back to context
-  contextOfButton.sxc = getSxcInstance(htmlElementOrId);
+  contextOfButton.sxc = window.$2sxc(htmlElementOrId);
   return copyOfContext;
 }
 
@@ -110,10 +111,10 @@ export function createContextFromEditContext(editCtx: DataEditContext) {
     // sxc
     btnCtx.instance.sxcVersion = editCtx.Environment.SxcVersion;
     btnCtx.instance.parameters = editCtx.Environment.parameters;
-    btnCtx.instance.sxcRootUrl = editCtx.Environment.SxcRootUrl;// NgDialogParams.websiteroot
+    btnCtx.instance.sxcRootUrl = editCtx.Environment.SxcRootUrl; // NgDialogParams.websiteroot
   }
   if (editCtx.ContentBlock) {
-    btnCtx.instance.allowPublish = editCtx.ContentBlock.VersioningRequirements === $2sxc.c.publishAllowed;// NgDialogParams.publishing
+    btnCtx.instance.allowPublish = editCtx.ContentBlock.VersioningRequirements === $2sxc.c.publishAllowed; // NgDialogParams.publishing
   }
 
   // this will be about the current app, settings of the app, app - paths, etc.
@@ -152,7 +153,7 @@ export function createContextFromEditContext(editCtx: DataEditContext) {
     btnCtx.contentBlock.versioningRequirements = editCtx.ContentBlock.VersioningRequirements;
     btnCtx.contentBlock.parentFieldName = editCtx.ContentBlock.ParentFieldName;
     btnCtx.contentBlock.parentFieldSortOrder = editCtx.ContentBlock.ParentFieldSortOrder;
-    btnCtx.contentBlock.partOfPage = editCtx.ContentBlock.PartOfPage;// NgDialogParams.partOfPage
+    btnCtx.contentBlock.partOfPage = editCtx.ContentBlock.PartOfPage; // NgDialogParams.partOfPage
   }
   if (editCtx.ContentGroup) {
     btnCtx.contentBlock.isCreated = editCtx.ContentGroup.IsCreated;

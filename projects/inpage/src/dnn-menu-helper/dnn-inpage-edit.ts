@@ -1,7 +1,6 @@
 ﻿import { SxcInstanceWithInternals } from '../../../$2sxc/src/index';
 import { windowInPage as window } from '../interfaces/window-in-page';
 import { getTag } from '../manage/api';
-import { getSxcInstance } from '../x-bootstrap/sxc';
 
 /**
  * Maps actions of the module menu to JS actions - needed because onclick event can't be set (actually, a bug in DNN)
@@ -12,7 +11,7 @@ export class ActionMenuMapper {
   private sxc: SxcInstanceWithInternals;
 
   constructor(moduleId: number) {
-    this.sxc = getSxcInstance(moduleId) as SxcInstanceWithInternals;
+    this.sxc = window.$2sxc(moduleId) as SxcInstanceWithInternals;
     this.tag = getTag(this.sxc);
     this.run = this.sxc.manage.run;
   }

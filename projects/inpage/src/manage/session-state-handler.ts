@@ -1,16 +1,16 @@
-﻿import { DebugConfig } from "../DebugConfig";
+﻿import { DebugConfig } from '../DebugConfig';
 
 /**
- * This object helps persist / load / reset 
+ * This object helps persist / load / reset
  * a setting in the session-state
- * */
+ */
 export class SessionStateHandler<T> {
   constructor(private readonly key: string) { }
 
   set(value: string): void {
-    if(DebugConfig.state.change) console.log(`state '${this.key}' set(${value})`);
+    if (DebugConfig.state.change) console.log(`state '${this.key}' set(${value})`);
     sessionStorage.setItem(this.key, value);
-  };
+  }
 
   remove(): void {
     if (DebugConfig.state.change) console.log(`state '${this.key}' remove()`);

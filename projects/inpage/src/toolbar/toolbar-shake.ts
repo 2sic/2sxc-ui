@@ -1,4 +1,5 @@
-﻿const Shake = require('shake.js');
+﻿// tslint:disable-next-line: no-var-requires
+const Shake = require('shake.js');
 // ReSharper disable once InconsistentNaming
 
 // enable shake detection on all toolbars

@@ -18,7 +18,7 @@ let current: IDialogFrameElement = null;
  * this is a dialog manager which is in charge of all quick-dialogues
  * it always has a reference to the latest dialog created by any module instance
  */
-class QuickDialogManager {
+export class QuickDialogManager {
   /**
    * Determines if any dialog is currently showing
    */

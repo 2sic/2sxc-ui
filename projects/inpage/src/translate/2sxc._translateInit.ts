@@ -1,10 +1,9 @@
-﻿import * as i18next from './libs/i18next.min';
-import * as i18nextXHRBackend from './libs/i18nextXHRBackend.min';
-import * as jqueryI18next from './libs/jquery-i18next.min';
-import { createContextFromEditContext } from '../context/context';
+﻿import { createContextFromEditContext } from '../context/context';
 import { windowInPage as window } from '../interfaces/window-in-page';
 import { getEditContext } from '../manage/api';
-import { getSxcInstance } from '../x-bootstrap/sxc';
+import * as i18next from './libs/i18next.min';
+import * as i18nextXHRBackend from './libs/i18nextXHRBackend.min';
+import * as jqueryI18next from './libs/jquery-i18next.min';
 
 /**
  * initialize the translation system; ensure toolbars etc. are translated
@@ -26,18 +25,18 @@ export function _translateInit(manage: any): void {
     initialized = true; // getScxInstance is calling _translate so that we can skip the loop...
     // trying to get context...
     const htmlElementOrId = $('div[data-cb-id]')[0];
-    const sxc = getSxcInstance(htmlElementOrId);
+    const sxc = window.$2sxc(htmlElementOrId);
     initialized = false; // for real, it is not initialized...
     const editContext = getEditContext(sxc);
     context = createContextFromEditContext(editContext);
     context.sxc = sxc;
   }
 
-  //console.log('stv: compare #1',
+  // console.log('stv: compare #1',
   //  manage._editContext.Language.Current.substr(0, 2),
   //  context.app.currentLanguage.substr(0, 2));
 
-  //console.log('stv: compare #2',
+  // console.log('stv: compare #2',
   //  manage._editContext.Environment.SxcRootUrl,
   //  context.instance.sxcRootUrl);
 
@@ -53,7 +52,7 @@ export function _translateInit(manage: any): void {
       },
       // ReSharper disable UnusedParameter
     },
-      (err: any, t: any) => {
+      (/* err: a.ny, t: a.ny */) => {
         // ReSharper restore UnusedParameter
         // for options see
         // https://github.com/i18next/jquery-i18next#initialize-the-plugin

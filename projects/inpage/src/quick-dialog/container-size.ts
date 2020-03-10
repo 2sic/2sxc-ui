@@ -26,7 +26,7 @@ let resizeWatcher: number = null;
 /**
  * create watcher which monitors the iframe size and adjusts the container as needed
  */
-export function watchForResize(container: JQuery<HTMLElement>): void {
+export function watchForResize(container: JQuery): void {
 
   if (!resizeWatcher) // only add a timer if not already running
     resizeWatcher = window.setInterval(() => {

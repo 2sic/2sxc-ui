@@ -10,7 +10,7 @@
  * - run(...)
  * - isEditMode
  */
-class Manage {
+export class Manage {
   initInstance = initInstance;
 }
 

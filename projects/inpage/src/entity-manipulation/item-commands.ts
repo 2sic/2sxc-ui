@@ -27,12 +27,12 @@ export let contentItems = {
      */
     const params: WebApiParams = {
       zoneId: context.app.zoneId,
-      appId: context.app.id
+      appId: context.app.id,
     };
 
-    return new Promise((resolve: any, reject: any) => {
+    return new Promise((resolve, reject) => {
       context.sxc.webApi.delete(`app-content/any/${itemGuid}`, params, null, true)
-        .done((data: any, textStatus: string, jqXHR: any) => {
+        .done((data, textStatus: string, jqXHR) => {
           if (jqXHR.status === 204 || jqXHR.status === 200) {
             // resolve the promise with the response text
             resolve(data);
@@ -45,12 +45,12 @@ export let contentItems = {
             // which will hopefully be a meaningful error
             reject(Error(textStatus));
           }
-        }).fail((jqXHR: any, textStatus: string, errorThrown: string) => {
+        }).fail((jqXHR, textStatus: string, errorThrown: string) => {
           reject(Error(errorThrown));
         });
-    }).then((result: any) => {
+    }).then((result) => {
       location.reload();
-    }).catch((error: any) => {
+    }).catch((error) => {
       console.log(error);
     });
   },

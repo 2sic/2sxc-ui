@@ -12,13 +12,12 @@ import {
   buildToolbarsFromAnyNode,
 } from '../toolbar/build-toolbars';
 import { CleanupTagToolbars } from '../toolbar/tag-toolbar';
-import { getSxcInstance } from './sxc';
 
 /**
  * module & toolbar bootstrapping (initialize all toolbars after loading page)
  * this will run onReady...
  */
-const initializedInstances: Array<JQuery<HTMLElement>> = [];
+const initializedInstances: JQuery[] = [];
 let openedTemplatePickerOnce = false;
 const diagCancelStateOnStart = QuickEditState.cancelled.get();
 
@@ -50,7 +49,7 @@ function initAllInstances(isFirstRun: boolean): void {
 function watchDomChanges() {
   const observer = new MutationObserver((m) => {
     // Watch how many changes were processed (statistics)
-    (window.$2sxc as any).stats.watchDomChanges++;
+    window.$2sxc.stats.watchDomChanges++;
     // Create toolbars for added nodes
     const log = new Log('Bts.Module');
     let processed = 0;
@@ -109,7 +108,7 @@ function tryShowTemplatePicker(): boolean {
     const found = $(`[data-cb-id="${openDialogId}"]`);
     if (found.length) {
       // since the CB-ID could also be an inner content (marked as a negative "-" number)
-      // we must be sure that we use the right id anyhow
+      // we must be sure that we use the right id a.nyhow
       if (openDialogId < 0) {
         const instanceId = Number(
           found[0].attributes.getNamedItem(Attributes.InstanceId).value,
@@ -137,7 +136,7 @@ function tryShowTemplatePicker(): boolean {
 
     // show the template picker of this module
     const module = uninitializedModules.parent('div[data-edit-context]')[0];
-    sxc = getSxcInstance(module);
+    sxc = window.$2sxc(module);
   }
 
   if (sxc) {
@@ -147,7 +146,7 @@ function tryShowTemplatePicker(): boolean {
   return true;
 }
 
-function initInstance(module: JQuery<HTMLElement>, isFirstRun: boolean): void {
+function initInstance(module: JQuery, isFirstRun: boolean): void {
   // console.log("initInstance called with ", module, isFirstRun);
   // console.log("Initialized instances are ", initializedInstances);
 
@@ -157,7 +156,7 @@ function initInstance(module: JQuery<HTMLElement>, isFirstRun: boolean): void {
   // add to modules-list first, in case we run into recursions
   initializedInstances.push(module);
 
-  let sxc = getSxcInstance(module);
+  let sxc = window.$2sxc(module);
 
   // check if the sxc must be re-created. This is necessary when modules are dynamically changed
   // because the configuration may change, and that is cached otherwise, resulting in toolbars with wrong config
