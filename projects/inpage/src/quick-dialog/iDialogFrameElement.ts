@@ -6,4 +6,8 @@
 
 export interface IDialogFrameElement extends HTMLIFrameElement {
   bridge: IFrameBridge;
+
+  /** store previous height for changing again later on */
+  previousHeight: number;
+
 }

@@ -22,7 +22,7 @@ export class Publish extends CommandBase {
         disabled(context) {
           return !context.instance.allowPublish;
         },
-        code(context, event) {
+        code(context, event): Promise<any> {
           return new Promise((resolve, reject) => {
             if (context.button.action.params.isPublished) {
               alert(translate('Toolbar.AlreadyPublished'));

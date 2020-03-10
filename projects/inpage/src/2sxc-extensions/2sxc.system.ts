@@ -3,11 +3,12 @@
     TODO: 2dm must verify this works, my change could have broken something
 */
 import { windowInPage as window } from '../interfaces/window-in-page';
+import { getSxc } from '../plumbing/getSxc';
 
 export class SystemUpgrader {
     // upgrade command - started when an error contains a link to start this
     finishUpgrade(domElement: HTMLElement): void {
-    const mc = window.$2sxc(domElement);
+    const mc = getSxc(domElement);
     mc.webApi.get('view/module/finishinstallation')
         .done(() => {
         alert('Upgrade ok, restarting the CMS and reloading...');

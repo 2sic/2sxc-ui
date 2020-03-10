@@ -7,20 +7,20 @@ import { selectors } from './selectors-instance';
  * content-block specific stuff like actions
  */
 function onCbButtonClick() {
-  const list: any = quickE.main.actionsForCb.closest(selectors.cb.listSelector);
-  const listItems: any = list.find(selectors.cb.selector);
-  const actionConfig: any = JSON.parse(list.attr(selectors.cb.context));
+  const list = quickE.main.actionsForCb.closest(selectors.blocks.cb.listSelector);
+  const listItems = list.find(selectors.blocks.cb.selector);
+  const actionConfig: any = JSON.parse(list.attr(selectors.blocks.cb.context));
   let index: number = 0;
   const newGuid: string | null = actionConfig.guid || null;
 
-  if (quickE.main.actionsForCb.hasClass(selectors.cb.class))
+  if (quickE.main.actionsForCb.hasClass(selectors.blocks.cb.class))
     index = listItems.index(quickE.main.actionsForCb[0]) + 1;
 
   // check cut/paste
   const cbAction = $(this).data('action');
   if (cbAction) {
     // this is a cut/paste action
-    return copyPasteInPage(cbAction, list, index, selectors.cb.id);
+    return copyPasteInPage(cbAction, list, index, selectors.blocks.cb.id);
   } else {
     const appOrContent = $(this).data('type');
     return cb.create(actionConfig.parent, actionConfig.field, index, appOrContent, list, newGuid);

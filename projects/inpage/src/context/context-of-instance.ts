@@ -1,4 +1,4 @@
-﻿import { SxcInstanceWithInternals } from '../../../$2sxc/src/index';
+﻿import { SxcIntanceEditable } from '../interfaces/sxc-instance-editable';
 import { ContextOfPage } from './context-of-page';
 import { AppContext } from './instance-context/app-context';
 import { InstanceContext } from './instance-context/instance-context';
@@ -6,7 +6,7 @@ import { UiContext } from './instance-context/ui-context';
 
 
 export class ContextOfInstance extends ContextOfPage {
-  sxc: SxcInstanceWithInternals; // instance of sxc object
+  sxc: SxcIntanceEditable; // instance of sxc object
   instance: InstanceContext; // information related to the current DNN module, incl.instanceId, etc.
   app: AppContext; // this will be about the current app, settings of the app, app - paths, etc.
   ui: UiContext; // ensure that the UI will load the correct assets to enable editing

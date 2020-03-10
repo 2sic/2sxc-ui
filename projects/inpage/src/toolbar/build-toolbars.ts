@@ -1,7 +1,7 @@
-﻿import { SxcInstanceWithInternals } from '../../../$2sxc/src/index';
-import * as Constants from '../constants';
+﻿import * as Constants from '../constants';
 import { context } from '../context/context';
 import { $2sxcInPage as $2sxc } from '../interfaces/sxc-controller-in-page';
+import { SxcIntanceEditable } from '../interfaces/sxc-instance-editable';
 import { Log } from '../logging/log';
 import { getTag } from '../manage/api';
 import { renderToolbar } from './item/render-toolbar';
@@ -40,13 +40,13 @@ export function buildToolbars(parentLog: Log, parentTag: JQuery, optionalId?: nu
 }
 
 /**
- * Build toolbar, but allow any node as target
+ * Build toolbar, but allow a.ny node as target
  * Will automatically find a wrapping sc-edit-context and all containing toolbars
  * @param parentLog
  * @param node
  */
 export function buildToolbarsFromAnyNode(parentLog: Log, node: JQuery): void {
-  const log = new Log('Tlb.BldAny', parentLog);
+  const log = new Log('Tlb.BldNde', parentLog);
   const contextNode = $(node).closest(Constants.cb.selectors.ofName)[0];
 
   // if we have no contextNode (a parent content block), we can
@@ -196,7 +196,7 @@ export function disable(tag: HTMLElement | JQuery): void {
   jtag.attr(Constants.toolbar.attr.disable, 'true');
 }
 
-export function isDisabled(sxc: SxcInstanceWithInternals): boolean {
-  const tag: any = $(getTag(sxc));
+export function isDisabled(sxc: SxcIntanceEditable): boolean {
+  const tag = $(getTag(sxc));
   return !!tag.attr(Constants.toolbar.attr.disable);
 }

@@ -19,7 +19,7 @@ $2sxc.api.edit
 
 ## Naming convention
 
-* .[object-name] builds an object, but doesn't register it anywhere
+* .[object-name] builds an object, but doesn't register it a.nywhere
 * .register[something] will create an object and register it
 
 

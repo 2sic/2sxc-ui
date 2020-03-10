@@ -9,7 +9,7 @@ import { selectors } from './selectors-instance';
 function onModuleButtonClick() {
   const type = $(this).data('type');
   const dnnMod = quickE.main.actionsForModule;
-  const pane = dnnMod.closest(selectors.mod.listSelector);
+  const pane = dnnMod.closest(selectors.blocks.mod.listSelector);
   let index = 0;
 
   if (dnnMod.hasClass('DnnModule'))
@@ -17,7 +17,7 @@ function onModuleButtonClick() {
 
   const cbAction = $(this).data('action');
   if (cbAction) {
-    return copyPasteInPage(cbAction, pane, index, selectors.mod.id); // copy/paste
+    return copyPasteInPage(cbAction, pane, index, selectors.blocks.mod.id); // copy/paste
   }
   return modManage.create(modManage.getPaneName(pane), index, type);
 }

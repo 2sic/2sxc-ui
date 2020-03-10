@@ -22,7 +22,7 @@ export function _readPageConfig() {
   let confJ: string;
 
   // any inner blocks found? will currently affect if modules can be inserted...
-  const hasInnerCBs = ($(selectors.cb.listSelector).length > 0);
+  const hasInnerCBs = ($(selectors.blocks.cb.listSelector).length > 0);
 
   if (configs.length > 0) {
     // go through reverse list, as the last is the most important...

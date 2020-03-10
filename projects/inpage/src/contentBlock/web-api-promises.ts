@@ -23,7 +23,7 @@ import { ContextOfButton } from '../context/context-of-button';
  * @param {boolean} state
  * @returns {promise}
  */
-// 2017-09-02 2dm removed, deprecated, it's not stored on the server any more
+// 2017-09-02 2dm removed, deprecated, it's not stored on the server a.ny more
 // cbm.setTemplateChooserState = function(sxc, state) {
 //    return sxc.webApi.get({
 //        url: "view/module/SetTemplateChooserState",

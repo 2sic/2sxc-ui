@@ -16,8 +16,8 @@ export class More extends CommandBase {
       {
         code(context, event) {
           return new Promise((resolve, reject) => {
-            const btn2: Element = event.target;
-            const fullMenu2: Element = btn2.closest('ul.sc-menu');
+            const btn2 = event.target as HTMLElement;
+            const fullMenu2 = btn2.closest('ul.sc-menu') as HTMLElement;
             const oldState2 = Number(fullMenu2.getAttribute('data-state') || 0);
             const max2 = Number(fullMenu2.getAttribute('group-count'));
             const newState2 = (oldState2 + 1) % max2;
@@ -29,17 +29,17 @@ export class More extends CommandBase {
             event.preventDefault();
 
             function mouseenterHandler(e: MouseEvent) {
-              (fullMenu2 as HTMLElement).style.opacity = '1';
+              fullMenu2.style.opacity = '1';
             }
 
             function mouseleaveHandler(e: MouseEvent) {
-              if (e.screenX != 0 && e.screenY != 0) {
+              if (e.screenX !== 0 && e.screenY !== 0) {
                 // hide toolbar on mouseleave
-                (fullMenu2 as HTMLElement).style.opacity = '0';
+                fullMenu2.style.opacity = '0';
               } else {
                 // this is fix for Chrome issue
                 // ensure to show toolbar because X=0 and Y=0
-                (fullMenu2 as HTMLElement).style.opacity = '1';
+                fullMenu2.style.opacity = '1';
                 console.warn('workaround for toolbar hide onmouseleave issue', e.screenX, e.screenY, e.target);
               }
             }

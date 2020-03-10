@@ -1,6 +1,6 @@
-﻿import { translate } from '../translate/2sxc.translate';
+﻿import { WebApiParams } from '../contentBlock/web-api-params';
 import { ContextOfButton } from '../context/context-of-button';
-import { WebApiParams } from '../contentBlock/web-api-params';
+import { translate } from '../translate/2sxc.translate';
 
 /**
  * this enhances the $2sxc client controller with stuff only needed when logged in

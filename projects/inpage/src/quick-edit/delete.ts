@@ -1,3 +1,5 @@
-﻿interface Delete {
-  delete(clip: any): any;
+﻿import { Specs } from './specs';
+
+export interface Delete {
+  delete(clip: Specs): JQueryPromise<void>;
 }

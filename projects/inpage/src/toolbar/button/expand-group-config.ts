@@ -33,7 +33,7 @@ export function expandButtonGroups(fullToolbarConfig: ToolbarConfig, parentLog: 
     if (Array.isArray(btns)) {
       log.add(`will process ${btns.length} buttons`);
       for (let b = 0; b < btns.length; b++) {
-        const btn = btns[b] as any;
+        const btn = btns[b];
 
         if (!(actions.get(btn.command.action))) {
           log.add(`couldn't find action ${btn.command.action} - show warning`);

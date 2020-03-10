@@ -15,9 +15,9 @@ function enable(): void {
  * start watching for mouse-move
  */
 function watchMouse() {
-  let refreshTimeout: any = null;
+  let refreshTimeout: number = null;
   $('body').on('mousemove',
-    (e: any) => {
+    (e) => {
       if (refreshTimeout === null)
         refreshTimeout = window.setTimeout(() => {
             requestAnimationFrame(() => {
@@ -51,7 +51,7 @@ export function start(): void {
  * cache the panes which can contain modules
  */
 function initPanes(): void {
-  quickE.cachedPanes = $(selectors.mod.listSelector);
+  quickE.cachedPanes = $(selectors.blocks.mod.listSelector);
   quickE.cachedPanes.addClass('sc-cb-pane-glow');
 }
 

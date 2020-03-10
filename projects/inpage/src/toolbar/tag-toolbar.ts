@@ -113,9 +113,9 @@ export class TagToolbar {
   updatePosition() {
 
     const position = {
-      top: 'auto' as any,
-      left: 'auto' as any,
-      right: 'auto' as any,
+      top: 'auto' as string | number,
+      left: 'auto' as string | number,
+      right: 'auto' as string | number,
       viewportOffset: this.tag[0].getBoundingClientRect().top,
       bodyOffset: getBodyOffset(),
       tagScrollOffset: 0,

@@ -34,14 +34,14 @@ function refreshDomObjects(): void {
 
   if (quickE.config.innerBlocks.enable) {
     // get all content-block lists which are empty, or which allow multiple child-items
-    const lists: any = $(selectors.cb.listSelector).filter(`:not(.${selectors.cb.singleItem}), :empty`);
+    const lists = $(selectors.blocks.cb.listSelector).filter(`:not(.${selectors.blocks.cb.singleItem}), :empty`);
     quickE.contentBlocks = lists // $(selectors.cb.listSelector)
-      .find(selectors.cb.selector)
+      .find(selectors.blocks.cb.selector)
       .add(lists); // selectors.cb.listSelector);
   }
   if (quickE.config.modules.enable)
     quickE.modules = quickE.cachedPanes
-      .find(selectors.mod.selector)
+      .find(selectors.blocks.mod.selector)
       .add(quickE.cachedPanes);
 }
 
@@ -56,7 +56,7 @@ namespace refreshDomObjects {
 /**
  * position, align and show a menu linked to another item
  */
-export function positionAndAlign(element: any, coords: Coords) {
+export function positionAndAlign(element: JQuery, coords: Coords) {
   return element.css({
     left: coords.x - quickE.bodyOffset.x,
     top: coords.yh - quickE.bodyOffset.y,
@@ -68,7 +68,7 @@ export function positionAndAlign(element: any, coords: Coords) {
  * Refresh positioning / visibility of the quick-insert bar
  * @param e
  */
-export function refresh(e: any) {
+export function refresh(e: JQueryEventObject) {
   const highlightClass: string = 'sc-cb-highlight-for-insert';
   const newDate = new Date();
   if ((!refreshDomObjects.lastCall) || (newDate.getTime() - refreshDomObjects.lastCall.getTime() > 1000)) {
@@ -94,8 +94,8 @@ export function refresh(e: any) {
     const alignTo = quickE.nearestCb || quickE.nearestMod;
 
     // find parent pane to highlight
-    const parentPane = $(alignTo.element).closest(selectors.mod.listSelector);
-    const parentCbList = $(alignTo.element).closest(selectors.cb.listSelector);
+    const parentPane = $(alignTo.element).closest(selectors.blocks.mod.listSelector);
+    const parentCbList = $(alignTo.element).closest(selectors.blocks.cb.listSelector);
     const parentContainer = (parentCbList.length ? parentCbList : parentPane)[0];
 
     // put part of the pane-name into the button-labels
@@ -130,7 +130,7 @@ export function refresh(e: any) {
  * @param elements
  * @param position
  */
-export function findNearest(elements: any, position: Coords): Coords {
+export function findNearest(elements: JQuery, position: Coords): Coords {
   const maxDistance: number = 30; // Defines the maximal distance of the cursor when the menu is displayed
 
   let nearestItem: any = null;
@@ -159,7 +159,7 @@ export function findNearest(elements: any, position: Coords): Coords {
   return nearestItem;
 }
 
-export function getCoordinates(element: any): Coords {
+export function getCoordinates(element: JQuery): Coords {
   // sometimes element.length === 0 and element.offset() = undefined
   // console.log("element.offset():", element.offset());
   // console.log("element.length:", element.length);

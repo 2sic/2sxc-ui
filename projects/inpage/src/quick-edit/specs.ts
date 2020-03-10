@@ -1,8 +1,13 @@
 ﻿export class Specs {
-  parent: any;
+  /** The parent is either "dnn" or a module information */
+  parent: number;
+
+  /** The field inside the parent used for this content */
   field: string;
-  list: any;
-  item: any;
+
+  /**  */
+  list: JQuery;
+  item: HTMLElement;
   index: number;
   type: string;
 }

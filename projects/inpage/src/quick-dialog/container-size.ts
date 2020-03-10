@@ -31,7 +31,7 @@ export function watchForResize(container: JQuery): void {
   if (!resizeWatcher) // only add a timer if not already running
     resizeWatcher = window.setInterval(() => {
       try {
-        const frm: any = Container.getIFrame(container);
+        const frm = Container.getIFrame(container);
         if (!frm) return;
 
         const height: number = frm.contentDocument.body.offsetHeight;

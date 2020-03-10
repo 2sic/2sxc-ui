@@ -1,6 +1,7 @@
 ﻿import { createContextFromEditContext } from '../context/context';
 import { windowInPage as window } from '../interfaces/window-in-page';
 import { getEditContext } from '../manage/api';
+import { getSxc } from '../plumbing/getSxc';
 import * as i18next from './libs/i18next.min';
 import * as i18nextXHRBackend from './libs/i18nextXHRBackend.min';
 import * as jqueryI18next from './libs/jquery-i18next.min';
@@ -25,7 +26,7 @@ export function _translateInit(manage: any): void {
     initialized = true; // getScxInstance is calling _translate so that we can skip the loop...
     // trying to get context...
     const htmlElementOrId = $('div[data-cb-id]')[0];
-    const sxc = window.$2sxc(htmlElementOrId);
+    const sxc = getSxc(htmlElementOrId);
     initialized = false; // for real, it is not initialized...
     const editContext = getEditContext(sxc);
     context = createContextFromEditContext(editContext);

@@ -8,6 +8,7 @@ import { context } from '../context/context';
 import { Manage } from '../manage/manage';
 import { QuickDialogManager } from '../quick-dialog/quick-dialog';
 import { ToolbarManager } from '../toolbar/toolbar-manager';
+import { SxcIntanceEditable } from './sxc-instance-editable';
 import { windowInPage as window } from './window-in-page';
 
 
@@ -16,6 +17,13 @@ import { windowInPage as window } from './window-in-page';
  */
 // ReSharper disable InconsistentNaming
 export interface SxcControllerInPage extends SxcRootWithInternals {
+  /**
+   * Get's an SxcInstance
+   * @param id number | HTMLElement
+   * @param cbid number
+   * @returns SxcInstance
+   */
+  (id: number | HTMLElement | JQuery, cbid?: number): SxcIntanceEditable;
   _commands: Commands;
   _contentBlock: MainContentBlock;
   _quickDialog: QuickDialogManager;

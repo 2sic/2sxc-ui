@@ -4,7 +4,7 @@
     public y: number,
     public w?: number,
     public yh?: number,
-    public element?: any,
+    public element?: JQuery,
   ) {
   }
 }

@@ -1,6 +1,6 @@
-﻿import { SxcInstanceWithInternals } from '../../../$2sxc/src/index';
-import { DataEditContext } from '../data-edit-context/data-edit-context';
+﻿import { DataEditContext } from '../data-edit-context/data-edit-context';
 import { $2sxcInPage as $2sxc } from '../interfaces/sxc-controller-in-page';
+import { SxcIntanceEditable } from '../interfaces/sxc-instance-editable';
 import { getContainerTag, getEditContext } from '../manage/api';
 import { isSxcInstance } from '../plumbing/is';
 import { SystemContext } from './base-context/system-context';
@@ -13,6 +13,7 @@ import { InstanceContext } from './instance-context/instance-context';
 import { UiContext } from './instance-context/ui-context';
 import { ItemContext } from './item-context/item-context';
 import { PageContext } from './page-context/page-context';
+import { getSxc } from '../plumbing/getSxc';
 
 
 
@@ -21,17 +22,18 @@ import { PageContext } from './page-context/page-context';
  * @param htmlElement or Id (moduleId)
  * @param cbid
  */
-export function context(tagOrSxc: SxcInstanceWithInternals | HTMLElement | JQuery| number, cbid?: number): ContextOfButton {
-  let sxc: SxcInstanceWithInternals;
-  let containerTag: any = null;
+export function context(tagOrSxc: SxcIntanceEditable | HTMLElement | JQuery| number, cbid?: number): ContextOfButton {
+  let sxc: SxcIntanceEditable;
+  let containerTag: HTMLElement = null;
 
   if (isSxcInstance(tagOrSxc)) { // it is SxcInstance
     sxc = tagOrSxc;
   } else if (typeof tagOrSxc === 'number') { // it is number
-    sxc = window.$2sxc(tagOrSxc, cbid);
-  } else { // it is HTMLElement
-    sxc = window.$2sxc(tagOrSxc);
-    containerTag = getContainerTag(tagOrSxc);
+    sxc = getSxc(tagOrSxc, cbid);
+  } else  { // it is HTMLElement
+
+    sxc = getSxc(tagOrSxc);
+    containerTag = getContainerTag(tagOrSxc as HTMLElement);
   }
 
   const contextOfButton = getContextInstance(sxc, containerTag);
@@ -51,7 +53,7 @@ export function contextCopy(htmlElementOrId: HTMLElement | number, cbid?: number
   // make a copy
   const copyOfContext = JSON.parse(JSON.stringify(contextOfButton));
   // bring sxc back to context
-  contextOfButton.sxc = window.$2sxc(htmlElementOrId);
+  contextOfButton.sxc = getSxc(htmlElementOrId) as SxcIntanceEditable;
   return copyOfContext;
 }
 
@@ -60,7 +62,7 @@ export function contextCopy(htmlElementOrId: HTMLElement | number, cbid?: number
  * @param sxc
  * @param htmlElement
  */
-export function getContextInstance(sxc: SxcInstanceWithInternals, htmlElement?: HTMLElement): ContextOfButton {
+export function getContextInstance(sxc: SxcIntanceEditable, htmlElement?: HTMLElement): ContextOfButton {
   const editContext = getEditContext(sxc, htmlElement);
   return createContextFromEditContext(editContext);
 }

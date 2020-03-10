@@ -1,3 +1,3 @@
-﻿interface Dictionary {
-  [key: string]: Delete;
-}
+﻿// interface Dictionary {
+//   [key: string]: Delete;
+// }

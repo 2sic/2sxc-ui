@@ -1,5 +1,4 @@
-﻿import { SxcInstanceWithInternals } from '../../../$2sxc/src/index';
-import { Attributes } from '../constants';
+﻿import { Attributes } from '../constants';
 import { DebugConfig } from '../DebugConfig';
 import { windowInPage as window } from '../interfaces/window-in-page';
 import { Log } from '../logging/log';
@@ -12,6 +11,8 @@ import {
   buildToolbarsFromAnyNode,
 } from '../toolbar/build-toolbars';
 import { CleanupTagToolbars } from '../toolbar/tag-toolbar';
+import { SxcIntanceEditable } from '../interfaces/sxc-instance-editable';
+import { getSxc } from '../plumbing/getSxc';
 
 /**
  * module & toolbar bootstrapping (initialize all toolbars after loading page)
@@ -100,7 +101,7 @@ function watchDomChanges() {
  * @returns
  */
 function tryShowTemplatePicker(): boolean {
-  let sxc: SxcInstanceWithInternals;
+  let sxc: SxcIntanceEditable;
   // first check if we should show one according to the state-settings
   const openDialogId = QuickEditState.cbId.get();
   if (openDialogId) {
@@ -113,12 +114,9 @@ function tryShowTemplatePicker(): boolean {
         const instanceId = Number(
           found[0].attributes.getNamedItem(Attributes.InstanceId).value,
         );
-        sxc = window.$2sxc(
-          instanceId,
-          openDialogId,
-        ) as SxcInstanceWithInternals;
+        sxc = getSxc(instanceId, openDialogId);
       } else {
-        sxc = window.$2sxc(openDialogId) as SxcInstanceWithInternals;
+        sxc = getSxc(openDialogId);
       }
     }
   }
@@ -136,7 +134,7 @@ function tryShowTemplatePicker(): boolean {
 
     // show the template picker of this module
     const module = uninitializedModules.parent('div[data-edit-context]')[0];
-    sxc = window.$2sxc(module);
+    sxc = getSxc(module);
   }
 
   if (sxc) {
@@ -156,11 +154,11 @@ function initInstance(module: JQuery, isFirstRun: boolean): void {
   // add to modules-list first, in case we run into recursions
   initializedInstances.push(module);
 
-  let sxc = window.$2sxc(module);
+  let sxc = getSxc(module);
 
   // check if the sxc must be re-created. This is necessary when modules are dynamically changed
   // because the configuration may change, and that is cached otherwise, resulting in toolbars with wrong config
-  if (!isFirstRun) sxc = sxc.recreate(true);
+  if (!isFirstRun) sxc = sxc.recreate(true) as any as SxcIntanceEditable;
 
   // check if we must show the glasses
   // this must always run because it can be added ajax-style
@@ -176,7 +174,7 @@ function initInstance(module: JQuery, isFirstRun: boolean): void {
 }
 
 function showGlassesButtonIfUninitialized(
-  sxci: SxcInstanceWithInternals,
+  sxci: SxcIntanceEditable,
 ): boolean {
   // already initialized
   if (isInitialized(sxci)) return false;
@@ -198,7 +196,7 @@ function showGlassesButtonIfUninitialized(
   return true;
 }
 
-function isInitialized(sxci: SxcInstanceWithInternals): boolean {
+function isInitialized(sxci: SxcIntanceEditable): boolean {
   const cg =
     sxci &&
     sxci.manage &&

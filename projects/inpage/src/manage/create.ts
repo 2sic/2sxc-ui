@@ -1,59 +1,27 @@
-﻿import { SxcInstanceWithInternals } from '../../../$2sxc/src/index';
+﻿import { SxcInstanceManage } from '../../../$2sxc/src/edit-interfaces/sxc-instance-manage';
 import { InstanceEngine } from '../commands/instance-engine';
-import { manipulator } from '../contentBlock/manipulate';
-import { context } from '../context/context';
+import { Manipulator } from '../contentBlock/manipulate';
 import { ContextOfButton } from '../context/context-of-button';
 import { DataEditContext } from '../data-edit-context/data-edit-context';
+import { SxcIntanceEditable } from '../interfaces/sxc-instance-editable';
 import { buttonConfigAdapter } from '../toolbar/adapters/button-config-adapter';
 import { ButtonDefinition } from '../toolbar/button/button-definition';
 import { renderButton } from '../toolbar/item/render-button';
 import { renderToolbar } from '../toolbar/item/render-toolbar';
 import { expandToolbarConfig } from '../toolbar/toolbar/toolbar-expand-config';
 import { ToolbarSettings } from '../toolbar/toolbar/toolbar-settings';
-import { getEditContext, getTag} from './api';
+import { getTag} from './api';
 import { UserOfEditContext } from './user-of-edit-context';
 /**
- * A helper-controller in charge of opening edit-dialogues + creating the toolbars for it
- * all in-page toolbars etc.
- * if loaded, it's found under the $2sxc(module).manage
- * it has commands to
- * - getButton
- * - getToolbar
- * - run(...)
- * - isEditMode
- * @param sxc
- *
- * we must keep signature of initInstance for compatibility because it is used out of this project in ToSic.Sxc.Instance and 2sxc.api.js
+ * Instance specific edit manager
  */
-export function initInstance(sxc: SxcInstanceWithInternals) {
-  try {
-    _initInstance(sxc);
-  } catch (e) {
-    console.error('error in 2sxc - will log but not throw', e);
-  }
-}
+export class EditManager implements SxcInstanceManage {
 
-// ReSharper disable once InconsistentNaming
-function _initInstance(sxc: SxcInstanceWithInternals) {
-  const myContext = context(sxc);
-  const editContext = getEditContext(myContext.sxc);
-
-  const userInfo = UserOfEditContext.fromContext(myContext); // 2dm simplified getUserOfEditContext(context);
-  const cmdEngine = new InstanceEngine(myContext.sxc);
-
-  const editManager = new EditManager(myContext.sxc, editContext, userInfo, cmdEngine, myContext);
-  sxc.manage = editManager;
-  editManager.init();
-  return editManager;
-}
-
-export class EditManager {
-
-  constructor(private sxc: SxcInstanceWithInternals,
+  constructor(private sxc: SxcIntanceEditable,
               private editContext: DataEditContext,
               private userInfo: UserOfEditContext,
               private cmdEngine: InstanceEngine,
-              private context: ContextOfButton) {
+              public context: ContextOfButton) {
   }
 
   //#region Official, public properties and commands, which are stable for use from the outside
@@ -165,7 +133,7 @@ export class EditManager {
     // this._instanceConfig = InstanceConfig.fromContext(context);// 2dm simplified buildInstanceConfig(context);
   }
 
-  _getCbManipulator = () => manipulator(this.sxc);
+  _getCbManipulator = () => new Manipulator(this.sxc); // manipulator(this.sxc);
   // ReSharper restore InconsistentNaming
 
   /**
@@ -184,7 +152,7 @@ export class EditManager {
 /**
  * private: show error when the app-data hasn't been installed yet for this imported-module
  */
-function handleErrors(errType: any, cbTag: any): void {
+function handleErrors(errType: string, cbTag: HTMLElement): void {
   const errWrapper = $('<div class="dnnFormMessage dnnFormWarning sc-element"></div>');
   let msg = '';
   const toolbar = $("<ul class='sc-menu'></ul>");

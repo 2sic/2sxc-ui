@@ -16,11 +16,11 @@ let current: IDialogFrameElement = null;
 
 /**
  * this is a dialog manager which is in charge of all quick-dialogues
- * it always has a reference to the latest dialog created by any module instance
+ * it always has a reference to the latest dialog created by a.ny module instance
  */
 export class QuickDialogManager {
   /**
-   * Determines if any dialog is currently showing
+   * Determines if a.ny dialog is currently showing
    */
   isVisible() {
     return current != null;
@@ -47,7 +47,7 @@ export class QuickDialogManager {
    * @param {function()} closeCallback - callback event
    * @param {boolean} isFullscreen - if it should open full screen
    * @param {string} [dialogName] - optional name of dialog, to check if it's already open
-   * @returns {any} jquery object of the iframe
+   * @returns {Promise<boolean>} jquery object of the iframe
    */
   showOrToggleFromToolbar(
     context: ContextOfButton,

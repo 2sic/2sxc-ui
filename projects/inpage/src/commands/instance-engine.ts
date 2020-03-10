@@ -1,10 +1,18 @@
-﻿import { SxcInstanceWithInternals } from '../../../$2sxc/src/index';
-import { Cms } from '../cms/Cms';
+﻿import { Cms } from '../cms/Cms';
 import { context } from '../context/context';
+import { SxcIntanceEditable } from '../interfaces/sxc-instance-editable';
 import { Settings } from './settings';
 
+// export interface runFunction {
+//     (
+//         nameOrSettings: string | Partial<Settings>,
+//         eventOrSettings?: Partial<Settings> | MouseEvent,
+//         event?: MouseEvent,
+//       ): Promise<any>;
+// }
+
 export class InstanceEngine {
-  constructor(private sxc: SxcInstanceWithInternals) {}
+  constructor(private sxc: SxcIntanceEditable) {}
 
   run(
     nameOrSettings: string | Partial<Settings>,
