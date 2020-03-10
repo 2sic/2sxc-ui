@@ -1,4 +1,5 @@
-﻿import { _toolbarManager } from '../toolbar/toolbar-manager';
+﻿import { SxcInstanceWithInternals } from '../../../$2sxc/src/index';
+import { _toolbarManager } from '../toolbar/toolbar-manager';
 import { translate } from '../translate/2sxc.translate';
 import { getSxcInstance } from '../x-bootstrap/sxc';
 import { ManipulateParams } from './manipulate-params';

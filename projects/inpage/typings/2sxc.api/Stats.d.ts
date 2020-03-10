@@ -1,3 +1,3 @@
-export declare class Stats {
-    watchDomChanges: number;
-}
+// export declare class Stats {
+//     watchDomChanges: number;
+// }

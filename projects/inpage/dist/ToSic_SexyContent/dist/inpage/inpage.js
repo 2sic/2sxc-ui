@@ -4492,7 +4492,7 @@ var IFrameBridge = /** @class */ (function () {
     IFrameBridge.prototype.uncachedSxc = function () {
         if (!this.instanceSxc)
             throw "can't find sxc-instance of IFrame, probably it wasn't initialized yet";
-        return this.instanceSxc.recreate();
+        return this.instanceSxc.recreate(true);
     };
     IFrameBridge.prototype.getContext = function () { return Object(__WEBPACK_IMPORTED_MODULE_2__context_context__["context"])(this.uncachedSxc()); };
     IFrameBridge.prototype.getAdditionalDashboardConfig = function () { return __WEBPACK_IMPORTED_MODULE_5__quick_dialog_config__["QuickDialogConfig"].fromContext(this.getContext()); };
@@ -4577,7 +4577,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 var QuickDialogConfig = /** @class */ (function () {
     function QuickDialogConfig() {
     }
-    //constructor(editContext: DataEditContext) {
+    // constructor(editContext: DataEditContext) {
     //  this.appId = editContext.ContentGroup.AppId;
     //  this.isContent = editContext.ContentGroup.IsContent;
     //  this.hasContent = editContext.ContentGroup.HasContent;
@@ -4587,7 +4587,7 @@ var QuickDialogConfig = /** @class */ (function () {
     //  this.templateChooserVisible = editContext.ContentBlock.ShowTemplatePicker; // todo = maybe move to content-group
     //  this.user = getUserOfEditContext(editContext);
     //  this.supportsAjax = editContext.ContentGroup.SupportsAjax;
-    //}
+    // }
     QuickDialogConfig.fromContext = function (context) {
         var config = new QuickDialogConfig();
         config.appId = context.app.id;
@@ -4985,12 +4985,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__commands_instance_engine__ = __webpack_require__(88);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__contentBlock_manipulate__ = __webpack_require__(89);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__context_context__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__toolbar_item_render_button__ = __webpack_require__(20);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__toolbar_item_render_toolbar__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__toolbar_toolbar_toolbar_expand_config__ = __webpack_require__(31);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__api__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__user_of_edit_context__ = __webpack_require__(24);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__toolbar_adapters_button_config_adapter__ = __webpack_require__(91);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__toolbar_adapters_button_config_adapter__ = __webpack_require__(91);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__toolbar_item_render_button__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__toolbar_item_render_toolbar__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__toolbar_toolbar_toolbar_expand_config__ = __webpack_require__(31);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__api__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__user_of_edit_context__ = __webpack_require__(24);
 
 
 
@@ -5024,8 +5024,8 @@ function initInstance(sxc) {
 // ReSharper disable once InconsistentNaming
 function _initInstance(sxc) {
     var myContext = Object(__WEBPACK_IMPORTED_MODULE_2__context_context__["context"])(sxc);
-    var editContext = Object(__WEBPACK_IMPORTED_MODULE_6__api__["getEditContext"])(myContext.sxc);
-    var userInfo = __WEBPACK_IMPORTED_MODULE_7__user_of_edit_context__["UserOfEditContext"].fromContext(myContext); // 2dm simplified getUserOfEditContext(context);
+    var editContext = Object(__WEBPACK_IMPORTED_MODULE_7__api__["getEditContext"])(myContext.sxc);
+    var userInfo = __WEBPACK_IMPORTED_MODULE_8__user_of_edit_context__["UserOfEditContext"].fromContext(myContext); // 2dm simplified getUserOfEditContext(context);
     var cmdEngine = new __WEBPACK_IMPORTED_MODULE_0__commands_instance_engine__["InstanceEngine"](myContext.sxc);
     var editManager = new EditManager(myContext.sxc, editContext, userInfo, cmdEngine, myContext);
     sxc.manage = editManager;
@@ -5054,13 +5054,13 @@ var EditManager = /** @class */ (function () {
          * it is publicly used out of inpage, so take a care to preserve function signature
          */
         this.getButton = function (actDef, groupIndex) {
-            //const tag: any = getTag(this.sxc);
-            //const myContext = context(tag);
-            var newButtonConfig = Object(__WEBPACK_IMPORTED_MODULE_8__toolbar_adapters_button_config_adapter__["buttonConfigAdapter"])(
+            // const tag: any = getTag(this.sxc);
+            // const myContext = context(tag);
+            var newButtonConfig = Object(__WEBPACK_IMPORTED_MODULE_3__toolbar_adapters_button_config_adapter__["buttonConfigAdapter"])(
             // this.context,
             actDef);
             _this.context.button = newButtonConfig;
-            var button = Object(__WEBPACK_IMPORTED_MODULE_3__toolbar_item_render_button__["renderButton"])(_this.context, groupIndex);
+            var button = Object(__WEBPACK_IMPORTED_MODULE_4__toolbar_item_render_button__["renderButton"])(_this.context, groupIndex);
             return button.outerHTML;
         };
         /**
@@ -5072,11 +5072,11 @@ var EditManager = /** @class */ (function () {
          * it is publicly used out of inpage, so take a care to preserve function signature
          */
         this.getToolbar = function (tbConfig, moreSettings) {
-            //const tag: any = getTag(this.sxc);
-            //const myContext = context(tag);
-            var toolbarConfig = Object(__WEBPACK_IMPORTED_MODULE_5__toolbar_toolbar_toolbar_expand_config__["expandToolbarConfig"])(_this.context, tbConfig, moreSettings);
+            // const tag: any = getTag(this.sxc);
+            // const myContext = context(tag);
+            var toolbarConfig = Object(__WEBPACK_IMPORTED_MODULE_6__toolbar_toolbar_toolbar_expand_config__["expandToolbarConfig"])(_this.context, tbConfig, moreSettings);
             _this.context.toolbar = toolbarConfig;
-            return Object(__WEBPACK_IMPORTED_MODULE_4__toolbar_item_render_toolbar__["renderToolbar"])(_this.context);
+            return Object(__WEBPACK_IMPORTED_MODULE_5__toolbar_item_render_toolbar__["renderToolbar"])(_this.context);
         };
         //#endregion official, public properties - everything below this can change at any time
         this._context = this.context;
@@ -5091,20 +5091,20 @@ var EditManager = /** @class */ (function () {
         this._reloadWithAjax = this.context.app.supportsAjax;
         // #region 2dm disabled / todo q2stv
         // todo q2stv - I think we don't need this any more
-        // 
-        //_dialogParameters = buildNgDialogParams(this.context);
+        //
+        // _dialogParameters = buildNgDialogParams(this.context);
         // 2dm disabled
         // todo q2stv - I think we don't need this any more
         /**
           * used to configure buttons / toolbars
           */
-        //_instanceConfig = buildInstanceConfig(this.context);
+        // _instanceConfig = buildInstanceConfig(this.context);
         // 2dm disabled
         // todo q2stv - I think we don't need this any more
         /**
          * used for in-page dialogues
          */
-        //_quickDialogConfig = buildQuickDialogConfig(this.context);
+        // _quickDialogConfig = buildQuickDialogConfig(this.context);
         //#endregion
         /** metadata necessary to know what/how to edit */
         this._editContext = this.editContext;
@@ -5117,7 +5117,7 @@ var EditManager = /** @class */ (function () {
          * init this object
          */
         this.init = function () {
-            var tag = Object(__WEBPACK_IMPORTED_MODULE_6__api__["getTag"])(_this.sxc);
+            var tag = Object(__WEBPACK_IMPORTED_MODULE_7__api__["getTag"])(_this.sxc);
             // enhance UI in case there are known errors / issues
             var isErrorState = _this.editContext && _this.editContext.error && _this.editContext.error.type;
             if (isErrorState)
@@ -5130,9 +5130,9 @@ var EditManager = /** @class */ (function () {
     EditManager.prototype._updateContentGroupGuid = function (context, newGuid) {
         context.contentBlock.contentGroupId = newGuid;
         this.editContext.ContentGroup.Guid = newGuid;
-        // 2dm disabled, doesn't seem used - 
+        // 2dm disabled, doesn't seem used -
         // todo q2stv - question, pls confirm
-        //this._instanceConfig = InstanceConfig.fromContext(context);// 2dm simplified buildInstanceConfig(context);
+        // this._instanceConfig = InstanceConfig.fromContext(context);// 2dm simplified buildInstanceConfig(context);
     };
     return EditManager;
 }());
@@ -6198,7 +6198,7 @@ if (__WEBPACK_IMPORTED_MODULE_0__interfaces_window_in_page__["windowInPage"].$2s
 function finishUpgrade(domElement) {
     var mc = __WEBPACK_IMPORTED_MODULE_0__interfaces_window_in_page__["windowInPage"].$2sxc(domElement);
     mc.webApi.get('view/module/finishinstallation')
-        .success(function () {
+        .done(function () {
         alert('Upgrade ok, restarting the CMS and reloading...');
         location.reload();
     });
@@ -8300,4 +8300,4 @@ var ToolbarConfigTemplate = /** @class */ (function () {
 
 /***/ })
 /******/ ]);
-//# sourceMappingURL=https://sourc
+//# sourceMappingURL=inpage.js.map

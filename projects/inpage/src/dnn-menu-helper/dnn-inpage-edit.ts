@@ -1,4 +1,5 @@
-﻿import { windowInPage as window } from '../interfaces/window-in-page';
+﻿import { SxcInstanceWithInternals } from '../../../$2sxc/src/index';
+import { windowInPage as window } from '../interfaces/window-in-page';
 import { getTag } from '../manage/api';
 import { getSxcInstance } from '../x-bootstrap/sxc';
 

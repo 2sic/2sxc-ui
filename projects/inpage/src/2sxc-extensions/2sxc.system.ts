@@ -11,7 +11,7 @@ if (window.$2sxc && !window.$2sxc.system) {
 function finishUpgrade(domElement: HTMLElement): void {
   const mc = window.$2sxc(domElement);
   mc.webApi.get('view/module/finishinstallation')
-    .success(() => {
+    .done(() => {
       alert('Upgrade ok, restarting the CMS and reloading...');
       location.reload();
     });

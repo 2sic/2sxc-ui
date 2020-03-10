@@ -1,4 +1,5 @@
-﻿import { Cms } from '../cms/Cms';
+﻿import { SxcInstanceWithInternals } from '../../../$2sxc/src/index';
+import { Cms } from '../cms/Cms';
 import { context } from '../context/context';
 import { Settings } from './settings';
 

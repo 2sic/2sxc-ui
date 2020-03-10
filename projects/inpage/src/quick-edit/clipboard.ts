@@ -1,4 +1,5 @@
-﻿import { getSxcInstance } from '../x-bootstrap/sxc';
+﻿import { SxcInstanceWithInternals } from '../../../$2sxc/src/index';
+import { getSxcInstance } from '../x-bootstrap/sxc';
 import { CmdsStrategyFactory } from './cmds-strategy-factory';
 import { Mod } from './mod';
 import { $quickE as quickE } from './quick-e';

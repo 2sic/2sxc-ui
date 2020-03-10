@@ -1,4 +1,5 @@
-﻿import { Attributes } from '../constants';
+﻿import { SxcInstanceWithInternals } from '../../../$2sxc/src/index';
+import { Attributes } from '../constants';
 import { DebugConfig } from '../DebugConfig';
 import { windowInPage as window } from '../interfaces/window-in-page';
 import { Log } from '../logging/log';

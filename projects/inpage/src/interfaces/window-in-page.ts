@@ -1,7 +1,8 @@
-﻿import { SxcControllerInPage } from './sxc-controller-in-page';
+﻿import { Window as sxcWindow } from '../../../$2sxc/src/index';
+import { SxcControllerInPage } from './sxc-controller-in-page';
 
 // ReSharper disable InconsistentNaming
-export interface WindowInPage extends Window {
+export interface WindowInPage extends Window, sxcWindow {
   $2sxc: SxcControllerInPage;
   // event: Event;
   dnn_tabVersioningEnabled: boolean;

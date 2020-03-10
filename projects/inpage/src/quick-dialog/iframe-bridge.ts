@@ -1,4 +1,5 @@
-﻿import { renderer } from '../contentBlock/render';
+﻿import { SxcInstanceWithInternals } from '../../../$2sxc/src/index';
+import { renderer } from '../contentBlock/render';
 import { updateTemplateFromDia } from '../contentBlock/templates';
 import { context } from '../context/context';
 import { ContextOfButton } from '../context/context-of-button';
@@ -42,7 +43,7 @@ export class IFrameBridge implements IIFrameBridge {
    */
   private uncachedSxc(): SxcInstanceWithInternals {
     if (!this.instanceSxc) throw "can't find sxc-instance of IFrame, probably it wasn't initialized yet";
-    return this.instanceSxc.recreate();
+    return this.instanceSxc.recreate(true);
   }
 
   getContext(): ContextOfButton { return context(this.uncachedSxc()); }

@@ -1,4 +1,5 @@
-﻿import * as Constants from '../constants';
+﻿import { SxcInstanceWithInternals } from '../../../$2sxc/src/index';
+import * as Constants from '../constants';
 import { context } from '../context/context';
 import { $2sxcInPage as $2sxc } from '../interfaces/sxc-controller-in-page';
 import { Log } from '../logging/log';

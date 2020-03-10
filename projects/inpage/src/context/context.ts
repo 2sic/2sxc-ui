@@ -1,4 +1,5 @@
-﻿import { DataEditContext } from '../data-edit-context/data-edit-context';
+﻿import { SxcInstanceWithInternals } from '../../../$2sxc/src/index';
+import { DataEditContext } from '../data-edit-context/data-edit-context';
 import { $2sxcInPage as $2sxc } from '../interfaces/sxc-controller-in-page';
 import { getEditContext, getContainerTag } from '../manage/api';
 import { getSxcInstance } from '../x-bootstrap/sxc';

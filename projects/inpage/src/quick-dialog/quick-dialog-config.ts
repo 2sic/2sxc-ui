@@ -1,6 +1,6 @@
 ﻿import { ContextOfButton } from '../context/context-of-button';
-import { UserOfEditContext } from '../manage/user-of-edit-context';
 import { IQuickDialogConfig } from '../interfaces/iquick-dialog-config';
+import { UserOfEditContext } from '../manage/user-of-edit-context';
 
 
 export class QuickDialogConfig implements IQuickDialogConfig {
@@ -11,12 +11,12 @@ export class QuickDialogConfig implements IQuickDialogConfig {
   isList: boolean;
   templateId: number;
   contentTypeId: string;
-  //templateChooserVisible: boolean;
+  // templateChooserVisible: boolean;
   user: UserOfEditContext;
   supportsAjax: boolean;
   debug: boolean;
 
-  //constructor(editContext: DataEditContext) {
+  // constructor(editContext: DataEditContext) {
   //  this.appId = editContext.ContentGroup.AppId;
   //  this.isContent = editContext.ContentGroup.IsContent;
   //  this.hasContent = editContext.ContentGroup.HasContent;
@@ -26,7 +26,7 @@ export class QuickDialogConfig implements IQuickDialogConfig {
   //  this.templateChooserVisible = editContext.ContentBlock.ShowTemplatePicker; // todo = maybe move to content-group
   //  this.user = getUserOfEditContext(editContext);
   //  this.supportsAjax = editContext.ContentGroup.SupportsAjax;
-  //}
+  // }
 
   static fromContext(context: ContextOfButton): QuickDialogConfig {
     const config = new QuickDialogConfig();
@@ -39,7 +39,7 @@ export class QuickDialogConfig implements IQuickDialogConfig {
     config.contentTypeId = context.contentBlock.contentTypeId;
     config.user = UserOfEditContext.fromContext(context);
     config.supportsAjax = context.app.supportsAjax;
-    config.debug = ((window as any).$2sxc as SxcControllerWithInternals).debug.load;
+    config.debug = window.$2sxc.debug.load;
     return config;
   }
 }

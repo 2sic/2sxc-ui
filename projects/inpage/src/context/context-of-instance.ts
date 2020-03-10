@@ -1,4 +1,5 @@
-﻿import { ContextOfPage } from './context-of-page';
+﻿import { SxcInstanceWithInternals } from '../../../$2sxc/src/index';
+import { ContextOfPage } from './context-of-page';
 import { AppContext } from './instance-context/app-context';
 import { InstanceContext } from './instance-context/instance-context';
 import { UiContext } from './instance-context/ui-context';

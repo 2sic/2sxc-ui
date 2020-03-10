@@ -1,4 +1,5 @@
-﻿import { DataEditContext } from '../data-edit-context/data-edit-context';
+﻿import { SxcInstanceWithInternals } from '../../../$2sxc/src/index';
+import { DataEditContext } from '../data-edit-context/data-edit-context';
 
 /**
  * get edit-context info of html element or sxc-object

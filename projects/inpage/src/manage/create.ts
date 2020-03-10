@@ -1,17 +1,17 @@
-﻿import { InstanceEngine } from '../commands/instance-engine';
+﻿import { SxcInstanceWithInternals } from '../../../$2sxc/src/index';
+import { InstanceEngine } from '../commands/instance-engine';
 import { manipulator } from '../contentBlock/manipulate';
 import { context } from '../context/context';
+import { ContextOfButton } from '../context/context-of-button';
 import { DataEditContext } from '../data-edit-context/data-edit-context';
+import { buttonConfigAdapter } from '../toolbar/adapters/button-config-adapter';
 import { ButtonDefinition } from '../toolbar/button/button-definition';
 import { renderButton } from '../toolbar/item/render-button';
 import { renderToolbar } from '../toolbar/item/render-toolbar';
 import { expandToolbarConfig } from '../toolbar/toolbar/toolbar-expand-config';
+import { ToolbarSettings } from '../toolbar/toolbar/toolbar-settings';
 import { getEditContext, getTag} from './api';
 import { UserOfEditContext } from './user-of-edit-context';
-import { buttonConfigAdapter } from '../toolbar/adapters/button-config-adapter';
-import { ToolbarSettings } from '../toolbar/toolbar/toolbar-settings';
-import { ContextOfButton } from '../context/context-of-button';
-
 /**
  * A helper-controller in charge of opening edit-dialogues + creating the toolbars for it
  * all in-page toolbars etc.
@@ -38,22 +38,22 @@ function _initInstance(sxc: SxcInstanceWithInternals) {
   const myContext = context(sxc);
   const editContext = getEditContext(myContext.sxc);
 
-  const userInfo = UserOfEditContext.fromContext(myContext);// 2dm simplified getUserOfEditContext(context);
+  const userInfo = UserOfEditContext.fromContext(myContext); // 2dm simplified getUserOfEditContext(context);
   const cmdEngine = new InstanceEngine(myContext.sxc);
 
   const editManager = new EditManager(myContext.sxc, editContext, userInfo, cmdEngine, myContext);
   sxc.manage = editManager;
-  editManager.init(); 
+  editManager.init();
   return editManager;
 }
 
 export class EditManager {
 
   constructor(private sxc: SxcInstanceWithInternals,
-    private editContext: DataEditContext,
-    private userInfo: UserOfEditContext,
-    private cmdEngine: InstanceEngine,
-    private context: ContextOfButton) {
+              private editContext: DataEditContext,
+              private userInfo: UserOfEditContext,
+              private cmdEngine: InstanceEngine,
+              private context: ContextOfButton) {
   }
 
   //#region Official, public properties and commands, which are stable for use from the outside
@@ -72,8 +72,8 @@ export class EditManager {
    * it is publicly used out of inpage, so take a care to preserve function signature
    */
   getButton = (actDef: ButtonDefinition, groupIndex: number): string => {
-    //const tag: any = getTag(this.sxc);
-    //const myContext = context(tag);
+    // const tag: any = getTag(this.sxc);
+    // const myContext = context(tag);
 
     const newButtonConfig = buttonConfigAdapter(
       // this.context,
@@ -82,7 +82,7 @@ export class EditManager {
       );
 
     this.context.button = newButtonConfig;
- 
+
     const button = renderButton(this.context, groupIndex);
 
     return button.outerHTML;
@@ -97,8 +97,8 @@ export class EditManager {
    * it is publicly used out of inpage, so take a care to preserve function signature
    */
   getToolbar = (tbConfig: any, moreSettings: ToolbarSettings): string => {
-    //const tag: any = getTag(this.sxc);
-    //const myContext = context(tag);
+    // const tag: any = getTag(this.sxc);
+    // const myContext = context(tag);
     const toolbarConfig = expandToolbarConfig(
       this.context,
       tbConfig,
@@ -107,7 +107,7 @@ export class EditManager {
     this.context.toolbar = toolbarConfig;
 
     return renderToolbar(this.context);
-  };
+  }
 
   //#endregion official, public properties - everything below this can change at any time
 
@@ -126,21 +126,21 @@ export class EditManager {
 
   // #region 2dm disabled / todo q2stv
   // todo q2stv - I think we don't need this any more
-  // 
-  //_dialogParameters = buildNgDialogParams(this.context);
+  //
+  // _dialogParameters = buildNgDialogParams(this.context);
 
    // 2dm disabled
   // todo q2stv - I think we don't need this any more
  /**
    * used to configure buttons / toolbars
    */
-  //_instanceConfig = buildInstanceConfig(this.context);
+  // _instanceConfig = buildInstanceConfig(this.context);
   // 2dm disabled
   // todo q2stv - I think we don't need this any more
   /**
    * used for in-page dialogues
    */
-  //_quickDialogConfig = buildQuickDialogConfig(this.context);
+  // _quickDialogConfig = buildQuickDialogConfig(this.context);
 
   //#endregion
 
@@ -160,9 +160,9 @@ export class EditManager {
   _updateContentGroupGuid(context: ContextOfButton, newGuid: string) {
     context.contentBlock.contentGroupId = newGuid;
     this.editContext.ContentGroup.Guid = newGuid;
-    // 2dm disabled, doesn't seem used - 
+    // 2dm disabled, doesn't seem used -
     // todo q2stv - question, pls confirm
-    //this._instanceConfig = InstanceConfig.fromContext(context);// 2dm simplified buildInstanceConfig(context);
+    // this._instanceConfig = InstanceConfig.fromContext(context);// 2dm simplified buildInstanceConfig(context);
   }
 
   _getCbManipulator = () => manipulator(this.sxc);
@@ -175,7 +175,7 @@ export class EditManager {
     const tag = getTag(this.sxc);
     // enhance UI in case there are known errors / issues
     const isErrorState = this.editContext && this.editContext.error && this.editContext.error.type;
-    if (isErrorState) 
+    if (isErrorState)
       handleErrors(this.editContext.error.type, tag);
   }
 }
