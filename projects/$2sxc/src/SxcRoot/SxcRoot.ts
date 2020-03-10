@@ -16,7 +16,7 @@ export interface SxcRoot extends Public.SxcRoot {
      * @param cbid number
      * @returns SxcInstance
      */
-    (id: number | HTMLElement | JQuery, cbid?: number): /* SxcInstance |*/ SxcInstanceWithInternals,
+    (id: number | HTMLElement | JQuery, cbid?: number): SxcInstanceWithInternals,
 
     /**
      * Environment information

@@ -29,3 +29,7 @@ export * from './SxcRoot/SxcRootInternals';
 export * from './tools/TotalPopup';
 export * from './tools/UrlParamManager';
 export * from './tools/Window';
+
+
+export * from './edit-interfaces/sxc-root-manage';
+export * from './edit-interfaces/sxc-instance-manage';

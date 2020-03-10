@@ -4,6 +4,7 @@ import { ToSxcName } from '../constants';
 import { SxcRoot } from '../SxcRoot/SxcRoot';
 import { HasLog } from '../logging/HasLog';
 import { SxcRootInternals } from '../SxcRoot/SxcRootInternals';
+import { SxcInstanceManage } from '../edit-interfaces/sxc-instance-manage';
 
 const serviceScopes = ['app', 'app-sys', 'app-api', 'app-query', 'app-content', 'eav', 'view', 'dnn'];
 
@@ -22,7 +23,7 @@ export class SxcInstance extends HasLog implements Public.SxcInstance {
      * @type {*}
      * @memberof SxcInstance
      */
-    manage: any = null; // initialize correctly later on
+    manage: SxcInstanceManage = null; // initialize correctly later on
 
     constructor(
         /** the sxc-instance ID, which is usually the DNN Module Id */
