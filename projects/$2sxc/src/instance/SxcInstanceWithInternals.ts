@@ -12,7 +12,7 @@ export class SxcInstanceWithInternals extends SxcInstance {
     constructor(
         public id: number,
         public cbid: number,
-        private cacheKey: string,
+        public cacheKey: string,
         protected $2sxc: SxcRoot & SxcRootInternals,
     ) {
         super(id, cbid, $2sxc);

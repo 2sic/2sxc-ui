@@ -1,6 +1,7 @@
 import { SxcInstanceWithInternals } from '../instance/SxcInstanceWithInternals';
 import { TotalPopup } from '../tools/TotalPopup';
 import { Stats } from '../Stats';
+import { SxcRoot } from './SxcRoot';
 
 export interface SxcRootInternals {
     _controllers: { [id: string] : SxcInstanceWithInternals }; // SxcInstanceWithInternals[key: string];
@@ -20,3 +21,5 @@ export interface SxcRootInternals {
 
     totalPopup: TotalPopup;
 }
+
+export interface SxcRootWithInternals extends SxcRoot, SxcRootInternals {}
