@@ -8300,4 +8300,4 @@ var ToolbarConfigTemplate = /** @class */ (function () {
 
 /***/ })
 /******/ ]);
-//# sourceMappingURL=inpage.js.map
+//# sourceMappingURL=https://sources.2sxc.org/10.27.00/./inpage/inpage.js.map
