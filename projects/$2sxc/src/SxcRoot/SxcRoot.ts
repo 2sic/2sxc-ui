@@ -1,5 +1,4 @@
 import * as Public from '../../../sxc-typings/index';
-import { SxcInstance } from '../instance/SxcInstance';
 import { SxcInstanceWithInternals } from '../instance/SxcInstanceWithInternals';
 import { Environment } from '../environment/Environment';
 import { SxcHttp } from '../http/SxcHttp';
@@ -17,7 +16,7 @@ export interface SxcRoot extends Public.SxcRoot {
      * @param cbid number
      * @returns SxcInstance
      */
-    (id: number | HTMLElement, cbid?: number): /* SxcInstance |*/ SxcInstanceWithInternals,
+    (id: number | HTMLElement | JQuery, cbid?: number): /* SxcInstance |*/ SxcInstanceWithInternals,
 
     /**
      * Environment information

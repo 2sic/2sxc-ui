@@ -91,7 +91,7 @@ export function buildSxcRoot(): SxcRoot & SxcRootInternals {
 }
 
 
-function autoFind(domElement: HTMLElement): [number, number] {
+function autoFind(domElement: HTMLElement | JQuery): [number, number] {
     const containerTag = $2sxc_jQSuperlight(domElement).closest('.sc-content-block')[0];
     if (!containerTag) return null;
     const iid = containerTag.getAttribute('data-cb-instance');
