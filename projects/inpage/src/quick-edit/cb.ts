@@ -7,7 +7,7 @@ import { Specs } from './specs';
  * extend the quick edit with the core commands
  */
 export class Cb implements Delete {
-  delete(clip: Specs): JQueryPromise<any> {
+  delete(clip: Specs): Promise<void> {
     const sxc = getSxc(clip.list);
     return sxc.manage._getCbManipulator().delete(clip.parent, clip.field, clip.index);
   }

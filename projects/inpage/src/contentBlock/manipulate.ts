@@ -1,17 +1,10 @@
 ﻿import { SxcIntanceEditable } from '../interfaces/sxc-instance-editable';
+import { getSxc } from '../plumbing/getSxc';
 import { _toolbarManager } from '../toolbar/toolbar-manager';
 import { translate } from '../translate/2sxc.translate';
 import { ManipulateParams } from './manipulate-params';
-import { getSxc } from '../plumbing/getSxc';
 
 /** contains commands to create/move/delete a contentBlock in a page */
-// let sxcInstance: SxcIntanceEditable;
-
-
-
-
-
-
 export class Manipulator {
 
     constructor(private sxcInstance: SxcIntanceEditable) {}
@@ -30,12 +23,12 @@ export class Manipulator {
          index: number,
          appName: string,
          container: any,
-         newGuid: string): JQueryPromise<any> {
+         newGuid: string): Promise<void> {
     // the wrapper, into which this will be placed and the list of pre-existing blocks
     const listTag = container;
     if (listTag.length === 0) {
         alert('can\'t add content-block as we couldn\'t find the list');
-        return null;
+        return Promise.resolve();
     }
     const cblockList = listTag.find('div.sc-content-block');
     if (index > cblockList.length) index = cblockList.length; // make sure index is never greater than the amount of items
@@ -48,7 +41,7 @@ export class Manipulator {
       guid: newGuid,
     };
 
-    return this.sxcInstance.webApi.get({ url: 'view/module/generatecontentblock', params: params })
+    const jqPromise = this.sxcInstance.webApi.get({ url: 'view/module/generatecontentblock', params: params })
       .then((result) => {
         const newTag = $(result); // prepare tag for inserting
 
@@ -63,6 +56,7 @@ export class Manipulator {
         const sxcNew = getSxc(newTag);
         _toolbarManager.buildToolbars(newTag);
       });
+    return Promise.resolve(jqPromise);
   }
 
   /**
@@ -72,7 +66,7 @@ export class Manipulator {
    * @param indexFrom
    * @param indexTo
    */
-  move(parentId: number, field: string, indexFrom: number, indexTo: number): JQueryPromise<any> {
+  move(parentId: number, field: string, indexFrom: number, indexTo: number): Promise<void> {
 
     const params: ManipulateParams = {
       parentId: parentId,
@@ -81,11 +75,12 @@ export class Manipulator {
       indexTo: indexTo,
     };
 
-    return this.sxcInstance.webApi.get({ url: 'view/module/moveiteminlist', params: params })
+    const jqPromise = this.sxcInstance.webApi.get({ url: 'view/module/moveiteminlist', params: params })
       .then(() => {
         console.log('done moving!');
         window.location.reload();
       });
+    return Promise.resolve(jqPromise);
   }
 
 
@@ -95,7 +90,7 @@ export class Manipulator {
    * @param field
    * @param index
    */
-  delete(parentId: number, field: string, index: number): JQueryPromise<any> {
+  delete(parentId: number, field: string, index: number): Promise<void> {
 
     if (!confirm(translate('QuickInsertMenu.ConfirmDelete'))) return null;
 
@@ -105,11 +100,12 @@ export class Manipulator {
       index: index,
     };
 
-    return this.sxcInstance.webApi.get({ url: 'view/module/RemoveItemInList', params: params })
+    const jqPromise = this.sxcInstance.webApi.get({ url: 'view/module/RemoveItemInList', params: params })
       .then(() => {
         console.log('done deleting!');
         window.location.reload();
       });
+    return Promise.resolve(jqPromise);
   }
 }
 

@@ -2907,6 +2907,7 @@ function commandOpenNgDialog(context, event) {
         // prepare promise for callback when the dialog closes
         // to reload the in-page view w/ajax or page reload
         var resolveAndReInit = function () {
+            // very special thing: the signature always expects a Promise<T> so we're recasting
             resolvePromise(context);
             __WEBPACK_IMPORTED_MODULE_0__contentBlock_render__["renderer"].reloadAndReInitialize(context);
         };
@@ -2932,6 +2933,7 @@ function commandOpenNgDialog(context, event) {
             }
             // check if new-window
             if (context.button.newWindow || (origEvent && origEvent.shiftKey)) {
+                // very special thing: the signature always expects a Promise<T> so we're recasting
                 resolvePromise(context);
                 __WEBPACK_IMPORTED_MODULE_2__interfaces_window_in_page__["windowInPage"].open(link);
             }
@@ -3373,9 +3375,7 @@ var Engine = /** @class */ (function (_super) {
         // todo: stv, fix this in case that is function
         if (!button.code) {
             this.log.add('simple button without code - generating code to open standard dialog');
-            button.code = function (contextParam, evt) {
-                return Object(__WEBPACK_IMPORTED_MODULE_5__command_open_ng_dialog__["commandOpenNgDialog"])(contextParam, evt);
-            };
+            button.code = function (contextParam, evt) { return Object(__WEBPACK_IMPORTED_MODULE_5__command_open_ng_dialog__["commandOpenNgDialog"])(contextParam, evt); };
         }
         if (button.uiActionOnly(context)) {
             this.log.add('just a UI command, will not run pre-flight to ensure content-block - now running the code');
@@ -5096,14 +5096,13 @@ function handleErrors(errType, cbTag) {
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Manipulator", function() { return Manipulator; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__toolbar_toolbar_manager__ = __webpack_require__(89);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__translate_2sxc_translate__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__plumbing_getSxc__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__plumbing_getSxc__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__toolbar_toolbar_manager__ = __webpack_require__(89);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__translate_2sxc_translate__ = __webpack_require__(8);
 
 
 
 /** contains commands to create/move/delete a contentBlock in a page */
-// let sxcInstance: SxcIntanceEditable;
 var Manipulator = /** @class */ (function () {
     function Manipulator(sxcInstance) {
         this.sxcInstance = sxcInstance;
@@ -5122,7 +5121,7 @@ var Manipulator = /** @class */ (function () {
         var listTag = container;
         if (listTag.length === 0) {
             alert('can\'t add content-block as we couldn\'t find the list');
-            return null;
+            return Promise.resolve();
         }
         var cblockList = listTag.find('div.sc-content-block');
         if (index > cblockList.length)
@@ -5134,7 +5133,7 @@ var Manipulator = /** @class */ (function () {
             app: appName,
             guid: newGuid,
         };
-        return this.sxcInstance.webApi.get({ url: 'view/module/generatecontentblock', params: params })
+        var jqPromise = this.sxcInstance.webApi.get({ url: 'view/module/generatecontentblock', params: params })
             .then(function (result) {
             var newTag = $(result); // prepare tag for inserting
             // should I add it to a specific position...
@@ -5144,9 +5143,10 @@ var Manipulator = /** @class */ (function () {
             else // ...or just at the beginning?
                 listTag.prepend(newTag);
             // ReSharper disable once UnusedLocals
-            var sxcNew = Object(__WEBPACK_IMPORTED_MODULE_2__plumbing_getSxc__["getSxc"])(newTag);
-            __WEBPACK_IMPORTED_MODULE_0__toolbar_toolbar_manager__["_toolbarManager"].buildToolbars(newTag);
+            var sxcNew = Object(__WEBPACK_IMPORTED_MODULE_0__plumbing_getSxc__["getSxc"])(newTag);
+            __WEBPACK_IMPORTED_MODULE_1__toolbar_toolbar_manager__["_toolbarManager"].buildToolbars(newTag);
         });
+        return Promise.resolve(jqPromise);
     };
     /**
      * move content block
@@ -5162,11 +5162,12 @@ var Manipulator = /** @class */ (function () {
             indexFrom: indexFrom,
             indexTo: indexTo,
         };
-        return this.sxcInstance.webApi.get({ url: 'view/module/moveiteminlist', params: params })
+        var jqPromise = this.sxcInstance.webApi.get({ url: 'view/module/moveiteminlist', params: params })
             .then(function () {
             console.log('done moving!');
             window.location.reload();
         });
+        return Promise.resolve(jqPromise);
     };
     /**
      * delete a content-block inside a list of content-blocks
@@ -5175,18 +5176,19 @@ var Manipulator = /** @class */ (function () {
      * @param index
      */
     Manipulator.prototype.delete = function (parentId, field, index) {
-        if (!confirm(Object(__WEBPACK_IMPORTED_MODULE_1__translate_2sxc_translate__["translate"])('QuickInsertMenu.ConfirmDelete')))
+        if (!confirm(Object(__WEBPACK_IMPORTED_MODULE_2__translate_2sxc_translate__["translate"])('QuickInsertMenu.ConfirmDelete')))
             return null;
         var params = {
             parentId: parentId,
             field: field,
             index: index,
         };
-        return this.sxcInstance.webApi.get({ url: 'view/module/RemoveItemInList', params: params })
+        var jqPromise = this.sxcInstance.webApi.get({ url: 'view/module/RemoveItemInList', params: params })
             .then(function () {
             console.log('done deleting!');
             window.location.reload();
         });
+        return Promise.resolve(jqPromise);
     };
     return Manipulator;
 }());

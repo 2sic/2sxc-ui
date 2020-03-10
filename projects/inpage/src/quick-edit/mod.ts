@@ -5,7 +5,7 @@ import { selectors } from './selectors-instance';
 import { Specs } from './specs';
 
 export class Mod implements Delete {
-  delete(clip: Specs): JQueryPromise<void> {
+  delete(clip: Specs): Promise<void> {
     if (!confirm('are you sure?')) return;
     const modId = modManage.getModuleId(clip.item.className);
     modManage.delete(modId);

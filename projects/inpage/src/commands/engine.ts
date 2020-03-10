@@ -15,12 +15,12 @@ export class Engine extends HasLog {
     super('Cmd.Exec', parentLog);
   }
 
-  detectParamsAndRun(
+  detectParamsAndRun<T>(
     context: ContextOfInstance,
     nameOrSettings: string | Partial<Settings>,
     eventOrSettings: Partial<Settings> | MouseEvent,
     event?: MouseEvent,
-  ): Promise<any> {
+  ): Promise<void | T> {
     this.log.add(
       `detecting params and running - has ${arguments.length} params`,
     );
@@ -61,11 +61,11 @@ export class Engine extends HasLog {
    * @param settings
    * @param event
    */
-  run(
+  run<T>(
     context: ContextOfButton,
     nameOrSettings: string | Partial<Settings>,
     event: MouseEvent,
-  ): Promise<any> {
+  ): Promise<T | void> {
     // | any is temporary, just to get it to work; should be improved to only give a promise
 
     let settings = this.nameOrSettingsAdapter(nameOrSettings);
@@ -104,12 +104,10 @@ export class Engine extends HasLog {
       this.log.add(
         'simple button without code - generating code to open standard dialog',
       );
-      button.code = (
+      button.code = <T>(
         contextParam: ContextOfButton,
         evt: MouseEvent,
-      ): Promise<any> => {
-        return commandOpenNgDialog(contextParam, evt);
-      };
+      ): Promise<T> => commandOpenNgDialog<T>(contextParam, evt);
     }
 
     if (button.uiActionOnly(context)) {

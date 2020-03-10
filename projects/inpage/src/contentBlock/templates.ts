@@ -10,7 +10,7 @@ import { saveTemplate } from './web-api-promises';
  * @returns {any}
  */
 
-export function prepareToAddContent(context: ContextOfButton, useModuleList: boolean): Promise<any> {
+export function prepareToAddContent(context: ContextOfButton, useModuleList: boolean): Promise<string | void> {
   const isCreated: boolean = context.contentBlock.isCreated;
   if (isCreated || !useModuleList) return Promise.resolve();
   // return persistTemplate(sxc, null);

@@ -12,8 +12,8 @@ class ActionsCatalog {
      * @param {ContextOfButton} context
      * @param {number} sortOrder
      */
-    addItem(context: ContextOfButton, sortOrder: number) {
-        return getAndReload<void>(context, 'view/module/additem', { sortOrder });
+    addItem<T>(context: ContextOfButton, sortOrder: number) {
+        return getAndReload<T>(context, 'view/module/additem', { sortOrder });
     }
 
     /**

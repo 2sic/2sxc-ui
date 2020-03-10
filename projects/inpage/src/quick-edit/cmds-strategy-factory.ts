@@ -19,7 +19,7 @@ export class CmdsStrategyFactory {
 //     return this.cmds[cliptype];
 //   }
 
-  delete(clip: Specs): JQueryPromise<void> {
+  delete(clip: Specs): Promise<void> {
     return this.cmds[clip.type].delete(clip);
   }
 }

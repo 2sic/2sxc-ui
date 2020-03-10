@@ -9,7 +9,7 @@ import { translate } from '../translate/2sxc.translate';
 // #region contentItem Commands
 export let contentItems = {
   // delete command - try to really delete a content-item
-  delete: (context: ContextOfButton, itemId: number, itemGuid: string, itemTitle: string): Promise<any> => {
+  delete: (context: ContextOfButton, itemId: number, itemGuid: string, itemTitle: string): Promise<void> => {
     // first show main warning / get ok
     const ok = confirm(translate('Delete.Confirm')
       .replace('{id}', String(itemId))

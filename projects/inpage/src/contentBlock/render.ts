@@ -36,7 +36,7 @@ class Renderer {
    * @param {boolean} forceAjax
    * @param {boolean} preview
    */
-  reloadAndReInitialize(context: ContextOfButton, forceAjax?: boolean, preview?: boolean): Promise<any> {
+  reloadAndReInitialize(context: ContextOfButton, forceAjax?: boolean, preview?: boolean): Promise<void> {
     // if ajax is not supported, we must reload the whole page
     if (!forceAjax && !context.app.supportsAjax) {
       window.location.reload();

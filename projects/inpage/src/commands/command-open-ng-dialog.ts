@@ -13,18 +13,19 @@ import { commandLinkToNgDialog } from './command-link-to-ng-dialog';
  * @param sxc
  * @param editContext
  */
-export function commandOpenNgDialog(context: ContextOfButton, event: MouseEvent): Promise<any> {
+export function commandOpenNgDialog<T>(context: ContextOfButton, event: MouseEvent): Promise<T> {
   // the link contains everything to open a full dialog (lots of params added)
   let link = commandLinkToNgDialog(context);
 
   let fullScreen = false;
   const origEvent = event || (window.event as MouseEvent);
 
-  return new Promise<any>((resolvePromise) => {
+  return new Promise<T>((resolvePromise) => {
     // prepare promise for callback when the dialog closes
     // to reload the in-page view w/ajax or page reload
     const resolveAndReInit = () => {
-      resolvePromise(context);
+      // very special thing: the signature always expects a Promise<T> so we're recasting
+      resolvePromise(context as any as T);
       renderer.reloadAndReInitialize(context);
     };
 
@@ -54,7 +55,8 @@ export function commandOpenNgDialog(context: ContextOfButton, event: MouseEvent)
 
       // check if new-window
       if (context.button.newWindow || (origEvent && origEvent.shiftKey)) {
-        resolvePromise(context);
+        // very special thing: the signature always expects a Promise<T> so we're recasting
+        resolvePromise(context as any as T);
         window.open(link);
       } else {
         $2sxc.totalPopup.open(link, resolveAndReInit);

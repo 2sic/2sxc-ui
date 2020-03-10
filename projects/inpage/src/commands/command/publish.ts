@@ -15,7 +15,7 @@ Commands.add('publish', 'Unpublished', 'eye-off', false, false, {
         console.log('disabled:', context.instance);
         return !context.instance.allowPublish;
     },
-    code(context, event): Promise<any> {
+    code(context, event): Promise<void> {
         return new Promise((resolve, reject) => {
             if (context.button.action.params.isPublished) {
                 alert(translate('Toolbar.AlreadyPublished'));

@@ -30,12 +30,12 @@ export class Cms extends HasLog {
     this.log = new Log(logId, null, 'log was reset');
   }
 
-  run(
+  run<T>(
     context: ContextOfInstance | HTMLElement,
     nameOrSettings: string | Partial<Settings>,
     eventOrSettings?: Partial<Settings> | MouseEvent,
     event?: MouseEvent,
-  ): Promise<any> {
+  ): Promise<void | T> {
     const realContext = isContextOfInstance(context)
       ? context
       : getContext(context);
@@ -53,7 +53,7 @@ export class Cms extends HasLog {
   /**
    * reset/clear the log if alwaysResetLog is true
    */
-  private do(innerCall: () => Promise<any>): Promise<any> {
+  private do<T>(innerCall: () => Promise<T>): Promise<T> {
     if (this.autoReset) this.resetLog();
     const result = innerCall();
     if (this.autoDump) console.log(this.log.dump());
