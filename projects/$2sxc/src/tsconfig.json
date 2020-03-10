@@ -2,7 +2,7 @@
   "compileOnSave": true,
   "compilerOptions": {
     //"outFile": "2sxc.api.js",
-    "noImplicitAny": false,
+    "noImplicitAny": true,
     //"noEmitOnError": true,
     "removeComments": true,
     "sourceMap": true,

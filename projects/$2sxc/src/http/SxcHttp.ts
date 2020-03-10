@@ -12,10 +12,10 @@ export class SxcHttp implements Public.Http {
      * Use this if you need to get a list of headers in another system
      */
     headers(id?: number, cbid?: number): Public.Dictionary<string> {
-        const fHeaders = {};
-        if(id) fHeaders[HeaderNames.ModuleId] = id;
-        if(cbid) fHeaders[HeaderNames.ContentBlockId] = cbid;
-        fHeaders[HeaderNames.TabId] = this.env.page();
+        const fHeaders : Public.Dictionary<string> = {}; // as any;
+        if(id) fHeaders[HeaderNames.ModuleId] = id.toString();
+        if(cbid) fHeaders[HeaderNames.ContentBlockId] = cbid.toString();
+        fHeaders[HeaderNames.TabId] = this.env.page().toString();
         fHeaders[HeaderNames.Rvt] = this.env.rvt();
         return fHeaders;
     }

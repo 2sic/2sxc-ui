@@ -41,7 +41,7 @@ export class EnvironmentMetaLoader {
     this.env.load(JSON.parse(meta) as JsInfo, 'meta header');
   }
     
-  private getMeta(metaName): string {
+  private getMeta(metaName: string): string {
   const metas = document.getElementsByTagName('meta');
   
   for (let i = 0; i < metas.length; i++)
