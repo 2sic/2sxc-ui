@@ -191,16 +191,6 @@ selectedOverlay.toggleOverlay = function (target) {
  */
 var QuickE = /** @class */ (function () {
     function QuickE() {
-        // (this.selected as any).toggle = (target: boolean | JQuery) => {
-        //   if (!target || target.length === 0) {
-        //     this.selected.hide();
-        //   } else {
-        //     const coords = getCoordinates(target);
-        //     coords.yh = coords.y + 20;
-        //     positionAndAlign(this.selected, coords);
-        //     this.selected.target = target;
-        //   }
-        // };
         this.body = $('body');
         this.win = $(window);
         this.main = $("<div class='sc-content-block-menu sc-content-block-quick-insert sc-i18n'></div>");
@@ -212,7 +202,6 @@ var QuickE = /** @class */ (function () {
         this.modules = null;
         this.nearestCb = null;
         this.nearestMod = null;
-        //   modManage: any = null;
         // add stuff which depends on other values to create
         this.cbActions = $(this.template);
         this.modActions = $(this.template.replace(/QuickInsertMenu.AddBlock/g, 'QuickInsertMenu.AddModule'))
@@ -845,7 +834,7 @@ function loadAndConvertTag(log, node) {
             convertConfigToToolbarTags(tag, config, log);
         }
         catch (err2) {
-            // catch any errors, as this is very common - make sure the others are still rendered
+            // catch a.ny errors, as this is very common - make sure the others are still rendered
             console.error('error creating toolbar - will skip this one', err2);
         }
     }
@@ -1185,7 +1174,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
  * prepare the instance so content can be added
  * this ensure the content-group has been created, which is required to add content
  * @param {ContextOfButton} context
- * @returns {any}
  */
 function prepareToAddContent(context, useModuleList) {
     var isCreated = context.contentBlock.isCreated;
@@ -1365,7 +1353,7 @@ function renderButton(context, groupIndex) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (immutable) */ __webpack_exports__["expandButtonConfig"] = expandButtonConfig;
+/* harmony export (immutable) */ __webpack_exports__["expandButtonDefinitionInPage"] = expandButtonDefinitionInPage;
 /* harmony export (immutable) */ __webpack_exports__["removeDisableButtons"] = removeDisableButtons;
 /* harmony export (immutable) */ __webpack_exports__["addDefaultBtnSettings"] = addDefaultBtnSettings;
 /* harmony export (immutable) */ __webpack_exports__["customize"] = customize;
@@ -1373,7 +1361,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 // takes an object like "actionname" or { action: "actionname", ... } and changes it to a { command: { action: "actionname" }, ... }
 // ReSharper disable once UnusedParameter
-function expandButtonConfig(original, sharedProps, parentLog) {
+function expandButtonDefinitionInPage(original, sharedProps, parentLog) {
     var log = new __WEBPACK_IMPORTED_MODULE_0__logging_log__["Log"]('Tlb.ExpBtn', parentLog, 'start');
     // prevent multiple inits
     if (original._expanded || original.command) {
@@ -1397,26 +1385,9 @@ function expandButtonConfig(original, sharedProps, parentLog) {
     log.add('done');
     return original;
 }
-// export function getButtonConfigDefaultsV1(name: string,
-//                                           icon: string,
-//                                           translateKey: string,
-//                                           uiOnly: boolean,
-//                                           partOfPage: boolean,
-//                                           more: Definition): Partial<ButtonConfig> {
-//   //
-//   // stv: v1 code
-//   const partialButtonConfig = {
-//     icon: (context: ContextOfButton) => `icon-sxc-${icon}`,
-//     title: (context: ContextOfButton) => `Toolbar.${translateKey}`,
-//     uiActionOnly: (context: ContextOfButton) => uiOnly,
-//     partOfPage: (context: ContextOfButton) => partOfPage,
-//   } as Partial<ButtonConfig>;
-//   Object.assign(partialButtonConfig, more);
-//   return partialButtonConfig;
-// }
 // remove buttons which are not valid based on add condition
 function removeDisableButtons(context, full, config, parentLog) {
-    var log = new __WEBPACK_IMPORTED_MODULE_0__logging_log__["Log"]("Tlb.RmvDsb', parentLog, 'start remove disabled buttons for " + full.groups.length + " groups");
+    var log = new __WEBPACK_IMPORTED_MODULE_0__logging_log__["Log"]("Tlb.RmvDsb', parentLog, 'start remove disabled buttons for " + full.groups.length + " groups", parentLog);
     var btnGroups = full.groups;
     for (var g = 0; g < btnGroups.length; g++) {
         var btns = btnGroups[g].buttons;
@@ -2523,7 +2494,7 @@ var settingsForEmptyToolbar = new ToolbarSettings({
     show: 'hover',
 });
 var emptyToolbar = {
-    toolbar: '',
+    toolbar: {},
     settings: settingsForEmptyToolbar,
 };
 
@@ -2959,7 +2930,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /**
  * this is a dialog manager which is in charge of all quick-dialogues
- * it always has a reference to the latest dialog created by any module instance
+ * it always has a reference to the latest dialog created by a.ny module instance
  */
 var containerClass = 'inpage-frame-wrapper';
 var iframeClass = 'inpage-frame';
@@ -3012,7 +2983,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /**
  * this is a dialog manager which is in charge of all quick-dialogues
- * it always has a reference to the latest dialog created by any module instance
+ * it always has a reference to the latest dialog created by a.ny module instance
  */
 var isFullscreen = false;
 /**
@@ -3352,7 +3323,6 @@ var Engine = /** @class */ (function (_super) {
      * @param event
      */
     Engine.prototype.run = function (context, nameOrSettings, event) {
-        // | any is temporary, just to get it to work; should be improved to only give a promise
         var settings = this.nameOrSettingsAdapter(nameOrSettings);
         settings = this.expandSettingsWithDefaults(settings);
         var origEvent = event;
@@ -4094,7 +4064,7 @@ function expandButtonList(root, settings, parentLog) {
     }
     // add each button - check if it's already an object or just the string
     for (var v = 0; v < btns.length; v++) {
-        btns[v] = Object(__WEBPACK_IMPORTED_MODULE_7__expand_button_config__["expandButtonConfig"])(btns[v], sharedProperties, log);
+        btns[v] = Object(__WEBPACK_IMPORTED_MODULE_7__expand_button_config__["expandButtonDefinitionInPage"])(btns[v], sharedProperties, log);
         // todo: refactor this out, not needed any more as they are all together now
         // btns[v].group = root;// grp;    // attach group reference, needed for fallback etc.
     }
@@ -4272,7 +4242,7 @@ var conf = __WEBPACK_IMPORTED_MODULE_0__quick_e__["$quickE"].config = {
 function _readPageConfig() {
     var configs /*: Conf[]*/ = $("[" + configAttr + "]");
     var confJ;
-    // any inner blocks found? will currently affect if modules can be inserted...
+    // a.ny inner blocks found? will currently affect if modules can be inserted...
     var hasInnerCBs = ($(__WEBPACK_IMPORTED_MODULE_1__selectors_instance__["selectors"].blocks.cb.listSelector).length > 0);
     if (configs.length > 0) {
         // go through reverse list, as the last is the most important...
@@ -4401,7 +4371,6 @@ var IFrameBridge = /** @class */ (function () {
     }
     /**
      * get the sxc-object of this iframe
-     * @returns {Object<any>} refreshed sxc-object
      */
     IFrameBridge.prototype.uncachedSxc = function () {
         if (!this.instanceSxc)
@@ -5006,7 +4975,7 @@ var EditManager = /** @class */ (function () {
          * it is publicly used out of inpage, so take a care to preserve function signature
          */
         this.getToolbar = function (tbConfig, moreSettings) {
-            // const tag: any = getTag(this.sxc);
+            // const tag = getTag(this.sxc);
             // const myContext = context(tag);
             var toolbarConfig = Object(__WEBPACK_IMPORTED_MODULE_4__toolbar_toolbar_toolbar_expand_config__["expandToolbarConfig"])(_this.context, tbConfig, moreSettings);
             _this.context.toolbar = toolbarConfig;
@@ -5359,7 +5328,7 @@ function buttonConfigAdapter(actDef) {
             return actDef.uiActionOnly;
         };
     }
-    actDef = (Object(__WEBPACK_IMPORTED_MODULE_3__button_expand_button_config__["expandButtonConfig"])(actDef, [], null));
+    actDef = Object(__WEBPACK_IMPORTED_MODULE_3__button_expand_button_config__["expandButtonDefinitionInPage"])(actDef, [], null);
     var name = actDef.command.action;
     var contentType = actDef.command.contentType;
     // if the button belongs to a content-item, move the specs up to the item into the settings-object
@@ -5415,11 +5384,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
-/**
- * initialize the translation system; ensure toolbars etc. are translated
- */
-__WEBPACK_IMPORTED_MODULE_1__interfaces_window_in_page__["windowInPage"].i18next = __WEBPACK_IMPORTED_MODULE_4__libs_i18next_min__;
-__WEBPACK_IMPORTED_MODULE_1__interfaces_window_in_page__["windowInPage"].i18nextXHRBackend = __WEBPACK_IMPORTED_MODULE_5__libs_i18nextXHRBackend_min__;
+var win18n = __WEBPACK_IMPORTED_MODULE_1__interfaces_window_in_page__["windowInPage"];
+win18n.i18next = __WEBPACK_IMPORTED_MODULE_4__libs_i18next_min__;
+win18n.i18nextXHRBackend = __WEBPACK_IMPORTED_MODULE_5__libs_i18nextXHRBackend_min__;
 var initialized = false;
 // ReSharper disable once InconsistentNaming
 function _translateInit(manage) {
@@ -5443,7 +5410,7 @@ function _translateInit(manage) {
     // console.log('stv: compare #2',
     //  manage._editContext.Environment.SxcRootUrl,
     //  context.instance.sxcRootUrl);
-    __WEBPACK_IMPORTED_MODULE_1__interfaces_window_in_page__["windowInPage"].i18next
+    win18n.i18next
         .use(__WEBPACK_IMPORTED_MODULE_5__libs_i18nextXHRBackend_min__)
         .init({
         lng: context.app.currentLanguage.substr(0, 2),
@@ -7141,23 +7108,18 @@ __WEBPACK_IMPORTED_MODULE_0__interfaces_window_in_page__["windowInPage"].$2sxcAc
 
 /***/ }),
 /* 154 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, __webpack_exports__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (immutable) */ __webpack_exports__["extend"] = extend;
-// ReSharper disable once UnusedParameter
-function extend() {
-    var args = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        args[_i] = arguments[_i];
-    }
-    for (var i = 1; i < arguments.length; i++)
-        for (var key in arguments[i])
-            if (arguments[i].hasOwnProperty(key))
-                arguments[0][key] = arguments[i][key];
-    return arguments[0];
-}
+// // ReSharper disable once UnusedParameter
+// export function
+//   extend(...args: any[]) { // same as angular.extend or jquery.extend, but without that additional dependency
+//   for (let i = 1; i < arguments.length; i++)
+//     for (let key in arguments[i])
+//       if (arguments[i].hasOwnProperty(key))
+//         arguments[0][key] = arguments[i][key];
+//   return arguments[0];
+// }
 
 
 /***/ }),
@@ -7314,7 +7276,7 @@ __WEBPACK_IMPORTED_MODULE_2__quick_e__["$quickE"].modActions.click(onModuleButto
 //   mod: CbOrMod;
 //   eitherCbOrMod: string;
 //   selected: string;
-// //   [propName: string]: any;
+// //   [propName: string]: a.ny;
 // }
 
 
@@ -7324,15 +7286,15 @@ __WEBPACK_IMPORTED_MODULE_2__quick_e__["$quickE"].modActions.click(onModuleButto
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ButtonDefinition", function() { return ButtonDefinition; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ButtonDefinitionInPage", function() { return ButtonDefinitionInPage; });
 /**
  * Button Definition v1. from old API
  * it is publicly used out of inpage, so take a care to preserve its signature
  */
-var ButtonDefinition = /** @class */ (function () {
-    function ButtonDefinition() {
+var ButtonDefinitionInPage = /** @class */ (function () {
+    function ButtonDefinitionInPage() {
     }
-    return ButtonDefinition;
+    return ButtonDefinitionInPage;
 }());
 
 

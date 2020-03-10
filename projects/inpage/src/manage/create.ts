@@ -5,7 +5,7 @@ import { ContextOfButton } from '../context/context-of-button';
 import { DataEditContext } from '../data-edit-context/data-edit-context';
 import { SxcIntanceEditable } from '../interfaces/sxc-instance-editable';
 import { buttonConfigAdapter } from '../toolbar/adapters/button-config-adapter';
-import { ButtonDefinition } from '../toolbar/button/button-definition';
+import { ButtonDefinitionInPage } from '../toolbar/button/button-definition';
 import { renderButton } from '../toolbar/item/render-button';
 import { renderToolbar } from '../toolbar/item/render-toolbar';
 import { expandToolbarConfig } from '../toolbar/toolbar/toolbar-expand-config';
@@ -39,7 +39,7 @@ export class EditManager implements SxcInstanceManage {
    * @returns {string} html of a button
    * it is publicly used out of inpage, so take a care to preserve function signature
    */
-  getButton = (actDef: ButtonDefinition, groupIndex: number): string => {
+  getButton = (actDef: ButtonDefinitionInPage, groupIndex: number): string => {
     // const tag: any = getTag(this.sxc);
     // const myContext = context(tag);
 
@@ -65,7 +65,7 @@ export class EditManager implements SxcInstanceManage {
    * it is publicly used out of inpage, so take a care to preserve function signature
    */
   getToolbar = (tbConfig: any, moreSettings: ToolbarSettings): string => {
-    // const tag: any = getTag(this.sxc);
+    // const tag = getTag(this.sxc);
     // const myContext = context(tag);
     const toolbarConfig = expandToolbarConfig(
       this.context,

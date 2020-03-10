@@ -4,20 +4,21 @@ import { InstanceConfig } from '../../manage/instance-config';
 import { oldToolbarSettingsAddapter } from '../adapters/old-toolbar-settings-adapter';
 import { customize, removeDisableButtons } from '../button/expand-button-config';
 import { expandButtonGroups } from '../button/expand-group-config';
+import { ToolbarVariationsBeforeInitializing, ToolbarVariationsForInitializing } from '../toolbar-init-config';
 import { ToolbarConfig } from './toolbar-config';
 import { ToolbarConfigTemplates } from './toolbar-config-templates';
 import { defaultToolbarSettings, settingsForEmptyToolbar, ToolbarSettings } from './toolbar-settings';
 
-export function expandToolbarConfig(context: ContextOfButton, toolbarData: any, toolbarSettings: ToolbarSettings, parentLog?: Log): ToolbarConfig {
+export function expandToolbarConfig(context: ContextOfButton, toolbarData: ToolbarVariationsBeforeInitializing, toolbarSettings: ToolbarSettings, parentLog?: Log): ToolbarConfig {
   const log = new Log('Tlb.ExpTop', parentLog, 'expand start');
 
-  if (toolbarData === {} && toolbarSettings === ({} as ToolbarSettings)) {
+  if (toolbarData === ({} as ToolbarVariationsForInitializing) && toolbarSettings === ({} as ToolbarSettings)) {
     log.add('no data or settings found, will use default toolbar');
     toolbarSettings = settingsForEmptyToolbar;
   }
 
   // if it has an action or is an array, keep that. Otherwise get standard buttons
-  toolbarData = toolbarData || {}; // if null/undefined, use empty object
+  toolbarData = toolbarData || {} as ToolbarVariationsForInitializing; // if null/undefined, use empty object
 
   let unstructuredConfig = toolbarData;
   if (!toolbarData.action && !toolbarData.groups && !toolbarData.buttons && !Array.isArray(toolbarData)) {
@@ -50,7 +51,7 @@ export function expandToolbarConfig(context: ContextOfButton, toolbarData: any, 
  * @param instanceConfig
  * @param toolbarSettings
  */
-function buildFullDefinition(toolbarContext: ContextOfButton, unstructuredConfig: any, instanceConfig: InstanceConfig, toolbarSettings: ToolbarSettings, parentLog: Log) {
+function buildFullDefinition(toolbarContext: ContextOfButton, unstructuredConfig: ToolbarVariationsBeforeInitializing, instanceConfig: InstanceConfig, toolbarSettings: ToolbarSettings, parentLog: Log) {
   const log = new Log('Tlb.BldFul', parentLog, 'start');
   const fullConfig = ensureDefinitionTree(unstructuredConfig, toolbarSettings, log);
 

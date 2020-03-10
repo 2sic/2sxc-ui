@@ -9,9 +9,13 @@ import * as jqueryI18next from './libs/jquery-i18next.min';
 /**
  * initialize the translation system; ensure toolbars etc. are translated
  */
-
-window.i18next = i18next;
-window.i18nextXHRBackend = i18nextXHRBackend;
+interface Windowi18n extends Window {
+    i18next: any;
+    i18nextXHRBackend: any;
+}
+const win18n = window as any as Windowi18n;
+win18n.i18next = i18next;
+win18n.i18nextXHRBackend = i18nextXHRBackend;
 
 let initialized: boolean = false;
 
@@ -41,7 +45,7 @@ export function _translateInit(manage: any): void {
   //  manage._editContext.Environment.SxcRootUrl,
   //  context.instance.sxcRootUrl);
 
-  window.i18next
+  win18n.i18next
     .use(i18nextXHRBackend)
     .init({
       lng: context.app.currentLanguage.substr(0, 2), // "en",

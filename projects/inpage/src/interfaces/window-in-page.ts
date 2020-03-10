@@ -1,4 +1,6 @@
 ﻿import { Window as sxcWindow } from '../../../$2sxc/src/index';
+import { ActionMenuMapper } from '../dnn-menu-helper/dnn-inpage-edit';
+import { $quickE } from '../quick-edit/quick-e';
 import { SxcControllerInPage } from './sxc-controller-in-page';
 
 // ReSharper disable InconsistentNaming
@@ -7,10 +9,8 @@ export interface WindowInPage extends Window, sxcWindow {
   // event: Event;
   dnn_tabVersioningEnabled: boolean;
   dnn: any;
-  $quickE: any;
-  i18next: any;
-  i18nextXHRBackend: any;
-  $2sxcActionMenuMapper: any; // (moduleId: number) => ActionMenuMapper,
+  $quickE: typeof $quickE ;
+  $2sxcActionMenuMapper: (moduleId: number) => ActionMenuMapper;
 }
 // ReSharper restore InconsistentNaming
 

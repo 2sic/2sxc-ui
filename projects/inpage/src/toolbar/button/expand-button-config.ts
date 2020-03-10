@@ -1,14 +1,15 @@
 ﻿import { Commands as Commands } from '../../commands/commands';
-import { Definition } from '../../commands/definition';
 import { ContextOfButton } from '../../context/context-of-button';
 import { Log } from '../../logging/log';
+import { InstanceConfig } from '../../manage/instance-config';
 import { ToolbarConfig } from '../toolbar/toolbar-config';
 import { ButtonConfig } from './button-config';
+import { ButtonDefinitionInPage } from './button-definition';
 import { GroupConfig } from './group-config';
 
 // takes an object like "actionname" or { action: "actionname", ... } and changes it to a { command: { action: "actionname" }, ... }
 // ReSharper disable once UnusedParameter
-export function expandButtonConfig(original: any, sharedProps: any[], parentLog: Log) {
+export function expandButtonDefinitionInPage(original: ButtonDefinitionInPage | any, sharedProps: any[], parentLog: Log): ButtonDefinitionInPage {
   const log = new Log('Tlb.ExpBtn', parentLog, 'start');
 
   // prevent multiple inits
@@ -20,7 +21,7 @@ export function expandButtonConfig(original: any, sharedProps: any[], parentLog:
   // if just a name, turn into a command
   if (typeof original === 'string') {
     log.add(`name "${original}" found, will re-map to .command.action`);
-    original = { command: { action: original.trim() } };
+    original = { command: { action: original.trim() } } as Partial<ButtonDefinitionInPage>;
   }
 
   // if it's a command w/action, wrap into command + trim
@@ -38,29 +39,9 @@ export function expandButtonConfig(original: any, sharedProps: any[], parentLog:
   return original;
 }
 
-// export function getButtonConfigDefaultsV1(name: string,
-//                                           icon: string,
-//                                           translateKey: string,
-//                                           uiOnly: boolean,
-//                                           partOfPage: boolean,
-//                                           more: Definition): Partial<ButtonConfig> {
-//   //
-//   // stv: v1 code
-//   const partialButtonConfig = {
-//     icon: (context: ContextOfButton) => `icon-sxc-${icon}`,
-//     title: (context: ContextOfButton) => `Toolbar.${translateKey}`,
-//     uiActionOnly: (context: ContextOfButton) => uiOnly,
-//     partOfPage: (context: ContextOfButton) => partOfPage,
-//   } as Partial<ButtonConfig>;
-
-//   Object.assign(partialButtonConfig, more);
-
-//   return partialButtonConfig;
-// }
-
 // remove buttons which are not valid based on add condition
-export function removeDisableButtons(context: any, full: ToolbarConfig, config: any, parentLog: Log): void {
-  const log = new Log(`Tlb.RmvDsb', parentLog, 'start remove disabled buttons for ${full.groups.length} groups`);
+export function removeDisableButtons(context: ContextOfButton, full: ToolbarConfig, config: InstanceConfig, parentLog: Log): void {
+  const log = new Log(`Tlb.RmvDsb', parentLog, 'start remove disabled buttons for ${full.groups.length} groups`, parentLog);
   const btnGroups = full.groups;
   for (let g = 0; g < btnGroups.length; g++) {
     const btns = btnGroups[g].buttons;
@@ -78,7 +59,7 @@ export function removeDisableButtons(context: any, full: ToolbarConfig, config: 
   }
 }
 
-function removeUnfitButtons(context: any, btns: ButtonConfig[], config: any, log: Log): void {
+function removeUnfitButtons(context: ContextOfButton, btns: ButtonConfig[], config: InstanceConfig, log: Log): void {
   let removals = '';
   for (let i = 0; i < btns.length; i++) {
     // let add = btns[i].showCondition;
@@ -95,7 +76,7 @@ function removeUnfitButtons(context: any, btns: ButtonConfig[], config: any, log
     log.add(`removed buttons: ${removals}`);
 }
 
-function disableButtons(context: ContextOfButton, btns: ButtonConfig[], config: any): void {
+function disableButtons(context: ContextOfButton, btns: ButtonConfig[], config: InstanceConfig): void {
   for (let i = 0; i < btns.length; i++) {
     // btns[i].disabled = evalPropOrFunction(btns[i].disabled, btns[i].command, config, false);
     context.button = btns[i];
@@ -112,7 +93,7 @@ function disableButtons(context: ContextOfButton, btns: ButtonConfig[], config: 
   }
 }
 
-function evalPropOrFunction(propOrFunction: any, context: ContextOfButton, config: any, fallback: any): any {
+function evalPropOrFunction(propOrFunction: any, context: ContextOfButton, config: InstanceConfig, fallback: any): any {
   if (propOrFunction === undefined || propOrFunction === null) {
     return fallback;
   }

@@ -1,4 +1,5 @@
 ﻿import { ToolbarInitConfig } from '../toolbar-init-config';
+import { ToolbarConfigTemplate } from './toolbar-config-template';
 
 /** contains toolbar behaviour settings like float, etc. */
 export class ToolbarSettings {
@@ -29,6 +30,6 @@ export const settingsForEmptyToolbar = new ToolbarSettings({
 });
 
 export const emptyToolbar = {
-  toolbar: '',
+  toolbar: {} as ToolbarConfigTemplate,
   settings: settingsForEmptyToolbar,
 } as ToolbarInitConfig;

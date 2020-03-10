@@ -22,7 +22,7 @@ export class Manipulator {
          fieldName: string,
          index: number,
          appName: string,
-         container: any,
+         container: JQuery,
          newGuid: string): Promise<void> {
     // the wrapper, into which this will be placed and the list of pre-existing blocks
     const listTag = container;

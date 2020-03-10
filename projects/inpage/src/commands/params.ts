@@ -1,5 +1,5 @@
 ﻿export class Params {
-  items?: any; // string | string[];
+  items?: string; // string | string[];
   mode?: string;
   contentTypeName?: string;
   pipelineId?: number;

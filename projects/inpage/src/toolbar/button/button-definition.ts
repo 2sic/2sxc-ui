@@ -2,13 +2,19 @@
 import { Settings } from '../../commands/settings';
 import { ModConfig } from './mod-config';
 
+interface CommandVariatons  {
+    action?: string;
+    entityId?: number;
+    contentType?: string ;
+}
+
 /**
  * Button Definition v1. from old API
  * it is publicly used out of inpage, so take a care to preserve its signature
  */
-export class ButtonDefinition {
+export class ButtonDefinitionInPage {
   // object command the internal command which will be called, should contain both the name and the parameters like { action: "new", contentType: "BlogPost"}
-  command?: any;
+  command?: CommandVariatons;
 
   // string title a text which is shown on mouse-over. Note that 2sxc will try to run it through the translator, so you can also use placeholders like Toolbar.Metadata
   title?: string;
@@ -38,7 +44,7 @@ export class ButtonDefinition {
   uiActionOnly?: boolean;
 
   // code(settings, event) - the code executed on click, if it's not the default action
-  code?(settings: Settings, event: ModConfig): any;
+  code?<T>(settings: Settings, event: ModConfig): Promise<void | T>;
 
   // created in the buttonConfig v1
   name?: string;
@@ -50,7 +56,7 @@ export class ButtonDefinition {
   fullScreen?: boolean;
 
   // entity support (vertical compatibility for pre 2sxc v9.x)
-  entity?: any;
+  entity?: number; // probably not a number...
   useModuleList?: boolean;
   entityId?: number;
   sortOrder?: number;

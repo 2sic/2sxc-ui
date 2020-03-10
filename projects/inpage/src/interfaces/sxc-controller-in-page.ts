@@ -28,9 +28,6 @@ export interface SxcControllerInPage extends SxcRootWithInternals {
   _quickDialog: QuickDialogManager;
   _toolbarManager: ToolbarManager;
   _manage: Manage;
-//   c: Constants;
-//   consts: Constants;
-  contentItems: any;
   system: SystemUpgrader;
   translate(key: string): string;
   context: typeof context;

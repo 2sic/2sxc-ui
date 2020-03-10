@@ -21,7 +21,7 @@ export function _readPageConfig() {
   const configs /*: Conf[]*/ = $(`[${configAttr}]`);
   let confJ: string;
 
-  // any inner blocks found? will currently affect if modules can be inserted...
+  // a.ny inner blocks found? will currently affect if modules can be inserted...
   const hasInnerCBs = ($(selectors.blocks.cb.listSelector).length > 0);
 
   if (configs.length > 0) {

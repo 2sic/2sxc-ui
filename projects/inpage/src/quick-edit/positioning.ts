@@ -133,7 +133,7 @@ export function refresh(e: JQueryEventObject) {
 export function findNearest(elements: JQuery, position: Coords): Coords {
   const maxDistance: number = 30; // Defines the maximal distance of the cursor when the menu is displayed
 
-  let nearestItem: any = null;
+  let nearestItem: Coords = null;
   let nearestDistance = maxDistance;
 
   const posX: number = position.x + quickE.win.scrollLeft();

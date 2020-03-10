@@ -3,7 +3,7 @@
   lang?: string;
   cbisentity?: boolean;
   cbid?: number;
-  originalparameters?: any;
+  originalparameters?: string;
   forceCreateContentGroup?: boolean;
   newTemplateChooserState?: boolean;
   zoneId?: number;

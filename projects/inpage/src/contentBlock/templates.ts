@@ -7,9 +7,7 @@ import { saveTemplate } from './web-api-promises';
  * prepare the instance so content can be added
  * this ensure the content-group has been created, which is required to add content
  * @param {ContextOfButton} context
- * @returns {any}
  */
-
 export function prepareToAddContent(context: ContextOfButton, useModuleList: boolean): Promise<string | void> {
   const isCreated: boolean = context.contentBlock.isCreated;
   if (isCreated || !useModuleList) return Promise.resolve();

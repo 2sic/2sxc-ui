@@ -1,7 +1,7 @@
 ﻿import * as Container from './container';
 /**
  * this is a dialog manager which is in charge of all quick-dialogues
- * it always has a reference to the latest dialog created by any module instance
+ * it always has a reference to the latest dialog created by a.ny module instance
  */
 let isFullscreen: boolean = false;
 

@@ -6,4 +6,5 @@ export class ToolbarConfigTemplate {
   defaults?: HashTable<string> = {};
   params?: HashTable<string> = {};
   settings?: Partial<ToolbarSettings> = {};
+  debug?: boolean;
 }

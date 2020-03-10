@@ -1,8 +1,9 @@
 ﻿import { ContextOfButton } from '../../context/context-of-button';
+import { ButtonConfig } from '../button/button-config';
 
-export function settingsAdapter(oldSettings: any): any {
+export function settingsAdapter(oldSettings: any): Partial<ButtonConfig> {
 
-  const newSettings: any = {};
+  const newSettings: Partial<ButtonConfig> = {};
 
   // 'classes',
   if (oldSettings.classes) {

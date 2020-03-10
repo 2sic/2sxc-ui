@@ -14,6 +14,10 @@ const diagShowClass: string = 'dia-select';
 /** dialog manager - the currently active dialog object */
 let current: IDialogFrameElement = null;
 
+interface iframeWindow extends Window {
+    reboot(): void;
+}
+
 /**
  * this is a dialog manager which is in charge of all quick-dialogues
  * it always has a reference to the latest dialog created by a.ny module instance
@@ -76,8 +80,8 @@ export class QuickDialogManager {
     iFrame.bridge.setup(context.sxc, dialogName);
     iFrame.setAttribute('src', dialogUrl);
     // if the window had already been loaded, re-init
-    if (iFrame.contentWindow && (iFrame.contentWindow as any).reboot)
-      (iFrame.contentWindow as any).reboot();
+    if (iFrame.contentWindow && (iFrame.contentWindow as iframeWindow).reboot)
+      (iFrame.contentWindow as iframeWindow).reboot();
 
     // make sure it's visible'
     this.setVisible(true);

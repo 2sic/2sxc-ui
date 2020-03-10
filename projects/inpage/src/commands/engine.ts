@@ -66,8 +66,6 @@ export class Engine extends HasLog {
     nameOrSettings: string | Partial<Settings>,
     event: MouseEvent,
   ): Promise<T | void> {
-    // | any is temporary, just to get it to work; should be improved to only give a promise
-
     let settings = this.nameOrSettingsAdapter(nameOrSettings);
 
     settings = this.expandSettingsWithDefaults(settings);

@@ -83,7 +83,7 @@ function loadAndConvertTag(log: Log, node: HTMLElement): void {
     try {
       convertConfigToToolbarTags(tag, config, log);
     } catch (err2) {
-      // catch any errors, as this is very common - make sure the others are still rendered
+      // catch a.ny errors, as this is very common - make sure the others are still rendered
       console.error('error creating toolbar - will skip this one', err2);
     }
   }

@@ -1,6 +1,8 @@
-﻿export function oldParametersAdapter(action: any): any {
+﻿import { Settings } from '../../commands/settings';
+import { ButtonAction } from '../button/button-action';
+export function oldParametersAdapter(action: ButtonAction): Partial<Settings> {
 
-  const params: any = {};
+  const params: Partial<Settings> = {};
 
   if (action) {
 

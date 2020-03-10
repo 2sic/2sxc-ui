@@ -20,7 +20,7 @@ export class ButtonConfig {
     }
   }
 
-  code: <T>(context: ContextOfButton, event: any) =>  Promise<T | void>; // void;
+  code: <T>(context: ContextOfButton, event: MouseEvent) =>  Promise<T | void>; // void;
   configureCommand: (context: ContextOfButton, cmd: Command) => void;
   dialog: (context: ContextOfButton) => string;
   disabled: (context: ContextOfButton) => boolean;

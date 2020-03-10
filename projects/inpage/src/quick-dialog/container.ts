@@ -6,7 +6,7 @@ import IDialogFrameElement = DialogFrameElement.IDialogFrameElement;
 
 /**
  * this is a dialog manager which is in charge of all quick-dialogues
- * it always has a reference to the latest dialog created by any module instance
+ * it always has a reference to the latest dialog created by a.ny module instance
  */
 
 const containerClass = 'inpage-frame-wrapper';

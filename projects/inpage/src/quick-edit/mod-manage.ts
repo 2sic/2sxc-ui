@@ -10,7 +10,7 @@ export class ModManage {
    * Delete a module
    */
   delete(modId: number): JQueryXHR {
-    const service: any = $.dnnSF(modId);
+    const service = $.dnnSF(modId);
     const tabId: number = service.getTabId();
     return sendDnnAjax(modId,
       '2sxc/dnn/module/delete',
@@ -39,7 +39,7 @@ export class ModManage {
           let module: any = null;
 
           // ReSharper disable once UnusedParameter
-          desktopModules.forEach((e: any, i: any) => {
+          desktopModules.forEach((e: any, i: number) => {
             if (e.ModuleName === moduleToFind)
               module = e;
           });
@@ -126,7 +126,7 @@ function xhrError(xhr: JQueryXHR, optionalMessage: string): void {
 
 // call an api on dnn
 function sendDnnAjax(modId: number, serviceName: string, options: Partial<JQueryAjaxSettings>): JQueryXHR {
-  const service: any = $.dnnSF(modId);
+  const service = $.dnnSF(modId);
 
   return $.ajax($.extend({
     type: 'GET',

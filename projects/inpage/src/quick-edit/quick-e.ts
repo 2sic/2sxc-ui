@@ -49,7 +49,6 @@ class QuickE {
   modules: JQuery = null;
   nearestCb: Coords = null;
   nearestMod: Coords = null;
-//   modManage: any = null;
   // add stuff which depends on other values to create
   cbActions = $(this.template);
   modActions = $(this.template.replace(/QuickInsertMenu.AddBlock/g, 'QuickInsertMenu.AddModule'))
@@ -59,20 +58,6 @@ class QuickE {
   config: Conf;
   bodyOffset: Coords;
 
-  constructor() {
-
-    // (this.selected as any).toggle = (target: boolean | JQuery) => {
-    //   if (!target || target.length === 0) {
-    //     this.selected.hide();
-    //   } else {
-    //     const coords = getCoordinates(target);
-    //     coords.yh = coords.y + 20;
-    //     positionAndAlign(this.selected, coords);
-    //     this.selected.target = target;
-    //   }
-    // };
-
-  }
 }
 
 export const $quickE = new QuickE();

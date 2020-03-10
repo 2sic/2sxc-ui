@@ -39,7 +39,6 @@ export class IFrameBridge implements IIFrameBridge {
 
   /**
    * get the sxc-object of this iframe
-   * @returns {Object<any>} refreshed sxc-object
    */
   private uncachedSxc(): SxcIntanceEditable {
     if (!this.instanceSxc) throw "can't find sxc-instance of IFrame, probably it wasn't initialized yet";

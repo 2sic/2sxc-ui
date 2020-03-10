@@ -12,7 +12,7 @@ export class Cb implements Delete {
     return sxc.manage._getCbManipulator().delete(clip.parent, clip.field, clip.index);
   }
 
-  static create(parent: number, field: string, index: number, appOrContent: string, list: JQuery, newGuid: string): any {
+  static create(parent: number, field: string, index: number, appOrContent: string, list: JQuery, newGuid: string): Promise<void> {
     const sxc = getSxc(list);
     return sxc.manage._getCbManipulator().create(parent, field, index, appOrContent, list, newGuid);
   }

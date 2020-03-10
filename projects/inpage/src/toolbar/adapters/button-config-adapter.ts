@@ -2,13 +2,13 @@
 import { ContextOfButton } from '../../context/context-of-button';
 import { ButtonAction } from '../button/button-action';
 import { ButtonConfig } from '../button/button-config';
-import { ButtonDefinition } from '../button/button-definition';
-import { expandButtonConfig } from '../button/expand-button-config';
+import { ButtonDefinitionInPage } from '../button/button-definition';
+import { expandButtonDefinitionInPage } from '../button/expand-button-config';
 import { ModConfig } from '../button/mod-config';
 import { flattenActionDefinition } from './flatten-action-definition';
 import { parametersAdapter } from './parameters-adapter';
 
-export function buttonConfigAdapter(actDef: ButtonDefinition): ButtonConfig {
+export function buttonConfigAdapter(actDef: ButtonDefinitionInPage): ButtonConfig {
 
   const partialButtonConfig: Partial<ButtonConfig> = {};
 
@@ -110,7 +110,7 @@ export function buttonConfigAdapter(actDef: ButtonDefinition): ButtonConfig {
     };
   }
 
-  actDef = (expandButtonConfig(actDef, [], null)) as ButtonDefinition;
+  actDef = expandButtonDefinitionInPage(actDef, [], null);
 
   const name = actDef.command.action;
   const contentType = actDef.command.contentType;

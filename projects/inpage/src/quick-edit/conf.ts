@@ -7,7 +7,7 @@
     enable: boolean | string | null;
   };
 
-  getAttribute?(configAttr: string): any;
+  getAttribute?(configAttr: string): string;
 
   guid?: string;
 }

@@ -7,7 +7,7 @@ import { ToolbarConfig } from '../toolbar/toolbar-config';
 import { ToolbarSettings } from '../toolbar/toolbar-settings';
 import { ButtonAction } from './button-action';
 import { ButtonConfig } from './button-config';
-import { addDefaultBtnSettings, expandButtonConfig } from './expand-button-config';
+import { addDefaultBtnSettings, expandButtonDefinitionInPage } from './expand-button-config';
 
 /**
  * this will traverse a groups-tree and expand each group
@@ -140,7 +140,7 @@ function expandButtonList(root: any, settings: ToolbarSettings, parentLog: Log):
 
   // add each button - check if it's already an object or just the string
   for (let v = 0; v < btns.length; v++) {
-    btns[v] = expandButtonConfig(btns[v], sharedProperties, log);
+    btns[v] = expandButtonDefinitionInPage(btns[v], sharedProperties, log);
     // todo: refactor this out, not needed any more as they are all together now
     // btns[v].group = root;// grp;    // attach group reference, needed for fallback etc.
   }

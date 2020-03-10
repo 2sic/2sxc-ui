@@ -25,7 +25,7 @@ class Renderer {
    * @param {string} newContent
    * @returns {} nothing
    */
-  showMessage(context: ContextOfButton, newContent: any): void {
+  showMessage(context: ContextOfButton, newContent: string): void {
     $(getTag(context.sxc)).html(newContent);
   }
 
