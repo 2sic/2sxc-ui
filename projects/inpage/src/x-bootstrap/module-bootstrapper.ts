@@ -9,7 +9,7 @@ import { getSxc } from '../plumbing';
 import { TypeUnsafe } from '../plumbing/TypeTbD';
 import { quickDialog } from '../quick-dialog/quick-dialog';
 import * as QuickEditState from '../quick-dialog/state';
-import { TagToolbarManager } from '../toolbar/tag-toolbar-manager';
+import { TagToolbarManager } from '../toolbar/tag-toolbars/tag-toolbar-manager';
 import { ToolbarManager } from '../toolbar/toolbar-manager';
 
 /**

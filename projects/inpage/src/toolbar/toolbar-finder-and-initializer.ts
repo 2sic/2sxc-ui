@@ -3,7 +3,7 @@ import { findContext } from '../context/context';
 import { HasLog } from '../logging/has-log';
 import { ToolbarRenderer } from './render/toolbar-renderer';
 import { emptyToolbar } from './settings/toolbar-settings';
-import { TagToolbar } from './tag-toolbar';
+import { TagToolbar } from './tag-toolbars/tag-toolbar';
 import { ToolbarInitConfig } from './toolbar-init-config';
 import { ToolbarManager } from './toolbar-manager';
 import { expandToolbarConfig } from './toolbar/toolbar-expand-config';

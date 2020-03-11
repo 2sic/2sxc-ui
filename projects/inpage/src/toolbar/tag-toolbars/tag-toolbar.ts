@@ -1,5 +1,5 @@
-﻿import { ContextBundleButton } from '../context/bundles/context-bundle-button';
-import { ToolbarRenderer } from './render/toolbar-renderer';
+﻿import { ContextBundleButton } from '../../context/bundles/context-bundle-button';
+import { ToolbarRenderer } from '../render/toolbar-renderer';
 import { TagToolbarManager } from './tag-toolbar-manager';
 
 /**
