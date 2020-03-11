@@ -1,7 +1,6 @@
 ﻿import * as Constants from '../constants';
 import { findContext } from '../context/context';
 import { HasLog } from '../logging/has-log';
-import { Log } from '../logging/log';
 import { ToolbarRenderer } from './render/toolbar-renderer';
 import { emptyToolbar } from './settings/toolbar-settings';
 import { TagToolbar } from './tag-toolbar';
@@ -55,16 +54,16 @@ export class ToolbarConfigFinderAndInitializer extends HasLog {
      * @param node
      */
     build(node: JQuery): void {
-        const contextNode = $(node).closest(Constants.cb.selectors.ofName)[0];
-
+        // go up the DOM to find the parent which has context-information
         // if we have no contextNode (a parent content block), we can
         // assume the node is outside of a 2sxc module so not interesting
+        const contextNode = $(node).closest(Constants.cb.selectors.ofName)[0];
         if (contextNode == null) return;
 
-        // toolbar itself has been added
-        if (node.is(toolbarSelector))
-        this.loadConfigAndInitialize(node[0]);
+        // check if the parent-node needs a toolbar
+        if (node.is(toolbarSelector)) this.loadConfigAndInitialize(node[0]);
 
+        // activate all child-nodes with toolbars
         const toolbars = $(toolbarSelector, node);
         toolbars.each((i, e: HTMLElement) => this.loadConfigAndInitialize(e));
     }
@@ -80,10 +79,10 @@ export class ToolbarConfigFinderAndInitializer extends HasLog {
 
         // return only those, which don't belong to a sub-item
         const onlyDirectDescendents = allInner
-        .filter((i: number, e: HTMLElement) =>
-            $(e).closest(Constants.cb.selectors.ofName)[0] === parentTag[0]);
+            .filter((i: number, e: HTMLElement) =>
+                $(e).closest(Constants.cb.selectors.ofName)[0] === parentTag[0]);
         if (dbg)
-        console.log('found toolbars for parent', parentTag, onlyDirectDescendents);
+            console.log('found toolbars for parent', parentTag, onlyDirectDescendents);
         return onlyDirectDescendents;
     }
 
@@ -97,7 +96,7 @@ export class ToolbarConfigFinderAndInitializer extends HasLog {
         const tag = $(node);
 
         // Do not process tag if a toolbar has already been attached
-        if (tag.data(Constants.toolbar.dataAttrToMarkInitalized)) return;
+        if (tag.data(Constants.toolbar.attrToMarkInitalized)) return;
 
         const config = ToolbarInitConfig.loadFromTag(node);
 
@@ -123,7 +122,7 @@ export class ToolbarConfigFinderAndInitializer extends HasLog {
 
         // V2 where the full toolbar is included in one setting
         if (tag.attr(Constants.toolbar.attr.full)) {
-            tag.data(Constants.toolbar.dataAttrToMarkInitalized, new TagToolbar(tag, context));
+            tag.data(Constants.toolbar.attrToMarkInitalized, new TagToolbar(tag, context));
             addHoverAttributeToTag(tag);
             return;
         }

@@ -1,5 +1,6 @@
 ﻿import { ContextBundleButton } from '../context/bundles/context-bundle-button';
 import { ToolbarRenderer } from './render/toolbar-renderer';
+import { TagToolbarManager } from './tag-toolbar-manager';
 
 /**
  * This is the modern toolbar which is attached to a tag from whic it hovers.
@@ -21,37 +22,23 @@ export class TagToolbar {
      */
     private addMouseEvents(hoverTag: JQuery) {
         hoverTag.on('mouseenter', () => {
-            this.initialize();
+            this.initializeIfNecessary();
             this.show();
         });
         hoverTag.on('mouseleave', (e) => {
-            this.initialize();
+            this.initializeIfNecessary();
             // if we hover the menu itself now, don't hide it
             if (!$.contains(this.toolbarElement[0], e.relatedTarget) && this.toolbarElement[0] !== e.relatedTarget)
                 this.hide();
         });
     }
 
-    /**
-     * Remove orphan tag-toolbars from DOM
-     * This can be necessary if the module was replaced by ajax, 
-     * leaving behind un-attached TagToolbars.
-     */
-    static CleanupOrphanedToolbars() {
-        const tagToolbars = $(`[${tagToolbarForAttr}]`);
-        tagToolbars.each((i, e) => {
-        const id = $(e).attr(tagToolbarForAttr);
-        if (!$(`[${tagToolbarAttr}=${id}]`).length) {
-            $(e).remove();
-        }
-        });
-    }
 
-
-    private initialize() {
+    private initializeIfNecessary() {
         if (this.initialized) return;
 
-        const toolbarId = `${this.context.instance.id}-${this.context.contentBlock.id}-${getMenuNumber()}`;
+        const nextFreeId = TagToolbarManager.getNextToolbarId();
+        const toolbarId = `${this.context.instance.id}-${this.context.contentBlock.id}-${nextFreeId}`;
 
         // render toolbar and append tag to body
         this.toolbarElement = $(new ToolbarRenderer(this.context).render());
@@ -64,8 +51,8 @@ export class TagToolbar {
 
         $('body').append(this.toolbarElement);
 
-        this.toolbarElement.attr(tagToolbarForAttr, toolbarId);
-        this.hoverTag.attr(tagToolbarAttr, toolbarId);
+        this.toolbarElement.attr(TagToolbarManager.TagToolbarForAttr, toolbarId);
+        this.hoverTag.attr(TagToolbarManager.TagToolbarAttr, toolbarId);
 
         this.toolbarElement.css({ display: 'none', position: 'absolute', transition: 'top 0.5s ease-out' });
 
@@ -78,11 +65,11 @@ export class TagToolbar {
             left: 'auto' as string | number,
             right: 'auto' as string | number,
             viewportOffset: this.hoverTag[0].getBoundingClientRect().top,
-            bodyOffset: getBodyOffset(),
+            bodyOffset: TagToolbarManager.getBodyScrollOffset(),
             tagScrollOffset: 0,
             tagOffset: this.hoverTag.offset(),
             tagWidth: this.hoverTag.outerWidth(),
-            mousePos: mousePosition,
+            mousePos: TagToolbarManager.mousePosition,
             win: {
                 scrollY: window.scrollY,
                 width: $(window).width(),
@@ -139,48 +126,3 @@ export class TagToolbar {
 const tagToolbarPadding = 4;
 const tagToolbarPaddingRight = 0;
 const toolbarHeight = 20;
-const tagToolbarAttr = 'data-tagtoolbar';
-const tagToolbarForAttr = 'data-tagtoolbar-for';
-
-/**
- * Returns the body offset if positioning is relative or absolute
- */
-function getBodyOffset() {
-  const body = $('body');
-  const bodyPos = body.css('position');
-  if (bodyPos === 'relative' || bodyPos === 'absolute') {
-    const offset = body.offset();
-    return {
-      top: offset.top,
-      left: offset.left,
-    };
-  }
-  return {
-    top: 0,
-    left: 0,
-  };
-}
-
-/**
- * Number generator used for TagToolbars
- */
-let lastMenuId = 0;
-function getMenuNumber() {
-  return lastMenuId++;
-}
-
-
-/** The current mouseposition, always updated when the mouse changes */
-const mousePosition = {
-  x: 0,
-  y: 0,
-};
-
-/**
- * Keep the mouse-position update for future use
- */
-$(window).on('mousemove', (e) => {
-  mousePosition.x = e.clientX;
-  mousePosition.y = e.clientY;
-});
-

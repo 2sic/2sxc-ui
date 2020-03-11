@@ -964,14 +964,16 @@ var ToolbarConfigFinderAndInitializer = /** @class */ (function (_super) {
      */
     ToolbarConfigFinderAndInitializer.prototype.build = function (node) {
         var _this = this;
-        var contextNode = $(node).closest(__WEBPACK_IMPORTED_MODULE_0__constants__["cb"].selectors.ofName)[0];
+        // go up the DOM to find the parent which has context-information
         // if we have no contextNode (a parent content block), we can
         // assume the node is outside of a 2sxc module so not interesting
+        var contextNode = $(node).closest(__WEBPACK_IMPORTED_MODULE_0__constants__["cb"].selectors.ofName)[0];
         if (contextNode == null)
             return;
-        // toolbar itself has been added
+        // check if the parent-node needs a toolbar
         if (node.is(toolbarSelector))
             this.loadConfigAndInitialize(node[0]);
+        // activate all child-nodes with toolbars
         var toolbars = $(toolbarSelector, node);
         toolbars.each(function (i, e) { return _this.loadConfigAndInitialize(e); });
     };
@@ -998,7 +1000,7 @@ var ToolbarConfigFinderAndInitializer = /** @class */ (function (_super) {
     ToolbarConfigFinderAndInitializer.prototype.loadConfigAndInitialize = function (node) {
         var tag = $(node);
         // Do not process tag if a toolbar has already been attached
-        if (tag.data(__WEBPACK_IMPORTED_MODULE_0__constants__["toolbar"].dataAttrToMarkInitalized))
+        if (tag.data(__WEBPACK_IMPORTED_MODULE_0__constants__["toolbar"].attrToMarkInitalized))
             return;
         var config = __WEBPACK_IMPORTED_MODULE_6__toolbar_init_config__["ToolbarInitConfig"].loadFromTag(node);
         if (config != null) { // is null if load failed
@@ -1021,7 +1023,7 @@ var ToolbarConfigFinderAndInitializer = /** @class */ (function (_super) {
         context.toolbar = Object(__WEBPACK_IMPORTED_MODULE_7__toolbar_toolbar_expand_config__["expandToolbarConfig"])(context, config.toolbar, config.settings, this.log);
         // V2 where the full toolbar is included in one setting
         if (tag.attr(__WEBPACK_IMPORTED_MODULE_0__constants__["toolbar"].attr.full)) {
-            tag.data(__WEBPACK_IMPORTED_MODULE_0__constants__["toolbar"].dataAttrToMarkInitalized, new __WEBPACK_IMPORTED_MODULE_5__tag_toolbar__["TagToolbar"](tag, context));
+            tag.data(__WEBPACK_IMPORTED_MODULE_0__constants__["toolbar"].attrToMarkInitalized, new __WEBPACK_IMPORTED_MODULE_5__tag_toolbar__["TagToolbar"](tag, context));
             addHoverAttributeToTag(tag);
             return;
         }
@@ -1153,7 +1155,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Attributes", function() { return Attributes; });
 /** Toolbar constants */
 var toolbar = {
-    dataAttrToMarkInitalized: '2sxc-tagtoolbar',
+    attrToMarkInitalized: '2sxc-tagtoolbar',
     attr: {
         full: 'sxc-toolbar',
         hover: 'sxc-toolbar-hover',
@@ -2641,6 +2643,8 @@ var emptyToolbar = {
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TagToolbar", function() { return TagToolbar; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__render_toolbar_renderer__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__tag_toolbar_manager__ = __webpack_require__(189);
+
 
 /**
  * This is the modern toolbar which is attached to a tag from whic it hovers.
@@ -2663,35 +2667,22 @@ var TagToolbar = /** @class */ (function () {
     TagToolbar.prototype.addMouseEvents = function (hoverTag) {
         var _this = this;
         hoverTag.on('mouseenter', function () {
-            _this.initialize();
+            _this.initializeIfNecessary();
             _this.show();
         });
         hoverTag.on('mouseleave', function (e) {
-            _this.initialize();
+            _this.initializeIfNecessary();
             // if we hover the menu itself now, don't hide it
             if (!$.contains(_this.toolbarElement[0], e.relatedTarget) && _this.toolbarElement[0] !== e.relatedTarget)
                 _this.hide();
         });
     };
-    /**
-     * Remove orphan tag-toolbars from DOM
-     * This can be necessary if the module was replaced by ajax,
-     * leaving behind un-attached TagToolbars.
-     */
-    TagToolbar.CleanupOrphanedToolbars = function () {
-        var tagToolbars = $("[" + tagToolbarForAttr + "]");
-        tagToolbars.each(function (i, e) {
-            var id = $(e).attr(tagToolbarForAttr);
-            if (!$("[" + tagToolbarAttr + "=" + id + "]").length) {
-                $(e).remove();
-            }
-        });
-    };
-    TagToolbar.prototype.initialize = function () {
+    TagToolbar.prototype.initializeIfNecessary = function () {
         var _this = this;
         if (this.initialized)
             return;
-        var toolbarId = this.context.instance.id + "-" + this.context.contentBlock.id + "-" + getMenuNumber();
+        var nextFreeId = __WEBPACK_IMPORTED_MODULE_1__tag_toolbar_manager__["a" /* TagToolbarManager */].getNextToolbarId();
+        var toolbarId = this.context.instance.id + "-" + this.context.contentBlock.id + "-" + nextFreeId;
         // render toolbar and append tag to body
         this.toolbarElement = $(new __WEBPACK_IMPORTED_MODULE_0__render_toolbar_renderer__["ToolbarRenderer"](this.context).render());
         this.toolbarElement.on('mouseleave', function (e) {
@@ -2700,8 +2691,8 @@ var TagToolbar = /** @class */ (function () {
                 _this.hide();
         });
         $('body').append(this.toolbarElement);
-        this.toolbarElement.attr(tagToolbarForAttr, toolbarId);
-        this.hoverTag.attr(tagToolbarAttr, toolbarId);
+        this.toolbarElement.attr(__WEBPACK_IMPORTED_MODULE_1__tag_toolbar_manager__["a" /* TagToolbarManager */].TagToolbarForAttr, toolbarId);
+        this.hoverTag.attr(__WEBPACK_IMPORTED_MODULE_1__tag_toolbar_manager__["a" /* TagToolbarManager */].TagToolbarAttr, toolbarId);
         this.toolbarElement.css({ display: 'none', position: 'absolute', transition: 'top 0.5s ease-out' });
         this.initialized = true;
     };
@@ -2711,11 +2702,11 @@ var TagToolbar = /** @class */ (function () {
             left: 'auto',
             right: 'auto',
             viewportOffset: this.hoverTag[0].getBoundingClientRect().top,
-            bodyOffset: getBodyOffset(),
+            bodyOffset: __WEBPACK_IMPORTED_MODULE_1__tag_toolbar_manager__["a" /* TagToolbarManager */].getBodyScrollOffset(),
             tagScrollOffset: 0,
             tagOffset: this.hoverTag.offset(),
             tagWidth: this.hoverTag.outerWidth(),
-            mousePos: mousePosition,
+            mousePos: __WEBPACK_IMPORTED_MODULE_1__tag_toolbar_manager__["a" /* TagToolbarManager */].mousePosition,
             win: {
                 scrollY: window.scrollY,
                 width: $(window).width(),
@@ -2765,45 +2756,6 @@ var TagToolbar = /** @class */ (function () {
 var tagToolbarPadding = 4;
 var tagToolbarPaddingRight = 0;
 var toolbarHeight = 20;
-var tagToolbarAttr = 'data-tagtoolbar';
-var tagToolbarForAttr = 'data-tagtoolbar-for';
-/**
- * Returns the body offset if positioning is relative or absolute
- */
-function getBodyOffset() {
-    var body = $('body');
-    var bodyPos = body.css('position');
-    if (bodyPos === 'relative' || bodyPos === 'absolute') {
-        var offset = body.offset();
-        return {
-            top: offset.top,
-            left: offset.left,
-        };
-    }
-    return {
-        top: 0,
-        left: 0,
-    };
-}
-/**
- * Number generator used for TagToolbars
- */
-var lastMenuId = 0;
-function getMenuNumber() {
-    return lastMenuId++;
-}
-/** The current mouseposition, always updated when the mouse changes */
-var mousePosition = {
-    x: 0,
-    y: 0,
-};
-/**
- * Keep the mouse-position update for future use
- */
-$(window).on('mousemove', function (e) {
-    mousePosition.x = e.clientX;
-    mousePosition.y = e.clientY;
-});
 
 
 /***/ }),
@@ -5543,7 +5495,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__plumbing__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__quick_dialog_quick_dialog__ = __webpack_require__(23);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__quick_dialog_state__ = __webpack_require__(50);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__toolbar_tag_toolbar__ = __webpack_require__(40);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__toolbar_tag_toolbar_manager__ = __webpack_require__(189);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__toolbar_toolbar_manager__ = __webpack_require__(90);
 
 
@@ -5590,8 +5542,6 @@ function watchDomChanges() {
     var observer = new MutationObserver(function (m) {
         // Watch statistics how changes were processed
         __WEBPACK_IMPORTED_MODULE_2__interfaces_window_in_page__["windowInPage"].$2sxc.stats.watchDomChanges++;
-        // Create toolbars for added nodes
-        var log = new __WEBPACK_IMPORTED_MODULE_3__logging_log__["Log"]('Bts.Module');
         var processed = 0;
         // 2019-08-29 2rm added automatic initialization of toolbars (not only module nodes)
         m.forEach(function (v) {
@@ -5620,7 +5570,7 @@ function watchDomChanges() {
         });
         // Clean up orphan tags if nodes have been added
         if (processed)
-            __WEBPACK_IMPORTED_MODULE_9__toolbar_tag_toolbar__["TagToolbar"].CleanupOrphanedToolbars();
+            __WEBPACK_IMPORTED_MODULE_9__toolbar_tag_toolbar_manager__["a" /* TagToolbarManager */].CleanupOrphanedToolbars();
     });
     observer.observe(document.body, {
         attributes: false,
@@ -7731,6 +7681,79 @@ var HtmlTools = /** @class */ (function () {
     return HtmlTools;
 }());
 
+
+
+/***/ }),
+/* 189 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TagToolbarManager; });
+/**
+ * The global Tag Toolbar Manager is responsible for the new TagToolbars
+ * These have certain shared aspects, like:
+ * - a numbering scheme to keep them apart
+ * - a mouse tracker to keep track of the position as the toolbar follows the scroll
+ */
+var TagToolbarManager = /** @class */ (function () {
+    function TagToolbarManager() {
+    }
+    /** The next free ID to mark a TagToolbar */
+    TagToolbarManager.getNextToolbarId = function () {
+        return TagToolbarManager.lastMenuId++;
+    };
+    /**
+     * Returns the body offset if positioning is relative or absolute
+     */
+    TagToolbarManager.getBodyScrollOffset = function () {
+        var body = $('body');
+        var bodyPos = body.css('position');
+        if (bodyPos === 'relative' || bodyPos === 'absolute') {
+            var offset = body.offset();
+            return {
+                top: offset.top,
+                left: offset.left,
+            };
+        }
+        return {
+            top: 0,
+            left: 0,
+        };
+    };
+    /**
+     * Remove orphan tag-toolbars from DOM
+     * This can be necessary if the module was replaced by ajax,
+     * leaving behind un-attached TagToolbars.
+     */
+    TagToolbarManager.CleanupOrphanedToolbars = function () {
+        var tagToolbars = $("[" + TagToolbarManager.TagToolbarForAttr + "]");
+        tagToolbars.each(function (i, e) {
+            var id = $(e).attr(TagToolbarManager.TagToolbarForAttr);
+            if (!$("[" + TagToolbarManager.TagToolbarAttr + "=" + id + "]").length) {
+                $(e).remove();
+            }
+        });
+    };
+    /** Mark Dom-Notes with the ID which Tag-Toolbar they want on mouse-over */
+    TagToolbarManager.TagToolbarAttr = 'data-tagtoolbar';
+    /** Mark TagToolbar Html-Nodes with the ID of the Dom-Tag they belong to */
+    TagToolbarManager.TagToolbarForAttr = 'data-tagtoolbar-for';
+    /** The current mouseposition, always updated when the mouse changes */
+    TagToolbarManager.mousePosition = {
+        x: 0,
+        y: 0,
+    };
+    TagToolbarManager.lastMenuId = 0;
+    return TagToolbarManager;
+}());
+
+/**
+ * Keep the mouse-position update for future use
+ */
+$(window).on('mousemove', function (e) {
+    TagToolbarManager.mousePosition.x = e.clientX;
+    TagToolbarManager.mousePosition.y = e.clientY;
+});
 
 
 /***/ })

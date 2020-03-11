@@ -1,7 +1,7 @@
 ﻿
 /** Toolbar constants */
 export const toolbar = {
-  dataAttrToMarkInitalized: '2sxc-tagtoolbar',
+  attrToMarkInitalized: '2sxc-tagtoolbar',
   attr: {
     full: 'sxc-toolbar',
     hover: 'sxc-toolbar-hover',

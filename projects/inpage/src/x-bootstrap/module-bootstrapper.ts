@@ -9,7 +9,7 @@ import { getSxc } from '../plumbing';
 import { TypeUnsafe } from '../plumbing/TypeTbD';
 import { quickDialog } from '../quick-dialog/quick-dialog';
 import * as QuickEditState from '../quick-dialog/state';
-import { TagToolbar } from '../toolbar/tag-toolbar';
+import { TagToolbarManager } from '../toolbar/tag-toolbar-manager';
 import { ToolbarManager } from '../toolbar/toolbar-manager';
 
 /**
@@ -49,8 +49,6 @@ function watchDomChanges() {
   const observer = new MutationObserver((m) => {
     // Watch statistics how changes were processed
     window.$2sxc.stats.watchDomChanges++;
-    // Create toolbars for added nodes
-    const log = new Log('Bts.Module');
     let processed = 0;
 
     // 2019-08-29 2rm added automatic initialization of toolbars (not only module nodes)
@@ -80,7 +78,7 @@ function watchDomChanges() {
     });
 
     // Clean up orphan tags if nodes have been added
-    if (processed) TagToolbar.CleanupOrphanedToolbars();
+    if (processed) TagToolbarManager.CleanupOrphanedToolbars();
   });
   observer.observe(document.body, {
     attributes: false,
