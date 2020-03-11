@@ -23,8 +23,8 @@ export class CommandExecution {
 
     // initialize params
     // todo: stv, clean this
-    const params = this.evalPropOrFunction(context.button.params, context, {});
-    const dialog = this.evalPropOrFunction(context.button.dialog, context, {});
+    const params = this.evalPropOrFunction(context.button.params, context);
+    const dialog = this.evalPropOrFunction(context.button.dialog, context);
     // note: this corrects how the variable to name the dialog changed in the history of 2sxc from action to dialog
     this.params = Object.assign({ dialog: dialog || context.button.action.name }, params);
 
@@ -82,9 +82,9 @@ export class CommandExecution {
   }
 
 
-  private evalPropOrFunction(propOrFunction: TypeTbD, context: ContextOfButton, fallback: any) {
+  private evalPropOrFunction(propOrFunction: TypeTbD, context: ContextOfButton) {
     if (propOrFunction === undefined || propOrFunction === null)
-      return fallback;
+      return {};
     return (typeof (propOrFunction) === 'function' ? propOrFunction(context) : propOrFunction);
   }
 

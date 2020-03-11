@@ -12,6 +12,7 @@ import { expandToolbarConfig } from '../toolbar/toolbar/toolbar-expand-config';
 import { ToolbarSettings } from '../toolbar/settings/toolbar-settings';
 import { getTag} from './api';
 import { UserOfEditContext } from './user-of-edit-context';
+import { TypeUnsafe } from '../plumbing/TypeTbD';
 /**
  * Instance specific edit manager
  */
@@ -47,13 +48,13 @@ export class EditManager implements SxcInstanceManage {
 
   /**
    * Builds the toolbar and returns it as HTML
-   * @param {Object<any>} tbConfig - general toolbar config
+   * @param {Object} tbConfig - general toolbar config
    * @param {ToolbarSettings} moreSettings - additional / override settings
    * @returns {string} html of the current toolbar
    *
    * it is publicly used in Razor scripts of inpage, so take a care to preserve function signature
    */
-  getToolbar(tbConfig: any, moreSettings: ToolbarSettings): string {
+  getToolbar(tbConfig: TypeUnsafe, moreSettings: ToolbarSettings): string {
     const toolbarConfig = expandToolbarConfig(this.context, tbConfig, moreSettings);
     this.context.toolbar = toolbarConfig;
     return renderToolbar(this.context);

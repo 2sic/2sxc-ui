@@ -9,6 +9,7 @@ import { ToolbarSettings } from '../settings/toolbar-settings';
 import { ToolbarConfig } from '../toolbar/toolbar-config';
 import { ButtonCommand } from './button-command';
 import { TypeUnsafe } from '../../plumbing/TypeTbD';
+import { ButtonGroupConfig } from '../config/button-group-config';
 
 /**
  * this will traverse a groups-tree and expand each group
@@ -84,13 +85,13 @@ export function expandButtonGroups(fullToolbarConfig: ToolbarConfig, parentLog: 
  * @param root
  * @param settings
  */
-function expandButtonList(root: any, settings: ToolbarSettings, parentLog: Log): void {
+function expandButtonList(root: ButtonGroupConfig, settings: ToolbarSettings, parentLog: Log): void {
   const log = new Log('Tlb.ExpBts', parentLog, 'start');
 
   // let root = grp; // the root object which has all params of the command
   let btns: any[] = [];
   // 2020-03-11 2dm removed, as it seems unused completely
-//   let sharedProperties: any = null;
+//   let sharedProperties: a.ny = null;
 
   // convert compact buttons (with multi-verb action objects) into own button-objects
   // important because an older syntax allowed {action: "new,edit", entityId: 17}
@@ -98,9 +99,9 @@ function expandButtonList(root: any, settings: ToolbarSettings, parentLog: Log):
     log.add(`detected array of btns (${root.buttons.length}), will ensure it's an object`);
     for (let b = 0; b < root.buttons.length; b++) {
       const btn = root.buttons[b];
-      const actionString: string = btn.action;
+      const actionString: string = btn.action as TypeUnsafe as string;
       if (typeof actionString === 'string' && actionString.indexOf(',') > -1) {
-        log.add(`button def "${btn} is string of m.any names, will expand into array with action-properties"`);
+        log.add(`button def "${btn} is string of ma.ny names, will expand into array with action-properties"`);
         const acts = actionString.split(',');
         for (let a = 0; a < acts.length; a++) {
           btns.push($.extend(true, {}, btn, { action: acts[a] }) as ButtonConfig);
@@ -112,7 +113,7 @@ function expandButtonList(root: any, settings: ToolbarSettings, parentLog: Log):
 
   } else if (typeof root.buttons === 'string') {
     log.add(`detected that it is a string "${root.buttons}", will split by "," and ...`);
-    btns = root.buttons.split(',');
+    btns = (root.buttons as string).split(',');
 
     // 2020-03-11 2dm removed, as it seems unused completely
     // sharedProperties = Object.assign({}, root); // inherit all fields used in the button

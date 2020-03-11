@@ -37,6 +37,4 @@ export class ButtonConfig {
   showCondition: (context: ContextOfButton) => boolean;
   title: (context: ContextOfButton) => string;
   uiActionOnly: (context: ContextOfButton) => boolean;
-
-//   [propName: string]: any;
 }

@@ -12,5 +12,5 @@ export class ToolbarConfig {
   debug?: boolean = false; // show more debug info
   defaults: DictionaryValue; // the button defaults like icon, etc.
 
-  [propName: string]: any;
+//   [propName: string]: a.ny;
 }

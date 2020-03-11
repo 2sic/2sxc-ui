@@ -1,4 +1,4 @@
 ﻿export class InPageCodeParametersProbablyUnused {
-  target: any;
+  target: string;
   isList: boolean;
 }

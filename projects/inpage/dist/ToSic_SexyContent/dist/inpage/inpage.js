@@ -4132,7 +4132,7 @@ function expandButtonList(root, settings, parentLog) {
     // let root = grp; // the root object which has all params of the command
     var btns = [];
     // 2020-03-11 2dm removed, as it seems unused completely
-    //   let sharedProperties: any = null;
+    //   let sharedProperties: a.ny = null;
     // convert compact buttons (with multi-verb action objects) into own button-objects
     // important because an older syntax allowed {action: "new,edit", entityId: 17}
     if (Array.isArray(root.buttons)) {
@@ -4141,7 +4141,7 @@ function expandButtonList(root, settings, parentLog) {
             var btn = root.buttons[b];
             var actionString = btn.action;
             if (typeof actionString === 'string' && actionString.indexOf(',') > -1) {
-                log.add("button def \"" + btn + " is string of m.any names, will expand into array with action-properties\"");
+                log.add("button def \"" + btn + " is string of ma.ny names, will expand into array with action-properties\"");
                 var acts = actionString.split(',');
                 for (var a = 0; a < acts.length; a++) {
                     btns.push($.extend(true, {}, btn, { action: acts[a] }));
@@ -4245,6 +4245,7 @@ var ToolbarConfig = /** @class */ (function () {
         // todo: old props, remove
         this.name = 'toolbar'; // name, no real use
         this.debug = false; // show more debug info
+        //   [propName: string]: a.ny;
     }
     return ToolbarConfig;
 }());
@@ -4666,8 +4667,8 @@ var CommandExecution = /** @class */ (function () {
         this.items = context.button.action.params.items || []; // use predefined or create empty array
         // initialize params
         // todo: stv, clean this
-        var params = this.evalPropOrFunction(context.button.params, context, {});
-        var dialog = this.evalPropOrFunction(context.button.dialog, context, {});
+        var params = this.evalPropOrFunction(context.button.params, context);
+        var dialog = this.evalPropOrFunction(context.button.dialog, context);
         // note: this corrects how the variable to name the dialog changed in the history of 2sxc from action to dialog
         this.params = Object.assign({ dialog: dialog || context.button.action.name }, params);
         // initialize root url to dialog
@@ -4712,9 +4713,9 @@ var CommandExecution = /** @class */ (function () {
             ? __WEBPACK_IMPORTED_MODULE_1__settings_DialogPaths__["DialogPaths"].ng8
             : __WEBPACK_IMPORTED_MODULE_1__settings_DialogPaths__["DialogPaths"].ng1) + "?sxcver=" + context.instance.sxcVersion;
     };
-    CommandExecution.prototype.evalPropOrFunction = function (propOrFunction, context, fallback) {
+    CommandExecution.prototype.evalPropOrFunction = function (propOrFunction, context) {
         if (propOrFunction === undefined || propOrFunction === null)
-            return fallback;
+            return {};
         return (typeof (propOrFunction) === 'function' ? propOrFunction(context) : propOrFunction);
     };
     CommandExecution.prototype.addItem = function () {
@@ -5035,7 +5036,7 @@ var EditManager = /** @class */ (function () {
     };
     /**
      * Builds the toolbar and returns it as HTML
-     * @param {Object<any>} tbConfig - general toolbar config
+     * @param {Object} tbConfig - general toolbar config
      * @param {ToolbarSettings} moreSettings - additional / override settings
      * @returns {string} html of the current toolbar
      *
