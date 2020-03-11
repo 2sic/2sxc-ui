@@ -1,4 +1,6 @@
 ﻿import { ContextOfButton } from '../../context/parts/context-button';
+import { TypeTbD } from '../../plumbing';
+import { TypeUnsafe } from '../../plumbing';
 import { ButtonConfig } from '../config/button/button-config';
 
 export function buttonConfigUpgrade(oldSettings: any): Partial<ButtonConfig> {
@@ -62,7 +64,7 @@ export function buttonConfigUpgrade(oldSettings: any): Partial<ButtonConfig> {
   return newSettings;
 }
 
-function evalPropOrFunction(propOrFunction: any): any {
+function evalPropOrFunction(propOrFunction: TypeTbD): TypeUnsafe {
   if (propOrFunction === undefined || propOrFunction === null) {
     return false;
   }

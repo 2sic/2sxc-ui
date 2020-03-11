@@ -1,7 +1,8 @@
-﻿import { CommandExecution } from '../../../commands/execute/command-execution';
+﻿import { CommandCode } from '../../../commands/command-code';
+import { CommandExecution } from '../../../commands/execute/command-execution';
 import { ContextOfButton } from '../../../context/parts/context-button';
+import { DictionaryValue } from '../../../plumbing/TypeTbD';
 import { ButtonCommand } from '../../button/button-command';
-import { CommandCode } from '../../../commands/command-code';
 
 export class ButtonConfig {
   name: string = '';
@@ -31,11 +32,11 @@ export class ButtonConfig {
   icon: (context: ContextOfButton) => string;
   inlineWindow: (context: ContextOfButton) => boolean;
   newWindow: (context: ContextOfButton) => boolean;
-  params: (context: ContextOfButton) => any;
+  params: (context: ContextOfButton) => DictionaryValue;
   partOfPage: (context: ContextOfButton) => boolean;
   showCondition: (context: ContextOfButton) => boolean;
   title: (context: ContextOfButton) => string;
   uiActionOnly: (context: ContextOfButton) => boolean;
 
-  [propName: string]: any;
+//   [propName: string]: any;
 }

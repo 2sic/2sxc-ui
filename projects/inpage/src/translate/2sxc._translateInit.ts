@@ -6,6 +6,7 @@ import { TypeUnsafe, TypeWeDontCare } from '../plumbing/TypeTbD';
 import * as i18next from './libs/i18next.min';
 import * as i18nextXHRBackend from './libs/i18nextXHRBackend.min';
 import * as jqueryI18next from './libs/jquery-i18next.min';
+import { EditManager } from '../manage/create';
 
 /**
  * initialize the translation system; ensure toolbars etc. are translated
@@ -21,7 +22,7 @@ win18n.i18nextXHRBackend = i18nextXHRBackend;
 let initialized: boolean = false;
 
 // ReSharper disable once InconsistentNaming
-export function _translateInit(manage: any): void {
+export function _translateInit(manage: EditManager): void {
   if (initialized) {
     return;
   }

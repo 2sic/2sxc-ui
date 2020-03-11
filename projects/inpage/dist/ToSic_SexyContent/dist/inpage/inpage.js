@@ -893,18 +893,18 @@ var renderer = new Renderer();
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (immutable) */ __webpack_exports__["buildToolbars"] = buildToolbars;
-/* harmony export (immutable) */ __webpack_exports__["buildToolbarsFromAnyNode"] = buildToolbarsFromAnyNode;
+/* harmony export (immutable) */ __webpack_exports__["buildToolbarFromDomNode"] = buildToolbarFromDomNode;
 /* harmony export (immutable) */ __webpack_exports__["disable"] = disable;
 /* harmony export (immutable) */ __webpack_exports__["isDisabled"] = isDisabled;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__settings_2sxc_consts__ = __webpack_require__(15);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__constants__ = __webpack_require__(16);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__context_context__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__logging_log__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__manage_api__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__constants__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__context_context__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__logging_log__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__manage_api__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__settings_2sxc_consts__ = __webpack_require__(15);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__item_render_toolbar__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__tag_toolbar__ = __webpack_require__(38);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__toolbar_toolbar_expand_config__ = __webpack_require__(39);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__settings_toolbar_settings__ = __webpack_require__(43);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__settings_toolbar_settings__ = __webpack_require__(43);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__tag_toolbar__ = __webpack_require__(38);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__toolbar_toolbar_expand_config__ = __webpack_require__(39);
 
 
 
@@ -916,7 +916,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 // quick debug - set to false if not needed for production
 var dbg = false;
-var toolbarSelector = ".sc-menu[toolbar],.sc-menu[data-toolbar],[" + __WEBPACK_IMPORTED_MODULE_1__constants__["toolbar"].attr.full + "]";
+var toolbarSelector = ".sc-menu[toolbar],.sc-menu[data-toolbar],[" + __WEBPACK_IMPORTED_MODULE_0__constants__["toolbar"].attr.full + "]";
 /**
  * Generate toolbars inside a MODULE tag (usually a div with class sc-edit-context)
  * @param parentLog
@@ -924,10 +924,10 @@ var toolbarSelector = ".sc-menu[toolbar],.sc-menu[data-toolbar],[" + __WEBPACK_I
  * @param optionalId
  */
 function buildToolbars(parentLog, parentTag, optionalId) {
-    var log = new __WEBPACK_IMPORTED_MODULE_3__logging_log__["Log"]('Tlb.BldAll', parentLog);
+    var log = new __WEBPACK_IMPORTED_MODULE_2__logging_log__["Log"]('Tlb.BldAll', parentLog);
     parentTag = $(parentTag || '.DnnModule-' + optionalId);
     // if something says the toolbars are disabled, then skip
-    if (parentTag.attr(__WEBPACK_IMPORTED_MODULE_1__constants__["toolbar"].attr.disable))
+    if (parentTag.attr(__WEBPACK_IMPORTED_MODULE_0__constants__["toolbar"].attr.disable))
         return;
     var toolbars = getToolbarTags(parentTag);
     // no toolbars found, must help a bit because otherwise editing is hard
@@ -944,9 +944,9 @@ function buildToolbars(parentLog, parentTag, optionalId) {
  * @param parentLog
  * @param node
  */
-function buildToolbarsFromAnyNode(parentLog, node) {
-    var log = new __WEBPACK_IMPORTED_MODULE_3__logging_log__["Log"]('Tlb.BldNde', parentLog);
-    var contextNode = $(node).closest(__WEBPACK_IMPORTED_MODULE_1__constants__["cb"].selectors.ofName)[0];
+function buildToolbarFromDomNode(parentLog, node) {
+    var log = new __WEBPACK_IMPORTED_MODULE_2__logging_log__["Log"]('Tlb.BldNde', parentLog);
+    var contextNode = $(node).closest(__WEBPACK_IMPORTED_MODULE_0__constants__["cb"].selectors.ofName)[0];
     // if we have no contextNode (a parent content block), we can
     // assume the node is outside of a 2sxc module so not interesting
     if (contextNode == null)
@@ -986,12 +986,12 @@ function loadAndConvertTag(log, node) {
  */
 function loadConfigFromAttributes(tag) {
     try {
-        var newConfigFormat = tryGetAttrText(tag, __WEBPACK_IMPORTED_MODULE_1__constants__["toolbar"].attr.full);
+        var newConfigFormat = tryGetAttrText(tag, __WEBPACK_IMPORTED_MODULE_0__constants__["toolbar"].attr.full);
         if (newConfigFormat) {
             return JSON.parse(newConfigFormat);
         }
         else {
-            var at = __WEBPACK_IMPORTED_MODULE_0__settings_2sxc_consts__["IDs"].attr;
+            var at = __WEBPACK_IMPORTED_MODULE_4__settings_2sxc_consts__["IDs"].attr;
             var data = getFirstAttribute(tag, at.toolbar, at.toolbarData);
             var settings = getFirstAttribute(tag, at.settings, at.settingsData);
             return {
@@ -1012,18 +1012,18 @@ function loadConfigFromAttributes(tag) {
  * @param log
  */
 function convertConfigToToolbarTags(tag, config, log) {
-    var cnt = Object(__WEBPACK_IMPORTED_MODULE_2__context_context__["context"])(tag);
-    cnt.toolbar = Object(__WEBPACK_IMPORTED_MODULE_7__toolbar_toolbar_expand_config__["expandToolbarConfig"])(cnt, config.toolbar, config.settings, log);
-    if (tag.attr(__WEBPACK_IMPORTED_MODULE_1__constants__["toolbar"].attr.full)) {
+    var cnt = Object(__WEBPACK_IMPORTED_MODULE_1__context_context__["context"])(tag);
+    cnt.toolbar = Object(__WEBPACK_IMPORTED_MODULE_8__toolbar_toolbar_expand_config__["expandToolbarConfig"])(cnt, config.toolbar, config.settings, log);
+    if (tag.attr(__WEBPACK_IMPORTED_MODULE_0__constants__["toolbar"].attr.full)) {
         // new case, where the full toolbar is included in one setting
         // ReSharper disable once WrongExpressionStatement
-        tag.data('2sxc-tagtoolbar', new __WEBPACK_IMPORTED_MODULE_6__tag_toolbar__["TagToolbar"](tag, cnt));
+        tag.data('2sxc-tagtoolbar', new __WEBPACK_IMPORTED_MODULE_7__tag_toolbar__["TagToolbar"](tag, cnt));
         ensureToolbarHoverClass(tag);
     }
     else {
         var toolbar = Object(__WEBPACK_IMPORTED_MODULE_5__item_render_toolbar__["renderToolbar"])(cnt);
         // default case, tag is the old <ul> tag, so find the sc-element parent before replacing
-        var scElementParent = tag.closest(__WEBPACK_IMPORTED_MODULE_1__constants__["toolbar"].selectors.ofOldHover);
+        var scElementParent = tag.closest(__WEBPACK_IMPORTED_MODULE_0__constants__["toolbar"].selectors.ofOldHover);
         tag.replaceWith(toolbar);
         if (scElementParent.length > 0)
             ensureToolbarHoverClass(scElementParent);
@@ -1034,7 +1034,7 @@ function getToolbarTags(parentTag) {
     var allInner = $(toolbarSelector, parentTag);
     // return only those, which don't belong to a sub-item
     var onlyDirectDescendents = allInner
-        .filter(function (i, e) { return $(e).closest(__WEBPACK_IMPORTED_MODULE_1__constants__["cb"].selectors.ofName)[0] === parentTag[0]; });
+        .filter(function (i, e) { return $(e).closest(__WEBPACK_IMPORTED_MODULE_0__constants__["cb"].selectors.ofName)[0] === parentTag[0]; });
     if (dbg)
         console.log('found toolbars for parent', parentTag, onlyDirectDescendents);
     return onlyDirectDescendents;
@@ -1044,20 +1044,20 @@ function ensureToolbarHoverClass(jtag) {
     if (jtag.length <= 0)
         return; // skip in case nothing was given
     var tag = jtag[0];
-    if (!tag.hasAttribute(__WEBPACK_IMPORTED_MODULE_1__constants__["toolbar"].attr.hover))
-        tag.setAttribute(__WEBPACK_IMPORTED_MODULE_1__constants__["toolbar"].attr.hover, '');
+    if (!tag.hasAttribute(__WEBPACK_IMPORTED_MODULE_0__constants__["toolbar"].attr.hover))
+        tag.setAttribute(__WEBPACK_IMPORTED_MODULE_0__constants__["toolbar"].attr.hover, '');
 }
 /** Create a default/fallback toolbar and return it */
 function addFallbackToolbar(parentTag) {
     if (dbg)
         console.log("didn't find toolbar, so will auto-create", parentTag);
-    var outsideCb = !parentTag.hasClass(__WEBPACK_IMPORTED_MODULE_1__constants__["cb"].classes.name);
-    var contentTag = outsideCb ? parentTag.find("div" + __WEBPACK_IMPORTED_MODULE_1__constants__["cb"].selectors.ofName) : parentTag;
+    var outsideCb = !parentTag.hasClass(__WEBPACK_IMPORTED_MODULE_0__constants__["cb"].classes.name);
+    var contentTag = outsideCb ? parentTag.find("div" + __WEBPACK_IMPORTED_MODULE_0__constants__["cb"].selectors.ofName) : parentTag;
     // auto toolbar
-    var ctx = Object(__WEBPACK_IMPORTED_MODULE_2__context_context__["context"])(contentTag);
+    var ctx = Object(__WEBPACK_IMPORTED_MODULE_1__context_context__["context"])(contentTag);
     if (ctx.ui.autoToolbar === false)
         return null;
-    contentTag.attr(__WEBPACK_IMPORTED_MODULE_1__constants__["toolbar"].attr.full, JSON.stringify(__WEBPACK_IMPORTED_MODULE_8__settings_toolbar_settings__["emptyToolbar"]));
+    contentTag.attr(__WEBPACK_IMPORTED_MODULE_0__constants__["toolbar"].attr.full, JSON.stringify(__WEBPACK_IMPORTED_MODULE_6__settings_toolbar_settings__["emptyToolbar"]));
     return contentTag;
 }
 /** Find the text of one or more attributes in fallback order, till we found one */
@@ -1071,11 +1071,11 @@ function tryGetAttrText(tag, name) {
 }
 function disable(tag) {
     var jtag = $(tag);
-    jtag.attr(__WEBPACK_IMPORTED_MODULE_1__constants__["toolbar"].attr.disable, 'true');
+    jtag.attr(__WEBPACK_IMPORTED_MODULE_0__constants__["toolbar"].attr.disable, 'true');
 }
 function isDisabled(sxc) {
-    var tag = $(Object(__WEBPACK_IMPORTED_MODULE_4__manage_api__["getTag"])(sxc));
-    return !!tag.attr(__WEBPACK_IMPORTED_MODULE_1__constants__["toolbar"].attr.disable);
+    var tag = $(Object(__WEBPACK_IMPORTED_MODULE_3__manage_api__["getTag"])(sxc));
+    return !!tag.attr(__WEBPACK_IMPORTED_MODULE_0__constants__["toolbar"].attr.disable);
 }
 
 
@@ -1469,28 +1469,24 @@ var prvProperties = [
  * @param propName
  */
 function fallbackBtnSetting(btn, group, fullToolbarConfig, actions, propName) {
-    if (btn[propName]) {
-        // if already defined, use the already defined property
-        btn[propName] = btn[propName];
-    }
-    else if (group.defaults &&
-        group.defaults[propName]) {
-        // if the group has defaults, try use that property
-        btn[propName] = group.defaults[propName];
-    }
-    else if (fullToolbarConfig &&
-        fullToolbarConfig.defaults &&
-        fullToolbarConfig.defaults[propName]) {
-        // if the toolbar has defaults, try use that property
-        btn[propName] = fullToolbarConfig.defaults[propName];
-    }
-    else if (btn.action &&
-        btn.action.name &&
-        actions.get(btn.action.name) &&
-        actions.get(btn.action.name).buttonConfig &&
-        actions.get(btn.action.name).buttonConfig[propName]) {
-        // if there is an action, try to use that property name
-        btn[propName] = actions.get(btn.action.name).buttonConfig[propName];
+    var untypedButton = btn;
+    if (untypedButton[propName])
+        return;
+    // if the group has defaults, try use that property
+    if (group.defaults && group.defaults[propName])
+        return untypedButton[propName] = group.defaults[propName];
+    // if the toolbar has defaults, try use that property
+    var conf = fullToolbarConfig;
+    if (conf && conf.defaults && conf.defaults[propName])
+        return untypedButton[propName] = conf.defaults[propName];
+    // if there is an action, try to use that property name
+    if (btn.action && btn.action.name) {
+        var a = actions.get(btn.action.name);
+        if (a && a.buttonConfig) {
+            var c = a.buttonConfig;
+            if (c[propName])
+                return untypedButton[propName] = c[propName];
+        }
     }
 }
 
@@ -1535,12 +1531,10 @@ var ButtonCommand = /** @class */ (function () {
     function ButtonCommand(name, contentType, params) {
         this.name = name;
         this.params = params;
-        if (!params) {
+        if (!params)
             this.params = {};
-        }
-        if (contentType) {
+        if (contentType)
             Object.assign(this.params, { contentType: contentType });
-        }
         // activate command for this
         this.commandDefinition = __WEBPACK_IMPORTED_MODULE_0__commands_commands__["Commands"].get(name);
     }
@@ -2819,7 +2813,7 @@ function buildFullDefinition(toolbarContext, unstructuredConfig, instanceConfig,
     // ToDo: don't use console.log in production
     if (unstructuredConfig.debug)
         console.log('toolbar: detailed debug on; start build full Def');
-    Object(__WEBPACK_IMPORTED_MODULE_3__button_expand_group_config__["expandButtonGroups"])(fullConfig, log);
+    fullConfig = Object(__WEBPACK_IMPORTED_MODULE_3__button_expand_group_config__["expandButtonGroups"])(fullConfig, log);
     new __WEBPACK_IMPORTED_MODULE_2__config_button_button_config_builder__["ButtonConfigurationBuilder"](log).removeDisableButtons(toolbarContext, fullConfig, instanceConfig);
     if (fullConfig.debug)
         console.log('after remove: ', fullConfig);
@@ -4060,8 +4054,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__adapters_parameters_adapter__ = __webpack_require__(41);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__adapters_settings_adapter__ = __webpack_require__(42);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__config_button_button_config__ = __webpack_require__(20);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__button_command__ = __webpack_require__(21);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__config_button_button_config_builder__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__config_button_button_config_builder__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__button_command__ = __webpack_require__(21);
 
 
 
@@ -4077,7 +4071,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
  */
 function expandButtonGroups(fullToolbarConfig, parentLog) {
     var log = new __WEBPACK_IMPORTED_MODULE_1__logging_log__["Log"]('Tlb.ExpGrp', parentLog, 'start');
-    var btnConfigBuilder = new __WEBPACK_IMPORTED_MODULE_7__config_button_button_config_builder__["ButtonConfigurationBuilder"](log);
+    var btnConfigBuilder = new __WEBPACK_IMPORTED_MODULE_6__config_button_button_config_builder__["ButtonConfigurationBuilder"](log);
     // by now we should have a structure, let's check/fix the buttons
     log.add("will expand groups - found " + fullToolbarConfig.groups.length + " items");
     for (var g = 0; g < fullToolbarConfig.groups.length; g++) {
@@ -4090,19 +4084,20 @@ function expandButtonGroups(fullToolbarConfig, parentLog) {
             log.add("will process " + btns.length + " buttons");
             for (var b = 0; b < btns.length; b++) {
                 var btn = btns[b];
-                if (!(__WEBPACK_IMPORTED_MODULE_0__commands_commands__["Commands"].get(btn.command.action))) {
-                    log.add("couldn't find action " + btn.command.action + " - show warning");
-                    console.warn('warning: toolbar-button with unknown action-name:', btn.command.action);
+                var btnCommand = btn.command;
+                if (!(__WEBPACK_IMPORTED_MODULE_0__commands_commands__["Commands"].get(btnCommand.action))) {
+                    log.add("couldn't find action " + btnCommand.action + " - show warning");
+                    console.warn('warning: toolbar-button with unknown action-name:', btnCommand.action);
                 }
-                var name = btn.command.action;
-                var contentType = btn.command.contentType;
+                var name = btnCommand.action;
+                var contentType = btnCommand.contentType;
                 // if the button belongs to a content-item, move the specs up to the item into the settings-object
-                Object(__WEBPACK_IMPORTED_MODULE_2__adapters_flatten_action_definition__["flattenActionDefinition"])(btn.command);
+                Object(__WEBPACK_IMPORTED_MODULE_2__adapters_flatten_action_definition__["flattenActionDefinition"])(btnCommand);
                 // parameters adapter from v1 to v2
-                var params = Object(__WEBPACK_IMPORTED_MODULE_3__adapters_parameters_adapter__["removeActionProperty"])(btn.command);
+                var params = Object(__WEBPACK_IMPORTED_MODULE_3__adapters_parameters_adapter__["removeActionProperty"])(btnCommand);
                 Object.assign(params, fullToolbarConfig.params);
                 // Toolbar API v2
-                var newButtonAction = new __WEBPACK_IMPORTED_MODULE_6__button_command__["ButtonCommand"](name, contentType, params);
+                var newButtonAction = new __WEBPACK_IMPORTED_MODULE_7__button_command__["ButtonCommand"](name, contentType, params);
                 var newButtonConfig = new __WEBPACK_IMPORTED_MODULE_5__config_button_button_config__["ButtonConfig"](newButtonAction);
                 newButtonConfig.name = name;
                 // settings adapter from v1 to v2
@@ -4114,10 +4109,11 @@ function expandButtonGroups(fullToolbarConfig, parentLog) {
             }
         }
         else
-            log.add("no button array found, won't do anything");
+            log.add("no button array found, won't do a.nything");
         // Toolbar API v2 overwrite V1
         fullToolbarConfig.groups[g].buttons = buttonConfigs;
     }
+    return fullToolbarConfig;
 }
 /**
  * take a list of buttons (objects OR strings)
@@ -4132,7 +4128,8 @@ function expandButtonList(root, settings, parentLog) {
     var log = new __WEBPACK_IMPORTED_MODULE_1__logging_log__["Log"]('Tlb.ExpBts', parentLog, 'start');
     // let root = grp; // the root object which has all params of the command
     var btns = [];
-    var sharedProperties = null;
+    // 2020-03-11 2dm removed, as it seems unused completely
+    //   let sharedProperties: any = null;
     // convert compact buttons (with multi-verb action objects) into own button-objects
     // important because an older syntax allowed {action: "new,edit", entityId: 17}
     if (Array.isArray(root.buttons)) {
@@ -4141,7 +4138,7 @@ function expandButtonList(root, settings, parentLog) {
             var btn = root.buttons[b];
             var actionString = btn.action;
             if (typeof actionString === 'string' && actionString.indexOf(',') > -1) {
-                log.add("button def \"" + btn + " is string of many names, will expand into array with action-properties\"");
+                log.add("button def \"" + btn + " is string of m.any names, will expand into array with action-properties\"");
                 var acts = actionString.split(',');
                 for (var a = 0; a < acts.length; a++) {
                     btns.push($.extend(true, {}, btn, { action: acts[a] }));
@@ -4155,10 +4152,11 @@ function expandButtonList(root, settings, parentLog) {
     else if (typeof root.buttons === 'string') {
         log.add("detected that it is a string \"" + root.buttons + "\", will split by \",\" and ...");
         btns = root.buttons.split(',');
-        sharedProperties = Object.assign({}, root); // inherit all fields used in the button
-        delete sharedProperties.buttons; // this one's not needed
-        delete sharedProperties.name; // this one's not needed
-        delete sharedProperties.action; //
+        // 2020-03-11 2dm removed, as it seems unused completely
+        // sharedProperties = Object.assign({}, root); // inherit all fields used in the button
+        // delete sharedProperties.buttons; // this one's not needed
+        // delete sharedProperties.name; // this one's not needed
+        // delete sharedProperties.action; //
     }
     else {
         log.add('no special case detected, will use the buttons-object as is');
@@ -4183,8 +4181,8 @@ function expandButtonList(root, settings, parentLog) {
     }
     // add each button - check if it's already an object or just the string
     for (var v = 0; v < btns.length; v++) {
-        btns[v] = new __WEBPACK_IMPORTED_MODULE_7__config_button_button_config_builder__["ButtonConfigurationBuilder"](log).normalize(btns[v] /* sharedProperties, */);
-        // todo: refactor this out, not needed any more as they are all together now
+        btns[v] = new __WEBPACK_IMPORTED_MODULE_6__config_button_button_config_builder__["ButtonConfigurationBuilder"](log).normalize(btns[v] /* sharedProperties, */);
+        // todo: refactor this out, not needed a.ny more as they are all together now
         // btns[v].group = root;// grp;    // attach group reference, needed for fallback etc.
     }
     root.buttons = btns; // ensure the internal def is also an array now
@@ -4661,11 +4659,6 @@ var __assign = (this && this.__assign) || function () {
 var CommandExecution = /** @class */ (function () {
     function CommandExecution(context) {
         this.context = context;
-        this.evalPropOrFunction = function (propOrFunction, context, fallback) {
-            if (propOrFunction === undefined || propOrFunction === null)
-                return fallback;
-            return (typeof (propOrFunction) === 'function' ? propOrFunction(context) : propOrFunction);
-        };
         // Initialize Items
         this.items = context.button.action.params.items || []; // use predefined or create empty array
         // initialize params
@@ -4715,6 +4708,11 @@ var CommandExecution = /** @class */ (function () {
             && context.button.dialog(context) === 'edit')
             ? __WEBPACK_IMPORTED_MODULE_1__settings_DialogPaths__["DialogPaths"].ng8
             : __WEBPACK_IMPORTED_MODULE_1__settings_DialogPaths__["DialogPaths"].ng1) + "?sxcver=" + context.instance.sxcVersion;
+    };
+    CommandExecution.prototype.evalPropOrFunction = function (propOrFunction, context, fallback) {
+        if (propOrFunction === undefined || propOrFunction === null)
+            return fallback;
+        return (typeof (propOrFunction) === 'function' ? propOrFunction(context) : propOrFunction);
     };
     CommandExecution.prototype.addItem = function () {
         var item = {};
@@ -4829,7 +4827,7 @@ var NgUrlValuesWithoutParams = /** @class */ (function () {
         this.websiteroot = context.instance.sxcRootUrl;
         this.partOfPage = partOfPage; // context.contentBlock.partOfPage;
         if (partOfPage) {
-            // 2020-03-11 2dm - this never seems to be set anywhere
+            // 2020-03-11 2dm - this never seems to be set a.nywhere
             // versioningRequirements= editContext.ContentBlock.VersioningRequirements;
             this.publishing = context.contentBlock.versioningRequirements;
         }
@@ -4974,38 +4972,6 @@ var EditManager = /** @class */ (function () {
          * it is publicly used out of inpage, so take a care to preserve function signature
          */
         this.run = this.cmdEngine.run;
-        /**
-         * Generate a button (an <a>-tag) for one specific toolbar-action.
-         * @param {InPageButtonConfiguration} actDef - settings, an object containing the spec for the expected button
-         * @param {int} groupIndex - number what button-group it's in'
-         * @returns {string} html of a button
-         * it is publicly used out of inpage, so take a care to preserve function signature
-         */
-        this.getButton = function (actDef, groupIndex) {
-            // const tag: any = getTag(this.sxc);
-            // const myContext = context(tag);
-            var newButtonConfig = Object(__WEBPACK_IMPORTED_MODULE_1__toolbar_adapters_button_config_adapter__["buttonConfigAdapter"])(
-            // this.context,
-            actDef);
-            _this.context.button = newButtonConfig;
-            var button = Object(__WEBPACK_IMPORTED_MODULE_2__toolbar_item_render_button__["renderButton"])(_this.context, groupIndex);
-            return button.outerHTML;
-        };
-        /**
-         * Builds the toolbar and returns it as HTML
-         * @param {Object<any>} tbConfig - general toolbar config
-         * @param {Object<any>} moreSettings - additional / override settings
-         * @returns {string} html of the current toolbar
-         *
-         * it is publicly used out of inpage, so take a care to preserve function signature
-         */
-        this.getToolbar = function (tbConfig, moreSettings) {
-            // const tag = getTag(this.sxc);
-            // const myContext = context(tag);
-            var toolbarConfig = Object(__WEBPACK_IMPORTED_MODULE_4__toolbar_toolbar_toolbar_expand_config__["expandToolbarConfig"])(_this.context, tbConfig, moreSettings);
-            _this.context.toolbar = toolbarConfig;
-            return Object(__WEBPACK_IMPORTED_MODULE_3__toolbar_item_render_toolbar__["renderToolbar"])(_this.context);
-        };
         //#endregion official, public properties - everything below this can change
         this._context = this.context;
         // ReSharper disable InconsistentNaming
@@ -5052,6 +5018,31 @@ var EditManager = /** @class */ (function () {
                 handleErrors(_this.editContext.error.type, tag);
         };
     }
+    /**
+     * Generate a button (an <a>-tag) for one specific toolbar-action.
+     * @param {InPageButtonConfiguration} actDef - settings, an object containing the spec for the expected button
+     * @param {int} groupIndex - number what button-group it's in'
+     * @returns {string} html of a button
+     * it is publicly used out of inpage, so take a care to preserve function signature
+     */
+    EditManager.prototype.getButton = function (actDef, groupIndex) {
+        this.context.button = Object(__WEBPACK_IMPORTED_MODULE_1__toolbar_adapters_button_config_adapter__["buttonConfigAdapter"])(actDef);
+        var button = Object(__WEBPACK_IMPORTED_MODULE_2__toolbar_item_render_button__["renderButton"])(this.context, groupIndex);
+        return button.outerHTML;
+    };
+    /**
+     * Builds the toolbar and returns it as HTML
+     * @param {Object<any>} tbConfig - general toolbar config
+     * @param {ToolbarSettings} moreSettings - additional / override settings
+     * @returns {string} html of the current toolbar
+     *
+     * it is publicly used in Razor scripts of inpage, so take a care to preserve function signature
+     */
+    EditManager.prototype.getToolbar = function (tbConfig, moreSettings) {
+        var toolbarConfig = Object(__WEBPACK_IMPORTED_MODULE_4__toolbar_toolbar_toolbar_expand_config__["expandToolbarConfig"])(this.context, tbConfig, moreSettings);
+        this.context.toolbar = toolbarConfig;
+        return Object(__WEBPACK_IMPORTED_MODULE_3__toolbar_item_render_toolbar__["renderToolbar"])(this.context);
+    };
     /**
      * change config by replacing the guid, and refreshing dependent sub-objects
      */
@@ -5535,7 +5526,7 @@ function initAllInstances(isFirstRun) {
  */
 function watchDomChanges() {
     var observer = new MutationObserver(function (m) {
-        // Watch how many changes were processed (statistics)
+        // Watch statistics how changes were processed
         __WEBPACK_IMPORTED_MODULE_2__interfaces_window_in_page__["windowInPage"].$2sxc.stats.watchDomChanges++;
         // Create toolbars for added nodes
         var log = new __WEBPACK_IMPORTED_MODULE_3__logging_log__["Log"]('Bts.Module');
@@ -5562,7 +5553,7 @@ function watchDomChanges() {
                     });
                 }
                 else
-                    Object(__WEBPACK_IMPORTED_MODULE_9__toolbar_build_toolbars__["buildToolbarsFromAnyNode"])(log, node);
+                    Object(__WEBPACK_IMPORTED_MODULE_9__toolbar_build_toolbars__["buildToolbarFromDomNode"])(log, node);
             });
         });
         if (processed) {
@@ -7342,17 +7333,13 @@ if (__WEBPACK_IMPORTED_MODULE_0__interfaces_window_in_page__["windowInPage"].$2s
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ButtonGroupConfig", function() { return ButtonGroupConfig; });
 var ButtonGroupConfig = /** @class */ (function () {
+    //   [propName: string]: a.ny;
     function ButtonGroupConfig(buttons) {
         this.buttons = []; // array of buttons
-        this.defaults = []; // v1
+        this.defaults = {}; // a.ny = []; // v1
         // adds these to the items
         this.buttons = buttons;
     }
-    ButtonGroupConfig.fromNameAndParams = function (name, params) {
-        var groupConfig = new ButtonGroupConfig([]);
-        // builds buttons from name and params, then adds
-        return groupConfig;
-    };
     return ButtonGroupConfig;
 }());
 

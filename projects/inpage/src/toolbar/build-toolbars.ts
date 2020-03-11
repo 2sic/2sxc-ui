@@ -1,15 +1,15 @@
-﻿import { IDs } from '../settings/2sxc.consts';
-import * as Constants from '../constants';
+﻿import * as Constants from '../constants';
 import { context } from '../context/context';
 import { $2sxcInPage as $2sxc } from '../interfaces/sxc-controller-in-page';
 import { SxcIntanceEditable } from '../interfaces/sxc-instance-editable';
 import { Log } from '../logging/log';
 import { getTag } from '../manage/api';
+import { IDs } from '../settings/2sxc.consts';
 import { renderToolbar } from './item/render-toolbar';
+import { emptyToolbar, ToolbarSettings } from './settings/toolbar-settings';
 import { TagToolbar } from './tag-toolbar';
 import { ToolbarInitConfig } from './toolbar-init-config';
 import { expandToolbarConfig } from './toolbar/toolbar-expand-config';
-import { emptyToolbar, ToolbarSettings } from './settings/toolbar-settings';
 
 // quick debug - set to false if not needed for production
 const dbg = false;
@@ -46,7 +46,7 @@ export function buildToolbars(parentLog: Log, parentTag: JQuery, optionalId?: nu
  * @param parentLog
  * @param node
  */
-export function buildToolbarsFromAnyNode(parentLog: Log, node: JQuery): void {
+export function buildToolbarFromDomNode(parentLog: Log, node: JQuery): void {
   const log = new Log('Tlb.BldNde', parentLog);
   const contextNode = $(node).closest(Constants.cb.selectors.ofName)[0];
 

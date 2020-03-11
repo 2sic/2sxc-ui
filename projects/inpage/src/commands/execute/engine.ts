@@ -13,6 +13,7 @@ import { ButtonCommand } from '../../toolbar/button/button-command';
 import { ButtonConfig } from '../../toolbar/config/button/button-config';
 import { Settings } from '../settings';
 import { CommandExecution } from './command-execution';
+import { TypeUnsafe } from '../../plumbing/TypeTbD';
 
 export class Engine extends HasLog {
   constructor(parentLog?: Log) {
@@ -172,7 +173,7 @@ export class Engine extends HasLog {
       // to reload the in-page view w/ajax or page reload
       const resolveAndReInit = () => {
         // very special thing: the signature always expects a Promise<T> so we're recasting
-        resolvePromise(context as any as T);
+        resolvePromise(context as TypeUnsafe as T);
         renderer.reloadAndReInitialize(context);
       };
 
@@ -203,7 +204,7 @@ export class Engine extends HasLog {
         // check if new-window
         if (context.button.newWindow || (origEvent && origEvent.shiftKey)) {
           // very special thing: the signature always expects a Promise<T> so we're recasting
-          resolvePromise(context as any as T);
+          resolvePromise(context as TypeUnsafe as T);
           window.open(link);
         } else {
           $2sxc.totalPopup.open(link, resolveAndReInit);

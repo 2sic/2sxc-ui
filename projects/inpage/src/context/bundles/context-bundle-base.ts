@@ -1,4 +1,5 @@
-﻿import { ContextOfSystem } from '../parts/context-system';
+﻿import { TypeTbD } from '../../plumbing';
+import { ContextOfSystem } from '../parts/context-system';
 import { ContextOfTenant } from '../parts/context-tenant';
 import { ContextOfUser } from '../parts/context-user';
 
@@ -11,7 +12,7 @@ export class ContextBundleBase {
   _isContext = true;
 }
 
-export function isContext(thing: any): thing is ContextBundleBase {
+export function isContext(thing: TypeTbD): thing is ContextBundleBase {
   const maybeButton = thing as ContextBundleBase;
   return maybeButton._isContext !== undefined;
 }

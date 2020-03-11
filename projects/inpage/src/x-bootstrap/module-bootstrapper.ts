@@ -10,7 +10,7 @@ import { quickDialog } from '../quick-dialog/quick-dialog';
 import * as QuickEditState from '../quick-dialog/state';
 import {
   buildToolbars,
-  buildToolbarsFromAnyNode,
+  buildToolbarFromDomNode,
 } from '../toolbar/build-toolbars';
 import { CleanupTagToolbars } from '../toolbar/tag-toolbar';
 import { TypeUnsafe } from '../plumbing/TypeTbD';
@@ -50,7 +50,7 @@ function initAllInstances(isFirstRun: boolean): void {
  */
 function watchDomChanges() {
   const observer = new MutationObserver((m) => {
-    // Watch how many changes were processed (statistics)
+    // Watch statistics how changes were processed
     window.$2sxc.stats.watchDomChanges++;
     // Create toolbars for added nodes
     const log = new Log('Bts.Module');
@@ -78,7 +78,7 @@ function watchDomChanges() {
           $('div[data-edit-context]', node).each(function() {
             initInstance(this, false);
           });
-        } else buildToolbarsFromAnyNode(log, node);
+        } else buildToolbarFromDomNode(log, node);
       });
     });
 

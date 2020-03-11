@@ -39,41 +39,23 @@ export class EditManager implements SxcInstanceManage {
    * @returns {string} html of a button
    * it is publicly used out of inpage, so take a care to preserve function signature
    */
-  getButton = (actDef: InPageButtonConfiguration, groupIndex: number): string => {
-    // const tag: any = getTag(this.sxc);
-    // const myContext = context(tag);
-
-    const newButtonConfig = buttonConfigAdapter(
-      // this.context,
-      actDef,
-      // groupIndex
-      );
-
-    this.context.button = newButtonConfig;
-
+  getButton(actDef: InPageButtonConfiguration, groupIndex: number): string {
+    this.context.button = buttonConfigAdapter(actDef);
     const button = renderButton(this.context, groupIndex);
-
     return button.outerHTML;
   }
 
   /**
    * Builds the toolbar and returns it as HTML
    * @param {Object<any>} tbConfig - general toolbar config
-   * @param {Object<any>} moreSettings - additional / override settings
+   * @param {ToolbarSettings} moreSettings - additional / override settings
    * @returns {string} html of the current toolbar
    *
-   * it is publicly used out of inpage, so take a care to preserve function signature
+   * it is publicly used in Razor scripts of inpage, so take a care to preserve function signature
    */
-  getToolbar = (tbConfig: any, moreSettings: ToolbarSettings): string => {
-    // const tag = getTag(this.sxc);
-    // const myContext = context(tag);
-    const toolbarConfig = expandToolbarConfig(
-      this.context,
-      tbConfig,
-      moreSettings);
-
+  getToolbar(tbConfig: any, moreSettings: ToolbarSettings): string {
+    const toolbarConfig = expandToolbarConfig(this.context, tbConfig, moreSettings);
     this.context.toolbar = toolbarConfig;
-
     return renderToolbar(this.context);
   }
 

@@ -1,3 +1,4 @@
+import { TypeTbD } from '../../../plumbing/TypeTbD';
 
 export interface InPageCommandConfigurationWithTooMuchInfo extends InPageCommandConfiguration {
     entity?: {
@@ -16,7 +17,7 @@ export interface InPageCommandConfiguration  {
     useModuleList?: boolean;
 }
 
-export function isInPageCommandConfiguration(thing: any): thing is InPageCommandConfiguration {
+export function isInPageCommandConfiguration(thing: TypeTbD): thing is InPageCommandConfiguration {
   // check two common signatures - command and action
   return typeof(thing as InPageCommandConfiguration).action === 'string';
 }

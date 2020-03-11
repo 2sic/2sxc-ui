@@ -9,3 +9,7 @@ export type TypeUnsafe = any;
 
 /** TypeWeDontCare is used in places where we really want to cast something to any */
 export type TypeWeDontCare = any;
+
+export type TypeValue = boolean | string | number | Date;
+
+export interface DictionaryValue { [key: string]: TypeValue; }

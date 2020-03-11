@@ -4,17 +4,18 @@ import { flattenActionDefinition } from '../adapters/flatten-action-definition';
 import { removeActionProperty } from '../adapters/parameters-adapter';
 import { buttonConfigUpgrade } from '../adapters/settings-adapter';
 import { ButtonConfig } from '../config/button/button-config';
+import { ButtonConfigurationBuilder } from '../config/button/button-config-builder';
 import { ToolbarSettings } from '../settings/toolbar-settings';
 import { ToolbarConfig } from '../toolbar/toolbar-config';
 import { ButtonCommand } from './button-command';
-import { ButtonConfigurationBuilder } from '../config/button/button-config-builder';
+import { TypeUnsafe } from '../../plumbing/TypeTbD';
 
 /**
  * this will traverse a groups-tree and expand each group
  * so if groups were just strings like "edit,new" or compact buttons, they will be expanded afterwards
  * @param fullToolbarConfig
  */
-export function expandButtonGroups(fullToolbarConfig: ToolbarConfig, parentLog: Log): void {
+export function expandButtonGroups(fullToolbarConfig: ToolbarConfig, parentLog: Log): ToolbarConfig {
   const log = new Log('Tlb.ExpGrp', parentLog, 'start');
 
   const btnConfigBuilder = new ButtonConfigurationBuilder(log);
@@ -34,20 +35,21 @@ export function expandButtonGroups(fullToolbarConfig: ToolbarConfig, parentLog: 
       log.add(`will process ${btns.length} buttons`);
       for (let b = 0; b < btns.length; b++) {
         const btn = btns[b];
+        const btnCommand = (btn as any).command;
 
-        if (!(Commands.get(btn.command.action))) {
-          log.add(`couldn't find action ${btn.command.action} - show warning`);
-          console.warn('warning: toolbar-button with unknown action-name:', btn.command.action);
+        if (!(Commands.get(btnCommand.action))) {
+          log.add(`couldn't find action ${btnCommand.action} - show warning`);
+          console.warn('warning: toolbar-button with unknown action-name:', btnCommand.action);
         }
 
-        const name = btn.command.action;
-        const contentType = btn.command.contentType;
+        const name = btnCommand.action;
+        const contentType = btnCommand.contentType;
 
         // if the button belongs to a content-item, move the specs up to the item into the settings-object
-        flattenActionDefinition(btn.command);
+        flattenActionDefinition(btnCommand);
 
         // parameters adapter from v1 to v2
-        const params = removeActionProperty(btn.command);
+        const params = removeActionProperty(btnCommand);
         Object.assign(params, fullToolbarConfig.params);
 
         // Toolbar API v2
@@ -65,11 +67,12 @@ export function expandButtonGroups(fullToolbarConfig: ToolbarConfig, parentLog: 
 
         buttonConfigs.push(newButtonConfig);
       }
-    } else log.add("no button array found, won't do anything");
+    } else log.add("no button array found, won't do a.nything");
 
     // Toolbar API v2 overwrite V1
     fullToolbarConfig.groups[g].buttons = buttonConfigs;
   }
+  return fullToolbarConfig;
 }
 
 /**
@@ -86,7 +89,8 @@ function expandButtonList(root: any, settings: ToolbarSettings, parentLog: Log):
 
   // let root = grp; // the root object which has all params of the command
   let btns: any[] = [];
-  let sharedProperties: any = null;
+  // 2020-03-11 2dm removed, as it seems unused completely
+//   let sharedProperties: any = null;
 
   // convert compact buttons (with multi-verb action objects) into own button-objects
   // important because an older syntax allowed {action: "new,edit", entityId: 17}
@@ -96,10 +100,10 @@ function expandButtonList(root: any, settings: ToolbarSettings, parentLog: Log):
       const btn = root.buttons[b];
       const actionString: string = btn.action;
       if (typeof actionString === 'string' && actionString.indexOf(',') > -1) {
-        log.add(`button def "${btn} is string of many names, will expand into array with action-properties"`);
+        log.add(`button def "${btn} is string of m.any names, will expand into array with action-properties"`);
         const acts = actionString.split(',');
         for (let a = 0; a < acts.length; a++) {
-          btns.push($.extend(true, {}, btn, { action: acts[a] }));
+          btns.push($.extend(true, {}, btn, { action: acts[a] }) as ButtonConfig);
         }
       } else {
         btns.push(btn);
@@ -110,10 +114,11 @@ function expandButtonList(root: any, settings: ToolbarSettings, parentLog: Log):
     log.add(`detected that it is a string "${root.buttons}", will split by "," and ...`);
     btns = root.buttons.split(',');
 
-    sharedProperties = Object.assign({}, root); // inherit all fields used in the button
-    delete sharedProperties.buttons; // this one's not needed
-    delete sharedProperties.name; // this one's not needed
-    delete sharedProperties.action; //
+    // 2020-03-11 2dm removed, as it seems unused completely
+    // sharedProperties = Object.assign({}, root); // inherit all fields used in the button
+    // delete sharedProperties.buttons; // this one's not needed
+    // delete sharedProperties.name; // this one's not needed
+    // delete sharedProperties.action; //
 
   } else {
     log.add('no special case detected, will use the buttons-object as is');
@@ -139,7 +144,7 @@ function expandButtonList(root: any, settings: ToolbarSettings, parentLog: Log):
   // add each button - check if it's already an object or just the string
   for (let v = 0; v < btns.length; v++) {
     btns[v] = new ButtonConfigurationBuilder(log).normalize(btns[v]/* sharedProperties, */);
-    // todo: refactor this out, not needed any more as they are all together now
+    // todo: refactor this out, not needed a.ny more as they are all together now
     // btns[v].group = root;// grp;    // attach group reference, needed for fallback etc.
   }
 

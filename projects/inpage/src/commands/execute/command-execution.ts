@@ -4,6 +4,8 @@ import { NgUrlValuesWithoutParams } from '../../manage/ng-dialog-params';
 import { DialogPaths } from '../../settings/DialogPaths';
 import { translate } from '../../translate/2sxc.translate';
 import { CommandParams } from '../params';
+import { DictionaryValue } from '../../plumbing';
+import { TypeUnsafe, TypeTbD } from '../../plumbing/TypeTbD';
 
 /**
  * This is responsible for taking a context with command and everything
@@ -50,7 +52,7 @@ export class CommandExecution {
   getLink() {
     const context = this.context;
     const params = context.button.action.params;
-    const urlItems = this.params as any;
+    const urlItems = this.params as TypeUnsafe as UrlItemParams;
 
     // steps for all actions: prefill, serialize, open-dialog
     // when doing new, there may be a prefill in the link to initialize the new item
@@ -80,7 +82,7 @@ export class CommandExecution {
   }
 
 
-  private evalPropOrFunction = (propOrFunction: any, context: ContextOfButton, fallback: any) => {
+  private evalPropOrFunction(propOrFunction: TypeTbD, context: ContextOfButton, fallback: any) {
     if (propOrFunction === undefined || propOrFunction === null)
       return fallback;
     return (typeof (propOrFunction) === 'function' ? propOrFunction(context) : propOrFunction);
@@ -91,7 +93,7 @@ export class CommandExecution {
     const params = this.context.button.action.params;
 
     // two ways to name the content-type-name this, v 7.2+ and older
-    const ct = params.contentType || (params as any).attributeSetName;
+    const ct = params.contentType || (params as TypeUnsafe).attributeSetName;
     if (params.entityId) item.EntityId = params.entityId;
     if (ct) item.ContentTypeName = ct;
 
@@ -153,4 +155,9 @@ export class CommandExecution {
     return `EditFormTitle.${partName}`;
   }
 
+}
+
+interface UrlItemParams {
+    prefill: DictionaryValue;
+    items: string;
 }

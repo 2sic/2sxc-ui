@@ -5,7 +5,7 @@ import { MetadataFor } from './params-metadata-for';
 export class Settings {
 //   code: a.ny;
 //   configureCommand: a.ny;
-//   items: any; // string | string[];
+//   items: a.ny; // string | string[];
 //   metadata: MetadataFor;
 //   prefill: {[key: string]: a.ny};
   //

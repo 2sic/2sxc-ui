@@ -1,8 +1,9 @@
+import { DictionaryValue } from '../plumbing';
 
 /** Shared properties of all item identifiers */
 export interface ItemIdentifierShared {
   Title?: string;
-  Prefill?: { [key: string]: any};
+  Prefill?: DictionaryValue;
 }
 
 /** Simple identifier, which is id/type-name */

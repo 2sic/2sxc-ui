@@ -9,6 +9,7 @@ import { getTag } from '../manage/api';
 import { IDialogFrameElement } from './iDialogFrameElement';
 import { quickDialog } from './quick-dialog';
 import { QuickDialogConfig } from './quick-dialog-config';
+import { TypeUnsafe } from '../plumbing/TypeTbD';
 import IIFrameBridge = Iiframebridge.IIFrameBridge;
 
 const scrollTopOffset: number = 80;
@@ -42,7 +43,7 @@ export class IFrameBridge implements IIFrameBridge {
    */
   private uncachedSxc(): SxcIntanceEditable {
     if (!this.instanceSxc) throw "can't find sxc-instance of IFrame, probably it wasn't initialized yet";
-    return this.instanceSxc.recreate(true) as any as SxcIntanceEditable;
+    return this.instanceSxc.recreate(true) as TypeUnsafe as SxcIntanceEditable;
   }
 
   getContext(): ContextOfButton { return context(this.uncachedSxc()); }

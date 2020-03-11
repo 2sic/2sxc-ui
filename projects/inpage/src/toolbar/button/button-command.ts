@@ -9,13 +9,9 @@ export class ButtonCommand {
   constructor(public name: string,
               contentType?: string,
               public params?: Partial<CommandParams>) {
-    if (!params) {
-      this.params = {};
-    }
+    if (!params) this.params = {};
 
-    if (contentType) {
-      Object.assign(this.params, { contentType: contentType });
-    }
+    if (contentType) Object.assign(this.params, { contentType: contentType });
 
     // activate command for this
     this.commandDefinition = Commands.get(name);

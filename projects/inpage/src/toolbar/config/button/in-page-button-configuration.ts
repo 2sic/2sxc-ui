@@ -1,6 +1,7 @@
 ﻿import { CommandParams } from '../../../commands/params';
 import { InPageCommandConfiguration } from '../command/in-page-command';
 import { InPageCodeParametersProbablyUnused } from './in-page-code-params-probably-unused';
+import { TypeTbD } from '../../../plumbing/TypeTbD';
 
 /**
  * Button Definition v1. from old API
@@ -59,7 +60,7 @@ export class InPageButtonConfiguration {
 }
 
 
-export function isInPageButtonConfiguration(thing: any): thing is InPageButtonConfiguration {
+export function isInPageButtonConfiguration(thing: TypeTbD): thing is InPageButtonConfiguration {
   // check two common signatures - command and action
   return thing.command !== undefined || thing.action !== undefined;
 }

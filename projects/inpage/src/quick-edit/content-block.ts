@@ -9,7 +9,7 @@ import { selectors } from './selectors-instance';
 function onCbButtonClick() {
   const list = quickE.main.actionsForCb.closest(selectors.blocks.cb.listSelector);
   const listItems = list.find(selectors.blocks.cb.selector);
-  const actionConfig: any = JSON.parse(list.attr(selectors.blocks.cb.context));
+  const actionConfig = JSON.parse(list.attr(selectors.blocks.cb.context));
   let index: number = 0;
   const newGuid: string | null = actionConfig.guid || null;
 

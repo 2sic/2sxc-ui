@@ -52,12 +52,12 @@ export function expandToolbarConfig(context: ContextOfButton, toolbarData: Toolb
  */
 function buildFullDefinition(toolbarContext: ContextOfButton, unstructuredConfig: ToolbarVariationsBeforeInitializing, instanceConfig: InstanceConfig, toolbarSettings: ToolbarSettings, parentLog: Log) {
   const log = new Log('Tlb.BldFul', parentLog, 'start');
-  const fullConfig = ensureDefinitionTree(unstructuredConfig, toolbarSettings, log);
+  let fullConfig = ensureDefinitionTree(unstructuredConfig, toolbarSettings, log);
 
   // ToDo: don't use console.log in production
   if (unstructuredConfig.debug) console.log('toolbar: detailed debug on; start build full Def');
 
-  expandButtonGroups(fullConfig, log);
+  fullConfig = expandButtonGroups(fullConfig, log);
 
   new ButtonConfigurationBuilder(log).removeDisableButtons(toolbarContext, fullConfig, instanceConfig);
 

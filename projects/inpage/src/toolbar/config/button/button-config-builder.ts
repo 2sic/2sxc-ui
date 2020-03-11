@@ -3,12 +3,12 @@ import { ContextOfButton } from '../../../context/parts/context-button';
 import { HasLog } from '../../../logging/has-log';
 import { Log } from '../../../logging/log';
 import { InstanceConfig } from '../../../manage/instance-config';
+import { DictionaryValue, TypeTbD, TypeUnsafe, TypeWeDontCare } from '../../../plumbing/TypeTbD';
 import { ToolbarConfig } from '../../toolbar/toolbar-config';
 import { ButtonGroupConfig } from '../button-group-config';
 import { InPageCommandConfiguration, isInPageCommandConfiguration } from '../command/in-page-command';
 import { ButtonConfig } from './button-config';
 import { InPageButtonConfiguration } from './in-page-button-configuration';
-import { TypeTbD } from '../../../plumbing/TypeTbD';
 
 /**
  * This is a system to build button configurations
@@ -135,11 +135,7 @@ function disableButtons(context: ContextOfButton, btns: ButtonConfig[], config: 
     // btns[i].disabled = evalPropOrFunction(btns[i].disabled, btns[i].command, config, false);
     context.button = btns[i];
     if (btns[i].action) {
-      btns[i].disabled = evalPropOrFunction(
-        btns[i].disabled,
-        context,
-        config,
-        false);
+      btns[i].disabled = evalPropOrFunction(btns[i].disabled, context, config, false);
     } else {
       btns[i].disabled = (() => false);
     }
@@ -147,7 +143,7 @@ function disableButtons(context: ContextOfButton, btns: ButtonConfig[], config: 
   }
 }
 
-function evalPropOrFunction(propOrFunction: TypeTbD, context: ContextOfButton, config: InstanceConfig, fallback: any): any {
+function evalPropOrFunction<T>(propOrFunction: TypeTbD, context: ContextOfButton, config: InstanceConfig, fallback: T): any {
   if (propOrFunction === undefined || propOrFunction === null) {
     return fallback;
   }
@@ -185,33 +181,27 @@ function fallbackBtnSetting(btn: ButtonConfig,
                             group: ButtonGroupConfig,
                             fullToolbarConfig: ToolbarConfig,
                             actions: typeof Commands,
-                            propName: string): void {
-  if (btn[propName]) {
+                            propName: string): TypeWeDontCare {
+  const untypedButton = btn as TypeUnsafe as DictionaryValue;
+  if (untypedButton[propName])
+    return;
 
-    // if already defined, use the already defined property
-    btn[propName] = btn[propName];
+  // if the group has defaults, try use that property
+  if (group.defaults && group.defaults[propName])
+    return untypedButton[propName] = group.defaults[propName];
 
-  } else if (group.defaults &&
-    group.defaults[propName]) {
+  // if the toolbar has defaults, try use that property
+  const conf = fullToolbarConfig;
+  if (conf && conf.defaults && conf.defaults[propName])
+    return untypedButton[propName] = conf.defaults[propName];
 
-    // if the group has defaults, try use that property
-    btn[propName] = group.defaults[propName];
-
-  } else if (fullToolbarConfig &&
-    fullToolbarConfig.defaults &&
-    fullToolbarConfig.defaults[propName]) {
-
-    // if the toolbar has defaults, try use that property
-    btn[propName] = fullToolbarConfig.defaults[propName];
-
-  } else if (btn.action &&
-    btn.action.name &&
-    actions.get(btn.action.name) &&
-    actions.get(btn.action.name).buttonConfig &&
-    actions.get(btn.action.name).buttonConfig[propName]) {
-
-    // if there is an action, try to use that property name
-    btn[propName] = actions.get(btn.action.name).buttonConfig[propName];
-
+  // if there is an action, try to use that property name
+  if (btn.action && btn.action.name) {
+      const a = actions.get(btn.action.name);
+      if (a && a.buttonConfig) {
+        const c = a.buttonConfig as DictionaryValue;
+        if (c[propName])
+            return untypedButton[propName] = c[propName];
+    }
   }
 }

@@ -1,7 +1,8 @@
 ﻿import { SxcIntanceEditable } from '../../interfaces/sxc-instance-editable';
+import { TypeTbD } from '../../plumbing';
+import { ContextOfApp } from '../parts/context-app';
 import { ContextOfInstance } from '../parts/context-instance';
 import { ContextOfUi } from '../parts/context-ui';
-import { ContextOfApp } from '../parts/context-app';
 import { ContextBundlePage } from './context-bundle-page';
 
 
@@ -12,7 +13,7 @@ export class ContextBundleInstance extends ContextBundlePage {
   ui: ContextOfUi; // ensure that the UI will load the correct assets to enable editing
 }
 
-export function isContextOfInstance(thing: any): thing is ContextBundleInstance {
+export function isContextOfInstance(thing: TypeTbD): thing is ContextBundleInstance {
   const maybeButton = thing as ContextBundleInstance;
   return maybeButton.sxc !== undefined && maybeButton.instance !== undefined;
 }

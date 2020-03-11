@@ -69,7 +69,7 @@ export class NgUrlValuesWithoutParams {
 
     this.partOfPage = partOfPage; // context.contentBlock.partOfPage;
     if (partOfPage) {
-        // 2020-03-11 2dm - this never seems to be set anywhere
+        // 2020-03-11 2dm - this never seems to be set a.nywhere
         // versioningRequirements= editContext.ContentBlock.VersioningRequirements;
         this.publishing = context.contentBlock.versioningRequirements;
     }

@@ -34,12 +34,12 @@ export class ModManage {
       'controlbar/GetPortalDesktopModules',
       {
         data: 'category=All&loadingStartIndex=0&loadingPageSize=100&searchTerm=',
-        success: (desktopModules) => {
+        success: (desktopModules: ModuleInfo[]) => {
           const moduleToFind: string = type === 'Default' ? ' Content' : ' App';
-          let module: any = null;
+          let module: ModuleInfo = null;
 
           // ReSharper disable once UnusedParameter
-          desktopModules.forEach((e: any, i: number) => {
+          desktopModules.forEach((e, i: number) => {
             if (e.ModuleName === moduleToFind)
               module = e;
           });
@@ -156,4 +156,9 @@ function createMod(paneName: string, position: number, modId: number): JQueryXHR
       // ReSharper disable once UnusedParameter
       success: () => window.location.reload(),
     } as Partial<JQueryAjaxSettings>);
+}
+
+interface ModuleInfo {
+    ModuleName: string;
+    ModuleID: number;
 }
