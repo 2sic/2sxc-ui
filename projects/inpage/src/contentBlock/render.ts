@@ -1,8 +1,8 @@
 ﻿import { ContextBundleButton } from '../context/bundles/context-bundle-button';
+import { HtmlTools } from '../html/dom-tools';
 import { windowInPage as window } from '../interfaces/window-in-page';
 import { getTag } from '../manage/api';
 import { reset } from '../quick-edit/start';
-import { disable } from '../toolbar/build-toolbars';
 import { MainContentBlock } from './main-content-block';
 import { getPreviewWithTemplate } from './web-api-promises';
 
@@ -91,7 +91,7 @@ class Renderer {
       const newDom = $(newContent);
 
       // Must disable toolbar before we attach to DOM
-      if (justPreview) disable(newDom);
+      if (justPreview) HtmlTools.disable(newDom);
 
       $(getTag(context.sxc)).replaceWith(newDom);
 

@@ -1,7 +1,10 @@
+import * as Constants from '../constants';
+import { HtmlTools } from '../html/dom-tools';
+import { IDs } from '../settings/2sxc.consts';
 import { ButtonConfig } from './config/button/button-config';
+import * as Toolbarsettings from './settings/toolbar-settings';
 import ToolbarSettings = Toolbarsettings.ToolbarSettings;
 import { ToolbarConfigTemplate } from './toolbar/toolbar-config-template';
-import * as Toolbarsettings from './settings/toolbar-settings';
 
 export type ToolbarVariationsBeforeInitializing = ToolbarVariationsForInitializing;
 
@@ -11,7 +14,36 @@ export interface ToolbarVariationsForInitializing extends ToolbarConfigTemplate 
     buttons: ButtonConfig[];
 }
 
-export interface ToolbarInitConfig {
-  toolbar: ToolbarVariationsBeforeInitializing;
-  settings: ToolbarSettings;
+/**
+ * The configuration / settings of a toolbar as loaded from the DOM
+ */
+export class ToolbarInitConfig {
+    toolbar: ToolbarVariationsBeforeInitializing;
+    settings: ToolbarSettings;
+
+    /**
+     * Load the toolbar configuration from the sxc-toolbar attribute OR the old schema
+     * @param tag
+     * @return a configuration object or null in case of an error
+     */
+    static loadFromTag(tag: HTMLElement): ToolbarInitConfig {
+        try {
+            const newConfigFormat = HtmlTools.tryGetAttrText(tag, Constants.toolbar.attr.full);
+            if (newConfigFormat) {
+                return JSON.parse(newConfigFormat) as ToolbarInitConfig;
+            } else {
+                const at = IDs.attr;
+                const data = HtmlTools.getFirstAttribute(tag, at.toolbar, at.toolbarData);
+                const settings = HtmlTools.getFirstAttribute(tag, at.settings, at.settingsData);
+                return {
+                toolbar: JSON.parse(data),
+                settings: JSON.parse(settings) as ToolbarSettings,
+                } as ToolbarInitConfig;
+            }
+        } catch (err) {
+        console.error(
+            'error in settings JSON - probably invalid - make sure you quote properties like "name": ...', tag, err);
+        return null;
+        }
+    }
 }

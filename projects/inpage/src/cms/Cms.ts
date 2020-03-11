@@ -1,7 +1,7 @@
 ﻿import { Engine } from '../commands/';
 import { Settings } from '../commands/settings';
 import { ContextBundleInstance, isContextOfInstance } from '../context/bundles/context-bundle-instance';
-import { context as getContext } from '../context/context';
+import { findContext as getContext } from '../context/context';
 import { DebugConfig } from '../DebugConfig';
 import { HasLog } from '../logging/has-log';
 import { Log } from '../logging/log';

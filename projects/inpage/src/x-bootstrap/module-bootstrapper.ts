@@ -6,14 +6,11 @@ import { Log } from '../logging/log';
 import { LogUtils } from '../logging/log-utils';
 import { getTag } from '../manage/api';
 import { getSxc } from '../plumbing';
+import { TypeUnsafe } from '../plumbing/TypeTbD';
 import { quickDialog } from '../quick-dialog/quick-dialog';
 import * as QuickEditState from '../quick-dialog/state';
-import {
-  buildToolbars,
-  buildToolbarFromDomNode,
-} from '../toolbar/build-toolbars';
-import { CleanupTagToolbars } from '../toolbar/tag-toolbar';
-import { TypeUnsafe } from '../plumbing/TypeTbD';
+import { TagToolbar } from '../toolbar/tag-toolbar';
+import { ToolbarManager } from '../toolbar/toolbar-manager';
 
 /**
  * module & toolbar bootstrapping (initialize all toolbars after loading page)
@@ -78,14 +75,12 @@ function watchDomChanges() {
           $('div[data-edit-context]', node).each(function() {
             initInstance(this, false);
           });
-        } else buildToolbarFromDomNode(log, node);
+        } else ToolbarManager.build(node);
       });
     });
 
-    if (processed) {
-      // Clean up orphan tags if nodes have been added
-      CleanupTagToolbars();
-    }
+    // Clean up orphan tags if nodes have been added
+    if (processed) TagToolbar.CleanupOrphanedToolbars();
   });
   observer.observe(document.body, {
     attributes: false,
@@ -169,7 +164,7 @@ function initInstance(module: JQuery, isFirstRun: boolean): void {
     // use a logger for each iteration
     const log = new Log('Bts.Module');
 
-    buildToolbars(log, module);
+    ToolbarManager.buildModule(module);
     if (DebugConfig.bootstrap.initInstance) LogUtils.logDump(log);
   }
 }

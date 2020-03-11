@@ -1,5 +1,5 @@
 ﻿import { ContextBundleButton } from '../context/bundles/context-bundle-button';
-import { isDisabled } from '../toolbar/build-toolbars';
+import { HtmlTools } from '../html/dom-tools';
 import { renderer } from './render';
 import { saveTemplate } from './web-api-promises';
 
@@ -33,7 +33,7 @@ export function prepareToAddContent(context: ContextBundleButton, useModuleList:
  * @param {boolean} forceCreate
  */
 export function updateTemplateFromDia(context: ContextBundleButton, templateId: number): Promise<void> {
-  const wasShowingPreview = isDisabled(context.sxc);
+  const wasShowingPreview = HtmlTools.isDisabled(context.sxc);
 
   return updateTemplate(context, templateId, false)
     .then(() => {

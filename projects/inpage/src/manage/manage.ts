@@ -1,5 +1,5 @@
 ﻿import { InstanceEngine } from '../commands/execute/instance-engine';
-import { context } from '../context/context';
+import { findContext } from '../context/context';
 import { SxcIntanceEditable } from '../interfaces/sxc-instance-editable';
 import { getEditContext } from './api';
 import { EditManager } from './create';
@@ -44,7 +44,7 @@ export function initInstance(sxc: SxcIntanceEditable) {
 
   // ReSharper disable once InconsistentNaming
 function _initInstance(sxc: SxcIntanceEditable) {
-    const myContext = context(sxc);
+    const myContext = findContext(sxc);
     const editContext = getEditContext(myContext.sxc);
 
     const userInfo = UserOfEditContext.fromContext(myContext); // 2dm simplified getUserOfEditContext(context);

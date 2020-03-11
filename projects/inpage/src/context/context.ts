@@ -1,17 +1,17 @@
-﻿import { ContextOfApp, ContextBundleButton, ContextOfContentBlock, ContextOfInstance, ContextOfItem, ContextOfPage, ContextOfSystem, ContextOfTenant, ContextOfUi, ContextOfUser } from '.';
-import { AttrJsonEditContext } from './html-attribute';
+﻿import { ContextBundleButton, ContextOfApp, ContextOfContentBlock, ContextOfInstance, ContextOfItem, ContextOfPage, ContextOfSystem, ContextOfTenant, ContextOfUi, ContextOfUser } from '.';
 import { SxcIntanceEditable } from '../interfaces/sxc-instance-editable';
 import { getContainerTag, getEditContext } from '../manage/api';
 import { getSxc } from '../plumbing';
 import { isSxcInstance } from '../plumbing';
 import { IDs } from '../settings/2sxc.consts';
+import { AttrJsonEditContext } from './html-attribute';
 
 /**
  * Primary API to get the context (context is cached)
  * @param htmlElement or Id (moduleId)
  * @param cbid
  */
-export function context(tagOrSxc: SxcIntanceEditable | HTMLElement | JQuery| number, cbid?: number): ContextBundleButton {
+export function findContext(tagOrSxc: SxcIntanceEditable | HTMLElement | JQuery| number, cbid?: number): ContextBundleButton {
   let sxc: SxcIntanceEditable;
   let containerTag: HTMLElement = null;
 
@@ -36,7 +36,7 @@ export function context(tagOrSxc: SxcIntanceEditable | HTMLElement | JQuery| num
  * @param cbid
  */
 export function contextCopy(htmlElementOrId: HTMLElement | number, cbid?: number): ContextBundleButton {
-  const contextOfButton = context(htmlElementOrId, cbid);
+  const contextOfButton = findContext(htmlElementOrId, cbid);
   // set sxc to null because of cyclic reference, so we can serialize it
   contextOfButton.sxc = null;
   // make a copy

@@ -1,5 +1,5 @@
 ﻿import { Cms } from '../../cms/Cms';
-import { context } from '../../context/context';
+import { findContext } from '../../context/context';
 import { SxcIntanceEditable } from '../../interfaces/sxc-instance-editable';
 import { Settings } from '../settings';
 
@@ -11,7 +11,7 @@ export class InstanceEngine {
     eventOrSettings?: Partial<Settings> | MouseEvent,
     event?: MouseEvent,
   ): Promise<void | T> {
-    const cntx = context(this.sxc);
+    const cntx = findContext(this.sxc);
     return new Cms().run(cntx, nameOrSettings, eventOrSettings, event);
   }
 }

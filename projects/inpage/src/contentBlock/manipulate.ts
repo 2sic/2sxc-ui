@@ -1,6 +1,6 @@
 ﻿import { SxcIntanceEditable } from '../interfaces/sxc-instance-editable';
 import { getSxc } from '../plumbing';
-import { _toolbarManager } from '../toolbar/toolbar-manager';
+import { ToolbarManager } from '../toolbar/toolbar-manager';
 import { translate } from '../translate/2sxc.translate';
 import { ManipulateParams } from './manipulate-params';
 
@@ -54,7 +54,7 @@ export class Manipulator {
 
         // ReSharper disable once UnusedLocals
         const sxcNew = getSxc(newTag);
-        _toolbarManager.buildToolbars(newTag);
+        ToolbarManager.buildModule(newTag);
       });
     return Promise.resolve(jqPromise);
   }

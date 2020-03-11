@@ -282,7 +282,7 @@ var selectors = {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (immutable) */ __webpack_exports__["context"] = context;
+/* harmony export (immutable) */ __webpack_exports__["findContext"] = findContext;
 /* harmony export (immutable) */ __webpack_exports__["contextCopy"] = contextCopy;
 /* harmony export (immutable) */ __webpack_exports__["getContextInstance"] = getContextInstance;
 /* harmony export (immutable) */ __webpack_exports__["createContextFromEditContext"] = createContextFromEditContext;
@@ -300,7 +300,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
  * @param htmlElement or Id (moduleId)
  * @param cbid
  */
-function context(tagOrSxc, cbid) {
+function findContext(tagOrSxc, cbid) {
     var sxc;
     var containerTag = null;
     if (Object(__WEBPACK_IMPORTED_MODULE_2__plumbing__["isSxcInstance"])(tagOrSxc)) { // it is SxcInstance
@@ -323,7 +323,7 @@ function context(tagOrSxc, cbid) {
  * @param cbid
  */
 function contextCopy(htmlElementOrId, cbid) {
-    var contextOfButton = context(htmlElementOrId, cbid);
+    var contextOfButton = findContext(htmlElementOrId, cbid);
     // set sxc to null because of cyclic reference, so we can serialize it
     contextOfButton.sxc = null;
     // make a copy
@@ -779,10 +779,10 @@ function getAndReload(context, url, params) {
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "renderer", function() { return renderer; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__interfaces_window_in_page__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__manage_api__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__quick_edit_start__ = __webpack_require__(32);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__toolbar_build_toolbars__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__html_dom_tools__ = __webpack_require__(188);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__interfaces_window_in_page__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__manage_api__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__quick_edit_start__ = __webpack_require__(32);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__main_content_block__ = __webpack_require__(79);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__web_api_promises__ = __webpack_require__(47);
 
@@ -811,7 +811,7 @@ var Renderer = /** @class */ (function () {
      * @returns {} nothing
      */
     Renderer.prototype.showMessage = function (context, newContent) {
-        $(Object(__WEBPACK_IMPORTED_MODULE_1__manage_api__["getTag"])(context.sxc)).html(newContent);
+        $(Object(__WEBPACK_IMPORTED_MODULE_2__manage_api__["getTag"])(context.sxc)).html(newContent);
     };
     /**
      * this one assumes a replace / change has already happened, but now must be finalized...
@@ -822,15 +822,15 @@ var Renderer = /** @class */ (function () {
     Renderer.prototype.reloadAndReInitialize = function (context, forceAjax, preview) {
         // if ajax is not supported, we must reload the whole page
         if (!forceAjax && !context.app.supportsAjax) {
-            __WEBPACK_IMPORTED_MODULE_0__interfaces_window_in_page__["windowInPage"].location.reload();
+            __WEBPACK_IMPORTED_MODULE_1__interfaces_window_in_page__["windowInPage"].location.reload();
             return Promise.resolve();
         }
         return this.ajaxLoad(context, __WEBPACK_IMPORTED_MODULE_4__main_content_block__["MainContentBlock"].cUseExistingTemplate, preview)
             .then(function (result) {
             // If Evoq, tell Evoq that page has changed if it has changed (Ajax call)
-            if (__WEBPACK_IMPORTED_MODULE_0__interfaces_window_in_page__["windowInPage"].dnn_tabVersioningEnabled) { // this only exists in evoq or on new DNNs with tabVersioning
+            if (__WEBPACK_IMPORTED_MODULE_1__interfaces_window_in_page__["windowInPage"].dnn_tabVersioningEnabled) { // this only exists in evoq or on new DNNs with tabVersioning
                 try {
-                    __WEBPACK_IMPORTED_MODULE_0__interfaces_window_in_page__["windowInPage"].dnn.ContentEditorManager.triggerChangeOnPageContentEvent();
+                    __WEBPACK_IMPORTED_MODULE_1__interfaces_window_in_page__["windowInPage"].dnn.ContentEditorManager.triggerChangeOnPageContentEvent();
                 }
                 catch (e) {
                     // ignore
@@ -856,7 +856,7 @@ var Renderer = /** @class */ (function () {
             _this.replaceContentBlock(context, result, justPreview);
         })
             .then(function () {
-            Object(__WEBPACK_IMPORTED_MODULE_2__quick_edit_start__["reset"])();
+            Object(__WEBPACK_IMPORTED_MODULE_3__quick_edit_start__["reset"])();
         }); // reset quick-edit, because the config could have changed
     };
     /**
@@ -871,8 +871,8 @@ var Renderer = /** @class */ (function () {
             var newDom = $(newContent);
             // Must disable toolbar before we attach to DOM
             if (justPreview)
-                Object(__WEBPACK_IMPORTED_MODULE_3__toolbar_build_toolbars__["disable"])(newDom);
-            $(Object(__WEBPACK_IMPORTED_MODULE_1__manage_api__["getTag"])(context.sxc)).replaceWith(newDom);
+                __WEBPACK_IMPORTED_MODULE_0__html_dom_tools__["a" /* HtmlTools */].disable(newDom);
+            $(Object(__WEBPACK_IMPORTED_MODULE_2__manage_api__["getTag"])(context.sxc)).replaceWith(newDom);
             // reset the cache, so the sxc-object is refreshed
             context.sxc.recreate(true);
         }
@@ -891,20 +891,28 @@ var renderer = new Renderer();
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (immutable) */ __webpack_exports__["buildToolbars"] = buildToolbars;
-/* harmony export (immutable) */ __webpack_exports__["buildToolbarFromDomNode"] = buildToolbarFromDomNode;
-/* harmony export (immutable) */ __webpack_exports__["disable"] = disable;
-/* harmony export (immutable) */ __webpack_exports__["isDisabled"] = isDisabled;
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ToolbarConfigFinderAndInitializer", function() { return ToolbarConfigFinderAndInitializer; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__constants__ = __webpack_require__(15);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__context_context__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__logging_log__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__manage_api__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__settings_2sxc_consts__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__settings_toolbar_settings__ = __webpack_require__(39);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__tag_toolbar__ = __webpack_require__(40);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__render_toolbar_renderer__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__toolbar_toolbar_expand_config__ = __webpack_require__(42);
-
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__logging_has_log__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__render_toolbar_renderer__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__settings_toolbar_settings__ = __webpack_require__(39);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__tag_toolbar__ = __webpack_require__(40);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__toolbar_init_config__ = __webpack_require__(171);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__toolbar_toolbar_expand_config__ = __webpack_require__(42);
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 
 
 
@@ -917,164 +925,141 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 var dbg = false;
 var toolbarSelector = ".sc-menu[toolbar],.sc-menu[data-toolbar],[" + __WEBPACK_IMPORTED_MODULE_0__constants__["toolbar"].attr.full + "]";
 /**
- * Generate toolbars inside a MODULE tag (usually a div with class sc-edit-context)
- * @param parentLog
- * @param parentTag
- * @param optionalId
+ * This class is responsible for finding toolbar configurations in the doom
+ * and then initializing them.
  */
-function buildToolbars(parentLog, parentTag, optionalId) {
-    var log = new __WEBPACK_IMPORTED_MODULE_2__logging_log__["Log"]('Tlb.BldAll', parentLog);
-    parentTag = $(parentTag || '.DnnModule-' + optionalId);
-    // if something says the toolbars are disabled, then skip
-    if (parentTag.attr(__WEBPACK_IMPORTED_MODULE_0__constants__["toolbar"].attr.disable))
-        return;
-    var toolbars = getToolbarTags(parentTag);
-    // no toolbars found, must help a bit because otherwise editing is hard
-    if (toolbars.length === 0) {
-        toolbars = addFallbackToolbar(parentTag);
-        if (toolbars == null)
+var ToolbarConfigFinderAndInitializer = /** @class */ (function (_super) {
+    __extends(ToolbarConfigFinderAndInitializer, _super);
+    /**
+     * Special constructor which only allows this builder to be instatiated from the TagManager
+     * This is to simplify program control flow
+     */
+    function ToolbarConfigFinderAndInitializer(parent) {
+        return _super.call(this, 'Tlb.Buildr', parent.log) || this;
+    }
+    /**
+     * Generate toolbars inside a MODULE tag (usually a div with class sc-edit-context)
+     * @param parentTag
+     * @param optionalId
+     */
+    ToolbarConfigFinderAndInitializer.prototype.buildDnnModule = function (parentTag, optionalId) {
+        var _this = this;
+        parentTag = $(parentTag || '.DnnModule-' + optionalId);
+        // if something says the toolbars are disabled, then skip
+        if (parentTag.attr(__WEBPACK_IMPORTED_MODULE_0__constants__["toolbar"].attr.disable))
             return;
-    }
-    toolbars.each(function (i, e) { return loadAndConvertTag(log, e); });
-}
-/**
- * Build toolbar, but allow a.ny node as target
- * Will automatically find a wrapping sc-edit-context and all containing toolbars
- * @param parentLog
- * @param node
- */
-function buildToolbarFromDomNode(parentLog, node) {
-    var log = new __WEBPACK_IMPORTED_MODULE_2__logging_log__["Log"]('Tlb.BldNde', parentLog);
-    var contextNode = $(node).closest(__WEBPACK_IMPORTED_MODULE_0__constants__["cb"].selectors.ofName)[0];
-    // if we have no contextNode (a parent content block), we can
-    // assume the node is outside of a 2sxc module so not interesting
-    if (contextNode == null)
-        return;
-    if (node.is(toolbarSelector)) // toolbar itself has been added
-        loadAndConvertTag(log, node[0]);
-    var toolbars = $(toolbarSelector, node);
-    toolbars.each(function (i, e) { return loadAndConvertTag(log, e); });
-}
-//////////////////////////////// Private Functions ////////////////////////////////////
-/**
- * Setup a toolbar for a specific tag/node by loading its self-contained configuration
- * and replacing / preparing the toolbar as needed.
- * @param log
- * @param node
- */
-function loadAndConvertTag(log, node) {
-    var tag = $(node);
-    // Do not process tag if a toolbar has already been attached
-    if (tag.data('2sxc-tagtoolbar'))
-        return;
-    var config = loadConfigFromAttributes(node);
-    if (config != null) { // is null if load failed
-        try {
-            convertConfigToToolbarTags(tag, config, log);
+        var toolbars = this.findChildTagsWithConfig(parentTag);
+        // no toolbars found, must help a bit because otherwise editing is hard
+        if (toolbars.length === 0) {
+            toolbars = addDefaultToolbarConfigToTag(parentTag);
+            if (toolbars == null)
+                return;
         }
-        catch (err2) {
-            // catch a.ny errors, as this is very common - make sure the others are still rendered
-            console.error('error creating toolbar - will skip this one', err2);
+        toolbars.each(function (i, e) { return _this.loadConfigAndInitialize(e); });
+    };
+    /**
+     * Build toolbar, but allow an html node as target
+     * Will automatically find a wrapping sc-edit-context and all containing toolbars
+     * @param node
+     */
+    ToolbarConfigFinderAndInitializer.prototype.build = function (node) {
+        var _this = this;
+        var contextNode = $(node).closest(__WEBPACK_IMPORTED_MODULE_0__constants__["cb"].selectors.ofName)[0];
+        // if we have no contextNode (a parent content block), we can
+        // assume the node is outside of a 2sxc module so not interesting
+        if (contextNode == null)
+            return;
+        // toolbar itself has been added
+        if (node.is(toolbarSelector))
+            this.loadConfigAndInitialize(node[0]);
+        var toolbars = $(toolbarSelector, node);
+        toolbars.each(function (i, e) { return _this.loadConfigAndInitialize(e); });
+    };
+    //////////////////////////////// Private Functions ////////////////////////////////////
+    /**
+     * find current toolbars inside this wrapper-tag
+     */
+    ToolbarConfigFinderAndInitializer.prototype.findChildTagsWithConfig = function (parentTag) {
+        var allInner = $(toolbarSelector, parentTag);
+        // return only those, which don't belong to a sub-item
+        var onlyDirectDescendents = allInner
+            .filter(function (i, e) {
+            return $(e).closest(__WEBPACK_IMPORTED_MODULE_0__constants__["cb"].selectors.ofName)[0] === parentTag[0];
+        });
+        if (dbg)
+            console.log('found toolbars for parent', parentTag, onlyDirectDescendents);
+        return onlyDirectDescendents;
+    };
+    /**
+     * Setup a toolbar for a specific tag/node by loading its self-contained configuration
+     * and replacing / preparing the toolbar as needed.
+     * @param node
+     */
+    ToolbarConfigFinderAndInitializer.prototype.loadConfigAndInitialize = function (node) {
+        var tag = $(node);
+        // Do not process tag if a toolbar has already been attached
+        if (tag.data(__WEBPACK_IMPORTED_MODULE_0__constants__["toolbar"].dataAttrToMarkInitalized))
+            return;
+        var config = __WEBPACK_IMPORTED_MODULE_6__toolbar_init_config__["ToolbarInitConfig"].loadFromTag(node);
+        if (config != null) { // is null if load failed
+            // catch errors, as this is very common - make sure the others are still rendered
+            try {
+                this.convertConfigToToolbars(tag, config);
+            }
+            catch (err2) {
+                console.error('error creating toolbar - will skip this one', err2);
+            }
         }
-    }
-}
-/**
- * Load the toolbar configuration from the sxc-toolbar attribute OR the old schema
- * @param tag
- * @return a configuration object or null in case of an error
- */
-function loadConfigFromAttributes(tag) {
-    try {
-        var newConfigFormat = tryGetAttrText(tag, __WEBPACK_IMPORTED_MODULE_0__constants__["toolbar"].attr.full);
-        if (newConfigFormat) {
-            return JSON.parse(newConfigFormat);
+    };
+    /**
+     * Take a configuration and convert into a toolbar-menu; also attach the hover-attribute
+     * @param tag
+     * @param config
+     */
+    ToolbarConfigFinderAndInitializer.prototype.convertConfigToToolbars = function (tag, config) {
+        var context = Object(__WEBPACK_IMPORTED_MODULE_1__context_context__["findContext"])(tag);
+        context.toolbar = Object(__WEBPACK_IMPORTED_MODULE_7__toolbar_toolbar_expand_config__["expandToolbarConfig"])(context, config.toolbar, config.settings, this.log);
+        // V2 where the full toolbar is included in one setting
+        if (tag.attr(__WEBPACK_IMPORTED_MODULE_0__constants__["toolbar"].attr.full)) {
+            tag.data(__WEBPACK_IMPORTED_MODULE_0__constants__["toolbar"].dataAttrToMarkInitalized, new __WEBPACK_IMPORTED_MODULE_5__tag_toolbar__["TagToolbar"](tag, context));
+            addHoverAttributeToTag(tag);
+            return;
         }
-        else {
-            var at = __WEBPACK_IMPORTED_MODULE_4__settings_2sxc_consts__["IDs"].attr;
-            var data = getFirstAttribute(tag, at.toolbar, at.toolbarData);
-            var settings = getFirstAttribute(tag, at.settings, at.settingsData);
-            return {
-                toolbar: JSON.parse(data),
-                settings: JSON.parse(settings),
-            };
-        }
-    }
-    catch (err) {
-        console.error('error in settings JSON - probably invalid - make sure you also quote your properties like "name": ...', tag, err);
-        return null;
-    }
-}
-/**
- * Take a configuration and convert into a toolbar-menu; also attach the hover-attribute
- * @param tag
- * @param config
- * @param log
- */
-function convertConfigToToolbarTags(tag, config, log) {
-    var cnt = Object(__WEBPACK_IMPORTED_MODULE_1__context_context__["context"])(tag);
-    cnt.toolbar = Object(__WEBPACK_IMPORTED_MODULE_8__toolbar_toolbar_expand_config__["expandToolbarConfig"])(cnt, config.toolbar, config.settings, log);
-    if (tag.attr(__WEBPACK_IMPORTED_MODULE_0__constants__["toolbar"].attr.full)) {
-        // new case, where the full toolbar is included in one setting
-        // ReSharper disable once WrongExpressionStatement
-        tag.data('2sxc-tagtoolbar', new __WEBPACK_IMPORTED_MODULE_6__tag_toolbar__["TagToolbar"](tag, cnt));
-        ensureToolbarHoverClass(tag);
-    }
-    else {
-        var toolbar = new __WEBPACK_IMPORTED_MODULE_7__render_toolbar_renderer__["ToolbarRenderer"](cnt).render(); // renderToolbar(cnt);
         // default case, tag is the old <ul> tag, so find the sc-element parent before replacing
+        var toolbar = new __WEBPACK_IMPORTED_MODULE_3__render_toolbar_renderer__["ToolbarRenderer"](context).render();
         var scElementParent = tag.closest(__WEBPACK_IMPORTED_MODULE_0__constants__["toolbar"].selectors.ofOldHover);
         tag.replaceWith(toolbar);
         if (scElementParent.length > 0)
-            ensureToolbarHoverClass(scElementParent);
-    }
-}
-/** find current toolbars inside this wrapper-tag */
-function getToolbarTags(parentTag) {
-    var allInner = $(toolbarSelector, parentTag);
-    // return only those, which don't belong to a sub-item
-    var onlyDirectDescendents = allInner
-        .filter(function (i, e) { return $(e).closest(__WEBPACK_IMPORTED_MODULE_0__constants__["cb"].selectors.ofName)[0] === parentTag[0]; });
-    if (dbg)
-        console.log('found toolbars for parent', parentTag, onlyDirectDescendents);
-    return onlyDirectDescendents;
-}
-/** add hover-attribute to tag */
-function ensureToolbarHoverClass(jtag) {
+            addHoverAttributeToTag(scElementParent);
+    };
+    return ToolbarConfigFinderAndInitializer;
+}(__WEBPACK_IMPORTED_MODULE_2__logging_has_log__["HasLog"]));
+
+//////////////////////////////// Private Functions ////////////////////////////////////
+/**
+ * add hover-attribute to tag which is responsible for the menu to appear/disappear
+ */
+function addHoverAttributeToTag(jtag) {
     if (jtag.length <= 0)
         return; // skip in case nothing was given
     var tag = jtag[0];
     if (!tag.hasAttribute(__WEBPACK_IMPORTED_MODULE_0__constants__["toolbar"].attr.hover))
         tag.setAttribute(__WEBPACK_IMPORTED_MODULE_0__constants__["toolbar"].attr.hover, '');
 }
-/** Create a default/fallback toolbar and return it */
-function addFallbackToolbar(parentTag) {
+/**
+ * Create a default/fallback toolbar and return it
+ */
+function addDefaultToolbarConfigToTag(parentTag) {
     if (dbg)
         console.log("didn't find toolbar, so will auto-create", parentTag);
     var outsideCb = !parentTag.hasClass(__WEBPACK_IMPORTED_MODULE_0__constants__["cb"].classes.name);
     var contentTag = outsideCb ? parentTag.find("div" + __WEBPACK_IMPORTED_MODULE_0__constants__["cb"].selectors.ofName) : parentTag;
     // auto toolbar
-    var ctx = Object(__WEBPACK_IMPORTED_MODULE_1__context_context__["context"])(contentTag);
+    var ctx = Object(__WEBPACK_IMPORTED_MODULE_1__context_context__["findContext"])(contentTag);
     if (ctx.ui.autoToolbar === false)
         return null;
-    contentTag.attr(__WEBPACK_IMPORTED_MODULE_0__constants__["toolbar"].attr.full, JSON.stringify(__WEBPACK_IMPORTED_MODULE_5__settings_toolbar_settings__["emptyToolbar"]));
+    contentTag.attr(__WEBPACK_IMPORTED_MODULE_0__constants__["toolbar"].attr.full, JSON.stringify(__WEBPACK_IMPORTED_MODULE_4__settings_toolbar_settings__["emptyToolbar"]));
     return contentTag;
-}
-/** Find the text of one or more attributes in fallback order, till we found one */
-function getFirstAttribute(toolbar, name1, name2) {
-    return tryGetAttrText(toolbar, name1) || tryGetAttrText(toolbar, name2) || '{}';
-}
-/** Get text-content of an attribute (or return null) */
-function tryGetAttrText(tag, name) {
-    var item1 = tag.attributes.getNamedItem(name);
-    return item1 && item1.textContent;
-}
-function disable(tag) {
-    var jtag = $(tag);
-    jtag.attr(__WEBPACK_IMPORTED_MODULE_0__constants__["toolbar"].attr.disable, 'true');
-}
-function isDisabled(sxc) {
-    var tag = $(Object(__WEBPACK_IMPORTED_MODULE_3__manage_api__["getTag"])(sxc));
-    return !!tag.attr(__WEBPACK_IMPORTED_MODULE_0__constants__["toolbar"].attr.disable);
 }
 
 
@@ -1168,6 +1153,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Attributes", function() { return Attributes; });
 /** Toolbar constants */
 var toolbar = {
+    dataAttrToMarkInitalized: '2sxc-tagtoolbar',
     attr: {
         full: 'sxc-toolbar',
         hover: 'sxc-toolbar-hover',
@@ -1512,7 +1498,7 @@ var ButtonCommand = /** @class */ (function () {
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (immutable) */ __webpack_exports__["prepareToAddContent"] = prepareToAddContent;
 /* harmony export (immutable) */ __webpack_exports__["updateTemplateFromDia"] = updateTemplateFromDia;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__toolbar_build_toolbars__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__html_dom_tools__ = __webpack_require__(188);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__render__ = __webpack_require__(11);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__web_api_promises__ = __webpack_require__(47);
 
@@ -1545,7 +1531,7 @@ function prepareToAddContent(context, useModuleList) {
  * @param {boolean} forceCreate
  */
 function updateTemplateFromDia(context, templateId) {
-    var wasShowingPreview = Object(__WEBPACK_IMPORTED_MODULE_0__toolbar_build_toolbars__["isDisabled"])(context.sxc);
+    var wasShowingPreview = __WEBPACK_IMPORTED_MODULE_0__html_dom_tools__["a" /* HtmlTools */].isDisabled(context.sxc);
     return updateTemplate(context, templateId, false)
         .then(function () {
         // only reload on ajax, not on app as that was already re-loaded on the preview
@@ -1928,7 +1914,7 @@ var Cms = /** @class */ (function (_super) {
         var _this = this;
         var realContext = Object(__WEBPACK_IMPORTED_MODULE_1__context_bundles_context_bundle_instance__["isContextOfInstance"])(context)
             ? context
-            : Object(__WEBPACK_IMPORTED_MODULE_2__context_context__["context"])(context);
+            : Object(__WEBPACK_IMPORTED_MODULE_2__context_context__["findContext"])(context);
         return this.do(function () {
             return new __WEBPACK_IMPORTED_MODULE_0__commands___["Engine"](_this.log).detectParamsAndRun(realContext, nameOrSettings, eventOrSettings, event);
         });
@@ -2653,24 +2639,132 @@ var emptyToolbar = {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (immutable) */ __webpack_exports__["CleanupTagToolbars"] = CleanupTagToolbars;
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TagToolbar", function() { return TagToolbar; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__render_toolbar_renderer__ = __webpack_require__(13);
 
 /**
- * Remove orphan tag-toolbars from DOM
+ * This is the modern toolbar which is attached to a tag from whic it hovers.
+ * Internally the toolbar Dom-Elements are hidden at the bottom of the page.
+ * This object is responsible for creating them,
+ * and making sure that hover-events etc. cause the right toolbar to show up.
  */
-function CleanupTagToolbars() {
-    var tagToolbars = $("[" + tagToolbarForAttr + "]");
-    tagToolbars.each(function (i, e) {
-        var id = $(e).attr(tagToolbarForAttr);
-        if (!$("[" + tagToolbarAttr + "=" + id + "]").length) {
-            $(e).remove();
-        }
-    });
-}
-// tslint:disable-next-line: one-variable-per-declaration
-var tagToolbarPadding = 4, tagToolbarPaddingRight = 0, toolbarHeight = 20;
+var TagToolbar = /** @class */ (function () {
+    function TagToolbar(hoverTag, context) {
+        this.hoverTag = hoverTag;
+        this.context = context;
+        this.toolbarElement = null;
+        this.initialized = false;
+        // Ensure toolbar gets visible when hovering
+        this.addMouseEvents(hoverTag);
+    }
+    /**
+     * Attach Mouse-Enter and Mouse-Leave events to ensure show/hide of the toolbar
+     */
+    TagToolbar.prototype.addMouseEvents = function (hoverTag) {
+        var _this = this;
+        hoverTag.on('mouseenter', function () {
+            _this.initialize();
+            _this.show();
+        });
+        hoverTag.on('mouseleave', function (e) {
+            _this.initialize();
+            // if we hover the menu itself now, don't hide it
+            if (!$.contains(_this.toolbarElement[0], e.relatedTarget) && _this.toolbarElement[0] !== e.relatedTarget)
+                _this.hide();
+        });
+    };
+    /**
+     * Remove orphan tag-toolbars from DOM
+     * This can be necessary if the module was replaced by ajax,
+     * leaving behind un-attached TagToolbars.
+     */
+    TagToolbar.CleanupOrphanedToolbars = function () {
+        var tagToolbars = $("[" + tagToolbarForAttr + "]");
+        tagToolbars.each(function (i, e) {
+            var id = $(e).attr(tagToolbarForAttr);
+            if (!$("[" + tagToolbarAttr + "=" + id + "]").length) {
+                $(e).remove();
+            }
+        });
+    };
+    TagToolbar.prototype.initialize = function () {
+        var _this = this;
+        if (this.initialized)
+            return;
+        var toolbarId = this.context.instance.id + "-" + this.context.contentBlock.id + "-" + getMenuNumber();
+        // render toolbar and append tag to body
+        this.toolbarElement = $(new __WEBPACK_IMPORTED_MODULE_0__render_toolbar_renderer__["ToolbarRenderer"](this.context).render());
+        this.toolbarElement.on('mouseleave', function (e) {
+            // if we do not hover the tag now, hide it
+            if (!$.contains(_this.hoverTag[0], e.relatedTarget) && _this.hoverTag[0] !== e.relatedTarget)
+                _this.hide();
+        });
+        $('body').append(this.toolbarElement);
+        this.toolbarElement.attr(tagToolbarForAttr, toolbarId);
+        this.hoverTag.attr(tagToolbarAttr, toolbarId);
+        this.toolbarElement.css({ display: 'none', position: 'absolute', transition: 'top 0.5s ease-out' });
+        this.initialized = true;
+    };
+    TagToolbar.prototype.updatePosition = function () {
+        var position = {
+            top: 'auto',
+            left: 'auto',
+            right: 'auto',
+            viewportOffset: this.hoverTag[0].getBoundingClientRect().top,
+            bodyOffset: getBodyOffset(),
+            tagScrollOffset: 0,
+            tagOffset: this.hoverTag.offset(),
+            tagWidth: this.hoverTag.outerWidth(),
+            mousePos: mousePosition,
+            win: {
+                scrollY: window.scrollY,
+                width: $(window).width(),
+            },
+            padding: tagToolbarPadding,
+        };
+        // If we scrolled down, the toolbar might not be visible - calculate offset
+        position.tagScrollOffset = Math.min(position.viewportOffset - position.bodyOffset.top, 0);
+        // Update top coordinates
+        if (position.tagScrollOffset === 0)
+            position.top = position.tagOffset.top + tagToolbarPadding - position.bodyOffset.top;
+        else
+            position.top = position.mousePos.y + position.win.scrollY - position.bodyOffset.top - toolbarHeight / 2;
+        // Update left / right coordinates
+        // todo: try to change class to use attribute or something
+        if (this.toolbarElement.hasClass('sc-tb-hover-right'))
+            position.right = position.win.width - position.tagOffset.left - position.tagWidth + tagToolbarPaddingRight - position.bodyOffset.left;
+        else
+            position.left = position.tagOffset.left + tagToolbarPadding + position.bodyOffset.left;
+        var cssPos = {
+            top: position.top,
+            left: position.left,
+            right: position.right,
+        };
+        this.toolbarElement.css(cssPos);
+    };
+    /**
+     * Hide the toolbar and detach scrolling-watcher
+     */
+    TagToolbar.prototype.hide = function () {
+        var _this = this;
+        $(window).off('scroll', function () { return _this.updatePosition(); });
+        this.toolbarElement.css({ display: 'none' });
+    };
+    /**
+     * Show the toolbar and attach scrolling watcher
+     */
+    TagToolbar.prototype.show = function () {
+        var _this = this;
+        this.toolbarElement.css({ display: 'block' });
+        $(window).on('scroll', function () { return _this.updatePosition(); });
+        this.updatePosition();
+    };
+    return TagToolbar;
+}());
+
+var tagToolbarPadding = 4;
+var tagToolbarPaddingRight = 0;
+var toolbarHeight = 20;
 var tagToolbarAttr = 'data-tagtoolbar';
 var tagToolbarForAttr = 'data-tagtoolbar-for';
 /**
@@ -2710,95 +2804,6 @@ $(window).on('mousemove', function (e) {
     mousePosition.x = e.clientX;
     mousePosition.y = e.clientY;
 });
-var TagToolbar = /** @class */ (function () {
-    function TagToolbar(tag, cnt) {
-        var _this = this;
-        this.tag = tag;
-        this.cnt = cnt;
-        this.toolbarElement = null;
-        this.initialized = false;
-        this.updatePosition = this.updatePosition.bind(this);
-        // Ensure toolbar gets visible when hovering
-        tag.on('mouseenter', function () {
-            _this.initialize();
-            _this.showToolbar();
-        });
-        tag.on('mouseleave', function (e) {
-            _this.initialize();
-            // if we hover the menu itself now, don't hide it
-            if (!$.contains(_this.toolbarElement[0], e.relatedTarget) && _this.toolbarElement[0] !== e.relatedTarget)
-                _this.hideToolbar();
-        });
-    }
-    TagToolbar.prototype.initialize = function () {
-        var _this = this;
-        if (this.initialized)
-            return;
-        var toolbarId = this.cnt.instance.id + "-" + this.cnt.contentBlock.id + "-" + getMenuNumber();
-        // render toolbar and append tag to body
-        this.toolbarElement = $(new __WEBPACK_IMPORTED_MODULE_0__render_toolbar_renderer__["ToolbarRenderer"](this.cnt).render()); // renderToolbar(this.cnt));
-        this.toolbarElement.on('mouseleave', function (e) {
-            // if we do not hover the tag now, hide it
-            if (!$.contains(_this.tag[0], e.relatedTarget) && _this.tag[0] !== e.relatedTarget)
-                _this.hideToolbar();
-        });
-        $('body').append(this.toolbarElement);
-        this.toolbarElement.attr(tagToolbarForAttr, toolbarId);
-        this.tag.attr(tagToolbarAttr, toolbarId);
-        this.toolbarElement.css({ display: 'none', position: 'absolute', transition: 'top 0.5s ease-out' });
-        this.initialized = true;
-    };
-    TagToolbar.prototype.updatePosition = function () {
-        var position = {
-            top: 'auto',
-            left: 'auto',
-            right: 'auto',
-            viewportOffset: this.tag[0].getBoundingClientRect().top,
-            bodyOffset: getBodyOffset(),
-            tagScrollOffset: 0,
-            tagOffset: this.tag.offset(),
-            tagWidth: this.tag.outerWidth(),
-            mousePos: mousePosition,
-            win: {
-                scrollY: window.scrollY,
-                width: $(window).width(),
-            },
-            padding: tagToolbarPadding,
-        };
-        // If we scrolled down, the toolbar might not be visible - calculate offset
-        position.tagScrollOffset = Math.min(position.viewportOffset - position.bodyOffset.top, 0);
-        // Update top coordinates
-        if (position.tagScrollOffset === 0)
-            position.top = position.tagOffset.top + tagToolbarPadding - position.bodyOffset.top;
-        else
-            position.top = position.mousePos.y + position.win.scrollY - position.bodyOffset.top - toolbarHeight / 2;
-        // Update left / right coordinates
-        // todo: try to change class to use attribute or something
-        if (this.toolbarElement.hasClass('sc-tb-hover-right'))
-            position.right = position.win.width - position.tagOffset.left - position.tagWidth + tagToolbarPaddingRight - position.bodyOffset.left;
-        else
-            position.left = position.tagOffset.left + tagToolbarPadding + position.bodyOffset.left;
-        var cssPos = {
-            top: position.top,
-            left: position.left,
-            right: position.right,
-        };
-        this.toolbarElement.css(cssPos);
-    };
-    TagToolbar.prototype.hideToolbar = function () {
-        $(window).off('scroll', this.updatePosition);
-        this.toolbarElement.css({ display: 'none' });
-    };
-    TagToolbar.prototype.showToolbar = function () {
-        /*if (this.toolbarElement.is(':visible'))
-          return;*/
-        this.toolbarElement.css({ display: 'block' });
-        $(window).on('scroll', this.updatePosition);
-        this.updatePosition();
-    };
-    return TagToolbar;
-}());
-
 
 
 /***/ }),
@@ -4494,7 +4499,7 @@ var IFrameBridge = /** @class */ (function () {
             throw "can't find sxc-instance of IFrame, probably it wasn't initialized yet";
         return this.instanceSxc.recreate(true);
     };
-    IFrameBridge.prototype.getContext = function () { return Object(__WEBPACK_IMPORTED_MODULE_2__context_context__["context"])(this.uncachedSxc()); };
+    IFrameBridge.prototype.getContext = function () { return Object(__WEBPACK_IMPORTED_MODULE_2__context_context__["findContext"])(this.uncachedSxc()); };
     IFrameBridge.prototype.getAdditionalDashboardConfig = function () { return __WEBPACK_IMPORTED_MODULE_5__quick_dialog_config__["QuickDialogConfig"].fromContext(this.getContext()); };
     IFrameBridge.prototype.hide = function () { __WEBPACK_IMPORTED_MODULE_4__quick_dialog__["quickDialog"].setVisible(false); };
     IFrameBridge.prototype.run = function (verb) { this.uncachedSxc().manage.run(verb); };
@@ -4975,7 +4980,7 @@ function initInstance(sxc) {
 }
 // ReSharper disable once InconsistentNaming
 function _initInstance(sxc) {
-    var myContext = Object(__WEBPACK_IMPORTED_MODULE_1__context_context__["context"])(sxc);
+    var myContext = Object(__WEBPACK_IMPORTED_MODULE_1__context_context__["findContext"])(sxc);
     var editContext = Object(__WEBPACK_IMPORTED_MODULE_2__api__["getEditContext"])(myContext.sxc);
     var userInfo = __WEBPACK_IMPORTED_MODULE_4__user_of_edit_context__["UserOfEditContext"].fromContext(myContext); // 2dm simplified getUserOfEditContext(context);
     var cmdEngine = new __WEBPACK_IMPORTED_MODULE_0__commands_execute_instance_engine__["InstanceEngine"](myContext.sxc);
@@ -5002,7 +5007,7 @@ var InstanceEngine = /** @class */ (function () {
         this.sxc = sxc;
     }
     InstanceEngine.prototype.run = function (nameOrSettings, eventOrSettings, event) {
-        var cntx = Object(__WEBPACK_IMPORTED_MODULE_1__context_context__["context"])(this.sxc);
+        var cntx = Object(__WEBPACK_IMPORTED_MODULE_1__context_context__["findContext"])(this.sxc);
         return new __WEBPACK_IMPORTED_MODULE_0__cms_Cms__["Cms"]().run(cntx, nameOrSettings, eventOrSettings, event);
     };
     return InstanceEngine;
@@ -5184,7 +5189,7 @@ var Manipulator = /** @class */ (function () {
                 listTag.prepend(newTag);
             // ReSharper disable once UnusedLocals
             var sxcNew = Object(__WEBPACK_IMPORTED_MODULE_0__plumbing__["getSxc"])(newTag);
-            __WEBPACK_IMPORTED_MODULE_1__toolbar_toolbar_manager__["_toolbarManager"].buildToolbars(newTag);
+            __WEBPACK_IMPORTED_MODULE_1__toolbar_toolbar_manager__["ToolbarManager"].buildModule(newTag);
         });
         return Promise.resolve(jqPromise);
     };
@@ -5246,7 +5251,6 @@ var Manipulator = /** @class */ (function () {
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ToolbarManager", function() { return ToolbarManager; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_toolbarManager", function() { return _toolbarManager; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__logging_has_log__ = __webpack_require__(9);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__build_toolbars__ = __webpack_require__(12);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__render_toolbar_renderer__ = __webpack_require__(13);
@@ -5267,38 +5271,37 @@ var __extends = (this && this.__extends) || (function () {
 
 
 
-// import { renderButton } from './item/render-button';
-// import { renderToolbar } from './item/render-toolbar';
 
 /**
  * Toolbar manager for the whole page - basically a set of APIs
  * the toolbar manager is an internal helper taking care of toolbars, buttons etc.
  */
-var ToolbarManager = /** @class */ (function (_super) {
-    __extends(ToolbarManager, _super);
-    function ToolbarManager(parentLog) {
+var ToolbarManagerGlobal = /** @class */ (function (_super) {
+    __extends(ToolbarManagerGlobal, _super);
+    function ToolbarManagerGlobal(parentLog) {
         var _this = _super.call(this, 'Tlb.Mngr', parentLog, 'init') || this;
-        _this.disable = __WEBPACK_IMPORTED_MODULE_1__build_toolbars__["disable"];
-        _this.isDisabled = __WEBPACK_IMPORTED_MODULE_1__build_toolbars__["isDisabled"];
         // generate button html
         _this.generateButtonHtml = function (context, groupIndex) {
-            return new __WEBPACK_IMPORTED_MODULE_2__render_toolbar_renderer__["ToolbarRenderer"](context).button.render(context, groupIndex);
+            new __WEBPACK_IMPORTED_MODULE_2__render_toolbar_renderer__["ToolbarRenderer"](context).button.render(context, groupIndex);
         };
         _this.generateToolbarHtml = function (context) {
             return new __WEBPACK_IMPORTED_MODULE_2__render_toolbar_renderer__["ToolbarRenderer"](context).render();
         };
         _this.toolbarTemplate = __WEBPACK_IMPORTED_MODULE_3__toolbar_toolbar_config_templates__["ToolbarConfigTemplates"].Instance(_this.log).get('default');
+        _this.toolbarFinder = new __WEBPACK_IMPORTED_MODULE_1__build_toolbars__["ToolbarConfigFinderAndInitializer"](_this);
         return _this;
     }
-    ToolbarManager.prototype.buildToolbars = function (parentTag, optionalId) {
-        Object(__WEBPACK_IMPORTED_MODULE_1__build_toolbars__["buildToolbars"])(this.log, parentTag, optionalId);
+    ToolbarManagerGlobal.prototype.buildModule = function (parentTag, optionalId) {
+        this.toolbarFinder.buildDnnModule(parentTag, optionalId);
     };
-    return ToolbarManager;
+    ToolbarManagerGlobal.prototype.build = function (node) {
+        this.toolbarFinder.build(node);
+    };
+    return ToolbarManagerGlobal;
 }(__WEBPACK_IMPORTED_MODULE_0__logging_has_log__["HasLog"]));
-
 // 2dm 2018-03-22 this seems to be unused
-var sharedTbm = new ToolbarManager(null);
-var _toolbarManager = sharedTbm;
+// const sharedTbm = new ToolbarManager(null);
+var ToolbarManager = new ToolbarManagerGlobal(null);
 
 
 /***/ }),
@@ -5540,8 +5543,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__plumbing__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__quick_dialog_quick_dialog__ = __webpack_require__(23);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__quick_dialog_state__ = __webpack_require__(50);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__toolbar_build_toolbars__ = __webpack_require__(12);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__toolbar_tag_toolbar__ = __webpack_require__(40);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__toolbar_tag_toolbar__ = __webpack_require__(40);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__toolbar_toolbar_manager__ = __webpack_require__(90);
 
 
 
@@ -5612,13 +5615,12 @@ function watchDomChanges() {
                     });
                 }
                 else
-                    Object(__WEBPACK_IMPORTED_MODULE_9__toolbar_build_toolbars__["buildToolbarFromDomNode"])(log, node);
+                    __WEBPACK_IMPORTED_MODULE_10__toolbar_toolbar_manager__["ToolbarManager"].build(node);
             });
         });
-        if (processed) {
-            // Clean up orphan tags if nodes have been added
-            Object(__WEBPACK_IMPORTED_MODULE_10__toolbar_tag_toolbar__["CleanupTagToolbars"])();
-        }
+        // Clean up orphan tags if nodes have been added
+        if (processed)
+            __WEBPACK_IMPORTED_MODULE_9__toolbar_tag_toolbar__["TagToolbar"].CleanupOrphanedToolbars();
     });
     observer.observe(document.body, {
         attributes: false,
@@ -5691,7 +5693,7 @@ function initInstance(module, isFirstRun) {
     if (isFirstRun || !wasEmpty) {
         // use a logger for each iteration
         var log = new __WEBPACK_IMPORTED_MODULE_3__logging_log__["Log"]('Bts.Module');
-        Object(__WEBPACK_IMPORTED_MODULE_9__toolbar_build_toolbars__["buildToolbars"])(log, module);
+        __WEBPACK_IMPORTED_MODULE_10__toolbar_toolbar_manager__["ToolbarManager"].buildModule(module);
         if (__WEBPACK_IMPORTED_MODULE_1__DebugConfig__["DebugConfig"].bootstrap.initInstance)
             __WEBPACK_IMPORTED_MODULE_4__logging_log_utils__["LogUtils"].logDump(log);
     }
@@ -6158,7 +6160,6 @@ __webpack_require__(19);
 __webpack_require__(169);
 __webpack_require__(92);
 __webpack_require__(74);
-__webpack_require__(170);
 __webpack_require__(70);
 __webpack_require__(72);
 __webpack_require__(41);
@@ -6167,12 +6168,12 @@ __webpack_require__(39);
 __webpack_require__(40);
 __webpack_require__(77);
 __webpack_require__(78);
+__webpack_require__(170);
 __webpack_require__(171);
-__webpack_require__(172);
 __webpack_require__(90);
-__webpack_require__(173);
+__webpack_require__(172);
+__webpack_require__(174);
 __webpack_require__(175);
-__webpack_require__(176);
 __webpack_require__(46);
 __webpack_require__(76);
 __webpack_require__(42);
@@ -6209,7 +6210,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
-__WEBPACK_IMPORTED_MODULE_3__interfaces_sxc_controller_in_page__["$2sxcInPage"].context = __WEBPACK_IMPORTED_MODULE_2__context_context__["context"]; // primary API to get the context
+__WEBPACK_IMPORTED_MODULE_3__interfaces_sxc_controller_in_page__["$2sxcInPage"].context = __WEBPACK_IMPORTED_MODULE_2__context_context__["findContext"]; // primary API to get the context
 __WEBPACK_IMPORTED_MODULE_3__interfaces_sxc_controller_in_page__["$2sxcInPage"]._translateInit = __WEBPACK_IMPORTED_MODULE_8__translate_2sxc_translateInit__["_translateInit"]; // reference in ./2sxc-api/js/ToSic.Sxc.Instance.ts
 __WEBPACK_IMPORTED_MODULE_3__interfaces_sxc_controller_in_page__["$2sxcInPage"].translate = __WEBPACK_IMPORTED_MODULE_9__translate_2sxc_translate__["translate"]; // provide an official translate API for 2sxc
 __WEBPACK_IMPORTED_MODULE_3__interfaces_sxc_controller_in_page__["$2sxcInPage"]._commands = __WEBPACK_IMPORTED_MODULE_1__commands_commands__["Commands"];
@@ -7431,25 +7432,6 @@ function isInPageButtonConfiguration(thing) {
 
 /***/ }),
 /* 170 */
-/***/ (function(module, exports) {
-
-// export interface PublicToolbarEntityInfo {
-//     _2sxcEditInformation: a.ny;
-//     EntityId?: number;
-// }
-// export interface PublicActionDefinition {
-//     entity?: PublicToolbarEntityInfo;
-//     sortOrder?: number;
-// }
-// export interface RealActionSpecs {
-//     useModuleList: boolean;
-//     sortOrder: number;
-//     entityId: number;
-// }
-
-
-/***/ }),
-/* 171 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -7461,17 +7443,61 @@ $(__WEBPACK_IMPORTED_MODULE_0__settings_2sxc_consts__["IDs"].sel.scMenu).click(f
 
 
 /***/ }),
-/* 172 */
-/***/ (function(module, exports) {
+/* 171 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ToolbarInitConfig", function() { return ToolbarInitConfig; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__constants__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__html_dom_tools__ = __webpack_require__(188);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__settings_2sxc_consts__ = __webpack_require__(17);
+
+
+
+/**
+ * The configuration / settings of a toolbar as loaded from the DOM
+ */
+var ToolbarInitConfig = /** @class */ (function () {
+    function ToolbarInitConfig() {
+    }
+    /**
+     * Load the toolbar configuration from the sxc-toolbar attribute OR the old schema
+     * @param tag
+     * @return a configuration object or null in case of an error
+     */
+    ToolbarInitConfig.loadFromTag = function (tag) {
+        try {
+            var newConfigFormat = __WEBPACK_IMPORTED_MODULE_1__html_dom_tools__["a" /* HtmlTools */].tryGetAttrText(tag, __WEBPACK_IMPORTED_MODULE_0__constants__["toolbar"].attr.full);
+            if (newConfigFormat) {
+                return JSON.parse(newConfigFormat);
+            }
+            else {
+                var at = __WEBPACK_IMPORTED_MODULE_2__settings_2sxc_consts__["IDs"].attr;
+                var data = __WEBPACK_IMPORTED_MODULE_1__html_dom_tools__["a" /* HtmlTools */].getFirstAttribute(tag, at.toolbar, at.toolbarData);
+                var settings = __WEBPACK_IMPORTED_MODULE_1__html_dom_tools__["a" /* HtmlTools */].getFirstAttribute(tag, at.settings, at.settingsData);
+                return {
+                    toolbar: JSON.parse(data),
+                    settings: JSON.parse(settings),
+                };
+            }
+        }
+        catch (err) {
+            console.error('error in settings JSON - probably invalid - make sure you quote properties like "name": ...', tag, err);
+            return null;
+        }
+    };
+    return ToolbarInitConfig;
+}());
 
 
 
 /***/ }),
-/* 173 */
+/* 172 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // tslint:disable-next-line: no-var-requires
-var Shake = __webpack_require__(174);
+var Shake = __webpack_require__(173);
 // ReSharper disable once InconsistentNaming
 // enable shake detection on all toolbars
 $(function () {
@@ -7486,7 +7512,7 @@ $(function () {
 
 
 /***/ }),
-/* 174 */
+/* 173 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_RESULT__;/*
@@ -7622,7 +7648,7 @@ var __WEBPACK_AMD_DEFINE_RESULT__;/*
 
 
 /***/ }),
-/* 175 */
+/* 174 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -7638,7 +7664,7 @@ var ButtonGroup = /** @class */ (function () {
 
 
 /***/ }),
-/* 176 */
+/* 175 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -7652,6 +7678,57 @@ var ToolbarConfigTemplate = /** @class */ (function () {
         this.settings = {};
     }
     return ToolbarConfigTemplate;
+}());
+
+
+
+/***/ }),
+/* 176 */,
+/* 177 */,
+/* 178 */,
+/* 179 */,
+/* 180 */,
+/* 181 */,
+/* 182 */,
+/* 183 */,
+/* 184 */,
+/* 185 */,
+/* 186 */,
+/* 187 */,
+/* 188 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return HtmlTools; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__constants__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__manage_api__ = __webpack_require__(1);
+
+
+var HtmlTools = /** @class */ (function () {
+    function HtmlTools() {
+    }
+    HtmlTools.disable = function (tag) {
+        var jtag = $(tag);
+        jtag.attr(__WEBPACK_IMPORTED_MODULE_0__constants__["toolbar"].attr.disable, 'true');
+    };
+    HtmlTools.isDisabled = function (sxc) {
+        var tag = $(Object(__WEBPACK_IMPORTED_MODULE_1__manage_api__["getTag"])(sxc));
+        return !!tag.attr(__WEBPACK_IMPORTED_MODULE_0__constants__["toolbar"].attr.disable);
+    };
+    /**
+     * Find the text of one or more attributes in fallback order, till we found one
+     */
+    HtmlTools.getFirstAttribute = function (toolbar, name1, name2) {
+        return HtmlTools.tryGetAttrText(toolbar, name1) || HtmlTools.tryGetAttrText(toolbar, name2) || '{}';
+    };
+    /**
+     * Get text-content of an attribute (or return null)
+     */
+    HtmlTools.tryGetAttrText = function (tag, name) {
+        var item1 = tag.attributes.getNamedItem(name);
+        return item1 && item1.textContent;
+    };
+    return HtmlTools;
 }());
 
 

@@ -1,11 +1,11 @@
 ﻿import { SxcRootWithInternals } from '../../../$2sxc/src/index';
-import { SystemUpgrader } from '../system/2sxc.system';
 import { Cms } from '../cms/Cms';
 import { Commands as Commands } from '../commands/commands';
 import { MainContentBlock } from '../contentBlock/main-content-block';
-import { context } from '../context/context';
+import { findContext } from '../context/context';
 import { Manage } from '../manage/manage';
 import { QuickDialogManager } from '../quick-dialog/quick-dialog';
+import { SystemUpgrader } from '../system/2sxc.system';
 import { ToolbarManager } from '../toolbar/toolbar-manager';
 import { SxcIntanceEditable } from './sxc-instance-editable';
 import { windowInPage as window } from './window-in-page';
@@ -26,11 +26,11 @@ export interface SxcControllerInPage extends SxcRootWithInternals {
   _commands: typeof Commands;
   _contentBlock: MainContentBlock;
   _quickDialog: QuickDialogManager;
-  _toolbarManager: ToolbarManager;
+  _toolbarManager: typeof ToolbarManager;
   _manage: Manage;
   system: SystemUpgrader;
   translate(key: string): string;
-  context: typeof context;
+  context: typeof findContext;
   cms: Cms;
 }
 // ReSharper restore InconsistentNaming
