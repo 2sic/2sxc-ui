@@ -1,7 +1,7 @@
 ﻿/**
  * information related to the current contentBlock, incl
  */
-export class ContentBlockContext {
+export class ContextOfContentBlock {
   // ContentBlock
   id: number; // the CB ID
   isEntity: boolean;

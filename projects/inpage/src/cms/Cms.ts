@@ -2,7 +2,7 @@
 import { Settings } from '../commands/settings';
 import { context as getContext } from '../context/context';
 import {
-  ContextOfInstance,
+  ContextBundleOfInstance,
   isContextOfInstance,
 } from '../context/context-of-instance';
 import { DebugConfig } from '../DebugConfig';
@@ -31,7 +31,7 @@ export class Cms extends HasLog {
   }
 
   run<T>(
-    context: ContextOfInstance | HTMLElement,
+    context: ContextBundleOfInstance | HTMLElement,
     nameOrSettings: string | Partial<Settings>,
     eventOrSettings?: Partial<Settings> | MouseEvent,
     event?: MouseEvent,

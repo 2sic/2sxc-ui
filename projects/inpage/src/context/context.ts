@@ -5,16 +5,16 @@ import { SxcIntanceEditable } from '../interfaces/sxc-instance-editable';
 import { getContainerTag, getEditContext } from '../manage/api';
 import { getSxc } from '../plumbing/getSxc';
 import { isSxcInstance } from '../plumbing/is';
-import { SystemContext } from './base-context/system-context';
-import { TenantContext } from './base-context/tenant-context';
-import { UserContext } from './base-context/user-context';
-import { ContentBlockContext } from './content-block-context/content-block-context';
+import { ContextOfSystem } from './base-context/system-context';
+import { ContextOfTenant } from './base-context/tenant-context';
+import { ContextOfUser } from './base-context/user-context';
+import { ContextOfContentBlock } from './content-block-context/content-block-context';
 import { ContextOfButton } from './context-of-button';
-import { AppContext } from './instance-context/app-context';
-import { InstanceContext } from './instance-context/instance-context';
+import { ContextOfApp } from './instance-context/app-context';
+import { ContextOfInstance } from './instance-context/instance-context';
 import { UiContext } from './instance-context/ui-context';
 import { ItemContext } from './item-context/item-context';
-import { PageContext } from './page-context/page-context';
+import { ContextOfPage } from './page-context/page-context';
 
 
 
@@ -77,21 +77,21 @@ export function createContextFromEditContext(editCtx: DataEditContext) {
 
   // *** ContextOf ***
   // this will be everything about the current system, like system / api -paths etc.
-  btnCtx.system = new SystemContext();
+  btnCtx.system = new ContextOfSystem();
   if (editCtx.error) {
     btnCtx.system.error = editCtx.error.type;
   }
   // empty
 
   // this will be something about the current tenant(the dnn portal)
-  btnCtx.tenant = new TenantContext();
+  btnCtx.tenant = new ContextOfTenant();
   if (editCtx.Environment) {
     btnCtx.tenant.id = editCtx.Environment.WebsiteId; // InstanceConfig.portalId
     btnCtx.tenant.url = editCtx.Environment.WebsiteUrl; // NgDialogParams.portalroot
   }
 
   // things about the user
-  btnCtx.user = new UserContext();
+  btnCtx.user = new ContextOfUser();
   if (editCtx.User) {
     btnCtx.user.canDesign = editCtx.User.CanDesign;
     btnCtx.user.canDevelop = editCtx.User.CanDevelop;
@@ -99,7 +99,7 @@ export function createContextFromEditContext(editCtx: DataEditContext) {
 
   // *** ContextOfPage ***
   // this will be information related to the current page
-  btnCtx.page = new PageContext();
+  btnCtx.page = new ContextOfPage();
   if (editCtx.Environment) {
     btnCtx.page.id = editCtx.Environment.PageId; // InstanceConfig.tabId, NgDialogParams.tid
     btnCtx.page.url = editCtx.Environment.PageUrl;
@@ -107,7 +107,7 @@ export function createContextFromEditContext(editCtx: DataEditContext) {
 
   // *** ContextOfInstance ***
   // information related to the current DNN module, incl.instanceId, etc.
-  btnCtx.instance = new InstanceContext();
+  btnCtx.instance = new ContextOfInstance();
   if (editCtx.Environment) {
     btnCtx.instance.id = editCtx.Environment.InstanceId; // InstanceConfig.moduleId, NgDialogParams.mid
     btnCtx.instance.isEditable = editCtx.Environment.IsEditable;
@@ -121,7 +121,7 @@ export function createContextFromEditContext(editCtx: DataEditContext) {
   }
 
   // this will be about the current app, settings of the app, app - paths, etc.
-  btnCtx.app = new AppContext();
+  btnCtx.app = new ContextOfApp();
   if (editCtx.ContentGroup) {
     btnCtx.app.id = editCtx.ContentGroup.AppId; // or NgDialogParams.appId
     btnCtx.app.isContent = editCtx.ContentGroup.IsContent;
@@ -148,7 +148,7 @@ export function createContextFromEditContext(editCtx: DataEditContext) {
 
   // *** ContextOfContentBlock ***
   // information related to the current contentBlock
-  btnCtx.contentBlock = new ContentBlockContext();
+  btnCtx.contentBlock = new ContextOfContentBlock();
   if (editCtx.ContentBlock) {
     btnCtx.contentBlock.id = editCtx.ContentBlock.Id; // or sxc.cbid or InstanceConfig.cbid
     btnCtx.contentBlock.isEntity = editCtx.ContentBlock.IsEntity; // ex: InstanceConfig.cbIsEntity

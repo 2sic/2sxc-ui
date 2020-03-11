@@ -1,6 +1,6 @@
 ﻿import { ContextOf } from './context-of';
-import { PageContext } from './page-context/page-context';
+import { ContextOfPage } from './page-context/page-context';
 
-export class ContextOfPage extends ContextOf {
-  page: PageContext; // this will be information related to the current page
+export class ContextBundleOfPage extends ContextOf {
+  page: ContextOfPage; // this will be information related to the current page
 }

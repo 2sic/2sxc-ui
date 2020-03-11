@@ -1,7 +1,7 @@
 ﻿/**
  * things about the user
  */
-export class UserContext {
+export class ContextOfUser {
   canDesign: boolean;
   canDevelop: boolean;
 }

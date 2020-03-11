@@ -1,6 +1,6 @@
-﻿import { ContentBlockContext } from './content-block-context/content-block-context';
-import { ContextOfInstance } from './context-of-instance';
+﻿import { ContextOfContentBlock } from './content-block-context/content-block-context';
+import { ContextBundleOfInstance } from './context-of-instance';
 
-export class ContextOfContentBlock extends ContextOfInstance {
-  contentBlock: ContentBlockContext;
+export class ContextBundleContentBlock extends ContextBundleOfInstance {
+  contentBlock: ContextOfContentBlock;
 }

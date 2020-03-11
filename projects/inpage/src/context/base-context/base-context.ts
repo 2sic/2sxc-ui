@@ -1,6 +1,6 @@
 ﻿
 
-export class BaseContext {
+export class ContextBundleBase {
   // tbd
 
 // ReSharper disable once InconsistentNaming
@@ -9,7 +9,7 @@ export class BaseContext {
 
 
 
-export function isContext(thing: any): thing is BaseContext {
-  const maybeButton = thing as BaseContext;
+export function isContext(thing: any): thing is ContextBundleBase {
+  const maybeButton = thing as ContextBundleBase;
   return maybeButton._isContext !== undefined;
 }

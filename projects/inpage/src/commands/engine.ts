@@ -1,6 +1,6 @@
 ﻿import { prepareToAddContent } from '../contentBlock/templates';
 import { ContextOfButton } from '../context/context-of-button';
-import { ContextOfInstance } from '../context/context-of-instance';
+import { ContextBundleOfInstance } from '../context/context-of-instance';
 import { HasLog } from '../logging/has-log';
 import { Log } from '../logging/log';
 import { settingsAdapter } from '../toolbar/adapters/settings-adapter';
@@ -16,7 +16,7 @@ export class Engine extends HasLog {
   }
 
   detectParamsAndRun<T>(
-    context: ContextOfInstance,
+    context: ContextBundleOfInstance,
     nameOrSettings: string | Partial<Settings>,
     eventOrSettings: Partial<Settings> | MouseEvent,
     event?: MouseEvent,
