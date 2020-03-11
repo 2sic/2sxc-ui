@@ -1,4 +1,4 @@
-﻿import { IDs } from '../2sxc-extensions/2sxc.consts';
+﻿import { IDs } from '../settings/2sxc.consts';
 import { DataEditContext } from '../data-edit-context/data-edit-context';
 import { $2sxcInPage as $2sxc } from '../interfaces/sxc-controller-in-page';
 import { SxcIntanceEditable } from '../interfaces/sxc-instance-editable';
