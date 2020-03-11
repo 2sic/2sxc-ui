@@ -1,6 +1,7 @@
 ﻿import { ContextOfButton } from '../context/parts/context-button';
 import { Command } from './command';
-import { Params } from './params';
+import { CommandParams } from './params';
+import { CommandCode } from './command-code';
 
 /**
  * Command definition, for creation of commands
@@ -15,7 +16,7 @@ export class Definition {
    * custom code
    * @param context
    */
-  code?<T>(context: ContextOfButton, event: MouseEvent): Promise<void | T>;
+  code?: CommandCode; // <T>(context: ContextOfButton, event: MouseEvent): Promise<void | T>;
 
   /**
    * command
@@ -70,7 +71,7 @@ export class Definition {
    * button parameters
    * @param context
    */
-  params?(context: ContextOfButton): Params;
+  params?(context: ContextOfButton): Partial<CommandParams>;
 
   /**
    * is part of page

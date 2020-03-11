@@ -5,8 +5,9 @@ import { Log } from '../../../logging/log';
 import { InstanceConfig } from '../../../manage/instance-config';
 import { ToolbarConfig } from '../../toolbar/toolbar-config';
 import { ButtonGroupConfig } from '../button-group-config';
-import { InPageButtonConfiguration, InPageCommandConfiguration, isInPageCommandConfiguration } from './in-page-button-configuration';
+import { InPageCommandConfiguration, isInPageCommandConfiguration } from '../command/in-page-command';
 import { ButtonConfig } from './button-config';
+import { InPageButtonConfiguration } from './in-page-button-configuration';
 
 /**
  * This is a system to build button configurations

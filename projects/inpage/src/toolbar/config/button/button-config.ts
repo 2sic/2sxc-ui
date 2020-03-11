@@ -1,14 +1,15 @@
 ﻿import { Command } from '../../../commands/command';
 import { ContextOfButton } from '../../../context/parts/context-button';
-import { ButtonAction } from '../../button/button-action';
+import { ButtonCommand } from '../../button/button-command';
+import { CommandCode } from '../../../commands/command-code';
 
 export class ButtonConfig {
   name: string = '';
-  action: ButtonAction;
+  action: ButtonCommand;
   classes: string = '';
   show: boolean = null; // maybe
 
-  constructor(action?: ButtonAction, partialConfig?: Partial<ButtonConfig>) {
+  constructor(action?: ButtonCommand, partialConfig?: Partial<ButtonConfig>) {
     if (action && action.commandDefinition && action.commandDefinition.buttonConfig) {
       this.action = action;
       // get defaults from action commandDefinition
@@ -20,7 +21,7 @@ export class ButtonConfig {
     }
   }
 
-  code: <T>(context: ContextOfButton, event: MouseEvent) =>  Promise<T | void>; // void;
+  code: CommandCode; // void;
   configureCommand: (context: ContextOfButton, cmd: Command) => void;
   dialog: (context: ContextOfButton) => string;
   disabled: (context: ContextOfButton) => boolean;

@@ -1,6 +1,8 @@
-﻿export function parametersAdapter(oldParameters: any): any {
-  const newParams = oldParameters;
+﻿import { InPageCommandConfiguration } from '../config/command/in-page-command';
+
+export function removeActionProperty(oldParameters: InPageCommandConfiguration): InPageCommandConfiguration {
+//   const newParams = oldParameters;
   // some clean-up
-  delete newParams.action; // remove the action property
-  return newParams;
+  delete oldParameters.action; // remove the action property
+  return oldParameters;
 }

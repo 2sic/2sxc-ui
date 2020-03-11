@@ -1,4 +1,4 @@
-﻿import { Params } from '../../../commands/params';
+﻿import { CommandParams } from '../../../commands/params';
 import { Settings } from '../../../commands/settings';
 import { InPageCommandConfiguration } from '../command/in-page-command';
 import { InPageCodeParametersProbablyUnused } from './in-page-code-params-probably-unused';
@@ -21,10 +21,10 @@ export class InPageButtonConfiguration {
   classes?: string;
 
   // function dynamicClasses(settings) can be used to dynamically build classes depending on the situation
-  dynamicClasses?(settings: Settings): string;
+  dynamicClasses?(settings: Partial<CommandParams>): string;
 
   // bool/function showCondition (API still experimental) - used to dynamically choose if this button should be shown or not
-  showCondition?(settings: Settings, modConfig: InPageCodeParametersProbablyUnused): boolean;
+  showCondition?(settings: Partial<CommandParams>, modConfig: InPageCodeParametersProbablyUnused): boolean;
 
   // bool disabled (API still experimental) would disable the click on a button
   disabled?: boolean;
@@ -33,13 +33,13 @@ export class InPageButtonConfiguration {
   partOfPage?: boolean;
 
   // tbd, not documented
-  params?: Params;
+  params?: CommandParams;
 
   // true/false if this is just something visual; otherwise a webservice will ensure that a content-group exists (for editing etc.)
   uiActionOnly?: boolean;
 
   // code(settings, event) - the code executed on click, if it's not the default action
-  code?<T>(settings: Settings, modConfig: InPageCodeParametersProbablyUnused): Promise<void | T>;
+  code?<T>(settings: Partial<CommandParams>, modConfig: InPageCodeParametersProbablyUnused): Promise<void | T>;
 
   // created in the buttonConfig v1
   name?: string;

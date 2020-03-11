@@ -1,10 +1,10 @@
 ﻿import { Engine } from '../commands/engine';
 import { Settings } from '../commands/settings';
-import { context as getContext } from '../context/context';
 import {
   ContextBundleInstance,
   isContextOfInstance,
 } from '../context/bundles/context-bundle-instance';
+import { context as getContext } from '../context/context';
 import { DebugConfig } from '../DebugConfig';
 import { HasLog } from '../logging/has-log';
 import { Log } from '../logging/log';

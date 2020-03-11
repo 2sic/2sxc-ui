@@ -2,7 +2,7 @@
 /** Shared properties of all item identifiers */
 export interface ItemIdentifierShared {
   Title?: string;
-  Prefill?: any;
+  Prefill?: { [key: string]: any};
 }
 
 /** Simple identifier, which is id/type-name */

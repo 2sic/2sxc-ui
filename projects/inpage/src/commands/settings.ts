@@ -1,12 +1,13 @@
 ﻿import { UserOfEditContext } from '../manage/user-of-edit-context';
-import { Params } from './params';
+import { CommandParams } from './params';
+import { MetadataFor } from './params-metadata-for';
 
 export class Settings {
   code: any;
   configureCommand: any;
   items: any; // string | string[];
-  metadata: any;
-  prefill: any;
+  metadata: MetadataFor;
+  prefill: {[key: string]: any};
   //
   action: string;
   appId: number;
@@ -29,7 +30,7 @@ export class Settings {
   isList: boolean;
   isPublished: boolean;
   newWindow: boolean;
-  params: Params;
+  params: CommandParams;
   partOfPage: boolean;
   sortOrder: number;
   supportsAjax: boolean;

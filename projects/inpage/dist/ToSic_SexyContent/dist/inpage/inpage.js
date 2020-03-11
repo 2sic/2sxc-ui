@@ -1375,7 +1375,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ButtonConfigurationBuilder", function() { return ButtonConfigurationBuilder; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__logging_has_log__ = __webpack_require__(9);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__logging_log__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__in_page_button_configuration__ = __webpack_require__(69);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__command_in_page_command__ = __webpack_require__(69);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -1426,7 +1426,7 @@ var ButtonConfigurationBuilder = /** @class */ (function (_super) {
             };
         }
         // if it's a command w/action, wrap into command + trim
-        if (Object(__WEBPACK_IMPORTED_MODULE_2__in_page_button_configuration__["isInPageCommandConfiguration"])(asBtnConfig)) {
+        if (Object(__WEBPACK_IMPORTED_MODULE_2__command_in_page_command__["isInPageCommandConfiguration"])(asBtnConfig)) {
             log.add('action found, will move down to .command');
             return {
                 command: { action: original.action.trim() },
@@ -1594,11 +1594,11 @@ var ButtonConfig = /** @class */ (function () {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ButtonAction", function() { return ButtonAction; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ButtonCommand", function() { return ButtonCommand; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__commands_commands__ = __webpack_require__(0);
 
-var ButtonAction = /** @class */ (function () {
-    function ButtonAction(name, contentType, params) {
+var ButtonCommand = /** @class */ (function () {
+    function ButtonCommand(name, contentType, params) {
         this.name = name;
         this.params = params;
         if (!params) {
@@ -1610,7 +1610,7 @@ var ButtonAction = /** @class */ (function () {
         // activate command for this
         this.commandDefinition = __WEBPACK_IMPORTED_MODULE_0__commands_commands__["Commands"].get(name);
     }
-    return ButtonAction;
+    return ButtonCommand;
 }());
 
 
@@ -1923,8 +1923,8 @@ $('a', __WEBPACK_IMPORTED_MODULE_3__quick_e__["$quickE"].selected).click(functio
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Cms", function() { return Cms; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__commands_engine__ = __webpack_require__(52);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__context_context__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__context_bundles_context_bundle_instance__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__context_bundles_context_bundle_instance__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__context_context__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__DebugConfig__ = __webpack_require__(14);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__logging_has_log__ = __webpack_require__(9);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__logging_log__ = __webpack_require__(6);
@@ -1968,9 +1968,9 @@ var Cms = /** @class */ (function (_super) {
     };
     Cms.prototype.run = function (context, nameOrSettings, eventOrSettings, event) {
         var _this = this;
-        var realContext = Object(__WEBPACK_IMPORTED_MODULE_2__context_bundles_context_bundle_instance__["isContextOfInstance"])(context)
+        var realContext = Object(__WEBPACK_IMPORTED_MODULE_1__context_bundles_context_bundle_instance__["isContextOfInstance"])(context)
             ? context
-            : Object(__WEBPACK_IMPORTED_MODULE_1__context_context__["context"])(context);
+            : Object(__WEBPACK_IMPORTED_MODULE_2__context_context__["context"])(context);
         return this.do(function () {
             return new __WEBPACK_IMPORTED_MODULE_0__commands_engine__["Engine"](_this.log).detectParamsAndRun(realContext, nameOrSettings, eventOrSettings, event);
         });
@@ -2475,7 +2475,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
  */
 function flattenActionDefinition(actDef) {
     if (!actDef.entity || !actDef.entity._2sxcEditInformation) {
-        return;
+        return actDef;
     }
     var editInfo = actDef.entity._2sxcEditInformation;
     actDef.useModuleList = (editInfo.sortOrder !== undefined); // has sort-order, so use list
@@ -2496,12 +2496,12 @@ function flattenActionDefinition(actDef) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (immutable) */ __webpack_exports__["parametersAdapter"] = parametersAdapter;
-function parametersAdapter(oldParameters) {
-    var newParams = oldParameters;
+/* harmony export (immutable) */ __webpack_exports__["removeActionProperty"] = removeActionProperty;
+function removeActionProperty(oldParameters) {
+    //   const newParams = oldParameters;
     // some clean-up
-    delete newParams.action; // remove the action property
-    return newParams;
+    delete oldParameters.action; // remove the action property
+    return oldParameters;
 }
 
 
@@ -3442,7 +3442,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__contentBlock_templates__ = __webpack_require__(15);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__logging_has_log__ = __webpack_require__(9);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__toolbar_adapters_settings_adapter__ = __webpack_require__(39);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__toolbar_button_button_action__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__toolbar_button_button_command__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__toolbar_config_button_button_config__ = __webpack_require__(21);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__command_open_ng_dialog__ = __webpack_require__(45);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__commands__ = __webpack_require__(0);
@@ -3506,7 +3506,7 @@ var Engine = /** @class */ (function (_super) {
         var contentType = settings.contentType;
         this.log.add("run command " + name + " for type " + contentType);
         // Toolbar API v2
-        var newButtonAction = new __WEBPACK_IMPORTED_MODULE_3__toolbar_button_button_action__["ButtonAction"](name, contentType, settings);
+        var newButtonAction = new __WEBPACK_IMPORTED_MODULE_3__toolbar_button_button_command__["ButtonCommand"](name, contentType, settings);
         var newButtonConfig = new __WEBPACK_IMPORTED_MODULE_4__toolbar_config_button_button_config__["ButtonConfig"](newButtonAction);
         newButtonConfig.name = name;
         var button = (context.button = Object.assign(newButtonConfig, newButtonAction.commandDefinition.buttonConfig, Object(__WEBPACK_IMPORTED_MODULE_2__toolbar_adapters_settings_adapter__["buttonConfigUpgrade"])(settings))); // merge conf & settings, but settings has higher priority
@@ -3962,21 +3962,10 @@ var InstanceConfig = /** @class */ (function () {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "InPageButtonConfiguration", function() { return InPageButtonConfiguration; });
-/* harmony export (immutable) */ __webpack_exports__["isInPageButtonConfiguration"] = isInPageButtonConfiguration;
-/**
- * Button Definition v1. from old API
- * it is publicly used out of inpage, so take a care to preserve its signature
- */
-var InPageButtonConfiguration = /** @class */ (function () {
-    function InPageButtonConfiguration() {
-    }
-    return InPageButtonConfiguration;
-}());
-
-function isInPageButtonConfiguration(thing) {
+/* harmony export (immutable) */ __webpack_exports__["isInPageCommandConfiguration"] = isInPageCommandConfiguration;
+function isInPageCommandConfiguration(thing) {
     // check two common signatures - command and action
-    return thing.command !== undefined || thing.action !== undefined;
+    return typeof thing.action === 'string';
 }
 
 
@@ -3993,7 +3982,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__adapters_parameters_adapter__ = __webpack_require__(38);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__adapters_settings_adapter__ = __webpack_require__(39);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__config_button_button_config__ = __webpack_require__(21);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__button_action__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__button_command__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__config_button_button_config_builder__ = __webpack_require__(20);
 
 
@@ -4032,10 +4021,10 @@ function expandButtonGroups(fullToolbarConfig, parentLog) {
                 // if the button belongs to a content-item, move the specs up to the item into the settings-object
                 Object(__WEBPACK_IMPORTED_MODULE_2__adapters_flatten_action_definition__["flattenActionDefinition"])(btn.command);
                 // parameters adapter from v1 to v2
-                var params = Object(__WEBPACK_IMPORTED_MODULE_3__adapters_parameters_adapter__["parametersAdapter"])(btn.command);
+                var params = Object(__WEBPACK_IMPORTED_MODULE_3__adapters_parameters_adapter__["removeActionProperty"])(btn.command);
                 Object.assign(params, fullToolbarConfig.params);
                 // Toolbar API v2
-                var newButtonAction = new __WEBPACK_IMPORTED_MODULE_6__button_action__["ButtonAction"](name, contentType, params);
+                var newButtonAction = new __WEBPACK_IMPORTED_MODULE_6__button_command__["ButtonCommand"](name, contentType, params);
                 var newButtonConfig = new __WEBPACK_IMPORTED_MODULE_5__config_button_button_config__["ButtonConfig"](newButtonAction);
                 newButtonConfig.name = name;
                 // settings adapter from v1 to v2
@@ -4720,61 +4709,34 @@ var Command = /** @class */ (function () {
             }
             return (typeof (propOrFunction) === 'function' ? propOrFunction(context) : propOrFunction);
         };
-        this.addSimpleItem = function () {
-            var item = {};
-            var params = _this.context.button.action.params;
-            var ct = params.contentType || params.attributeSetName; // two ways to name the content-type-name this, v 7.2+ and older
-            if (params.entityId)
-                item.EntityId = params.entityId;
-            if (ct)
-                item.ContentTypeName = ct;
-            // only add if there was stuff to add
-            if (item.EntityId || item.ContentTypeName) {
-                console.warn('used the simple item header - test if dialog still works!');
-                // this.items.push(item);
-                _this.items.push(__assign(__assign({}, item), { Title: Object(__WEBPACK_IMPORTED_MODULE_1__translate_2sxc_translate__["translate"])(_this.findTranslationKey(_this.findPartName(true))) }));
-            }
-        };
-        // this will tell the command to edit a item from the sorted list in the group, optionally together with the presentation item
-        this.addContentGroupItemSetsToEditList = function (withPresentation) {
-            var isContentAndNotHeader = (_this.context.button.action.params.sortOrder !== -1);
-            var index = isContentAndNotHeader ? _this.context.button.action.params.sortOrder : 0;
-            var cTerm = _this.findPartName(true);
-            var pTerm = _this.findPartName(false);
-            var isAdd = _this.context.button.action.name === 'new';
-            var groupId = _this.context.contentBlock.contentGroupId;
-            _this.addContentGroupItem(groupId, index, cTerm, isAdd);
-            if (withPresentation)
-                _this.addContentGroupItem(groupId, index, pTerm, isAdd);
-        };
         // build the link, combining specific params with global ones and put all in the url
         this.generateLink = function (context) {
+            var params = context.button.action.params;
+            var urlItems = params;
             // if there is no items-array, create an empty one (it's required later on)
-            if (!context.button.action.params.items) {
-                context.button.action.params.items = [];
-            }
-            //#region steps for all actions: prefill, serialize, open-dialog
+            // if (!context.button.action.params.items) {
+            //   context.button.action.params.items = [];
+            // }
+            // steps for all actions: prefill, serialize, open-dialog
             // when doing new, there may be a prefill in the link to initialize the new item
-            if (context.button.action.params.prefill) {
-                for (var i = 0; i < _this.items.length; i++) {
-                    _this.items[i].Prefill = context.button.action.params.prefill;
-                }
-            }
-            _this.params.items = JSON.stringify(_this.items); // Serialize/json-ify the complex items-list
+            if (params.prefill)
+                for (var i = 0; i < _this.items.length; i++)
+                    _this.items[i].Prefill = params.prefill;
+            delete urlItems.prefill; // added 2020-03-11, seemed strange that it's not removed
+            urlItems.items = JSON.stringify(_this.items); // Serialize/json-ify the complex items-list
             // clone the params and adjust parts based on partOfPage settings...
-            var ngDialogParams = __WEBPACK_IMPORTED_MODULE_0__manage_ng_dialog_params__["NgDialogParams"].fromContext(context); // 2dm simplified buildNgDialogParams(context);
-            var sharedParams = Object.assign({}, ngDialogParams);
             var partOfPage = context.button.partOfPage(context);
-            if (!partOfPage) {
-                delete sharedParams.versioningRequirements;
-                delete sharedParams.publishing;
-                sharedParams.partOfPage = false;
-            }
+            var ngDialogParams = new __WEBPACK_IMPORTED_MODULE_0__manage_ng_dialog_params__["NgUrlValuesWithoutParams"](context, partOfPage); // 2dm simplified buildNgDialogParams(context);
+            // const sharedParams = Object.assign({}, ngDialogParams) as NgDialogParams;
+            // const sharedParams = ngDialogParams;
+            // if (!partOfPage) {
+            //   delete sharedParams.versioningRequirements;
+            //   delete sharedParams.publishing;
+            //   sharedParams.partOfPage = false;
+            // }
             return _this.ngDialogUrl +
-                '#' +
-                $.param(sharedParams) +
-                '&' +
-                $.param(_this.params) +
+                '#' + $.param(ngDialogParams) +
+                '&' + $.param(urlItems) +
                 _this.isDebug;
             //#endregion
         };
@@ -4787,6 +4749,33 @@ var Command = /** @class */ (function () {
             dialog: dialog || context.button.action.name,
         }, params);
     }
+    Command.prototype.addSimpleItem = function () {
+        var item = {};
+        var params = this.context.button.action.params;
+        var ct = params.contentType || params.attributeSetName; // two ways to name the content-type-name this, v 7.2+ and older
+        if (params.entityId)
+            item.EntityId = params.entityId;
+        if (ct)
+            item.ContentTypeName = ct;
+        // only add if there was stuff to add
+        if (item.EntityId || item.ContentTypeName) {
+            console.warn('used the simple item header - test if dialog still works!');
+            // this.items.push(item);
+            this.items.push(__assign(__assign({}, item), { Title: Object(__WEBPACK_IMPORTED_MODULE_1__translate_2sxc_translate__["translate"])(this.findTranslationKey(this.findPartName(true))) }));
+        }
+    };
+    // this will tell the command to edit a item from the sorted list in the group, optionally together with the presentation item
+    Command.prototype.addContentGroupItemSetsToEditList = function (withPresentation) {
+        var isContentAndNotHeader = (this.context.button.action.params.sortOrder !== -1);
+        var index = isContentAndNotHeader ? this.context.button.action.params.sortOrder : 0;
+        var cTerm = this.findPartName(true);
+        var pTerm = this.findPartName(false);
+        var isAdd = this.context.button.action.name === 'new';
+        var groupId = this.context.contentBlock.contentGroupId;
+        this.addContentGroupItem(groupId, index, cTerm, isAdd);
+        if (withPresentation)
+            this.addContentGroupItem(groupId, index, pTerm, isAdd);
+    };
     // this adds an item of the content-group, based on the group GUID and the sequence number
     Command.prototype.addContentGroupItem = function (guid, index, part, isAdd) {
         this.items.push({
@@ -4819,54 +4808,63 @@ var Command = /** @class */ (function () {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "NgDialogParams", function() { return NgDialogParams; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "NgUrlValuesWithoutParams", function() { return NgUrlValuesWithoutParams; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__user_of_edit_context__ = __webpack_require__(25);
 
-var NgDialogParams = /** @class */ (function () {
-    function NgDialogParams() {
-    }
-    // constructor(sxc: SxcInstanceWithInternals, editContext: DataEditContext) {
-    //  this.zoneId = editContext.ContentGroup.ZoneId;
-    //  this.appId = editContext.ContentGroup.AppId;
-    //  this.tid = editContext.Environment.PageId;
-    //  this.mid = editContext.Environment.InstanceId;
-    //  this.cbid = sxc.cbid;
-    //  this.lang = editContext.Language.Current;
-    //  this.langpri = editContext.Language.Primary;
-    //  this.langs = JSON.stringify(editContext.Language.All);
-    //  this.portalroot = editContext.Environment.WebsiteUrl;
-    //  this.websiteroot = editContext.Environment.SxcRootUrl;
-    //  this.partOfPage = editContext.ContentBlock.PartOfPage;
-    //  // versioningRequirements= editContext.ContentBlock.VersioningRequirements;
-    //  this.publishing = editContext.ContentBlock.VersioningRequirements;
-    //  // todo= probably move the user into the dashboard info
-    //  this.user = getUserOfEditContext(editContext);
-    //  this.approot = editContext.ContentGroup.AppUrl || null; // this is the only value which doesn't have a slash by default. note that the app-root doesn't exist when opening "manage-app"
-    // }
-    NgDialogParams.fromContext = function (context) {
-        var params = new NgDialogParams();
-        params.zoneId = context.app.zoneId;
-        params.appId = context.app.id;
-        params.tid = context.page.id;
-        params.mid = context.instance.id;
-        params.cbid = context.contentBlock.id;
-        params.lang = context.app.currentLanguage;
-        params.langpri = context.app.primaryLanguage;
-        params.langs = JSON.stringify(context.app.allLanguages);
-        params.portalroot = context.tenant.url;
-        params.websiteroot = context.instance.sxcRootUrl;
-        params.partOfPage = context.contentBlock.partOfPage;
-        // versioningRequirements= editContext.ContentBlock.VersioningRequirements;
-        params.publishing = context.contentBlock.versioningRequirements;
+/**
+ * This is for building/serializing the main url params when opening a dialog.
+ * It does not contain the "params" / "items" part
+ * @export
+ * @class NgUrlValuesWithoutParams
+ */
+var NgUrlValuesWithoutParams = /** @class */ (function () {
+    //   static fromContext(context: ContextOfButton): NgUrlValuesWithoutParams {
+    //     const params = new NgUrlValuesWithoutParams();
+    //     params.zoneId = context.app.zoneId;
+    //     params.appId = context.app.id;
+    //     params.tid = context.page.id;
+    //     params.mid = context.instance.id;
+    //     params.cbid = context.contentBlock.id;
+    //     params.lang = context.app.currentLanguage;
+    //     params.langpri = context.app.primaryLanguage;
+    //     params.langs = JSON.stringify(context.app.allLanguages);
+    //     params.portalroot = context.tenant.url;
+    //     params.websiteroot = context.instance.sxcRootUrl;
+    //     params.partOfPage = context.contentBlock.partOfPage;
+    //     // versioningRequirements= editContext.ContentBlock.VersioningRequirements;
+    //     params.publishing = context.contentBlock.versioningRequirements;
+    //     // todo= probably move the user into the dashboard info
+    //     params.user = UserOfEditContext.fromContext(context);
+    //     params.approot = context.app.appPath || null; // this is the only value which doesn't have a slash by default. note that the app-root doesn't exist when opening "manage-app"
+    //     params.fa = !context.app.isContent;
+    //     params.rvt = $.ServicesFramework(0).getAntiForgeryValue();
+    //     console.log('rvt', params.rvt);
+    //     return params;
+    //   }
+    function NgUrlValuesWithoutParams(context, partOfPage) {
+        this.zoneId = context.app.zoneId;
+        this.appId = context.app.id;
+        this.tid = context.page.id;
+        this.mid = context.instance.id;
+        this.cbid = context.contentBlock.id;
+        this.lang = context.app.currentLanguage;
+        this.langpri = context.app.primaryLanguage;
+        this.langs = JSON.stringify(context.app.allLanguages);
+        this.portalroot = context.tenant.url;
+        this.websiteroot = context.instance.sxcRootUrl;
+        this.partOfPage = partOfPage; // context.contentBlock.partOfPage;
+        if (partOfPage) {
+            // 2020-03-11 2dm - this never seems to be set anywhere
+            // versioningRequirements= editContext.ContentBlock.VersioningRequirements;
+            this.publishing = context.contentBlock.versioningRequirements;
+        }
         // todo= probably move the user into the dashboard info
-        params.user = __WEBPACK_IMPORTED_MODULE_0__user_of_edit_context__["UserOfEditContext"].fromContext(context);
-        params.approot = context.app.appPath || null; // this is the only value which doesn't have a slash by default. note that the app-root doesn't exist when opening "manage-app"
-        params.fa = !context.app.isContent;
-        params.rvt = $.ServicesFramework(0).getAntiForgeryValue();
-        console.log('rvt', params.rvt);
-        return params;
-    };
-    return NgDialogParams;
+        this.user = __WEBPACK_IMPORTED_MODULE_0__user_of_edit_context__["UserOfEditContext"].fromContext(context);
+        this.approot = context.app.appPath || null; // this is the only value which doesn't have a slash by default. note that the app-root doesn't exist when opening "manage-app"
+        this.fa = !context.app.isContent;
+        this.rvt = $.ServicesFramework(0).getAntiForgeryValue();
+    }
+    return NgUrlValuesWithoutParams;
 }());
 
 
@@ -5285,7 +5283,7 @@ var _toolbarManager = sharedTbm;
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (immutable) */ __webpack_exports__["buttonConfigAdapter"] = buttonConfigAdapter;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__button_button_action__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__button_button_command__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__config_button_button_config__ = __webpack_require__(21);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__config_button_button_config_builder__ = __webpack_require__(20);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__config_button_in_page_code_params_probably_unused__ = __webpack_require__(91);
@@ -5384,9 +5382,9 @@ function buttonConfigAdapter(oldButtonDef) {
     // if the button belongs to a content-item, move the specs up to the item into the settings-object
     Object(__WEBPACK_IMPORTED_MODULE_4__flatten_action_definition__["flattenActionDefinition"])(oldButtonDef.command);
     // parameters adapter from v1 to v2
-    var params = Object(__WEBPACK_IMPORTED_MODULE_5__parameters_adapter__["parametersAdapter"])(oldButtonDef.command);
+    var params = Object(__WEBPACK_IMPORTED_MODULE_5__parameters_adapter__["removeActionProperty"])(oldButtonDef.command);
     // Toolbar API v2
-    var newButtonAction = new __WEBPACK_IMPORTED_MODULE_0__button_button_action__["ButtonAction"](name, contentType, params);
+    var newButtonAction = new __WEBPACK_IMPORTED_MODULE_0__button_button_command__["ButtonCommand"](name, contentType, params);
     var newButtonConfig = new __WEBPACK_IMPORTED_MODULE_1__config_button_button_config__["ButtonConfig"](newButtonAction);
     newButtonConfig.name = name;
     return newButtonConfig;
@@ -6129,9 +6127,9 @@ __webpack_require__(70);
 __webpack_require__(165);
 __webpack_require__(20);
 __webpack_require__(21);
-__webpack_require__(69);
-__webpack_require__(91);
 __webpack_require__(166);
+__webpack_require__(91);
+__webpack_require__(69);
 __webpack_require__(167);
 __webpack_require__(19);
 __webpack_require__(66);
@@ -6938,11 +6936,11 @@ var Definition = /** @class */ (function () {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Params", function() { return Params; });
-var Params = /** @class */ (function () {
-    function Params() {
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CommandParams", function() { return CommandParams; });
+var CommandParams = /** @class */ (function () {
+    function CommandParams() {
     }
-    return Params;
+    return CommandParams;
 }());
 
 
@@ -7378,10 +7376,21 @@ var ButtonGroupConfig = /** @class */ (function () {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (immutable) */ __webpack_exports__["isInPageCommandConfiguration"] = isInPageCommandConfiguration;
-function isInPageCommandConfiguration(thing) {
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "InPageButtonConfiguration", function() { return InPageButtonConfiguration; });
+/* harmony export (immutable) */ __webpack_exports__["isInPageButtonConfiguration"] = isInPageButtonConfiguration;
+/**
+ * Button Definition v1. from old API
+ * it is publicly used out of inpage, so take a care to preserve its signature
+ */
+var InPageButtonConfiguration = /** @class */ (function () {
+    function InPageButtonConfiguration() {
+    }
+    return InPageButtonConfiguration;
+}());
+
+function isInPageButtonConfiguration(thing) {
     // check two common signatures - command and action
-    return typeof thing.action === 'string';
+    return thing.command !== undefined || thing.action !== undefined;
 }
 
 

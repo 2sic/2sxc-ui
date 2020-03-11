@@ -1,8 +1,19 @@
 
+export interface InPageCommandConfigurationWithTooMuchInfo extends InPageCommandConfiguration {
+    entity?: {
+        EntityId: number,
+        _2sxcEditInformation: {
+            sortOrder?: number,
+        },
+    };
+    sortOrder?: number;
+}
+
 export interface InPageCommandConfiguration  {
     action?: string;
     entityId?: number;
-    contentType?: string ;
+    contentType?: string;
+    useModuleList?: boolean;
 }
 
 export function isInPageCommandConfiguration(thing: any): thing is InPageCommandConfiguration {

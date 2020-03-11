@@ -1,13 +1,14 @@
 ﻿import { CommandDefinition } from '../../commands/command-definition';
 import { Commands } from '../../commands/commands';
+import { CommandParams } from '../../commands/params';
 
-export class ButtonAction {
+export class ButtonCommand {
   readonly commandDefinition: CommandDefinition; // reference to action to be run
   customCode: string; // custom code if used
 
   constructor(public name: string,
               contentType?: string,
-              public params?: any) {
+              public params?: Partial<CommandParams>) {
     if (!params) {
       this.params = {};
     }

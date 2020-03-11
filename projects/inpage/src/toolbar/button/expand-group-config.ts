@@ -1,12 +1,12 @@
 ﻿import { Commands } from '../../commands/commands';
 import { Log } from '../../logging/log';
 import { flattenActionDefinition } from '../adapters/flatten-action-definition';
-import { parametersAdapter } from '../adapters/parameters-adapter';
+import { removeActionProperty } from '../adapters/parameters-adapter';
 import { buttonConfigUpgrade } from '../adapters/settings-adapter';
 import { ButtonConfig } from '../config/button/button-config';
 import { ToolbarSettings } from '../settings/toolbar-settings';
 import { ToolbarConfig } from '../toolbar/toolbar-config';
-import { ButtonAction } from './button-action';
+import { ButtonCommand } from './button-command';
 import { ButtonConfigurationBuilder } from '../config/button/button-config-builder';
 
 /**
@@ -47,11 +47,11 @@ export function expandButtonGroups(fullToolbarConfig: ToolbarConfig, parentLog: 
         flattenActionDefinition(btn.command);
 
         // parameters adapter from v1 to v2
-        const params = parametersAdapter(btn.command);
+        const params = removeActionProperty(btn.command);
         Object.assign(params, fullToolbarConfig.params);
 
         // Toolbar API v2
-        const newButtonAction = new ButtonAction(name, contentType, params);
+        const newButtonAction = new ButtonCommand(name, contentType, params);
         const newButtonConfig = new ButtonConfig(newButtonAction);
         newButtonConfig.name = name;
 

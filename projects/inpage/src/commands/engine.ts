@@ -1,10 +1,10 @@
 ﻿import { prepareToAddContent } from '../contentBlock/templates';
-import { ContextOfButton } from '../context/parts/context-button';
 import { ContextBundleInstance } from '../context/bundles/context-bundle-instance';
+import { ContextOfButton } from '../context/parts/context-button';
 import { HasLog } from '../logging/has-log';
 import { Log } from '../logging/log';
 import { buttonConfigUpgrade } from '../toolbar/adapters/settings-adapter';
-import { ButtonAction } from '../toolbar/button/button-action';
+import { ButtonCommand } from '../toolbar/button/button-command';
 import { ButtonConfig } from '../toolbar/config/button/button-config';
 import { commandOpenNgDialog } from './command-open-ng-dialog';
 import { Commands as Commands } from './commands';
@@ -76,7 +76,7 @@ export class Engine extends HasLog {
     this.log.add(`run command ${name} for type ${contentType}`);
 
     // Toolbar API v2
-    const newButtonAction = new ButtonAction(name, contentType, settings);
+    const newButtonAction = new ButtonCommand(name, contentType, settings);
     const newButtonConfig = new ButtonConfig(newButtonAction);
     newButtonConfig.name = name;
 

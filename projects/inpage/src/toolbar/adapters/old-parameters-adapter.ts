@@ -1,6 +1,6 @@
 ﻿import { Settings } from '../../commands/settings';
-import { ButtonAction } from '../button/button-action';
-export function oldParametersAdapter(action: ButtonAction): Partial<Settings> {
+import { ButtonCommand } from '../button/button-command';
+export function oldParametersAdapter(action: ButtonCommand): Partial<Settings> {
 
   const params: Partial<Settings> = {};
 

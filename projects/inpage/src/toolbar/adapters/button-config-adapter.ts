@@ -1,12 +1,11 @@
-﻿import { Commands as Commands } from '../../commands/commands';
-import { ContextOfButton } from '../../context/parts/context-button';
-import { ButtonAction } from '../button/button-action';
+﻿import { ContextOfButton } from '../../context/parts/context-button';
+import { ButtonCommand } from '../button/button-command';
 import { ButtonConfig } from '../config/button/button-config';
-import { InPageButtonConfiguration } from '../config/button/in-page-button-configuration';
 import { ButtonConfigurationBuilder } from '../config/button/button-config-builder';
+import { InPageButtonConfiguration } from '../config/button/in-page-button-configuration';
 import { InPageCodeParametersProbablyUnused } from '../config/button/in-page-code-params-probably-unused';
 import { flattenActionDefinition } from './flatten-action-definition';
-import { parametersAdapter } from './parameters-adapter';
+import { removeActionProperty } from './parameters-adapter';
 
 export function buttonConfigAdapter(oldButtonDef: InPageButtonConfiguration): ButtonConfig {
 
@@ -115,10 +114,10 @@ export function buttonConfigAdapter(oldButtonDef: InPageButtonConfiguration): Bu
   flattenActionDefinition(oldButtonDef.command);
 
   // parameters adapter from v1 to v2
-  const params = parametersAdapter(oldButtonDef.command);
+  const params = removeActionProperty(oldButtonDef.command);
 
   // Toolbar API v2
-  const newButtonAction = new ButtonAction(name, contentType, params);
+  const newButtonAction = new ButtonCommand(name, contentType, params);
   const newButtonConfig = new ButtonConfig(newButtonAction);
   newButtonConfig.name = name;
 
