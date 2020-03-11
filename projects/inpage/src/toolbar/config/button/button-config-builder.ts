@@ -135,7 +135,7 @@ function disableButtons(context: ContextOfButton, btns: ButtonConfig[], config: 
     // btns[i].disabled = evalPropOrFunction(btns[i].disabled, btns[i].command, config, false);
     context.button = btns[i];
     if (btns[i].action) {
-      btns[i].disabled = evalPropOrFunction(btns[i].disabled, context, config, false);
+      btns[i].disabled = evalPropOrFunction(btns[i].disabled, context, config, () => false);
     } else {
       btns[i].disabled = (() => false);
     }
@@ -143,7 +143,7 @@ function disableButtons(context: ContextOfButton, btns: ButtonConfig[], config: 
   }
 }
 
-function evalPropOrFunction<T>(propOrFunction: TypeTbD, context: ContextOfButton, config: InstanceConfig, fallback: T): any {
+function evalPropOrFunction<T>(propOrFunction: TypeTbD, context: ContextOfButton, config: InstanceConfig, fallback: T): T {
   if (propOrFunction === undefined || propOrFunction === null) {
     return fallback;
   }

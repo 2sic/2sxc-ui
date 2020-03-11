@@ -17,7 +17,11 @@ export function renderButton(context: ContextOfButton, groupIndex: number): HTML
 
   let onclick: string = '';
 
-  if (!buttonConfig.disabled) {
+  const disabled = typeof(buttonConfig.disabled) === 'function'
+    ? buttonConfig.disabled(context)
+    : buttonConfig.disabled as boolean;
+
+  if (!disabled) {
     onclick = `$2sxc(${context.instance.id}, ${context.contentBlock.id}).manage.run(${JSON.stringify(oldParamsAdapter)}, event);`;
     // onclick = `$2sxc(${context.instance.id}, ${context.contentBlock.id}).manage.run2($2sxc.context(this), ${JSON.stringify(oldParamsAdapter)}, event);`;
   }
@@ -30,7 +34,7 @@ export function renderButton(context: ContextOfButton, groupIndex: number): HTML
 
   button.classList.add(`group-${groupIndex}`);
 
-  if (buttonConfig.disabled) {
+  if (disabled) {
     button.classList.add('disabled');
   }
 

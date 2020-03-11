@@ -1267,7 +1267,10 @@ function renderButton(context, groupIndex) {
     // retrieve configuration for this button
     var oldParamsAdapter = Object(__WEBPACK_IMPORTED_MODULE_0__adapters_old_parameters_adapter__["oldParametersAdapter"])(buttonConfig.action);
     var onclick = '';
-    if (!buttonConfig.disabled) {
+    var disabled = typeof (buttonConfig.disabled) === 'function'
+        ? buttonConfig.disabled(context)
+        : buttonConfig.disabled;
+    if (!disabled) {
         onclick = "$2sxc(" + context.instance.id + ", " + context.contentBlock.id + ").manage.run(" + JSON.stringify(oldParamsAdapter) + ", event);";
         // onclick = `$2sxc(${context.instance.id}, ${context.contentBlock.id}).manage.run2($2sxc.context(this), ${JSON.stringify(oldParamsAdapter)}, event);`;
     }
@@ -1276,7 +1279,7 @@ function renderButton(context, groupIndex) {
         button.classList.add("sc-" + buttonConfig.action.name);
     }
     button.classList.add("group-" + groupIndex);
-    if (buttonConfig.disabled) {
+    if (disabled) {
         button.classList.add('disabled');
     }
     Object(__WEBPACK_IMPORTED_MODULE_1__render_helpers__["addClasses"])(button, buttonConfig.classes, ',');
@@ -1429,7 +1432,7 @@ function disableButtons(context, btns, config) {
         // btns[i].disabled = evalPropOrFunction(btns[i].disabled, btns[i].command, config, false);
         context.button = btns[i];
         if (btns[i].action) {
-            btns[i].disabled = evalPropOrFunction(btns[i].disabled, context, config, false);
+            btns[i].disabled = evalPropOrFunction(btns[i].disabled, context, config, function () { return false; });
         }
         else {
             btns[i].disabled = (function () { return false; });
