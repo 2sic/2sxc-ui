@@ -1,5 +1,5 @@
-﻿import { commandOpenNgDialog } from '../command-open-ng-dialog';
-import { Commands } from '../commands';
+﻿import { Commands } from '../commands';
+import { Engine } from '../execute/engine';
 
 /**
  * new is a dialog to add something, and will not add if cancelled
@@ -27,6 +27,6 @@ Commands.add('new', 'New', 'plus', false, true, {
         Object.assign(context.button.action.params, {
             sortOrder: context.button.action.params.sortOrder + 1,
         });
-        return commandOpenNgDialog(context, event);
+        return Engine.openDialog(context, event);
     },
 });

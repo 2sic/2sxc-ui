@@ -1,9 +1,6 @@
-﻿import { Engine } from '../commands/engine';
+﻿import { Engine } from '../commands/';
 import { Settings } from '../commands/settings';
-import {
-  ContextBundleInstance,
-  isContextOfInstance,
-} from '../context/bundles/context-bundle-instance';
+import { ContextBundleInstance, isContextOfInstance } from '../context/bundles/context-bundle-instance';
 import { context as getContext } from '../context/context';
 import { DebugConfig } from '../DebugConfig';
 import { HasLog } from '../logging/has-log';
@@ -41,13 +38,7 @@ export class Cms extends HasLog {
       : getContext(context);
 
     return this.do(() =>
-      new Engine(this.log).detectParamsAndRun(
-        realContext,
-        nameOrSettings,
-        eventOrSettings,
-        event,
-      ),
-    );
+      new Engine(this.log).detectParamsAndRun(realContext, nameOrSettings, eventOrSettings, event));
   }
 
   /**

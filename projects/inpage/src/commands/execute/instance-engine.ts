@@ -1,7 +1,7 @@
-﻿import { Cms } from '../cms/Cms';
-import { context } from '../context/context';
-import { SxcIntanceEditable } from '../interfaces/sxc-instance-editable';
-import { Settings } from './settings';
+﻿import { Cms } from '../../cms/Cms';
+import { context } from '../../context/context';
+import { SxcIntanceEditable } from '../../interfaces/sxc-instance-editable';
+import { Settings } from '../settings';
 
 export class InstanceEngine {
   constructor(private sxc: SxcIntanceEditable) {}

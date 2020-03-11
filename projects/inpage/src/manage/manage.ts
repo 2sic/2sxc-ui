@@ -1,4 +1,4 @@
-﻿import { InstanceEngine } from '../commands/instance-engine';
+﻿import { InstanceEngine } from '../commands/execute/instance-engine';
 import { context } from '../context/context';
 import { SxcIntanceEditable } from '../interfaces/sxc-instance-editable';
 import { getEditContext } from './api';

@@ -1,4 +1,4 @@
-﻿import { InstanceEngine } from '../../commands/instance-engine';
+﻿import { InstanceEngine } from '../../commands/execute/instance-engine';
 import { SxcIntanceEditable } from '../../interfaces/sxc-instance-editable';
 import { windowInPage as window } from '../../interfaces/window-in-page';
 import { getTag } from '../../manage/api';

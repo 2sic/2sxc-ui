@@ -1,10 +1,14 @@
-﻿import { ContextOfButton } from '../context/parts/context-button';
-import { ItemIdentifierGroup, ItemIdentifierSimple } from '../interfaces/item-identifiers';
-import { NgUrlValuesWithoutParams } from '../manage/ng-dialog-params';
-import { DialogPaths } from '../settings/DialogPaths';
-import { translate } from '../translate/2sxc.translate';
-import { CommandParams } from './params';
+﻿import { ContextOfButton } from '../../context/parts/context-button';
+import { ItemIdentifierGroup, ItemIdentifierSimple } from '../../interfaces/item-identifiers';
+import { NgUrlValuesWithoutParams } from '../../manage/ng-dialog-params';
+import { DialogPaths } from '../../settings/DialogPaths';
+import { translate } from '../../translate/2sxc.translate';
+import { CommandParams } from '../params';
 
+/**
+ * This is responsible for taking a context with command and everything
+ * then building the link for opening the correct dialogs
+ */
 export class CommandExecution {
   public items: Array<ItemIdentifierSimple | ItemIdentifierGroup>;
   public readonly params: CommandParams;
@@ -40,8 +44,10 @@ export class CommandExecution {
   }
 
 
-  // build the link, combining specific params with global ones and put all in the url
-  generateLink() {
+  /**
+   * build the link, combining specific params with global ones and put all in the url
+   */
+  getLink() {
     const context = this.context;
     const params = context.button.action.params;
     const urlItems = this.params as any;
@@ -62,6 +68,9 @@ export class CommandExecution {
     return `${this.rootUrl}#${$.param(ngDialogParams)}&${$.param(urlItems)}${this.debugUrlParam}`;
   }
 
+  /**
+   * Determine the url to open a dialog, based on the settings which UI version to use
+   */
   private getDialogUrl(): string {
     const context = this.context;
     return `${context.instance.sxcRootUrl}desktopmodules/tosic_sexycontent/${(context.ui.form === 'ng8'
@@ -70,17 +79,19 @@ export class CommandExecution {
     : DialogPaths.ng1}?sxcver=${context.instance.sxcVersion}`;
   }
 
+
   private evalPropOrFunction = (propOrFunction: any, context: ContextOfButton, fallback: any) => {
-    if (propOrFunction === undefined || propOrFunction === null) {
+    if (propOrFunction === undefined || propOrFunction === null)
       return fallback;
-    }
     return (typeof (propOrFunction) === 'function' ? propOrFunction(context) : propOrFunction);
   }
 
   private addItem() {
     const item = {} as ItemIdentifierSimple;
     const params = this.context.button.action.params;
-    const ct = params.contentType || (params as any).attributeSetName; // two ways to name the content-type-name this, v 7.2+ and older
+
+    // two ways to name the content-type-name this, v 7.2+ and older
+    const ct = params.contentType || (params as any).attributeSetName;
     if (params.entityId) item.EntityId = params.entityId;
     if (ct) item.ContentTypeName = ct;
 
@@ -93,24 +104,27 @@ export class CommandExecution {
   }
 
 
-  // this will tell the command to edit a item from the sorted list in the group, optionally together with the presentation item
+  /**
+   * this will tell the command to edit a item from the sorted list in the group,
+   * optionally together with the presentation item
+   */
   private addContentGroupItems(withPresentation: boolean) {
     const isContentAndNotHeader = (this.context.button.action.params.sortOrder !== -1);
     const index = isContentAndNotHeader ? this.context.button.action.params.sortOrder : 0;
-    const cTerm = this.findPartName(true);
-    const pTerm = this.findPartName(false);
     const isAdd = this.context.button.action.name === 'new';
     const groupId = this.context.contentBlock.contentGroupId;
 
-    this.addContentGroupItem(groupId, index, cTerm, isAdd);
+    this.addContentGroupItem(groupId, index, this.findPartName(true), isAdd);
 
     if (withPresentation)
-      this.addContentGroupItem(groupId, index, pTerm, isAdd);
+      this.addContentGroupItem(groupId, index, this.findPartName(false), isAdd);
   }
 
 
 
-  // this adds an item of the content-group, based on the group GUID and the sequence number
+  /**
+   * this adds an item of the content-group, based on the group GUID and the sequence number
+   */
   private addContentGroupItem(guid: string, index: number, part: string, isAdd: boolean) {
     this.items.push({
       Group: {
@@ -124,13 +138,17 @@ export class CommandExecution {
   }
 
 
-  /** find the part name for both the API to give the right item (when using groups) and for i18n */
+  /**
+   * find the part name for both the API to give the right item (when using groups) and for i18n
+   */
   private findPartName(content: boolean): string {
     const isContentAndNotHeader = (this.context.button.action.params.sortOrder !== -1);
     return (isContentAndNotHeader ? '' : 'List') + (content ? 'Content' : 'Presentation');
   }
 
-  /** find the correct i18n key for this part */
+  /**
+   * find the correct i18n key for this part
+   */
   private findTranslationKey(partName: string): string {
     return `EditFormTitle.${partName}`;
   }

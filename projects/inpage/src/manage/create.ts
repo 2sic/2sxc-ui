@@ -1,5 +1,5 @@
 ﻿import { SxcInstanceManage } from '../../../$2sxc/src/edit-interfaces/sxc-instance-manage';
-import { InstanceEngine } from '../commands/instance-engine';
+import { InstanceEngine } from '../commands/execute/instance-engine';
 import { Manipulator } from '../contentBlock/manipulate';
 import { ContextOfButton } from '../context/parts/context-button';
 import { AttrJsonEditContext } from '../context/html-attribute/edit-context-root';

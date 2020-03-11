@@ -1,6 +1,6 @@
 ﻿import { ContextOfButton } from '../context/parts/context-button';
 import { CommandCode } from './command-code';
-import { CommandExecution } from './command-execution';
+import { CommandExecution } from './execute/command-execution';
 import { CommandParams } from './params';
 
 /**

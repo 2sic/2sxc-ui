@@ -1,14 +1,18 @@
-﻿import { prepareToAddContent } from '../contentBlock/templates';
-import { ContextBundleInstance } from '../context/bundles/context-bundle-instance';
-import { ContextOfButton } from '../context/parts/context-button';
-import { HasLog } from '../logging/has-log';
-import { Log } from '../logging/log';
-import { buttonConfigUpgrade } from '../toolbar/adapters/settings-adapter';
-import { ButtonCommand } from '../toolbar/button/button-command';
-import { ButtonConfig } from '../toolbar/config/button/button-config';
-import { commandOpenNgDialog } from './command-open-ng-dialog';
-import { Commands as Commands } from './commands';
-import { Settings } from './settings';
+﻿import { Commands } from '../.';
+import { renderer } from '../../contentBlock/render';
+import { prepareToAddContent } from '../../contentBlock/templates';
+import { ContextBundleInstance } from '../../context/bundles/context-bundle-instance';
+import { ContextOfButton } from '../../context/parts/context-button';
+import { $2sxcInPage as $2sxc } from '../../interfaces/sxc-controller-in-page';
+import { HasLog } from '../../logging/has-log';
+import { Log } from '../../logging/log';
+import { quickDialog } from '../../quick-dialog/quick-dialog';
+import { DialogPaths } from '../../settings/DialogPaths';
+import { buttonConfigUpgrade } from '../../toolbar/adapters/settings-adapter';
+import { ButtonCommand } from '../../toolbar/button/button-command';
+import { ButtonConfig } from '../../toolbar/config/button/button-config';
+import { Settings } from '../settings';
+import { CommandExecution } from './command-execution';
 
 export class Engine extends HasLog {
   constructor(parentLog?: Log) {
@@ -21,9 +25,7 @@ export class Engine extends HasLog {
     eventOrSettings: Partial<Settings> | MouseEvent,
     event?: MouseEvent,
   ): Promise<void | T> {
-    this.log.add(
-      `detecting params and running - has ${arguments.length} params`,
-    );
+    this.log.add(`detecting params and running - has ${arguments.length} params`);
 
     let settings: Partial<Settings>;
 
@@ -98,26 +100,17 @@ export class Engine extends HasLog {
 
     // todo: stv, fix this in case that is function
     if (!button.code) {
-      this.log.add(
-        'simple button without code - generating code to open standard dialog',
-      );
-      button.code = <T>(
-        contextParam: ContextOfButton,
-        evt: MouseEvent,
-      ): Promise<T> => commandOpenNgDialog<T>(contextParam, evt);
+      this.log.add('simple button without code - generating code to open standard dialog');
+      button.code = (contextParam: ContextOfButton, evt: MouseEvent) => Engine.openDialog(contextParam, evt);
     }
 
     if (button.uiActionOnly(context)) {
-      this.log.add(
-        'just a UI command, will not run pre-flight to ensure content-block - now running the code',
-      );
+      this.log.add('UI command, will not run pre-flight to ensure content-block - running code');
       return button.code(context, origEvent);
     }
 
     // if more than just a UI-action, then it needs to be sure the content-group is created first
-    this.log.add(
-      'command might change data, will wrap in pre-flight to ensure content-block',
-    );
+    this.log.add('command might change data, wrap in pre-flight to ensure content-block');
     return prepareToAddContent(context, settings.useModuleList).then(() => {
       return context.button.code(context, origEvent);
     });
@@ -128,9 +121,7 @@ export class Engine extends HasLog {
    * @param nameOrSettings
    * @returns settings
    */
-  nameOrSettingsAdapter(
-    nameOrSettings: string | Partial<Settings>,
-  ): Partial<Settings> {
+  private nameOrSettingsAdapter(nameOrSettings: string | Partial<Settings>): Partial<Settings> {
     let settings: Partial<Settings>;
     // check if nameOrString is name (string) or object (settings)
     const nameIsString = typeof nameOrSettings === 'string';
@@ -155,12 +146,69 @@ export class Engine extends HasLog {
    * the command definition
    * @param settings
    */
-  expandSettingsWithDefaults(settings: Partial<Settings>): Settings {
+  private expandSettingsWithDefaults(settings: Partial<Settings>): Settings {
     const name = settings.action;
     this.log.add(`will add defaults for ${name} from buttonConfig`);
     const conf = Commands.get(name).buttonConfig;
     const full = Object.assign({}, conf, settings) as Settings; // merge conf & settings, but settings has higher priority
 
     return full;
+  }
+
+
+
+  /**
+   * open a new dialog of the angular-ui
+   */
+  static openDialog<T>(context: ContextOfButton, event: MouseEvent): Promise<T> {
+    // the link contains everything to open a full dialog (lots of params added)
+    let link = new CommandExecution(context).getLink(); // commandLinkToNgDialog(context);
+
+    let fullScreen = false;
+    const origEvent = event || (window.event as MouseEvent);
+
+    return new Promise<T>((resolvePromise) => {
+      // prepare promise for callback when the dialog closes
+      // to reload the in-page view w/ajax or page reload
+      const resolveAndReInit = () => {
+        // very special thing: the signature always expects a Promise<T> so we're recasting
+        resolvePromise(context as any as T);
+        renderer.reloadAndReInitialize(context);
+      };
+
+      // check if inline window (quick-dialog)
+      if (context.button.inlineWindow) {
+        // test if it should be full screen (value or resolve-function)
+        if (typeof context.button.fullScreen === 'function')
+          fullScreen = context.button.fullScreen(context);
+        const diagName = context.button.dialog(context).toString();
+
+        quickDialog
+          .showOrToggleFromToolbar(context, link, fullScreen, diagName)
+          .then((isChanged) => {
+            if (isChanged) resolveAndReInit();
+          });
+
+        // else it's a normal pop-up dialog
+      } else {
+        // check if alt-key pressed, to open the old/new dialog instead
+        if (origEvent && origEvent.altKey) {
+          const toOld = link.indexOf(DialogPaths.ng8) > 0;
+          link = link.replace(
+            toOld ? DialogPaths.ng8 : DialogPaths.ng1,
+            toOld ? DialogPaths.ng1 : DialogPaths.ng8,
+          );
+        }
+
+        // check if new-window
+        if (context.button.newWindow || (origEvent && origEvent.shiftKey)) {
+          // very special thing: the signature always expects a Promise<T> so we're recasting
+          resolvePromise(context as any as T);
+          window.open(link);
+        } else {
+          $2sxc.totalPopup.open(link, resolveAndReInit);
+        }
+      }
+    });
   }
 }

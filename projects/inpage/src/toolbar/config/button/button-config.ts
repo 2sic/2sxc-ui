@@ -1,4 +1,4 @@
-﻿import { CommandExecution } from '../../../commands/command-execution';
+﻿import { CommandExecution } from '../../../commands/execute/command-execution';
 import { ContextOfButton } from '../../../context/parts/context-button';
 import { ButtonCommand } from '../../button/button-command';
 import { CommandCode } from '../../../commands/command-code';
