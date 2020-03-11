@@ -1,5 +1,5 @@
-﻿import { ContextOfButton } from '../context/parts/context-button';
-import { renderToolbar } from './item/render-toolbar';
+﻿import { ContextBundleButton } from '../context/bundles/context-bundle-button';
+import { ToolbarRenderer } from './render/toolbar-renderer';
 
 /**
  * Remove orphan tag-toolbars from DOM
@@ -67,7 +67,7 @@ export class TagToolbar {
   toolbarElement = null as JQuery;
   initialized = false;
 
-  constructor(private readonly tag: JQuery, private readonly cnt: ContextOfButton) {
+  constructor(private readonly tag: JQuery, private readonly cnt: ContextBundleButton) {
     this.updatePosition = this.updatePosition.bind(this);
 
     // Ensure toolbar gets visible when hovering
@@ -92,7 +92,7 @@ export class TagToolbar {
     const toolbarId = `${this.cnt.instance.id}-${this.cnt.contentBlock.id}-${getMenuNumber()}`;
 
     // render toolbar and append tag to body
-    this.toolbarElement = $(renderToolbar(this.cnt));
+    this.toolbarElement = $(new ToolbarRenderer(this.cnt).render());// renderToolbar(this.cnt));
 
     this.toolbarElement.on('mouseleave', (e) => {
       // if we do not hover the tag now, hide it

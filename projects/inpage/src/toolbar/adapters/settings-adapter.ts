@@ -1,4 +1,4 @@
-﻿import { ContextOfButton } from '../../context/parts/context-button';
+﻿import { ContextBundleButton } from '../../context/bundles/context-bundle-button';
 import { TypeTbD } from '../../plumbing';
 import { TypeUnsafe } from '../../plumbing';
 import { ButtonConfig } from '../config/button/button-config';
@@ -71,6 +71,6 @@ function evalPropOrFunction(propOrFunction: TypeTbD): TypeUnsafe {
   if (typeof (propOrFunction) === 'function') {
     return propOrFunction;
   } else {
-    return (context: ContextOfButton) => propOrFunction;
+    return (context: ContextBundleButton) => propOrFunction;
   }
 }

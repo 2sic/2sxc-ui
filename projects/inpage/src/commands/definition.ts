@@ -1,4 +1,4 @@
-﻿import { ContextOfButton } from '../context/parts/context-button';
+﻿import { ContextBundleButton } from '../context/bundles/context-bundle-button';
 import { CommandCode } from './command-code';
 import { CommandExecution } from './execute/command-execution';
 import { CommandParams } from './params';
@@ -23,77 +23,77 @@ export class Definition {
    * @param context
    * @param cmd
    */
-  configureCommand?(context: ContextOfButton, cmd: CommandExecution): void;
+  configureCommand?(context: ContextBundleButton, cmd: CommandExecution): void;
 
   /**
    * optional name of dialog, to check if it's already open
    * @param context
    */
-  dialog?(context: ContextOfButton): string;
+  dialog?(context: ContextBundleButton): string;
 
   /**
    * button is disabled
    * @param context
    */
-  disabled?(context: ContextOfButton): boolean;
+  disabled?(context: ContextBundleButton): boolean;
 
   /**
    * dynamic classes for button
    * @param context
    */
-  dynamicClasses?(context: ContextOfButton): string;
+  dynamicClasses?(context: ContextBundleButton): string;
 
   /**
    * open dialog in full screen
    * @param context
    */
-  fullScreen?(context: ContextOfButton): boolean;
+  fullScreen?(context: ContextBundleButton): boolean;
 
   /**
    * style of icon for button
    * @param context
    */
-  icon?(context: ContextOfButton): string;
+  icon?(context: ContextBundleButton): string;
 
   /**
    * inline window for dialog
    * @param context
    */
-  inlineWindow?(context: ContextOfButton): boolean;
+  inlineWindow?(context: ContextBundleButton): boolean;
 
   /**
    * open new window
    * @param context
    */
-  newWindow?(context: ContextOfButton): boolean;
+  newWindow?(context: ContextBundleButton): boolean;
 
   /**
    * button parameters
    * @param context
    */
-  params?(context: ContextOfButton): Partial<CommandParams>;
+  params?(context: ContextBundleButton): Partial<CommandParams>;
 
   /**
    * is part of page
    * @param context
    */
-  partOfPage?(context: ContextOfButton): boolean;
+  partOfPage?(context: ContextBundleButton): boolean;
 
   /**
    * dynamic show button
    * @param context
    */
-  showCondition?(context: ContextOfButton): boolean;
+  showCondition?(context: ContextBundleButton): boolean;
 
   /**
    * title of button
    * @param context
    */
-  title?(context: ContextOfButton): string;
+  title?(context: ContextBundleButton): string;
 
   /**
    * is Ui action only, like more button
    * @param context
    */
-  uiActionOnly?(context: ContextOfButton): boolean;
+  uiActionOnly?(context: ContextBundleButton): boolean;
 }

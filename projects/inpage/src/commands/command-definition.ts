@@ -1,4 +1,4 @@
-﻿import { ContextOfButton } from '../context/parts/context-button';
+﻿import { ContextBundleButton } from '../context/bundles/context-bundle-button';
 import { ButtonConfig } from '../toolbar/config/button/button-config';
 import { Definition } from './definition';
 
@@ -12,10 +12,10 @@ export class CommandDefinition {
     //
     // stv: v1 code
     const partialButtonConfig = {
-    icon: (context: ContextOfButton) => `icon-sxc-${icon}`,
-    title: (context: ContextOfButton) => `Toolbar.${translateKey}`,
-    uiActionOnly: (context: ContextOfButton) => uiOnly,
-    partOfPage: (context: ContextOfButton) => partOfPage,
+    icon: (context: ContextBundleButton) => `icon-sxc-${icon}`,
+    title: (context: ContextBundleButton) => `Toolbar.${translateKey}`,
+    uiActionOnly: (context: ContextBundleButton) => uiOnly,
+    partOfPage: (context: ContextBundleButton) => partOfPage,
     } as Partial<ButtonConfig>;
 
     Object.assign(partialButtonConfig, more);

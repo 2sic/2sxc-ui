@@ -1,4 +1,4 @@
-﻿import { ContextOfButton } from '../context/parts/context-button';
+﻿import { ContextBundleButton } from '../context/bundles/context-bundle-button';
 import { windowInPage as window } from '../interfaces/window-in-page';
 import { getTag } from '../manage/api';
 import { reset } from '../quick-edit/start';
@@ -21,22 +21,22 @@ import { getPreviewWithTemplate } from './web-api-promises';
 class Renderer {
   /**
    * Show a message where the content of a module should be - usually as placeholder till something else happens
-   * @param {ContextOfButton} context
+   * @param {ContextBundleButton} context
    * @param {string} newContent
    * @returns {} nothing
    */
-  showMessage(context: ContextOfButton, newContent: string): void {
+  showMessage(context: ContextBundleButton, newContent: string): void {
     $(getTag(context.sxc)).html(newContent);
   }
 
 
   /**
    * this one assumes a replace / change has already happened, but now must be finalized...
-   * @param {ContextOfButton} context
+   * @param {ContextBundleButton} context
    * @param {boolean} forceAjax
    * @param {boolean} preview
    */
-  reloadAndReInitialize(context: ContextOfButton, forceAjax?: boolean, preview?: boolean): Promise<void> {
+  reloadAndReInitialize(context: ContextBundleButton, forceAjax?: boolean, preview?: boolean): Promise<void> {
     // if ajax is not supported, we must reload the whole page
     if (!forceAjax && !context.app.supportsAjax) {
       window.location.reload();
@@ -64,11 +64,11 @@ class Renderer {
 
   /**
    * ajax-call, then replace
-   * @param {ContextOfButton} context
+   * @param {ContextBundleButton} context
    * @param {number} alternateTemplateId
    * @param {boolean} justPreview
    */
-  ajaxLoad(context: ContextOfButton, alternateTemplateId: number, justPreview: boolean): Promise<void> {
+  ajaxLoad(context: ContextBundleButton, alternateTemplateId: number, justPreview: boolean): Promise<void> {
     return getPreviewWithTemplate(context, alternateTemplateId)
       .then((result: string) => {
         this.replaceContentBlock(context, result, justPreview);
@@ -82,11 +82,11 @@ class Renderer {
   /**
    * ajax update/replace the content of the content-block
    * optionally also initialize the toolbar (if not just preview)
-   * @param {ContextOfButton} context
+   * @param {ContextBundleButton} context
    * @param {string} newContent
    * @param {boolean} justPreview
    */
-  private replaceContentBlock(context: ContextOfButton, newContent: string, justPreview: boolean): void {
+  private replaceContentBlock(context: ContextBundleButton, newContent: string, justPreview: boolean): void {
     try {
       const newDom = $(newContent);
 

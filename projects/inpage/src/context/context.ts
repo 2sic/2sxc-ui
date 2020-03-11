@@ -1,4 +1,4 @@
-﻿import { ContextOfApp, ContextOfButton, ContextOfContentBlock, ContextOfInstance, ContextOfItem, ContextOfPage, ContextOfSystem, ContextOfTenant, ContextOfUi, ContextOfUser } from '.';
+﻿import { ContextOfApp, ContextBundleButton, ContextOfContentBlock, ContextOfInstance, ContextOfItem, ContextOfPage, ContextOfSystem, ContextOfTenant, ContextOfUi, ContextOfUser } from '.';
 import { AttrJsonEditContext } from './html-attribute';
 import { SxcIntanceEditable } from '../interfaces/sxc-instance-editable';
 import { getContainerTag, getEditContext } from '../manage/api';
@@ -11,7 +11,7 @@ import { IDs } from '../settings/2sxc.consts';
  * @param htmlElement or Id (moduleId)
  * @param cbid
  */
-export function context(tagOrSxc: SxcIntanceEditable | HTMLElement | JQuery| number, cbid?: number): ContextOfButton {
+export function context(tagOrSxc: SxcIntanceEditable | HTMLElement | JQuery| number, cbid?: number): ContextBundleButton {
   let sxc: SxcIntanceEditable;
   let containerTag: HTMLElement = null;
 
@@ -35,7 +35,7 @@ export function context(tagOrSxc: SxcIntanceEditable | HTMLElement | JQuery| num
  * @param htmlElement or Id (moduleId)
  * @param cbid
  */
-export function contextCopy(htmlElementOrId: HTMLElement | number, cbid?: number): ContextOfButton {
+export function contextCopy(htmlElementOrId: HTMLElement | number, cbid?: number): ContextBundleButton {
   const contextOfButton = context(htmlElementOrId, cbid);
   // set sxc to null because of cyclic reference, so we can serialize it
   contextOfButton.sxc = null;
@@ -51,7 +51,7 @@ export function contextCopy(htmlElementOrId: HTMLElement | number, cbid?: number
  * @param sxc
  * @param htmlElement
  */
-export function getContextInstance(sxc: SxcIntanceEditable, htmlElement?: HTMLElement): ContextOfButton {
+export function getContextInstance(sxc: SxcIntanceEditable, htmlElement?: HTMLElement): ContextBundleButton {
   const editContext = getEditContext(sxc, htmlElement);
   return createContextFromEditContext(editContext);
 }
@@ -61,7 +61,7 @@ export function getContextInstance(sxc: SxcIntanceEditable, htmlElement?: HTMLEl
  * @param editCtx
  */
 export function createContextFromEditContext(editCtx: AttrJsonEditContext) {
-  const btnCtx = new ContextOfButton();
+  const btnCtx = new ContextBundleButton();
 
   // *** ContextOf ***
   // this will be everything about the current system, like system / api -paths etc.

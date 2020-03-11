@@ -1,5 +1,5 @@
 ﻿import { WebApiParams } from '../contentBlock/web-api-params';
-import { ContextOfButton } from '../context/parts/context-button';
+import { ContextBundleButton } from '../context/bundles/context-bundle-button';
 import { translate } from '../translate/2sxc.translate';
 
 /**
@@ -9,7 +9,7 @@ import { translate } from '../translate/2sxc.translate';
 // #region contentItem Commands
 export let contentItems = {
   // delete command - try to really delete a content-item
-  delete: (context: ContextOfButton, itemId: number, itemGuid: string, itemTitle: string): Promise<void> => {
+  delete: (context: ContextBundleButton, itemId: number, itemGuid: string, itemTitle: string): Promise<void> => {
     // first show main warning / get ok
     const ok = confirm(translate('Delete.Confirm')
       .replace('{id}', String(itemId))

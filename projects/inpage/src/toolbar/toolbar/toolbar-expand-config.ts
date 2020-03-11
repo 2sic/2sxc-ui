@@ -1,4 +1,4 @@
-﻿import { ContextOfButton } from '../../context/parts/context-button';
+﻿import { ContextBundleButton } from '../../context/bundles/context-bundle-button';
 import { Log } from '../../logging/log';
 import { InstanceConfig } from '../../manage/instance-config';
 import { ButtonConfigurationBuilder } from '../config/button/button-config-builder';
@@ -8,7 +8,7 @@ import { ToolbarVariationsBeforeInitializing, ToolbarVariationsForInitializing }
 import { ToolbarConfig } from './toolbar-config';
 import { ToolbarConfigTemplates } from './toolbar-config-templates';
 
-export function expandToolbarConfig(context: ContextOfButton, toolbarData: ToolbarVariationsBeforeInitializing, toolbarSettings: ToolbarSettings, parentLog?: Log): ToolbarConfig {
+export function expandToolbarConfig(context: ContextBundleButton, toolbarData: ToolbarVariationsBeforeInitializing, toolbarSettings: ToolbarSettings, parentLog?: Log): ToolbarConfig {
   const log = new Log('Tlb.ExpTop', parentLog, 'expand start');
 
   if (toolbarData === ({} as ToolbarVariationsForInitializing) && toolbarSettings === ({} as ToolbarSettings)) {
@@ -50,7 +50,7 @@ export function expandToolbarConfig(context: ContextOfButton, toolbarData: Toolb
  * @param instanceConfig
  * @param toolbarSettings
  */
-function buildFullDefinition(toolbarContext: ContextOfButton, unstructuredConfig: ToolbarVariationsBeforeInitializing, instanceConfig: InstanceConfig, toolbarSettings: ToolbarSettings, parentLog: Log) {
+function buildFullDefinition(toolbarContext: ContextBundleButton, unstructuredConfig: ToolbarVariationsBeforeInitializing, instanceConfig: InstanceConfig, toolbarSettings: ToolbarSettings, parentLog: Log) {
   const log = new Log('Tlb.BldFul', parentLog, 'start');
   let fullConfig = ensureDefinitionTree(unstructuredConfig, toolbarSettings, log);
 

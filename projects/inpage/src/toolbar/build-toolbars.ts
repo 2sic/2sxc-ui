@@ -1,14 +1,13 @@
 ﻿import * as Constants from '../constants';
 import { context } from '../context/context';
-import { $2sxcInPage as $2sxc } from '../interfaces/sxc-controller-in-page';
 import { SxcIntanceEditable } from '../interfaces/sxc-instance-editable';
 import { Log } from '../logging/log';
 import { getTag } from '../manage/api';
 import { IDs } from '../settings/2sxc.consts';
-import { renderToolbar } from './item/render-toolbar';
 import { emptyToolbar, ToolbarSettings } from './settings/toolbar-settings';
 import { TagToolbar } from './tag-toolbar';
 import { ToolbarInitConfig } from './toolbar-init-config';
+import { ToolbarRenderer } from './render/toolbar-renderer';
 import { expandToolbarConfig } from './toolbar/toolbar-expand-config';
 
 // quick debug - set to false if not needed for production
@@ -132,7 +131,7 @@ function convertConfigToToolbarTags(tag: JQuery, config: ToolbarInitConfig, log:
     tag.data('2sxc-tagtoolbar', new TagToolbar(tag, cnt));
     ensureToolbarHoverClass(tag);
   } else {
-    const toolbar = renderToolbar(cnt);
+    const toolbar = new ToolbarRenderer(cnt).render(); // renderToolbar(cnt);
     // default case, tag is the old <ul> tag, so find the sc-element parent before replacing
     const scElementParent = tag.closest(Constants.toolbar.selectors.ofOldHover);
     tag.replaceWith(toolbar);

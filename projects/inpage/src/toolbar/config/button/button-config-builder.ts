@@ -1,5 +1,5 @@
 ﻿import { Commands as Commands } from '../../../commands/commands';
-import { ContextOfButton } from '../../../context/parts/context-button';
+import { ContextBundleButton } from '../../../context/bundles/context-bundle-button';
 import { HasLog } from '../../../logging/has-log';
 import { Log } from '../../../logging/log';
 import { InstanceConfig } from '../../../manage/instance-config';
@@ -65,12 +65,12 @@ export class ButtonConfigurationBuilder extends HasLog {
 
   /**
    * remove buttons which are not valid based on add condition
-   * @param {ContextOfButton} context
+   * @param {ContextBundleButton} context
    * @param {ToolbarConfig} full
    * @param {InstanceConfig} config
    * @memberof ButtonConfigurationBuilder
    */
-  removeDisableButtons(context: ContextOfButton, full: ToolbarConfig, config: InstanceConfig): void {
+  removeDisableButtons(context: ContextBundleButton, full: ToolbarConfig, config: InstanceConfig): void {
     const log = new Log('Tlb.RmvDsb', this.log,  `start remove disabled buttons for ${full.groups.length} groups`);
     const btnGroups = full.groups;
     for (let g = 0; g < btnGroups.length; g++) {
@@ -113,7 +113,7 @@ export class ButtonConfigurationBuilder extends HasLog {
 
 
 
-function removeUnfitButtons(context: ContextOfButton, btns: ButtonConfig[], config: InstanceConfig, log: Log): void {
+function removeUnfitButtons(context: ContextBundleButton, btns: ButtonConfig[], config: InstanceConfig, log: Log): void {
   let removals = '';
   for (let i = 0; i < btns.length; i++) {
     // let add = btns[i].showCondition;
@@ -130,7 +130,7 @@ function removeUnfitButtons(context: ContextOfButton, btns: ButtonConfig[], conf
     log.add(`removed buttons: ${removals}`);
 }
 
-function disableButtons(context: ContextOfButton, btns: ButtonConfig[], config: InstanceConfig): void {
+function disableButtons(context: ContextBundleButton, btns: ButtonConfig[], config: InstanceConfig): void {
   for (let i = 0; i < btns.length; i++) {
     // btns[i].disabled = evalPropOrFunction(btns[i].disabled, btns[i].command, config, false);
     context.button = btns[i];
@@ -143,7 +143,7 @@ function disableButtons(context: ContextOfButton, btns: ButtonConfig[], config: 
   }
 }
 
-function evalPropOrFunction<T>(propOrFunction: TypeTbD, context: ContextOfButton, config: InstanceConfig, fallback: T): T {
+function evalPropOrFunction<T>(propOrFunction: TypeTbD, context: ContextBundleButton, config: InstanceConfig, fallback: T): T {
   if (propOrFunction === undefined || propOrFunction === null) {
     return fallback;
   }

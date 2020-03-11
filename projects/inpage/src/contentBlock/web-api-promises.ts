@@ -1,5 +1,5 @@
 ﻿import { WebApiParams } from './web-api-params';
-import { ContextOfButton } from '../context/parts/context-button';
+import { ContextBundleButton } from '../context/bundles/context-bundle-button';
 
 /*
  * this is a content block in the browser
@@ -33,12 +33,12 @@ import { ContextOfButton } from '../context/parts/context-button';
 
 /**
  * Save the template configuration for this instance
- * @param {ContextOfButton} context
+ * @param {ContextBundleButton} context
  * @param {number} templateId
  * @param {boolean} [forceCreateContentGroup]
  * @returns {promise}
  */
-export function saveTemplate(context: ContextOfButton, templateId: number, forceCreateContentGroup: boolean): Promise<string> {
+export function saveTemplate(context: ContextBundleButton, templateId: number, forceCreateContentGroup: boolean): Promise<string> {
   const params: WebApiParams = {
     templateId: templateId,
     forceCreateContentGroup: forceCreateContentGroup,
@@ -64,11 +64,11 @@ export function saveTemplate(context: ContextOfButton, templateId: number, force
 
 /**
  * Retrieve the preview from the web-api
- * @param {ContextOfButton} context
+ * @param {ContextBundleButton} context
  * @param {number} templateId
  * @returns {promise} promise with the html in the result
  */
-export function getPreviewWithTemplate(context: ContextOfButton, templateId: number): Promise<string> {
+export function getPreviewWithTemplate(context: ContextBundleButton, templateId: number): Promise<string> {
   templateId = templateId || -1; // fallback, meaning use saved ID
   const params: WebApiParams = {
     templateId: templateId,

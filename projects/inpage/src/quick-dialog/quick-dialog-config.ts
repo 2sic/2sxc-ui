@@ -1,4 +1,4 @@
-﻿import { ContextOfButton } from '../context/parts/context-button';
+﻿import { ContextBundleButton } from '../context/bundles/context-bundle-button';
 import { IQuickDialogConfig } from '../interfaces/iquick-dialog-config';
 import { UserOfEditContext } from '../manage/user-of-edit-context';
 
@@ -28,7 +28,7 @@ export class QuickDialogConfig implements IQuickDialogConfig {
   //  this.supportsAjax = editContext.ContentGroup.SupportsAjax;
   // }
 
-  static fromContext(context: ContextOfButton): QuickDialogConfig {
+  static fromContext(context: ContextBundleButton): QuickDialogConfig {
     const config = new QuickDialogConfig();
     config.appId = context.app.id;
     config.isContent = context.app.isContent;

@@ -1,8 +1,11 @@
-﻿import { HasLog } from '../logging/has-log';
+﻿// import { context } from '../context/context';
+import { ContextBundleButton } from '../context/bundles/context-bundle-button';
+import { HasLog } from '../logging/has-log';
 import { Log } from '../logging/log';
 import { buildToolbars, disable, isDisabled } from './build-toolbars';
-import { renderButton } from './item/render-button';
-import { renderToolbar } from './item/render-toolbar';
+import { ToolbarRenderer } from './render/toolbar-renderer';
+// import { renderButton } from './item/render-button';
+// import { renderToolbar } from './item/render-toolbar';
 import { ToolbarConfigTemplates } from './toolbar/toolbar-config-templates';
 
 /**
@@ -21,8 +24,12 @@ export class ToolbarManager extends HasLog {
   disable = disable;
   isDisabled = isDisabled;
   // generate button html
-  generateButtonHtml = renderButton;
-  generateToolbarHtml = renderToolbar;
+  generateButtonHtml = (context: ContextBundleButton, groupIndex: number) =>
+    new ToolbarRenderer(context).button.render(context, groupIndex);
+
+  generateToolbarHtml = (context: ContextBundleButton) =>
+    new ToolbarRenderer(context).render();
+
   toolbarTemplate = ToolbarConfigTemplates.Instance(this.log).get('default');
 }
 

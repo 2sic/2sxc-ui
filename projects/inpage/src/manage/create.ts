@@ -1,18 +1,17 @@
 ﻿import { SxcInstanceManage } from '../../../$2sxc/src/edit-interfaces/sxc-instance-manage';
 import { InstanceEngine } from '../commands/execute/instance-engine';
 import { Manipulator } from '../contentBlock/manipulate';
-import { ContextOfButton } from '../context/parts/context-button';
 import { AttrJsonEditContext } from '../context/html-attribute/edit-context-root';
+import { ContextBundleButton } from '../context/bundles/context-bundle-button';
 import { SxcIntanceEditable } from '../interfaces/sxc-instance-editable';
+import { TypeUnsafe } from '../plumbing/TypeTbD';
 import { buttonConfigAdapter } from '../toolbar/adapters/button-config-adapter';
 import { InPageButtonConfiguration } from '../toolbar/config/button/in-page-button-configuration';
-import { renderButton } from '../toolbar/item/render-button';
-import { renderToolbar } from '../toolbar/item/render-toolbar';
-import { expandToolbarConfig } from '../toolbar/toolbar/toolbar-expand-config';
 import { ToolbarSettings } from '../toolbar/settings/toolbar-settings';
+import { ToolbarRenderer } from '../toolbar/render/toolbar-renderer';
+import { expandToolbarConfig } from '../toolbar/toolbar/toolbar-expand-config';
 import { getTag} from './api';
 import { UserOfEditContext } from './user-of-edit-context';
-import { TypeUnsafe } from '../plumbing/TypeTbD';
 /**
  * Instance specific edit manager
  */
@@ -22,7 +21,7 @@ export class EditManager implements SxcInstanceManage {
               private editContext: AttrJsonEditContext,
               private userInfo: UserOfEditContext,
               private cmdEngine: InstanceEngine,
-              public context: ContextOfButton) {
+              public context: ContextBundleButton) {
   }
 
   //#region Official, public properties and commands, which are stable for use from the outside
@@ -42,7 +41,7 @@ export class EditManager implements SxcInstanceManage {
    */
   getButton(actDef: InPageButtonConfiguration, groupIndex: number): string {
     this.context.button = buttonConfigAdapter(actDef);
-    const button = renderButton(this.context, groupIndex);
+    const button = new ToolbarRenderer(this.context).button.render(this.context, groupIndex);
     return button.outerHTML;
   }
 
@@ -57,7 +56,7 @@ export class EditManager implements SxcInstanceManage {
   getToolbar(tbConfig: TypeUnsafe, moreSettings: ToolbarSettings): string {
     const toolbarConfig = expandToolbarConfig(this.context, tbConfig, moreSettings);
     this.context.toolbar = toolbarConfig;
-    return renderToolbar(this.context);
+    return new ToolbarRenderer(this.context).render(); // renderToolbar(this.context);
   }
 
   //#endregion official, public properties - everything below this can change
@@ -75,26 +74,6 @@ export class EditManager implements SxcInstanceManage {
    */
   _reloadWithAjax = this.context.app.supportsAjax;
 
-  // #region 2dm disabled / todo q2stv
-  // todo q2stv - I think we don't need this a.ny more
-  //
-  // _dialogParameters = buildNgDialogParams(this.context);
-
-   // 2dm disabled
-  // todo q2stv - I think we don't need this a.ny more
- /**
-   * used to configure buttons / toolbars
-   */
-  // _instanceConfig = buildInstanceConfig(this.context);
-  // 2dm disabled
-  // todo q2stv - I think we don't need this a.ny more
-  /**
-   * used for in-page dialogues
-   */
-  // _quickDialogConfig = buildQuickDialogConfig(this.context);
-
-  //#endregion
-
   /** metadata necessary to know what/how to edit */
   _editContext = this.editContext;
 
@@ -108,7 +87,7 @@ export class EditManager implements SxcInstanceManage {
   /**
    * change config by replacing the guid, and refreshing dependent sub-objects
    */
-  _updateContentGroupGuid(context: ContextOfButton, newGuid: string) {
+  _updateContentGroupGuid(context: ContextBundleButton, newGuid: string) {
     context.contentBlock.contentGroupId = newGuid;
     this.editContext.ContentGroup.Guid = newGuid;
     // 2dm disabled, doesn't seem used -

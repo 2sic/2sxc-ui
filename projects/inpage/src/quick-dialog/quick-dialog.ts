@@ -1,4 +1,4 @@
-﻿import { ContextOfButton } from '../context/parts/context-button';
+﻿import { ContextBundleButton } from '../context/bundles/context-bundle-button';
 import { DebugConfig } from '../DebugConfig';
 import * as Container from './container';
 import * as ContainerSize from './container-size';
@@ -46,7 +46,7 @@ export class QuickDialogManager {
 
   /**
    * show / reset the current iframe to use new url and callback
-   * @param {ContextOfButton} context object
+   * @param {ContextBundleButton} context object
    * @param {string} url - url to show
    * @param {function()} closeCallback - callback event
    * @param {boolean} isFullscreen - if it should open full screen
@@ -54,7 +54,7 @@ export class QuickDialogManager {
    * @returns {Promise<boolean>} jquery object of the iframe
    */
   showOrToggleFromToolbar(
-    context: ContextOfButton,
+    context: ContextBundleButton,
     url: string,
     isFullscreen: boolean,
     dialogName: string,

@@ -1,4 +1,4 @@
-﻿import { ContextOfButton } from '../context/parts/context-button';
+﻿import { ContextBundleButton } from '../context/bundles/context-bundle-button';
 import { isDisabled } from '../toolbar/build-toolbars';
 import { renderer } from './render';
 import { saveTemplate } from './web-api-promises';
@@ -6,9 +6,9 @@ import { saveTemplate } from './web-api-promises';
 /**
  * prepare the instance so content can be added
  * this ensure the content-group has been created, which is required to add content
- * @param {ContextOfButton} context
+ * @param {ContextBundleButton} context
  */
-export function prepareToAddContent(context: ContextOfButton, useModuleList: boolean): Promise<string | void> {
+export function prepareToAddContent(context: ContextBundleButton, useModuleList: boolean): Promise<string | void> {
   const isCreated: boolean = context.contentBlock.isCreated;
   if (isCreated || !useModuleList) return Promise.resolve();
   // return persistTemplate(sxc, null);
@@ -28,11 +28,11 @@ export function prepareToAddContent(context: ContextOfButton, useModuleList: boo
 
 /**
  * Update the template and adjust UI accordingly.
- * @param {ContextOfButton} context
+ * @param {ContextBundleButton} context
  * @param {number} templateId
  * @param {boolean} forceCreate
  */
-export function updateTemplateFromDia(context: ContextOfButton, templateId: number): Promise<void> {
+export function updateTemplateFromDia(context: ContextBundleButton, templateId: number): Promise<void> {
   const wasShowingPreview = isDisabled(context.sxc);
 
   return updateTemplate(context, templateId, false)
@@ -47,7 +47,7 @@ export function updateTemplateFromDia(context: ContextOfButton, templateId: numb
 /**
  * Update the template.
  */
-function updateTemplate(context: ContextOfButton, templateId: number, forceCreate: boolean): Promise<string | void> {
+function updateTemplate(context: ContextBundleButton, templateId: number, forceCreate: boolean): Promise<string | void> {
 
   return saveTemplate(context, templateId, forceCreate).then((data) => {
     if (!data) return null;

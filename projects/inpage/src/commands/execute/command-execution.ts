@@ -1,4 +1,4 @@
-﻿import { ContextOfButton } from '../../context/parts/context-button';
+﻿import { ContextBundleButton } from '../../context/bundles/context-bundle-button';
 import { ItemIdentifierGroup, ItemIdentifierSimple } from '../../interfaces/item-identifiers';
 import { NgUrlValuesWithoutParams } from '../../manage/ng-dialog-params';
 import { DialogPaths } from '../../settings/DialogPaths';
@@ -17,7 +17,7 @@ export class CommandExecution {
   private readonly rootUrl: string;
   private readonly debugUrlParam: string;
 
-  constructor(public readonly context: ContextOfButton) {
+  constructor(public readonly context: ContextBundleButton) {
     // Initialize Items
     this.items = context.button.action.params.items || []; // use predefined or create empty array
 
@@ -82,7 +82,7 @@ export class CommandExecution {
   }
 
 
-  private evalPropOrFunction(propOrFunction: TypeTbD, context: ContextOfButton) {
+  private evalPropOrFunction(propOrFunction: TypeTbD, context: ContextBundleButton) {
     if (propOrFunction === undefined || propOrFunction === null)
       return {};
     return (typeof (propOrFunction) === 'function' ? propOrFunction(context) : propOrFunction);

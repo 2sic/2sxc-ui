@@ -1,4 +1,4 @@
-﻿import { ContextOfButton } from '../context/parts/context-button';
+﻿import { ContextBundleButton } from '../context/bundles/context-bundle-button';
 import { AttrJsonEditContext } from '../context/html-attribute/edit-context-root';
 
 /**
@@ -31,7 +31,7 @@ export class InstanceConfig {
   //  this.isList = cg.IsList;
   //}
 
-  static fromContext(contextOfButton: ContextOfButton): InstanceConfig {
+  static fromContext(contextOfButton: ContextBundleButton): InstanceConfig {
     const config = new InstanceConfig();
     config.portalId = contextOfButton.tenant.id;
     config.tabId = contextOfButton.page.id;

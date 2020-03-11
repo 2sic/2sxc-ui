@@ -1,6 +1,6 @@
 ﻿import { CommandCode } from '../../../commands/command-code';
 import { CommandExecution } from '../../../commands/execute/command-execution';
-import { ContextOfButton } from '../../../context/parts/context-button';
+import { ContextBundleButton } from '../../../context/bundles/context-bundle-button';
 import { DictionaryValue } from '../../../plumbing/TypeTbD';
 import { ButtonCommand } from '../../button/button-command';
 
@@ -23,18 +23,18 @@ export class ButtonConfig {
   }
 
   code: CommandCode; // void;
-  configureCommand: (context: ContextOfButton, cmd: CommandExecution) => void;
-  dialog: (context: ContextOfButton) => string;
-  disabled: (context: ContextOfButton) => boolean;
-  dynamicClasses: (context: ContextOfButton) => string;
+  configureCommand: (context: ContextBundleButton, cmd: CommandExecution) => void;
+  dialog: (context: ContextBundleButton) => string;
+  disabled: (context: ContextBundleButton) => boolean;
+  dynamicClasses: (context: ContextBundleButton) => string;
   dynamicDisabled: (() => boolean) = () => false; // maybe
-  fullScreen: (context: ContextOfButton) => boolean;
-  icon: (context: ContextOfButton) => string;
-  inlineWindow: (context: ContextOfButton) => boolean;
-  newWindow: (context: ContextOfButton) => boolean;
-  params: (context: ContextOfButton) => DictionaryValue;
-  partOfPage: (context: ContextOfButton) => boolean;
-  showCondition: (context: ContextOfButton) => boolean;
-  title: (context: ContextOfButton) => string;
-  uiActionOnly: (context: ContextOfButton) => boolean;
+  fullScreen: (context: ContextBundleButton) => boolean;
+  icon: (context: ContextBundleButton) => string;
+  inlineWindow: (context: ContextBundleButton) => boolean;
+  newWindow: (context: ContextBundleButton) => boolean;
+  params: (context: ContextBundleButton) => DictionaryValue;
+  partOfPage: (context: ContextBundleButton) => boolean;
+  showCondition: (context: ContextBundleButton) => boolean;
+  title: (context: ContextBundleButton) => string;
+  uiActionOnly: (context: ContextBundleButton) => boolean;
 }

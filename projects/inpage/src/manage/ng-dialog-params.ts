@@ -1,4 +1,4 @@
-﻿import { ContextOfButton } from '../context/parts/context-button';
+﻿import { ContextBundleButton } from '../context/bundles/context-bundle-button';
 import { UserOfEditContext } from './user-of-edit-context';
 
 /**
@@ -55,7 +55,7 @@ export class NgUrlValuesWithoutParams {
 //     return params;
 //   }
 
-  constructor(context: ContextOfButton, partOfPage: boolean) {
+  constructor(context: ContextBundleButton, partOfPage: boolean) {
     this.zoneId = context.app.zoneId;
     this.appId = context.app.id;
     this.tid = context.page.id;

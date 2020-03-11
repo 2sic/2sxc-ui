@@ -1,5 +1,5 @@
 ﻿import { renderer } from '../contentBlock/render';
-import { ContextOfButton } from '../context/parts/context-button';
+import { ContextBundleButton } from '../context/bundles/context-bundle-button';
 import { ActionParams } from './action-params';
 
 /**
@@ -9,29 +9,29 @@ import { ActionParams } from './action-params';
 class ActionsCatalog {
     /**
      * add an item to the list at this position
-     * @param {ContextOfButton} context
+     * @param {ContextBundleButton} context
      * @param {number} sortOrder
      */
-    addItem<T>(context: ContextOfButton, sortOrder: number) {
+    addItem<T>(context: ContextBundleButton, sortOrder: number) {
         return getAndReload<T>(context, 'view/module/additem', { sortOrder });
     }
 
     /**
      * remove an item from a list, then reload
-     * @param {ContextOfButton} context
+     * @param {ContextBundleButton} context
      * @param {number} sortOrder
      */
-    removeFromList(context: ContextOfButton, sortOrder: number) {
+    removeFromList(context: ContextBundleButton, sortOrder: number) {
         return getAndReload<void>(context, 'view/module/removefromlist', { sortOrder });
     }
 
     /**
      * change the order of an item in a list, then reload
-     * @param {ContextOfButton} context
+     * @param {ContextBundleButton} context
      * @param {number} initOrder
      * @param {number} newOrder
      */
-    changeOrder(context: ContextOfButton, initOrder: number, newOrder: number) {
+    changeOrder(context: ContextBundleButton, initOrder: number, newOrder: number) {
         return getAndReload<void>(context, 'view/module/changeorder', {
             sortOrder: initOrder,
             destinationSortOrder: newOrder,
@@ -40,11 +40,11 @@ class ActionsCatalog {
 
     /**
      * set a content-item in this block to published, then reload
-     * @param {ContextOfButton} context
+     * @param {ContextBundleButton} context
      * @param {string} part
      * @param {number} sortOrder
      */
-    publish(context: ContextOfButton, part: string, sortOrder: number) {
+    publish(context: ContextBundleButton, part: string, sortOrder: number) {
         return getAndReload<void>(context, 'view/module/publish', {
             part: part,
             sortOrder,
@@ -53,10 +53,10 @@ class ActionsCatalog {
 
     /**
      * publish an item using it's ID
-     * @param {ContextOfButton} context
+     * @param {ContextBundleButton} context
      * @param {number} entityId
      */
-    publishId(context: ContextOfButton, entityId: number) {
+    publishId(context: ContextBundleButton, entityId: number) {
         return getAndReload<void>(context, 'view/module/publish', { id: entityId });
     }
 }
@@ -76,13 +76,13 @@ export const Actions = new ActionsCatalog();
 
 /**
  * internal helper, to do something and reload the content block
- * @param {ContextOfButton} context
+ * @param {ContextBundleButton} context
  * @param {string} url
  * @param {ActionParams} params
  * @returns {void | T}
  */
 function getAndReload<T>(
-    context: ContextOfButton,
+    context: ContextBundleButton,
     url: string,
     params: ActionParams,
 ): Promise<void | T> {

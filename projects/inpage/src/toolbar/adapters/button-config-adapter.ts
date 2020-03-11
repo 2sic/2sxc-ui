@@ -1,4 +1,4 @@
-﻿import { ContextOfButton } from '../../context/parts/context-button';
+﻿import { ContextBundleButton } from '../../context/bundles/context-bundle-button';
 import { ButtonCommand } from '../button/button-command';
 import { ButtonConfig } from '../config/button/button-config';
 import { ButtonConfigurationBuilder } from '../config/button/button-config-builder';
@@ -12,7 +12,7 @@ export function buttonConfigAdapter(oldButtonDef: InPageButtonConfiguration): Bu
   const partialButtonConfig: Partial<ButtonConfig> = {};
 
   if (oldButtonDef.code) {
-    partialButtonConfig.code = (context: ContextOfButton) => {
+    partialButtonConfig.code = (context: ContextBundleButton) => {
       // TODO: 2dm unclear why we're just giving an empty configuration
       // I believe this is a mistake, STV had some todos to try to find the values
       // so I believe for years now, the object was always empty
@@ -44,7 +44,7 @@ export function buttonConfigAdapter(oldButtonDef: InPageButtonConfiguration): Bu
   }
 
   if (oldButtonDef.dynamicClasses) {
-    partialButtonConfig.dynamicClasses = (context: ContextOfButton) => {
+    partialButtonConfig.dynamicClasses = (context: ContextBundleButton) => {
       return oldButtonDef.dynamicClasses(context.button.action.params);
     };
   }
@@ -84,7 +84,7 @@ export function buttonConfigAdapter(oldButtonDef: InPageButtonConfiguration): Bu
   }
 
   if (oldButtonDef.showCondition) {
-    partialButtonConfig.showCondition = (context: ContextOfButton) => {
+    partialButtonConfig.showCondition = (context: ContextBundleButton) => {
       // TODO: 2dm unclear why we're just giving an empty configuration
       // I believe this is a mistake, STV had some todos to try to find the values
       // so I believe for years now, the object was always empty

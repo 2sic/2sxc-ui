@@ -2,7 +2,7 @@
 import { renderer } from '../../contentBlock/render';
 import { prepareToAddContent } from '../../contentBlock/templates';
 import { ContextBundleInstance } from '../../context/bundles/context-bundle-instance';
-import { ContextOfButton } from '../../context/parts/context-button';
+import { ContextBundleButton } from '../../context/bundles/context-bundle-button';
 import { $2sxcInPage as $2sxc } from '../../interfaces/sxc-controller-in-page';
 import { HasLog } from '../../logging/has-log';
 import { Log } from '../../logging/log';
@@ -54,7 +54,7 @@ export class Engine extends HasLog {
     // ensure we have the right event despite browser differences
     event = event || (window.event as MouseEvent);
 
-    return this.run(context as ContextOfButton, settings, event);
+    return this.run(context as ContextBundleButton, settings, event);
   }
 
   /**
@@ -65,7 +65,7 @@ export class Engine extends HasLog {
    * @param event
    */
   run<T>(
-    context: ContextOfButton,
+    context: ContextBundleButton,
     nameOrSettings: string | Partial<Settings>,
     event: MouseEvent,
   ): Promise<T | void> {
@@ -102,7 +102,7 @@ export class Engine extends HasLog {
     // todo: stv, fix this in case that is function
     if (!button.code) {
       this.log.add('simple button without code - generating code to open standard dialog');
-      button.code = (contextParam: ContextOfButton, evt: MouseEvent) => Engine.openDialog(contextParam, evt);
+      button.code = (contextParam: ContextBundleButton, evt: MouseEvent) => Engine.openDialog(contextParam, evt);
     }
 
     if (button.uiActionOnly(context)) {
@@ -161,7 +161,7 @@ export class Engine extends HasLog {
   /**
    * open a new dialog of the angular-ui
    */
-  static openDialog<T>(context: ContextOfButton, event: MouseEvent): Promise<T> {
+  static openDialog<T>(context: ContextBundleButton, event: MouseEvent): Promise<T> {
     // the link contains everything to open a full dialog (lots of params added)
     let link = new CommandExecution(context).getLink(); // commandLinkToNgDialog(context);
 
