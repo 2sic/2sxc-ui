@@ -3,20 +3,20 @@ import { CommandParams } from './params';
 import { MetadataFor } from './params-metadata-for';
 
 export class Settings {
-  code: any;
-  configureCommand: any;
-  items: any; // string | string[];
-  metadata: MetadataFor;
-  prefill: {[key: string]: any};
+//   code: a.ny;
+//   configureCommand: a.ny;
+//   items: any; // string | string[];
+//   metadata: MetadataFor;
+//   prefill: {[key: string]: a.ny};
   //
   action: string;
-  appId: number;
-  attributeSetName: string;
-  cbId: number;
-  cbIsEntity: boolean;
-  contentGroupId: number;
+//   appId: number;
+//   attributeSetName: string;
+//   cbId: number;
+//   cbIsEntity: boolean;
+//   contentGroupId: number;
   contentType: string;
-  contentTypeId: string;
+//   contentTypeId: string;
   customCode: string;
   dialog: string;
   entityGuid: string;

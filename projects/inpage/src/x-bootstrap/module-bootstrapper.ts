@@ -1,9 +1,11 @@
 ﻿import { Attributes } from '../constants';
 import { DebugConfig } from '../DebugConfig';
+import { SxcIntanceEditable } from '../interfaces/sxc-instance-editable';
 import { windowInPage as window } from '../interfaces/window-in-page';
 import { Log } from '../logging/log';
 import { LogUtils } from '../logging/log-utils';
 import { getTag } from '../manage/api';
+import { getSxc } from '../plumbing';
 import { quickDialog } from '../quick-dialog/quick-dialog';
 import * as QuickEditState from '../quick-dialog/state';
 import {
@@ -11,8 +13,7 @@ import {
   buildToolbarsFromAnyNode,
 } from '../toolbar/build-toolbars';
 import { CleanupTagToolbars } from '../toolbar/tag-toolbar';
-import { SxcIntanceEditable } from '../interfaces/sxc-instance-editable';
-import { getSxc } from '../plumbing/getSxc';
+import { TypeUnsafe } from '../plumbing/TypeTbD';
 
 /**
  * module & toolbar bootstrapping (initialize all toolbars after loading page)
@@ -158,7 +159,7 @@ function initInstance(module: JQuery, isFirstRun: boolean): void {
 
   // check if the sxc must be re-created. This is necessary when modules are dynamically changed
   // because the configuration may change, and that is cached otherwise, resulting in toolbars with wrong config
-  if (!isFirstRun) sxc = sxc.recreate(true) as any as SxcIntanceEditable;
+  if (!isFirstRun) sxc = sxc.recreate(true) as TypeUnsafe as SxcIntanceEditable;
 
   // check if we must show the glasses
   // this must always run because it can be added ajax-style

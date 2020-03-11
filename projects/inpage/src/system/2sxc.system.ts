@@ -3,7 +3,7 @@
     TODO: 2dm must verify this works, my change could have broken something
 */
 import { windowInPage as window } from '../interfaces/window-in-page';
-import { getSxc } from '../plumbing/getSxc';
+import { getSxc } from '../plumbing';
 
 export class SystemUpgrader {
     // upgrade command - started when an error contains a link to start this

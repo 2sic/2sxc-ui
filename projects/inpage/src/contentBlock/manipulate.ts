@@ -1,5 +1,5 @@
 ﻿import { SxcIntanceEditable } from '../interfaces/sxc-instance-editable';
-import { getSxc } from '../plumbing/getSxc';
+import { getSxc } from '../plumbing';
 import { _toolbarManager } from '../toolbar/toolbar-manager';
 import { translate } from '../translate/2sxc.translate';
 import { ManipulateParams } from './manipulate-params';

@@ -2,8 +2,8 @@
 import { AttrJsonEditContext } from './html-attribute';
 import { SxcIntanceEditable } from '../interfaces/sxc-instance-editable';
 import { getContainerTag, getEditContext } from '../manage/api';
-import { getSxc } from '../plumbing/getSxc';
-import { isSxcInstance } from '../plumbing/is';
+import { getSxc } from '../plumbing';
+import { isSxcInstance } from '../plumbing';
 import { IDs } from '../settings/2sxc.consts';
 
 /**

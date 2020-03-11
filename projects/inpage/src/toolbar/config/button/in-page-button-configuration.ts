@@ -1,5 +1,4 @@
 ﻿import { CommandParams } from '../../../commands/params';
-import { Settings } from '../../../commands/settings';
 import { InPageCommandConfiguration } from '../command/in-page-command';
 import { InPageCodeParametersProbablyUnused } from './in-page-code-params-probably-unused';
 

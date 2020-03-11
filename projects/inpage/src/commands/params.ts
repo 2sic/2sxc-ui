@@ -19,7 +19,7 @@ export class CommandParams {
   metadata: MetadataFor;
 
   isPublished: boolean;
-  prefill: {[key: string]: any};
+  prefill: {[key: string]: string | number | boolean | Date };
 
   // 2020-03-11 2dm in this case it seems that it's a string according to the code
   // but I'm simply not sure if this is true...

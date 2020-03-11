@@ -1,4 +1,4 @@
-﻿import { getSxc } from '../plumbing/getSxc';
+﻿import { getSxc } from '../plumbing';
 import { CmdsStrategyFactory } from './cmds-strategy-factory';
 import { Mod } from './mod';
 import { $quickE as quickE } from './quick-e';

@@ -1,5 +1,4 @@
-﻿import { SxcIntanceEditable } from '../interfaces/sxc-instance-editable';
-import { getSxc } from '../plumbing/getSxc';
+﻿import { getSxc } from '../plumbing';
 import { Delete } from './delete';
 import { Specs } from './specs';
 

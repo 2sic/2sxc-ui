@@ -2,7 +2,7 @@
 import { SxcIntanceEditable } from '../../interfaces/sxc-instance-editable';
 import { windowInPage as window } from '../../interfaces/window-in-page';
 import { getTag } from '../../manage/api';
-import { getSxc } from '../../plumbing/getSxc';
+import { getSxc } from '../../plumbing';
 
 /**
  * Maps actions of the module menu to JS actions - needed because onclick event can't be set (actually, a bug in DNN)

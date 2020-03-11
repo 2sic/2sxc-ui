@@ -8,6 +8,7 @@ import { ButtonGroupConfig } from '../button-group-config';
 import { InPageCommandConfiguration, isInPageCommandConfiguration } from '../command/in-page-command';
 import { ButtonConfig } from './button-config';
 import { InPageButtonConfiguration } from './in-page-button-configuration';
+import { TypeTbD } from '../../../plumbing/TypeTbD';
 
 /**
  * This is a system to build button configurations
@@ -146,7 +147,7 @@ function disableButtons(context: ContextOfButton, btns: ButtonConfig[], config: 
   }
 }
 
-function evalPropOrFunction(propOrFunction: any, context: ContextOfButton, config: InstanceConfig, fallback: any): any {
+function evalPropOrFunction(propOrFunction: TypeTbD, context: ContextOfButton, config: InstanceConfig, fallback: any): any {
   if (propOrFunction === undefined || propOrFunction === null) {
     return fallback;
   }

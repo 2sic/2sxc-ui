@@ -1,5 +1,4 @@
-﻿
-interface JQueryStatic {
+﻿declare interface JQueryStatic {
   // the generator for the DNN ServicesFramework
 // ReSharper disable once InconsistentNaming
   dnnSF: any;

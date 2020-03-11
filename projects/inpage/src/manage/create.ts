@@ -34,7 +34,7 @@ export class EditManager implements SxcInstanceManage {
 
   /**
    * Generate a button (an <a>-tag) for one specific toolbar-action.
-   * @param {Object<any>} actDef - settings, an object containing the spec for the expected button
+   * @param {InPageButtonConfiguration} actDef - settings, an object containing the spec for the expected button
    * @param {int} groupIndex - number what button-group it's in'
    * @returns {string} html of a button
    * it is publicly used out of inpage, so take a care to preserve function signature

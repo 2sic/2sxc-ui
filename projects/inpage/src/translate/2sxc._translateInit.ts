@@ -1,7 +1,8 @@
 ﻿import { createContextFromEditContext } from '../context/context';
 import { windowInPage as window } from '../interfaces/window-in-page';
 import { getEditContext } from '../manage/api';
-import { getSxc } from '../plumbing/getSxc';
+import { getSxc } from '../plumbing';
+import { TypeUnsafe, TypeWeDontCare } from '../plumbing/TypeTbD';
 import * as i18next from './libs/i18next.min';
 import * as i18nextXHRBackend from './libs/i18nextXHRBackend.min';
 import * as jqueryI18next from './libs/jquery-i18next.min';
@@ -10,10 +11,10 @@ import * as jqueryI18next from './libs/jquery-i18next.min';
  * initialize the translation system; ensure toolbars etc. are translated
  */
 interface Windowi18n extends Window {
-    i18next: any;
-    i18nextXHRBackend: any;
+    i18next: TypeWeDontCare;
+    i18nextXHRBackend: TypeWeDontCare;
 }
-const win18n = window as any as Windowi18n;
+const win18n = window as TypeUnsafe as Windowi18n;
 win18n.i18next = i18next;
 win18n.i18nextXHRBackend = i18nextXHRBackend;
 

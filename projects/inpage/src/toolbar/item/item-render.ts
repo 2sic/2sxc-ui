@@ -1,5 +1,5 @@
 ﻿// export class ItemRender {
-//   button: (buttonConfig: any) => {};
-//   group: (groupConfig: any) => {};
-//   toolbar: (toolbarConfig: any) => {};
+//   button: (buttonConfig: a.ny) => {};
+//   group: (groupConfig: a.ny) => {};
+//   toolbar: (toolbarConfig: a.ny) => {};
 // }

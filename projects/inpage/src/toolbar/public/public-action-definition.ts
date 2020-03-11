@@ -1,6 +1,6 @@
 
 // export interface PublicToolbarEntityInfo {
-//     _2sxcEditInformation: any;
+//     _2sxcEditInformation: a.ny;
 //     EntityId?: number;
 // }
 
