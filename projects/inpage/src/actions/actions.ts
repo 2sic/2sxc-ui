@@ -1,5 +1,5 @@
 ﻿import { renderer } from '../contentBlock/render';
-import { ContextOfButton } from '../context/context-of-button';
+import { ContextOfButton } from '../context/parts/context-button';
 import { ActionParams } from './action-params';
 
 /**

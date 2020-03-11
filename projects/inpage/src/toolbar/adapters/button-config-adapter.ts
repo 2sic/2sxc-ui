@@ -1,130 +1,124 @@
 ﻿import { Commands as Commands } from '../../commands/commands';
-import { ContextOfButton } from '../../context/context-of-button';
+import { ContextOfButton } from '../../context/parts/context-button';
 import { ButtonAction } from '../button/button-action';
-import { ButtonConfig } from '../button/button-config';
-import { ButtonDefinitionInPage } from '../button/button-definition';
-import { expandButtonDefinitionInPage } from '../button/expand-button-config';
-import { ModConfig } from '../button/mod-config';
+import { ButtonConfig } from '../config/button/button-config';
+import { InPageButtonConfiguration } from '../config/button/in-page-button-configuration';
+import { ButtonConfigurationBuilder } from '../config/button/button-config-builder';
+import { InPageCodeParametersProbablyUnused } from '../config/button/in-page-code-params-probably-unused';
 import { flattenActionDefinition } from './flatten-action-definition';
 import { parametersAdapter } from './parameters-adapter';
 
-export function buttonConfigAdapter(actDef: ButtonDefinitionInPage): ButtonConfig {
+export function buttonConfigAdapter(oldButtonDef: InPageButtonConfiguration): ButtonConfig {
 
   const partialButtonConfig: Partial<ButtonConfig> = {};
 
-  if (actDef.code) {
+  if (oldButtonDef.code) {
     partialButtonConfig.code = (context: ContextOfButton) => {
-
-      const modConfig = new ModConfig();
-      // todo: stv find this data
-      // modConfig.target = '';
-      // modConfig.isList = false;
-
-      return actDef.code(context.button.action.params, modConfig);
+      // TODO: 2dm unclear why we're just giving an empty configuration
+      // I believe this is a mistake, STV had some todos to try to find the values
+      // so I believe for years now, the object was always empty
+      // so it's probably never been used
+      return oldButtonDef.code(context.button.action.params, new InPageCodeParametersProbablyUnused());
     };
   }
 
-  if (actDef.icon) {
+  if (oldButtonDef.icon) {
     partialButtonConfig.icon = () => {
-      return `icon-sxc-${actDef.icon}`;
+      return `icon-sxc-${oldButtonDef.icon}`;
     };
   }
 
-  if (actDef.classes) {
-    partialButtonConfig.classes = actDef.classes;
+  if (oldButtonDef.classes) {
+    partialButtonConfig.classes = oldButtonDef.classes;
   }
 
-  if (actDef.dialog) {
+  if (oldButtonDef.dialog) {
     partialButtonConfig.dialog = () => {
-      return actDef.dialog;
+      return oldButtonDef.dialog;
     };
   }
 
-  if (actDef.disabled) {
+  if (oldButtonDef.disabled) {
     partialButtonConfig.disabled = () => {
-      return actDef.disabled;
+      return oldButtonDef.disabled;
     };
   }
 
-  if (actDef.dynamicClasses) {
+  if (oldButtonDef.dynamicClasses) {
     partialButtonConfig.dynamicClasses = (context: ContextOfButton) => {
-      return actDef.dynamicClasses(context.button.action.params);
+      return oldButtonDef.dynamicClasses(context.button.action.params);
     };
   }
 
-  if (actDef.fullScreen) {
+  if (oldButtonDef.fullScreen) {
     partialButtonConfig.fullScreen = () => {
-      return actDef.fullScreen;
+      return oldButtonDef.fullScreen;
     };
   }
 
-  if (actDef.inlineWindow) {
+  if (oldButtonDef.inlineWindow) {
     partialButtonConfig.inlineWindow = () => {
-      return actDef.inlineWindow;
+      return oldButtonDef.inlineWindow;
     };
   }
 
-  if (actDef.name) {
-    partialButtonConfig.name = actDef.name;
+  if (oldButtonDef.name) {
+    partialButtonConfig.name = oldButtonDef.name;
   }
 
-  if (actDef.newWindow) {
+  if (oldButtonDef.newWindow) {
     partialButtonConfig.newWindow = () => {
-      return actDef.newWindow;
+      return oldButtonDef.newWindow;
     };
   }
 
-  if (actDef.params) {
+  if (oldButtonDef.params) {
     // todo: stv, this do not looking good, because old simple parameters become methods with context as parameter,
     // we need parameter adapter to do this...
-    Object.assign(partialButtonConfig.params, actDef.params);
+    Object.assign(partialButtonConfig.params, oldButtonDef.params);
   }
 
-  if (actDef.partOfPage) {
+  if (oldButtonDef.partOfPage) {
     partialButtonConfig.partOfPage = () => {
-      return actDef.partOfPage;
+      return oldButtonDef.partOfPage;
     };
   }
 
-  if (actDef.showCondition) {
+  if (oldButtonDef.showCondition) {
     partialButtonConfig.showCondition = (context: ContextOfButton) => {
-      const modConfig = new ModConfig();
-
-      // todo: stv find this data
-      // modConfig.target = '';
-      // modConfig.isList = false;
-
-      return actDef.showCondition(context.button.action.params, modConfig);
+      // TODO: 2dm unclear why we're just giving an empty configuration
+      // I believe this is a mistake, STV had some todos to try to find the values
+      // so I believe for years now, the object was always empty
+      // so it's probably never been used
+      return oldButtonDef.showCondition(context.button.action.params, new InPageCodeParametersProbablyUnused());
     };
   }
 
-  if (actDef.title) {
+  if (oldButtonDef.title) {
     partialButtonConfig.title = () => {
-      return `Toolbar.${actDef.title}`;
+      return `Toolbar.${oldButtonDef.title}`;
     };
   }
 
-  if (actDef.uiActionOnly) {
+  if (oldButtonDef.uiActionOnly) {
     partialButtonConfig.uiActionOnly = () => {
-      return actDef.uiActionOnly;
+      return oldButtonDef.uiActionOnly;
     };
   }
 
-  actDef = expandButtonDefinitionInPage(actDef, [], null);
+  oldButtonDef = new ButtonConfigurationBuilder(null).normalize(oldButtonDef);
 
-  const name = actDef.command.action;
-  const contentType = actDef.command.contentType;
+  const name = oldButtonDef.command.action;
+  const contentType = oldButtonDef.command.contentType;
 
   // if the button belongs to a content-item, move the specs up to the item into the settings-object
-  flattenActionDefinition(actDef.command);
+  flattenActionDefinition(oldButtonDef.command);
 
   // parameters adapter from v1 to v2
-  const params = parametersAdapter(actDef.command);
+  const params = parametersAdapter(oldButtonDef.command);
 
   // Toolbar API v2
-  const actions = Commands;
   const newButtonAction = new ButtonAction(name, contentType, params);
-  newButtonAction.commandDefinition = actions.get(name);
   const newButtonConfig = new ButtonConfig(newButtonAction);
   newButtonConfig.name = name;
 

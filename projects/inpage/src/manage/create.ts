@@ -1,15 +1,15 @@
 ﻿import { SxcInstanceManage } from '../../../$2sxc/src/edit-interfaces/sxc-instance-manage';
 import { InstanceEngine } from '../commands/instance-engine';
 import { Manipulator } from '../contentBlock/manipulate';
-import { ContextOfButton } from '../context/context-of-button';
-import { DataEditContext } from '../data-edit-context/data-edit-context';
+import { ContextOfButton } from '../context/parts/context-button';
+import { AttrJsonEditContext } from '../context/html-attribute/edit-context-root';
 import { SxcIntanceEditable } from '../interfaces/sxc-instance-editable';
 import { buttonConfigAdapter } from '../toolbar/adapters/button-config-adapter';
-import { ButtonDefinitionInPage } from '../toolbar/button/button-definition';
+import { InPageButtonConfiguration } from '../toolbar/config/button/in-page-button-configuration';
 import { renderButton } from '../toolbar/item/render-button';
 import { renderToolbar } from '../toolbar/item/render-toolbar';
 import { expandToolbarConfig } from '../toolbar/toolbar/toolbar-expand-config';
-import { ToolbarSettings } from '../toolbar/toolbar/toolbar-settings';
+import { ToolbarSettings } from '../toolbar/settings/toolbar-settings';
 import { getTag} from './api';
 import { UserOfEditContext } from './user-of-edit-context';
 /**
@@ -18,7 +18,7 @@ import { UserOfEditContext } from './user-of-edit-context';
 export class EditManager implements SxcInstanceManage {
 
   constructor(private sxc: SxcIntanceEditable,
-              private editContext: DataEditContext,
+              private editContext: AttrJsonEditContext,
               private userInfo: UserOfEditContext,
               private cmdEngine: InstanceEngine,
               public context: ContextOfButton) {
@@ -39,7 +39,7 @@ export class EditManager implements SxcInstanceManage {
    * @returns {string} html of a button
    * it is publicly used out of inpage, so take a care to preserve function signature
    */
-  getButton = (actDef: ButtonDefinitionInPage, groupIndex: number): string => {
+  getButton = (actDef: InPageButtonConfiguration, groupIndex: number): string => {
     // const tag: any = getTag(this.sxc);
     // const myContext = context(tag);
 

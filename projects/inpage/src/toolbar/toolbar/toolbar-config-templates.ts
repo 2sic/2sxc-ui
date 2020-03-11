@@ -1,7 +1,7 @@
 ﻿import { HasLog } from '../../logging/has-log';
 import { Log } from '../../logging/log';
-import { defaultToolbarTemplate } from './templates/default-toolbar-template';
-import { leftToolbarTemplate } from './templates/left-toolbar-template';
+import { defaultToolbarTemplate } from '../templates/default-toolbar-template';
+import { leftToolbarTemplate } from '../templates/left-toolbar-template';
 import { ToolbarConfigTemplate } from './toolbar-config-template';
 
 export class ToolbarConfigTemplates extends HasLog {

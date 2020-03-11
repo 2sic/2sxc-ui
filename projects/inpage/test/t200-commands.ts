@@ -4,9 +4,9 @@ import { CommandDefinition } from '../src/commands/command-definition';
 import { Commands as Commands } from '../src/commands/commands';
 import { Definition } from '../src/commands/definition';
 import { createContextFromEditContext } from '../src/context/context';
-import { DataEditContext } from '../src/data-edit-context/data-edit-context';
+import { AttrJsonEditContext } from '../src/context/html-attribute/edit-context-root';
 // import { getButtonConfigDefaultsV1 } from '../src/toolbar/button/expand-button-config';
-import { ButtonConfig } from '../src/toolbar/button/button-config';
+import { ButtonConfig } from '../src/toolbar/config/button/button-config';
 
 describe('Commands test suite', function() {
 
@@ -96,7 +96,7 @@ describe('Commands test suite', function() {
           'Guid': 'bacde468-fe3c-4993-8b0b-b6813f5141cc',
           'Id': 4995,
         }, 'error': { 'type': null },
-      } as DataEditContext;
+      } as AttrJsonEditContext;
 
       this.context = createContextFromEditContext(this.editContext2);
 

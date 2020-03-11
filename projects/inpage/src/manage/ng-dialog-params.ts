@@ -1,4 +1,4 @@
-﻿import { ContextOfButton } from '../context/context-of-button';
+﻿import { ContextOfButton } from '../context/parts/context-button';
 import { UserOfEditContext } from './user-of-edit-context';
 
 export class NgDialogParams {

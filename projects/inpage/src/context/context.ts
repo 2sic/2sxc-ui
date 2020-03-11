@@ -1,22 +1,10 @@
-﻿import { IDs } from '../settings/2sxc.consts';
-import { DataEditContext } from '../data-edit-context/data-edit-context';
-import { $2sxcInPage as $2sxc } from '../interfaces/sxc-controller-in-page';
+﻿import { ContextOfApp, ContextOfButton, ContextOfContentBlock, ContextOfInstance, ContextOfItem, ContextOfPage, ContextOfSystem, ContextOfTenant, ContextOfUi, ContextOfUser } from '.';
+import { AttrJsonEditContext } from './html-attribute';
 import { SxcIntanceEditable } from '../interfaces/sxc-instance-editable';
 import { getContainerTag, getEditContext } from '../manage/api';
 import { getSxc } from '../plumbing/getSxc';
 import { isSxcInstance } from '../plumbing/is';
-import { ContextOfSystem } from './base-context/system-context';
-import { ContextOfTenant } from './base-context/tenant-context';
-import { ContextOfUser } from './base-context/user-context';
-import { ContextOfContentBlock } from './content-block-context/content-block-context';
-import { ContextOfButton } from './context-of-button';
-import { ContextOfApp } from './instance-context/app-context';
-import { ContextOfInstance } from './instance-context/instance-context';
-import { UiContext } from './instance-context/ui-context';
-import { ItemContext } from './item-context/item-context';
-import { ContextOfPage } from './page-context/page-context';
-
-
+import { IDs } from '../settings/2sxc.consts';
 
 /**
  * Primary API to get the context (context is cached)
@@ -72,7 +60,7 @@ export function getContextInstance(sxc: SxcIntanceEditable, htmlElement?: HTMLEl
  * create part of context object (it is not cached)
  * @param editCtx
  */
-export function createContextFromEditContext(editCtx: DataEditContext) {
+export function createContextFromEditContext(editCtx: AttrJsonEditContext) {
   const btnCtx = new ContextOfButton();
 
   // *** ContextOf ***
@@ -140,7 +128,7 @@ export function createContextFromEditContext(editCtx: DataEditContext) {
   }
 
   // ensure that the UI will load the correct assets to enable editing
-  btnCtx.ui = new UiContext();
+  btnCtx.ui = new ContextOfUi();
   if (editCtx.Ui) {
     btnCtx.ui.autoToolbar = editCtx.Ui.AutoToolbar; // toolbar auto-show
     if (editCtx.Ui.Form) btnCtx.ui.form = editCtx.Ui.Form; // decide which dialog opens, eg ng8
@@ -169,7 +157,7 @@ export function createContextFromEditContext(editCtx: DataEditContext) {
 
   // *** ContextOfItem ***
   // information about the current item
-  btnCtx.item = new ItemContext();
+  btnCtx.item = new ContextOfItem();
   // empty
 
   // *** ContextOfToolbar ***

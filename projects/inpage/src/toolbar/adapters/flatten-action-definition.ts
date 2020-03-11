@@ -22,4 +22,5 @@ export function flattenActionDefinition(actDef: any): void {
   }
 
   delete actDef.entity; // clean up edit-info
+  return actDef;
 }

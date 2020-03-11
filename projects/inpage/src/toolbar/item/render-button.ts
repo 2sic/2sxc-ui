@@ -1,4 +1,4 @@
-﻿import { ContextOfButton } from '../../context/context-of-button';
+﻿import { ContextOfButton } from '../../context/parts/context-button';
 import { oldParametersAdapter } from '../adapters/old-parameters-adapter';
 import { addClasses } from './render-helpers';
 

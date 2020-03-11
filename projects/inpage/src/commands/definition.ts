@@ -1,4 +1,4 @@
-﻿import { ContextOfButton } from '../context/context-of-button';
+﻿import { ContextOfButton } from '../context/parts/context-button';
 import { Command } from './command';
 import { Params } from './params';
 

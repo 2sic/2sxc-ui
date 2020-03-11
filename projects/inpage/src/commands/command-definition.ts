@@ -1,5 +1,5 @@
-﻿import { ContextOfButton } from '../context/context-of-button';
-import { ButtonConfig } from '../toolbar/button/button-config';
+﻿import { ContextOfButton } from '../context/parts/context-button';
+import { ButtonConfig } from '../toolbar/config/button/button-config';
 import { Definition } from './definition';
 
 export class CommandDefinition {
@@ -8,7 +8,7 @@ export class CommandDefinition {
 
   buttonConfig: Partial<ButtonConfig>;
 
-  protected setConfig(icon: string, translateKey: string, uiOnly: boolean, partOfPage: boolean, more: Partial<Definition>): void {
+  protected merge(icon: string, translateKey: string, uiOnly: boolean, partOfPage: boolean, more: Partial<Definition>): void {
     //
     // stv: v1 code
     const partialButtonConfig = {
@@ -38,7 +38,7 @@ export class CommandDefinition {
 
     // Toolbar API v2
     // this.commandDefinition.name = name;
-    commandDefinition.setConfig(icon, translateKey, uiOnly, partOfPage, more);
+    commandDefinition.merge(icon, translateKey, uiOnly, partOfPage, more);
 
     return commandDefinition;
   }

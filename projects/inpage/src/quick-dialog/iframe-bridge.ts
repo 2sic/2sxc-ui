@@ -1,7 +1,7 @@
 ﻿import { renderer } from '../contentBlock/render';
 import { updateTemplateFromDia } from '../contentBlock/templates';
 import { context } from '../context/context';
-import { ContextOfButton } from '../context/context-of-button';
+import { ContextOfButton } from '../context/parts/context-button';
 import * as Iiframebridge from '../interfaces/iiframe-bridge';
 import { IQuickDialogConfig } from '../interfaces/iquick-dialog-config';
 import { SxcIntanceEditable } from '../interfaces/sxc-instance-editable';

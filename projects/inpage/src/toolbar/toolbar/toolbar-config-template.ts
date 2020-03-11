@@ -1,5 +1,5 @@
 ﻿import { ButtonGroup } from './button-group';
-import { ToolbarSettings } from './toolbar-settings';
+import { ToolbarSettings } from '../settings/toolbar-settings';
 
 export class ToolbarConfigTemplate {
   groups: ButtonGroup[] = [];

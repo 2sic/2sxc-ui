@@ -9,7 +9,7 @@ import { renderToolbar } from './item/render-toolbar';
 import { TagToolbar } from './tag-toolbar';
 import { ToolbarInitConfig } from './toolbar-init-config';
 import { expandToolbarConfig } from './toolbar/toolbar-expand-config';
-import { emptyToolbar, ToolbarSettings } from './toolbar/toolbar-settings';
+import { emptyToolbar, ToolbarSettings } from './settings/toolbar-settings';
 
 // quick debug - set to false if not needed for production
 const dbg = false;

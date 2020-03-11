@@ -3,16 +3,16 @@
 export const DebugConfig = {
   cms: {
     autoDump: false,
-    run: true
+    run: true,
   },
   qDialog: {
-    showHide: true
+    showHide: true,
   },
   bootstrap: {
-    initInstance: true
+    initInstance: true,
   },
   state: {
     change: true,
-    get: false
-  }
-}
+    get: false,
+  },
+};

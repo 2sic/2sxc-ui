@@ -1,5 +1,5 @@
 ﻿import { renderer } from '../contentBlock/render';
-import { ContextOfButton } from '../context/context-of-button';
+import { ContextOfButton } from '../context/parts/context-button';
 import { $2sxcInPage as $2sxc } from '../interfaces/sxc-controller-in-page';
 import { windowInPage as window } from '../interfaces/window-in-page';
 import { quickDialog } from '../quick-dialog/quick-dialog';

@@ -1,4 +1,4 @@
-﻿import { ContextOfButton } from '../context/context-of-button';
+﻿import { ContextOfButton } from '../context/parts/context-button';
 import { isDisabled } from '../toolbar/build-toolbars';
 import { renderer } from './render';
 import { saveTemplate } from './web-api-promises';

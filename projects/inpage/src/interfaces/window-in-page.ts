@@ -1,5 +1,5 @@
 ﻿import { Window as sxcWindow } from '../../../$2sxc/src/index';
-import { ActionMenuMapper } from '../dnn-menu-helper/dnn-inpage-edit';
+import { ActionMenuMapper } from '../dnn/dnn-menu-helper/dnn-inpage-edit';
 import { $quickE } from '../quick-edit/quick-e';
 import { SxcControllerInPage } from './sxc-controller-in-page';
 

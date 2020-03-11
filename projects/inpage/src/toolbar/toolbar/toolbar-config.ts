@@ -1,9 +1,9 @@
-﻿import { GroupConfig } from '../button/group-config';
-import { ToolbarSettings } from './toolbar-settings';
+﻿import { ButtonGroupConfig } from '../config/button-group-config';
+import { ToolbarSettings } from '../settings/toolbar-settings';
 
 /** contains a toolbar config + settings + mny groups */
 export class ToolbarConfig {
-  groups: GroupConfig[] = [];
+  groups: ButtonGroupConfig[] = [];
   settings: ToolbarSettings; // like floating of toolbar, etc.
   params: any; // like EntityId, Content - Type - Name
   // todo: old props, remove

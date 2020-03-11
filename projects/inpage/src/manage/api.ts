@@ -1,13 +1,13 @@
-﻿import { DataEditContext } from '../data-edit-context/data-edit-context';
+﻿import { AttrJsonEditContext } from '../context/html-attribute/edit-context-root';
 import { SxcIntanceEditable } from '../interfaces/sxc-instance-editable';
 
 /**
  * get edit-context info of html element or sxc-object
  * @param {SxcIntanceEditable} sxc
  * @param {HTMLElement} htmlElement
- * @return {DataEditContext} edit context info
+ * @return {AttrJsonEditContext} edit context info
  */
-export function getEditContext(sxc: SxcIntanceEditable, htmlElement?: HTMLElement): DataEditContext {
+export function getEditContext(sxc: SxcIntanceEditable, htmlElement?: HTMLElement): AttrJsonEditContext {
   let editContextTag: HTMLElement;
   if (htmlElement) {
     editContextTag = getContainerTag(htmlElement);
@@ -36,10 +36,10 @@ export function getTag(sxci: SxcIntanceEditable): HTMLElement {
 
 /**
  * get the edit-context object (a json object) of the current tag/sxc-instance
- * @return {DataEditContext} edit-context object
+ * @return {AttrJsonEditContext} edit-context object
  */
-function getEditContextOfTag(htmlTag: HTMLElement): DataEditContext {
+function getEditContextOfTag(htmlTag: HTMLElement): AttrJsonEditContext {
   const attr = htmlTag.getAttribute('data-edit-context');
-  return JSON.parse(attr || '{ }') as DataEditContext;
+  return JSON.parse(attr || '{ }') as AttrJsonEditContext;
 }
 

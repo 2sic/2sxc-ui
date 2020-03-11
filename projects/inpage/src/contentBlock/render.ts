@@ -1,4 +1,4 @@
-﻿import { ContextOfButton } from '../context/context-of-button';
+﻿import { ContextOfButton } from '../context/parts/context-button';
 import { windowInPage as window } from '../interfaces/window-in-page';
 import { getTag } from '../manage/api';
 import { reset } from '../quick-edit/start';

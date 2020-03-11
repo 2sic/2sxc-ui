@@ -1,4 +1,4 @@
-﻿import { ContextOfButton } from '../../context/context-of-button';
+﻿import { ContextOfButton } from '../../context/parts/context-button';
 import { renderGroups } from './render-groups';
 import { addClasses } from './render-helpers';
 

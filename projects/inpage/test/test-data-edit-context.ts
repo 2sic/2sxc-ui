@@ -1,5 +1,5 @@
 ﻿import 'jasmine';
-import { DataEditContext } from '../src/data-edit-context/data-edit-context';
+import { AttrJsonEditContext } from '../src/context/html-attribute/edit-context-root';
 import * as jsonTest1 from './assets/data-edit-context.test.json';
 import * as jsonTest2 from './assets/data-edit-context-2.test.json';
 

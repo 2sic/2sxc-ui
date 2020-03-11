@@ -1,13 +1,12 @@
-﻿import { ContextOfButton } from '../../context/context-of-button';
+﻿import { ContextOfButton } from '../../context/parts/context-button';
 import { Log } from '../../logging/log';
 import { InstanceConfig } from '../../manage/instance-config';
-import { oldToolbarSettingsAddapter } from '../adapters/old-toolbar-settings-adapter';
-import { customize, removeDisableButtons } from '../button/expand-button-config';
+import { ButtonConfigurationBuilder } from '../config/button/button-config-builder';
 import { expandButtonGroups } from '../button/expand-group-config';
+import { defaultToolbarSettings, settingsForEmptyToolbar, ToolbarSettings } from '../settings/toolbar-settings';
 import { ToolbarVariationsBeforeInitializing, ToolbarVariationsForInitializing } from '../toolbar-init-config';
 import { ToolbarConfig } from './toolbar-config';
 import { ToolbarConfigTemplates } from './toolbar-config-templates';
-import { defaultToolbarSettings, settingsForEmptyToolbar, ToolbarSettings } from './toolbar-settings';
 
 export function expandToolbarConfig(context: ContextOfButton, toolbarData: ToolbarVariationsBeforeInitializing, toolbarSettings: ToolbarSettings, parentLog?: Log): ToolbarConfig {
   const log = new Log('Tlb.ExpTop', parentLog, 'expand start');
@@ -60,11 +59,9 @@ function buildFullDefinition(toolbarContext: ContextOfButton, unstructuredConfig
 
   expandButtonGroups(fullConfig, log);
 
-  removeDisableButtons(toolbarContext, fullConfig, instanceConfig, log);
+  new ButtonConfigurationBuilder(log).removeDisableButtons(toolbarContext, fullConfig, instanceConfig);
 
   if (fullConfig.debug) console.log('after remove: ', fullConfig);
-
-  customize(fullConfig);
 
   return fullConfig;
 }
@@ -112,7 +109,7 @@ function ensureDefinitionTree(unstructuredConfig: any, toolbarSettings: ToolbarS
   // toolbarConfig.groupConfig = new GroupConfig(original.groups as ButtonConfig[]);
   toolbarConfig.groups = unstructuredConfig.groups || []; // the groups of buttons
   toolbarConfig.params = unstructuredConfig.params || {}; // these are the default command parameters
-  toolbarConfig.settings = Object.assign({}, defaultToolbarSettings, unstructuredConfig.settings, oldToolbarSettingsAddapter(toolbarSettings)) as ToolbarSettings;
+  toolbarConfig.settings = Object.assign({}, defaultToolbarSettings, unstructuredConfig.settings, cleanDeprecatedSettings(toolbarSettings)) as ToolbarSettings;
 
   // todo: old props, remove
   toolbarConfig.name = unstructuredConfig.name || 'toolbar'; // name, no real use
@@ -123,3 +120,23 @@ function ensureDefinitionTree(unstructuredConfig: any, toolbarSettings: ToolbarS
   return toolbarConfig;
 }
 //#endregion initial toolbar object
+
+
+/**
+ * removes autoAddMore and classes if are null or empty, to keep same behaviour like in v1
+ *
+ * Note 2dm: not sure why we're doing this, but it seems like we only need this to merge
+ * various objects, so we probably want to make sure the in-html-toolbar doesn't accidentally
+ * contain stuff we don't want passed on
+ * @param toolbarSettings
+ */
+function cleanDeprecatedSettings(toolbarSettings: ToolbarSettings): ToolbarSettings {
+    const partialToolbaSettings = Object.assign({}, toolbarSettings) as ToolbarSettings;
+    if (!partialToolbaSettings.autoAddMore) {
+      delete partialToolbaSettings.autoAddMore;
+    }
+    if (!partialToolbaSettings.classes) {
+      delete partialToolbaSettings.classes;
+    }
+    return partialToolbaSettings;
+  }

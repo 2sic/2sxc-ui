@@ -1,5 +1,5 @@
-﻿import { ContextOfButton } from '../context/context-of-button';
-import { DataEditContext } from '../data-edit-context/data-edit-context';
+﻿import { ContextOfButton } from '../context/parts/context-button';
+import { AttrJsonEditContext } from '../context/html-attribute/edit-context-root';
 
 /**
  * used to build instance config

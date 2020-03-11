@@ -1,4 +1,4 @@
-﻿import { ContextOfButton } from '../context/context-of-button';
+﻿import { ContextOfButton } from '../context/parts/context-button';
 import { DebugConfig } from '../DebugConfig';
 import * as Container from './container';
 import * as ContainerSize from './container-size';

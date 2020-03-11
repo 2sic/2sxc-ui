@@ -1,5 +1,5 @@
 ﻿import { WebApiParams } from '../contentBlock/web-api-params';
-import { ContextOfButton } from '../context/context-of-button';
+import { ContextOfButton } from '../context/parts/context-button';
 import { translate } from '../translate/2sxc.translate';
 
 /**

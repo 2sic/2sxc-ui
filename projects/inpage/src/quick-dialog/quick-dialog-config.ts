@@ -1,4 +1,4 @@
-﻿import { ContextOfButton } from '../context/context-of-button';
+﻿import { ContextOfButton } from '../context/parts/context-button';
 import { IQuickDialogConfig } from '../interfaces/iquick-dialog-config';
 import { UserOfEditContext } from '../manage/user-of-edit-context';
 

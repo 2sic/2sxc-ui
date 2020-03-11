@@ -1,10 +1,13 @@
 ﻿import { CommandDefinition } from '../../commands/command-definition';
+import { Commands } from '../../commands/commands';
 
 export class ButtonAction {
-  commandDefinition: CommandDefinition; // reference to action to be run
+  readonly commandDefinition: CommandDefinition; // reference to action to be run
   customCode: string; // custom code if used
 
-  constructor(public name: string, contentType?: string, public params?: any) {
+  constructor(public name: string,
+              contentType?: string,
+              public params?: any) {
     if (!params) {
       this.params = {};
     }
@@ -12,6 +15,9 @@ export class ButtonAction {
     if (contentType) {
       Object.assign(this.params, { contentType: contentType });
     }
+
+    // activate command for this
+    this.commandDefinition = Commands.get(name);
 
   }
 }

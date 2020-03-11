@@ -1,4 +1,4 @@
-﻿import { ContextOfButton } from '../context/context-of-button';
+﻿import { ContextOfButton } from '../context/parts/context-button';
 import { ItemIdentifierGroup, ItemIdentifierSimple } from '../interfaces/item-identifiers';
 import { NgDialogParams } from '../manage/ng-dialog-params';
 import { translate } from '../translate/2sxc.translate';

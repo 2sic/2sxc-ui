@@ -1,11 +1,11 @@
 ﻿import { prepareToAddContent } from '../contentBlock/templates';
-import { ContextOfButton } from '../context/context-of-button';
-import { ContextBundleOfInstance } from '../context/context-of-instance';
+import { ContextOfButton } from '../context/parts/context-button';
+import { ContextBundleInstance } from '../context/bundles/context-bundle-instance';
 import { HasLog } from '../logging/has-log';
 import { Log } from '../logging/log';
-import { settingsAdapter } from '../toolbar/adapters/settings-adapter';
+import { buttonConfigUpgrade } from '../toolbar/adapters/settings-adapter';
 import { ButtonAction } from '../toolbar/button/button-action';
-import { ButtonConfig } from '../toolbar/button/button-config';
+import { ButtonConfig } from '../toolbar/config/button/button-config';
 import { commandOpenNgDialog } from './command-open-ng-dialog';
 import { Commands as Commands } from './commands';
 import { Settings } from './settings';
@@ -16,7 +16,7 @@ export class Engine extends HasLog {
   }
 
   detectParamsAndRun<T>(
-    context: ContextBundleOfInstance,
+    context: ContextBundleInstance,
     nameOrSettings: string | Partial<Settings>,
     eventOrSettings: Partial<Settings> | MouseEvent,
     event?: MouseEvent,
@@ -77,14 +77,13 @@ export class Engine extends HasLog {
 
     // Toolbar API v2
     const newButtonAction = new ButtonAction(name, contentType, settings);
-    newButtonAction.commandDefinition = Commands.get(name);
     const newButtonConfig = new ButtonConfig(newButtonAction);
     newButtonConfig.name = name;
 
     const button = (context.button = Object.assign(
       newButtonConfig,
       newButtonAction.commandDefinition.buttonConfig,
-      settingsAdapter(settings),
+      buttonConfigUpgrade(settings),
     ) as ButtonConfig); // merge conf & settings, but settings has higher priority
 
     // todo: stv, fix this in case that is function

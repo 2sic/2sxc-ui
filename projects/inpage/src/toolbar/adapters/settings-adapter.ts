@@ -1,7 +1,7 @@
-﻿import { ContextOfButton } from '../../context/context-of-button';
-import { ButtonConfig } from '../button/button-config';
+﻿import { ContextOfButton } from '../../context/parts/context-button';
+import { ButtonConfig } from '../config/button/button-config';
 
-export function settingsAdapter(oldSettings: any): Partial<ButtonConfig> {
+export function buttonConfigUpgrade(oldSettings: any): Partial<ButtonConfig> {
 
   const newSettings: Partial<ButtonConfig> = {};
 

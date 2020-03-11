@@ -2,9 +2,9 @@
 import { Settings } from '../commands/settings';
 import { context as getContext } from '../context/context';
 import {
-  ContextBundleOfInstance,
+  ContextBundleInstance,
   isContextOfInstance,
-} from '../context/context-of-instance';
+} from '../context/bundles/context-bundle-instance';
 import { DebugConfig } from '../DebugConfig';
 import { HasLog } from '../logging/has-log';
 import { Log } from '../logging/log';
@@ -31,7 +31,7 @@ export class Cms extends HasLog {
   }
 
   run<T>(
-    context: ContextBundleOfInstance | HTMLElement,
+    context: ContextBundleInstance | HTMLElement,
     nameOrSettings: string | Partial<Settings>,
     eventOrSettings?: Partial<Settings> | MouseEvent,
     event?: MouseEvent,

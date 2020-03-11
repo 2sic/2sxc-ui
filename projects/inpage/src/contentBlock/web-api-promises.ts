@@ -1,5 +1,5 @@
 ﻿import { WebApiParams } from './web-api-params';
-import { ContextOfButton } from '../context/context-of-button';
+import { ContextOfButton } from '../context/parts/context-button';
 
 /*
  * this is a content block in the browser

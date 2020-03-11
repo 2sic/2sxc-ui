@@ -1,13 +1,13 @@
-﻿import { Commands as Commands } from '../../commands/commands';
+﻿import { Commands } from '../../commands/commands';
 import { Log } from '../../logging/log';
 import { flattenActionDefinition } from '../adapters/flatten-action-definition';
 import { parametersAdapter } from '../adapters/parameters-adapter';
-import { settingsAdapter } from '../adapters/settings-adapter';
+import { buttonConfigUpgrade } from '../adapters/settings-adapter';
+import { ButtonConfig } from '../config/button/button-config';
+import { ToolbarSettings } from '../settings/toolbar-settings';
 import { ToolbarConfig } from '../toolbar/toolbar-config';
-import { ToolbarSettings } from '../toolbar/toolbar-settings';
 import { ButtonAction } from './button-action';
-import { ButtonConfig } from './button-config';
-import { addDefaultBtnSettings, expandButtonDefinitionInPage } from './expand-button-config';
+import { ButtonConfigurationBuilder } from '../config/button/button-config-builder';
 
 /**
  * this will traverse a groups-tree and expand each group
@@ -17,7 +17,7 @@ import { addDefaultBtnSettings, expandButtonDefinitionInPage } from './expand-bu
 export function expandButtonGroups(fullToolbarConfig: ToolbarConfig, parentLog: Log): void {
   const log = new Log('Tlb.ExpGrp', parentLog, 'start');
 
-  const actions = Commands;
+  const btnConfigBuilder = new ButtonConfigurationBuilder(log);
 
   // by now we should have a structure, let's check/fix the buttons
   log.add(`will expand groups - found ${fullToolbarConfig.groups.length} items`);
@@ -35,7 +35,7 @@ export function expandButtonGroups(fullToolbarConfig: ToolbarConfig, parentLog: 
       for (let b = 0; b < btns.length; b++) {
         const btn = btns[b];
 
-        if (!(actions.get(btn.command.action))) {
+        if (!(Commands.get(btn.command.action))) {
           log.add(`couldn't find action ${btn.command.action} - show warning`);
           console.warn('warning: toolbar-button with unknown action-name:', btn.command.action);
         }
@@ -52,18 +52,16 @@ export function expandButtonGroups(fullToolbarConfig: ToolbarConfig, parentLog: 
 
         // Toolbar API v2
         const newButtonAction = new ButtonAction(name, contentType, params);
-        newButtonAction.commandDefinition = actions.get(name);
         const newButtonConfig = new ButtonConfig(newButtonAction);
         newButtonConfig.name = name;
 
         // settings adapter from v1 to v2
-        const settings = settingsAdapter(btn);
+        const settings = buttonConfigUpgrade(btn);
         Object.assign(newButtonConfig, settings);
 
-        addDefaultBtnSettings(newButtonConfig,
-          fullToolbarConfig.groups[g],
-          fullToolbarConfig,
-          actions, log); // ensure all buttons have either own settings, or the fallback
+        // ensure all buttons have either own settings, or the fallback
+        btnConfigBuilder.addDefaultBtnSettings(newButtonConfig,
+          fullToolbarConfig.groups[g], fullToolbarConfig, Commands);
 
         buttonConfigs.push(newButtonConfig);
       }
@@ -140,7 +138,7 @@ function expandButtonList(root: any, settings: ToolbarSettings, parentLog: Log):
 
   // add each button - check if it's already an object or just the string
   for (let v = 0; v < btns.length; v++) {
-    btns[v] = expandButtonDefinitionInPage(btns[v], sharedProperties, log);
+    btns[v] = new ButtonConfigurationBuilder(log).normalize(btns[v]/* sharedProperties, */);
     // todo: refactor this out, not needed any more as they are all together now
     // btns[v].group = root;// grp;    // attach group reference, needed for fallback etc.
   }
