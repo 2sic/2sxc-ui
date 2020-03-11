@@ -1,23 +1,73 @@
 ﻿import { ContextOfButton } from '../context/parts/context-button';
 import { ItemIdentifierGroup, ItemIdentifierSimple } from '../interfaces/item-identifiers';
 import { NgUrlValuesWithoutParams } from '../manage/ng-dialog-params';
+import { DialogPaths } from '../settings/DialogPaths';
 import { translate } from '../translate/2sxc.translate';
 import { CommandParams } from './params';
 
-export class Command {
-  items: Array<ItemIdentifierSimple | ItemIdentifierGroup>;
-  params: CommandParams;
+export class CommandExecution {
+  public items: Array<ItemIdentifierSimple | ItemIdentifierGroup>;
+  public readonly params: CommandParams;
+  private readonly rootUrl: string;
+  private readonly debugUrlParam: string;
 
-  constructor(public context: ContextOfButton, public ngDialogUrl: string, public isDebug: string) {
-    // this.settings = settings;
+  constructor(public readonly context: ContextOfButton) {
+    // Initialize Items
     this.items = context.button.action.params.items || []; // use predefined or create empty array
+
+    // initialize params
     // todo: stv, clean this
     const params = this.evalPropOrFunction(context.button.params, context, {});
     const dialog = this.evalPropOrFunction(context.button.dialog, context, {});
-    this.params = Object.assign({
-      dialog: dialog || context.button.action.name, // the variable used to name the dialog changed in the history of 2sxc from action to dialog
-    }, params) as CommandParams;
+    // note: this corrects how the variable to name the dialog changed in the history of 2sxc from action to dialog
+    this.params = Object.assign({ dialog: dialog || context.button.action.name }, params);
 
+    // initialize root url to dialog
+    this.rootUrl = this.getDialogUrl();
+
+    // get isDebug url Parameter
+    this.debugUrlParam = window.$2sxc.urlParams.get('debug') ? '&debug=true' : '';
+
+      // activate items for list or simple item depending on the scenario
+    if (context.button.action.params.useModuleList)
+      this.addContentGroupItems(true);
+    else
+      this.addItem();
+
+    // if the command has own configuration stuff, do that now
+    if (context.button.configureCommand)
+      context.button.configureCommand(context, this);
+  }
+
+
+  // build the link, combining specific params with global ones and put all in the url
+  generateLink() {
+    const context = this.context;
+    const params = context.button.action.params;
+    const urlItems = this.params as any;
+
+    // steps for all actions: prefill, serialize, open-dialog
+    // when doing new, there may be a prefill in the link to initialize the new item
+    if (params.prefill)
+      for (let i = 0; i < this.items.length; i++)
+        this.items[i].Prefill = params.prefill;
+
+    delete urlItems.prefill; // added 2020-03-11, seemed strange that it's not removed
+    urlItems.items = JSON.stringify(this.items); // Serialize/json-ify the complex items-list
+
+    // clone the params and adjust parts based on partOfPage settings...
+    const partOfPage = context.button.partOfPage(context);
+    const ngDialogParams = new NgUrlValuesWithoutParams(context, partOfPage); // 2dm simplified buildNgDialogParams
+
+    return `${this.rootUrl}#${$.param(ngDialogParams)}&${$.param(urlItems)}${this.debugUrlParam}`;
+  }
+
+  private getDialogUrl(): string {
+    const context = this.context;
+    return `${context.instance.sxcRootUrl}desktopmodules/tosic_sexycontent/${(context.ui.form === 'ng8'
+        && context.button.dialog(context) === 'edit')
+    ? DialogPaths.ng8
+    : DialogPaths.ng1}?sxcver=${context.instance.sxcVersion}`;
   }
 
   private evalPropOrFunction = (propOrFunction: any, context: ContextOfButton, fallback: any) => {
@@ -27,7 +77,7 @@ export class Command {
     return (typeof (propOrFunction) === 'function' ? propOrFunction(context) : propOrFunction);
   }
 
-  addSimpleItem() {
+  private addItem() {
     const item = {} as ItemIdentifierSimple;
     const params = this.context.button.action.params;
     const ct = params.contentType || (params as any).attributeSetName; // two ways to name the content-type-name this, v 7.2+ and older
@@ -44,7 +94,7 @@ export class Command {
 
 
   // this will tell the command to edit a item from the sorted list in the group, optionally together with the presentation item
-  addContentGroupItemSetsToEditList(withPresentation: boolean) {
+  private addContentGroupItems(withPresentation: boolean) {
     const isContentAndNotHeader = (this.context.button.action.params.sortOrder !== -1);
     const index = isContentAndNotHeader ? this.context.button.action.params.sortOrder : 0;
     const cTerm = this.findPartName(true);
@@ -58,54 +108,10 @@ export class Command {
       this.addContentGroupItem(groupId, index, pTerm, isAdd);
   }
 
-  // build the link, combining specific params with global ones and put all in the url
-  generateLink = (context: ContextOfButton) => {
-    const params = context.button.action.params;
-    const urlItems = params as any;
-    // if there is no items-array, create an empty one (it's required later on)
-    // if (!context.button.action.params.items) {
-    //   context.button.action.params.items = [];
-    // }
-
-    // steps for all actions: prefill, serialize, open-dialog
-    // when doing new, there may be a prefill in the link to initialize the new item
-    if (params.prefill)
-      for (let i = 0; i < this.items.length; i++)
-        this.items[i].Prefill = params.prefill;
-
-    delete urlItems.prefill; // added 2020-03-11, seemed strange that it's not removed
-    urlItems.items = JSON.stringify(this.items); // Serialize/json-ify the complex items-list
-
-    // clone the params and adjust parts based on partOfPage settings...
-    const partOfPage = context.button.partOfPage(context);
-    const ngDialogParams = new NgUrlValuesWithoutParams(context, partOfPage); // 2dm simplified buildNgDialogParams(context);
-    // const sharedParams = Object.assign({}, ngDialogParams) as NgDialogParams;
-    // const sharedParams = ngDialogParams;
-    // if (!partOfPage) {
-    //   delete sharedParams.versioningRequirements;
-    //   delete sharedParams.publishing;
-    //   sharedParams.partOfPage = false;
-    // }
-
-    return this.ngDialogUrl +
-      '#' + $.param(ngDialogParams) +
-      '&' + $.param(urlItems) +
-      this.isDebug;
-    //#endregion
-  }
-
 
 
   // this adds an item of the content-group, based on the group GUID and the sequence number
-  private addContentGroupItem(
-    guid: string,
-    index: number,
-    part: string,
-    isAdd: boolean,
-    // isEntity: boolean,
-    // cbid: number,
-    // sectionLanguageKey: string
-    ) {
+  private addContentGroupItem(guid: string, index: number, part: string, isAdd: boolean) {
     this.items.push({
       Group: {
         Guid: guid,

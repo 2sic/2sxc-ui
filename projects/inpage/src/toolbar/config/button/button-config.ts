@@ -1,4 +1,4 @@
-﻿import { Command } from '../../../commands/command';
+﻿import { CommandExecution } from '../../../commands/command-execution';
 import { ContextOfButton } from '../../../context/parts/context-button';
 import { ButtonCommand } from '../../button/button-command';
 import { CommandCode } from '../../../commands/command-code';
@@ -22,7 +22,7 @@ export class ButtonConfig {
   }
 
   code: CommandCode; // void;
-  configureCommand: (context: ContextOfButton, cmd: Command) => void;
+  configureCommand: (context: ContextOfButton, cmd: CommandExecution) => void;
   dialog: (context: ContextOfButton) => string;
   disabled: (context: ContextOfButton) => boolean;
   dynamicClasses: (context: ContextOfButton) => string;

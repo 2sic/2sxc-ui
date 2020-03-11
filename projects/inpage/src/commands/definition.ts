@@ -1,7 +1,7 @@
 ﻿import { ContextOfButton } from '../context/parts/context-button';
-import { Command } from './command';
-import { CommandParams } from './params';
 import { CommandCode } from './command-code';
+import { CommandExecution } from './command-execution';
+import { CommandParams } from './params';
 
 /**
  * Command definition, for creation of commands
@@ -23,7 +23,7 @@ export class Definition {
    * @param context
    * @param cmd
    */
-  configureCommand?(context: ContextOfButton, cmd: Command): void;
+  configureCommand?(context: ContextOfButton, cmd: CommandExecution): void;
 
   /**
    * optional name of dialog, to check if it's already open

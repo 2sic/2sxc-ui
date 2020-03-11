@@ -1,6 +1,5 @@
-﻿import { CommandCode } from './command-code';
+﻿import { ItemIdentifierGroup, ItemIdentifierSimple } from '../interfaces/item-identifiers';
 import { MetadataFor } from './params-metadata-for';
-import { ItemIdentifierSimple, ItemIdentifierGroup } from '../interfaces/item-identifiers';
 export class CommandParams {
   items?: Array<ItemIdentifierSimple | ItemIdentifierGroup>; // string | string[];
   mode?: string;

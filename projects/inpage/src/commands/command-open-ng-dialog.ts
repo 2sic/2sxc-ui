@@ -4,7 +4,7 @@ import { $2sxcInPage as $2sxc } from '../interfaces/sxc-controller-in-page';
 import { windowInPage as window } from '../interfaces/window-in-page';
 import { quickDialog } from '../quick-dialog/quick-dialog';
 import { DialogPaths } from '../settings/DialogPaths';
-import { commandLinkToNgDialog } from './command-link-to-ng-dialog';
+import { CommandExecution } from './command-execution';
 
 /**
  * open a new dialog of the angular-ui
@@ -15,7 +15,7 @@ import { commandLinkToNgDialog } from './command-link-to-ng-dialog';
  */
 export function commandOpenNgDialog<T>(context: ContextOfButton, event: MouseEvent): Promise<T> {
   // the link contains everything to open a full dialog (lots of params added)
-  let link = commandLinkToNgDialog(context);
+  let link = new CommandExecution(context).generateLink(); // commandLinkToNgDialog(context);
 
   let fullScreen = false;
   const origEvent = event || (window.event as MouseEvent);
