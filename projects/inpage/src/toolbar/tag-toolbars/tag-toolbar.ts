@@ -1,6 +1,6 @@
-﻿import { ContextBundleButton } from '../../context/bundles/context-bundle-button';
-import { ToolbarRenderer } from '../render/toolbar-renderer';
-import { TagToolbarManager } from './tag-toolbar-manager';
+﻿import { ToolbarRenderer } from '..';
+import { TagToolbarManager } from '..';
+import { ContextBundleButton } from '../../context/bundles/context-bundle-button';
 
 /**
  * This is the modern toolbar which is attached to a tag from whic it hovers.

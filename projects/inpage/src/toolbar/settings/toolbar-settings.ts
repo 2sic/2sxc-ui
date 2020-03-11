@@ -1,4 +1,4 @@
-﻿import { ToolbarInitConfig } from '../toolbar-init-config';
+﻿import { ToolbarInitConfig } from '../initialize/toolbar-init-config';
 import { ToolbarConfigTemplate } from '../toolbar/toolbar-config-template';
 
 /** contains toolbar behaviour settings like float, etc. */

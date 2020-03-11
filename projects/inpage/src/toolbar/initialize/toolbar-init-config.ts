@@ -1,10 +1,10 @@
-import * as Constants from '../constants';
-import { HtmlTools } from '../html/dom-tools';
-import { IDs } from '../settings/2sxc.consts';
-import { ButtonConfig } from './config/button/button-config';
-import * as Toolbarsettings from './settings/toolbar-settings';
+import * as Constants from '../../constants';
+import { HtmlTools } from '../../html/dom-tools';
+import { IDs } from '../../settings/2sxc.consts';
+import { ButtonConfig } from '../config/button/button-config';
+import * as Toolbarsettings from '../settings/toolbar-settings';
 import ToolbarSettings = Toolbarsettings.ToolbarSettings;
-import { ToolbarConfigTemplate } from './toolbar/toolbar-config-template';
+import { ToolbarConfigTemplate } from '../toolbar/toolbar-config-template';
 
 export type ToolbarVariationsBeforeInitializing = ToolbarVariationsForInitializing;
 

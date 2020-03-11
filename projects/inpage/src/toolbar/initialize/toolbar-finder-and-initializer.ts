@@ -1,12 +1,12 @@
-﻿import * as Constants from '../constants';
-import { findContext } from '../context/context';
-import { HasLog } from '../logging/has-log';
-import { ToolbarRenderer } from './render/toolbar-renderer';
-import { emptyToolbar } from './settings/toolbar-settings';
-import { TagToolbar } from './tag-toolbars/tag-toolbar';
+﻿import * as Constants from '../../constants';
+import { findContext } from '../../context/context';
+import { HasLog } from '../../logging/has-log';
+import { ToolbarRenderer } from '../render/toolbar-renderer';
+import { emptyToolbar } from '../settings/toolbar-settings';
+import { TagToolbar } from '../tag-toolbars/tag-toolbar';
+import { ToolbarManager } from '../toolbar-manager';
+import { expandToolbarConfig } from '../toolbar/toolbar-expand-config';
 import { ToolbarInitConfig } from './toolbar-init-config';
-import { ToolbarManager } from './toolbar-manager';
-import { expandToolbarConfig } from './toolbar/toolbar-expand-config';
 
 // quick debug - set to false if not needed for production
 const dbg = false;

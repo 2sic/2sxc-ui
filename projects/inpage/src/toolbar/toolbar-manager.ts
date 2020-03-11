@@ -1,9 +1,8 @@
 ﻿// import { context } from '../context/context';
+import { ToolbarRenderer } from '.';
+import { ToolbarConfigFinderAndInitializer } from '.';
 import { ContextBundleButton } from '../context/bundles/context-bundle-button';
-import { HasLog } from '../logging/has-log';
-import { Log } from '../logging/log';
-import { ToolbarRenderer } from './render/toolbar-renderer';
-import { ToolbarConfigFinderAndInitializer } from './toolbar-finder-and-initializer';
+import { HasLog, Log } from '../logging';
 import { ToolbarConfigTemplates } from './toolbar/toolbar-config-templates';
 
 /**

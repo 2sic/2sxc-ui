@@ -4,7 +4,7 @@ import { InstanceConfig } from '../../manage/instance-config';
 import { ButtonConfigurationBuilder } from '../config/button/button-config-builder';
 import { expandButtonGroups } from '../button/expand-group-config';
 import { defaultToolbarSettings, settingsForEmptyToolbar, ToolbarSettings } from '../settings/toolbar-settings';
-import { ToolbarVariationsBeforeInitializing, ToolbarVariationsForInitializing } from '../toolbar-init-config';
+import { ToolbarVariationsBeforeInitializing, ToolbarVariationsForInitializing } from '../initialize/toolbar-init-config';
 import { ToolbarConfig } from './toolbar-config';
 import { ToolbarConfigTemplates } from './toolbar-config-templates';
 
