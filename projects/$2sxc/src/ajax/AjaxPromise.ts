@@ -44,8 +44,9 @@ export class AjaxPromise {
    */
   private getActionUrl(settings: AjaxSettings): string {
     var url = settings.url || 'app/auto/api/' + settings.controller + '/' + settings.action;
-    var endpoint = settings.endpoint || ToSxcName;
-    var base = this.sxc.root.http.apiUrl(url, endpoint);
+    // 2020-03-13 stop adding 2sxc endpoint-name, it's already happening in apiUrl so with this it happens 2x
+    // var endpoint = settings.endpoint || ToSxcName;
+    var base = this.sxc.root.http.apiUrl(url, settings.endpoint);
     // let base = (settings.url)
     //   ? this.sxc.root.http.apiUrl(settings.url) // this.sxc.resolveServiceUrl(settings.url)  // use url -> TODO: change this to use the new root.http.apiUrl
     //   : env.apiRoot('2sxc')               // use controller/action

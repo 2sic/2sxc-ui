@@ -684,8 +684,6 @@ var SxcWebApi = (function () {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AjaxPromise; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__constants__ = __webpack_require__(0);
-
 var AjaxPromise = (function () {
     function AjaxPromise(api, sxc) {
         this.api = api;
@@ -712,8 +710,7 @@ var AjaxPromise = (function () {
     };
     AjaxPromise.prototype.getActionUrl = function (settings) {
         var url = settings.url || 'app/auto/api/' + settings.controller + '/' + settings.action;
-        var endpoint = settings.endpoint || __WEBPACK_IMPORTED_MODULE_0__constants__["e" /* ToSxcName */];
-        var base = this.sxc.root.http.apiUrl(url, endpoint);
+        var base = this.sxc.root.http.apiUrl(url, settings.endpoint);
         return base + (!settings.params ? '' : ('?' + $2sxc_jQSuperlight.param(settings.params)));
     };
     return AjaxPromise;
