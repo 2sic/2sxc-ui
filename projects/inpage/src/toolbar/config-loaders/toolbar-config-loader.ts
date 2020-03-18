@@ -2,22 +2,25 @@
 import { HasLog } from '../../logging/has-log';
 import { Log } from '../../logging/log';
 import { InstanceConfig } from '../../manage/instance-config';
-import { ButtonGroupConfigBuilder } from '../button/expand-group-config';
-import { ButtonConfigurationBuilder } from '../config-inpage/button-config-builder';
 import { ToolbarVariationsForInitializing } from '../initialize/toolbar-init-config';
 import { defaultToolbarSettings, settingsForEmptyToolbar, ToolbarSettings } from '../settings/toolbar-settings';
 import { ToolbarTemplateManager } from '../templates/toolbar-template-manager';
-import { ToolbarConfig } from './toolbar-config';
+import { ToolbarConfig } from '../toolbar/toolbar-config';
+import { ButtonConfigLoader } from './button-config-loader';
+import { ButtonGroupConfigLoader } from '.';
+import { CommandConfigLoader } from '.';
 
-export class ToolbarConfigBuilder extends HasLog {
+export class ToolbarConfigLoader extends HasLog {
 
-    private groups: ButtonGroupConfigBuilder;
-    private button: ButtonConfigurationBuilder;
+    public groups: ButtonGroupConfigLoader;
+    public button: ButtonConfigLoader;
+    public command: CommandConfigLoader;
 
     constructor(parentLog: Log) {
         super('Tlb.TlbCnf', parentLog);
-        this.groups = new ButtonGroupConfigBuilder(this.log);
-        this.button = new ButtonConfigurationBuilder(this.log);
+        this.groups = new ButtonGroupConfigLoader(this);
+        this.button = new ButtonConfigLoader(this);
+        this.command = new CommandConfigLoader(this);
     }
 
     expandToolbarConfig(context: ContextBundleButton, toolbarData: ToolbarVariationsForInitializing, toolbarSettings: ToolbarSettings, parentLog?: Log): ToolbarConfig {

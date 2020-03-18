@@ -1,7 +1,7 @@
-﻿import { CommandParams } from '../../commands/params';
-import { TypeTbD } from '../../plumbing/TypeTbD';
-import { InPageCodeJson_ProbablyUnused } from '.';
+﻿import { InPageCodeJson_ProbablyUnused } from '.';
 import { InPageCommandJson } from '.';
+import { CommandParams } from '../../commands/params';
+import { TypeTbD } from '../../plumbing/TypeTbD';
 
 /**
  * Button Definition v1. from old API

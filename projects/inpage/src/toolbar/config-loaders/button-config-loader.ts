@@ -1,26 +1,26 @@
 ﻿import { InPageCodeJson_ProbablyUnused, InPageCommandJson, isInPageCommandConfiguration } from '.';
 import { InPageButtonJson } from '.';
+import { ToolbarConfigLoader } from '.';
+import { CommandConfigLoader } from '.';
 import { Commands as Commands } from '../../commands/commands';
 import { ContextBundleButton } from '../../context/bundles/context-bundle-button';
 import { HasLog } from '../../logging/has-log';
 import { Log } from '../../logging/log';
 import { InstanceConfig } from '../../manage/instance-config';
 import { DictionaryValue, TypeTbD, TypeUnsafe, TypeWeDontCare } from '../../plumbing/TypeTbD';
-import { removeActionProperty } from '../adapters/parameters-adapter';
 import { ButtonCommand } from '../button/button-command';
 import { ButtonConfig } from '../config/button-config';
 import { ButtonGroupConfig } from '../config/button-group-config';
 import { ToolbarConfig } from '../toolbar/toolbar-config';
-import { CommandConfigBuilder } from './command-config-builder';
 
 /**
  * This is a system to build button configurations
  */
-export class ButtonConfigurationBuilder extends HasLog {
+export class ButtonConfigLoader extends HasLog {
 
-  constructor(parentLog: Log) {
-    super('Tlb.BtCfBl', parentLog);
-  }
+    constructor(private toolbar: ToolbarConfigLoader) {
+        super('Tlb.BtCfBl', toolbar.log);
+    }
 
 
 
@@ -86,10 +86,10 @@ export class ButtonConfigurationBuilder extends HasLog {
     const contentType = oldButtonDef.command.contentType;
 
     // if the button belongs to a content-item, move the specs up to the item into the settings-object
-    CommandConfigBuilder.normalizeCommandJson(oldButtonDef.command);
+    this.toolbar.command.normalizeCommandJson(oldButtonDef.command);
 
     // parameters adapter from v1 to v2
-    const params = removeActionProperty(oldButtonDef.command);
+    const params = this.toolbar.command.removeActionProperty(oldButtonDef.command);
 
     // Toolbar API v2
     const newButtonAction = new ButtonCommand(name, contentType, params);
@@ -172,23 +172,22 @@ export class ButtonConfigurationBuilder extends HasLog {
 
 
 
-/**
- * enhance button-object with default icons, etc.
- * @param btn
- * @param group
- * @param fullToolbarConfig
- * @param actions
- */
-addDefaultBtnSettings(btn: ButtonConfig,
-                      group: ButtonGroupConfig,
-                      fullToolbarConfig: ToolbarConfig,
-                      actions: typeof Commands) {
-    this.log.add(`adding default btn settings for ${() => btn.action.name}`);
-    for (let d = 0; d < btnProperties.length; d++) {
-      fallbackBtnSetting(btn, group, fullToolbarConfig, actions, btnProperties[d]);
+    /**
+     * enhance button-object with default icons, etc.
+     * @param btn
+     * @param group
+     * @param fullToolbarConfig
+     * @param actions
+     */
+    addDefaultBtnSettings(btn: ButtonConfig,
+                          group: ButtonGroupConfig,
+                          fullToolbarConfig: ToolbarConfig,
+                          actions: typeof Commands) {
+        this.log.add(`adding default btn settings for ${() => btn.action.name}`);
+        for (let d = 0; d < btnProperties.length; d++) {
+        fallbackBtnSetting(btn, group, fullToolbarConfig, actions, btnProperties[d]);
+        }
     }
-  }
-
 
 }
 

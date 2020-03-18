@@ -5,11 +5,9 @@ import { ContextBundleButton } from '../context/bundles/context-bundle-button';
 import { AttrJsonEditContext } from '../context/html-attribute/edit-context-root';
 import { SxcIntanceEditable } from '../interfaces/sxc-instance-editable';
 import { TypeUnsafe } from '../plumbing/TypeTbD';
-import { InPageButtonJson } from '../toolbar/config-inpage';
-import { ButtonConfigurationBuilder } from '../toolbar/config-inpage/button-config-builder';
+import { InPageButtonJson, ButtonConfigLoader, ToolbarConfigLoader } from '../toolbar/config-loaders';
 import { ToolbarRenderer } from '../toolbar/render/toolbar-renderer';
 import { ToolbarSettings } from '../toolbar/settings/toolbar-settings';
-import { ToolbarConfigBuilder } from '../toolbar/toolbar/toolbar-expand-config';
 import { getTag} from './api';
 import { UserOfEditContext } from './user-of-edit-context';
 
@@ -41,7 +39,7 @@ export class EditManager implements SxcInstanceManage {
    * it is publicly used out of inpage, so take a care to preserve function signature
    */
   getButton(actDef: InPageButtonJson, groupIndex: number): string {
-    this.context.button = new ButtonConfigurationBuilder(null).convertToConfig(actDef);
+    this.context.button = new ButtonConfigLoader(null).convertToConfig(actDef);
     const button = new ToolbarRenderer(this.context).button.render(this.context, groupIndex);
     return button.outerHTML;
   }
@@ -55,7 +53,7 @@ export class EditManager implements SxcInstanceManage {
    * it is publicly used in Razor scripts of inpage, so take a care to preserve function signature
    */
   getToolbar(tbConfig: TypeUnsafe, moreSettings: ToolbarSettings): string {
-    const toolbarConfig = new ToolbarConfigBuilder(null).expandToolbarConfig(this.context, tbConfig, moreSettings);
+    const toolbarConfig = new ToolbarConfigLoader(null).expandToolbarConfig(this.context, tbConfig, moreSettings);
     this.context.toolbar = toolbarConfig;
     return new ToolbarRenderer(this.context).render(); // renderToolbar(this.context);
   }

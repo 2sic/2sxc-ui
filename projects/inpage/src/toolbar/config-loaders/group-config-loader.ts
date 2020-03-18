@@ -1,21 +1,21 @@
-﻿import { Commands } from '../../commands/commands';
+﻿import { ButtonConfigLoader, InPageCommandJson } from '.';
+import { CommandConfigLoader } from '.';
+import { Commands } from '../../commands/commands';
+import { HasLog } from '../../logging/has-log';
 import { Log } from '../../logging/log';
 import { TypeUnsafe } from '../../plumbing/TypeTbD';
-import { removeActionProperty } from '../adapters/parameters-adapter';
 import { buttonConfigUpgrade } from '../adapters/settings-adapter';
-import { ButtonConfigurationBuilder } from '../config-inpage/button-config-builder';
-import { CommandConfigBuilder } from '../config-inpage/command-config-builder';
+import { ButtonCommand } from '../button/button-command';
 import { ButtonConfig } from '../config/button-config';
 import { ButtonGroupConfig } from '../config/button-group-config';
 import { ToolbarSettings } from '../settings/toolbar-settings';
 import { ToolbarConfig } from '../toolbar/toolbar-config';
-import { ButtonCommand } from './button-command';
-import { HasLog } from '../../logging/has-log';
+import { ToolbarConfigLoader } from './toolbar-config-loader';
 
-export class ButtonGroupConfigBuilder extends HasLog {
+export class ButtonGroupConfigLoader extends HasLog {
 
-    constructor(parentLog: Log) {
-        super('Tlb.GrpCnf', parentLog);
+    constructor(private toolbar: ToolbarConfigLoader) {
+        super('Tlb.GrpCnf', toolbar.log);
     }
 
     /**
@@ -26,7 +26,7 @@ export class ButtonGroupConfigBuilder extends HasLog {
     expandButtonGroups(fullToolbarConfig: ToolbarConfig, parentLog: Log): ToolbarConfig {
         const log = new Log('Tlb.ExpGrp', parentLog, 'start');
 
-        const btnConfigBuilder = new ButtonConfigurationBuilder(log);
+        const btnConfigBuilder = this.toolbar.button;// new ButtonConfigurationBuilder(log);
 
         // by now we should have a structure, let's check/fix the buttons
         log.add(`will expand groups - found ${fullToolbarConfig.groups.length} items`);
@@ -54,10 +54,10 @@ export class ButtonGroupConfigBuilder extends HasLog {
                 const contentType = btnCommand.contentType;
 
                 // if the button belongs to a content-item, move the specs up to the item into the settings-object
-                CommandConfigBuilder.normalizeCommandJson(btnCommand);
+                this.toolbar.command.normalizeCommandJson(btnCommand);
 
                 // parameters adapter from v1 to v2
-                const params = removeActionProperty(btnCommand);
+                const params = this.toolbar.command.removeActionProperty(btnCommand);
                 Object.assign(params, fullToolbarConfig.params);
 
                 // Toolbar API v2
@@ -82,6 +82,7 @@ export class ButtonGroupConfigBuilder extends HasLog {
         }
         return fullToolbarConfig;
     }
+
 }
 
 
@@ -153,7 +154,7 @@ function expandButtonList(root: ButtonGroupConfig, settings: ToolbarSettings, pa
 
   // add each button - check if it's already an object or just the string
   for (let v = 0; v < btns.length; v++) {
-    btns[v] = new ButtonConfigurationBuilder(log).normalize(btns[v]/* sharedProperties, */);
+    btns[v] = new ToolbarConfigLoader(null).button.normalize(btns[v]/* sharedProperties, */);
     // todo: refactor this out, not needed a.ny more as they are all together now
     // btns[v].group = root;// grp;    // attach group reference, needed for fallback etc.
   }
