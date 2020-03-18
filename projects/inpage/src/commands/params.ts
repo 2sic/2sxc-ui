@@ -1,6 +1,6 @@
 ﻿import { ItemIdentifierGroup, ItemIdentifierSimple } from '../interfaces/item-identifiers';
-import { MetadataFor } from './params-metadata-for';
 import { DictionaryValue } from '../plumbing/TypeTbD';
+import { MetadataFor } from './params-metadata-for';
 export class CommandParams {
   items?: Array<ItemIdentifierSimple | ItemIdentifierGroup>; // string | string[];
   mode?: string;

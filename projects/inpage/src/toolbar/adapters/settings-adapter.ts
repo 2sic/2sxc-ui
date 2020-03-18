@@ -1,70 +1,28 @@
 ﻿import { ContextBundleButton } from '../../context/bundles/context-bundle-button';
 import { TypeTbD } from '../../plumbing';
 import { TypeUnsafe } from '../../plumbing';
-import { ButtonConfig } from '../config/button/button-config';
+import { ButtonConfig } from '../config/button-config';
 
-export function buttonConfigUpgrade(oldSettings: any): Partial<ButtonConfig> {
+export function buttonConfigUpgrade(oldFormat: any): Partial<ButtonConfig> {
 
-  const newSettings: Partial<ButtonConfig> = {};
+  const config: Partial<ButtonConfig> = {};
 
-  // 'classes',
-  if (oldSettings.classes) {
-    newSettings.classes = oldSettings.classes;
-  }
+  if (oldFormat.classes) config.classes = oldFormat.classes;
+  if (oldFormat.dialog) config.dialog = evalPropOrFun(oldFormat.dialog);
+  if (oldFormat.disabled) config.disabled = evalPropOrFun(oldFormat.disabled);
+  if (oldFormat.dynamicClasses) config.dynamicClasses = evalPropOrFun(oldFormat.dynamicClasses);
+  if (oldFormat.fullScreen) config.fullScreen = evalPropOrFun(oldFormat.fullScreen);
+  if (oldFormat.icon) config.icon = evalPropOrFun(oldFormat.icon);
+  if (oldFormat.inlineWindow) config.inlineWindow = evalPropOrFun(oldFormat.inlineWindow);
+  if (oldFormat.newWindow) config.newWindow = evalPropOrFun(oldFormat.newWindow);
+  if (oldFormat.partOfPage) config.partOfPage = evalPropOrFun(oldFormat.partOfPage);
+  if (oldFormat.showCondition) config.showCondition = evalPropOrFun(oldFormat.showCondition);
+  if (oldFormat.title) config.title = evalPropOrFun(oldFormat.title);
 
-  // 'dialog',
-  if (oldSettings.dialog) {
-    newSettings.dialog = evalPropOrFunction(oldSettings.dialog);
-  }
-  // 'disabled'
-  if (oldSettings.disabled) {
-    newSettings.disabled = evalPropOrFunction(oldSettings.disabled);
-  }
-
-  // 'dynamicClasses',
-  if (oldSettings.dynamicClasses) {
-    newSettings.dynamicClasses = evalPropOrFunction(oldSettings.dynamicClasses);
-  }
-
-  // 'fullScreen',
-  if (oldSettings.fullScreen) {
-    newSettings.fullScreen = evalPropOrFunction(oldSettings.fullScreen);
-  }
-
-  // 'icon',
-  if (oldSettings.icon) {
-    newSettings.icon = evalPropOrFunction(oldSettings.icon);
-  }
-
-  // 'inlineWindow',
-  if (oldSettings.inlineWindow) {
-    newSettings.inlineWindow = evalPropOrFunction(oldSettings.inlineWindow);
-  }
-
-  // 'newWindow',
-  if (oldSettings.newWindow) {
-    newSettings.newWindow = evalPropOrFunction(oldSettings.newWindow);
-  }
-
-  // partOfPage
-  if (oldSettings.partOfPage) {
-    newSettings.partOfPage = evalPropOrFunction(oldSettings.partOfPage);
-  }
-
-  // 'showCondition',
-  if (oldSettings.showCondition) {
-    newSettings.showCondition = evalPropOrFunction(oldSettings.showCondition);
-  }
-
-  // 'title',
-  if (oldSettings.title) {
-    newSettings.title = evalPropOrFunction(oldSettings.title);
-  }
-
-  return newSettings;
+  return config;
 }
 
-function evalPropOrFunction(propOrFunction: TypeTbD): TypeUnsafe {
+function evalPropOrFun(propOrFunction: TypeTbD): TypeUnsafe {
   if (propOrFunction === undefined || propOrFunction === null) {
     return false;
   }

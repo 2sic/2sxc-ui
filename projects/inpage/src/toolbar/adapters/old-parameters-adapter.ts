@@ -1,8 +1,10 @@
-﻿import { Settings } from '../../commands/settings';
+﻿import { RunParams } from '../../commands/run-params';
 import { ButtonCommand } from '../button/button-command';
-export function oldParametersAdapter(action: ButtonCommand): Partial<Settings> {
 
-  const params: Partial<Settings> = {};
+
+export function oldParametersAdapter(action: ButtonCommand): Partial<RunParams> {
+
+  const params: Partial<RunParams> = {};
 
   if (action) {
 

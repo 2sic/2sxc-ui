@@ -1,14 +1,14 @@
 ﻿import { Cms } from '../../cms/Cms';
 import { findContext } from '../../context/context';
 import { SxcIntanceEditable } from '../../interfaces/sxc-instance-editable';
-import { Settings } from '../settings';
+import { RunParams } from '../run-params';
 
 export class InstanceEngine {
   constructor(private sxc: SxcIntanceEditable) {}
 
   run<T>(
-    nameOrSettings: string | Partial<Settings>,
-    eventOrSettings?: Partial<Settings> | MouseEvent,
+    nameOrSettings: string | Partial<RunParams>,
+    eventOrSettings?: Partial<RunParams> | MouseEvent,
     event?: MouseEvent,
   ): Promise<void | T> {
     const cntx = findContext(this.sxc);

@@ -1,5 +1,5 @@
 ﻿import { ContextBundleButton } from '../context/bundles/context-bundle-button';
-import { ButtonConfig } from '../toolbar/config/button/button-config';
+import { ButtonConfig } from '../toolbar/config/button-config';
 import { Definition } from './definition';
 
 export class CommandDefinition {

@@ -1,8 +1,7 @@
 ﻿import { UserOfEditContext } from '../manage/user-of-edit-context';
 import { CommandParams } from './params';
-import { MetadataFor } from './params-metadata-for';
 
-export class Settings {
+export class RunParams {
 //   code: a.ny;
 //   configureCommand: a.ny;
 //   items: a.ny; // string | string[];

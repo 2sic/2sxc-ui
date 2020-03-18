@@ -5,7 +5,7 @@ import { ToolbarRenderer } from '../render/toolbar-renderer';
 import { emptyToolbar } from '../settings/toolbar-settings';
 import { TagToolbar } from '../tag-toolbars/tag-toolbar';
 import { ToolbarManager } from '../toolbar-manager';
-import { expandToolbarConfig } from '../toolbar/toolbar-expand-config';
+import { ToolbarConfigBuilder } from '../toolbar/toolbar-expand-config';
 import { ToolbarInitConfig } from './toolbar-init-config';
 
 // quick debug - set to false if not needed for production
@@ -118,7 +118,7 @@ export class ToolbarConfigFinderAndInitializer extends HasLog {
      */
     private convertConfigToToolbars(tag: JQuery, config: ToolbarInitConfig): void {
         const context = findContext(tag);
-        context.toolbar = expandToolbarConfig(context, config.toolbar, config.settings, this.log);
+        context.toolbar = new ToolbarConfigBuilder(null).expandToolbarConfig(context, config.toolbar, config.settings, this.log);
 
         // V2 where the full toolbar is included in one setting
         if (tag.attr(Constants.toolbar.attr.full)) {

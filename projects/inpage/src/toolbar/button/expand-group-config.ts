@@ -1,80 +1,89 @@
 ﻿import { Commands } from '../../commands/commands';
 import { Log } from '../../logging/log';
-import { flattenActionDefinition } from '../adapters/flatten-action-definition';
+import { TypeUnsafe } from '../../plumbing/TypeTbD';
 import { removeActionProperty } from '../adapters/parameters-adapter';
 import { buttonConfigUpgrade } from '../adapters/settings-adapter';
-import { ButtonConfig } from '../config/button/button-config';
-import { ButtonConfigurationBuilder } from '../config/button/button-config-builder';
+import { ButtonConfigurationBuilder } from '../config-inpage/button-config-builder';
+import { CommandConfigBuilder } from '../config-inpage/command-config-builder';
+import { ButtonConfig } from '../config/button-config';
+import { ButtonGroupConfig } from '../config/button-group-config';
 import { ToolbarSettings } from '../settings/toolbar-settings';
 import { ToolbarConfig } from '../toolbar/toolbar-config';
 import { ButtonCommand } from './button-command';
-import { TypeUnsafe } from '../../plumbing/TypeTbD';
-import { ButtonGroupConfig } from '../config/button-group-config';
+import { HasLog } from '../../logging/has-log';
 
-/**
- * this will traverse a groups-tree and expand each group
- * so if groups were just strings like "edit,new" or compact buttons, they will be expanded afterwards
- * @param fullToolbarConfig
- */
-export function expandButtonGroups(fullToolbarConfig: ToolbarConfig, parentLog: Log): ToolbarConfig {
-  const log = new Log('Tlb.ExpGrp', parentLog, 'start');
+export class ButtonGroupConfigBuilder extends HasLog {
 
-  const btnConfigBuilder = new ButtonConfigurationBuilder(log);
+    constructor(parentLog: Log) {
+        super('Tlb.GrpCnf', parentLog);
+    }
 
-  // by now we should have a structure, let's check/fix the buttons
-  log.add(`will expand groups - found ${fullToolbarConfig.groups.length} items`);
-  for (let g = 0; g < fullToolbarConfig.groups.length; g++) {
-    // expand a verb-list like "edit,new" into objects like [{ action: "edit" }, {action: "new"}]
-    expandButtonList(fullToolbarConfig.groups[g], fullToolbarConfig.settings, log);
+    /**
+     * this will traverse a groups-tree and expand each group
+     * so if groups were just strings like "edit,new" or compact buttons, they will be expanded afterwards
+     * @param fullToolbarConfig
+     */
+    expandButtonGroups(fullToolbarConfig: ToolbarConfig, parentLog: Log): ToolbarConfig {
+        const log = new Log('Tlb.ExpGrp', parentLog, 'start');
 
-    // fix all the buttons
-    const btns = fullToolbarConfig.groups[g].buttons;
+        const btnConfigBuilder = new ButtonConfigurationBuilder(log);
 
-    const buttonConfigs: ButtonConfig[] = [];
+        // by now we should have a structure, let's check/fix the buttons
+        log.add(`will expand groups - found ${fullToolbarConfig.groups.length} items`);
+        for (let g = 0; g < fullToolbarConfig.groups.length; g++) {
+            // expand a verb-list like "edit,new" into objects like [{ action: "edit" }, {action: "new"}]
+            expandButtonList(fullToolbarConfig.groups[g], fullToolbarConfig.settings, log);
 
-    if (Array.isArray(btns)) {
-      log.add(`will process ${btns.length} buttons`);
-      for (let b = 0; b < btns.length; b++) {
-        const btn = btns[b];
-        const btnCommand = (btn as any).command;
+            // fix all the buttons
+            const btns = fullToolbarConfig.groups[g].buttons;
 
-        if (!(Commands.get(btnCommand.action))) {
-          log.add(`couldn't find action ${btnCommand.action} - show warning`);
-          console.warn('warning: toolbar-button with unknown action-name:', btnCommand.action);
+            const buttonConfigs: ButtonConfig[] = [];
+
+            if (Array.isArray(btns)) {
+            log.add(`will process ${btns.length} buttons`);
+            for (let b = 0; b < btns.length; b++) {
+                const btn = btns[b];
+                const btnCommand = (btn as any).command;
+
+                if (!(Commands.get(btnCommand.action))) {
+                log.add(`couldn't find action ${btnCommand.action} - show warning`);
+                console.warn('warning: toolbar-button with unknown action-name:', btnCommand.action);
+                }
+
+                const name = btnCommand.action;
+                const contentType = btnCommand.contentType;
+
+                // if the button belongs to a content-item, move the specs up to the item into the settings-object
+                CommandConfigBuilder.normalizeCommandJson(btnCommand);
+
+                // parameters adapter from v1 to v2
+                const params = removeActionProperty(btnCommand);
+                Object.assign(params, fullToolbarConfig.params);
+
+                // Toolbar API v2
+                const newButtonAction = new ButtonCommand(name, contentType, params);
+                const newButtonConfig = new ButtonConfig(newButtonAction);
+                newButtonConfig.name = name;
+
+                // settings adapter from v1 to v2
+                const settings = buttonConfigUpgrade(btn);
+                Object.assign(newButtonConfig, settings);
+
+                // ensure all buttons have either own settings, or the fallback
+                btnConfigBuilder.addDefaultBtnSettings(newButtonConfig,
+                fullToolbarConfig.groups[g], fullToolbarConfig, Commands);
+
+                buttonConfigs.push(newButtonConfig);
+            }
+            } else log.add("no button array found, won't do a.nything");
+
+            // Toolbar API v2 overwrite V1
+            fullToolbarConfig.groups[g].buttons = buttonConfigs;
         }
-
-        const name = btnCommand.action;
-        const contentType = btnCommand.contentType;
-
-        // if the button belongs to a content-item, move the specs up to the item into the settings-object
-        flattenActionDefinition(btnCommand);
-
-        // parameters adapter from v1 to v2
-        const params = removeActionProperty(btnCommand);
-        Object.assign(params, fullToolbarConfig.params);
-
-        // Toolbar API v2
-        const newButtonAction = new ButtonCommand(name, contentType, params);
-        const newButtonConfig = new ButtonConfig(newButtonAction);
-        newButtonConfig.name = name;
-
-        // settings adapter from v1 to v2
-        const settings = buttonConfigUpgrade(btn);
-        Object.assign(newButtonConfig, settings);
-
-        // ensure all buttons have either own settings, or the fallback
-        btnConfigBuilder.addDefaultBtnSettings(newButtonConfig,
-          fullToolbarConfig.groups[g], fullToolbarConfig, Commands);
-
-        buttonConfigs.push(newButtonConfig);
-      }
-    } else log.add("no button array found, won't do a.nything");
-
-    // Toolbar API v2 overwrite V1
-    fullToolbarConfig.groups[g].buttons = buttonConfigs;
-  }
-  return fullToolbarConfig;
+        return fullToolbarConfig;
+    }
 }
+
 
 /**
  * take a list of buttons (objects OR strings)

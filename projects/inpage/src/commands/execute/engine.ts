@@ -10,8 +10,8 @@ import { quickDialog } from '../../quick-dialog/quick-dialog';
 import { DialogPaths } from '../../settings/DialogPaths';
 import { buttonConfigUpgrade } from '../../toolbar/adapters/settings-adapter';
 import { ButtonCommand } from '../../toolbar/button/button-command';
-import { ButtonConfig } from '../../toolbar/config/button/button-config';
-import { Settings } from '../settings';
+import { ButtonConfig } from '../../toolbar/config/button-config';
+import { RunParams } from '../run-params';
 import { CommandExecution } from './command-execution';
 import { TypeUnsafe } from '../../plumbing/TypeTbD';
 
@@ -22,13 +22,13 @@ export class Engine extends HasLog {
 
   detectParamsAndRun<T>(
     context: ContextBundleInstance,
-    nameOrSettings: string | Partial<Settings>,
-    eventOrSettings: Partial<Settings> | MouseEvent,
+    nameOrSettings: string | Partial<RunParams>,
+    eventOrSettings: Partial<RunParams> | MouseEvent,
     event?: MouseEvent,
   ): Promise<void | T> {
     this.log.add(`detecting params and running - has ${arguments.length} params`);
 
-    let settings: Partial<Settings>;
+    let settings: Partial<RunParams>;
 
     const thirdParamIsEvent =
       !event &&
@@ -48,7 +48,7 @@ export class Engine extends HasLog {
       settings = Object.assign(
         eventOrSettings || {},
         this.nameOrSettingsAdapter(nameOrSettings),
-      ) as Partial<Settings>;
+      ) as Partial<RunParams>;
     }
 
     // ensure we have the right event despite browser differences
@@ -66,7 +66,7 @@ export class Engine extends HasLog {
    */
   run<T>(
     context: ContextBundleButton,
-    nameOrSettings: string | Partial<Settings>,
+    nameOrSettings: string | Partial<RunParams>,
     event: MouseEvent,
   ): Promise<T | void> {
     let settings = this.nameOrSettingsAdapter(nameOrSettings);
@@ -122,8 +122,8 @@ export class Engine extends HasLog {
    * @param nameOrSettings
    * @returns settings
    */
-  private nameOrSettingsAdapter(nameOrSettings: string | Partial<Settings>): Partial<Settings> {
-    let settings: Partial<Settings>;
+  private nameOrSettingsAdapter(nameOrSettings: string | Partial<RunParams>): Partial<RunParams> {
+    let settings: Partial<RunParams>;
     // check if nameOrString is name (string) or object (settings)
     const nameIsString = typeof nameOrSettings === 'string';
     this.log.add(
@@ -132,10 +132,10 @@ export class Engine extends HasLog {
 
     if (nameIsString) {
       settings = Object.assign({}, { action: nameOrSettings }) as Partial<
-        Settings
+        RunParams
       >; // place the name as an action-name into a command-object
     } else {
-      settings = nameOrSettings as Partial<Settings>;
+      settings = nameOrSettings as Partial<RunParams>;
     }
 
     return settings;
@@ -147,11 +147,11 @@ export class Engine extends HasLog {
    * the command definition
    * @param settings
    */
-  private expandSettingsWithDefaults(settings: Partial<Settings>): Settings {
+  private expandSettingsWithDefaults(settings: Partial<RunParams>): RunParams {
     const name = settings.action;
     this.log.add(`will add defaults for ${name} from buttonConfig`);
     const conf = Commands.get(name).buttonConfig;
-    const full = Object.assign({}, conf, settings) as Settings; // merge conf & settings, but settings has higher priority
+    const full = Object.assign({}, conf, settings) as RunParams; // merge conf & settings, but settings has higher priority
 
     return full;
   }

@@ -1,9 +1,12 @@
-﻿import { CommandCode } from '../../../commands/command-code';
-import { CommandExecution } from '../../../commands/execute/command-execution';
-import { ContextBundleButton } from '../../../context/bundles/context-bundle-button';
-import { DictionaryValue } from '../../../plumbing/TypeTbD';
-import { ButtonCommand } from '../../button/button-command';
+﻿import { CommandCode } from '../../commands/command-code';
+import { CommandExecution } from '../../commands/execute/command-execution';
+import { ContextBundleButton } from '../../context/bundles/context-bundle-button';
+import { DictionaryValue } from '../../plumbing/TypeTbD';
+import { ButtonCommand } from '../button/button-command';
 
+/**
+ * The real button configuration as it's used at runtime
+ */
 export class ButtonConfig {
   name: string = '';
   action: ButtonCommand;

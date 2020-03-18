@@ -1,17 +1,18 @@
 ﻿import { SxcInstanceManage } from '../../../$2sxc/src/edit-interfaces/sxc-instance-manage';
 import { InstanceEngine } from '../commands/execute/instance-engine';
 import { Manipulator } from '../contentBlock/manipulate';
-import { AttrJsonEditContext } from '../context/html-attribute/edit-context-root';
 import { ContextBundleButton } from '../context/bundles/context-bundle-button';
+import { AttrJsonEditContext } from '../context/html-attribute/edit-context-root';
 import { SxcIntanceEditable } from '../interfaces/sxc-instance-editable';
 import { TypeUnsafe } from '../plumbing/TypeTbD';
-import { buttonConfigAdapter } from '../toolbar/adapters/button-config-adapter';
-import { InPageButtonConfiguration } from '../toolbar/config/button/in-page-button-configuration';
-import { ToolbarSettings } from '../toolbar/settings/toolbar-settings';
+import { InPageButtonJson } from '../toolbar/config-inpage';
+import { ButtonConfigurationBuilder } from '../toolbar/config-inpage/button-config-builder';
 import { ToolbarRenderer } from '../toolbar/render/toolbar-renderer';
-import { expandToolbarConfig } from '../toolbar/toolbar/toolbar-expand-config';
+import { ToolbarSettings } from '../toolbar/settings/toolbar-settings';
+import { ToolbarConfigBuilder } from '../toolbar/toolbar/toolbar-expand-config';
 import { getTag} from './api';
 import { UserOfEditContext } from './user-of-edit-context';
+
 /**
  * Instance specific edit manager
  */
@@ -34,13 +35,13 @@ export class EditManager implements SxcInstanceManage {
 
   /**
    * Generate a button (an <a>-tag) for one specific toolbar-action.
-   * @param {InPageButtonConfiguration} actDef - settings, an object containing the spec for the expected button
+   * @param {InPageButtonJson} actDef - settings, an object containing the spec for the expected button
    * @param {int} groupIndex - number what button-group it's in'
    * @returns {string} html of a button
    * it is publicly used out of inpage, so take a care to preserve function signature
    */
-  getButton(actDef: InPageButtonConfiguration, groupIndex: number): string {
-    this.context.button = buttonConfigAdapter(actDef);
+  getButton(actDef: InPageButtonJson, groupIndex: number): string {
+    this.context.button = new ButtonConfigurationBuilder(null).convertToConfig(actDef);
     const button = new ToolbarRenderer(this.context).button.render(this.context, groupIndex);
     return button.outerHTML;
   }
@@ -54,7 +55,7 @@ export class EditManager implements SxcInstanceManage {
    * it is publicly used in Razor scripts of inpage, so take a care to preserve function signature
    */
   getToolbar(tbConfig: TypeUnsafe, moreSettings: ToolbarSettings): string {
-    const toolbarConfig = expandToolbarConfig(this.context, tbConfig, moreSettings);
+    const toolbarConfig = new ToolbarConfigBuilder(null).expandToolbarConfig(this.context, tbConfig, moreSettings);
     this.context.toolbar = toolbarConfig;
     return new ToolbarRenderer(this.context).render(); // renderToolbar(this.context);
   }

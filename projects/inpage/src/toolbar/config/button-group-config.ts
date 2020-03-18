@@ -1,5 +1,5 @@
 ﻿import { DictionaryValue } from '../../plumbing/TypeTbD';
-import { ButtonConfig } from './button/button-config';
+import { ButtonConfig } from './button-config';
 
 export class ButtonGroupConfig {
   buttons: ButtonConfig[] = []; // array of buttons

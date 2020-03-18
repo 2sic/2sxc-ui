@@ -1,8 +1,8 @@
-﻿import { ToolbarConfigTemplate } from '../toolbar/toolbar-config-template';
+﻿import { ToolbarTemplateToolbar } from './toolbar-template-toolbar';
 
 // the default / initial buttons in a standard toolbar
 // ToDo: refactor to avoid side-effects
-export const defaultToolbarTemplate: ToolbarConfigTemplate = {
+export const defaultToolbarTemplate: ToolbarTemplateToolbar = {
   groups: [
     {
       name: 'default',

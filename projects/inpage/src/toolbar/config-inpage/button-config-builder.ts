@@ -1,21 +1,102 @@
-﻿import { Commands as Commands } from '../../../commands/commands';
-import { ContextBundleButton } from '../../../context/bundles/context-bundle-button';
-import { HasLog } from '../../../logging/has-log';
-import { Log } from '../../../logging/log';
-import { InstanceConfig } from '../../../manage/instance-config';
-import { DictionaryValue, TypeTbD, TypeUnsafe, TypeWeDontCare } from '../../../plumbing/TypeTbD';
-import { ToolbarConfig } from '../../toolbar/toolbar-config';
-import { ButtonGroupConfig } from '../button-group-config';
-import { InPageCommandConfiguration, isInPageCommandConfiguration } from '../command/in-page-command';
-import { ButtonConfig } from './button-config';
-import { InPageButtonConfiguration } from './in-page-button-configuration';
+﻿import { InPageCodeJson_ProbablyUnused, InPageCommandJson, isInPageCommandConfiguration } from '.';
+import { InPageButtonJson } from '.';
+import { Commands as Commands } from '../../commands/commands';
+import { ContextBundleButton } from '../../context/bundles/context-bundle-button';
+import { HasLog } from '../../logging/has-log';
+import { Log } from '../../logging/log';
+import { InstanceConfig } from '../../manage/instance-config';
+import { DictionaryValue, TypeTbD, TypeUnsafe, TypeWeDontCare } from '../../plumbing/TypeTbD';
+import { removeActionProperty } from '../adapters/parameters-adapter';
+import { ButtonCommand } from '../button/button-command';
+import { ButtonConfig } from '../config/button-config';
+import { ButtonGroupConfig } from '../config/button-group-config';
+import { ToolbarConfig } from '../toolbar/toolbar-config';
+import { CommandConfigBuilder } from './command-config-builder';
 
 /**
  * This is a system to build button configurations
  */
 export class ButtonConfigurationBuilder extends HasLog {
+
   constructor(parentLog: Log) {
     super('Tlb.BtCfBl', parentLog);
+  }
+
+
+
+  convertToConfig(oldButtonDef: InPageButtonJson): ButtonConfig {
+
+    const partialButtonConfig: Partial<ButtonConfig> = {};
+
+    if (oldButtonDef.code) {
+      partialButtonConfig.code = (context: ContextBundleButton) => {
+        // TODO: 2dm unclear why we're just giving an empty configuration
+        // I believe this is a mistake, STV had some todos to try to find the values
+        // so I believe for years now, the object was always empty
+        // so it's probably never been used
+        return oldButtonDef.code(context.button.action.params, new InPageCodeJson_ProbablyUnused());
+      };
+    }
+
+    if (oldButtonDef.icon) partialButtonConfig.icon = () => `icon-sxc-${oldButtonDef.icon}`;
+
+    if (oldButtonDef.classes) partialButtonConfig.classes = oldButtonDef.classes;
+
+    if (oldButtonDef.dialog) partialButtonConfig.dialog = () => oldButtonDef.dialog;
+
+    if (oldButtonDef.disabled) partialButtonConfig.disabled = () => oldButtonDef.disabled;
+
+    if (oldButtonDef.dynamicClasses) {
+      partialButtonConfig.dynamicClasses = (context: ContextBundleButton) => {
+        return oldButtonDef.dynamicClasses(context.button.action.params);
+      };
+    }
+
+    if (oldButtonDef.fullScreen) partialButtonConfig.fullScreen = () => oldButtonDef.fullScreen;
+
+    if (oldButtonDef.inlineWindow) partialButtonConfig.inlineWindow = () => oldButtonDef.inlineWindow;
+
+    if (oldButtonDef.name) partialButtonConfig.name = oldButtonDef.name;
+
+    if (oldButtonDef.newWindow) partialButtonConfig.newWindow = () => oldButtonDef.newWindow;
+
+    // todo: stv, this do not looking good, because old simple parameters become methods with context as parameter,
+    // we need parameter adapter to do this...
+    if (oldButtonDef.params) Object.assign(partialButtonConfig.params, oldButtonDef.params);
+
+    if (oldButtonDef.partOfPage) partialButtonConfig.partOfPage = () => oldButtonDef.partOfPage;
+
+    if (oldButtonDef.showCondition) {
+      partialButtonConfig.showCondition = (context: ContextBundleButton) => {
+        // TODO: 2dm unclear why we're just giving an empty configuration
+        // I believe this is a mistake, STV had some todos to try to find the values
+        // so I believe for years now, the object was always empty
+        // so it's probably never been used
+        return oldButtonDef.showCondition(context.button.action.params, new InPageCodeJson_ProbablyUnused());
+      };
+    }
+
+    if (oldButtonDef.title) partialButtonConfig.title = () => `Toolbar.${oldButtonDef.title}`;
+
+    if (oldButtonDef.uiActionOnly) partialButtonConfig.uiActionOnly = () => oldButtonDef.uiActionOnly;
+
+    oldButtonDef = this.normalize(oldButtonDef);
+
+    const name = oldButtonDef.command.action;
+    const contentType = oldButtonDef.command.contentType;
+
+    // if the button belongs to a content-item, move the specs up to the item into the settings-object
+    CommandConfigBuilder.normalizeCommandJson(oldButtonDef.command);
+
+    // parameters adapter from v1 to v2
+    const params = removeActionProperty(oldButtonDef.command);
+
+    // Toolbar API v2
+    const newButtonAction = new ButtonCommand(name, contentType, params);
+    const newButtonConfig = new ButtonConfig(newButtonAction);
+    newButtonConfig.name = name;
+
+    return newButtonConfig;
   }
 
 
@@ -24,15 +105,15 @@ export class ButtonConfigurationBuilder extends HasLog {
    * takes an object like "actionname" or { action: "actionname", ... }
    * and changes it to a { command: { action: "actionname" }, ... }
    *
-   * @param {(InPageButtonConfiguration | InPageCommandConfiguration | string)} original
-   * @returns {InPageButtonConfiguration}
+   * @param {(InPageButtonJson | InPageCommandJson | string)} original
+   * @returns {InPageButtonJson}
    * @memberof ButtonConfigurationBuilder
    */
-  normalize(original: InPageButtonConfiguration | InPageCommandConfiguration | string): InPageButtonConfiguration {
+  normalize(original: InPageButtonJson | InPageCommandJson | string): InPageButtonJson {
     const log = new Log('Tlb.ExpBtn', this.log, 'start');
 
     // prevent multiple inits
-    const asBtnConfig = original as InPageButtonConfiguration;
+    const asBtnConfig = original as InPageButtonJson;
     if (asBtnConfig._expanded || asBtnConfig.command) {
       log.add("already expanded, won't modify");
       return asBtnConfig;
@@ -52,7 +133,7 @@ export class ButtonConfigurationBuilder extends HasLog {
     if (isInPageCommandConfiguration(asBtnConfig)) {
       log.add('action found, will move down to .command');
       return {
-          command: { action: (original as InPageCommandConfiguration).action.trim() },
+          command: { action: (original as InPageCommandJson).action.trim() },
           _expanded: true,
       };
     }
@@ -91,17 +172,17 @@ export class ButtonConfigurationBuilder extends HasLog {
 
 
 
-  /**
-   * enhance button-object with default icons, etc.
-   * @param btn
-   * @param group
-   * @param fullToolbarConfig
-   * @param actions
-   */
-  addDefaultBtnSettings(btn: ButtonConfig,
-                        group: ButtonGroupConfig,
-                        fullToolbarConfig: ToolbarConfig,
-                        actions: typeof Commands) {
+/**
+ * enhance button-object with default icons, etc.
+ * @param btn
+ * @param group
+ * @param fullToolbarConfig
+ * @param actions
+ */
+addDefaultBtnSettings(btn: ButtonConfig,
+                      group: ButtonGroupConfig,
+                      fullToolbarConfig: ToolbarConfig,
+                      actions: typeof Commands) {
     this.log.add(`adding default btn settings for ${() => btn.action.name}`);
     for (let d = 0; d < btnProperties.length; d++) {
       fallbackBtnSetting(btn, group, fullToolbarConfig, actions, btnProperties[d]);

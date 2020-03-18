@@ -1,15 +1,15 @@
-﻿import { CommandParams } from '../../../commands/params';
-import { InPageCommandConfiguration } from '../command/in-page-command';
-import { InPageCodeParametersProbablyUnused } from './in-page-code-params-probably-unused';
-import { TypeTbD } from '../../../plumbing/TypeTbD';
+﻿import { CommandParams } from '../../commands/params';
+import { TypeTbD } from '../../plumbing/TypeTbD';
+import { InPageCodeJson_ProbablyUnused } from '.';
+import { InPageCommandJson } from '.';
 
 /**
  * Button Definition v1. from old API
  * it is publicly used out of inpage, so take a care to preserve its signature
  */
-export class InPageButtonConfiguration {
+export class InPageButtonJson {
   // object command the internal command which will be called, should contain both the name and the parameters like { action: "new", contentType: "BlogPost"}
-  command?: InPageCommandConfiguration;
+  command?: InPageCommandJson;
 
   // string title a text which is shown on mouse-over. Note that 2sxc will try to run it through the translator, so you can also use placeholders like Toolbar.Metadata
   title?: string;
@@ -24,7 +24,7 @@ export class InPageButtonConfiguration {
   dynamicClasses?(settings: Partial<CommandParams>): string;
 
   // bool/function showCondition (API still experimental) - used to dynamically choose if this button should be shown or not
-  showCondition?(settings: Partial<CommandParams>, modConfig: InPageCodeParametersProbablyUnused): boolean;
+  showCondition?(settings: Partial<CommandParams>, modConfig: InPageCodeJson_ProbablyUnused): boolean;
 
   // bool disabled (API still experimental) would disable the click on a button
   disabled?: boolean;
@@ -39,7 +39,7 @@ export class InPageButtonConfiguration {
   uiActionOnly?: boolean;
 
   // code(settings, event) - the code executed on click, if it's not the default action
-  code?<T>(settings: Partial<CommandParams>, modConfig: InPageCodeParametersProbablyUnused): Promise<void | T>;
+  code?<T>(settings: Partial<CommandParams>, modConfig: InPageCodeJson_ProbablyUnused): Promise<void | T>;
 
   // created in the buttonConfig v1
   name?: string;
@@ -60,7 +60,7 @@ export class InPageButtonConfiguration {
 }
 
 
-export function isInPageButtonConfiguration(thing: TypeTbD): thing is InPageButtonConfiguration {
+export function isInPageButtonConfiguration(thing: TypeTbD): thing is InPageButtonJson {
   // check two common signatures - command and action
   return thing.command !== undefined || thing.action !== undefined;
 }
