@@ -11,7 +11,7 @@ import { DictionaryValue, TypeTbD, TypeUnsafe, TypeWeDontCare } from '../../plum
 import { ButtonCommand } from '../button/button-command';
 import { ButtonConfig } from '../config/button-config';
 import { ButtonGroupConfig } from '../config/button-group-config';
-import { ToolbarConfig } from '../toolbar/toolbar-config';
+import { ToolbarConfig } from '../config/toolbar-config';
 
 /**
  * This is a system to build button configurations

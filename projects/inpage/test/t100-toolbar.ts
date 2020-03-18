@@ -9,7 +9,7 @@ import { ToolbarConfigLoader } from '../src/toolbar/config-loaders';
 import { ToolbarRenderer } from '../src/toolbar/render/toolbar-renderer';
 // import { expandToolbarConfig, ToolbarConfigBuilder } from '../src/toolbar/toolbar/toolbar-expand-config';
 // import { renderToolbar } from '../src/toolbar/item/render-toolbar';
-import { ToolbarSettings } from '../src/toolbar/settings/toolbar-settings';
+import { ToolbarSettings } from '../src/toolbar/config/toolbar-settings';
 
 const expandToolbarConfig = new ToolbarConfigLoader(null).expandToolbarConfig;
 

@@ -7,7 +7,7 @@ import { SxcIntanceEditable } from '../interfaces/sxc-instance-editable';
 import { TypeUnsafe } from '../plumbing/TypeTbD';
 import { InPageButtonJson, ButtonConfigLoader, ToolbarConfigLoader } from '../toolbar/config-loaders';
 import { ToolbarRenderer } from '../toolbar/render/toolbar-renderer';
-import { ToolbarSettings } from '../toolbar/settings/toolbar-settings';
+import { ToolbarSettings } from '../toolbar/config/toolbar-settings';
 import { getTag} from './api';
 import { UserOfEditContext } from './user-of-edit-context';
 

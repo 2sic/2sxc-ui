@@ -1,11 +1,12 @@
 ﻿import { Commands } from '../.';
 import { renderer } from '../../contentBlock/render';
 import { prepareToAddContent } from '../../contentBlock/templates';
-import { ContextBundleInstance } from '../../context/bundles/context-bundle-instance';
 import { ContextBundleButton } from '../../context/bundles/context-bundle-button';
+import { ContextBundleInstance } from '../../context/bundles/context-bundle-instance';
 import { $2sxcInPage as $2sxc } from '../../interfaces/sxc-controller-in-page';
 import { HasLog } from '../../logging/has-log';
 import { Log } from '../../logging/log';
+import { TypeUnsafe } from '../../plumbing/TypeTbD';
 import { quickDialog } from '../../quick-dialog/quick-dialog';
 import { DialogPaths } from '../../settings/DialogPaths';
 import { buttonConfigUpgrade } from '../../toolbar/adapters/settings-adapter';
@@ -13,7 +14,6 @@ import { ButtonCommand } from '../../toolbar/button/button-command';
 import { ButtonConfig } from '../../toolbar/config/button-config';
 import { RunParams } from '../run-params';
 import { CommandExecution } from './command-execution';
-import { TypeUnsafe } from '../../plumbing/TypeTbD';
 
 export class Engine extends HasLog {
   constructor(parentLog?: Log) {

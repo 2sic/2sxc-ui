@@ -1,4 +1,4 @@
-﻿import { ToolbarSettings } from '../settings/toolbar-settings';
+﻿import { ToolbarSettings } from '../config/toolbar-settings';
 import { ToolbarTemplateButtonGroup } from './toolbar-templaten-button-group';
 
 /**

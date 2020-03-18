@@ -33,8 +33,8 @@ export class RunParams {
   partOfPage: boolean;
   sortOrder: number;
   supportsAjax: boolean;
-  templateChooserVisible: boolean;
-  templateId: number;
+//   templateChooserVisible: boolean;
+//   templateId: number;
   useModuleList: boolean;
   user: UserOfEditContext;
   //

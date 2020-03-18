@@ -1,5 +1,5 @@
 ﻿import { ButtonConfig } from '../../toolbar/config/button-config';
-import { ToolbarConfig } from '../../toolbar/toolbar/toolbar-config';
+import { ToolbarConfig } from '../../toolbar/config/toolbar-config';
 import { ContextBundleButton } from './context-bundle-button';
 import { ContextBundleItem } from './context-bundle-item';
 

@@ -1,6 +1,6 @@
 ﻿import { DictionaryValue } from '../../plumbing/TypeTbD';
-import { ButtonGroupConfig } from '../config/button-group-config';
-import { ToolbarSettings } from '../settings/toolbar-settings';
+import { ButtonGroupConfig } from '.';
+import { ToolbarSettings } from '.';
 
 /**
  * Runtime configuration of the toolbar.

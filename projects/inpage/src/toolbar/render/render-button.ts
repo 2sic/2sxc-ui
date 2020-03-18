@@ -1,5 +1,6 @@
-﻿import { ContextBundleButton } from '../../context/bundles/context-bundle-button';
-import { oldParametersAdapter } from '../adapters/old-parameters-adapter';
+﻿import { RunParams } from '../../commands/run-params';
+import { ContextBundleButton } from '../../context/bundles/context-bundle-button';
+import { ButtonCommand } from '../button/button-command';
 import { RenderPart } from './render-part-base';
 // import { addClasses } from './render-helpers';
 import { ToolbarRenderer } from './toolbar-renderer';
@@ -13,7 +14,7 @@ export class RenderButton extends RenderPart {
     const buttonConfig = context.button;
 
     // retrieve configuration for this button
-    const oldParamsAdapter = oldParametersAdapter(buttonConfig.action);
+    const commandParams = oldParametersAdapter(buttonConfig.action);
 
     let onclick: string = '';
 
@@ -22,7 +23,7 @@ export class RenderButton extends RenderPart {
       : buttonConfig.disabled as boolean;
 
     if (!disabled) {
-      onclick = `$2sxc(${context.instance.id}, ${context.contentBlock.id}).manage.run(${JSON.stringify(oldParamsAdapter)}, event);`;
+      onclick = `$2sxc(${context.instance.id}, ${context.contentBlock.id}).manage.run(${JSON.stringify(commandParams)}, event);`;
     }
 
     const button = document.createElement('a');
@@ -60,3 +61,25 @@ export class RenderButton extends RenderPart {
     return button;
   }
 }
+
+
+
+function oldParametersAdapter(action: ButtonCommand): Partial<RunParams> {
+
+    const params: Partial<RunParams> = {};
+
+    if (action) {
+
+      if (action.name) {
+        params.action = action.name;
+      }
+
+      if (action.params) {
+        Object.assign(
+          params,
+          action.params);
+      }
+    }
+
+    return params;
+  }
