@@ -1,5 +1,5 @@
 ﻿import { Engine } from '../commands/';
-import { RunParams } from '../commands/run-params';
+import { CommandParams } from '../commands/command-params';
 import { ContextBundleInstance, isContextOfInstance } from '../context/bundles/context-bundle-instance';
 import { findContext as getContext } from '../context/context';
 import { DebugConfig } from '../DebugConfig';
@@ -29,8 +29,8 @@ export class Cms extends HasLog {
 
   run<T>(
     context: ContextBundleInstance | HTMLElement,
-    nameOrSettings: string | Partial<RunParams>,
-    eventOrSettings?: Partial<RunParams> | MouseEvent,
+    nameOrSettings: string | Partial<CommandParams>,
+    eventOrSettings?: Partial<CommandParams> | MouseEvent,
     event?: MouseEvent,
   ): Promise<void | T> {
     const realContext = isContextOfInstance(context)

@@ -3,7 +3,7 @@ import { ItemIdentifierGroup, ItemIdentifierSimple } from '../../interfaces/item
 import { NgUrlValuesWithoutParams } from '../../manage/ng-dialog-params';
 import { DialogPaths } from '../../settings/DialogPaths';
 import { translate } from '../../translate/2sxc.translate';
-import { CommandParams } from '../params';
+import { CommandParams } from '../command-params';
 import { DictionaryValue } from '../../plumbing';
 import { TypeUnsafe, TypeTbD } from '../../plumbing/TypeTbD';
 

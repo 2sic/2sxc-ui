@@ -12,7 +12,7 @@ import { DialogPaths } from '../../settings/DialogPaths';
 import { buttonConfigUpgrade } from '../../toolbar/adapters/settings-adapter';
 import { ButtonCommand } from '../../toolbar/button/button-command';
 import { ButtonConfig } from '../../toolbar/config/button-config';
-import { RunParams } from '../run-params';
+import { CommandParams } from '../command-params';
 import { CommandExecution } from './command-execution';
 
 export class Engine extends HasLog {
@@ -22,13 +22,13 @@ export class Engine extends HasLog {
 
   detectParamsAndRun<T>(
     context: ContextBundleInstance,
-    nameOrSettings: string | Partial<RunParams>,
-    eventOrSettings: Partial<RunParams> | MouseEvent,
+    nameOrSettings: string | Partial<CommandParams>,
+    eventOrSettings: Partial<CommandParams> | MouseEvent,
     event?: MouseEvent,
   ): Promise<void | T> {
     this.log.add(`detecting params and running - has ${arguments.length} params`);
 
-    let settings: Partial<RunParams>;
+    let settings: Partial<CommandParams>;
 
     const thirdParamIsEvent =
       !event &&
@@ -39,16 +39,14 @@ export class Engine extends HasLog {
     );
     if (thirdParamIsEvent) {
       // no event param, but settings contains the event-object
-      this.log.add(
-        'cycling parameters as event was missing & eventOrSettings seems to be an event; settings must be empty',
-      );
+      this.log.add('cycling params; event missing & eventOrSettings seems to be an event; settings assumed empty');
       event = eventOrSettings as MouseEvent; // move it to the correct variable
       settings = this.nameOrSettingsAdapter(nameOrSettings);
     } else {
       settings = Object.assign(
         eventOrSettings || {},
         this.nameOrSettingsAdapter(nameOrSettings),
-      ) as Partial<RunParams>;
+      ) as Partial<CommandParams>;
     }
 
     // ensure we have the right event despite browser differences
@@ -66,7 +64,7 @@ export class Engine extends HasLog {
    */
   run<T>(
     context: ContextBundleButton,
-    nameOrSettings: string | Partial<RunParams>,
+    nameOrSettings: string | Partial<CommandParams>,
     event: MouseEvent,
   ): Promise<T | void> {
     let settings = this.nameOrSettingsAdapter(nameOrSettings);
@@ -122,23 +120,14 @@ export class Engine extends HasLog {
    * @param nameOrSettings
    * @returns settings
    */
-  private nameOrSettingsAdapter(nameOrSettings: string | Partial<RunParams>): Partial<RunParams> {
-    let settings: Partial<RunParams>;
+  private nameOrSettingsAdapter(nameOrSettings: string | Partial<CommandParams>): Partial<CommandParams> {
     // check if nameOrString is name (string) or object (settings)
     const nameIsString = typeof nameOrSettings === 'string';
-    this.log.add(
-      `adapting settings; name is string: ${nameIsString}; name = ${nameOrSettings}`,
-    );
+    this.log.add(`adapting settings; name string: ${nameIsString}; name = ${nameOrSettings}`);
 
-    if (nameIsString) {
-      settings = Object.assign({}, { action: nameOrSettings }) as Partial<
-        RunParams
-      >; // place the name as an action-name into a command-object
-    } else {
-      settings = nameOrSettings as Partial<RunParams>;
-    }
-
-    return settings;
+    return (nameIsString
+        ? { action: nameOrSettings }
+        : nameOrSettings) as Partial<CommandParams>;
   }
 
   /**
@@ -147,11 +136,11 @@ export class Engine extends HasLog {
    * the command definition
    * @param settings
    */
-  private expandSettingsWithDefaults(settings: Partial<RunParams>): RunParams {
+  private expandSettingsWithDefaults(settings: Partial<CommandParams>): CommandParams {
     const name = settings.action;
     this.log.add(`will add defaults for ${name} from buttonConfig`);
     const conf = Commands.get(name).buttonConfig;
-    const full = Object.assign({}, conf, settings) as RunParams; // merge conf & settings, but settings has higher priority
+    const full = Object.assign({}, conf, settings) as CommandParams; // merge conf & settings, but settings has higher priority
 
     return full;
   }

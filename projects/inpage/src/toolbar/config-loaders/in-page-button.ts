@@ -1,6 +1,6 @@
 ﻿import { InPageCodeJson_ProbablyUnused } from '.';
 import { InPageCommandJson } from '.';
-import { CommandParams } from '../../commands/params';
+import { CommandParams } from '../../commands/command-params';
 import { TypeTbD } from '../../plumbing/TypeTbD';
 
 /**

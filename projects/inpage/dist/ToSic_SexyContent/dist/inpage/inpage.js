@@ -1890,7 +1890,7 @@ var Engine = /** @class */ (function (_super) {
         this.log.add("might cycle parameters, in case not all were given. third is event=" + thirdParamIsEvent);
         if (thirdParamIsEvent) {
             // no event param, but settings contains the event-object
-            this.log.add('cycling parameters as event was missing & eventOrSettings seems to be an event; settings must be empty');
+            this.log.add('cycling params; event missing & eventOrSettings seems to be an event; settings assumed empty');
             event = eventOrSettings; // move it to the correct variable
             settings = this.nameOrSettingsAdapter(nameOrSettings);
         }
@@ -1948,17 +1948,12 @@ var Engine = /** @class */ (function (_super) {
      * @returns settings
      */
     Engine.prototype.nameOrSettingsAdapter = function (nameOrSettings) {
-        var settings;
         // check if nameOrString is name (string) or object (settings)
         var nameIsString = typeof nameOrSettings === 'string';
-        this.log.add("adapting settings; name is string: " + nameIsString + "; name = " + nameOrSettings);
-        if (nameIsString) {
-            settings = Object.assign({}, { action: nameOrSettings }); // place the name as an action-name into a command-object
-        }
-        else {
-            settings = nameOrSettings;
-        }
-        return settings;
+        this.log.add("adapting settings; name string: " + nameIsString + "; name = " + nameOrSettings);
+        return (nameIsString
+            ? { action: nameOrSettings }
+            : nameOrSettings);
     };
     /**
      * Take a settings-name or partial settings object,
@@ -6274,22 +6269,21 @@ __webpack_require__(141);
 __webpack_require__(142);
 __webpack_require__(143);
 __webpack_require__(144);
-__webpack_require__(0);
 __webpack_require__(145);
+__webpack_require__(0);
+__webpack_require__(146);
 __webpack_require__(80);
 __webpack_require__(34);
 __webpack_require__(83);
 __webpack_require__(31);
-__webpack_require__(146);
 __webpack_require__(147);
-__webpack_require__(148);
 __webpack_require__(10);
 __webpack_require__(61);
-__webpack_require__(149);
+__webpack_require__(148);
 __webpack_require__(85);
 __webpack_require__(13);
 __webpack_require__(18);
-__webpack_require__(150);
+__webpack_require__(149);
 __webpack_require__(37);
 __webpack_require__(42);
 __webpack_require__(44);
@@ -6300,7 +6294,7 @@ __webpack_require__(43);
 __webpack_require__(40);
 __webpack_require__(8);
 __webpack_require__(105);
-__webpack_require__(151);
+__webpack_require__(150);
 __webpack_require__(106);
 __webpack_require__(107);
 __webpack_require__(108);
@@ -6320,19 +6314,19 @@ __webpack_require__(72);
 __webpack_require__(73);
 __webpack_require__(74);
 __webpack_require__(14);
+__webpack_require__(151);
 __webpack_require__(152);
-__webpack_require__(153);
 __webpack_require__(104);
 __webpack_require__(17);
+__webpack_require__(153);
 __webpack_require__(154);
 __webpack_require__(155);
 __webpack_require__(156);
 __webpack_require__(157);
 __webpack_require__(158);
 __webpack_require__(159);
-__webpack_require__(160);
 __webpack_require__(19);
-__webpack_require__(161);
+__webpack_require__(160);
 __webpack_require__(5);
 __webpack_require__(62);
 __webpack_require__(4);
@@ -6349,39 +6343,39 @@ __webpack_require__(78);
 __webpack_require__(23);
 __webpack_require__(75);
 __webpack_require__(3);
+__webpack_require__(161);
 __webpack_require__(162);
-__webpack_require__(163);
 __webpack_require__(76);
 __webpack_require__(39);
 __webpack_require__(38);
-__webpack_require__(164);
+__webpack_require__(163);
 __webpack_require__(63);
 __webpack_require__(77);
 __webpack_require__(20);
 __webpack_require__(45);
 __webpack_require__(79);
-__webpack_require__(165);
+__webpack_require__(164);
 __webpack_require__(56);
 __webpack_require__(29);
 __webpack_require__(114);
-__webpack_require__(166);
+__webpack_require__(165);
 __webpack_require__(59);
-__webpack_require__(167);
+__webpack_require__(166);
 __webpack_require__(60);
+__webpack_require__(167);
 __webpack_require__(168);
-__webpack_require__(169);
 __webpack_require__(58);
 __webpack_require__(57);
-__webpack_require__(170);
+__webpack_require__(169);
 __webpack_require__(36);
 __webpack_require__(2);
 __webpack_require__(6);
-__webpack_require__(171);
+__webpack_require__(170);
 __webpack_require__(115);
 __webpack_require__(35);
 __webpack_require__(22);
 __webpack_require__(24);
-__webpack_require__(172);
+__webpack_require__(171);
 __webpack_require__(46);
 __webpack_require__(25);
 __webpack_require__(51);
@@ -6394,11 +6388,11 @@ __webpack_require__(11);
 __webpack_require__(53);
 __webpack_require__(15);
 __webpack_require__(116);
-__webpack_require__(173);
+__webpack_require__(172);
 __webpack_require__(55);
 __webpack_require__(28);
 __webpack_require__(16);
-__webpack_require__(174);
+__webpack_require__(173);
 __webpack_require__(88);
 __webpack_require__(50);
 __webpack_require__(86);
@@ -6410,10 +6404,10 @@ __webpack_require__(47);
 __webpack_require__(96);
 __webpack_require__(97);
 __webpack_require__(54);
+__webpack_require__(174);
 __webpack_require__(175);
 __webpack_require__(176);
 __webpack_require__(177);
-__webpack_require__(178);
 __webpack_require__(26);
 __webpack_require__(98);
 __webpack_require__(9);
@@ -6478,6 +6472,53 @@ var ActionParams = /** @class */ (function () {
 
 /***/ }),
 /* 120 */
+/***/ (function(module, exports) {
+
+// 2020-03-18 - this was an old class that was often used where we now have
+// CommandParams in use
+// We'll leave it here for a while in case we realize we missed something
+// export class Settings {
+// //   code: a.ny;
+// //   configureCommand: a.ny;
+// //   items: a.ny; // string | string[];
+// //   metadata: MetadataFor;
+// //   prefill: {[key: string]: a.ny};
+//   //
+//   action: string;
+// //   appId: number;
+// //   attributeSetName: string;
+// //   cbId: number;
+// //   cbIsEntity: boolean;
+// //   contentGroupId: number;
+//   contentType: string;
+// //   contentTypeId: string;
+//   customCode: string;
+//   dialog: string;
+//   entityGuid: string;
+//   entityId: number;
+// //   entityTitle: string;
+// //   filters: string;
+// //   fullScreen: boolean;
+//   hasContent: boolean;
+//   inlineWindow: boolean;
+//   isContent: boolean;
+//   isList: boolean;
+//   isPublished: boolean;
+//   newWindow: boolean;
+//   partOfPage: boolean;
+//   sortOrder: number;
+//   supportsAjax: boolean;
+// //   templateChooserVisible: boolean;
+// //   templateId: number;
+//   useModuleList: boolean;
+//   user: UserOfEditContext;
+//   //
+//   name: string;
+// }
+
+
+/***/ }),
+/* 121 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -6504,7 +6545,7 @@ __WEBPACK_IMPORTED_MODULE_1__commands__["Commands"].add('add', 'AddDemo', 'plus-
 
 
 /***/ }),
-/* 121 */
+/* 122 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -6520,7 +6561,7 @@ __WEBPACK_IMPORTED_MODULE_0__commands__["Commands"].add('app-import', 'Dashboard
 
 
 /***/ }),
-/* 122 */
+/* 123 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -6551,7 +6592,7 @@ __WEBPACK_IMPORTED_MODULE_0__commands__["Commands"].add('app-resources', 'AppRes
 
 
 /***/ }),
-/* 123 */
+/* 124 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -6582,7 +6623,7 @@ __WEBPACK_IMPORTED_MODULE_0__commands__["Commands"].add('app-settings', 'AppSett
 
 
 /***/ }),
-/* 124 */
+/* 125 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -6600,7 +6641,7 @@ __WEBPACK_IMPORTED_MODULE_0__commands__["Commands"].add('app', 'App', 'settings'
 
 
 /***/ }),
-/* 125 */
+/* 126 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -6641,7 +6682,7 @@ __WEBPACK_IMPORTED_MODULE_0__commands__["Commands"].add('contentitems', 'Content
 
 
 /***/ }),
-/* 126 */
+/* 127 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -6659,7 +6700,7 @@ __WEBPACK_IMPORTED_MODULE_0__commands__["Commands"].add('contenttype', 'ContentT
 
 
 /***/ }),
-/* 127 */
+/* 128 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -6691,7 +6732,7 @@ __WEBPACK_IMPORTED_MODULE_0__commands__["Commands"].add('custom', 'Custom', 'bom
 
 
 /***/ }),
-/* 128 */
+/* 129 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -6724,7 +6765,7 @@ __WEBPACK_IMPORTED_MODULE_1__commands__["Commands"].add('delete', 'Delete', 'can
 
 
 /***/ }),
-/* 129 */
+/* 130 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -6748,7 +6789,7 @@ __WEBPACK_IMPORTED_MODULE_0__commands__["Commands"].add('edit', 'Edit', 'pencil'
 
 
 /***/ }),
-/* 130 */
+/* 131 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -6768,7 +6809,7 @@ __WEBPACK_IMPORTED_MODULE_0__commands__["Commands"].add('instance-list', 'Sort',
 
 
 /***/ }),
-/* 131 */
+/* 132 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -6787,7 +6828,7 @@ __WEBPACK_IMPORTED_MODULE_0__commands__["Commands"].add('item-history', 'ItemHis
 
 
 /***/ }),
-/* 132 */
+/* 133 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -6803,7 +6844,7 @@ __WEBPACK_IMPORTED_MODULE_0__commands__["Commands"].add('layout', 'ChangeLayout'
 
 
 /***/ }),
-/* 133 */
+/* 134 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -6839,7 +6880,7 @@ __WEBPACK_IMPORTED_MODULE_0__commands__["Commands"].add('metadata', 'Metadata', 
 
 
 /***/ }),
-/* 134 */
+/* 135 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -6893,7 +6934,7 @@ __WEBPACK_IMPORTED_MODULE_1__commands__["Commands"].add('more', 'MoreActions', '
 
 
 /***/ }),
-/* 135 */
+/* 136 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -6920,7 +6961,7 @@ __WEBPACK_IMPORTED_MODULE_1__commands__["Commands"].add('movedown', 'MoveDown', 
 
 
 /***/ }),
-/* 136 */
+/* 137 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -6946,7 +6987,7 @@ __WEBPACK_IMPORTED_MODULE_1__commands__["Commands"].add('moveup', 'MoveUp', 'mov
 
 
 /***/ }),
-/* 137 */
+/* 138 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -6985,7 +7026,7 @@ __WEBPACK_IMPORTED_MODULE_0__commands__["Commands"].add('new', 'New', 'plus', fa
 
 
 /***/ }),
-/* 138 */
+/* 139 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -7032,7 +7073,7 @@ __WEBPACK_IMPORTED_MODULE_2__commands__["Commands"].add('publish', 'Unpublished'
 
 
 /***/ }),
-/* 139 */
+/* 140 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -7066,7 +7107,7 @@ __WEBPACK_IMPORTED_MODULE_2__commands__["Commands"].add('remove', 'Remove', 'min
 
 
 /***/ }),
-/* 140 */
+/* 141 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -7084,7 +7125,7 @@ __WEBPACK_IMPORTED_MODULE_0__commands__["Commands"].add('replace', 'Replace', 'r
 
 
 /***/ }),
-/* 141 */
+/* 142 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -7107,7 +7148,7 @@ __WEBPACK_IMPORTED_MODULE_0__commands__["Commands"].add('template-develop', 'Dev
 
 
 /***/ }),
-/* 142 */
+/* 143 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -7139,7 +7180,7 @@ __WEBPACK_IMPORTED_MODULE_0__commands__["Commands"].add('template-query', 'Query
 
 
 /***/ }),
-/* 143 */
+/* 144 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -7161,7 +7202,7 @@ __WEBPACK_IMPORTED_MODULE_0__commands__["Commands"].add('template-settings', 'Te
 
 
 /***/ }),
-/* 144 */
+/* 145 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -7179,7 +7220,7 @@ __WEBPACK_IMPORTED_MODULE_0__commands__["Commands"].add('zone', 'Zone', 'manage'
 
 
 /***/ }),
-/* 145 */
+/* 146 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -7197,43 +7238,13 @@ var Definition = /** @class */ (function () {
 
 
 /***/ }),
-/* 146 */
+/* 147 */
 /***/ (function(module, exports) {
 
 
 
 /***/ }),
-/* 147 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CommandParams", function() { return CommandParams; });
-var CommandParams = /** @class */ (function () {
-    function CommandParams() {
-    }
-    return CommandParams;
-}());
-
-
-
-/***/ }),
 /* 148 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RunParams", function() { return RunParams; });
-var RunParams = /** @class */ (function () {
-    function RunParams() {
-    }
-    return RunParams;
-}());
-
-
-
-/***/ }),
-/* 149 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -7248,7 +7259,7 @@ var ManipulateParams = /** @class */ (function () {
 
 
 /***/ }),
-/* 150 */
+/* 149 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -7263,7 +7274,7 @@ var WebApiParams = /** @class */ (function () {
 
 
 /***/ }),
-/* 151 */
+/* 150 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -7298,7 +7309,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /***/ }),
-/* 152 */
+/* 151 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -7335,7 +7346,7 @@ __WEBPACK_IMPORTED_MODULE_0__interfaces_window_in_page__["windowInPage"].$2sxcAc
 
 
 /***/ }),
-/* 153 */
+/* 152 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7364,6 +7375,12 @@ __WEBPACK_IMPORTED_MODULE_0__interfaces_window_in_page__["windowInPage"].$2sxcAc
 
 
 /***/ }),
+/* 153 */
+/***/ (function(module, exports) {
+
+
+
+/***/ }),
 /* 154 */
 /***/ (function(module, exports) {
 
@@ -7373,6 +7390,9 @@ __WEBPACK_IMPORTED_MODULE_0__interfaces_window_in_page__["windowInPage"].$2sxcAc
 /* 155 */
 /***/ (function(module, exports) {
 
+//
+// Note: this interface is copied/shared between this and angular quick-edit
+//
 
 
 /***/ }),
@@ -7388,24 +7408,21 @@ __WEBPACK_IMPORTED_MODULE_0__interfaces_window_in_page__["windowInPage"].$2sxcAc
 /* 157 */
 /***/ (function(module, exports) {
 
-//
-// Note: this interface is copied/shared between this and angular quick-edit
-//
 
 
 /***/ }),
 /* 158 */
 /***/ (function(module, exports) {
 
+//
+// Note: this interface is copied/shared between this and angular quick-edit
+//
 
 
 /***/ }),
 /* 159 */
 /***/ (function(module, exports) {
 
-//
-// Note: this interface is copied/shared between this and angular quick-edit
-//
 
 
 /***/ }),
@@ -7434,12 +7451,6 @@ __WEBPACK_IMPORTED_MODULE_0__interfaces_window_in_page__["windowInPage"].$2sxcAc
 
 /***/ }),
 /* 164 */
-/***/ (function(module, exports) {
-
-
-
-/***/ }),
-/* 165 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -7457,7 +7468,7 @@ var CbOrMod = /** @class */ (function () {
 
 
 /***/ }),
-/* 166 */
+/* 165 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -7472,7 +7483,7 @@ var Conf = /** @class */ (function () {
 
 
 /***/ }),
-/* 167 */
+/* 166 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -7511,13 +7522,13 @@ __WEBPACK_IMPORTED_MODULE_2__quick_e__["$quickE"].cbActions.click(onCbButtonClic
 
 
 /***/ }),
-/* 168 */
+/* 167 */
 /***/ (function(module, exports) {
 
 
 
 /***/ }),
-/* 169 */
+/* 168 */
 /***/ (function(module, exports) {
 
 // interface Dictionary {
@@ -7526,7 +7537,7 @@ __WEBPACK_IMPORTED_MODULE_2__quick_e__["$quickE"].cbActions.click(onCbButtonClic
 
 
 /***/ }),
-/* 170 */
+/* 169 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -7562,7 +7573,7 @@ __WEBPACK_IMPORTED_MODULE_2__quick_e__["$quickE"].modActions.click(onModuleButto
 
 
 /***/ }),
-/* 171 */
+/* 170 */
 /***/ (function(module, exports) {
 
 // import { CbOrMod } from './cb-or-mod';
@@ -7579,7 +7590,7 @@ __WEBPACK_IMPORTED_MODULE_2__quick_e__["$quickE"].modActions.click(onModuleButto
 
 
 /***/ }),
-/* 172 */
+/* 171 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -7619,7 +7630,7 @@ if (__WEBPACK_IMPORTED_MODULE_0__interfaces_window_in_page__["windowInPage"].$2s
 
 
 /***/ }),
-/* 173 */
+/* 172 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -7642,7 +7653,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /***/ }),
-/* 174 */
+/* 173 */
 /***/ (function(module, exports) {
 
 /*
@@ -7660,7 +7671,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /***/ }),
-/* 175 */
+/* 174 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -7683,7 +7694,7 @@ var ToolbarTemplateToolbar = /** @class */ (function () {
 
 
 /***/ }),
-/* 176 */
+/* 175 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -7703,7 +7714,7 @@ var ToolbarTemplateButtonGroup = /** @class */ (function () {
 
 
 /***/ }),
-/* 177 */
+/* 176 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -7715,11 +7726,11 @@ $(__WEBPACK_IMPORTED_MODULE_0__settings_2sxc_consts__["IDs"].sel.scMenu).click(f
 
 
 /***/ }),
-/* 178 */
+/* 177 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // tslint:disable-next-line: no-var-requires
-var Shake = __webpack_require__(179);
+var Shake = __webpack_require__(178);
 // ReSharper disable once InconsistentNaming
 // enable shake detection on all toolbars
 $(function () {
@@ -7734,7 +7745,7 @@ $(function () {
 
 
 /***/ }),
-/* 179 */
+/* 178 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_RESULT__;/*

@@ -1,4 +1,4 @@
-﻿import { RunParams } from '../../commands/run-params';
+﻿import { CommandParams } from '../../commands/command-params';
 import { ContextBundleButton } from '../../context/bundles/context-bundle-button';
 import { ButtonCommand } from '../button/button-command';
 import { RenderPart } from './render-part-base';
@@ -64,9 +64,9 @@ export class RenderButton extends RenderPart {
 
 
 
-function oldParametersAdapter(action: ButtonCommand): Partial<RunParams> {
+function oldParametersAdapter(action: ButtonCommand): Partial<CommandParams> {
 
-    const params: Partial<RunParams> = {};
+    const params: Partial<CommandParams> = {};
 
     if (action) {
 

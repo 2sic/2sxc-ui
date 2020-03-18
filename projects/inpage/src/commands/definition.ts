@@ -1,7 +1,7 @@
 ﻿import { ContextBundleButton } from '../context/bundles/context-bundle-button';
 import { CommandCode } from './command-code';
 import { CommandExecution } from './execute/command-execution';
-import { CommandParams } from './params';
+import { CommandParams } from './command-params';
 
 /**
  * Command definition, for creation of commands
