@@ -1,10 +1,8 @@
 // #region imports
 import { combineLatest } from 'rxjs';
-
 import { map, startWith, share } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-
 import { HttpClient } from '@angular/common/http';
 import { App } from 'app/core/app';
 import { ContentType } from 'app/template-picker/content-type';
@@ -15,6 +13,7 @@ import { DebugConfig } from 'app/debug-config';
 import { BehaviorObservable } from 'app/core/behavior-observable';
 // #endregion
 
+declare const $2sxc;
 const log = parentLog.subLog('api', DebugConfig.api.enabled);
 const uninitializedList = []; // this must be created as a variable, so we can check later if it's still the original or a new empty list
 @Injectable()
@@ -121,10 +120,12 @@ export class PickerService {
     log.add(`loadApps() - skip:${alreadyLoaded}`);
     if (alreadyLoaded) return;
 
-    const obs = this.http.get<any[]>(`${Constants.apiRoot}GetSelectableApps`)
+    const appsFilter = $2sxc.urlParams.get('apps');
+
+    const obs = this.http.get<any[]>(`${Constants.apiRoot}GetSelectableApps?apps=${appsFilter}`)
       .pipe(share(), /* ensure it's only run once */ );
 
-    obs.subscribe(response => this.apps$.subject.next(response/*.json()*/.map(a => new App(a)) /*.map(this.pascalCaseToLower)*/));
+    obs.subscribe(response => this.apps$.subject.next(response.map(a => new App(a))));
     return obs;
   }
 
