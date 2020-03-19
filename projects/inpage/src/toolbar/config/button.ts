@@ -48,8 +48,6 @@ export class Button {
     static normalize(oldFormat: Partial<Button> | ButtonConfigWithFunctionsStillAsValues | InPageButtonJson): Partial<Button> {
         const config: Partial<Button> = {};
 
-        console.log('oldFormat', oldFormat);
-
         if (oldFormat.classes) config.classes = oldFormat.classes;
         if (oldFormat.dialog) config.dialog = evalPropOrFun(oldFormat.dialog);
         if (oldFormat.disabled) config.disabled = evalPropOrFun(oldFormat.disabled);

@@ -5129,7 +5129,6 @@ var Button = /** @class */ (function () {
     }
     Button.normalize = function (oldFormat) {
         var config = {};
-        console.log('oldFormat', oldFormat);
         if (oldFormat.classes)
             config.classes = oldFormat.classes;
         if (oldFormat.dialog)
