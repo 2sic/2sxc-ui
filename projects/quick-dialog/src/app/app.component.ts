@@ -24,7 +24,7 @@ export class AppComponent extends DnnAppComponent {
   ) {
     super(el, context.preConfigure(
       {
-        sxc: $2sxc($2sxc.urlParams.require('mid'))
+        sxc: $2sxc($2sxc.urlParams.require('mid'), $2sxc.urlParams.require('cbid'))
         // moduleId: $2sxc.urlParams.require('mid'),
         // contentBlockId: $2sxc.urlParams.require('cbid')
       }), false);
