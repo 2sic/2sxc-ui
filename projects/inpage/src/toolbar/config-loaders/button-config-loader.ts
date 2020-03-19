@@ -1,4 +1,4 @@
-﻿import { InPageCommandJson } from '.';
+﻿import { InPageCommandJson, ButtonGroupWip, ToolbarWip } from '.';
 import { InPageButtonJson } from '.';
 import { ToolbarConfigLoader } from '.';
 import { Commands } from '../../commands/commands';
@@ -19,96 +19,95 @@ export class ButtonConfigLoader extends HasLog {
     }
 
 
+    /**
+     * Converts the InPageButtonJson to a Button
+     * WARNING: Note that this does the same task as convertToButton in the ButtonGroupConfigLoader - but very differently
+     *          I'm not sure why though.
+     */
+    convertToButton(jsonBtn: InPageButtonJson): Button {
+        const btn: Partial<Button> = {};
 
-  convertToButton(jsonBtn: InPageButtonJson): Button {
+        if (jsonBtn.code) btn.code = (c: ContextBundleButton) => jsonBtn.code(c.button.action.params);
+        if (jsonBtn.icon) btn.icon = () => `icon-sxc-${jsonBtn.icon}`;
+        if (jsonBtn.classes) btn.classes = jsonBtn.classes;
+        if (jsonBtn.dialog) btn.dialog = () => jsonBtn.dialog;
+        if (jsonBtn.disabled) btn.disabled = () => jsonBtn.disabled;
+        if (jsonBtn.dynamicClasses) btn.dynamicClasses = (c: ContextBundleButton) => jsonBtn.dynamicClasses(c.button.action.params);
+        if (jsonBtn.fullScreen) btn.fullScreen = () => jsonBtn.fullScreen;
+        if (jsonBtn.inlineWindow) btn.inlineWindow = () => jsonBtn.inlineWindow;
+        if (jsonBtn.name) btn.name = jsonBtn.name;
+        if (jsonBtn.newWindow) btn.newWindow = () => jsonBtn.newWindow;
 
-    const btn: Partial<Button> = {};
+        // todo: stv, this do not looking good, because old simple parameters become methods with context as parameter,
+        // we need parameter adapter to do this...
+        if (jsonBtn.params) btn.params = () => jsonBtn.params;
+        if (jsonBtn.partOfPage) btn.partOfPage = () => jsonBtn.partOfPage;
+        if (jsonBtn.showCondition) btn.showCondition = (c: ContextBundleButton) => jsonBtn.showCondition(c.button.action.params);
+        if (jsonBtn.title) btn.title = () => `Toolbar.${jsonBtn.title}`;
+        if (jsonBtn.uiActionOnly) btn.uiActionOnly = () => jsonBtn.uiActionOnly;
 
-    if (jsonBtn.code)
-      btn.code = (c: ContextBundleButton) => jsonBtn.code(c.button.action.params);
+        jsonBtn = this.normalize(jsonBtn);
 
-    if (jsonBtn.icon) btn.icon = () => `icon-sxc-${jsonBtn.icon}`;
-    if (jsonBtn.classes) btn.classes = jsonBtn.classes;
-    if (jsonBtn.dialog) btn.dialog = () => jsonBtn.dialog;
-    if (jsonBtn.disabled) btn.disabled = () => jsonBtn.disabled;
-    if (jsonBtn.dynamicClasses)
-      btn.dynamicClasses = (c: ContextBundleButton) => jsonBtn.dynamicClasses(c.button.action.params);
+        const name = jsonBtn.command.action;
+        const contentType = jsonBtn.command.contentType;
 
-    if (jsonBtn.fullScreen) btn.fullScreen = () => jsonBtn.fullScreen;
-    if (jsonBtn.inlineWindow) btn.inlineWindow = () => jsonBtn.inlineWindow;
-    if (jsonBtn.name) btn.name = jsonBtn.name;
-    if (jsonBtn.newWindow) btn.newWindow = () => jsonBtn.newWindow;
+        // if the button belongs to a content-item, move the specs up to the item into the settings-object
+        this.toolbar.command.normalizeCommandJson(jsonBtn.command);
 
-    // todo: stv, this do not looking good, because old simple parameters become methods with context as parameter,
-    // we need parameter adapter to do this...
-    if (jsonBtn.params) btn.params = () => jsonBtn.params;
-    // O.bject.assign(btn.params, jsonBtn.params);
+        // parameters adapter from v1 to v2
+        const params = this.toolbar.command.removeActionProperty(jsonBtn.command);
 
-    if (jsonBtn.partOfPage) btn.partOfPage = () => jsonBtn.partOfPage;
-
-    if (jsonBtn.showCondition)
-      btn.showCondition = (c: ContextBundleButton) => jsonBtn.showCondition(c.button.action.params);
-
-    if (jsonBtn.title) btn.title = () => `Toolbar.${jsonBtn.title}`;
-
-    if (jsonBtn.uiActionOnly) btn.uiActionOnly = () => jsonBtn.uiActionOnly;
-
-    jsonBtn = this.normalize(jsonBtn);
-
-    const name = jsonBtn.command.action;
-    const contentType = jsonBtn.command.contentType;
-
-    // if the button belongs to a content-item, move the specs up to the item into the settings-object
-    this.toolbar.command.normalizeCommandJson(jsonBtn.command);
-
-    // parameters adapter from v1 to v2
-    const params = this.toolbar.command.removeActionProperty(jsonBtn.command);
-
-    // Toolbar API v2
-    const newButtonAction = new ButtonCommand(name, contentType, params);
-    const newButtonConfig = new Button(newButtonAction);
-    newButtonConfig.name = name;
-
-    return newButtonConfig;
-  }
-
-
-
-  /**
-   * takes an object like "actionname" or { action: "actionname", ... }
-   * and changes it to a { command: { action: "actionname" }, ... }
-   */
-  normalize(original: InPageButtonJson | InPageCommandJson | string): InPageButtonJson {
-    const log = new Log('Tlb.ExpBtn', this.log, 'start');
-
-    // prevent multiple inits
-    const asBtnConfig = original as InPageButtonJson;
-    if (asBtnConfig._expanded || asBtnConfig.command) {
-      log.add("already expanded, won't modify");
-      return asBtnConfig;
+        // Toolbar API v2
+        const newButtonAction = new ButtonCommand(name, contentType, params);
+        return new Button(newButtonAction, name);
     }
 
-    // if just a name, turn into a command
-    // use the deep version with command.action, because of more clean-up later on
-    if (typeof original === 'string') {
-      log.add(`name "${original}" found, will re-map to .command.action`);
-      return {
-          command: { action: original.trim() },
-          _expanded: true,
-      };
+
+
+    /**
+     * takes an object like "actionname" or { action: "actionname", ... }
+     * and changes it to a { command: { action: "actionname" }, ... }
+     */
+    normalize(original: InPageButtonJson | InPageCommandJson | string): InPageButtonJson {
+        const log = new Log('Tlb.ExpBtn', this.log, 'start');
+
+        // prevent multiple inits
+        const asBtnConfig = original as InPageButtonJson;
+        if (asBtnConfig._expanded || asBtnConfig.command) {
+            log.add("already expanded, won't modify");
+            return asBtnConfig;
+        }
+
+        // if just a name, turn into a command
+        // use the deep version with command.action, because of more clean-up later on
+        if (typeof original === 'string') return this.getFromName(original);
+        // {
+        //     log.add(`name "${original}" found, will re-map to .command.action`);
+        //     return {
+        //         command: { action: original.trim() },
+        //         _expanded: true,
+        //     };
+        // }
+
+        // if it's a command w/action, wrap into command + trim
+        if (InPageCommandJson.is(asBtnConfig)) {
+            log.add('action found, will move down to .command');
+            return {
+                command: { action: (original as InPageCommandJson).action.trim() },
+                _expanded: true,
+            };
+        }
+
+        throw 'can\'t expand InPageButtonConfiguration - unexpected type signature encountered';
     }
 
-    // if it's a command w/action, wrap into command + trim
-    if (InPageCommandJson.is(asBtnConfig)) {
-      log.add('action found, will move down to .command');
-      return {
-          command: { action: (original as InPageCommandJson).action.trim() },
-          _expanded: true,
-      };
+    getFromName(name: string): InPageButtonJson {
+        this.log.add(`name "${name}" found, will re-map to .command.action`);
+        return {
+            command: { action: name.trim() },
+            _expanded: true,
+        };
     }
-
-    throw 'can\'t expand InPageButtonConfiguration - unexpected type signature encountered';
-  }
 
 
 
@@ -150,11 +149,11 @@ export class ButtonConfigLoader extends HasLog {
      */
     addDefaultBtnSettings(btn: Button,
                           group: ButtonGroup,
-                          fullToolbarConfig: Toolbar,
+                          fullToolbarConfig: ToolbarWip,
                           actions: typeof Commands) {
         this.log.add(`adding default btn settings for ${() => btn.action.name}`);
         for (let d = 0; d < btnProperties.length; d++) {
-        fallbackBtnSetting(btn, group, fullToolbarConfig, actions, btnProperties[d]);
+            fallbackBtnSetting(btn, group, fullToolbarConfig, actions, btnProperties[d]);
         }
     }
 
@@ -223,7 +222,7 @@ const btnProperties = [
  */
 function fallbackBtnSetting(btn: Button,
                             group: ButtonGroup,
-                            fullToolbarConfig: Toolbar,
+                            fullToolbarConfig: ToolbarWip,
                             actions: typeof Commands,
                             propName: string): TypeWeDontCare {
   const untypedButton = btn as TypeUnsafe as DictionaryValue;

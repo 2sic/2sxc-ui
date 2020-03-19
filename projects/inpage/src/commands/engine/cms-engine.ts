@@ -9,10 +9,10 @@ import { Log } from '../../logging/log';
 import { TypeUnsafe } from '../../plumbing/TypeTbD';
 import { quickDialog } from '../../quick-dialog/quick-dialog';
 import { DialogPaths } from '../../settings/DialogPaths';
-import { Button } from '../../toolbar/config/button';
-import { ButtonCommand } from '../../toolbar/config/button-command';
-import { CommandParams } from '../command-params';
+import { Button } from '../../toolbar/config';
+import { ButtonCommand } from '../../toolbar/config';
 import { CommandLinkGenerator } from '../command-link-generator';
+import { CommandParams } from '../command-params';
 
 /**
  * The CMS engine is global, and needs the context to work.
@@ -76,14 +76,13 @@ export class CmsEngine extends HasLog {
 
     // Toolbar API v2
     const newButtonAction = new ButtonCommand(name, contentType, cmdParams);
-    const newButtonConfig = new Button(newButtonAction);
-    newButtonConfig.name = name;
+    const newButtonConfig = new Button(newButtonAction, name);
 
     // merge conf & settings, but settings has higher priority
-    const button = (context.button = { // O.bject.assign(
+    const button = (context.button = {
       ...newButtonConfig,
       ...newButtonAction.commandDefinition.buttonConfig,
-      ...Button.normalize(cmdParams as any) });
+      ...Button.normalize(cmdParams as unknown) });
 
     // todo: stv, fix this in case that is function
     if (!button.dialog) {

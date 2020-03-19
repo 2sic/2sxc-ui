@@ -21,7 +21,6 @@ export const defaultToolbarSettings = new ToolbarSettings({
   autoAddMore: null, // null | 'start' | 'end' | true
   hover: 'right', // 'left' |'right' | 'none'
   show: 'hover', // 'always' | 'hover'
-  // order or reverse, still thinking about this --> order: "default"    // default | reverse
 });
 
 /** default / fallback settings for toolbars when nothings is specified */

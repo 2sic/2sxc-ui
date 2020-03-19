@@ -10,6 +10,8 @@ import { ToolbarTemplate } from '../templates/toolbar-template-toolbar';
 import { ButtonConfigLoader } from './button-config-loader';
 import { InPageButtonJson } from './in-page-button';
 import { ToolbarTemplateButtonGroup } from '../templates/toolbar-templaten-button-group';
+import { InPageButtonGroupJson } from './in-page-button-group';
+import { ButtonGroupsWip } from './toolbar-wip';
 
 export class ToolbarConfigLoader extends HasLog {
 
@@ -66,19 +68,20 @@ export class ToolbarConfigLoader extends HasLog {
      */
     private buildFullDefinition(toolbarContext: ContextBundleButton, unstructuredConfig: InPageToolbarConfigVariations, instanceConfig: InstanceConfig, toolbarSettings: ToolbarSettings): Toolbar {
         const log = new Log('Tlb.BldFul', this.log, 'start');
-        let fullConfig = this.ensureDefinitionTree(unstructuredConfig, toolbarSettings) as unknown as Toolbar;
+
+        const configWip = this.ensureDefinitionTree(unstructuredConfig, toolbarSettings); // as unknown as Toolbar;
 
         // ToDo: don't use console.log in production
         if (ToolbarTemplate.is(unstructuredConfig) && unstructuredConfig.debug)
             console.log('toolbar: detailed debug on; start build full Def');
 
-        fullConfig = this.groups.expandButtonGroups(fullConfig, log);
+        const tlbConfig = this.groups.expandButtonGroups(configWip, log);
 
-        this.button.removeDisableButtons(toolbarContext, fullConfig, instanceConfig);
+        this.button.removeDisableButtons(toolbarContext, tlbConfig, instanceConfig);
 
-        if (fullConfig.debug) console.log('after remove: ', fullConfig);
+        if (configWip.debug) console.log('after remove: ', configWip);
 
-        return fullConfig;
+        return tlbConfig;
     }
 
 
@@ -112,7 +115,7 @@ export class ToolbarConfigLoader extends HasLog {
         //     log.add('detected array with length');
         //     if (unstructuredConfig[0].buttons) {
         //         log.add('detected buttons on first item, assume button-group, moving into .groups');
-        //         (unstructuredConfig as any).groups = unstructuredConfig; // move "down"
+        //         (unstructuredConfig as a.ny).groups = unstructuredConfig; // move "down"
         //     } else if (unstructuredConfig[0].command || unstructuredConfig[0].action) {
         //         log.add('detected command or action on first item, assume buttons, move into .groups[buttons] ');
         //         unstructuredConfig = { groups: [{ buttons: unstructuredConfig }] };
@@ -136,7 +139,7 @@ export class ToolbarConfigLoader extends HasLog {
         return newToolbar;
     }
 
-    private findGroups(unstructuredConfig: InPageToolbarConfigVariations): Array<InPageButtonJson | ButtonGroup> {
+    private findGroups(unstructuredConfig: InPageToolbarConfigVariations): ButtonGroupsWip {
 
         let arrBtnsOrGroups: Array<InPageButtonJson | ButtonGroup>;
 
@@ -149,7 +152,7 @@ export class ToolbarConfigLoader extends HasLog {
             log.add('found no array, but detected action/buttons properties, will wrap config into array');
             arrBtnsOrGroups = [unstructuredConfig];
         } else
-            // we either have groups already, or we don't have any
+            // we either have groups already, or we'll return blank
             return (ToolbarTemplate.is(unstructuredConfig))
                 ? unstructuredConfig.groups
                 : [];
@@ -161,12 +164,12 @@ export class ToolbarConfigLoader extends HasLog {
         }
 
         log.add('detected array with length');
-        if (ButtonGroup.is(arrBtnsOrGroups)) { // unstructuredConfig[0].buttons) {
+        if (ButtonGroup.isArray(arrBtnsOrGroups)) { // unstructuredConfig[0].buttons) {
             log.add('detected buttons on first item, assume button-group, moving into .groups');
             return arrBtnsOrGroups;
         } else if (InPageButtonJson.isArray(arrBtnsOrGroups)) { // unstructuredConfig[0].action) {
             log.add('detected command or action on first item, assume buttons, move into .groups[buttons] ');
-            return arrBtnsOrGroups;
+            return [{ buttons:  arrBtnsOrGroups } as InPageButtonGroupJson];
             // unstructuredConfig = { groups: [{ buttons: unstructuredConfig }] };
         }
 

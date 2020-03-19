@@ -1,9 +1,9 @@
 ﻿import * as Constants from '../../constants';
 import { findContext } from '../../context/context';
 import { HasLog } from '../../logging/has-log';
+import { emptyToolbar } from '../config';
 import { ToolbarConfigLoader } from '../config-loaders';
 import { ToolbarRenderer } from '../render/toolbar-renderer';
-import { emptyToolbar } from '../config/toolbar-settings';
 import { TagToolbar } from '../tag-toolbars/tag-toolbar';
 import { ToolbarManager } from '../toolbar-manager';
 import { ToolbarInitConfig } from './toolbar-init-config';
@@ -134,7 +134,6 @@ export class ToolbarConfigFinderAndInitializer extends HasLog {
 
         if (scElementParent.length > 0)
             addHoverAttributeToTag(scElementParent);
-
     }
 }
 

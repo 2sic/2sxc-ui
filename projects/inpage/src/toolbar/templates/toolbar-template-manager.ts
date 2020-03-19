@@ -10,7 +10,9 @@ import { ToolbarTemplate } from './toolbar-template-toolbar';
  */
 export class ToolbarTemplateManager extends HasLog {
   configTemplateList: ToolbarTemplate[] = [];
-  list: HashTable<ToolbarTemplate> = {}; // hash - table of templates, to be used a list()['template - name']
+
+  /** hash - table of templates, to be used a list()['template - name'] */
+  list: HashTable<ToolbarTemplate> = {};
 
   private constructor(parentLog: Log) {
     super('Tlb.TmpMan', parentLog, 'build');

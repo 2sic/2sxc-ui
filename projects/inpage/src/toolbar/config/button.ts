@@ -4,6 +4,7 @@ import { CommandLinkGenerator } from '../../commands/command-link-generator';
 import { CommandParams } from '../../commands/command-params';
 import { ContextBundleButton } from '../../context/bundles/context-bundle-button';
 import { TypeSafeAssign, TypeTbD, TypeUnsafe } from '../../plumbing';
+import { InPageButtonJson } from '../config-loaders/in-page-button';
 
 
 /** This is the most common call signature on most ButtonConfig properties */
@@ -13,23 +14,18 @@ export type ButtonPropertyGenerator<T> = (context: ContextBundleButton) => T;
  * The real button configuration as it's used at runtime
  */
 export class Button {
-    name: string = '';
     action: ButtonCommand;
     classes: string = '';
     show: boolean = null; // maybe
 
-    constructor(action?: ButtonCommand, partialConfig?: Partial<Button>) {
+    constructor(action: ButtonCommand, public name: string /*, partialConfig?: Partial<Button> */) {
         if (action && action.commandDefinition && action.commandDefinition.buttonConfig) {
             this.action = action;
             // get defaults from action commandDefinition
             TypeSafeAssign(this, action.commandDefinition.buttonConfig);
-            // O.bject.assign(this, action.commandDefinition.buttonConfig);
         }
 
-        if (partialConfig) {
-            TypeSafeAssign(this, partialConfig);
-            // O.bject.assign(this, partialConfig);
-        }
+        // if (partialConfig) TypeSafeAssign(this, partialConfig);
     }
 
     code: CommandCode; // void;
@@ -49,7 +45,7 @@ export class Button {
     uiActionOnly: ButtonPropertyGenerator<boolean>;
 
 
-    static normalize(oldFormat: Partial<Button> | ButtonConfigWithFunctionsStillAsValues): Partial<Button> {
+    static normalize(oldFormat: Partial<Button> | ButtonConfigWithFunctionsStillAsValues | InPageButtonJson): Partial<Button> {
         const config: Partial<Button> = {};
 
         console.log('oldFormat', oldFormat);

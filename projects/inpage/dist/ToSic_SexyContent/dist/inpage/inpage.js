@@ -2574,8 +2574,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
  * The real button configuration as it's used at runtime
  */
 var Button = /** @class */ (function () {
-    function Button(action, partialConfig) {
-        this.name = '';
+    function Button(action, name /*, partialConfig?: Partial<Button> */) {
+        this.name = name;
         this.classes = '';
         this.show = null; // maybe
         this.dynamicDisabled = function () { return false; };
@@ -2583,12 +2583,8 @@ var Button = /** @class */ (function () {
             this.action = action;
             // get defaults from action commandDefinition
             Object(__WEBPACK_IMPORTED_MODULE_0__plumbing__["TypeSafeAssign"])(this, action.commandDefinition.buttonConfig);
-            // O.bject.assign(this, action.commandDefinition.buttonConfig);
         }
-        if (partialConfig) {
-            Object(__WEBPACK_IMPORTED_MODULE_0__plumbing__["TypeSafeAssign"])(this, partialConfig);
-            // O.bject.assign(this, partialConfig);
-        }
+        // if (partialConfig) TypeSafeAssign(this, partialConfig);
     }
     Button.normalize = function (oldFormat) {
         var config = {};
@@ -2943,6 +2939,11 @@ var ButtonConfigLoader = /** @class */ (function (_super) {
         _this.toolbar = toolbar;
         return _this;
     }
+    /**
+     * Converts the InPageButtonJson to a Button
+     * WARNING: Note that this does the same task as convertToButton in the ButtonGroupConfigLoader - but very differently
+     *          I'm not sure why though.
+     */
     ButtonConfigLoader.prototype.convertToButton = function (jsonBtn) {
         var btn = {};
         if (jsonBtn.code)
@@ -2969,7 +2970,6 @@ var ButtonConfigLoader = /** @class */ (function (_super) {
         // we need parameter adapter to do this...
         if (jsonBtn.params)
             btn.params = function () { return jsonBtn.params; };
-        // O.bject.assign(btn.params, jsonBtn.params);
         if (jsonBtn.partOfPage)
             btn.partOfPage = function () { return jsonBtn.partOfPage; };
         if (jsonBtn.showCondition)
@@ -2987,9 +2987,7 @@ var ButtonConfigLoader = /** @class */ (function (_super) {
         var params = this.toolbar.command.removeActionProperty(jsonBtn.command);
         // Toolbar API v2
         var newButtonAction = new __WEBPACK_IMPORTED_MODULE_2__config__["ButtonCommand"](name, contentType, params);
-        var newButtonConfig = new __WEBPACK_IMPORTED_MODULE_2__config__["Button"](newButtonAction);
-        newButtonConfig.name = name;
-        return newButtonConfig;
+        return new __WEBPACK_IMPORTED_MODULE_2__config__["Button"](newButtonAction, name);
     };
     /**
      * takes an object like "actionname" or { action: "actionname", ... }
@@ -3005,13 +3003,15 @@ var ButtonConfigLoader = /** @class */ (function (_super) {
         }
         // if just a name, turn into a command
         // use the deep version with command.action, because of more clean-up later on
-        if (typeof original === 'string') {
-            log.add("name \"" + original + "\" found, will re-map to .command.action");
-            return {
-                command: { action: original.trim() },
-                _expanded: true,
-            };
-        }
+        if (typeof original === 'string')
+            return this.getFromName(original);
+        // {
+        //     log.add(`name "${original}" found, will re-map to .command.action`);
+        //     return {
+        //         command: { action: original.trim() },
+        //         _expanded: true,
+        //     };
+        // }
         // if it's a command w/action, wrap into command + trim
         if (__WEBPACK_IMPORTED_MODULE_0____["InPageCommandJson"].is(asBtnConfig)) {
             log.add('action found, will move down to .command');
@@ -3021,6 +3021,13 @@ var ButtonConfigLoader = /** @class */ (function (_super) {
             };
         }
         throw 'can\'t expand InPageButtonConfiguration - unexpected type signature encountered';
+    };
+    ButtonConfigLoader.prototype.getFromName = function (name) {
+        this.log.add("name \"" + name + "\" found, will re-map to .command.action");
+        return {
+            command: { action: name.trim() },
+            _expanded: true,
+        };
     };
     /**
      * remove buttons which are not valid based on add condition
@@ -3223,7 +3230,8 @@ var ToolbarTemplateManager = /** @class */ (function (_super) {
     function ToolbarTemplateManager(parentLog) {
         var _this = _super.call(this, 'Tlb.TmpMan', parentLog, 'build') || this;
         _this.configTemplateList = [];
-        _this.list = {}; // hash - table of templates, to be used a list()['template - name']
+        /** hash - table of templates, to be used a list()['template - name'] */
+        _this.list = {};
         _this.add('default', __WEBPACK_IMPORTED_MODULE_1__template_default__["defaultToolbarTemplate"]);
         _this.add('left', __WEBPACK_IMPORTED_MODULE_2__template_left__["leftToolbarTemplate"]);
         return _this;
@@ -3539,9 +3547,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__logging_has_log__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__quick_dialog_quick_dialog__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__settings_DialogPaths__ = __webpack_require__(29);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__toolbar_config_button__ = __webpack_require__(47);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__toolbar_config_button_command__ = __webpack_require__(30);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__command_link_generator__ = __webpack_require__(82);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__toolbar_config__ = __webpack_require__(53);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__command_link_generator__ = __webpack_require__(82);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -3617,11 +3624,10 @@ var CmsEngine = /** @class */ (function (_super) {
         var contentType = cmdParams.contentType;
         this.log.add("run command " + name + " for type " + contentType);
         // Toolbar API v2
-        var newButtonAction = new __WEBPACK_IMPORTED_MODULE_8__toolbar_config_button_command__["ButtonCommand"](name, contentType, cmdParams);
-        var newButtonConfig = new __WEBPACK_IMPORTED_MODULE_7__toolbar_config_button__["Button"](newButtonAction);
-        newButtonConfig.name = name;
+        var newButtonAction = new __WEBPACK_IMPORTED_MODULE_7__toolbar_config__["ButtonCommand"](name, contentType, cmdParams);
+        var newButtonConfig = new __WEBPACK_IMPORTED_MODULE_7__toolbar_config__["Button"](newButtonAction, name);
         // merge conf & settings, but settings has higher priority
-        var button = (context.button = __assign(__assign(__assign({}, newButtonConfig), newButtonAction.commandDefinition.buttonConfig), __WEBPACK_IMPORTED_MODULE_7__toolbar_config_button__["Button"].normalize(cmdParams)));
+        var button = (context.button = __assign(__assign(__assign({}, newButtonConfig), newButtonAction.commandDefinition.buttonConfig), __WEBPACK_IMPORTED_MODULE_7__toolbar_config__["Button"].normalize(cmdParams)));
         // todo: stv, fix this in case that is function
         if (!button.dialog) {
             this.log.add('button.dialog method missing, old implementation with action-name');
@@ -3675,7 +3681,7 @@ var CmsEngine = /** @class */ (function (_super) {
      */
     CmsEngine.openDialog = function (context, event) {
         // the link contains everything to open a full dialog (lots of params added)
-        var link = new __WEBPACK_IMPORTED_MODULE_9__command_link_generator__["CommandLinkGenerator"](context).getLink(); // commandLinkToNgDialog(context);
+        var link = new __WEBPACK_IMPORTED_MODULE_8__command_link_generator__["CommandLinkGenerator"](context).getLink(); // commandLinkToNgDialog(context);
         var fullScreen = false;
         var origEvent = event || window.event;
         return new Promise(function (resolvePromise) {
@@ -5301,6 +5307,10 @@ var ButtonGroup = /** @class */ (function () {
     ButtonGroup.is = function (thing) {
         return thing.buttons !== undefined;
     };
+    /** Detect if this is a ButtonGroup */
+    ButtonGroup.isArray = function (thing) {
+        return thing.length && thing[0].buttons !== undefined;
+    };
     return ButtonGroup;
 }());
 
@@ -5422,120 +5432,115 @@ var ButtonGroupConfigLoader = /** @class */ (function (_super) {
         log.add("will expand groups - found " + fullToolbar.groups.length + " items");
         for (var g = 0; g < fullToolbar.groups.length; g++) {
             // expand a verb-list like "edit,new" into objects like [{ action: "edit" }, {action: "new"}]
-            expandButtonList(this, fullToolbar.groups[g], fullToolbar.settings);
-            // fix all the buttons
-            var btns = (fullToolbar.groups[g]).buttons;
+            var group = fullToolbar.groups[g];
+            var btns = this.expandButtonList(group, fullToolbar.settings);
             var buttonConfigs = [];
             if (Array.isArray(btns)) {
                 log.add("will process " + btns.length + " buttons");
-                for (var b = 0; b < btns.length; b++) {
-                    var btn = btns[b];
-                    var btnCommand = btn.command;
-                    if (!(__WEBPACK_IMPORTED_MODULE_0__commands__["Commands"].get(btnCommand.action))) {
-                        log.add("couldn't find action " + btnCommand.action + " - show warning");
-                        console.warn('warning: toolbar-button with unknown action-name:', btnCommand.action);
-                    }
-                    var name = btnCommand.action;
-                    var contentType = btnCommand.contentType;
-                    // if the button belongs to a content-item, move the specs up to the item into the settings-object
-                    this.toolbar.command.normalizeCommandJson(btnCommand);
-                    // parameters adapter from v1 to v2
-                    var params = this.toolbar.command.removeActionProperty(btnCommand);
-                    params = __assign(__assign({}, params), fullToolbar.params);
-                    // O.bject.assign(params, fullToolbarConfig.params);
-                    // Toolbar API v2
-                    var newButtonAction = new __WEBPACK_IMPORTED_MODULE_2__config__["ButtonCommand"](name, contentType, params);
-                    var newButtonConfig = new __WEBPACK_IMPORTED_MODULE_2__config__["Button"](newButtonAction);
-                    newButtonConfig.name = name;
-                    // settings adapter from v1 to v2
-                    var settings = __WEBPACK_IMPORTED_MODULE_2__config__["Button"].normalize(btn);
-                    newButtonConfig = __assign(__assign({}, newButtonConfig), settings);
-                    // O.bject.assign(newButtonConfig, settings);
-                    // ensure all buttons have either own settings, or the fallback
-                    this.toolbar.button.addDefaultBtnSettings(newButtonConfig, fullToolbar.groups[g], fullToolbar, __WEBPACK_IMPORTED_MODULE_0__commands__["Commands"]);
-                    buttonConfigs.push(newButtonConfig);
-                }
+                for (var b = 0; b < btns.length; b++)
+                    buttonConfigs.push(this.convertToButton(btns[b], fullToolbar, group));
             }
             else
                 log.add("no button array found, won't do a.nything");
             // Toolbar API v2 overwrite V1
-            fullToolbar.groups[g].buttons = buttonConfigs;
+            group.buttons = buttonConfigs;
         }
         return fullToolbar;
+    };
+    /**
+     * Converts the InPageButtonJson to a Button
+     * WARNING: Note that this does the same task as convertToButton in the ButtonConfigLoader - but very differently
+     *          I'm not sure why though.
+     */
+    ButtonGroupConfigLoader.prototype.convertToButton = function (btn, fullToolbar, group) {
+        var btnCommand = btn.command;
+        if (!(__WEBPACK_IMPORTED_MODULE_0__commands__["Commands"].get(btnCommand.action))) {
+            this.log.add("couldn't find action " + btnCommand.action + " - show warning");
+            console.warn('warning: toolbar-button with unknown action-name:', btnCommand.action);
+        }
+        var name = btnCommand.action;
+        var contentType = btnCommand.contentType;
+        // if the button belongs to a content-item, move the specs up to the item into the settings-object
+        this.toolbar.command.normalizeCommandJson(btnCommand);
+        // parameters adapter from v1 to v2
+        var params = __assign(__assign({}, this.toolbar.command.removeActionProperty(btnCommand)), fullToolbar.params);
+        // Toolbar API v2
+        var newButtonAction = new __WEBPACK_IMPORTED_MODULE_2__config__["ButtonCommand"](name, contentType, params);
+        var newButtonConfig = new __WEBPACK_IMPORTED_MODULE_2__config__["Button"](newButtonAction, name);
+        // settings adapter from v1 to v2
+        newButtonConfig = __assign(__assign({}, newButtonConfig), __WEBPACK_IMPORTED_MODULE_2__config__["Button"].normalize(btn));
+        // ensure all buttons have either own settings, or the fallback
+        this.toolbar.button.addDefaultBtnSettings(newButtonConfig, group, fullToolbar, __WEBPACK_IMPORTED_MODULE_0__commands__["Commands"]);
+        return newButtonConfig;
+    };
+    /**
+     * take a list of buttons (objects OR strings)
+     * and convert to proper array of buttons with actions
+     * on the in is a object with buttons, which are either:
+     * - a string like "edit" or multi-value "layout,more"
+     * - an array of such strings incl. optional complex objects which are
+     */
+    ButtonGroupConfigLoader.prototype.expandButtonList = function (root, settings) {
+        var _this = this;
+        var log = new __WEBPACK_IMPORTED_MODULE_1__logging__["Log"]('Tlb.ExpBts', this.log, 'start');
+        var buttonsWip = root.buttons;
+        var newButtons = [];
+        // convert compact buttons (with multi-verb action objects) into own button-objects
+        // important because an older syntax allowed {action: "new,edit", entityId: 17}
+        if (Array.isArray(buttonsWip)) {
+            log.add("detected array of btns (" + buttonsWip.length + "), will ensure it's an object");
+            for (var b = 0; b < buttonsWip.length; b++) {
+                var btn = buttonsWip[b];
+                var actionNames = btn.action;
+                if (typeof actionNames === 'string' && actionNames.indexOf(',') > -1) {
+                    this.expandButtonAndAddToList(newButtons, btn, actionNames);
+                }
+                else {
+                    newButtons.push(btn);
+                }
+            }
+        }
+        else if (typeof buttonsWip === 'string') {
+            log.add("detected that it is a string \"" + buttonsWip + "\", will split by \",\" and ...");
+            this.expandButtonAndAddToList(newButtons, {}, buttonsWip);
+        }
+        else {
+            log.add('no special case detected, will use the buttons-object as is');
+            newButtons = buttonsWip;
+        }
+        log.add("after check, found " + newButtons.length + " buttons");
+        // optionally add a more-button in each group
+        this.addMoreButton(settings, newButtons);
+        var result = newButtons.map(function (x) { return _this.toolbar.button.normalize(x); }); // ensure the internal def is also an array now
+        log.add('done');
+        return result;
+    };
+    ButtonGroupConfigLoader.prototype.expandButtonAndAddToList = function (list, btn, names) {
+        this.log.add("button def \"" + btn + " is string of ma.ny names, will expand into array with action-properties\"");
+        var actions = names.split(',');
+        for (var a = 0; a < actions.length; a++)
+            list.push(__assign(__assign({}, btn), this.toolbar.button.getFromName(actions[a])));
+    };
+    /** Add the "more" button at the end or beginning */
+    ButtonGroupConfigLoader.prototype.addMoreButton = function (settings, list) {
+        var addMore = settings.autoAddMore;
+        if (addMore) {
+            var moreButton = this.toolbar.button.getFromName('more');
+            if ((addMore === 'end') || (addMore.toString() === 'right')) { // fallback for older v1 setting
+                this.log.add('will add a more "..." button to end');
+                list.push(moreButton); // 'more');
+            }
+            else {
+                this.log.add('will add a more "..." button to start');
+                list.unshift(moreButton); // 'more');
+            }
+        }
+        else
+            this.log.add('will not add more "..." button');
     };
     return ButtonGroupConfigLoader;
 }(__WEBPACK_IMPORTED_MODULE_1__logging__["HasLog"]));
 
-/**
- * take a list of buttons (objects OR strings)
- * and convert to proper array of buttons with actions
- * on the in is a object with buttons, which are either:
- * - a string like "edit" or multi-value "layout,more"
- * - an array of such strings incl. optional complex objects which are
- * @param root
- * @param settings
- */
-function expandButtonList(parent, root, settings) {
-    var log = new __WEBPACK_IMPORTED_MODULE_1__logging__["Log"]('Tlb.ExpBts', parent.log, 'start');
-    var btns = [];
-    // convert compact buttons (with multi-verb action objects) into own button-objects
-    // important because an older syntax allowed {action: "new,edit", entityId: 17}
-    if (Array.isArray(root.buttons)) {
-        log.add("detected array of btns (" + root.buttons.length + "), will ensure it's an object");
-        for (var b = 0; b < root.buttons.length; b++) {
-            var btn = root.buttons[b];
-            var actionString = btn.action;
-            if (typeof actionString === 'string' && actionString.indexOf(',') > -1) {
-                log.add("button def \"" + btn + " is string of ma.ny names, will expand into array with action-properties\"");
-                var acts = actionString.split(',');
-                for (var a = 0; a < acts.length; a++) {
-                    // TODO: must fix, the action isn't correctly expanded
-                    btn.action = acts[a];
-                    btns.push(btn);
-                }
-            }
-            else {
-                btns.push(btn);
-            }
-        }
-    }
-    else if (typeof root.buttons === 'string') {
-        log.add("detected that it is a string \"" + root.buttons + "\", will split by \",\" and ...");
-        btns = root.buttons.split(',');
-        // 2020-03-11 2dm removed, as it seems unused completely
-        // sharedProperties = O.bject.assign({}, root); // inherit all fields used in the button
-        // delete sharedProperties.buttons; // this one's not needed
-        // delete sharedProperties.name; // this one's not needed
-        // delete sharedProperties.action; //
-    }
-    else {
-        log.add('no special case detected, will use the buttons-object as is');
-        btns = root.buttons;
-    }
-    log.add("after check, found " + btns.length + " buttons");
-    // optionally add a more-button in each group
-    if (settings.autoAddMore) {
-        if ((settings.autoAddMore === 'end')
-            || (settings.autoAddMore.toString() === 'right') // fallback for older v1 setting
-        ) {
-            log.add('will add a more "..." button to end');
-            btns.push('more');
-        }
-        else {
-            log.add('will add a more "..." button to start');
-            btns.unshift('more');
-        }
-    }
-    else {
-        log.add('will not add more "..." button');
-    }
-    // add each button - check if it's already an object or just the string
-    //   const finalButtons: Button[] = btns.map(this.toolbar.button.normalize);
-    //   for (let v = 0; v < btns.length; v++)
-    //     finalButtons[v] = this.toolbar.button.normalize(btns[v]/* sharedProperties, */);
-    root.buttons = btns.map(function (x) { return parent.toolbar.button.normalize(x); }); // ensure the internal def is also an array now
-    log.add('done');
-}
 
 
 /***/ }),
@@ -5630,15 +5635,15 @@ var ToolbarConfigLoader = /** @class */ (function (_super) {
      */
     ToolbarConfigLoader.prototype.buildFullDefinition = function (toolbarContext, unstructuredConfig, instanceConfig, toolbarSettings) {
         var log = new __WEBPACK_IMPORTED_MODULE_1__logging__["Log"]('Tlb.BldFul', this.log, 'start');
-        var fullConfig = this.ensureDefinitionTree(unstructuredConfig, toolbarSettings);
+        var configWip = this.ensureDefinitionTree(unstructuredConfig, toolbarSettings); // as unknown as Toolbar;
         // ToDo: don't use console.log in production
         if (__WEBPACK_IMPORTED_MODULE_5__templates_toolbar_template_toolbar__["ToolbarTemplate"].is(unstructuredConfig) && unstructuredConfig.debug)
             console.log('toolbar: detailed debug on; start build full Def');
-        fullConfig = this.groups.expandButtonGroups(fullConfig, log);
-        this.button.removeDisableButtons(toolbarContext, fullConfig, instanceConfig);
-        if (fullConfig.debug)
-            console.log('after remove: ', fullConfig);
-        return fullConfig;
+        var tlbConfig = this.groups.expandButtonGroups(configWip, log);
+        this.button.removeDisableButtons(toolbarContext, tlbConfig, instanceConfig);
+        if (configWip.debug)
+            console.log('after remove: ', configWip);
+        return tlbConfig;
     };
     //#region build initial toolbar object
     /**
@@ -5669,7 +5674,7 @@ var ToolbarConfigLoader = /** @class */ (function (_super) {
         //     log.add('detected array with length');
         //     if (unstructuredConfig[0].buttons) {
         //         log.add('detected buttons on first item, assume button-group, moving into .groups');
-        //         (unstructuredConfig as any).groups = unstructuredConfig; // move "down"
+        //         (unstructuredConfig as a.ny).groups = unstructuredConfig; // move "down"
         //     } else if (unstructuredConfig[0].command || unstructuredConfig[0].action) {
         //         log.add('detected command or action on first item, assume buttons, move into .groups[buttons] ');
         //         unstructuredConfig = { groups: [{ buttons: unstructuredConfig }] };
@@ -5700,7 +5705,7 @@ var ToolbarConfigLoader = /** @class */ (function (_super) {
             arrBtnsOrGroups = [unstructuredConfig];
         }
         else
-            // we either have groups already, or we don't have any
+            // we either have groups already, or we'll return blank
             return (__WEBPACK_IMPORTED_MODULE_5__templates_toolbar_template_toolbar__["ToolbarTemplate"].is(unstructuredConfig))
                 ? unstructuredConfig.groups
                 : [];
@@ -5710,13 +5715,13 @@ var ToolbarConfigLoader = /** @class */ (function (_super) {
             return [];
         }
         log.add('detected array with length');
-        if (__WEBPACK_IMPORTED_MODULE_3__config__["ButtonGroup"].is(arrBtnsOrGroups)) { // unstructuredConfig[0].buttons) {
+        if (__WEBPACK_IMPORTED_MODULE_3__config__["ButtonGroup"].isArray(arrBtnsOrGroups)) { // unstructuredConfig[0].buttons) {
             log.add('detected buttons on first item, assume button-group, moving into .groups');
             return arrBtnsOrGroups;
         }
         else if (__WEBPACK_IMPORTED_MODULE_7__in_page_button__["InPageButtonJson"].isArray(arrBtnsOrGroups)) { // unstructuredConfig[0].action) {
             log.add('detected command or action on first item, assume buttons, move into .groups[buttons] ');
-            return arrBtnsOrGroups;
+            return [{ buttons: arrBtnsOrGroups }];
             // unstructuredConfig = { groups: [{ buttons: unstructuredConfig }] };
         }
         log.add('can\'t detect what this is - show warning');
