@@ -1,10 +1,10 @@
 ﻿import { CmsEngine } from '../commands/';
 import { CommandParams } from '../commands/command-params';
 import { ContextBundleInstance } from '../context/bundles/context-bundle-instance';
-import { findContext as getContext } from '../context/context';
 import { DebugConfig } from '../DebugConfig';
 import { HasLog } from '../logging/has-log';
 import { Log } from '../logging/log';
+import { ContextBundleButton } from '../context/bundles/context-bundle-button';
 
 const logId = 'Cms.Api';
 
@@ -35,7 +35,7 @@ export class Cms extends HasLog {
   ): Promise<void | T> {
     const realContext = ContextBundleInstance.is(context)
       ? context
-      : getContext(context);
+      : ContextBundleButton.findContext(context);
 
     return this.do(() =>
       new CmsEngine(this.log).detectParamsAndRun(realContext, nameOrSettings, eventOrSettings, event));

@@ -1,7 +1,5 @@
 ﻿import * as DialogFrameElement from './iDialogFrameElement';
-import * as Iframebridge from './iframe-bridge';
 import IDialogFrameElement = DialogFrameElement.IDialogFrameElement;
-
 
 /**
  * this is a dialog manager which is in charge of all quick-dialogues
@@ -89,7 +87,7 @@ function buildContainerAndIFrame(): JQuery {
     if ($('#personaBar-iframe').length > 0)
         container.addClass('persona-bar-visible');
     const newIFrame = document.createElement(iframeTag);
-    const extendedIFrame = Iframebridge.build(newIFrame);
+    const extendedIFrame = IDialogFrameElement.build(newIFrame);
     container.find(`.${iframeClass}`).append(extendedIFrame);
     $('body').append(container);
     QuickDialogContainer.watchForResize(container);

@@ -1,10 +1,9 @@
 ﻿import 'jasmine';
-import { Actions } from '../src/commands/command/content-list-actions';
 import { Command } from '../src/commands/command';
+import { Actions } from '../src/commands/command/content-list-actions';
 import { Commands as Commands } from '../src/commands/commands';
-import { createContextFromEditContext } from '../src/context/context';
+import { ContextBundleButton } from '../src/context/bundles/context-bundle-button';
 import { AttrJsonEditContext } from '../src/context/html-attribute/edit-context-root';
-// import { getButtonConfigDefaultsV1 } from '../src/toolbar/button/expand-button-config';
 import { Button } from '../src/toolbar/config/button';
 
 describe('Commands test suite', function() {
@@ -19,7 +18,7 @@ describe('Commands test suite', function() {
 
   describe('/ One command test suite', function() {
 
-    let myCustomEquality = function(first: Command, second: Command) {
+    const myCustomEquality = function(first: Command, second: Command) {
       if (!(first instanceof Command)) return false;
       if (!(second instanceof Command)) return false;
       if (first.name !== second.name) return false;
@@ -47,57 +46,57 @@ describe('Commands test suite', function() {
     beforeEach(function() {
 
       this.editContext2 = {
-        'Environment': {
-          'WebsiteId': 0,
-          'WebsiteUrl': '//2sxc914lts-dnn742.dnndev.me/',
-          'PageId': 93,
-          'PageUrl': 'http://2sxc914lts-dnn742.dnndev.me/TB3',
-          'parameters': [
-            { 'Key': 'TabId', 'Value': '93' },
-            { 'Key': 'language', 'Value': 'en-US' }],
-          'InstanceId': 2507,
-          'SxcVersion': '9.14.0.27116',
-          'SxcRootUrl': '/',
-          'IsEditable': true,
+        Environment: {
+          WebsiteId: 0,
+          WebsiteUrl: '//2sxc914lts-dnn742.dnndev.me/',
+          PageId: 93,
+          PageUrl: 'http://2sxc914lts-dnn742.dnndev.me/TB3',
+          parameters: [
+            { Key: 'TabId', Value: '93' },
+            { Key: 'language', Value: 'en-US' }],
+          InstanceId: 2507,
+          SxcVersion: '9.14.0.27116',
+          SxcRootUrl: '/',
+          IsEditable: true,
         },
-        'User': {
-          'CanDesign': true,
-          'CanDevelop': true,
+        User: {
+          CanDesign: true,
+          CanDevelop: true,
         },
-        'Language': {
-          'Current': 'en-us',
-          'Primary': 'en-us',
-          'All': [],
+        Language: {
+          Current: 'en-us',
+          Primary: 'en-us',
+          All: [],
         },
-        'ContentBlock': {
-          'ShowTemplatePicker': true,
-          'IsEntity': false,
-          'VersioningRequirements': 'DraftOptional',
-          'Id': 2507,
-          'ParentFieldName': null,
-          'ParentFieldSortOrder': 0,
-          'PartOfPage': true,
+        ContentBlock: {
+          ShowTemplatePicker: true,
+          IsEntity: false,
+          VersioningRequirements: 'DraftOptional',
+          Id: 2507,
+          ParentFieldName: null,
+          ParentFieldSortOrder: 0,
+          PartOfPage: true,
         },
-        'ContentGroup': {
-          'IsCreated': true,
-          'IsList': true,
-          'TemplateId': 4994,
-          'QueryId': null,
-          'ContentTypeName': '5a3932e9-cff0-46a2-a465-d2370154c39e',
-          'AppUrl': '/Portals/0/2sxc/TestToolbar',
-          'AppSettingsId': null,
-          'AppResourcesId': null,
-          'IsContent': false,
-          'HasContent': true,
-          'SupportsAjax': false,
-          'ZoneId': 3,
-          'AppId': 17,
-          'Guid': 'bacde468-fe3c-4993-8b0b-b6813f5141cc',
-          'Id': 4995,
-        }, 'error': { 'type': null },
+        ContentGroup: {
+          IsCreated: true,
+          IsList: true,
+          TemplateId: 4994,
+          QueryId: null,
+          ContentTypeName: '5a3932e9-cff0-46a2-a465-d2370154c39e',
+          AppUrl: '/Portals/0/2sxc/TestToolbar',
+          AppSettingsId: null,
+          AppResourcesId: null,
+          IsContent: false,
+          HasContent: true,
+          SupportsAjax: false,
+          ZoneId: 3,
+          AppId: 17,
+          Guid: 'bacde468-fe3c-4993-8b0b-b6813f5141cc',
+          Id: 4995,
+        }, error: { type: null },
       } as AttrJsonEditContext;
 
-      this.context = createContextFromEditContext(this.editContext2);
+      this.context = ContextBundleButton.createContextFromEditContext(this.editContext2);
 
       this.event = window.event;
 
@@ -115,7 +114,7 @@ describe('Commands test suite', function() {
         params: {
           useModuleList: true,
           sortOrder: 0,
-          contentBlock: 'dummy'
+          contentBlock: 'dummy',
         },
       };
 

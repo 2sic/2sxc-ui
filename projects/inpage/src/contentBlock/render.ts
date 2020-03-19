@@ -1,10 +1,10 @@
 ﻿import { ContextBundleButton } from '../context/bundles/context-bundle-button';
 import { HtmlTools } from '../html/dom-tools';
 import { windowInPage as window } from '../interfaces/window-in-page';
-import { getTag } from '../manage/api';
-import { reset } from '../quick-edit/start';
 import { ContentBlockEditor } from './content-block-editor';
 import { MainContentBlock } from './main-content-block';
+import { SxcEdit } from '../interfaces/sxc-instance-editable';
+import { QuickE } from '../quick-edit/quick-e';
 
 /*
  * this is the content block manager in the browser
@@ -26,7 +26,7 @@ class Renderer {
    * @returns {} nothing
    */
   showMessage(context: ContextBundleButton, newContent: string): void {
-    $(getTag(context.sxc)).html(newContent);
+    $(SxcEdit.getTag(context.sxc)).html(newContent);
   }
 
 
@@ -74,7 +74,7 @@ class Renderer {
         this.replaceContentBlock(context, result, justPreview);
       })
       .then(() => {
-        reset();
+        QuickE.reset();
       }); // reset quick-edit, because the config could have changed
   }
 
@@ -93,7 +93,7 @@ class Renderer {
       // Must disable toolbar before we attach to DOM
       if (justPreview) HtmlTools.disable(newDom);
 
-      $(getTag(context.sxc)).replaceWith(newDom);
+      $(SxcEdit.getTag(context.sxc)).replaceWith(newDom);
 
       // reset the cache, so the sxc-object is refreshed
       context.sxc.recreate(true);

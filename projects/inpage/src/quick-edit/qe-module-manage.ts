@@ -1,10 +1,9 @@
-﻿import { InstanceClipboard } from './clipboard';
-import { $quickE as quickE } from './quick-e';
+﻿import { QuickE, QuickEClipboard } from '.';
 
 /**
  * module specific stuff
  */
-export class ModManage {
+export class QeModuleManager {
 
   /**
    * Delete a module
@@ -91,7 +90,7 @@ export class ModManage {
   }
 
   getMoveButtons(current: string): JQuery {
-    const pns = quickE.cachedPanes;
+    const pns = QuickE.cachedPanes;
     // generate list of panes as links
     const targets = $('<div>');
     for (let p = 0; p < pns.length; p++) {
@@ -105,7 +104,7 @@ export class ModManage {
     // ReSharper disable once UnusedParameter
     targets.find('a').click(function() {
       const link = $(this);
-      const clip = InstanceClipboard.get(); // contents;
+      const clip = QuickEClipboard.get(); // contents;
       const modId = this.getModuleId(clip.item.className);
       const newPane = link.attr('data');
 
@@ -116,7 +115,7 @@ export class ModManage {
   }
 }
 
-export const modManage = new ModManage();
+export const modManage = new QeModuleManager();
 
 // show an error when an xhr error occurs
 function xhrError(xhr: JQueryXHR, optionalMessage: string): void {

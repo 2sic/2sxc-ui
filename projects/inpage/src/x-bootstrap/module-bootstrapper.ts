@@ -1,10 +1,9 @@
 ﻿import { Attributes } from '../constants';
 import { DebugConfig } from '../DebugConfig';
-import { SxcIntanceEditable } from '../interfaces/sxc-instance-editable';
+import { SxcEdit } from '../interfaces/sxc-instance-editable';
 import { windowInPage as window } from '../interfaces/window-in-page';
 import { Log } from '../logging/log';
 import { LogUtils } from '../logging/log-utils';
-import { getTag } from '../manage/api';
 import { TypeUnsafe } from '../plumbing/TypeTbD';
 import { quickDialog } from '../quick-dialog/quick-dialog';
 import * as QuickEditState from '../quick-dialog/state';
@@ -94,7 +93,7 @@ function watchDomChanges() {
  * @returns
  */
 function tryShowTemplatePicker(): boolean {
-  let sxc: SxcIntanceEditable;
+  let sxc: SxcEdit;
   // first check if we should show one according to the state-settings
   const openDialogId = QuickEditState.cbId.get();
   if (openDialogId) {
@@ -107,9 +106,9 @@ function tryShowTemplatePicker(): boolean {
         const instanceId = Number(
           found[0].attributes.getNamedItem(Attributes.InstanceId).value,
         );
-        sxc = SxcIntanceEditable.get(instanceId, openDialogId);
+        sxc = SxcEdit.get(instanceId, openDialogId);
       } else {
-        sxc = SxcIntanceEditable.get(openDialogId);
+        sxc = SxcEdit.get(openDialogId);
       }
     }
   }
@@ -127,7 +126,7 @@ function tryShowTemplatePicker(): boolean {
 
     // show the template picker of this module
     const module = uninitializedModules.parent('div[data-edit-context]')[0];
-    sxc = SxcIntanceEditable.get(module);
+    sxc = SxcEdit.get(module);
   }
 
   if (sxc) {
@@ -147,11 +146,11 @@ function initInstance(module: JQuery, isFirstRun: boolean): void {
   // add to modules-list first, in case we run into recursions
   initializedInstances.push(module);
 
-  let sxc = SxcIntanceEditable.get(module);
+  let sxc = SxcEdit.get(module);
 
   // check if the sxc must be re-created. This is necessary when modules are dynamically changed
   // because the configuration may change, and that is cached otherwise, resulting in toolbars with wrong config
-  if (!isFirstRun) sxc = sxc.recreate(true) as TypeUnsafe as SxcIntanceEditable;
+  if (!isFirstRun) sxc = sxc.recreate(true) as TypeUnsafe as SxcEdit;
 
   // check if we must show the glasses
   // this must always run because it can be added ajax-style
@@ -167,13 +166,13 @@ function initInstance(module: JQuery, isFirstRun: boolean): void {
 }
 
 function showGlassesButtonIfUninitialized(
-  sxci: SxcIntanceEditable,
+  sxci: SxcEdit,
 ): boolean {
   // already initialized
   if (isInitialized(sxci)) return false;
 
   // already has a glasses button
-  const tag = $(getTag(sxci));
+  const tag = $(SxcEdit.getTag(sxci));
   if (tag.find('.sc-uninitialized').length !== 0) return false;
 
   // note: title is added on mouseover, as the translation isn't ready at page-load
@@ -189,7 +188,7 @@ function showGlassesButtonIfUninitialized(
   return true;
 }
 
-function isInitialized(sxci: SxcIntanceEditable): boolean {
+function isInitialized(sxci: SxcEdit): boolean {
   const cg =
     sxci &&
     sxci.manage &&

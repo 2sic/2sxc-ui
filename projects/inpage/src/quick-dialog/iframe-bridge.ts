@@ -1,27 +1,16 @@
-﻿import { renderer } from '../contentBlock/render';
-import { ContentBlockEditor } from '../contentBlock/content-block-editor';
+﻿import { ContentBlockEditor } from '../contentBlock/content-block-editor';
+import { renderer } from '../contentBlock/render';
 import { ContextBundleButton } from '../context/bundles/context-bundle-button';
-import { findContext } from '../context/context';
 import * as Iiframebridge from '../interfaces/iiframe-bridge';
 import { IQuickDialogConfig } from '../interfaces/iquick-dialog-config';
-import { SxcIntanceEditable } from '../interfaces/sxc-instance-editable';
-import { getTag } from '../manage/api';
+import { SxcEdit } from '../interfaces/sxc-instance-editable';
 import { TypeUnsafe } from '../plumbing/TypeTbD';
-import { IDialogFrameElement } from './iDialogFrameElement';
 import { quickDialog } from './quick-dialog';
 import { QuickDialogConfig } from './quick-dialog-config';
 import IIFrameBridge = Iiframebridge.IIFrameBridge;
 
 const scrollTopOffset: number = 80;
 const animationTime: number = 400;
-
-export function build(iFrame: HTMLIFrameElement): IDialogFrameElement {
-  console.log('prot: ', IFrameBridge.prototype);
-  const iFrameExtended = iFrame as IDialogFrameElement;
-  iFrameExtended.bridge = new IFrameBridge();
-  console.log('extensions: ', iFrameExtended.bridge);
-  return iFrameExtended;
-}
 
 /**
  *
@@ -33,7 +22,7 @@ export class IFrameBridge implements IIFrameBridge {
   private dialogName: string;
 
   /** internal object to keep track of the sxc-instance */
-  private instanceSxc: SxcIntanceEditable;
+  private instanceSxc: SxcEdit;
 
   /** The html-tag of the current module */
   private tagModule: JQuery;
@@ -41,12 +30,12 @@ export class IFrameBridge implements IIFrameBridge {
   /**
    * get the sxc-object of this iframe
    */
-  private uncachedSxc(): SxcIntanceEditable {
+  private uncachedSxc(): SxcEdit {
     if (!this.instanceSxc) throw "can't find sxc-instance of IFrame, probably it wasn't initialized yet";
-    return this.instanceSxc.recreate(true) as TypeUnsafe as SxcIntanceEditable;
+    return this.instanceSxc.recreate(true) as TypeUnsafe as SxcEdit;
   }
 
-  getContext(): ContextBundleButton { return findContext(this.uncachedSxc()); }
+  getContext(): ContextBundleButton { return ContextBundleButton.findContext(this.uncachedSxc()); }
 
   getAdditionalDashboardConfig() { return QuickDialogConfig.fromContext(this.getContext()); }
 
@@ -101,12 +90,12 @@ export class IFrameBridge implements IIFrameBridge {
   /**
    * prepare the bridge with the info of the current instance
    */
-  setup(sxc: SxcIntanceEditable, dialogName: string): void {
+  setup(sxc: SxcEdit, dialogName: string): void {
     console.log('rewire with sxc: ', sxc);
 
     this.changed = false;
     this.instanceSxc = sxc;
-    this.tagModule = $($(getTag(sxc)).parent().eq(0));
+    this.tagModule = $($(SxcEdit.getTag(sxc)).parent().eq(0));
     this.sxcCacheKey = sxc.cacheKey;
     if (dialogName)
       this.dialogName = dialogName;

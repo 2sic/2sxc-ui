@@ -1,5 +1,5 @@
 ﻿import * as Constants from '../../constants';
-import { findContext } from '../../context/context';
+import { ContextBundleButton } from '../../context/bundles/context-bundle-button';
 import { HasLog } from '../../logging/has-log';
 import { emptyToolbar } from '../config';
 import { ToolbarConfigLoader } from '../config-loaders';
@@ -117,7 +117,7 @@ export class ToolbarConfigFinderAndInitializer extends HasLog {
      * @param config
      */
     private convertConfigToToolbars(tag: JQuery, config: ToolbarInitConfig): void {
-        const context = findContext(tag);
+        const context = ContextBundleButton.findContext(tag);
         context.toolbar = new ToolbarConfigLoader(this.log).expandToolbarConfig(context, config.toolbar, config.settings);
 
         // V2 where the full toolbar is included in one setting
@@ -161,7 +161,7 @@ function addDefaultToolbarConfigToTag(parentTag: JQuery): JQuery {
   const contentTag = outsideCb ? parentTag.find(`div${Constants.cb.selectors.ofName}`) : parentTag;
 
   // auto toolbar
-  const ctx = findContext(contentTag);
+  const ctx = ContextBundleButton.findContext(contentTag);
   if (ctx.ui.autoToolbar === false)
     return null;
 

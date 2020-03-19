@@ -1,7 +1,6 @@
 ﻿import { SxcInstanceEngine } from '../../commands';
-import { SxcIntanceEditable } from '../../interfaces/sxc-instance-editable';
+import { SxcEdit } from '../../interfaces/sxc-instance-editable';
 import { windowInPage as window } from '../../interfaces/window-in-page';
-import { getTag } from '../../manage/api';
 
 
 /**
@@ -10,11 +9,11 @@ import { getTag } from '../../manage/api';
 export class ActionMenuMapper {
   private run: typeof SxcInstanceEngine.prototype.run;
   private tag: HTMLElement;
-  private sxc: SxcIntanceEditable;
+  private sxc: SxcEdit;
 
   constructor(moduleId: number) {
-    this.sxc = SxcIntanceEditable.get(moduleId);
-    this.tag = getTag(this.sxc);
+    this.sxc = SxcEdit.get(moduleId);
+    this.tag = SxcEdit.getTag(this.sxc);
     this.run = this.sxc.manage.run;
   }
 

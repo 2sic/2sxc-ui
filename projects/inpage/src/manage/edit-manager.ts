@@ -3,12 +3,11 @@ import { SxcInstanceEngine } from '../commands';
 import { DnnModuleEditor } from '../contentBlock/dnn-module-editor';
 import { ContextBundleButton } from '../context/bundles/context-bundle-button';
 import { AttrJsonEditContext } from '../context/html-attribute/edit-context-root';
-import { SxcIntanceEditable } from '../interfaces/sxc-instance-editable';
+import { SxcEdit } from '../interfaces/sxc-instance-editable';
 import { TypeUnsafe } from '../plumbing/TypeTbD';
 import { ButtonConfigLoader, InPageButtonJson, ToolbarConfigLoader } from '../toolbar/config-loaders';
 import { ToolbarSettings } from '../toolbar/config/toolbar-settings';
 import { ToolbarRenderer } from '../toolbar/render/toolbar-renderer';
-import { getTag} from './api';
 import { UserOfEditContext } from './user-of-edit-context';
 
 /**
@@ -16,7 +15,7 @@ import { UserOfEditContext } from './user-of-edit-context';
  */
 export class EditManager implements SxcInstanceManage {
 
-  constructor(private sxc: SxcIntanceEditable,
+  constructor(private sxc: SxcEdit,
               private editContext: AttrJsonEditContext,
               private userInfo: UserOfEditContext,
               private cmdEngine: SxcInstanceEngine,
@@ -101,7 +100,7 @@ export class EditManager implements SxcInstanceManage {
    * init this object
    */
   init = (): void => {
-    const tag = getTag(this.sxc);
+    const tag = SxcEdit.getTag(this.sxc);
     // enhance UI in case there are known errors / issues
     const isErrorState = this.editContext && this.editContext.error && this.editContext.error.type;
     if (isErrorState)

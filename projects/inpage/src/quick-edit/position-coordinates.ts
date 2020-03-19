@@ -1,4 +1,4 @@
-﻿export class Coords {
+﻿export class PositionCoordinates {
   constructor(
     public x: number,
     public y: number,

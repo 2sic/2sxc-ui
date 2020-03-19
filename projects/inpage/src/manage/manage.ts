@@ -1,7 +1,6 @@
 ﻿import { SxcInstanceEngine } from '../commands';
-import { findContext } from '../context/context';
-import { SxcIntanceEditable } from '../interfaces/sxc-instance-editable';
-import { getEditContext } from './api';
+import { ContextBundleButton } from '../context/bundles/context-bundle-button';
+import { SxcEdit } from '../interfaces/sxc-instance-editable';
 import { EditManager } from './edit-manager';
 import { UserOfEditContext } from './user-of-edit-context';
 
@@ -34,7 +33,7 @@ export class Manage {
  *
  * we must keep signature of initInstance for compatibility because it is used out of this project in ToSic.Sxc.Instance and 2sxc.api.js
  */
-export function initInstance(sxc: SxcIntanceEditable) {
+function initInstance(sxc: SxcEdit) {
     try {
       _initInstance(sxc);
     } catch (e) {
@@ -43,9 +42,9 @@ export function initInstance(sxc: SxcIntanceEditable) {
   }
 
   // ReSharper disable once InconsistentNaming
-function _initInstance(sxc: SxcIntanceEditable) {
-    const myContext = findContext(sxc);
-    const editContext = getEditContext(myContext.sxc);
+function _initInstance(sxc: SxcEdit) {
+    const myContext = ContextBundleButton.findContext(sxc);
+    const editContext = SxcEdit.getEditContext(myContext.sxc);
 
     const userInfo = UserOfEditContext.fromContext(myContext); // 2dm simplified getUserOfEditContext(context);
     const cmdEngine = new SxcInstanceEngine(myContext.sxc);

@@ -3,13 +3,13 @@
 
 import 'jasmine';
 //import { generateFallbackToolbar } from '../src/toolbar/build-toolbars';
-import { createContextFromEditContext } from '../src/context/context';
 import { AttrJsonEditContext } from '../src/context/html-attribute/edit-context-root';
 import { ToolbarConfigLoader } from '../src/toolbar/config-loaders';
 import { ToolbarRenderer } from '../src/toolbar/render/toolbar-renderer';
 // import { expandToolbarConfig, ToolbarConfigBuilder } from '../src/toolbar/toolbar/toolbar-expand-config';
 // import { renderToolbar } from '../src/toolbar/item/render-toolbar';
 import { ToolbarSettings } from '../src/toolbar/config/toolbar-settings';
+import { ContextBundleButton } from '../src/context/bundles/context-bundle-button';
 
 const expandToolbarConfig = new ToolbarConfigLoader(null).expandToolbarConfig;
 
@@ -41,7 +41,7 @@ describe('Toolbar test suite', function() {
   it('3 mock standard toolbar', function() {
     const toolbarData: any = {};
     const toolbarSettings = {} as ToolbarSettings;
-    const cnt = createContextFromEditContext(editContext);
+    const cnt = ContextBundleButton.createContextFromEditContext(editContext);
     cnt.toolbar = expandToolbarConfig(cnt, toolbarData, toolbarSettings);
     const generatedHtml = new ToolbarRenderer(cnt).render();
     const expectedHtml = '<ul class="sc-menu group-0 sc-tb-hover-right sc-tb-show-hover" onclick="var e = arguments[0] || window.event; e.stopPropagation();" group-count="4"><li><a class="sc-layout group-0" onclick="$2sxc(2506, 2506).manage.run({&quot;action&quot;:&quot;layout&quot;}, event);" data-i18n="[title]Toolbar.ChangeLayout"><div><i class="icon-sxc-glasses" aria-hidden="true"></i></div></a></li><li><a class="sc-more group-0" onclick="$2sxc(2506, 2506).manage.run({&quot;action&quot;:&quot;more&quot;}, event);" data-i18n="[title]Toolbar.MoreActions"><div><i class="icon-sxc-options btn-mode" aria-hidden="true"></i></div></a></li><li><a class="sc-item-history group-1" onclick="$2sxc(2506, 2506).manage.run({&quot;action&quot;:&quot;item-history&quot;}, event);" data-i18n="[title]Toolbar.ItemHistory"><div><i class="icon-sxc-clock" aria-hidden="true"></i></div></a></li><li><a class="sc-more group-1" onclick="$2sxc(2506, 2506).manage.run({&quot;action&quot;:&quot;more&quot;}, event);" data-i18n="[title]Toolbar.MoreActions"><div><i class="icon-sxc-options btn-mode" aria-hidden="true"></i></div></a></li><li><a class="sc-template-develop group-2 group-pro" onclick="$2sxc(2506, 2506).manage.run({&quot;action&quot;:&quot;template-develop&quot;}, event);" data-i18n="[title]Toolbar.Develop"><div><i class="icon-sxc-code" aria-hidden="true"></i></div></a></li><li><a class="sc-template-settings group-2 group-pro" onclick="$2sxc(2506, 2506).manage.run({&quot;action&quot;:&quot;template-settings&quot;}, event);" data-i18n="[title]Toolbar.TemplateSettings"><div><i class="icon-sxc-sliders" aria-hidden="true"></i></div></a></li><li><a class="sc-contentitems group-2 group-pro" onclick="$2sxc(2506, 2506).manage.run({&quot;action&quot;:&quot;contentitems&quot;}, event);" data-i18n="[title]Toolbar.ContentItems"><div><i class="icon-sxc-table" aria-hidden="true"></i></div></a></li><li><a class="sc-template-query group-2 disabled group-pro empty" onclick="" data-i18n="[title]Toolbar.QueryEditDisabled"><div><i class="icon-sxc-filter" aria-hidden="true"></i></div></a></li><li><a class="sc-contenttype group-2 group-pro" onclick="$2sxc(2506, 2506).manage.run({&quot;action&quot;:&quot;contenttype&quot;}, event);" data-i18n="[title]Toolbar.ContentType"><div><i class="icon-sxc-fields" aria-hidden="true"></i></div></a></li><li><a class="sc-more group-2 group-pro" onclick="$2sxc(2506, 2506).manage.run({&quot;action&quot;:&quot;more&quot;}, event);" data-i18n="[title]Toolbar.MoreActions"><div><i class="icon-sxc-options btn-mode" aria-hidden="true"></i></div></a></li><li><a class="sc-app group-3 group-pro" onclick="$2sxc(2506, 2506).manage.run({&quot;action&quot;:&quot;app&quot;}, event);" data-i18n="[title]Toolbar.App"><div><i class="icon-sxc-settings" aria-hidden="true"></i></div></a></li><li><a class="sc-app-settings group-3 disabled group-pro empty" onclick="" data-i18n="[title]Toolbar.AppSettingsDisabled"><div><i class="icon-sxc-sliders" aria-hidden="true"></i></div></a></li><li><a class="sc-app-resources group-3 disabled group-pro empty" onclick="" data-i18n="[title]Toolbar.AppResourcesDisabled"><div><i class="icon-sxc-language" aria-hidden="true"></i></div></a></li><li><a class="sc-zone group-3 group-pro" onclick="$2sxc(2506, 2506).manage.run({&quot;action&quot;:&quot;zone&quot;}, event);" data-i18n="[title]Toolbar.Zone"><div><i class="icon-sxc-manage" aria-hidden="true"></i></div></a></li><li><a class="sc-more group-3 group-pro" onclick="$2sxc(2506, 2506).manage.run({&quot;action&quot;:&quot;more&quot;}, event);" data-i18n="[title]Toolbar.MoreActions"><div><i class="icon-sxc-options btn-mode" aria-hidden="true"></i></div></a></li></ul>';
@@ -52,7 +52,7 @@ describe('Toolbar test suite', function() {
   it('4 mock standard toolbar with settings { "hover": "left" } to contain "sc-tb-hover-left"', function() {
     const toolbarData: any = {};
     const toolbarSettings = new ToolbarSettings({ 'hover': 'left' });
-    const cnt = createContextFromEditContext(editContext);
+    const cnt = ContextBundleButton.createContextFromEditContext(editContext);
     cnt.toolbar = expandToolbarConfig(cnt, toolbarData, toolbarSettings);
     const generatedHtml = new ToolbarRenderer(cnt).render(); ;
     const containHtml = 'sc-tb-hover-left';
@@ -62,7 +62,7 @@ describe('Toolbar test suite', function() {
   it('5 mock standard toolbar with settings { "hover": "left" } ', function() {
     const toolbarData: any = {};
     const toolbarSettings = new ToolbarSettings({ 'hover': 'left' });
-    const cnt = createContextFromEditContext(editContext);
+    const cnt = ContextBundleButton.createContextFromEditContext(editContext);
     cnt.toolbar = expandToolbarConfig(cnt, toolbarData, toolbarSettings);
     const generatedHtml = new ToolbarRenderer(cnt).render(); ;
     const expectedHtml = '<ul class="sc-menu group-0 sc-tb-hover-left sc-tb-show-hover" onclick="var e = arguments[0] || window.event; e.stopPropagation();" group-count="4"><li><a class="sc-layout group-0" onclick="$2sxc(2506, 2506).manage.run({&quot;action&quot;:&quot;layout&quot;}, event);" data-i18n="[title]Toolbar.ChangeLayout"><div><i class="icon-sxc-glasses" aria-hidden="true"></i></div></a></li><li><a class="sc-more group-0" onclick="$2sxc(2506, 2506).manage.run({&quot;action&quot;:&quot;more&quot;}, event);" data-i18n="[title]Toolbar.MoreActions"><div><i class="icon-sxc-options btn-mode" aria-hidden="true"></i></div></a></li><li><a class="sc-item-history group-1" onclick="$2sxc(2506, 2506).manage.run({&quot;action&quot;:&quot;item-history&quot;}, event);" data-i18n="[title]Toolbar.ItemHistory"><div><i class="icon-sxc-clock" aria-hidden="true"></i></div></a></li><li><a class="sc-more group-1" onclick="$2sxc(2506, 2506).manage.run({&quot;action&quot;:&quot;more&quot;}, event);" data-i18n="[title]Toolbar.MoreActions"><div><i class="icon-sxc-options btn-mode" aria-hidden="true"></i></div></a></li><li><a class="sc-template-develop group-2 group-pro" onclick="$2sxc(2506, 2506).manage.run({&quot;action&quot;:&quot;template-develop&quot;}, event);" data-i18n="[title]Toolbar.Develop"><div><i class="icon-sxc-code" aria-hidden="true"></i></div></a></li><li><a class="sc-template-settings group-2 group-pro" onclick="$2sxc(2506, 2506).manage.run({&quot;action&quot;:&quot;template-settings&quot;}, event);" data-i18n="[title]Toolbar.TemplateSettings"><div><i class="icon-sxc-sliders" aria-hidden="true"></i></div></a></li><li><a class="sc-contentitems group-2 group-pro" onclick="$2sxc(2506, 2506).manage.run({&quot;action&quot;:&quot;contentitems&quot;}, event);" data-i18n="[title]Toolbar.ContentItems"><div><i class="icon-sxc-table" aria-hidden="true"></i></div></a></li><li><a class="sc-template-query group-2 disabled group-pro empty" onclick="" data-i18n="[title]Toolbar.QueryEditDisabled"><div><i class="icon-sxc-filter" aria-hidden="true"></i></div></a></li><li><a class="sc-contenttype group-2 group-pro" onclick="$2sxc(2506, 2506).manage.run({&quot;action&quot;:&quot;contenttype&quot;}, event);" data-i18n="[title]Toolbar.ContentType"><div><i class="icon-sxc-fields" aria-hidden="true"></i></div></a></li><li><a class="sc-more group-2 group-pro" onclick="$2sxc(2506, 2506).manage.run({&quot;action&quot;:&quot;more&quot;}, event);" data-i18n="[title]Toolbar.MoreActions"><div><i class="icon-sxc-options btn-mode" aria-hidden="true"></i></div></a></li><li><a class="sc-app group-3 group-pro" onclick="$2sxc(2506, 2506).manage.run({&quot;action&quot;:&quot;app&quot;}, event);" data-i18n="[title]Toolbar.App"><div><i class="icon-sxc-settings" aria-hidden="true"></i></div></a></li><li><a class="sc-app-settings group-3 disabled group-pro empty" onclick="" data-i18n="[title]Toolbar.AppSettingsDisabled"><div><i class="icon-sxc-sliders" aria-hidden="true"></i></div></a></li><li><a class="sc-app-resources group-3 disabled group-pro empty" onclick="" data-i18n="[title]Toolbar.AppResourcesDisabled"><div><i class="icon-sxc-language" aria-hidden="true"></i></div></a></li><li><a class="sc-zone group-3 group-pro" onclick="$2sxc(2506, 2506).manage.run({&quot;action&quot;:&quot;zone&quot;}, event);" data-i18n="[title]Toolbar.Zone"><div><i class="icon-sxc-manage" aria-hidden="true"></i></div></a></li><li><a class="sc-more group-3 group-pro" onclick="$2sxc(2506, 2506).manage.run({&quot;action&quot;:&quot;more&quot;}, event);" data-i18n="[title]Toolbar.MoreActions"><div><i class="icon-sxc-options btn-mode" aria-hidden="true"></i></div></a></li></ul>';
@@ -72,7 +72,7 @@ describe('Toolbar test suite', function() {
   it('6 mock standard toolbar with settings { "hover": "left", "autoAddMore": "start" } to contain button more as first button in toolbar', function() {
     const toolbarData: any = {};
     const toolbarSettings = new ToolbarSettings({ 'hover': 'left', 'autoAddMore': 'start' });
-    const cnt = createContextFromEditContext(editContext);
+    const cnt = ContextBundleButton.createContextFromEditContext(editContext);
     cnt.toolbar = expandToolbarConfig(cnt, toolbarData, toolbarSettings);
     const generatedHtml = new ToolbarRenderer(cnt).render(); ;
     const containHtml = '<ul class="sc-menu group-0 sc-tb-hover-left sc-tb-show-hover" onclick="var e = arguments[0] || window.event; e.stopPropagation();" group-count="4"><li><a class="sc-more group-0" onclick="$2sxc(2506, 2506).manage.run({&quot;action&quot;:&quot;more&quot;}, event);" data-i18n="[title]Toolbar.MoreActions"><div><i class="icon-sxc-options btn-mode" aria-hidden="true"></i></div></a></li>';
@@ -82,7 +82,7 @@ describe('Toolbar test suite', function() {
   it('7 mock standard toolbar with settings { "hover": "left", "autoAddMore": "start" } ', function() {
     const toolbarData: any = {};
     const toolbarSettings = new ToolbarSettings({ 'hover': 'left', 'autoAddMore': 'start' });
-    const cnt = createContextFromEditContext(editContext);
+    const cnt = ContextBundleButton.createContextFromEditContext(editContext);
     cnt.toolbar = expandToolbarConfig(cnt, toolbarData, toolbarSettings);
     const generatedHtml = new ToolbarRenderer(cnt).render(); ;
     const expectedHtml = '<ul class="sc-menu group-0 sc-tb-hover-left sc-tb-show-hover" onclick="var e = arguments[0] || window.event; e.stopPropagation();" group-count="4"><li><a class="sc-more group-0" onclick="$2sxc(2506, 2506).manage.run({&quot;action&quot;:&quot;more&quot;}, event);" data-i18n="[title]Toolbar.MoreActions"><div><i class="icon-sxc-options btn-mode" aria-hidden="true"></i></div></a></li><li><a class="sc-layout group-0" onclick="$2sxc(2506, 2506).manage.run({&quot;action&quot;:&quot;layout&quot;}, event);" data-i18n="[title]Toolbar.ChangeLayout"><div><i class="icon-sxc-glasses" aria-hidden="true"></i></div></a></li><li><a class="sc-more group-1" onclick="$2sxc(2506, 2506).manage.run({&quot;action&quot;:&quot;more&quot;}, event);" data-i18n="[title]Toolbar.MoreActions"><div><i class="icon-sxc-options btn-mode" aria-hidden="true"></i></div></a></li><li><a class="sc-item-history group-1" onclick="$2sxc(2506, 2506).manage.run({&quot;action&quot;:&quot;item-history&quot;}, event);" data-i18n="[title]Toolbar.ItemHistory"><div><i class="icon-sxc-clock" aria-hidden="true"></i></div></a></li><li><a class="sc-more group-2 group-pro" onclick="$2sxc(2506, 2506).manage.run({&quot;action&quot;:&quot;more&quot;}, event);" data-i18n="[title]Toolbar.MoreActions"><div><i class="icon-sxc-options btn-mode" aria-hidden="true"></i></div></a></li><li><a class="sc-template-develop group-2 group-pro" onclick="$2sxc(2506, 2506).manage.run({&quot;action&quot;:&quot;template-develop&quot;}, event);" data-i18n="[title]Toolbar.Develop"><div><i class="icon-sxc-code" aria-hidden="true"></i></div></a></li><li><a class="sc-template-settings group-2 group-pro" onclick="$2sxc(2506, 2506).manage.run({&quot;action&quot;:&quot;template-settings&quot;}, event);" data-i18n="[title]Toolbar.TemplateSettings"><div><i class="icon-sxc-sliders" aria-hidden="true"></i></div></a></li><li><a class="sc-contentitems group-2 group-pro" onclick="$2sxc(2506, 2506).manage.run({&quot;action&quot;:&quot;contentitems&quot;}, event);" data-i18n="[title]Toolbar.ContentItems"><div><i class="icon-sxc-table" aria-hidden="true"></i></div></a></li><li><a class="sc-template-query group-2 disabled group-pro empty" onclick="" data-i18n="[title]Toolbar.QueryEditDisabled"><div><i class="icon-sxc-filter" aria-hidden="true"></i></div></a></li><li><a class="sc-contenttype group-2 group-pro" onclick="$2sxc(2506, 2506).manage.run({&quot;action&quot;:&quot;contenttype&quot;}, event);" data-i18n="[title]Toolbar.ContentType"><div><i class="icon-sxc-fields" aria-hidden="true"></i></div></a></li><li><a class="sc-more group-3 group-pro" onclick="$2sxc(2506, 2506).manage.run({&quot;action&quot;:&quot;more&quot;}, event);" data-i18n="[title]Toolbar.MoreActions"><div><i class="icon-sxc-options btn-mode" aria-hidden="true"></i></div></a></li><li><a class="sc-app group-3 group-pro" onclick="$2sxc(2506, 2506).manage.run({&quot;action&quot;:&quot;app&quot;}, event);" data-i18n="[title]Toolbar.App"><div><i class="icon-sxc-settings" aria-hidden="true"></i></div></a></li><li><a class="sc-app-settings group-3 disabled group-pro empty" onclick="" data-i18n="[title]Toolbar.AppSettingsDisabled"><div><i class="icon-sxc-sliders" aria-hidden="true"></i></div></a></li><li><a class="sc-app-resources group-3 disabled group-pro empty" onclick="" data-i18n="[title]Toolbar.AppResourcesDisabled"><div><i class="icon-sxc-language" aria-hidden="true"></i></div></a></li><li><a class="sc-zone group-3 group-pro" onclick="$2sxc(2506, 2506).manage.run({&quot;action&quot;:&quot;zone&quot;}, event);" data-i18n="[title]Toolbar.Zone"><div><i class="icon-sxc-manage" aria-hidden="true"></i></div></a></li></ul>';
@@ -92,7 +92,7 @@ describe('Toolbar test suite', function() {
   it('8 mock toolbar with one button "new" and settings { "hover": "left" } to contain `sc-tb-hover-left`', function() {
     const toolbarData: any = [{ 'action': 'new', 'contentType': 'Dummy' }];
     const toolbarSettings = new ToolbarSettings({ 'hover': 'left' });
-    const cnt = createContextFromEditContext(editContext);
+    const cnt = ContextBundleButton.createContextFromEditContext(editContext);
     cnt.toolbar = expandToolbarConfig(cnt, toolbarData, toolbarSettings);
     const generatedHtml = new ToolbarRenderer(cnt).render();
     const containHtml = 'sc-tb-hover-left';
@@ -102,7 +102,7 @@ describe('Toolbar test suite', function() {
   it('9 mock toolbar with one button "new" and settings { "hover": "left" }', function() {
     const toolbarData: any = [{ 'action': 'new', 'contentType': 'Dummy' }];
     const toolbarSettings = new ToolbarSettings({ 'hover': 'left' });
-    const cnt = createContextFromEditContext(editContext);
+    const cnt = ContextBundleButton.createContextFromEditContext(editContext);
     cnt.toolbar = expandToolbarConfig(cnt, toolbarData, toolbarSettings);
     const generatedHtml = new ToolbarRenderer(cnt).render(); ;
     const expectedHtml = '<ul class="sc-menu group-0 sc-tb-hover-left sc-tb-show-hover" onclick="var e = arguments[0] || window.event; e.stopPropagation();" group-count="1"><li><a class="sc-new group-0" onclick="$2sxc(2506, 2506).manage.run({&quot;action&quot;:&quot;new&quot;,&quot;contentType&quot;:&quot;Dummy&quot;}, event);" data-i18n="[title]Toolbar.New"><div><i class="icon-sxc-plus" aria-hidden="true"></i></div></a></li></ul>';
@@ -125,7 +125,7 @@ describe('Toolbar test suite', function() {
       'title': 'create Author'
     }];
     const toolbarSettings = new ToolbarSettings({ 'hover': 'left', 'show': 'always' });
-    const cnt = createContextFromEditContext(editContext);
+    const cnt = ContextBundleButton.createContextFromEditContext(editContext);
     cnt.toolbar = expandToolbarConfig(cnt, toolbarData, toolbarSettings);
     const generatedHtml = new ToolbarRenderer(cnt).render();
     const containHtml = 'sc-tb-hover-left sc-tb-show-always';
@@ -148,7 +148,7 @@ describe('Toolbar test suite', function() {
       'title': 'create Author'
     }];
     const toolbarSettings = new ToolbarSettings({ 'hover': 'left', 'show': 'always' });
-    const cnt = createContextFromEditContext(editContext);
+    const cnt = ContextBundleButton.createContextFromEditContext(editContext);
     cnt.toolbar = expandToolbarConfig(cnt, toolbarData, toolbarSettings);
     const generatedHtml = new ToolbarRenderer(cnt).render();
     const expectedHtml = '<ul class="sc-menu group-0 sc-tb-hover-left sc-tb-show-always" onclick="var e = arguments[0] || window.event; e.stopPropagation();" group-count="1"><li><a class="sc-new group-0 group-pro" onclick="$2sxc(2506, 2506).manage.run({&quot;action&quot;:&quot;new&quot;,&quot;contentType&quot;:&quot;Category&quot;}, event);" data-i18n="[title]create Category"><div><i class="icon-sxc-plus" aria-hidden="true"></i></div></a></li><li><a class="sc-new group-0" onclick="$2sxc(2506, 2506).manage.run({&quot;action&quot;:&quot;new&quot;,&quot;contentType&quot;:&quot;Author&quot;}, event);" data-i18n="[title]create Author"><div><i class="icon-sxc-plus" aria-hidden="true"></i></div></a></li></ul>';
@@ -167,7 +167,7 @@ describe('Toolbar test suite', function() {
       }],
     };
     const toolbarSettings = new ToolbarSettings({});
-    const cnt = createContextFromEditContext(editContext);
+    const cnt = ContextBundleButton.createContextFromEditContext(editContext);
     cnt.toolbar = expandToolbarConfig(cnt, toolbarData, toolbarSettings);
     const generatedHtml = new ToolbarRenderer(cnt).render();
     const containHtml = 'custom';
@@ -186,7 +186,7 @@ describe('Toolbar test suite', function() {
       }],
     };
     const toolbarSettings = new ToolbarSettings({});
-    const cnt = createContextFromEditContext(editContext);
+    const cnt = ContextBundleButton.createContextFromEditContext(editContext);
     cnt.toolbar = expandToolbarConfig(cnt, toolbarData, toolbarSettings);
     const generatedHtml = new ToolbarRenderer(cnt).render();
     const expectedHtml = '<ul class="sc-menu group-0 sc-tb-hover-right sc-tb-show-hover" onclick="var e = arguments[0] || window.event; e.stopPropagation();" group-count="1"><li><a class="sc-custom group-0" onclick="$2sxc(2506, 2506).manage.run({&quot;action&quot;:&quot;custom&quot;,&quot;customCode&quot;:&quot;alert(\\&quot;custom button!\\&quot;)&quot;}, event);" data-i18n="[title]Toolbar.Custom"><div><i class="icon-sxc-bomb" aria-hidden="true"></i></div></a></li></ul>';
@@ -196,7 +196,7 @@ describe('Toolbar test suite', function() {
   it('14 mock toolbar with one button "app" and defaults, plus settings to contain "group-pro"', function() {
     const toolbarData: any = { 'groups': [{ 'name': 'default', 'buttons': 'app', 'contentType': 'Libraries' }], 'defaults': { 'title': 'Libraries', 'classes': 'group-pro' } };
     const toolbarSettings = new ToolbarSettings({ 'hover': 'none', 'show': 'always' });
-    const cnt = createContextFromEditContext(editContext);
+    const cnt = ContextBundleButton.createContextFromEditContext(editContext);
     cnt.toolbar = expandToolbarConfig(cnt, toolbarData, toolbarSettings);
     const generatedHtml = new ToolbarRenderer(cnt).render();
     const containHtml = 'group-pro';
@@ -206,7 +206,7 @@ describe('Toolbar test suite', function() {
   it('15 mock toolbar with one button "app" and defaults, plus settigns', function() {
     const toolbarData: any = { 'groups': [{ 'name': 'default', 'buttons': 'app', 'contentType': 'Libraries' }], 'defaults': { 'title': 'Libraries', 'classes': 'group-pro' } };
     const toolbarSettings = new ToolbarSettings({ 'hover': 'none', 'show': 'always' });
-    const cnt = createContextFromEditContext(editContext);
+    const cnt = ContextBundleButton.createContextFromEditContext(editContext);
     cnt.toolbar = expandToolbarConfig(cnt, toolbarData, toolbarSettings);
     const generatedHtml = new ToolbarRenderer(cnt).render();
     const expectedHtml = '<ul class="sc-menu group-0 sc-tb-hover-none sc-tb-show-always" onclick="var e = arguments[0] || window.event; e.stopPropagation();" group-count="1"><li><a class="sc-app group-0 group-pro" onclick="$2sxc(2506, 2506).manage.run({&quot;action&quot;:&quot;app&quot;}, event);" data-i18n="[title]Toolbar.App"><div><i class="icon-sxc-settings" aria-hidden="true"></i></div></a></li></ul>';

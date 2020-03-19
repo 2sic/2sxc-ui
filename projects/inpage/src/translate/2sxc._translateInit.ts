@@ -1,7 +1,6 @@
-﻿import { createContextFromEditContext } from '../context/context';
-import { SxcIntanceEditable } from '../interfaces/sxc-instance-editable';
+﻿import { ContextBundleButton } from '../context/bundles/context-bundle-button';
+import { SxcEdit } from '../interfaces/sxc-instance-editable';
 import { windowInPage as window } from '../interfaces/window-in-page';
-import { getEditContext } from '../manage/api';
 import { EditManager } from '../manage/edit-manager';
 import { TypeUnsafe, TypeWeDontCare } from '../plumbing';
 import * as i18next from './libs/i18next.min';
@@ -32,10 +31,10 @@ export function _translateInit(manage: EditManager): void {
     initialized = true; // getScxInstance is calling _translate so that we can skip the loop...
     // trying to get context...
     const htmlElementOrId = $('div[data-cb-id]')[0];
-    const sxc = SxcIntanceEditable.get(htmlElementOrId);
+    const sxc = SxcEdit.get(htmlElementOrId);
     initialized = false; // for real, it is not initialized...
-    const editContext = getEditContext(sxc);
-    context = createContextFromEditContext(editContext);
+    const editContext = SxcEdit.getEditContext(sxc);
+    context = ContextBundleButton.createContextFromEditContext(editContext);
     context.sxc = sxc;
   }
 

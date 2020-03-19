@@ -1,11 +1,11 @@
-﻿import { SxcIntanceEditable } from '../interfaces/sxc-instance-editable';
+﻿import { SxcEdit } from '../interfaces/sxc-instance-editable';
 import { ToolbarManager } from '../toolbar/toolbar-manager';
 import { translate } from '../translate/2sxc.translate';
 
 /** contains commands to create/move/delete a module in a page */
 export class DnnModuleEditor {
 
-    constructor(private sxcInstance: SxcIntanceEditable) {}
+    constructor(private sxcInstance: SxcEdit) {}
 
   /**
    * create content block
@@ -51,7 +51,7 @@ export class DnnModuleEditor {
           listTag.prepend(newTag);
 
         // ReSharper disable once UnusedLocals
-        const sxcNew = SxcIntanceEditable.get(newTag);
+        const sxcNew = SxcEdit.get(newTag);
         ToolbarManager.buildModule(newTag);
       });
     return Promise.resolve(jqPromise);

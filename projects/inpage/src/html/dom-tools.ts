@@ -1,6 +1,5 @@
 import * as Constants from '../constants';
-import { SxcIntanceEditable } from '../interfaces/sxc-instance-editable';
-import { getTag } from '../manage/api';
+import { SxcEdit } from '../interfaces/sxc-instance-editable';
 
 export class HtmlTools {
 
@@ -9,8 +8,8 @@ export class HtmlTools {
         jtag.attr(Constants.toolbar.attr.disable, 'true');
     }
 
-    static isDisabled(sxc: SxcIntanceEditable): boolean {
-        const tag = $(getTag(sxc));
+    static isDisabled(sxc: SxcEdit): boolean {
+        const tag = $(SxcEdit.getTag(sxc));
         return !!tag.attr(Constants.toolbar.attr.disable);
     }
 

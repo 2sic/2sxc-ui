@@ -1,6 +1,4 @@
-﻿import { CbOrMod } from './cb-or-mod';
-
-/**
+﻿/**
  * selectors used all over the in-page-editing, centralized to ensure consistency
  */
 
@@ -23,8 +21,22 @@ const contentBlockAndModuleSelectors: { [key: string ]: CbOrMod} = {
         } as CbOrMod,
  };
 
-export const selectors = {
-  blocks:contentBlockAndModuleSelectors,
+export const QeSelectors = {
+  blocks: contentBlockAndModuleSelectors,
   eitherCbOrMod: '.DnnModule, .sc-content-block',
   selected: 'sc-cb-is-selected',
 };
+
+
+/**
+ * Structure for constants in the selectors, to guarantee we got everything
+ */
+interface CbOrMod {
+    id: string;
+    class: string;
+    selector: string;
+    listSelector: string;
+    context: string;
+    singleItem?: string;
+  }
+  

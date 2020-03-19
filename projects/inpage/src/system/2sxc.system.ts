@@ -2,13 +2,13 @@
 
     TODO: 2dm must verify this works, my change could have broken something
 */
-import { SxcIntanceEditable } from '../interfaces/sxc-instance-editable';
+import { SxcEdit } from '../interfaces/sxc-instance-editable';
 import { windowInPage as window } from '../interfaces/window-in-page';
 
 export class SystemUpgrader {
     // upgrade command - started when an error contains a link to start this
     finishUpgrade(domElement: HTMLElement): void {
-    const mc = SxcIntanceEditable.get(domElement);
+    const mc = SxcEdit.get(domElement);
     mc.webApi.get('view/module/finishinstallation')
         .done(() => {
         alert('Upgrade ok, restarting the CMS and reloading...');
