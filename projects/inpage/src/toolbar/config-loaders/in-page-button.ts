@@ -69,9 +69,3 @@ export class InPageButtonJson {
   }
 
 }
-
-
-// export function isInPageButtonConfiguration(thing: TypeTbD): thing is InPageButtonJson {
-//   // check two common signatures - command and action
-//   return thing.command !== undefined || thing.action !== undefined;
-// }

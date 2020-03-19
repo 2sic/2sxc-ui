@@ -1,11 +1,11 @@
 ﻿import { _readPageConfig } from './config';
-import { getBodyPosition, refresh } from './positioning';
-import { $quickE as quickE, prepareToolbarInDom } from './quick-e';
+import { Positioning } from './positioning';
+import { $quickE as quickE } from './quick-e';
 import { selectors } from './selectors-instance';
 
 function enable(): void {
   // build all toolbar html-elements
-  prepareToolbarInDom();
+  quickE.prepareToolbarInDom();
 
   // Cache the panes (because panes can't change dynamically)
   initPanes();
@@ -21,7 +21,7 @@ function watchMouse() {
       if (refreshTimeout === null)
         refreshTimeout = window.setTimeout(() => {
             requestAnimationFrame(() => {
-              refresh(e);
+              Positioning.refresh(e);
               refreshTimeout = null;
             });
           },
@@ -34,7 +34,7 @@ export function start(): void {
     _readPageConfig();
     if (quickE.config.enable) {
       // initialize first body-offset
-      quickE.bodyOffset = getBodyPosition();
+      quickE.bodyOffset = Positioning.getBodyPosition();
 
       enable();
 

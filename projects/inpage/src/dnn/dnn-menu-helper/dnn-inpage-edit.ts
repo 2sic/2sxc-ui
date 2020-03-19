@@ -2,7 +2,7 @@
 import { SxcIntanceEditable } from '../../interfaces/sxc-instance-editable';
 import { windowInPage as window } from '../../interfaces/window-in-page';
 import { getTag } from '../../manage/api';
-import { getSxc } from '../../plumbing';
+
 
 /**
  * Maps actions of the module menu to JS actions - needed because onclick event can't be set (actually, a bug in DNN)
@@ -13,7 +13,7 @@ export class ActionMenuMapper {
   private sxc: SxcIntanceEditable;
 
   constructor(moduleId: number) {
-    this.sxc = getSxc(moduleId);
+    this.sxc = SxcIntanceEditable.get(moduleId);
     this.tag = getTag(this.sxc);
     this.run = this.sxc.manage.run;
   }

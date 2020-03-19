@@ -1,4 +1,4 @@
-﻿import { copyPasteInPage } from './clipboard';
+﻿import { InstanceClipboard } from './clipboard';
 import { modManage } from './mod-manage';
 import { $quickE as quickE } from './quick-e';
 import { selectors } from './selectors-instance';
@@ -17,7 +17,7 @@ function onModuleButtonClick() {
 
   const cbAction = $(this).data('action');
   if (cbAction) {
-    return copyPasteInPage(cbAction, pane, index, selectors.blocks.mod.id); // copy/paste
+    return InstanceClipboard.do(cbAction, pane, index, selectors.blocks.mod.id); // copy/paste
   }
   return modManage.create(modManage.getPaneName(pane), index, type);
 }

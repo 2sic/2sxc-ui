@@ -1,11 +1,9 @@
 ﻿import { SxcIntanceEditable } from '../interfaces/sxc-instance-editable';
-import { getSxc } from '../plumbing';
 import { ToolbarManager } from '../toolbar/toolbar-manager';
 import { translate } from '../translate/2sxc.translate';
-import { ManipulateParams } from './manipulate-params';
 
-/** contains commands to create/move/delete a contentBlock in a page */
-export class Manipulator {
+/** contains commands to create/move/delete a module in a page */
+export class DnnModuleEditor {
 
     constructor(private sxcInstance: SxcIntanceEditable) {}
 
@@ -53,7 +51,7 @@ export class Manipulator {
           listTag.prepend(newTag);
 
         // ReSharper disable once UnusedLocals
-        const sxcNew = getSxc(newTag);
+        const sxcNew = SxcIntanceEditable.get(newTag);
         ToolbarManager.buildModule(newTag);
       });
     return Promise.resolve(jqPromise);
@@ -109,7 +107,13 @@ export class Manipulator {
   }
 }
 
-// export function manipulator(sxc: SxcIntanceEditable): Manipulator {
-// //   sxcInstance = sxc;
-//   return new Manipulator(sxc);
-// }
+interface ManipulateParams {
+    parentId: number;
+    field: string;
+    sortOrder?: number;
+    index?: number;
+    indexFrom?: number;
+    indexTo?: number;
+    app?: string;
+    guid?: string;
+}

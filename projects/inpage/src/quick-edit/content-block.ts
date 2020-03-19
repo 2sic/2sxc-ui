@@ -1,5 +1,5 @@
 ﻿import { Cb as cb } from './cb';
-import { copyPasteInPage } from './clipboard';
+import { InstanceClipboard } from './clipboard';
 import { $quickE as quickE } from './quick-e';
 import { selectors } from './selectors-instance';
 
@@ -20,7 +20,7 @@ function onCbButtonClick() {
   const cbAction = $(this).data('action');
   if (cbAction) {
     // this is a cut/paste action
-    return copyPasteInPage(cbAction, list, index, selectors.blocks.cb.id);
+    return InstanceClipboard.do(cbAction, list, index, selectors.blocks.cb.id);
   } else {
     const appOrContent = $(this).data('type');
     return cb.create(actionConfig.parent, actionConfig.field, index, appOrContent, list, newGuid);

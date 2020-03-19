@@ -1,12 +1,11 @@
 ﻿import { ContextBundleButton } from '../context/bundles/context-bundle-button';
 import { DebugConfig } from '../DebugConfig';
-import * as Container from './container';
-import * as ContainerSize from './container-size';
+import IDialogFrameElement = DialogFrameElement.IDialogFrameElement;
+import { DialogPaths } from '../settings/DialogPaths';
+import { QuickDialogContainer } from './quick-dialog-container';
 import * as DialogFrameElement from './iDialogFrameElement';
 import { IFrameBridge } from './iframe-bridge';
 import * as QuickEditState from './state';
-import * as UrlHandler from './url-handler';
-import IDialogFrameElement = DialogFrameElement.IDialogFrameElement;
 
 const dbg = DebugConfig.qDialog;
 const diagShowClass: string = 'dia-select';
@@ -35,13 +34,13 @@ export class QuickDialogManager {
    * @param {boolean} [show] true/false optional
    */
   setVisible(show: boolean): void {
-    const cont = Container.getOrCreate();
+    const cont = QuickDialogContainer.getOrCreate();
     // if (show === undefined)
     //  show = !cont.hasClass(diagShowClass);
     // show/hide visually
     cont.toggleClass(diagShowClass, show);
-    this.rememberDialogState(Container.getIFrame(cont), show);
-    current = show ? Container.getIFrame() : null;
+    this.rememberDialogState(QuickDialogContainer.getIFrame(cont), show);
+    current = show ? QuickDialogContainer.getIFrame() : null;
   }
 
   /**
@@ -59,8 +58,8 @@ export class QuickDialogManager {
     isFullscreen: boolean,
     dialogName: string,
   ): Promise<boolean> {
-    ContainerSize.setSize(isFullscreen);
-    const iFrame = Container.getIFrame();
+    QuickDialogContainer.setSize(isFullscreen);
+    const iFrame = QuickDialogContainer.getIFrame();
 
     // in case it's a toggle
     if (this.isVisible()) {
@@ -76,7 +75,7 @@ export class QuickDialogManager {
       if (currentPromise) return currentPromise;
     }
 
-    const dialogUrl = UrlHandler.setUrlToQuickDialog(url);
+    const dialogUrl = setUrlToQuickDialog(url);
     iFrame.bridge.setup(context.sxc, dialogName);
     iFrame.setAttribute('src', dialogUrl);
     // if the window had already been loaded, re-init
@@ -121,3 +120,34 @@ export class QuickDialogManager {
 }
 
 export let quickDialog = new QuickDialogManager();
+
+/**
+ * rewrite the url to fit the quick-dialog situation
+ * optionally with a live-compiled version from ng-serve
+ * @param {string} url - original url pointing to the default dialog
+ * @returns {string} new url pointing to quick dialog
+ */
+function setUrlToQuickDialog(url: string): string {
+  // change default url-schema from the primary angular-app to the quick-dialog
+  url = url.replace(DialogPaths.ng1, DialogPaths.quickDialog)
+    .replace(DialogPaths.ng8, DialogPaths.quickDialog);
+  url = changePathToLocalhostForDev(url);
+  return url;
+}
+
+/**
+ * special debug-code when running on local ng-serve
+ * this is only activated if the developer manually sets a value in the localStorage
+ * @param url
+ */
+function changePathToLocalhostForDev(url: string): string {
+  try {
+    const devMode = localStorage.getItem('devMode');
+    if (devMode && !!devMode) {
+      return url.replace('/desktopmodules/tosic_sexycontent/dist/ng/ui.html', 'http://localhost:4200');
+    }
+  } catch (e) {
+    // ignore
+  }
+  return url;
+}

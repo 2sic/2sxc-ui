@@ -11,10 +11,9 @@ export class ContextBundleInstance extends ContextBundlePage {
   instance: ContextOfInstance; // information related to the current DNN module, incl.instanceId, etc.
   app: ContextOfApp; // this will be about the current app, settings of the app, app - paths, etc.
   ui: ContextOfUi; // ensure that the UI will load the correct assets to enable editing
-}
 
-export function isContextOfInstance(thing: TypeTbD): thing is ContextBundleInstance {
-  const maybeButton = thing as ContextBundleInstance;
-  return maybeButton.sxc !== undefined && maybeButton.instance !== undefined;
+  static is(thing: TypeTbD): thing is ContextBundleInstance {
+    const maybeButton = thing as ContextBundleInstance;
+    return maybeButton.sxc !== undefined && maybeButton.instance !== undefined;
+  }
 }
-

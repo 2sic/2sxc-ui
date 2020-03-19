@@ -5,16 +5,18 @@ import { selectors } from './selectors-instance';
 /**
  * Module with everything related to positioning the quick-edit in-page editing
  */
-
-/**
- * Point is used as return type to store X,Y coordinates
- */
+export class Positioning {
+    static getBodyPosition = getBodyPosition;
+    static positionAndAlign = positionAndAlign;
+    static refresh = refresh;
+    static getCoordinates = getCoordinates;
+}
 
 /**
  * Prepare offset calculation based on body positioning
  * @returns Point
  */
-export function getBodyPosition(): Coords {
+function getBodyPosition(): Coords {
   const bodyPos = quickE.body.css('position');
   return bodyPos === 'relative' || bodyPos === 'absolute'
     ? new Coords(quickE.body.offset().left, quickE.body.offset().top)
@@ -49,14 +51,14 @@ function refreshDomObjects(): void {
  * Last time when contentblock and modules are refreshed.
  * Helps to skip unnecessary calls to refresh(e).
  */
-namespace refreshDomObjects {
-  export let lastCall: Date;
-}
+// namespace refreshDomObjects {
+let lastCall: Date;
+// }
 
 /**
  * position, align and show a menu linked to another item
  */
-export function positionAndAlign(element: JQuery, coords: Coords) {
+function positionAndAlign(element: JQuery, coords: Coords) {
   return element.css({
     left: coords.x - quickE.bodyOffset.x,
     top: coords.yh - quickE.bodyOffset.y,
@@ -68,12 +70,12 @@ export function positionAndAlign(element: JQuery, coords: Coords) {
  * Refresh positioning / visibility of the quick-insert bar
  * @param e
  */
-export function refresh(e: JQueryEventObject) {
+function refresh(e: JQueryEventObject) {
   const highlightClass: string = 'sc-cb-highlight-for-insert';
   const newDate = new Date();
-  if ((!refreshDomObjects.lastCall) || (newDate.getTime() - refreshDomObjects.lastCall.getTime() > 1000)) {
+  if ((!lastCall) || (newDate.getTime() - lastCall.getTime() > 1000)) {
     // console.log('refreshed contentblock and modules');
-    refreshDomObjects.lastCall = newDate;
+    lastCall = newDate;
     refreshDomObjects();
   }
 
@@ -130,7 +132,7 @@ export function refresh(e: JQueryEventObject) {
  * @param elements
  * @param position
  */
-export function findNearest(elements: JQuery, position: Coords): Coords {
+function findNearest(elements: JQuery, position: Coords): Coords {
   const maxDistance: number = 30; // Defines the maximal distance of the cursor when the menu is displayed
 
   let nearestItem: Coords = null;
@@ -159,7 +161,7 @@ export function findNearest(elements: JQuery, position: Coords): Coords {
   return nearestItem;
 }
 
-export function getCoordinates(element: JQuery): Coords {
+function getCoordinates(element: JQuery): Coords {
   // sometimes element.length === 0 and element.offset() = undefined
   // console.log("element.offset():", element.offset());
   // console.log("element.length:", element.length);

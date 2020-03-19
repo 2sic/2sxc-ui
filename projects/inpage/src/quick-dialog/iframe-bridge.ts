@@ -1,15 +1,15 @@
 ﻿import { renderer } from '../contentBlock/render';
-import { updateTemplateFromDia } from '../contentBlock/templates';
-import { findContext } from '../context/context';
+import { ContentBlockEditor } from '../contentBlock/content-block-editor';
 import { ContextBundleButton } from '../context/bundles/context-bundle-button';
+import { findContext } from '../context/context';
 import * as Iiframebridge from '../interfaces/iiframe-bridge';
 import { IQuickDialogConfig } from '../interfaces/iquick-dialog-config';
 import { SxcIntanceEditable } from '../interfaces/sxc-instance-editable';
 import { getTag } from '../manage/api';
+import { TypeUnsafe } from '../plumbing/TypeTbD';
 import { IDialogFrameElement } from './iDialogFrameElement';
 import { quickDialog } from './quick-dialog';
 import { QuickDialogConfig } from './quick-dialog-config';
-import { TypeUnsafe } from '../plumbing/TypeTbD';
 import IIFrameBridge = Iiframebridge.IIFrameBridge;
 
 const scrollTopOffset: number = 80;
@@ -70,8 +70,8 @@ export class IFrameBridge implements IIFrameBridge {
 
   setTemplate(templateId: number, templateName: string, final: boolean): Promise<boolean> {
     this.changed = true;
-    const config = this.getAdditionalDashboardConfig(),
-      context = this.getContext();
+    const config = this.getAdditionalDashboardConfig();
+    const context = this.getContext();
     const ajax = config.isContent || config.supportsAjax;
 
     // add msg on full-reload, as it takes longer
@@ -82,7 +82,7 @@ export class IFrameBridge implements IIFrameBridge {
 
     const reallySave = final || !ajax;
     let promise = reallySave
-      ? updateTemplateFromDia(context, templateId)
+      ? ContentBlockEditor.updateTemplateFromDia(context, templateId)
       : renderer.ajaxLoad(context, templateId, true);
 
     if (final) promise = promise

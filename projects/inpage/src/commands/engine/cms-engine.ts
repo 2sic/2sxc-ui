@@ -1,6 +1,6 @@
 ﻿import { Commands } from '..';
 import { renderer } from '../../contentBlock/render';
-import { prepareToAddContent } from '../../contentBlock/templates';
+import { ContentBlockEditor } from '../../contentBlock/content-block-editor';
 import { ContextBundleButton } from '../../context/bundles/context-bundle-button';
 import { ContextBundleInstance } from '../../context/bundles/context-bundle-instance';
 import { $2sxcInPage as $2sxc } from '../../interfaces/sxc-controller-in-page';
@@ -103,7 +103,7 @@ export class CmsEngine extends HasLog {
 
     // if more than just a UI-action, then it needs to be sure the content-group is created first
     this.log.add('command might change data, wrap in pre-flight to ensure content-block');
-    return prepareToAddContent(context, cmdParams.useModuleList).then(() => {
+    return ContentBlockEditor.prepareToAddContent(context, cmdParams.useModuleList).then(() => {
       return context.button.code(context, origEvent);
     });
   }

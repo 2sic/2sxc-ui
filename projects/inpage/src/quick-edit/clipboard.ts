@@ -1,4 +1,4 @@
-﻿import { getSxc } from '../plumbing';
+﻿import { SxcIntanceEditable } from '../interfaces/sxc-instance-editable';
 import { CmdsStrategyFactory } from './cmds-strategy-factory';
 import { Mod } from './mod';
 import { $quickE as quickE } from './quick-e';
@@ -7,6 +7,14 @@ import { Specs } from './specs';
 
 /** add a clipboard to the quick edit */
 
+export class InstanceClipboard {
+    static do = copyPasteInPage;
+    // static mark = mark;
+    // static clear = clear;
+    // static createSpecs = createSpecs;
+    static get(): Specs { return contents; }
+}
+
 /**
  * perform copy and paste commands - needs the clipboard
  * @param cbAction
@@ -14,80 +22,78 @@ import { Specs } from './specs';
  * @param index
  * @param type
  */
-export function copyPasteInPage(cbAction: string, list: JQuery, index: number, type: string): void {
-  const newClip = createSpecs(type, list, index);
+function copyPasteInPage(cbAction: string, list: JQuery, index: number, type: string): void {
+    const newClip = createSpecs(type, list, index);
 
-  // action!
-  switch (cbAction) {
-    case 'select':
-      mark(newClip);
-      break;
+    // action!
+    switch (cbAction) {
+        case 'select':
+            mark(newClip);
+            break;
 
-    case 'paste':
-      const from = data.index;
-      const to = newClip.index;
-       // check that we only move block-to-block or module to module
-      if (data.type !== newClip.type)
-        return alert("can't move module-to-block; move only works from module-to-module or block-to-block");
+        case 'paste':
+            const from = contents.index;
+            const to = newClip.index;
+            // check that we only move block-to-block or module to module
+            if (contents.type !== newClip.type)
+                return alert("can't move module-to-block; move only works from module-to-module or block-to-block");
 
-      if (isNaN(from) || isNaN(to) || from === to) // || from + 1 === to) // this moves it to the same spot, so ignore
-        return clear(); // don't do a.nything
+            if (isNaN(from) || isNaN(to) || from === to) // || from + 1 === to) // this moves it to the same spot, so ignore
+                return clear(); // don't do a.nything
 
-      // cb-numbering is a bit different, because the selector is at the bottom
-      // only there we should also skip on +1;
-      if (newClip.type === selectors.blocks.cb.id && from + 1 === to)
-        return clear(); // don't do a.nything
+            // cb-numbering is a bit different, because the selector is at the bottom
+            // only there we should also skip on +1;
+            if (newClip.type === selectors.blocks.cb.id && from + 1 === to)
+                return clear(); // don't do a.nything
 
-      if (type === selectors.blocks.cb.id) {
-        const sxc = getSxc(list);
-        sxc.manage._getCbManipulator().move(newClip.parent, newClip.field, from, to);
-      } else {
-        // sometimes missing oldClip.item
-        // if (clipboard.data.item)
-        Mod.move(data, newClip, from, to);
-      }
-      clear();
-      break;
-    default:
-  }
-  return null;
+            if (type === selectors.blocks.cb.id) {
+                const sxc = SxcIntanceEditable.get(list);
+                sxc.manage._getCbManipulator().move(newClip.parent, newClip.field, from, to);
+            } else
+                Mod.move(contents, newClip, from, to); // sometimes missing oldClip.item
+
+            clear();
+            break;
+        default:
+    }
+    return null;
 }
 
 /**
  * clipboard object - remembers what module (or content-block) was previously copied / needs to be pasted
  */
-export let data = new Specs(); // = {};
+let contents = new Specs();
 
-export function mark(newData: Specs): void {
+function mark(newData: Specs): void {
   if (newData) {
     // if it was already selected with the same thing, then release it
-    if (data && data.item === newData.item)
+    if (contents && contents.item === newData.item)
       return clear();
-    data = newData;
+    contents = newData;
   }
   $(`.${selectors.selected}`).removeClass(selectors.selected); // clear previous markings
 
   // sometimes missing data.item
-  if (!data.item) {
+  if (!contents.item) {
     return;
   }
 
-  const cb = $(data.item);
+  const cb = $(contents.item);
   cb.addClass(selectors.selected);
   if (cb.prev().is('iframe'))
     cb.prev().addClass(selectors.selected);
   setSecondaryActionsState(true);
-  quickE.selected.toggleOverlay(cb); // , data.type);
+  quickE.selected.toggleOverlay(cb);
 }
 
-export function clear(): void {
+function clear(): void {
   $(`.${selectors.selected}`).removeClass(selectors.selected);
-  data = null;
+  contents = null;
   setSecondaryActionsState(false);
   quickE.selected.toggleOverlay(false);
 }
 
-export function createSpecs(type: string, list: JQuery, index: number): Specs {
+function createSpecs(type: string, list: JQuery, index: number): Specs {
   const listItems = list.find(selectors.blocks[type].selector);
   let currentItem: HTMLElement;
   if (index >= listItems.length) {
@@ -122,7 +128,7 @@ const cmdsStrategyFactory = new CmdsStrategyFactory();
  */
 $('a', quickE.selected).click(function() {
   const action: string = $(this).data('action');
-  const clip = data;
+  const clip = contents;
   switch (action) {
     case 'delete':
       return cmdsStrategyFactory.delete(clip);

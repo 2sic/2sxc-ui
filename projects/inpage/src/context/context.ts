@@ -1,8 +1,6 @@
 ﻿import { ContextBundleButton, ContextOfApp, ContextOfContentBlock, ContextOfInstance, ContextOfItem, ContextOfPage, ContextOfSystem, ContextOfTenant, ContextOfUi, ContextOfUser } from '.';
 import { SxcIntanceEditable } from '../interfaces/sxc-instance-editable';
 import { getContainerTag, getEditContext } from '../manage/api';
-import { getSxc } from '../plumbing';
-import { isSxcInstance } from '../plumbing';
 import { IDs } from '../settings/2sxc.consts';
 import { AttrJsonEditContext } from './html-attribute';
 
@@ -15,13 +13,13 @@ export function findContext(tagOrSxc: SxcIntanceEditable | HTMLElement | JQuery|
   let sxc: SxcIntanceEditable;
   let containerTag: HTMLElement = null;
 
-  if (isSxcInstance(tagOrSxc)) { // it is SxcInstance
+  if (SxcIntanceEditable.is(tagOrSxc)) { // it is SxcInstance
     sxc = tagOrSxc;
   } else if (typeof tagOrSxc === 'number') { // it is number
-    sxc = getSxc(tagOrSxc, cbid);
+    sxc = SxcIntanceEditable.get(tagOrSxc, cbid);
   } else  { // it is HTMLElement
 
-    sxc = getSxc(tagOrSxc);
+    sxc = SxcIntanceEditable.get(tagOrSxc);
     containerTag = getContainerTag(tagOrSxc as HTMLElement);
   }
 
@@ -42,7 +40,7 @@ export function contextCopy(htmlElementOrId: HTMLElement | number, cbid?: number
   // make a copy
   const copyOfContext = JSON.parse(JSON.stringify(contextOfButton));
   // bring sxc back to context
-  contextOfButton.sxc = getSxc(htmlElementOrId) as SxcIntanceEditable;
+  contextOfButton.sxc = SxcIntanceEditable.get(htmlElementOrId) as SxcIntanceEditable;
   return copyOfContext;
 }
 
@@ -60,7 +58,7 @@ export function getContextInstance(sxc: SxcIntanceEditable, htmlElement?: HTMLEl
  * create part of context object (it is not cached)
  * @param editCtx
  */
-export function createContextFromEditContext(editCtx: AttrJsonEditContext) {
+export function createContextFromEditContext(editCtx: AttrJsonEditContext): ContextBundleButton {
   const btnCtx = new ContextBundleButton();
 
   // *** ContextOf ***

@@ -11,8 +11,3 @@ export class ContextBundleBase {
 
   _isContext = true;
 }
-
-export function isContext(thing: TypeTbD): thing is ContextBundleBase {
-  const maybeButton = thing as ContextBundleBase;
-  return maybeButton._isContext !== undefined;
-}

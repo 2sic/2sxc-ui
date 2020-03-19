@@ -2,7 +2,7 @@
 import { findContext } from '../context/context';
 import { SxcIntanceEditable } from '../interfaces/sxc-instance-editable';
 import { getEditContext } from './api';
-import { EditManager } from './create';
+import { EditManager } from './edit-manager';
 import { UserOfEditContext } from './user-of-edit-context';
 
 /**

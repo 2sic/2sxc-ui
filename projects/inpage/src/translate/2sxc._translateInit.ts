@@ -1,12 +1,12 @@
 ﻿import { createContextFromEditContext } from '../context/context';
+import { SxcIntanceEditable } from '../interfaces/sxc-instance-editable';
 import { windowInPage as window } from '../interfaces/window-in-page';
 import { getEditContext } from '../manage/api';
-import { getSxc } from '../plumbing';
-import { TypeUnsafe, TypeWeDontCare } from '../plumbing/TypeTbD';
+import { EditManager } from '../manage/edit-manager';
+import { TypeUnsafe, TypeWeDontCare } from '../plumbing';
 import * as i18next from './libs/i18next.min';
 import * as i18nextXHRBackend from './libs/i18nextXHRBackend.min';
 import * as jqueryI18next from './libs/jquery-i18next.min';
-import { EditManager } from '../manage/create';
 
 /**
  * initialize the translation system; ensure toolbars etc. are translated
@@ -32,20 +32,12 @@ export function _translateInit(manage: EditManager): void {
     initialized = true; // getScxInstance is calling _translate so that we can skip the loop...
     // trying to get context...
     const htmlElementOrId = $('div[data-cb-id]')[0];
-    const sxc = getSxc(htmlElementOrId);
+    const sxc = SxcIntanceEditable.get(htmlElementOrId);
     initialized = false; // for real, it is not initialized...
     const editContext = getEditContext(sxc);
     context = createContextFromEditContext(editContext);
     context.sxc = sxc;
   }
-
-  // console.log('stv: compare #1',
-  //  manage._editContext.Language.Current.substr(0, 2),
-  //  context.app.currentLanguage.substr(0, 2));
-
-  // console.log('stv: compare #2',
-  //  manage._editContext.Environment.SxcRootUrl,
-  //  context.instance.sxcRootUrl);
 
   win18n.i18next
     .use(i18nextXHRBackend)
@@ -59,8 +51,7 @@ export function _translateInit(manage: EditManager): void {
       },
       // ReSharper disable UnusedParameter
     },
-      (/* err: a.ny, t: a.ny */) => {
-        // ReSharper restore UnusedParameter
+      () => {
         // for options see
         // https://github.com/i18next/jquery-i18next#initialize-the-plugin
         // ReSharper disable once TsResolvedFromInaccessibleModule

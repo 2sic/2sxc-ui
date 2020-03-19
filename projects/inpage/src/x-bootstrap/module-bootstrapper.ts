@@ -5,7 +5,6 @@ import { windowInPage as window } from '../interfaces/window-in-page';
 import { Log } from '../logging/log';
 import { LogUtils } from '../logging/log-utils';
 import { getTag } from '../manage/api';
-import { getSxc } from '../plumbing';
 import { TypeUnsafe } from '../plumbing/TypeTbD';
 import { quickDialog } from '../quick-dialog/quick-dialog';
 import * as QuickEditState from '../quick-dialog/state';
@@ -108,9 +107,9 @@ function tryShowTemplatePicker(): boolean {
         const instanceId = Number(
           found[0].attributes.getNamedItem(Attributes.InstanceId).value,
         );
-        sxc = getSxc(instanceId, openDialogId);
+        sxc = SxcIntanceEditable.get(instanceId, openDialogId);
       } else {
-        sxc = getSxc(openDialogId);
+        sxc = SxcIntanceEditable.get(openDialogId);
       }
     }
   }
@@ -128,7 +127,7 @@ function tryShowTemplatePicker(): boolean {
 
     // show the template picker of this module
     const module = uninitializedModules.parent('div[data-edit-context]')[0];
-    sxc = getSxc(module);
+    sxc = SxcIntanceEditable.get(module);
   }
 
   if (sxc) {
@@ -148,7 +147,7 @@ function initInstance(module: JQuery, isFirstRun: boolean): void {
   // add to modules-list first, in case we run into recursions
   initializedInstances.push(module);
 
-  let sxc = getSxc(module);
+  let sxc = SxcIntanceEditable.get(module);
 
   // check if the sxc must be re-created. This is necessary when modules are dynamically changed
   // because the configuration may change, and that is cached otherwise, resulting in toolbars with wrong config

@@ -1,6 +1,6 @@
 ﻿import { CmsEngine } from '../commands/';
 import { CommandParams } from '../commands/command-params';
-import { ContextBundleInstance, isContextOfInstance } from '../context/bundles/context-bundle-instance';
+import { ContextBundleInstance } from '../context/bundles/context-bundle-instance';
 import { findContext as getContext } from '../context/context';
 import { DebugConfig } from '../DebugConfig';
 import { HasLog } from '../logging/has-log';
@@ -33,7 +33,7 @@ export class Cms extends HasLog {
     eventOrSettings?: CommandParams | MouseEvent,
     event?: MouseEvent,
   ): Promise<void | T> {
-    const realContext = isContextOfInstance(context)
+    const realContext = ContextBundleInstance.is(context)
       ? context
       : getContext(context);
 

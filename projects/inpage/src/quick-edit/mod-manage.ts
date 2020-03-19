@@ -1,4 +1,4 @@
-﻿import { data } from './clipboard';
+﻿import { InstanceClipboard } from './clipboard';
 import { $quickE as quickE } from './quick-e';
 
 /**
@@ -105,7 +105,7 @@ export class ModManage {
     // ReSharper disable once UnusedParameter
     targets.find('a').click(function() {
       const link = $(this);
-      const clip = data;
+      const clip = InstanceClipboard.get(); // contents;
       const modId = this.getModuleId(clip.item.className);
       const newPane = link.attr('data');
 

@@ -3,8 +3,8 @@ import { HtmlTools } from '../html/dom-tools';
 import { windowInPage as window } from '../interfaces/window-in-page';
 import { getTag } from '../manage/api';
 import { reset } from '../quick-edit/start';
+import { ContentBlockEditor } from './content-block-editor';
 import { MainContentBlock } from './main-content-block';
-import { getPreviewWithTemplate } from './web-api-promises';
 
 /*
  * this is the content block manager in the browser
@@ -69,7 +69,7 @@ class Renderer {
    * @param {boolean} justPreview
    */
   ajaxLoad(context: ContextBundleButton, alternateTemplateId: number, justPreview: boolean): Promise<void> {
-    return getPreviewWithTemplate(context, alternateTemplateId)
+    return ContentBlockEditor.getPreviewWithTemplate(context, alternateTemplateId)
       .then((result: string) => {
         this.replaceContentBlock(context, result, justPreview);
       })

@@ -1,5 +1,4 @@
-﻿import { WebApiParams } from '../contentBlock/web-api-params';
-import { ContextBundleButton } from '../context/bundles/context-bundle-button';
+﻿import { ContextBundleButton } from '../context/bundles/context-bundle-button';
 import { translate } from '../translate/2sxc.translate';
 
 /**
@@ -25,7 +24,7 @@ export let contentItems = {
      * when we need to delete entity from other app or zone, than current one.
      * TODO: send this params, only when is necesary (value change detection for ZoneId, AppId)
      */
-    const params: WebApiParams = {
+    const params = {
       zoneId: context.app.zoneId,
       appId: context.app.id,
     };

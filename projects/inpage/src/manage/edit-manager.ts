@@ -1,6 +1,6 @@
 ﻿import { SxcInstanceManage } from '../../../$2sxc/src/edit-interfaces/sxc-instance-manage';
 import { SxcInstanceEngine } from '../commands';
-import { Manipulator } from '../contentBlock/manipulate';
+import { DnnModuleEditor } from '../contentBlock/dnn-module-editor';
 import { ContextBundleButton } from '../context/bundles/context-bundle-button';
 import { AttrJsonEditContext } from '../context/html-attribute/edit-context-root';
 import { SxcIntanceEditable } from '../interfaces/sxc-instance-editable';
@@ -94,7 +94,7 @@ export class EditManager implements SxcInstanceManage {
     // this._instanceConfig = InstanceConfig.fromContext(context);// 2dm simplified buildInstanceConfig(context);
   }
 
-  _getCbManipulator = () => new Manipulator(this.sxc); // manipulator(this.sxc);
+  _getCbManipulator = () => new DnnModuleEditor(this.sxc); // manipulator(this.sxc);
   // ReSharper restore InconsistentNaming
 
   /**

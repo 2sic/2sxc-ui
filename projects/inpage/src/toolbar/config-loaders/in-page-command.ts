@@ -21,8 +21,3 @@ export class InPageCommandJson  {
         return typeof(thing as InPageCommandJson).action === 'string';
     }
 }
-
-// export function isInPageCommandConfiguration(thing: TypeTbD): thing is InPageCommandJson {
-//   // check two common signatures - command and action
-//   return typeof(thing as InPageCommandJson).action === 'string';
-// }
