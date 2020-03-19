@@ -1,7 +1,6 @@
 ﻿import { Window as sxcWindow } from '../../../$2sxc/src/index';
 import { ActionMenuMapper } from '../dnn/dnn-menu-helper/dnn-inpage-edit';
 import { TypeWeDontCare } from '../plumbing';
-import { TypeUnsafe } from '../plumbing';
 import { $quickE } from '../quick-edit/quick-e';
 import { SxcControllerInPage } from './sxc-controller-in-page';
 
@@ -16,4 +15,4 @@ export interface WindowInPage extends Window, sxcWindow {
 }
 // ReSharper restore InconsistentNaming
 
-export const windowInPage: WindowInPage = window as TypeUnsafe as WindowInPage;
+export const windowInPage: WindowInPage = window as unknown as WindowInPage;

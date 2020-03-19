@@ -15,11 +15,10 @@ export class NgUrlValuesWithoutParams {
   readonly cbid: number;
   readonly lang: string;
   readonly langpri: string;
-  readonly langs: string; // string[] | null;
+  readonly langs: string;
   readonly portalroot: string;
   readonly websiteroot: string;
   readonly partOfPage?: boolean;
-//   readonly versioningRequirements?: string;
   readonly publishing?: string;
   readonly user: UserOfEditContext;
   readonly approot: string | null;
@@ -29,31 +28,6 @@ export class NgUrlValuesWithoutParams {
 
   /** request verification token for form */
   readonly rvt: string;
-
-
-//   static fromContext(context: ContextOfButton): NgUrlValuesWithoutParams {
-//     const params = new NgUrlValuesWithoutParams();
-//     params.zoneId = context.app.zoneId;
-//     params.appId = context.app.id;
-//     params.tid = context.page.id;
-//     params.mid = context.instance.id;
-//     params.cbid = context.contentBlock.id;
-//     params.lang = context.app.currentLanguage;
-//     params.langpri = context.app.primaryLanguage;
-//     params.langs = JSON.stringify(context.app.allLanguages);
-//     params.portalroot = context.tenant.url;
-//     params.websiteroot = context.instance.sxcRootUrl;
-//     params.partOfPage = context.contentBlock.partOfPage;
-//     // versioningRequirements= editContext.ContentBlock.VersioningRequirements;
-//     params.publishing = context.contentBlock.versioningRequirements;
-//     // todo= probably move the user into the dashboard info
-//     params.user = UserOfEditContext.fromContext(context);
-//     params.approot = context.app.appPath || null; // this is the only value which doesn't have a slash by default. note that the app-root doesn't exist when opening "manage-app"
-//     params.fa = !context.app.isContent;
-//     params.rvt = $.ServicesFramework(0).getAntiForgeryValue();
-//     console.log('rvt', params.rvt);
-//     return params;
-//   }
 
   constructor(context: ContextBundleButton, partOfPage: boolean) {
     this.zoneId = context.app.zoneId;

@@ -1,12 +1,12 @@
-﻿import { renderer } from '../contentBlock/render';
-import { ContextBundleButton } from '../context/bundles/context-bundle-button';
-import { ActionParams } from './action-params';
+﻿import { renderer } from '../../contentBlock/render';
+import { ContextBundleButton } from '../../context/bundles/context-bundle-button';
+import { ContentListActionParams } from './content-list-action-params';
 
 /**
  * These actions make changes to a content-block - like adding, removing or publishing items in the block
  * @class ActionsCatalog
  */
-class ActionsCatalog {
+class ContentListActions {
     /**
      * add an item to the list at this position
      * @param {ContextBundleButton} context
@@ -61,7 +61,7 @@ class ActionsCatalog {
     }
 }
 
-export const Actions = new ActionsCatalog();
+export const Actions = new ContentListActions();
 
 /*
  * this is a content block in the browser
@@ -78,13 +78,13 @@ export const Actions = new ActionsCatalog();
  * internal helper, to do something and reload the content block
  * @param {ContextBundleButton} context
  * @param {string} url
- * @param {ActionParams} params
+ * @param {ContentListActionParams} params
  * @returns {void | T}
  */
 function getAndReload<T>(
     context: ContextBundleButton,
     url: string,
-    params: ActionParams,
+    params: ContentListActionParams,
 ): Promise<void | T> {
     return new Promise<T>((resolve, reject) => {
         context.sxc.webApi

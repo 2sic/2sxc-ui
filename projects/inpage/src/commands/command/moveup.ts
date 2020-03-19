@@ -1,4 +1,4 @@
-﻿import { Actions } from '../../actions/actions';
+﻿import { Actions } from './content-list-actions';
 import { Commands } from '../commands';
 
 /**

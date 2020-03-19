@@ -1,5 +1,5 @@
 ﻿import 'jasmine';
-import { Actions } from '../src/actions/actions';
+import { Actions } from '../src/commands/command/content-list-actions';
 import { Command } from '../src/commands/command';
 import { Commands as Commands } from '../src/commands/commands';
 import { createContextFromEditContext } from '../src/context/context';

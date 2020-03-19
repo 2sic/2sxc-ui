@@ -6,7 +6,7 @@
     "noEmitOnError": false,
     "noImplicitAny": true,
     //"noFallthroughCasesInSwitch": true,
-    //"allowUnreachableCode": false,
+    "allowUnreachableCode": false,
     //"allowUnusedLabels": false,
     "removeComments": false,
     "sourceMap": true,
