@@ -9,6 +9,7 @@ import { quickDialog } from '../quick-dialog/quick-dialog';
 import * as QuickEditState from '../quick-dialog/state';
 import { TagToolbarManager } from '../toolbar/tag-toolbars/tag-toolbar-manager';
 import { ToolbarManager } from '../toolbar/toolbar-manager';
+import { LayoutCommand } from '../commands/command/layout';
 
 /**
  * module & toolbar bootstrapping (initialize all toolbars after loading page)
@@ -130,7 +131,7 @@ function tryShowTemplatePicker(): boolean {
   }
 
   if (sxc) {
-    sxc.manage.run('layout');
+    sxc.manage.run(LayoutCommand);
     openedTemplatePickerOnce = true;
   }
   return true;
@@ -182,7 +183,7 @@ function showGlassesButtonIfUninitialized(
       '</div>',
   );
 
-  btn.on('click', () => sxci.manage.run('layout'));
+  btn.on('click', () => sxci.manage.run(LayoutCommand));
 
   tag.append(btn);
   return true;

@@ -1485,7 +1485,14 @@ var ContextForLists = /** @class */ (function () {
     function ContextForLists() {
     }
     ContextForLists.getFromDom = function (tag) {
-        return JSON.parse($(tag).attr(__WEBPACK_IMPORTED_MODULE_0____["QeSelectors"].blocks.cb.context) || null);
+        var result = JSON.parse($(tag).attr(__WEBPACK_IMPORTED_MODULE_0____["QeSelectors"].blocks.cb.context) || null) || {};
+        result.appList = []; // empty by default
+        if (result != null && typeof (result.apps) === 'string' && result.apps.length > 1)
+            result.appList = result.apps
+                .split(',')
+                .map(function (s) { return s.trim(); }) // trim
+                .filter(function (s) { return !!s; }); // drop empty ones
+        return result;
     };
     return ContextForLists;
 }());
@@ -1960,11 +1967,11 @@ var ToolbarRenderer = /** @class */ (function () {
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Cms", function() { return Cms; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__commands___ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__context_bundles_context_bundle_instance__ = __webpack_require__(16);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__DebugConfig__ = __webpack_require__(15);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__logging_has_log__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__logging_log__ = __webpack_require__(14);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__context_bundles_context_bundle_button__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__context_bundles_context_bundle_button__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__context_bundles_context_bundle_instance__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__DebugConfig__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__logging_has_log__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__logging_log__ = __webpack_require__(14);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -1994,20 +2001,20 @@ var Cms = /** @class */ (function (_super) {
          * if false, will preserve the log over multiple calls
          */
         _this.autoReset = true;
-        _this.autoDump = __WEBPACK_IMPORTED_MODULE_2__DebugConfig__["DebugConfig"].cms.autoDump;
+        _this.autoDump = __WEBPACK_IMPORTED_MODULE_3__DebugConfig__["DebugConfig"].cms.autoDump;
         return _this;
     }
     /**
      * reset / clear the log
      */
     Cms.prototype.resetLog = function () {
-        this.log = new __WEBPACK_IMPORTED_MODULE_4__logging_log__["Log"](logId, null, 'log was reset');
+        this.log = new __WEBPACK_IMPORTED_MODULE_5__logging_log__["Log"](logId, null, 'log was reset');
     };
     Cms.prototype.run = function (context, nameOrSettings, eventOrSettings, event) {
         var _this = this;
-        var realContext = __WEBPACK_IMPORTED_MODULE_1__context_bundles_context_bundle_instance__["ContextBundleInstance"].is(context)
+        var realContext = __WEBPACK_IMPORTED_MODULE_2__context_bundles_context_bundle_instance__["ContextBundleInstance"].is(context)
             ? context
-            : __WEBPACK_IMPORTED_MODULE_5__context_bundles_context_bundle_button__["ContextBundleButton"].findContext(context);
+            : __WEBPACK_IMPORTED_MODULE_1__context_bundles_context_bundle_button__["ContextBundleButton"].findContext(context);
         return this.do(function () {
             return new __WEBPACK_IMPORTED_MODULE_0__commands___["CmsEngine"](_this.log).detectParamsAndRun(realContext, nameOrSettings, eventOrSettings, event);
         });
@@ -2024,7 +2031,7 @@ var Cms = /** @class */ (function (_super) {
         return result;
     };
     return Cms;
-}(__WEBPACK_IMPORTED_MODULE_3__logging_has_log__["HasLog"]));
+}(__WEBPACK_IMPORTED_MODULE_4__logging_has_log__["HasLog"]));
 
 
 
@@ -4291,14 +4298,10 @@ function provideCorrectAddButtons(tag) {
     var listSettings = __WEBPACK_IMPORTED_MODULE_1__context_for_lists__["ContextForLists"].getFromDom(tag);
     var showContent = true;
     var showApps = true;
-    if (listSettings != null && typeof (listSettings.apps) === 'string' && listSettings.apps.length > 1) {
-        var apps = listSettings.apps
-            .split(',')
-            .map(function (s) { return s.trim(); }) // trim
-            .filter(function (s) { return !!s; }); // drop empty ones
-        showContent = apps.indexOf('Content') > -1;
+    if (listSettings.appList.length > 0) {
+        showContent = listSettings.appList.indexOf('Content') > -1;
         // only show apps if the list is longer than 'Content' if it contains that
-        showApps = apps.length - (showContent ? 1 : 0) > 0;
+        showApps = listSettings.appList.length - (showContent ? 1 : 0) > 0;
     }
     __WEBPACK_IMPORTED_MODULE_0____["QuickE"].cbActions.toggleClass('hide-content', !showContent);
     __WEBPACK_IMPORTED_MODULE_0____["QuickE"].cbActions.toggleClass('hide-app', !showApps);
@@ -5524,6 +5527,8 @@ var NgUrlValuesWithoutParams = /** @class */ (function () {
         // todo= probably move the user into the dashboard info
         this.user = __WEBPACK_IMPORTED_MODULE_0__user_of_edit_context__["UserOfEditContext"].fromContext(context);
         this.approot = context.app.appPath || null; // this is the only value which doesn't have a slash by default. note that the app-root doesn't exist when opening "manage-app"
+        if (context && context.button && context.button.action && context.button.action.params && context.button.action.params.apps)
+            this.apps = context.button.action.params.apps;
         this.fa = !context.app.isContent;
         this.rvt = $.ServicesFramework(0).getAntiForgeryValue();
     }
@@ -6888,6 +6893,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__quick_dialog_state__ = __webpack_require__(41);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__toolbar_tag_toolbars_tag_toolbar_manager__ = __webpack_require__(45);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__toolbar_toolbar_manager__ = __webpack_require__(32);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__commands_command_layout__ = __webpack_require__(160);
+
 
 
 
@@ -7009,7 +7016,7 @@ function tryShowTemplatePicker() {
         sxc = __WEBPACK_IMPORTED_MODULE_2__interfaces_sxc_instance_editable__["SxcEdit"].get(module);
     }
     if (sxc) {
-        sxc.manage.run('layout');
+        sxc.manage.run(__WEBPACK_IMPORTED_MODULE_10__commands_command_layout__["LayoutCommand"]);
         openedTemplatePickerOnce = true;
     }
     return true;
@@ -7050,7 +7057,7 @@ function showGlassesButtonIfUninitialized(sxci) {
     var btn = $('<div class="sc-uninitialized" onmouseover="this.title = $2sxc.translate(this.title)" title="InPage.NewElement">' +
         '<div class="icon-sxc-glasses"></div>' +
         '</div>');
-    btn.on('click', function () { return sxci.manage.run('layout'); });
+    btn.on('click', function () { return sxci.manage.run(__WEBPACK_IMPORTED_MODULE_10__commands_command_layout__["LayoutCommand"]); });
     tag.append(btn);
     return true;
 }
@@ -8172,13 +8179,36 @@ __WEBPACK_IMPORTED_MODULE_0__commands__["Commands"].add('item-history', 'ItemHis
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__commands__ = __webpack_require__(0);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LayoutCommand", function() { return LayoutCommand; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0____ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__quick_edit__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__quick_edit_context_for_lists__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__commands__ = __webpack_require__(0);
 
+
+
+
+var LayoutCommand = 'layout';
 /**
  * import this module to commands.ts
  */
-__WEBPACK_IMPORTED_MODULE_0__commands__["Commands"].add('layout', 'ChangeLayout', 'glasses', true, true, {
+__WEBPACK_IMPORTED_MODULE_3__commands__["Commands"].add(LayoutCommand, 'ChangeLayout', 'glasses', true, true, {
+    params: function (context) {
+        console.log('will layout - context:', context);
+        return {}; // { mode: 'edit' };
+    },
     inlineWindow: function (context) { return true; },
+    code: function (context, event) {
+        console.log('layout - code', event.target);
+        // const eventTag = event.currentTarget;
+        var listSpecs = $(event.target).closest('[' + __WEBPACK_IMPORTED_MODULE_1__quick_edit__["QeSelectors"].blocks.cb.context + ']');
+        if (listSpecs.length > 0) {
+            var specs = __WEBPACK_IMPORTED_MODULE_2__quick_edit_context_for_lists__["ContextForLists"].getFromDom(listSpecs);
+            console.log('layout specs:', specs);
+            context.button.action.params.apps = specs.apps;
+        }
+        return __WEBPACK_IMPORTED_MODULE_0____["CmsEngine"].openDialog(context, event);
+    },
 });
 
 
@@ -8284,14 +8314,14 @@ __WEBPACK_IMPORTED_MODULE_1__commands__["Commands"].add('more', 'MoreActions', '
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__content_list_actions__ = __webpack_require__(11);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__commands__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__commands__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__content_list_actions__ = __webpack_require__(11);
 
 
 /**
  * import this module to commands.ts
  */
-__WEBPACK_IMPORTED_MODULE_1__commands__["Commands"].add('movedown', 'MoveDown', 'move-down', false, true, {
+__WEBPACK_IMPORTED_MODULE_0__commands__["Commands"].add('movedown', 'MoveDown', 'move-down', false, true, {
     showCondition: function (context) {
         // TODO: do not display if is last item in list
         return (context.contentBlock.isList &&
@@ -8300,7 +8330,7 @@ __WEBPACK_IMPORTED_MODULE_1__commands__["Commands"].add('movedown', 'MoveDown', 
     },
     code: function (context) {
         // TODO: make sure index is never greater than the amount of items
-        return __WEBPACK_IMPORTED_MODULE_0__content_list_actions__["Actions"].changeOrder(context, context.button.action.params.sortOrder, context.button.action.params.sortOrder + 1);
+        return __WEBPACK_IMPORTED_MODULE_1__content_list_actions__["Actions"].changeOrder(context, context.button.action.params.sortOrder, context.button.action.params.sortOrder + 1);
     },
 });
 
@@ -8311,14 +8341,14 @@ __WEBPACK_IMPORTED_MODULE_1__commands__["Commands"].add('movedown', 'MoveDown', 
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__content_list_actions__ = __webpack_require__(11);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__commands__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__commands__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__content_list_actions__ = __webpack_require__(11);
 
 
 /**
  * import this module to commands.ts
  */
-__WEBPACK_IMPORTED_MODULE_1__commands__["Commands"].add('moveup', 'MoveUp', 'move-up', false, true, {
+__WEBPACK_IMPORTED_MODULE_0__commands__["Commands"].add('moveup', 'MoveUp', 'move-up', false, true, {
     showCondition: function (context) {
         return (context.contentBlock.isList &&
             context.button.action.params.useModuleList &&
@@ -8326,7 +8356,7 @@ __WEBPACK_IMPORTED_MODULE_1__commands__["Commands"].add('moveup', 'MoveUp', 'mov
             context.button.action.params.sortOrder !== 0);
     },
     code: function (context) {
-        return __WEBPACK_IMPORTED_MODULE_0__content_list_actions__["Actions"].changeOrder(context, context.button.action.params.sortOrder, Math.max(context.button.action.params.sortOrder - 1, 0));
+        return __WEBPACK_IMPORTED_MODULE_1__content_list_actions__["Actions"].changeOrder(context, context.button.action.params.sortOrder, Math.max(context.button.action.params.sortOrder - 1, 0));
     },
 });
 
@@ -8601,8 +8631,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ActionMenuMapper", function() { return ActionMenuMapper; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__interfaces_sxc_instance_editable__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__interfaces_window_in_page__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__commands_command_layout__ = __webpack_require__(160);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__interfaces_sxc_instance_editable__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__interfaces_window_in_page__ = __webpack_require__(4);
+
 
 
 /**
@@ -8611,20 +8643,20 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 var ActionMenuMapper = /** @class */ (function () {
     function ActionMenuMapper(moduleId) {
         var _this = this;
-        this.changeLayoutOrContent = function () { _this.run('layout'); };
+        this.changeLayoutOrContent = function () { _this.run(__WEBPACK_IMPORTED_MODULE_0__commands_command_layout__["LayoutCommand"]); };
         this.addItem = function () { _this.run('add', { useModuleList: true, sortOrder: 0 }); };
         this.edit = function () { _this.run('edit', { useModuleList: true, sortOrder: 0 }); };
         this.adminApp = function () { _this.run('app'); };
         this.adminZone = function () { _this.run('zone'); };
         this.develop = function () { _this.run('template-develop'); };
-        this.sxc = __WEBPACK_IMPORTED_MODULE_0__interfaces_sxc_instance_editable__["SxcEdit"].get(moduleId);
-        this.tag = __WEBPACK_IMPORTED_MODULE_0__interfaces_sxc_instance_editable__["SxcEdit"].getTag(this.sxc);
+        this.sxc = __WEBPACK_IMPORTED_MODULE_1__interfaces_sxc_instance_editable__["SxcEdit"].get(moduleId);
+        this.tag = __WEBPACK_IMPORTED_MODULE_1__interfaces_sxc_instance_editable__["SxcEdit"].getTag(this.sxc);
         this.run = this.sxc.manage.run;
     }
     return ActionMenuMapper;
 }());
 
-__WEBPACK_IMPORTED_MODULE_1__interfaces_window_in_page__["windowInPage"].$2sxcActionMenuMapper = function (moduleId) {
+__WEBPACK_IMPORTED_MODULE_2__interfaces_window_in_page__["windowInPage"].$2sxcActionMenuMapper = function (moduleId) {
     return new ActionMenuMapper(moduleId);
 };
 

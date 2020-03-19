@@ -31,6 +31,9 @@ export interface CommandParams {
     // 2020-03-11 2dm in this case it seems that it's a string according to the code
     // but I'm simply not sure if this is true...
     customCode?: string;
+
+    /** New in 10.27 - list of apps for the quick dialog */
+    apps?: string;
 }
 
 // 2020-03-18 - this was an old class that was often used where we now have

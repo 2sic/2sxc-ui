@@ -1,5 +1,5 @@
-﻿import { Actions } from './content-list-actions';
-import { Commands } from '../commands';
+﻿import { Commands } from '../commands';
+import { Actions } from './content-list-actions';
 
 /**
  * import this module to commands.ts

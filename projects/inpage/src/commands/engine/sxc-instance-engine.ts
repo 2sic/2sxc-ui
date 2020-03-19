@@ -1,10 +1,10 @@
 ﻿import { Cms } from '../../cms/Cms';
+import { ContextBundleButton } from '../../context/bundles/context-bundle-button';
 import { SxcEdit } from '../../interfaces/sxc-instance-editable';
 import { CommandParams } from '../command-params';
-import { ContextBundleButton } from '../../context/bundles/context-bundle-button';
 
 /**
- * This is an engine on the sxc object. 
+ * This is an engine on the sxc object.
  * It provides a .run(...) for when the sxc is already known.
  */
 export class SxcInstanceEngine {

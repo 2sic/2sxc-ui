@@ -23,6 +23,9 @@ export class NgUrlValuesWithoutParams {
   readonly user: UserOfEditContext;
   readonly approot: string | null;
 
+  /** new in 10.27 */
+  readonly apps?: string;
+
   /** features of App - this is to tell the UI it can show advanced features of an app like permissions, API, REST etc. */
   readonly fa: boolean;
 
@@ -50,6 +53,8 @@ export class NgUrlValuesWithoutParams {
     // todo= probably move the user into the dashboard info
     this.user = UserOfEditContext.fromContext(context);
     this.approot = context.app.appPath || null; // this is the only value which doesn't have a slash by default. note that the app-root doesn't exist when opening "manage-app"
+    if (context && context.button && context.button.action && context.button.action.params && context.button.action.params.apps)
+        this.apps = context.button.action.params.apps;
     this.fa = !context.app.isContent;
     this.rvt = $.ServicesFramework(0).getAntiForgeryValue();
   }

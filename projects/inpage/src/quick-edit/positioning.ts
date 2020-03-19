@@ -131,14 +131,10 @@ function provideCorrectAddButtons(tag: HTMLElement) {
     const listSettings = ContextForLists.getFromDom(tag);
     let showContent = true;
     let showApps = true;
-    if (listSettings != null && typeof(listSettings.apps) === 'string' && listSettings.apps.length > 1) {
-        const apps = listSettings.apps
-            .split(',')
-            .map((s) => s.trim())   // trim
-            .filter((s) => !!s);    // drop empty ones
-        showContent = apps.indexOf('Content') > -1;
+    if (listSettings.appList.length > 0) {
+        showContent = listSettings.appList.indexOf('Content') > -1;
         // only show apps if the list is longer than 'Content' if it contains that
-        showApps = apps.length - (showContent ? 1 : 0 ) > 0;
+        showApps = listSettings.appList.length - (showContent ? 1 : 0 ) > 0;
     }
     QuickE.cbActions.toggleClass('hide-content', !showContent);
     QuickE.cbActions.toggleClass('hide-app', !showApps);
