@@ -127,14 +127,13 @@ function xhrError(xhr: JQueryXHR, optionalMessage: string): void {
 // call an api on dnn
 function sendDnnAjax(modId: number, serviceName: string, options: Partial<JQueryAjaxSettings>): JQueryXHR {
   const service = $.dnnSF(modId);
-
-  return $.ajax($.extend({
-    type: 'GET',
-    url: service.getServiceRoot('internalservices') + serviceName,
-    beforeSend: service.setModuleHeaders,
-    error: xhrError,
-  }  as Partial<JQueryAjaxSettings>,
-    options));
+  return $.ajax({
+            type: 'GET',
+            url: service.getServiceRoot('internalservices') + serviceName,
+            beforeSend: service.setModuleHeaders,
+            error: xhrError,
+            ...options,
+        });
 }
 
 // create / insert a new module

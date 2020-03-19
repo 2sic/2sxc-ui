@@ -1,3 +1,4 @@
+import { MetadataFor } from '../commands/params-metadata-for';
 import { DictionaryValue } from '../plumbing';
 
 /** Shared properties of all item identifiers */
@@ -10,6 +11,7 @@ export interface ItemIdentifierShared {
 export interface ItemIdentifierSimple extends ItemIdentifierShared {
   EntityId: number;
   ContentTypeName?: string;
+  Metadata?: MetadataFor;
 }
 
 /** Group identifier */

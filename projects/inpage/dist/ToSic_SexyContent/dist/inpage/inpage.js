@@ -226,6 +226,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__TypeTbD__ = __webpack_require__(75);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__TypeTbD___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__TypeTbD__);
 /* harmony namespace reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in __WEBPACK_IMPORTED_MODULE_1__TypeTbD__) if(["getSxc","isSxcInstance","default"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return __WEBPACK_IMPORTED_MODULE_1__TypeTbD__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__type_safe_assign__ = __webpack_require__(191);
+/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "TypeSafeAssign", function() { return __WEBPACK_IMPORTED_MODULE_2__type_safe_assign__["a"]; });
+
 
 
 
@@ -709,6 +712,17 @@ var Attributes = {
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ButtonCommand", function() { return ButtonCommand; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__commands_commands__ = __webpack_require__(0);
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 
 var ButtonCommand = /** @class */ (function () {
     function ButtonCommand(name, contentType, params) {
@@ -727,7 +741,7 @@ var ButtonCommand = /** @class */ (function () {
             if (action.name)
                 params.action = action.name;
             if (action.params)
-                Object.assign(params, action.params);
+                params = __assign(__assign({}, params), action.params); // O.bject.assign(params, action.params);
         }
         return params;
     };
@@ -1023,6 +1037,8 @@ var DebugConfig = {
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Button", function() { return Button; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__plumbing__ = __webpack_require__(3);
+
 /**
  * The real button configuration as it's used at runtime
  */
@@ -1035,10 +1051,12 @@ var Button = /** @class */ (function () {
         if (action && action.commandDefinition && action.commandDefinition.buttonConfig) {
             this.action = action;
             // get defaults from action commandDefinition
-            Object.assign(this, action.commandDefinition.buttonConfig);
+            Object(__WEBPACK_IMPORTED_MODULE_0__plumbing__["TypeSafeAssign"])(this, action.commandDefinition.buttonConfig);
+            // O.bject.assign(this, action.commandDefinition.buttonConfig);
         }
         if (partialConfig) {
-            Object.assign(this, partialConfig);
+            Object(__WEBPACK_IMPORTED_MODULE_0__plumbing__["TypeSafeAssign"])(this, partialConfig);
+            // O.bject.assign(this, partialConfig);
         }
     }
     Button.normalize = function (oldFormat) {
@@ -1565,6 +1583,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "defaultToolbarSettings", function() { return defaultToolbarSettings; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "settingsForEmptyToolbar", function() { return settingsForEmptyToolbar; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "emptyToolbar", function() { return emptyToolbar; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__plumbing_type_safe_assign__ = __webpack_require__(191);
+
 /** contains toolbar behaviour settings like float, etc. */
 var ToolbarSettings = /** @class */ (function () {
     function ToolbarSettings(toolbarSettings) {
@@ -1573,7 +1593,8 @@ var ToolbarSettings = /** @class */ (function () {
         this.show = 'hover';
         this.classes = '';
         if (toolbarSettings) {
-            Object.assign(this, toolbarSettings);
+            Object(__WEBPACK_IMPORTED_MODULE_0__plumbing_type_safe_assign__["a" /* TypeSafeAssign */])(this, toolbarSettings);
+            //   O.bject.assign(this, toolbarSettings);
         }
     }
     return ToolbarSettings;
@@ -1864,9 +1885,8 @@ var CommandDefinition = /** @class */ (function () {
         this.buttonConfig = partialButtonConfig;
     };
     CommandDefinition.build = function (name, translateKey, icon, uiOnly, partOfPage, more) {
-        if (typeof (partOfPage) !== 'boolean') {
+        if (typeof (partOfPage) !== 'boolean')
             throw 'partOfPage in commands not provided, order will be wrong!';
-        }
         var commandDefinition = new CommandDefinition(name);
         // Toolbar API v2
         // this.commandDefinition.name = name;
@@ -1908,6 +1928,17 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 
 
 
@@ -1959,7 +1990,8 @@ var Engine = /** @class */ (function (_super) {
         var newButtonAction = new __WEBPACK_IMPORTED_MODULE_7__toolbar_config_button_command__["ButtonCommand"](name, contentType, cmdParams);
         var newButtonConfig = new __WEBPACK_IMPORTED_MODULE_8__toolbar_config_button__["Button"](newButtonAction);
         newButtonConfig.name = name;
-        var button = (context.button = Object.assign(newButtonConfig, newButtonAction.commandDefinition.buttonConfig, __WEBPACK_IMPORTED_MODULE_8__toolbar_config_button__["Button"].normalize(cmdParams))); // merge conf & settings, but settings has higher priority
+        // merge conf & settings, but settings has higher priority
+        var button = (context.button = __assign(__assign(__assign({}, newButtonConfig), newButtonAction.commandDefinition.buttonConfig), __WEBPACK_IMPORTED_MODULE_8__toolbar_config_button__["Button"].normalize(cmdParams)));
         // todo: stv, fix this in case that is function
         if (!button.dialog) {
             this.log.add('button.dialog method missing, must be old implementation which used the action-name - generating method');
@@ -2536,6 +2568,17 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 
 var ContextBundleToolbar = /** @class */ (function (_super) {
     __extends(ContextBundleToolbar, _super);
@@ -2543,7 +2586,8 @@ var ContextBundleToolbar = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     ContextBundleToolbar.prototype.forButton = function (button) {
-        var clone = Object.assign({}, this);
+        // the ContextBundleButton is the same as toolbar, just with .button
+        var clone = __assign({}, this); // O.bject.assign({}, this) as ContextBundleButton;
         clone.button = button;
         return clone;
     };
@@ -3057,10 +3101,6 @@ var ButtonConfigLoader = /** @class */ (function (_super) {
     /**
      * takes an object like "actionname" or { action: "actionname", ... }
      * and changes it to a { command: { action: "actionname" }, ... }
-     *
-     * @param {(InPageButtonJson | InPageCommandJson | string)} original
-     * @returns {InPageButtonJson}
-     * @memberof ButtonConfigurationBuilder
      */
     ButtonConfigLoader.prototype.normalize = function (original) {
         var log = new __WEBPACK_IMPORTED_MODULE_1__logging__["Log"]('Tlb.ExpBtn', this.log, 'start');
@@ -3251,6 +3291,17 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 
 
 
@@ -3359,7 +3410,8 @@ var ToolbarConfigLoader = /** @class */ (function (_super) {
         // toolbarConfig.groupConfig = new GroupConfig(original.groups as ButtonConfig[]);
         toolbarConfig.groups = unstructuredConfig.groups || []; // the groups of buttons
         toolbarConfig.params = unstructuredConfig.params || {}; // these are the default command parameters
-        toolbarConfig.settings = Object.assign({}, __WEBPACK_IMPORTED_MODULE_4__config_toolbar_settings__["defaultToolbarSettings"], unstructuredConfig.settings, cleanDeprecatedSettings(toolbarSettings));
+        toolbarConfig.settings = __assign(__assign(__assign({}, __WEBPACK_IMPORTED_MODULE_4__config_toolbar_settings__["defaultToolbarSettings"]), unstructuredConfig.settings), cleanDeprecatedSettings(toolbarSettings));
+        // toolbarConfig.settings = O.bject.assign({}, defaultToolbarSettings, unstructuredConfig.settings, cleanDeprecatedSettings(toolbarSettings)) as ToolbarSettings;
         toolbarConfig.debug = unstructuredConfig.debug || false; // show more debug info
         toolbarConfig.defaults = unstructuredConfig.defaults || {}; // the button defaults like icon, etc.
         log.add('done');
@@ -3377,7 +3429,7 @@ var ToolbarConfigLoader = /** @class */ (function (_super) {
  * @param toolbarSettings
  */
 function cleanDeprecatedSettings(toolbarSettings) {
-    var partialToolbaSettings = Object.assign({}, toolbarSettings);
+    var partialToolbaSettings = __assign({}, toolbarSettings); // O.bject.assign({}, toolbarSettings) as ToolbarSettings;
     if (!partialToolbaSettings.autoAddMore) {
         delete partialToolbaSettings.autoAddMore;
     }
@@ -3559,6 +3611,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "modManage", function() { return modManage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__clipboard__ = __webpack_require__(29);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__quick_e__ = __webpack_require__(2);
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 
 
 /**
@@ -3667,12 +3730,7 @@ function xhrError(xhr, optionalMessage) {
 // call an api on dnn
 function sendDnnAjax(modId, serviceName, options) {
     var service = $.dnnSF(modId);
-    return $.ajax($.extend({
-        type: 'GET',
-        url: service.getServiceRoot('internalservices') + serviceName,
-        beforeSend: service.setModuleHeaders,
-        error: xhrError,
-    }, options));
+    return $.ajax(__assign({ type: 'GET', url: service.getServiceRoot('internalservices') + serviceName, beforeSend: service.setModuleHeaders, error: xhrError }, options));
 }
 // create / insert a new module
 function createMod(paneName, position, modId) {
@@ -3704,11 +3762,23 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (immutable) */ __webpack_exports__["_readPageConfig"] = _readPageConfig;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__quick_e__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__selectors_instance__ = __webpack_require__(6);
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 
 
 var configAttr = 'quick-edit-config';
 /**
  * the initial configuration
+ * will be updated when reading the page configuration
  */
 var conf = __WEBPACK_IMPORTED_MODULE_0__quick_e__["$quickE"].config = {
     enable: true,
@@ -3720,7 +3790,7 @@ var conf = __WEBPACK_IMPORTED_MODULE_0__quick_e__["$quickE"].config = {
     },
 };
 function _readPageConfig() {
-    var configs /*: Conf[]*/ = $("[" + configAttr + "]");
+    var configs = $("[" + configAttr + "]");
     var confJ;
     // a.ny inner blocks found? will currently affect if modules can be inserted...
     var hasInnerCBs = ($(__WEBPACK_IMPORTED_MODULE_1__selectors_instance__["selectors"].blocks.cb.listSelector).length > 0);
@@ -3731,13 +3801,15 @@ function _readPageConfig() {
             confJ = configs[0].getAttribute(configAttr);
             try {
                 var confO = JSON.parse(confJ);
-                Object.assign(finalConfig, confO);
+                finalConfig = __assign(__assign({}, finalConfig), confO);
+                // O.bject.assign(finalConfig, confO);
             }
             catch (e) {
                 console.warn('had trouble with json', e);
             }
         }
-        Object.assign(conf, finalConfig);
+        conf = __assign(__assign({}, conf), finalConfig);
+        // O.bject.assign(conf, finalConfig);
     }
     // re-check "auto" or "null"
     // if it has inner-content, then it's probably a details page, where quickly adding modules would be a problem, so for now, disable modules in this case
@@ -4968,16 +5040,14 @@ var RenderButton = /** @class */ (function (_super) {
     return RenderButton;
 }(__WEBPACK_IMPORTED_MODULE_1__render_part_base__["RenderPart"]));
 
-function oldParametersAdapter(action) {
-    var params = {};
-    if (action) {
-        if (action.name)
-            params.action = action.name;
-        if (action.params)
-            Object.assign(params, action.params);
-    }
-    return params;
-}
+// function oldParametersAdapter(action: ButtonCommand): Partial<CommandParams> {
+//     let params: Partial<CommandParams> = {};
+//     if (action) {
+//       if (action.name) params.action = action.name;
+//       if (action.params) O.bject.assign(params, action.params);
+//     }
+//     return params;
+//   }
 
 
 /***/ }),
@@ -5336,11 +5406,8 @@ var CommandConfigLoader = /** @class */ (function (_super) {
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ButtonGroupConfigLoader", function() { return ButtonGroupConfigLoader; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__commands_commands__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__logging_has_log__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__logging_log__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__config_button_command__ = __webpack_require__(11);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__config_button__ = __webpack_require__(16);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__toolbar_config_loader__ = __webpack_require__(52);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__logging__ = __webpack_require__(51);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__config__ = __webpack_require__(171);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -5354,9 +5421,17 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-
-
-
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 
 
 
@@ -5373,12 +5448,12 @@ var ButtonGroupConfigLoader = /** @class */ (function (_super) {
      * @param fullToolbarConfig
      */
     ButtonGroupConfigLoader.prototype.expandButtonGroups = function (fullToolbarConfig, parentLog) {
-        var log = new __WEBPACK_IMPORTED_MODULE_2__logging_log__["Log"]('Tlb.ExpGrp', parentLog, 'start');
+        var log = new __WEBPACK_IMPORTED_MODULE_1__logging__["Log"]('Tlb.ExpGrp', parentLog, 'start');
         // by now we should have a structure, let's check/fix the buttons
         log.add("will expand groups - found " + fullToolbarConfig.groups.length + " items");
         for (var g = 0; g < fullToolbarConfig.groups.length; g++) {
             // expand a verb-list like "edit,new" into objects like [{ action: "edit" }, {action: "new"}]
-            expandButtonList(fullToolbarConfig.groups[g], fullToolbarConfig.settings, log);
+            expandButtonList(this, fullToolbarConfig.groups[g], fullToolbarConfig.settings);
             // fix all the buttons
             var btns = fullToolbarConfig.groups[g].buttons;
             var buttonConfigs = [];
@@ -5397,14 +5472,16 @@ var ButtonGroupConfigLoader = /** @class */ (function (_super) {
                     this.toolbar.command.normalizeCommandJson(btnCommand);
                     // parameters adapter from v1 to v2
                     var params = this.toolbar.command.removeActionProperty(btnCommand);
-                    Object.assign(params, fullToolbarConfig.params);
+                    params = __assign(__assign({}, params), fullToolbarConfig.params);
+                    // O.bject.assign(params, fullToolbarConfig.params);
                     // Toolbar API v2
-                    var newButtonAction = new __WEBPACK_IMPORTED_MODULE_3__config_button_command__["ButtonCommand"](name, contentType, params);
-                    var newButtonConfig = new __WEBPACK_IMPORTED_MODULE_4__config_button__["Button"](newButtonAction);
+                    var newButtonAction = new __WEBPACK_IMPORTED_MODULE_2__config__["ButtonCommand"](name, contentType, params);
+                    var newButtonConfig = new __WEBPACK_IMPORTED_MODULE_2__config__["Button"](newButtonAction);
                     newButtonConfig.name = name;
                     // settings adapter from v1 to v2
-                    var settings = __WEBPACK_IMPORTED_MODULE_4__config_button__["Button"].normalize(btn);
-                    Object.assign(newButtonConfig, settings);
+                    var settings = __WEBPACK_IMPORTED_MODULE_2__config__["Button"].normalize(btn);
+                    newButtonConfig = __assign(__assign({}, newButtonConfig), settings);
+                    // O.bject.assign(newButtonConfig, settings);
                     // ensure all buttons have either own settings, or the fallback
                     this.toolbar.button.addDefaultBtnSettings(newButtonConfig, fullToolbarConfig.groups[g], fullToolbarConfig, __WEBPACK_IMPORTED_MODULE_0__commands_commands__["Commands"]);
                     buttonConfigs.push(newButtonConfig);
@@ -5418,7 +5495,7 @@ var ButtonGroupConfigLoader = /** @class */ (function (_super) {
         return fullToolbarConfig;
     };
     return ButtonGroupConfigLoader;
-}(__WEBPACK_IMPORTED_MODULE_1__logging_has_log__["HasLog"]));
+}(__WEBPACK_IMPORTED_MODULE_1__logging__["HasLog"]));
 
 /**
  * take a list of buttons (objects OR strings)
@@ -5429,12 +5506,9 @@ var ButtonGroupConfigLoader = /** @class */ (function (_super) {
  * @param root
  * @param settings
  */
-function expandButtonList(root, settings, parentLog) {
-    var log = new __WEBPACK_IMPORTED_MODULE_2__logging_log__["Log"]('Tlb.ExpBts', parentLog, 'start');
-    // let root = grp; // the root object which has all params of the command
+function expandButtonList(parent, root, settings) {
+    var log = new __WEBPACK_IMPORTED_MODULE_1__logging__["Log"]('Tlb.ExpBts', parent.log, 'start');
     var btns = [];
-    // 2020-03-11 2dm removed, as it seems unused completely
-    //   let sharedProperties: a.ny = null;
     // convert compact buttons (with multi-verb action objects) into own button-objects
     // important because an older syntax allowed {action: "new,edit", entityId: 17}
     if (Array.isArray(root.buttons)) {
@@ -5446,7 +5520,9 @@ function expandButtonList(root, settings, parentLog) {
                 log.add("button def \"" + btn + " is string of ma.ny names, will expand into array with action-properties\"");
                 var acts = actionString.split(',');
                 for (var a = 0; a < acts.length; a++) {
-                    btns.push($.extend(true, {}, btn, { action: acts[a] }));
+                    // TODO: must fix, the action isn't correctly expanded
+                    btn.action = acts[a];
+                    btns.push(btn);
                 }
             }
             else {
@@ -5458,7 +5534,7 @@ function expandButtonList(root, settings, parentLog) {
         log.add("detected that it is a string \"" + root.buttons + "\", will split by \",\" and ...");
         btns = root.buttons.split(',');
         // 2020-03-11 2dm removed, as it seems unused completely
-        // sharedProperties = Object.assign({}, root); // inherit all fields used in the button
+        // sharedProperties = O.bject.assign({}, root); // inherit all fields used in the button
         // delete sharedProperties.buttons; // this one's not needed
         // delete sharedProperties.name; // this one's not needed
         // delete sharedProperties.action; //
@@ -5485,12 +5561,10 @@ function expandButtonList(root, settings, parentLog) {
         log.add('will not add more "..." button');
     }
     // add each button - check if it's already an object or just the string
-    for (var v = 0; v < btns.length; v++) {
-        btns[v] = new __WEBPACK_IMPORTED_MODULE_5__toolbar_config_loader__["ToolbarConfigLoader"](null).button.normalize(btns[v] /* sharedProperties, */);
-        // todo: refactor this out, not needed a.ny more as they are all together now
-        // btns[v].group = root;// grp;    // attach group reference, needed for fallback etc.
-    }
-    root.buttons = btns; // ensure the internal def is also an array now
+    //   const finalButtons: Button[] = btns.map(this.toolbar.button.normalize);
+    //   for (let v = 0; v < btns.length; v++)
+    //     finalButtons[v] = this.toolbar.button.normalize(btns[v]/* sharedProperties, */);
+    root.buttons = btns.map(function (x) { return parent.toolbar.button.normalize(x); }); // ensure the internal def is also an array now
     log.add('done');
 }
 
@@ -6199,11 +6273,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ButtonGroup", function() { return ButtonGroup; });
 var ButtonGroup = /** @class */ (function () {
     function ButtonGroup(buttons) {
-        this.buttons = []; // array of buttons
-        this.defaults = {}; // a.ny = []; // v1
-        // TODO: 2dm - seems unnecessary
-        // adds these to the items
         this.buttons = buttons;
+        this.defaults = {};
+        // adds these to the items
+        this.buttons = buttons || [];
     }
     return ButtonGroup;
 }());
@@ -6828,6 +6901,17 @@ __WEBPACK_IMPORTED_MODULE_0__commands__["Commands"].add('layout', 'ChangeLayout'
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__commands__ = __webpack_require__(0);
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 
 /**
  * create a metadata toolbar
@@ -6850,9 +6934,10 @@ __WEBPACK_IMPORTED_MODULE_0__commands__["Commands"].add('metadata', 'Metadata', 
     configureCommand: function (context, command) {
         var itm = {
             Title: 'EditFormTitle.Metadata',
-            Metadata: Object.assign({ keyType: 'string', targetType: 10 }, command.context.button.action.params.metadata),
+            Metadata: __assign({ keyType: 'string', targetType: 10 }, command.context.button.action.params.metadata),
         };
-        Object.assign(command.items[0], itm);
+        command.items[0] = __assign(__assign({}, command.items[0]), itm);
+        // O.bject.assign(command.items[0], itm);
     },
 });
 
@@ -6983,9 +7068,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
  * import this module to commands.ts
  */
 __WEBPACK_IMPORTED_MODULE_0__commands__["Commands"].add('new', 'New', 'plus', false, true, {
-    params: function (context) {
-        return { mode: 'new' };
-    },
+    params: function (context) { return ({ mode: 'new' }); },
     dialog: function (context) { return 'edit'; },
     showCondition: function (context) {
         return (!!context.button.action.params.contentType ||
@@ -6995,9 +7078,10 @@ __WEBPACK_IMPORTED_MODULE_0__commands__["Commands"].add('new', 'New', 'plus', fa
     },
     code: function (context, event) {
         // todo - should refactor this to be a toolbarManager.contentBlock command
-        Object.assign(context.button.action.params, {
-            sortOrder: context.button.action.params.sortOrder + 1,
-        });
+        context.button.action.params.sortOrder = context.button.action.params.sortOrder + 1;
+        // O.bject.assign(context.button.action.params, {
+        //     sortOrder: context.button.action.params.sortOrder + 1,
+        // });
         return __WEBPACK_IMPORTED_MODULE_1__execute_engine__["Engine"].openDialog(context, event);
     },
 });
@@ -7899,6 +7983,30 @@ var __WEBPACK_AMD_DEFINE_RESULT__;/*
 
 
 
+
+
+/***/ }),
+/* 191 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["a"] = TypeSafeAssign;
+/**
+ * This is the same as Object.assign, but type-safe.
+ * Use it as a replacetment for Object.Assign(this, ... ) in constructors
+ */
+function TypeSafeAssign() {
+    var args = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        args[_i] = arguments[_i];
+    }
+    args.reduce(function (result, current) {
+        return Object.keys(current).reduce(function (target, key) {
+            target[key] = current[key];
+            return target;
+        }, result);
+    }, args[0]);
+}
 
 
 /***/ })

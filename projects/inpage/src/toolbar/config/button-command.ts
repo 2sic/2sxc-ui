@@ -21,10 +21,10 @@ export class ButtonCommand {
     }
 
     static normalize(action: ButtonCommand): Partial<CommandParams> {
-        const params: Partial<CommandParams> = {};
+        let params: Partial<CommandParams> = {};
         if (action) {
             if (action.name) params.action = action.name;
-            if (action.params) Object.assign(params, action.params);
+            if (action.params) params = {...params, ...action.params}; // O.bject.assign(params, action.params);
         }
         return params;
     }

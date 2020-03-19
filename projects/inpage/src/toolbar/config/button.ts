@@ -2,7 +2,7 @@
 import { CommandCode } from '../../commands/command-code';
 import { CommandExecution } from '../../commands/execute/command-execution';
 import { ContextBundleButton } from '../../context/bundles/context-bundle-button';
-import { DictionaryValue, TypeTbD, TypeUnsafe } from '../../plumbing';
+import { DictionaryValue, TypeSafeAssign, TypeTbD, TypeUnsafe } from '../../plumbing';
 
 
 /** This is the most common call signature on most ButtonConfig properties */
@@ -19,13 +19,15 @@ export class Button {
 
     constructor(action?: ButtonCommand, partialConfig?: Partial<Button>) {
         if (action && action.commandDefinition && action.commandDefinition.buttonConfig) {
-        this.action = action;
-        // get defaults from action commandDefinition
-        Object.assign(this, action.commandDefinition.buttonConfig);
+            this.action = action;
+            // get defaults from action commandDefinition
+            TypeSafeAssign(this, action.commandDefinition.buttonConfig);
+            // O.bject.assign(this, action.commandDefinition.buttonConfig);
         }
 
         if (partialConfig) {
-        Object.assign(this, partialConfig);
+            TypeSafeAssign(this, partialConfig);
+            // O.bject.assign(this, partialConfig);
         }
     }
 
@@ -67,8 +69,6 @@ export class Button {
     }
 
 }
-
-
 
 function evalPropOrFun(propOrFunction: TypeTbD): TypeUnsafe {
     if (propOrFunction === undefined || propOrFunction === null) return false;

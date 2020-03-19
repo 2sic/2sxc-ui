@@ -1,17 +1,12 @@
 ﻿import { Commands } from '../../commands/commands';
-import { HasLog } from '../../logging/has-log';
-import { Log } from '../../logging/log';
-import { TypeUnsafe } from '../../plumbing/TypeTbD';
-import { ButtonCommand } from '../config/button-command';
-import { Button } from '../config/button';
-import { ButtonGroup } from '../config/button-group';
-import { Toolbar } from '../config/toolbar';
-import { ToolbarSettings } from '../config/toolbar-settings';
+import { HasLog, Log } from '../../logging';
+import { TypeUnsafe } from '../../plumbing';
+import { Button, ButtonCommand, ButtonGroup, Toolbar, ToolbarSettings } from '../config';
 import { ToolbarConfigLoader } from './toolbar-config-loader';
 
 export class ButtonGroupConfigLoader extends HasLog {
 
-    constructor(private toolbar: ToolbarConfigLoader) {
+    constructor(public toolbar: ToolbarConfigLoader) {
         super('Tlb.GrpCnf', toolbar.log);
     }
 
@@ -27,7 +22,7 @@ export class ButtonGroupConfigLoader extends HasLog {
         log.add(`will expand groups - found ${fullToolbarConfig.groups.length} items`);
         for (let g = 0; g < fullToolbarConfig.groups.length; g++) {
             // expand a verb-list like "edit,new" into objects like [{ action: "edit" }, {action: "new"}]
-            expandButtonList(fullToolbarConfig.groups[g], fullToolbarConfig.settings, log);
+            expandButtonList(this, fullToolbarConfig.groups[g], fullToolbarConfig.settings);
 
             // fix all the buttons
             const btns = fullToolbarConfig.groups[g].buttons;
@@ -52,17 +47,19 @@ export class ButtonGroupConfigLoader extends HasLog {
                     this.toolbar.command.normalizeCommandJson(btnCommand);
 
                     // parameters adapter from v1 to v2
-                    const params = this.toolbar.command.removeActionProperty(btnCommand);
-                    Object.assign(params, fullToolbarConfig.params);
+                    let params = this.toolbar.command.removeActionProperty(btnCommand);
+                    params = {...params, ...fullToolbarConfig.params};
+                    // O.bject.assign(params, fullToolbarConfig.params);
 
                     // Toolbar API v2
                     const newButtonAction = new ButtonCommand(name, contentType, params);
-                    const newButtonConfig = new Button(newButtonAction);
+                    let newButtonConfig = new Button(newButtonAction);
                     newButtonConfig.name = name;
 
                     // settings adapter from v1 to v2
                     const settings = Button.normalize(btn);
-                    Object.assign(newButtonConfig, settings);
+                    newButtonConfig = {...newButtonConfig, ...settings};
+                    // O.bject.assign(newButtonConfig, settings);
 
                     // ensure all buttons have either own settings, or the fallback
                     this.toolbar.button.addDefaultBtnSettings(newButtonConfig,
@@ -91,13 +88,10 @@ export class ButtonGroupConfigLoader extends HasLog {
  * @param root
  * @param settings
  */
-function expandButtonList(root: ButtonGroup, settings: ToolbarSettings, parentLog: Log): void {
-  const log = new Log('Tlb.ExpBts', parentLog, 'start');
+function expandButtonList(parent: ButtonGroupConfigLoader, root: ButtonGroup, settings: ToolbarSettings): void {
+  const log = new Log('Tlb.ExpBts', parent.log, 'start');
 
-  // let root = grp; // the root object which has all params of the command
-  let btns: any[] = [];
-  // 2020-03-11 2dm removed, as it seems unused completely
-//   let sharedProperties: a.ny = null;
+  let btns: Array<Button | string> = [];
 
   // convert compact buttons (with multi-verb action objects) into own button-objects
   // important because an older syntax allowed {action: "new,edit", entityId: 17}
@@ -110,7 +104,9 @@ function expandButtonList(root: ButtonGroup, settings: ToolbarSettings, parentLo
         log.add(`button def "${btn} is string of ma.ny names, will expand into array with action-properties"`);
         const acts = actionString.split(',');
         for (let a = 0; a < acts.length; a++) {
-          btns.push($.extend(true, {}, btn, { action: acts[a] }) as Button);
+            // TODO: must fix, the action isn't correctly expanded
+            (btn as any).action = acts[a];
+            btns.push(btn);
         }
       } else {
         btns.push(btn);
@@ -122,7 +118,7 @@ function expandButtonList(root: ButtonGroup, settings: ToolbarSettings, parentLo
     btns = (root.buttons as string).split(',');
 
     // 2020-03-11 2dm removed, as it seems unused completely
-    // sharedProperties = Object.assign({}, root); // inherit all fields used in the button
+    // sharedProperties = O.bject.assign({}, root); // inherit all fields used in the button
     // delete sharedProperties.buttons; // this one's not needed
     // delete sharedProperties.name; // this one's not needed
     // delete sharedProperties.action; //
@@ -149,12 +145,11 @@ function expandButtonList(root: ButtonGroup, settings: ToolbarSettings, parentLo
   }
 
   // add each button - check if it's already an object or just the string
-  for (let v = 0; v < btns.length; v++) {
-    btns[v] = new ToolbarConfigLoader(null).button.normalize(btns[v]/* sharedProperties, */);
-    // todo: refactor this out, not needed a.ny more as they are all together now
-    // btns[v].group = root;// grp;    // attach group reference, needed for fallback etc.
-  }
+//   const finalButtons: Button[] = btns.map(this.toolbar.button.normalize);
 
-  root.buttons = btns; // ensure the internal def is also an array now
+//   for (let v = 0; v < btns.length; v++)
+//     finalButtons[v] = this.toolbar.button.normalize(btns[v]/* sharedProperties, */);
+
+  root.buttons = btns.map((x) => parent.toolbar.button.normalize(x as any)) as any; // ensure the internal def is also an array now
   log.add('done');
 }

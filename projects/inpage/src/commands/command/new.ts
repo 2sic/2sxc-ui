@@ -10,10 +10,10 @@ import { Engine } from '../execute/engine';
  * import this module to commands.ts
  */
 Commands.add('new', 'New', 'plus', false, true, {
-    params: (context) => {
-        return { mode: 'new' };
-    },
+    params: (context) => ({ mode: 'new' }),
+
     dialog: (context) => 'edit', // don't use "new" (default) but use "edit"
+
     showCondition(context) {
         return (
             !!context.button.action.params.contentType ||
@@ -24,9 +24,10 @@ Commands.add('new', 'New', 'plus', false, true, {
     },
     code(context, event) {
         // todo - should refactor this to be a toolbarManager.contentBlock command
-        Object.assign(context.button.action.params, {
-            sortOrder: context.button.action.params.sortOrder + 1,
-        });
+        context.button.action.params.sortOrder = context.button.action.params.sortOrder + 1;
+        // O.bject.assign(context.button.action.params, {
+        //     sortOrder: context.button.action.params.sortOrder + 1,
+        // });
         return Engine.openDialog(context, event);
     },
 });

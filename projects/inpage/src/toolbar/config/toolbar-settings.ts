@@ -1,4 +1,5 @@
-﻿import { ToolbarInitConfig } from '../initialize/toolbar-init-config';
+﻿import { TypeSafeAssign } from '../../plumbing/type-safe-assign';
+import { ToolbarInitConfig } from '../initialize/toolbar-init-config';
 import { ToolbarTemplateToolbar } from '../templates/toolbar-template-toolbar';
 
 /** contains toolbar behaviour settings like float, etc. */
@@ -9,7 +10,8 @@ export class ToolbarSettings {
   classes: string = '';
   constructor(toolbarSettings?: Partial<ToolbarSettings>) {
     if (toolbarSettings) {
-      Object.assign(this, toolbarSettings);
+        TypeSafeAssign(this, toolbarSettings);
+    //   O.bject.assign(this, toolbarSettings);
     }
   }
 }

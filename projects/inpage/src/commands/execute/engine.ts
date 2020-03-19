@@ -76,11 +76,11 @@ export class Engine extends HasLog {
     const newButtonConfig = new Button(newButtonAction);
     newButtonConfig.name = name;
 
-    const button = (context.button = Object.assign(
-      newButtonConfig,
-      newButtonAction.commandDefinition.buttonConfig,
-      Button.normalize(cmdParams as any),
-    ) as Button); // merge conf & settings, but settings has higher priority
+    // merge conf & settings, but settings has higher priority
+    const button = (context.button = { // O.bject.assign(
+      ...newButtonConfig,
+      ...newButtonAction.commandDefinition.buttonConfig,
+      ...Button.normalize(cmdParams as any) });
 
     // todo: stv, fix this in case that is function
     if (!button.dialog) {

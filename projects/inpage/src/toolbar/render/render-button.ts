@@ -63,14 +63,14 @@ export class RenderButton extends RenderPart {
 
 
 
-function oldParametersAdapter(action: ButtonCommand): Partial<CommandParams> {
+// function oldParametersAdapter(action: ButtonCommand): Partial<CommandParams> {
 
-    const params: Partial<CommandParams> = {};
+//     let params: Partial<CommandParams> = {};
 
-    if (action) {
-      if (action.name) params.action = action.name;
-      if (action.params) Object.assign(params, action.params);
-    }
+//     if (action) {
+//       if (action.name) params.action = action.name;
+//       if (action.params) O.bject.assign(params, action.params);
+//     }
 
-    return params;
-  }
+//     return params;
+//   }

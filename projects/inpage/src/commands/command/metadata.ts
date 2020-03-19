@@ -1,4 +1,5 @@
-﻿import { Commands } from '../commands';
+﻿import { ItemIdentifierSimple } from '../../interfaces/item-identifiers';
+import { Commands } from '../commands';
 
 /**
  * create a metadata toolbar
@@ -15,17 +16,19 @@ Commands.add('metadata', 'Metadata', 'tag', false, false, {
         return context.button.action.params.entityId ? '' : 'empty';
         // return settings.items && settings.items[0].entityId ? "" : "empty";
     },
+
     showCondition(context) {
         return !!context.button.action.params.metadata;
     }, // only add a metadata-button if it has metadata-infos
+
     configureCommand(context, command) {
-        const itm = {
+        const itm: Partial<ItemIdentifierSimple> = {
             Title: 'EditFormTitle.Metadata',
-            Metadata: Object.assign(
-                { keyType: 'string', targetType: 10 },
-                command.context.button.action.params.metadata,
-            ),
+            Metadata: { // O.bject.assign(
+                ...{ keyType: 'string', targetType: 10 },
+                ...command.context.button.action.params.metadata },
         };
-        Object.assign(command.items[0], itm);
+        command.items[0] = {...command.items[0], ...itm };
+        // O.bject.assign(command.items[0], itm);
     },
 });

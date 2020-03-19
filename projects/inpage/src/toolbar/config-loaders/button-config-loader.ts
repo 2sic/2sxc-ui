@@ -100,10 +100,6 @@ export class ButtonConfigLoader extends HasLog {
   /**
    * takes an object like "actionname" or { action: "actionname", ... }
    * and changes it to a { command: { action: "actionname" }, ... }
-   *
-   * @param {(InPageButtonJson | InPageCommandJson | string)} original
-   * @returns {InPageButtonJson}
-   * @memberof ButtonConfigurationBuilder
    */
   normalize(original: InPageButtonJson | InPageCommandJson | string): InPageButtonJson {
     const log = new Log('Tlb.ExpBtn', this.log, 'start');

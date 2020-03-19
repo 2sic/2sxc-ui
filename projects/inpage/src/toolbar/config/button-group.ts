@@ -2,13 +2,11 @@
 import { DictionaryValue } from '../../plumbing';
 
 export class ButtonGroup {
-  buttons: Button[] = []; // array of buttons
-  defaults: DictionaryValue = {}; // a.ny = []; // v1
+  defaults: DictionaryValue = {};
 
-  constructor(buttons: Button[]) {
-      // TODO: 2dm - seems unnecessary
+  constructor(public buttons: Button[]) {
     // adds these to the items
-    this.buttons = buttons;
+    this.buttons = buttons || [];
   }
 
 }

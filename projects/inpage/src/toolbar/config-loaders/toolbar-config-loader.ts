@@ -126,7 +126,8 @@ export class ToolbarConfigLoader extends HasLog {
         // toolbarConfig.groupConfig = new GroupConfig(original.groups as ButtonConfig[]);
         toolbarConfig.groups = unstructuredConfig.groups || []; // the groups of buttons
         toolbarConfig.params = unstructuredConfig.params || {}; // these are the default command parameters
-        toolbarConfig.settings = Object.assign({}, defaultToolbarSettings, unstructuredConfig.settings, cleanDeprecatedSettings(toolbarSettings)) as ToolbarSettings;
+        toolbarConfig.settings = { ...defaultToolbarSettings, ...unstructuredConfig.settings, ...cleanDeprecatedSettings(toolbarSettings)};
+        // toolbarConfig.settings = O.bject.assign({}, defaultToolbarSettings, unstructuredConfig.settings, cleanDeprecatedSettings(toolbarSettings)) as ToolbarSettings;
 
         toolbarConfig.debug = unstructuredConfig.debug || false; // show more debug info
         toolbarConfig.defaults = unstructuredConfig.defaults || {}; // the button defaults like icon, etc.
@@ -150,7 +151,7 @@ export class ToolbarConfigLoader extends HasLog {
  * @param toolbarSettings
  */
 function cleanDeprecatedSettings(toolbarSettings: ToolbarSettings): ToolbarSettings {
-    const partialToolbaSettings = Object.assign({}, toolbarSettings) as ToolbarSettings;
+    const partialToolbaSettings = {...toolbarSettings}; // O.bject.assign({}, toolbarSettings) as ToolbarSettings;
     if (!partialToolbaSettings.autoAddMore) {
       delete partialToolbaSettings.autoAddMore;
     }
