@@ -1,6 +1,8 @@
 ﻿import { PositionCoordinates, Positioning, QeContentBlock, QeModule, QeSelectors } from '.';
 
 const configAttr: string = 'quick-edit-config';
+const classForAddContent = 'sc-content-block-menu-addcontent';
+const classForAddApp = 'sc-content-block-menu-addapp';
 const selectedOverlay = $("<div class='sc-content-block-menu sc-content-block-selected-menu sc-i18n'></div>")
     .append(
     btn('delete', 'trash-empty', 'Delete'),
@@ -27,8 +29,9 @@ class QuickESingleton {
     win = $(window);
     main = $("<div class='sc-content-block-menu sc-content-block-quick-insert sc-i18n'></div>") as MainOverlay;
     template =
-        `<a class='sc-content-block-menu-addcontent sc-invisible' data-type='Default' data-i18n='[titleTemplate]QuickInsertMenu.AddBlockContent'>x</a><a class='sc-content-block-menu-addapp sc-invisible' data-type='' data-i18n='[titleTemplate]QuickInsertMenu.AddBlockApp'>x</a>${
-        btn('select', 'ok', 'Select', true)}${btn('paste', 'paste', 'Paste', true, true)}`;
+        `<a class='${classForAddContent} sc-invisible' data-type='Default' data-i18n='[titleTemplate]QuickInsertMenu.AddBlockContent'>x</a>`
+        + `<a class='${classForAddApp} sc-invisible' data-type='' data-i18n='[titleTemplate]QuickInsertMenu.AddBlockApp'>x</a>`
+        + `${btn('select', 'ok', 'Select', true)}${btn('paste', 'paste', 'Paste', true, true)}`;
     selected = selectedOverlay;
     // will be populated later in the module section
     contentBlocks: JQuery = null;
@@ -125,12 +128,7 @@ export const QuickE = new QuickESingleton();
 
 
 
-function btn(action: string,
-             icon: string,
-             i18N: string,
-             invisible?: boolean,
-             unavailable?: boolean,
-             classes?: string): string {
+function btn(action: string, icon: string, i18N: string, invisible?: boolean, unavailable?: boolean, classes?: string): string {
   return `<a class='sc-content-block-menu-btn sc-cb-action icon-sxc-${icon} ${invisible ? ' sc-invisible ' : ''}${
     unavailable ? ' sc-unavailable ' : ''}${classes}' data-action='${action
     }' data-i18n='[title]QuickInsertMenu.${i18N}'></a>`;
@@ -149,13 +147,12 @@ function enable(): void {
  */
 function watchMouse() {
     let refreshTimeout: number = null;
-    $('body').on('mousemove',
-        (e) => {
+    $('body').on('mousemove', (e) => {
         if (refreshTimeout === null)
             refreshTimeout = window.setTimeout(() => {
                 requestAnimationFrame(() => {
-                Positioning.refresh(e);
-                refreshTimeout = null;
+                    Positioning.refresh(e);
+                    refreshTimeout = null;
                 });
             },
             20);

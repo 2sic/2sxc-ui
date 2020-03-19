@@ -1,14 +1,16 @@
-﻿import { QeModule, QuickE, QeSelectors, Specs } from '.';
+﻿import { QeModule, QeSelectors, QuickE, Specs } from '.';
 import { SxcEdit } from '../interfaces/sxc-instance-editable';
 import { CmdsStrategyFactory } from './cmds-strategy-factory';
+import { ContextForLists } from './context-for-lists';
 
 /** add a clipboard to the quick edit */
 
-export class QuickEClipboard {
-    static do = copyPasteInPage;
-    static get(): Specs { return contents; }
+class QuickEClipboardSingleton {
+    do = copyPasteInPage;
+    get(): Specs { return contents; }
 
     constructor() {
+        // initialize once the DOM is ready
         $(() => this.initialize());
     }
 
@@ -30,6 +32,8 @@ export class QuickEClipboard {
         });
     }
 }
+
+export const QuickEClipboard = new QuickEClipboardSingleton();
 
 /**
  * perform copy and paste commands - needs the clipboard
@@ -64,7 +68,7 @@ function copyPasteInPage(cbAction: string, list: JQuery, index: number, type: st
 
             if (type === QeSelectors.blocks.cb.id) {
                 const sxc = SxcEdit.get(list);
-                sxc.manage._getCbManipulator().move(newClip.parent, newClip.field, from, to);
+                sxc.manage._getCbManipulator().move(newClip.parent as number, newClip.field, from, to);
             } else
                 QeModule.move(contents, newClip, from, to); // sometimes missing oldClip.item
 
@@ -119,7 +123,8 @@ function createSpecs(type: string, list: JQuery, index: number): Specs {
   } else {
     currentItem = listItems[index];
   }
-  const editContext = JSON.parse(list.attr(QeSelectors.blocks.cb.context) || null) || { parent: 'dnn', field: list.id };
+  const editContext: ContextForLists = ContextForLists.getFromDom(list) // (JSON.parse(list.attr(QeSelectors.blocks.cb.context) || null) as ContextForLists
+    || { parent: 'dnn', field: list.id };
   return {
     parent: editContext.parent,
     field: editContext.field,
