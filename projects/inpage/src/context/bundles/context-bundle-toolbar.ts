@@ -1,12 +1,11 @@
-﻿import { ButtonConfig } from '../../toolbar/config/button-config';
-import { ToolbarConfig } from '../../toolbar/config/toolbar-config';
-import { ContextBundleButton } from './context-bundle-button';
-import { ContextBundleItem } from './context-bundle-item';
+﻿import { ContextBundleButton, ContextBundleItem } from '.';
+import { Button } from '../../toolbar/config/button';
+import { Toolbar } from '../../toolbar/config/toolbar';
 
 export class ContextBundleToolbar extends ContextBundleItem {
-  toolbar: ToolbarConfig;
+  toolbar: Toolbar;
 
-  forButton(button: ButtonConfig): ContextBundleButton {
+  forButton(button: Button): ContextBundleButton {
       const clone = Object.assign({}, this) as ContextBundleButton;
       clone.button = button;
       return clone;

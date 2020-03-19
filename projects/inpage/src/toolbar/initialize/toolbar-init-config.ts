@@ -1,17 +1,17 @@
 import * as Constants from '../../constants';
 import { HtmlTools } from '../../html/dom-tools';
 import { IDs } from '../../settings/2sxc.consts';
-import { ButtonConfig } from '../config/button-config';
+import { Button } from '../config/button';
 import * as Toolbarsettings from '../config/toolbar-settings';
 import ToolbarSettings = Toolbarsettings.ToolbarSettings;
 import { ToolbarTemplateToolbar } from '../templates/toolbar-template-toolbar';
 
-export type ToolbarVariationsBeforeInitializing = ToolbarVariationsForInitializing;
+// export type ToolbarVariationsBeforeInitializing = ToolbarVariationsForInitializing;
 
 export interface ToolbarVariationsForInitializing extends ToolbarTemplateToolbar {
     action?: string;
     // groups?: ButtonGroup[];
-    buttons: ButtonConfig[];
+    buttons: Button[];
 }
 
 /**

@@ -1,8 +1,7 @@
 ﻿import { CommandParams } from '../../commands/command-params';
 import { ContextBundleButton } from '../../context/bundles/context-bundle-button';
-import { ButtonCommand } from '../button/button-command';
+import { ButtonCommand } from '../config/button-command';
 import { RenderPart } from './render-part-base';
-// import { addClasses } from './render-helpers';
 import { ToolbarRenderer } from './toolbar-renderer';
 
 
@@ -14,7 +13,7 @@ export class RenderButton extends RenderPart {
     const buttonConfig = context.button;
 
     // retrieve configuration for this button
-    const commandParams = oldParametersAdapter(buttonConfig.action);
+    const commandParams = ButtonCommand.normalize(buttonConfig.action);
 
     let onclick: string = '';
 
@@ -69,16 +68,8 @@ function oldParametersAdapter(action: ButtonCommand): Partial<CommandParams> {
     const params: Partial<CommandParams> = {};
 
     if (action) {
-
-      if (action.name) {
-        params.action = action.name;
-      }
-
-      if (action.params) {
-        Object.assign(
-          params,
-          action.params);
-      }
+      if (action.name) params.action = action.name;
+      if (action.params) Object.assign(params, action.params);
     }
 
     return params;

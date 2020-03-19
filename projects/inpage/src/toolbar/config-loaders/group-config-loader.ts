@@ -2,11 +2,10 @@
 import { HasLog } from '../../logging/has-log';
 import { Log } from '../../logging/log';
 import { TypeUnsafe } from '../../plumbing/TypeTbD';
-import { buttonConfigUpgrade } from '../adapters/settings-adapter';
-import { ButtonCommand } from '../button/button-command';
-import { ButtonConfig } from '../config/button-config';
-import { ButtonGroupConfig } from '../config/button-group-config';
-import { ToolbarConfig } from '../config/toolbar-config';
+import { ButtonCommand } from '../config/button-command';
+import { Button } from '../config/button';
+import { ButtonGroup } from '../config/button-group';
+import { Toolbar } from '../config/toolbar';
 import { ToolbarSettings } from '../config/toolbar-settings';
 import { ToolbarConfigLoader } from './toolbar-config-loader';
 
@@ -21,7 +20,7 @@ export class ButtonGroupConfigLoader extends HasLog {
      * so if groups were just strings like "edit,new" or compact buttons, they will be expanded afterwards
      * @param fullToolbarConfig
      */
-    expandButtonGroups(fullToolbarConfig: ToolbarConfig, parentLog: Log): ToolbarConfig {
+    expandButtonGroups(fullToolbarConfig: Toolbar, parentLog: Log): Toolbar {
         const log = new Log('Tlb.ExpGrp', parentLog, 'start');
 
         // by now we should have a structure, let's check/fix the buttons
@@ -33,7 +32,7 @@ export class ButtonGroupConfigLoader extends HasLog {
             // fix all the buttons
             const btns = fullToolbarConfig.groups[g].buttons;
 
-            const buttonConfigs: ButtonConfig[] = [];
+            const buttonConfigs: Button[] = [];
 
             if (Array.isArray(btns)) {
                 log.add(`will process ${btns.length} buttons`);
@@ -58,11 +57,11 @@ export class ButtonGroupConfigLoader extends HasLog {
 
                     // Toolbar API v2
                     const newButtonAction = new ButtonCommand(name, contentType, params);
-                    const newButtonConfig = new ButtonConfig(newButtonAction);
+                    const newButtonConfig = new Button(newButtonAction);
                     newButtonConfig.name = name;
 
                     // settings adapter from v1 to v2
-                    const settings = buttonConfigUpgrade(btn);
+                    const settings = Button.normalize(btn);
                     Object.assign(newButtonConfig, settings);
 
                     // ensure all buttons have either own settings, or the fallback
@@ -92,7 +91,7 @@ export class ButtonGroupConfigLoader extends HasLog {
  * @param root
  * @param settings
  */
-function expandButtonList(root: ButtonGroupConfig, settings: ToolbarSettings, parentLog: Log): void {
+function expandButtonList(root: ButtonGroup, settings: ToolbarSettings, parentLog: Log): void {
   const log = new Log('Tlb.ExpBts', parentLog, 'start');
 
   // let root = grp; // the root object which has all params of the command
@@ -111,7 +110,7 @@ function expandButtonList(root: ButtonGroupConfig, settings: ToolbarSettings, pa
         log.add(`button def "${btn} is string of ma.ny names, will expand into array with action-properties"`);
         const acts = actionString.split(',');
         for (let a = 0; a < acts.length; a++) {
-          btns.push($.extend(true, {}, btn, { action: acts[a] }) as ButtonConfig);
+          btns.push($.extend(true, {}, btn, { action: acts[a] }) as Button);
         }
       } else {
         btns.push(btn);

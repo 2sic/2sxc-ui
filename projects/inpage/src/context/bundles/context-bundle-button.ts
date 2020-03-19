@@ -1,9 +1,9 @@
 ﻿import { TypeTbD } from '../../plumbing';
-import { ButtonConfig } from '../../toolbar/config/button-config';
+import { Button } from '../../toolbar/config/button';
 import { ContextBundleToolbar } from './context-bundle-toolbar';
 
 export class ContextBundleButton extends ContextBundleToolbar {
-  button: ButtonConfig;
+  button: Button;
 }
 
 

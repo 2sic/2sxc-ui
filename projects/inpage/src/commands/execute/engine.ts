@@ -9,9 +9,8 @@ import { Log } from '../../logging/log';
 import { TypeUnsafe } from '../../plumbing/TypeTbD';
 import { quickDialog } from '../../quick-dialog/quick-dialog';
 import { DialogPaths } from '../../settings/DialogPaths';
-import { buttonConfigUpgrade } from '../../toolbar/adapters/settings-adapter';
-import { ButtonCommand } from '../../toolbar/button/button-command';
-import { ButtonConfig } from '../../toolbar/config/button-config';
+import { ButtonCommand } from '../../toolbar/config/button-command';
+import { Button } from '../../toolbar/config/button';
 import { CommandParams } from '../command-params';
 import { CommandExecution } from './command-execution';
 
@@ -22,37 +21,33 @@ export class Engine extends HasLog {
 
   detectParamsAndRun<T>(
     context: ContextBundleInstance,
-    nameOrSettings: string | Partial<CommandParams>,
-    eventOrSettings: Partial<CommandParams> | MouseEvent,
+    nameOrParams: string | Partial<CommandParams>,
+    eventOrParams: Partial<CommandParams> | MouseEvent,
     event?: MouseEvent,
   ): Promise<void | T> {
     this.log.add(`detecting params and running - has ${arguments.length} params`);
 
-    let settings: Partial<CommandParams>;
+    let cmdParams: Partial<CommandParams>;
 
-    const thirdParamIsEvent =
-      !event &&
-      eventOrSettings &&
-      typeof (eventOrSettings as MouseEvent).altKey !== 'undefined';
-    this.log.add(
-      `might cycle parameters, in case not all were given. third is event=${thirdParamIsEvent}`,
-    );
+    const thirdParamIsEvent = !event && eventOrParams && typeof (eventOrParams as MouseEvent).altKey !== 'undefined';
+    this.log.add(`might cycle parameters. third is event=${thirdParamIsEvent}`);
+
     if (thirdParamIsEvent) {
       // no event param, but settings contains the event-object
       this.log.add('cycling params; event missing & eventOrSettings seems to be an event; settings assumed empty');
-      event = eventOrSettings as MouseEvent; // move it to the correct variable
-      settings = this.nameOrSettingsAdapter(nameOrSettings);
+      event = eventOrParams as MouseEvent; // move it to the correct variable
+      cmdParams = this.nameOrSettingsAdapter(nameOrParams);
     } else {
-      settings = Object.assign(
-        eventOrSettings || {},
-        this.nameOrSettingsAdapter(nameOrSettings),
+      cmdParams = Object.assign(
+        eventOrParams || {},
+        this.nameOrSettingsAdapter(nameOrParams),
       ) as Partial<CommandParams>;
     }
 
     // ensure we have the right event despite browser differences
     event = event || (window.event as MouseEvent);
 
-    return this.run(context as ContextBundleButton, settings, event);
+    return this.run(context as ContextBundleButton, cmdParams, event);
   }
 
   /**
@@ -64,28 +59,28 @@ export class Engine extends HasLog {
    */
   run<T>(
     context: ContextBundleButton,
-    nameOrSettings: string | Partial<CommandParams>,
+    nameOrParams: string | Partial<CommandParams>,
     event: MouseEvent,
   ): Promise<T | void> {
-    let settings = this.nameOrSettingsAdapter(nameOrSettings);
+    let cmdParams = this.nameOrSettingsAdapter(nameOrParams);
 
-    settings = this.expandSettingsWithDefaults(settings);
+    cmdParams = this.expandSettingsWithDefaults(cmdParams);
 
     const origEvent = event;
-    const name = settings.action;
-    const contentType = settings.contentType;
+    const name = cmdParams.action;
+    const contentType = cmdParams.contentType;
     this.log.add(`run command ${name} for type ${contentType}`);
 
     // Toolbar API v2
-    const newButtonAction = new ButtonCommand(name, contentType, settings);
-    const newButtonConfig = new ButtonConfig(newButtonAction);
+    const newButtonAction = new ButtonCommand(name, contentType, cmdParams);
+    const newButtonConfig = new Button(newButtonAction);
     newButtonConfig.name = name;
 
     const button = (context.button = Object.assign(
       newButtonConfig,
       newButtonAction.commandDefinition.buttonConfig,
-      buttonConfigUpgrade(settings),
-    ) as ButtonConfig); // merge conf & settings, but settings has higher priority
+      Button.normalize(cmdParams as any),
+    ) as Button); // merge conf & settings, but settings has higher priority
 
     // todo: stv, fix this in case that is function
     if (!button.dialog) {
@@ -110,7 +105,7 @@ export class Engine extends HasLog {
 
     // if more than just a UI-action, then it needs to be sure the content-group is created first
     this.log.add('command might change data, wrap in pre-flight to ensure content-block');
-    return prepareToAddContent(context, settings.useModuleList).then(() => {
+    return prepareToAddContent(context, cmdParams.useModuleList).then(() => {
       return context.button.code(context, origEvent);
     });
   }

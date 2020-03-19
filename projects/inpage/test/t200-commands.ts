@@ -6,7 +6,7 @@ import { Definition } from '../src/commands/definition';
 import { createContextFromEditContext } from '../src/context/context';
 import { AttrJsonEditContext } from '../src/context/html-attribute/edit-context-root';
 // import { getButtonConfigDefaultsV1 } from '../src/toolbar/button/expand-button-config';
-import { ButtonConfig } from '../src/toolbar/config/button-config';
+import { Button } from '../src/toolbar/config/button';
 
 describe('Commands test suite', function() {
 
@@ -109,7 +109,7 @@ describe('Commands test suite', function() {
     it('/ 210 add command', function() {
       this.command = commands.get('add');
 
-      this.button = this.command.buttonConfig as ButtonConfig;
+      this.button = this.command.buttonConfig as Button;
       this.context.button = this.button;
 
       this.action = {

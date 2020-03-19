@@ -1,8 +1,10 @@
 
-export * from './button-config';
+export * from './button-command';
 
-export * from './button-group-config';
+export * from './button';
 
-export * from './toolbar-config';
+export * from './button-group';
+
+export * from './toolbar';
 
 export * from './toolbar-settings';

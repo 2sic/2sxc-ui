@@ -1,14 +1,13 @@
-﻿import { ContextBundleButton } from '../../context/bundles/context-bundle-button';
-import { HasLog } from '../../logging/has-log';
-import { Log } from '../../logging/log';
-import { InstanceConfig } from '../../manage/instance-config';
-import { ToolbarVariationsForInitializing } from '../initialize/toolbar-init-config';
-import { defaultToolbarSettings, settingsForEmptyToolbar, ToolbarSettings } from '../config/toolbar-settings';
-import { ToolbarTemplateManager } from '../templates/toolbar-template-manager';
-import { ToolbarConfig } from '../config/toolbar-config';
-import { ButtonConfigLoader } from './button-config-loader';
-import { ButtonGroupConfigLoader } from '.';
+﻿import { ButtonGroupConfigLoader } from '.';
 import { CommandConfigLoader } from '.';
+import { ContextBundleButton } from '../../context/bundles/context-bundle-button';
+import { HasLog, Log } from '../../logging';
+import { InstanceConfig } from '../../manage/instance-config';
+import { Toolbar } from '../config/toolbar';
+import { defaultToolbarSettings, settingsForEmptyToolbar, ToolbarSettings } from '../config/toolbar-settings';
+import { ToolbarVariationsForInitializing } from '../initialize/toolbar-init-config';
+import { ToolbarTemplateManager } from '../templates/toolbar-template-manager';
+import { ButtonConfigLoader } from './button-config-loader';
 
 export class ToolbarConfigLoader extends HasLog {
 
@@ -23,7 +22,7 @@ export class ToolbarConfigLoader extends HasLog {
         this.command = new CommandConfigLoader(this);
     }
 
-    expandToolbarConfig(context: ContextBundleButton, toolbarData: ToolbarVariationsForInitializing, toolbarSettings: ToolbarSettings, parentLog?: Log): ToolbarConfig {
+    expandToolbarConfig(context: ContextBundleButton, toolbarData: ToolbarVariationsForInitializing, toolbarSettings: ToolbarSettings, parentLog?: Log): Toolbar {
         const log = new Log('Tlb.ExpTop', this.log, 'expand start');
 
         if (toolbarData === ({} as ToolbarVariationsForInitializing) && toolbarSettings === ({} as ToolbarSettings)) {
@@ -96,7 +95,7 @@ export class ToolbarConfigLoader extends HasLog {
      * @param unstructuredConfig
      * @param toolbarSettings
      */
-    private ensureDefinitionTree(unstructuredConfig: any, toolbarSettings: ToolbarSettings): ToolbarConfig {
+    private ensureDefinitionTree(unstructuredConfig: any, toolbarSettings: ToolbarSettings): Toolbar {
         const log = new Log('Tlb.DefTre', this.log, 'start');
         // original is null/undefined, just return empty set
         if (!unstructuredConfig) throw (`preparing toolbar, with nothing to work on: ${unstructuredConfig}`);
@@ -123,14 +122,12 @@ export class ToolbarConfigLoader extends HasLog {
         } else
             log.add('not array or has no items');
 
-        const toolbarConfig = new ToolbarConfig();
+        const toolbarConfig = new Toolbar();
         // toolbarConfig.groupConfig = new GroupConfig(original.groups as ButtonConfig[]);
         toolbarConfig.groups = unstructuredConfig.groups || []; // the groups of buttons
         toolbarConfig.params = unstructuredConfig.params || {}; // these are the default command parameters
         toolbarConfig.settings = Object.assign({}, defaultToolbarSettings, unstructuredConfig.settings, cleanDeprecatedSettings(toolbarSettings)) as ToolbarSettings;
 
-        // todo: old props, remove
-        //   toolbarConfig.name = unstructuredConfig.name || 'toolbar'; // name, no real use
         toolbarConfig.debug = unstructuredConfig.debug || false; // show more debug info
         toolbarConfig.defaults = unstructuredConfig.defaults || {}; // the button defaults like icon, etc.
 

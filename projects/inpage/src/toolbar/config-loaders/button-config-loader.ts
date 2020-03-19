@@ -1,17 +1,13 @@
 ﻿import { InPageCodeJson_ProbablyUnused, InPageCommandJson, isInPageCommandConfiguration } from '.';
 import { InPageButtonJson } from '.';
 import { ToolbarConfigLoader } from '.';
-import { CommandConfigLoader } from '.';
-import { Commands as Commands } from '../../commands/commands';
-import { ContextBundleButton } from '../../context/bundles/context-bundle-button';
-import { HasLog } from '../../logging/has-log';
-import { Log } from '../../logging/log';
+import { Commands } from '../../commands/commands';
+import { ContextBundleButton } from '../../context/bundles';
+import { HasLog } from '../../logging';
+import { Log } from '../../logging';
 import { InstanceConfig } from '../../manage/instance-config';
-import { DictionaryValue, TypeTbD, TypeUnsafe, TypeWeDontCare } from '../../plumbing/TypeTbD';
-import { ButtonCommand } from '../button/button-command';
-import { ButtonConfig } from '../config/button-config';
-import { ButtonGroupConfig } from '../config/button-group-config';
-import { ToolbarConfig } from '../config/toolbar-config';
+import { DictionaryValue, TypeTbD, TypeUnsafe, TypeWeDontCare } from '../../plumbing';
+import { Button, ButtonCommand, ButtonGroup, Toolbar } from '../config';
 
 /**
  * This is a system to build button configurations
@@ -24,9 +20,9 @@ export class ButtonConfigLoader extends HasLog {
 
 
 
-  convertToConfig(oldButtonDef: InPageButtonJson): ButtonConfig {
+  convertToConfig(oldButtonDef: InPageButtonJson): Button {
 
-    const partialButtonConfig: Partial<ButtonConfig> = {};
+    const partialButtonConfig: Partial<Button> = {};
 
     if (oldButtonDef.code) {
       partialButtonConfig.code = (context: ContextBundleButton) => {
@@ -93,7 +89,7 @@ export class ButtonConfigLoader extends HasLog {
 
     // Toolbar API v2
     const newButtonAction = new ButtonCommand(name, contentType, params);
-    const newButtonConfig = new ButtonConfig(newButtonAction);
+    const newButtonConfig = new Button(newButtonAction);
     newButtonConfig.name = name;
 
     return newButtonConfig;
@@ -147,11 +143,11 @@ export class ButtonConfigLoader extends HasLog {
   /**
    * remove buttons which are not valid based on add condition
    * @param {ContextBundleButton} context
-   * @param {ToolbarConfig} full
+   * @param {Toolbar} full
    * @param {InstanceConfig} config
    * @memberof ButtonConfigurationBuilder
    */
-  removeDisableButtons(context: ContextBundleButton, full: ToolbarConfig, config: InstanceConfig): void {
+  removeDisableButtons(context: ContextBundleButton, full: Toolbar, config: InstanceConfig): void {
     const log = new Log('Tlb.RmvDsb', this.log,  `start remove disabled buttons for ${full.groups.length} groups`);
     const btnGroups = full.groups;
     for (let g = 0; g < btnGroups.length; g++) {
@@ -179,9 +175,9 @@ export class ButtonConfigLoader extends HasLog {
      * @param fullToolbarConfig
      * @param actions
      */
-    addDefaultBtnSettings(btn: ButtonConfig,
-                          group: ButtonGroupConfig,
-                          fullToolbarConfig: ToolbarConfig,
+    addDefaultBtnSettings(btn: Button,
+                          group: ButtonGroup,
+                          fullToolbarConfig: Toolbar,
                           actions: typeof Commands) {
         this.log.add(`adding default btn settings for ${() => btn.action.name}`);
         for (let d = 0; d < btnProperties.length; d++) {
@@ -193,7 +189,7 @@ export class ButtonConfigLoader extends HasLog {
 
 
 
-function removeUnfitButtons(context: ContextBundleButton, btns: ButtonConfig[], config: InstanceConfig, log: Log): void {
+function removeUnfitButtons(context: ContextBundleButton, btns: Button[], config: InstanceConfig, log: Log): void {
   let removals = '';
   for (let i = 0; i < btns.length; i++) {
     // let add = btns[i].showCondition;
@@ -210,7 +206,7 @@ function removeUnfitButtons(context: ContextBundleButton, btns: ButtonConfig[], 
     log.add(`removed buttons: ${removals}`);
 }
 
-function disableButtons(context: ContextBundleButton, btns: ButtonConfig[], config: InstanceConfig): void {
+function disableButtons(context: ContextBundleButton, btns: Button[], config: InstanceConfig): void {
   for (let i = 0; i < btns.length; i++) {
     // btns[i].disabled = evalPropOrFunction(btns[i].disabled, btns[i].command, config, false);
     context.button = btns[i];
@@ -243,11 +239,6 @@ const btnProperties = [
   'disabled',
 ];
 
-const prvProperties = [
-  'defaults',
-  'params',
-  'name',
-];
 
 /**
  * configure missing button properties with various fallback options
@@ -257,9 +248,9 @@ const prvProperties = [
  * @param actions
  * @param propName
  */
-function fallbackBtnSetting(btn: ButtonConfig,
-                            group: ButtonGroupConfig,
-                            fullToolbarConfig: ToolbarConfig,
+function fallbackBtnSetting(btn: Button,
+                            group: ButtonGroup,
+                            fullToolbarConfig: Toolbar,
                             actions: typeof Commands,
                             propName: string): TypeWeDontCare {
   const untypedButton = btn as TypeUnsafe as DictionaryValue;

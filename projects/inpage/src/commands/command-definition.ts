@@ -1,12 +1,12 @@
 ﻿import { ContextBundleButton } from '../context/bundles/context-bundle-button';
-import { ButtonConfig } from '../toolbar/config/button-config';
+import { Button } from '../toolbar/config/button';
 import { Definition } from './definition';
 
 export class CommandDefinition {
   constructor(public name: string) {
   }
 
-  buttonConfig: Partial<ButtonConfig>;
+  buttonConfig: Partial<Button>;
 
   protected merge(icon: string, translateKey: string, uiOnly: boolean, partOfPage: boolean, more: Partial<Definition>): void {
     //
@@ -16,7 +16,7 @@ export class CommandDefinition {
     title: (context: ContextBundleButton) => `Toolbar.${translateKey}`,
     uiActionOnly: (context: ContextBundleButton) => uiOnly,
     partOfPage: (context: ContextBundleButton) => partOfPage,
-    } as Partial<ButtonConfig>;
+    } as Partial<Button>;
 
     Object.assign(partialButtonConfig, more);
 
