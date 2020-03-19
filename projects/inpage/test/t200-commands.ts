@@ -2,7 +2,6 @@
 import { Actions } from '../src/actions/actions';
 import { CommandDefinition } from '../src/commands/command-definition';
 import { Commands as Commands } from '../src/commands/commands';
-import { Definition } from '../src/commands/definition';
 import { createContextFromEditContext } from '../src/context/context';
 import { AttrJsonEditContext } from '../src/context/html-attribute/edit-context-root';
 // import { getButtonConfigDefaultsV1 } from '../src/toolbar/button/expand-button-config';
@@ -127,14 +126,14 @@ describe('Commands test suite', function() {
       this.icon = 'plus-circled';
       this.uiOnly = false;
       this.partOfPage = true;
-      const more: Definition = {
+      const more: Partial<Button> = {
         showCondition(context) {
           return (context.contentBlock.isList) && (context.button.action.params.useModuleList) && (context.button.action.params.sortOrder !== -1);
         },
         code(context) {
           return Actions.addItem(context, context.button.action.params.sortOrder + 1);
         },
-      } as Definition;
+      } as Partial<Button>;
 
       this.commandExpected = CommandDefinition.build('add', this.translateKey, this.icon, this.uiOnly, this.partOfPage, more);
     //   this.commandExpected.name = this.name;

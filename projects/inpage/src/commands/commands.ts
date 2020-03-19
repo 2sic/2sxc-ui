@@ -1,5 +1,5 @@
-﻿import { CommandDefinition } from './command-definition';
-import { Definition } from './definition';
+﻿import { Button } from '../toolbar/config';
+import { CommandDefinition } from './command-definition';
 
 /** Singleton Catalog of all commands */
 class CommandsCatalog {
@@ -8,7 +8,7 @@ class CommandsCatalog {
   get = (name: string) => this.list[name]; // a specific action definition
 
   add(name: string, translateKey: string, icon: string, uiOnly: boolean, partOfPage: boolean,
-      more: Definition): CommandDefinition {
+      more: Partial<Button>): CommandDefinition {
       return this.addDef(CommandDefinition.build(name, translateKey, icon, uiOnly, partOfPage, more));
   }
 

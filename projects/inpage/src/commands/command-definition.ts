@@ -1,6 +1,6 @@
 ﻿import { ContextBundleButton } from '../context/bundles/context-bundle-button';
 import { Button } from '../toolbar/config/button';
-import { Definition } from './definition';
+// import { Definition } from './definition';
 
 export class CommandDefinition {
     constructor(public name: string) {
@@ -8,14 +8,14 @@ export class CommandDefinition {
 
     buttonConfig: Partial<Button>;
 
-    protected merge(icon: string, translateKey: string, uiOnly: boolean, partOfPage: boolean, more: Partial<Definition>): void {
+    protected merge(icon: string, translateKey: string, uiOnly: boolean, partOfPage: boolean, more: Partial<Button>): void {
         //
         // stv: v1 code
         const partialButtonConfig = {
-        icon: (context: ContextBundleButton) => `icon-sxc-${icon}`,
-        title: (context: ContextBundleButton) => `Toolbar.${translateKey}`,
-        uiActionOnly: (context: ContextBundleButton) => uiOnly,
-        partOfPage: (context: ContextBundleButton) => partOfPage,
+            icon: (context: ContextBundleButton) => `icon-sxc-${icon}`,
+            title: (context: ContextBundleButton) => `Toolbar.${translateKey}`,
+            uiActionOnly: (context: ContextBundleButton) => uiOnly,
+            partOfPage: (context: ContextBundleButton) => partOfPage,
         } as Partial<Button>;
 
         Object.assign(partialButtonConfig, more);
@@ -28,7 +28,7 @@ export class CommandDefinition {
                  icon: string,
                  uiOnly: boolean,
                  partOfPage: boolean,
-                 more: Definition,
+                 more: Partial<Button>,
                  ): CommandDefinition {
 
         if (typeof (partOfPage) !== 'boolean')
