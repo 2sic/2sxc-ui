@@ -572,9 +572,8 @@ var HasLog = /** @class */ (function () {
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__in_page_button__ = __webpack_require__(92);
 /* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "InPageButtonJson", function() { return __WEBPACK_IMPORTED_MODULE_0__in_page_button__["InPageButtonJson"]; });
-/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "isInPageButtonConfiguration", function() { return __WEBPACK_IMPORTED_MODULE_0__in_page_button__["isInPageButtonConfiguration"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__in_page_command__ = __webpack_require__(93);
-/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "isInPageCommandConfiguration", function() { return __WEBPACK_IMPORTED_MODULE_1__in_page_command__["isInPageCommandConfiguration"]; });
+/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "InPageCommandJson", function() { return __WEBPACK_IMPORTED_MODULE_1__in_page_command__["InPageCommandJson"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__button_config_loader__ = __webpack_require__(52);
 /* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "ButtonConfigLoader", function() { return __WEBPACK_IMPORTED_MODULE_2__button_config_loader__["ButtonConfigLoader"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__command_config_loader__ = __webpack_require__(96);
@@ -583,6 +582,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "ButtonGroupConfigLoader", function() { return __WEBPACK_IMPORTED_MODULE_4__group_config_loader__["ButtonGroupConfigLoader"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__toolbar_config_loader__ = __webpack_require__(98);
 /* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "ToolbarConfigLoader", function() { return __WEBPACK_IMPORTED_MODULE_5__toolbar_config_loader__["ToolbarConfigLoader"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__toolbar_wip__ = __webpack_require__(190);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__toolbar_wip___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6__toolbar_wip__);
+/* harmony namespace reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in __WEBPACK_IMPORTED_MODULE_6__toolbar_wip__) if(["InPageButtonJson","InPageCommandJson","ButtonConfigLoader","CommandConfigLoader","ButtonGroupConfigLoader","ToolbarConfigLoader","default"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return __WEBPACK_IMPORTED_MODULE_6__toolbar_wip__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+
 
 
 
@@ -2614,6 +2617,13 @@ var Button = /** @class */ (function () {
             config.title = evalPropOrFun(oldFormat.title);
         return config;
     };
+    /** Detect if this is a Button */
+    Button.is = function (thing) {
+        return thing.action !== undefined;
+    };
+    Button.isArray = function (thing) {
+        return thing.length && Button.is(thing[0]);
+    };
     return Button;
 }());
 
@@ -3003,7 +3013,7 @@ var ButtonConfigLoader = /** @class */ (function (_super) {
             };
         }
         // if it's a command w/action, wrap into command + trim
-        if (Object(__WEBPACK_IMPORTED_MODULE_0____["isInPageCommandConfiguration"])(asBtnConfig)) {
+        if (__WEBPACK_IMPORTED_MODULE_0____["InPageCommandJson"].is(asBtnConfig)) {
             log.add('action found, will move down to .command');
             return {
                 command: { action: original.action.trim() },
@@ -5169,7 +5179,7 @@ var ToolbarConfigFinderAndInitializer = /** @class */ (function (_super) {
      */
     ToolbarConfigFinderAndInitializer.prototype.convertConfigToToolbars = function (tag, config) {
         var context = Object(__WEBPACK_IMPORTED_MODULE_1__context_context__["findContext"])(tag);
-        context.toolbar = new __WEBPACK_IMPORTED_MODULE_3__config_loaders__["ToolbarConfigLoader"](null).expandToolbarConfig(context, config.toolbar, config.settings, this.log);
+        context.toolbar = new __WEBPACK_IMPORTED_MODULE_3__config_loaders__["ToolbarConfigLoader"](this.log).expandToolbarConfig(context, config.toolbar, config.settings);
         // V2 where the full toolbar is included in one setting
         if (tag.attr(__WEBPACK_IMPORTED_MODULE_0__constants__["toolbar"].attr.full)) {
             tag.data(__WEBPACK_IMPORTED_MODULE_0__constants__["toolbar"].attrToMarkInitalized, new __WEBPACK_IMPORTED_MODULE_6__tag_toolbars_tag_toolbar__["TagToolbar"](tag, context));
@@ -5221,7 +5231,6 @@ function addDefaultToolbarConfigToTag(parentTag) {
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "InPageButtonJson", function() { return InPageButtonJson; });
-/* harmony export (immutable) */ __webpack_exports__["isInPageButtonConfiguration"] = isInPageButtonConfiguration;
 /**
  * Button Definition v1. from old API
  * it is publicly used out of inpage, so take a care to preserve its signature
@@ -5229,13 +5238,20 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 var InPageButtonJson = /** @class */ (function () {
     function InPageButtonJson() {
     }
+    // check two common signatures - command and action
+    InPageButtonJson.is = function (thing) {
+        return thing.command !== undefined || thing.action !== undefined;
+    };
+    InPageButtonJson.isArray = function (thing) {
+        return thing.length > 0 && InPageButtonJson.is(thing[0]);
+    };
     return InPageButtonJson;
 }());
 
-function isInPageButtonConfiguration(thing) {
-    // check two common signatures - command and action
-    return thing.command !== undefined || thing.action !== undefined;
-}
+// export function isInPageButtonConfiguration(thing: TypeTbD): thing is InPageButtonJson {
+//   // check two common signatures - command and action
+//   return thing.command !== undefined || thing.action !== undefined;
+// }
 
 
 /***/ }),
@@ -5244,11 +5260,21 @@ function isInPageButtonConfiguration(thing) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (immutable) */ __webpack_exports__["isInPageCommandConfiguration"] = isInPageCommandConfiguration;
-function isInPageCommandConfiguration(thing) {
-    // check two common signatures - command and action
-    return typeof thing.action === 'string';
-}
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "InPageCommandJson", function() { return InPageCommandJson; });
+var InPageCommandJson = /** @class */ (function () {
+    function InPageCommandJson() {
+    }
+    InPageCommandJson.is = function (thing) {
+        // check two common signatures - command and action
+        return typeof thing.action === 'string';
+    };
+    return InPageCommandJson;
+}());
+
+// export function isInPageCommandConfiguration(thing: TypeTbD): thing is InPageCommandJson {
+//   // check two common signatures - command and action
+//   return typeof(thing as InPageCommandJson).action === 'string';
+// }
 
 
 /***/ }),
@@ -5271,6 +5297,10 @@ var ButtonGroup = /** @class */ (function () {
         // adds these to the items
         this.buttons = buttons || [];
     }
+    /** Detect if this is a ButtonGroup */
+    ButtonGroup.is = function (thing) {
+        return thing.buttons !== undefined;
+    };
     return ButtonGroup;
 }());
 
@@ -5344,7 +5374,7 @@ var CommandConfigLoader = /** @class */ (function (_super) {
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ButtonGroupConfigLoader", function() { return ButtonGroupConfigLoader; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__commands_commands__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__commands__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__logging__ = __webpack_require__(8);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__config__ = __webpack_require__(53);
 var __extends = (this && this.__extends) || (function () {
@@ -5384,24 +5414,24 @@ var ButtonGroupConfigLoader = /** @class */ (function (_super) {
     /**
      * this will traverse a groups-tree and expand each group
      * so if groups were just strings like "edit,new" or compact buttons, they will be expanded afterwards
-     * @param fullToolbarConfig
+     * @param fullToolbar
      */
-    ButtonGroupConfigLoader.prototype.expandButtonGroups = function (fullToolbarConfig, parentLog) {
+    ButtonGroupConfigLoader.prototype.expandButtonGroups = function (fullToolbar, parentLog) {
         var log = new __WEBPACK_IMPORTED_MODULE_1__logging__["Log"]('Tlb.ExpGrp', parentLog, 'start');
         // by now we should have a structure, let's check/fix the buttons
-        log.add("will expand groups - found " + fullToolbarConfig.groups.length + " items");
-        for (var g = 0; g < fullToolbarConfig.groups.length; g++) {
+        log.add("will expand groups - found " + fullToolbar.groups.length + " items");
+        for (var g = 0; g < fullToolbar.groups.length; g++) {
             // expand a verb-list like "edit,new" into objects like [{ action: "edit" }, {action: "new"}]
-            expandButtonList(this, fullToolbarConfig.groups[g], fullToolbarConfig.settings);
+            expandButtonList(this, fullToolbar.groups[g], fullToolbar.settings);
             // fix all the buttons
-            var btns = fullToolbarConfig.groups[g].buttons;
+            var btns = (fullToolbar.groups[g]).buttons;
             var buttonConfigs = [];
             if (Array.isArray(btns)) {
                 log.add("will process " + btns.length + " buttons");
                 for (var b = 0; b < btns.length; b++) {
                     var btn = btns[b];
                     var btnCommand = btn.command;
-                    if (!(__WEBPACK_IMPORTED_MODULE_0__commands_commands__["Commands"].get(btnCommand.action))) {
+                    if (!(__WEBPACK_IMPORTED_MODULE_0__commands__["Commands"].get(btnCommand.action))) {
                         log.add("couldn't find action " + btnCommand.action + " - show warning");
                         console.warn('warning: toolbar-button with unknown action-name:', btnCommand.action);
                     }
@@ -5411,7 +5441,7 @@ var ButtonGroupConfigLoader = /** @class */ (function (_super) {
                     this.toolbar.command.normalizeCommandJson(btnCommand);
                     // parameters adapter from v1 to v2
                     var params = this.toolbar.command.removeActionProperty(btnCommand);
-                    params = __assign(__assign({}, params), fullToolbarConfig.params);
+                    params = __assign(__assign({}, params), fullToolbar.params);
                     // O.bject.assign(params, fullToolbarConfig.params);
                     // Toolbar API v2
                     var newButtonAction = new __WEBPACK_IMPORTED_MODULE_2__config__["ButtonCommand"](name, contentType, params);
@@ -5422,16 +5452,16 @@ var ButtonGroupConfigLoader = /** @class */ (function (_super) {
                     newButtonConfig = __assign(__assign({}, newButtonConfig), settings);
                     // O.bject.assign(newButtonConfig, settings);
                     // ensure all buttons have either own settings, or the fallback
-                    this.toolbar.button.addDefaultBtnSettings(newButtonConfig, fullToolbarConfig.groups[g], fullToolbarConfig, __WEBPACK_IMPORTED_MODULE_0__commands_commands__["Commands"]);
+                    this.toolbar.button.addDefaultBtnSettings(newButtonConfig, fullToolbar.groups[g], fullToolbar, __WEBPACK_IMPORTED_MODULE_0__commands__["Commands"]);
                     buttonConfigs.push(newButtonConfig);
                 }
             }
             else
                 log.add("no button array found, won't do a.nything");
             // Toolbar API v2 overwrite V1
-            fullToolbarConfig.groups[g].buttons = buttonConfigs;
+            fullToolbar.groups[g].buttons = buttonConfigs;
         }
-        return fullToolbarConfig;
+        return fullToolbar;
     };
     return ButtonGroupConfigLoader;
 }(__WEBPACK_IMPORTED_MODULE_1__logging__["HasLog"]));
@@ -5518,10 +5548,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0____ = __webpack_require__(11);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__logging__ = __webpack_require__(8);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__manage_instance_config__ = __webpack_require__(99);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__config_toolbar__ = __webpack_require__(54);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__config_toolbar_settings__ = __webpack_require__(33);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__templates_toolbar_template_manager__ = __webpack_require__(55);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__config__ = __webpack_require__(53);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__templates_toolbar_template_manager__ = __webpack_require__(55);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__templates_toolbar_template_toolbar__ = __webpack_require__(173);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__button_config_loader__ = __webpack_require__(52);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__in_page_button__ = __webpack_require__(92);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__templates_toolbar_templaten_button_group__ = __webpack_require__(174);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -5554,6 +5586,8 @@ var __assign = (this && this.__assign) || function () {
 
 
 
+
+
 var ToolbarConfigLoader = /** @class */ (function (_super) {
     __extends(ToolbarConfigLoader, _super);
     function ToolbarConfigLoader(parentLog) {
@@ -5563,20 +5597,20 @@ var ToolbarConfigLoader = /** @class */ (function (_super) {
         _this.command = new __WEBPACK_IMPORTED_MODULE_0____["CommandConfigLoader"](_this);
         return _this;
     }
-    ToolbarConfigLoader.prototype.expandToolbarConfig = function (context, toolbarData, toolbarSettings, parentLog) {
+    ToolbarConfigLoader.prototype.expandToolbarConfig = function (context, toolbarData, toolbarSettings) {
         var log = new __WEBPACK_IMPORTED_MODULE_1__logging__["Log"]('Tlb.ExpTop', this.log, 'expand start');
         if (toolbarData === {} && toolbarSettings === {}) {
             log.add('no data or settings found, will use default toolbar');
-            toolbarSettings = __WEBPACK_IMPORTED_MODULE_4__config_toolbar_settings__["settingsForEmptyToolbar"];
+            toolbarSettings = __WEBPACK_IMPORTED_MODULE_3__config__["settingsForEmptyToolbar"];
         }
         // if it has an action or is an array, keep that. Otherwise get standard buttons
         toolbarData = toolbarData || {}; // if null/undefined, use empty object
         var unstructuredConfig = toolbarData;
-        if (!toolbarData.action && !toolbarData.groups && !toolbarData.buttons && !Array.isArray(toolbarData)) {
-            log.add('no toolbar details found, will use standard toolbar template');
-            var toolbarTemplate = __WEBPACK_IMPORTED_MODULE_5__templates_toolbar_template_manager__["ToolbarTemplateManager"].Instance(log).get('default'); // use default toolbar template
+        if (!__WEBPACK_IMPORTED_MODULE_0____["InPageCommandJson"].is(toolbarData) && !__WEBPACK_IMPORTED_MODULE_5__templates_toolbar_template_toolbar__["ToolbarTemplate"].is(toolbarData) && !__WEBPACK_IMPORTED_MODULE_8__templates_toolbar_templaten_button_group__["ToolbarTemplateButtonGroup"].is(toolbarData) && !Array.isArray(toolbarData)) {
+            log.add('no toolbar structure specified, will use standard toolbar template');
+            var toolbarTemplate = __WEBPACK_IMPORTED_MODULE_4__templates_toolbar_template_manager__["ToolbarTemplateManager"].Instance(log).get('default'); // use default toolbar template
             unstructuredConfig = JSON.parse(JSON.stringify(toolbarTemplate)); // deep copy toolbar template
-            unstructuredConfig.params = ((toolbarData) && Array.isArray(toolbarData) && toolbarData[0]) || toolbarData; // these are the default command parameters
+            unstructuredConfig.params = (toolbarData && Array.isArray(toolbarData) && toolbarData[0]) || toolbarData; // these are the default command parameters
         }
         var instanceConfig = __WEBPACK_IMPORTED_MODULE_2__manage_instance_config__["InstanceConfig"].fromContext(context);
         // whatever we had, if more settings were provided, override with these...
@@ -5593,16 +5627,12 @@ var ToolbarConfigLoader = /** @class */ (function (_super) {
      * button (detected by "command"): { command: ""|[], icon: "..", ... }
      * just a command (detected by "action"): { entityId: 17, action: "edit" }
      * array of commands: [{entityId: 17, action: "edit"}, {contentType: "blog", action: "new"}]
-     * @param unstructuredConfig
-     * @param allActions
-     * @param instanceConfig
-     * @param toolbarSettings
      */
     ToolbarConfigLoader.prototype.buildFullDefinition = function (toolbarContext, unstructuredConfig, instanceConfig, toolbarSettings) {
         var log = new __WEBPACK_IMPORTED_MODULE_1__logging__["Log"]('Tlb.BldFul', this.log, 'start');
         var fullConfig = this.ensureDefinitionTree(unstructuredConfig, toolbarSettings);
         // ToDo: don't use console.log in production
-        if (unstructuredConfig.debug)
+        if (__WEBPACK_IMPORTED_MODULE_5__templates_toolbar_template_toolbar__["ToolbarTemplate"].is(unstructuredConfig) && unstructuredConfig.debug)
             console.log('toolbar: detailed debug on; start build full Def');
         fullConfig = this.groups.expandButtonGroups(fullConfig, log);
         this.button.removeDisableButtons(toolbarContext, fullConfig, instanceConfig);
@@ -5627,39 +5657,71 @@ var ToolbarConfigLoader = /** @class */ (function (_super) {
         // original is null/undefined, just return empty set
         if (!unstructuredConfig)
             throw ("preparing toolbar, with nothing to work on: " + unstructuredConfig);
+        var newToolbar = new __WEBPACK_IMPORTED_MODULE_3__config__["Toolbar"]();
+        newToolbar.groups = this.findGroups(unstructuredConfig);
         // ensure that if it's just actions or buttons, they are then processed as arrays with 1 entry
-        if (!Array.isArray(unstructuredConfig) && (unstructuredConfig.action || unstructuredConfig.buttons)) {
+        // if (!Array.isArray(unstructuredConfig) && (unstructuredConfig.action || unstructuredConfig.buttons)) {
+        //     log.add('found no array, but detected action/buttons properties, will wrap config into array');
+        //     unstructuredConfig = [unstructuredConfig];
+        // }
+        // // ensure that arrays of actions or buttons are re-mapped to the right structure node
+        // if (Array.isArray(unstructuredConfig) && unstructuredConfig.length) {
+        //     log.add('detected array with length');
+        //     if (unstructuredConfig[0].buttons) {
+        //         log.add('detected buttons on first item, assume button-group, moving into .groups');
+        //         (unstructuredConfig as any).groups = unstructuredConfig; // move "down"
+        //     } else if (unstructuredConfig[0].command || unstructuredConfig[0].action) {
+        //         log.add('detected command or action on first item, assume buttons, move into .groups[buttons] ');
+        //         unstructuredConfig = { groups: [{ buttons: unstructuredConfig }] };
+        //     } else {
+        //     log.add('can\'t detect what this is - show warning');
+        //     console.warn("toolbar tried to build toolbar but couldn't detect type of this:", unstructuredConfig);
+        //     }
+        // } else
+        //     log.add('not array or has no items');
+        // newToolbar.groups = unstructuredConfig.groups || []; // the groups of buttons
+        var probablyTemplate = unstructuredConfig;
+        newToolbar.params = probablyTemplate.params || {}; // these are the default command parameters
+        newToolbar.settings = __assign(__assign(__assign({}, __WEBPACK_IMPORTED_MODULE_3__config__["defaultToolbarSettings"]), probablyTemplate.settings), cleanDeprecatedSettings(toolbarSettings));
+        // toolbarConfig.settings = O.bject.assign({}, defaultToolbarSettings, unstructuredConfig.settings, cleanDeprecatedSettings(toolbarSettings)) as ToolbarSettings;
+        newToolbar.debug = probablyTemplate.debug || false; // show more debug info
+        newToolbar.defaults = probablyTemplate.defaults || {}; // the button defaults like icon, etc.
+        log.add('done');
+        return newToolbar;
+    };
+    ToolbarConfigLoader.prototype.findGroups = function (unstructuredConfig) {
+        var arrBtnsOrGroups;
+        var log = new __WEBPACK_IMPORTED_MODULE_1__logging__["Log"]('Tlb.GrpArr', this.log, 'start');
+        // ensure that the groups are all correct
+        if (Array.isArray(unstructuredConfig))
+            arrBtnsOrGroups = unstructuredConfig;
+        else if (!Array.isArray(unstructuredConfig) && __WEBPACK_IMPORTED_MODULE_7__in_page_button__["InPageButtonJson"].is(unstructuredConfig)) {
             log.add('found no array, but detected action/buttons properties, will wrap config into array');
-            unstructuredConfig = [unstructuredConfig];
-        }
-        // ensure that arrays of actions or buttons are re-mapped to the right structure node
-        if (Array.isArray(unstructuredConfig) && unstructuredConfig.length) {
-            log.add('detected array with length');
-            if (unstructuredConfig[0].buttons) {
-                log.add('detected buttons on first item, assume button-group, moving into .groups');
-                unstructuredConfig.groups = unstructuredConfig; // move "down"
-            }
-            else if (unstructuredConfig[0].command || unstructuredConfig[0].action) {
-                log.add('detected command or action on first item, assume buttons, move into .groups[buttons] ');
-                unstructuredConfig = { groups: [{ buttons: unstructuredConfig }] };
-            }
-            else {
-                log.add('can\'t detect what this is - show warning');
-                console.warn("toolbar tried to build toolbar but couldn't detect type of this:", unstructuredConfig);
-            }
+            arrBtnsOrGroups = [unstructuredConfig];
         }
         else
+            // we either have groups already, or we don't have any
+            return (__WEBPACK_IMPORTED_MODULE_5__templates_toolbar_template_toolbar__["ToolbarTemplate"].is(unstructuredConfig))
+                ? unstructuredConfig.groups
+                : [];
+        // ensure that arrays of actions or buttons are re-mapped to the right structure node
+        if (!arrBtnsOrGroups || !arrBtnsOrGroups.length) {
             log.add('not array or has no items');
-        var toolbarConfig = new __WEBPACK_IMPORTED_MODULE_3__config_toolbar__["Toolbar"]();
-        // toolbarConfig.groupConfig = new GroupConfig(original.groups as ButtonConfig[]);
-        toolbarConfig.groups = unstructuredConfig.groups || []; // the groups of buttons
-        toolbarConfig.params = unstructuredConfig.params || {}; // these are the default command parameters
-        toolbarConfig.settings = __assign(__assign(__assign({}, __WEBPACK_IMPORTED_MODULE_4__config_toolbar_settings__["defaultToolbarSettings"]), unstructuredConfig.settings), cleanDeprecatedSettings(toolbarSettings));
-        // toolbarConfig.settings = O.bject.assign({}, defaultToolbarSettings, unstructuredConfig.settings, cleanDeprecatedSettings(toolbarSettings)) as ToolbarSettings;
-        toolbarConfig.debug = unstructuredConfig.debug || false; // show more debug info
-        toolbarConfig.defaults = unstructuredConfig.defaults || {}; // the button defaults like icon, etc.
-        log.add('done');
-        return toolbarConfig;
+            return [];
+        }
+        log.add('detected array with length');
+        if (__WEBPACK_IMPORTED_MODULE_3__config__["ButtonGroup"].is(arrBtnsOrGroups)) { // unstructuredConfig[0].buttons) {
+            log.add('detected buttons on first item, assume button-group, moving into .groups');
+            return arrBtnsOrGroups;
+        }
+        else if (__WEBPACK_IMPORTED_MODULE_7__in_page_button__["InPageButtonJson"].isArray(arrBtnsOrGroups)) { // unstructuredConfig[0].action) {
+            log.add('detected command or action on first item, assume buttons, move into .groups[buttons] ');
+            return arrBtnsOrGroups;
+            // unstructuredConfig = { groups: [{ buttons: unstructuredConfig }] };
+        }
+        log.add('can\'t detect what this is - show warning');
+        console.warn("toolbar tried to build toolbar but couldn't detect type of this:", arrBtnsOrGroups);
+        return [];
     };
     return ToolbarConfigLoader;
 }(__WEBPACK_IMPORTED_MODULE_1__logging__["HasLog"]));
@@ -5754,6 +5816,7 @@ var defaultToolbarTemplate = {
     settings: {
         autoAddMore: 'end',
     },
+    _isToolbarTemplate: true,
 };
 
 
@@ -5796,6 +5859,7 @@ var leftToolbarTemplate = {
     settings: {
         autoAddMore: 'start',
     },
+    _isToolbarTemplate: true,
 };
 
 
@@ -7716,19 +7780,22 @@ if (__WEBPACK_IMPORTED_MODULE_0__interfaces_window_in_page__["windowInPage"].$2s
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ToolbarTemplateToolbar", function() { return ToolbarTemplateToolbar; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ToolbarTemplate", function() { return ToolbarTemplate; });
 /**
  * This describes a template configuration of a toolbar
  * It's meant to provide type-save templates for what buttons are used where
  */
-var ToolbarTemplateToolbar = /** @class */ (function () {
-    function ToolbarTemplateToolbar() {
+var ToolbarTemplate = /** @class */ (function () {
+    function ToolbarTemplate() {
         this.groups = [];
         this.defaults = {};
         this.params = {};
         this.settings = {};
     }
-    return ToolbarTemplateToolbar;
+    ToolbarTemplate.is = function (thing) {
+        return thing._isToolbarTemplate;
+    };
+    return ToolbarTemplate;
 }());
 
 
@@ -7748,6 +7815,9 @@ var ToolbarTemplateButtonGroup = /** @class */ (function () {
     function ToolbarTemplateButtonGroup() {
         this.defaults = {};
     }
+    ToolbarTemplateButtonGroup.is = function (thing) {
+        return thing.buttons !== undefined;
+    };
     return ToolbarTemplateButtonGroup;
 }());
 
@@ -7918,6 +7988,24 @@ var __WEBPACK_AMD_DEFINE_RESULT__;/*
 
     return Shake;
 }));
+
+
+/***/ }),
+/* 178 */,
+/* 179 */,
+/* 180 */,
+/* 181 */,
+/* 182 */,
+/* 183 */,
+/* 184 */,
+/* 185 */,
+/* 186 */,
+/* 187 */,
+/* 188 */,
+/* 189 */,
+/* 190 */
+/***/ (function(module, exports) {
+
 
 
 /***/ })

@@ -1,7 +1,7 @@
 ﻿import { ButtonCommand } from '.';
 import { CommandCode } from '../../commands/command-code';
-import { CommandParams } from '../../commands/command-params';
 import { CommandLinkGenerator } from '../../commands/command-link-generator';
+import { CommandParams } from '../../commands/command-params';
 import { ContextBundleButton } from '../../context/bundles/context-bundle-button';
 import { TypeSafeAssign, TypeTbD, TypeUnsafe } from '../../plumbing';
 
@@ -69,6 +69,14 @@ export class Button {
         return config;
     }
 
+    /** Detect if this is a Button */
+    static is(thing: TypeTbD): thing is Button {
+        return (thing as Button).action !== undefined;
+    }
+
+    static isArray(thing: TypeTbD): thing is Button[] {
+        return thing.length && Button.is(thing[0]);
+    }
 }
 
 function evalPropOrFun(propOrFunction: TypeTbD): TypeUnsafe {

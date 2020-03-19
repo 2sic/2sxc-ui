@@ -1,7 +1,9 @@
-﻿import { Commands } from '../../commands/commands';
+﻿import { ToolbarWip } from '.';
+import { CommandParams, Commands } from '../../commands';
 import { HasLog, Log } from '../../logging';
 import { TypeUnsafe } from '../../plumbing';
 import { Button, ButtonCommand, ButtonGroup, Toolbar, ToolbarSettings } from '../config';
+import { InPageButtonJson } from './in-page-button';
 import { ToolbarConfigLoader } from './toolbar-config-loader';
 
 export class ButtonGroupConfigLoader extends HasLog {
@@ -13,19 +15,19 @@ export class ButtonGroupConfigLoader extends HasLog {
     /**
      * this will traverse a groups-tree and expand each group
      * so if groups were just strings like "edit,new" or compact buttons, they will be expanded afterwards
-     * @param fullToolbarConfig
+     * @param fullToolbar
      */
-    expandButtonGroups(fullToolbarConfig: Toolbar, parentLog: Log): Toolbar {
+    expandButtonGroups(fullToolbar: Toolbar, parentLog: Log): Toolbar {
         const log = new Log('Tlb.ExpGrp', parentLog, 'start');
 
         // by now we should have a structure, let's check/fix the buttons
-        log.add(`will expand groups - found ${fullToolbarConfig.groups.length} items`);
-        for (let g = 0; g < fullToolbarConfig.groups.length; g++) {
+        log.add(`will expand groups - found ${fullToolbar.groups.length} items`);
+        for (let g = 0; g < fullToolbar.groups.length; g++) {
             // expand a verb-list like "edit,new" into objects like [{ action: "edit" }, {action: "new"}]
-            expandButtonList(this, fullToolbarConfig.groups[g], fullToolbarConfig.settings);
+            expandButtonList(this, fullToolbar.groups[g], fullToolbar.settings);
 
             // fix all the buttons
-            const btns = fullToolbarConfig.groups[g].buttons;
+            const btns = (fullToolbar.groups[g]).buttons;
 
             const buttonConfigs: Button[] = [];
 
@@ -33,7 +35,7 @@ export class ButtonGroupConfigLoader extends HasLog {
                 log.add(`will process ${btns.length} buttons`);
                 for (let b = 0; b < btns.length; b++) {
                     const btn = btns[b];
-                    const btnCommand = (btn as any).command;
+                    const btnCommand = (btn as unknown as { command: CommandParams }).command;
 
                     if (!(Commands.get(btnCommand.action))) {
                         log.add(`couldn't find action ${btnCommand.action} - show warning`);
@@ -48,7 +50,7 @@ export class ButtonGroupConfigLoader extends HasLog {
 
                     // parameters adapter from v1 to v2
                     let params = this.toolbar.command.removeActionProperty(btnCommand);
-                    params = {...params, ...fullToolbarConfig.params};
+                    params = {...params, ...fullToolbar.params};
                     // O.bject.assign(params, fullToolbarConfig.params);
 
                     // Toolbar API v2
@@ -62,8 +64,7 @@ export class ButtonGroupConfigLoader extends HasLog {
                     // O.bject.assign(newButtonConfig, settings);
 
                     // ensure all buttons have either own settings, or the fallback
-                    this.toolbar.button.addDefaultBtnSettings(newButtonConfig,
-                    fullToolbarConfig.groups[g], fullToolbarConfig, Commands);
+                    this.toolbar.button.addDefaultBtnSettings(newButtonConfig, fullToolbar.groups[g], fullToolbar, Commands);
 
                     buttonConfigs.push(newButtonConfig);
                 }
@@ -71,9 +72,9 @@ export class ButtonGroupConfigLoader extends HasLog {
                 log.add("no button array found, won't do a.nything");
 
             // Toolbar API v2 overwrite V1
-            fullToolbarConfig.groups[g].buttons = buttonConfigs;
+            fullToolbar.groups[g].buttons = buttonConfigs;
         }
-        return fullToolbarConfig;
+        return fullToolbar;
     }
 
 }

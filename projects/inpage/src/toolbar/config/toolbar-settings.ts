@@ -1,6 +1,6 @@
 ﻿import { TypeSafeAssign } from '../../plumbing/type-safe-assign';
 import { ToolbarInitConfig } from '../initialize/toolbar-init-config';
-import { ToolbarTemplateToolbar } from '../templates/toolbar-template-toolbar';
+import { ToolbarTemplate } from '../templates/toolbar-template-toolbar';
 
 /** contains toolbar behaviour settings like float, etc. */
 export class ToolbarSettings {
@@ -32,6 +32,6 @@ export const settingsForEmptyToolbar = new ToolbarSettings({
 });
 
 export const emptyToolbar = {
-  toolbar: {} as ToolbarTemplateToolbar,
+  toolbar: {} as ToolbarTemplate,
   settings: settingsForEmptyToolbar,
 } as ToolbarInitConfig;

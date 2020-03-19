@@ -7,3 +7,5 @@ export * from './command-config-loader';
 export * from './group-config-loader';
 
 export * from './toolbar-config-loader';
+
+export * from './toolbar-wip';

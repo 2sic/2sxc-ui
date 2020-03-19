@@ -1,8 +1,8 @@
-﻿import { ToolbarTemplateToolbar } from './toolbar-template-toolbar';
+﻿import { ToolbarTemplate } from './toolbar-template-toolbar';
 
 // the default / initial buttons in a standard toolbar
 // ToDo: refactor to avoid side-effects
-export const leftToolbarTemplate: ToolbarTemplateToolbar = {
+export const leftToolbarTemplate: ToolbarTemplate = {
   groups: [
     {
       name: 'default',
@@ -34,4 +34,5 @@ export const leftToolbarTemplate: ToolbarTemplateToolbar = {
     // these are defaults, don't set again
     // hover: "right",
   },
+  _isToolbarTemplate: true,
 };

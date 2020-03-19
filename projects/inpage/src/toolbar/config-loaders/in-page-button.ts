@@ -56,10 +56,20 @@ export class InPageButtonJson {
   sortOrder?: number;
 
   _expanded?: boolean; // marker to determine that the configuration has already been initialized
-}
 
-
-export function isInPageButtonConfiguration(thing: TypeTbD): thing is InPageButtonJson {
   // check two common signatures - command and action
-  return thing.command !== undefined || thing.action !== undefined;
+  static is(thing: TypeTbD): thing is InPageButtonJson {
+    return thing.command !== undefined || thing.action !== undefined;
+  }
+
+  static isArray(thing: TypeTbD[]): thing is InPageButtonJson[] {
+      return thing.length > 0 && InPageButtonJson.is(thing[0]);
+  }
+
 }
+
+
+// export function isInPageButtonConfiguration(thing: TypeTbD): thing is InPageButtonJson {
+//   // check two common signatures - command and action
+//   return thing.command !== undefined || thing.action !== undefined;
+// }

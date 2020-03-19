@@ -1,5 +1,5 @@
 ﻿import { Button } from '.';
-import { DictionaryValue } from '../../plumbing';
+import { DictionaryValue, TypeTbD } from '../../plumbing';
 
 export class ButtonGroup {
   defaults: DictionaryValue = {};
@@ -9,4 +9,8 @@ export class ButtonGroup {
     this.buttons = buttons || [];
   }
 
+  /** Detect if this is a ButtonGroup */
+  static is(thing: TypeTbD): thing is ButtonGroup {
+    return (thing as ButtonGroup).buttons !== undefined;
+  }
 }

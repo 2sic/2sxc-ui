@@ -2,15 +2,15 @@
 import { Log } from '../../logging/log';
 import { defaultToolbarTemplate } from './template-default';
 import { leftToolbarTemplate } from './template-left';
-import { ToolbarTemplateToolbar } from './toolbar-template-toolbar';
+import { ToolbarTemplate } from './toolbar-template-toolbar';
 
 /**
  * The template manager provides toolbar templates to the entire system.
  * It basically keeps a list of predefined templates, and returns the ones needed
  */
 export class ToolbarTemplateManager extends HasLog {
-  configTemplateList: ToolbarTemplateToolbar[] = [];
-  list: HashTable<ToolbarTemplateToolbar> = {}; // hash - table of templates, to be used a list()['template - name']
+  configTemplateList: ToolbarTemplate[] = [];
+  list: HashTable<ToolbarTemplate> = {}; // hash - table of templates, to be used a list()['template - name']
 
   private constructor(parentLog: Log) {
     super('Tlb.TmpMan', parentLog, 'build');
@@ -33,14 +33,14 @@ export class ToolbarTemplateManager extends HasLog {
   /**
    * a single template – usually 'default'
    */
-  get(name: string): ToolbarTemplateToolbar {
+  get(name: string): ToolbarTemplate {
     return this.list[name];
   }
 
   /**
    * adds a template to the list, if it doesn't exist
    */
-  add(name: string, template: ToolbarTemplateToolbar, force?: boolean) {
+  add(name: string, template: ToolbarTemplate, force?: boolean) {
     this.list[name] = template;
   }
 }

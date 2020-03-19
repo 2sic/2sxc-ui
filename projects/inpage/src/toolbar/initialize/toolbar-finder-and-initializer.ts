@@ -118,7 +118,7 @@ export class ToolbarConfigFinderAndInitializer extends HasLog {
      */
     private convertConfigToToolbars(tag: JQuery, config: ToolbarInitConfig): void {
         const context = findContext(tag);
-        context.toolbar = new ToolbarConfigLoader(null).expandToolbarConfig(context, config.toolbar, config.settings, this.log);
+        context.toolbar = new ToolbarConfigLoader(this.log).expandToolbarConfig(context, config.toolbar, config.settings);
 
         // V2 where the full toolbar is included in one setting
         if (tag.attr(Constants.toolbar.attr.full)) {

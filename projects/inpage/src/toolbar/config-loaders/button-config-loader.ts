@@ -1,4 +1,4 @@
-﻿import { InPageCommandJson, isInPageCommandConfiguration } from '.';
+﻿import { InPageCommandJson } from '.';
 import { InPageButtonJson } from '.';
 import { ToolbarConfigLoader } from '.';
 import { Commands } from '../../commands/commands';
@@ -99,7 +99,7 @@ export class ButtonConfigLoader extends HasLog {
     }
 
     // if it's a command w/action, wrap into command + trim
-    if (isInPageCommandConfiguration(asBtnConfig)) {
+    if (InPageCommandJson.is(asBtnConfig)) {
       log.add('action found, will move down to .command');
       return {
           command: { action: (original as InPageCommandJson).action.trim() },
