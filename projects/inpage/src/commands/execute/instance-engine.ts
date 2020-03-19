@@ -7,8 +7,8 @@ export class InstanceEngine {
   constructor(private sxc: SxcIntanceEditable) {}
 
   run<T>(
-    nameOrSettings: string | Partial<CommandParams>,
-    eventOrSettings?: Partial<CommandParams> | MouseEvent,
+    nameOrSettings: string | CommandParams,
+    eventOrSettings?: CommandParams | MouseEvent,
     event?: MouseEvent,
   ): Promise<void | T> {
     const cntx = findContext(this.sxc);

@@ -39,7 +39,7 @@ export class EditManager implements SxcInstanceManage {
    * it is publicly used out of inpage, so take a care to preserve function signature
    */
   getButton(actDef: InPageButtonJson, groupIndex: number): string {
-    this.context.button = new ButtonConfigLoader(null).convertToConfig(actDef);
+    this.context.button = new ButtonConfigLoader(null).convertToButton(actDef);
     const button = new ToolbarRenderer(this.context).button.render(this.context, groupIndex);
     return button.outerHTML;
   }

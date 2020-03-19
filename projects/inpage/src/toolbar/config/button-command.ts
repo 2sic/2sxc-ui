@@ -10,7 +10,7 @@ export class ButtonCommand {
     constructor(
         public name: string,
         contentType?: string,
-        public params?: Partial<CommandParams>,
+        public params?: CommandParams,
     ) {
         if (!params) this.params = {};
 
@@ -20,8 +20,8 @@ export class ButtonCommand {
         this.commandDefinition = Commands.get(name);
     }
 
-    static normalize(action: ButtonCommand): Partial<CommandParams> {
-        let params: Partial<CommandParams> = {};
+    static normalize(action: ButtonCommand): CommandParams {
+        let params: CommandParams = {};
         if (action) {
             if (action.name) params.action = action.name;
             if (action.params) params = {...params, ...action.params}; // O.bject.assign(params, action.params);

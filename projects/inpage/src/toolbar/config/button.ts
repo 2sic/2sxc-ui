@@ -3,6 +3,7 @@ import { CommandCode } from '../../commands/command-code';
 import { CommandExecution } from '../../commands/execute/command-execution';
 import { ContextBundleButton } from '../../context/bundles/context-bundle-button';
 import { DictionaryValue, TypeSafeAssign, TypeTbD, TypeUnsafe } from '../../plumbing';
+import { CommandParams } from '../../commands/command-params';
 
 
 /** This is the most common call signature on most ButtonConfig properties */
@@ -41,7 +42,7 @@ export class Button {
     icon: ButtonPropertyGenerator<string>;
     inlineWindow: ButtonPropertyGenerator<boolean>;
     newWindow: ButtonPropertyGenerator<boolean>;
-    params: ButtonPropertyGenerator<DictionaryValue>;
+    params: ButtonPropertyGenerator<CommandParams>;
     partOfPage: ButtonPropertyGenerator<boolean>;
     showCondition: ButtonPropertyGenerator<boolean>;
     title: ButtonPropertyGenerator<string>;

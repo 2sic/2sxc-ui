@@ -1,5 +1,4 @@
-﻿import { InPageCodeJson_ProbablyUnused } from '.';
-import { InPageCommandJson } from '.';
+﻿import { InPageCommandJson } from '.';
 import { CommandParams } from '../../commands/command-params';
 import { TypeTbD } from '../../plumbing/TypeTbD';
 
@@ -21,10 +20,10 @@ export class InPageButtonJson {
   classes?: string;
 
   // function dynamicClasses(settings) can be used to dynamically build classes depending on the situation
-  dynamicClasses?(settings: Partial<CommandParams>): string;
+  dynamicClasses?(settings: CommandParams): string;
 
   // bool/function showCondition (API still experimental) - used to dynamically choose if this button should be shown or not
-  showCondition?(settings: Partial<CommandParams>, modConfig: InPageCodeJson_ProbablyUnused): boolean;
+  showCondition?(settings: CommandParams): boolean;
 
   // bool disabled (API still experimental) would disable the click on a button
   disabled?: boolean;
@@ -39,7 +38,7 @@ export class InPageButtonJson {
   uiActionOnly?: boolean;
 
   // code(settings, event) - the code executed on click, if it's not the default action
-  code?<T>(settings: Partial<CommandParams>, modConfig: InPageCodeJson_ProbablyUnused): Promise<void | T>;
+  code?<T>(settings: CommandParams): Promise<void | T>;
 
   // created in the buttonConfig v1
   name?: string;

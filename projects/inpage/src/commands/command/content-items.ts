@@ -4,9 +4,8 @@
  * import this module to commands.ts
  */
 Commands.add('contentitems', 'ContentItems', 'table', true, false, {
-    params: (context) => {
-        return { contentTypeName: context.contentBlock.contentTypeId };
-    },
+    params: (context) => ({ contentTypeName: context.contentBlock.contentTypeId }),
+
     showCondition: (context) => {
         return (
             context.user.canDesign &&
@@ -14,6 +13,7 @@ Commands.add('contentitems', 'ContentItems', 'table', true, false, {
                 !!context.contentBlock.contentTypeId)
         );
     },
+
     configureCommand: (context, command) => {
         if (command.context.button.action.params.contentType)
             // optionally override with custom type

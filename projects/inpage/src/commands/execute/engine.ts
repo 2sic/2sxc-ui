@@ -9,8 +9,8 @@ import { Log } from '../../logging/log';
 import { TypeUnsafe } from '../../plumbing/TypeTbD';
 import { quickDialog } from '../../quick-dialog/quick-dialog';
 import { DialogPaths } from '../../settings/DialogPaths';
-import { ButtonCommand } from '../../toolbar/config/button-command';
 import { Button } from '../../toolbar/config/button';
+import { ButtonCommand } from '../../toolbar/config/button-command';
 import { CommandParams } from '../command-params';
 import { CommandExecution } from './command-execution';
 
@@ -21,13 +21,13 @@ export class Engine extends HasLog {
 
   detectParamsAndRun<T>(
     context: ContextBundleInstance,
-    nameOrParams: string | Partial<CommandParams>,
-    eventOrParams: Partial<CommandParams> | MouseEvent,
+    nameOrParams: string | CommandParams,
+    eventOrParams: CommandParams | MouseEvent,
     event?: MouseEvent,
   ): Promise<void | T> {
     this.log.add(`detecting params and running - has ${arguments.length} params`);
 
-    let cmdParams: Partial<CommandParams>;
+    let cmdParams: CommandParams;
 
     const thirdParamIsEvent = !event && eventOrParams && typeof (eventOrParams as MouseEvent).altKey !== 'undefined';
     this.log.add(`might cycle parameters. third is event=${thirdParamIsEvent}`);
@@ -38,10 +38,10 @@ export class Engine extends HasLog {
       event = eventOrParams as MouseEvent; // move it to the correct variable
       cmdParams = this.nameOrSettingsAdapter(nameOrParams);
     } else {
-      cmdParams = Object.assign(
-        eventOrParams || {},
-        this.nameOrSettingsAdapter(nameOrParams),
-      ) as Partial<CommandParams>;
+      cmdParams = { //  O.bject.assign(
+        ...(eventOrParams || {}),
+        ...this.nameOrSettingsAdapter(nameOrParams),
+      };
     }
 
     // ensure we have the right event despite browser differences
@@ -59,7 +59,7 @@ export class Engine extends HasLog {
    */
   run<T>(
     context: ContextBundleButton,
-    nameOrParams: string | Partial<CommandParams>,
+    nameOrParams: string | CommandParams,
     event: MouseEvent,
   ): Promise<T | void> {
     let cmdParams = this.nameOrSettingsAdapter(nameOrParams);
@@ -115,14 +115,14 @@ export class Engine extends HasLog {
    * @param nameOrSettings
    * @returns settings
    */
-  private nameOrSettingsAdapter(nameOrSettings: string | Partial<CommandParams>): Partial<CommandParams> {
+  private nameOrSettingsAdapter(nameOrSettings: string | CommandParams): CommandParams {
     // check if nameOrString is name (string) or object (settings)
     const nameIsString = typeof nameOrSettings === 'string';
     this.log.add(`adapting settings; name string: ${nameIsString}; name = ${nameOrSettings}`);
 
     return (nameIsString
         ? { action: nameOrSettings }
-        : nameOrSettings) as Partial<CommandParams>;
+        : nameOrSettings) as CommandParams;
   }
 
   /**
@@ -131,11 +131,13 @@ export class Engine extends HasLog {
    * the command definition
    * @param settings
    */
-  private expandSettingsWithDefaults(settings: Partial<CommandParams>): CommandParams {
+  private expandSettingsWithDefaults(settings: CommandParams): CommandParams {
     const name = settings.action;
     this.log.add(`will add defaults for ${name} from buttonConfig`);
     const conf = Commands.get(name).buttonConfig;
-    const full = Object.assign({}, conf, settings) as CommandParams; // merge conf & settings, but settings has higher priority
+    // TODO: 2dm - suspicius cast
+    const full = {...conf, ...settings} as CommandParams; // merge conf & settings, but
+    // const full = O.bject.assign({}, conf, settings) as CommandParams; // merge conf & settings, but settings has higher priority
 
     return full;
   }

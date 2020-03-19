@@ -1,5 +1,4 @@
-﻿import { CommandParams } from '../../commands/command-params';
-import { ContextBundleButton } from '../../context/bundles/context-bundle-button';
+﻿import { ContextBundleButton } from '../../context/bundles/context-bundle-button';
 import { ButtonCommand } from '../config/button-command';
 import { RenderPart } from './render-part-base';
 import { ToolbarRenderer } from './toolbar-renderer';
@@ -60,17 +59,3 @@ export class RenderButton extends RenderPart {
     return button;
   }
 }
-
-
-
-// function oldParametersAdapter(action: ButtonCommand): Partial<CommandParams> {
-
-//     let params: Partial<CommandParams> = {};
-
-//     if (action) {
-//       if (action.name) params.action = action.name;
-//       if (action.params) O.bject.assign(params, action.params);
-//     }
-
-//     return params;
-//   }

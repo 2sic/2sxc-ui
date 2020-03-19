@@ -11,14 +11,15 @@ export class CommandDefinition {
     protected merge(icon: string, translateKey: string, uiOnly: boolean, partOfPage: boolean, more: Partial<Button>): void {
         //
         // stv: v1 code
-        const partialButtonConfig = {
+        const partialButtonConfig: Partial<Button> = {
             icon: (context: ContextBundleButton) => `icon-sxc-${icon}`,
             title: (context: ContextBundleButton) => `Toolbar.${translateKey}`,
             uiActionOnly: (context: ContextBundleButton) => uiOnly,
             partOfPage: (context: ContextBundleButton) => partOfPage,
-        } as Partial<Button>;
+            ...more,
+        };
 
-        Object.assign(partialButtonConfig, more);
+        // O.bject.assign(partialButtonConfig, more);
 
         this.buttonConfig = partialButtonConfig;
     }

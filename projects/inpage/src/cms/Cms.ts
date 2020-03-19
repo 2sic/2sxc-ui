@@ -29,8 +29,8 @@ export class Cms extends HasLog {
 
   run<T>(
     context: ContextBundleInstance | HTMLElement,
-    nameOrSettings: string | Partial<CommandParams>,
-    eventOrSettings?: Partial<CommandParams> | MouseEvent,
+    nameOrSettings: string | CommandParams,
+    eventOrSettings?: CommandParams | MouseEvent,
     event?: MouseEvent,
   ): Promise<void | T> {
     const realContext = isContextOfInstance(context)

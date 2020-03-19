@@ -27,4 +27,4 @@ class CommandsCatalog {
 }
 
 // only create the catalog once, then use that everywhere
-export const Commands = new CommandsCatalog(); // .getInstance();
+export const Commands = new CommandsCatalog();

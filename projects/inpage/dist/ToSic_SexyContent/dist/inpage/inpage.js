@@ -98,7 +98,7 @@ var CommandsCatalog = /** @class */ (function () {
     return CommandsCatalog;
 }());
 // only create the catalog once, then use that everywhere
-var Commands = new CommandsCatalog(); // .getInstance();
+var Commands = new CommandsCatalog();
 
 
 /***/ }),
@@ -573,19 +573,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__in_page_button__ = __webpack_require__(90);
 /* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "InPageButtonJson", function() { return __WEBPACK_IMPORTED_MODULE_0__in_page_button__["InPageButtonJson"]; });
 /* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "isInPageButtonConfiguration", function() { return __WEBPACK_IMPORTED_MODULE_0__in_page_button__["isInPageButtonConfiguration"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__in_page_code_params_probably_unused__ = __webpack_require__(91);
-/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "InPageCodeJson_ProbablyUnused", function() { return __WEBPACK_IMPORTED_MODULE_1__in_page_code_params_probably_unused__["InPageCodeJson_ProbablyUnused"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__in_page_command__ = __webpack_require__(92);
-/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "isInPageCommandConfiguration", function() { return __WEBPACK_IMPORTED_MODULE_2__in_page_command__["isInPageCommandConfiguration"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__button_config_loader__ = __webpack_require__(53);
-/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "ButtonConfigLoader", function() { return __WEBPACK_IMPORTED_MODULE_3__button_config_loader__["ButtonConfigLoader"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__command_config_loader__ = __webpack_require__(95);
-/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "CommandConfigLoader", function() { return __WEBPACK_IMPORTED_MODULE_4__command_config_loader__["CommandConfigLoader"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__group_config_loader__ = __webpack_require__(96);
-/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "ButtonGroupConfigLoader", function() { return __WEBPACK_IMPORTED_MODULE_5__group_config_loader__["ButtonGroupConfigLoader"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__toolbar_config_loader__ = __webpack_require__(97);
-/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "ToolbarConfigLoader", function() { return __WEBPACK_IMPORTED_MODULE_6__toolbar_config_loader__["ToolbarConfigLoader"]; });
-
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__in_page_command__ = __webpack_require__(92);
+/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "isInPageCommandConfiguration", function() { return __WEBPACK_IMPORTED_MODULE_1__in_page_command__["isInPageCommandConfiguration"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__button_config_loader__ = __webpack_require__(53);
+/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "ButtonConfigLoader", function() { return __WEBPACK_IMPORTED_MODULE_2__button_config_loader__["ButtonConfigLoader"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__command_config_loader__ = __webpack_require__(95);
+/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "CommandConfigLoader", function() { return __WEBPACK_IMPORTED_MODULE_3__command_config_loader__["CommandConfigLoader"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__group_config_loader__ = __webpack_require__(96);
+/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "ButtonGroupConfigLoader", function() { return __WEBPACK_IMPORTED_MODULE_4__group_config_loader__["ButtonGroupConfigLoader"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__toolbar_config_loader__ = __webpack_require__(97);
+/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "ToolbarConfigLoader", function() { return __WEBPACK_IMPORTED_MODULE_5__toolbar_config_loader__["ToolbarConfigLoader"]; });
 
 
 
@@ -1952,6 +1949,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CommandDefinition", function() { return CommandDefinition; });
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 // import { Definition } from './definition';
 var CommandDefinition = /** @class */ (function () {
     function CommandDefinition(name) {
@@ -1960,13 +1968,8 @@ var CommandDefinition = /** @class */ (function () {
     CommandDefinition.prototype.merge = function (icon, translateKey, uiOnly, partOfPage, more) {
         //
         // stv: v1 code
-        var partialButtonConfig = {
-            icon: function (context) { return "icon-sxc-" + icon; },
-            title: function (context) { return "Toolbar." + translateKey; },
-            uiActionOnly: function (context) { return uiOnly; },
-            partOfPage: function (context) { return partOfPage; },
-        };
-        Object.assign(partialButtonConfig, more);
+        var partialButtonConfig = __assign({ icon: function (context) { return "icon-sxc-" + icon; }, title: function (context) { return "Toolbar." + translateKey; }, uiActionOnly: function (context) { return uiOnly; }, partOfPage: function (context) { return partOfPage; } }, more);
+        // O.bject.assign(partialButtonConfig, more);
         this.buttonConfig = partialButtonConfig;
     };
     CommandDefinition.build = function (name, translateKey, icon, uiOnly, partOfPage, more) {
@@ -1997,8 +2000,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__logging_has_log__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__quick_dialog_quick_dialog__ = __webpack_require__(21);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__settings_DialogPaths__ = __webpack_require__(28);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__toolbar_config_button_command__ = __webpack_require__(29);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__toolbar_config_button__ = __webpack_require__(48);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__toolbar_config_button__ = __webpack_require__(48);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__toolbar_config_button_command__ = __webpack_require__(29);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__command_execution__ = __webpack_require__(81);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
@@ -2051,7 +2054,7 @@ var Engine = /** @class */ (function (_super) {
             cmdParams = this.nameOrSettingsAdapter(nameOrParams);
         }
         else {
-            cmdParams = Object.assign(eventOrParams || {}, this.nameOrSettingsAdapter(nameOrParams));
+            cmdParams = __assign(__assign({}, (eventOrParams || {})), this.nameOrSettingsAdapter(nameOrParams));
         }
         // ensure we have the right event despite browser differences
         event = event || window.event;
@@ -2072,11 +2075,11 @@ var Engine = /** @class */ (function (_super) {
         var contentType = cmdParams.contentType;
         this.log.add("run command " + name + " for type " + contentType);
         // Toolbar API v2
-        var newButtonAction = new __WEBPACK_IMPORTED_MODULE_7__toolbar_config_button_command__["ButtonCommand"](name, contentType, cmdParams);
-        var newButtonConfig = new __WEBPACK_IMPORTED_MODULE_8__toolbar_config_button__["Button"](newButtonAction);
+        var newButtonAction = new __WEBPACK_IMPORTED_MODULE_8__toolbar_config_button_command__["ButtonCommand"](name, contentType, cmdParams);
+        var newButtonConfig = new __WEBPACK_IMPORTED_MODULE_7__toolbar_config_button__["Button"](newButtonAction);
         newButtonConfig.name = name;
         // merge conf & settings, but settings has higher priority
-        var button = (context.button = __assign(__assign(__assign({}, newButtonConfig), newButtonAction.commandDefinition.buttonConfig), __WEBPACK_IMPORTED_MODULE_8__toolbar_config_button__["Button"].normalize(cmdParams)));
+        var button = (context.button = __assign(__assign(__assign({}, newButtonConfig), newButtonAction.commandDefinition.buttonConfig), __WEBPACK_IMPORTED_MODULE_7__toolbar_config_button__["Button"].normalize(cmdParams)));
         // todo: stv, fix this in case that is function
         if (!button.dialog) {
             this.log.add('button.dialog method missing, must be old implementation which used the action-name - generating method');
@@ -2122,7 +2125,9 @@ var Engine = /** @class */ (function (_super) {
         var name = settings.action;
         this.log.add("will add defaults for " + name + " from buttonConfig");
         var conf = __WEBPACK_IMPORTED_MODULE_0____["Commands"].get(name).buttonConfig;
-        var full = Object.assign({}, conf, settings); // merge conf & settings, but settings has higher priority
+        // TODO: 2dm - suspicius cast
+        var full = __assign(__assign({}, conf), settings); // merge conf & settings, but
+        // const full = O.bject.assign({}, conf, settings) as CommandParams; // merge conf & settings, but settings has higher priority
         return full;
     };
     /**
@@ -3115,64 +3120,48 @@ var ButtonConfigLoader = /** @class */ (function (_super) {
         _this.toolbar = toolbar;
         return _this;
     }
-    ButtonConfigLoader.prototype.convertToConfig = function (oldButtonDef) {
-        var partialButtonConfig = {};
-        if (oldButtonDef.code) {
-            partialButtonConfig.code = function (context) {
-                // TODO: 2dm unclear why we're just giving an empty configuration
-                // I believe this is a mistake, STV had some todos to try to find the values
-                // so I believe for years now, the object was always empty
-                // so it's probably never been used
-                return oldButtonDef.code(context.button.action.params, new __WEBPACK_IMPORTED_MODULE_0____["InPageCodeJson_ProbablyUnused"]());
-            };
-        }
-        if (oldButtonDef.icon)
-            partialButtonConfig.icon = function () { return "icon-sxc-" + oldButtonDef.icon; };
-        if (oldButtonDef.classes)
-            partialButtonConfig.classes = oldButtonDef.classes;
-        if (oldButtonDef.dialog)
-            partialButtonConfig.dialog = function () { return oldButtonDef.dialog; };
-        if (oldButtonDef.disabled)
-            partialButtonConfig.disabled = function () { return oldButtonDef.disabled; };
-        if (oldButtonDef.dynamicClasses) {
-            partialButtonConfig.dynamicClasses = function (context) {
-                return oldButtonDef.dynamicClasses(context.button.action.params);
-            };
-        }
-        if (oldButtonDef.fullScreen)
-            partialButtonConfig.fullScreen = function () { return oldButtonDef.fullScreen; };
-        if (oldButtonDef.inlineWindow)
-            partialButtonConfig.inlineWindow = function () { return oldButtonDef.inlineWindow; };
-        if (oldButtonDef.name)
-            partialButtonConfig.name = oldButtonDef.name;
-        if (oldButtonDef.newWindow)
-            partialButtonConfig.newWindow = function () { return oldButtonDef.newWindow; };
+    ButtonConfigLoader.prototype.convertToButton = function (jsonBtn) {
+        var btn = {};
+        if (jsonBtn.code)
+            btn.code = function (c) { return jsonBtn.code(c.button.action.params); };
+        if (jsonBtn.icon)
+            btn.icon = function () { return "icon-sxc-" + jsonBtn.icon; };
+        if (jsonBtn.classes)
+            btn.classes = jsonBtn.classes;
+        if (jsonBtn.dialog)
+            btn.dialog = function () { return jsonBtn.dialog; };
+        if (jsonBtn.disabled)
+            btn.disabled = function () { return jsonBtn.disabled; };
+        if (jsonBtn.dynamicClasses)
+            btn.dynamicClasses = function (c) { return jsonBtn.dynamicClasses(c.button.action.params); };
+        if (jsonBtn.fullScreen)
+            btn.fullScreen = function () { return jsonBtn.fullScreen; };
+        if (jsonBtn.inlineWindow)
+            btn.inlineWindow = function () { return jsonBtn.inlineWindow; };
+        if (jsonBtn.name)
+            btn.name = jsonBtn.name;
+        if (jsonBtn.newWindow)
+            btn.newWindow = function () { return jsonBtn.newWindow; };
         // todo: stv, this do not looking good, because old simple parameters become methods with context as parameter,
         // we need parameter adapter to do this...
-        if (oldButtonDef.params)
-            Object.assign(partialButtonConfig.params, oldButtonDef.params);
-        if (oldButtonDef.partOfPage)
-            partialButtonConfig.partOfPage = function () { return oldButtonDef.partOfPage; };
-        if (oldButtonDef.showCondition) {
-            partialButtonConfig.showCondition = function (context) {
-                // TODO: 2dm unclear why we're just giving an empty configuration
-                // I believe this is a mistake, STV had some todos to try to find the values
-                // so I believe for years now, the object was always empty
-                // so it's probably never been used
-                return oldButtonDef.showCondition(context.button.action.params, new __WEBPACK_IMPORTED_MODULE_0____["InPageCodeJson_ProbablyUnused"]());
-            };
-        }
-        if (oldButtonDef.title)
-            partialButtonConfig.title = function () { return "Toolbar." + oldButtonDef.title; };
-        if (oldButtonDef.uiActionOnly)
-            partialButtonConfig.uiActionOnly = function () { return oldButtonDef.uiActionOnly; };
-        oldButtonDef = this.normalize(oldButtonDef);
-        var name = oldButtonDef.command.action;
-        var contentType = oldButtonDef.command.contentType;
+        if (jsonBtn.params)
+            btn.params = function () { return jsonBtn.params; };
+        // O.bject.assign(btn.params, jsonBtn.params);
+        if (jsonBtn.partOfPage)
+            btn.partOfPage = function () { return jsonBtn.partOfPage; };
+        if (jsonBtn.showCondition)
+            btn.showCondition = function (c) { return jsonBtn.showCondition(c.button.action.params); };
+        if (jsonBtn.title)
+            btn.title = function () { return "Toolbar." + jsonBtn.title; };
+        if (jsonBtn.uiActionOnly)
+            btn.uiActionOnly = function () { return jsonBtn.uiActionOnly; };
+        jsonBtn = this.normalize(jsonBtn);
+        var name = jsonBtn.command.action;
+        var contentType = jsonBtn.command.contentType;
         // if the button belongs to a content-item, move the specs up to the item into the settings-object
-        this.toolbar.command.normalizeCommandJson(oldButtonDef.command);
+        this.toolbar.command.normalizeCommandJson(jsonBtn.command);
         // parameters adapter from v1 to v2
-        var params = this.toolbar.command.removeActionProperty(oldButtonDef.command);
+        var params = this.toolbar.command.removeActionProperty(jsonBtn.command);
         // Toolbar API v2
         var newButtonAction = new __WEBPACK_IMPORTED_MODULE_2__config__["ButtonCommand"](name, contentType, params);
         var newButtonConfig = new __WEBPACK_IMPORTED_MODULE_2__config__["Button"](newButtonAction);
@@ -4385,7 +4374,8 @@ var CommandExecution = /** @class */ (function () {
         var params = this.evalPropOrFunction(context.button.params, context);
         var dialog = this.evalPropOrFunction(context.button.dialog, context);
         // note: this corrects how the variable to name the dialog changed in the history of 2sxc from action to dialog
-        this.params = Object.assign({ dialog: dialog || context.button.action.name }, params);
+        this.params = __assign({ dialog: dialog || context.button.action.name }, params);
+        // this.params = O.bject.assign({ dialog: dialog || context.button.action.name }, params);
         // initialize root url to dialog
         this.rootUrl = this.getDialogUrl();
         // get isDebug url Parameter
@@ -4724,7 +4714,7 @@ var EditManager = /** @class */ (function () {
      * it is publicly used out of inpage, so take a care to preserve function signature
      */
     EditManager.prototype.getButton = function (actDef, groupIndex) {
-        this.context.button = new __WEBPACK_IMPORTED_MODULE_1__toolbar_config_loaders__["ButtonConfigLoader"](null).convertToConfig(actDef);
+        this.context.button = new __WEBPACK_IMPORTED_MODULE_1__toolbar_config_loaders__["ButtonConfigLoader"](null).convertToButton(actDef);
         var button = new __WEBPACK_IMPORTED_MODULE_2__toolbar_render_toolbar_renderer__["ToolbarRenderer"](this.context).button.render(this.context, groupIndex);
         return button.outerHTML;
     };
@@ -4948,14 +4938,6 @@ var RenderButton = /** @class */ (function (_super) {
     return RenderButton;
 }(__WEBPACK_IMPORTED_MODULE_1__render_part_base__["RenderPart"]));
 
-// function oldParametersAdapter(action: ButtonCommand): Partial<CommandParams> {
-//     let params: Partial<CommandParams> = {};
-//     if (action) {
-//       if (action.name) params.action = action.name;
-//       if (action.params) O.bject.assign(params, action.params);
-//     }
-//     return params;
-//   }
 
 
 /***/ }),
@@ -5213,17 +5195,13 @@ function isInPageButtonConfiguration(thing) {
 
 /***/ }),
 /* 91 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, __webpack_exports__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "InPageCodeJson_ProbablyUnused", function() { return InPageCodeJson_ProbablyUnused; });
-var InPageCodeJson_ProbablyUnused = /** @class */ (function () {
-    function InPageCodeJson_ProbablyUnused() {
-    }
-    return InPageCodeJson_ProbablyUnused;
-}());
-
+// export class InPageCodeJson_ProbablyUnused {
+//   target: string;
+//   isList: boolean;
+// }
 
 
 /***/ }),
@@ -6788,9 +6766,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
  * import this module to commands.ts
  */
 __WEBPACK_IMPORTED_MODULE_0__commands__["Commands"].add('contentitems', 'ContentItems', 'table', true, false, {
-    params: function (context) {
-        return { contentTypeName: context.contentBlock.contentTypeId };
-    },
+    params: function (context) { return ({ contentTypeName: context.contentBlock.contentTypeId }); },
     showCondition: function (context) {
         return (context.user.canDesign &&
             (!!context.button.action.params.contentType ||

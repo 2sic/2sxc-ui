@@ -1,4 +1,4 @@
-﻿import { InPageCodeJson_ProbablyUnused, InPageCommandJson, isInPageCommandConfiguration } from '.';
+﻿import { InPageCommandJson, isInPageCommandConfiguration } from '.';
 import { InPageButtonJson } from '.';
 import { ToolbarConfigLoader } from '.';
 import { Commands } from '../../commands/commands';
@@ -20,72 +20,49 @@ export class ButtonConfigLoader extends HasLog {
 
 
 
-  convertToConfig(oldButtonDef: InPageButtonJson): Button {
+  convertToButton(jsonBtn: InPageButtonJson): Button {
 
-    const partialButtonConfig: Partial<Button> = {};
+    const btn: Partial<Button> = {};
 
-    if (oldButtonDef.code) {
-      partialButtonConfig.code = (context: ContextBundleButton) => {
-        // TODO: 2dm unclear why we're just giving an empty configuration
-        // I believe this is a mistake, STV had some todos to try to find the values
-        // so I believe for years now, the object was always empty
-        // so it's probably never been used
-        return oldButtonDef.code(context.button.action.params, new InPageCodeJson_ProbablyUnused());
-      };
-    }
+    if (jsonBtn.code)
+      btn.code = (c: ContextBundleButton) => jsonBtn.code(c.button.action.params);
 
-    if (oldButtonDef.icon) partialButtonConfig.icon = () => `icon-sxc-${oldButtonDef.icon}`;
+    if (jsonBtn.icon) btn.icon = () => `icon-sxc-${jsonBtn.icon}`;
+    if (jsonBtn.classes) btn.classes = jsonBtn.classes;
+    if (jsonBtn.dialog) btn.dialog = () => jsonBtn.dialog;
+    if (jsonBtn.disabled) btn.disabled = () => jsonBtn.disabled;
+    if (jsonBtn.dynamicClasses)
+      btn.dynamicClasses = (c: ContextBundleButton) => jsonBtn.dynamicClasses(c.button.action.params);
 
-    if (oldButtonDef.classes) partialButtonConfig.classes = oldButtonDef.classes;
-
-    if (oldButtonDef.dialog) partialButtonConfig.dialog = () => oldButtonDef.dialog;
-
-    if (oldButtonDef.disabled) partialButtonConfig.disabled = () => oldButtonDef.disabled;
-
-    if (oldButtonDef.dynamicClasses) {
-      partialButtonConfig.dynamicClasses = (context: ContextBundleButton) => {
-        return oldButtonDef.dynamicClasses(context.button.action.params);
-      };
-    }
-
-    if (oldButtonDef.fullScreen) partialButtonConfig.fullScreen = () => oldButtonDef.fullScreen;
-
-    if (oldButtonDef.inlineWindow) partialButtonConfig.inlineWindow = () => oldButtonDef.inlineWindow;
-
-    if (oldButtonDef.name) partialButtonConfig.name = oldButtonDef.name;
-
-    if (oldButtonDef.newWindow) partialButtonConfig.newWindow = () => oldButtonDef.newWindow;
+    if (jsonBtn.fullScreen) btn.fullScreen = () => jsonBtn.fullScreen;
+    if (jsonBtn.inlineWindow) btn.inlineWindow = () => jsonBtn.inlineWindow;
+    if (jsonBtn.name) btn.name = jsonBtn.name;
+    if (jsonBtn.newWindow) btn.newWindow = () => jsonBtn.newWindow;
 
     // todo: stv, this do not looking good, because old simple parameters become methods with context as parameter,
     // we need parameter adapter to do this...
-    if (oldButtonDef.params) Object.assign(partialButtonConfig.params, oldButtonDef.params);
+    if (jsonBtn.params) btn.params = () => jsonBtn.params;
+    // O.bject.assign(btn.params, jsonBtn.params);
 
-    if (oldButtonDef.partOfPage) partialButtonConfig.partOfPage = () => oldButtonDef.partOfPage;
+    if (jsonBtn.partOfPage) btn.partOfPage = () => jsonBtn.partOfPage;
 
-    if (oldButtonDef.showCondition) {
-      partialButtonConfig.showCondition = (context: ContextBundleButton) => {
-        // TODO: 2dm unclear why we're just giving an empty configuration
-        // I believe this is a mistake, STV had some todos to try to find the values
-        // so I believe for years now, the object was always empty
-        // so it's probably never been used
-        return oldButtonDef.showCondition(context.button.action.params, new InPageCodeJson_ProbablyUnused());
-      };
-    }
+    if (jsonBtn.showCondition)
+      btn.showCondition = (c: ContextBundleButton) => jsonBtn.showCondition(c.button.action.params);
 
-    if (oldButtonDef.title) partialButtonConfig.title = () => `Toolbar.${oldButtonDef.title}`;
+    if (jsonBtn.title) btn.title = () => `Toolbar.${jsonBtn.title}`;
 
-    if (oldButtonDef.uiActionOnly) partialButtonConfig.uiActionOnly = () => oldButtonDef.uiActionOnly;
+    if (jsonBtn.uiActionOnly) btn.uiActionOnly = () => jsonBtn.uiActionOnly;
 
-    oldButtonDef = this.normalize(oldButtonDef);
+    jsonBtn = this.normalize(jsonBtn);
 
-    const name = oldButtonDef.command.action;
-    const contentType = oldButtonDef.command.contentType;
+    const name = jsonBtn.command.action;
+    const contentType = jsonBtn.command.contentType;
 
     // if the button belongs to a content-item, move the specs up to the item into the settings-object
-    this.toolbar.command.normalizeCommandJson(oldButtonDef.command);
+    this.toolbar.command.normalizeCommandJson(jsonBtn.command);
 
     // parameters adapter from v1 to v2
-    const params = this.toolbar.command.removeActionProperty(oldButtonDef.command);
+    const params = this.toolbar.command.removeActionProperty(jsonBtn.command);
 
     // Toolbar API v2
     const newButtonAction = new ButtonCommand(name, contentType, params);
