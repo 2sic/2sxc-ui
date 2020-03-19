@@ -1,8 +1,7 @@
 ﻿import { ContextBundleButton } from '../context/bundles/context-bundle-button';
 import { Button } from '../toolbar/config/button';
-// import { Definition } from './definition';
 
-export class CommandDefinition {
+export class Command {
     constructor(public name: string) {
     }
 
@@ -30,12 +29,12 @@ export class CommandDefinition {
                  uiOnly: boolean,
                  partOfPage: boolean,
                  more: Partial<Button>,
-                 ): CommandDefinition {
+                 ): Command {
 
         if (typeof (partOfPage) !== 'boolean')
             throw 'partOfPage in commands not provided, order will be wrong!';
 
-        const commandDefinition = new CommandDefinition(name);
+        const commandDefinition = new Command(name);
 
         // Toolbar API v2
         // this.commandDefinition.name = name;

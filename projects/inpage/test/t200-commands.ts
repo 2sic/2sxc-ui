@@ -1,6 +1,6 @@
 ﻿import 'jasmine';
 import { Actions } from '../src/actions/actions';
-import { CommandDefinition } from '../src/commands/command-definition';
+import { Command } from '../src/commands/command';
 import { Commands as Commands } from '../src/commands/commands';
 import { createContextFromEditContext } from '../src/context/context';
 import { AttrJsonEditContext } from '../src/context/html-attribute/edit-context-root';
@@ -19,9 +19,9 @@ describe('Commands test suite', function() {
 
   describe('/ One command test suite', function() {
 
-    let myCustomEquality = function(first: CommandDefinition, second: CommandDefinition) {
-      if (!(first instanceof CommandDefinition)) return false;
-      if (!(second instanceof CommandDefinition)) return false;
+    let myCustomEquality = function(first: Command, second: Command) {
+      if (!(first instanceof Command)) return false;
+      if (!(second instanceof Command)) return false;
       if (first.name !== second.name) return false;
       // if (first.buttonConfig.action !== second.buttonConfig.action) return false;
       if (first.buttonConfig.icon(this.context) !== second.buttonConfig.icon(this.context)) return false;
@@ -135,7 +135,7 @@ describe('Commands test suite', function() {
         },
       } as Partial<Button>;
 
-      this.commandExpected = CommandDefinition.build('add', this.translateKey, this.icon, this.uiOnly, this.partOfPage, more);
+      this.commandExpected = Command.build('add', this.translateKey, this.icon, this.uiOnly, this.partOfPage, more);
     //   this.commandExpected.name = this.name;
     //   this.commandExpected.buttonConfig = getButtonConfigDefaultsV1(this.name, this.icon, this.translateKey, this.uiOnly, this.partOfPage, more);
 

@@ -1,18 +1,18 @@
 ﻿import { Button } from '../toolbar/config';
-import { CommandDefinition } from './command-definition';
+import { Command } from './command';
 
 /** Singleton Catalog of all commands */
 class CommandsCatalog {
-  private commandList: CommandDefinition[] = [];
-  list: HashTable<CommandDefinition> = {}; // hash - table of action definitions, to be used a list()["action - name"]
+  private commandList: Command[] = [];
+  list: HashTable<Command> = {}; // hash - table of action definitions, to be used a list()["action - name"]
   get = (name: string) => this.list[name]; // a specific action definition
 
   add(name: string, translateKey: string, icon: string, uiOnly: boolean, partOfPage: boolean,
-      more: Partial<Button>): CommandDefinition {
-      return this.addDef(CommandDefinition.build(name, translateKey, icon, uiOnly, partOfPage, more));
+      more: Partial<Button>): Command {
+      return this.addDef(Command.build(name, translateKey, icon, uiOnly, partOfPage, more));
   }
 
-  private addDef(def: CommandDefinition): CommandDefinition {
+  private addDef(def: Command): Command {
     if (!this.list[def.name]) {
       // add
       this.commandList.push(def);

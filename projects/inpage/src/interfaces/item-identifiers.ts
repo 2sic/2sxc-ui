@@ -1,4 +1,4 @@
-import { MetadataFor } from '../commands/params-metadata-for';
+import { MetadataFor } from '../commands';
 import { DictionaryValue } from '../plumbing';
 
 /** Shared properties of all item identifiers */

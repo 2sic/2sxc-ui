@@ -1,5 +1,5 @@
-﻿import { Commands } from '../commands';
-import { Engine } from '../execute/engine';
+﻿import { CmsEngine } from '..';
+import { Commands } from '../commands';
 
 /**
  * new is a dialog to add something, and will not add if cancelled
@@ -28,6 +28,6 @@ Commands.add('new', 'New', 'plus', false, true, {
         // O.bject.assign(context.button.action.params, {
         //     sortOrder: context.button.action.params.sortOrder + 1,
         // });
-        return Engine.openDialog(context, event);
+        return CmsEngine.openDialog(context, event);
     },
 });

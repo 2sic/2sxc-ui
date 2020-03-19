@@ -1,4 +1,4 @@
-﻿import { Engine } from '../commands/';
+﻿import { CmsEngine } from '../commands/';
 import { CommandParams } from '../commands/command-params';
 import { ContextBundleInstance, isContextOfInstance } from '../context/bundles/context-bundle-instance';
 import { findContext as getContext } from '../context/context';
@@ -38,7 +38,7 @@ export class Cms extends HasLog {
       : getContext(context);
 
     return this.do(() =>
-      new Engine(this.log).detectParamsAndRun(realContext, nameOrSettings, eventOrSettings, event));
+      new CmsEngine(this.log).detectParamsAndRun(realContext, nameOrSettings, eventOrSettings, event));
   }
 
   /**

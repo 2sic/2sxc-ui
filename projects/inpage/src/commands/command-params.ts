@@ -1,6 +1,6 @@
-﻿import { ItemIdentifierGroup, ItemIdentifierSimple } from '../interfaces/item-identifiers';
-import { DictionaryValue } from '../plumbing/TypeTbD';
-import { MetadataFor } from './params-metadata-for';
+﻿import { MetadataFor } from '.';
+import { ItemIdentifierGroup, ItemIdentifierSimple } from '../interfaces/item-identifiers';
+import { DictionaryValue } from '../plumbing';
 
 /**
  * Command parameters are handed over to a command for execution
@@ -8,7 +8,7 @@ import { MetadataFor } from './params-metadata-for';
 export interface CommandParams {
     /** The action is used in scenarios where the command name must be included */
     action?: string;
-    items?: Array<ItemIdentifierSimple | ItemIdentifierGroup>; // string | string[];
+    items?: Array<ItemIdentifierSimple | ItemIdentifierGroup>;
     mode?: string;
 
     // both contentType and contentTypeName were used historically, so both variations may exist in Razor templaets

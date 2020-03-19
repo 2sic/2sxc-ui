@@ -1,4 +1,4 @@
-﻿import { InstanceEngine } from '../commands/execute/instance-engine';
+﻿import { SxcInstanceEngine } from '../commands';
 import { findContext } from '../context/context';
 import { SxcIntanceEditable } from '../interfaces/sxc-instance-editable';
 import { getEditContext } from './api';
@@ -48,7 +48,7 @@ function _initInstance(sxc: SxcIntanceEditable) {
     const editContext = getEditContext(myContext.sxc);
 
     const userInfo = UserOfEditContext.fromContext(myContext); // 2dm simplified getUserOfEditContext(context);
-    const cmdEngine = new InstanceEngine(myContext.sxc);
+    const cmdEngine = new SxcInstanceEngine(myContext.sxc);
 
     const editManager = new EditManager(myContext.sxc, editContext, userInfo, cmdEngine, myContext);
     sxc.manage = editManager;

@@ -5,10 +5,10 @@
  */
 Commands.add('template-settings', 'TemplateSettings', 'sliders', true, false, {
     dialog: (context) => 'edit',
-    showCondition: (context) => {
-        return context.user.canDesign && !context.app.isContent;
-    },
-    configureCommand: (context, command) => {
-        command.items = [{ EntityId: context.contentBlock.templateId }];
+
+    showCondition: (context) => context.user.canDesign && !context.app.isContent,
+
+    configureCommand: (context, linkGenerator) => {
+        linkGenerator.items = [{ EntityId: context.contentBlock.templateId }];
     },
 });

@@ -1,4 +1,4 @@
-﻿import { Commands } from '../.';
+﻿import { Commands } from '..';
 import { renderer } from '../../contentBlock/render';
 import { prepareToAddContent } from '../../contentBlock/templates';
 import { ContextBundleButton } from '../../context/bundles/context-bundle-button';
@@ -12,9 +12,12 @@ import { DialogPaths } from '../../settings/DialogPaths';
 import { Button } from '../../toolbar/config/button';
 import { ButtonCommand } from '../../toolbar/config/button-command';
 import { CommandParams } from '../command-params';
-import { CommandExecution } from './command-execution';
+import { CommandLinkGenerator } from '../command-link-generator';
 
-export class Engine extends HasLog {
+/**
+ * The CMS engine is global, and needs the context to work.
+ */
+export class CmsEngine extends HasLog {
   constructor(parentLog?: Log) {
     super('Cmd.Exec', parentLog);
   }
@@ -84,18 +87,14 @@ export class Engine extends HasLog {
 
     // todo: stv, fix this in case that is function
     if (!button.dialog) {
-      this.log.add(
-        'button.dialog method missing, must be old implementation which used the action-name - generating method',
-      );
-      button.dialog = () => {
-        return name;
-      };
+      this.log.add('button.dialog method missing, old implementation with action-name');
+      button.dialog = () => name;
     }
 
     // todo: stv, fix this in case that is function
     if (!button.code) {
       this.log.add('simple button without code - generating code to open standard dialog');
-      button.code = (contextParam: ContextBundleButton, evt: MouseEvent) => Engine.openDialog(contextParam, evt);
+      button.code = (contextParam: ContextBundleButton, evt: MouseEvent) => CmsEngine.openDialog(contextParam, evt);
     }
 
     if (button.uiActionOnly(context)) {
@@ -149,7 +148,7 @@ export class Engine extends HasLog {
    */
   static openDialog<T>(context: ContextBundleButton, event: MouseEvent): Promise<T> {
     // the link contains everything to open a full dialog (lots of params added)
-    let link = new CommandExecution(context).getLink(); // commandLinkToNgDialog(context);
+    let link = new CommandLinkGenerator(context).getLink(); // commandLinkToNgDialog(context);
 
     let fullScreen = false;
     const origEvent = event || (window.event as MouseEvent);

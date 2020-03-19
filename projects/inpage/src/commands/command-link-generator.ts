@@ -1,17 +1,17 @@
-﻿import { ContextBundleButton } from '../../context/bundles/context-bundle-button';
-import { ItemIdentifierGroup, ItemIdentifierSimple } from '../../interfaces/item-identifiers';
-import { NgUrlValuesWithoutParams } from '../../manage/ng-dialog-params';
-import { DialogPaths } from '../../settings/DialogPaths';
-import { translate } from '../../translate/2sxc.translate';
-import { CommandParams } from '../command-params';
-import { DictionaryValue } from '../../plumbing';
-import { TypeUnsafe, TypeTbD } from '../../plumbing/TypeTbD';
+﻿import { CommandParams } from '.';
+import { ContextBundleButton } from '../context/bundles/context-bundle-button';
+import { ItemIdentifierGroup, ItemIdentifierSimple } from '../interfaces/item-identifiers';
+import { NgUrlValuesWithoutParams } from '../manage/ng-dialog-params';
+import { DictionaryValue, TypeUnsafe } from '../plumbing';
+import { DialogPaths } from '../settings/DialogPaths';
+import { ButtonPropertyGenerator } from '../toolbar/config';
+import { translate } from '../translate/2sxc.translate';
 
 /**
  * This is responsible for taking a context with command and everything
  * then building the link for opening the correct dialogs
  */
-export class CommandExecution {
+export class CommandLinkGenerator {
   public items: Array<ItemIdentifierSimple | ItemIdentifierGroup>;
   public readonly params: CommandParams;
   private readonly rootUrl: string;
@@ -23,8 +23,8 @@ export class CommandExecution {
 
     // initialize params
     // todo: stv, clean this
-    const params = this.evalPropOrFunction(context.button.params, context) as CommandParams;
-    const dialog = this.evalPropOrFunction(context.button.dialog, context) as string;
+    const params = this.evalPropOrFunction(context.button.params, context, {} as CommandParams);
+    const dialog = this.evalPropOrFunction(context.button.dialog, context, '');
     // note: this corrects how the variable to name the dialog changed in the history of 2sxc from action to dialog
     this.params = {...{ dialog: dialog || context.button.action.name }, ...params};
     // this.params = O.bject.assign({ dialog: dialog || context.button.action.name }, params);
@@ -53,7 +53,7 @@ export class CommandExecution {
   getLink() {
     const context = this.context;
     const params = context.button.action.params;
-    const urlItems = this.params as TypeUnsafe as UrlItemParams;
+    const urlItems = this.params as unknown as UrlItemParams;
 
     // steps for all actions: prefill, serialize, open-dialog
     // when doing new, there may be a prefill in the link to initialize the new item
@@ -83,10 +83,10 @@ export class CommandExecution {
   }
 
 
-  private evalPropOrFunction(propOrFunction: TypeTbD, context: ContextBundleButton): any {
-    if (propOrFunction === undefined || propOrFunction === null)
-      return {};
-    return (typeof (propOrFunction) === 'function' ? propOrFunction(context) : propOrFunction);
+  private evalPropOrFunction<T>(propOrFunction: ButtonPropertyGenerator<T>, context: ContextBundleButton, fallback: T): T {
+    return (propOrFunction === undefined || propOrFunction === null)
+        ? fallback
+        : (typeof (propOrFunction) === 'function' ? propOrFunction(context) : propOrFunction);
   }
 
   private addItem() {

@@ -1,4 +1,4 @@
-﻿import { InstanceEngine } from '../../commands/execute/instance-engine';
+﻿import { SxcInstanceEngine } from '../../commands';
 import { SxcIntanceEditable } from '../../interfaces/sxc-instance-editable';
 import { windowInPage as window } from '../../interfaces/window-in-page';
 import { getTag } from '../../manage/api';
@@ -8,7 +8,7 @@ import { getSxc } from '../../plumbing';
  * Maps actions of the module menu to JS actions - needed because onclick event can't be set (actually, a bug in DNN)
  */
 export class ActionMenuMapper {
-  private run: typeof InstanceEngine.prototype.run;
+  private run: typeof SxcInstanceEngine.prototype.run;
   private tag: HTMLElement;
   private sxc: SxcIntanceEditable;
 

@@ -1,9 +1,9 @@
-﻿import { CommandDefinition } from '../../commands/command-definition';
+﻿import { Command } from '../../commands/command';
 import { CommandParams } from '../../commands/command-params';
 import { Commands } from '../../commands/commands';
 
 export class ButtonCommand {
-    readonly commandDefinition: CommandDefinition; // reference to action to be run
+    readonly commandDefinition: Command; // reference to action to be run
 
     customCode: string; // custom code if used
 

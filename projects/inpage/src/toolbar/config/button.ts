@@ -1,13 +1,13 @@
 ﻿import { ButtonCommand } from '.';
 import { CommandCode } from '../../commands/command-code';
-import { CommandExecution } from '../../commands/execute/command-execution';
-import { ContextBundleButton } from '../../context/bundles/context-bundle-button';
-import { DictionaryValue, TypeSafeAssign, TypeTbD, TypeUnsafe } from '../../plumbing';
 import { CommandParams } from '../../commands/command-params';
+import { CommandLinkGenerator } from '../../commands/command-link-generator';
+import { ContextBundleButton } from '../../context/bundles/context-bundle-button';
+import { TypeSafeAssign, TypeTbD, TypeUnsafe } from '../../plumbing';
 
 
 /** This is the most common call signature on most ButtonConfig properties */
-type ButtonPropertyGenerator<T> = (context: ContextBundleButton) => T;
+export type ButtonPropertyGenerator<T> = (context: ContextBundleButton) => T;
 
 /**
  * The real button configuration as it's used at runtime
@@ -33,7 +33,7 @@ export class Button {
     }
 
     code: CommandCode; // void;
-    configureCommand: (context: ContextBundleButton, cmd: CommandExecution) => void;
+    configureCommand: (context: ContextBundleButton, linkGenerator: CommandLinkGenerator) => void;
     dialog: ButtonPropertyGenerator<string>;
     disabled: ButtonPropertyGenerator<boolean>;
     dynamicClasses: ButtonPropertyGenerator<string>;
@@ -74,7 +74,7 @@ export class Button {
 function evalPropOrFun(propOrFunction: TypeTbD): TypeUnsafe {
     if (propOrFunction === undefined || propOrFunction === null) return false;
     if (typeof (propOrFunction) === 'function') return propOrFunction;
-    return (context: ContextBundleButton) => propOrFunction;
+    return () => propOrFunction;
 }
 
 type ButtonPropertyGeneratorOrValue<T> = (context: ContextBundleButton) => T | T;

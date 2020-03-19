@@ -1,13 +1,13 @@
 ﻿import { SxcInstanceManage } from '../../../$2sxc/src/edit-interfaces/sxc-instance-manage';
-import { InstanceEngine } from '../commands/execute/instance-engine';
+import { SxcInstanceEngine } from '../commands';
 import { Manipulator } from '../contentBlock/manipulate';
 import { ContextBundleButton } from '../context/bundles/context-bundle-button';
 import { AttrJsonEditContext } from '../context/html-attribute/edit-context-root';
 import { SxcIntanceEditable } from '../interfaces/sxc-instance-editable';
 import { TypeUnsafe } from '../plumbing/TypeTbD';
-import { InPageButtonJson, ButtonConfigLoader, ToolbarConfigLoader } from '../toolbar/config-loaders';
-import { ToolbarRenderer } from '../toolbar/render/toolbar-renderer';
+import { ButtonConfigLoader, InPageButtonJson, ToolbarConfigLoader } from '../toolbar/config-loaders';
 import { ToolbarSettings } from '../toolbar/config/toolbar-settings';
+import { ToolbarRenderer } from '../toolbar/render/toolbar-renderer';
 import { getTag} from './api';
 import { UserOfEditContext } from './user-of-edit-context';
 
@@ -19,7 +19,7 @@ export class EditManager implements SxcInstanceManage {
   constructor(private sxc: SxcIntanceEditable,
               private editContext: AttrJsonEditContext,
               private userInfo: UserOfEditContext,
-              private cmdEngine: InstanceEngine,
+              private cmdEngine: SxcInstanceEngine,
               public context: ContextBundleButton) {
   }
 
