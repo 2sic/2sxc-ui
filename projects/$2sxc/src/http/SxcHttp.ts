@@ -28,8 +28,7 @@ export class SxcHttp extends HasLog implements Public.Http {
      */
     apiRoot(endpointName: string): string {
         var result = this.env.api().replace(ApiExtensionPlaceholder, endpointName);
-        this.log.add(`apiRoot('${endpointName}') = '${result}'`)
-        return result;
+        return this.log.return(result, `apiRoot('${endpointName}')`);
     }
 
     /**

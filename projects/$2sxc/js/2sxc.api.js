@@ -772,8 +772,7 @@ var SxcHttp = (function (_super) {
     };
     SxcHttp.prototype.apiRoot = function (endpointName) {
         var result = this.env.api().replace(__WEBPACK_IMPORTED_MODULE_0__constants__["a" /* ApiExtensionPlaceholder */], endpointName);
-        this.log.add("apiRoot('" + endpointName + "') = '" + result + "'");
-        return result;
+        return this.log.return(result, "apiRoot('" + endpointName + "')");
     };
     SxcHttp.prototype.apiUrl = function (url, endpointName) {
         this.log.add("apiUrl(url:'" + url + "', endpointName:'" + endpointName + "')");
