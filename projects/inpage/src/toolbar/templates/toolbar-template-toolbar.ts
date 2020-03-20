@@ -7,6 +7,7 @@ import { ToolbarTemplateButtonGroup } from './toolbar-templaten-button-group';
  * It's meant to provide type-save templates for what buttons are used where
  */
 export class ToolbarTemplate {
+    name: string;
     groups: ToolbarTemplateButtonGroup[] = [];
     defaults?: DictionaryValue = {};
     params?: DictionaryValue = {};

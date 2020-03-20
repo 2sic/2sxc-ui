@@ -1,38 +1,39 @@
-﻿import { ToolbarTemplate } from './toolbar-template-toolbar';
+﻿// import { ToolbarTemplate } from './toolbar-template-toolbar';
 
 // the default / initial buttons in a standard toolbar
 // ToDo: refactor to avoid side-effects
-export const leftToolbarTemplate: ToolbarTemplate = {
-  groups: [
-    {
-      name: 'default',
-      buttons: 'edit,new,metadata,publish,layout',
-    }, {
-      name: 'list',
-      buttons: 'add,remove,moveup,movedown,instance-list,replace,item-history',
-    }, {
-      name: 'data',
-      buttons: 'delete',
-    }, {
-      name: 'instance',
-      buttons: 'template-develop,template-settings,contentitems,template-query,contenttype',
-      defaults: {
-        classes: 'group-pro',
-      },
-    }, {
-      name: 'app',
-      buttons: 'app,app-settings,app-resources,zone',
-      defaults: {
-        classes: 'group-pro',
-      },
-    },
-  ],
-  defaults: {},
-  params: {},
-  settings: {
-    autoAddMore: 'start',
-    // these are defaults, don't set again
-    // hover: "right",
-  },
-  _isToolbarTemplate: true,
-};
+// CodeChange #2020-03-20#TemplateToolbarLeftUnused - if no side-effects, delete in June
+// export const ToolbarTemplateLeft: ToolbarTemplate = {
+//   groups: [
+//     {
+//       name: 'default',
+//       buttons: 'edit,new,metadata,publish,layout',
+//     }, {
+//       name: 'list',
+//       buttons: 'add,remove,moveup,movedown,instance-list,replace,item-history',
+//     }, {
+//       name: 'data',
+//       buttons: 'delete',
+//     }, {
+//       name: 'instance',
+//       buttons: 'template-develop,template-settings,contentitems,template-query,contenttype',
+//       defaults: {
+//         classes: 'group-pro',
+//       },
+//     }, {
+//       name: 'app',
+//       buttons: 'app,app-settings,app-resources,zone',
+//       defaults: {
+//         classes: 'group-pro',
+//       },
+//     },
+//   ],
+//   defaults: {},
+//   params: {},
+//   settings: {
+//     autoAddMore: 'start',
+//     // these are defaults, don't set again
+//     // hover: "right",
+//   },
+//   _isToolbarTemplate: true,
+// };

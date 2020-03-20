@@ -2,29 +2,32 @@
 
 // the default / initial buttons in a standard toolbar
 // ToDo: refactor to avoid side-effects
-export const ToolbarTemplateDefault: ToolbarTemplate = {
-  name: 'default',
+export const ToolbarTemplateInListRight: ToolbarTemplate = {
+  name: 'listitem',
   groups: [
     {
       name: 'default',
-      buttons: 'edit,new,metadata,publish,layout',
+      buttons: 'edit,new,publish',
+      defaults: {
+        classes: 'group-inlist',
+      },
     }, {
       name: 'list',
       buttons: 'add,remove,moveup,movedown,instance-list,replace,item-history',
+      defaults: {
+        classes: 'group-inlist',
+      },
     }, {
       name: 'data',
       buttons: 'delete',
-    }, {
-      name: 'instance',
-      buttons: 'template-develop,template-settings,contentitems,template-query,contenttype',
       defaults: {
-        classes: 'group-pro',
+        classes: 'group-inlist',
       },
     }, {
-      name: 'app',
-      buttons: 'app,app-settings,app-resources,zone',
+      name: 'instance',
+      buttons: 'contentitems,contenttype',
       defaults: {
-        classes: 'group-pro',
+        classes: 'group-inlist group-pro',
       },
     },
   ],
@@ -32,8 +35,6 @@ export const ToolbarTemplateDefault: ToolbarTemplate = {
   params: {},
   settings: {
     autoAddMore: 'end',
-    // these are defaults, don't set again
-    // hover: "right",
   },
   _isToolbarTemplate: true,
 };

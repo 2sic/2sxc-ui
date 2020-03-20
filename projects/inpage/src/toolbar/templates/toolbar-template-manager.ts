@@ -1,8 +1,6 @@
-﻿import { HasLog } from '../../logging/has-log';
+﻿import { ToolbarTemplate, ToolbarTemplateDefault, ToolbarTemplateInListRight } from '.';
+import { HasLog } from '../../logging/has-log';
 import { Log } from '../../logging/log';
-import { defaultToolbarTemplate } from './template-default';
-import { leftToolbarTemplate } from './template-left';
-import { ToolbarTemplate } from './toolbar-template-toolbar';
 
 /**
  * The template manager provides toolbar templates to the entire system.
@@ -16,8 +14,10 @@ export class ToolbarTemplateManager extends HasLog {
 
   private constructor(parentLog: Log) {
     super('Tlb.TmpMan', parentLog, 'build');
-    this.add('default', defaultToolbarTemplate);
-    this.add('left', leftToolbarTemplate);
+    this.add(/*'default',*/ ToolbarTemplateDefault);
+    // CodeChange #2020-03-20#TemplateToolbarLeftUnused - if no side-effects, delete in June
+    // this.add('left', ToolbarTemplateLeft);
+    this.add(/*'listitem',*/ ToolbarTemplateInListRight);
   }
 
   public static Instance(parentLog: Log): ToolbarTemplateManager {
@@ -32,17 +32,22 @@ export class ToolbarTemplateManager extends HasLog {
   }
   private static singleton: ToolbarTemplateManager = null; // A variable which stores the singleton object. Initially, the variable acts like a placeholder
 
+//   /**
+//    * a single template – usually 'default'
+//    */
+//   get(name: string): ToolbarTemplate { return this.list[name]; }
+
   /**
-   * a single template – usually 'default'
+   * Deep copy toolbar template, so it can be modified without changing the next use
    */
-  get(name: string): ToolbarTemplate {
-    return this.list[name];
+  copy(name: string): ToolbarTemplate {
+      return JSON.parse(JSON.stringify(this.list[name]));
   }
 
   /**
    * adds a template to the list, if it doesn't exist
    */
-  add(name: string, template: ToolbarTemplate, force?: boolean) {
-    this.list[name] = template;
+  private add(/*name: string,*/ template: ToolbarTemplate /*, force?: boolean */) {
+    this.list[template.name] = template;
   }
 }

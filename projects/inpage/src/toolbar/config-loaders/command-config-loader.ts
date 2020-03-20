@@ -22,13 +22,9 @@ export class CommandConfigLoader extends HasLog {
         const editInfo = actDef.entity._2sxcEditInformation;
         actDef.useModuleList = (editInfo.sortOrder !== undefined); // has sort-order, so use list
 
-        if (actDef.entity.EntityId !== undefined) {
-        actDef.entityId = actDef.entity.EntityId;
-        }
+        if (actDef.entity.EntityId !== undefined) actDef.entityId = actDef.entity.EntityId;
 
-        if (editInfo.sortOrder !== undefined) {
-        actDef.sortOrder = editInfo.sortOrder;
-        }
+        if (editInfo.sortOrder !== undefined)  actDef.sortOrder = editInfo.sortOrder;
 
         delete actDef.entity; // clean up edit-info
         return actDef;

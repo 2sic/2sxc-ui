@@ -1,4 +1,4 @@
-﻿import { ButtonGroupConfigLoader, CommandConfigLoader, ToolbarWip, InPageCommandJson } from '.';
+﻿import { ButtonGroupConfigLoader, CommandConfigLoader, InPageCommandJson, ToolbarWip } from '.';
 import { ContextBundleButton } from '../../context/bundles/context-bundle-button';
 import { HasLog, Log } from '../../logging';
 import { InstanceConfig } from '../../manage/instance-config';
@@ -7,9 +7,9 @@ import { defaultToolbarSettings, settingsForEmptyToolbar, ToolbarSettings } from
 import { InPageToolbarConfigVariations } from '../initialize/toolbar-init-config';
 import { ToolbarTemplateManager } from '../templates/toolbar-template-manager';
 import { ToolbarTemplate } from '../templates/toolbar-template-toolbar';
+import { ToolbarTemplateButtonGroup } from '../templates/toolbar-templaten-button-group';
 import { ButtonConfigLoader } from './button-config-loader';
 import { InPageButtonJson } from './in-page-button';
-import { ToolbarTemplateButtonGroup } from '../templates/toolbar-templaten-button-group';
 import { InPageButtonGroupJson } from './in-page-button-group';
 import { ButtonGroupsWip } from './toolbar-wip';
 
@@ -29,29 +29,39 @@ export class ToolbarConfigLoader extends HasLog {
     expandToolbarConfig(context: ContextBundleButton, toolbarData: InPageToolbarConfigVariations, toolbarSettings: ToolbarSettings): Toolbar {
         const log = new Log('Tlb.ExpTop', this.log, 'expand start');
 
-        if (toolbarData === ({} as InPageToolbarConfigVariations) && toolbarSettings === ({} as ToolbarSettings)) {
-            log.add('no data or settings found, will use default toolbar');
+        // if null/undefined, use empty object
+        toolbarData = toolbarData || {};
+
+        // Default to empty toolbar settings if we don't have a toolbar or settings
+        if (Object.keys(toolbarData).length + Object.keys(toolbarSettings || {}).length === 0) {
+            log.add('no data or settings, will use default settings for empty');
             toolbarSettings = settingsForEmptyToolbar;
         }
 
         // if it has an action or is an array, keep that. Otherwise get standard buttons
-        toolbarData = toolbarData || {} as InPageToolbarConfigVariations; // if null/undefined, use empty object
-
-        let unstructuredConfig = toolbarData;
-        if (!InPageCommandJson.is(toolbarData) && !ToolbarTemplate.is(toolbarData) && !ToolbarTemplateButtonGroup.is(toolbarData) && !Array.isArray(toolbarData)) {
-            log.add('no toolbar structure specified, will use standard toolbar template');
-            const toolbarTemplate = ToolbarTemplateManager.Instance(log).get('default'); // use default toolbar template
-            unstructuredConfig = JSON.parse(JSON.stringify(toolbarTemplate)) as ToolbarTemplate; // deep copy toolbar template
-            unstructuredConfig.params = (toolbarData && Array.isArray(toolbarData) && toolbarData[0]) || toolbarData; // these are the default command parameters
-        }
+        toolbarData = this.useButtonsFromConfigOrLoadTemplate(toolbarData, log);
 
         const instanceConfig = InstanceConfig.fromContext(context);
 
         // whatever we had, if more settings were provided, override with these...
-        const config = this.buildFullDefinition(context, unstructuredConfig, instanceConfig, toolbarSettings);
+        const config = this.buildFullDefinition(context, toolbarData, instanceConfig, toolbarSettings);
 
         log.add('expand done');
         return config;
+    }
+
+    /**
+     * If the raw data has specs for what buttons, use that
+     * Otherwise load the button list from the template
+     */
+    private useButtonsFromConfigOrLoadTemplate(raw: InPageToolbarConfigVariations, log: Log) {
+        if (InPageCommandJson.hasActions(raw) || ToolbarTemplate.is(raw)
+            || ToolbarTemplateButtonGroup.is(raw) || Array.isArray(raw))
+                return raw;
+        log.add('no toolbar structure specified, will use standard toolbar template');
+        const template = ToolbarTemplateManager.Instance(log).copy('default');
+        template.params = (raw && Array.isArray(raw) && raw[0]) || raw; // attach parameters
+        return template;
     }
 
 

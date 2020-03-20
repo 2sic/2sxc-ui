@@ -3,7 +3,6 @@ import { ToolbarRenderer } from '.';
 import { ToolbarConfigFinderAndInitializer } from '.';
 import { ContextBundleButton } from '../context/bundles/context-bundle-button';
 import { HasLog, Log } from '../logging';
-import { ToolbarTemplateManager } from './templates/toolbar-template-manager';
 
 /**
  * Toolbar manager for the whole page - basically a set of APIs
@@ -33,7 +32,8 @@ class ToolbarManagerGlobal extends HasLog {
     return new ToolbarRenderer(context).render();
   }
 
-  toolbarTemplate = ToolbarTemplateManager.Instance(this.log).get('default');
+// 2020-03-20 2dm - seems unused
+//   toolbarTemplate = ToolbarTemplateManager.Instance(this.log).get('default');
 }
 
 // 2dm 2018-03-22 this seems to be unused
