@@ -8181,9 +8181,11 @@ __WEBPACK_IMPORTED_MODULE_0__commands__["Commands"].add('item-history', 'ItemHis
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LayoutCommand", function() { return LayoutCommand; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0____ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__quick_edit__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__quick_edit_context_for_lists__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__commands__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__interfaces_sxc_instance_editable__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__quick_edit__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__quick_edit_context_for_lists__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__commands__ = __webpack_require__(0);
+
 
 
 
@@ -8192,19 +8194,18 @@ var LayoutCommand = 'layout';
 /**
  * import this module to commands.ts
  */
-__WEBPACK_IMPORTED_MODULE_3__commands__["Commands"].add(LayoutCommand, 'ChangeLayout', 'glasses', true, true, {
-    params: function (context) {
-        console.log('will layout - context:', context);
-        return {}; // { mode: 'edit' };
-    },
+__WEBPACK_IMPORTED_MODULE_4__commands__["Commands"].add(LayoutCommand, 'ChangeLayout', 'glasses', true, true, {
     inlineWindow: function (context) { return true; },
     code: function (context, event) {
-        console.log('layout - code', event.target);
-        // const eventTag = event.currentTarget;
-        var listSpecs = $(event.target).closest('[' + __WEBPACK_IMPORTED_MODULE_1__quick_edit__["QeSelectors"].blocks.cb.context + ']');
+        // Try to find the closest tag based on the click
+        // if this fails, try to find it based on the sxc-instance
+        var attrSel = '[' + __WEBPACK_IMPORTED_MODULE_2__quick_edit__["QeSelectors"].blocks.cb.context + ']';
+        var listSpecs = $(event.target).closest(attrSel);
+        if (listSpecs.length === 0)
+            listSpecs = $(__WEBPACK_IMPORTED_MODULE_1__interfaces_sxc_instance_editable__["SxcEdit"].getTag(context.sxc)).closest(attrSel);
+        // Now check if we have apps-parameters to pass on
         if (listSpecs.length > 0) {
-            var specs = __WEBPACK_IMPORTED_MODULE_2__quick_edit_context_for_lists__["ContextForLists"].getFromDom(listSpecs);
-            console.log('layout specs:', specs);
+            var specs = __WEBPACK_IMPORTED_MODULE_3__quick_edit_context_for_lists__["ContextForLists"].getFromDom(listSpecs);
             context.button.action.params.apps = specs.apps;
         }
         return __WEBPACK_IMPORTED_MODULE_0____["CmsEngine"].openDialog(context, event);
