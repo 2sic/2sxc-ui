@@ -7,6 +7,12 @@
 export * from './ajax/AjaxPromise';
 export * from './ajax/AjaxSettings';
 
+// must be pretty early, because most objects rely on this
+// and ATM having this on top changes the load order
+// this is a side-effect-problem from not clearly using modules
+export * from './logging/index';
+
+
 export * from './environment/Environment';
 export * from './environment/JsInfo';
 // export * from './environment/envDnnSfLoader';
@@ -18,9 +24,7 @@ export * from './instance/SxcInstanceDataDeprecated';
 export * from './instance/SxcInstanceWithInternals';
 export * from './instance/SxcWebApi';
 
-export * from './logging/HasLog';
-export * from './logging/Log';
-export * from './logging/LogEntry';
+
 
 export * from './SxcRoot/SxcRoot';
 export * from './SxcRoot/SxcRootBuilder';

@@ -55,7 +55,8 @@ module.exports = env => {
         },
         output: {
             filename: sxcJsFileBase + ".js",
-            path: sxcJsDist
+            path: sxcJsDist,
+            // jsonpFunction: 'something',
         },
         plugins: enableMc ? [] : [copyAfterBuild]
     };

@@ -40,8 +40,8 @@ export function getRootPartsV2() : Partial<SxcRoot> {
             version: SxcVersion,
             description: 'The 2sxc Controller - read more about it on docs.2sxc.org',
         },
-        env,
+        env: env,
         http: new SxcHttp(env),
-        log,
+        log: log,
     };
 }
