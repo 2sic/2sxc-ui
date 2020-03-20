@@ -3,7 +3,7 @@ import { UrlParamManager } from '../tools/UrlParamManager';
 import { Stats } from '../Stats';
 import { SxcInstanceWithInternals } from '../instance/SxcInstanceWithInternals';
 import { SxcRootInternals } from './SxcRootInternals';
-import { SxcRoot, getRootParts } from './SxcRoot';
+import { SxcRoot, getRootPartsV2 } from './SxcRoot';
 import { Window } from "../tools/Window";
 
 declare const $2sxc_jQSuperlight: any;
@@ -49,7 +49,7 @@ function FindSxcInstance(id: number | HTMLElement, cbid?: number): SxcInstanceWi
  * Build a SXC Controller for the page. Should only ever be executed once
  */
 export function buildSxcRoot(): SxcRoot & SxcRootInternals {
-    const rootApiV2 = getRootParts();
+    const rootApiV2 = getRootPartsV2();
 
     const urlManager = new UrlParamManager();
     const debug = {

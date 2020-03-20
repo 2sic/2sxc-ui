@@ -16,7 +16,7 @@ export class Log implements Public.Log {
     if(message) this.add(message);
   }
 
-  add(message: string) {
+  add<T>(message: string, data?: T) {
     // silently return if past the max
     if(this.entries.length > this.maxEntries) return;
 
@@ -24,13 +24,22 @@ export class Log implements Public.Log {
     else if(this.entries.length == this.maxEntries) this._add(maxEntriesReached);
     
     // standard: just add this
-    else this._add(message);
+    else this._add(message, data);
   }
 
-  private _add(message: string)
+  return<T>(result: T, message?: string) {
+      this.add(message || 'return', result);
+      return result;
+  }
+
+  private _add<T>(message: string, data?: T)
   {
     this.text += message + '\n';
-    this.entries.push({time: new Date().getTime() - this.start, message: message} as LogEntry);
+    this.entries.push({
+        time: new Date().getTime() - this.start, 
+        message: message,
+        data: data
+    } as LogEntry);
   }
 }
 

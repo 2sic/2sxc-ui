@@ -1,10 +1,10 @@
 import * as Public from '../../../sxc-typings/index';
 import { HeaderNames, ToSxcName, ApiExtensionPlaceholder } from '../constants';
-import { Environment } from '../environment/Environment';
+import { Environment, HasLog, Log } from '../index';
 
-export class SxcHttp implements Public.Http {
+export class SxcHttp extends HasLog implements Public.Http {
     constructor(private env: Environment) {
-        
+        super("Sxc.Http");
     }
 
     /**
@@ -17,7 +17,7 @@ export class SxcHttp implements Public.Http {
         if(cbid) fHeaders[HeaderNames.ContentBlockId] = cbid.toString();
         fHeaders[HeaderNames.TabId] = this.env.page().toString();
         fHeaders[HeaderNames.Rvt] = this.env.rvt();
-        return fHeaders;
+        return this.log.return(fHeaders, `headers(id:${id}, cbid:${cbid})`);
     }
 
     /**
@@ -27,7 +27,9 @@ export class SxcHttp implements Public.Http {
      * @memberof SxcHttp
      */
     apiRoot(endpointName: string): string {
-        return this.env.api().replace(ApiExtensionPlaceholder, endpointName);
+        var result = this.env.api().replace(ApiExtensionPlaceholder, endpointName);
+        this.log.add(`apiRoot('${endpointName}') = '${result}'`)
+        return result;
     }
 
     /**
@@ -40,19 +42,20 @@ export class SxcHttp implements Public.Http {
      */
     apiUrl(url: string, endpointName?: string)
     {
+        this.log.add(`apiUrl(url:'${url}', endpointName:'${endpointName}')`);
         // if starts with http: or https: then ignore
         if(!url || url.indexOf('http:') == 0 || url.indexOf('https:') == 0 || url.indexOf('//') == 0)
-            return url;
+            return this.log.return(url);
         
         // if no endpoint specified, then also skip absolute and relative urls
         if(!endpointName && (url.indexOf('/') == 0 || url.indexOf('.') == 0))
-            return url;
+            return this.log.return(url);
 
         var baseUrl = this.apiRoot(endpointName || ToSxcName);
         // ensure base ends with slash
         if(baseUrl[baseUrl.length-1] != '/') baseUrl += '/';
         // ensure url doesn't start with slash
         if(url[0] == '/') url = url.slice(1);
-        return baseUrl + url;
+        return this.log.return(baseUrl + url);
     }
 }
