@@ -22,11 +22,11 @@ export class InPageCommandJson  {
     /** determines that we should use a module list */
     useModuleList?: boolean;
 
-    /** index in the module list */
+    /** index in the list */
     sortOrder?: number;
 
     /** Experimental 10.27 */
-    parent?: number;
+    parent?: string;
     /** Experimental 10.27 */
     field?: string;
 

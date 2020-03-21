@@ -1,11 +1,11 @@
-﻿import { CommandParams } from '.';
-import { ContextBundleButton } from '../context/bundles/context-bundle-button';
-import { ItemIdentifierGroup, ItemIdentifierSimple } from '../interfaces/item-identifiers';
+﻿import { ContextBundleButton } from '../context/bundles/context-bundle-button';
+import { ItemIdentifierGroup, ItemIdentifierSimple, ItemInField } from '../interfaces/item-identifiers';
 import { NgUrlValuesWithoutParams } from '../manage/ng-dialog-params';
 import { DictionaryValue, TypeUnsafe } from '../plumbing';
 import { DialogPaths } from '../settings/DialogPaths';
 import { ButtonPropertyGenerator } from '../toolbar/config';
 import { translate } from '../translate/2sxc.translate';
+import { isatty } from 'tty';
 
 /**
  * This is responsible for taking a context with command and everything
@@ -13,7 +13,7 @@ import { translate } from '../translate/2sxc.translate';
  */
 export class CommandLinkGenerator {
   public items: Array<ItemIdentifierSimple | ItemIdentifierGroup>;
-  public readonly params: CommandParams;
+  public readonly urlParams: UrlItemParams;
   private readonly rootUrl: string;
   private readonly debugUrlParam: string;
 
@@ -23,10 +23,10 @@ export class CommandLinkGenerator {
 
     // initialize params
     // todo: stv, clean this
-    const params = this.evalPropOrFunction(context.button.params, context, {} as CommandParams);
+    this.urlParams = this.evalPropOrFunction(context.button.params, context, {} as unknown);
     const dialog = this.evalPropOrFunction(context.button.dialog, context, '');
     // note: this corrects how the variable to name the dialog changed in the history of 2sxc from action to dialog
-    this.params = {...{ dialog: dialog || context.button.action.name }, ...params};
+    this.urlParams = {...{ dialog: dialog || context.button.action.name }, ...this.urlParams};
     // this.params = O.bject.assign({ dialog: dialog || context.button.action.name }, params);
 
     // initialize root url to dialog
@@ -38,6 +38,8 @@ export class CommandLinkGenerator {
       // activate items for list or simple item depending on the scenario
     if (context.button.action.params.useModuleList)
       this.addContentGroupItems(true);
+    if (context.button.action.params.parent)
+      this.addItemInList();
     else
       this.addItem();
 
@@ -53,7 +55,7 @@ export class CommandLinkGenerator {
   getLink() {
     const context = this.context;
     const params = context.button.action.params;
-    const urlItems = this.params as unknown as UrlItemParams;
+    const urlItems = this.urlParams as unknown as UrlItemParams;
 
     // steps for all actions: prefill, serialize, open-dialog
     // when doing new, there may be a prefill in the link to initialize the new item
@@ -112,15 +114,20 @@ export class CommandLinkGenerator {
    * optionally together with the presentation item
    */
   private addContentGroupItems(withPresentation: boolean) {
-    const isContentAndNotHeader = (this.context.button.action.params.sortOrder !== -1);
-    const index = isContentAndNotHeader ? this.context.button.action.params.sortOrder : 0;
+    const params = this.context.button.action.params;
+    const isContentAndNotHeader = (params.sortOrder !== -1);
+    const index = isContentAndNotHeader ? params.sortOrder : 0;
     const isAdd = this.context.button.action.name === 'new';
     const groupId = this.context.contentBlock.contentGroupId;
 
-    this.addContentGroupItem(groupId, index, this.findPartName(true), isAdd);
+    const fields: string[] = [this.findPartName(true)];
+    if (withPresentation) fields.push(this.findPartName(false));
+    fields.map((f) => this.addContentGroupItem(groupId, index, f, isAdd));
+    // previous code before 10.27
+    // this.addContentGroupItem(groupId, index, this.findPartName(true), isAdd);
 
-    if (withPresentation)
-      this.addContentGroupItem(groupId, index, this.findPartName(false), isAdd);
+    // if (withPresentation)
+    //   this.addContentGroupItem(groupId, index, this.findPartName(false), isAdd);
   }
 
 
@@ -141,6 +148,29 @@ export class CommandLinkGenerator {
   }
 
 
+    /**
+     * EXPERIMENTAL in 10.27, if a parent is specified, use that
+     * this will tell the command to edit a item which also belongs to a list
+     * this is relevant when adding new items
+     */
+    private addItemInList() {
+        const params = this.context.button.action.params;
+        const index = params.sortOrder;
+        const isAdd = this.context.button.action.name === 'new';
+        const groupId = params.parent;
+
+
+        // New in 10.27 - if params has a field, use that
+        if (params.fields)
+            params.fields.split(',').map((f) => this.items.push({
+                    EntityId: params.entityId,
+                    Field: f,
+                    Parent: groupId,
+                    Add: isAdd,
+                    Index: index,
+                    } as ItemInField));
+    }
+
   /**
    * find the part name for both the API to give the right item (when using groups) and for i18n
    */
@@ -159,6 +189,8 @@ export class CommandLinkGenerator {
 }
 
 interface UrlItemParams {
-    prefill: DictionaryValue;
-    items: string;
+    prefill?: DictionaryValue;
+    items?: string;
+    contentTypeName?: string;
+    filters?: string;
 }

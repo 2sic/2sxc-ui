@@ -34,6 +34,11 @@ export interface CommandParams {
 
     /** New in 10.27 - list of apps for the quick dialog */
     apps?: string;
+
+    /** Experimental in 10.27 */
+    parent?: string;
+    /** Experimental in 10.27 */
+    fields?: string;
 }
 
 // 2020-03-18 - this was an old class that was often used where we now have
