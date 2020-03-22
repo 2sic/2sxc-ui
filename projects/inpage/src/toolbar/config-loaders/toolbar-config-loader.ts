@@ -4,9 +4,9 @@ import { HasLog, Log } from '../../logging';
 import { ButtonGroup, ButtonModifier, Toolbar } from '../config';
 import { ToolbarSettings, ToolbarSettingsDefaults, ToolbarSettingsForEmpty } from '../config';
 import { InPageToolbarConfigVariations } from '../initialize/toolbar-init-config';
-import { ToolbarTemplateManager } from '../templates/toolbar-template-manager';
-import { ToolbarTemplate } from '../templates/toolbar-template-toolbar';
-import { ToolbarTemplateButtonGroup } from '../templates/toolbar-templaten-button-group';
+import { ToolbarTemplateManager } from '../templates';
+import { ToolbarTemplate } from '../templates';
+import { ToolbarTemplateButtonGroup } from '../templates';
 import { ButtonConfigLoader } from './button-config-loader';
 import { InPageButtonJson } from './in-page-button';
 import { InPageButtonGroupJson } from './in-page-button-group';
@@ -80,7 +80,7 @@ export class ToolbarConfigLoader extends HasLog {
     }
 
     /**
-     * Convert action params with +edit or -delete
+     * Extract action params with +edit or -delete
      */
     private extractModifiers(raw: InPageToolbarConfigVariations, log: Log): ButtonModifier[] {
         let buttonModifiers: ButtonModifier[] = null;
@@ -246,12 +246,8 @@ export class ToolbarConfigLoader extends HasLog {
  * @param toolbarSettings
  */
 function cleanDeprecatedSettings(toolbarSettings: ToolbarSettings): ToolbarSettings {
-    const partialToolbaSettings = {...toolbarSettings}; // O.bject.assign({}, toolbarSettings) as ToolbarSettings;
-    if (!partialToolbaSettings.autoAddMore) {
-      delete partialToolbaSettings.autoAddMore;
-    }
-    if (!partialToolbaSettings.classes) {
-      delete partialToolbaSettings.classes;
-    }
-    return partialToolbaSettings;
+    const partialSettings = {...toolbarSettings};
+    if (!partialSettings.autoAddMore) delete partialSettings.autoAddMore;
+    if (!partialSettings.classes) delete partialSettings.classes;
+    return partialSettings;
   }

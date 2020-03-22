@@ -1,10 +1,12 @@
-﻿import { Commands } from '../commands';
+﻿import { Commands } from '..';
+import { CmdEditDialog } from './edit';
 
+export const CmdAppResources = 'app-resources';
 /**
  * import this module to commands.ts
  */
-Commands.add('app-resources', 'AppResources', 'translate', true, false, {
-    dialog: (context) => 'edit',
+Commands.add(CmdAppResources, 'AppResources', 'translate', true, false, {
+    dialog: (context) => CmdEditDialog,
 
     disabled: (context) => context.app.resourcesId === null,
 

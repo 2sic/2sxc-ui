@@ -1,12 +1,11 @@
 ﻿import { Commands } from '..';
-import { renderer } from '../../contentBlock/render';
 import { ContentBlockEditor } from '../../contentBlock/content-block-editor';
+import { renderer } from '../../contentBlock/render';
 import { ContextBundleButton } from '../../context/bundles/context-bundle-button';
 import { ContextBundleInstance } from '../../context/bundles/context-bundle-instance';
 import { $2sxcInPage as $2sxc } from '../../interfaces/sxc-controller-in-page';
-import { HasLog } from '../../logging/has-log';
-import { Log } from '../../logging/log';
-import { TypeUnsafe } from '../../plumbing/TypeTbD';
+import { HasLog, Log } from '../../logging';
+import { TypeUnsafe } from '../../plumbing';
 import { quickDialog } from '../../quick-dialog/quick-dialog';
 import { DialogPaths } from '../../settings/DialogPaths';
 import { Button } from '../../toolbar/config';
@@ -133,7 +132,7 @@ export class CmsEngine extends HasLog {
     const name = settings.action;
     this.log.add(`will add defaults for ${name} from buttonConfig`);
     const conf = Commands.get(name).buttonConfig;
-    // TODO: 2dm - suspicius cast
+    // TODO: 2dm - suspicious cast
     const full = {...conf, ...settings} as CommandParams; // merge conf & settings, but
     // const full = O.bject.assign({}, conf, settings) as CommandParams; // merge conf & settings, but settings has higher priority
 

@@ -1,9 +1,10 @@
-﻿import { Commands } from '../commands';
+﻿import { Commands } from '..';
 
+export const CmdContentItems = 'contentitems';
 /**
  * import this module to commands.ts
  */
-Commands.add('contentitems', 'ContentItems', 'table', true, false, {
+Commands.add(CmdContentItems, 'ContentItems', 'table', true, false, {
     params: (context) => ({ contentTypeName: context.contentBlock.contentTypeId }),
 
     showCondition: (context) => {

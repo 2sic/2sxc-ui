@@ -1,13 +1,14 @@
-﻿import { Actions } from './content-list-actions';
+﻿import { Commands } from '..';
 import { translate } from '../../translate/2sxc.translate';
-import { Commands } from '../commands';
+import { Actions } from './content-list-actions';
 
+export const CmdRemove = 'remove';
 /**
  * remove an item from the placeholder (usually for lists)
  *
  * import this module to commands.ts
  */
-Commands.add('remove', 'Remove', 'minus-circled', false, true, {
+Commands.add(CmdRemove, 'Remove', 'minus-circled', false, true, {
     showCondition(context) {
         return (
             context.contentBlock.isList &&

@@ -1,9 +1,10 @@
-﻿import { Commands } from '../commands';
+﻿import { Commands } from '..';
 
+export const CmdApp = 'app';
 /**
  * import this module to commands.ts
  */
-Commands.add('app', 'App', 'settings', true, false, {
+Commands.add(CmdApp, 'App', 'settings', true, false, {
     showCondition: (context) => {
         return context.user.canDesign;
     },

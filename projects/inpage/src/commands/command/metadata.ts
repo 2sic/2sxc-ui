@@ -1,16 +1,19 @@
-﻿import { ItemIdentifierSimple } from '../../interfaces/item-identifiers';
-import { Commands } from '../commands';
+﻿import { Commands } from '..';
+import { ItemIdentifierSimple } from '../../interfaces/item-identifiers';
+import { CmdEditDialog } from './edit';
+import { CmdNewMode } from './new';
 
+export const CmdMetadata = 'metadata';
 /**
  * create a metadata toolbar
  *
  * import this module to commands.ts
  */
-Commands.add('metadata', 'Metadata', 'tag', false, false, {
+Commands.add(CmdMetadata, 'Metadata', 'tag', false, false, {
 
-    params: (context) => ({ mode: 'new' }),
+    params: (context) => ({ mode: CmdNewMode }),
 
-    dialog: (context) => 'edit', // don't use "new" (default) but use "edit"
+    dialog: (context) => CmdEditDialog, // don't use "new" (default) but use "edit"
 
     // if it doesn't have data yet, make it less strong
     dynamicClasses: (context) => context.button.action.params.entityId ? '' : 'empty',

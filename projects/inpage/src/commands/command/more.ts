@@ -1,10 +1,11 @@
 ﻿import * as Constants from '../../constants';
 import { Commands } from '../commands';
 
+export const CmdMore = 'more';
 /**
  * import this module to commands.ts
  */
-Commands.add('more', 'MoreActions', 'options btn-mode', true, false, {
+Commands.add(CmdMore, 'MoreActions', 'options btn-mode', true, false, {
     code(context, event) {
         return new Promise((resolve, reject) => {
             const btn2 = event.target as HTMLElement;

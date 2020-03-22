@@ -1,5 +1,5 @@
 ﻿import { SxcInstanceEngine } from '../../commands';
-import { LayoutCommand } from '../../commands/command/layout';
+import { CmdLayout } from '../../commands/command/layout';
 import { SxcEdit } from '../../interfaces/sxc-instance-editable';
 import { windowInPage as window } from '../../interfaces/window-in-page';
 
@@ -18,7 +18,7 @@ export class ActionMenuMapper {
     this.run = this.sxc.manage.run;
   }
 
-  changeLayoutOrContent = () => { this.run(LayoutCommand); };
+  changeLayoutOrContent = () => { this.run(CmdLayout); };
 
   addItem = () => { this.run('add', { useModuleList: true, sortOrder: 0 }); };
 

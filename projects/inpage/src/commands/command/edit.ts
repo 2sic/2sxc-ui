@@ -1,11 +1,14 @@
-﻿import { Commands } from '../commands';
+﻿import { Commands } from '..';
+
+export const CmdEdit = 'edit';
+export const CmdEditDialog = 'edit';
 
 /**
  * open an edit-item dialog
  *
  * import this module to commands.ts
  */
-Commands.add('edit', 'Edit', 'pencil', false, true, {
+Commands.add(CmdEdit, 'Edit', 'pencil', false, true, {
     params: (context) => {
         return { mode: 'edit' };
     },

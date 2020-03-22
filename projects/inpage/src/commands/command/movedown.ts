@@ -1,10 +1,12 @@
-﻿import { Commands } from '../commands';
+﻿import { Commands } from '..';
 import { Actions } from './content-list-actions';
+
+export const CmdMoveDown = 'movedown';
 
 /**
  * import this module to commands.ts
  */
-Commands.add('movedown', 'MoveDown', 'move-down', false, true, {
+Commands.add(CmdMoveDown, 'MoveDown', 'move-down', false, true, {
     showCondition(context) {
         // TODO: do not display if is last item in list
         return (

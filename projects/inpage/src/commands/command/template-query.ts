@@ -1,9 +1,10 @@
-﻿import { Commands } from '../commands';
+﻿import { Commands } from '..';
 
+export const CmdTemplateQuery = 'template-query';
 /**
  * import this module to commands.ts
  */
-Commands.add('template-query', 'QueryEdit', 'filter', true, false, {
+Commands.add(CmdTemplateQuery, 'QueryEdit', 'filter', true, false, {
     dialog: (context) => 'pipeline-designer',
     params: (context) => {
         return { pipelineId: context.contentBlock.queryId };

@@ -1,9 +1,11 @@
 ﻿import { Commands } from '../commands';
 
+export const CmdCustom = 'custom';
+
 /**
  * import this module to commands.ts
  */
-Commands.add('custom', 'Custom', 'bomb', true, false, {
+Commands.add(CmdCustom, 'Custom', 'bomb', true, false, {
     code(context, event) {
         return new Promise((resolve, reject) => {
             console.log('custom action with code - BETA feature, may change');

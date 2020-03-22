@@ -1,13 +1,14 @@
-﻿import { Actions } from './content-list-actions';
-import { Commands as Commands } from '../commands';
+﻿import { Commands } from '..';
+import { Actions } from './content-list-actions';
 
+export const CmdAdd = 'add';
 /**
  * add brings no dialog, just add an empty item
  *
  * import this module to commands.ts
  */
 Commands.add(
-    'add',
+    CmdAdd,
     'AddDemo',
     'plus-circled',
     false,

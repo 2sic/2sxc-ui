@@ -1,10 +1,11 @@
 ﻿import { Commands } from '../commands';
 import { Actions } from './content-list-actions';
 
+export const CmdMoveUp = 'moveup';
 /**
  * import this module to commands.ts
  */
-Commands.add('moveup', 'MoveUp', 'move-up', false, true, {
+Commands.add(CmdMoveUp, 'MoveUp', 'move-up', false, true, {
     showCondition(context) {
         return (
             context.contentBlock.isList &&

@@ -1,5 +1,6 @@
 ﻿import { ToolbarWip } from '.';
 import { CommandParams, Commands } from '../../commands';
+import { CmdMore } from '../../commands/command/more';
 import { HasLog, Log } from '../../logging';
 import { Button, ButtonCommand, Toolbar, ToolbarSettings } from '../config';
 import { ButtonGroup } from '../config';
@@ -135,13 +136,13 @@ export class ButtonGroupConfigLoader extends HasLog {
     private addMoreButton(settings: ToolbarSettings, list: InPageButtonJson[]): void {
         const addMore = settings.autoAddMore;
         if (addMore) {
-            const moreButton = this.toolbar.button.getFromName('more');
+            const moreButton = this.toolbar.button.getFromName(CmdMore);
             if ((addMore === 'end') || (addMore.toString() === 'right')) { // fallback for older v1 setting
                 this.log.add('will add a more "..." button to end');
-                list.push(moreButton); // 'more');
+                list.push(moreButton);
             } else {
                 this.log.add('will add a more "..." button to start');
-                list.unshift(moreButton); // 'more');
+                list.unshift(moreButton);
             }
         } else this.log.add('will not add more "..." button');
     }

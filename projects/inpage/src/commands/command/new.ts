@@ -1,5 +1,7 @@
-﻿import { CmsEngine } from '..';
-import { Commands } from '../commands';
+﻿import { CmsEngine, Commands } from '..';
+
+export const CmdNew = 'new';
+export const CmdNewMode = 'new';
 
 /**
  * new is a dialog to add something, and will not add if cancelled
@@ -9,8 +11,8 @@ import { Commands } from '../commands';
  *
  * import this module to commands.ts
  */
-Commands.add('new', 'New', 'plus', false, true, {
-    params: (context) => ({ mode: 'new' }),
+Commands.add(CmdNew, 'New', 'plus', false, true, {
+    params: (context) => ({ mode: CmdNewMode }),
 
     dialog: (context) => 'edit', // don't use "new" (default) but use "edit"
 

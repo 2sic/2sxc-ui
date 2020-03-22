@@ -4,11 +4,11 @@ import { QeSelectors } from '../../quick-edit';
 import { ContextForLists } from '../../quick-edit/context-for-lists';
 import { Commands } from '../commands';
 
-export const LayoutCommand = 'layout';
+export const CmdLayout = 'layout';
 /**
  * import this module to commands.ts
  */
-Commands.add(LayoutCommand, 'ChangeLayout', 'glasses', true, true, {
+Commands.add(CmdLayout, 'ChangeLayout', 'glasses', true, true, {
 
     inlineWindow: (context) => true,
 

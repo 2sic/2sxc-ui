@@ -7,6 +7,7 @@ import { HasLog } from '../../logging';
 import { Log } from '../../logging';
 import { DictionaryValue, TypeTbD, TypeUnsafe, TypeWeDontCare } from '../../plumbing';
 import { Button, ButtonCommand, ButtonGroup, Toolbar } from '../config';
+import { CmdMore } from '../../commands/command/more';
 
 /**
  * This is a system to build button configurations
@@ -134,11 +135,10 @@ export class ButtonConfigLoader extends HasLog {
       disableButtons(context, btns/*, config */);
 
       // remove the group, if no buttons left, or only "more"
-      // if (btns.length === 0 || (btns.length === 1 && btns[0].command.action === 'more'))
-      if (btns.length === 0 || (btns.length === 1 && btns[0].action.name === 'more')) {
-        log.add('found no more buttons except for the "more" - will remove that too');
-        btnGroups.splice(g--, 1);
-      } // remove, and decrement counter
+      if (btns.length === 0 || (btns.length === 1 && btns[0].action.name === CmdMore)) {
+        log.add('found no more buttons except for the "more" - will remove that group');
+        btnGroups.splice(g--, 1); // remove, and decrement counter
+      }
     }
   }
 

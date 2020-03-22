@@ -1,9 +1,11 @@
-﻿import { Commands } from '../commands';
+﻿import { Commands } from '..';
+
+export const CmdTemplateDevelop = 'template-develop';
 
 /**
  * import this module to commands.ts
  */
-Commands.add('template-develop', 'Develop', 'code', true, false, {
+Commands.add(CmdTemplateDevelop, 'Develop', 'code', true, false, {
     newWindow: (context) => true,
     dialog: (context) => 'develop',
 
