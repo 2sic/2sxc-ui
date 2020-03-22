@@ -435,9 +435,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "Toolbar", function() { return __WEBPACK_IMPORTED_MODULE_3__toolbar__["Toolbar"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__toolbar_settings__ = __webpack_require__(99);
 /* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "ToolbarSettings", function() { return __WEBPACK_IMPORTED_MODULE_4__toolbar_settings__["ToolbarSettings"]; });
-/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "defaultToolbarSettings", function() { return __WEBPACK_IMPORTED_MODULE_4__toolbar_settings__["defaultToolbarSettings"]; });
-/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "settingsForEmptyToolbar", function() { return __WEBPACK_IMPORTED_MODULE_4__toolbar_settings__["settingsForEmptyToolbar"]; });
-/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "emptyToolbar", function() { return __WEBPACK_IMPORTED_MODULE_4__toolbar_settings__["emptyToolbar"]; });
+/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "ToolbarSettingsDefaults", function() { return __WEBPACK_IMPORTED_MODULE_4__toolbar_settings__["ToolbarSettingsDefaults"]; });
+/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "ToolbarSettingsForEmpty", function() { return __WEBPACK_IMPORTED_MODULE_4__toolbar_settings__["ToolbarSettingsForEmpty"]; });
+/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "ToolbarEmpty", function() { return __WEBPACK_IMPORTED_MODULE_4__toolbar_settings__["ToolbarEmpty"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__button_modifier__ = __webpack_require__(206);
+/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "ButtonModifier", function() { return __WEBPACK_IMPORTED_MODULE_5__button_modifier__["a"]; });
+
 
 
 
@@ -2749,10 +2752,6 @@ var ButtonConfigLoader = /** @class */ (function (_super) {
 function removeUnfitButtons(context, btns, config, log) {
     var removals = '';
     for (var i = 0; i < btns.length; i++) {
-        // let add = btns[i].showCondition;
-        // if (add !== undefined)
-        //    if (typeof (add) === "function" ? !add(btns[i].command, config) : !add)
-        // if (!evalPropOrFunction(btns[i].showCondition, btns[i].command, config, true))
         context.button = btns[i];
         if (btns[i].action && !evalPropOrFunction(btns[i].showCondition, context, config, true)) {
             removals += "#" + i + " \"" + btns[i].action.name + "\"; ";
@@ -2875,10 +2874,6 @@ var ToolbarTemplateManager = /** @class */ (function (_super) {
         // return the singleton object
         return this.singleton;
     };
-    //   /**
-    //    * a single template – usually 'default'
-    //    */
-    //   get(name: string): ToolbarTemplate { return this.list[name]; }
     /**
      * Deep copy toolbar template, so it can be modified without changing the next use
      */
@@ -5502,9 +5497,9 @@ var Toolbar = /** @class */ (function () {
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ToolbarSettings", function() { return ToolbarSettings; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "defaultToolbarSettings", function() { return defaultToolbarSettings; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "settingsForEmptyToolbar", function() { return settingsForEmptyToolbar; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "emptyToolbar", function() { return emptyToolbar; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ToolbarSettingsDefaults", function() { return ToolbarSettingsDefaults; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ToolbarSettingsForEmpty", function() { return ToolbarSettingsForEmpty; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ToolbarEmpty", function() { return ToolbarEmpty; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__plumbing_type_safe_assign__ = __webpack_require__(43);
 
 /** contains toolbar behaviour settings like float, etc. */
@@ -5514,29 +5509,38 @@ var ToolbarSettings = /** @class */ (function () {
         this.hover = 'right';
         this.show = 'hover';
         this.classes = '';
-        if (toolbarSettings) {
+        /**
+         * Experimental 10.27 - modifiers for the buttons
+         * Should never be set from the page, but the toolbar initializer will set this
+         */
+        this.buttonModifiers = [];
+        if (toolbarSettings)
             Object(__WEBPACK_IMPORTED_MODULE_0__plumbing_type_safe_assign__["TypeSafeAssign"])(this, toolbarSettings);
-            //   O.bject.assign(this, toolbarSettings);
-        }
     }
+    ToolbarSettings.evalModifier = function (name, settings) {
+        name = name.toLocaleLowerCase();
+        var set = settings.buttonModifiers.find(function (bf) { return bf.name === name; });
+        return (set) ? set.operation : null;
+    };
     return ToolbarSettings;
 }());
 
 // ToDo: refactor to avoid side-effects
-var defaultToolbarSettings = new ToolbarSettings({
+var ToolbarSettingsDefaults = new ToolbarSettings({
     autoAddMore: null,
     hover: 'right',
     show: 'hover',
 });
 /** default / fallback settings for toolbars when nothings is specified */
-var settingsForEmptyToolbar = new ToolbarSettings({
+var ToolbarSettingsForEmpty = new ToolbarSettings({
     autoAddMore: 'start',
     hover: 'left',
     show: 'hover',
 });
-var emptyToolbar = {
+// TODO: this is in the wrong place, shouldn't be in settings
+var ToolbarEmpty = {
     toolbar: {},
-    settings: settingsForEmptyToolbar,
+    settings: ToolbarSettingsForEmpty,
 };
 
 
@@ -6382,7 +6386,7 @@ function addDefaultToolbarConfigToTag(parentTag) {
     var ctx = __WEBPACK_IMPORTED_MODULE_1__context_bundles_context_bundle_button__["ContextBundleButton"].findContext(contentTag);
     if (ctx.ui.autoToolbar === false)
         return null;
-    contentTag.attr(__WEBPACK_IMPORTED_MODULE_0__constants__["toolbar"].attr.full, JSON.stringify(__WEBPACK_IMPORTED_MODULE_3__config__["emptyToolbar"]));
+    contentTag.attr(__WEBPACK_IMPORTED_MODULE_0__constants__["toolbar"].attr.full, JSON.stringify(__WEBPACK_IMPORTED_MODULE_3__config__["ToolbarEmpty"]));
     return contentTag;
 }
 
@@ -6703,7 +6707,7 @@ var ToolbarConfigLoader = /** @class */ (function (_super) {
         // Default to empty toolbar settings if we don't have a toolbar or settings
         if (Object.keys(toolbarData).length + Object.keys(toolbarSettings || {}).length === 0) {
             log.add('no data or settings, will use default settings for empty');
-            toolbarSettings = __WEBPACK_IMPORTED_MODULE_3__config__["settingsForEmptyToolbar"];
+            toolbarSettings = __WEBPACK_IMPORTED_MODULE_3__config__["ToolbarSettingsForEmpty"];
         }
         // if it has an action or is an array, keep that. Otherwise get standard buttons
         toolbarData = this.useButtonsFromConfigOrLoadTemplate(toolbarData, log);
@@ -6718,12 +6722,29 @@ var ToolbarConfigLoader = /** @class */ (function (_super) {
      * Otherwise load the button list from the template
      */
     ToolbarConfigLoader.prototype.useButtonsFromConfigOrLoadTemplate = function (raw, log) {
-        if (__WEBPACK_IMPORTED_MODULE_0____["InPageCommandJson"].hasActions(raw) || __WEBPACK_IMPORTED_MODULE_5__templates_toolbar_template_toolbar__["ToolbarTemplate"].is(raw)
+        var hasActions = false;
+        var buttonModifiers = '';
+        // if we have an actions node,
+        // check if it's just a modifier (with +/-) or a standalone list
+        if (__WEBPACK_IMPORTED_MODULE_0____["InPageCommandJson"].hasActions(raw)) {
+            hasActions = true;
+            var actions = raw.action;
+            var firstChar = (actions.length) ? actions[0] : ' ';
+            if (firstChar === '+' || firstChar === '-') {
+                buttonModifiers = actions;
+                hasActions = false;
+            }
+        }
+        if (hasActions || __WEBPACK_IMPORTED_MODULE_5__templates_toolbar_template_toolbar__["ToolbarTemplate"].is(raw)
             || __WEBPACK_IMPORTED_MODULE_6__templates_toolbar_templaten_button_group__["ToolbarTemplateButtonGroup"].is(raw) || Array.isArray(raw))
             return raw;
         log.add('no toolbar structure specified, will use standard toolbar template');
+        // TODO: PASS MODIFIERS TO THE COPY!
         var template = __WEBPACK_IMPORTED_MODULE_4__templates_toolbar_template_manager__["ToolbarTemplateManager"].Instance(log).copy('default');
         template.params = (raw && Array.isArray(raw) && raw[0]) || raw; // attach parameters
+        if (buttonModifiers)
+            template.settings.buttonModifiers
+                = buttonModifiers.split(',').map(function (btnMod) { return new __WEBPACK_IMPORTED_MODULE_3__config__["ButtonModifier"](btnMod); });
         return template;
     };
     /**
@@ -6790,7 +6811,7 @@ var ToolbarConfigLoader = /** @class */ (function (_super) {
         // newToolbar.groups = unstructuredConfig.groups || []; // the groups of buttons
         var probablyTemplate = unstructuredConfig;
         newToolbar.params = probablyTemplate.params || {}; // these are the default command parameters
-        newToolbar.settings = __assign(__assign(__assign({}, __WEBPACK_IMPORTED_MODULE_3__config__["defaultToolbarSettings"]), probablyTemplate.settings), cleanDeprecatedSettings(toolbarSettings));
+        newToolbar.settings = __assign(__assign(__assign({}, __WEBPACK_IMPORTED_MODULE_3__config__["ToolbarSettingsDefaults"]), probablyTemplate.settings), cleanDeprecatedSettings(toolbarSettings));
         // toolbarConfig.settings = O.bject.assign({}, defaultToolbarSettings, unstructuredConfig.settings, cleanDeprecatedSettings(toolbarSettings)) as ToolbarSettings;
         newToolbar.debug = probablyTemplate.debug || false; // show more debug info
         newToolbar.defaults = probablyTemplate.defaults || {}; // the button defaults like icon, etc.
@@ -6864,6 +6885,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /**
  * used to build instance config
  */
+// TODO: 2dm I don't think this is every in use any more - it was used to
+// call showConfig and disabled, but I believe those signatures don't even expect this!
 var InstanceConfig = /** @class */ (function () {
     function InstanceConfig() {
     }
@@ -8938,10 +8961,11 @@ var InPageButtonGroupJson = /** @class */ (function () {
 /* 189 */
 /***/ (function(module, exports) {
 
+// CodeChange #2020-03-20#TemplateToolbarLeftUnused - if no side-effects, delete in June
 // import { ToolbarTemplate } from './toolbar-template-toolbar';
+//
 // the default / initial buttons in a standard toolbar
 // ToDo: refactor to avoid side-effects
-// CodeChange #2020-03-20#TemplateToolbarLeftUnused - if no side-effects, delete in June
 // export const ToolbarTemplateLeft: ToolbarTemplate = {
 //   groups: [
 //     {
@@ -9170,6 +9194,30 @@ var __WEBPACK_AMD_DEFINE_RESULT__;/*
 /* unused harmony namespace reexport */
 
 
+
+
+
+/***/ }),
+/* 206 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ButtonModifier; });
+// tslint:disable-next-line: max-classes-per-file
+var ButtonModifier = /** @class */ (function () {
+    function ButtonModifier(code) {
+        this.operation = null;
+        if (!code || !code.length)
+            return;
+        if (code[0] === '+')
+            this.operation = '+';
+        if (code[0] === '-')
+            this.operation = '-';
+        if (this.operation)
+            this.name = code.substring(1).toLocaleLowerCase();
+    }
+    return ButtonModifier;
+}());
 
 
 

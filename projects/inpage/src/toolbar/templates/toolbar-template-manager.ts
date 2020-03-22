@@ -32,11 +32,6 @@ export class ToolbarTemplateManager extends HasLog {
   }
   private static singleton: ToolbarTemplateManager = null; // A variable which stores the singleton object. Initially, the variable acts like a placeholder
 
-//   /**
-//    * a single template – usually 'default'
-//    */
-//   get(name: string): ToolbarTemplate { return this.list[name]; }
-
   /**
    * Deep copy toolbar template, so it can be modified without changing the next use
    */

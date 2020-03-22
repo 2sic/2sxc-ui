@@ -2,8 +2,8 @@
 import { ContextBundleButton } from '../../context/bundles/context-bundle-button';
 import { HasLog, Log } from '../../logging';
 import { InstanceConfig } from '../../manage/instance-config';
-import { ButtonGroup, Toolbar } from '../config';
-import { defaultToolbarSettings, settingsForEmptyToolbar, ToolbarSettings } from '../config';
+import { ButtonGroup, Toolbar, ButtonModifier } from '../config';
+import { ToolbarSettingsDefaults, ToolbarSettingsForEmpty, ToolbarSettings } from '../config';
 import { InPageToolbarConfigVariations } from '../initialize/toolbar-init-config';
 import { ToolbarTemplateManager } from '../templates/toolbar-template-manager';
 import { ToolbarTemplate } from '../templates/toolbar-template-toolbar';
@@ -35,7 +35,7 @@ export class ToolbarConfigLoader extends HasLog {
         // Default to empty toolbar settings if we don't have a toolbar or settings
         if (Object.keys(toolbarData).length + Object.keys(toolbarSettings || {}).length === 0) {
             log.add('no data or settings, will use default settings for empty');
-            toolbarSettings = settingsForEmptyToolbar;
+            toolbarSettings = ToolbarSettingsForEmpty;
         }
 
         // if it has an action or is an array, keep that. Otherwise get standard buttons
@@ -55,12 +55,29 @@ export class ToolbarConfigLoader extends HasLog {
      * Otherwise load the button list from the template
      */
     private useButtonsFromConfigOrLoadTemplate(raw: InPageToolbarConfigVariations, log: Log) {
-        if (InPageCommandJson.hasActions(raw) || ToolbarTemplate.is(raw)
+        let hasActions = false;
+        let buttonModifiers = '';
+        // if we have an actions node,
+        // check if it's just a modifier (with +/-) or a standalone list
+        if (InPageCommandJson.hasActions(raw)) {
+            hasActions = true;
+            const actions = raw.action;
+            const firstChar = (actions.length) ? actions[0] : ' ';
+            if (firstChar === '+' || firstChar === '-'){
+                buttonModifiers = actions;
+                hasActions = false;
+            }
+        }
+
+        if (hasActions || ToolbarTemplate.is(raw)
             || ToolbarTemplateButtonGroup.is(raw) || Array.isArray(raw))
                 return raw;
         log.add('no toolbar structure specified, will use standard toolbar template');
+        // TODO: PASS MODIFIERS TO THE COPY!
         const template = ToolbarTemplateManager.Instance(log).copy('default');
         template.params = (raw && Array.isArray(raw) && raw[0]) || raw; // attach parameters
+        if (buttonModifiers) template.settings.buttonModifiers
+            = buttonModifiers.split(',').map((btnMod) => new ButtonModifier(btnMod));
         return template;
     }
 
@@ -139,7 +156,7 @@ export class ToolbarConfigLoader extends HasLog {
 
         const probablyTemplate = unstructuredConfig as ToolbarTemplate;
         newToolbar.params = probablyTemplate.params || {}; // these are the default command parameters
-        newToolbar.settings = { ...defaultToolbarSettings, ...probablyTemplate.settings, ...cleanDeprecatedSettings(toolbarSettings)};
+        newToolbar.settings = { ...ToolbarSettingsDefaults, ...probablyTemplate.settings, ...cleanDeprecatedSettings(toolbarSettings)};
         // toolbarConfig.settings = O.bject.assign({}, defaultToolbarSettings, unstructuredConfig.settings, cleanDeprecatedSettings(toolbarSettings)) as ToolbarSettings;
 
         newToolbar.debug = probablyTemplate.debug || false; // show more debug info

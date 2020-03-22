@@ -1,8 +1,11 @@
-﻿import { ContextBundleButton } from '../context/bundles/context-bundle-button';
+﻿// #CodeChange#2020-03-22#InstanceConfig - believe this is completely unused
+import { ContextBundleButton } from '../context/bundles/context-bundle-button';
 
 /**
  * used to build instance config
  */
+// TODO: 2dm I don't think this is every in use any more - it was used to
+// call showConfig and disabled, but I believe those signatures don't even expect this!
 export class InstanceConfig {
   portalId: number;
   tabId: number;

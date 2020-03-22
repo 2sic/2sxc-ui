@@ -1,4 +1,4 @@
-﻿import { InPageCommandJson, ButtonGroupWip, ToolbarWip } from '.';
+﻿import { InPageCommandJson, ToolbarWip } from '.';
 import { InPageButtonJson } from '.';
 import { ToolbarConfigLoader } from '.';
 import { Commands } from '../../commands/commands';
@@ -164,10 +164,6 @@ export class ButtonConfigLoader extends HasLog {
 function removeUnfitButtons(context: ContextBundleButton, btns: Button[], config: InstanceConfig, log: Log): void {
   let removals = '';
   for (let i = 0; i < btns.length; i++) {
-    // let add = btns[i].showCondition;
-    // if (add !== undefined)
-    //    if (typeof (add) === "function" ? !add(btns[i].command, config) : !add)
-    // if (!evalPropOrFunction(btns[i].showCondition, btns[i].command, config, true))
     context.button = btns[i];
     if (btns[i].action && !evalPropOrFunction(btns[i].showCondition, context, config, true)) {
       removals += `#${i} "${btns[i].action.name}"; `;

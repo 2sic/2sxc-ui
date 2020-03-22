@@ -1,8 +1,8 @@
-﻿// import { ToolbarTemplate } from './toolbar-template-toolbar';
-
+﻿// CodeChange #2020-03-20#TemplateToolbarLeftUnused - if no side-effects, delete in June
+// import { ToolbarTemplate } from './toolbar-template-toolbar';
+//
 // the default / initial buttons in a standard toolbar
 // ToDo: refactor to avoid side-effects
-// CodeChange #2020-03-20#TemplateToolbarLeftUnused - if no side-effects, delete in June
 // export const ToolbarTemplateLeft: ToolbarTemplate = {
 //   groups: [
 //     {

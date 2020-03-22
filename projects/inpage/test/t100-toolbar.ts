@@ -54,7 +54,7 @@ describe('Toolbar test suite', function() {
     const toolbarSettings = new ToolbarSettings({ 'hover': 'left' });
     const cnt = ContextBundleButton.createContextFromEditContext(editContext);
     cnt.toolbar = expandToolbarConfig(cnt, toolbarData, toolbarSettings);
-    const generatedHtml = new ToolbarRenderer(cnt).render(); ;
+    const generatedHtml = new ToolbarRenderer(cnt).render();
     const containHtml = 'sc-tb-hover-left';
     expect(generatedHtml).toContain(containHtml);
   });
