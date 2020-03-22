@@ -12,6 +12,8 @@ import { InPageButtonJson } from './in-page-button';
 import { InPageButtonGroupJson } from './in-page-button-group';
 import { ButtonGroupsWip } from './toolbar-wip';
 
+const debugRawEnabled = true;
+
 export class ToolbarConfigLoader extends HasLog {
 
     public groups: ButtonGroupConfigLoader;
@@ -23,6 +25,11 @@ export class ToolbarConfigLoader extends HasLog {
         this.groups = new ButtonGroupConfigLoader(this);
         this.button = new ButtonConfigLoader(this);
         this.command = new CommandConfigLoader(this);
+    }
+
+    /** Debug-dump an object - for development */
+    dump(location: string, raw: unknown) {
+        if (debugRawEnabled) console.log('Dump ' + location, raw);
     }
 
     expandToolbarConfig(context: ContextBundleButton, toolbarData: InPageToolbarConfigVariations, toolbarSettings: ToolbarSettings): Toolbar {
@@ -38,7 +45,7 @@ export class ToolbarConfigLoader extends HasLog {
         }
 
         // if it has an action or is an array, keep that. Otherwise get standard buttons
-        toolbarData = this.useButtonsFromConfigOrLoadTemplate(toolbarData, log);
+        toolbarData = this.getTemplateIfNoButtonsSpecified(toolbarData, log);
 
         // #CodeChange#2020-03-22#InstanceConfig - believe this is completely unused; remove in June
         // const instanceConfig = InstanceConfig.fromContext(context);
@@ -46,7 +53,7 @@ export class ToolbarConfigLoader extends HasLog {
         // whatever we had, if more settings were provided, override with these...
         // #CodeChange#2020-03-22#InstanceConfig - believe this is completely unused; remove in June
         const config = this.buildFullDefinition(context, toolbarData, /* instanceConfig, */ toolbarSettings);
-
+        this.dump('expandToolbarConfig', config);
         log.add('expand done');
         return config;
     }
@@ -55,33 +62,41 @@ export class ToolbarConfigLoader extends HasLog {
      * If the raw data has specs for what buttons, use that
      * Otherwise load the button list from the template
      */
-    private useButtonsFromConfigOrLoadTemplate(raw: InPageToolbarConfigVariations, log: Log) {
-        let hasActions = false;
-        let buttonModifiers = '';
-        // if we have an actions node,
-        // check if it's just a modifier (with +/-) or a standalone list
-        if (InPageCommandJson.hasActions(raw)) {
-            hasActions = true;
-            const actions = raw.action;
-            const firstChar = (actions.length) ? actions[0] : ' ';
-            if (firstChar === '+' || firstChar === '-') {
-                buttonModifiers = actions;
-                hasActions = false;
-            }
-        }
+    private getTemplateIfNoButtonsSpecified(raw: InPageToolbarConfigVariations, log: Log) {
+        log = new Log('Tlb.GetTpl', log);
+        this.dump('getTemplateIfNoButtonsSpecified', raw);
+        const modifiers: ButtonModifier[] = this.extractModifiers(raw, log);
 
-        if (hasActions || ToolbarTemplate.is(raw)
+        if (InPageCommandJson.hasActions(raw) || ToolbarTemplate.is(raw)
             || ToolbarTemplateButtonGroup.is(raw) || Array.isArray(raw))
                 return raw;
+
         log.add('no toolbar structure specified, will use standard toolbar template');
-        // TODO: PASS MODIFIERS TO THE COPY!
         const template = ToolbarTemplateManager.Instance(log).copy('default');
         template.params = (raw && Array.isArray(raw) && raw[0]) || raw; // attach parameters
-        if (buttonModifiers) template.settings.buttonModifiers
-            = buttonModifiers.split(',').map((btnMod) => new ButtonModifier(btnMod));
+        template.settings._btnModifiers = modifiers;
+        this.dump('getTemplateIfNoButtonsSpecified', template);
         return template;
     }
 
+    /**
+     * Convert action params with +edit or -delete
+     */
+    private extractModifiers(raw: InPageToolbarConfigVariations, log: Log): ButtonModifier[] {
+        let buttonModifiers: ButtonModifier[] = null;
+        // if we have an actions node,
+        // check if it's just a modifier (with +/-) or a standalone list
+        if (!InPageCommandJson.hasActions(raw)) return [];
+        log.add(`found actions: ${raw.action}`);
+
+        const firstChar = (raw.action.length) ? raw.action[0] : ' ';
+        if (!(firstChar === '+' || firstChar === '-')) return [];
+
+        log.add('actions have +/-, assume they are only modifiers - extract and reset');
+        buttonModifiers = raw.action.split(',').map((btnMod) => new ButtonModifier(btnMod));
+        delete raw.action; // clean up to prevent side-effects
+        return buttonModifiers;
+    }
 
 
     /**
@@ -104,16 +119,18 @@ export class ToolbarConfigLoader extends HasLog {
         const log = new Log('Tlb.BldFul', this.log, 'start');
 
         const configWip = this.ensureDefinitionTree(unstructuredConfig, toolbarSettings); // as unknown as Toolbar;
+        this.dump('buildFullDefinition', configWip);
 
         // ToDo: don't use console.log in production
         if (ToolbarTemplate.is(unstructuredConfig) && unstructuredConfig.debug)
             console.log('toolbar: detailed debug on; start build full Def');
 
         const tlbConfig = this.groups.expandButtonGroups(configWip, log);
+        this.dump('buildFullDefinition', tlbConfig);
 
         // #CodeChange#2020-03-22#InstanceConfig - believe this is completely unused; remove in June
         this.button.removeDisableButtons(toolbarContext, tlbConfig/*, instanceConfig */);
-
+        this.dump('buildFullDefinition', tlbConfig);
         if (configWip.debug) console.log('after remove: ', configWip);
 
         return tlbConfig;

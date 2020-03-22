@@ -14,7 +14,7 @@ export class ToolbarSettings {
      * Experimental 10.27 - modifiers for the buttons
      * Should never be set from the page, but the toolbar initializer will set this
      */
-    buttonModifiers: ButtonModifier[] = [];
+    _btnModifiers: ButtonModifier[] = [];
 
     constructor(toolbarSettings?: Partial<ToolbarSettings>) {
         if (toolbarSettings)
@@ -23,7 +23,7 @@ export class ToolbarSettings {
 
     static evalModifier(name: string, settings: ToolbarSettings) {
         name = name.toLocaleLowerCase();
-        const set = settings.buttonModifiers.find((bf) => bf.name === name);
+        const set = settings._btnModifiers.find((bf) => bf.name === name);
         return (set) ? set.operation : null;
     }
 }

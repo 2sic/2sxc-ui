@@ -884,7 +884,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 var maxScopeLen = 3;
 var maxNameLen = 6;
-var liveDump = false;
+var liveDump = true;
 var Log = /** @class */ (function () {
     /**
      * Create a logger and optionally attach it to a parent logger
@@ -5522,13 +5522,13 @@ var ToolbarSettings = /** @class */ (function () {
          * Experimental 10.27 - modifiers for the buttons
          * Should never be set from the page, but the toolbar initializer will set this
          */
-        this.buttonModifiers = [];
+        this._btnModifiers = [];
         if (toolbarSettings)
             Object(__WEBPACK_IMPORTED_MODULE_0__plumbing_type_safe_assign__["TypeSafeAssign"])(this, toolbarSettings);
     }
     ToolbarSettings.evalModifier = function (name, settings) {
         name = name.toLocaleLowerCase();
-        var set = settings.buttonModifiers.find(function (bf) { return bf.name === name; });
+        var set = settings._btnModifiers.find(function (bf) { return bf.name === name; });
         return (set) ? set.operation : null;
     };
     return ToolbarSettings;
@@ -6698,6 +6698,7 @@ var __assign = (this && this.__assign) || function () {
 
 
 
+var debugRawEnabled = true;
 var ToolbarConfigLoader = /** @class */ (function (_super) {
     __extends(ToolbarConfigLoader, _super);
     function ToolbarConfigLoader(parentLog) {
@@ -6707,6 +6708,11 @@ var ToolbarConfigLoader = /** @class */ (function (_super) {
         _this.command = new __WEBPACK_IMPORTED_MODULE_0____["CommandConfigLoader"](_this);
         return _this;
     }
+    /** Debug-dump an object - for development */
+    ToolbarConfigLoader.prototype.dump = function (location, raw) {
+        if (debugRawEnabled)
+            console.log('Dump ' + location, raw);
+    };
     ToolbarConfigLoader.prototype.expandToolbarConfig = function (context, toolbarData, toolbarSettings) {
         var log = new __WEBPACK_IMPORTED_MODULE_1__logging__["Log"]('Tlb.ExpTop', this.log, 'expand start');
         // if null/undefined, use empty object
@@ -6717,12 +6723,13 @@ var ToolbarConfigLoader = /** @class */ (function (_super) {
             toolbarSettings = __WEBPACK_IMPORTED_MODULE_2__config__["ToolbarSettingsForEmpty"];
         }
         // if it has an action or is an array, keep that. Otherwise get standard buttons
-        toolbarData = this.useButtonsFromConfigOrLoadTemplate(toolbarData, log);
+        toolbarData = this.getTemplateIfNoButtonsSpecified(toolbarData, log);
         // #CodeChange#2020-03-22#InstanceConfig - believe this is completely unused; remove in June
         // const instanceConfig = InstanceConfig.fromContext(context);
         // whatever we had, if more settings were provided, override with these...
         // #CodeChange#2020-03-22#InstanceConfig - believe this is completely unused; remove in June
         var config = this.buildFullDefinition(context, toolbarData, /* instanceConfig, */ toolbarSettings);
+        this.dump('expandToolbarConfig', config);
         log.add('expand done');
         return config;
     };
@@ -6730,31 +6737,37 @@ var ToolbarConfigLoader = /** @class */ (function (_super) {
      * If the raw data has specs for what buttons, use that
      * Otherwise load the button list from the template
      */
-    ToolbarConfigLoader.prototype.useButtonsFromConfigOrLoadTemplate = function (raw, log) {
-        var hasActions = false;
-        var buttonModifiers = '';
-        // if we have an actions node,
-        // check if it's just a modifier (with +/-) or a standalone list
-        if (__WEBPACK_IMPORTED_MODULE_0____["InPageCommandJson"].hasActions(raw)) {
-            hasActions = true;
-            var actions = raw.action;
-            var firstChar = (actions.length) ? actions[0] : ' ';
-            if (firstChar === '+' || firstChar === '-') {
-                buttonModifiers = actions;
-                hasActions = false;
-            }
-        }
-        if (hasActions || __WEBPACK_IMPORTED_MODULE_4__templates_toolbar_template_toolbar__["ToolbarTemplate"].is(raw)
+    ToolbarConfigLoader.prototype.getTemplateIfNoButtonsSpecified = function (raw, log) {
+        log = new __WEBPACK_IMPORTED_MODULE_1__logging__["Log"]('Tlb.GetTpl', log);
+        this.dump('getTemplateIfNoButtonsSpecified', raw);
+        var modifiers = this.extractModifiers(raw, log);
+        if (__WEBPACK_IMPORTED_MODULE_0____["InPageCommandJson"].hasActions(raw) || __WEBPACK_IMPORTED_MODULE_4__templates_toolbar_template_toolbar__["ToolbarTemplate"].is(raw)
             || __WEBPACK_IMPORTED_MODULE_5__templates_toolbar_templaten_button_group__["ToolbarTemplateButtonGroup"].is(raw) || Array.isArray(raw))
             return raw;
         log.add('no toolbar structure specified, will use standard toolbar template');
-        // TODO: PASS MODIFIERS TO THE COPY!
         var template = __WEBPACK_IMPORTED_MODULE_3__templates_toolbar_template_manager__["ToolbarTemplateManager"].Instance(log).copy('default');
         template.params = (raw && Array.isArray(raw) && raw[0]) || raw; // attach parameters
-        if (buttonModifiers)
-            template.settings.buttonModifiers
-                = buttonModifiers.split(',').map(function (btnMod) { return new __WEBPACK_IMPORTED_MODULE_2__config__["ButtonModifier"](btnMod); });
+        template.settings._btnModifiers = modifiers;
+        this.dump('getTemplateIfNoButtonsSpecified', template);
         return template;
+    };
+    /**
+     * Convert action params with +edit or -delete
+     */
+    ToolbarConfigLoader.prototype.extractModifiers = function (raw, log) {
+        var buttonModifiers = null;
+        // if we have an actions node,
+        // check if it's just a modifier (with +/-) or a standalone list
+        if (!__WEBPACK_IMPORTED_MODULE_0____["InPageCommandJson"].hasActions(raw))
+            return [];
+        log.add("found actions: " + raw.action);
+        var firstChar = (raw.action.length) ? raw.action[0] : ' ';
+        if (!(firstChar === '+' || firstChar === '-'))
+            return [];
+        log.add('actions have +/-, assume they are only modifiers - extract and reset');
+        buttonModifiers = raw.action.split(',').map(function (btnMod) { return new __WEBPACK_IMPORTED_MODULE_2__config__["ButtonModifier"](btnMod); });
+        delete raw.action; // clean up to prevent side-effects
+        return buttonModifiers;
     };
     /**
      * take various common input format and convert it to a full toolbar-structure definition
@@ -6772,12 +6785,15 @@ var ToolbarConfigLoader = /** @class */ (function (_super) {
     toolbarSettings) {
         var log = new __WEBPACK_IMPORTED_MODULE_1__logging__["Log"]('Tlb.BldFul', this.log, 'start');
         var configWip = this.ensureDefinitionTree(unstructuredConfig, toolbarSettings); // as unknown as Toolbar;
+        this.dump('buildFullDefinition', configWip);
         // ToDo: don't use console.log in production
         if (__WEBPACK_IMPORTED_MODULE_4__templates_toolbar_template_toolbar__["ToolbarTemplate"].is(unstructuredConfig) && unstructuredConfig.debug)
             console.log('toolbar: detailed debug on; start build full Def');
         var tlbConfig = this.groups.expandButtonGroups(configWip, log);
+        this.dump('buildFullDefinition', tlbConfig);
         // #CodeChange#2020-03-22#InstanceConfig - believe this is completely unused; remove in June
         this.button.removeDisableButtons(toolbarContext, tlbConfig /*, instanceConfig */);
+        this.dump('buildFullDefinition', tlbConfig);
         if (configWip.debug)
             console.log('after remove: ', configWip);
         return tlbConfig;

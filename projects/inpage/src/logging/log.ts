@@ -2,7 +2,7 @@
 const maxScopeLen = 3;
 const maxNameLen = 6;
 
-const liveDump = false;
+const liveDump = true;
 
 export class Log {
 
