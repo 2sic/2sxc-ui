@@ -1,9 +1,8 @@
 ﻿import { ButtonGroupConfigLoader, CommandConfigLoader, InPageCommandJson, ToolbarWip } from '.';
 import { ContextBundleButton } from '../../context/bundles/context-bundle-button';
 import { HasLog, Log } from '../../logging';
-import { InstanceConfig } from '../../manage/instance-config';
-import { ButtonGroup, Toolbar, ButtonModifier } from '../config';
-import { ToolbarSettingsDefaults, ToolbarSettingsForEmpty, ToolbarSettings } from '../config';
+import { ButtonGroup, ButtonModifier, Toolbar } from '../config';
+import { ToolbarSettings, ToolbarSettingsDefaults, ToolbarSettingsForEmpty } from '../config';
 import { InPageToolbarConfigVariations } from '../initialize/toolbar-init-config';
 import { ToolbarTemplateManager } from '../templates/toolbar-template-manager';
 import { ToolbarTemplate } from '../templates/toolbar-template-toolbar';
@@ -41,10 +40,12 @@ export class ToolbarConfigLoader extends HasLog {
         // if it has an action or is an array, keep that. Otherwise get standard buttons
         toolbarData = this.useButtonsFromConfigOrLoadTemplate(toolbarData, log);
 
-        const instanceConfig = InstanceConfig.fromContext(context);
+        // #CodeChange#2020-03-22#InstanceConfig - believe this is completely unused; remove in June
+        // const instanceConfig = InstanceConfig.fromContext(context);
 
         // whatever we had, if more settings were provided, override with these...
-        const config = this.buildFullDefinition(context, toolbarData, instanceConfig, toolbarSettings);
+        // #CodeChange#2020-03-22#InstanceConfig - believe this is completely unused; remove in June
+        const config = this.buildFullDefinition(context, toolbarData, /* instanceConfig, */ toolbarSettings);
 
         log.add('expand done');
         return config;
@@ -63,7 +64,7 @@ export class ToolbarConfigLoader extends HasLog {
             hasActions = true;
             const actions = raw.action;
             const firstChar = (actions.length) ? actions[0] : ' ';
-            if (firstChar === '+' || firstChar === '-'){
+            if (firstChar === '+' || firstChar === '-') {
                 buttonModifiers = actions;
                 hasActions = false;
             }
@@ -93,7 +94,13 @@ export class ToolbarConfigLoader extends HasLog {
      * just a command (detected by "action"): { entityId: 17, action: "edit" }
      * array of commands: [{entityId: 17, action: "edit"}, {contentType: "blog", action: "new"}]
      */
-    private buildFullDefinition(toolbarContext: ContextBundleButton, unstructuredConfig: InPageToolbarConfigVariations, instanceConfig: InstanceConfig, toolbarSettings: ToolbarSettings): Toolbar {
+    private buildFullDefinition(
+        toolbarContext: ContextBundleButton,
+        unstructuredConfig: InPageToolbarConfigVariations,
+        // #CodeChange#2020-03-22#InstanceConfig - believe this is completely unused; remove in June
+        // instanceConfig: InstanceConfig,
+        toolbarSettings: ToolbarSettings,
+        ): Toolbar {
         const log = new Log('Tlb.BldFul', this.log, 'start');
 
         const configWip = this.ensureDefinitionTree(unstructuredConfig, toolbarSettings); // as unknown as Toolbar;
@@ -104,7 +111,8 @@ export class ToolbarConfigLoader extends HasLog {
 
         const tlbConfig = this.groups.expandButtonGroups(configWip, log);
 
-        this.button.removeDisableButtons(toolbarContext, tlbConfig, instanceConfig);
+        // #CodeChange#2020-03-22#InstanceConfig - believe this is completely unused; remove in June
+        this.button.removeDisableButtons(toolbarContext, tlbConfig/*, instanceConfig */);
 
         if (configWip.debug) console.log('after remove: ', configWip);
 

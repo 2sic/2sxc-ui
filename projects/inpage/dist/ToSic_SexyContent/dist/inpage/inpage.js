@@ -2717,14 +2717,16 @@ var ButtonConfigLoader = /** @class */ (function (_super) {
      * @param {InstanceConfig} config
      * @memberof ButtonConfigurationBuilder
      */
-    ButtonConfigLoader.prototype.removeDisableButtons = function (context, full, config) {
+    ButtonConfigLoader.prototype.removeDisableButtons = function (context, full) {
         var log = new __WEBPACK_IMPORTED_MODULE_1__logging__["Log"]('Tlb.RmvDsb', this.log, "start remove disabled buttons for " + full.groups.length + " groups");
         var btnGroups = full.groups;
         for (var g = 0; g < btnGroups.length; g++) {
             var btns = btnGroups[g].buttons;
-            removeUnfitButtons(context, btns, config, log);
+            // #CodeChange#2020-03-22#InstanceConfig - believe this is completely unused; remove in June
+            removeUnfitButtons(context, btns, /* config, */ log);
             log.add('will disable appropriate buttons');
-            disableButtons(context, btns, config);
+            // #CodeChange#2020-03-22#InstanceConfig - believe this is completely unused; remove in June
+            disableButtons(context, btns /*, config */);
             // remove the group, if no buttons left, or only "more"
             // if (btns.length === 0 || (btns.length === 1 && btns[0].command.action === 'more'))
             if (btns.length === 0 || (btns.length === 1 && btns[0].action.name === 'more')) {
@@ -2749,11 +2751,14 @@ var ButtonConfigLoader = /** @class */ (function (_super) {
     return ButtonConfigLoader;
 }(__WEBPACK_IMPORTED_MODULE_1__logging__["HasLog"]));
 
-function removeUnfitButtons(context, btns, config, log) {
+function removeUnfitButtons(context, btns, 
+// #CodeChange#2020-03-22#InstanceConfig - believe this is completely unused; remove in June
+// config: InstanceConfig,
+log) {
     var removals = '';
     for (var i = 0; i < btns.length; i++) {
         context.button = btns[i];
-        if (btns[i].action && !evalPropOrFunction(btns[i].showCondition, context, config, true)) {
+        if (btns[i].action && !evalPropOrFunction(btns[i].showCondition, context, /* config, */ true)) {
             removals += "#" + i + " \"" + btns[i].action.name + "\"; ";
             btns.splice(i--, 1);
         }
@@ -2761,24 +2766,28 @@ function removeUnfitButtons(context, btns, config, log) {
     if (removals)
         log.add("removed buttons: " + removals);
 }
-function disableButtons(context, btns, config) {
+// #CodeChange#2020-03-22#InstanceConfig - believe this is completely unused
+function disableButtons(context, btns) {
     for (var i = 0; i < btns.length; i++) {
         // btns[i].disabled = evalPropOrFunction(btns[i].disabled, btns[i].command, config, false);
         context.button = btns[i];
         if (btns[i].action) {
-            btns[i].disabled = evalPropOrFunction(btns[i].disabled, context, config, function () { return false; });
+            btns[i].disabled = evalPropOrFunction(btns[i].disabled, context, /* config, */ function () { return false; });
         }
         else {
             btns[i].disabled = (function () { return false; });
         }
     }
 }
-function evalPropOrFunction(propOrFunction, context, config, fallback) {
+function evalPropOrFunction(propOrFunction, context, 
+// #CodeChange#2020-03-22#InstanceConfig - believe this is completely unused; remove in June
+// config: InstanceConfig,
+fallback) {
     if (propOrFunction === undefined || propOrFunction === null) {
         return fallback;
     }
     if (typeof (propOrFunction) === 'function') {
-        return propOrFunction(context, config);
+        return propOrFunction(context /*, config */);
     }
     else {
         return propOrFunction;
@@ -6650,13 +6659,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ToolbarConfigLoader", function() { return ToolbarConfigLoader; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0____ = __webpack_require__(19);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__logging__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__manage_instance_config__ = __webpack_require__(115);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__config__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__templates_toolbar_template_manager__ = __webpack_require__(50);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__templates_toolbar_template_toolbar__ = __webpack_require__(51);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__templates_toolbar_templaten_button_group__ = __webpack_require__(52);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__button_config_loader__ = __webpack_require__(49);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__in_page_button__ = __webpack_require__(48);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__config__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__templates_toolbar_template_manager__ = __webpack_require__(50);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__templates_toolbar_template_toolbar__ = __webpack_require__(51);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__templates_toolbar_templaten_button_group__ = __webpack_require__(52);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__button_config_loader__ = __webpack_require__(49);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__in_page_button__ = __webpack_require__(48);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -6690,13 +6698,12 @@ var __assign = (this && this.__assign) || function () {
 
 
 
-
 var ToolbarConfigLoader = /** @class */ (function (_super) {
     __extends(ToolbarConfigLoader, _super);
     function ToolbarConfigLoader(parentLog) {
         var _this = _super.call(this, 'Tlb.TlbCnf', parentLog) || this;
         _this.groups = new __WEBPACK_IMPORTED_MODULE_0____["ButtonGroupConfigLoader"](_this);
-        _this.button = new __WEBPACK_IMPORTED_MODULE_7__button_config_loader__["ButtonConfigLoader"](_this);
+        _this.button = new __WEBPACK_IMPORTED_MODULE_6__button_config_loader__["ButtonConfigLoader"](_this);
         _this.command = new __WEBPACK_IMPORTED_MODULE_0____["CommandConfigLoader"](_this);
         return _this;
     }
@@ -6707,13 +6714,15 @@ var ToolbarConfigLoader = /** @class */ (function (_super) {
         // Default to empty toolbar settings if we don't have a toolbar or settings
         if (Object.keys(toolbarData).length + Object.keys(toolbarSettings || {}).length === 0) {
             log.add('no data or settings, will use default settings for empty');
-            toolbarSettings = __WEBPACK_IMPORTED_MODULE_3__config__["ToolbarSettingsForEmpty"];
+            toolbarSettings = __WEBPACK_IMPORTED_MODULE_2__config__["ToolbarSettingsForEmpty"];
         }
         // if it has an action or is an array, keep that. Otherwise get standard buttons
         toolbarData = this.useButtonsFromConfigOrLoadTemplate(toolbarData, log);
-        var instanceConfig = __WEBPACK_IMPORTED_MODULE_2__manage_instance_config__["InstanceConfig"].fromContext(context);
+        // #CodeChange#2020-03-22#InstanceConfig - believe this is completely unused; remove in June
+        // const instanceConfig = InstanceConfig.fromContext(context);
         // whatever we had, if more settings were provided, override with these...
-        var config = this.buildFullDefinition(context, toolbarData, instanceConfig, toolbarSettings);
+        // #CodeChange#2020-03-22#InstanceConfig - believe this is completely unused; remove in June
+        var config = this.buildFullDefinition(context, toolbarData, /* instanceConfig, */ toolbarSettings);
         log.add('expand done');
         return config;
     };
@@ -6735,16 +6744,16 @@ var ToolbarConfigLoader = /** @class */ (function (_super) {
                 hasActions = false;
             }
         }
-        if (hasActions || __WEBPACK_IMPORTED_MODULE_5__templates_toolbar_template_toolbar__["ToolbarTemplate"].is(raw)
-            || __WEBPACK_IMPORTED_MODULE_6__templates_toolbar_templaten_button_group__["ToolbarTemplateButtonGroup"].is(raw) || Array.isArray(raw))
+        if (hasActions || __WEBPACK_IMPORTED_MODULE_4__templates_toolbar_template_toolbar__["ToolbarTemplate"].is(raw)
+            || __WEBPACK_IMPORTED_MODULE_5__templates_toolbar_templaten_button_group__["ToolbarTemplateButtonGroup"].is(raw) || Array.isArray(raw))
             return raw;
         log.add('no toolbar structure specified, will use standard toolbar template');
         // TODO: PASS MODIFIERS TO THE COPY!
-        var template = __WEBPACK_IMPORTED_MODULE_4__templates_toolbar_template_manager__["ToolbarTemplateManager"].Instance(log).copy('default');
+        var template = __WEBPACK_IMPORTED_MODULE_3__templates_toolbar_template_manager__["ToolbarTemplateManager"].Instance(log).copy('default');
         template.params = (raw && Array.isArray(raw) && raw[0]) || raw; // attach parameters
         if (buttonModifiers)
             template.settings.buttonModifiers
-                = buttonModifiers.split(',').map(function (btnMod) { return new __WEBPACK_IMPORTED_MODULE_3__config__["ButtonModifier"](btnMod); });
+                = buttonModifiers.split(',').map(function (btnMod) { return new __WEBPACK_IMPORTED_MODULE_2__config__["ButtonModifier"](btnMod); });
         return template;
     };
     /**
@@ -6757,14 +6766,18 @@ var ToolbarConfigLoader = /** @class */ (function (_super) {
      * just a command (detected by "action"): { entityId: 17, action: "edit" }
      * array of commands: [{entityId: 17, action: "edit"}, {contentType: "blog", action: "new"}]
      */
-    ToolbarConfigLoader.prototype.buildFullDefinition = function (toolbarContext, unstructuredConfig, instanceConfig, toolbarSettings) {
+    ToolbarConfigLoader.prototype.buildFullDefinition = function (toolbarContext, unstructuredConfig, 
+    // #CodeChange#2020-03-22#InstanceConfig - believe this is completely unused; remove in June
+    // instanceConfig: InstanceConfig,
+    toolbarSettings) {
         var log = new __WEBPACK_IMPORTED_MODULE_1__logging__["Log"]('Tlb.BldFul', this.log, 'start');
         var configWip = this.ensureDefinitionTree(unstructuredConfig, toolbarSettings); // as unknown as Toolbar;
         // ToDo: don't use console.log in production
-        if (__WEBPACK_IMPORTED_MODULE_5__templates_toolbar_template_toolbar__["ToolbarTemplate"].is(unstructuredConfig) && unstructuredConfig.debug)
+        if (__WEBPACK_IMPORTED_MODULE_4__templates_toolbar_template_toolbar__["ToolbarTemplate"].is(unstructuredConfig) && unstructuredConfig.debug)
             console.log('toolbar: detailed debug on; start build full Def');
         var tlbConfig = this.groups.expandButtonGroups(configWip, log);
-        this.button.removeDisableButtons(toolbarContext, tlbConfig, instanceConfig);
+        // #CodeChange#2020-03-22#InstanceConfig - believe this is completely unused; remove in June
+        this.button.removeDisableButtons(toolbarContext, tlbConfig /*, instanceConfig */);
         if (configWip.debug)
             console.log('after remove: ', configWip);
         return tlbConfig;
@@ -6786,7 +6799,7 @@ var ToolbarConfigLoader = /** @class */ (function (_super) {
         // original is null/undefined, just return empty set
         if (!unstructuredConfig)
             throw ("preparing toolbar, with nothing to work on: " + unstructuredConfig);
-        var newToolbar = new __WEBPACK_IMPORTED_MODULE_3__config__["Toolbar"]();
+        var newToolbar = new __WEBPACK_IMPORTED_MODULE_2__config__["Toolbar"]();
         newToolbar.groups = this.findGroups(unstructuredConfig);
         // ensure that if it's just actions or buttons, they are then processed as arrays with 1 entry
         // if (!Array.isArray(unstructuredConfig) && (unstructuredConfig.action || unstructuredConfig.buttons)) {
@@ -6811,7 +6824,7 @@ var ToolbarConfigLoader = /** @class */ (function (_super) {
         // newToolbar.groups = unstructuredConfig.groups || []; // the groups of buttons
         var probablyTemplate = unstructuredConfig;
         newToolbar.params = probablyTemplate.params || {}; // these are the default command parameters
-        newToolbar.settings = __assign(__assign(__assign({}, __WEBPACK_IMPORTED_MODULE_3__config__["ToolbarSettingsDefaults"]), probablyTemplate.settings), cleanDeprecatedSettings(toolbarSettings));
+        newToolbar.settings = __assign(__assign(__assign({}, __WEBPACK_IMPORTED_MODULE_2__config__["ToolbarSettingsDefaults"]), probablyTemplate.settings), cleanDeprecatedSettings(toolbarSettings));
         // toolbarConfig.settings = O.bject.assign({}, defaultToolbarSettings, unstructuredConfig.settings, cleanDeprecatedSettings(toolbarSettings)) as ToolbarSettings;
         newToolbar.debug = probablyTemplate.debug || false; // show more debug info
         newToolbar.defaults = probablyTemplate.defaults || {}; // the button defaults like icon, etc.
@@ -6824,13 +6837,13 @@ var ToolbarConfigLoader = /** @class */ (function (_super) {
         // ensure that the groups are all correct
         if (Array.isArray(unstructuredConfig))
             arrBtnsOrGroups = unstructuredConfig;
-        else if (!Array.isArray(unstructuredConfig) && __WEBPACK_IMPORTED_MODULE_8__in_page_button__["InPageButtonJson"].is(unstructuredConfig)) {
+        else if (!Array.isArray(unstructuredConfig) && __WEBPACK_IMPORTED_MODULE_7__in_page_button__["InPageButtonJson"].is(unstructuredConfig)) {
             log.add('found no array, but detected action/buttons properties, will wrap config into array');
             arrBtnsOrGroups = [unstructuredConfig];
         }
         else
             // we either have groups already, or we'll return blank
-            return (__WEBPACK_IMPORTED_MODULE_5__templates_toolbar_template_toolbar__["ToolbarTemplate"].is(unstructuredConfig))
+            return (__WEBPACK_IMPORTED_MODULE_4__templates_toolbar_template_toolbar__["ToolbarTemplate"].is(unstructuredConfig))
                 ? unstructuredConfig.groups
                 : [];
         // ensure that arrays of actions or buttons are re-mapped to the right structure node
@@ -6839,11 +6852,11 @@ var ToolbarConfigLoader = /** @class */ (function (_super) {
             return [];
         }
         log.add('detected array with length');
-        if (__WEBPACK_IMPORTED_MODULE_3__config__["ButtonGroup"].isArray(arrBtnsOrGroups)) { // unstructuredConfig[0].buttons) {
+        if (__WEBPACK_IMPORTED_MODULE_2__config__["ButtonGroup"].isArray(arrBtnsOrGroups)) { // unstructuredConfig[0].buttons) {
             log.add('detected buttons on first item, assume button-group, moving into .groups');
             return arrBtnsOrGroups;
         }
-        else if (__WEBPACK_IMPORTED_MODULE_8__in_page_button__["InPageButtonJson"].isArray(arrBtnsOrGroups)) { // unstructuredConfig[0].action) {
+        else if (__WEBPACK_IMPORTED_MODULE_7__in_page_button__["InPageButtonJson"].isArray(arrBtnsOrGroups)) { // unstructuredConfig[0].action) {
             log.add('detected command or action on first item, assume buttons, move into .groups[buttons] ');
             return [{ buttons: arrBtnsOrGroups }];
             // unstructuredConfig = { groups: [{ buttons: unstructuredConfig }] };
@@ -6877,35 +6890,40 @@ function cleanDeprecatedSettings(toolbarSettings) {
 
 /***/ }),
 /* 115 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, __webpack_exports__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "InstanceConfig", function() { return InstanceConfig; });
-/**
- * used to build instance config
- */
-// TODO: 2dm I don't think this is every in use any more - it was used to
-// call showConfig and disabled, but I believe those signatures don't even expect this!
-var InstanceConfig = /** @class */ (function () {
-    function InstanceConfig() {
-    }
-    InstanceConfig.fromContext = function (contextOfButton) {
-        var config = new InstanceConfig();
-        config.portalId = contextOfButton.tenant.id;
-        config.tabId = contextOfButton.page.id;
-        config.moduleId = contextOfButton.instance.id;
-        config.version = contextOfButton.instance.sxcVersion;
-        config.contentGroupId = contextOfButton.contentBlock.contentGroupId;
-        config.cbIsEntity = contextOfButton.contentBlock.isEntity;
-        config.cbId = contextOfButton.contentBlock.id;
-        config.appPath = contextOfButton.app.appPath;
-        config.isList = contextOfButton.contentBlock.isList;
-        return config;
-    };
-    return InstanceConfig;
-}());
-
+// #CodeChange#2020-03-22#InstanceConfig - believe this is completely unused
+// import { ContextBundleButton } from '../context/bundles/context-bundle-button';
+// /**
+//  * used to build instance config
+//  */
+// // TODO: 2dm I don't think this is every in use any more - it was used to
+// // call showConfig and disabled, but I believe those signatures don't even expect this!
+// export class InstanceConfig {
+//   portalId: number;
+//   tabId: number;
+//   moduleId: number;
+//   version: string;
+//   contentGroupId: string;
+//   cbIsEntity: boolean;
+//   cbId: number;
+//   appPath: string;
+//   isList: boolean;
+//   static fromContext(contextOfButton: ContextBundleButton): InstanceConfig {
+//     const config = new InstanceConfig();
+//     config.portalId = contextOfButton.tenant.id;
+//     config.tabId = contextOfButton.page.id;
+//     config.moduleId = contextOfButton.instance.id;
+//     config.version = contextOfButton.instance.sxcVersion;
+//     config.contentGroupId = contextOfButton.contentBlock.contentGroupId;
+//     config.cbIsEntity = contextOfButton.contentBlock.isEntity;
+//     config.cbId = contextOfButton.contentBlock.id;
+//     config.appPath = contextOfButton.app.appPath;
+//     config.isList = contextOfButton.contentBlock.isList;
+//     return config;
+//   }
+// }
 
 
 /***/ }),

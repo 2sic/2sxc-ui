@@ -5,7 +5,6 @@ import { Commands } from '../../commands/commands';
 import { ContextBundleButton } from '../../context/bundles';
 import { HasLog } from '../../logging';
 import { Log } from '../../logging';
-import { InstanceConfig } from '../../manage/instance-config';
 import { DictionaryValue, TypeTbD, TypeUnsafe, TypeWeDontCare } from '../../plumbing';
 import { Button, ButtonCommand, ButtonGroup, Toolbar } from '../config';
 
@@ -119,15 +118,20 @@ export class ButtonConfigLoader extends HasLog {
    * @param {InstanceConfig} config
    * @memberof ButtonConfigurationBuilder
    */
-  removeDisableButtons(context: ContextBundleButton, full: Toolbar, config: InstanceConfig): void {
+  removeDisableButtons(context: ContextBundleButton, full: Toolbar,
+    // #CodeChange#2020-03-22#InstanceConfig - believe this is completely unused; remove in June
+    // config: InstanceConfig
+    ): void {
     const log = new Log('Tlb.RmvDsb', this.log,  `start remove disabled buttons for ${full.groups.length} groups`);
     const btnGroups = full.groups;
     for (let g = 0; g < btnGroups.length; g++) {
       const btns = btnGroups[g].buttons;
-      removeUnfitButtons(context, btns, config, log);
+      // #CodeChange#2020-03-22#InstanceConfig - believe this is completely unused; remove in June
+      removeUnfitButtons(context, btns, /* config, */ log);
 
       log.add('will disable appropriate buttons');
-      disableButtons(context, btns, config);
+      // #CodeChange#2020-03-22#InstanceConfig - believe this is completely unused; remove in June
+      disableButtons(context, btns/*, config */);
 
       // remove the group, if no buttons left, or only "more"
       // if (btns.length === 0 || (btns.length === 1 && btns[0].command.action === 'more'))
@@ -161,11 +165,14 @@ export class ButtonConfigLoader extends HasLog {
 
 
 
-function removeUnfitButtons(context: ContextBundleButton, btns: Button[], config: InstanceConfig, log: Log): void {
+function removeUnfitButtons(context: ContextBundleButton, btns: Button[],
+    // #CodeChange#2020-03-22#InstanceConfig - believe this is completely unused; remove in June
+    // config: InstanceConfig,
+                            log: Log): void {
   let removals = '';
   for (let i = 0; i < btns.length; i++) {
     context.button = btns[i];
-    if (btns[i].action && !evalPropOrFunction(btns[i].showCondition, context, config, true)) {
+    if (btns[i].action && !evalPropOrFunction(btns[i].showCondition, context, /* config, */ true)) {
       removals += `#${i} "${btns[i].action.name}"; `;
       btns.splice(i--, 1);
     }
@@ -174,12 +181,16 @@ function removeUnfitButtons(context: ContextBundleButton, btns: Button[], config
     log.add(`removed buttons: ${removals}`);
 }
 
-function disableButtons(context: ContextBundleButton, btns: Button[], config: InstanceConfig): void {
+// #CodeChange#2020-03-22#InstanceConfig - believe this is completely unused
+function disableButtons(context: ContextBundleButton, btns: Button[],
+    // #CodeChange#2020-03-22#InstanceConfig - believe this is completely unused
+    // config: InstanceConfig
+    ): void {
   for (let i = 0; i < btns.length; i++) {
     // btns[i].disabled = evalPropOrFunction(btns[i].disabled, btns[i].command, config, false);
     context.button = btns[i];
     if (btns[i].action) {
-      btns[i].disabled = evalPropOrFunction(btns[i].disabled, context, config, () => false);
+      btns[i].disabled = evalPropOrFunction(btns[i].disabled, context, /* config, */ () => false);
     } else {
       btns[i].disabled = (() => false);
     }
@@ -187,12 +198,17 @@ function disableButtons(context: ContextBundleButton, btns: Button[], config: In
   }
 }
 
-function evalPropOrFunction<T>(propOrFunction: TypeTbD, context: ContextBundleButton, config: InstanceConfig, fallback: T): T {
+function evalPropOrFunction<T>(
+    propOrFunction: TypeTbD,
+    context: ContextBundleButton,
+    // #CodeChange#2020-03-22#InstanceConfig - believe this is completely unused; remove in June
+    // config: InstanceConfig,
+    fallback: T): T {
   if (propOrFunction === undefined || propOrFunction === null) {
     return fallback;
   }
   if (typeof (propOrFunction) === 'function') {
-    return propOrFunction(context, config);
+    return propOrFunction(context/*, config */);
   } else {
     return propOrFunction;
   }
