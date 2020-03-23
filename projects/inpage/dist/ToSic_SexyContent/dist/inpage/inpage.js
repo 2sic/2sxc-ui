@@ -421,6 +421,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "Log", function() { return __WEBPACK_IMPORTED_MODULE_2__log__["Log"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__log_utils__ = __webpack_require__(130);
 /* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "LogUtils", function() { return __WEBPACK_IMPORTED_MODULE_3__log_utils__["LogUtils"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__entry__ = __webpack_require__(79);
+/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "Entry", function() { return __WEBPACK_IMPORTED_MODULE_4__entry__["Entry"]; });
+
 
 
 
@@ -923,6 +926,8 @@ var Log = /** @class */ (function () {
         /* if we should live-dump, can be selectively activated */
         this.liveDump = liveDump;
         this._parentHasLiveDump = false;
+        this.keepData = false;
+        this._parentHasKeepData = false;
         /**
          * Full identifier of this log-object, with full hierarchy
          */
@@ -937,8 +942,8 @@ var Log = /** @class */ (function () {
         this.linkLog = function (parent) {
             _this.parent = parent || _this.parent; // if new parent isn't defined, don't replace
             if (_this.parent) {
-                if (_this.parent.liveDump || _this.parent._parentHasLiveDump)
-                    _this._parentHasLiveDump = _this.parent.liveDump || _this.parent._parentHasLiveDump;
+                _this._parentHasLiveDump = _this.parent.liveDump || _this.parent._parentHasLiveDump;
+                _this._parentHasKeepData = _this.parent.keepData || _this.parent._parentHasKeepData;
             }
         };
         /**
@@ -992,26 +997,14 @@ var Log = /** @class */ (function () {
      * but use it very rarely, because there is certainly a performance implication!
      * log.add(`description ${() => parameter}`);
      */
-    Log.prototype.add = function (message) {
-        // const messageText = this._prepareMessage(message);
-        // if (message instanceof Function) {
-        //     try {
-        //         messageText = ((message as () => string)());
-        //         message = null; // maybe it is unnecessary, but added to be safe as possible that arrow function parameter will be garbage collected
-        //     } catch (e) {
-        //         messageText = 'undefined';
-        //     }
-        // } else {
-        //     messageText = message.toString();
-        // }
-        // const entry = new Entry(this, messageText);
-        var entry = this._prepareEntry(message);
+    Log.prototype.add = function (message, data) {
+        var entry = this._prepareEntry(message, data);
         this._addEntry(entry);
         return entry.message;
     };
-    Log.prototype._prepareEntry = function (message) {
+    Log.prototype._prepareEntry = function (message, data) {
         var msg = this._prepareMessage(message);
-        var entry = new __WEBPACK_IMPORTED_MODULE_0__entry__["Entry"](this, msg, this.depth);
+        var entry = new __WEBPACK_IMPORTED_MODULE_0__entry__["Entry"](this, msg, this.depth, data);
         return entry;
     };
     Log.prototype._prepareMessage = function (message) {
@@ -1035,8 +1028,9 @@ var Log = /** @class */ (function () {
     Log.prototype._callDepthRemove = function (name) {
         this.depth--;
         var last = this.callDepths.pop();
-        if (last !== name)
+        if (last !== name) {
             console.warn("log: call depth reduced by '" + name + "' but last was '" + last + "'");
+        }
     };
     /**
      * helper to create a text-output of the log info
@@ -1044,22 +1038,23 @@ var Log = /** @class */ (function () {
      * @param start
      * @param end
      */
-    Log.prototype.dump = function (separator, start, end, one) {
-        if (separator === void 0) { separator = ' - '; }
-        if (start === void 0) { start = ''; }
-        if (end === void 0) { end = ''; }
+    Log.prototype.dump = function (one, separator) {
+        var _this = this;
         if (one === void 0) { one = null; }
-        var lg = start;
-        var dumpOne = function (e) {
-            var result = (e.result) ? ' =' + e.result : '';
-            lg += e.source() + separator + '..'.repeat(e.depth) + e.message + result + '\n';
-        };
+        if (separator === void 0) { separator = ' - '; }
         if (one)
-            dumpOne(one);
+            this.dumpOne(one, separator);
         else
-            this.entries.forEach(dumpOne);
-        lg += end;
-        return lg;
+            this.entries.forEach(function (e) { return _this.dumpOne(e, separator); });
+    };
+    Log.prototype.dumpOne = function (e, separator) {
+        if (separator === void 0) { separator = ' - '; }
+        var result = (e.result) ? ' =' + e.result : '';
+        var line = e.source() + separator + '..'.repeat(e.depth) + e.message + result;
+        if (e.data)
+            console.log(line, e.data);
+        else
+            console.log(line);
     };
     /**
      * add an entry-object to this logger
@@ -1068,7 +1063,7 @@ var Log = /** @class */ (function () {
      */
     Log.prototype._addEntry = function (entry) {
         if (this.liveDump)
-            console.log(this.dump(undefined, undefined, undefined, entry));
+            this.dump(entry);
         this.entries.push(entry);
         if (this.parent)
             this.parent._addEntry(entry);
@@ -1957,6 +1952,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0____ = __webpack_require__(19);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__interfaces_sxc_controller_in_page__ = __webpack_require__(14);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__logging__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__config_loaders_toolbar_config_loader__ = __webpack_require__(117);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -1975,6 +1971,7 @@ var __extends = (this && this.__extends) || (function () {
 
 
 
+
 /**
  * Toolbar manager for the whole page - basically a set of APIs
  * the toolbar manager is an internal helper taking care of toolbars, buttons etc.
@@ -1983,13 +1980,8 @@ var ToolbarManagerGlobal = /** @class */ (function (_super) {
     __extends(ToolbarManagerGlobal, _super);
     function ToolbarManagerGlobal(parentLog) {
         var _this = _super.call(this, 'Tlb.Mngr', parentLog, 'init') || this;
-        // generate button html
-        _this.generateButtonHtml = function (context, groupIndex) {
-            new __WEBPACK_IMPORTED_MODULE_0____["ToolbarRenderer"](context).button.render(context, groupIndex);
-        };
-        _this.generateToolbarHtml = function (context) {
-            return new __WEBPACK_IMPORTED_MODULE_0____["ToolbarRenderer"](context).render();
-        };
+        /** Contains a log for each toolbar which was initialized */
+        _this.logs = new Array();
         _this.toolbarFinder = new __WEBPACK_IMPORTED_MODULE_0____["ToolbarConfigFinderAndInitializer"](_this);
         return _this;
     }
@@ -1998,6 +1990,18 @@ var ToolbarManagerGlobal = /** @class */ (function (_super) {
     };
     ToolbarManagerGlobal.prototype.build = function (node) {
         this.toolbarFinder.build(node);
+    };
+    // generate button html
+    ToolbarManagerGlobal.prototype.generateButtonHtml = function (context, groupIndex) {
+        new __WEBPACK_IMPORTED_MODULE_0____["ToolbarRenderer"](context).button.render(context, groupIndex);
+    };
+    ToolbarManagerGlobal.prototype.generateToolbarHtml = function (context) {
+        return new __WEBPACK_IMPORTED_MODULE_0____["ToolbarRenderer"](context).render();
+    };
+    ToolbarManagerGlobal.prototype.loadConfig = function (context, config) {
+        var loader = new __WEBPACK_IMPORTED_MODULE_3__config_loaders_toolbar_config_loader__["ToolbarConfigLoader"](this);
+        this.logs.push({ key: JSON.stringify(config.toolbar || ''), log: loader.log });
+        return loader.load(context, config.toolbar, config.settings);
     };
     return ToolbarManagerGlobal;
 }(__WEBPACK_IMPORTED_MODULE_2__logging__["HasLog"]));
@@ -2225,7 +2229,7 @@ var Cms = /** @class */ (function (_super) {
             this.resetLog();
         var result = innerCall();
         if (this.autoDump)
-            console.log(this.log.dump());
+            this.log.dump();
         return result;
     };
     return Cms;
@@ -2766,9 +2770,9 @@ var InPageButtonJson = /** @class */ (function () {
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ButtonConfigLoader", function() { return ButtonConfigLoader; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0____ = __webpack_require__(20);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__logging__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__config__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__commands_command_more__ = __webpack_require__(36);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__commands_command_more__ = __webpack_require__(36);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__logging__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__config__ = __webpack_require__(7);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -2843,8 +2847,8 @@ var ButtonConfigLoader = /** @class */ (function (_super) {
         // parameters adapter from v1 to v2
         var params = this.toolbar.command.removeActionProperty(jsonBtn.command);
         // Toolbar API v2
-        var newButtonAction = new __WEBPACK_IMPORTED_MODULE_2__config__["ButtonCommand"](name, contentType, params);
-        return new __WEBPACK_IMPORTED_MODULE_2__config__["Button"](newButtonAction, name);
+        var newButtonAction = new __WEBPACK_IMPORTED_MODULE_3__config__["ButtonCommand"](name, contentType, params);
+        return new __WEBPACK_IMPORTED_MODULE_3__config__["Button"](newButtonAction, name);
     };
     /**
      * takes an object like "actionname" or { action: "actionname", ... }
@@ -2852,6 +2856,7 @@ var ButtonConfigLoader = /** @class */ (function (_super) {
      */
     ButtonConfigLoader.prototype.normalize = function (original) {
         var wrapLog = this.log.call('normalize'); // new Log('Tlb.ExpBtn', this.log, 'start');
+        wrapLog.add('initial', original);
         // prevent multiple inits
         var asBtnConfig = original;
         if (asBtnConfig._expanded || asBtnConfig.command)
@@ -2860,18 +2865,13 @@ var ButtonConfigLoader = /** @class */ (function (_super) {
         // use the deep version with command.action, because of more clean-up later on
         if (typeof original === 'string')
             return wrapLog.return(this.getFromName(original), 'found name, use that');
-        // {
-        //     log.add(`name "${original}" found, will re-map to .command.action`);
-        //     return {
-        //         command: { action: original.trim() },
-        //         _expanded: true,
-        //     };
-        // }
         // if it's a command w/action, wrap into command + trim
-        if (__WEBPACK_IMPORTED_MODULE_0____["InPageCommandJson"].hasActions(asBtnConfig)) {
-            wrapLog.add('action found, will move down to .command');
+        if (__WEBPACK_IMPORTED_MODULE_0____["InPageCommandJson"].hasActions(original)) {
+            wrapLog.add('action found, will move down to .command', original);
+            if (original.action)
+                original.action = original.action.trim();
             return wrapLog.return({
-                command: { action: original.action.trim() },
+                command: original,
                 _expanded: true,
             }, 'had actions, convert to commands');
         }
@@ -2902,7 +2902,7 @@ var ButtonConfigLoader = /** @class */ (function (_super) {
             // #CodeChange#2020-03-22#InstanceConfig - believe this is completely unused; remove in June
             disableButtons(context, btns /*, config */);
             // remove the group, if no buttons left, or only "more"
-            if (btns.length === 0 || (btns.length === 1 && btns[0].action.name === __WEBPACK_IMPORTED_MODULE_3__commands_command_more__["CmdMore"])) {
+            if (btns.length === 0 || (btns.length === 1 && btns[0].action.name === __WEBPACK_IMPORTED_MODULE_1__commands_command_more__["CmdMore"])) {
                 wrapLog.add('found no more buttons except for the "more" - will remove that group');
                 btnGroups.splice(g--, 1); // remove, and decrement counter
             }
@@ -2923,7 +2923,7 @@ var ButtonConfigLoader = /** @class */ (function (_super) {
         }
     };
     return ButtonConfigLoader;
-}(__WEBPACK_IMPORTED_MODULE_1__logging__["HasLog"]));
+}(__WEBPACK_IMPORTED_MODULE_2__logging__["HasLog"]));
 
 function removeUnfitButtons(context, btns, 
 // #CodeChange#2020-03-22#InstanceConfig - believe this is completely unused; remove in June
@@ -4837,14 +4837,31 @@ var QeSelectors = {
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Entry", function() { return Entry; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__plumbing__ = __webpack_require__(98);
+
 var Entry = /** @class */ (function () {
-    function Entry(log, message, depth) {
+    function Entry(log, message, depth, data) {
         var _this = this;
         this.log = log;
         this.message = message;
         this.depth = depth;
         this.source = function () { return _this.log.fullIdentifier(); };
+        if (data)
+            this.data = data;
     }
+    Object.defineProperty(Entry.prototype, "data", {
+        get: function () {
+            return this._data;
+        },
+        set: function (data) {
+            if (data === undefined)
+                return;
+            if (this.log.keepData || this.log._parentHasKeepData)
+                this._data = __WEBPACK_IMPORTED_MODULE_0__plumbing__["Obj"].DeepClone(data);
+        },
+        enumerable: true,
+        configurable: true
+    });
     return Entry;
 }());
 
@@ -6012,6 +6029,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__interfaces_sxc_instance_editable__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__toolbar_config_loaders__ = __webpack_require__(20);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__toolbar_render_toolbar_renderer__ = __webpack_require__(35);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__toolbar_toolbar_manager__ = __webpack_require__(34);
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
+
 
 
 
@@ -6049,18 +6079,7 @@ var EditManager = /** @class */ (function () {
         /** used to handle the commands for this content-block */
         this._commands = this.cmdEngine;
         this._user = this.userInfo;
-        this._getCbManipulator = function () { return new __WEBPACK_IMPORTED_MODULE_0__contentBlock_dnn_module_editor__["DnnModuleEditor"](_this.sxc); }; // manipulator(this.sxc);
-        // ReSharper restore InconsistentNaming
-        /**
-         * init this object
-         */
-        this.init = function () {
-            var tag = __WEBPACK_IMPORTED_MODULE_1__interfaces_sxc_instance_editable__["SxcEdit"].getTag(_this.sxc);
-            // enhance UI in case there are known errors / issues
-            var isErrorState = _this.editContext && _this.editContext.error && _this.editContext.error.type;
-            if (isErrorState)
-                handleErrors(_this.editContext.error.type, tag);
-        };
+        this._getCbManipulator = function () { return new __WEBPACK_IMPORTED_MODULE_0__contentBlock_dnn_module_editor__["DnnModuleEditor"](_this.sxc); };
     }
     /**
      * Generate a button (an <a>-tag) for one specific toolbar-action.
@@ -6083,9 +6102,11 @@ var EditManager = /** @class */ (function () {
      * it is publicly used in Razor scripts of inpage, so take a care to preserve function signature
      */
     EditManager.prototype.getToolbar = function (tbConfig, moreSettings) {
-        var toolbarConfig = new __WEBPACK_IMPORTED_MODULE_2__toolbar_config_loaders__["ToolbarConfigLoader"](null).expandToolbarConfig(this.context, tbConfig, moreSettings);
+        tbConfig = __assign({ settings: __assign(__assign({}, tbConfig.settings), moreSettings) }, tbConfig);
+        var toolbarConfig = __WEBPACK_IMPORTED_MODULE_4__toolbar_toolbar_manager__["ToolbarManager"].loadConfig(this.context, tbConfig);
+        // const toolbarConfig = new ToolbarConfigLoader(null).expandToolbarConfig(this.context, tbConfig, moreSettings);
         this.context.toolbar = toolbarConfig;
-        return new __WEBPACK_IMPORTED_MODULE_3__toolbar_render_toolbar_renderer__["ToolbarRenderer"](this.context).render(); // renderToolbar(this.context);
+        return new __WEBPACK_IMPORTED_MODULE_3__toolbar_render_toolbar_renderer__["ToolbarRenderer"](this.context).render();
     };
     /**
      * change config by replacing the guid, and refreshing dependent sub-objects
@@ -6093,9 +6114,16 @@ var EditManager = /** @class */ (function () {
     EditManager.prototype._updateContentGroupGuid = function (context, newGuid) {
         context.contentBlock.contentGroupId = newGuid;
         this.editContext.ContentGroup.Guid = newGuid;
-        // 2dm disabled, doesn't seem used -
-        // todo q2stv - question, pls confirm
-        // this._instanceConfig = InstanceConfig.fromContext(context);// 2dm simplified buildInstanceConfig(context);
+    };
+    /**
+     * init this object
+     */
+    EditManager.prototype.init = function () {
+        var tag = __WEBPACK_IMPORTED_MODULE_1__interfaces_sxc_instance_editable__["SxcEdit"].getTag(this.sxc);
+        // enhance UI in case there are known errors / issues
+        var isErrorState = this.editContext && this.editContext.error && this.editContext.error.type;
+        if (isErrorState)
+            handleErrors(this.editContext.error.type, tag);
     };
     return EditManager;
 }());
@@ -6352,10 +6380,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__context_bundles_context_bundle_button__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__logging_has_log__ = __webpack_require__(15);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__config__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__config_loaders__ = __webpack_require__(20);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__render_toolbar_renderer__ = __webpack_require__(35);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__tag_toolbars_tag_toolbar__ = __webpack_require__(47);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__toolbar_init_config__ = __webpack_require__(50);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__render_toolbar_renderer__ = __webpack_require__(35);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__tag_toolbars_tag_toolbar__ = __webpack_require__(47);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__toolbar_init_config__ = __webpack_require__(50);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -6376,7 +6403,6 @@ var __extends = (this && this.__extends) || (function () {
 
 
 
-
 // quick debug - set to false if not needed for production
 var dbg = false;
 var toolbarSelector = ".sc-menu[toolbar],.sc-menu[data-toolbar],[" + __WEBPACK_IMPORTED_MODULE_0__constants__["toolbar"].attr.full + "]";
@@ -6390,8 +6416,10 @@ var ToolbarConfigFinderAndInitializer = /** @class */ (function (_super) {
      * Special constructor which only allows this builder to be instatiated from the TagManager
      * This is to simplify program control flow
      */
-    function ToolbarConfigFinderAndInitializer(parent) {
-        return _super.call(this, 'Tlb.Buildr', parent.log) || this;
+    function ToolbarConfigFinderAndInitializer(tlbManager) {
+        var _this = _super.call(this, 'Tlb.Buildr', tlbManager.log) || this;
+        _this.tlbManager = tlbManager;
+        return _this;
     }
     /**
      * Generate toolbars inside a MODULE tag (usually a div with class sc-edit-context)
@@ -6458,7 +6486,7 @@ var ToolbarConfigFinderAndInitializer = /** @class */ (function (_super) {
         // Do not process tag if a toolbar has already been attached
         if (tag.data(__WEBPACK_IMPORTED_MODULE_0__constants__["toolbar"].attrToMarkInitalized))
             return;
-        var config = __WEBPACK_IMPORTED_MODULE_7__toolbar_init_config__["ToolbarInitConfig"].loadFromTag(node);
+        var config = __WEBPACK_IMPORTED_MODULE_6__toolbar_init_config__["ToolbarInitConfig"].loadFromTag(node);
         if (config != null) { // is null if load failed
             // catch errors, as this is very common - make sure the others are still rendered
             try {
@@ -6476,15 +6504,16 @@ var ToolbarConfigFinderAndInitializer = /** @class */ (function (_super) {
      */
     ToolbarConfigFinderAndInitializer.prototype.convertConfigToToolbars = function (tag, config) {
         var context = __WEBPACK_IMPORTED_MODULE_1__context_bundles_context_bundle_button__["ContextBundleButton"].findContext(tag);
-        context.toolbar = new __WEBPACK_IMPORTED_MODULE_4__config_loaders__["ToolbarConfigLoader"](this.log).expandToolbarConfig(context, config.toolbar, config.settings);
+        context.toolbar = this.tlbManager.loadConfig(context, config); // new ToolbarConfigLoader(this.log)
+        // .expandToolbarConfig(context, config.toolbar, config.settings);
         // V2 where the full toolbar is included in one setting
         if (tag.attr(__WEBPACK_IMPORTED_MODULE_0__constants__["toolbar"].attr.full)) {
-            tag.data(__WEBPACK_IMPORTED_MODULE_0__constants__["toolbar"].attrToMarkInitalized, new __WEBPACK_IMPORTED_MODULE_6__tag_toolbars_tag_toolbar__["TagToolbar"](tag, context));
+            tag.data(__WEBPACK_IMPORTED_MODULE_0__constants__["toolbar"].attrToMarkInitalized, new __WEBPACK_IMPORTED_MODULE_5__tag_toolbars_tag_toolbar__["TagToolbar"](tag, context));
             addHoverAttributeToTag(tag);
             return;
         }
         // default case, tag is the old <ul> tag, so find the sc-element parent before replacing
-        var toolbar = new __WEBPACK_IMPORTED_MODULE_5__render_toolbar_renderer__["ToolbarRenderer"](context).render();
+        var toolbar = new __WEBPACK_IMPORTED_MODULE_4__render_toolbar_renderer__["ToolbarRenderer"](context).render();
         var scElementParent = tag.closest(__WEBPACK_IMPORTED_MODULE_0__constants__["toolbar"].selectors.ofOldHover);
         tag.replaceWith(toolbar);
         if (scElementParent.length > 0)
@@ -6650,7 +6679,7 @@ var ButtonGroupConfigLoader = /** @class */ (function (_super) {
      * so if groups were just strings like "edit,new" or compact buttons, they will be expanded afterwards
      * @param fullToolbar
      */
-    ButtonGroupConfigLoader.prototype.expandButtonGroups = function (fullToolbar, parentLog) {
+    ButtonGroupConfigLoader.prototype.expandButtonGroups = function (fullToolbar) {
         var wrapLog = this.log.call('expandButtonGroups'); // new Log('Tlb.ExpGrp', parentLog, 'start');
         // by now we should have a structure, let's check/fix the buttons
         wrapLog.add("will expand groups - found " + fullToolbar.groups.length + " items");
@@ -6707,6 +6736,7 @@ var ButtonGroupConfigLoader = /** @class */ (function (_super) {
     ButtonGroupConfigLoader.prototype.expandButtonList = function (root, settings) {
         var _this = this;
         var wrapLog = this.log.call('expandButtonList'); // new Log('Tlb.ExpBts', this.log, 'start');
+        wrapLog.add('initial', root);
         var buttonsWip = root.buttons;
         var newButtons = [];
         // convert compact buttons (with multi-verb action objects) into own button-objects
@@ -6716,10 +6746,13 @@ var ButtonGroupConfigLoader = /** @class */ (function (_super) {
             for (var b = 0; b < buttonsWip.length; b++) {
                 var btn = buttonsWip[b];
                 var actionNames = btn.action;
+                wrapLog.add("will process actions: '" + actionNames + "' for ", btn);
                 if (typeof actionNames === 'string' && actionNames.indexOf(',') > -1) {
+                    wrapLog.add("actionNames has mult values: '" + actionNames + "'");
                     this.expandButtonAndAddToList(newButtons, btn, actionNames);
                 }
                 else {
+                    wrapLog.add('actionNames has 1 value', btn);
                     newButtons.push(btn);
                 }
             }
@@ -6732,7 +6765,7 @@ var ButtonGroupConfigLoader = /** @class */ (function (_super) {
             wrapLog.add('no special case detected, will use the buttons-object as is');
             newButtons = buttonsWip;
         }
-        wrapLog.add("after check, found " + newButtons.length + " buttons");
+        wrapLog.add("after check, found " + newButtons.length + " buttons", newButtons);
         // optionally add a more-button in each group
         this.addMoreButton(settings, newButtons);
         var result = newButtons.map(function (x) { return _this.toolbar.button.normalize(x); }); // ensure the internal def is also an array now
@@ -6743,7 +6776,7 @@ var ButtonGroupConfigLoader = /** @class */ (function (_super) {
         var actions = names.split(',');
         for (var a = 0; a < actions.length; a++)
             list.push(__assign(__assign({}, btn), this.toolbar.button.getFromName(actions[a])));
-        wrapLog.return(null);
+        wrapLog.return(list);
     };
     /** Add the "more" button at the end or beginning */
     ButtonGroupConfigLoader.prototype.addMoreButton = function (settings, list) {
@@ -6762,7 +6795,7 @@ var ButtonGroupConfigLoader = /** @class */ (function (_super) {
         }
         else
             this.log.add('will not add more "..." button');
-        wrapLog.return(null);
+        wrapLog.return(list);
     };
     return ButtonGroupConfigLoader;
 }(__WEBPACK_IMPORTED_MODULE_2__logging__["HasLog"]));
@@ -6817,26 +6850,32 @@ var __assign = (this && this.__assign) || function () {
 
 
 
-var debugRawEnabled = true;
-var liveDumpThis = true;
+// Enable when debugging toolbar creation - will dump all logs to the console
+var liveDumpThis = false;
 var ToolbarConfigLoader = /** @class */ (function (_super) {
     __extends(ToolbarConfigLoader, _super);
-    function ToolbarConfigLoader(parentLog) {
-        var _this = _super.call(this, 'Tlb.TlbCnf', parentLog) || this;
-        if (liveDumpThis)
-            _this.log.liveDump = true;
-        _this.groups = new __WEBPACK_IMPORTED_MODULE_0____["ButtonGroupConfigLoader"](_this);
-        _this.button = new __WEBPACK_IMPORTED_MODULE_5__button_config_loader__["ButtonConfigLoader"](_this);
-        _this.command = new __WEBPACK_IMPORTED_MODULE_0____["CommandConfigLoader"](_this);
-        return _this;
+    /** Special constructor that can only be called from the ToolbarManager */
+    function ToolbarConfigLoader(owner) {
+        return _super.call(this, 'Tlb.TlbCnf', owner.log) || this;
     }
-    /** Debug-dump an object - for development */
-    ToolbarConfigLoader.prototype.dump = function (location, raw) {
-        if (debugRawEnabled)
-            console.log('Dump ' + location, raw);
+    ToolbarConfigLoader.prototype.setLoggingAndCreateHelpers = function (toolbarData) {
+        // note: could be true, false or 'live'
+        var debugLog = toolbarData.debug;
+        if (debugLog === undefined && Array.isArray(toolbarData) && toolbarData.length)
+            debugLog = toolbarData[0].debug;
+        if (liveDumpThis || debugLog) {
+            this.log.keepData = true;
+            if (liveDumpThis || debugLog.toString() === 'live')
+                this.log.liveDump = true;
+            this.log.add("found debug=" + debugLog + ", will enable intense logging");
+        }
+        this.groups = new __WEBPACK_IMPORTED_MODULE_0____["ButtonGroupConfigLoader"](this);
+        this.button = new __WEBPACK_IMPORTED_MODULE_5__button_config_loader__["ButtonConfigLoader"](this);
+        this.command = new __WEBPACK_IMPORTED_MODULE_0____["CommandConfigLoader"](this);
     };
-    ToolbarConfigLoader.prototype.expandToolbarConfig = function (context, toolbarData, toolbarSettings) {
-        var wrapLog = this.log.call('expandToolbarConfig', '', 'expand start'); // new Log('Tlb.ExpTop', this.log, 'expand start');
+    ToolbarConfigLoader.prototype.load = function (context, toolbarData, toolbarSettings) {
+        var wrapLog = this.log.call('expandToolbarConfig', '', 'expand start');
+        this.setLoggingAndCreateHelpers(toolbarData);
         // if null/undefined, use empty object
         toolbarData = toolbarData || {};
         // Default to empty toolbar settings if we don't have a toolbar or settings
@@ -6851,7 +6890,6 @@ var ToolbarConfigLoader = /** @class */ (function (_super) {
         // whatever we had, if more settings were provided, override with these...
         // #CodeChange#2020-03-22#InstanceConfig - believe this is completely unused; remove in June
         var config = this.buildFullDefinition(context, toolbarData, /* instanceConfig, */ toolbarSettings);
-        this.dump('expandToolbarConfig', config);
         return wrapLog.return(config, 'expand done');
     };
     /**
@@ -6859,8 +6897,8 @@ var ToolbarConfigLoader = /** @class */ (function (_super) {
      * Otherwise load the button list from the template
      */
     ToolbarConfigLoader.prototype.getTemplateIfNoButtonsSpecified = function (raw) {
-        var wrapLog = this.log.call('getTemplateIfNoButtonsSpecified'); // new Log('Tlb.GetTpl', wrapLog);
-        this.dump('getTemplateIfNoButtonsSpecified', raw);
+        var wrapLog = this.log.call('getTemplateIfNoButtonsSpecified');
+        wrapLog.add('before', raw);
         var modifiers = this.extractModifiers(raw);
         if (__WEBPACK_IMPORTED_MODULE_0____["InPageCommandJson"].hasActions(raw) || __WEBPACK_IMPORTED_MODULE_3__templates__["ToolbarTemplate"].is(raw)
             || __WEBPACK_IMPORTED_MODULE_3__templates__["ToolbarTemplateButtonGroup"].is(raw) || Array.isArray(raw))
@@ -6869,7 +6907,6 @@ var ToolbarConfigLoader = /** @class */ (function (_super) {
         var template = __WEBPACK_IMPORTED_MODULE_3__templates__["ToolbarTemplateManager"].Instance(this.log).copy(__WEBPACK_IMPORTED_MODULE_4__templates_template_default__["ToolbarTemplateDefault"].name);
         template.params = (raw && Array.isArray(raw) && raw[0]) || raw; // attach parameters
         template.settings._btnModifiers = modifiers;
-        this.dump('getTemplateIfNoButtonsSpecified', template);
         return wrapLog.return(template, 'use template');
     };
     /**
@@ -6905,19 +6942,14 @@ var ToolbarConfigLoader = /** @class */ (function (_super) {
     // #CodeChange#2020-03-22#InstanceConfig - believe this is completely unused; remove in June
     // instanceConfig: InstanceConfig,
     toolbarSettings) {
-        var wrapLog = this.log.call('buildFullDefinition'); // new Log('Tlb.BldFul', this.log, 'start');
+        var wrapLog = this.log.call('buildFullDefinition');
         var configWip = this.ensureDefinitionTree(unstructuredConfig, toolbarSettings); // as unknown as Toolbar;
-        this.dump('buildFullDefinition', configWip);
         // ToDo: don't use console.log in production
         if (__WEBPACK_IMPORTED_MODULE_3__templates__["ToolbarTemplate"].is(unstructuredConfig) && unstructuredConfig.debug)
             console.log('toolbar: detailed debug on; start build full Def');
-        var tlbConfig = this.groups.expandButtonGroups(configWip, this.log);
-        this.dump('buildFullDefinition', tlbConfig);
+        var tlbConfig = this.groups.expandButtonGroups(configWip);
         // #CodeChange#2020-03-22#InstanceConfig - believe this is completely unused; remove in June
         this.button.removeDisableButtons(toolbarContext, tlbConfig /*, instanceConfig */);
-        this.dump('buildFullDefinition', tlbConfig);
-        if (configWip.debug)
-            console.log('after remove: ', configWip);
         return wrapLog.return(tlbConfig);
     };
     //#region build initial toolbar object
@@ -6933,13 +6965,12 @@ var ToolbarConfigLoader = /** @class */ (function (_super) {
      * @param toolbarSettings
      */
     ToolbarConfigLoader.prototype.ensureDefinitionTree = function (unstructuredConfig, toolbarSettings) {
-        var wrapLog = this.log.call('ensureDefinitionTree'); // new Log('Tlb.DefTre', this.log, 'start');
+        var wrapLog = this.log.call('ensureDefinitionTree');
         // original is null/undefined, just return empty set
         if (!unstructuredConfig)
             throw ("preparing toolbar, with nothing to work on: " + unstructuredConfig);
         var newToolbar = new __WEBPACK_IMPORTED_MODULE_2__config__["Toolbar"]();
         newToolbar.groups = this.findGroups(unstructuredConfig);
-        this.dump('ensureDefinitionTree', newToolbar);
         // ensure that if it's just actions or buttons, they are then processed as arrays with 1 entry
         // if (!Array.isArray(unstructuredConfig) && (unstructuredConfig.action || unstructuredConfig.buttons)) {
         //     log.add('found no array, but detected action/buttons properties, will wrap config into array');
@@ -6970,8 +7001,8 @@ var ToolbarConfigLoader = /** @class */ (function (_super) {
         return wrapLog.return(newToolbar);
     };
     ToolbarConfigLoader.prototype.findGroups = function (unstructuredConfig) {
+        var wrapLog = this.log.call('findGroups');
         var arrBtnsOrGroups;
-        var wrapLog = this.log.call('findGroups'); // new Log('Tlb.GrpArr', this.log, 'start');
         // ensure that the groups are all correct
         if (Array.isArray(unstructuredConfig)) {
             wrapLog.add('Case 1: is array, use that');
@@ -6986,8 +7017,8 @@ var ToolbarConfigLoader = /** @class */ (function (_super) {
                 wrapLog.add('Case 2b: not array, no action, will return it or blank');
                 // we either have groups already, or we'll return blank
                 return (__WEBPACK_IMPORTED_MODULE_3__templates__["ToolbarTemplate"].is(unstructuredConfig))
-                    ? unstructuredConfig.groups
-                    : [];
+                    ? wrapLog.return(unstructuredConfig.groups, 'found groups')
+                    : wrapLog.return([], 'no groups = []');
             }
         }
         // ensure that arrays of actions or buttons are re-mapped to the right structure node
@@ -7596,7 +7627,7 @@ var LogUtils = /** @class */ (function () {
         //  console.log(log.dump());
         //}
         if (jsLogUrlParam) {
-            console.log(log.dump());
+            log.dump();
         }
     };
     return LogUtils;
@@ -9583,16 +9614,18 @@ var LogCall = /** @class */ (function () {
         if (message)
             this.add(message);
     }
-    LogCall.prototype.add = function (message) {
-        this.log.add(message);
+    LogCall.prototype.add = function (message, data) {
+        this.log.add(message, data);
     };
     LogCall.prototype.return = function (result, message) {
         message = message || 'ok';
         this.initialEntry.result = message;
         this.log._callDepthRemove(this.name);
+        // if we're in keep-data / debug mode, keep that
+        this.initialEntry.data = result;
         // if we're in live-dump mode, then the entry was already dumped, show again
         if (this.log.liveDump || this.log._parentHasLiveDump)
-            this.add(this.name + ' = ' + message);
+            this.add(this.name + ' = ' + message, result);
         return result;
     };
     return LogCall;

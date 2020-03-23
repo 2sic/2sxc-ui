@@ -22,8 +22,8 @@ export class ToolbarConfigFinderAndInitializer extends HasLog {
      * Special constructor which only allows this builder to be instatiated from the TagManager
      * This is to simplify program control flow
      */
-    constructor(parent: typeof ToolbarManager) {
-        super('Tlb.Buildr', parent.log);
+    constructor(private tlbManager: typeof ToolbarManager) {
+        super('Tlb.Buildr', tlbManager.log);
     }
 
     /**
@@ -118,7 +118,8 @@ export class ToolbarConfigFinderAndInitializer extends HasLog {
      */
     private convertConfigToToolbars(tag: JQuery, config: ToolbarInitConfig): void {
         const context = ContextBundleButton.findContext(tag);
-        context.toolbar = new ToolbarConfigLoader(this.log).expandToolbarConfig(context, config.toolbar, config.settings);
+        context.toolbar = this.tlbManager.loadConfig(context, config); // new ToolbarConfigLoader(this.log)
+            // .expandToolbarConfig(context, config.toolbar, config.settings);
 
         // V2 where the full toolbar is included in one setting
         if (tag.attr(Constants.toolbar.attr.full)) {

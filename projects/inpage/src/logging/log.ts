@@ -29,6 +29,8 @@ export class Log {
     /* if we should live-dump, can be selectively activated */
     liveDump: boolean = liveDump;
     _parentHasLiveDump: boolean = false;
+    keepData: boolean = false;
+    _parentHasKeepData: boolean = false;
 
     /**
      * Full identifier of this log-object, with full hierarchy
@@ -62,8 +64,8 @@ export class Log {
     linkLog = (parent: Log): void => {
         this.parent = parent || this.parent; // if new parent isn't defined, don't replace
         if (this.parent) {
-            if (this.parent.liveDump || this.parent._parentHasLiveDump)
-                this._parentHasLiveDump = this.parent.liveDump || this.parent._parentHasLiveDump;
+            this._parentHasLiveDump = this.parent.liveDump || this.parent._parentHasLiveDump;
+            this._parentHasKeepData = this.parent.keepData || this.parent._parentHasKeepData;
         }
     }
 
@@ -78,27 +80,15 @@ export class Log {
      * but use it very rarely, because there is certainly a performance implication!
      * log.add(`description ${() => parameter}`);
      */
-    add(message: (() => string) | string): string {
-        // const messageText = this._prepareMessage(message);
-        // if (message instanceof Function) {
-        //     try {
-        //         messageText = ((message as () => string)());
-        //         message = null; // maybe it is unnecessary, but added to be safe as possible that arrow function parameter will be garbage collected
-        //     } catch (e) {
-        //         messageText = 'undefined';
-        //     }
-        // } else {
-        //     messageText = message.toString();
-        // }
-        // const entry = new Entry(this, messageText);
-        const entry = this._prepareEntry(message);
+    add(message: (() => string) | string, data?: unknown): string {
+        const entry = this._prepareEntry(message, data);
         this._addEntry(entry);
         return entry.message;
     }
 
-    _prepareEntry(message: (() => string) | string): Entry {
+    _prepareEntry(message: (() => string) | string, data?: unknown): Entry {
         const msg = this._prepareMessage(message);
-        const entry = new Entry(this, msg, this.depth);
+        const entry = new Entry(this, msg, this.depth, data);
         return entry;
     }
 
@@ -126,7 +116,9 @@ export class Log {
     _callDepthRemove(name: string): void {
         this.depth--;
         const last = this.callDepths.pop();
-        if (last !== name) console.warn(`log: call depth reduced by '${name}' but last was '${last}'`);
+        if (last !== name) {
+            console.warn(`log: call depth reduced by '${name}' but last was '${last}'`);
+        }
     }
 
     /**
@@ -135,19 +127,18 @@ export class Log {
      * @param start
      * @param end
      */
-    dump(separator = ' - ', start = '', end = '', one: Entry = null ): string {
-        let lg = start;
-
-        const dumpOne = (e: Entry) => {
-            const result = (e.result) ? ' =' + e.result : '';
-            lg += e.source() + separator + '..'.repeat(e.depth) + e.message + result + '\n';
-        };
-
-        if (one) dumpOne(one);
-        else this.entries.forEach(dumpOne);
-        lg += end;
-        return lg;
+    dump(one: Entry = null, separator = ' - '): void {
+        if (one) this.dumpOne(one, separator);
+        else this.entries.forEach((e) => this.dumpOne(e, separator));
     }
+
+    private dumpOne(e: Entry, separator = ' - '): void {
+        const result = (e.result) ? ' =' + e.result : '';
+        const line = e.source() + separator + '..'.repeat(e.depth) + e.message + result;
+        if (e.data) console.log(line, e.data);
+        else console.log(line);
+    }
+
 
     /**
      * add an entry-object to this logger
@@ -155,7 +146,7 @@ export class Log {
      * @param entry
      */
     _addEntry(entry: Entry): void {
-        if (this.liveDump) console.log(this.dump(undefined, undefined, undefined, entry));
+        if (this.liveDump) this.dump(entry);
         this.entries.push(entry);
         if (this.parent) this.parent._addEntry(entry);
     }
@@ -168,8 +159,8 @@ export class Log {
         const chars = '0123456789abcdefghiklmnopqrstuvwxyz';
         let randomstring = '';
         for (let i = 0; i < stringLength; i++) {
-        const rnum = Math.floor(Math.random() * chars.length);
-        randomstring += chars.substring(rnum, rnum + 1);
+            const rnum = Math.floor(Math.random() * chars.length);
+            randomstring += chars.substring(rnum, rnum + 1);
         }
         return randomstring;
     }

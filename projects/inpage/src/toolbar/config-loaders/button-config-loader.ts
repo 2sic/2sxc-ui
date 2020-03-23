@@ -1,13 +1,12 @@
 ﻿import { InPageCommandJson, ToolbarWip } from '.';
 import { InPageButtonJson } from '.';
 import { ToolbarConfigLoader } from '.';
+import { CmdMore } from '../../commands/command/more';
 import { Commands } from '../../commands/commands';
 import { ContextBundleButton } from '../../context/bundles';
-import { HasLog } from '../../logging';
-import { Log } from '../../logging';
+import { HasLog, Log } from '../../logging';
 import { DictionaryValue, TypeTbD, TypeUnsafe, TypeWeDontCare } from '../../plumbing';
 import { Button, ButtonCommand, ButtonGroup, Toolbar } from '../config';
-import { CmdMore } from '../../commands/command/more';
 
 /**
  * This is a system to build button configurations
@@ -70,6 +69,7 @@ export class ButtonConfigLoader extends HasLog {
      */
     normalize(original: InPageButtonJson | InPageCommandJson | string): InPageButtonJson {
         const wrapLog = this.log.call('normalize'); // new Log('Tlb.ExpBtn', this.log, 'start');
+        wrapLog.add('initial', original);
 
         // prevent multiple inits
         const asBtnConfig = original as InPageButtonJson;
@@ -80,19 +80,13 @@ export class ButtonConfigLoader extends HasLog {
         // use the deep version with command.action, because of more clean-up later on
         if (typeof original === 'string')
             return wrapLog.return(this.getFromName(original), 'found name, use that');
-        // {
-        //     log.add(`name "${original}" found, will re-map to .command.action`);
-        //     return {
-        //         command: { action: original.trim() },
-        //         _expanded: true,
-        //     };
-        // }
 
         // if it's a command w/action, wrap into command + trim
-        if (InPageCommandJson.hasActions(asBtnConfig)) {
-            wrapLog.add('action found, will move down to .command');
+        if (InPageCommandJson.hasActions(original)) {
+            wrapLog.add('action found, will move down to .command', original);
+            if (original.action) original.action = original.action.trim();
             return wrapLog.return({
-                command: { action: (original as InPageCommandJson).action.trim() },
+                command: original,
                 _expanded: true,
             }, 'had actions, convert to commands');
         }

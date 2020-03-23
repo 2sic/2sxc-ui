@@ -17,7 +17,7 @@ export class LogUtils {
     //  console.log(log.dump());
     //}
     if (jsLogUrlParam) {
-      console.log(log.dump());
+      log.dump();
     }
   }
 }

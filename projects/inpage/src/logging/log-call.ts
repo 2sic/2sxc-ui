@@ -11,16 +11,19 @@ export class LogCall {
     }
 
 
-    add(message: string) {
-        this.log.add(message);
+    add(message: string, data?: unknown) {
+        this.log.add(message, data);
     }
 
     return<T>(result: T, message?: string) {
         message = message || 'ok';
         this.initialEntry.result = message;
         this.log._callDepthRemove(this.name);
+        // if we're in keep-data / debug mode, keep that
+        this.initialEntry.data = result;
         // if we're in live-dump mode, then the entry was already dumped, show again
-        if (this.log.liveDump || this.log._parentHasLiveDump) this.add(this.name + ' = ' + message);
+        if (this.log.liveDump || this.log._parentHasLiveDump)
+            this.add(this.name + ' = ' + message, result);
         return result;
     }
 }

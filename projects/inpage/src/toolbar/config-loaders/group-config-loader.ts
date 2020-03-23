@@ -20,7 +20,7 @@ export class ButtonGroupConfigLoader extends HasLog {
      * so if groups were just strings like "edit,new" or compact buttons, they will be expanded afterwards
      * @param fullToolbar
      */
-    expandButtonGroups(fullToolbar: ToolbarWip, parentLog: Log): Toolbar {
+    expandButtonGroups(fullToolbar: ToolbarWip): Toolbar {
         const wrapLog = this.log.call('expandButtonGroups'); // new Log('Tlb.ExpGrp', parentLog, 'start');
 
         // by now we should have a structure, let's check/fix the buttons
@@ -89,7 +89,7 @@ export class ButtonGroupConfigLoader extends HasLog {
      */
     private expandButtonList(root: ButtonGroupWip, settings: ToolbarSettings): InPageButtonJson[] {
         const wrapLog = this.log.call('expandButtonList'); // new Log('Tlb.ExpBts', this.log, 'start');
-
+        wrapLog.add('initial', root);
         const buttonsWip = root.buttons;
 
         let newButtons: InPageButtonJson[] = [];
@@ -101,9 +101,12 @@ export class ButtonGroupConfigLoader extends HasLog {
             for (let b = 0; b < buttonsWip.length; b++) {
                 const btn = buttonsWip[b] as InPageButtonJson;
                 const actionNames = (btn as InPageCommandJson).action;
+                wrapLog.add(`will process actions: '${actionNames}' for `, btn);
                 if (typeof actionNames === 'string' && actionNames.indexOf(',') > -1) {
+                    wrapLog.add(`actionNames has mult values: '${actionNames}'`);
                     this.expandButtonAndAddToList(newButtons, btn, actionNames);
                 } else {
+                    wrapLog.add('actionNames has 1 value', btn);
                     newButtons.push(btn);
                 }
             }
@@ -114,7 +117,7 @@ export class ButtonGroupConfigLoader extends HasLog {
             wrapLog.add('no special case detected, will use the buttons-object as is');
             newButtons = buttonsWip;
         }
-        wrapLog.add(`after check, found ${newButtons.length} buttons`);
+        wrapLog.add(`after check, found ${newButtons.length} buttons`, newButtons);
 
         // optionally add a more-button in each group
         this.addMoreButton(settings, newButtons);
@@ -129,7 +132,7 @@ export class ButtonGroupConfigLoader extends HasLog {
         const actions = names.split(',');
         for (let a = 0; a < actions.length; a++)
             list.push({...btn, ...this.toolbar.button.getFromName(actions[a])} as InPageButtonJson);
-        wrapLog.return(null);
+        wrapLog.return(list);
     }
 
     /** Add the "more" button at the end or beginning */
@@ -146,7 +149,7 @@ export class ButtonGroupConfigLoader extends HasLog {
                 list.unshift(moreButton);
             }
         } else this.log.add('will not add more "..." button');
-        wrapLog.return(null);
+        wrapLog.return(list);
     }
 
 

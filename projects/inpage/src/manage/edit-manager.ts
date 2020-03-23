@@ -9,6 +9,7 @@ import { ButtonConfigLoader, InPageButtonJson, ToolbarConfigLoader } from '../to
 import { ToolbarSettings } from '../toolbar/config/toolbar-settings';
 import { ToolbarRenderer } from '../toolbar/render/toolbar-renderer';
 import { UserOfEditContext } from './user-of-edit-context';
+import { ToolbarManager } from '../toolbar/toolbar-manager';
 
 /**
  * Instance specific edit manager
@@ -52,9 +53,11 @@ export class EditManager implements SxcInstanceManage {
    * it is publicly used in Razor scripts of inpage, so take a care to preserve function signature
    */
   getToolbar(tbConfig: TypeUnsafe, moreSettings: ToolbarSettings): string {
-    const toolbarConfig = new ToolbarConfigLoader(null).expandToolbarConfig(this.context, tbConfig, moreSettings);
+    tbConfig = {settings: {...tbConfig.settings, ...moreSettings}, ...tbConfig};
+    const toolbarConfig = ToolbarManager.loadConfig(this.context, tbConfig);
+    // const toolbarConfig = new ToolbarConfigLoader(null).expandToolbarConfig(this.context, tbConfig, moreSettings);
     this.context.toolbar = toolbarConfig;
-    return new ToolbarRenderer(this.context).render(); // renderToolbar(this.context);
+    return new ToolbarRenderer(this.context).render();
   }
 
   //#endregion official, public properties - everything below this can change
@@ -88,18 +91,14 @@ export class EditManager implements SxcInstanceManage {
   _updateContentGroupGuid(context: ContextBundleButton, newGuid: string) {
     context.contentBlock.contentGroupId = newGuid;
     this.editContext.ContentGroup.Guid = newGuid;
-    // 2dm disabled, doesn't seem used -
-    // todo q2stv - question, pls confirm
-    // this._instanceConfig = InstanceConfig.fromContext(context);// 2dm simplified buildInstanceConfig(context);
   }
 
-  _getCbManipulator = () => new DnnModuleEditor(this.sxc); // manipulator(this.sxc);
-  // ReSharper restore InconsistentNaming
+  _getCbManipulator = () => new DnnModuleEditor(this.sxc);
 
   /**
    * init this object
    */
-  init = (): void => {
+  init(): void {
     const tag = SxcEdit.getTag(this.sxc);
     // enhance UI in case there are known errors / issues
     const isErrorState = this.editContext && this.editContext.error && this.editContext.error.type;
