@@ -1,15 +1,15 @@
-﻿import { Attributes } from '../constants';
+﻿import { CmdLayout } from '../commands/command/layout';
+import { Attributes } from '../constants';
 import { DebugConfig } from '../DebugConfig';
 import { SxcEdit } from '../interfaces/sxc-instance-editable';
 import { windowInPage as window } from '../interfaces/window-in-page';
 import { Log } from '../logging/log';
 import { LogUtils } from '../logging/log-utils';
-import { TypeUnsafe } from '../plumbing/TypeTbD';
+import { TypeUnsafe } from '../plumbing';
 import { quickDialog } from '../quick-dialog/quick-dialog';
 import * as QuickEditState from '../quick-dialog/state';
 import { TagToolbarManager } from '../toolbar/tag-toolbars/tag-toolbar-manager';
 import { ToolbarManager } from '../toolbar/toolbar-manager';
-import { CmdLayout } from '../commands/command/layout';
 
 /**
  * module & toolbar bootstrapping (initialize all toolbars after loading page)

@@ -9,6 +9,7 @@ import { SystemUpgrader } from '../system/2sxc.system';
 import { ToolbarManager } from '../toolbar/toolbar-manager';
 import { SxcEdit } from './sxc-instance-editable';
 import { windowInPage as window } from './window-in-page';
+import { BootstrapInPage } from '../bootstrap/bootstrap';
 
 
 /**
@@ -32,6 +33,9 @@ export interface SxcControllerInPage extends SxcRootWithInternals {
   translate(key: string): string;
   context: typeof ContextBundleButton.findContext;
   cms: Cms;
+
+  /** experimental */
+  _bootstrapper: BootstrapInPage;
 }
 // ReSharper restore InconsistentNaming
 

@@ -1,4 +1,4 @@
-﻿import { ToolbarTemplate } from './toolbar-template-toolbar';
+﻿import { ToolbarTemplate } from '.';
 
 // the default / initial buttons in a standard toolbar
 // ToDo: refactor to avoid side-effects

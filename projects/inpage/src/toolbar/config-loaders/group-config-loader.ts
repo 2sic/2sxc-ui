@@ -21,10 +21,10 @@ export class ButtonGroupConfigLoader extends HasLog {
      * @param fullToolbar
      */
     expandButtonGroups(fullToolbar: ToolbarWip, parentLog: Log): Toolbar {
-        const log = new Log('Tlb.ExpGrp', parentLog, 'start');
+        const wrapLog = this.log.call('expandButtonGroups'); // new Log('Tlb.ExpGrp', parentLog, 'start');
 
         // by now we should have a structure, let's check/fix the buttons
-        log.add(`will expand groups - found ${fullToolbar.groups.length} items`);
+        wrapLog.add(`will expand groups - found ${fullToolbar.groups.length} items`);
         for (let g = 0; g < fullToolbar.groups.length; g++) {
             // expand a verb-list like "edit,new" into objects like [{ action: "edit" }, {action: "new"}]
             const group = fullToolbar.groups[g];
@@ -32,16 +32,16 @@ export class ButtonGroupConfigLoader extends HasLog {
             const buttonConfigs: Button[] = [];
 
             if (Array.isArray(btns)) {
-                log.add(`will process ${btns.length} buttons`);
+                wrapLog.add(`will process ${btns.length} buttons`);
                 for (let b = 0; b < btns.length; b++)
                     buttonConfigs.push(this.convertToButton(btns[b], fullToolbar, group));
             } else
-                log.add("no button array found, won't do a.nything");
+                wrapLog.add("no button array found, won't do a.nything");
 
             // Toolbar API v2 overwrite V1
             group.buttons = buttonConfigs;
         }
-        return fullToolbar as Toolbar;
+        return wrapLog.return(fullToolbar as Toolbar);
     }
 
 
@@ -52,7 +52,7 @@ export class ButtonGroupConfigLoader extends HasLog {
      *          I'm not sure why though.
      */
     private convertToButton(btn: InPageButtonJson, fullToolbar: ToolbarWip, group: ButtonGroupWip): Button {
-        const btnCommand = (btn as unknown as { command: CommandParams; }).command;
+        let btnCommand = (btn as unknown as { command: CommandParams; }).command;
 
         if (!(Commands.get(btnCommand.action))) {
             this.log.add(`couldn't find action ${btnCommand.action} - show warning`);
@@ -63,7 +63,7 @@ export class ButtonGroupConfigLoader extends HasLog {
         const contentType = btnCommand.contentType;
 
         // if the button belongs to a content-item, move the specs up to the item into the settings-object
-        this.toolbar.command.normalizeCommandJson(btnCommand);
+        btnCommand = this.toolbar.command.normalizeCommandJson(btnCommand);
 
         // parameters adapter from v1 to v2
         const params = { ...this.toolbar.command.removeActionProperty(btnCommand), ...fullToolbar.params };
@@ -88,7 +88,7 @@ export class ButtonGroupConfigLoader extends HasLog {
      * - an array of such strings incl. optional complex objects which are
      */
     private expandButtonList(root: ButtonGroupWip, settings: ToolbarSettings): InPageButtonJson[] {
-        const log = new Log('Tlb.ExpBts', this.log, 'start');
+        const wrapLog = this.log.call('expandButtonList'); // new Log('Tlb.ExpBts', this.log, 'start');
 
         const buttonsWip = root.buttons;
 
@@ -97,7 +97,7 @@ export class ButtonGroupConfigLoader extends HasLog {
         // convert compact buttons (with multi-verb action objects) into own button-objects
         // important because an older syntax allowed {action: "new,edit", entityId: 17}
         if (Array.isArray(buttonsWip)) {
-            log.add(`detected array of btns (${buttonsWip.length}), will ensure it's an object`);
+            wrapLog.add(`detected array of btns (${buttonsWip.length}), will ensure it's an object`);
             for (let b = 0; b < buttonsWip.length; b++) {
                 const btn = buttonsWip[b] as InPageButtonJson;
                 const actionNames = (btn as InPageCommandJson).action;
@@ -108,32 +108,33 @@ export class ButtonGroupConfigLoader extends HasLog {
                 }
             }
         } else if (typeof buttonsWip === 'string') {
-            log.add(`detected that it is a string "${buttonsWip}", will split by "," and ...`);
+            wrapLog.add(`detected that it is a string "${buttonsWip}", will split by "," and ...`);
             this.expandButtonAndAddToList(newButtons, {}, buttonsWip);
         } else {
-            log.add('no special case detected, will use the buttons-object as is');
+            wrapLog.add('no special case detected, will use the buttons-object as is');
             newButtons = buttonsWip;
         }
-        log.add(`after check, found ${newButtons.length} buttons`);
+        wrapLog.add(`after check, found ${newButtons.length} buttons`);
 
         // optionally add a more-button in each group
         this.addMoreButton(settings, newButtons);
 
         const result = newButtons.map((x) => this.toolbar.button.normalize(x)); // ensure the internal def is also an array now
-        log.add('done');
-        return result;
+        return wrapLog.return(result, 'done');
     }
 
 
     private expandButtonAndAddToList(list: InPageButtonJson[], btn: InPageButtonJson, names: string): void {
-        this.log.add(`button def "${btn} is string of ma.ny names, will expand into array with action-properties"`);
+        const wrapLog = this.log.call('expandButtonAndAddToList', '', `button def "${btn} is string of ma.ny names, will expand into array with action-properties"`);
         const actions = names.split(',');
         for (let a = 0; a < actions.length; a++)
             list.push({...btn, ...this.toolbar.button.getFromName(actions[a])} as InPageButtonJson);
+        wrapLog.return(null);
     }
 
     /** Add the "more" button at the end or beginning */
     private addMoreButton(settings: ToolbarSettings, list: InPageButtonJson[]): void {
+        const wrapLog = this.log.call('addMoreButtons');
         const addMore = settings.autoAddMore;
         if (addMore) {
             const moreButton = this.toolbar.button.getFromName(CmdMore);
@@ -145,6 +146,7 @@ export class ButtonGroupConfigLoader extends HasLog {
                 list.unshift(moreButton);
             }
         } else this.log.add('will not add more "..." button');
+        wrapLog.return(null);
     }
 
 

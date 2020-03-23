@@ -2,18 +2,9 @@ import * as Constants from '../../constants';
 import { HtmlTools } from '../../html/dom-tools';
 import { IDs } from '../../settings/2sxc.consts';
 import { InPageButtonJson, InPageCommandJson, ToolbarWip } from '../config-loaders';
-import { Button } from '../config/button';
 import * as Toolbarsettings from '../config/toolbar-settings';
 import ToolbarSettings = Toolbarsettings.ToolbarSettings;
-import { ToolbarTemplate } from '../templates/toolbar-template-toolbar';
-
-// export type ToolbarVariationsBeforeInitializing = ToolbarVariationsForInitializing;
-
-// export interface ToolbarVariationsForInitializing extends ToolbarTemplateToolbar {
-//     action?: string;
-//     // groups?: ButtonGroup[];
-//     buttons: Button[];
-// }
+import { ToolbarTemplate } from '../templates';
 
 /**
  * take various common input format and convert it to a full toolbar-structure definition

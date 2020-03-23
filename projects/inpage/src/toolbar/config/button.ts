@@ -3,7 +3,7 @@ import { CommandCode } from '../../commands/command-code';
 import { CommandLinkGenerator } from '../../commands/command-link-generator';
 import { CommandParams } from '../../commands/command-params';
 import { ContextBundleButton } from '../../context/bundles/context-bundle-button';
-import { TypeSafeAssign, TypeTbD, TypeUnsafe } from '../../plumbing';
+import { Obj, TypeTbD, TypeUnsafe } from '../../plumbing';
 import { InPageButtonJson } from '../config-loaders/in-page-button';
 
 
@@ -22,7 +22,7 @@ export class Button {
         if (action && action.commandDefinition && action.commandDefinition.buttonConfig) {
             this.action = action;
             // get defaults from action commandDefinition
-            TypeSafeAssign(this, action.commandDefinition.buttonConfig);
+            Obj.TypeSafeAssign(this, action.commandDefinition.buttonConfig);
         }
 
         // if (partialConfig) TypeSafeAssign(this, partialConfig);

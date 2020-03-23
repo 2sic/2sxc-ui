@@ -1,7 +1,7 @@
 ﻿import { ButtonModifier } from '.';
-import { TypeSafeAssign } from '../../plumbing/type-safe-assign';
+import { Obj } from '../../plumbing';
 import { ToolbarInitConfig } from '../initialize/toolbar-init-config';
-import { ToolbarTemplate } from '../templates/toolbar-template-toolbar';
+import { ToolbarTemplate } from '../templates';
 
 /** contains toolbar behaviour settings like float, etc. */
 export class ToolbarSettings {
@@ -18,7 +18,7 @@ export class ToolbarSettings {
 
     constructor(toolbarSettings?: Partial<ToolbarSettings>) {
         if (toolbarSettings)
-            TypeSafeAssign(this, toolbarSettings);
+            Obj.TypeSafeAssign(this, toolbarSettings);
     }
 
     static evalModifier(name: string, settings: ToolbarSettings) {

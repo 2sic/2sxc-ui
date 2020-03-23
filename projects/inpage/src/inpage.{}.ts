@@ -7,7 +7,7 @@ import { Manage } from './manage/manage';
 import { QuickE } from './quick-edit/quick-e';
 import { _translateInit } from './translate/2sxc._translateInit';
 import { translate } from './translate/2sxc.translate';
-import './x-bootstrap/module-bootstrapper';
+import './x-bootstrap/x-bootstrap';
 
 
 $2sxc.context = ContextBundleButton.findContext; // primary API to get the context

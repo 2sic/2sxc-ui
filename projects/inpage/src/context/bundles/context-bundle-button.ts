@@ -1,5 +1,6 @@
 ﻿import { ContextOfApp, ContextOfContentBlock, ContextOfInstance, ContextOfItem, ContextOfPage, ContextOfSystem, ContextOfTenant, ContextOfUi, ContextOfUser } from '..';
 import { SxcEdit } from '../../interfaces/sxc-instance-editable';
+import { Obj } from '../../plumbing';
 import { IDs } from '../../settings/2sxc.consts';
 import { Button } from '../../toolbar/config/button';
 import { AttrJsonEditContext } from '../html-attribute';
@@ -44,7 +45,7 @@ export class ContextBundleButton extends ContextBundleToolbar {
         // set sxc to null because of cyclic reference, so we can serialize it
         contextOfButton.sxc = null;
         // make a copy
-        const copyOfContext = JSON.parse(JSON.stringify(contextOfButton));
+        const copyOfContext = Obj.DeepClone(contextOfButton); // JSON.parse(JSON.stringify(contextOfButton));
         // bring sxc back to context
         contextOfButton.sxc = SxcEdit.get(htmlElementOrId) as SxcEdit;
         return copyOfContext;

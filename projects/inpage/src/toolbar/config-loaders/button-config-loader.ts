@@ -69,18 +69,17 @@ export class ButtonConfigLoader extends HasLog {
      * and changes it to a { command: { action: "actionname" }, ... }
      */
     normalize(original: InPageButtonJson | InPageCommandJson | string): InPageButtonJson {
-        const log = new Log('Tlb.ExpBtn', this.log, 'start');
+        const wrapLog = this.log.call('normalize'); // new Log('Tlb.ExpBtn', this.log, 'start');
 
         // prevent multiple inits
         const asBtnConfig = original as InPageButtonJson;
-        if (asBtnConfig._expanded || asBtnConfig.command) {
-            log.add("already expanded, won't modify");
-            return asBtnConfig;
-        }
+        if (asBtnConfig._expanded || asBtnConfig.command)
+            return wrapLog.return(asBtnConfig, "already expanded, won't modify");
 
         // if just a name, turn into a command
         // use the deep version with command.action, because of more clean-up later on
-        if (typeof original === 'string') return this.getFromName(original);
+        if (typeof original === 'string')
+            return wrapLog.return(this.getFromName(original), 'found name, use that');
         // {
         //     log.add(`name "${original}" found, will re-map to .command.action`);
         //     return {
@@ -91,22 +90,22 @@ export class ButtonConfigLoader extends HasLog {
 
         // if it's a command w/action, wrap into command + trim
         if (InPageCommandJson.hasActions(asBtnConfig)) {
-            log.add('action found, will move down to .command');
-            return {
+            wrapLog.add('action found, will move down to .command');
+            return wrapLog.return({
                 command: { action: (original as InPageCommandJson).action.trim() },
                 _expanded: true,
-            };
+            }, 'had actions, convert to commands');
         }
 
         throw 'can\'t expand InPageButtonConfiguration - unexpected type signature encountered';
     }
 
     getFromName(name: string): InPageButtonJson {
-        this.log.add(`name "${name}" found, will re-map to .command.action`);
-        return {
+        const wrapLog = this.log.call('getFromName');
+        return wrapLog.return({
             command: { action: name.trim() },
             _expanded: true,
-        };
+        }, `name "${name}" found, will re-map to .command.action`);
     }
 
 
@@ -123,23 +122,24 @@ export class ButtonConfigLoader extends HasLog {
     // #CodeChange#2020-03-22#InstanceConfig - believe this is completely unused; remove in June
     // config: InstanceConfig
     ): void {
-    const log = new Log('Tlb.RmvDsb', this.log,  `start remove disabled buttons for ${full.groups.length} groups`);
+    const wrapLog = this.log.call('removeDisableButtons', `length of groups: ${full.groups.length}`); // new Log('Tlb.RmvDsb', this.log,  `start remove disabled buttons for ${full.groups.length} groups`);
     const btnGroups = full.groups;
     for (let g = 0; g < btnGroups.length; g++) {
       const btns = btnGroups[g].buttons;
       // #CodeChange#2020-03-22#InstanceConfig - believe this is completely unused; remove in June
-      removeUnfitButtons(context, btns, /* config, */ log);
+      removeUnfitButtons(context, btns, /* config, */ this.log);
 
-      log.add('will disable appropriate buttons');
+      wrapLog.add('will disable appropriate buttons');
       // #CodeChange#2020-03-22#InstanceConfig - believe this is completely unused; remove in June
       disableButtons(context, btns/*, config */);
 
       // remove the group, if no buttons left, or only "more"
       if (btns.length === 0 || (btns.length === 1 && btns[0].action.name === CmdMore)) {
-        log.add('found no more buttons except for the "more" - will remove that group');
+        wrapLog.add('found no more buttons except for the "more" - will remove that group');
         btnGroups.splice(g--, 1); // remove, and decrement counter
       }
     }
+    wrapLog.return(null);
   }
 
 
@@ -155,7 +155,7 @@ export class ButtonConfigLoader extends HasLog {
                           group: ButtonGroup,
                           fullToolbarConfig: ToolbarWip,
                           actions: typeof Commands) {
-        this.log.add(`adding default btn settings for ${() => btn.action.name}`);
+        const wrapLog = this.log.call('addDefaultBtnSettings', '', `adding default btn settings for ${() => btn.action.name}`);
         for (let d = 0; d < btnProperties.length; d++) {
             fallbackBtnSetting(btn, group, fullToolbarConfig, actions, btnProperties[d]);
         }
@@ -169,16 +169,18 @@ function removeUnfitButtons(context: ContextBundleButton, btns: Button[],
     // #CodeChange#2020-03-22#InstanceConfig - believe this is completely unused; remove in June
     // config: InstanceConfig,
                             log: Log): void {
-  let removals = '';
-  for (let i = 0; i < btns.length; i++) {
-    context.button = btns[i];
-    if (btns[i].action && !evalPropOrFunction(btns[i].showCondition, context, /* config, */ true)) {
-      removals += `#${i} "${btns[i].action.name}"; `;
-      btns.splice(i--, 1);
+    const wrapLog = log.call('removeUnfitButtons');
+    let removals = '';
+    for (let i = 0; i < btns.length; i++) {
+        context.button = btns[i];
+        if (btns[i].action && !evalPropOrFunction(btns[i].showCondition, context, /* config, */ true)) {
+            removals += `#${i} "${btns[i].action.name}"; `;
+            btns.splice(i--, 1);
+        }
     }
-  }
-  if (removals)
-    log.add(`removed buttons: ${removals}`);
+    if (removals)
+        wrapLog.add(`removed buttons: ${removals}`);
+    wrapLog.return(null);
 }
 
 // #CodeChange#2020-03-22#InstanceConfig - believe this is completely unused
@@ -186,16 +188,14 @@ function disableButtons(context: ContextBundleButton, btns: Button[],
     // #CodeChange#2020-03-22#InstanceConfig - believe this is completely unused
     // config: InstanceConfig
     ): void {
-  for (let i = 0; i < btns.length; i++) {
-    // btns[i].disabled = evalPropOrFunction(btns[i].disabled, btns[i].command, config, false);
-    context.button = btns[i];
-    if (btns[i].action) {
-      btns[i].disabled = evalPropOrFunction(btns[i].disabled, context, /* config, */ () => false);
-    } else {
-      btns[i].disabled = (() => false);
+    for (let i = 0; i < btns.length; i++) {
+        // btns[i].disabled = evalPropOrFunction(btns[i].disabled, btns[i].command, config, false);
+        context.button = btns[i];
+        if (btns[i].action)
+            btns[i].disabled = evalPropOrFunction(btns[i].disabled, context, /* config, */ () => false);
+        else
+            btns[i].disabled = (() => false);
     }
-
-  }
 }
 
 function evalPropOrFunction<T>(
@@ -204,14 +204,14 @@ function evalPropOrFunction<T>(
     // #CodeChange#2020-03-22#InstanceConfig - believe this is completely unused; remove in June
     // config: InstanceConfig,
     fallback: T): T {
-  if (propOrFunction === undefined || propOrFunction === null) {
-    return fallback;
-  }
-  if (typeof (propOrFunction) === 'function') {
-    return propOrFunction(context/*, config */);
-  } else {
-    return propOrFunction;
-  }
+    if (propOrFunction === undefined || propOrFunction === null) {
+        return fallback;
+    }
+    if (typeof (propOrFunction) === 'function') {
+        return propOrFunction(context/*, config */);
+    } else {
+        return propOrFunction;
+    }
 }
 
 const btnProperties = [

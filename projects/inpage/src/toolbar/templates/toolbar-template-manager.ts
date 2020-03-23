@@ -1,6 +1,6 @@
 ﻿import { ToolbarTemplate, ToolbarTemplateDefault, ToolbarTemplateInListRight } from '.';
-import { HasLog } from '../../logging/has-log';
-import { Log } from '../../logging/log';
+import { HasLog, Log } from '../../logging';
+import { Obj } from '../../plumbing';
 
 /**
  * The template manager provides toolbar templates to the entire system.
@@ -36,7 +36,7 @@ export class ToolbarTemplateManager extends HasLog {
    * Deep copy toolbar template, so it can be modified without changing the next use
    */
   copy(name: string): ToolbarTemplate {
-      return JSON.parse(JSON.stringify(this.list[name]));
+      return Obj.DeepClone(this.list[name]); // JSON.parse(JSON.stringify(this.list[name]));
   }
 
   /**

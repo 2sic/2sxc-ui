@@ -7,12 +7,14 @@ import { InPageToolbarConfigVariations } from '../initialize/toolbar-init-config
 import { ToolbarTemplateManager } from '../templates';
 import { ToolbarTemplate } from '../templates';
 import { ToolbarTemplateButtonGroup } from '../templates';
+import { ToolbarTemplateDefault } from '../templates/template-default';
 import { ButtonConfigLoader } from './button-config-loader';
 import { InPageButtonJson } from './in-page-button';
 import { InPageButtonGroupJson } from './in-page-button-group';
 import { ButtonGroupsWip } from './toolbar-wip';
 
 const debugRawEnabled = true;
+const liveDumpThis = true;
 
 export class ToolbarConfigLoader extends HasLog {
 
@@ -22,6 +24,7 @@ export class ToolbarConfigLoader extends HasLog {
 
     constructor(parentLog: Log) {
         super('Tlb.TlbCnf', parentLog);
+        if (liveDumpThis) this.log.liveDump = true;
         this.groups = new ButtonGroupConfigLoader(this);
         this.button = new ButtonConfigLoader(this);
         this.command = new CommandConfigLoader(this);
@@ -33,19 +36,19 @@ export class ToolbarConfigLoader extends HasLog {
     }
 
     expandToolbarConfig(context: ContextBundleButton, toolbarData: InPageToolbarConfigVariations, toolbarSettings: ToolbarSettings): Toolbar {
-        const log = new Log('Tlb.ExpTop', this.log, 'expand start');
+        const wrapLog = this.log.call('expandToolbarConfig', '', 'expand start'); // new Log('Tlb.ExpTop', this.log, 'expand start');
 
         // if null/undefined, use empty object
         toolbarData = toolbarData || {};
 
         // Default to empty toolbar settings if we don't have a toolbar or settings
         if (Object.keys(toolbarData).length + Object.keys(toolbarSettings || {}).length === 0) {
-            log.add('no data or settings, will use default settings for empty');
+            wrapLog.add('no data or settings, will use default settings for empty');
             toolbarSettings = ToolbarSettingsForEmpty;
         }
 
         // if it has an action or is an array, keep that. Otherwise get standard buttons
-        toolbarData = this.getTemplateIfNoButtonsSpecified(toolbarData, log);
+        toolbarData = this.getTemplateIfNoButtonsSpecified(toolbarData);
 
         // #CodeChange#2020-03-22#InstanceConfig - believe this is completely unused; remove in June
         // const instanceConfig = InstanceConfig.fromContext(context);
@@ -54,48 +57,48 @@ export class ToolbarConfigLoader extends HasLog {
         // #CodeChange#2020-03-22#InstanceConfig - believe this is completely unused; remove in June
         const config = this.buildFullDefinition(context, toolbarData, /* instanceConfig, */ toolbarSettings);
         this.dump('expandToolbarConfig', config);
-        log.add('expand done');
-        return config;
+        return wrapLog.return(config, 'expand done');
     }
 
     /**
      * If the raw data has specs for what buttons, use that
      * Otherwise load the button list from the template
      */
-    private getTemplateIfNoButtonsSpecified(raw: InPageToolbarConfigVariations, log: Log) {
-        log = new Log('Tlb.GetTpl', log);
+    private getTemplateIfNoButtonsSpecified(raw: InPageToolbarConfigVariations) {
+        const wrapLog = this.log.call('getTemplateIfNoButtonsSpecified'); // new Log('Tlb.GetTpl', wrapLog);
         this.dump('getTemplateIfNoButtonsSpecified', raw);
-        const modifiers: ButtonModifier[] = this.extractModifiers(raw, log);
+        const modifiers: ButtonModifier[] = this.extractModifiers(raw);
 
         if (InPageCommandJson.hasActions(raw) || ToolbarTemplate.is(raw)
             || ToolbarTemplateButtonGroup.is(raw) || Array.isArray(raw))
-                return raw;
+                return wrapLog.return(raw, 'keep raw');
 
-        log.add('no toolbar structure specified, will use standard toolbar template');
-        const template = ToolbarTemplateManager.Instance(log).copy('default');
+        wrapLog.add('no toolbar structure specified, will use standard toolbar template');
+        const template = ToolbarTemplateManager.Instance(this.log).copy(ToolbarTemplateDefault.name);
         template.params = (raw && Array.isArray(raw) && raw[0]) || raw; // attach parameters
         template.settings._btnModifiers = modifiers;
         this.dump('getTemplateIfNoButtonsSpecified', template);
-        return template;
+        return wrapLog.return(template, 'use template');
     }
 
     /**
      * Extract action params with +edit or -delete
      */
-    private extractModifiers(raw: InPageToolbarConfigVariations, log: Log): ButtonModifier[] {
+    private extractModifiers(raw: InPageToolbarConfigVariations): ButtonModifier[] {
+        const wrapLog = this.log.call('extractModifiers');
         let buttonModifiers: ButtonModifier[] = null;
         // if we have an actions node,
         // check if it's just a modifier (with +/-) or a standalone list
-        if (!InPageCommandJson.hasActions(raw)) return [];
-        log.add(`found actions: ${raw.action}`);
+        if (!InPageCommandJson.hasActions(raw)) return wrapLog.return([], 'no actions/modifiers');
+        wrapLog.add(`found actions: ${raw.action}`);
 
         const firstChar = (raw.action.length) ? raw.action[0] : ' ';
-        if (!(firstChar === '+' || firstChar === '-')) return [];
+        if (!(firstChar === '+' || firstChar === '-')) return wrapLog.return([], 'actions but not modifiers');
 
-        log.add('actions have +/-, assume they are only modifiers - extract and reset');
+        wrapLog.add('actions have +/-, assume they are only modifiers - extract and reset');
         buttonModifiers = raw.action.split(',').map((btnMod) => new ButtonModifier(btnMod));
         delete raw.action; // clean up to prevent side-effects
-        return buttonModifiers;
+        return wrapLog.return(buttonModifiers, 'had modifiers');
     }
 
 
@@ -116,7 +119,7 @@ export class ToolbarConfigLoader extends HasLog {
         // instanceConfig: InstanceConfig,
         toolbarSettings: ToolbarSettings,
         ): Toolbar {
-        const log = new Log('Tlb.BldFul', this.log, 'start');
+        const wrapLog = this.log.call('buildFullDefinition'); // new Log('Tlb.BldFul', this.log, 'start');
 
         const configWip = this.ensureDefinitionTree(unstructuredConfig, toolbarSettings); // as unknown as Toolbar;
         this.dump('buildFullDefinition', configWip);
@@ -125,7 +128,7 @@ export class ToolbarConfigLoader extends HasLog {
         if (ToolbarTemplate.is(unstructuredConfig) && unstructuredConfig.debug)
             console.log('toolbar: detailed debug on; start build full Def');
 
-        const tlbConfig = this.groups.expandButtonGroups(configWip, log);
+        const tlbConfig = this.groups.expandButtonGroups(configWip, this.log);
         this.dump('buildFullDefinition', tlbConfig);
 
         // #CodeChange#2020-03-22#InstanceConfig - believe this is completely unused; remove in June
@@ -133,7 +136,7 @@ export class ToolbarConfigLoader extends HasLog {
         this.dump('buildFullDefinition', tlbConfig);
         if (configWip.debug) console.log('after remove: ', configWip);
 
-        return tlbConfig;
+        return wrapLog.return(tlbConfig);
     }
 
 
@@ -150,12 +153,13 @@ export class ToolbarConfigLoader extends HasLog {
      * @param toolbarSettings
      */
     private ensureDefinitionTree(unstructuredConfig: InPageToolbarConfigVariations, toolbarSettings: ToolbarSettings): ToolbarWip {
-        const log = new Log('Tlb.DefTre', this.log, 'start');
+        const wrapLog = this.log.call('ensureDefinitionTree'); // new Log('Tlb.DefTre', this.log, 'start');
         // original is null/undefined, just return empty set
         if (!unstructuredConfig) throw (`preparing toolbar, with nothing to work on: ${unstructuredConfig}`);
 
         const newToolbar: ToolbarWip = new Toolbar();
         newToolbar.groups = this.findGroups(unstructuredConfig);
+        this.dump('ensureDefinitionTree', newToolbar);
 
         // ensure that if it's just actions or buttons, they are then processed as arrays with 1 entry
         // if (!Array.isArray(unstructuredConfig) && (unstructuredConfig.action || unstructuredConfig.buttons)) {
@@ -187,47 +191,49 @@ export class ToolbarConfigLoader extends HasLog {
         newToolbar.debug = probablyTemplate.debug || false; // show more debug info
         newToolbar.defaults = probablyTemplate.defaults || {}; // the button defaults like icon, etc.
 
-        log.add('done');
-        return newToolbar;
+        return wrapLog.return(newToolbar);
     }
 
     private findGroups(unstructuredConfig: InPageToolbarConfigVariations): ButtonGroupsWip {
 
         let arrBtnsOrGroups: Array<InPageButtonJson | ButtonGroup>;
 
-        const log = new Log('Tlb.GrpArr', this.log, 'start');
+        const wrapLog = this.log.call('findGroups'); // new Log('Tlb.GrpArr', this.log, 'start');
 
         // ensure that the groups are all correct
-        if (Array.isArray(unstructuredConfig))
+        if (Array.isArray(unstructuredConfig)) {
+            wrapLog.add('Case 1: is array, use that');
             arrBtnsOrGroups = unstructuredConfig as Array<InPageButtonJson | ButtonGroup>;
-        else if (!Array.isArray(unstructuredConfig) && InPageButtonJson.is(unstructuredConfig)) {
-            log.add('found no array, but detected action/buttons properties, will wrap config into array');
-            arrBtnsOrGroups = [unstructuredConfig];
-        } else
-            // we either have groups already, or we'll return blank
-            return (ToolbarTemplate.is(unstructuredConfig))
-                ? unstructuredConfig.groups
-                : [];
+        } else {
+            if (InPageButtonJson.is(unstructuredConfig)) {
+                wrapLog.add('Case 2a: not array, but has action/buttons properties, will wrap config into array');
+                arrBtnsOrGroups = [unstructuredConfig];
+            } else {
+                wrapLog.add('Case 2b: not array, no action, will return it or blank');
+                // we either have groups already, or we'll return blank
+                return (ToolbarTemplate.is(unstructuredConfig))
+                    ? unstructuredConfig.groups
+                    : [];
+            }
+        }
 
         // ensure that arrays of actions or buttons are re-mapped to the right structure node
         if (!arrBtnsOrGroups || !arrBtnsOrGroups.length) {
-            log.add('not array or has no items');
-            return [];
-        }
+            return wrapLog.return([], 'not array or has no items, return empty array');
+        } else
+            wrapLog.add('its an object or array, use that');
 
-        log.add('detected array with length');
         if (ButtonGroup.isArray(arrBtnsOrGroups)) { // unstructuredConfig[0].buttons) {
-            log.add('detected buttons on first item, assume button-group, moving into .groups');
-            return arrBtnsOrGroups;
+            return wrapLog.return(arrBtnsOrGroups, 'detected buttons on first item, assume button-group, moving into .groups');
         } else if (InPageButtonJson.isArray(arrBtnsOrGroups)) { // unstructuredConfig[0].action) {
-            log.add('detected command or action on first item, assume buttons, move into .groups[buttons] ');
-            return [{ buttons:  arrBtnsOrGroups } as InPageButtonGroupJson];
+            return wrapLog.return([{ buttons:  arrBtnsOrGroups } as InPageButtonGroupJson],
+                'detected command or action on first item, assume buttons, move into .groups[buttons] ');
             // unstructuredConfig = { groups: [{ buttons: unstructuredConfig }] };
         }
 
-        log.add('can\'t detect what this is - show warning');
+        wrapLog.add('can\'t detect what this is - show warning');
         console.warn("toolbar tried to build toolbar but couldn't detect type of this:", arrBtnsOrGroups);
-        return [];
+        return wrapLog.return([], 'warning');
     }
 
   //#endregion initial toolbar object
