@@ -42,10 +42,6 @@ class ToolbarManagerGlobal extends HasLog {
         Insights.add('toolbars', JSON.stringify(config.toolbar || ''), loader.log);
         return loader.load(context, config.toolbar, config.settings);
     }
-
 }
 
 export const ToolbarManager = new ToolbarManagerGlobal();
-
-// attach to global object, so we can check the logs if we need them
-$2sxcInPage._toolbarManager = ToolbarManager;

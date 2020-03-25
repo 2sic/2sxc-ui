@@ -24,16 +24,11 @@ export interface SxcRoot extends SxcRootWithInternals {
    */
   (id: number | HTMLElement | JQuery, cbid?: number): SxcEdit;
   insights: typeof Insights;
-  _quickDialog: typeof QuickDialog;
-  _toolbarManager: typeof ToolbarManager;
   _manage: Manage;
   system: SystemUpgrader;
   translate(key: string): string;
   context: typeof ContextComplete.findContext;
   cms: Cms;
-
-  /** experimental */
-  _bootstrapper: BootstrapInPage;
 }
 // ReSharper restore InconsistentNaming
 

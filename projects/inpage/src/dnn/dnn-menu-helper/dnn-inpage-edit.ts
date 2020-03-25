@@ -9,31 +9,29 @@ import { HasLog, Insights } from '../../logging';
  * Maps actions of the module menu to JS actions - needed because onclick event can't be set (actually, a bug in DNN)
  */
 export class DnnActionMenu extends HasLog {
-  private run: typeof SxcInstanceEngine.prototype.run;
-  private tag: HTMLElement;
-  private sxc: SxcEdit;
+    private run: typeof SxcInstanceEngine.prototype.run;
+    private sxc: SxcEdit;
 
-  constructor(moduleId: number) {
-    super('Dnn.Menu', null, `modId: ${moduleId}`);
-    Insights.add('dnn-menu', `mod: ${moduleId}`, this.log);
-    this.sxc = SxcEdit.get(moduleId);
-    this.tag = SxcEdit.getTag(this.sxc);
-    this.run = this.sxc.manage.run;
-  }
+    constructor(moduleId: number) {
+        super('Dnn.Menu', null, `modId: ${moduleId}`);
+        Insights.add('dnn-menu', `mod: ${moduleId}`, this.log);
+        this.sxc = SxcEdit.get(moduleId);
+        this.run = this.sxc.manage.run;
+    }
 
-  changeLayoutOrContent = () => { this.run(CmdLayout); };
+    changeLayoutOrContent = () => { this.run(CmdLayout); };
 
-  addItem = () => { this.run('add', { useModuleList: true, sortOrder: 0 }); };
+    addItem = () => { this.run('add', { useModuleList: true, sortOrder: 0 }); };
 
-  edit = () => { this.run('edit', { useModuleList: true, sortOrder: 0 }); };
+    edit = () => { this.run('edit', { useModuleList: true, sortOrder: 0 }); };
 
-  adminApp = () => { this.run('app'); };
+    adminApp = () => { this.run('app'); };
 
-  adminZone = () => { this.run('zone'); };
+    adminZone = () => { this.run('zone'); };
 
-  develop = () => { this.run('template-develop'); };
+    develop = () => { this.run('template-develop'); };
 }
 
 window.$2sxcActionMenuMapper = (moduleId: number) => {
-  return new DnnActionMenu(moduleId);
+    return new DnnActionMenu(moduleId);
 };

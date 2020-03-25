@@ -3,7 +3,7 @@ import { CommandParams } from '../../commands/command-params';
 import { Commands } from '../../commands/commands';
 
 export class ButtonCommand {
-    readonly commandDefinition: Command; // reference to action to be run
+    readonly command: Command; // reference to action to be run
 
     customCode: string; // custom code if used
 
@@ -17,7 +17,7 @@ export class ButtonCommand {
         if (contentType) this.params.contentType = contentType;
 
         // activate command for this
-        this.commandDefinition = Commands.get(name);
+        this.command = Commands.get(name);
     }
 
     static normalize(action: ButtonCommand): CommandParams {

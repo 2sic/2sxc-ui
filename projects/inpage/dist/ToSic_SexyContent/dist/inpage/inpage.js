@@ -1531,9 +1531,8 @@ function toggleParts() {
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ToolbarManager", function() { return ToolbarManager; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0____ = __webpack_require__(14);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__interfaces_sxc_controller_in_page__ = __webpack_require__(9);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__logging__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__config_loaders_toolbar_config_loader__ = __webpack_require__(55);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__logging__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__config_loaders_toolbar_config_loader__ = __webpack_require__(55);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -1548,7 +1547,6 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 // import { context } from '../context/context';
-
 
 
 
@@ -1578,15 +1576,13 @@ var ToolbarManagerGlobal = /** @class */ (function (_super) {
         return new __WEBPACK_IMPORTED_MODULE_0____["ToolbarRenderer"](context).render();
     };
     ToolbarManagerGlobal.prototype.loadConfig = function (context, config) {
-        var loader = new __WEBPACK_IMPORTED_MODULE_3__config_loaders_toolbar_config_loader__["ToolbarConfigLoader"](this);
-        __WEBPACK_IMPORTED_MODULE_2__logging__["Insights"].add('toolbars', JSON.stringify(config.toolbar || ''), loader.log);
+        var loader = new __WEBPACK_IMPORTED_MODULE_2__config_loaders_toolbar_config_loader__["ToolbarConfigLoader"](this);
+        __WEBPACK_IMPORTED_MODULE_1__logging__["Insights"].add('toolbars', JSON.stringify(config.toolbar || ''), loader.log);
         return loader.load(context, config.toolbar, config.settings);
     };
     return ToolbarManagerGlobal;
-}(__WEBPACK_IMPORTED_MODULE_2__logging__["HasLog"]));
+}(__WEBPACK_IMPORTED_MODULE_1__logging__["HasLog"]));
 var ToolbarManager = new ToolbarManagerGlobal();
-// attach to global object, so we can check the logs if we need them
-__WEBPACK_IMPORTED_MODULE_1__interfaces_sxc_controller_in_page__["$2sxcInPage"]._toolbarManager = ToolbarManager;
 
 
 /***/ }),
@@ -2633,7 +2629,7 @@ var ButtonCommand = /** @class */ (function () {
         if (contentType)
             this.params.contentType = contentType;
         // activate command for this
-        this.commandDefinition = __WEBPACK_IMPORTED_MODULE_0__commands_commands__["Commands"].get(name);
+        this.command = __WEBPACK_IMPORTED_MODULE_0__commands_commands__["Commands"].get(name);
     }
     ButtonCommand.normalize = function (action) {
         var params = {};
@@ -4253,7 +4249,7 @@ var CmsEngine = /** @class */ (function (_super) {
         var newButtonAction = new __WEBPACK_IMPORTED_MODULE_6__toolbar_config__["ButtonCommand"](name, contentType, cmdParams);
         var newButtonConfig = new __WEBPACK_IMPORTED_MODULE_6__toolbar_config__["Button"](newButtonAction, name);
         // merge conf & settings, but settings has higher priority
-        var button = (context.button = __assign(__assign(__assign({}, newButtonConfig), newButtonAction.commandDefinition.buttonConfig), __WEBPACK_IMPORTED_MODULE_6__toolbar_config__["Button"].normalize(cmdParams)));
+        var button = (context.button = __assign(__assign(__assign({}, newButtonConfig), newButtonAction.command.buttonConfig), __WEBPACK_IMPORTED_MODULE_6__toolbar_config__["Button"].normalize(cmdParams)));
         // todo: stv, fix this in case that is function
         if (!button.dialog) {
             this.log.add('button.dialog method missing, old implementation with action-name');
@@ -5767,10 +5763,10 @@ var Button = /** @class */ (function () {
         this.classes = '';
         this.show = null; // maybe
         this.dynamicDisabled = function () { return false; };
-        if (action && action.commandDefinition && action.commandDefinition.buttonConfig) {
+        if (action && action.command && action.command.buttonConfig) {
             this.action = action;
             // get defaults from action commandDefinition
-            __WEBPACK_IMPORTED_MODULE_0__plumbing__["Obj"].TypeSafeAssign(this, action.commandDefinition.buttonConfig);
+            __WEBPACK_IMPORTED_MODULE_0__plumbing__["Obj"].TypeSafeAssign(this, action.command.buttonConfig);
         }
         // if (partialConfig) TypeSafeAssign(this, partialConfig);
     }
@@ -7585,11 +7581,8 @@ void this.loadResources(t)):t()},t.prototype.dir=function(e){e||(e=this.language
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__bootstrap_bootstrap__ = __webpack_require__(124);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__interfaces_sxc_controller_in_page__ = __webpack_require__(9);
-
 
 var bootstrapper = new __WEBPACK_IMPORTED_MODULE_0__bootstrap_bootstrap__["BootstrapInPage"]();
-__WEBPACK_IMPORTED_MODULE_1__interfaces_sxc_controller_in_page__["$2sxcInPage"]._bootstrapper = bootstrapper;
 $(document).ready(function () {
     bootstrapper.initialize();
 });
@@ -9431,7 +9424,6 @@ var DnnActionMenu = /** @class */ (function (_super) {
         _this.develop = function () { _this.run('template-develop'); };
         __WEBPACK_IMPORTED_MODULE_3__logging__["Insights"].add('dnn-menu', "mod: " + moduleId, _this.log);
         _this.sxc = __WEBPACK_IMPORTED_MODULE_1__interfaces_sxc_instance_editable__["SxcEdit"].get(moduleId);
-        _this.tag = __WEBPACK_IMPORTED_MODULE_1__interfaces_sxc_instance_editable__["SxcEdit"].getTag(_this.sxc);
         _this.run = _this.sxc.manage.run;
         return _this;
     }

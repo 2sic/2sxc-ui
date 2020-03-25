@@ -19,10 +19,10 @@ export class Button {
     show: boolean = null; // maybe
 
     constructor(action: ButtonCommand, public name: string /*, partialConfig?: Partial<Button> */) {
-        if (action && action.commandDefinition && action.commandDefinition.buttonConfig) {
+        if (action && action.command && action.command.buttonConfig) {
             this.action = action;
             // get defaults from action commandDefinition
-            Obj.TypeSafeAssign(this, action.commandDefinition.buttonConfig);
+            Obj.TypeSafeAssign(this, action.command.buttonConfig);
         }
 
         // if (partialConfig) TypeSafeAssign(this, partialConfig);

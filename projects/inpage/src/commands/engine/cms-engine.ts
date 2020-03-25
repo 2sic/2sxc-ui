@@ -80,7 +80,7 @@ export class CmsEngine extends HasLog {
     // merge conf & settings, but settings has higher priority
     const button = (context.button = {
       ...newButtonConfig,
-      ...newButtonAction.commandDefinition.buttonConfig,
+      ...newButtonAction.command.buttonConfig,
       ...Button.normalize(cmdParams as unknown) });
 
     // todo: stv, fix this in case that is function
