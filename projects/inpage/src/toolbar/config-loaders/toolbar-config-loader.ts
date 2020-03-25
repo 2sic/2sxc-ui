@@ -1,6 +1,6 @@
 ﻿import { ButtonGroupConfigLoader, CommandConfigLoader, InPageCommandJson, ToolbarWip } from '.';
 import { ToolbarManager } from '..';
-import { ContextBundleButton } from '../../context/bundles/context-bundle-button';
+import { ContextComplete } from '../../context/bundles/context-bundle-button';
 import { Entry, HasLog, Log } from '../../logging';
 import { ButtonGroup, ButtonModifier, Toolbar } from '../config';
 import { ToolbarSettings, ToolbarSettingsDefaults, ToolbarSettingsForEmpty } from '../config';
@@ -47,7 +47,7 @@ export class ToolbarConfigLoader extends HasLog {
         this.command = new CommandConfigLoader(this);
     }
 
-    load(context: ContextBundleButton, toolbarData: InPageToolbarConfigVariations, toolbarSettings: ToolbarSettings): Toolbar {
+    load(context: ContextComplete, toolbarData: InPageToolbarConfigVariations, toolbarSettings: ToolbarSettings): Toolbar {
         const wrapLog = this.log.call('expandToolbarConfig', '', 'expand start');
         this.setLoggingAndCreateHelpers(toolbarData);
 
@@ -124,7 +124,7 @@ export class ToolbarConfigLoader extends HasLog {
      * array of commands: [{entityId: 17, action: "edit"}, {contentType: "blog", action: "new"}]
      */
     private buildFullDefinition(
-            toolbarContext: ContextBundleButton,
+            toolbarContext: ContextComplete,
             unstructuredConfig: InPageToolbarConfigVariations,
             // #CodeChange#2020-03-22#InstanceConfig - believe this is completely unused; remove in June
             // instanceConfig: InstanceConfig,

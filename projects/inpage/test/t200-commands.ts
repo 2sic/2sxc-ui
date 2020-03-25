@@ -2,7 +2,7 @@
 import { Command } from '../src/commands/command';
 import { Actions } from '../src/commands/command/content-list-actions';
 import { Commands as Commands } from '../src/commands/commands';
-import { ContextBundleButton } from '../src/context/bundles/context-bundle-button';
+import { ContextComplete } from '../src/context/bundles/context-bundle-button';
 import { AttrJsonEditContext } from '../src/context/html-attribute/edit-context-root';
 import { Button } from '../src/toolbar/config/button';
 
@@ -96,7 +96,7 @@ describe('Commands test suite', function() {
         }, error: { type: null },
       } as AttrJsonEditContext;
 
-      this.context = ContextBundleButton.createContextFromEditContext(this.editContext2);
+      this.context = new ContextComplete(this.editContext2);
 
       this.event = window.event;
 

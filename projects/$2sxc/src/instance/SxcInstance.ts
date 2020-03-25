@@ -39,7 +39,7 @@ export class SxcInstance extends HasLog implements Public.SxcInstance {
 
         // add manage property, but not within initializer, because inside the manage-initializer it may reference 2sxc again
         try { // sometimes the manage can't be built, like before installing
-        if (root._manage) root._manage.initInstance(this);
+            if (root._manage) root._manage.initInstance(this);
         } catch (e) {
             console.error('error in 2sxc - will only log but not throw', e);
         }

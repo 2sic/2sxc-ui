@@ -1,6 +1,6 @@
 ﻿import { ToolbarRenderer } from '..';
 import { TagToolbarManager } from '..';
-import { ContextBundleButton } from '../../context/bundles/context-bundle-button';
+import { ContextComplete } from '../../context/bundles/context-bundle-button';
 
 /**
  * This is the modern toolbar which is attached to a tag from whic it hovers.
@@ -12,7 +12,7 @@ export class TagToolbar {
     private toolbarElement = null as JQuery;
     private initialized = false;
 
-    constructor(private readonly hoverTag: JQuery, private readonly context: ContextBundleButton) {
+    constructor(private readonly hoverTag: JQuery, private readonly context: ContextComplete) {
         // Ensure toolbar gets visible when hovering
         this.addMouseEvents(hoverTag);
     }

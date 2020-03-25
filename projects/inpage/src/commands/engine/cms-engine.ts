@@ -1,7 +1,7 @@
 ﻿import { Commands } from '..';
 import { ContentBlockEditor } from '../../contentBlock/content-block-editor';
 import { renderer } from '../../contentBlock/render';
-import { ContextBundleButton } from '../../context/bundles/context-bundle-button';
+import { ContextComplete } from '../../context/bundles/context-bundle-button';
 import { ContextBundleInstance } from '../../context/bundles/context-bundle-instance';
 import { $2sxcInPage as $2sxc } from '../../interfaces/sxc-controller-in-page';
 import { HasLog, Log } from '../../logging';
@@ -49,7 +49,7 @@ export class CmsEngine extends HasLog {
     // ensure we have the right event despite browser differences
     event = event || (window.event as MouseEvent);
 
-    return this.run(context as ContextBundleButton, cmdParams, event);
+    return this.run(context as ContextComplete, cmdParams, event);
   }
 
   /**
@@ -60,7 +60,7 @@ export class CmsEngine extends HasLog {
    * @param event
    */
   run<T>(
-    context: ContextBundleButton,
+    context: ContextComplete,
     nameOrParams: string | CommandParams,
     event: MouseEvent,
   ): Promise<T | void> {
@@ -92,7 +92,7 @@ export class CmsEngine extends HasLog {
     // todo: stv, fix this in case that is function
     if (!button.code) {
       this.log.add('simple button without code - generating code to open standard dialog');
-      button.code = (contextParam: ContextBundleButton, evt: MouseEvent) => CmsEngine.openDialog(contextParam, evt);
+      button.code = (contextParam: ContextComplete, evt: MouseEvent) => CmsEngine.openDialog(contextParam, evt);
     }
 
     if (button.uiActionOnly(context)) {
@@ -144,7 +144,7 @@ export class CmsEngine extends HasLog {
   /**
    * open a new dialog of the angular-ui
    */
-  static openDialog<T>(context: ContextBundleButton, event: MouseEvent): Promise<T> {
+  static openDialog<T>(context: ContextComplete, event: MouseEvent): Promise<T> {
     // the link contains everything to open a full dialog (lots of params added)
     let link = new CommandLinkGenerator(context).getLink(); // commandLinkToNgDialog(context);
 

@@ -1,3 +1,3 @@
-import { ContextBundleButton } from '../context';
+import { ContextComplete } from '../context';
 
-export type CommandCode = <T>(context: ContextBundleButton, event: MouseEvent) => Promise<void | T>;
+export type CommandCode = <T>(context: ContextComplete, event: MouseEvent) => Promise<void | T>;

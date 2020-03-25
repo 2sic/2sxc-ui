@@ -1,4 +1,4 @@
-﻿import { ContextBundleButton } from '../context/bundles/context-bundle-button';
+﻿import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { Button } from '../toolbar/config/button';
 
 export class Command {
@@ -11,10 +11,10 @@ export class Command {
         //
         // stv: v1 code
         const partialButtonConfig: Partial<Button> = {
-            icon: (context: ContextBundleButton) => `icon-sxc-${icon}`,
-            title: (context: ContextBundleButton) => `Toolbar.${translateKey}`,
-            uiActionOnly: (context: ContextBundleButton) => uiOnly,
-            partOfPage: (context: ContextBundleButton) => partOfPage,
+            icon: (context: ContextComplete) => `icon-sxc-${icon}`,
+            title: (context: ContextComplete) => `Toolbar.${translateKey}`,
+            uiActionOnly: (context: ContextComplete) => uiOnly,
+            partOfPage: (context: ContextComplete) => partOfPage,
             ...more,
         };
 

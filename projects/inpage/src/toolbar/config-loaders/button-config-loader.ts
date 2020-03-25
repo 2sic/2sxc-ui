@@ -3,7 +3,7 @@ import { InPageButtonJson } from '.';
 import { ToolbarConfigLoader } from '.';
 import { CmdMore } from '../../commands/command/more';
 import { Commands } from '../../commands/commands';
-import { ContextBundleButton } from '../../context/bundles';
+import { ContextComplete } from '../../context/bundles';
 import { HasLog, Log } from '../../logging';
 import { DictionaryValue, TypeTbD, TypeUnsafe, TypeWeDontCare } from '../../plumbing';
 import { Button, ButtonCommand, ButtonGroup, Toolbar } from '../config';
@@ -26,12 +26,12 @@ export class ButtonConfigLoader extends HasLog {
     convertToButton(jsonBtn: InPageButtonJson): Button {
         const btn: Partial<Button> = {};
 
-        if (jsonBtn.code) btn.code = (c: ContextBundleButton) => jsonBtn.code(c.button.action.params);
+        if (jsonBtn.code) btn.code = (c: ContextComplete) => jsonBtn.code(c.button.action.params);
         if (jsonBtn.icon) btn.icon = () => `icon-sxc-${jsonBtn.icon}`;
         if (jsonBtn.classes) btn.classes = jsonBtn.classes;
         if (jsonBtn.dialog) btn.dialog = () => jsonBtn.dialog;
         if (jsonBtn.disabled) btn.disabled = () => jsonBtn.disabled;
-        if (jsonBtn.dynamicClasses) btn.dynamicClasses = (c: ContextBundleButton) => jsonBtn.dynamicClasses(c.button.action.params);
+        if (jsonBtn.dynamicClasses) btn.dynamicClasses = (c: ContextComplete) => jsonBtn.dynamicClasses(c.button.action.params);
         if (jsonBtn.fullScreen) btn.fullScreen = () => jsonBtn.fullScreen;
         if (jsonBtn.inlineWindow) btn.inlineWindow = () => jsonBtn.inlineWindow;
         if (jsonBtn.name) btn.name = jsonBtn.name;
@@ -41,7 +41,7 @@ export class ButtonConfigLoader extends HasLog {
         // we need parameter adapter to do this...
         if (jsonBtn.params) btn.params = () => jsonBtn.params;
         if (jsonBtn.partOfPage) btn.partOfPage = () => jsonBtn.partOfPage;
-        if (jsonBtn.showCondition) btn.showCondition = (c: ContextBundleButton) => jsonBtn.showCondition(c.button.action.params);
+        if (jsonBtn.showCondition) btn.showCondition = (c: ContextComplete) => jsonBtn.showCondition(c.button.action.params);
         if (jsonBtn.title) btn.title = () => `Toolbar.${jsonBtn.title}`;
         if (jsonBtn.uiActionOnly) btn.uiActionOnly = () => jsonBtn.uiActionOnly;
 
@@ -107,12 +107,12 @@ export class ButtonConfigLoader extends HasLog {
 
   /**
    * remove buttons which are not valid based on add condition
-   * @param {ContextBundleButton} context
+   * @param {ContextComplete} context
    * @param {Toolbar} full
    * @param {InstanceConfig} config
    * @memberof ButtonConfigurationBuilder
    */
-  removeDisableButtons(context: ContextBundleButton, full: Toolbar,
+  removeDisableButtons(context: ContextComplete, full: Toolbar,
     // #CodeChange#2020-03-22#InstanceConfig - believe this is completely unused; remove in June
     // config: InstanceConfig
     ): void {
@@ -160,7 +160,7 @@ export class ButtonConfigLoader extends HasLog {
 
 
 
-function removeUnfitButtons(context: ContextBundleButton, btns: Button[],
+function removeUnfitButtons(context: ContextComplete, btns: Button[],
     // #CodeChange#2020-03-22#InstanceConfig - believe this is completely unused; remove in June
     // config: InstanceConfig,
                             log: Log): void {
@@ -179,7 +179,7 @@ function removeUnfitButtons(context: ContextBundleButton, btns: Button[],
 }
 
 // #CodeChange#2020-03-22#InstanceConfig - believe this is completely unused
-function disableButtons(context: ContextBundleButton, btns: Button[],
+function disableButtons(context: ContextComplete, btns: Button[],
     // #CodeChange#2020-03-22#InstanceConfig - believe this is completely unused
     // config: InstanceConfig
     ): void {
@@ -195,7 +195,7 @@ function disableButtons(context: ContextBundleButton, btns: Button[],
 
 function evalPropOrFunction<T>(
     propOrFunction: TypeTbD,
-    context: ContextBundleButton,
+    context: ContextComplete,
     // #CodeChange#2020-03-22#InstanceConfig - believe this is completely unused; remove in June
     // config: InstanceConfig,
     fallback: T): T {

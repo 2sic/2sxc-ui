@@ -1,22 +1,24 @@
 ﻿import { ContextOfApp, ContextOfContentBlock, ContextOfInstance, ContextOfItem, ContextOfPage, ContextOfSystem, ContextOfTenant, ContextOfUi, ContextOfUser } from '..';
 import { SxcEdit } from '../../interfaces/sxc-instance-editable';
 import { Obj } from '../../plumbing';
-import { IDs } from '../../settings/2sxc.consts';
 import { Button } from '../../toolbar/config/button';
 import { AttrJsonEditContext } from '../html-attribute';
 import { ContextBundleToolbar } from './context-bundle-toolbar';
 
-export class ContextBundleButton extends ContextBundleToolbar {
+export class ContextComplete extends ContextBundleToolbar {
     button: Button;
 
-
+    constructor(editCtx: AttrJsonEditContext) {
+        super(editCtx);
+        // note that the button will not be filled here, as it will be filled somewhere else
+    }
 
     /**
      * Primary API to get the context (context is cached)
      * @param htmlElement or Id (moduleId)
      * @param cbid
      */
-    static findContext(tagOrSxc: SxcEdit | HTMLElement | JQuery| number, cbid?: number): ContextBundleButton {
+    static findContext(tagOrSxc: SxcEdit | HTMLElement | JQuery| number, cbid?: number): ContextComplete {
         let sxc: SxcEdit;
         let containerTag: HTMLElement = null;
 
@@ -25,12 +27,11 @@ export class ContextBundleButton extends ContextBundleToolbar {
         } else if (typeof tagOrSxc === 'number') { // it is number
             sxc = SxcEdit.get(tagOrSxc, cbid);
         } else  { // it is HTMLElement
-
             sxc = SxcEdit.get(tagOrSxc);
             containerTag = SxcEdit.getContainerTag(tagOrSxc as HTMLElement);
         }
 
-        const contextOfButton = ContextBundleButton.getContextInstance(sxc, containerTag);
+        const contextOfButton = ContextComplete.getContextInstance(sxc, containerTag);
         contextOfButton.sxc = sxc;
         return contextOfButton;
     }
@@ -40,8 +41,8 @@ export class ContextBundleButton extends ContextBundleToolbar {
      * @param htmlElement or Id (moduleId)
      * @param cbid
      */
-    static contextCopy(htmlElementOrId: HTMLElement | number, cbid?: number): ContextBundleButton {
-        const contextOfButton = ContextBundleButton.findContext(htmlElementOrId, cbid);
+    static contextCopy(htmlElementOrId: HTMLElement | number, cbid?: number): ContextComplete {
+        const contextOfButton = ContextComplete.findContext(htmlElementOrId, cbid);
         // set sxc to null because of cyclic reference, so we can serialize it
         contextOfButton.sxc = null;
         // make a copy
@@ -56,124 +57,9 @@ export class ContextBundleButton extends ContextBundleToolbar {
      * @param sxc
      * @param htmlElement
      */
-    static getContextInstance(sxc: SxcEdit, htmlElement?: HTMLElement): ContextBundleButton {
+    static getContextInstance(sxc: SxcEdit, htmlElement?: HTMLElement): ContextComplete {
         const editContext = SxcEdit.getEditContext(sxc, htmlElement);
-        return ContextBundleButton.createContextFromEditContext(editContext);
+        return new ContextComplete(editContext);
     }
-
-    /**
-     * create part of context object (it is not cached)
-     * @param editCtx
-     */
-    static createContextFromEditContext(editCtx: AttrJsonEditContext): ContextBundleButton {
-        const btnCtx = new ContextBundleButton();
-
-        // *** ContextOf ***
-        // this will be everything about the current system, like system / api -paths etc.
-        btnCtx.system = new ContextOfSystem();
-        if (editCtx.error) {
-            btnCtx.system.error = editCtx.error.type;
-        }
-        // empty
-
-        // this will be something about the current tenant(the dnn portal)
-        btnCtx.tenant = new ContextOfTenant();
-        if (editCtx.Environment) {
-            btnCtx.tenant.id = editCtx.Environment.WebsiteId; // InstanceConfig.portalId
-            btnCtx.tenant.url = editCtx.Environment.WebsiteUrl; // NgDialogParams.portalroot
-        }
-
-        // things about the user
-        btnCtx.user = new ContextOfUser();
-        if (editCtx.User) {
-            btnCtx.user.canDesign = editCtx.User.CanDesign;
-            btnCtx.user.canDevelop = editCtx.User.CanDevelop;
-        }
-
-        // *** ContextOfPage ***
-        // this will be information related to the current page
-        btnCtx.page = new ContextOfPage();
-        if (editCtx.Environment) {
-            btnCtx.page.id = editCtx.Environment.PageId; // InstanceConfig.tabId, NgDialogParams.tid
-            btnCtx.page.url = editCtx.Environment.PageUrl;
-        }
-
-        // *** ContextOfInstance ***
-        // information related to the current DNN module, incl.instanceId, etc.
-        btnCtx.instance = new ContextOfInstance();
-        if (editCtx.Environment) {
-            btnCtx.instance.id = editCtx.Environment.InstanceId; // InstanceConfig.moduleId, NgDialogParams.mid
-            btnCtx.instance.isEditable = editCtx.Environment.IsEditable;
-            // sxc
-            btnCtx.instance.sxcVersion = editCtx.Environment.SxcVersion;
-            btnCtx.instance.parameters = editCtx.Environment.parameters;
-            btnCtx.instance.sxcRootUrl = editCtx.Environment.SxcRootUrl; // NgDialogParams.websiteroot
-        }
-        if (editCtx.ContentBlock) {
-            btnCtx.instance.allowPublish = editCtx.ContentBlock.VersioningRequirements === IDs.publishAllowed; // NgDialogParams.publishing
-        }
-
-        // this will be about the current app, settings of the app, app - paths, etc.
-        btnCtx.app = new ContextOfApp();
-        if (editCtx.ContentGroup) {
-            btnCtx.app.id = editCtx.ContentGroup.AppId; // or NgDialogParams.appId
-            btnCtx.app.isContent = editCtx.ContentGroup.IsContent;
-            btnCtx.app.resourcesId = editCtx.ContentGroup.AppResourcesId;
-            btnCtx.app.settingsId = editCtx.ContentGroup.AppSettingsId;
-            btnCtx.app.appPath = editCtx.ContentGroup.AppUrl; // InstanceConfig.appPath, NgDialogParams.approot, this is the only value which doesn't have a slash by default. note that the app-root doesn't exist when opening "manage-app"
-            btnCtx.app.hasContent = editCtx.ContentGroup.HasContent;
-            btnCtx.app.supportsAjax = editCtx.ContentGroup.SupportsAjax;
-            btnCtx.app.zoneId = editCtx.ContentGroup.ZoneId; // or NgDialogParams.zoneId
-        }
-        if (editCtx.Language) {
-            // languages
-            btnCtx.app.currentLanguage = editCtx.Language.Current; // NgDialogParams.lang
-            btnCtx.app.primaryLanguage = editCtx.Language.Primary; // NgDialogParams.langpri
-            btnCtx.app.allLanguages = editCtx.Language.All; // or NgDialogParams.langs
-        }
-
-        // ensure that the UI will load the correct assets to enable editing
-        btnCtx.ui = new ContextOfUi();
-        if (editCtx.Ui) {
-            btnCtx.ui.autoToolbar = editCtx.Ui.AutoToolbar; // toolbar auto-show
-            if (editCtx.Ui.Form) btnCtx.ui.form = editCtx.Ui.Form; // decide which dialog opens, eg ng8
-        }
-
-        // *** ContextOfContentBlock ***
-        // information related to the current contentBlock
-        btnCtx.contentBlock = new ContextOfContentBlock();
-        if (editCtx.ContentBlock) {
-            btnCtx.contentBlock.id = editCtx.ContentBlock.Id; // or sxc.cbid or InstanceConfig.cbid
-            btnCtx.contentBlock.isEntity = editCtx.ContentBlock.IsEntity; // ex: InstanceConfig.cbIsEntity
-            btnCtx.contentBlock.showTemplatePicker = editCtx.ContentBlock.ShowTemplatePicker;
-            btnCtx.contentBlock.versioningRequirements = editCtx.ContentBlock.VersioningRequirements;
-            btnCtx.contentBlock.parentFieldName = editCtx.ContentBlock.ParentFieldName;
-            btnCtx.contentBlock.parentFieldSortOrder = editCtx.ContentBlock.ParentFieldSortOrder;
-            btnCtx.contentBlock.partOfPage = editCtx.ContentBlock.PartOfPage; // NgDialogParams.partOfPage
-        }
-        if (editCtx.ContentGroup) {
-            btnCtx.contentBlock.isCreated = editCtx.ContentGroup.IsCreated;
-            btnCtx.contentBlock.isList = editCtx.ContentGroup.IsList; // ex: InstanceConfig.isList
-            btnCtx.contentBlock.queryId = editCtx.ContentGroup.QueryId;
-            btnCtx.contentBlock.templateId = editCtx.ContentGroup.TemplateId;
-            btnCtx.contentBlock.contentTypeId = editCtx.ContentGroup.ContentTypeName;
-            btnCtx.contentBlock.contentGroupId = editCtx.ContentGroup.Guid; // ex: InstanceConfig.contentGroupId
-        }
-
-        // *** ContextOfItem ***
-        // information about the current item
-        btnCtx.item = new ContextOfItem();
-        // empty
-
-        // *** ContextOfToolbar ***
-        // fill externally
-
-        // *** ContextOfButton ***
-        // fill externally
-
-        return btnCtx;
-    }
-
-
 
 }

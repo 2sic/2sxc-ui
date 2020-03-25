@@ -1,4 +1,4 @@
-﻿import { ContextBundleButton } from '../context/bundles/context-bundle-button';
+﻿import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { HtmlTools } from '../html/dom-tools';
 import { renderer } from './render';
 
@@ -11,9 +11,9 @@ export class ContentBlockEditor {
 /**
  * prepare the instance so content can be added
  * this ensure the content-group has been created, which is required to add content
- * @param {ContextBundleButton} context
+ * @param {ContextComplete} context
  */
-function prepareToAddContent(context: ContextBundleButton, useModuleList: boolean): Promise<string | void> {
+function prepareToAddContent(context: ContextComplete, useModuleList: boolean): Promise<string | void> {
   const isCreated: boolean = context.contentBlock.isCreated;
   if (isCreated || !useModuleList) return Promise.resolve();
   // return persistTemplate(sxc, null);
@@ -33,11 +33,11 @@ function prepareToAddContent(context: ContextBundleButton, useModuleList: boolea
 
 /**
  * Update the template and adjust UI accordingly.
- * @param {ContextBundleButton} context
+ * @param {ContextComplete} context
  * @param {number} templateId
  * @param {boolean} forceCreate
  */
-function updateTemplateFromDia(context: ContextBundleButton, templateId: number): Promise<void> {
+function updateTemplateFromDia(context: ContextComplete, templateId: number): Promise<void> {
   const wasShowingPreview = HtmlTools.isDisabled(context.sxc);
 
   return updateTemplate(context, templateId, false)
@@ -52,7 +52,7 @@ function updateTemplateFromDia(context: ContextBundleButton, templateId: number)
 /**
  * Update the template.
  */
-function updateTemplate(context: ContextBundleButton, templateId: number, forceCreate: boolean): Promise<string | void> {
+function updateTemplate(context: ContextComplete, templateId: number, forceCreate: boolean): Promise<string | void> {
 
   return saveTemplate(context, templateId, forceCreate).then((data) => {
     if (!data) return null;
@@ -73,12 +73,12 @@ function updateTemplate(context: ContextBundleButton, templateId: number, forceC
 
 /**
  * Save the template configuration for this instance
- * @param {ContextBundleButton} context
+ * @param {ContextComplete} context
  * @param {number} templateId
  * @param {boolean} [forceCreateContentGroup]
  * @returns {promise}
  */
-function saveTemplate(context: ContextBundleButton, templateId: number, forceCreateContentGroup: boolean): Promise<string> {
+function saveTemplate(context: ContextComplete, templateId: number, forceCreateContentGroup: boolean): Promise<string> {
     const params: WebApiParams = {
       templateId: templateId,
       forceCreateContentGroup: forceCreateContentGroup,
@@ -105,11 +105,11 @@ function saveTemplate(context: ContextBundleButton, templateId: number, forceCre
 
 /**
  * Retrieve the preview from the web-api
- * @param {ContextBundleButton} context
+ * @param {ContextComplete} context
  * @param {number} templateId
  * @returns {promise} promise with the html in the result
  */
-function getPreviewWithTemplate(context: ContextBundleButton, templateId: number): Promise<string> {
+function getPreviewWithTemplate(context: ContextComplete, templateId: number): Promise<string> {
     templateId = templateId || -1; // fallback, meaning use saved ID
     const params: WebApiParams = {
       templateId: templateId,

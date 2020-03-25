@@ -1,5 +1,5 @@
-﻿import { ContextBundleButton } from '../context/bundles/context-bundle-button';
-import { UserOfEditContext } from './user-of-edit-context';
+﻿import { ContextComplete } from '../context/bundles/context-bundle-button';
+import { ContextOfUser } from '../context/parts/context-user';
 
 /**
  * This is for building/serializing the main url params when opening a dialog.
@@ -20,7 +20,7 @@ export class NgUrlValuesWithoutParams {
   readonly websiteroot: string;
   readonly partOfPage?: boolean;
   readonly publishing?: string;
-  readonly user: UserOfEditContext;
+  readonly user: ContextOfUser;
   readonly approot: string | null;
 
   /** new in 10.27 */
@@ -32,7 +32,7 @@ export class NgUrlValuesWithoutParams {
   /** request verification token for form */
   readonly rvt: string;
 
-  constructor(context: ContextBundleButton, partOfPage: boolean) {
+  constructor(context: ContextComplete, partOfPage: boolean) {
     this.zoneId = context.app.zoneId;
     this.appId = context.app.id;
     this.tid = context.page.id;
@@ -51,7 +51,7 @@ export class NgUrlValuesWithoutParams {
         this.publishing = context.contentBlock.versioningRequirements;
     }
     // todo= probably move the user into the dashboard info
-    this.user = UserOfEditContext.fromContext(context);
+    this.user = ContextOfUser.fromContext(context);
     this.approot = context.app.appPath || null; // this is the only value which doesn't have a slash by default. note that the app-root doesn't exist when opening "manage-app"
     if (context && context.button && context.button.action && context.button.action.params && context.button.action.params.apps)
         this.apps = context.button.action.params.apps;

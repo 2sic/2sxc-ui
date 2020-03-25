@@ -2,13 +2,13 @@
 import { CommandCode } from '../../commands/command-code';
 import { CommandLinkGenerator } from '../../commands/command-link-generator';
 import { CommandParams } from '../../commands/command-params';
-import { ContextBundleButton } from '../../context/bundles/context-bundle-button';
+import { ContextComplete } from '../../context/bundles/context-bundle-button';
 import { Obj, TypeTbD, TypeUnsafe } from '../../plumbing';
 import { InPageButtonJson } from '../config-loaders/in-page-button';
 
 
 /** This is the most common call signature on most ButtonConfig properties */
-export type ButtonPropertyGenerator<T> = (context: ContextBundleButton) => T;
+export type ButtonPropertyGenerator<T> = (context: ContextComplete) => T;
 
 /**
  * The real button configuration as it's used at runtime
@@ -29,7 +29,7 @@ export class Button {
     }
 
     code: CommandCode; // void;
-    configureCommand: (context: ContextBundleButton, linkGenerator: CommandLinkGenerator) => void;
+    configureCommand: (context: ContextComplete, linkGenerator: CommandLinkGenerator) => void;
     dialog: ButtonPropertyGenerator<string>;
     disabled: ButtonPropertyGenerator<boolean>;
     dynamicClasses: ButtonPropertyGenerator<string>;
@@ -79,7 +79,7 @@ function evalPropOrFun(propOrFunction: TypeTbD): TypeUnsafe {
     return () => propOrFunction;
 }
 
-type ButtonPropertyGeneratorOrValue<T> = (context: ContextBundleButton) => T | T;
+type ButtonPropertyGeneratorOrValue<T> = (context: ContextComplete) => T | T;
 
 /**
  * This is a kind of clone of the ButtonConfig,

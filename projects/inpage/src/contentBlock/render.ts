@@ -1,4 +1,4 @@
-﻿import { ContextBundleButton } from '../context/bundles/context-bundle-button';
+﻿import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { HtmlTools } from '../html/dom-tools';
 import { SxcEdit } from '../interfaces/sxc-instance-editable';
 import { windowInPage as window } from '../interfaces/window-in-page';
@@ -21,22 +21,22 @@ import { MainContentBlock } from './main-content-block';
 class Renderer {
   /**
    * Show a message where the content of a module should be - usually as placeholder till something else happens
-   * @param {ContextBundleButton} context
+   * @param {ContextComplete} context
    * @param {string} newContent
    * @returns {} nothing
    */
-  showMessage(context: ContextBundleButton, newContent: string): void {
+  showMessage(context: ContextComplete, newContent: string): void {
     $(SxcEdit.getTag(context.sxc)).html(newContent);
   }
 
 
   /**
    * this one assumes a replace / change has already happened, but now must be finalized...
-   * @param {ContextBundleButton} context
+   * @param {ContextComplete} context
    * @param {boolean} forceAjax
    * @param {boolean} preview
    */
-  reloadAndReInitialize(context: ContextBundleButton, forceAjax?: boolean, preview?: boolean): Promise<void> {
+  reloadAndReInitialize(context: ContextComplete, forceAjax?: boolean, preview?: boolean): Promise<void> {
     // if ajax is not supported, we must reload the whole page
     if (!forceAjax && !context.app.supportsAjax) {
       window.location.reload();
@@ -64,11 +64,11 @@ class Renderer {
 
   /**
    * ajax-call, then replace
-   * @param {ContextBundleButton} context
+   * @param {ContextComplete} context
    * @param {number} alternateTemplateId
    * @param {boolean} justPreview
    */
-  ajaxLoad(context: ContextBundleButton, alternateTemplateId: number, justPreview: boolean): Promise<void> {
+  ajaxLoad(context: ContextComplete, alternateTemplateId: number, justPreview: boolean): Promise<void> {
     return ContentBlockEditor.getPreviewWithTemplate(context, alternateTemplateId)
       .then((result: string) => {
         this.replaceContentBlock(context, result, justPreview);
@@ -82,11 +82,11 @@ class Renderer {
   /**
    * ajax update/replace the content of the content-block
    * optionally also initialize the toolbar (if not just preview)
-   * @param {ContextBundleButton} context
+   * @param {ContextComplete} context
    * @param {string} newContent
    * @param {boolean} justPreview
    */
-  private replaceContentBlock(context: ContextBundleButton, newContent: string, justPreview: boolean): void {
+  private replaceContentBlock(context: ContextComplete, newContent: string, justPreview: boolean): void {
     try {
       const newDom = $(newContent);
 

@@ -3,7 +3,7 @@ import { BootstrapInPage } from '../bootstrap/bootstrap';
 import { Cms } from '../cms/Cms';
 import { Commands as Commands } from '../commands/commands';
 import { MainContentBlock } from '../contentBlock/main-content-block';
-import { ContextBundleButton } from '../context/bundles/context-bundle-button';
+import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { Insights } from '../logging';
 import { Manage } from '../manage/manage';
 import { QuickDialog } from '../quick-dialog/quick-dialog';
@@ -26,14 +26,13 @@ export interface SxcRoot extends SxcRootWithInternals {
    */
   (id: number | HTMLElement | JQuery, cbid?: number): SxcEdit;
   insights: typeof Insights;
-  _commands: typeof Commands;
   _contentBlock: MainContentBlock;
   _quickDialog: typeof QuickDialog;
   _toolbarManager: typeof ToolbarManager;
   _manage: Manage;
   system: SystemUpgrader;
   translate(key: string): string;
-  context: typeof ContextBundleButton.findContext;
+  context: typeof ContextComplete.findContext;
   cms: Cms;
 
   /** experimental */

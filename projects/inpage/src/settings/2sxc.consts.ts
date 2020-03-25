@@ -1,6 +1,3 @@
-import { $2sxcInPage as $2sxc } from '../interfaces/sxc-controller-in-page';
-import { windowInPage as window } from '../interfaces/window-in-page';
-
 
 export const IDs = {
   // classes
@@ -18,7 +15,3 @@ export const IDs = {
     scMenu: '.sc-menu',
   },
 };
-
-// if (window.$2sxc && !window.$2sxc.consts) {
-//   $2sxc.c = $2sxc.consts = new Constants();
-// }

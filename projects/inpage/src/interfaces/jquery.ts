@@ -1,11 +1,8 @@
 ﻿
 declare interface JQueryStatic {
   /** the generator for the DNN ServicesFramework */
-  dnnSF: any;
+  dnnSF: (id?: number) => any;
 
   /** The DNN Services Framework */
-  ServicesFramework: any;
-
-  /** the translations extension on jquery */
-  t: any;
+  ServicesFramework: (id: number) => any;
 }

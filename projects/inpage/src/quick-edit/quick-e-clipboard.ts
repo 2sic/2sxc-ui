@@ -1,11 +1,9 @@
-﻿import { QeModule, QeSelectors, QuickE, Specs } from '.';
+﻿import { ModifierDnnModule, QeSelectors, QuickE, ModifierBase, Selection } from '.';
 import { SxcEdit } from '../interfaces/sxc-instance-editable';
 import { HasLog, Insights } from '../logging';
-import { CmdsStrategyFactory } from './cmds-strategy-factory';
 import { ContextForLists } from './context-for-lists';
+import { ModifierContentBlock } from './modifier-content-block';
 
-
-const cmdsStrategyFactory = new CmdsStrategyFactory();
 
 /**
  * add a clipboard to the quick edit
@@ -14,25 +12,33 @@ class QuickEClipboardSingleton extends HasLog {
     /**
      * clipboard object - remembers what module (or content-block) was previously copied / needs to be pasted
      */
-    clipboard = new Specs();
+    clipboard = new Selection();
+
+    mods: {[key: string]: ModifierBase } = {};
+    modDnn: ModifierDnnModule;
+    modCb: ModifierContentBlock;
 
     constructor() {
         super('Q-E.Clpbrd');
         Insights.add('Q-E', 'clipboard', this.log);
+        this.mods.cb = this.modCb = new ModifierContentBlock();
+        this.mods.mod = this.modDnn = new ModifierDnnModule();
+
         // initialize once the DOM is ready
-        $(() => this.initialize());
+        $(() => this.initializeSecondaryButtons());
     }
 
     /**
      * bind clipboard actions to DOM buttons
      */
-    initialize() {
-        const cl = this.log.call('initialize');
+    initializeSecondaryButtons() {
+        const cl = this.log.call('initializeSecondaryButtons');
+        const qem = this;
         $('a', QuickE.selected).click(function() {
             const action: string = $(this).data('action');
             switch (action) {
-                case 'delete': return cmdsStrategyFactory.delete(this.clipboard);
-                case 'sendToPane': return QeModule.sendToPane();
+                case 'delete': return qem.mods[qem.clipboard.type].delete(qem.clipboard);
+                case 'sendToPane': return qem.modDnn.showSendToPane();
                 default: throw new Error(`unexpected action: ${action}`);
             }
         });
@@ -73,10 +79,11 @@ class QuickEClipboardSingleton extends HasLog {
                     return this.clearUi(); // don't do a.nything
 
                 if (type === QeSelectors.blocks.cb.id) {
-                    const sxc = SxcEdit.get(list);
-                    sxc.manage._getCbManipulator().move(newClip.parent as number, newClip.field, from, to);
+                    this.modCb.move(this.clipboard, newClip);
+                    // const sxc = SxcEdit.get(list);
+                    // sxc.manage._getCbManipulator().move(newClip.parent as number, newClip.field, from, to);
                 } else
-                    QeModule.move(this.clipboard, newClip, from, to); // sometimes missing oldClip.item
+                    this.modDnn.move(this.clipboard, newClip, from, to); // sometimes missing oldClip.item
 
                 this.clearUi();
                 break;
@@ -86,7 +93,7 @@ class QuickEClipboardSingleton extends HasLog {
     }
 
 
-    private mark(newData: Specs): void {
+    private mark(newData: Selection): void {
         const cl = this.log.call('mark');
         cl.addData('specs', newData);
 
@@ -135,7 +142,7 @@ class QuickEClipboardSingleton extends HasLog {
     }
 
 
-    private createSpecs(type: string, list: JQuery, index: number): Specs {
+    private createSpecs(type: string, list: JQuery, index: number): Selection {
         const cl = this.log.call('createSpecs', `${type}, ..., ${index}`);
         const listItems = list.find(QeSelectors.blocks[type].selector);
         // when paste module below the last module in pane

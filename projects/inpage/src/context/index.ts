@@ -11,8 +11,5 @@ export * from './bundles/context-bundle-toolbar';
 export * from './parts/context-ui';
 export * from './parts/context-user';
 
-export * from './bundles/context-bendle-content-block';
-export * from './bundles/context-bundle-base';
 export * from './bundles/context-bundle-instance';
-export * from './bundles/context-bundle-item';
-export * from './bundles/context-bundle-page';
+export * from './bundles/context-bundle-content';

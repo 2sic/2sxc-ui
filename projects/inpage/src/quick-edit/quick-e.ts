@@ -1,4 +1,4 @@
-﻿import { PositionCoordinates, Positioning, QeContentBlock, QeModule, QeSelectors } from '.';
+﻿import { ModifierContentBlock, ModifierDnnModule, PositionCoordinates, Positioning, QeSelectors } from '.';
 
 const configAttr: string = 'quick-edit-config';
 const classForAddContent = 'sc-content-block-menu-addcontent';
@@ -14,7 +14,7 @@ selectedOverlay.toggleOverlay = (target: boolean | JQuery) => {
     if (!target || (target as JQuery).length === 0) {
       selectedOverlay.hide();
     } else {
-      const coords = Positioning.getCoordinates(target as JQuery);
+      const coords = Positioning.get(target as JQuery);
       coords.yh = coords.y + 20;
       Positioning.positionAndAlign(selectedOverlay, coords);
       selectedOverlay.target = target as JQuery;
@@ -45,6 +45,7 @@ class QuickESingleton {
     modActions = $(this.template.replace(/QuickInsertMenu.AddBlock/g, 'QuickInsertMenu.AddModule'))
         .attr('data-context', 'module')
         .addClass('sc-content-block-menu-module');
+
     //
     config: QuickEConfiguration = {
         enable: true,
@@ -59,27 +60,31 @@ class QuickESingleton {
     bodyOffset: PositionCoordinates;
 
     constructor() {
-        this.modActions.click(QeModule.onModuleButtonClick);
-        this.cbActions.click(QeContentBlock.onCbButtonClick);
+        this.modActions.click(ModifierDnnModule.onModuleButtonClick);
+        this.cbActions.click(ModifierContentBlock.onCbButtonClick);
     }
 
     prepareToolbarInDom(): void {
-        this.body.append(this.main).append(this.selected);
-        this.main.append(this.cbActions).append(this.modActions);
+        this.body
+            .append(this.main)
+            .append(this.selected);
+        this.main
+            .append(this.cbActions)
+            .append(this.modActions);
     }
 
     start(): void {
         try {
-          this.loadPageConfig();
-          if (this.config.enable) {
-            // initialize first body-offset
-            this.bodyOffset = Positioning.getBodyPosition();
-            enable();
-            toggleParts();
-            watchMouse();
-          }
+            this.loadPageConfig();
+            if (this.config.enable) {
+                // initialize first body-offset
+                this.bodyOffset = Positioning.getBodyPosition();
+                enable();
+                toggleParts();
+                watchMouse();
+            }
         } catch (e) {
-          console.error("couldn't start quick-edit", e);
+            console.error("couldn't start quick-edit", e);
         }
     }
     /**
@@ -116,10 +121,12 @@ class QuickESingleton {
 
         // re-check "auto" or "null"
         // if it has inner-content, then it's probably a details page, where quickly adding modules would be a problem, so for now, disable modules in this case
-        if (conf.modules.enable === null || conf.modules.enable === 'auto') conf.modules.enable = !hasInnerCBs;
+        if (conf.modules.enable === null || conf.modules.enable === 'auto')
+            conf.modules.enable = !hasInnerCBs;
 
         // for now, ContentBlocks are only enabled if they exist on the page
-        if (conf.innerBlocks.enable === null || conf.innerBlocks.enable === 'auto') conf.innerBlocks.enable = hasInnerCBs;
+        if (conf.innerBlocks.enable === null || conf.innerBlocks.enable === 'auto')
+            conf.innerBlocks.enable = hasInnerCBs;
     }
 
 }
@@ -191,9 +198,9 @@ interface SelectionOverlay extends JQuery {
 
 
 interface MainOverlay extends JQuery {
-    actionsForCb: JQuery;
-    actionsForModule: JQuery;
-    parentContainer: HTMLElement;
+    activeContentBlock: JQuery;
+    activeModule: JQuery;
+    parentNode: HTMLElement;
 }
 
 

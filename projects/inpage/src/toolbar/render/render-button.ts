@@ -1,4 +1,4 @@
-﻿import { ContextBundleButton } from '../../context/bundles/context-bundle-button';
+﻿import { ContextComplete } from '../../context/bundles/context-bundle-button';
 import { HtmlTools } from '../../html/dom-tools';
 import { Button } from '../config';
 import { ButtonCommand } from '../config/button-command';
@@ -11,7 +11,7 @@ export class RenderButton extends RenderPart {
         super(parent, 'Rnd.Button');
     }
 
-    render(ctx: ContextBundleButton, groupIndex: number): HTMLElement {
+    render(ctx: ContextComplete, groupIndex: number): HTMLElement {
         const cl = this.log.call('render', `contex: obj, group: ${groupIndex}, btn: ${ctx.button.name}`);
         const btn = ctx.button;
 
@@ -47,12 +47,12 @@ export class RenderButton extends RenderPart {
 
 
 
-    private generateRunJs(btn: Button, ctx: ContextBundleButton) {
+    private generateRunJs(btn: Button, ctx: ContextComplete) {
         const runParams = ButtonCommand.normalize(btn.action);
         return `$2sxc(${ctx.instance.id}, ${ctx.contentBlock.id}).manage.run(${JSON.stringify(runParams)}, event);`;
     }
 
-    private iconTag(btn: Button, context: ContextBundleButton) {
+    private iconTag(btn: Button, context: ContextComplete) {
         const symbol = document.createElement('i');
         if (btn.icon)
             HtmlTools.addClasses(symbol, btn.icon(context));

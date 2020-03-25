@@ -1,6 +1,6 @@
 ﻿import { ContentBlockEditor } from '../contentBlock/content-block-editor';
 import { renderer } from '../contentBlock/render';
-import { ContextBundleButton } from '../context/bundles/context-bundle-button';
+import { ContextComplete } from '../context/bundles/context-bundle-button';
 import * as Iiframebridge from '../interfaces/iiframe-bridge';
 import { IQuickDialogConfig } from '../interfaces/iquick-dialog-config';
 import { SxcEdit } from '../interfaces/sxc-instance-editable';
@@ -40,9 +40,9 @@ export class IFrameBridge extends HasLog implements IIFrameBridge {
         return this.instanceSxc.recreate(true) as TypeUnsafe as SxcEdit;
     }
 
-    getContext(): ContextBundleButton {
+    getContext(): ContextComplete {
         const cl = this.log.call('getContext');
-        return cl.return(ContextBundleButton.findContext(this.uncachedSxc()));
+        return cl.return(ContextComplete.findContext(this.uncachedSxc()));
     }
 
     getAdditionalDashboardConfig() {

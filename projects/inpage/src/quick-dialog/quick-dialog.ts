@@ -1,5 +1,5 @@
 ﻿import { IDialogFrameElement } from '.';
-import { ContextBundleButton } from '../context/bundles/context-bundle-button';
+import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { HasLog, Insights } from '../logging';
 import { DialogPaths } from '../settings/DialogPaths';
 import { IFrameBridge } from './iframe-bridge';
@@ -50,7 +50,7 @@ class QuickDialogManagerSingleton extends HasLog {
 
     /**
      * show / reset the current iframe to use new url and callback
-     * @param {ContextBundleButton} context object
+     * @param {ContextComplete} context object
      * @param {string} url - url to show
      * @param {function()} closeCallback - callback event
      * @param {boolean} isFullscreen - if it should open full screen
@@ -58,7 +58,7 @@ class QuickDialogManagerSingleton extends HasLog {
      * @returns {Promise<boolean>} jquery object of the iframe
      */
     showOrToggleFromToolbar(
-        context: ContextBundleButton,
+        context: ContextComplete,
         url: string,
         isFullscreen: boolean,
         dialogName: string,

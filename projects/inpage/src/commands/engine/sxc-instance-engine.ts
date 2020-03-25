@@ -1,5 +1,5 @@
 ﻿import { Cms } from '../../cms/Cms';
-import { ContextBundleButton } from '../../context/bundles/context-bundle-button';
+import { ContextComplete } from '../../context/bundles/context-bundle-button';
 import { SxcEdit } from '../../interfaces/sxc-instance-editable';
 import { CommandParams } from '../command-params';
 
@@ -15,7 +15,7 @@ export class SxcInstanceEngine {
     eventOrSettings?: CommandParams | MouseEvent,
     event?: MouseEvent,
   ): Promise<void | T> {
-    const cntx = ContextBundleButton.findContext(this.sxc);
+    const cntx = ContextComplete.findContext(this.sxc);
     return new Cms().run(cntx, nameOrSettings, eventOrSettings, event);
   }
 }

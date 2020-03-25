@@ -1,4 +1,4 @@
-﻿import { ContextBundleButton } from '../context/bundles/context-bundle-button';
+﻿import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { ItemIdentifierGroup, ItemIdentifierSimple, ItemInField } from '../interfaces/item-identifiers';
 import { NgUrlValuesWithoutParams } from '../manage/ng-dialog-params';
 import { DictionaryValue, TypeUnsafe } from '../plumbing';
@@ -17,7 +17,7 @@ export class CommandLinkGenerator {
   private readonly rootUrl: string;
   private readonly debugUrlParam: string;
 
-  constructor(public readonly context: ContextBundleButton) {
+  constructor(public readonly context: ContextComplete) {
     // Initialize Items
     this.items = context.button.action.params.items || []; // use predefined or create empty array
 
@@ -85,7 +85,7 @@ export class CommandLinkGenerator {
   }
 
 
-  private evalPropOrFunction<T>(propOrFunction: ButtonPropertyGenerator<T>, context: ContextBundleButton, fallback: T): T {
+  private evalPropOrFunction<T>(propOrFunction: ButtonPropertyGenerator<T>, context: ContextComplete, fallback: T): T {
     return (propOrFunction === undefined || propOrFunction === null)
         ? fallback
         : (typeof (propOrFunction) === 'function' ? propOrFunction(context) : propOrFunction);

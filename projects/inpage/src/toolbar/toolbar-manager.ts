@@ -1,7 +1,7 @@
 ﻿// import { context } from '../context/context';
 import { ToolbarRenderer } from '.';
 import { ToolbarConfigFinderAndInitializer } from '.';
-import { ContextBundleButton } from '../context/bundles/context-bundle-button';
+import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { $2sxcInPage } from '../interfaces/sxc-controller-in-page';
 import { HasLog, Insights, Log } from '../logging';
 import { ToolbarConfigLoader } from './config-loaders/toolbar-config-loader';
@@ -15,8 +15,8 @@ import { ToolbarInitConfig } from './initialize/toolbar-init-config';
 class ToolbarManagerGlobal extends HasLog {
     private readonly toolbarFinder: ToolbarConfigFinderAndInitializer;
 
-    constructor(parentLog: Log) {
-        super('Tlb.Mngr', parentLog, 'init');
+    constructor() {
+        super('Tlb.Mngr', null, 'init');
         this.toolbarFinder = new ToolbarConfigFinderAndInitializer(this);
     }
 
@@ -29,28 +29,23 @@ class ToolbarManagerGlobal extends HasLog {
     }
 
     // generate button html
-    generateButtonHtml(context: ContextBundleButton, groupIndex: number) {
+    generateButtonHtml(context: ContextComplete, groupIndex: number) {
         new ToolbarRenderer(context).button.render(context, groupIndex);
     }
 
-    generateToolbarHtml(context: ContextBundleButton) {
+    generateToolbarHtml(context: ContextComplete) {
         return new ToolbarRenderer(context).render();
     }
 
-    loadConfig(context: ContextBundleButton, config: ToolbarInitConfig): Toolbar {
+    loadConfig(context: ContextComplete, config: ToolbarInitConfig): Toolbar {
         const loader = new ToolbarConfigLoader(this);
         Insights.add('toolbars', JSON.stringify(config.toolbar || ''), loader.log);
-        // this.logs.push({ key: JSON.stringify(config.toolbar || ''), log: loader.log });
         return loader.load(context, config.toolbar, config.settings);
     }
 
-// 2020-03-20 2dm - seems unused
-//   toolbarTemplate = ToolbarTemplateManager.Instance(this.log).get('default');
 }
 
-// 2dm 2018-03-22 this seems to be unused
-// const sharedTbm = new ToolbarManager(null);
-export const ToolbarManager = new ToolbarManagerGlobal(null);
+export const ToolbarManager = new ToolbarManagerGlobal();
 
 // attach to global object, so we can check the logs if we need them
 $2sxcInPage._toolbarManager = ToolbarManager;

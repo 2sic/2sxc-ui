@@ -1,4 +1,4 @@
-﻿import { ContextBundleButton } from '../context/bundles/context-bundle-button';
+﻿import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { SxcEdit } from '../interfaces/sxc-instance-editable';
 import { windowInPage as window } from '../interfaces/window-in-page';
 import { EditManager } from '../manage/edit-manager';
@@ -34,7 +34,7 @@ export function _translateInit(manage: EditManager): void {
     const sxc = SxcEdit.get(htmlElementOrId);
     initialized = false; // for real, it is not initialized...
     const editContext = SxcEdit.getEditContext(sxc);
-    context = ContextBundleButton.createContextFromEditContext(editContext);
+    context = new ContextComplete(editContext);
     context.sxc = sxc;
   }
 

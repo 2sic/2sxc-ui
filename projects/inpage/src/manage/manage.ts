@@ -1,8 +1,8 @@
 ﻿import { SxcInstanceEngine } from '../commands';
-import { ContextBundleButton } from '../context/bundles/context-bundle-button';
+import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { SxcEdit } from '../interfaces/sxc-instance-editable';
 import { EditManager } from './edit-manager';
-import { UserOfEditContext } from './user-of-edit-context';
+import { ContextOfUser } from '../context/parts/context-user';
 
 /**
  * A helper-controller in charge of opening edit-dialogues + creating the toolbars for it
@@ -30,10 +30,10 @@ export class Manage {
      */
     initInstance(sxc: SxcEdit) {
         try {
-            const myContext = ContextBundleButton.findContext(sxc);
+            const myContext = ContextComplete.findContext(sxc);
             const editContext = SxcEdit.getEditContext(myContext.sxc);
 
-            const userInfo = UserOfEditContext.fromContext(myContext); // 2dm simplified getUserOfEditContext(context);
+            const userInfo = ContextOfUser.fromContext(myContext); // 2dm simplified getUserOfEditContext(context);
             const cmdEngine = new SxcInstanceEngine(myContext.sxc);
 
             const editManager = new EditManager(myContext.sxc, editContext, userInfo, cmdEngine, myContext);
