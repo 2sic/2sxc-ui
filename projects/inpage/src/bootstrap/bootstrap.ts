@@ -1,6 +1,5 @@
 import { CmdLayout } from '../commands/command/layout';
-import { Attributes } from '../constants';
-import { DebugConfig } from '../DebugConfig';
+import { C } from '../constants';
 import { SxcEdit } from '../interfaces/sxc-instance-editable';
 import { windowInPage as window } from '../interfaces/window-in-page';
 import { HasLog, Insights, Log, LogUtils } from '../logging';
@@ -120,7 +119,7 @@ export class BootstrapInPage extends HasLog {
                 // since the CB-ID could also be an inner content (marked as a negative "-" number)
                 // we must be sure that we use the right id a.nyhow
                 if (openDialogId < 0) {
-                    const instanceId = Number(found[0].attributes.getNamedItem(Attributes.InstanceId).value);
+                    const instanceId = Number(found[0].attributes.getNamedItem(C.Attributes.InstanceId).value);
                     sxc = SxcEdit.get(instanceId, openDialogId);
                 } else sxc = SxcEdit.get(openDialogId);
             }
@@ -177,7 +176,7 @@ export class BootstrapInPage extends HasLog {
           const log = new Log('Bts.Module');
 
           ToolbarManager.buildModule(module);
-          if (DebugConfig.bootstrap.initInstance) LogUtils.logDump(log);
+          if (C.Debug.bootstrap.initInstance) LogUtils.logDump(log);
         }
         callLog.return(null);
     }

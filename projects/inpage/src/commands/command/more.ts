@@ -1,4 +1,4 @@
-﻿import * as Constants from '../../constants';
+﻿import { C } from '../../constants';
 import { Commands } from '../commands';
 
 export const CmdMore = 'more';
@@ -43,7 +43,7 @@ Commands.add(CmdMore, 'MoreActions', 'options btn-mode', true, false, {
 
             // because of issue in Chrome we need to override CSS rules in edit.css for toolbar toggle on mouse hover
             const scElement = fullMenu2.closest(
-                '.' + Constants.toolbar.classes.oldHover,
+                '.' + C.Toolbar.classes.oldHover,
             );
             // add mouseenter and mouseleave events to parent sc-element if not already added
             if (scElement && fullMenu2.getAttribute('listener') !== 'true') {

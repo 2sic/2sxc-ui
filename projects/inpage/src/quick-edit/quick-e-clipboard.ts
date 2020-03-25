@@ -1,5 +1,4 @@
-﻿import { ModifierDnnModule, QeSelectors, QuickE, ModifierBase, Selection } from '.';
-import { SxcEdit } from '../interfaces/sxc-instance-editable';
+﻿import { ModifierBase, ModifierDnnModule, QeSelectors, QuickE, Selection } from '.';
 import { HasLog, Insights } from '../logging';
 import { ContextForLists } from './context-for-lists';
 import { ModifierContentBlock } from './modifier-content-block';

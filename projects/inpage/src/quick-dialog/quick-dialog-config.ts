@@ -1,5 +1,5 @@
-﻿import { ContextComplete } from '../context/bundles/context-bundle-button';
-import { ContextOfUser } from '../context/parts/context-user';
+﻿import { ContextComplete } from '../context';
+import { ContextOfUser } from '../context';
 import { IQuickDialogConfig } from '../interfaces/iquick-dialog-config';
 
 

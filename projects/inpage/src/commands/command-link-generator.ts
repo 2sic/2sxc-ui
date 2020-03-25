@@ -1,11 +1,10 @@
-﻿import { ContextComplete } from '../context/bundles/context-bundle-button';
+﻿import { C } from '../constants';
+import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { ItemIdentifierGroup, ItemIdentifierSimple, ItemInField } from '../interfaces/item-identifiers';
 import { NgUrlValuesWithoutParams } from '../manage/ng-dialog-params';
 import { DictionaryValue, TypeUnsafe } from '../plumbing';
-import { DialogPaths } from '../settings/DialogPaths';
 import { ButtonPropertyGenerator } from '../toolbar/config';
 import { translate } from '../translate/2sxc.translate';
-import { isatty } from 'tty';
 
 /**
  * This is responsible for taking a context with command and everything
@@ -80,8 +79,8 @@ export class CommandLinkGenerator {
     const context = this.context;
     return `${context.instance.sxcRootUrl}desktopmodules/tosic_sexycontent/${(context.ui.form === 'ng8'
         && context.button.dialog(context) === 'edit')
-    ? DialogPaths.ng8
-    : DialogPaths.ng1}?sxcver=${context.instance.sxcVersion}`;
+    ? C.DialogPaths.ng8
+    : C.DialogPaths.ng1}?sxcver=${context.instance.sxcVersion}`;
   }
 
 

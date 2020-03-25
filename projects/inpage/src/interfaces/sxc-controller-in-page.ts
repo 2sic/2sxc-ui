@@ -1,8 +1,6 @@
 ﻿import { SxcRootWithInternals } from '../../../$2sxc/src/index';
 import { BootstrapInPage } from '../bootstrap/bootstrap';
 import { Cms } from '../cms/Cms';
-import { Commands as Commands } from '../commands/commands';
-import { MainContentBlock } from '../contentBlock/main-content-block';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { Insights } from '../logging';
 import { Manage } from '../manage/manage';
@@ -26,7 +24,6 @@ export interface SxcRoot extends SxcRootWithInternals {
    */
   (id: number | HTMLElement | JQuery, cbid?: number): SxcEdit;
   insights: typeof Insights;
-  _contentBlock: MainContentBlock;
   _quickDialog: typeof QuickDialog;
   _toolbarManager: typeof ToolbarManager;
   _manage: Manage;

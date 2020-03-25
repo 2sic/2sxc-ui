@@ -1,12 +1,11 @@
-﻿import { ContextOfApp, ContextOfContentBlock, ContextOfInstance, ContextOfItem, ContextOfPage, ContextOfSystem, ContextOfTenant, ContextOfUi, ContextOfUser } from '..';
-import { SxcEdit } from '../../interfaces/sxc-instance-editable';
+﻿import { SxcEdit } from '../../interfaces/sxc-instance-editable';
 import { Obj } from '../../plumbing';
 import { Button } from '../../toolbar/config/button';
 import { AttrJsonEditContext } from '../html-attribute';
 import { ContextBundleToolbar } from './context-bundle-toolbar';
 
 export class ContextComplete extends ContextBundleToolbar {
-    button: Button;
+    button?: Button;
 
     constructor(editCtx: AttrJsonEditContext) {
         super(editCtx);

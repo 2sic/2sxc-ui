@@ -8,7 +8,7 @@ const selectedOverlay = $("<div class='sc-content-block-menu sc-content-block-se
     btn('delete', 'trash-empty', 'Delete'),
     btn('sendToPane', 'move', 'Move', null, null, 'sc-cb-mod-only'),
     "<div id='paneList'></div>",
-    ) as SelectionOverlay;
+    ) as QuickEdit.SelectionOverlay;
 
 selectedOverlay.toggleOverlay = (target: boolean | JQuery) => {
     if (!target || (target as JQuery).length === 0) {
@@ -28,7 +28,7 @@ selectedOverlay.toggleOverlay = (target: boolean | JQuery) => {
 class QuickESingleton {
     body = $('body');
     win = $(window);
-    main = $("<div class='sc-content-block-menu sc-content-block-quick-insert sc-i18n'></div>") as MainOverlay;
+    main = $("<div class='sc-content-block-menu sc-content-block-quick-insert sc-i18n'></div>") as QuickEdit.MainOverlay;
     template =
         `<a class='${classForAddContent} sc-invisible' data-type='Default' data-i18n='[titleTemplate]QuickInsertMenu.AddBlockContent'>x</a>`
         + `<a class='${classForAddApp} sc-invisible' data-type='' data-i18n='[titleTemplate]QuickInsertMenu.AddBlockApp'>x</a>`
@@ -47,7 +47,7 @@ class QuickESingleton {
         .addClass('sc-content-block-menu-module');
 
     //
-    config: QuickEConfiguration = {
+    config: QuickEdit.QuickEConfiguration = {
         enable: true,
         innerBlocks: {
           enable: null, // default: auto-detect
@@ -106,11 +106,11 @@ class QuickESingleton {
 
         if (configs.length > 0) {
             // go through reverse list, as the last is the most important...
-            let finalConfig = {} as QuickEConfiguration;
+            let finalConfig = {} as QuickEdit.QuickEConfiguration;
             for (let c = configs.length; c >= 0; c--) {
                 confJ = configs[0].getAttribute(configAttr);
                 try {
-                    const confO = JSON.parse(confJ) as QuickEConfiguration;
+                    const confO = JSON.parse(confJ) as QuickEdit.QuickEConfiguration;
                     finalConfig = {...finalConfig, ...confO };
                 } catch (e) {
                     console.warn('had trouble with json', e);
@@ -188,32 +188,3 @@ function toggleParts(): void {
 }
 
 
-
-
-
-interface SelectionOverlay extends JQuery {
-    toggleOverlay(target: boolean | JQuery): void;
-    target: JQuery;
-}
-
-
-interface MainOverlay extends JQuery {
-    activeContentBlock: JQuery;
-    activeModule: JQuery;
-    parentNode: HTMLElement;
-}
-
-
-interface QuickEConfiguration {
-    enable: boolean;
-    innerBlocks: {
-      enable: boolean | string | null;
-    };
-    modules: {
-      enable: boolean | string | null;
-    };
-
-    // getAttribute?(configAttr: string): string;
-
-    guid?: string;
-  }

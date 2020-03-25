@@ -1,16 +1,16 @@
-import * as Constants from '../constants';
+import { C } from '../constants';
 import { SxcEdit } from '../interfaces/sxc-instance-editable';
 
 export class HtmlTools {
 
     static disable(tag: HTMLElement | JQuery): void {
         const jtag = $(tag);
-        jtag.attr(Constants.toolbar.attr.disable, 'true');
+        jtag.attr(C.Toolbar.attr.disable, 'true');
     }
 
     static isDisabled(sxc: SxcEdit): boolean {
         const tag = $(SxcEdit.getTag(sxc));
-        return !!tag.attr(Constants.toolbar.attr.disable);
+        return !!tag.attr(C.Toolbar.attr.disable);
     }
 
     /**

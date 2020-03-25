@@ -1,10 +1,10 @@
-﻿import { ContextComplete } from '../context/bundles/context-bundle-button';
+﻿import { C } from '../constants';
+import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { HtmlTools } from '../html/dom-tools';
 import { SxcEdit } from '../interfaces/sxc-instance-editable';
 import { windowInPage as window } from '../interfaces/window-in-page';
 import { QuickE } from '../quick-edit/quick-e';
 import { ContentBlockEditor } from './content-block-editor';
-import { MainContentBlock } from './main-content-block';
 
 /*
  * this is the content block manager in the browser
@@ -43,7 +43,7 @@ class Renderer {
       return Promise.resolve();
     }
 
-    return this.ajaxLoad(context, MainContentBlock.cUseExistingTemplate, preview)
+    return this.ajaxLoad(context, C.ContentBlock.UseExistingTemplate, preview)
       .then((result) => {
         // If Evoq, tell Evoq that page has changed if it has changed (Ajax call)
         if (window.dnn_tabVersioningEnabled) { // this only exists in evoq or on new DNNs with tabVersioning

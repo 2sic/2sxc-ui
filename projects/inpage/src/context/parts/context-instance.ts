@@ -1,4 +1,4 @@
-﻿import { IDs } from '../../settings/2sxc.consts';
+﻿import { C } from '../../constants';
 import { AttrJsonEditContext } from '../html-attribute';
 import { AttrJsonEntity } from '../html-attribute/parts/parameters-entity';
 
@@ -24,7 +24,7 @@ export class ContextOfInstance {
             this.sxcRootUrl = editCtx.Environment.SxcRootUrl;
         }
         if (editCtx.ContentBlock) {
-            this.allowPublish = editCtx.ContentBlock.VersioningRequirements === IDs.publishAllowed;
+            this.allowPublish = editCtx.ContentBlock.VersioningRequirements === C.IDs.publishAllowed;
         }
     }
 }

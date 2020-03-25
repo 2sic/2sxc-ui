@@ -1,4 +1,4 @@
-﻿import { IDs } from '../settings/2sxc.consts';
+﻿import { C } from '../constants';
 
 // prevent propagation of the click (if menu was clicked)
-$(IDs.sel.scMenu).click((e) => e.stopPropagation());
+$(C.IDs.sel.scMenu).click((e) => e.stopPropagation());

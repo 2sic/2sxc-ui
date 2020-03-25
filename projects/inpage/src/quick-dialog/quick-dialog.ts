@@ -1,7 +1,7 @@
 ﻿import { IDialogFrameElement } from '.';
+import { C } from '../constants';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { HasLog, Insights } from '../logging';
-import { DialogPaths } from '../settings/DialogPaths';
 import { IFrameBridge } from './iframe-bridge';
 import { QuickDialogContainer } from './quick-dialog-container';
 import * as QuickEditState from './state';
@@ -136,8 +136,8 @@ class QuickDialogManagerSingleton extends HasLog {
         const cl = this.log.call('setUrlToQuickDialog', url);
         // change default url-schema from the primary angular-app to the quick-dialog
         url = url
-            .replace(DialogPaths.ng1, DialogPaths.quickDialog)
-            .replace(DialogPaths.ng8, DialogPaths.quickDialog);
+            .replace(C.DialogPaths.ng1, C.DialogPaths.quickDialog)
+            .replace(C.DialogPaths.ng8, C.DialogPaths.quickDialog);
         url = this.changePathToLocalhostForDev(url);
         return cl.return(url);
     }

@@ -1,8 +1,8 @@
 ﻿import { SxcInstanceEngine } from '../commands';
-import { ContextComplete } from '../context/bundles/context-bundle-button';
+import { ContextComplete } from '../context';
+import { ContextOfUser } from '../context';
 import { SxcEdit } from '../interfaces/sxc-instance-editable';
 import { EditManager } from './edit-manager';
-import { ContextOfUser } from '../context/parts/context-user';
 
 /**
  * A helper-controller in charge of opening edit-dialogues + creating the toolbars for it
@@ -45,18 +45,3 @@ export class Manage {
         }
     }
 }
-
-
-// // ReSharper disable once InconsistentNaming
-// function _initInstance(sxc: SxcEdit) {
-//     const myContext = ContextBundleButton.findContext(sxc);
-//     const editContext = SxcEdit.getEditContext(myContext.sxc);
-
-//     const userInfo = UserOfEditContext.fromContext(myContext); // 2dm simplified getUserOfEditContext(context);
-//     const cmdEngine = new SxcInstanceEngine(myContext.sxc);
-
-//     const editManager = new EditManager(myContext.sxc, editContext, userInfo, cmdEngine, myContext);
-//     sxc.manage = editManager;
-//     editManager.init();
-//     return editManager;
-//   }

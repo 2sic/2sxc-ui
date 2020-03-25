@@ -1,6 +1,5 @@
-import * as Constants from '../../constants';
+import { C } from '../../constants';
 import { HtmlTools } from '../../html/dom-tools';
-import { IDs } from '../../settings/2sxc.consts';
 import { InPageButtonJson, InPageCommandJson, ToolbarWip } from '../config-loaders';
 import * as Toolbarsettings from '../config/toolbar-settings';
 import ToolbarSettings = Toolbarsettings.ToolbarSettings;
@@ -36,11 +35,11 @@ export class ToolbarInitConfig {
      */
     static loadFromTag(tag: HTMLElement): ToolbarInitConfig {
         try {
-            const newConfigFormat = HtmlTools.tryGetAttrText(tag, Constants.toolbar.attr.full);
+            const newConfigFormat = HtmlTools.tryGetAttrText(tag, C.Toolbar.attr.full);
             if (newConfigFormat) {
                 return JSON.parse(newConfigFormat) as ToolbarInitConfig;
             } else {
-                const at = IDs.attr;
+                const at = C.IDs.attr;
                 const data = HtmlTools.getFirstAttribute(tag, at.toolbar, at.toolbarData);
                 const settings = HtmlTools.getFirstAttribute(tag, at.settings, at.settingsData);
                 return {

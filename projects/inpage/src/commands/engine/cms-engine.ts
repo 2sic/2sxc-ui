@@ -7,11 +7,11 @@ import { $2sxcInPage as $2sxc } from '../../interfaces/sxc-controller-in-page';
 import { HasLog, Log } from '../../logging';
 import { TypeUnsafe } from '../../plumbing';
 import { QuickDialog } from '../../quick-dialog/quick-dialog';
-import { DialogPaths } from '../../settings/DialogPaths';
 import { Button } from '../../toolbar/config';
 import { ButtonCommand } from '../../toolbar/config';
 import { CommandLinkGenerator } from '../command-link-generator';
 import { CommandParams } from '../command-params';
+import { C } from '../../constants';
 
 /**
  * The CMS engine is global, and needs the context to work.
@@ -177,10 +177,10 @@ export class CmsEngine extends HasLog {
       } else {
         // check if alt-key pressed, to open the old/new dialog instead
         if (origEvent && origEvent.altKey) {
-          const toOld = link.indexOf(DialogPaths.ng8) > 0;
+          const toOld = link.indexOf(C.DialogPaths.ng8) > 0;
           link = link.replace(
-            toOld ? DialogPaths.ng8 : DialogPaths.ng1,
-            toOld ? DialogPaths.ng1 : DialogPaths.ng8,
+            toOld ? C.DialogPaths.ng8 : C.DialogPaths.ng1,
+            toOld ? C.DialogPaths.ng1 : C.DialogPaths.ng8,
           );
         }
 

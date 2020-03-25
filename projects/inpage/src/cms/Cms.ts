@@ -1,8 +1,8 @@
 ﻿import { CmsEngine } from '../commands/';
 import { CommandParams } from '../commands/command-params';
+import { C } from '../constants';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { ContextBundleInstance } from '../context/bundles/context-bundle-instance';
-import { DebugConfig } from '../DebugConfig';
 import { HasLog } from '../logging/has-log';
 import { Log } from '../logging/log';
 
@@ -14,7 +14,7 @@ export class Cms extends HasLog {
    * if false, will preserve the log over multiple calls
    */
   autoReset = true;
-  autoDump = DebugConfig.cms.autoDump;
+  autoDump = C.Debug.cms.autoDump;
 
   constructor() {
     super(logId, null);
