@@ -1,5 +1,5 @@
+import { HasLog, Log } from '.';
 import { $2sxcInPage } from '../interfaces/sxc-controller-in-page';
-import { HasLog, Log } from '../logging';
 
 type LogList = Array<{ key: string, log: Log}>;
 

@@ -7,7 +7,7 @@
 export class SessionStateHandler<T> extends HasLog {
     constructor(private readonly key: string) {
         super('Ses.State');
-        Insights.add('system', 'session-state', this.log);
+        Insights.add('system', 'session-state ' + key, this.log);
     }
 
     set(value: string): void {
@@ -27,15 +27,6 @@ export class SessionStateHandler<T> extends HasLog {
     }
 }
 
-// /**
-//  * session storage helper to get typed values from it
-//  */
-// function getItemValueString(key: string): string {
-//     const value = sessionStorage.getItem(key);
-//     return value;
-// }
-
-  // tslint:disable-next-line: align
 function getItemValue<T>(key: string): T {
     const value = sessionStorage.getItem(key);
     return JSON.parse(value) as T;

@@ -1,4 +1,4 @@
-﻿import { Delete, modManage, QuickE, QuickEClipboard, QeSelectors, Specs } from '.';
+﻿import { Delete, modManage, QeSelectors, QuickE, QuickEClipboard, Specs } from '.';
 
 export class QeModule implements Delete {
   delete(clip: Specs): Promise<void> {

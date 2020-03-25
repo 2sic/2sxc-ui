@@ -10,13 +10,13 @@ export class RenderButtonGroups extends RenderPart {
 
     render(context: ContextBundleToolbar): HTMLElement[] {
         const cl = this.log.call('render');
-        const tags: HTMLElement[] = []; // temporary storage for detached HTML DOM objects
+        let tags: HTMLElement[] = []; // temporary storage for detached HTML DOM objects
         const btnGroups = context.toolbar.groups;
 
         for (let i = 0; i < btnGroups.length; i++)
-            tags.concat(this.renderGroup(btnGroups[i], context, i));
+            tags = tags.concat(this.renderGroup(btnGroups[i], context, i));
 
-        return cl.return(tags);
+        return cl.return(tags, `total tags: ${tags.length}`);
     }
 
     private renderGroup(group: ButtonGroup, context: ContextBundleToolbar, groupNumber: number): HTMLElement[] {
@@ -31,6 +31,6 @@ export class RenderButtonGroups extends RenderPart {
             item.appendChild(tag);
             tags.push(item);
         }
-        return cl.return(tags);
+        return cl.return(tags, `tags: ${tags.length}`);
     }
 }

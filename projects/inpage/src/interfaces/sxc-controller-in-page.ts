@@ -4,7 +4,7 @@ import { Cms } from '../cms/Cms';
 import { Commands as Commands } from '../commands/commands';
 import { MainContentBlock } from '../contentBlock/main-content-block';
 import { ContextBundleButton } from '../context/bundles/context-bundle-button';
-import { Insights } from '../insights/insights';
+import { Insights } from '../logging';
 import { Manage } from '../manage/manage';
 import { QuickDialog } from '../quick-dialog/quick-dialog';
 import { SystemUpgrader } from '../system/2sxc.system';

@@ -3,7 +3,7 @@ import * as DialogFrameElement from './iDialogFrameElement';
 import IDialogFrameElement = DialogFrameElement.IDialogFrameElement;
 
 /**
- * this is a dialog manager which is in charge of all quick-dialogues
+ * this is a dialog manager which is in charge of all quick-dialoges
  * it always has a reference to the latest dialog created by a.ny module instance
  */
 
@@ -11,6 +11,8 @@ const containerClass = 'inpage-frame-wrapper';
 const iframeClass = 'inpage-frame';
 const iframeTag = 'iframe';
 const containerTemplate = `<div class="${containerClass}"><div class="${iframeClass}"></div></div>`;
+const resizeInterval = 200;
+
 
 class QuickDialogContainerSingleton extends HasLog {
 
@@ -19,6 +21,8 @@ class QuickDialogContainerSingleton extends HasLog {
         Insights.add('quick-dialog', 'container', this.log);
     }
 
+    private isFullscreen: boolean = false;
+    private resizeWatcher: number = null;
     /**
      * get the current container
      * @returns {element} html element of the div
@@ -60,12 +64,12 @@ class QuickDialogContainerSingleton extends HasLog {
      * @param {boolean} fullScreen
      */
     setSize(fullScreen: boolean): void {
-        const callLog = this.log.call('setSize');
+        const cl = this.log.call('setSize');
         const container = this.getOrCreate();
         // set container height
         container.css('min-height', fullScreen ? '100%' : '225px');
-        isFullscreen = fullScreen;
-        callLog.done();
+        this.isFullscreen = fullScreen;
+        cl.done();
     }
 
 
@@ -74,10 +78,10 @@ class QuickDialogContainerSingleton extends HasLog {
      */
     private watchForResize(container: JQuery): void {
         // only add a timer if not already running
-        if (resizeWatcher) return;
+        if (this.resizeWatcher) return;
         const callLog = this.log.call('watchForResize');
         // if (!resizeWatcher)
-        resizeWatcher = window.setInterval(() => {
+        this.resizeWatcher = window.setInterval(() => {
             try {
                 const frm = this.getIFrame(container);
                 if (!frm) {
@@ -93,13 +97,13 @@ class QuickDialogContainerSingleton extends HasLog {
                 frm.style.minHeight = container.css('min-height');
                 frm.style.height = height + 'px';
                 frm.previousHeight = height;
-                if (isFullscreen) {
+                if (this.isFullscreen) {
                     frm.style.height = '100%';
                     frm.style.position = 'absolute';
                 }
                 callLog.onlyAddIfNew('changed to ' + height);
             } catch (e) {
-                callLog.add('error');
+                callLog.add('error', e);
             }
         }, resizeInterval);
         callLog.return(null, 'watcher added');
@@ -112,15 +116,4 @@ export const QuickDialogContainer = new QuickDialogContainerSingleton();
 
 
 
-
-
-
-
-/**
- * this is a dialog manager which is in charge of all quick-dialogues
- * it always has a reference to the latest dialog created by a.ny module instance
- */
-let isFullscreen: boolean = false;
-const resizeInterval: number = 200;
-let resizeWatcher: number = null;
 

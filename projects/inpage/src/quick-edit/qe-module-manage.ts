@@ -3,7 +3,7 @@
 /**
  * module specific stuff
  */
-export class QeModuleManager {
+class QeModuleManageSingleton {
 
   /**
    * Delete a module
@@ -104,7 +104,7 @@ export class QeModuleManager {
     // ReSharper disable once UnusedParameter
     targets.find('a').click(function() {
       const link = $(this);
-      const clip = QuickEClipboard.get(); // contents;
+      const clip = QuickEClipboard.clipboard;
       const modId = this.getModuleId(clip.item.className);
       const newPane = link.attr('data');
 
@@ -115,7 +115,7 @@ export class QeModuleManager {
   }
 }
 
-export const modManage = new QeModuleManager();
+export const modManage = new QeModuleManageSingleton();
 
 // show an error when an xhr error occurs
 function xhrError(xhr: JQueryXHR, optionalMessage: string): void {

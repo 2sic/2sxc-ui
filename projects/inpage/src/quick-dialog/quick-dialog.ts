@@ -37,7 +37,7 @@ class QuickDialogManagerSingleton extends HasLog {
      * @param {boolean} [show] true/false optional
      */
     setVisible(show: boolean): void {
-        const callLog = this.log.call('setVisible');
+        const cl = this.log.call('setVisible');
         const cont = QuickDialogContainer.getOrCreate();
         // if (show === undefined)
         //  show = !cont.hasClass(diagShowClass);
@@ -45,7 +45,7 @@ class QuickDialogManagerSingleton extends HasLog {
         cont.toggleClass(diagShowClass, show);
         this.rememberDialogState(QuickDialogContainer.getIFrame(cont), show);
         current = show ? QuickDialogContainer.getIFrame() : null;
-        callLog.done();
+        cl.done();
     }
 
     /**
@@ -63,7 +63,7 @@ class QuickDialogManagerSingleton extends HasLog {
         isFullscreen: boolean,
         dialogName: string,
     ): Promise<boolean> {
-        const callLog = this.log.call('showOrToggleFromToolbar');
+        const cl = this.log.call('showOrToggleFromToolbar');
         QuickDialogContainer.setSize(isFullscreen);
         const iFrame = QuickDialogContainer.getIFrame();
 
@@ -76,7 +76,7 @@ class QuickDialogManagerSingleton extends HasLog {
                 : null;
             this.cancel(current.bridge);
             // just a hide this, return the old promise
-            if (togglePromise) return callLog.return(togglePromise, 'just toggle off');
+            if (togglePromise) return cl.return(togglePromise, 'just toggle off');
         }
 
         const dialogUrl = this.setUrlToQuickDialog(url);
@@ -88,7 +88,7 @@ class QuickDialogManagerSingleton extends HasLog {
 
         // make sure it's visible'
         this.setVisible(true);
-        return callLog.return(this.promiseRestart(), 'restart');
+        return cl.return(this.promiseRestart(), 'restart');
     }
 
     cancel(bridge: IFrameBridge) {
@@ -133,13 +133,13 @@ class QuickDialogManagerSingleton extends HasLog {
      * @returns {string} new url pointing to quick dialog
      */
     private setUrlToQuickDialog(url: string): string {
-        const callLog = this.log.call('setUrlToQuickDialog', url);
+        const cl = this.log.call('setUrlToQuickDialog', url);
         // change default url-schema from the primary angular-app to the quick-dialog
         url = url
             .replace(DialogPaths.ng1, DialogPaths.quickDialog)
             .replace(DialogPaths.ng8, DialogPaths.quickDialog);
         url = this.changePathToLocalhostForDev(url);
-        return callLog.return(url);
+        return cl.return(url);
     }
 
 
@@ -149,7 +149,7 @@ class QuickDialogManagerSingleton extends HasLog {
      * @param url
      */
     private changePathToLocalhostForDev(url: string): string {
-        const callLog = this.log.call('changePathToLocalhostForDev', url);
+        const cl = this.log.call('changePathToLocalhostForDev', url);
         try {
             const devMode = localStorage.getItem('devMode');
             if (devMode && !!devMode)
@@ -157,7 +157,7 @@ class QuickDialogManagerSingleton extends HasLog {
         } catch (e) {
             // ignore
         }
-        return callLog.return(url);
+        return cl.return(url);
     }
 }
 

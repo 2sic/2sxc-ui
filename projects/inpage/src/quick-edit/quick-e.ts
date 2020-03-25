@@ -9,6 +9,7 @@ const selectedOverlay = $("<div class='sc-content-block-menu sc-content-block-se
     btn('sendToPane', 'move', 'Move', null, null, 'sc-cb-mod-only'),
     "<div id='paneList'></div>",
     ) as SelectionOverlay;
+
 selectedOverlay.toggleOverlay = (target: boolean | JQuery) => {
     if (!target || (target as JQuery).length === 0) {
       selectedOverlay.hide();
