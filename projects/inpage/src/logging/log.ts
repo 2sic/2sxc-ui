@@ -86,6 +86,14 @@ export class Log {
         return entry.message;
     }
 
+    addData(message: (() => string) | string, data: unknown): void {
+        if (this.logData()) this.add(message, data);
+    }
+
+    logData(): boolean {
+        return this.keepData || this._parentHasKeepData;
+    }
+
     _prepareEntry(message: (() => string) | string, data?: unknown): Entry {
         const msg = this._prepareMessage(message);
         const entry = new Entry(this, msg, this.depth, data);

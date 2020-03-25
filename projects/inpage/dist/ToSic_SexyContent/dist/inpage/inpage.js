@@ -1002,6 +1002,13 @@ var Log = /** @class */ (function () {
         this._addEntry(entry);
         return entry.message;
     };
+    Log.prototype.addData = function (message, data) {
+        if (this.logData())
+            this.add(message, data);
+    };
+    Log.prototype.logData = function () {
+        return this.keepData || this._parentHasKeepData;
+    };
     Log.prototype._prepareEntry = function (message, data) {
         var msg = this._prepareMessage(message);
         var entry = new __WEBPACK_IMPORTED_MODULE_0__entry__["Entry"](this, msg, this.depth, data);
@@ -1953,6 +1960,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__interfaces_sxc_controller_in_page__ = __webpack_require__(14);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__logging__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__config_loaders_toolbar_config_loader__ = __webpack_require__(117);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__insights_insights__ = __webpack_require__(216);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -1972,16 +1980,17 @@ var __extends = (this && this.__extends) || (function () {
 
 
 
+
 /**
  * Toolbar manager for the whole page - basically a set of APIs
  * the toolbar manager is an internal helper taking care of toolbars, buttons etc.
  */
 var ToolbarManagerGlobal = /** @class */ (function (_super) {
     __extends(ToolbarManagerGlobal, _super);
+    /** Contains a log for each toolbar which was initialized */
+    // logs = new Array<{ key: string, log: Log}>();
     function ToolbarManagerGlobal(parentLog) {
         var _this = _super.call(this, 'Tlb.Mngr', parentLog, 'init') || this;
-        /** Contains a log for each toolbar which was initialized */
-        _this.logs = new Array();
         _this.toolbarFinder = new __WEBPACK_IMPORTED_MODULE_0____["ToolbarConfigFinderAndInitializer"](_this);
         return _this;
     }
@@ -2000,7 +2009,8 @@ var ToolbarManagerGlobal = /** @class */ (function (_super) {
     };
     ToolbarManagerGlobal.prototype.loadConfig = function (context, config) {
         var loader = new __WEBPACK_IMPORTED_MODULE_3__config_loaders_toolbar_config_loader__["ToolbarConfigLoader"](this);
-        this.logs.push({ key: JSON.stringify(config.toolbar || ''), log: loader.log });
+        __WEBPACK_IMPORTED_MODULE_4__insights_insights__["a" /* Insights */].add('toolbars', JSON.stringify(config.toolbar || ''), loader.log);
+        // this.logs.push({ key: JSON.stringify(config.toolbar || ''), log: loader.log });
         return loader.load(context, config.toolbar, config.settings);
     };
     return ToolbarManagerGlobal;
@@ -2856,7 +2866,7 @@ var ButtonConfigLoader = /** @class */ (function (_super) {
      */
     ButtonConfigLoader.prototype.normalize = function (original) {
         var wrapLog = this.log.call('normalize'); // new Log('Tlb.ExpBtn', this.log, 'start');
-        wrapLog.add('initial', original);
+        wrapLog.addData('initial', original);
         // prevent multiple inits
         var asBtnConfig = original;
         if (asBtnConfig._expanded || asBtnConfig.command)
@@ -2921,6 +2931,7 @@ var ButtonConfigLoader = /** @class */ (function (_super) {
         for (var d = 0; d < btnProperties.length; d++) {
             fallbackBtnSetting(btn, group, fullToolbarConfig, actions, btnProperties[d]);
         }
+        wrapLog.return(null);
     };
     return ButtonConfigLoader;
 }(__WEBPACK_IMPORTED_MODULE_2__logging__["HasLog"]));
@@ -4856,7 +4867,7 @@ var Entry = /** @class */ (function () {
         set: function (data) {
             if (data === undefined)
                 return;
-            if (this.log.keepData || this.log._parentHasKeepData)
+            if (this.log.logData())
                 this._data = __WEBPACK_IMPORTED_MODULE_0__plumbing__["Obj"].DeepClone(data);
         },
         enumerable: true,
@@ -9617,6 +9628,10 @@ var LogCall = /** @class */ (function () {
     LogCall.prototype.add = function (message, data) {
         this.log.add(message, data);
     };
+    /** Add data - but only if data logging is enabled */
+    LogCall.prototype.addData = function (message, data) {
+        this.log.addData(message, data);
+    };
     LogCall.prototype.return = function (result, message) {
         message = message || 'ok';
         this.initialEntry.result = message;
@@ -9631,6 +9646,85 @@ var LogCall = /** @class */ (function () {
     return LogCall;
 }());
 
+
+
+/***/ }),
+/* 212 */,
+/* 213 */,
+/* 214 */,
+/* 215 */,
+/* 216 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Insights; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__interfaces_sxc_controller_in_page__ = __webpack_require__(14);
+
+// function insightsCall(partName: string, index?: number): void {
+//     Insights.show(partName, index);
+// }
+// export type InsightsCall = (partName: string, index?: number) => void;
+var InsightsSingleton = /** @class */ (function () {
+    function InsightsSingleton() {
+        // (partName: string, index?: number): void {
+        //     Insights.show(partName, index);
+        // }
+        this.history = {};
+    }
+    InsightsSingleton.prototype.add = function (setName, logName, log) {
+        if (!(setName in this.history))
+            this.history[setName] = new InsightsLogSet(setName);
+        this.history[setName].logs.push({ key: logName, log: log });
+    };
+    /** Provide help in the console */
+    InsightsSingleton.prototype.help = function () {
+        console.log("use the debugger to call $2sxc.insights.xxx where .xxx is:\n        .help() - show this help\n        .show() - show the part names and how to console-log them\n        .show(partName)");
+    };
+    InsightsSingleton.prototype.show = function (partName, index) {
+        // if nothing specified, list what to do to see inner parts
+        if (!partName) {
+            var keys = Object.keys(this.history);
+            console.log(keys.length + " parts found. Execute the code shown below to list the items inside: \n" + keys.map(function (p) { return "$2sxc.insights.show('" + p + "')"; }).join('\n'));
+            return;
+        }
+        // partName found, check if it exists
+        var part = this.history[partName];
+        if (!part) {
+            console.error("part '" + partName + "' not found");
+            return;
+        }
+        // We have a partName, but no index - show list and how to get details
+        if (index === undefined) {
+            var count_1 = 0;
+            var logNames = part.logs.map(function (s) { return "$2sxc.insights.show('" + partName + "', " + count_1++ + ") - will show for '" + s.key + "'"; }).join('\n');
+            console.log(logNames);
+            return;
+        }
+        // verify the entry exists
+        var logSet = part.logs.length >= index && part.logs[index];
+        if (!logSet) {
+            console.error("index " + index + " not found in part '" + partName + "'");
+            return;
+        }
+        if (!logSet.log) {
+            console.error("found index " + index + " on part '" + partName + "' but it has no logs");
+            return;
+        }
+        console.log("Will dump the log on " + partName + "[" + index + "]");
+        logSet.log.dump();
+    };
+    return InsightsSingleton;
+}());
+// tslint:disable-next-line: max-classes-per-file
+var InsightsLogSet = /** @class */ (function () {
+    function InsightsLogSet(name) {
+        this.name = name;
+        this.logs = [];
+    }
+    return InsightsLogSet;
+}());
+var Insights = new InsightsSingleton();
+__WEBPACK_IMPORTED_MODULE_0__interfaces_sxc_controller_in_page__["$2sxcInPage"].insights = Insights;
 
 
 /***/ })

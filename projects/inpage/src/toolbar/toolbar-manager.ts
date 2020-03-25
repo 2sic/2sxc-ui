@@ -7,6 +7,7 @@ import { HasLog, Log } from '../logging';
 import { ToolbarConfigLoader } from './config-loaders/toolbar-config-loader';
 import { Toolbar } from './config/toolbar';
 import { ToolbarInitConfig } from './initialize/toolbar-init-config';
+import { Insights } from '../insights/insights';
 
 /**
  * Toolbar manager for the whole page - basically a set of APIs
@@ -16,7 +17,7 @@ class ToolbarManagerGlobal extends HasLog {
     private readonly toolbarFinder: ToolbarConfigFinderAndInitializer;
 
     /** Contains a log for each toolbar which was initialized */
-    logs = new Array<{ key: string, log: Log}>();
+    // logs = new Array<{ key: string, log: Log}>();
 
     constructor(parentLog: Log) {
         super('Tlb.Mngr', parentLog, 'init');
@@ -42,7 +43,8 @@ class ToolbarManagerGlobal extends HasLog {
 
     loadConfig(context: ContextBundleButton, config: ToolbarInitConfig): Toolbar {
         const loader = new ToolbarConfigLoader(this);
-        this.logs.push({ key: JSON.stringify(config.toolbar || ''), log: loader.log });
+        Insights.add('toolbars', JSON.stringify(config.toolbar || ''), loader.log);
+        // this.logs.push({ key: JSON.stringify(config.toolbar || ''), log: loader.log });
         return loader.load(context, config.toolbar, config.settings);
     }
 

@@ -15,6 +15,11 @@ export class LogCall {
         this.log.add(message, data);
     }
 
+    /** Add data - but only if data logging is enabled */
+    addData(message: string, data: unknown) {
+        this.log.addData(message, data);
+    }
+
     return<T>(result: T, message?: string) {
         message = message || 'ok';
         this.initialEntry.result = message;

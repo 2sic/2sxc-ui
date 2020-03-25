@@ -11,7 +11,7 @@ export class Entry {
     }
     set data(data: unknown) {
         if (data === undefined) return;
-        if (this.log.keepData || this.log._parentHasKeepData)
+        if (this.log.logData())
             this._data = Obj.DeepClone(data);
     }
 

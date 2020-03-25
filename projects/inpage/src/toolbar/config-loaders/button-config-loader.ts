@@ -69,7 +69,7 @@ export class ButtonConfigLoader extends HasLog {
      */
     normalize(original: InPageButtonJson | InPageCommandJson | string): InPageButtonJson {
         const wrapLog = this.log.call('normalize'); // new Log('Tlb.ExpBtn', this.log, 'start');
-        wrapLog.add('initial', original);
+        wrapLog.addData('initial', original);
 
         // prevent multiple inits
         const asBtnConfig = original as InPageButtonJson;
@@ -153,6 +153,7 @@ export class ButtonConfigLoader extends HasLog {
         for (let d = 0; d < btnProperties.length; d++) {
             fallbackBtnSetting(btn, group, fullToolbarConfig, actions, btnProperties[d]);
         }
+        wrapLog.return(null);
     }
 
 }

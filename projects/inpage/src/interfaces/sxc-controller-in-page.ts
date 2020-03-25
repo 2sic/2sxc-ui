@@ -1,22 +1,23 @@
 ﻿import { SxcRootWithInternals } from '../../../$2sxc/src/index';
+import { BootstrapInPage } from '../bootstrap/bootstrap';
 import { Cms } from '../cms/Cms';
 import { Commands as Commands } from '../commands/commands';
 import { MainContentBlock } from '../contentBlock/main-content-block';
 import { ContextBundleButton } from '../context/bundles/context-bundle-button';
+import { Insights } from '../insights/insights';
 import { Manage } from '../manage/manage';
 import { QuickDialogManager } from '../quick-dialog/quick-dialog';
 import { SystemUpgrader } from '../system/2sxc.system';
 import { ToolbarManager } from '../toolbar/toolbar-manager';
 import { SxcEdit } from './sxc-instance-editable';
 import { windowInPage as window } from './window-in-page';
-import { BootstrapInPage } from '../bootstrap/bootstrap';
 
 
 /**
  * $2sxc interface declaration merging for in-page
  */
 // ReSharper disable InconsistentNaming
-export interface SxcControllerInPage extends SxcRootWithInternals {
+export interface SxcRoot extends SxcRootWithInternals {
   /**
    * Get's an SxcInstance
    * @param id number | HTMLElement
@@ -24,6 +25,7 @@ export interface SxcControllerInPage extends SxcRootWithInternals {
    * @returns SxcInstance
    */
   (id: number | HTMLElement | JQuery, cbid?: number): SxcEdit;
+  insights: typeof Insights;
   _commands: typeof Commands;
   _contentBlock: MainContentBlock;
   _quickDialog: QuickDialogManager;
@@ -39,4 +41,4 @@ export interface SxcControllerInPage extends SxcRootWithInternals {
 }
 // ReSharper restore InconsistentNaming
 
-export const $2sxcInPage: SxcControllerInPage = window.$2sxc;
+export const $2sxcInPage: SxcRoot = window.$2sxc;
