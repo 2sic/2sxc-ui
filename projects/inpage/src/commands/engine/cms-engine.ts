@@ -6,7 +6,7 @@ import { ContextBundleInstance } from '../../context/bundles/context-bundle-inst
 import { $2sxcInPage as $2sxc } from '../../interfaces/sxc-controller-in-page';
 import { HasLog, Log } from '../../logging';
 import { TypeUnsafe } from '../../plumbing';
-import { quickDialog } from '../../quick-dialog/quick-dialog';
+import { QuickDialog } from '../../quick-dialog/quick-dialog';
 import { DialogPaths } from '../../settings/DialogPaths';
 import { Button } from '../../toolbar/config';
 import { ButtonCommand } from '../../toolbar/config';
@@ -167,7 +167,7 @@ export class CmsEngine extends HasLog {
           fullScreen = context.button.fullScreen(context);
         const diagName = context.button.dialog(context).toString();
 
-        quickDialog
+        QuickDialog
           .showOrToggleFromToolbar(context, link, fullScreen, diagName)
           .then((isChanged) => {
             if (isChanged) resolveAndReInit();

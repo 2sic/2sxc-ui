@@ -1,4 +1,5 @@
-﻿import * as DialogFrameElement from './iDialogFrameElement';
+﻿import { HasLog, Insights } from '../logging/';
+import * as DialogFrameElement from './iDialogFrameElement';
 import IDialogFrameElement = DialogFrameElement.IDialogFrameElement;
 
 /**
@@ -11,15 +12,37 @@ const iframeClass = 'inpage-frame';
 const iframeTag = 'iframe';
 const containerTemplate = `<div class="${containerClass}"><div class="${iframeClass}"></div></div>`;
 
-export class QuickDialogContainer {
+class QuickDialogContainerSingleton extends HasLog {
+
+    constructor() {
+        super('QDl.Contnr');
+        Insights.add('quick-dialog', 'container', this.log);
+    }
 
     /**
      * get the current container
      * @returns {element} html element of the div
      */
-    static getOrCreate(): JQuery {
+    getOrCreate(): JQuery {
         const container = $(`.${containerClass}`);
-        return container.length > 0 ? container : buildContainerAndIFrame();
+        return container.length > 0 ? container : this.buildContainerAndIFrame();
+    }
+
+    /**
+     * build the container in the dom w/iframe for re-use
+     * @return {jquery} jquery dom-object
+     */
+    private buildContainerAndIFrame(): JQuery {
+        const callLog = this.log.call('buildContainerAndIFrame');
+        const container = $(containerTemplate);
+        if ($('#personaBar-iframe').length > 0)
+            container.addClass('persona-bar-visible');
+        const newIFrame = document.createElement(iframeTag);
+        const extendedIFrame = IDialogFrameElement.build(newIFrame, this.log);
+        container.find(`.${iframeClass}`).append(extendedIFrame);
+        $('body').append(container);
+        this.watchForResize(container);
+        return callLog.return(container, 'ok');
     }
 
     /**
@@ -27,8 +50,8 @@ export class QuickDialogContainer {
      * @param {html} [container] - html-container as jQuery object
      * @returns {html} iframe object
      */
-    static getIFrame(container?: JQuery): IDialogFrameElement {
-        if (!container) container = QuickDialogContainer.getOrCreate();
+    getIFrame(container?: JQuery): IDialogFrameElement {
+        if (!container) container = this.getOrCreate();
         return container.find(iframeTag)[0] as IDialogFrameElement;
     }
 
@@ -36,63 +59,61 @@ export class QuickDialogContainer {
      * set container css for size
      * @param {boolean} fullScreen
      */
-    static setSize(fullScreen: boolean): void {
-        const container = QuickDialogContainer.getOrCreate();
+    setSize(fullScreen: boolean): void {
+        const callLog = this.log.call('setSize');
+        const container = this.getOrCreate();
         // set container height
         container.css('min-height', fullScreen ? '100%' : '225px');
         isFullscreen = fullScreen;
+        callLog.done();
     }
-
 
 
     /**
      * create watcher which monitors the iframe size and adjusts the container as needed
      */
-    static watchForResize(container: JQuery): void {
-
-        if (!resizeWatcher) // only add a timer if not already running
+    private watchForResize(container: JQuery): void {
+        // only add a timer if not already running
+        if (resizeWatcher) return;
+        const callLog = this.log.call('watchForResize');
+        // if (!resizeWatcher)
         resizeWatcher = window.setInterval(() => {
             try {
-            const frm = QuickDialogContainer.getIFrame(container);
-            if (!frm) return;
+                const frm = this.getIFrame(container);
+                if (!frm) {
+                    callLog.onlyAddIfNew('no iframe');
+                    return;
+                }
 
-            const height: number = frm.contentDocument.body.offsetHeight;
-            if (frm.previousHeight === height) return;
-            frm.style.minHeight = container.css('min-height');
-            frm.style.height = height + 'px';
-            frm.previousHeight = height;
-            if (isFullscreen) {
-                frm.style.height = '100%';
-                frm.style.position = 'absolute';
-            }
+                const height: number = frm.contentDocument.body.offsetHeight;
+                if (frm.previousHeight === height) {
+                    callLog.onlyAddIfNew('no height change');
+                    return;
+                }
+                frm.style.minHeight = container.css('min-height');
+                frm.style.height = height + 'px';
+                frm.previousHeight = height;
+                if (isFullscreen) {
+                    frm.style.height = '100%';
+                    frm.style.position = 'absolute';
+                }
+                callLog.onlyAddIfNew('changed to ' + height);
             } catch (e) {
-            // ignore
+                callLog.add('error');
             }
         }, resizeInterval);
+        callLog.return(null, 'watcher added');
     }
 
 }
 
+export const QuickDialogContainer = new QuickDialogContainerSingleton();
 
 
 
 
 
-/**
- * build the container in the dom w/iframe for re-use
- * @return {jquery} jquery dom-object
- */
-function buildContainerAndIFrame(): JQuery {
-    const container = $(containerTemplate);
-    if ($('#personaBar-iframe').length > 0)
-        container.addClass('persona-bar-visible');
-    const newIFrame = document.createElement(iframeTag);
-    const extendedIFrame = IDialogFrameElement.build(newIFrame);
-    container.find(`.${iframeClass}`).append(extendedIFrame);
-    $('body').append(container);
-    QuickDialogContainer.watchForResize(container);
-    return container;
-}
+
 
 
 /**

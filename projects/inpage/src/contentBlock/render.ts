@@ -1,10 +1,10 @@
 ﻿import { ContextBundleButton } from '../context/bundles/context-bundle-button';
 import { HtmlTools } from '../html/dom-tools';
+import { SxcEdit } from '../interfaces/sxc-instance-editable';
 import { windowInPage as window } from '../interfaces/window-in-page';
+import { QuickE } from '../quick-edit/quick-e';
 import { ContentBlockEditor } from './content-block-editor';
 import { MainContentBlock } from './main-content-block';
-import { SxcEdit } from '../interfaces/sxc-instance-editable';
-import { QuickE } from '../quick-edit/quick-e';
 
 /*
  * this is the content block manager in the browser

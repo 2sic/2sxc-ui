@@ -7,7 +7,7 @@ export class ContextBundleToolbar extends ContextBundleItem {
 
   forButton(button: Button): ContextBundleButton {
       // the ContextBundleButton is the same as toolbar, just with .button
-      const clone = {...this} as unknown as ContextBundleButton; // O.bject.assign({}, this) as ContextBundleButton;
+      const clone = {...this} as unknown as ContextBundleButton;
       clone.button = button;
       return clone;
   }

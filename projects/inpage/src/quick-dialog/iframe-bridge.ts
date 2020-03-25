@@ -4,8 +4,9 @@ import { ContextBundleButton } from '../context/bundles/context-bundle-button';
 import * as Iiframebridge from '../interfaces/iiframe-bridge';
 import { IQuickDialogConfig } from '../interfaces/iquick-dialog-config';
 import { SxcEdit } from '../interfaces/sxc-instance-editable';
+import { HasLog, Log } from '../logging';
 import { TypeUnsafe } from '../plumbing/TypeTbD';
-import { quickDialog } from './quick-dialog';
+import { QuickDialog } from './quick-dialog';
 import { QuickDialogConfig } from './quick-dialog-config';
 import IIFrameBridge = Iiframebridge.IIFrameBridge;
 
@@ -16,105 +17,127 @@ const animationTime: number = 400;
  *
  */
 // ReSharper disable once InconsistentNaming
-export class IFrameBridge implements IIFrameBridge {
+export class IFrameBridge extends HasLog implements IIFrameBridge {
 
-  private sxcCacheKey: string;
-  private dialogName: string;
+    constructor(parentLog: Log) {
+        super('QDl.IfBrig', parentLog);
+    }
 
-  /** internal object to keep track of the sxc-instance */
-  private instanceSxc: SxcEdit;
+    private sxcCacheKey: string;
+    private dialogName: string;
 
-  /** The html-tag of the current module */
-  private tagModule: JQuery;
+    /** internal object to keep track of the sxc-instance */
+    private instanceSxc: SxcEdit;
 
-  /**
-   * get the sxc-object of this iframe
-   */
-  private uncachedSxc(): SxcEdit {
-    if (!this.instanceSxc) throw "can't find sxc-instance of IFrame, probably it wasn't initialized yet";
-    return this.instanceSxc.recreate(true) as TypeUnsafe as SxcEdit;
-  }
+    /** The html-tag of the current module */
+    private tagModule: JQuery;
 
-  getContext(): ContextBundleButton { return ContextBundleButton.findContext(this.uncachedSxc()); }
+    /**
+     * get the sxc-object of this iframe
+     */
+    private uncachedSxc(): SxcEdit {
+        if (!this.instanceSxc) throw "can't find sxc-instance of IFrame, probably it wasn't initialized yet";
+        return this.instanceSxc.recreate(true) as TypeUnsafe as SxcEdit;
+    }
 
-  getAdditionalDashboardConfig() { return QuickDialogConfig.fromContext(this.getContext()); }
+    getContext(): ContextBundleButton {
+        const cl = this.log.call('getContext');
+        return cl.return(ContextBundleButton.findContext(this.uncachedSxc()));
+    }
 
-  hide(): void { quickDialog.setVisible(false); }
+    getAdditionalDashboardConfig() {
+        const cl = this.log.call('getAdditionalDashboardConfig');
+        return cl.return(QuickDialogConfig.fromContext(this.getContext()));
+    }
 
-  run(verb: string) { this.uncachedSxc().manage.run(verb); }
+    hide(): void {
+        QuickDialog.setVisible(false);
+    }
 
-  cancel(): void { quickDialog.cancel(this); }
+    run(verb: string) {
+        this.uncachedSxc().manage.run(verb);
+    }
 
-  showMessage(message: string) {
-    renderer.showMessage(this.getContext(), `<p class="no-live-preview-available">${message}</p>`);
-    scrollToTarget(this.tagModule);
-  }
+    cancel(): void { QuickDialog.cancel(this); }
 
-  reloadAndReInit(): Promise<IQuickDialogConfig> {
-    this.changed = false;
-    return renderer.reloadAndReInitialize(this.getContext(), true, true)
-      .then(() => scrollToTarget(this.tagModule))
-      .then(() => Promise.resolve(this.getAdditionalDashboardConfig()));
-  }
+    showMessage(message: string) {
+        const cl = this.log.call('showMessage');
+        renderer.showMessage(this.getContext(), `<p class="no-live-preview-available">${message}</p>`);
+        this.scrollToTarget(this.tagModule);
+        cl.done();
+    }
 
-  setTemplate(templateId: number, templateName: string, final: boolean): Promise<boolean> {
-    this.changed = true;
-    const config = this.getAdditionalDashboardConfig();
-    const context = this.getContext();
-    const ajax = config.isContent || config.supportsAjax;
+    reloadAndReInit(): Promise<IQuickDialogConfig> {
+        this.changed = false;
+        return renderer.reloadAndReInitialize(this.getContext(), true, true)
+            .then(() => this.scrollToTarget(this.tagModule))
+            .then(() => Promise.resolve(this.getAdditionalDashboardConfig()));
+    }
 
-    // add msg on full-reload, as it takes longer
-    // don't add this on ajax, as it will have side-effects because sometimes
-    // in ajax the content won't be replaced
-    if (!ajax)
-      this.showMessage(`refreshing <b>${templateName}</b>...`);
+    setTemplate(templateId: number, templateName: string, final: boolean): Promise<boolean> {
+        const cl = this.log.call('setTemplate', `tid: ${templateId}, tname: ${templateName}, final: ${final}`);
+        this.changed = true;
+        const config = this.getAdditionalDashboardConfig();
+        const context = this.getContext();
+        const ajax = config.isContent || config.supportsAjax;
 
-    const reallySave = final || !ajax;
-    let promise = reallySave
-      ? ContentBlockEditor.updateTemplateFromDia(context, templateId)
-      : renderer.ajaxLoad(context, templateId, true);
+        // add msg on full-reload, as it takes longer
+        // don't add this on ajax, as it will have side-effects because sometimes
+        // in ajax the content won't be replaced
+        if (!ajax)
+            this.showMessage(`refreshing <b>${templateName}</b>...`);
 
-    if (final) promise = promise
-      .then(() => quickDialog.setVisible(false));
+        const reallySave = final || !ajax;
+        let promise = reallySave
+            ? ContentBlockEditor.updateTemplateFromDia(context, templateId)
+            : renderer.ajaxLoad(context, templateId, true);
 
-    promise = ajax
-      ? promise.then(() => scrollToTarget(this.tagModule))
-      : promise.then(() => window.parent.location.reload());
+        if (final)
+            promise = promise.then(() => QuickDialog.setVisible(false));
 
-    // return true if ajax, so upstream can update UIs
-    return promise.then(() => ajax);
-  }
+        promise = ajax
+            ? promise.then(() => this.scrollToTarget(this.tagModule))
+            : promise.then(() => window.parent.location.reload());
 
-  changed = false;
+        // return true if ajax, so upstream can update UIs
+        return cl.return(promise.then(() => ajax));
+    }
 
-  /**
-   * prepare the bridge with the info of the current instance
-   */
-  setup(sxc: SxcEdit, dialogName: string): void {
-    console.log('rewire with sxc: ', sxc);
+    changed = false;
 
-    this.changed = false;
-    this.instanceSxc = sxc;
-    this.tagModule = $($(SxcEdit.getTag(sxc)).parent().eq(0));
-    this.sxcCacheKey = sxc.cacheKey;
-    if (dialogName)
-      this.dialogName = dialogName;
-  }
+    /**
+     * prepare the bridge with the info of the current instance
+     */
+    setup(sxc: SxcEdit, dialogName: string): void {
+        const cl = this.log.call('setup');
+        cl.addData('rewire with sxc: ', sxc);
 
-  /**
-   * check if the dialog is showing for the current sxc-instance
-   * @param {string} dialogName - name of dialog
-   * @returns {boolean} true if it's currently showing for this sxc-instance
-   */
-  isConfiguredFor(instanceId: string, dialogName: string): boolean {
-    return this.sxcCacheKey === instanceId // the iframe is showing for the current sxc
-      && this.dialogName === dialogName; // the view is the same as previously
-  }
+        this.changed = false;
+        this.instanceSxc = sxc;
+        this.tagModule = $($(SxcEdit.getTag(sxc)).parent().eq(0));
+        this.sxcCacheKey = sxc.cacheKey;
+        if (dialogName) this.dialogName = dialogName;
+        cl.done();
+    }
+
+    /**
+     * check if the dialog is showing for the current sxc-instance
+     * @param {string} dialogName - name of dialog
+     * @returns {boolean} true if it's currently showing for this sxc-instance
+     */
+    isConfiguredFor(instanceId: string, dialogName: string): boolean {
+        return this.sxcCacheKey === instanceId // the iframe is showing for the current sxc
+            && this.dialogName === dialogName; // the view is the same as previously
+    }
+
+    private scrollToTarget(target: JQuery): void {
+        const cl = this.log.call('scrollToTarget');
+        const specs = {
+            scrollTop: target.offset().top - scrollTopOffset,
+        };
+        $('body').animate(specs, animationTime);
+        cl.done();
+    }
 }
 
-function scrollToTarget(target: JQuery): void {
-  const specs = {
-    scrollTop: target.offset().top - scrollTopOffset,
-  };
-  $('body').animate(specs, animationTime);
-}
+

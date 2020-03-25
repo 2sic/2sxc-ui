@@ -1,3 +1,4 @@
+import { HasLog } from '../../logging';
 import { ToolbarRenderer } from './toolbar-renderer';
 
 /**
@@ -8,7 +9,9 @@ import { ToolbarRenderer } from './toolbar-renderer';
  * @export
  * @class RenderPart
  */
-export class RenderPart {
-    constructor(protected parent: ToolbarRenderer) { }
+export class RenderPart extends HasLog {
+    constructor(protected parent: ToolbarRenderer, logName: string) {
+        super(logName, parent.log);
+    }
 
 }

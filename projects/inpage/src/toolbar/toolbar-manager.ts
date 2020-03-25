@@ -3,11 +3,10 @@ import { ToolbarRenderer } from '.';
 import { ToolbarConfigFinderAndInitializer } from '.';
 import { ContextBundleButton } from '../context/bundles/context-bundle-button';
 import { $2sxcInPage } from '../interfaces/sxc-controller-in-page';
-import { HasLog, Log } from '../logging';
+import { HasLog, Insights, Log } from '../logging';
 import { ToolbarConfigLoader } from './config-loaders/toolbar-config-loader';
 import { Toolbar } from './config/toolbar';
 import { ToolbarInitConfig } from './initialize/toolbar-init-config';
-import { Insights } from '../insights/insights';
 
 /**
  * Toolbar manager for the whole page - basically a set of APIs
@@ -15,9 +14,6 @@ import { Insights } from '../insights/insights';
  */
 class ToolbarManagerGlobal extends HasLog {
     private readonly toolbarFinder: ToolbarConfigFinderAndInitializer;
-
-    /** Contains a log for each toolbar which was initialized */
-    // logs = new Array<{ key: string, log: Log}>();
 
     constructor(parentLog: Log) {
         super('Tlb.Mngr', parentLog, 'init');

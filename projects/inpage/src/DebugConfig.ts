@@ -5,14 +5,7 @@ export const DebugConfig = {
     autoDump: false,
     run: true,
   },
-  qDialog: {
-    showHide: true,
-  },
   bootstrap: {
     initInstance: true,
-  },
-  state: {
-    change: true,
-    get: false,
   },
 };

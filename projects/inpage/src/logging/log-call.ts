@@ -10,14 +10,25 @@ export class LogCall {
         if (message) this.add(message);
     }
 
+    private lastMessage: string;
 
     add(message: string, data?: unknown) {
+        this.lastMessage = message;
         this.log.add(message, data);
+    }
+
+    onlyAddIfNew(message: string) {
+        if (this.lastMessage !== message)
+        this.add(message);
     }
 
     /** Add data - but only if data logging is enabled */
     addData(message: string, data: unknown) {
         this.log.addData(message, data);
+    }
+
+    done(): void {
+        this.return(null);
     }
 
     return<T>(result: T, message?: string) {

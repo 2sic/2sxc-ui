@@ -11,22 +11,9 @@ export class QuickDialogConfig implements IQuickDialogConfig {
   isList: boolean;
   templateId: number;
   contentTypeId: string;
-  // templateChooserVisible: boolean;
   user: UserOfEditContext;
   supportsAjax: boolean;
   debug: boolean;
-
-  // constructor(editContext: DataEditContext) {
-  //  this.appId = editContext.ContentGroup.AppId;
-  //  this.isContent = editContext.ContentGroup.IsContent;
-  //  this.hasContent = editContext.ContentGroup.HasContent;
-  //  this.isList = editContext.ContentGroup.IsList;
-  //  this.templateId = editContext.ContentGroup.TemplateId;
-  //  this.contentTypeId = editContext.ContentGroup.ContentTypeName;
-  //  this.templateChooserVisible = editContext.ContentBlock.ShowTemplatePicker; // todo = maybe move to content-group
-  //  this.user = getUserOfEditContext(editContext);
-  //  this.supportsAjax = editContext.ContentGroup.SupportsAjax;
-  // }
 
   static fromContext(context: ContextBundleButton): QuickDialogConfig {
     const config = new QuickDialogConfig();

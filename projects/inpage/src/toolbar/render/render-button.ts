@@ -1,61 +1,62 @@
 ﻿import { ContextBundleButton } from '../../context/bundles/context-bundle-button';
+import { HtmlTools } from '../../html/dom-tools';
+import { Button } from '../config';
 import { ButtonCommand } from '../config/button-command';
 import { RenderPart } from './render-part-base';
 import { ToolbarRenderer } from './toolbar-renderer';
 
 
 export class RenderButton extends RenderPart {
-  constructor(parent: ToolbarRenderer) { super(parent); }
-
-  render(context: ContextBundleButton, groupIndex: number): HTMLElement {
-
-    const buttonConfig = context.button;
-
-    // retrieve configuration for this button
-    const commandParams = ButtonCommand.normalize(buttonConfig.action);
-
-    let onclick: string = '';
-
-    const disabled = typeof(buttonConfig.disabled) === 'function'
-      ? buttonConfig.disabled(context)
-      : buttonConfig.disabled as boolean;
-
-    if (!disabled) {
-      onclick = `$2sxc(${context.instance.id}, ${context.contentBlock.id}).manage.run(${JSON.stringify(commandParams)}, event);`;
+    constructor(parent: ToolbarRenderer) {
+        super(parent, 'Rnd.Button');
     }
 
-    const button = document.createElement('a');
+    render(ctx: ContextBundleButton, groupIndex: number): HTMLElement {
+        const cl = this.log.call('render', `contex: obj, group: ${groupIndex}, btn: ${ctx.button.name}`);
+        const btn = ctx.button;
 
-    if (buttonConfig.action) button.classList.add(`sc-${buttonConfig.action.name}`);
+        const btnLink = document.createElement('a');
 
-    button.classList.add(`group-${groupIndex}`);
+        const disabled = typeof(btn.disabled) === 'function'
+            ? btn.disabled(ctx)
+            : btn.disabled as boolean;
 
-    if (disabled) button.classList.add('disabled');
+        // put call as plain JavaScript to preserve even if DOM is serialized
+        if (!disabled) btnLink.setAttribute('onclick', this.generateRunJs(btn, ctx));
 
-    this.parent.addClasses(button, buttonConfig.classes, ',');
+        // Add various classes
+        const classes = (disabled ? ' disabled' : '')
+            + (btn.action ? ` sc-${btn.action.name}` : '')
+            + ` group-${groupIndex}`
+            + ' ' + btn.classes
+            + (btn.dynamicClasses ? ' ' + btn.dynamicClasses(ctx) : '');
+        cl.add('classes: ' + classes);
+        HtmlTools.addClasses(btnLink, classes);
 
-    if (buttonConfig.dynamicClasses) {
-      const dynamicClasses = buttonConfig.dynamicClasses(context);
-      this.parent.addClasses(button, dynamicClasses, ' ');
+        // set title for i18n
+        if (btn.title)
+            btnLink.setAttribute('data-i18n', `[title]${btn.title(ctx)}`); // localization support
+
+
+        const divTag = document.createElement('div');
+        divTag.appendChild(this.iconTag(btn, ctx));
+        btnLink.appendChild(divTag);
+
+        return cl.return(btnLink);
     }
 
-    button.setAttribute('onclick', onclick); // serialize JavaScript because of ajax
 
-    if (buttonConfig.title)
-      button.setAttribute('data-i18n', `[title]${buttonConfig.title(context)}`); // localization support
 
-    const box = document.createElement('div');
+    private generateRunJs(btn: Button, ctx: ContextBundleButton) {
+        const runParams = ButtonCommand.normalize(btn.action);
+        return `$2sxc(${ctx.instance.id}, ${ctx.contentBlock.id}).manage.run(${JSON.stringify(runParams)}, event);`;
+    }
 
-    const symbol = document.createElement('i');
-    if (buttonConfig.icon)
-      this.parent.addClasses(symbol, buttonConfig.icon(context), ' ');
-
-    symbol.setAttribute('aria-hidden', 'true');
-
-    box.appendChild(symbol);
-
-    button.appendChild(box);
-
-    return button;
-  }
+    private iconTag(btn: Button, context: ContextBundleButton) {
+        const symbol = document.createElement('i');
+        if (btn.icon)
+            HtmlTools.addClasses(symbol, btn.icon(context));
+        symbol.setAttribute('aria-hidden', 'true');
+        return symbol;
+    }
 }

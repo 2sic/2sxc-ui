@@ -6,7 +6,7 @@ import { MainContentBlock } from '../contentBlock/main-content-block';
 import { ContextBundleButton } from '../context/bundles/context-bundle-button';
 import { Insights } from '../insights/insights';
 import { Manage } from '../manage/manage';
-import { QuickDialogManager } from '../quick-dialog/quick-dialog';
+import { QuickDialog } from '../quick-dialog/quick-dialog';
 import { SystemUpgrader } from '../system/2sxc.system';
 import { ToolbarManager } from '../toolbar/toolbar-manager';
 import { SxcEdit } from './sxc-instance-editable';
@@ -28,7 +28,7 @@ export interface SxcRoot extends SxcRootWithInternals {
   insights: typeof Insights;
   _commands: typeof Commands;
   _contentBlock: MainContentBlock;
-  _quickDialog: QuickDialogManager;
+  _quickDialog: typeof QuickDialog;
   _toolbarManager: typeof ToolbarManager;
   _manage: Manage;
   system: SystemUpgrader;

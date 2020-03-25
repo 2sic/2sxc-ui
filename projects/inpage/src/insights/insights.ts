@@ -1,17 +1,14 @@
 import { $2sxcInPage } from '../interfaces/sxc-controller-in-page';
-import { Log } from '../logging';
+import { HasLog, Log } from '../logging';
 
 type LogList = Array<{ key: string, log: Log}>;
 
-// function insightsCall(partName: string, index?: number): void {
-//     Insights.show(partName, index);
-// }
-// export type InsightsCall = (partName: string, index?: number) => void;
+class InsightsSingleton extends HasLog {
 
-class InsightsSingleton {
-    // (partName: string, index?: number): void {
-    //     Insights.show(partName, index);
-    // }
+    constructor() {
+        super('Sys.Insght');
+        this.add('system', 'insights', this.log);
+    }
 
     history: { [key: string]: InsightsLogSet } = {};
 

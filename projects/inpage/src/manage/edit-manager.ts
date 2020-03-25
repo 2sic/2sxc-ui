@@ -5,11 +5,11 @@ import { ContextBundleButton } from '../context/bundles/context-bundle-button';
 import { AttrJsonEditContext } from '../context/html-attribute/edit-context-root';
 import { SxcEdit } from '../interfaces/sxc-instance-editable';
 import { TypeUnsafe } from '../plumbing/TypeTbD';
-import { ButtonConfigLoader, InPageButtonJson, ToolbarConfigLoader } from '../toolbar/config-loaders';
+import { ToolbarManager } from '../toolbar';
+import { ButtonConfigLoader, InPageButtonJson } from '../toolbar/config-loaders';
 import { ToolbarSettings } from '../toolbar/config/toolbar-settings';
 import { ToolbarRenderer } from '../toolbar/render/toolbar-renderer';
 import { UserOfEditContext } from './user-of-edit-context';
-import { ToolbarManager } from '../toolbar/toolbar-manager';
 
 /**
  * Instance specific edit manager
@@ -55,7 +55,6 @@ export class EditManager implements SxcInstanceManage {
   getToolbar(tbConfig: TypeUnsafe, moreSettings: ToolbarSettings): string {
     tbConfig = {settings: {...tbConfig.settings, ...moreSettings}, ...tbConfig};
     const toolbarConfig = ToolbarManager.loadConfig(this.context, tbConfig);
-    // const toolbarConfig = new ToolbarConfigLoader(null).expandToolbarConfig(this.context, tbConfig, moreSettings);
     this.context.toolbar = toolbarConfig;
     return new ToolbarRenderer(this.context).render();
   }

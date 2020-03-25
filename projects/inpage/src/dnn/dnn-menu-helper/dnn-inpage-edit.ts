@@ -2,17 +2,20 @@
 import { CmdLayout } from '../../commands/command/layout';
 import { SxcEdit } from '../../interfaces/sxc-instance-editable';
 import { windowInPage as window } from '../../interfaces/window-in-page';
+import { HasLog, Insights } from '../../logging';
 
 
 /**
  * Maps actions of the module menu to JS actions - needed because onclick event can't be set (actually, a bug in DNN)
  */
-export class ActionMenuMapper {
+export class DnnActionMenu extends HasLog {
   private run: typeof SxcInstanceEngine.prototype.run;
   private tag: HTMLElement;
   private sxc: SxcEdit;
 
   constructor(moduleId: number) {
+    super('Dnn.Menu', null, `modId: ${moduleId}`);
+    Insights.add('dnn-menu', `mod: ${moduleId}`, this.log);
     this.sxc = SxcEdit.get(moduleId);
     this.tag = SxcEdit.getTag(this.sxc);
     this.run = this.sxc.manage.run;
@@ -32,5 +35,5 @@ export class ActionMenuMapper {
 }
 
 window.$2sxcActionMenuMapper = (moduleId: number) => {
-  return new ActionMenuMapper(moduleId);
+  return new DnnActionMenu(moduleId);
 };

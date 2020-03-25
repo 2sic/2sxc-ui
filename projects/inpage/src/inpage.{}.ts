@@ -1,7 +1,6 @@
 ﻿import { Cms } from './cms/Cms';
 import { Commands as Commands } from './commands/commands';
 import { ContextBundleButton } from './context/bundles/context-bundle-button';
-import { Insights } from './insights/insights';
 import { $2sxcInPage as $2sxc } from './interfaces/sxc-controller-in-page';
 import { windowInPage as window } from './interfaces/window-in-page';
 import { Manage } from './manage/manage';

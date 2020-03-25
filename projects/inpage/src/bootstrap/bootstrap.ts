@@ -3,9 +3,9 @@ import { Attributes } from '../constants';
 import { DebugConfig } from '../DebugConfig';
 import { SxcEdit } from '../interfaces/sxc-instance-editable';
 import { windowInPage as window } from '../interfaces/window-in-page';
-import { HasLog, Log, LogUtils } from '../logging';
+import { HasLog, Insights, Log, LogUtils } from '../logging';
 import { TypeUnsafe } from '../plumbing';
-import { quickDialog } from '../quick-dialog';
+import { QuickDialog } from '../quick-dialog';
 import * as QuickEditState from '../quick-dialog/state';
 import { TagToolbarManager } from '../toolbar/tag-toolbars/tag-toolbar-manager';
 import { ToolbarManager } from '../toolbar/toolbar-manager';
@@ -18,6 +18,7 @@ import { ToolbarManager } from '../toolbar/toolbar-manager';
 export class BootstrapInPage extends HasLog {
     constructor() {
         super('Sys.Bootst', null, 'Building Bootstrapper');
+        Insights.add('system', 'bootstrap', this.log);
     }
 
     private initializedInstances: JQuery[] = [];
@@ -25,7 +26,7 @@ export class BootstrapInPage extends HasLog {
     private diagCancelStateOnStart: boolean = QuickEditState.cancelled.get();
 
     initialize() {
-        this.log.add('initialize');
+        const callLog = this.log.call('initialize');
         // reset cancelled state after one reload
         if (this.diagCancelStateOnStart) QuickEditState.cancelled.remove();
 
@@ -34,7 +35,7 @@ export class BootstrapInPage extends HasLog {
 
         // start observing the body for configured mutations
         this.watchDomChanges();
-        this.log.add('initialize done');
+        callLog.return('done');
     }
 
 
@@ -43,19 +44,19 @@ export class BootstrapInPage extends HasLog {
      * @param isFirstRun should be true only on the very initial call
      */
     private initAllInstances(isFirstRun: boolean): void {
-        this.log.add('initAllInstances');
+        const callLog = this.log.call('initAllInstances');
         $('div[data-edit-context]').each((i, e) => {
             this.initInstance($(e), isFirstRun);
         });
         if (isFirstRun) this.tryShowTemplatePicker();
-        this.log.add('initAllInstances done');
+        callLog.return('initAllInstances done');
     }
 
     /**
      * create an observer instance and start observing
      */
     private watchDomChanges() {
-        this.log.add('watchDomChanges');
+        const callLog = this.log.call('watchDomChanges');
         const observer = new MutationObserver((m) => {
             // Watch statistics how changes were processed
             window.$2sxc.stats.watchDomChanges++;
@@ -95,7 +96,7 @@ export class BootstrapInPage extends HasLog {
             childList: true,
             subtree: true,
         });
-        this.log.add('watchDomChanges done');
+        callLog.return('watchDomChanges done');
     }
 
 
@@ -108,7 +109,7 @@ export class BootstrapInPage extends HasLog {
      * @returns
      */
     private tryShowTemplatePicker(): boolean {
-        this.log.add('tryShowTemplatePicker()');
+        const cl = this.log.call('tryShowTemplatePicker');
         let sxc: SxcEdit;
         // first check if we should show one according to the state-settings
         const openDialogId = QuickEditState.cbId.get();
@@ -128,13 +129,16 @@ export class BootstrapInPage extends HasLog {
         if (!sxc) {
             const uninitializedModules = $('.sc-uninitialized');
 
-            if (this.diagCancelStateOnStart || this.openedTemplatePickerOnce) return false;
+            if (this.diagCancelStateOnStart || this.openedTemplatePickerOnce)
+                return cl.return(false, 'cancelled');
 
             // already showing a dialog
-            if (quickDialog.isVisible()) return false;
+            if (QuickDialog.isVisible())
+                return cl.return(false, 'should be invisible');
 
             // not exactly one uninitialized module
-            if (uninitializedModules.length !== 1) return false;
+            if (uninitializedModules.length !== 1)
+                return cl.return(false, 'has un-init modules');
 
             // show the template picker of this module
             const module = uninitializedModules.parent('div[data-edit-context]')[0];
@@ -145,13 +149,12 @@ export class BootstrapInPage extends HasLog {
             sxc.manage.run(CmdLayout);
             this.openedTemplatePickerOnce = true;
         }
-        this.log.add('tryShowTemplatePicker() done');
-        return true;
+        return cl.return(true, 'tryShowTemplatePicker() done');
     }
 
 
     private initInstance(module: JQuery, isFirstRun: boolean): void {
-        this.log.add(`initInstance(module: obj, isFirstRun: ${isFirstRun}) initialized: ${this.initializedInstances}`);
+        const callLog = this.log.call('initInstance', `module: obj, isFirstRun: ${isFirstRun}) initialized: ${this.initializedInstances}`);
 
         // check if module is already in the list of initialized modules
         if (this.initializedInstances.find((m) => m === module)) return;
@@ -176,16 +179,20 @@ export class BootstrapInPage extends HasLog {
           ToolbarManager.buildModule(module);
           if (DebugConfig.bootstrap.initInstance) LogUtils.logDump(log);
         }
+        callLog.return(null);
     }
 
 
     private showGlassesButtonIfUninitialized(sxci: SxcEdit): boolean {
+        const callLog = this.log.call('showGlassesButtonIfUninitialized');
         // already initialized
-        if (this.isInitialized(sxci)) return false;
+        if (this.isInitialized(sxci))
+            return callLog.return(false, 'is initialized');
 
         // already has a glasses button
         const tag = $(SxcEdit.getTag(sxci));
-        if (tag.find('.sc-uninitialized').length !== 0) return false;
+        if (tag.find('.sc-uninitialized').length !== 0)
+            return callLog.return(false, 'already has button');
 
         // note: title is added on mouseover, as the translation isn't ready at page-load
         const btn = $(
@@ -197,7 +204,7 @@ export class BootstrapInPage extends HasLog {
         btn.on('click', () => sxci.manage.run(CmdLayout));
 
         tag.append(btn);
-        return true;
+        return callLog.return(true, 'ok');
     }
 
 

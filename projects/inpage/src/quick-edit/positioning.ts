@@ -1,6 +1,6 @@
 ﻿import { PositionCoordinates, QuickE, QeSelectors } from '.';
 import { ContextForLists } from './context-for-lists';
-import { quickDialog } from '../quick-dialog/quick-dialog';
+import { QuickDialog } from '../quick-dialog/quick-dialog';
 
 /**
  * Module with everything related to positioning the quick-edit in-page editing

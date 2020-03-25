@@ -27,4 +27,17 @@ export class HtmlTools {
         const item1 = tag.attributes.getNamedItem(name);
         return item1 && item1.textContent;
     }
+
+    /**
+     * Add html classes to a DOM element
+     */
+    static addClasses(element: HTMLElement, classes: string) {
+        if (!classes) return;
+        if (classes.indexOf(','))
+            classes = classes.replace(',', ' ');
+        const classessArray = classes.split(' ');
+        for (let c = 0; c < classessArray.length; c++)
+            if (classessArray[c])
+                element.classList.add(classessArray[c]);
+    }
 }
