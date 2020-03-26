@@ -2,7 +2,6 @@
 import { ToolbarRenderer } from '.';
 import { ToolbarConfigFinderAndInitializer } from '.';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
-import { $2sxcInPage } from '../interfaces/sxc-controller-in-page';
 import { HasLog, Insights, Log } from '../logging';
 import { ToolbarConfigLoader } from './config-loaders/toolbar-config-loader';
 import { Toolbar } from './config/toolbar';
@@ -17,6 +16,7 @@ class ToolbarManagerGlobal extends HasLog {
 
     constructor() {
         super('Tlb.Mngr', null, 'init');
+        Insights.add('system', 'toolbar-manager', this.log);
         this.toolbarFinder = new ToolbarConfigFinderAndInitializer(this);
     }
 

@@ -13,10 +13,10 @@ export class IDialogFrameElement extends HTMLIFrameElement {
 
     static build(iFrame: HTMLIFrameElement, log: Log): IDialogFrameElement {
         const callLog = log.call('build');
-        callLog.addData('prototype', IFrameBridge.prototype);
+        callLog.data('prototype', IFrameBridge.prototype);
         const iFrameExtended = iFrame as IDialogFrameElement;
         iFrameExtended.bridge = new IFrameBridge(log);
-        callLog.addData('extensions', iFrameExtended.bridge);
+        callLog.data('extensions', iFrameExtended.bridge);
         return callLog.return(iFrameExtended);
     }
 }

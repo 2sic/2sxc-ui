@@ -18,4 +18,9 @@ export class ToolbarTemplate {
     static is(thing: TypeTbD): thing is ToolbarTemplate {
         return (thing as ToolbarTemplate)._isToolbarTemplate;
     }
+
+    static hasGroups(thing: TypeTbD): thing is ToolbarTemplate {
+        return Array.isArray((thing as ToolbarTemplate).groups);
+    }
+
 }

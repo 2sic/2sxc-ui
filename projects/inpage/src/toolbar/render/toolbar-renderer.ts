@@ -1,3 +1,4 @@
+import { C } from '../../constants';
 import { ContextBundleToolbar } from '../../context/bundles/context-bundle-toolbar';
 import { HtmlTools } from '../../html/dom-tools';
 import { HasLog, Insights } from '../../logging';
@@ -17,10 +18,15 @@ export class ToolbarRenderer extends HasLog {
     }
 
     render(): string {
-        const cl = this.log.call('render');
+        const cl = this.log.call('generate');
+        return cl.return(this.generate().outerHTML);
+    }
+
+    generate(): HTMLUListElement {
+        const cl = this.log.call('generate');
         // render groups of buttons
         const context = this.context;
-        const groups = this.groups.render(context);
+        const groups = this.groups.generate(context);
 
         // render toolbar
         const tlbTag = document.createElement('ul');
@@ -40,17 +46,6 @@ export class ToolbarRenderer extends HasLog {
         for (let g = 0; g < groups.length; g++)
             tlbTag.appendChild(groups[g]);
 
-        return cl.return(tlbTag.outerHTML, 'done');
+        return cl.return(tlbTag, 'done');
     }
-
-    // /**
-    //  * Add html classes to a DOM element
-    //  */
-    // addClasses(element: HTMLElement, classes: string, spliter: string) {
-    //     if (!classes) return;
-    //     const classessArray = classes.split(spliter);
-    //     for (let c = 0; c < classessArray.length; c++)
-    //         if (classessArray[c])
-    //             element.classList.add(classessArray[c]);
-    // }
 }

@@ -66,7 +66,7 @@ class ContentBlockEditorSingleton extends HasLog {
             cbid: context.contentBlock.id,
             originalparameters: JSON.stringify(context.instance.parameters),
         };
-        cl.addData('params', params);
+        cl.data('params', params);
         const promise = new Promise<string>((resolve, reject) => {
                 context.sxc.webApi.get({ url: 'view/module/rendertemplate', params: params, dataType: 'html' })
                     .done((data, textStatus: string, jqXhr) => {
@@ -122,7 +122,7 @@ class ContentBlockEditorSingleton extends HasLog {
             forceCreateContentGroup: forceCreateContentGroup,
             newTemplateChooserState: false,
         };
-        cl.addData('params', params);
+        cl.data('params', params);
         const promise = new Promise<string>((resolve, reject) => {
             context.sxc.webApi.get( { url: 'view/module/savetemplateid', params: params })
                 .done((data, textStatus, jqXhr) => {

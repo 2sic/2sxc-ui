@@ -69,7 +69,7 @@ export class ButtonConfigLoader extends HasLog {
      */
     normalize(original: InPageButtonJson | InPageCommandJson | string): InPageButtonJson {
         const wrapLog = this.log.call('normalize'); // new Log('Tlb.ExpBtn', this.log, 'start');
-        wrapLog.addData('initial', original);
+        wrapLog.data('initial', original);
 
         // prevent multiple inits
         const asBtnConfig = original as InPageButtonJson;

@@ -23,12 +23,12 @@ export class LogCall {
     }
 
     /** Add data - but only if data logging is enabled */
-    addData(message: string, data: unknown) {
+    data(message: string, data: unknown) {
         this.log.addData(message, data);
     }
 
-    done(): void {
-        this.return(null);
+    done(message?: string): void {
+        this.return(null, message);
     }
 
     return<T>(result: T, message?: string) {

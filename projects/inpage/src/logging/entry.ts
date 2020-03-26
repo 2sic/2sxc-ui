@@ -23,7 +23,17 @@ export class Entry {
         public depth: number,
         data?: unknown,
         ) {
-            if (data) this.data = data;
+            if (data) {
+                if (data instanceof jQuery) {
+                    const jq = data as JQuery;
+                    this.data = {
+                        isJQuery: true,
+                        original: jq,
+                        html: jq.length && jq[0].outerHTML,
+                    };
+                } else
+                    this.data = data;
+            }
     }
 
 }

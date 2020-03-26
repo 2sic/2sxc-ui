@@ -94,7 +94,7 @@ class QuickEClipboardSingleton extends HasLog {
 
     private mark(newData: Selection): void {
         const cl = this.log.call('mark');
-        cl.addData('specs', newData);
+        cl.data('specs', newData);
 
         if (newData) {
             // if it was already selected with the same thing, then release it

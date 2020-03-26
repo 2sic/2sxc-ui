@@ -1,4 +1,5 @@
-﻿import { Entry } from './entry';
+﻿import { C } from '../constants';
+import { Entry } from './entry';
 import { LogCall } from './log-call';
 const maxScopeLen = 3;
 const maxNameLen = 6;
@@ -29,7 +30,7 @@ export class Log {
     /* if we should live-dump, can be selectively activated */
     liveDump: boolean = liveDump;
     _parentHasLiveDump: boolean = false;
-    keepData: boolean = false;
+    keepData: boolean = C.Debug.urlState;
     _parentHasKeepData: boolean = false;
 
     /**

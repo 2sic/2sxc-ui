@@ -1,6 +1,10 @@
 ﻿import { Commands } from '../commands';
 
 export const CmdCustom = 'custom';
+const ctxName = 'context';
+const evtName = 'event';
+
+const errNoCode = 'Trying to run Custom-Code action, but no customCode found to run - see console for debug info.';
 
 /**
  * import this module to commands.ts
@@ -8,26 +12,17 @@ export const CmdCustom = 'custom';
 Commands.add(CmdCustom, 'Custom', 'bomb', true, false, {
     code(context, event) {
         return new Promise((resolve, reject) => {
-            console.log('custom action with code - BETA feature, may change');
-            if (!context.button.action.params.customCode) {
-                console.warn(
-                    'custom code action, but no onclick found to run',
-                    context.button.action.params,
-                );
+            const actPar = context.button.action.params;
+            if (!actPar.customCode) {
+                console.warn(errNoCode, actPar);
+                alert(errNoCode);
                 resolve();
             }
             try {
-                const fn = new Function(
-                    'context',
-                    'event',
-                    context.button.action.params.customCode,
-                ); // jshint ignore:line
+                const fn = new Function(ctxName, evtName, actPar.customCode);
                 resolve(fn(context, event));
             } catch (err) {
-                console.error(
-                    'error in custom button-code: ',
-                    context.button.action.params,
-                );
+                console.error('error in custom button-code: ', actPar);
                 reject(err);
             }
         });

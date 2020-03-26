@@ -8,19 +8,19 @@ export class RenderButtonGroups extends RenderPart {
         super(parent, 'Rnd.Groups');
     }
 
-    render(context: ContextBundleToolbar): HTMLElement[] {
-        const cl = this.log.call('render');
+    generate(context: ContextBundleToolbar): HTMLElement[] {
+        const cl = this.log.call('generate');
         let tags: HTMLElement[] = []; // temporary storage for detached HTML DOM objects
         const btnGroups = context.toolbar.groups;
 
         for (let i = 0; i < btnGroups.length; i++)
-            tags = tags.concat(this.renderGroup(btnGroups[i], context, i));
+            tags = tags.concat(this.generateGroup(btnGroups[i], context, i));
 
         return cl.return(tags, `total tags: ${tags.length}`);
     }
 
-    private renderGroup(group: ButtonGroup, context: ContextBundleToolbar, groupNumber: number): HTMLElement[] {
-        const cl = this.log.call('renderGroup', `group #${groupNumber}`);
+    private generateGroup(group: ButtonGroup, context: ContextBundleToolbar, groupNumber: number): HTMLElement[] {
+        const cl = this.log.call('generateGroup', `group #${groupNumber}`);
         const tags: HTMLElement[] = []; // temporary storage for detached HTML DOM objects
         const btns = group.buttons;
         for (let h = 0; h < btns.length; h++) {

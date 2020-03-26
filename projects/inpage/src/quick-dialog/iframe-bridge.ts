@@ -110,7 +110,7 @@ export class IFrameBridge extends HasLog implements IIFrameBridge {
      */
     setup(sxc: SxcEdit, dialogName: string): void {
         const cl = this.log.call('setup');
-        cl.addData('rewire with sxc: ', sxc);
+        cl.data('rewire with sxc: ', sxc);
 
         this.changed = false;
         this.instanceSxc = sxc;

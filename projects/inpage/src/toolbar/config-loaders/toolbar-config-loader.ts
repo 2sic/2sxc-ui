@@ -1,5 +1,6 @@
 ﻿import { ButtonGroupConfigLoader, CommandConfigLoader, InPageCommandJson, ToolbarWip } from '.';
 import { ToolbarManager } from '..';
+import { C } from '../../constants/index';
 import { ContextComplete } from '../../context/bundles/context-bundle-button';
 import { Entry, HasLog, Log } from '../../logging';
 import { ButtonGroup, ButtonModifier, Toolbar } from '../config';
@@ -26,17 +27,20 @@ export class ToolbarConfigLoader extends HasLog {
     public logs: Array<{ key: string, entries: Entry[]}>;
 
     /** Special constructor that can only be called from the ToolbarManager */
-    constructor(owner: typeof ToolbarManager) {
-        super('Tlb.TlbCnf', owner.log);
+    constructor(_owner: typeof ToolbarManager) {
+        // important: always create a new log
+        super('Tlb.TlbCnf');
     }
 
     private setLoggingAndCreateHelpers(toolbarData: InPageToolbarConfigVariations): void {
         // note: could be true, false or 'live'
-        let debugLog = (toolbarData as ToolbarTemplate).debug;
+        let debugLog = toolbarData && (toolbarData as ToolbarTemplate).debug;
         if (debugLog === undefined && Array.isArray(toolbarData) && toolbarData.length)
             debugLog = (toolbarData[0] as ToolbarTemplate).debug;
 
-        if (liveDumpThis || debugLog) {
+        debugLog = debugLog || false;
+
+        if (liveDumpThis || debugLog || C.Debug.urlState) {
             this.log.keepData = true;
             if (liveDumpThis || debugLog.toString() === 'live')
                 this.log.liveDump = true;
@@ -81,8 +85,10 @@ export class ToolbarConfigLoader extends HasLog {
         wrapLog.add('before', raw);
         const modifiers: ButtonModifier[] = this.extractModifiers(raw);
 
-        if (InPageCommandJson.hasActions(raw) || ToolbarTemplate.is(raw)
-            || ToolbarTemplateButtonGroup.is(raw) || Array.isArray(raw))
+        if (InPageCommandJson.hasActions(raw)
+            || ToolbarTemplate.hasGroups(raw)
+            || ToolbarTemplateButtonGroup.is(raw)
+            || Array.isArray(raw))
                 return wrapLog.return(raw, 'keep raw');
 
         wrapLog.add('no toolbar structure specified, will use standard toolbar template');
@@ -167,28 +173,6 @@ export class ToolbarConfigLoader extends HasLog {
         const newToolbar: ToolbarWip = new Toolbar();
         newToolbar.groups = this.findGroups(unstructuredConfig);
 
-        // ensure that if it's just actions or buttons, they are then processed as arrays with 1 entry
-        // if (!Array.isArray(unstructuredConfig) && (unstructuredConfig.action || unstructuredConfig.buttons)) {
-        //     log.add('found no array, but detected action/buttons properties, will wrap config into array');
-        //     unstructuredConfig = [unstructuredConfig];
-        // }
-        // // ensure that arrays of actions or buttons are re-mapped to the right structure node
-        // if (Array.isArray(unstructuredConfig) && unstructuredConfig.length) {
-        //     log.add('detected array with length');
-        //     if (unstructuredConfig[0].buttons) {
-        //         log.add('detected buttons on first item, assume button-group, moving into .groups');
-        //         (unstructuredConfig as a.ny).groups = unstructuredConfig; // move "down"
-        //     } else if (unstructuredConfig[0].command || unstructuredConfig[0].action) {
-        //         log.add('detected command or action on first item, assume buttons, move into .groups[buttons] ');
-        //         unstructuredConfig = { groups: [{ buttons: unstructuredConfig }] };
-        //     } else {
-        //     log.add('can\'t detect what this is - show warning');
-        //     console.warn("toolbar tried to build toolbar but couldn't detect type of this:", unstructuredConfig);
-        //     }
-        // } else
-        //     log.add('not array or has no items');
-        // newToolbar.groups = unstructuredConfig.groups || []; // the groups of buttons
-
         const probablyTemplate = unstructuredConfig as ToolbarTemplate;
         newToolbar.params = probablyTemplate.params || {}; // these are the default command parameters
         newToolbar.settings = { ...ToolbarSettingsDefaults, ...probablyTemplate.settings, ...cleanDeprecatedSettings(toolbarSettings)};
@@ -217,7 +201,7 @@ export class ToolbarConfigLoader extends HasLog {
             } else {
                 wrapLog.add('Case 2b: not array, no action, will return it or blank');
                 // we either have groups already, or we'll return blank
-                return (ToolbarTemplate.is(unstructuredConfig))
+                return (ToolbarTemplate.hasGroups(unstructuredConfig))
                     ? wrapLog.return(unstructuredConfig.groups, 'found groups')
                     : wrapLog.return([], 'no groups = []');
             }
