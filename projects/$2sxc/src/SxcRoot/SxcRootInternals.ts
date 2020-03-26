@@ -3,13 +3,17 @@ import { TotalPopup } from '../tools/TotalPopup';
 import { Stats } from '../Stats';
 import { SxcRoot } from './SxcRoot';
 import { Debug } from '..';
+import { Insights } from '../logging';
 
 export interface SxcRootInternals {
-    _controllers: { [id: string] : SxcInstanceWithInternals }; // SxcInstanceWithInternals[key: string];
+    _controllers: { [id: string] : SxcInstanceWithInternals };
     beta: any;
     _data: any;
     debug: Debug;
     stats: Stats;
+
+    /** The debugging / insights system */
+    insights: typeof Insights;
 
     _manage: any;
     _translateInit: any;

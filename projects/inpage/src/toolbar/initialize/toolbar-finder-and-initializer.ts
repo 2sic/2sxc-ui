@@ -1,6 +1,6 @@
 ﻿import { C } from '../../constants/index';
 import { ContextComplete } from '../../context/bundles/context-bundle-button';
-import { HasLog } from '../../logging/has-log';
+import { HasLog } from '../../logging';
 import { ToolbarEmpty } from '../config';
 import { ToolbarRenderer } from '../render/toolbar-renderer';
 import { TagToolbar } from '../tag-toolbars/tag-toolbar';

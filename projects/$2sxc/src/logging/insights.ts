@@ -1,5 +1,4 @@
 import { HasLog, Log } from '.';
-import { $2sxcInPage } from '../interfaces/sxc-controller-in-page';
 
 type LogList = Array<{ key: string, log: Log}>;
 
@@ -72,6 +71,11 @@ class InsightsLogSet {
     constructor(public name: string) {}
 }
 
-export const Insights = new InsightsSingleton();
+// ensure it's only created once
+// this is important, because the inpage code also uses this class
+// and would otherwise create the object separately
+const singleton: InsightsSingleton = 
+    window.$2sxc && window.$2sxc.insights   // try to load existing
+    || new InsightsSingleton();             // otherwise create new
 
-$2sxcInPage.insights = Insights;
+export const Insights = singleton;

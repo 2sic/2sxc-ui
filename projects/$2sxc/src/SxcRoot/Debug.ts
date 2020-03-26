@@ -1,5 +1,8 @@
 import { UrlParamManager } from '..';
 
+const urlManager = new UrlParamManager();
+const urlDebugState = urlManager.get('debug') === 'true';
+
 export class Debug {
     /**
      * The load-debug state (provided by the url with debug=true)
@@ -10,10 +13,11 @@ export class Debug {
      * Cache breaker string, contans the version number of 2sxc if one is provided with sxcver=...
      */
     uncache: string;
-    
+
     constructor() {
-        const urlManager = new UrlParamManager();
-        this.load = urlManager.get('debug') === 'true';
+        this.load = urlDebugState;
         this.uncache = urlManager.get('sxcver');
     }
+
+    static urlState = urlDebugState;
 }

@@ -1,4 +1,6 @@
 
-export * from './HasLog';
+export * from './has-log';
 export * from './Log';
-export * from './LogEntry';
+export * from './log-call';
+export * from './entry';
+export * from './insights';

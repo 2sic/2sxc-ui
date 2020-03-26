@@ -2,7 +2,7 @@
 import { SxcWebApi } from './SxcWebApi';
 import { ToSxcName } from '../constants';
 import { SxcRoot } from '../SxcRoot/SxcRoot';
-import { HasLog } from '../logging/HasLog';
+import { HasLog } from '../logging';
 import { SxcRootInternals } from '../SxcRoot/SxcRootInternals';
 import { SxcInstanceManage } from '../edit-interfaces/sxc-instance-manage';
 
@@ -28,8 +28,10 @@ export class SxcInstance extends HasLog implements Public.SxcInstance {
     constructor(
         /** the sxc-instance ID, which is usually the DNN Module Id */
         public id: number,
-        /** content-block ID, which is either the module ID, or the content-block definitiion entity ID
-         * this is an advanced concept you usually don't care about, otherwise you should research it */
+        /** 
+         * content-block ID, which is either the module ID, or the content-block definitiion entity ID
+         * this is an advanced concept you usually don't care about, otherwise you should research it 
+         */
         public cbid: number,
         /** The environment information, important for http-calls */
         public readonly root: SxcRoot & SxcRootInternals,

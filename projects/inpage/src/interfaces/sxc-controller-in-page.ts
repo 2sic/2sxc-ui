@@ -23,7 +23,7 @@ export interface SxcRoot extends SxcRootWithInternals {
    * @returns SxcInstance
    */
   (id: number | HTMLElement | JQuery, cbid?: number): SxcEdit;
-  insights: typeof Insights;
+//   insights: typeof Insights;
   _manage: Manage;
   system: SystemUpgrader;
   translate(key: string): string;

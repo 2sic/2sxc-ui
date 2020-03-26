@@ -2,7 +2,16 @@
     This is just a type-index entry point.
     The purpose is that other 2sxc projects in this repo can access all the types
     in this project from here, without having to know the exact code files
+
+    Note that the order of things in this file can cause trouble
+    As webpack needs the order to be correct, meaning some depedencies need to be early
 */
+
+
+// early things without dependencies, which may be needed by others
+export * from './tools/TotalPopup';
+export * from './tools/UrlParamManager';
+
 
 export * from './ajax/AjaxPromise';
 export * from './ajax/AjaxSettings';
@@ -30,9 +39,7 @@ export * from './SxcRoot/SxcRoot';
 export * from './SxcRoot/SxcRootBuilder';
 export * from './SxcRoot/SxcRootInternals';
 
-export * from './tools/TotalPopup';
-export * from './tools/UrlParamManager';
-export * from './tools/Window';
+export * from './_/Window';
 
 
 export * from './edit-interfaces/sxc-root-manage';

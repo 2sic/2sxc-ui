@@ -3,8 +3,7 @@ import { CommandParams } from '../commands/command-params';
 import { C } from '../constants';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { ContextBundleInstance } from '../context/bundles/context-bundle-instance';
-import { HasLog } from '../logging/has-log';
-import { Log } from '../logging/log';
+import { HasLog, Log } from '../logging';
 
 const logId = 'Cms.Api';
 

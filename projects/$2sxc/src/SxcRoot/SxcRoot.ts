@@ -33,7 +33,7 @@ export interface SxcRoot extends Public.SxcRoot {
 
 
 export function getRootPartsV2() : Partial<SxcRoot> {
-    const log = new Log('$2sxc', 'building');
+    const log = new Log('$2sxc', null, 'building');
     var env = new Environment();
     return {
         sysinfo: {

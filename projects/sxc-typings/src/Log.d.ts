@@ -24,7 +24,7 @@ export interface Log {
      * @param {string} message
      * @memberof Log
      */
-    add(message: string): void;
+    add(message: (() => string) | string, data?: unknown): void;
 }
   
 /**

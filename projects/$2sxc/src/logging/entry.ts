@@ -1,5 +1,5 @@
-﻿import { Obj } from '../plumbing';
-import { Log } from './log';
+import { Obj } from '../plumbing';
+import { Log } from '.';
 
 export class Entry {
 

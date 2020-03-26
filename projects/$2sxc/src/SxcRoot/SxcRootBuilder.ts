@@ -4,8 +4,9 @@ import { Stats } from '../Stats';
 import { SxcInstanceWithInternals } from '../instance/SxcInstanceWithInternals';
 import { SxcRootInternals } from './SxcRootInternals';
 import { SxcRoot, getRootPartsV2 } from './SxcRoot';
-import { Window } from "../tools/Window";
+import { Window } from "../_/Window";
 import { Debug } from '..';
+import { Insights } from '../logging';
 
 declare const $2sxc_jQSuperlight: any;
 declare const window: Window;
@@ -73,6 +74,7 @@ export function buildSxcRoot(): SxcRoot & SxcRootInternals {
         // debug state which is needed in various places
         debug,
         stats: stats,
+        insights: Insights,
         // mini-helpers to manage 2sxc parts, a bit like a dependency loader
         // which will optimize to load min/max depending on debug state
         parts: {

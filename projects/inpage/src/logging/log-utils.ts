@@ -1,5 +1,5 @@
-﻿import { $2sxcInPage as $2sxc } from '../interfaces/sxc-controller-in-page';
-import { Log } from './log';
+﻿import { Log } from '.';
+import { $2sxcInPage as $2sxc } from '../interfaces/sxc-controller-in-page';
 
 /**
  * logDump - to write whole log to console if is enabled
