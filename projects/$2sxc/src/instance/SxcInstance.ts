@@ -1,9 +1,9 @@
 ﻿import * as Public from '../../../sxc-typings/index';
 import { SxcWebApi } from './SxcWebApi';
 import { ToSxcName } from '../constants';
-import { SxcRoot } from '../SxcRoot/SxcRoot';
+import { SxcRoot } from '../SxcRoot/sxc-root';
 import { HasLog } from '../logging';
-import { SxcRootInternals } from '../SxcRoot/SxcRootInternals';
+import { SxcRootInternals } from '../SxcRoot/sxc-root-internals';
 import { SxcInstanceManage } from '../edit-interfaces/sxc-instance-manage';
 
 const serviceScopes = ['app', 'app-sys', 'app-api', 'app-query', 'app-content', 'eav', 'view', 'dnn'];

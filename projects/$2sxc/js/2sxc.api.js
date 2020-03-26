@@ -112,14 +112,14 @@ var MetaHeaderJsApi = '_jsApi';
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__tools_TotalPopup__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__tools_total_popup__ = __webpack_require__(4);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__tools_UrlParamManager__ = __webpack_require__(5);
-/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "c", function() { return __WEBPACK_IMPORTED_MODULE_1__tools_UrlParamManager__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__tools_url_param_manager__ = __webpack_require__(5);
+/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "c", function() { return __WEBPACK_IMPORTED_MODULE_1__tools_url_param_manager__["a"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ajax_AjaxPromise__ = __webpack_require__(10);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__logging_index__ = __webpack_require__(0);
-/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "b", function() { return __WEBPACK_IMPORTED_MODULE_3__logging_index__["b"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__logging__ = __webpack_require__(0);
+/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "b", function() { return __WEBPACK_IMPORTED_MODULE_3__logging__["b"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__environment_Environment__ = __webpack_require__(12);
 /* unused harmony namespace reexport */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__http_SxcHttp__ = __webpack_require__(13);
@@ -132,11 +132,11 @@ var MetaHeaderJsApi = '_jsApi';
 /* unused harmony namespace reexport */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__instance_SxcWebApi__ = __webpack_require__(9);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__SxcRoot_Debug__ = __webpack_require__(23);
-/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_10__SxcRoot_Debug__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__SxcRoot_SxcRoot__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__SxcRoot_debug__ = __webpack_require__(23);
+/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_10__SxcRoot_debug__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__SxcRoot_sxc_root__ = __webpack_require__(14);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__SxcRoot_SxcRootBuilder__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__SxcRoot_sxc_root_builder__ = __webpack_require__(3);
 /* unused harmony namespace reexport */
 
 
@@ -159,11 +159,11 @@ var MetaHeaderJsApi = '_jsApi';
 
 "use strict";
 /* harmony export (immutable) */ __webpack_exports__["a"] = buildSxcRoot;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__tools_TotalPopup__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__tools_UrlParamManager__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__tools_total_popup__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__tools_url_param_manager__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Stats__ = __webpack_require__(19);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__instance_SxcInstanceWithInternals__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__SxcRoot__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__sxc_root__ = __webpack_require__(14);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5____ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__logging__ = __webpack_require__(0);
 
@@ -196,15 +196,15 @@ function FindSxcInstance(id, cbid) {
         = new __WEBPACK_IMPORTED_MODULE_3__instance_SxcInstanceWithInternals__["a" /* SxcInstanceWithInternals */](id, cbid, cacheKey, $2sxc));
 }
 function buildSxcRoot() {
-    var rootApiV2 = Object(__WEBPACK_IMPORTED_MODULE_4__SxcRoot__["a" /* getRootPartsV2 */])();
-    var urlManager = new __WEBPACK_IMPORTED_MODULE_1__tools_UrlParamManager__["a" /* UrlParamManager */]();
+    var rootApiV2 = Object(__WEBPACK_IMPORTED_MODULE_4__sxc_root__["a" /* getRootPartsV2 */])();
+    var urlManager = new __WEBPACK_IMPORTED_MODULE_1__tools_url_param_manager__["a" /* UrlParamManager */]();
     var debug = new __WEBPACK_IMPORTED_MODULE_5____["a" /* Debug */]();
     var stats = new __WEBPACK_IMPORTED_MODULE_2__Stats__["a" /* Stats */]();
     var addOn = {
         _controllers: {},
         beta: {},
         _data: {},
-        totalPopup: new __WEBPACK_IMPORTED_MODULE_0__tools_TotalPopup__["a" /* TotalPopup */](),
+        totalPopup: new __WEBPACK_IMPORTED_MODULE_0__tools_total_popup__["a" /* TotalPopup */](),
         urlParams: urlManager,
         debug: debug,
         stats: stats,
@@ -962,11 +962,11 @@ function getRootPartsV2() {
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__jquery_ajax_ajax203_js__ = __webpack_require__(16);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__jquery_ajax_ajax203_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__jquery_ajax_ajax203_js__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__SxcRoot_SxcRootBuilder__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__SxcRoot_sxc_root_builder__ = __webpack_require__(3);
 
 
 if (!window.$2sxc)
-    window.$2sxc = Object(__WEBPACK_IMPORTED_MODULE_1__SxcRoot_SxcRootBuilder__["a" /* buildSxcRoot */])();
+    window.$2sxc = Object(__WEBPACK_IMPORTED_MODULE_1__SxcRoot_sxc_root_builder__["a" /* buildSxcRoot */])();
 
 
 /***/ }),

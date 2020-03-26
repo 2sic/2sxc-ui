@@ -1,6 +1,6 @@
 import { SxcInstanceDataDeprecated } from './SxcInstanceDataDeprecated';
-import { SxcRootInternals } from '../SxcRoot/SxcRootInternals';
-import { SxcRoot } from '../SxcRoot/SxcRoot';
+import { SxcRootInternals } from '../SxcRoot/sxc-root-internals';
+import { SxcRoot } from '../SxcRoot/sxc-root';
 import { SxcInstance } from './SxcInstance';
 
 export class SxcInstanceWithInternals extends SxcInstance {

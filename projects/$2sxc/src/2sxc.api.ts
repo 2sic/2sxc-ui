@@ -6,7 +6,7 @@
 // Keep our super-slimmed down jQuery for AJAX
 import './jquery-ajax/ajax203.js'
 import { Window } from './_/Window';
-import { buildSxcRoot } from './SxcRoot/SxcRootBuilder';
+import { buildSxcRoot } from './SxcRoot/sxc-root-builder';
 
 declare const window: Window;
 

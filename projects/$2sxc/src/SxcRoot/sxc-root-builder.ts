@@ -1,9 +1,9 @@
-﻿import { TotalPopup } from '../tools/TotalPopup';
-import { UrlParamManager } from '../tools/UrlParamManager';
+﻿import { TotalPopup } from '../tools/total-popup';
+import { UrlParamManager } from '../tools/url-param-manager';
 import { Stats } from '../Stats';
 import { SxcInstanceWithInternals } from '../instance/SxcInstanceWithInternals';
-import { SxcRootInternals } from './SxcRootInternals';
-import { SxcRoot, getRootPartsV2 } from './SxcRoot';
+import { SxcRootInternals } from './sxc-root-internals';
+import { SxcRoot, getRootPartsV2 } from './sxc-root';
 import { Window } from "../_/Window";
 import { Debug } from '..';
 import { Insights } from '../logging';

@@ -1,7 +1,7 @@
 import { SxcInstanceWithInternals } from '../instance/SxcInstanceWithInternals';
-import { TotalPopup } from '../tools/TotalPopup';
+import { TotalPopup } from '../tools/total-popup';
 import { Stats } from '../Stats';
-import { SxcRoot } from './SxcRoot';
+import { SxcRoot } from './sxc-root';
 import { Debug } from '..';
 import { Insights } from '../logging';
 
