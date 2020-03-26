@@ -21,11 +21,6 @@ export class ToolbarSettings {
             Obj.TypeSafeAssign(this, toolbarSettings);
     }
 
-    static evalModifier(name: string, settings: ToolbarSettings) {
-        name = name.toLocaleLowerCase();
-        const set = settings._btnModifiers.find((bf) => bf.name === name);
-        return (set) ? set.operation : null;
-    }
 }
 
 

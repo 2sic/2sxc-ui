@@ -5,6 +5,7 @@ import { CommandParams } from '../../commands/command-params';
 import { ContextComplete } from '../../context/bundles/context-bundle-button';
 import { Obj, TypeTbD, TypeUnsafe } from '../../plumbing';
 import { InPageButtonJson } from '../config-loaders';
+import { ButtonModifier } from './button-modifier';
 
 
 /** This is the most common call signature on most ButtonConfig properties */
@@ -16,7 +17,9 @@ export type ButtonPropertyGenerator<T> = (context: ContextComplete) => T;
 export class Button {
     action: ButtonCommand;
     classes: string = '';
-    show: boolean = null; // maybe
+    // show: boolean = null; // maybe
+
+    modifier?: ButtonModifier;
 
     constructor(action: ButtonCommand, public name: string /*, partialConfig?: Partial<Button> */) {
         if (action && action.command && action.command.buttonConfig) {

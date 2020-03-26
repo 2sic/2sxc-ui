@@ -2681,30 +2681,43 @@ var ContextBundleContent = /** @class */ (function (_super) {
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ButtonModifier", function() { return ButtonModifier; });
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 // tslint:disable-next-line: max-classes-per-file
 var ButtonModifier = /** @class */ (function () {
     function ButtonModifier(code) {
-        this.operation = null;
+        this.add = false;
+        this.remove = false;
+        if (!code || !code.length)
+            return;
+        code = code.trim();
         if (!code || !code.length)
             return;
         if (code[0] === '+')
-            this.operation = '+';
+            this.add = true; // this.operation = '+';
         if (code[0] === '-')
-            this.operation = '-';
-        if (this.operation)
-            this.name = code.substring(1).toLocaleLowerCase();
+            this.remove = true; // this.operation = '-';
+        this.name = ((this.add || this.remove) ? code.substring(1) : code)
+            .toLocaleLowerCase();
     }
-    ButtonModifier.check = function (modifiers, name) {
+    ButtonModifier.findOrCreate = function (modifiers, name) {
         if (!name)
-            return { add: false, remove: false, reason: 'no name' };
+            return __assign({ reason: 'no name' }, new ButtonModifier(name));
         var mod = modifiers.find(function (m) { return m.name === name; });
         if (!mod)
-            return { add: false, remove: false, reason: 'not found' };
-        if (mod.operation === '+')
-            return { add: true, remove: false, reason: 'found' };
-        if (mod.operation === '-')
-            return { add: false, remove: true, reason: 'found' };
-        return { add: false, remove: false, reason: 'unknown' };
+            return __assign({ reason: 'not found' }, new ButtonModifier(name));
+        if (mod.add || mod.remove)
+            return __assign({ reason: 'found' }, mod);
+        return __assign({ reason: 'unknown' }, new ButtonModifier(name));
     };
     return ButtonModifier;
 }());
@@ -3124,10 +3137,11 @@ var ButtonConfigLoader = /** @class */ (function (_super) {
             // add to context for calls to verify if it should be shown
             context.button = btn;
             if (btn.action) {
-                var modifier = __WEBPACK_IMPORTED_MODULE_4__config_button_modifier__["ButtonModifier"].check(modifiers, btn.action.name);
+                var modifier = __WEBPACK_IMPORTED_MODULE_4__config_button_modifier__["ButtonModifier"].findOrCreate(modifiers, btn.action.name);
+                btn.modifier = modifier;
                 var remove = modifier.remove
                     || !evalPropOrFunction(btn.showCondition, context, /* config, */ true);
-                if (remove) {
+                if (!modifier.add && remove) {
                     removals += "#" + i + " \"" + btn.action.name + "\"; ";
                     btns.splice(i--, 1);
                 }
@@ -5196,7 +5210,6 @@ var Button = /** @class */ (function () {
     function Button(action, name /*, partialConfig?: Partial<Button> */) {
         this.name = name;
         this.classes = '';
-        this.show = null; // maybe
         this.dynamicDisabled = function () { return false; };
         if (action && action.command && action.command.buttonConfig) {
             this.action = action;
@@ -5327,11 +5340,6 @@ var ToolbarSettings = /** @class */ (function () {
         if (toolbarSettings)
             __WEBPACK_IMPORTED_MODULE_0__plumbing__["Obj"].TypeSafeAssign(this, toolbarSettings);
     }
-    ToolbarSettings.evalModifier = function (name, settings) {
-        name = name.toLocaleLowerCase();
-        var set = settings._btnModifiers.find(function (bf) { return bf.name === name; });
-        return (set) ? set.operation : null;
-    };
     return ToolbarSettings;
 }());
 
@@ -7533,17 +7541,22 @@ var CmdDelete = 'delete';
 __WEBPACK_IMPORTED_MODULE_0____["Commands"].add(CmdDelete, 'Delete', 'cancel', true, false, {
     // disabled: true,
     showCondition: function (context) {
+        var p = context.button.action.params;
         // can never be used for a modulelist item, as it is always in use somewhere
-        if (context.button.action.params.useModuleList) {
+        if (p.useModuleList)
             return false;
-        }
         // check if all data exists required for deleting
-        return (!!context.button.action.params.entityId &&
-            !!context.button.action.params.entityGuid &&
-            !!context.button.action.params.entityTitle);
+        // before 10.27, it was entityId, entityGuid and entityTitle
+        // since 10.27, there will always be a guid (if it has an ID)
+        // and enabling it requires an action-modifier "+delete",
+        // so the automatic detection only applies
+        // to the pre-10.27 custom toolbars case
+        return (!!p.entityId && !!p.entityGuid && !!p.entityTitle);
     },
     code: function (context) {
-        return __WEBPACK_IMPORTED_MODULE_1__entity_manipulation_item_commands__["contentItems"].delete(context, context.button.action.params.entityId, context.button.action.params.entityGuid, context.button.action.params.entityTitle);
+        var p = context.button.action.params;
+        var title = p.title || p.entityTitle; // prefer new title, and fallback to old for pre 10.27 configs
+        return __WEBPACK_IMPORTED_MODULE_1__entity_manipulation_item_commands__["contentItems"].delete(context, p.entityId, p.entityGuid, p.title || p.entityTitle);
     },
 });
 
@@ -9925,4 +9938,4 @@ var __WEBPACK_AMD_DEFINE_RESULT__;/*
 
 /***/ })
 /******/ ]);
-//# sourceMappingURL=inpage.js.map
+//# sourceMappingURL=https://sources.2sxc.org/10.27.00/./inpage/inpage.js.map

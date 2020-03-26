@@ -170,10 +170,11 @@ export class ButtonConfigLoader extends HasLog {
             // add to context for calls to verify if it should be shown
             context.button = btn;
             if (btn.action) {
-                const modifier = ButtonModifier.check(modifiers, btn.action.name);
+                const modifier = ButtonModifier.findOrCreate(modifiers, btn.action.name);
+                btn.modifier = modifier;
                 const remove = modifier.remove
                     || !evalPropOrFunction(btn.showCondition, context, /* config, */ true);
-                if (remove) {
+                if (!modifier.add && remove) {
                     removals += `#${i} "${btn.action.name}"; `;
                     btns.splice(i--, 1);
                 }

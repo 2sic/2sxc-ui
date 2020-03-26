@@ -20,8 +20,15 @@ export interface CommandParams {
     dialog?: string;
     sortOrder?: number;
     entityId?: number;
+
+    /** The guid - for people creating custom toolbars before 10.27 or automatically added since 10.27 */
     entityGuid?: string;
+
+    /** The manually added title from before 10.27 - automatically enabled the delete-button */
     entityTitle?: string;
+
+    title?: string;
+
     useModuleList?: boolean;
     metadata?: MetadataFor;
 
