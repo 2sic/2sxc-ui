@@ -25,26 +25,29 @@ export class ButtonConfigLoader extends HasLog {
      *          I'm not sure why though.
      */
     convertToButton(jsonBtn: InPageButtonJson): Button {
-        const btn: Partial<Button> = {};
-
-        if (jsonBtn.code) btn.code = (c: ContextComplete) => jsonBtn.code(c.button.action.params);
-        if (jsonBtn.icon) btn.icon = () => `icon-sxc-${jsonBtn.icon}`;
-        if (jsonBtn.classes) btn.classes = jsonBtn.classes;
-        if (jsonBtn.dialog) btn.dialog = () => jsonBtn.dialog;
-        if (jsonBtn.disabled) btn.disabled = () => jsonBtn.disabled;
-        if (jsonBtn.dynamicClasses) btn.dynamicClasses = (c: ContextComplete) => jsonBtn.dynamicClasses(c.button.action.params);
-        if (jsonBtn.fullScreen) btn.fullScreen = () => jsonBtn.fullScreen;
-        if (jsonBtn.inlineWindow) btn.inlineWindow = () => jsonBtn.inlineWindow;
-        if (jsonBtn.name) btn.name = jsonBtn.name;
-        if (jsonBtn.newWindow) btn.newWindow = () => jsonBtn.newWindow;
+        //#region just-found-out-this-code doesn't seem to do anything! 2020-03-26
+        // original was here: https://github.com/2sic/2sxc-inpage/blob/f071211ba5356c87c4c57b4d4cc900b3c1bf7b3e/src/toolbar/adapters/button-config-adapter.ts
+        // but the created object isn't used!
+        // const btn: Partial<Button> = {};
+        //
+        // if (jsonBtn.code) btn.code = (c: ContextComplete) => jsonBtn.code(c.button.action.params);
+        // if (jsonBtn.icon) btn.icon = () => `icon-sxc-${jsonBtn.icon}`;
+        // if (jsonBtn.classes) btn.classes = jsonBtn.classes;
+        // if (jsonBtn.dialog) btn.dialog = () => jsonBtn.dialog;
+        // if (jsonBtn.disabled) btn.disabled = () => jsonBtn.disabled;
+        // if (jsonBtn.dynamicClasses) btn.dynamicClasses = (c: ContextComplete) => jsonBtn.dynamicClasses(c.button.action.params);
+        // if (jsonBtn.fullScreen) btn.fullScreen = () => jsonBtn.fullScreen;
+        // if (jsonBtn.inlineWindow) btn.inlineWindow = () => jsonBtn.inlineWindow;
+        // if (jsonBtn.name) btn.name = jsonBtn.name;
+        // if (jsonBtn.newWindow) btn.newWindow = () => jsonBtn.newWindow;
 
         // todo: stv, this do not looking good, because old simple parameters become methods with context as parameter,
         // we need parameter adapter to do this...
-        if (jsonBtn.params) btn.params = () => jsonBtn.params;
-        if (jsonBtn.partOfPage) btn.partOfPage = () => jsonBtn.partOfPage;
-        if (jsonBtn.showCondition) btn.showCondition = (c: ContextComplete) => jsonBtn.showCondition(c.button.action.params);
-        if (jsonBtn.title) btn.title = () => `Toolbar.${jsonBtn.title}`;
-        if (jsonBtn.uiActionOnly) btn.uiActionOnly = () => jsonBtn.uiActionOnly;
+        // if (jsonBtn.params) btn.params = () => jsonBtn.params;
+        // if (jsonBtn.partOfPage) btn.partOfPage = () => jsonBtn.partOfPage;
+        // if (jsonBtn.showCondition) btn.showCondition = (c: ContextComplete) => jsonBtn.showCondition(c.button.action.params);
+        // if (jsonBtn.title) btn.title = () => `Toolbar.${jsonBtn.title}`;
+        // if (jsonBtn.uiActionOnly) btn.uiActionOnly = () => jsonBtn.uiActionOnly;
 
         jsonBtn = this.normalize(jsonBtn);
 
@@ -52,14 +55,14 @@ export class ButtonConfigLoader extends HasLog {
         const contentType = jsonBtn.command.contentType;
 
         // if the button belongs to a content-item, move the specs up to the item into the settings-object
-        this.toolbar.command.normalizeCommandJson(jsonBtn.command);
+        this.toolbar.command.updateCommandToV9(jsonBtn.command);
 
         // parameters adapter from v1 to v2
-        const params = this.toolbar.command.removeActionProperty(jsonBtn.command);
+        const cmdConfig = this.toolbar.command.removeActionProperty(jsonBtn.command);
 
         // Toolbar API v2
-        const newButtonAction = new ButtonCommand(name, contentType, params);
-        return new Button(newButtonAction, name);
+        const btnCommand = new ButtonCommand(name, contentType, cmdConfig);
+        return new Button(btnCommand, name);
     }
 
 
