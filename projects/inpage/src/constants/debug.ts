@@ -6,5 +6,4 @@ export const Debug = {
     bootstrap: {
         initInstance: true,
     },
-    urlState: window.$2sxc.urlParams.get('debug') === 'true',
 };

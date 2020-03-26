@@ -34,7 +34,7 @@ export class SxcInstance extends HasLog implements Public.SxcInstance {
         /** The environment information, important for http-calls */
         public readonly root: SxcRoot & SxcRootInternals,
     ) {
-        super('SxcInstance', 'Generating for ' + id + ':' + cbid);
+        super('SxcInstance', null, 'Generating for ' + id + ':' + cbid);
         this.webApi = new SxcWebApi(this);
 
         // add manage property, but not within initializer, because inside the manage-initializer it may reference 2sxc again

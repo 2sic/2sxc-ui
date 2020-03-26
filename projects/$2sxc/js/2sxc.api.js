@@ -112,6 +112,8 @@ var MetaHeaderJsApi = '_jsApi';
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Stats__ = __webpack_require__(19);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__instance_SxcInstanceWithInternals__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__SxcRoot__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5____ = __webpack_require__(23);
+
 
 
 
@@ -142,10 +144,7 @@ function FindSxcInstance(id, cbid) {
 function buildSxcRoot() {
     var rootApiV2 = Object(__WEBPACK_IMPORTED_MODULE_4__SxcRoot__["a" /* getRootPartsV2 */])();
     var urlManager = new __WEBPACK_IMPORTED_MODULE_1__tools_UrlParamManager__["a" /* UrlParamManager */]();
-    var debug = {
-        load: (urlManager.get('debug') === 'true'),
-        uncache: urlManager.get('sxcver'),
-    };
+    var debug = new __WEBPACK_IMPORTED_MODULE_5____["a" /* Debug */]();
     var stats = new __WEBPACK_IMPORTED_MODULE_2__Stats__["a" /* Stats */]();
     var addOn = {
         _controllers: {},
@@ -279,9 +278,12 @@ var UrlParamManager = (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__SxcInstanceDataDeprecated__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__SxcInstance__ = __webpack_require__(7);
 var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
     return function (d, b) {
         extendStatics(d, b);
         function __() { this.constructor = d; }
@@ -400,9 +402,12 @@ var SxcInstanceDataDeprecated = (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__constants__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__logging_HasLog__ = __webpack_require__(10);
 var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
     return function (d, b) {
         extendStatics(d, b);
         function __() { this.constructor = d; }
@@ -416,7 +421,7 @@ var serviceScopes = ['app', 'app-sys', 'app-api', 'app-query', 'app-content', 'e
 var SxcInstance = (function (_super) {
     __extends(SxcInstance, _super);
     function SxcInstance(id, cbid, root) {
-        var _this = _super.call(this, 'SxcInstance', 'Generating for ' + id + ':' + cbid) || this;
+        var _this = _super.call(this, 'SxcInstance', null, 'Generating for ' + id + ':' + cbid) || this;
         _this.id = id;
         _this.cbid = cbid;
         _this.root = root;
@@ -595,7 +600,7 @@ var AjaxPromise = (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0____ = __webpack_require__(1);
 
 var HasLog = (function () {
-    function HasLog(name, message) {
+    function HasLog(name, parentLog, message) {
         this.log = new __WEBPACK_IMPORTED_MODULE_0____["b" /* Log */](name, message);
     }
     return HasLog;
@@ -684,9 +689,12 @@ function getRootPartsV2() {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__constants__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__logging_index__ = __webpack_require__(1);
 var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
     return function (d, b) {
         extendStatics(d, b);
         function __() { this.constructor = d; }
@@ -699,7 +707,7 @@ var __extends = (this && this.__extends) || (function () {
 var Environment = (function (_super) {
     __extends(Environment, _super);
     function Environment() {
-        var _this = _super.call(this, 'Environment', 'starting') || this;
+        var _this = _super.call(this, 'Environment', null, 'starting') || this;
         _this.ready = false;
         _this.source = '';
         _this.metaLoader = new __WEBPACK_IMPORTED_MODULE_0__envMetaLoader__["a" /* EnvironmentMetaLoader */](_this);
@@ -758,9 +766,12 @@ var Environment = (function (_super) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__constants__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__index__ = __webpack_require__(23);
 var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
     return function (d, b) {
         extendStatics(d, b);
         function __() { this.constructor = d; }
@@ -772,7 +783,7 @@ var __extends = (this && this.__extends) || (function () {
 var SxcHttp = (function (_super) {
     __extends(SxcHttp, _super);
     function SxcHttp(env) {
-        var _this = _super.call(this, "Sxc.Http") || this;
+        var _this = _super.call(this, 'Sxc.Http') || this;
         _this.env = env;
         return _this;
     }
@@ -804,7 +815,7 @@ var SxcHttp = (function (_super) {
         return this.log.return(baseUrl + url);
     };
     return SxcHttp;
-}(__WEBPACK_IMPORTED_MODULE_1__index__["a" /* HasLog */]));
+}(__WEBPACK_IMPORTED_MODULE_1__index__["b" /* HasLog */]));
 
 
 
@@ -1013,7 +1024,7 @@ var EnvironmentDnnSfLoader = (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ajax_AjaxPromise__ = __webpack_require__(9);
 /* unused harmony namespace reexport */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__logging_index__ = __webpack_require__(1);
-/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_1__logging_index__["a"]; });
+/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "b", function() { return __WEBPACK_IMPORTED_MODULE_1__logging_index__["a"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__environment_Environment__ = __webpack_require__(13);
 /* unused harmony namespace reexport */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__http_SxcHttp__ = __webpack_require__(14);
@@ -1026,14 +1037,16 @@ var EnvironmentDnnSfLoader = (function () {
 /* unused harmony namespace reexport */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__instance_SxcWebApi__ = __webpack_require__(8);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__SxcRoot_SxcRoot__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__SxcRoot_Debug__ = __webpack_require__(24);
+/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_8__SxcRoot_Debug__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__SxcRoot_SxcRoot__ = __webpack_require__(12);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__SxcRoot_SxcRootBuilder__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__SxcRoot_SxcRootBuilder__ = __webpack_require__(2);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__tools_TotalPopup__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__tools_TotalPopup__ = __webpack_require__(3);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__tools_UrlParamManager__ = __webpack_require__(4);
-/* unused harmony namespace reexport */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__tools_UrlParamManager__ = __webpack_require__(4);
+/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "c", function() { return __WEBPACK_IMPORTED_MODULE_12__tools_UrlParamManager__["a"]; });
 
 
 
@@ -1045,6 +1058,26 @@ var EnvironmentDnnSfLoader = (function () {
 
 
 
+
+
+
+
+/***/ }),
+/* 24 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Debug; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0____ = __webpack_require__(23);
+
+var Debug = (function () {
+    function Debug() {
+        var urlManager = new __WEBPACK_IMPORTED_MODULE_0____["c" /* UrlParamManager */]();
+        this.load = urlManager.get('debug') === 'true';
+        this.uncache = urlManager.get('sxcver');
+    }
+    return Debug;
+}());
 
 
 

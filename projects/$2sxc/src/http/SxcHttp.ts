@@ -4,7 +4,7 @@ import { Environment, HasLog, Log } from '../index';
 
 export class SxcHttp extends HasLog implements Public.Http {
     constructor(private env: Environment) {
-        super("Sxc.Http");
+        super('Sxc.Http');
     }
 
     /**

@@ -18,7 +18,7 @@ export class Environment extends HasLog implements Public.Environment {
   public metaLoader: EnvironmentMetaLoader;
 
   constructor() {
-      super('Environment', 'starting');
+      super('Environment', null, 'starting');
     // this.log = new Log();
     this.metaLoader = new EnvironmentMetaLoader(this);
 

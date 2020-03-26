@@ -25,7 +25,7 @@ export * from './instance/SxcInstanceWithInternals';
 export * from './instance/SxcWebApi';
 
 
-
+export * from './SxcRoot/Debug';
 export * from './SxcRoot/SxcRoot';
 export * from './SxcRoot/SxcRootBuilder';
 export * from './SxcRoot/SxcRootInternals';

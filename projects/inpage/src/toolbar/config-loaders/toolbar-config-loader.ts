@@ -1,8 +1,7 @@
 ﻿import { ButtonGroupConfigLoader, CommandConfigLoader, InPageCommandJson, ToolbarWip } from '.';
 import { ToolbarManager } from '..';
-import { C } from '../../constants/index';
 import { ContextComplete } from '../../context/bundles/context-bundle-button';
-import { Entry, HasLog, Log } from '../../logging';
+import { Entry, HasLog } from '../../logging';
 import { ButtonGroup, ButtonModifier, Toolbar } from '../config';
 import { ToolbarSettings, ToolbarSettingsDefaults, ToolbarSettingsForEmpty } from '../config';
 import { InPageToolbarConfigVariations } from '../initialize/toolbar-init-config';
@@ -40,7 +39,7 @@ export class ToolbarConfigLoader extends HasLog {
 
         debugLog = debugLog || false;
 
-        if (liveDumpThis || debugLog || C.Debug.urlState) {
+        if (liveDumpThis || debugLog) {
             this.log.keepData = true;
             if (liveDumpThis || debugLog.toString() === 'live')
                 this.log.liveDump = true;

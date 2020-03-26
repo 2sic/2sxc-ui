@@ -2,12 +2,13 @@ import { SxcInstanceWithInternals } from '../instance/SxcInstanceWithInternals';
 import { TotalPopup } from '../tools/TotalPopup';
 import { Stats } from '../Stats';
 import { SxcRoot } from './SxcRoot';
+import { Debug } from '..';
 
 export interface SxcRootInternals {
     _controllers: { [id: string] : SxcInstanceWithInternals }; // SxcInstanceWithInternals[key: string];
     beta: any;
     _data: any;
-    debug: any;
+    debug: Debug;
     stats: Stats;
 
     _manage: any;

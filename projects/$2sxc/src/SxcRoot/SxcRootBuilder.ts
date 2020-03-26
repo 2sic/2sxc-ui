@@ -5,6 +5,7 @@ import { SxcInstanceWithInternals } from '../instance/SxcInstanceWithInternals';
 import { SxcRootInternals } from './SxcRootInternals';
 import { SxcRoot, getRootPartsV2 } from './SxcRoot';
 import { Window } from "../tools/Window";
+import { Debug } from '..';
 
 declare const $2sxc_jQSuperlight: any;
 declare const window: Window;
@@ -52,10 +53,11 @@ export function buildSxcRoot(): SxcRoot & SxcRootInternals {
     const rootApiV2 = getRootPartsV2();
 
     const urlManager = new UrlParamManager();
-    const debug = {
-        load: (urlManager.get('debug') === 'true'),
-        uncache: urlManager.get('sxcver'),
-    };
+    const debug = new Debug();
+    //  {
+    //     load: (urlManager.get('debug') === 'true'),
+    //     uncache: urlManager.get('sxcver'),
+    // };
     const stats = new Stats();
 
 

@@ -1,5 +1,6 @@
-﻿import { IHasLog, Log } from '.';
-export class HasLog  implements IHasLog {
+﻿import { Log } from '.';
+import { HasLog as IHasLog } from '../../../sxc-typings/index';
+export abstract class HasLog  implements Omit<IHasLog, 'log'> {
   log: Log;
 
   /**
@@ -28,9 +29,5 @@ export class HasLog  implements IHasLog {
         this.log.add(initialMessage);
     }
   }
-
-//   private logId = 'unknwn';
-
-//   linkLog = (parentLog: Log): void => this.log.linkLog(parentLog);
 
 }
