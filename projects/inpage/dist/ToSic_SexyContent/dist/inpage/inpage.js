@@ -354,11 +354,11 @@ var ContextComplete = /** @class */ (function (_super) {
 /* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "b", function() { return __WEBPACK_IMPORTED_MODULE_0__has_log__["a"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Log__ = __webpack_require__(63);
 /* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "d", function() { return __WEBPACK_IMPORTED_MODULE_1__Log__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__log_call__ = __webpack_require__(170);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__log_call__ = __webpack_require__(171);
 /* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "e", function() { return __WEBPACK_IMPORTED_MODULE_2__log_call__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__entry__ = __webpack_require__(171);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__entry__ = __webpack_require__(172);
 /* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_3__entry__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__insights__ = __webpack_require__(175);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__insights__ = __webpack_require__(176);
 /* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "c", function() { return __WEBPACK_IMPORTED_MODULE_4__insights__["a"]; });
 
 
@@ -677,56 +677,44 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Window__ = __webpack_require__(167);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Window___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__Window__);
-/* harmony namespace reexport (by used) */ if(__webpack_require__.o(__WEBPACK_IMPORTED_MODULE_0__Window__, "Debug")) __webpack_require__.d(__webpack_exports__, "Debug", function() { return __WEBPACK_IMPORTED_MODULE_0__Window__["Debug"]; });
-/* harmony namespace reexport (by used) */ if(__webpack_require__.o(__WEBPACK_IMPORTED_MODULE_0__Window__, "HasLog")) __webpack_require__.d(__webpack_exports__, "HasLog", function() { return __WEBPACK_IMPORTED_MODULE_0__Window__["HasLog"]; });
-/* harmony namespace reexport (by used) */ if(__webpack_require__.o(__WEBPACK_IMPORTED_MODULE_0__Window__, "SxcInstanceWithInternals")) __webpack_require__.d(__webpack_exports__, "SxcInstanceWithInternals", function() { return __WEBPACK_IMPORTED_MODULE_0__Window__["SxcInstanceWithInternals"]; });
-/* harmony namespace reexport (by used) */ if(__webpack_require__.o(__WEBPACK_IMPORTED_MODULE_0__Window__, "UrlParamManager")) __webpack_require__.d(__webpack_exports__, "UrlParamManager", function() { return __WEBPACK_IMPORTED_MODULE_0__Window__["UrlParamManager"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__tools_total_popup__ = __webpack_require__(210);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__window__ = __webpack_require__(159);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__window___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__window__);
+/* harmony namespace reexport (by used) */ if(__webpack_require__.o(__WEBPACK_IMPORTED_MODULE_0__window__, "Debug")) __webpack_require__.d(__webpack_exports__, "Debug", function() { return __WEBPACK_IMPORTED_MODULE_0__window__["Debug"]; });
+/* harmony namespace reexport (by used) */ if(__webpack_require__.o(__WEBPACK_IMPORTED_MODULE_0__window__, "HasLog")) __webpack_require__.d(__webpack_exports__, "HasLog", function() { return __WEBPACK_IMPORTED_MODULE_0__window__["HasLog"]; });
+/* harmony namespace reexport (by used) */ if(__webpack_require__.o(__WEBPACK_IMPORTED_MODULE_0__window__, "SxcInstanceWithInternals")) __webpack_require__.d(__webpack_exports__, "SxcInstanceWithInternals", function() { return __WEBPACK_IMPORTED_MODULE_0__window__["SxcInstanceWithInternals"]; });
+/* harmony namespace reexport (by used) */ if(__webpack_require__.o(__WEBPACK_IMPORTED_MODULE_0__window__, "UrlParamManager")) __webpack_require__.d(__webpack_exports__, "UrlParamManager", function() { return __WEBPACK_IMPORTED_MODULE_0__window__["UrlParamManager"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__tools_total_popup__ = __webpack_require__(64);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__tools_url_param_manager__ = __webpack_require__(211);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__tools_url_param_manager__ = __webpack_require__(65);
 /* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "UrlParamManager", function() { return __WEBPACK_IMPORTED_MODULE_2__tools_url_param_manager__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ajax_AjaxPromise__ = __webpack_require__(66);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__logging__ = __webpack_require__(6);
+/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "HasLog", function() { return __WEBPACK_IMPORTED_MODULE_3__logging__["b"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__environment_environment__ = __webpack_require__(66);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ajax_AjaxSettings__ = __webpack_require__(159);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ajax_AjaxSettings___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__ajax_AjaxSettings__);
-/* harmony namespace reexport (by used) */ if(__webpack_require__.o(__WEBPACK_IMPORTED_MODULE_4__ajax_AjaxSettings__, "Debug")) __webpack_require__.d(__webpack_exports__, "Debug", function() { return __WEBPACK_IMPORTED_MODULE_4__ajax_AjaxSettings__["Debug"]; });
-/* harmony namespace reexport (by used) */ if(__webpack_require__.o(__WEBPACK_IMPORTED_MODULE_4__ajax_AjaxSettings__, "HasLog")) __webpack_require__.d(__webpack_exports__, "HasLog", function() { return __WEBPACK_IMPORTED_MODULE_4__ajax_AjaxSettings__["HasLog"]; });
-/* harmony namespace reexport (by used) */ if(__webpack_require__.o(__WEBPACK_IMPORTED_MODULE_4__ajax_AjaxSettings__, "SxcInstanceWithInternals")) __webpack_require__.d(__webpack_exports__, "SxcInstanceWithInternals", function() { return __WEBPACK_IMPORTED_MODULE_4__ajax_AjaxSettings__["SxcInstanceWithInternals"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__logging__ = __webpack_require__(6);
-/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "HasLog", function() { return __WEBPACK_IMPORTED_MODULE_5__logging__["b"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__environment_Environment__ = __webpack_require__(67);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__environment_js_info__ = __webpack_require__(162);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__environment_js_info___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__environment_js_info__);
+/* harmony namespace reexport (by used) */ if(__webpack_require__.o(__WEBPACK_IMPORTED_MODULE_5__environment_js_info__, "Debug")) __webpack_require__.d(__webpack_exports__, "Debug", function() { return __WEBPACK_IMPORTED_MODULE_5__environment_js_info__["Debug"]; });
+/* harmony namespace reexport (by used) */ if(__webpack_require__.o(__WEBPACK_IMPORTED_MODULE_5__environment_js_info__, "SxcInstanceWithInternals")) __webpack_require__.d(__webpack_exports__, "SxcInstanceWithInternals", function() { return __WEBPACK_IMPORTED_MODULE_5__environment_js_info__["SxcInstanceWithInternals"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__http_sxc_http__ = __webpack_require__(67);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__environment_JsInfo__ = __webpack_require__(162);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__environment_JsInfo___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7__environment_JsInfo__);
-/* harmony namespace reexport (by used) */ if(__webpack_require__.o(__WEBPACK_IMPORTED_MODULE_7__environment_JsInfo__, "Debug")) __webpack_require__.d(__webpack_exports__, "Debug", function() { return __WEBPACK_IMPORTED_MODULE_7__environment_JsInfo__["Debug"]; });
-/* harmony namespace reexport (by used) */ if(__webpack_require__.o(__WEBPACK_IMPORTED_MODULE_7__environment_JsInfo__, "SxcInstanceWithInternals")) __webpack_require__.d(__webpack_exports__, "SxcInstanceWithInternals", function() { return __WEBPACK_IMPORTED_MODULE_7__environment_JsInfo__["SxcInstanceWithInternals"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__http_SxcHttp__ = __webpack_require__(68);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__sxc_instance__ = __webpack_require__(68);
+/* harmony namespace reexport (by used) */ if(__webpack_require__.o(__WEBPACK_IMPORTED_MODULE_7__sxc_instance__, "Debug")) __webpack_require__.d(__webpack_exports__, "Debug", function() { return __WEBPACK_IMPORTED_MODULE_7__sxc_instance__["Debug"]; });
+/* harmony namespace reexport (by used) */ if(__webpack_require__.o(__WEBPACK_IMPORTED_MODULE_7__sxc_instance__, "SxcInstanceWithInternals")) __webpack_require__.d(__webpack_exports__, "SxcInstanceWithInternals", function() { return __WEBPACK_IMPORTED_MODULE_7__sxc_instance__["SxcInstanceWithInternals"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__sxc_root_debug__ = __webpack_require__(166);
+/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "Debug", function() { return __WEBPACK_IMPORTED_MODULE_8__sxc_root_debug__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__sxc_root_sxc_root__ = __webpack_require__(73);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__instance_SxcInstance__ = __webpack_require__(69);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__sxc_root_sxc_root_builder__ = __webpack_require__(167);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__instance_SxcInstanceDataDeprecated__ = __webpack_require__(71);
-/* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__instance_SxcInstanceWithInternals__ = __webpack_require__(72);
-/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "SxcInstanceWithInternals", function() { return __WEBPACK_IMPORTED_MODULE_11__instance_SxcInstanceWithInternals__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__instance_SxcWebApi__ = __webpack_require__(70);
-/* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__SxcRoot_debug__ = __webpack_require__(213);
-/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "Debug", function() { return __WEBPACK_IMPORTED_MODULE_13__SxcRoot_debug__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__SxcRoot_sxc_root__ = __webpack_require__(212);
-/* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__SxcRoot_sxc_root_builder__ = __webpack_require__(214);
-/* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__SxcRoot_sxc_root_internals__ = __webpack_require__(215);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__SxcRoot_sxc_root_internals___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_16__SxcRoot_sxc_root_internals__);
-/* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__edit_interfaces_sxc_root_manage__ = __webpack_require__(168);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__edit_interfaces_sxc_root_manage___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_17__edit_interfaces_sxc_root_manage__);
-/* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__edit_interfaces_sxc_instance_manage__ = __webpack_require__(169);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__edit_interfaces_sxc_instance_manage___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_18__edit_interfaces_sxc_instance_manage__);
-/* unused harmony namespace reexport */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__sxc_root_sxc_root_internals__ = __webpack_require__(169);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__sxc_root_sxc_root_internals___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_11__sxc_root_sxc_root_internals__);
+/* harmony namespace reexport (by used) */ if(__webpack_require__.o(__WEBPACK_IMPORTED_MODULE_11__sxc_root_sxc_root_internals__, "SxcInstanceWithInternals")) __webpack_require__.d(__webpack_exports__, "SxcInstanceWithInternals", function() { return __WEBPACK_IMPORTED_MODULE_11__sxc_root_sxc_root_internals__["SxcInstanceWithInternals"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__sxc_root_sxc_root_manage__ = __webpack_require__(170);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__sxc_root_sxc_root_manage___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_12__sxc_root_sxc_root_manage__);
+/* harmony namespace reexport (by used) */ if(__webpack_require__.o(__WEBPACK_IMPORTED_MODULE_12__sxc_root_sxc_root_manage__, "SxcInstanceWithInternals")) __webpack_require__.d(__webpack_exports__, "SxcInstanceWithInternals", function() { return __WEBPACK_IMPORTED_MODULE_12__sxc_root_sxc_root_manage__["SxcInstanceWithInternals"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__sxc_instance_sxc_instance_manage__ = __webpack_require__(71);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__sxc_instance_sxc_instance_manage___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_13__sxc_instance_sxc_instance_manage__);
+/* harmony namespace reexport (by used) */ if(__webpack_require__.o(__WEBPACK_IMPORTED_MODULE_13__sxc_instance_sxc_instance_manage__, "SxcInstanceWithInternals")) __webpack_require__.d(__webpack_exports__, "SxcInstanceWithInternals", function() { return __WEBPACK_IMPORTED_MODULE_13__sxc_instance_sxc_instance_manage__["SxcInstanceWithInternals"]; });
 /*
     This is just a type-index entry point.
     The purpose is that other 2sxc projects in this repo can access all the types
@@ -739,14 +727,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
-
-
 // must be pretty early, because most objects rely on this
 // and ATM having this on top changes the load order
 // this is a side-effect-problem from not clearly using modules
-
-
-
 
 
 
@@ -771,7 +754,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ApiExtensionPlaceholder; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return MetaHeaderJsApi; });
 var ToSxcName = "2sxc";
-var SxcVersion = "10.25.01";
+var SxcVersion = "10.27.00";
 var HeaderNames = {
     // 2sxc specific header
     ContentBlockId: "ContentBlockId",
@@ -3710,6 +3693,7 @@ __WEBPACK_IMPORTED_MODULE_0____["Commands"].add(CmdNew, 'New', 'plus', false, tr
 var maxScopeLen = 3;
 var maxNameLen = 6;
 var liveDump = false;
+var maxEntriesReached = 'Maximum amount of entries added to log, will stop adding more';
 var Log = /** @class */ (function () {
     /**
      * Create a logger and optionally attach it to a parent logger
@@ -3725,6 +3709,10 @@ var Log = /** @class */ (function () {
         this.entries = new Array();
         this.depth = 0;
         this.callDepths = [];
+        /**
+         * Maximum amount of entries to add - to prevent memory hoging
+         */
+        this.maxEntries = 1000;
         /* if we should live-dump, can be selectively activated */
         this.liveDump = liveDump;
         this._parentHasLiveDump = false;
@@ -3801,6 +3789,12 @@ var Log = /** @class */ (function () {
      * log.add(`description ${() => parameter}`);
      */
     Log.prototype.add = function (message, data) {
+        // check if the log is already too big
+        if (this.entries.length > this.maxEntries)
+            return this._prepareMessage(message);
+        // if we just reached the max, add special message
+        if (this.entries.length === this.maxEntries)
+            this._addEntry(this._prepareEntry(maxEntriesReached));
         var entry = this._prepareEntry(message, data);
         this._addEntry(entry);
         return entry.message;
@@ -3898,73 +3892,108 @@ var Log = /** @class */ (function () {
 
 
 /***/ }),
-/* 64 */,
-/* 65 */,
-/* 66 */
+/* 64 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AjaxPromise; });
-var AjaxPromise = /** @class */ (function () {
-    function AjaxPromise(api, sxc) {
-        this.api = api;
-        this.sxc = sxc;
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TotalPopup; });
+var TotalPopup = /** @class */ (function () {
+    function TotalPopup() {
+        this.frame = undefined;
+        this.callback = undefined;
     }
-    /**
-     * Make a jQuery style promise request
-     * @param {AjaxSettings} settings
-     * @returns {JQueryPromise<any>}
-     * @memberof AjaxPromise
-     */
-    AjaxPromise.prototype.makePromise = function (settings) {
-        var headers = this.api.headers();
-        var promise = $2sxc_jQSuperlight.ajax({
-            async: true,
-            dataType: settings.dataType || 'json',
-            data: JSON.stringify(settings.data),
-            contentType: 'application/json',
-            type: settings.method,
-            url: this.getActionUrl(settings),
-            beforeSend: function (xhr) {
-                for (var key in headers)
-                    if (headers.hasOwnProperty(key))
-                        xhr.setRequestHeader(key, headers[key]);
-            },
-        });
-        if (!settings.preventAutoFail)
-            promise.fail(this.sxc.showDetailedHttpError);
-        return promise;
+    TotalPopup.prototype.open = function (url, callback) {
+        // count parents to see how high the z-index needs to be
+        var z = 10000010; // Needs at least 10000000 to be on top of the DNN9 bar
+        var p = window;
+        while (p !== window.top && z < 10000100) {
+            z++;
+            p = p.parent;
+        }
+        var wrapper = document.createElement('div');
+        wrapper.setAttribute('style', ' top: 0;left: 0;width: 100%;height: 100%; position:fixed; z-index:' + z);
+        document.body.appendChild(wrapper);
+        var ifrm = document.createElement('iframe');
+        ifrm.setAttribute('allowtransparency', 'true');
+        ifrm.setAttribute('style', 'top: 0;left: 0;width: 100%;height: 100%;');
+        ifrm.setAttribute('src', url);
+        wrapper.appendChild(ifrm);
+        document.body.className += ' sxc-popup-open';
+        this.frame = ifrm;
+        this.callback = callback;
     };
-    /**
-     * Generate the correct WebApi url
-     * @param settings the settings as they would be in jQuery
-     */
-    AjaxPromise.prototype.getActionUrl = function (settings) {
-        var url = settings.url || 'app/auto/api/' + settings.controller + '/' + settings.action;
-        // 2020-03-13 stop adding 2sxc endpoint-name, it's already happening in apiUrl so with this it happens 2x
-        // var endpoint = settings.endpoint || ToSxcName;
-        var base = this.sxc.root.http.apiUrl(url, settings.endpoint);
-        // let base = (settings.url)
-        //   ? this.sxc.root.http.apiUrl(settings.url) // this.sxc.resolveServiceUrl(settings.url)  // use url -> TODO: change this to use the new root.http.apiUrl
-        //   : env.apiRoot('2sxc')               // use controller/action
-        //     + 'app/auto/api/' + settings.controller + '/' + settings.action;
-        // if(settings.endpoint)
-        //     base = base.replace(env.apiRoot('2sxc'), 
-        //         env.apiRoot(settings.endpoint));
-        return base + (!settings.params ? '' : ('?' + $2sxc_jQSuperlight.param(settings.params)));
+    TotalPopup.prototype.close = function () {
+        if (this.frame) {
+            document.body.className = document.body.className.replace('sxc-popup-open', '');
+            var frm = this.frame;
+            frm.parentNode.parentNode.removeChild(frm.parentNode);
+            this.callback();
+        }
     };
-    return AjaxPromise;
+    TotalPopup.prototype.closeThis = function () {
+        window.parent.$2sxc.totalPopup.close();
+    };
+    return TotalPopup;
 }());
 
 
 
 /***/ }),
-/* 67 */
+/* 65 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return UrlParamManager; });
+var UrlParamManager = /** @class */ (function () {
+    function UrlParamManager() {
+    }
+    UrlParamManager.prototype.get = function (name) {
+        // warning: this method is duplicated in 2 places - keep them in sync.
+        // locations are eav and 2sxc4ng
+        name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+        var searchRx = new RegExp('[\\?&]' + name + '=([^&#]*)', 'i');
+        var results = searchRx.exec(location.search);
+        var strResult;
+        if (results === null) {
+            var hashRx = new RegExp('[#&]' + name + '=([^&#]*)', 'i');
+            results = hashRx.exec(location.hash);
+        }
+        // if nothing found, try normal URL because DNN places parameters in /key/value notation
+        if (results === null) {
+            // Otherwise try parts of the URL
+            var matches = window.location.pathname.match(new RegExp('/' + name + '/([^/]+)', 'i'));
+            // Check if we found anything, if we do find it, we must reverse the
+            // results so we get the "last" one in case there are multiple hits
+            if (matches && matches.length > 1)
+                strResult = matches.reverse()[0];
+        }
+        else
+            strResult = results[1];
+        return strResult === null || strResult === undefined
+            ? ''
+            : decodeURIComponent(strResult.replace(/\+/g, ' '));
+    };
+    UrlParamManager.prototype.require = function (name) {
+        var found = this.get(name);
+        if (found === '') {
+            var message = "Required parameter (" + name + ") missing from url - cannot continue";
+            alert(message);
+            throw message;
+        }
+        return found;
+    };
+    return UrlParamManager;
+}());
+
+
+
+/***/ }),
+/* 66 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Environment; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__envMetaLoader__ = __webpack_require__(160);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__env_loader_meta__ = __webpack_require__(160);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__constants__ = __webpack_require__(15);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__logging_index__ = __webpack_require__(6);
 var __extends = (this && this.__extends) || (function () {
@@ -3993,7 +4022,7 @@ var Environment = /** @class */ (function (_super) {
         _this.ready = false;
         _this.source = '';
         // this.log = new Log();
-        _this.metaLoader = new __WEBPACK_IMPORTED_MODULE_0__envMetaLoader__["a" /* EnvironmentMetaLoader */](_this);
+        _this.metaLoader = new __WEBPACK_IMPORTED_MODULE_0__env_loader_meta__["a" /* EnvironmentMetaLoader */](_this);
         // check if a global variable was already set which we should use
         if (typeof _jsApi !== typeof undefined) {
             _this.log.add('found _jsApi, will use');
@@ -4049,13 +4078,13 @@ var Environment = /** @class */ (function (_super) {
 
 
 /***/ }),
-/* 68 */
+/* 67 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SxcHttp; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__constants__ = __webpack_require__(15);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__index__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1____ = __webpack_require__(14);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -4131,7 +4160,40 @@ var SxcHttp = /** @class */ (function (_super) {
         return cl.return(baseUrl + url);
     };
     return SxcHttp;
-}(__WEBPACK_IMPORTED_MODULE_1__index__["HasLog"]));
+}(__WEBPACK_IMPORTED_MODULE_1____["HasLog"]));
+
+
+
+/***/ }),
+/* 68 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__sxc_instance__ = __webpack_require__(163);
+/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "SxcInstance", function() { return __WEBPACK_IMPORTED_MODULE_0__sxc_instance__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__sxc_instance_manage__ = __webpack_require__(71);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__sxc_instance_manage___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__sxc_instance_manage__);
+/* harmony namespace reexport (by used) */ if(__webpack_require__.o(__WEBPACK_IMPORTED_MODULE_1__sxc_instance_manage__, "Debug")) __webpack_require__.d(__webpack_exports__, "Debug", function() { return __WEBPACK_IMPORTED_MODULE_1__sxc_instance_manage__["Debug"]; });
+/* harmony namespace reexport (by used) */ if(__webpack_require__.o(__WEBPACK_IMPORTED_MODULE_1__sxc_instance_manage__, "SxcInstanceDataDeprecated")) __webpack_require__.d(__webpack_exports__, "SxcInstanceDataDeprecated", function() { return __WEBPACK_IMPORTED_MODULE_1__sxc_instance_manage__["SxcInstanceDataDeprecated"]; });
+/* harmony namespace reexport (by used) */ if(__webpack_require__.o(__WEBPACK_IMPORTED_MODULE_1__sxc_instance_manage__, "SxcInstanceWithInternals")) __webpack_require__.d(__webpack_exports__, "SxcInstanceWithInternals", function() { return __WEBPACK_IMPORTED_MODULE_1__sxc_instance_manage__["SxcInstanceWithInternals"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__sxc_instance_with_internals__ = __webpack_require__(72);
+/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "SxcInstanceWithInternals", function() { return __WEBPACK_IMPORTED_MODULE_2__sxc_instance_with_internals__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__web_api_sxc_web_api__ = __webpack_require__(69);
+/* unused harmony namespace reexport */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__web_api_ajax_promise__ = __webpack_require__(70);
+/* unused harmony namespace reexport */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__web_api_ajax_settings__ = __webpack_require__(164);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__web_api_ajax_settings___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__web_api_ajax_settings__);
+/* harmony namespace reexport (by used) */ if(__webpack_require__.o(__WEBPACK_IMPORTED_MODULE_5__web_api_ajax_settings__, "Debug")) __webpack_require__.d(__webpack_exports__, "Debug", function() { return __WEBPACK_IMPORTED_MODULE_5__web_api_ajax_settings__["Debug"]; });
+/* harmony namespace reexport (by used) */ if(__webpack_require__.o(__WEBPACK_IMPORTED_MODULE_5__web_api_ajax_settings__, "SxcInstanceDataDeprecated")) __webpack_require__.d(__webpack_exports__, "SxcInstanceDataDeprecated", function() { return __WEBPACK_IMPORTED_MODULE_5__web_api_ajax_settings__["SxcInstanceDataDeprecated"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__deprecated_sxc_instance_data__ = __webpack_require__(165);
+/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "SxcInstanceDataDeprecated", function() { return __WEBPACK_IMPORTED_MODULE_6__deprecated_sxc_instance_data__["a"]; });
+
+
+
+
+
+
 
 
 
@@ -4140,147 +4202,8 @@ var SxcHttp = /** @class */ (function (_super) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SxcInstance; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__SxcWebApi__ = __webpack_require__(70);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__constants__ = __webpack_require__(15);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__logging__ = __webpack_require__(6);
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-
-
-
-var serviceScopes = ['app', 'app-sys', 'app-api', 'app-query', 'app-content', 'eav', 'view', 'dnn'];
-/**
- * The typical sxc-instance object for a specific DNN module or content-block
- */
-var SxcInstance = /** @class */ (function (_super) {
-    __extends(SxcInstance, _super);
-    function SxcInstance(
-    /** the sxc-instance ID, which is usually the DNN Module Id */
-    id, 
-    /**
-     * content-block ID, which is either the module ID, or the content-block definitiion entity ID
-     * this is an advanced concept you usually don't care about, otherwise you should research it
-     */
-    cbid, 
-    /** The environment information, important for http-calls */
-    root) {
-        var _this = _super.call(this, 'SxcInstance', null, 'Generating for ' + id + ':' + cbid) || this;
-        _this.id = id;
-        _this.cbid = cbid;
-        _this.root = root;
-        /**
-         * The manage controller for edit/cms actions
-         *
-         * @type {*}
-         * @memberof SxcInstance
-         */
-        _this.manage = null; // initialize correctly later on
-        _this.webApi = new __WEBPACK_IMPORTED_MODULE_0__SxcWebApi__["a" /* SxcWebApi */](_this);
-        // add manage property, but not within initializer, because inside the manage-initializer it may reference 2sxc again
-        try { // sometimes the manage can't be built, like before installing
-            if (root._manage)
-                root._manage.initInstance(_this);
-        }
-        catch (e) {
-            console.error('error in 2sxc - will only log but not throw', e);
-        }
-        // this only works when manage exists (not installing) and translator exists too
-        if (root._translateInit && _this.manage)
-            // ensure that we really have a manage context, otherwise we can't initialize i18n and it doesn't make sense
-            if (_this.manage.context && _this.manage.context.app && _this.manage.context.app.currentLanguage)
-                root._translateInit(_this.manage); // init translate, not really nice, but ok for now
-        return _this;
-    }
-    /**
-     * converts a short api-call path like "/app/Blog/query/xyz" to the DNN full path
-     * which varies from installation to installation like "/desktopmodules/api/2sxc/app/..."
-     * @deprecated use http.apiUrl instead
-     * @param virtualPath
-     * @returns mapped path
-     */
-    SxcInstance.prototype.resolveServiceUrl = function (virtualPath) {
-        // console.warn('used resolveServiceUrl:' + virtualPath);
-        var scope = virtualPath.split('/')[0].toLowerCase();
-        // stop if it's not one of our special paths
-        if (serviceScopes.indexOf(scope) === -1)
-            return virtualPath;
-        return this.root.http.apiRoot(__WEBPACK_IMPORTED_MODULE_1__constants__["e" /* ToSxcName */]) + scope + '/' + virtualPath.substring(virtualPath.indexOf('/') + 1);
-    };
-    // Show a nice error with more infos around 2sxc
-    SxcInstance.prototype.showDetailedHttpError = function (result) {
-        if (window.console)
-            console.log(result);
-        // check if the error was just because a language file couldn't be loaded - then don't show a message
-        if (result.status === 404 &&
-            result.config &&
-            result.config.url &&
-            result.config.url.indexOf('/dist/i18n/') > -1) {
-            if (window.console)
-                console.log('just fyi: failed to load language resource; will have to use default');
-            return result;
-        }
-        // if it's an unspecified 0-error, it's probably not an error but a cancelled request,
-        // (happens when closing popups containing angularJS)
-        if (result.status === 0 || result.status === -1)
-            return result;
-        // let's try to show good messages in most cases
-        var infoText = 'Had an error talking to the server (status ' + result.status + ').';
-        var srvResp = result.responseText
-            ? JSON.parse(result.responseText) // for jquery ajax errors
-            : result.data; // for angular $http
-        if (srvResp) {
-            var msg = srvResp.Message;
-            if (msg)
-                infoText += '\nMessage: ' + msg;
-            var msgDet = srvResp.MessageDetail || srvResp.ExceptionMessage;
-            if (msgDet)
-                infoText += '\nDetail: ' + msgDet;
-            if (msgDet && msgDet.indexOf('No action was found') === 0)
-                if (msgDet.indexOf('that matches the name') > 0)
-                    infoText += '\n\nTip from 2sxc: you probably got the action-name wrong in your JS.';
-                else if (msgDet.indexOf('that matches the request.') > 0)
-                    infoText += '\n\nTip from 2sxc: Seems like the parameters are the wrong amount or type.';
-            if (msg && msg.indexOf('Controller') === 0 && msg.indexOf('not found') > 0)
-                infoText +=
-                    // tslint:disable-next-line:max-line-length
-                    "\n\nTip from 2sxc: you probably spelled the controller name wrong or forgot to remove the word 'controller' from the call in JS. To call a controller called 'DemoController' only use 'Demo'.";
-        }
-        // tslint:disable-next-line:max-line-length
-        infoText += '\n\nif you are an advanced user you can learn more about what went wrong - discover how on 2sxc.org/help?tag=debug';
-        alert(infoText);
-        return result;
-    };
-    /**
-     * checks if we're currently in edit mode
-     * @returns {boolean}
-     */
-    SxcInstance.prototype.isEditMode = function () {
-        return this.manage && this.manage._isEditMode();
-    };
-    return SxcInstance;
-}(__WEBPACK_IMPORTED_MODULE_2__logging__["b" /* HasLog */]));
-
-
-
-/***/ }),
-/* 70 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SxcWebApi; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ajax_AjaxPromise__ = __webpack_require__(66);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ajax_promise__ = __webpack_require__(70);
 
 /**
  * helper API to run ajax / REST calls to the server
@@ -4372,7 +4295,7 @@ var SxcWebApi = /** @class */ (function () {
             preventAutoFail: false,
         };
         // new 10.25
-        var http = new __WEBPACK_IMPORTED_MODULE_0__ajax_AjaxPromise__["a" /* AjaxPromise */](this, this.sxc);
+        var http = new __WEBPACK_IMPORTED_MODULE_0__ajax_promise__["a" /* AjaxPromise */](this, this.sxc);
         settings = $2sxc_jQSuperlight.extend({}, defaults, settings);
         var promise = http.makePromise(settings);
         return promise;
@@ -4390,91 +4313,72 @@ var SxcWebApi = /** @class */ (function () {
 
 
 /***/ }),
-/* 71 */
+/* 70 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SxcInstanceDataDeprecated; });
-/**
- * This is a old 2sxc concept from 2sxc ca. V3
- * The idea was that each module could have it's own data and access it.
- * It would hide the internals of WebApis and just provide data.
- * This model isn't promoted or much in use any more, but included for compatibility
- */
-var SxcInstanceDataDeprecated = /** @class */ (function () {
-    function SxcInstanceDataDeprecated(controller) {
-        this.controller = controller;
-        this.source = undefined;
-        // in-streams
-        this["in"] = {};
-        // will hold the default stream (["in"]["Default"].List
-        this.List = [];
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AjaxPromise; });
+var AjaxPromise = /** @class */ (function () {
+    function AjaxPromise(api, sxc) {
+        this.api = api;
+        this.sxc = sxc;
     }
-    // source path defaulting to current page + optional params
-    SxcInstanceDataDeprecated.prototype.sourceUrl = function (params) {
-        var url = this.controller.root.http.apiUrl('app-sys/appcontent/GetContentBlockData');
-        if (typeof params === 'string') // text like 'id=7'
-            url += '&' + params;
-        return url;
+    /**
+     * Make a jQuery style promise request
+     * @param {AjaxSettings} settings
+     * @returns {JQueryPromise<any>}
+     * @memberof AjaxPromise
+     */
+    AjaxPromise.prototype.makePromise = function (settings) {
+        var headers = this.api.headers();
+        var promise = $2sxc_jQSuperlight.ajax({
+            async: true,
+            dataType: settings.dataType || 'json',
+            data: JSON.stringify(settings.data),
+            contentType: 'application/json',
+            type: settings.method,
+            url: this.getActionUrl(settings),
+            beforeSend: function (xhr) {
+                for (var key in headers)
+                    if (headers.hasOwnProperty(key))
+                        xhr.setRequestHeader(key, headers[key]);
+            },
+        });
+        if (!settings.preventAutoFail)
+            promise.fail(this.sxc.showDetailedHttpError);
+        return promise;
     };
-    // load data via ajax
-    SxcInstanceDataDeprecated.prototype.load = function (source) {
-        var _this = this;
-        // if source is already the data, set it
-        if (source && source.List) {
-            return this.controller.data;
-        }
-        else {
-            if (!source)
-                source = {};
-            if (!source.url)
-                source.url = this.controller.data.sourceUrl();
-            source.origSuccess = source.success;
-            source.success = function (data) {
-                for (var dataSetName in data) {
-                    if (data.hasOwnProperty(dataSetName))
-                        if (data[dataSetName].List !== null) {
-                            _this.controller.data.in[dataSetName] = data[dataSetName];
-                            _this.controller.data.in[dataSetName].name = dataSetName;
-                        }
-                }
-                if (_this.controller.data.in.Default)
-                    _this.List = _this.in.Default.List;
-                if (source.origSuccess)
-                    source.origSuccess(_this);
-                _this.controller.isLoaded = true;
-                _this.controller.lastRefresh = new Date();
-                _this._triggerLoaded();
-            };
-            source.error = function (request) { alert(request.statusText); };
-            source.preventAutoFail = true; // use our fail message
-            this.source = source;
-            return this.reload();
-        }
+    /**
+     * Generate the correct WebApi url
+     * @param settings the settings as they would be in jQuery
+     */
+    AjaxPromise.prototype.getActionUrl = function (settings) {
+        var url = settings.url || 'app/auto/api/' + settings.controller + '/' + settings.action;
+        // 2020-03-13 stop adding 2sxc endpoint-name, it's already happening in apiUrl so with this it happens 2x
+        // var endpoint = settings.endpoint || ToSxcName;
+        var base = this.sxc.root.http.apiUrl(url, settings.endpoint);
+        // let base = (settings.url)
+        //   ? this.sxc.root.http.apiUrl(settings.url) // this.sxc.resolveServiceUrl(settings.url)  // use url -> TODO: change this to use the new root.http.apiUrl
+        //   : env.apiRoot('2sxc')               // use controller/action
+        //     + 'app/auto/api/' + settings.controller + '/' + settings.action;
+        // if(settings.endpoint)
+        //     base = base.replace(env.apiRoot('2sxc'), 
+        //         env.apiRoot(settings.endpoint));
+        return base + (!settings.params ? '' : ('?' + $2sxc_jQSuperlight.param(settings.params)));
     };
-    SxcInstanceDataDeprecated.prototype.reload = function () {
-        this.controller.webApi.get(this.source)
-            .then(this.source.success, this.source.error);
-        return this;
-    };
-    SxcInstanceDataDeprecated.prototype.on = function (events, callback) {
-        return $2sxc_jQSuperlight(this).on('2scLoad', callback)[0]._triggerLoaded();
-    };
-    // ReSharper disable once InconsistentNaming
-    SxcInstanceDataDeprecated.prototype._triggerLoaded = function () {
-        return this.controller.isLoaded
-            ? $2sxc_jQSuperlight(this).trigger('2scLoad', [this])[0]
-            : this;
-    };
-    SxcInstanceDataDeprecated.prototype.one = function (events, callback) {
-        if (!this.controller.isLoaded)
-            return $2sxc_jQSuperlight(this).one('2scLoad', callback)[0];
-        callback({}, this);
-        return this;
-    };
-    return SxcInstanceDataDeprecated;
+    return AjaxPromise;
 }());
 
+
+
+/***/ }),
+/* 71 */
+/***/ (function(module, exports) {
+
+/*
+  This is the base class for the Manage object on 2sxc instances.
+  It's typed here, so that API code is strongly typed, but it's incomplete.
+*/
 
 
 /***/ }),
@@ -4483,8 +4387,7 @@ var SxcInstanceDataDeprecated = /** @class */ (function () {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SxcInstanceWithInternals; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__SxcInstanceDataDeprecated__ = __webpack_require__(71);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__SxcInstance__ = __webpack_require__(69);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0____ = __webpack_require__(68);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -4499,7 +4402,6 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 
-
 var SxcInstanceWithInternals = /** @class */ (function (_super) {
     __extends(SxcInstanceWithInternals, _super);
     function SxcInstanceWithInternals(id, cbid, cacheKey, $2sxc) {
@@ -4511,7 +4413,7 @@ var SxcInstanceWithInternals = /** @class */ (function (_super) {
         _this.source = null;
         _this.isLoaded = false;
         _this.lastRefresh = null;
-        _this.data = new __WEBPACK_IMPORTED_MODULE_0__SxcInstanceDataDeprecated__["a" /* SxcInstanceDataDeprecated */](_this);
+        _this.data = new __WEBPACK_IMPORTED_MODULE_0____["SxcInstanceDataDeprecated"](_this);
         return _this;
     }
     SxcInstanceWithInternals.prototype.recreate = function (resetCache) {
@@ -4520,23 +4422,51 @@ var SxcInstanceWithInternals = /** @class */ (function (_super) {
         return this.$2sxc(this.id, this.cbid); // generate new
     };
     return SxcInstanceWithInternals;
-}(__WEBPACK_IMPORTED_MODULE_1__SxcInstance__["a" /* SxcInstance */]));
+}(__WEBPACK_IMPORTED_MODULE_0____["SxcInstance"]));
 
 
 
 /***/ }),
-/* 73 */,
+/* 73 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["a"] = getRootPartsV2;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__environment_environment__ = __webpack_require__(66);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__http_sxc_http__ = __webpack_require__(67);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__logging_Log__ = __webpack_require__(63);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__constants__ = __webpack_require__(15);
+
+
+
+
+function getRootPartsV2() {
+    var log = new __WEBPACK_IMPORTED_MODULE_2__logging_Log__["a" /* Log */]('$2sxc', null, 'building');
+    var env = new __WEBPACK_IMPORTED_MODULE_0__environment_environment__["a" /* Environment */]();
+    return {
+        sysinfo: {
+            version: __WEBPACK_IMPORTED_MODULE_3__constants__["d" /* SxcVersion */],
+            description: 'The 2sxc Controller - read more about it on docs.2sxc.org',
+        },
+        env: env,
+        http: new __WEBPACK_IMPORTED_MODULE_1__http_sxc_http__["a" /* SxcHttp */](env),
+        log: log,
+    };
+}
+
+
+/***/ }),
 /* 74 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__obj__ = __webpack_require__(172);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__obj__ = __webpack_require__(173);
 /* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "Obj", function() { return __WEBPACK_IMPORTED_MODULE_0__obj__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__type_value__ = __webpack_require__(173);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__type_value__ = __webpack_require__(174);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__type_value___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__type_value__);
 /* harmony namespace reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in __WEBPACK_IMPORTED_MODULE_1__type_value__) if(["Obj","default"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return __WEBPACK_IMPORTED_MODULE_1__type_value__[key]; }) }(__WEBPACK_IMPORT_KEY__));
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__dictionary_value__ = __webpack_require__(174);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__dictionary_value__ = __webpack_require__(175);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__dictionary_value___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__dictionary_value__);
 /* harmony namespace reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in __WEBPACK_IMPORTED_MODULE_2__dictionary_value__) if(["Obj","default"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return __WEBPACK_IMPORTED_MODULE_2__dictionary_value__[key]; }) }(__WEBPACK_IMPORT_KEY__));
 //
@@ -8380,7 +8310,7 @@ __webpack_require__(125);
 __webpack_require__(126);
 __webpack_require__(127);
 __webpack_require__(128);
-__webpack_require__(176);
+__webpack_require__(177);
 __webpack_require__(129);
 __webpack_require__(130);
 __webpack_require__(11);
@@ -8388,7 +8318,7 @@ __webpack_require__(131);
 __webpack_require__(132);
 __webpack_require__(133);
 __webpack_require__(21);
-__webpack_require__(177);
+__webpack_require__(178);
 __webpack_require__(135);
 __webpack_require__(136);
 __webpack_require__(36);
@@ -8424,7 +8354,7 @@ __webpack_require__(28);
 __webpack_require__(27);
 __webpack_require__(90);
 __webpack_require__(147);
-__webpack_require__(178);
+__webpack_require__(179);
 __webpack_require__(148);
 __webpack_require__(149);
 __webpack_require__(150);
@@ -8444,19 +8374,19 @@ __webpack_require__(51);
 __webpack_require__(30);
 __webpack_require__(31);
 __webpack_require__(91);
-__webpack_require__(179);
 __webpack_require__(180);
+__webpack_require__(181);
 __webpack_require__(134);
 __webpack_require__(12);
-__webpack_require__(181);
 __webpack_require__(182);
 __webpack_require__(183);
 __webpack_require__(184);
 __webpack_require__(185);
 __webpack_require__(186);
+__webpack_require__(187);
 __webpack_require__(22);
 __webpack_require__(3);
-__webpack_require__(187);
+__webpack_require__(188);
 __webpack_require__(7);
 __webpack_require__(1);
 __webpack_require__(75);
@@ -8465,7 +8395,7 @@ __webpack_require__(116);
 __webpack_require__(113);
 __webpack_require__(111);
 __webpack_require__(18);
-__webpack_require__(188);
+__webpack_require__(189);
 __webpack_require__(89);
 __webpack_require__(58);
 __webpack_require__(59);
@@ -8483,18 +8413,18 @@ __webpack_require__(107);
 __webpack_require__(106);
 __webpack_require__(105);
 __webpack_require__(108);
-__webpack_require__(189);
+__webpack_require__(190);
 __webpack_require__(109);
 __webpack_require__(24);
 __webpack_require__(83);
 __webpack_require__(110);
-__webpack_require__(190);
+__webpack_require__(191);
 __webpack_require__(55);
 __webpack_require__(98);
 __webpack_require__(99);
-__webpack_require__(191);
-__webpack_require__(54);
 __webpack_require__(192);
+__webpack_require__(54);
+__webpack_require__(193);
 __webpack_require__(97);
 __webpack_require__(32);
 __webpack_require__(53);
@@ -8507,7 +8437,7 @@ __webpack_require__(8);
 __webpack_require__(95);
 __webpack_require__(94);
 __webpack_require__(13);
-__webpack_require__(193);
+__webpack_require__(194);
 __webpack_require__(88);
 __webpack_require__(45);
 __webpack_require__(86);
@@ -8518,13 +8448,13 @@ __webpack_require__(42);
 __webpack_require__(41);
 __webpack_require__(20);
 __webpack_require__(56);
-__webpack_require__(194);
+__webpack_require__(195);
 __webpack_require__(101);
 __webpack_require__(102);
 __webpack_require__(103);
 __webpack_require__(104);
-__webpack_require__(195);
 __webpack_require__(196);
+__webpack_require__(197);
 __webpack_require__(25);
 __webpack_require__(118);
 __webpack_require__(10);
@@ -8615,7 +8545,7 @@ var HasLog = /** @class */ (function () {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return EnvironmentMetaLoader; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__envDnnSfLoader__ = __webpack_require__(161);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__env_loader_dnn_sf__ = __webpack_require__(161);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__constants__ = __webpack_require__(15);
 
 
@@ -8643,7 +8573,7 @@ var EnvironmentMetaLoader = /** @class */ (function () {
         if (!meta) {
             this.retries++;
             if (forceFallback || this.retries >= maxRetries)
-                new __WEBPACK_IMPORTED_MODULE_0__envDnnSfLoader__["a" /* EnvironmentDnnSfLoader */](this.env).dnnSfFallback();
+                new __WEBPACK_IMPORTED_MODULE_0__env_loader_dnn_sf__["a" /* EnvironmentDnnSfLoader */](this.env).dnnSfFallback();
             else {
                 setTimeout(function () { _this.loadMetaFromHeader(); }, 1);
             }
@@ -8716,9 +8646,366 @@ var EnvironmentDnnSfLoader = /** @class */ (function () {
 
 
 /***/ }),
-/* 163 */,
-/* 164 */,
+/* 163 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SxcInstance; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__web_api_sxc_web_api__ = __webpack_require__(69);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__constants__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__logging__ = __webpack_require__(6);
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+
+
+
+var serviceScopes = ['app', 'app-sys', 'app-api', 'app-query', 'app-content', 'eav', 'view', 'dnn'];
+/**
+ * The typical sxc-instance object for a specific DNN module or content-block
+ */
+var SxcInstance = /** @class */ (function (_super) {
+    __extends(SxcInstance, _super);
+    function SxcInstance(
+    /** the sxc-instance ID, which is usually the DNN Module Id */
+    id, 
+    /**
+     * content-block ID, which is either the module ID, or the content-block definitiion entity ID
+     * this is an advanced concept you usually don't care about, otherwise you should research it
+     */
+    cbid, 
+    /** The environment information, important for http-calls */
+    root) {
+        var _this = _super.call(this, 'SxcInstance', null, 'Generating for ' + id + ':' + cbid) || this;
+        _this.id = id;
+        _this.cbid = cbid;
+        _this.root = root;
+        /**
+         * The manage controller for edit/cms actions
+         *
+         * @type {*}
+         * @memberof SxcInstance
+         */
+        _this.manage = null; // initialize correctly later on
+        _this.webApi = new __WEBPACK_IMPORTED_MODULE_0__web_api_sxc_web_api__["a" /* SxcWebApi */](_this);
+        // add manage property, but not within initializer, because inside the manage-initializer it may reference 2sxc again
+        try { // sometimes the manage can't be built, like before installing
+            if (root._manage)
+                root._manage.initInstance(_this);
+        }
+        catch (e) {
+            console.error('error in 2sxc - will only log but not throw', e);
+        }
+        // this only works when manage exists (not installing) and translator exists too
+        if (root._translateInit && _this.manage)
+            // ensure that we really have a manage context, otherwise we can't initialize i18n and it doesn't make sense
+            if (_this.manage.context && _this.manage.context.app && _this.manage.context.app.currentLanguage)
+                root._translateInit(_this.manage); // init translate, not really nice, but ok for now
+        return _this;
+    }
+    /**
+     * converts a short api-call path like "/app/Blog/query/xyz" to the DNN full path
+     * which varies from installation to installation like "/desktopmodules/api/2sxc/app/..."
+     * @deprecated use http.apiUrl instead
+     * @param virtualPath
+     * @returns mapped path
+     */
+    SxcInstance.prototype.resolveServiceUrl = function (virtualPath) {
+        // console.warn('used resolveServiceUrl:' + virtualPath);
+        var scope = virtualPath.split('/')[0].toLowerCase();
+        // stop if it's not one of our special paths
+        if (serviceScopes.indexOf(scope) === -1)
+            return virtualPath;
+        return this.root.http.apiRoot(__WEBPACK_IMPORTED_MODULE_1__constants__["e" /* ToSxcName */]) + scope + '/' + virtualPath.substring(virtualPath.indexOf('/') + 1);
+    };
+    // Show a nice error with more infos around 2sxc
+    SxcInstance.prototype.showDetailedHttpError = function (result) {
+        if (window.console)
+            console.log(result);
+        // check if the error was just because a language file couldn't be loaded - then don't show a message
+        if (result.status === 404 &&
+            result.config &&
+            result.config.url &&
+            result.config.url.indexOf('/dist/i18n/') > -1) {
+            if (window.console)
+                console.log('just fyi: failed to load language resource; will have to use default');
+            return result;
+        }
+        // if it's an unspecified 0-error, it's probably not an error but a cancelled request,
+        // (happens when closing popups containing angularJS)
+        if (result.status === 0 || result.status === -1)
+            return result;
+        // let's try to show good messages in most cases
+        var infoText = 'Had an error talking to the server (status ' + result.status + ').';
+        var srvResp = result.responseText
+            ? JSON.parse(result.responseText) // for jquery ajax errors
+            : result.data; // for angular $http
+        if (srvResp) {
+            var msg = srvResp.Message;
+            if (msg)
+                infoText += '\nMessage: ' + msg;
+            var msgDet = srvResp.MessageDetail || srvResp.ExceptionMessage;
+            if (msgDet)
+                infoText += '\nDetail: ' + msgDet;
+            if (msgDet && msgDet.indexOf('No action was found') === 0)
+                if (msgDet.indexOf('that matches the name') > 0)
+                    infoText += '\n\nTip from 2sxc: you probably got the action-name wrong in your JS.';
+                else if (msgDet.indexOf('that matches the request.') > 0)
+                    infoText += '\n\nTip from 2sxc: Seems like the parameters are the wrong amount or type.';
+            if (msg && msg.indexOf('Controller') === 0 && msg.indexOf('not found') > 0)
+                infoText +=
+                    // tslint:disable-next-line:max-line-length
+                    "\n\nTip from 2sxc: you probably spelled the controller name wrong or forgot to remove the word 'controller' from the call in JS. To call a controller called 'DemoController' only use 'Demo'.";
+        }
+        // tslint:disable-next-line:max-line-length
+        infoText += '\n\nif you are an advanced user you can learn more about what went wrong - discover how on 2sxc.org/help?tag=debug';
+        alert(infoText);
+        return result;
+    };
+    /**
+     * checks if we're currently in edit mode
+     * @returns {boolean}
+     */
+    SxcInstance.prototype.isEditMode = function () {
+        return this.manage && this.manage._isEditMode();
+    };
+    return SxcInstance;
+}(__WEBPACK_IMPORTED_MODULE_2__logging__["b" /* HasLog */]));
+
+
+
+/***/ }),
+/* 164 */
+/***/ (function(module, exports) {
+
+
+
+/***/ }),
 /* 165 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SxcInstanceDataDeprecated; });
+/**
+ * This is a old 2sxc concept from 2sxc ca. V3
+ * The idea was that each module could have it's own data and access it.
+ * It would hide the internals of WebApis and just provide data.
+ * This model isn't promoted or much in use any more, but included for compatibility
+ */
+var SxcInstanceDataDeprecated = /** @class */ (function () {
+    function SxcInstanceDataDeprecated(controller) {
+        this.controller = controller;
+        this.source = undefined;
+        // in-streams
+        this["in"] = {};
+        // will hold the default stream (["in"]["Default"].List
+        this.List = [];
+    }
+    // source path defaulting to current page + optional params
+    SxcInstanceDataDeprecated.prototype.sourceUrl = function (params) {
+        var url = this.controller.root.http.apiUrl('app-sys/appcontent/GetContentBlockData');
+        if (typeof params === 'string') // text like 'id=7'
+            url += '&' + params;
+        return url;
+    };
+    // load data via ajax
+    SxcInstanceDataDeprecated.prototype.load = function (source) {
+        var _this = this;
+        // if source is already the data, set it
+        if (source && source.List) {
+            return this.controller.data;
+        }
+        else {
+            if (!source)
+                source = {};
+            if (!source.url)
+                source.url = this.controller.data.sourceUrl();
+            source.origSuccess = source.success;
+            source.success = function (data) {
+                for (var dataSetName in data) {
+                    if (data.hasOwnProperty(dataSetName))
+                        if (data[dataSetName].List !== null) {
+                            _this.controller.data.in[dataSetName] = data[dataSetName];
+                            _this.controller.data.in[dataSetName].name = dataSetName;
+                        }
+                }
+                if (_this.controller.data.in.Default)
+                    _this.List = _this.in.Default.List;
+                if (source.origSuccess)
+                    source.origSuccess(_this);
+                _this.controller.isLoaded = true;
+                _this.controller.lastRefresh = new Date();
+                _this._triggerLoaded();
+            };
+            source.error = function (request) { alert(request.statusText); };
+            source.preventAutoFail = true; // use our fail message
+            this.source = source;
+            return this.reload();
+        }
+    };
+    SxcInstanceDataDeprecated.prototype.reload = function () {
+        this.controller.webApi.get(this.source)
+            .then(this.source.success, this.source.error);
+        return this;
+    };
+    SxcInstanceDataDeprecated.prototype.on = function (events, callback) {
+        return $2sxc_jQSuperlight(this).on('2scLoad', callback)[0]._triggerLoaded();
+    };
+    // ReSharper disable once InconsistentNaming
+    SxcInstanceDataDeprecated.prototype._triggerLoaded = function () {
+        return this.controller.isLoaded
+            ? $2sxc_jQSuperlight(this).trigger('2scLoad', [this])[0]
+            : this;
+    };
+    SxcInstanceDataDeprecated.prototype.one = function (events, callback) {
+        if (!this.controller.isLoaded)
+            return $2sxc_jQSuperlight(this).one('2scLoad', callback)[0];
+        callback({}, this);
+        return this;
+    };
+    return SxcInstanceDataDeprecated;
+}());
+
+
+
+/***/ }),
+/* 166 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Debug; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0____ = __webpack_require__(14);
+
+var urlManager = new __WEBPACK_IMPORTED_MODULE_0____["UrlParamManager"]();
+var urlDebugState = urlManager.get('debug') === 'true';
+var Debug = /** @class */ (function () {
+    function Debug() {
+        this.load = urlDebugState;
+        this.uncache = urlManager.get('sxcver');
+    }
+    Debug.urlState = urlDebugState;
+    return Debug;
+}());
+
+
+
+/***/ }),
+/* 167 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* unused harmony export buildSxcRoot */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__tools_total_popup__ = __webpack_require__(64);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__tools_url_param_manager__ = __webpack_require__(65);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Stats__ = __webpack_require__(168);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__sxc_instance_sxc_instance_with_internals__ = __webpack_require__(72);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__sxc_root__ = __webpack_require__(73);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5____ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__logging__ = __webpack_require__(6);
+
+
+
+
+
+
+
+/**
+ * returns a 2sxc-instance of the id or html-tag passed in
+ * @param id
+ * @param cbid
+ * @returns {}
+ */
+function FindSxcInstance(id, cbid) {
+    var $2sxc = window.$2sxc;
+    $2sxc.log.add('FindSxcInstance(' + id + ',' + cbid);
+    if (!$2sxc._controllers)
+        throw new Error('$2sxc not initialized yet');
+    // if it's a dom-element, use auto-find
+    if (typeof id === 'object') {
+        var idTuple = autoFind(id);
+        id = idTuple[0];
+        cbid = idTuple[1];
+    }
+    // if content-block is unknown, use id of module, and create an ID in the cache
+    if (!cbid)
+        cbid = id;
+    var cacheKey = id + ':' + cbid;
+    // either get the cached controller from previous calls, or create a new one
+    if ($2sxc._controllers[cacheKey]) {
+        $2sxc.log.add('Cache found for: ' + cacheKey);
+        return $2sxc._controllers[cacheKey];
+    }
+    // not found, so also init the data-cache in case it's ever needed
+    if (!$2sxc._data[cacheKey])
+        $2sxc._data[cacheKey] = {};
+    return ($2sxc._controllers[cacheKey]
+        = new __WEBPACK_IMPORTED_MODULE_3__sxc_instance_sxc_instance_with_internals__["a" /* SxcInstanceWithInternals */](id, cbid, cacheKey, $2sxc));
+}
+/**
+ * Build a SXC Controller for the page. Should only ever be executed once
+ */
+function buildSxcRoot() {
+    var rootApiV2 = Object(__WEBPACK_IMPORTED_MODULE_4__sxc_root__["a" /* getRootPartsV2 */])();
+    var urlManager = new __WEBPACK_IMPORTED_MODULE_1__tools_url_param_manager__["a" /* UrlParamManager */]();
+    var debug = new __WEBPACK_IMPORTED_MODULE_5____["Debug"]();
+    //  {
+    //     load: (urlManager.get('debug') === 'true'),
+    //     uncache: urlManager.get('sxcver'),
+    // };
+    var stats = new __WEBPACK_IMPORTED_MODULE_2__Stats__["a" /* Stats */]();
+    var addOn = {
+        _controllers: {},
+        beta: {},
+        _data: {},
+        // this creates a full-screen iframe-popup and provides a close-command to finish the dialog as needed
+        totalPopup: new __WEBPACK_IMPORTED_MODULE_0__tools_total_popup__["a" /* TotalPopup */](),
+        urlParams: urlManager,
+        // note: I would like to remove this from $2sxc, but it's currently
+        // used both in the inpage-edit and in the dialogs
+        // debug state which is needed in various places
+        debug: debug,
+        stats: stats,
+        insights: __WEBPACK_IMPORTED_MODULE_6__logging__["c" /* Insights */],
+        // mini-helpers to manage 2sxc parts, a bit like a dependency loader
+        // which will optimize to load min/max depending on debug state
+        parts: {
+            getUrl: function (url, preventUnmin) {
+                var r = (preventUnmin || !debug.load) ? url : url.replace('.min', ''); // use min or not
+                if (debug.uncache && r.indexOf('sxcver') === -1)
+                    r = r + ((r.indexOf('?') === -1) ? '?' : '&') + 'sxcver=' + debug.uncache;
+                return r;
+            },
+        },
+        jq: function () { return $2sxc_jQSuperlight; },
+    };
+    var merged = addOn.jq().extend(FindSxcInstance, addOn, rootApiV2);
+    merged.log.add('sxc controller built');
+    return merged; //FindSxcInstance as SxcRoot & SxcRootInternals;
+}
+function autoFind(domElement) {
+    var containerTag = $2sxc_jQSuperlight(domElement).closest('.sc-content-block')[0];
+    if (!containerTag)
+        return null;
+    var iid = containerTag.getAttribute('data-cb-instance');
+    var cbid = containerTag.getAttribute('data-cb-id');
+    if (!iid || !cbid)
+        return null;
+    return [iid, cbid];
+}
+
+
+/***/ }),
+/* 168 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -8733,30 +9020,19 @@ var Stats = /** @class */ (function () {
 
 
 /***/ }),
-/* 166 */,
-/* 167 */
-/***/ (function(module, exports) {
-
-
-
-/***/ }),
-/* 168 */
-/***/ (function(module, exports) {
-
-
-
-/***/ }),
 /* 169 */
 /***/ (function(module, exports) {
 
-/*
-  This is the base class for the Manage object on 2sxc instances.
-  It's typed here, so that API code is strongly typed, but it's incomplete.
-*/
 
 
 /***/ }),
 /* 170 */
+/***/ (function(module, exports) {
+
+
+
+/***/ }),
+/* 171 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -8803,7 +9079,7 @@ var LogCall = /** @class */ (function () {
 
 
 /***/ }),
-/* 171 */
+/* 172 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -8853,7 +9129,7 @@ var Entry = /** @class */ (function () {
 
 
 /***/ }),
-/* 172 */
+/* 173 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -8889,12 +9165,6 @@ var Obj = /** @class */ (function () {
 
 
 /***/ }),
-/* 173 */
-/***/ (function(module, exports) {
-
-
-
-/***/ }),
 /* 174 */
 /***/ (function(module, exports) {
 
@@ -8902,6 +9172,12 @@ var Obj = /** @class */ (function () {
 
 /***/ }),
 /* 175 */
+/***/ (function(module, exports) {
+
+
+
+/***/ }),
+/* 176 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -8990,7 +9266,7 @@ var Insights = singleton;
 
 
 /***/ }),
-/* 176 */
+/* 177 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -9010,7 +9286,7 @@ __WEBPACK_IMPORTED_MODULE_0____["Commands"].add(CmdApp, 'App', 'settings', true,
 
 
 /***/ }),
-/* 177 */
+/* 178 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -9098,7 +9374,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /***/ }),
-/* 178 */
+/* 179 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -9133,7 +9409,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /***/ }),
-/* 179 */
+/* 180 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -9187,7 +9463,7 @@ __WEBPACK_IMPORTED_MODULE_2__interfaces_window_in_page__["windowInPage"].$2sxcAc
 
 
 /***/ }),
-/* 180 */
+/* 181 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9216,18 +9492,9 @@ __WEBPACK_IMPORTED_MODULE_2__interfaces_window_in_page__["windowInPage"].$2sxcAc
 
 
 /***/ }),
-/* 181 */
-/***/ (function(module, exports) {
-
-
-
-/***/ }),
 /* 182 */
 /***/ (function(module, exports) {
 
-//
-// Note: this interface is copied/shared between this and angular quick-edit
-//
 
 
 /***/ }),
@@ -9243,6 +9510,9 @@ __WEBPACK_IMPORTED_MODULE_2__interfaces_window_in_page__["windowInPage"].$2sxcAc
 /* 184 */
 /***/ (function(module, exports) {
 
+//
+// Note: this interface is copied/shared between this and angular quick-edit
+//
 
 
 /***/ }),
@@ -9255,6 +9525,12 @@ __WEBPACK_IMPORTED_MODULE_2__interfaces_window_in_page__["windowInPage"].$2sxcAc
 /* 186 */
 /***/ (function(module, exports) {
 
+
+
+/***/ }),
+/* 187 */
+/***/ (function(module, exports) {
+
 // // https://stackoverflow.com/questions/38860161/using-typescript-and-object-assign-gives-me-an-error-property-assign-does-no
 // interface ObjectConstructor {
 //   assign(...objects: Object[]): Object;
@@ -9262,7 +9538,7 @@ __WEBPACK_IMPORTED_MODULE_2__interfaces_window_in_page__["windowInPage"].$2sxcAc
 
 
 /***/ }),
-/* 187 */
+/* 188 */
 /***/ (function(module, exports) {
 
 // //
@@ -9278,7 +9554,7 @@ __WEBPACK_IMPORTED_MODULE_2__interfaces_window_in_page__["windowInPage"].$2sxcAc
 
 
 /***/ }),
-/* 188 */
+/* 189 */
 /***/ (function(module, exports) {
 
 // /**
@@ -9304,13 +9580,13 @@ __WEBPACK_IMPORTED_MODULE_2__interfaces_window_in_page__["windowInPage"].$2sxcAc
 
 
 /***/ }),
-/* 189 */
+/* 190 */
 /***/ (function(module, exports) {
 
 
 
 /***/ }),
-/* 190 */
+/* 191 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -9347,7 +9623,7 @@ if (__WEBPACK_IMPORTED_MODULE_1__interfaces_window_in_page__["windowInPage"].$2s
 
 
 /***/ }),
-/* 191 */
+/* 192 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -9362,7 +9638,7 @@ var InPageButtonGroupJson = /** @class */ (function () {
 
 
 /***/ }),
-/* 192 */
+/* 193 */
 /***/ (function(module, exports) {
 
 // export class InPageCodeJson_ProbablyUnused {
@@ -9372,7 +9648,7 @@ var InPageButtonGroupJson = /** @class */ (function () {
 
 
 /***/ }),
-/* 193 */
+/* 194 */
 /***/ (function(module, exports) {
 
 /*
@@ -9390,7 +9666,7 @@ var InPageButtonGroupJson = /** @class */ (function () {
 
 
 /***/ }),
-/* 194 */
+/* 195 */
 /***/ (function(module, exports) {
 
 // CodeChange #2020-03-20#TemplateToolbarLeftUnused - if no side-effects, delete in June
@@ -9435,7 +9711,7 @@ var InPageButtonGroupJson = /** @class */ (function () {
 
 
 /***/ }),
-/* 195 */
+/* 196 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -9447,11 +9723,11 @@ $(__WEBPACK_IMPORTED_MODULE_0__constants__["C"].IDs.sel.scMenu).click(function (
 
 
 /***/ }),
-/* 196 */
+/* 197 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // tslint:disable-next-line: no-var-requires
-var Shake = __webpack_require__(197);
+var Shake = __webpack_require__(198);
 // ReSharper disable once InconsistentNaming
 // enable shake detection on all toolbars
 $(function () {
@@ -9466,7 +9742,7 @@ $(function () {
 
 
 /***/ }),
-/* 197 */
+/* 198 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_RESULT__;/*
@@ -9599,275 +9875,6 @@ var __WEBPACK_AMD_DEFINE_RESULT__;/*
 
     return Shake;
 }));
-
-
-/***/ }),
-/* 198 */,
-/* 199 */,
-/* 200 */,
-/* 201 */,
-/* 202 */,
-/* 203 */,
-/* 204 */,
-/* 205 */,
-/* 206 */,
-/* 207 */,
-/* 208 */,
-/* 209 */,
-/* 210 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TotalPopup; });
-var TotalPopup = /** @class */ (function () {
-    function TotalPopup() {
-        this.frame = undefined;
-        this.callback = undefined;
-    }
-    TotalPopup.prototype.open = function (url, callback) {
-        // count parents to see how high the z-index needs to be
-        var z = 10000010; // Needs at least 10000000 to be on top of the DNN9 bar
-        var p = window;
-        while (p !== window.top && z < 10000100) {
-            z++;
-            p = p.parent;
-        }
-        var wrapper = document.createElement('div');
-        wrapper.setAttribute('style', ' top: 0;left: 0;width: 100%;height: 100%; position:fixed; z-index:' + z);
-        document.body.appendChild(wrapper);
-        var ifrm = document.createElement('iframe');
-        ifrm.setAttribute('allowtransparency', 'true');
-        ifrm.setAttribute('style', 'top: 0;left: 0;width: 100%;height: 100%;');
-        ifrm.setAttribute('src', url);
-        wrapper.appendChild(ifrm);
-        document.body.className += ' sxc-popup-open';
-        this.frame = ifrm;
-        this.callback = callback;
-    };
-    TotalPopup.prototype.close = function () {
-        if (this.frame) {
-            document.body.className = document.body.className.replace('sxc-popup-open', '');
-            var frm = this.frame;
-            frm.parentNode.parentNode.removeChild(frm.parentNode);
-            this.callback();
-        }
-    };
-    TotalPopup.prototype.closeThis = function () {
-        window.parent.$2sxc.totalPopup.close();
-    };
-    return TotalPopup;
-}());
-
-
-
-/***/ }),
-/* 211 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return UrlParamManager; });
-var UrlParamManager = /** @class */ (function () {
-    function UrlParamManager() {
-    }
-    UrlParamManager.prototype.get = function (name) {
-        // warning: this method is duplicated in 2 places - keep them in sync.
-        // locations are eav and 2sxc4ng
-        name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
-        var searchRx = new RegExp('[\\?&]' + name + '=([^&#]*)', 'i');
-        var results = searchRx.exec(location.search);
-        var strResult;
-        if (results === null) {
-            var hashRx = new RegExp('[#&]' + name + '=([^&#]*)', 'i');
-            results = hashRx.exec(location.hash);
-        }
-        // if nothing found, try normal URL because DNN places parameters in /key/value notation
-        if (results === null) {
-            // Otherwise try parts of the URL
-            var matches = window.location.pathname.match(new RegExp('/' + name + '/([^/]+)', 'i'));
-            // Check if we found anything, if we do find it, we must reverse the
-            // results so we get the "last" one in case there are multiple hits
-            if (matches && matches.length > 1)
-                strResult = matches.reverse()[0];
-        }
-        else
-            strResult = results[1];
-        return strResult === null || strResult === undefined
-            ? ''
-            : decodeURIComponent(strResult.replace(/\+/g, ' '));
-    };
-    UrlParamManager.prototype.require = function (name) {
-        var found = this.get(name);
-        if (found === '') {
-            var message = "Required parameter (" + name + ") missing from url - cannot continue";
-            alert(message);
-            throw message;
-        }
-        return found;
-    };
-    return UrlParamManager;
-}());
-
-
-
-/***/ }),
-/* 212 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (immutable) */ __webpack_exports__["a"] = getRootPartsV2;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__environment_Environment__ = __webpack_require__(67);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__http_SxcHttp__ = __webpack_require__(68);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__logging_Log__ = __webpack_require__(63);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__constants__ = __webpack_require__(15);
-
-
-
-
-function getRootPartsV2() {
-    var log = new __WEBPACK_IMPORTED_MODULE_2__logging_Log__["a" /* Log */]('$2sxc', null, 'building');
-    var env = new __WEBPACK_IMPORTED_MODULE_0__environment_Environment__["a" /* Environment */]();
-    return {
-        sysinfo: {
-            version: __WEBPACK_IMPORTED_MODULE_3__constants__["d" /* SxcVersion */],
-            description: 'The 2sxc Controller - read more about it on docs.2sxc.org',
-        },
-        env: env,
-        http: new __WEBPACK_IMPORTED_MODULE_1__http_SxcHttp__["a" /* SxcHttp */](env),
-        log: log,
-    };
-}
-
-
-/***/ }),
-/* 213 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Debug; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0____ = __webpack_require__(14);
-
-var urlManager = new __WEBPACK_IMPORTED_MODULE_0____["UrlParamManager"]();
-var urlDebugState = urlManager.get('debug') === 'true';
-var Debug = /** @class */ (function () {
-    function Debug() {
-        this.load = urlDebugState;
-        this.uncache = urlManager.get('sxcver');
-    }
-    Debug.urlState = urlDebugState;
-    return Debug;
-}());
-
-
-
-/***/ }),
-/* 214 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* unused harmony export buildSxcRoot */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__tools_total_popup__ = __webpack_require__(210);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__tools_url_param_manager__ = __webpack_require__(211);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Stats__ = __webpack_require__(165);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__instance_SxcInstanceWithInternals__ = __webpack_require__(72);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__sxc_root__ = __webpack_require__(212);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5____ = __webpack_require__(14);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__logging__ = __webpack_require__(6);
-
-
-
-
-
-
-
-/**
- * returns a 2sxc-instance of the id or html-tag passed in
- * @param id
- * @param cbid
- * @returns {}
- */
-function FindSxcInstance(id, cbid) {
-    var $2sxc = window.$2sxc;
-    $2sxc.log.add('FindSxcInstance(' + id + ',' + cbid);
-    if (!$2sxc._controllers)
-        throw new Error('$2sxc not initialized yet');
-    // if it's a dom-element, use auto-find
-    if (typeof id === 'object') {
-        var idTuple = autoFind(id);
-        id = idTuple[0];
-        cbid = idTuple[1];
-    }
-    // if content-block is unknown, use id of module, and create an ID in the cache
-    if (!cbid)
-        cbid = id;
-    var cacheKey = id + ':' + cbid;
-    // either get the cached controller from previous calls, or create a new one
-    if ($2sxc._controllers[cacheKey]) {
-        $2sxc.log.add('Cache found for: ' + cacheKey);
-        return $2sxc._controllers[cacheKey];
-    }
-    // not found, so also init the data-cache in case it's ever needed
-    if (!$2sxc._data[cacheKey])
-        $2sxc._data[cacheKey] = {};
-    return ($2sxc._controllers[cacheKey]
-        = new __WEBPACK_IMPORTED_MODULE_3__instance_SxcInstanceWithInternals__["a" /* SxcInstanceWithInternals */](id, cbid, cacheKey, $2sxc));
-}
-/**
- * Build a SXC Controller for the page. Should only ever be executed once
- */
-function buildSxcRoot() {
-    var rootApiV2 = Object(__WEBPACK_IMPORTED_MODULE_4__sxc_root__["a" /* getRootPartsV2 */])();
-    var urlManager = new __WEBPACK_IMPORTED_MODULE_1__tools_url_param_manager__["a" /* UrlParamManager */]();
-    var debug = new __WEBPACK_IMPORTED_MODULE_5____["Debug"]();
-    //  {
-    //     load: (urlManager.get('debug') === 'true'),
-    //     uncache: urlManager.get('sxcver'),
-    // };
-    var stats = new __WEBPACK_IMPORTED_MODULE_2__Stats__["a" /* Stats */]();
-    var addOn = {
-        _controllers: {},
-        beta: {},
-        _data: {},
-        // this creates a full-screen iframe-popup and provides a close-command to finish the dialog as needed
-        totalPopup: new __WEBPACK_IMPORTED_MODULE_0__tools_total_popup__["a" /* TotalPopup */](),
-        urlParams: urlManager,
-        // note: I would like to remove this from $2sxc, but it's currently
-        // used both in the inpage-edit and in the dialogs
-        // debug state which is needed in various places
-        debug: debug,
-        stats: stats,
-        insights: __WEBPACK_IMPORTED_MODULE_6__logging__["c" /* Insights */],
-        // mini-helpers to manage 2sxc parts, a bit like a dependency loader
-        // which will optimize to load min/max depending on debug state
-        parts: {
-            getUrl: function (url, preventUnmin) {
-                var r = (preventUnmin || !debug.load) ? url : url.replace('.min', ''); // use min or not
-                if (debug.uncache && r.indexOf('sxcver') === -1)
-                    r = r + ((r.indexOf('?') === -1) ? '?' : '&') + 'sxcver=' + debug.uncache;
-                return r;
-            },
-        },
-        jq: function () { return $2sxc_jQSuperlight; },
-    };
-    var merged = addOn.jq().extend(FindSxcInstance, addOn, rootApiV2);
-    merged.log.add('sxc controller built');
-    return merged; //FindSxcInstance as SxcRoot & SxcRootInternals;
-}
-function autoFind(domElement) {
-    var containerTag = $2sxc_jQSuperlight(domElement).closest('.sc-content-block')[0];
-    if (!containerTag)
-        return null;
-    var iid = containerTag.getAttribute('data-cb-instance');
-    var cbid = containerTag.getAttribute('data-cb-id');
-    if (!iid || !cbid)
-        return null;
-    return [iid, cbid];
-}
-
-
-/***/ }),
-/* 215 */
-/***/ (function(module, exports) {
-
 
 
 /***/ })

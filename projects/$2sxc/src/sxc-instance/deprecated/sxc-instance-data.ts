@@ -1,4 +1,4 @@
-﻿import { SxcInstanceWithInternals } from './SxcInstanceWithInternals';
+﻿import { SxcInstanceWithInternals } from '..';
 
 declare const $2sxc_jQSuperlight: any;
 

@@ -1,6 +1,6 @@
 import * as Public from '../../../sxc-typings/index';
-import { JsInfo } from './JsInfo';
-import { EnvironmentMetaLoader } from './envMetaLoader';
+import { JsInfo } from '.';
+import { EnvironmentMetaLoader } from './env-loader-meta';
 import { ApiExtensionPlaceholder } from '../constants';
 import { HasLog } from '../logging/index';
 

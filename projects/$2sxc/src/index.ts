@@ -9,13 +9,9 @@
 
 
 // early things without dependencies, which may be needed by others
-export * from './_/Window';
+export * from './_/window';
 export * from './tools/total-popup';
 export * from './tools/url-param-manager';
-
-
-export * from './ajax/AjaxPromise';
-export * from './ajax/AjaxSettings';
 
 // must be pretty early, because most objects rely on this
 // and ATM having this on top changes the load order
@@ -23,21 +19,18 @@ export * from './ajax/AjaxSettings';
 export * from './logging';
 
 
-export * from './environment/Environment';
-export * from './environment/JsInfo';
+export * from './environment/environment';
+export * from './environment/js-info';
 
-export * from './http/SxcHttp';
-export * from './instance/SxcInstance';
-export * from './instance/SxcInstanceDataDeprecated';
-export * from './instance/SxcInstanceWithInternals';
-export * from './instance/SxcWebApi';
+export * from './http/sxc-http';
+export * from './sxc-instance';
 
 
-export * from './SxcRoot/debug';
-export * from './SxcRoot/sxc-root';
-export * from './SxcRoot/sxc-root-builder';
-export * from './SxcRoot/sxc-root-internals';
+export * from './sxc-root/debug';
+export * from './sxc-root/sxc-root';
+export * from './sxc-root/sxc-root-builder';
+export * from './sxc-root/sxc-root-internals';
 
 
-export * from './edit-interfaces/sxc-root-manage';
-export * from './edit-interfaces/sxc-instance-manage';
+export * from './sxc-root/sxc-root-manage';
+export * from './sxc-instance/sxc-instance-manage';

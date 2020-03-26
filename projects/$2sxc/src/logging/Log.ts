@@ -1,10 +1,12 @@
 import { Entry, LogCall } from '.';
 import { Log as ILog } from '../../../sxc-typings/index';
 import { Debug } from '..';
+
+
 const maxScopeLen = 3;
 const maxNameLen = 6;
-
 const liveDump = false;
+const maxEntriesReached = 'Maximum amount of entries added to log, will stop adding more';
 
 export class Log implements ILog {
 
@@ -19,7 +21,7 @@ export class Log implements ILog {
     /**
      * Maximum amount of entries to add - to prevent memory hoging
      */
-    maxEntries: number;
+    maxEntries = 1000;
 
     /**
      * Create a logger and optionally attach it to a parent logger
@@ -89,6 +91,14 @@ export class Log implements ILog {
      * log.add(`description ${() => parameter}`);
      */
     add(message: (() => string) | string, data?: unknown): string {
+        // check if the log is already too big
+        if(this.entries.length > this.maxEntries) 
+            return this._prepareMessage(message);
+
+        // if we just reached the max, add special message
+        if(this.entries.length === this.maxEntries) 
+            this._addEntry(this._prepareEntry(maxEntriesReached));
+
         const entry = this._prepareEntry(message, data);
         this._addEntry(entry);
         return entry.message;

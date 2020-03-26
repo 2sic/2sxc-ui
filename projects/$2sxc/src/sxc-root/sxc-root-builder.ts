@@ -1,10 +1,10 @@
 ﻿import { TotalPopup } from '../tools/total-popup';
 import { UrlParamManager } from '../tools/url-param-manager';
 import { Stats } from '../Stats';
-import { SxcInstanceWithInternals } from '../instance/SxcInstanceWithInternals';
+import { SxcInstanceWithInternals } from '../sxc-instance/sxc-instance-with-internals';
 import { SxcRootInternals } from './sxc-root-internals';
 import { SxcRoot, getRootPartsV2 } from './sxc-root';
-import { Window } from "../_/Window";
+import { Window } from "../_/window";
 import { Debug } from '..';
 import { Insights } from '../logging';
 

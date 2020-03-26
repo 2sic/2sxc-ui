@@ -1,7 +1,7 @@
 import * as Public from '../../../sxc-typings/index';
-import { SxcInstanceWithInternals } from '../instance/SxcInstanceWithInternals';
-import { Environment } from '../environment/Environment';
-import { SxcHttp } from '../http/SxcHttp';
+import { SxcInstanceWithInternals } from '../sxc-instance/sxc-instance-with-internals';
+import { Environment } from '../environment/environment';
+import { SxcHttp } from '../http/sxc-http';
 import { Log } from '../logging/Log';
 import { SxcVersion } from '../constants';
 

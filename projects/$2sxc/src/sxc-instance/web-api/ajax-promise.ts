@@ -1,6 +1,5 @@
-import { SxcInstance } from '../instance/SxcInstance';
-import { AjaxSettings } from './AjaxSettings';
-import { SxcWebApi } from '../instance/SxcWebApi';
+import { SxcInstance, SxcWebApi } from '..';
+import { AjaxSettings } from './ajax-settings';
 
 declare const $2sxc_jQSuperlight: JQuery;
 

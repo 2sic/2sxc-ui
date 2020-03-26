@@ -1,4 +1,4 @@
-import { Environment } from './Environment';
+import { Environment } from './environment';
 
 const helpAutoDetect = 'You must either include jQuery on the page or inject the jsApi parameters to prevent auto-detection.';
 
