@@ -7418,20 +7418,28 @@ var CmdContentItems = 'contentitems';
  * import this module to commands.ts
  */
 __WEBPACK_IMPORTED_MODULE_0____["Commands"].add(CmdContentItems, 'ContentItems', 'table', true, false, {
-    params: function (context) { return ({ contentTypeName: context.contentBlock.contentTypeId }); },
+    params: function (context) {
+        var typeName = context.button.action.params.contentType
+            || context.contentBlock.contentTypeId;
+        return {
+            // old name for the previous UI
+            contentTypeName: typeName,
+            // new name for the new UI
+            contentType: typeName,
+        };
+    },
+    // only show to admin-users and in cases where we know the content-type
     showCondition: function (context) {
-        return (context.user.canDesign &&
+        return context.user.canDesign &&
             (!!context.button.action.params.contentType ||
-                !!context.contentBlock.contentTypeId));
+                !!context.contentBlock.contentTypeId);
     },
     configureCommand: function (context, linkGenerator) {
-        if (linkGenerator.context.button.action.params.contentType)
-            // optionally override with custom type
-            linkGenerator.urlParams.contentTypeName =
-                linkGenerator.context.button.action.params.contentType;
-        // maybe: if item doesn't have a type, use that of template
-        // else if (cmdSpecs.contentTypeId)
-        //    cmd.params.contentTypeName = cmdSpecs.contentTypeId;
+        // optionally override with custom type
+        // 2020-03-26 2dm seems superflues, because it's already merged in the params
+        // if (linkGenerator.context.button.action.params.contentType)
+        //     linkGenerator.urlParams.contentTypeName =
+        //         linkGenerator.context.button.action.params.contentType;
         if (context.button.action.params.filters) {
             var enc = JSON.stringify(context.button.action.params.filters);
             // special case - if it contains a "+" character, this won't survive
@@ -7477,8 +7485,16 @@ var CmdContentType = 'contenttype';
  * import this module to commands.ts
  */
 __WEBPACK_IMPORTED_MODULE_0____["Commands"].add(CmdContentType, 'ContentType', 'fields', true, false, {
+    params: function (context) { return ({
+        // added in 10.27 to help with the new edit ui
+        contentType: context.button.action.params.contentType
+            || context.contentBlock.contentTypeId,
+    }); },
+    // only show to admin-users and in cases where we know the content-type
     showCondition: function (context) {
-        return context.user.canDesign;
+        return context.user.canDesign &&
+            (!!context.button.action.params.contentType ||
+                !!context.contentBlock.contentTypeId);
     },
 });
 
@@ -9938,4 +9954,4 @@ var __WEBPACK_AMD_DEFINE_RESULT__;/*
 
 /***/ })
 /******/ ]);
-//# sourceMappingURL=https://sources.2sxc.org/10.27.00/./inpage/inpage.js.map
+//# sourceMappingURL=inpage.js.map
