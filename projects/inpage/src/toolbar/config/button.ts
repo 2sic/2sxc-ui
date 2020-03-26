@@ -4,7 +4,7 @@ import { CommandLinkGenerator } from '../../commands/command-link-generator';
 import { CommandParams } from '../../commands/command-params';
 import { ContextComplete } from '../../context/bundles/context-bundle-button';
 import { Obj, TypeTbD, TypeUnsafe } from '../../plumbing';
-import { InPageButtonJson } from '../config-loaders/in-page-button';
+import { InPageButtonJson } from '../config-loaders';
 
 
 /** This is the most common call signature on most ButtonConfig properties */

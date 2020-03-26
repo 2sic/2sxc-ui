@@ -1,13 +1,12 @@
 ﻿import { ToolbarWip } from '.';
+import { InPageButtonJson, InPageCommandJson } from '.';
+import { ButtonGroupWip } from '.';
 import { CommandParams, Commands } from '../../commands';
 import { CmdMore } from '../../commands/command/more';
-import { HasLog, Log } from '../../logging';
+import { HasLog } from '../../logging';
 import { Button, ButtonCommand, Toolbar, ToolbarSettings } from '../config';
 import { ButtonGroup } from '../config';
-import { InPageButtonJson } from './in-page-button';
-import { InPageCommandJson } from './in-page-command';
 import { ToolbarConfigLoader } from './toolbar-config-loader';
-import { ButtonGroupWip } from './toolbar-wip';
 
 export class ButtonGroupConfigLoader extends HasLog {
 

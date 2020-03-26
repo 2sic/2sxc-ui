@@ -3,7 +3,4 @@ export const Debug = {
         autoDump: false,
         run: true,
     },
-    bootstrap: {
-        initInstance: true,
-    },
 };

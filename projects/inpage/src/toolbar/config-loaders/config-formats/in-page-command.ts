@@ -1,4 +1,4 @@
-import { TypeTbD } from '../../plumbing/TypeTbD';
+import { TypeTbD } from '../../../plumbing/TypeTbD';
 
 export interface InPageCommandJsonWithTooMuchInfo extends InPageCommandJson {
     entity?: {

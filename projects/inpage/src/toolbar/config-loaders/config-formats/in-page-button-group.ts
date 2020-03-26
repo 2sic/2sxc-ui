@@ -1,4 +1,4 @@
-import { InPageButtonJson } from './in-page-button';
+import { InPageButtonJson } from '..';
 
 export class InPageButtonGroupJson {
     buttons: InPageButtonJson[] | string;

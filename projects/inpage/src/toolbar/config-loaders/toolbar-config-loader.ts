@@ -1,4 +1,6 @@
 ﻿import { ButtonGroupConfigLoader, CommandConfigLoader, InPageCommandJson, ToolbarWip } from '.';
+import { InPageButtonGroupJson, InPageButtonJson } from '.';
+import { ButtonGroupsWip } from '.';
 import { ToolbarManager } from '..';
 import { ContextComplete } from '../../context/bundles/context-bundle-button';
 import { Entry, HasLog } from '../../logging';
@@ -10,9 +12,6 @@ import { ToolbarTemplate } from '../templates';
 import { ToolbarTemplateButtonGroup } from '../templates';
 import { ToolbarTemplateDefault } from '../templates/template-default';
 import { ButtonConfigLoader } from './button-config-loader';
-import { InPageButtonJson } from './in-page-button';
-import { InPageButtonGroupJson } from './in-page-button-group';
-import { ButtonGroupsWip } from './toolbar-wip';
 
 // Enable when debugging toolbar creation - will dump all logs to the console
 const liveDumpThis = false;

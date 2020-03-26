@@ -7,6 +7,7 @@ import { ContextComplete } from '../../context/bundles';
 import { HasLog, Log } from '../../logging';
 import { DictionaryValue, TypeTbD, TypeUnsafe, TypeWeDontCare } from '../../plumbing';
 import { Button, ButtonCommand, ButtonGroup, Toolbar } from '../config';
+import { ButtonModifier } from '../config/button-modifier';
 
 /**
  * This is a system to build button configurations
@@ -105,36 +106,36 @@ export class ButtonConfigLoader extends HasLog {
 
 
 
-  /**
-   * remove buttons which are not valid based on add condition
-   * @param {ContextComplete} context
-   * @param {Toolbar} full
-   * @param {InstanceConfig} config
-   * @memberof ButtonConfigurationBuilder
-   */
-  removeDisableButtons(context: ContextComplete, full: Toolbar,
-    // #CodeChange#2020-03-22#InstanceConfig - believe this is completely unused; remove in June
-    // config: InstanceConfig
-    ): void {
-    const wrapLog = this.log.call('removeDisableButtons', `length of groups: ${full.groups.length}`); // new Log('Tlb.RmvDsb', this.log,  `start remove disabled buttons for ${full.groups.length} groups`);
-    const btnGroups = full.groups;
-    for (let g = 0; g < btnGroups.length; g++) {
-      const btns = btnGroups[g].buttons;
-      // #CodeChange#2020-03-22#InstanceConfig - believe this is completely unused; remove in June
-      removeUnfitButtons(context, btns, /* config, */ this.log);
+/**
+ * remove buttons which are not valid based on add condition
+ * @param {ContextComplete} context
+ * @param {Toolbar} full
+ * @param {InstanceConfig} config
+ * @memberof ButtonConfigurationBuilder
+ */
+    removeDisableButtons(context: ContextComplete, full: Toolbar,
+        // #CodeChange#2020-03-22#InstanceConfig - believe this is completely unused; remove in June
+        // config: InstanceConfig
+        ): void {
+        const wrapLog = this.log.call('removeDisableButtons', `length of groups: ${full.groups.length}`); // new Log('Tlb.RmvDsb', this.log,  `start remove disabled buttons for ${full.groups.length} groups`);
+        const btnGroups = full.groups;
+        for (let g = 0; g < btnGroups.length; g++) {
+            const btns = btnGroups[g].buttons;
+            // #CodeChange#2020-03-22#InstanceConfig - believe this is completely unused; remove in June
+            this.removeUnfitButtons(context, full, btns /* config, */);
 
-      wrapLog.add('will disable appropriate buttons');
-      // #CodeChange#2020-03-22#InstanceConfig - believe this is completely unused; remove in June
-      disableButtons(context, btns/*, config */);
+            wrapLog.add('will disable appropriate buttons');
+            // #CodeChange#2020-03-22#InstanceConfig - believe this is completely unused; remove in June
+            disableButtons(context, btns/*, config */);
 
-      // remove the group, if no buttons left, or only "more"
-      if (btns.length === 0 || (btns.length === 1 && btns[0].action.name === CmdMore)) {
-        wrapLog.add('found no more buttons except for the "more" - will remove that group');
-        btnGroups.splice(g--, 1); // remove, and decrement counter
-      }
+            // remove the group, if no buttons left, or only "more"
+            if (btns.length === 0 || (btns.length === 1 && btns[0].action.name === CmdMore)) {
+                wrapLog.add('found no more buttons except for the "more" - will remove that group');
+                btnGroups.splice(g--, 1); // remove, and decrement counter
+            }
+        }
+        wrapLog.return(null);
     }
-    wrapLog.return(null);
-  }
 
 
 
@@ -149,34 +150,46 @@ export class ButtonConfigLoader extends HasLog {
                           group: ButtonGroup,
                           fullToolbarConfig: ToolbarWip,
                           actions: typeof Commands) {
-        const wrapLog = this.log.call('addDefaultBtnSettings', '', `adding default btn settings for ${() => btn.action.name}`);
+        const cl = this.log.call('addDefaultBtnSettings', '', `adding default btn settings for ${() => btn.action.name}`);
         for (let d = 0; d < btnProperties.length; d++) {
             fallbackBtnSetting(btn, group, fullToolbarConfig, actions, btnProperties[d]);
         }
-        wrapLog.return(null);
+        cl.return(null);
     }
 
-}
 
 
-
-function removeUnfitButtons(context: ContextComplete, btns: Button[],
-    // #CodeChange#2020-03-22#InstanceConfig - believe this is completely unused; remove in June
-    // config: InstanceConfig,
-                            log: Log): void {
-    const wrapLog = log.call('removeUnfitButtons');
-    let removals = '';
-    for (let i = 0; i < btns.length; i++) {
-        context.button = btns[i];
-        if (btns[i].action && !evalPropOrFunction(btns[i].showCondition, context, /* config, */ true)) {
-            removals += `#${i} "${btns[i].action.name}"; `;
-            btns.splice(i--, 1);
+    private removeUnfitButtons(context: ContextComplete, toolbar: Toolbar, btns: Button[]): void {
+        // #CodeChange#2020-03-22#InstanceConfig - believe this is completely unused; remove in June
+        // config: InstanceConfig,
+        const cl = this.log.call('removeUnfitButtons');
+        let removals = '';
+        const modifiers = toolbar.settings && toolbar.settings._btnModifiers || [];
+        for (let i = 0; i < btns.length; i++) {
+            const btn = btns[i];
+            // add to context for calls to verify if it should be shown
+            context.button = btn;
+            if (btn.action) {
+                const modifier = ButtonModifier.check(modifiers, btn.action.name);
+                const remove = modifier.remove
+                    || !evalPropOrFunction(btn.showCondition, context, /* config, */ true);
+                if (remove) {
+                    removals += `#${i} "${btn.action.name}"; `;
+                    btns.splice(i--, 1);
+                }
+                cl.add(`btn '${btn.action.name}' remove ${remove} - modifierMessage ${modifier.reason}`);
+            }
         }
+        if (removals)
+            cl.add(`removed buttons: ${removals}`);
+        cl.return(null);
     }
-    if (removals)
-        wrapLog.add(`removed buttons: ${removals}`);
-    wrapLog.return(null);
+
 }
+
+
+
+
 
 // #CodeChange#2020-03-22#InstanceConfig - believe this is completely unused
 function disableButtons(context: ContextComplete, btns: Button[],

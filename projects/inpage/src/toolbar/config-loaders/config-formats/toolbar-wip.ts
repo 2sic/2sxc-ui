@@ -1,8 +1,8 @@
-import { CommandParams } from '../../commands/command-params';
-import { DictionaryValue } from '../../plumbing';
-import { ButtonGroup, ToolbarSettings } from '../config';
-import { ToolbarTemplateButtonGroup } from '../templates/toolbar-templaten-button-group';
-import { InPageButtonGroupJson } from './in-page-button-group';
+import { InPageButtonGroupJson } from '..';
+import { CommandParams } from '../../../commands/command-params';
+import { DictionaryValue } from '../../../plumbing';
+import { ButtonGroup, ToolbarSettings } from '../../config';
+import { ToolbarTemplateButtonGroup } from '../../templates/toolbar-templaten-button-group';
 
 
 export type ButtonGroupsWip = ButtonGroupWip[];

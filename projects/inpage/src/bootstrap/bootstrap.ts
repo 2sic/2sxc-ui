@@ -2,7 +2,7 @@ import { CmdLayout } from '../commands/command/layout';
 import { C } from '../constants';
 import { SxcEdit } from '../interfaces/sxc-instance-editable';
 import { windowInPage as window } from '../interfaces/window-in-page';
-import { HasLog, Insights, Log, LogUtils } from '../logging';
+import { HasLog, Insights, Log } from '../logging';
 import { TypeUnsafe } from '../plumbing';
 import { QuickDialog } from '../quick-dialog';
 import * as QuickEditState from '../quick-dialog/state';
@@ -153,7 +153,7 @@ export class BootstrapInPage extends HasLog {
 
 
     private initInstance(module: JQuery, isFirstRun: boolean): void {
-        const callLog = this.log.call('initInstance', `module: obj, isFirstRun: ${isFirstRun}) initialized: ${this.initializedInstances}`);
+        const cl = this.log.call('initInstance', `module: obj, isFirstRun: ${isFirstRun}) initialized: ${this.initializedInstances}`);
 
         // check if module is already in the list of initialized modules
         if (this.initializedInstances.find((m) => m === module)) return;
@@ -176,9 +176,8 @@ export class BootstrapInPage extends HasLog {
           const log = new Log('Bts.Module');
 
           ToolbarManager.buildModule(module);
-          if (C.Debug.bootstrap.initInstance) LogUtils.logDump(log);
         }
-        callLog.return(null);
+        cl.done();
     }
 
 

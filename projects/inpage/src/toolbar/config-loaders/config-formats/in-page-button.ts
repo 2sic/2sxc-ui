@@ -1,6 +1,6 @@
-﻿import { InPageCommandJson } from '.';
-import { CommandParams } from '../../commands/command-params';
-import { TypeTbD } from '../../plumbing/TypeTbD';
+﻿import { InPageCommandJson } from '..';
+import { CommandParams } from '../../../commands/command-params';
+import { TypeTbD } from '../../../plumbing/TypeTbD';
 
 /**
  * Button Definition v1. from old API
