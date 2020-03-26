@@ -39,4 +39,8 @@ export class UrlParamManager {
         }
         return found;
     }
+
+    debug(): boolean {
+        return this.get('debug') === 'true'
+    }
 }

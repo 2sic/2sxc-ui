@@ -16,7 +16,26 @@ export class Obj {
         , args[0]);
     }
 
-    static DeepClone<T>(original: T): T {
-        return JSON.parse(JSON.stringify(original)) as T;
+    static DeepClone<T>(original: T, ignoreCircular = false): T {
+        if(original === undefined || original === null)
+            return original;
+        const str = ignoreCircular ? JSON.stringify(original, getCircularReplacer) : JSON.stringify(original);
+        if(str === undefined || str === null)
+            return original;
+        return JSON.parse(str) as T;
     }
 }
+
+
+const getCircularReplacer = () => {
+    const seen = new WeakSet();
+    return (_:any, value: any) => {
+      if (typeof value === "object" && value !== null) {
+        if (seen.has(value)) {
+          return;
+        }
+        seen.add(value);
+      }
+      return value;
+    };
+  };

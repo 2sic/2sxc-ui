@@ -1,7 +1,7 @@
 ﻿import * as Public from '../../../../sxc-typings/index';
 import { SxcInstance } from '../sxc-instance';
 import { AjaxPromise } from './ajax-promise';
-import { Environment } from '../../environment/environment';
+import { Environment } from '../../environment';
 import { AjaxSettings } from './ajax-settings';
 
 declare const $2sxc_jQSuperlight: JQuery;

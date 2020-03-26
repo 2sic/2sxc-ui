@@ -1,3 +1,3 @@
 
-export * from './environment';
+export * from './root-environment';
 export * from './js-info';

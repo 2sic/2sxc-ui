@@ -19,7 +19,7 @@ export * from './tools/url-param-manager';
 export * from './logging';
 
 
-export * from './environment/environment';
+export * from './environment/root-environment';
 export * from './environment/js-info';
 
 export * from './http/sxc-http';
