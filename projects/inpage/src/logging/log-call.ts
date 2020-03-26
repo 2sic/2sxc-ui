@@ -1,5 +1,4 @@
-import { Log } from '.';
-import { Entry } from './entry';
+import { Entry, Log } from '.';
 
 export class LogCall {
     public initialEntry: Entry;

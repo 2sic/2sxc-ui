@@ -13,11 +13,6 @@ export class LogUtils {
     // 'jslog' is additional query string url parameter, to enable log dump (debug=true is required)
     // in the future would support more variations like jslog = toolbar etc.
     const jsLogUrlParam = $2sxc.urlParams.get('jslog');
-    //if ($2sxc.debug.load) {
-    //  console.log(log.dump());
-    //}
-    if (jsLogUrlParam) {
-      log.dump();
-    }
+    if (jsLogUrlParam) log.dump();
   }
 }

@@ -1,5 +1,5 @@
 import * as Public from '../../../sxc-typings/index';
-import { Log } from './Log';
+import { Log } from '.';
 
 export abstract class HasLog implements Public.HasLog {
     constructor(name: string, message?: string) {

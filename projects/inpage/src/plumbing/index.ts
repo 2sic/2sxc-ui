@@ -1,4 +1,4 @@
 
 export * from './TypeTbD';
 
-export * from './obj';
+export * from '../../../$2sxc/src/plumbing';

@@ -1,6 +1,5 @@
-﻿import { C } from '../constants';
-import { Entry } from './entry';
-import { LogCall } from './log-call';
+﻿import { Entry, LogCall } from '.';
+import { C } from '../constants';
 const maxScopeLen = 3;
 const maxNameLen = 6;
 
@@ -14,6 +13,7 @@ export class Log {
     entries = new Array<Entry>();
     private depth = 0;
     private callDepths: string[] = [];
+    startTime: number;
 
     /**
      * Create a logger and optionally attach it to a parent logger
@@ -24,6 +24,7 @@ export class Log {
     constructor(name: string, parent?: Log, initialMessage?: string) {
         this.rename(name);
         this.linkLog(parent);
+        this.startTime = new Date().getTime();
         if (initialMessage != null) this.add(initialMessage);
     }
 
@@ -97,7 +98,8 @@ export class Log {
 
     _prepareEntry(message: (() => string) | string, data?: unknown): Entry {
         const msg = this._prepareMessage(message);
-        const entry = new Entry(this, msg, this.depth, data);
+        const time = new Date().getTime() - this.startTime;
+        const entry = new Entry(this, msg, this.depth, time, data);
         return entry;
     }
 

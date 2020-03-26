@@ -1,8 +1,6 @@
-﻿import { Log } from './log';
+﻿import { Log } from '.';
 
 export interface IHasLog {
 
   log: Log;
-  linkLog(parentLog: Log) : void;
-  
 }
