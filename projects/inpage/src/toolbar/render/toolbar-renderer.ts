@@ -26,6 +26,7 @@ export class ToolbarRenderer extends HasLog {
         const cl = this.log.call('generate');
         // render groups of buttons
         const context = this.context;
+        cl.data('toolbar config', context.toolbar);
         const groups = this.groups.generate(context);
 
         // render toolbar

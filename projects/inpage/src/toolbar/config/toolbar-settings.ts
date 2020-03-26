@@ -11,6 +11,12 @@ export class ToolbarSettings {
     classes: string = '';
 
     /**
+     * color configuration which applies to all buttons
+     * use "colorname", "#xxyyzz" or "color1,color2" to specify the colors
+     */
+    color?: string = '';
+
+    /**
      * Experimental 10.27 - modifiers for the buttons
      * Should never be set from the page, but the toolbar initializer will set this
      */

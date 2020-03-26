@@ -42,6 +42,15 @@ export class RenderButton extends RenderPart {
         divTag.appendChild(this.iconTag(btn, ctx));
         btnLink.appendChild(divTag);
 
+        // set color - new in 10.27
+        const color = ctx.toolbar.settings.color;
+        if (color) {
+            cl.add('color: ' + color);
+            const split = color.split(',');
+            if (split[0]) divTag.style.backgroundColor = split[0];
+            if (split[1]) divTag.style.color = split[1];
+        }
+
         return cl.return(btnLink);
     }
 

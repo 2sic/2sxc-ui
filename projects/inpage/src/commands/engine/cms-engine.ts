@@ -81,7 +81,7 @@ export class CmsEngine extends HasLog {
     const button = (context.button = {
       ...newButtonConfig,
       ...newButtonAction.command.buttonConfig,
-      ...Button.normalize(cmdParams as unknown) });
+      ...Button.propertyToMethod(cmdParams as unknown) });
 
     // todo: stv, fix this in case that is function
     if (!button.dialog) {

@@ -17,7 +17,6 @@ export type ButtonPropertyGenerator<T> = (context: ContextComplete) => T;
 export class Button {
     action: ButtonCommand;
     classes: string = '';
-    // show: boolean = null; // maybe
 
     modifier?: ButtonModifier;
 
@@ -48,7 +47,7 @@ export class Button {
     uiActionOnly: ButtonPropertyGenerator<boolean>;
 
 
-    static normalize(oldFormat: Partial<Button> | ButtonConfigWithFunctionsStillAsValues | InPageButtonJson): Partial<Button> {
+    static propertyToMethod(oldFormat: Partial<Button> | InPageButtonJson): Partial<Button> {
         const config: Partial<Button> = {};
 
         if (oldFormat.classes) config.classes = oldFormat.classes;
@@ -83,27 +82,3 @@ function evalPropOrFun(propOrFunction: TypeTbD): TypeUnsafe {
 }
 
 type ButtonPropertyGeneratorOrValue<T> = (context: ContextComplete) => T | T;
-
-/**
- * This is a kind of clone of the ButtonConfig,
- * but with most properties being string/function possible
- * for later conversion into ButtonConfig
- */
-interface ButtonConfigWithFunctionsStillAsValues {
-    classes: string;
-    // code: CommandCode; // void;
-    // configureCommand: (context: ContextBundleButton, cmd: CommandExecution) => void;
-    dialog: ButtonPropertyGeneratorOrValue<string>;
-    disabled: ButtonPropertyGeneratorOrValue<boolean>;
-    dynamicClasses: ButtonPropertyGeneratorOrValue<string>;
-    dynamicDisabled: (() => boolean) | boolean;
-    fullScreen: ButtonPropertyGeneratorOrValue<boolean>;
-    icon: ButtonPropertyGeneratorOrValue<string>;
-    inlineWindow: ButtonPropertyGeneratorOrValue<boolean>;
-    newWindow: ButtonPropertyGeneratorOrValue<boolean>;
-    // params: ButtonPropertyGenerator<DictionaryValue>;
-    partOfPage: ButtonPropertyGeneratorOrValue<boolean>;
-    showCondition: ButtonPropertyGeneratorOrValue<boolean>;
-    title: ButtonPropertyGeneratorOrValue<string>;
-    // uiActionOnly: ButtonPropertyGenerator<boolean>;
-}

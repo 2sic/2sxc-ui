@@ -1,12 +1,12 @@
-﻿import { InPageCommandJson, ToolbarWip } from '.';
+﻿import { InPageCommandJson } from '.';
 import { InPageButtonJson } from '.';
 import { ToolbarConfigLoader } from '.';
 import { CmdMore } from '../../commands/command/more';
 import { Commands } from '../../commands/commands';
 import { ContextComplete } from '../../context/bundles';
-import { HasLog, Log } from '../../logging';
-import { DictionaryValue, TypeTbD, TypeUnsafe, TypeWeDontCare } from '../../plumbing';
-import { Button, ButtonCommand, ButtonGroup, Toolbar } from '../config';
+import { HasLog } from '../../logging';
+import { DictionaryValue, TypeTbD } from '../../plumbing';
+import { Button, Toolbar } from '../config';
 import { ButtonModifier } from '../config/button-modifier';
 
 /**
@@ -14,82 +14,33 @@ import { ButtonModifier } from '../config/button-modifier';
  */
 export class ButtonConfigLoader extends HasLog {
 
-    constructor(private toolbar: ToolbarConfigLoader) {
+    constructor(toolbar: ToolbarConfigLoader) {
         super('Tlb.BtCfBl', toolbar.log);
     }
-
-
-    /**
-     * Converts the InPageButtonJson to a Button
-     * WARNING: Note that this does the same task as convertToButton in the ButtonGroupConfigLoader - but very differently
-     *          I'm not sure why though.
-     */
-    convertToButton(jsonBtn: InPageButtonJson): Button {
-        //#region just-found-out-this-code doesn't seem to do anything! 2020-03-26
-        // original was here: https://github.com/2sic/2sxc-inpage/blob/f071211ba5356c87c4c57b4d4cc900b3c1bf7b3e/src/toolbar/adapters/button-config-adapter.ts
-        // but the created object isn't used!
-        // const btn: Partial<Button> = {};
-        //
-        // if (jsonBtn.code) btn.code = (c: ContextComplete) => jsonBtn.code(c.button.action.params);
-        // if (jsonBtn.icon) btn.icon = () => `icon-sxc-${jsonBtn.icon}`;
-        // if (jsonBtn.classes) btn.classes = jsonBtn.classes;
-        // if (jsonBtn.dialog) btn.dialog = () => jsonBtn.dialog;
-        // if (jsonBtn.disabled) btn.disabled = () => jsonBtn.disabled;
-        // if (jsonBtn.dynamicClasses) btn.dynamicClasses = (c: ContextComplete) => jsonBtn.dynamicClasses(c.button.action.params);
-        // if (jsonBtn.fullScreen) btn.fullScreen = () => jsonBtn.fullScreen;
-        // if (jsonBtn.inlineWindow) btn.inlineWindow = () => jsonBtn.inlineWindow;
-        // if (jsonBtn.name) btn.name = jsonBtn.name;
-        // if (jsonBtn.newWindow) btn.newWindow = () => jsonBtn.newWindow;
-
-        // todo: stv, this do not looking good, because old simple parameters become methods with context as parameter,
-        // we need parameter adapter to do this...
-        // if (jsonBtn.params) btn.params = () => jsonBtn.params;
-        // if (jsonBtn.partOfPage) btn.partOfPage = () => jsonBtn.partOfPage;
-        // if (jsonBtn.showCondition) btn.showCondition = (c: ContextComplete) => jsonBtn.showCondition(c.button.action.params);
-        // if (jsonBtn.title) btn.title = () => `Toolbar.${jsonBtn.title}`;
-        // if (jsonBtn.uiActionOnly) btn.uiActionOnly = () => jsonBtn.uiActionOnly;
-
-        jsonBtn = this.normalize(jsonBtn);
-
-        const name = jsonBtn.command.action;
-        const contentType = jsonBtn.command.contentType;
-
-        // if the button belongs to a content-item, move the specs up to the item into the settings-object
-        this.toolbar.command.updateCommandToV9(jsonBtn.command);
-
-        // parameters adapter from v1 to v2
-        const cmdConfig = this.toolbar.command.removeActionProperty(jsonBtn.command);
-
-        // Toolbar API v2
-        const btnCommand = new ButtonCommand(name, contentType, cmdConfig);
-        return new Button(btnCommand, name);
-    }
-
-
 
     /**
      * takes an object like "actionname" or { action: "actionname", ... }
      * and changes it to a { command: { action: "actionname" }, ... }
      */
     normalize(original: InPageButtonJson | InPageCommandJson | string): InPageButtonJson {
-        const wrapLog = this.log.call('normalize'); // new Log('Tlb.ExpBtn', this.log, 'start');
-        wrapLog.data('initial', original);
+        const cl = this.log.call('normalize');
+        cl.data('initial', original);
 
         // prevent multiple inits
         const asBtnConfig = original as InPageButtonJson;
         if (asBtnConfig._expanded || asBtnConfig.command)
-            return wrapLog.return(asBtnConfig, "already expanded, won't modify");
+            return cl.return(asBtnConfig, "already expanded, won't modify");
 
         // if just a name, turn into a command
         // use the deep version with command.action, because of more clean-up later on
         if (typeof original === 'string')
-            return wrapLog.return(this.getFromName(original), 'found name, use that');
+            return cl.return(this.getFromName(original), 'found name, use that');
 
         // if it's a command w/action, wrap into command + trim
         if (InPageCommandJson.hasActions(original)) {
-            wrapLog.add('action found, will move down to .command', original);
+            cl.add('action found, will move down to .command', original);
             if (original.action) original.action = original.action.trim();
-            return wrapLog.return({
+            return cl.return({
                 command: original,
                 _expanded: true,
             }, 'had actions, convert to commands');
@@ -109,13 +60,13 @@ export class ButtonConfigLoader extends HasLog {
 
 
 
-/**
- * remove buttons which are not valid based on add condition
- * @param {ContextComplete} context
- * @param {Toolbar} full
- * @param {InstanceConfig} config
- * @memberof ButtonConfigurationBuilder
- */
+    /**
+     * remove buttons which are not valid based on add condition
+     * @param {ContextComplete} context
+     * @param {Toolbar} full
+     * @param {InstanceConfig} config
+     * @memberof ButtonConfigurationBuilder
+     */
     removeDisableButtons(context: ContextComplete, full: Toolbar,
         // #CodeChange#2020-03-22#InstanceConfig - believe this is completely unused; remove in June
         // config: InstanceConfig
@@ -150,13 +101,12 @@ export class ButtonConfigLoader extends HasLog {
      * @param actions
      */
     addDefaultBtnSettings(btn: Button,
-                          group: ButtonGroup,
-                          fullToolbarConfig: ToolbarWip,
+                          groupDefaults: DictionaryValue | null,
+                          tlbDefaults: DictionaryValue | null | undefined,
                           actions: typeof Commands) {
-        const cl = this.log.call('addDefaultBtnSettings', '', `adding default btn settings for ${() => btn.action.name}`);
-        for (let d = 0; d < btnProperties.length; d++) {
-            fallbackBtnSetting(btn, group, fullToolbarConfig, actions, btnProperties[d]);
-        }
+        const cl = this.log.call('addDefaultBtnSettings', '', `for ${() => btn.action.name}`);
+        for (let d = 0; d < btnProperties.length; d++)
+            fallbackBtnSetting(btn, groupDefaults, tlbDefaults, actions, btnProperties[d]);
         cl.return(null);
     }
 
@@ -245,30 +195,30 @@ const btnProperties = [
  * @param propName
  */
 function fallbackBtnSetting(btn: Button,
-                            group: ButtonGroup,
-                            fullToolbarConfig: ToolbarWip,
+                            groupDefaults: DictionaryValue | null,
+                            toolbarDefaults: DictionaryValue | null | undefined,
                             actions: typeof Commands,
-                            propName: string): TypeWeDontCare {
-  const untypedButton = btn as TypeUnsafe as DictionaryValue;
-  if (untypedButton[propName])
-    return;
+                            propName: string) {
+    const target = btn as unknown as DictionaryValue;
 
-  // if the group has defaults, try use that property
-  if (group.defaults && group.defaults[propName])
-    return untypedButton[propName] = group.defaults[propName];
+    // skip it property is already set
+    if (target[propName])
+        return;
 
-  // if the toolbar has defaults, try use that property
-  const conf = fullToolbarConfig;
-  if (conf && conf.defaults && conf.defaults[propName])
-    return untypedButton[propName] = conf.defaults[propName];
+    if (groupDefaults && groupDefaults[propName])
+        return target[propName] = groupDefaults[propName];
 
-  // if there is an action, try to use that property name
-  if (btn.action && btn.action.name) {
-      const a = actions.get(btn.action.name);
-      if (a && a.buttonConfig) {
-        const c = a.buttonConfig as DictionaryValue;
-        if (c[propName])
-            return untypedButton[propName] = c[propName];
+    // if the toolbar has defaults, try use that property
+    if (toolbarDefaults && toolbarDefaults[propName])
+        return target[propName] = toolbarDefaults[propName];
+
+    // if there is an action, try to use that property name
+    if (btn.action && btn.action.name) {
+        const a = actions.get(btn.action.name);
+        if (a && a.buttonConfig) {
+            const c = a.buttonConfig as DictionaryValue;
+            if (c[propName])
+                return target[propName] = c[propName];
+        }
     }
-  }
 }

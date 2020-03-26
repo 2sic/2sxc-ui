@@ -4,6 +4,7 @@ import { ButtonGroupWip } from '.';
 import { CommandParams, Commands } from '../../commands';
 import { CmdMore } from '../../commands/command/more';
 import { HasLog } from '../../logging';
+import { DictionaryValue } from '../../plumbing';
 import { Button, ButtonCommand, Toolbar, ToolbarSettings } from '../config';
 import { ButtonGroup } from '../config';
 import { ToolbarConfigLoader } from './toolbar-config-loader';
@@ -27,13 +28,14 @@ export class ButtonGroupConfigLoader extends HasLog {
         for (let g = 0; g < fullToolbar.groups.length; g++) {
             // expand a verb-list like "edit,new" into objects like [{ action: "edit" }, {action: "new"}]
             const group = fullToolbar.groups[g];
+            const groupDefaults = (group as ButtonGroup).defaults;
             const btns = this.expandButtonList(group, fullToolbar.settings);
             const buttonConfigs: Button[] = [];
 
             if (Array.isArray(btns)) {
                 wrapLog.add(`will process ${btns.length} buttons`);
                 for (let b = 0; b < btns.length; b++)
-                    buttonConfigs.push(this.convertToButton(btns[b], fullToolbar, group));
+                    buttonConfigs.push(this.convertToButton(btns[b], fullToolbar.params, fullToolbar.defaults, groupDefaults));
             } else
                 wrapLog.add("no button array found, won't do a.nything");
 
@@ -50,7 +52,13 @@ export class ButtonGroupConfigLoader extends HasLog {
      * WARNING: Note that this does the same task as convertToButton in the ButtonConfigLoader - but very differently
      *          I'm not sure why though.
      */
-    private convertToButton(btn: InPageButtonJson, fullToolbar: ToolbarWip, group: ButtonGroupWip): Button {
+    convertToButton(btn: InPageButtonJson,
+                    sharedParams: CommandParams | DictionaryValue,
+                    sharedDefaults: DictionaryValue,
+                    // fullToolbar: ToolbarWip,
+                    // group: ButtonGroupWip
+                    groupDefaults: DictionaryValue,
+                    ): Button {
         let btnCommand = (btn as unknown as { command: CommandParams; }).command;
 
         if (!(Commands.get(btnCommand.action))) {
@@ -62,20 +70,20 @@ export class ButtonGroupConfigLoader extends HasLog {
         const contentType = btnCommand.contentType;
 
         // if the button belongs to a content-item, move the specs up to the item into the settings-object
-        btnCommand = this.toolbar.command.normalizeCommandJson(btnCommand);
+        btnCommand = this.toolbar.command.updateToV9(btnCommand);
 
         // parameters adapter from v1 to v2
-        const params = { ...this.toolbar.command.removeActionProperty(btnCommand), ...fullToolbar.params };
+        const params = { ...this.toolbar.command.removeActionProperty(btnCommand), ...sharedParams };
 
         // Toolbar API v2
         const newButtonAction = new ButtonCommand(name, contentType, params);
         let newButtonConfig = new Button(newButtonAction, name);
 
         // settings adapter from v1 to v2
-        newButtonConfig = { ...newButtonConfig, ...Button.normalize(btn) };
+        newButtonConfig = { ...newButtonConfig, ...Button.propertyToMethod(btn) };
 
         // ensure all buttons have either own settings, or the fallback
-        this.toolbar.button.addDefaultBtnSettings(newButtonConfig, group as ButtonGroup, fullToolbar, Commands);
+        this.toolbar.button.addDefaultBtnSettings(newButtonConfig, groupDefaults, sharedDefaults, Commands);
         return newButtonConfig;
     }
 
@@ -127,16 +135,16 @@ export class ButtonGroupConfigLoader extends HasLog {
 
 
     private expandButtonAndAddToList(list: InPageButtonJson[], btn: InPageButtonJson, names: string): void {
-        const wrapLog = this.log.call('expandButtonAndAddToList', '', `button def "${btn} is string of ma.ny names, will expand into array with action-properties"`);
+        const cl = this.log.call('expandButtonAndAddToList', '', `button def "${btn} is string of ma.ny names, will expand into array with action-properties"`);
         const actions = names.split(',');
         for (let a = 0; a < actions.length; a++)
             list.push({...btn, ...this.toolbar.button.getFromName(actions[a])} as InPageButtonJson);
-        wrapLog.return(list);
+        cl.return(list);
     }
 
     /** Add the "more" button at the end or beginning */
     private addMoreButton(settings: ToolbarSettings, list: InPageButtonJson[]): void {
-        const wrapLog = this.log.call('addMoreButtons');
+        const cl = this.log.call('addMoreButtons');
         const addMore = settings.autoAddMore;
         if (addMore) {
             const moreButton = this.toolbar.button.getFromName(CmdMore);
@@ -148,7 +156,7 @@ export class ButtonGroupConfigLoader extends HasLog {
                 list.unshift(moreButton);
             }
         } else this.log.add('will not add more "..." button');
-        wrapLog.return(list);
+        cl.return(list);
     }
 
 
