@@ -7,6 +7,7 @@ class InsightsSingleton extends HasLog {
     constructor() {
         super('Sys.Insght');
         this.add('system', 'insights', this.log);
+        this.log.add(`this log is usually empty, as it's just a helper tool`)
     }
 
     history: { [key: string]: InsightsLogSet } = {};
@@ -17,19 +18,11 @@ class InsightsSingleton extends HasLog {
         this.history[setName].logs.push({key: logName, log: log});
     }
 
-    /** Provide help in the console */
-    help() {
-        console.log(`use the debugger to call $2sxc.insights.xxx where .xxx is:
-        .help() - show this help
-        .show() - show the part names and how to console-log them
-        .show(partName)`);
-    }
-
     show(partName: string, index?: number): void {
         // if nothing specified, list what to do to see inner parts
         if (!partName) {
             const keys = Object.keys(this.history);
-            console.log(`${keys.length} parts found. Execute the code shown below to list the items inside: \n` + keys.map((p) => `$2sxc.insights.show('${p}')`).join('\n'));
+            console.log(`${keys.length} parts found. Execute the code shown below to list the items inside: \n` + keys.map((p) => `$2sxc.insights('${p}')`).join('\n'));
             return;
         }
 
@@ -43,7 +36,9 @@ class InsightsSingleton extends HasLog {
         // We have a partName, but no index - show list and how to get details
         if (index === undefined) {
             let count = 0;
-            const logNames = part.logs.map((s) => `$2sxc.insights.show('${partName}', ${count++}) - will show for '${s.key}'`).join('\n');
+            const logNames = part.logs
+                .map((s) => `$2sxc.insights('${partName}', ${count++}) - will show for '${s.key}'`)
+                .join('\n');
             console.log(logNames);
             return;
         }
@@ -60,7 +55,7 @@ class InsightsSingleton extends HasLog {
             return;
         }
 
-        console.log(`Will dump the log on ${partName}[${index}]`);
+        console.log(`Will dump the log on ${partName}[${index}] '${logSet.key}'`);
         logSet.log.dump();
     }
 }
@@ -75,7 +70,7 @@ class InsightsLogSet {
 // this is important, because the inpage code also uses this class
 // and would otherwise create the object separately
 const singleton: InsightsSingleton = 
-    window.$2sxc && window.$2sxc.insights   // try to load existing
+    window.$2sxc && window.$2sxc._insights   // try to load existing
     || new InsightsSingleton();             // otherwise create new
 
 export const Insights = singleton;

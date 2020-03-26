@@ -13,7 +13,8 @@ export interface SxcRootInternals {
     stats: Stats;
 
     /** The debugging / insights system */
-    insights: typeof Insights;
+    insights: typeof Insights.show;
+    _insights: typeof Insights;
 
     _manage: any;
     _translateInit: any;

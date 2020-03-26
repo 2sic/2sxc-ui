@@ -232,11 +232,11 @@ function getEditContextOfTag(htmlTag) {
 /* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "b", function() { return __WEBPACK_IMPORTED_MODULE_0__has_log__["a"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Log__ = __webpack_require__(159);
 /* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "d", function() { return __WEBPACK_IMPORTED_MODULE_1__Log__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__log_call__ = __webpack_require__(172);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__log_call__ = __webpack_require__(171);
 /* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "e", function() { return __WEBPACK_IMPORTED_MODULE_2__log_call__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__entry__ = __webpack_require__(173);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__entry__ = __webpack_require__(172);
 /* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_3__entry__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__insights__ = __webpack_require__(177);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__insights__ = __webpack_require__(176);
 /* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "c", function() { return __WEBPACK_IMPORTED_MODULE_4__insights__["a"]; });
 
 
@@ -709,12 +709,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__sxc_root_sxc_root_internals__ = __webpack_require__(170);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__sxc_root_sxc_root_internals___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_11__sxc_root_sxc_root_internals__);
 /* harmony namespace reexport (by used) */ if(__webpack_require__.o(__WEBPACK_IMPORTED_MODULE_11__sxc_root_sxc_root_internals__, "SxcInstanceWithInternals")) __webpack_require__.d(__webpack_exports__, "SxcInstanceWithInternals", function() { return __WEBPACK_IMPORTED_MODULE_11__sxc_root_sxc_root_internals__["SxcInstanceWithInternals"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__sxc_root_sxc_root_manage__ = __webpack_require__(171);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__sxc_root_sxc_root_manage___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_12__sxc_root_sxc_root_manage__);
-/* harmony namespace reexport (by used) */ if(__webpack_require__.o(__WEBPACK_IMPORTED_MODULE_12__sxc_root_sxc_root_manage__, "SxcInstanceWithInternals")) __webpack_require__.d(__webpack_exports__, "SxcInstanceWithInternals", function() { return __WEBPACK_IMPORTED_MODULE_12__sxc_root_sxc_root_manage__["SxcInstanceWithInternals"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__sxc_instance_sxc_instance_manage__ = __webpack_require__(71);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__sxc_instance_sxc_instance_manage___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_13__sxc_instance_sxc_instance_manage__);
-/* harmony namespace reexport (by used) */ if(__webpack_require__.o(__WEBPACK_IMPORTED_MODULE_13__sxc_instance_sxc_instance_manage__, "SxcInstanceWithInternals")) __webpack_require__.d(__webpack_exports__, "SxcInstanceWithInternals", function() { return __WEBPACK_IMPORTED_MODULE_13__sxc_instance_sxc_instance_manage__["SxcInstanceWithInternals"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__sxc_instance_sxc_instance_manage__ = __webpack_require__(71);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__sxc_instance_sxc_instance_manage___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_12__sxc_instance_sxc_instance_manage__);
+/* harmony namespace reexport (by used) */ if(__webpack_require__.o(__WEBPACK_IMPORTED_MODULE_12__sxc_instance_sxc_instance_manage__, "SxcInstanceWithInternals")) __webpack_require__.d(__webpack_exports__, "SxcInstanceWithInternals", function() { return __WEBPACK_IMPORTED_MODULE_12__sxc_instance_sxc_instance_manage__["SxcInstanceWithInternals"]; });
 /*
     This is just a type-index entry point.
     The purpose is that other 2sxc projects in this repo can access all the types
@@ -730,7 +727,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 // must be pretty early, because most objects rely on this
 // and ATM having this on top changes the load order
 // this is a side-effect-problem from not clearly using modules
-
 
 
 
@@ -4261,12 +4257,12 @@ function getRootPartsV2() {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__obj__ = __webpack_require__(174);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__obj__ = __webpack_require__(173);
 /* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "Obj", function() { return __WEBPACK_IMPORTED_MODULE_0__obj__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__type_value__ = __webpack_require__(175);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__type_value__ = __webpack_require__(174);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__type_value___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__type_value__);
 /* harmony namespace reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in __WEBPACK_IMPORTED_MODULE_1__type_value__) if(["Obj","default"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return __WEBPACK_IMPORTED_MODULE_1__type_value__[key]; }) }(__WEBPACK_IMPORT_KEY__));
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__dictionary_value__ = __webpack_require__(176);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__dictionary_value__ = __webpack_require__(175);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__dictionary_value___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__dictionary_value__);
 /* harmony namespace reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in __WEBPACK_IMPORTED_MODULE_2__dictionary_value__) if(["Obj","default"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return __WEBPACK_IMPORTED_MODULE_2__dictionary_value__[key]; }) }(__WEBPACK_IMPORT_KEY__));
 //
@@ -8110,7 +8106,7 @@ __webpack_require__(125);
 __webpack_require__(126);
 __webpack_require__(127);
 __webpack_require__(128);
-__webpack_require__(178);
+__webpack_require__(177);
 __webpack_require__(129);
 __webpack_require__(130);
 __webpack_require__(11);
@@ -8118,7 +8114,7 @@ __webpack_require__(131);
 __webpack_require__(132);
 __webpack_require__(133);
 __webpack_require__(21);
-__webpack_require__(179);
+__webpack_require__(178);
 __webpack_require__(135);
 __webpack_require__(136);
 __webpack_require__(36);
@@ -8154,7 +8150,7 @@ __webpack_require__(28);
 __webpack_require__(27);
 __webpack_require__(90);
 __webpack_require__(147);
-__webpack_require__(180);
+__webpack_require__(179);
 __webpack_require__(148);
 __webpack_require__(149);
 __webpack_require__(150);
@@ -8174,19 +8170,19 @@ __webpack_require__(51);
 __webpack_require__(30);
 __webpack_require__(31);
 __webpack_require__(91);
+__webpack_require__(180);
 __webpack_require__(181);
-__webpack_require__(182);
 __webpack_require__(134);
 __webpack_require__(12);
+__webpack_require__(182);
 __webpack_require__(183);
 __webpack_require__(184);
 __webpack_require__(185);
 __webpack_require__(186);
 __webpack_require__(187);
-__webpack_require__(188);
 __webpack_require__(22);
 __webpack_require__(3);
-__webpack_require__(189);
+__webpack_require__(188);
 __webpack_require__(7);
 __webpack_require__(1);
 __webpack_require__(75);
@@ -8195,7 +8191,7 @@ __webpack_require__(116);
 __webpack_require__(113);
 __webpack_require__(111);
 __webpack_require__(18);
-__webpack_require__(190);
+__webpack_require__(189);
 __webpack_require__(89);
 __webpack_require__(58);
 __webpack_require__(59);
@@ -8213,18 +8209,18 @@ __webpack_require__(107);
 __webpack_require__(106);
 __webpack_require__(105);
 __webpack_require__(108);
-__webpack_require__(191);
+__webpack_require__(190);
 __webpack_require__(109);
 __webpack_require__(24);
 __webpack_require__(83);
 __webpack_require__(110);
-__webpack_require__(192);
+__webpack_require__(191);
 __webpack_require__(55);
 __webpack_require__(98);
 __webpack_require__(99);
-__webpack_require__(193);
+__webpack_require__(192);
 __webpack_require__(54);
-__webpack_require__(194);
+__webpack_require__(193);
 __webpack_require__(97);
 __webpack_require__(32);
 __webpack_require__(53);
@@ -8237,7 +8233,7 @@ __webpack_require__(8);
 __webpack_require__(95);
 __webpack_require__(94);
 __webpack_require__(13);
-__webpack_require__(195);
+__webpack_require__(194);
 __webpack_require__(88);
 __webpack_require__(45);
 __webpack_require__(86);
@@ -8248,13 +8244,13 @@ __webpack_require__(42);
 __webpack_require__(41);
 __webpack_require__(20);
 __webpack_require__(56);
-__webpack_require__(196);
+__webpack_require__(195);
 __webpack_require__(101);
 __webpack_require__(102);
 __webpack_require__(103);
 __webpack_require__(104);
+__webpack_require__(196);
 __webpack_require__(197);
-__webpack_require__(198);
 __webpack_require__(25);
 __webpack_require__(118);
 __webpack_require__(10);
@@ -9039,7 +9035,8 @@ function buildSxcRoot() {
         // debug state which is needed in various places
         debug: debug,
         stats: stats,
-        insights: __WEBPACK_IMPORTED_MODULE_6__logging__["c" /* Insights */],
+        insights: function (partName, index) { return __WEBPACK_IMPORTED_MODULE_6__logging__["c" /* Insights */].show(partName, index); },
+        _insights: __WEBPACK_IMPORTED_MODULE_6__logging__["c" /* Insights */],
         // mini-helpers to manage 2sxc parts, a bit like a dependency loader
         // which will optimize to load min/max depending on debug state
         parts: {
@@ -9091,12 +9088,6 @@ var Stats = /** @class */ (function () {
 
 /***/ }),
 /* 171 */
-/***/ (function(module, exports) {
-
-
-
-/***/ }),
-/* 172 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -9143,7 +9134,7 @@ var LogCall = /** @class */ (function () {
 
 
 /***/ }),
-/* 173 */
+/* 172 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -9193,7 +9184,7 @@ var Entry = /** @class */ (function () {
 
 
 /***/ }),
-/* 174 */
+/* 173 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -9247,6 +9238,12 @@ var getCircularReplacer = function () {
 
 
 /***/ }),
+/* 174 */
+/***/ (function(module, exports) {
+
+
+
+/***/ }),
 /* 175 */
 /***/ (function(module, exports) {
 
@@ -9254,12 +9251,6 @@ var getCircularReplacer = function () {
 
 /***/ }),
 /* 176 */
-/***/ (function(module, exports) {
-
-
-
-/***/ }),
-/* 177 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -9285,6 +9276,7 @@ var InsightsSingleton = /** @class */ (function (_super) {
         var _this = _super.call(this, 'Sys.Insght') || this;
         _this.history = {};
         _this.add('system', 'insights', _this.log);
+        _this.log.add("this log is usually empty, as it's just a helper tool");
         return _this;
     }
     InsightsSingleton.prototype.add = function (setName, logName, log) {
@@ -9292,15 +9284,11 @@ var InsightsSingleton = /** @class */ (function (_super) {
             this.history[setName] = new InsightsLogSet(setName);
         this.history[setName].logs.push({ key: logName, log: log });
     };
-    /** Provide help in the console */
-    InsightsSingleton.prototype.help = function () {
-        console.log("use the debugger to call $2sxc.insights.xxx where .xxx is:\n        .help() - show this help\n        .show() - show the part names and how to console-log them\n        .show(partName)");
-    };
     InsightsSingleton.prototype.show = function (partName, index) {
         // if nothing specified, list what to do to see inner parts
         if (!partName) {
             var keys = Object.keys(this.history);
-            console.log(keys.length + " parts found. Execute the code shown below to list the items inside: \n" + keys.map(function (p) { return "$2sxc.insights.show('" + p + "')"; }).join('\n'));
+            console.log(keys.length + " parts found. Execute the code shown below to list the items inside: \n" + keys.map(function (p) { return "$2sxc.insights('" + p + "')"; }).join('\n'));
             return;
         }
         // partName found, check if it exists
@@ -9312,7 +9300,9 @@ var InsightsSingleton = /** @class */ (function (_super) {
         // We have a partName, but no index - show list and how to get details
         if (index === undefined) {
             var count_1 = 0;
-            var logNames = part.logs.map(function (s) { return "$2sxc.insights.show('" + partName + "', " + count_1++ + ") - will show for '" + s.key + "'"; }).join('\n');
+            var logNames = part.logs
+                .map(function (s) { return "$2sxc.insights('" + partName + "', " + count_1++ + ") - will show for '" + s.key + "'"; })
+                .join('\n');
             console.log(logNames);
             return;
         }
@@ -9326,7 +9316,7 @@ var InsightsSingleton = /** @class */ (function (_super) {
             console.error("found index " + index + " on part '" + partName + "' but it has no logs");
             return;
         }
-        console.log("Will dump the log on " + partName + "[" + index + "]");
+        console.log("Will dump the log on " + partName + "[" + index + "] '" + logSet.key + "'");
         logSet.log.dump();
     };
     return InsightsSingleton;
@@ -9342,13 +9332,13 @@ var InsightsLogSet = /** @class */ (function () {
 // ensure it's only created once
 // this is important, because the inpage code also uses this class
 // and would otherwise create the object separately
-var singleton = window.$2sxc && window.$2sxc.insights // try to load existing
+var singleton = window.$2sxc && window.$2sxc._insights // try to load existing
     || new InsightsSingleton(); // otherwise create new
 var Insights = singleton;
 
 
 /***/ }),
-/* 178 */
+/* 177 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -9368,7 +9358,7 @@ __WEBPACK_IMPORTED_MODULE_0____["Commands"].add(CmdApp, 'App', 'settings', true,
 
 
 /***/ }),
-/* 179 */
+/* 178 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -9456,7 +9446,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /***/ }),
-/* 180 */
+/* 179 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -9491,7 +9481,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /***/ }),
-/* 181 */
+/* 180 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -9545,7 +9535,7 @@ __WEBPACK_IMPORTED_MODULE_2__interfaces_window_in_page__["windowInPage"].$2sxcAc
 
 
 /***/ }),
-/* 182 */
+/* 181 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9574,9 +9564,18 @@ __WEBPACK_IMPORTED_MODULE_2__interfaces_window_in_page__["windowInPage"].$2sxcAc
 
 
 /***/ }),
+/* 182 */
+/***/ (function(module, exports) {
+
+
+
+/***/ }),
 /* 183 */
 /***/ (function(module, exports) {
 
+//
+// Note: this interface is copied/shared between this and angular quick-edit
+//
 
 
 /***/ }),
@@ -9592,9 +9591,6 @@ __WEBPACK_IMPORTED_MODULE_2__interfaces_window_in_page__["windowInPage"].$2sxcAc
 /* 185 */
 /***/ (function(module, exports) {
 
-//
-// Note: this interface is copied/shared between this and angular quick-edit
-//
 
 
 /***/ }),
@@ -9607,12 +9603,6 @@ __WEBPACK_IMPORTED_MODULE_2__interfaces_window_in_page__["windowInPage"].$2sxcAc
 /* 187 */
 /***/ (function(module, exports) {
 
-
-
-/***/ }),
-/* 188 */
-/***/ (function(module, exports) {
-
 // // https://stackoverflow.com/questions/38860161/using-typescript-and-object-assign-gives-me-an-error-property-assign-does-no
 // interface ObjectConstructor {
 //   assign(...objects: Object[]): Object;
@@ -9620,7 +9610,7 @@ __WEBPACK_IMPORTED_MODULE_2__interfaces_window_in_page__["windowInPage"].$2sxcAc
 
 
 /***/ }),
-/* 189 */
+/* 188 */
 /***/ (function(module, exports) {
 
 // //
@@ -9636,7 +9626,7 @@ __WEBPACK_IMPORTED_MODULE_2__interfaces_window_in_page__["windowInPage"].$2sxcAc
 
 
 /***/ }),
-/* 190 */
+/* 189 */
 /***/ (function(module, exports) {
 
 // /**
@@ -9662,13 +9652,13 @@ __WEBPACK_IMPORTED_MODULE_2__interfaces_window_in_page__["windowInPage"].$2sxcAc
 
 
 /***/ }),
-/* 191 */
+/* 190 */
 /***/ (function(module, exports) {
 
 
 
 /***/ }),
-/* 192 */
+/* 191 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -9705,7 +9695,7 @@ if (__WEBPACK_IMPORTED_MODULE_1__interfaces_window_in_page__["windowInPage"].$2s
 
 
 /***/ }),
-/* 193 */
+/* 192 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -9720,7 +9710,7 @@ var InPageButtonGroupJson = /** @class */ (function () {
 
 
 /***/ }),
-/* 194 */
+/* 193 */
 /***/ (function(module, exports) {
 
 // export class InPageCodeJson_ProbablyUnused {
@@ -9730,7 +9720,7 @@ var InPageButtonGroupJson = /** @class */ (function () {
 
 
 /***/ }),
-/* 195 */
+/* 194 */
 /***/ (function(module, exports) {
 
 /*
@@ -9748,7 +9738,7 @@ var InPageButtonGroupJson = /** @class */ (function () {
 
 
 /***/ }),
-/* 196 */
+/* 195 */
 /***/ (function(module, exports) {
 
 // CodeChange #2020-03-20#TemplateToolbarLeftUnused - if no side-effects, delete in June
@@ -9793,7 +9783,7 @@ var InPageButtonGroupJson = /** @class */ (function () {
 
 
 /***/ }),
-/* 197 */
+/* 196 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -9805,11 +9795,11 @@ $(__WEBPACK_IMPORTED_MODULE_0__constants__["C"].IDs.sel.scMenu).click(function (
 
 
 /***/ }),
-/* 198 */
+/* 197 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // tslint:disable-next-line: no-var-requires
-var Shake = __webpack_require__(199);
+var Shake = __webpack_require__(198);
 // ReSharper disable once InconsistentNaming
 // enable shake detection on all toolbars
 $(function () {
@@ -9824,7 +9814,7 @@ $(function () {
 
 
 /***/ }),
-/* 199 */
+/* 198 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_RESULT__;/*

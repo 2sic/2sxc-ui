@@ -31,6 +31,4 @@ export * from './sxc-root/sxc-root';
 export * from './sxc-root/sxc-root-builder';
 export * from './sxc-root/sxc-root-internals';
 
-
-export * from './sxc-root/sxc-root-manage';
 export * from './sxc-instance/sxc-instance-manage';
