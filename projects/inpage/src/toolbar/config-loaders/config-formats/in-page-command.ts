@@ -25,14 +25,22 @@ export class InPageCommandJson  {
     /** index in the list */
     sortOrder?: number;
 
-    /** Experimental 10.27 */
+    /** Experimental in 10.27 */
+    modify?: string;
+
+    /** Experimental for 10.30 */
     parent?: string;
-    /** Experimental 10.27 */
+    /** Experimental for 10.30 */
     field?: string;
 
     static hasActions(thing: TypeTbD): thing is InPageCommandJson {
         // check two common signatures - command and action
         return typeof(thing as InPageCommandJson).action === 'string';
+    }
+
+    static hasModify(thing: TypeTbD): thing is InPageCommandJson {
+        // check two common signatures - command and action
+        return !!(thing as InPageCommandJson).modify;
     }
 
     /** Important for object merging - because otherwise action will be preserved */

@@ -95,7 +95,7 @@ export class CmsEngine extends HasLog {
             code = (contextParam: ContextComplete, evt: MouseEvent) => CmsEngine.openDialog(contextParam, evt);
         }
 
-        if (button.uiActionOnly(context)) {
+        if (new ButtonSafe(button, context).uiActionOnly()) {
             cl.add('UI command, no pre-flight to ensure content-block');
             return cl.return(code(context, origEvent));
         }
@@ -162,7 +162,7 @@ export class CmsEngine extends HasLog {
             };
 
             // check if inline window (quick-dialog)
-            if (Button.getVal(btn.inlineWindow, context, false)) {
+            if (btn.inlineWindow()) {
                 // test if it should be full screen (value or resolve-function)
                 QuickDialog
                     .showOrToggleFromToolbar(context, link, btn.fullScreen(), btn.dialog())
@@ -170,7 +170,7 @@ export class CmsEngine extends HasLog {
             } else {
                 // else it's a normal pop-up dialog
                 link = CmsEngine.convertUrlIfAltPressed(origEvent, link);
-                const isNewWindow = Button.getVal(btn.newWindow, context, false);
+                const isNewWindow = btn.newWindow();
                 // check if new-window
                 if (isNewWindow || (origEvent && origEvent.shiftKey)) {
                     // resolve promise, as the window won't report when closed

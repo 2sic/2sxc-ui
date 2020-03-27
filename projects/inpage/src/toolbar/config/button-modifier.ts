@@ -1,32 +1,45 @@
 
+export interface ButtonModify {
+    color?: string;
+}
+
 // tslint:disable-next-line: max-classes-per-file
 export class ButtonModifier {
-    // operation: '+' | '-' | null = null;
 
     /** the button name, always lower case */
     name: string;
 
+    /** if this button should be added / activated */
     add: boolean = false;
+
+    /** if this button should be removed */
     remove: boolean = false;
 
-    constructor(code: string) {
+    /** true if there are really rules that apply */
+    found: boolean = false;
+
+    constructor(code: string, public rules?: ButtonModify) {
+        // handle the key / code
         if (!code || !code.length) return;
         code = code.trim();
         if (!code || !code.length) return;
 
-        if (code[0] === '+') this.add = true; // this.operation = '+';
-        if (code[0] === '-') this.remove = true; // this.operation = '-';
+        if (code[0] === '+') this.add = true;
+        if (code[0] === '-') this.remove = true;
         this.name = ((this.add || this.remove) ? code.substring(1) : code)
             .toLocaleLowerCase();
+
+        this.found = this.add || this.remove || !!rules;
     }
 
     static findOrCreate(modifiers: ButtonModifier[], name: string): ButtonModifier & { reason: string } {
         if (!name) return { reason: 'no name', ...new ButtonModifier(name)};
 
-        const mod = modifiers.find((m) => m.name === name);
-        if (!mod) return {reason: 'not found', ...new ButtonModifier(name)};
+        if (!modifiers) return { reason: 'no modifiers', ...new ButtonModifier(name)};
 
-        if (mod.add || mod.remove) return { reason: 'found', ...mod};
-        return { reason: 'unknown', ...new ButtonModifier(name)};
+        const mod = modifiers.find((m) => m.name === name);
+        if (!mod) return {reason: 'modifier not found', ...new ButtonModifier(name)};
+
+        return { reason: 'modifier found', ...mod};
     }
 }

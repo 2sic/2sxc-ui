@@ -1,7 +1,6 @@
-import { Button } from '.';
+import { Button, ButtonPropGen } from '.';
 import { ContextComplete } from '../../context/bundles/context-bundle-button';
-
-const getVal = Button.getVal;
+import { isNothing } from '../../plumbing';
 
 /**
  * Special helper to read a button configuration
@@ -51,4 +50,15 @@ export class ButtonSafe {
     /** The title of this button which will usually be i18n keys */
     title = () => getVal (this.button.title, this.context, 'unknown-title');
 
+    /** this is just a UI interaction, won't create data so won't need pre-flight */
+    uiActionOnly = () => getVal (this.button.uiActionOnly, this.context, true);
+
+}
+
+
+/** Evaluate a property or generator and return the property */
+function getVal<T>(propOrGen: ButtonPropGen<T> | T, ctx: ContextComplete, fallback: T): T {
+    return (isNothing(propOrGen))
+        ? fallback
+        : (Button.isPropGen(propOrGen) ? propOrGen(ctx) : propOrGen);
 }

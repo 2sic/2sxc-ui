@@ -50,7 +50,7 @@ export class ToolbarConfigLoader extends HasLog {
     }
 
     load(context: ContextComplete, toolbarData: InPageToolbarConfigVariations, toolbarSettings: ToolbarSettings): Toolbar {
-        const wrapLog = this.log.call('expandToolbarConfig', '', 'expand start');
+        const cl = this.log.call('load', '', 'expand start');
         this.setLoggingAndCreateHelpers(toolbarData);
 
         // if null/undefined, use empty object
@@ -58,12 +58,13 @@ export class ToolbarConfigLoader extends HasLog {
 
         // Default to empty toolbar settings if we don't have a toolbar or settings
         if (Object.keys(toolbarData).length + Object.keys(toolbarSettings || {}).length === 0) {
-            wrapLog.add('no data or settings, will use default settings for empty');
+            cl.add('no data or settings, will use default settings for empty');
             toolbarSettings = ToolbarSettingsForEmpty;
         }
 
         // if it has an action or is an array, keep that. Otherwise get standard buttons
         toolbarData = this.getTemplateIfNoButtonsSpecified(toolbarData);
+        cl.data('after template check', toolbarData);
 
         // #CodeChange#2020-03-22#InstanceConfig - believe this is completely unused; remove in June
         // const instanceConfig = InstanceConfig.fromContext(context);
@@ -71,7 +72,7 @@ export class ToolbarConfigLoader extends HasLog {
         // whatever we had, if more settings were provided, override with these...
         // #CodeChange#2020-03-22#InstanceConfig - believe this is completely unused; remove in June
         const config = this.buildFullDefinition(context, toolbarData, /* instanceConfig, */ toolbarSettings);
-        return wrapLog.return(config, 'expand done');
+        return cl.return(config, 'expand done');
     }
 
     /**
@@ -91,8 +92,8 @@ export class ToolbarConfigLoader extends HasLog {
 
         wrapLog.add('no toolbar structure specified, will use standard toolbar template');
         const template = ToolbarTemplateManager.Instance(this.log).copy(ToolbarTemplateDefault.name);
-        template.params = (raw && Array.isArray(raw) && raw[0]) || raw; // attach parameters
-        template.settings._btnModifiers = modifiers;
+        template.params = (Array.isArray(raw) && raw[0]) || raw; // attach parameters
+        template.settings._modifiers = modifiers;
         return wrapLog.return(template, 'use template');
     }
 
@@ -100,20 +101,26 @@ export class ToolbarConfigLoader extends HasLog {
      * Extract action params with +edit or -delete
      */
     private extractModifiers(raw: InPageToolbarConfigVariations): ButtonModifier[] {
-        const wrapLog = this.log.call('extractModifiers');
+        const cl = this.log.call('extractModifiers');
         let buttonModifiers: ButtonModifier[] = null;
         // if we have an actions node,
         // check if it's just a modifier (with +/-) or a standalone list
-        if (!InPageCommandJson.hasActions(raw)) return wrapLog.return([], 'no actions/modifiers');
-        wrapLog.add(`found actions: ${raw.action}`);
+        if (!InPageCommandJson.hasModify(raw)) return cl.return([], 'no actions/modifiers');
+        cl.add(`found modify: ${raw.modify}`);
+        const modify = raw.modify;
+        delete raw.modify; // clean up to prevent side-effects
 
-        const firstChar = (raw.action.length) ? raw.action[0] : ' ';
-        if (!(firstChar === '+' || firstChar === '-')) return wrapLog.return([], 'actions but not modifiers');
+        if (typeof modify === 'string') {
+            cl.add('string modifier');
+            if (!modify.length) return cl.return([], 'empty modifiers');
 
-        wrapLog.add('actions have +/-, assume they are only modifiers - extract and reset');
-        buttonModifiers = raw.action.split(',').map((btnMod) => new ButtonModifier(btnMod));
-        delete raw.action; // clean up to prevent side-effects
-        return wrapLog.return(buttonModifiers, 'had modifiers');
+            cl.add('have +/-, assume they are only modifiers - will extract');
+            buttonModifiers = modify.split(',').map((btnMod) => new ButtonModifier(btnMod));
+        } else {
+            cl.add('detected modifier object - will pass it on');
+            buttonModifiers = Object.keys(modify).map((k) => new ButtonModifier(k, modify[k]));
+        }
+        return cl.return(buttonModifiers, 'had modifiers');
     }
 
 

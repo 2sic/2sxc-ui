@@ -7,24 +7,17 @@ export class ButtonCommand {
 
     customCode: string; // custom code if used
 
-    constructor(
-        public name: string,
-        contentType?: string,
-        public params?: CommandParams,
-    ) {
+    constructor(public name: string, contentType?: string, public params?: CommandParams) {
         if (!params) this.params = {};
-
         if (contentType) this.params.contentType = contentType;
-
-        // activate command for this
-        this.command = Commands.get(name);
+        this.command = Commands.get(name); // activate command for this
     }
 
-    static normalize(action: ButtonCommand): CommandParams {
+    static prepareForUsingInLink(action: ButtonCommand): CommandParams {
         let params: CommandParams = {};
         if (action) {
             if (action.name) params.action = action.name;
-            if (action.params) params = {...params, ...action.params}; // O.bject.assign(params, action.params);
+            if (action.params) params = {...params, ...action.params};
         }
         return params;
     }

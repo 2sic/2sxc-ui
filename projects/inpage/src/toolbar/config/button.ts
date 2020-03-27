@@ -3,7 +3,7 @@ import { CommandCode } from '../../commands/command-code';
 import { CommandLinkGenerator } from '../../commands/command-link-generator';
 import { CommandParams } from '../../commands/command-params';
 import { ContextComplete } from '../../context/bundles/context-bundle-button';
-import { isNothing, Obj, TypeTbD } from '../../plumbing';
+import { Obj, TypeTbD } from '../../plumbing';
 import { ButtonModifier } from './button-modifier';
 
 /** This is the most common call signature on most ButtonConfig properties */
@@ -17,15 +17,13 @@ type ButtonGenOrProp<T> = ButtonPropGen<T> | T;
 export class Button {
     action: ButtonCommand;
     classes: string = '';
-
     modifier?: ButtonModifier;
 
     constructor(action: ButtonCommand, public name: string) {
-        if (action?.command?.buttonDefaults) {
-            this.action = action;
-            // get defaults from action commandDefinition
+        this.action = action;
+        // get defaults from action commandDefinition
+        if (action?.command?.buttonDefaults)
             Obj.TypeSafeAssign(this, action.command.buttonDefaults);
-        }
     }
 
     /** Configure the link generator before it creates the link */
@@ -64,15 +62,13 @@ export class Button {
     /** The code to run for this button - if empty, will default to open a dialog */
     code?: CommandCode;
 
-
-
-
-
     /** The parameters which are used to run the command */
     params?: ButtonPropGen<CommandParams>;
 
     /** this is just a UI interaction, won't create data so won't need pre-flight */
     uiActionOnly: ButtonPropGen<boolean>;
+
+
 
     /** Detect if this is a Button */
     static is(thing: TypeTbD): thing is Button {
@@ -85,13 +81,6 @@ export class Button {
 
     static isPropGen<T>(thing: ButtonPropGen<T> | T): thing is ButtonPropGen<T> {
         return typeof thing === 'function';
-    }
-
-    /** Evaluate a property or generator and return the property */
-    static getVal<T>(propOrGen: ButtonPropGen<T> | T, ctx: ContextComplete, fallback: T): T {
-        return (isNothing(propOrGen))
-            ? fallback
-            : (Button.isPropGen(propOrGen) ? propOrGen(ctx) : propOrGen);
     }
 }
 

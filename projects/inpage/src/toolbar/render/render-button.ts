@@ -1,6 +1,6 @@
 ﻿import { ContextComplete } from '../../context/bundles/context-bundle-button';
 import { HtmlTools } from '../../html/dom-tools';
-import { Button, ButtonCommand, ButtonSafe } from '../config';
+import { ButtonCommand, ButtonModifier, ButtonSafe } from '../config';
 import { RenderPart } from './render-part-base';
 import { ToolbarRenderer } from './toolbar-renderer';
 
@@ -13,6 +13,11 @@ export class RenderButton extends RenderPart {
     render(ctx: ContextComplete, groupIndex: number): HTMLElement {
         const cl = this.log.call('render', `contex: obj, group: ${groupIndex}, btn: ${ctx.button.name}`);
         const btn = new ButtonSafe(ctx.button, ctx);
+
+        // check if we have modifiers
+        const modifier = ButtonModifier.findOrCreate(ctx.toolbar?.settings?._modifiers, ctx.button.name);
+        cl.data('modifier' + modifier.reason, modifier);
+        if (modifier.found) cl.data('modifier found', modifier);
 
         const btnLink = document.createElement('a');
 
@@ -40,7 +45,7 @@ export class RenderButton extends RenderPart {
         btnLink.appendChild(divTag);
 
         // set color - new in 10.27
-        const color = ctx.toolbar.settings.color;
+        const color = modifier.rules?.color || ctx.toolbar.settings.color;
         if (color) {
             cl.add('color: ' + color);
             const split = color.split(',');
@@ -54,7 +59,7 @@ export class RenderButton extends RenderPart {
 
 
     private generateRunJs(btn: ButtonSafe, ctx: ContextComplete) {
-        const runParams = ButtonCommand.normalize(btn.action());
+        const runParams = ButtonCommand.prepareForUsingInLink(btn.action());
         return `$2sxc(${ctx.instance.id}, ${ctx.contentBlock.id}).manage.run(${JSON.stringify(runParams)}, event);`;
     }
 
