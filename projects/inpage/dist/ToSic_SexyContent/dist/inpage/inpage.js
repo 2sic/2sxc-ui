@@ -264,9 +264,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "ToolbarSettingsDefaults", function() { return __WEBPACK_IMPORTED_MODULE_5__toolbar_settings__["ToolbarSettingsDefaults"]; });
 /* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "ToolbarSettingsForEmpty", function() { return __WEBPACK_IMPORTED_MODULE_5__toolbar_settings__["ToolbarSettingsForEmpty"]; });
 /* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "ToolbarEmpty", function() { return __WEBPACK_IMPORTED_MODULE_5__toolbar_settings__["ToolbarEmpty"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__modify_button_modifier__ = __webpack_require__(27);
-/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "ButtonModifier", function() { return __WEBPACK_IMPORTED_MODULE_6__modify_button_modifier__["ButtonModifier"]; });
-
 
 
 
@@ -1521,59 +1518,40 @@ var ToolbarRenderer = /** @class */ (function (_super) {
 
 /***/ }),
 /* 27 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, __webpack_exports__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ButtonModifier", function() { return ButtonModifier; });
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
-// tslint:disable-next-line: max-classes-per-file
-var ButtonModifier = /** @class */ (function () {
-    function ButtonModifier(code, rules) {
-        this.rules = rules;
-        /** if this button should be added / activated */
-        this.add = false;
-        /** if this button should be removed */
-        this.remove = false;
-        /** true if there are really rules that apply */
-        this.found = false;
-        // handle the key / code
-        if (!code || !code.length)
-            return;
-        code = code.trim();
-        if (!code || !code.length)
-            return;
-        if (code[0] === '+')
-            this.add = true;
-        if (code[0] === '-')
-            this.remove = true;
-        this.name = ((this.add || this.remove) ? code.substring(1) : code)
-            .toLocaleLowerCase();
-        this.found = this.add || this.remove || !!rules;
-    }
-    ButtonModifier.findOrCreate = function (modifiers, name) {
-        if (!name)
-            return __assign({ reason: 'no name' }, new ButtonModifier(name));
-        if (!modifiers)
-            return __assign({ reason: 'no modifiers' }, new ButtonModifier(name));
-        var mod = modifiers.find(function (m) { return m.name === name; });
-        if (!mod)
-            return __assign({ reason: 'modifier not found' }, new ButtonModifier(name));
-        return __assign({ reason: 'modifier found' }, mod);
-    };
-    return ButtonModifier;
-}());
-
+// import { Rule } from '.';
+// // tslint:disable-next-line: max-classes-per-file
+// export class ButtonModifier {
+//     /** the button name, always lower case */
+//     name: string;
+//     /** if this button should be added / activated */
+//     add: boolean = false;
+//     /** if this button should be removed */
+//     remove: boolean = false;
+//     /** true if there are really rules that apply */
+//     found: boolean = false;
+//     constructor(code: string, public rules?: Rule) {
+//         // handle the key / code
+//         if (!code || !code.length) return;
+//         code = code.trim();
+//         if (!code || !code.length) return;
+//         if (code[0] === '+') this.add = true;
+//         if (code[0] === '-') this.remove = true;
+//         this.name = ((this.add || this.remove) ? code.substring(1) : code)
+//             .toLocaleLowerCase();
+//         this.found = this.add || this.remove || !!rules;
+//     }
+//     static findOrCreate(modifiers: ButtonModifier[], name: string): ButtonModifier & { reason: string } {
+//         if (!name) return { reason: 'no name', ...new ButtonModifier(name)};
+//         if (!modifiers) return { reason: 'no modifiers', ...new ButtonModifier(name)};
+//         const mod = modifiers.find((m) => m.name === name);
+//         if (!mod) return {reason: 'modifier not found', ...new ButtonModifier(name)};
+//         return { reason: 'modifier found', ...mod};
+//     }
+//     // static findDefault()
+// }
 
 
 /***/ }),
@@ -2879,7 +2857,7 @@ var ToolbarConfigLoader = /** @class */ (function (_super) {
     ToolbarConfigLoader.prototype.getTemplateIfNoButtonsSpecified = function (raw) {
         var wrapLog = this.log.call('getTemplateIfNoButtonsSpecified');
         wrapLog.add('before', raw);
-        var modifiers = this.extractModifiers(raw);
+        // const modifiers: ButtonModifier[] = this.extractModifiers(raw);
         if (__WEBPACK_IMPORTED_MODULE_0____["InPageCommandJson"].hasActions(raw)
             || __WEBPACK_IMPORTED_MODULE_4__templates__["ToolbarTemplate"].hasGroups(raw)
             || __WEBPACK_IMPORTED_MODULE_4__templates__["ToolbarTemplateButtonGroup"].is(raw)
@@ -2888,35 +2866,32 @@ var ToolbarConfigLoader = /** @class */ (function (_super) {
         wrapLog.add('no toolbar structure specified, will use standard toolbar template');
         var template = __WEBPACK_IMPORTED_MODULE_4__templates__["ToolbarTemplateManager"].Instance(this.log).copy(__WEBPACK_IMPORTED_MODULE_5__templates_template_default__["ToolbarTemplateDefault"].name);
         template.params = (Array.isArray(raw) && raw[0]) || raw; // attach parameters
-        template.settings._modifiers = modifiers;
+        // template.settings._rules = modifiers;
         return wrapLog.return(template, 'use template');
     };
-    /**
-     * Extract action params with +edit or -delete
-     */
-    ToolbarConfigLoader.prototype.extractModifiers = function (raw) {
-        var cl = this.log.call('extractModifiers');
-        var buttonModifiers = null;
-        // if we have an actions node,
-        // check if it's just a modifier (with +/-) or a standalone list
-        if (!__WEBPACK_IMPORTED_MODULE_0____["InPageCommandJson"].hasModify(raw))
-            return cl.return([], 'no actions/modifiers');
-        cl.add("found modify: " + raw.modify);
-        var modify = raw.modify;
-        delete raw.modify; // clean up to prevent side-effects
-        if (typeof modify === 'string') {
-            cl.add('string modifier');
-            if (!modify.length)
-                return cl.return([], 'empty modifiers');
-            cl.add('have +/-, assume they are only modifiers - will extract');
-            buttonModifiers = modify.split(',').map(function (btnMod) { return new __WEBPACK_IMPORTED_MODULE_2__config__["ButtonModifier"](btnMod); });
-        }
-        else {
-            cl.add('detected modifier object - will pass it on');
-            buttonModifiers = Object.keys(modify).map(function (k) { return new __WEBPACK_IMPORTED_MODULE_2__config__["ButtonModifier"](k, modify[k]); });
-        }
-        return cl.return(buttonModifiers, 'had modifiers');
-    };
+    // /**
+    //  * Extract action params with +edit or -delete
+    //  */
+    // private extractModifiers(raw: InPageToolbarConfigVariations): ButtonModifier[] {
+    //     const cl = this.log.call('extractModifiers');
+    //     let buttonModifiers: ButtonModifier[] = null;
+    //     // if we have an actions node,
+    //     // check if it's just a modifier (with +/-) or a standalone list
+    //     if (!InPageCommandJson.hasModify(raw)) return cl.return([], 'no actions/modifiers');
+    //     cl.add(`found modify: ${raw.modify}`);
+    //     const modify = raw.modify;
+    //     delete raw.modify; // clean up to prevent side-effects
+    //     if (typeof modify === 'string') {
+    //         cl.add('string modifier');
+    //         if (!modify.length) return cl.return([], 'empty modifiers');
+    //         cl.add('have +/-, assume they are only modifiers - will extract');
+    //         buttonModifiers = modify.split(',').map((btnMod) => new ButtonModifier(btnMod));
+    //     } else {
+    //         cl.add('detected modifier object - will pass it on');
+    //         buttonModifiers = Object.keys(modify).map((k) => new ButtonModifier(k, modify[k]));
+    //     }
+    //     return cl.return(buttonModifiers, 'had modifiers');
+    // }
     /**
      * take various common input format and convert it to a full toolbar-structure definition
      * can handle the following input formats (the param unstructuredConfig):
@@ -3187,11 +3162,10 @@ var ButtonConfigLoader = /** @class */ (function (_super) {
         // config: InstanceConfig,
         var cl = this.log.call('removeUnfitButtons');
         var removals = '';
-        // const modifiers = toolbar.settings && toolbar.settings._modifiers || [];
         for (var i = 0; i < btns.length; i++) {
             var btn = btns[i];
             if (btn.action) {
-                var modifier = this.toolbar.rules.find(btn.action.name); // ButtonModifier.findOrCreate(modifiers, btn.action.name);
+                var modifier = this.toolbar.rules.find(btn.action.name);
                 btn.modifier = modifier;
                 context.button = btn; // add to context for calls
                 var remove = (modifier === null || modifier === void 0 ? void 0 : modifier.ruleOperation) === __WEBPACK_IMPORTED_MODULE_4__rules__["a" /* Operations */].remove
@@ -4885,14 +4859,13 @@ var RenderButton = /** @class */ (function (_super) {
         return _super.call(this, parent, 'Rnd.Button') || this;
     }
     RenderButton.prototype.render = function (ctx, groupIndex) {
-        var _a, _b, _c;
+        var _a, _b, _c, _d;
         var cl = this.log.call('render', "contex: obj, group: " + groupIndex + ", btn: " + ctx.button.name);
         var btn = new __WEBPACK_IMPORTED_MODULE_1__config__["ButtonSafe"](ctx.button, ctx);
         // check if we have modifiers
-        var modifier = __WEBPACK_IMPORTED_MODULE_1__config__["ButtonModifier"].findOrCreate((_b = (_a = ctx.toolbar) === null || _a === void 0 ? void 0 : _a.settings) === null || _b === void 0 ? void 0 : _b._modifiers, ctx.button.name);
-        cl.data('modifier' + modifier.reason, modifier);
-        if (modifier.found)
-            cl.data('modifier found', modifier);
+        var rule = (_c = (_b = (_a = ctx.toolbar) === null || _a === void 0 ? void 0 : _a.settings) === null || _b === void 0 ? void 0 : _b._rules) === null || _c === void 0 ? void 0 : _c.find(ctx.button.name); // ButtonModifier.findOrCreate(ctx.toolbar?.settings?._rules, ctx.button.name);
+        if (rule)
+            cl.data('modifier found', rule);
         var btnLink = document.createElement('a');
         var disabled = btn.disabled();
         // put call as plain JavaScript to preserve even if DOM is serialized
@@ -4913,8 +4886,8 @@ var RenderButton = /** @class */ (function (_super) {
         divTag.appendChild(this.iconTag(btn, ctx));
         btnLink.appendChild(divTag);
         // set color - new in 10.27
-        var color = ((_c = modifier.rules) === null || _c === void 0 ? void 0 : _c.color) || ctx.toolbar.settings.color;
-        if (color) {
+        var color = ((_d = rule === null || rule === void 0 ? void 0 : rule.button) === null || _d === void 0 ? void 0 : _d.color) || ctx.toolbar.settings.color;
+        if (color && typeof color === 'string') {
             cl.add('color: ' + color);
             var split = color.split(',');
             if (split[0])
@@ -5123,11 +5096,6 @@ var ToolbarSettings = /** @class */ (function () {
          * use "colorname", "#xxyyzz" or "color1,color2" to specify the colors
          */
         this.color = '';
-        /**
-         * Experimental 10.27 - modifiers for the buttons
-         * Should never be set from the page, but the toolbar initializer will set this
-         */
-        this._modifiers = [];
         if (toolbarSettings)
             __WEBPACK_IMPORTED_MODULE_0__plumbing__["Obj"].TypeSafeAssign(this, toolbarSettings);
     }
@@ -8221,6 +8189,9 @@ var AttrJsonUser = /** @class */ (function () {
 /* 157 */
 /***/ (function(module, exports) {
 
+// export interface Rule {
+//     color?: string;
+// }
 
 
 /***/ }),
@@ -9850,17 +9821,11 @@ if (__WEBPACK_IMPORTED_MODULE_1__interfaces_window_in_page__["windowInPage"].$2s
 
 /***/ }),
 /* 195 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, __webpack_exports__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__rule__ = __webpack_require__(157);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__rule___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__rule__);
-/* harmony namespace reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in __WEBPACK_IMPORTED_MODULE_0__rule__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return __WEBPACK_IMPORTED_MODULE_0__rule__[key]; }) }(__WEBPACK_IMPORT_KEY__));
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__button_modifier__ = __webpack_require__(27);
-/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "ButtonModifier", function() { return __WEBPACK_IMPORTED_MODULE_1__button_modifier__["ButtonModifier"]; });
-
-
+// export * from './rule';
+// export * from './button-modifier';
 
 
 /***/ }),
@@ -10117,6 +10082,7 @@ var BuildRule = /** @class */ (function (_super) {
         var _this = _super.call(this, 'Tlb.BdRule', parentLog) || this;
         _this.ruleString = ruleString;
         _this.params = {};
+        _this.button = {};
         if (!ruleString) {
             _this.log.add('rule is empty');
             return _this;

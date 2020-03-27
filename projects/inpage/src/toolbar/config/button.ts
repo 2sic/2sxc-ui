@@ -4,7 +4,6 @@ import { CommandLinkGenerator } from '../../commands/command-link-generator';
 import { CommandParams } from '../../commands/command-params';
 import { ContextComplete } from '../../context/bundles/context-bundle-button';
 import { Obj, TypeTbD } from '../../plumbing';
-import { ButtonModifier } from '../modify/button-modifier';
 import { BuildRule } from '../rules';
 
 /** This is the most common call signature on most ButtonConfig properties */

@@ -1,5 +1,5 @@
 
 
-export interface Rule {
-    color?: string;
-}
+// export interface Rule {
+//     color?: string;
+// }

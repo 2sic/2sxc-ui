@@ -9,5 +9,3 @@ export * from './button-group';
 export * from './toolbar';
 
 export * from './toolbar-settings';
-
-export * from '../modify/button-modifier';

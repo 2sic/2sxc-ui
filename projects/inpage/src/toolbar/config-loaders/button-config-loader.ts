@@ -118,11 +118,10 @@ export class ButtonConfigLoader extends HasLog {
         // config: InstanceConfig,
         const cl = this.log.call('removeUnfitButtons');
         let removals = '';
-        // const modifiers = toolbar.settings && toolbar.settings._modifiers || [];
         for (let i = 0; i < btns.length; i++) {
             const btn = btns[i];
             if (btn.action) {
-                const modifier = this.toolbar.rules.find(btn.action.name); // ButtonModifier.findOrCreate(modifiers, btn.action.name);
+                const modifier = this.toolbar.rules.find(btn.action.name);
                 btn.modifier = modifier;
                 context.button = btn; // add to context for calls
                 const remove = modifier?.ruleOperation === Operations.remove

@@ -53,7 +53,9 @@ export class BuildRule extends HasLog {
     //#region command parts
     action: string;
 
-    params: DictionaryValue = {};
+    params?: DictionaryValue = {};
+
+    button?: DictionaryValue = {};
 
     //#endregion
 

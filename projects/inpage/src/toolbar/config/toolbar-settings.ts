@@ -1,6 +1,6 @@
-﻿import { ButtonModifier } from '.';
-import { Obj } from '../../plumbing';
+﻿import { Obj } from '../../plumbing';
 import { ToolbarInitConfig } from '../initialize/toolbar-init-config';
+import { RuleManager } from '../rules/rule-manager';
 import { ToolbarTemplate } from '../templates';
 
 /** contains toolbar behaviour settings like float, etc. */
@@ -21,7 +21,7 @@ export class ToolbarSettings {
      * Experimental 10.27 - modifiers for the buttons
      * Should never be set from the page, but the toolbar initializer will set this
      */
-    _modifiers: ButtonModifier[] = [];
+    _rules: RuleManager;
 
     constructor(toolbarSettings?: Partial<ToolbarSettings>) {
         if (toolbarSettings)

@@ -1,6 +1,6 @@
 ﻿import { ContextComplete } from '../../context/bundles/context-bundle-button';
 import { HtmlTools } from '../../html/dom-tools';
-import { ButtonCommand, ButtonModifier, ButtonSafe } from '../config';
+import { ButtonCommand, ButtonSafe } from '../config';
 import { RenderPart } from './render-part-base';
 import { ToolbarRenderer } from './toolbar-renderer';
 
@@ -15,9 +15,8 @@ export class RenderButton extends RenderPart {
         const btn = new ButtonSafe(ctx.button, ctx);
 
         // check if we have modifiers
-        const modifier = ButtonModifier.findOrCreate(ctx.toolbar?.settings?._modifiers, ctx.button.name);
-        cl.data('modifier' + modifier.reason, modifier);
-        if (modifier.found) cl.data('modifier found', modifier);
+        const rule = ctx.toolbar?.settings?._rules?.find(ctx.button.name); // ButtonModifier.findOrCreate(ctx.toolbar?.settings?._rules, ctx.button.name);
+        if (rule) cl.data('modifier found', rule);
 
         const btnLink = document.createElement('a');
 
@@ -45,8 +44,8 @@ export class RenderButton extends RenderPart {
         btnLink.appendChild(divTag);
 
         // set color - new in 10.27
-        const color = modifier.rules?.color || ctx.toolbar.settings.color;
-        if (color) {
+        const color = rule?.button?.color || ctx.toolbar.settings.color;
+        if (color && typeof color === 'string') {
             cl.add('color: ' + color);
             const split = color.split(',');
             if (split[0]) divTag.style.backgroundColor = split[0];

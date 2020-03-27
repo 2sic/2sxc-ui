@@ -4,7 +4,7 @@ import { ButtonGroupsWip } from '.';
 import { ToolbarManager } from '..';
 import { ContextComplete } from '../../context/bundles/context-bundle-button';
 import { Entry, HasLog } from '../../logging';
-import { ButtonGroup, ButtonModifier, Toolbar } from '../config';
+import { ButtonGroup, Toolbar } from '../config';
 import { ToolbarSettings, ToolbarSettingsDefaults, ToolbarSettingsForEmpty } from '../config';
 import { InPageToolbarConfigVariations, ToolbarInitConfig } from '../initialize/toolbar-init-config';
 import { RuleManager } from '../rules';
@@ -115,7 +115,7 @@ export class ToolbarConfigLoader extends HasLog {
     private getTemplateIfNoButtonsSpecified(raw: InPageToolbarConfigVariations): InPageToolbarConfigVariations {
         const wrapLog = this.log.call('getTemplateIfNoButtonsSpecified');
         wrapLog.add('before', raw);
-        const modifiers: ButtonModifier[] = this.extractModifiers(raw);
+        // const modifiers: ButtonModifier[] = this.extractModifiers(raw);
 
         if (InPageCommandJson.hasActions(raw)
             || ToolbarTemplate.hasGroups(raw)
@@ -126,35 +126,35 @@ export class ToolbarConfigLoader extends HasLog {
         wrapLog.add('no toolbar structure specified, will use standard toolbar template');
         const template = ToolbarTemplateManager.Instance(this.log).copy(ToolbarTemplateDefault.name);
         template.params = (Array.isArray(raw) && raw[0]) || raw; // attach parameters
-        template.settings._modifiers = modifiers;
+        // template.settings._rules = modifiers;
         return wrapLog.return(template, 'use template');
     }
 
-    /**
-     * Extract action params with +edit or -delete
-     */
-    private extractModifiers(raw: InPageToolbarConfigVariations): ButtonModifier[] {
-        const cl = this.log.call('extractModifiers');
-        let buttonModifiers: ButtonModifier[] = null;
-        // if we have an actions node,
-        // check if it's just a modifier (with +/-) or a standalone list
-        if (!InPageCommandJson.hasModify(raw)) return cl.return([], 'no actions/modifiers');
-        cl.add(`found modify: ${raw.modify}`);
-        const modify = raw.modify;
-        delete raw.modify; // clean up to prevent side-effects
+    // /**
+    //  * Extract action params with +edit or -delete
+    //  */
+    // private extractModifiers(raw: InPageToolbarConfigVariations): ButtonModifier[] {
+    //     const cl = this.log.call('extractModifiers');
+    //     let buttonModifiers: ButtonModifier[] = null;
+    //     // if we have an actions node,
+    //     // check if it's just a modifier (with +/-) or a standalone list
+    //     if (!InPageCommandJson.hasModify(raw)) return cl.return([], 'no actions/modifiers');
+    //     cl.add(`found modify: ${raw.modify}`);
+    //     const modify = raw.modify;
+    //     delete raw.modify; // clean up to prevent side-effects
 
-        if (typeof modify === 'string') {
-            cl.add('string modifier');
-            if (!modify.length) return cl.return([], 'empty modifiers');
+    //     if (typeof modify === 'string') {
+    //         cl.add('string modifier');
+    //         if (!modify.length) return cl.return([], 'empty modifiers');
 
-            cl.add('have +/-, assume they are only modifiers - will extract');
-            buttonModifiers = modify.split(',').map((btnMod) => new ButtonModifier(btnMod));
-        } else {
-            cl.add('detected modifier object - will pass it on');
-            buttonModifiers = Object.keys(modify).map((k) => new ButtonModifier(k, modify[k]));
-        }
-        return cl.return(buttonModifiers, 'had modifiers');
-    }
+    //         cl.add('have +/-, assume they are only modifiers - will extract');
+    //         buttonModifiers = modify.split(',').map((btnMod) => new ButtonModifier(btnMod));
+    //     } else {
+    //         cl.add('detected modifier object - will pass it on');
+    //         buttonModifiers = Object.keys(modify).map((k) => new ButtonModifier(k, modify[k]));
+    //     }
+    //     return cl.return(buttonModifiers, 'had modifiers');
+    // }
 
 
     /**
