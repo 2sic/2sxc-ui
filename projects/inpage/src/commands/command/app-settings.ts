@@ -20,7 +20,7 @@ Commands.add(CmdAppSettings, 'AppSettings', 'sliders', true, false, {
     // only if settings exist, or are 0 (to be created)
     showCondition: (context) => context.user.canDesign && !context.app.isContent,
 
-    configureCommand: (context, linkGenerator) => {
+    configureLinkGenerator: (context, linkGenerator) => {
         linkGenerator.items = [{ EntityId: context.app.settingsId }];
     },
 

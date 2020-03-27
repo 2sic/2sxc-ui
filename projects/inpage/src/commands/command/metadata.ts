@@ -21,7 +21,7 @@ Commands.add(CmdMetadata, 'Metadata', 'tag', false, false, {
     // only add a metadata-button if it has metadata-infos
     showCondition: (context) => !!context.button.action.params.metadata,
 
-    configureCommand(context, linkGenerator) {
+    configureLinkGenerator(_, linkGenerator) {
         const itm: Partial<ItemIdentifierSimple> = {
             Title: 'EditFormTitle.Metadata',
             Metadata: { // O.bject.assign(

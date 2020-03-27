@@ -10,7 +10,7 @@ export const CmdLayout = 'layout';
  */
 Commands.add(CmdLayout, 'ChangeLayout', 'glasses', true, true, {
 
-    inlineWindow: (context) => true,
+    inlineWindow: (_) => true,
 
     code(context, event) {
         // Try to find the closest tag based on the click

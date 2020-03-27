@@ -5,11 +5,11 @@ export const CmdTemplateQuery = 'template-query';
  * import this module to commands.ts
  */
 Commands.add(CmdTemplateQuery, 'QueryEdit', 'filter', true, false, {
-    dialog: (ctx) => 'pipeline-designer',
+    dialog: (_) => 'pipeline-designer',
 
     params: (ctx) => ({ pipelineId: ctx.contentBlock.queryId }),
 
-    newWindow: (ctx) => true,
+    newWindow: (_) => true,
 
     disabled: (ctx) => ctx.app.settingsId === null || !ctx.contentBlock.queryId,
 

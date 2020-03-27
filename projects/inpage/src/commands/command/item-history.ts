@@ -8,6 +8,6 @@ export const CmdItemHistory = 'item-history';
  * import this module to commands.ts
  */
 Commands.add(CmdItemHistory, 'ItemHistory', 'clock', true, false, {
-    inlineWindow: (context) => true,
-    fullScreen: (context) => true,
+    inlineWindow: (_) => true,
+    fullScreen: (_) => true,
 });

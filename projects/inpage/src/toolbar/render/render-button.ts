@@ -1,7 +1,6 @@
 ﻿import { ContextComplete } from '../../context/bundles/context-bundle-button';
 import { HtmlTools } from '../../html/dom-tools';
-import { Button } from '../config';
-import { ButtonCommand } from '../config/button-command';
+import { Button, ButtonCommand, ButtonSafe } from '../config';
 import { RenderPart } from './render-part-base';
 import { ToolbarRenderer } from './toolbar-renderer';
 
@@ -13,29 +12,27 @@ export class RenderButton extends RenderPart {
 
     render(ctx: ContextComplete, groupIndex: number): HTMLElement {
         const cl = this.log.call('render', `contex: obj, group: ${groupIndex}, btn: ${ctx.button.name}`);
-        const btn = ctx.button;
+        const btn = new ButtonSafe(ctx.button, ctx);
 
         const btnLink = document.createElement('a');
 
-        const disabled = typeof(btn.disabled) === 'function'
-            ? btn.disabled(ctx)
-            : btn.disabled as boolean;
+        const disabled = btn.disabled();
 
         // put call as plain JavaScript to preserve even if DOM is serialized
         if (!disabled) btnLink.setAttribute('onclick', this.generateRunJs(btn, ctx));
 
         // Add various classes
         const classes = (disabled ? ' disabled' : '')
-            + (btn.action ? ` sc-${btn.action.name}` : '')
+            + (btn.action() ? ` sc-${btn.action().name}` : '')
             + ` group-${groupIndex}`
-            + ' ' + btn.classes
-            + (btn.dynamicClasses ? ' ' + btn.dynamicClasses(ctx) : '');
+            + ' ' + btn.classes()
+            + ' ' + btn.dynamicClasses();
         cl.add('classes: ' + classes);
         HtmlTools.addClasses(btnLink, classes);
 
         // set title for i18n
         if (btn.title)
-            btnLink.setAttribute('data-i18n', `[title]${btn.title(ctx)}`); // localization support
+            btnLink.setAttribute('data-i18n', `[title]${btn.title()}`); // localization support
 
 
         const divTag = document.createElement('div');
@@ -56,15 +53,14 @@ export class RenderButton extends RenderPart {
 
 
 
-    private generateRunJs(btn: Button, ctx: ContextComplete) {
-        const runParams = ButtonCommand.normalize(btn.action);
+    private generateRunJs(btn: ButtonSafe, ctx: ContextComplete) {
+        const runParams = ButtonCommand.normalize(btn.action());
         return `$2sxc(${ctx.instance.id}, ${ctx.contentBlock.id}).manage.run(${JSON.stringify(runParams)}, event);`;
     }
 
-    private iconTag(btn: Button, context: ContextComplete) {
+    private iconTag(btn: ButtonSafe, context: ContextComplete) {
         const symbol = document.createElement('i');
-        if (btn.icon)
-            HtmlTools.addClasses(symbol, btn.icon(context));
+        HtmlTools.addClasses(symbol, btn.icon());
         symbol.setAttribute('aria-hidden', 'true');
         return symbol;
     }

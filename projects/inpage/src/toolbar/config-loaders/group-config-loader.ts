@@ -73,14 +73,14 @@ export class ButtonGroupConfigLoader extends HasLog {
         btnCommand = this.toolbar.command.updateToV9(btnCommand);
 
         // parameters adapter from v1 to v2
-        const params = { ...this.toolbar.command.removeActionProperty(btnCommand), ...sharedParams };
+        const params = { ...InPageCommandJson.noAction(btnCommand), ...sharedParams };
 
         // Toolbar API v2
         const newButtonAction = new ButtonCommand(name, contentType, params);
         let newButtonConfig = new Button(newButtonAction, name);
 
         // settings adapter from v1 to v2
-        newButtonConfig = { ...newButtonConfig, ...Button.propertyToMethod(btn) };
+        newButtonConfig = { ...newButtonConfig, ...InPageButtonJson.toButton(btn) };
 
         // ensure all buttons have either own settings, or the fallback
         this.toolbar.button.addDefaultBtnSettings(newButtonConfig, groupDefaults, sharedDefaults, Commands);

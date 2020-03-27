@@ -3,7 +3,7 @@ import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { ItemIdentifierGroup, ItemIdentifierSimple, ItemInField } from '../interfaces/item-identifiers';
 import { NgUrlValuesWithoutParams } from '../manage/ng-dialog-params';
 import { DictionaryValue, TypeUnsafe } from '../plumbing';
-import { ButtonPropertyGenerator } from '../toolbar/config';
+import { ButtonSafe } from '../toolbar/config';
 import { translate } from '../translate/2sxc.translate';
 
 /**
@@ -11,41 +11,40 @@ import { translate } from '../translate/2sxc.translate';
  * then building the link for opening the correct dialogs
  */
 export class CommandLinkGenerator {
-  public items: Array<ItemIdentifierSimple | ItemIdentifierGroup>;
-  public readonly urlParams: UrlItemParams;
-  private readonly rootUrl: string;
-  private readonly debugUrlParam: string;
+    public items: Array<ItemIdentifierSimple | ItemIdentifierGroup>;
+    public readonly urlParams: UrlItemParams;
+    private readonly rootUrl: string;
+    private readonly debugUrlParam: string;
 
-  constructor(public readonly context: ContextComplete) {
-    // Initialize Items
-    this.items = context.button.action.params.items || []; // use predefined or create empty array
+    constructor(public readonly context: ContextComplete) {
+        const button = new ButtonSafe(context.button, context);
+        const action = button.action();
+        // Initialize Items - use predefined or create empty array
+        this.items = action.params.items || [];
 
-    // initialize params
-    // todo: stv, clean this
-    this.urlParams = this.evalPropOrFunction(context.button.params, context, {} as unknown);
-    const dialog = this.evalPropOrFunction(context.button.dialog, context, '');
-    // note: this corrects how the variable to name the dialog changed in the history of 2sxc from action to dialog
-    this.urlParams = {...{ dialog: dialog || context.button.action.name }, ...this.urlParams};
-    // this.params = O.bject.assign({ dialog: dialog || context.button.action.name }, params);
+        // initialize params
+        // todo: stv, clean this
+        this.urlParams = button.params() as unknown; // Button.getVal(context.button.params, context, {} as unknown);
+        const dialog = button.dialog(); // Button.getVal(context.button.dialog, context, '');
+        // note: this corrects how the variable to name the dialog changed in the history of 2sxc from action to dialog
+        this.urlParams = {...{ dialog: dialog || action.name }, ...this.urlParams};
+        // this.params = O.bject.assign({ dialog: dialog || context.button.action.name }, params);
 
-    // initialize root url to dialog
-    this.rootUrl = this.getDialogUrl();
+        // initialize root url to dialog
+        this.rootUrl = this.getDialogUrl(dialog);
 
-    // get isDebug url Parameter
-    this.debugUrlParam = window.$2sxc.urlParams.get('debug') ? '&debug=true' : '';
+        // get isDebug url Parameter
+        this.debugUrlParam = window.$2sxc.urlParams.get('debug') ? '&debug=true' : '';
 
-      // activate items for list or simple item depending on the scenario
-    if (context.button.action.params.useModuleList)
-      this.addContentGroupItems(true);
-    if (context.button.action.params.parent)
-      this.addItemInList();
-    else
-      this.addItem();
+        // activate items for list or simple item depending on the scenario
+        if (action.params.useModuleList) this.addContentGroupItems(true);
+        if (button.action().params.parent) this.addItemInList();
+        else this.addItem();
 
-    // if the command has own configuration stuff, do that now
-    if (context.button.configureCommand)
-      context.button.configureCommand(context, this);
-  }
+        // if the command has own configuration stuff, do that now
+        if (context.button.configureLinkGenerator)
+        context.button.configureLinkGenerator(context, this);
+    }
 
 
   /**
@@ -53,7 +52,8 @@ export class CommandLinkGenerator {
    */
   getLink() {
     const context = this.context;
-    const params = context.button.action.params;
+    const button = new ButtonSafe(context.button, context);
+    const params = button.action().params;
     const urlItems = this.urlParams as unknown as UrlItemParams;
 
     // steps for all actions: prefill, serialize, open-dialog
@@ -66,8 +66,8 @@ export class CommandLinkGenerator {
     urlItems.items = JSON.stringify(this.items); // Serialize/json-ify the complex items-list
 
     // clone the params and adjust parts based on partOfPage settings...
-    const partOfPage = context.button.partOfPage(context);
-    const ngDialogParams = new NgUrlValuesWithoutParams(context, partOfPage); // 2dm simplified buildNgDialogParams
+    const partOfPage = button.partOfPage();
+    const ngDialogParams = new NgUrlValuesWithoutParams(context, partOfPage);
 
     return `${this.rootUrl}#${$.param(ngDialogParams)}&${$.param(urlItems)}${this.debugUrlParam}`;
   }
@@ -75,19 +75,12 @@ export class CommandLinkGenerator {
   /**
    * Determine the url to open a dialog, based on the settings which UI version to use
    */
-  private getDialogUrl(): string {
+  private getDialogUrl(dialogName: string): string {
     const context = this.context;
-    return `${context.instance.sxcRootUrl}desktopmodules/tosic_sexycontent/${(context.ui.form === 'ng8'
-        && context.button.dialog(context) === 'edit')
-    ? C.DialogPaths.ng8
-    : C.DialogPaths.ng1}?sxcver=${context.instance.sxcVersion}`;
-  }
-
-
-  private evalPropOrFunction<T>(propOrFunction: ButtonPropertyGenerator<T>, context: ContextComplete, fallback: T): T {
-    return (propOrFunction === undefined || propOrFunction === null)
-        ? fallback
-        : (typeof (propOrFunction) === 'function' ? propOrFunction(context) : propOrFunction);
+    const path = (context.ui.form === 'ng8' && dialogName === 'edit')
+        ? C.DialogPaths.ng8
+        : `${C.DialogPaths.ng1}?sxcver=${context.instance.sxcVersion}`;
+    return `${context.instance.sxcRootUrl}desktopmodules/tosic_sexycontent/${path}`;
   }
 
   private addItem() {

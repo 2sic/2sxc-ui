@@ -23,7 +23,7 @@ Commands.add(CmdContentItems, 'ContentItems', 'table', true, false, {
                 !!context.contentBlock.contentTypeId);
     },
 
-    configureCommand: (context, linkGenerator) => {
+    configureLinkGenerator: (context, linkGenerator) => {
         // optionally override with custom type
         // 2020-03-26 2dm seems superflues, because it's already merged in the params
         // if (linkGenerator.context.button.action.params.contentType)

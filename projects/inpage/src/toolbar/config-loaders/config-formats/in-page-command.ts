@@ -34,4 +34,13 @@ export class InPageCommandJson  {
         // check two common signatures - command and action
         return typeof(thing as InPageCommandJson).action === 'string';
     }
+
+    /** Important for object merging - because otherwise action will be preserved */
+    static noAction(thing: InPageCommandJson) {
+        // some clean-up
+        delete thing.action; // remove the action property
+        return thing;
+    }
+
+
 }

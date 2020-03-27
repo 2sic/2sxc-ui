@@ -1,6 +1,7 @@
 ﻿import { InPageCommandJson } from '..';
 import { CommandParams } from '../../../commands/command-params';
-import { TypeTbD } from '../../../plumbing/TypeTbD';
+import { TypeTbD, TypeUnsafe } from '../../../plumbing';
+import { Button } from '../../config';
 
 /**
  * Button Definition v1. from old API
@@ -68,4 +69,32 @@ export class InPageButtonJson {
       return thing.length > 0 && InPageButtonJson.is(thing[0]);
   }
 
+    static toButton(oldFormat: InPageButtonJson): Partial<Button> {
+        const config: Partial<Button> = {};
+
+        // simple value properties
+        if (oldFormat.classes) config.classes = oldFormat.classes;
+        if (oldFormat.dialog) config.dialog = oldFormat.dialog;
+        if (oldFormat.disabled) config.disabled = oldFormat.disabled;
+        if (oldFormat.icon) config.icon = oldFormat.icon;
+
+        // Method Properties
+        if (oldFormat.dynamicClasses) config.dynamicClasses = evalPropOrFun(oldFormat.dynamicClasses);
+        if (oldFormat.fullScreen) config.fullScreen = evalPropOrFun(oldFormat.fullScreen);
+        if (oldFormat.icon) config.icon = evalPropOrFun(oldFormat.icon);
+        if (oldFormat.inlineWindow) config.inlineWindow = evalPropOrFun(oldFormat.inlineWindow);
+        if (oldFormat.newWindow) config.newWindow = evalPropOrFun(oldFormat.newWindow);
+        if (oldFormat.partOfPage) config.partOfPage = evalPropOrFun(oldFormat.partOfPage);
+        if (oldFormat.showCondition) config.showCondition = evalPropOrFun(oldFormat.showCondition);
+        if (oldFormat.title) config.title = evalPropOrFun(oldFormat.title);
+
+        return config;
+    }
+}
+
+
+function evalPropOrFun(propOrFunction: TypeTbD): TypeUnsafe {
+    if (propOrFunction === undefined || propOrFunction === null) return false;
+    if (typeof (propOrFunction) === 'function') return propOrFunction;
+    return () => propOrFunction;
 }

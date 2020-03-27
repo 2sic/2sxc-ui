@@ -3,13 +3,13 @@ import { CommandCode } from '../../commands/command-code';
 import { CommandLinkGenerator } from '../../commands/command-link-generator';
 import { CommandParams } from '../../commands/command-params';
 import { ContextComplete } from '../../context/bundles/context-bundle-button';
-import { Obj, TypeTbD, TypeUnsafe } from '../../plumbing';
-import { InPageButtonJson } from '../config-loaders';
+import { isNothing, Obj, TypeTbD } from '../../plumbing';
 import { ButtonModifier } from './button-modifier';
 
-
 /** This is the most common call signature on most ButtonConfig properties */
-export type ButtonPropertyGenerator<T> = (context: ContextComplete) => T;
+export type ButtonPropGen<T> = (context: ContextComplete) => T;
+
+type ButtonGenOrProp<T> = ButtonPropGen<T> | T;
 
 /**
  * The real button configuration as it's used at runtime
@@ -20,50 +20,56 @@ export class Button {
 
     modifier?: ButtonModifier;
 
-    constructor(action: ButtonCommand, public name: string /*, partialConfig?: Partial<Button> */) {
-        if (action && action.command && action.command.buttonConfig) {
+    constructor(action: ButtonCommand, public name: string) {
+        if (action?.command?.buttonDefaults) {
             this.action = action;
             // get defaults from action commandDefinition
-            Obj.TypeSafeAssign(this, action.command.buttonConfig);
+            Obj.TypeSafeAssign(this, action.command.buttonDefaults);
         }
-
-        // if (partialConfig) TypeSafeAssign(this, partialConfig);
     }
+
+    /** Configure the link generator before it creates the link */
+    configureLinkGenerator: (context: ContextComplete, linkGenerator: CommandLinkGenerator) => void;
+
+
+    /** The dialog name */
+    dialog?: ButtonGenOrProp<string>;
+
+    /** Check if full-screen, always a function */
+    fullScreen?: ButtonPropGen<boolean>;
+
+    /** Determines if the button should be disabled */
+    disabled?: ButtonGenOrProp<boolean>;
+
+    /** Dynamicaly determine classes - must always be a function */
+    dynamicClasses: ButtonPropGen<string>;
+
+    /** The icon to show in the button */
+    icon?: ButtonGenOrProp<string>;
+
+    /** Determine if it should use the inline window, always a function */
+    inlineWindow?: ButtonPropGen<boolean> = () => false;
+
+    /** Check if we should open a new window, always an FN */
+    newWindow?: ButtonPropGen<boolean>;
+
+    /** Method which determines if it should be shown or not */
+    showCondition?: ButtonPropGen<boolean>;
+
+    /** The title of this button which will usually be i18n keys */
+    title?: ButtonPropGen<string>;
+
+
+
+    /** Determines if this button runs in the page - affecting publishing */
+    partOfPage?: ButtonPropGen<boolean>;
 
     code: CommandCode; // void;
-    configureCommand: (context: ContextComplete, linkGenerator: CommandLinkGenerator) => void;
-    dialog: ButtonPropertyGenerator<string>;
-    disabled: ButtonPropertyGenerator<boolean>;
-    dynamicClasses: ButtonPropertyGenerator<string>;
-    dynamicDisabled: (() => boolean) = () => false;
-    fullScreen: ButtonPropertyGenerator<boolean>;
-    icon: ButtonPropertyGenerator<string>;
-    inlineWindow: ButtonPropertyGenerator<boolean>;
-    newWindow: ButtonPropertyGenerator<boolean>;
-    params: ButtonPropertyGenerator<CommandParams>;
-    partOfPage: ButtonPropertyGenerator<boolean>;
-    showCondition: ButtonPropertyGenerator<boolean>;
-    title: ButtonPropertyGenerator<string>;
-    uiActionOnly: ButtonPropertyGenerator<boolean>;
 
+    /** The parameters which are used to run the command */
+    params?: ButtonPropGen<CommandParams>;
 
-    static propertyToMethod(oldFormat: Partial<Button> | InPageButtonJson): Partial<Button> {
-        const config: Partial<Button> = {};
-
-        if (oldFormat.classes) config.classes = oldFormat.classes;
-        if (oldFormat.dialog) config.dialog = evalPropOrFun(oldFormat.dialog);
-        if (oldFormat.disabled) config.disabled = evalPropOrFun(oldFormat.disabled);
-        if (oldFormat.dynamicClasses) config.dynamicClasses = evalPropOrFun(oldFormat.dynamicClasses);
-        if (oldFormat.fullScreen) config.fullScreen = evalPropOrFun(oldFormat.fullScreen);
-        if (oldFormat.icon) config.icon = evalPropOrFun(oldFormat.icon);
-        if (oldFormat.inlineWindow) config.inlineWindow = evalPropOrFun(oldFormat.inlineWindow);
-        if (oldFormat.newWindow) config.newWindow = evalPropOrFun(oldFormat.newWindow);
-        if (oldFormat.partOfPage) config.partOfPage = evalPropOrFun(oldFormat.partOfPage);
-        if (oldFormat.showCondition) config.showCondition = evalPropOrFun(oldFormat.showCondition);
-        if (oldFormat.title) config.title = evalPropOrFun(oldFormat.title);
-
-        return config;
-    }
+    uiActionOnly: ButtonPropGen<boolean>;
 
     /** Detect if this is a Button */
     static is(thing: TypeTbD): thing is Button {
@@ -73,12 +79,16 @@ export class Button {
     static isArray(thing: TypeTbD): thing is Button[] {
         return thing.length && Button.is(thing[0]);
     }
+
+    static isPropGen<T>(thing: ButtonPropGen<T> | T): thing is ButtonPropGen<T> {
+        return typeof thing === 'function';
+    }
+
+    /** Evaluate a property or generator and return the property */
+    static getVal<T>(propOrGen: ButtonPropGen<T> | T, ctx: ContextComplete, fallback: T): T {
+        return (isNothing(propOrGen))
+            ? fallback
+            : (Button.isPropGen(propOrGen) ? propOrGen(ctx) : propOrGen);
+    }
 }
 
-function evalPropOrFun(propOrFunction: TypeTbD): TypeUnsafe {
-    if (propOrFunction === undefined || propOrFunction === null) return false;
-    if (typeof (propOrFunction) === 'function') return propOrFunction;
-    return () => propOrFunction;
-}
-
-type ButtonPropertyGeneratorOrValue<T> = (context: ContextComplete) => T | T;

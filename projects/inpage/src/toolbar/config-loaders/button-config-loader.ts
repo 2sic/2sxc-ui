@@ -5,9 +5,10 @@ import { CmdMore } from '../../commands/command/more';
 import { Commands } from '../../commands/commands';
 import { ContextComplete } from '../../context/bundles';
 import { HasLog } from '../../logging';
-import { DictionaryValue, TypeTbD } from '../../plumbing';
+import { DictionaryValue } from '../../plumbing';
 import { Button, Toolbar } from '../config';
 import { ButtonModifier } from '../config/button-modifier';
+import { ButtonSafe } from '../config/button-safe';
 
 /**
  * This is a system to build button configurations
@@ -80,7 +81,7 @@ export class ButtonConfigLoader extends HasLog {
 
             wrapLog.add('will disable appropriate buttons');
             // #CodeChange#2020-03-22#InstanceConfig - believe this is completely unused; remove in June
-            disableButtons(context, btns/*, config */);
+            // disableButtons(context, btns/*, config */);
 
             // remove the group, if no buttons left, or only "more"
             if (btns.length === 0 || (btns.length === 1 && btns[0].action.name === CmdMore)) {
@@ -120,13 +121,12 @@ export class ButtonConfigLoader extends HasLog {
         const modifiers = toolbar.settings && toolbar.settings._btnModifiers || [];
         for (let i = 0; i < btns.length; i++) {
             const btn = btns[i];
-            // add to context for calls to verify if it should be shown
-            context.button = btn;
             if (btn.action) {
                 const modifier = ButtonModifier.findOrCreate(modifiers, btn.action.name);
                 btn.modifier = modifier;
+                context.button = btn; // add to context for calls
                 const remove = modifier.remove
-                    || !evalPropOrFunction(btn.showCondition, context, /* config, */ true);
+                    || !(new ButtonSafe(btn, context).showCondition());
                 if (!modifier.add && remove) {
                     removals += `#${i} "${btn.action.name}"; `;
                     btns.splice(i--, 1);
@@ -142,39 +142,18 @@ export class ButtonConfigLoader extends HasLog {
 }
 
 
+// 2020-03-27 2dm removed this - it's resolved at render level anyhow!
+// function disableButtons(context: ContextComplete, btns: Button[],
+//     ): void {
+//     for (let i = 0; i < btns.length; i++) {
+//         context.button = btns[i];
+//         if (btns[i].action)
+//             btns[i].disabled = Button.genToValue(btns[i].disabled, context,  false);
+//         else
+//             btns[i].disabled = ((_) => false);
+//     }
+// }
 
-
-
-// #CodeChange#2020-03-22#InstanceConfig - believe this is completely unused
-function disableButtons(context: ContextComplete, btns: Button[],
-    // #CodeChange#2020-03-22#InstanceConfig - believe this is completely unused
-    // config: InstanceConfig
-    ): void {
-    for (let i = 0; i < btns.length; i++) {
-        // btns[i].disabled = evalPropOrFunction(btns[i].disabled, btns[i].command, config, false);
-        context.button = btns[i];
-        if (btns[i].action)
-            btns[i].disabled = evalPropOrFunction(btns[i].disabled, context, /* config, */ () => false);
-        else
-            btns[i].disabled = (() => false);
-    }
-}
-
-function evalPropOrFunction<T>(
-    propOrFunction: TypeTbD,
-    context: ContextComplete,
-    // #CodeChange#2020-03-22#InstanceConfig - believe this is completely unused; remove in June
-    // config: InstanceConfig,
-    fallback: T): T {
-    if (propOrFunction === undefined || propOrFunction === null) {
-        return fallback;
-    }
-    if (typeof (propOrFunction) === 'function') {
-        return propOrFunction(context/*, config */);
-    } else {
-        return propOrFunction;
-    }
-}
 
 const btnProperties = [
   'classes',
@@ -215,8 +194,8 @@ function fallbackBtnSetting(btn: Button,
     // if there is an action, try to use that property name
     if (btn.action && btn.action.name) {
         const a = actions.get(btn.action.name);
-        if (a && a.buttonConfig) {
-            const c = a.buttonConfig as DictionaryValue;
+        if (a && a.buttonDefaults) {
+            const c = a.buttonDefaults as DictionaryValue;
             if (c[propName])
                 return target[propName] = c[propName];
         }

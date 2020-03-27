@@ -9,7 +9,7 @@ Commands.add(CmdTemplateSettings, 'TemplateSettings', 'sliders', true, false, {
 
     showCondition: (context) => context.user.canDesign && !context.app.isContent,
 
-    configureCommand: (context, linkGenerator) => {
+    configureLinkGenerator: (context, linkGenerator) => {
         linkGenerator.items = [{ EntityId: context.contentBlock.templateId }];
     },
 });

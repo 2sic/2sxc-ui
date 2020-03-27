@@ -6,7 +6,7 @@ export const CmdAppResources = 'app-resources';
  * import this module to commands.ts
  */
 Commands.add(CmdAppResources, 'AppResources', 'translate', true, false, {
-    dialog: (context) => CmdEditDialog,
+    dialog: (_) => CmdEditDialog,
 
     disabled: (context) => context.app.resourcesId === null,
 
@@ -15,7 +15,7 @@ Commands.add(CmdAppResources, 'AppResources', 'translate', true, false, {
     // only if resources exist or are 0 (to be created)...
     showCondition: (context) => context.user.canDesign && !context.app.isContent,
 
-    configureCommand: (context, linkGenerator) => {
+    configureLinkGenerator: (context, linkGenerator) => {
         linkGenerator.items = [{ EntityId: context.app.resourcesId }];
     },
 

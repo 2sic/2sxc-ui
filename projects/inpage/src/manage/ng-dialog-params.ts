@@ -53,7 +53,7 @@ export class NgUrlValuesWithoutParams {
     // todo= probably move the user into the dashboard info
     this.user = ContextOfUser.fromContext(context);
     this.approot = context.app.appPath || null; // this is the only value which doesn't have a slash by default. note that the app-root doesn't exist when opening "manage-app"
-    if (context && context.button && context.button.action && context.button.action.params && context.button.action.params.apps)
+    if (context?.button?.action?.params?.apps)
         this.apps = context.button.action.params.apps;
     this.fa = !context.app.isContent;
     this.rvt = $.ServicesFramework(0).getAntiForgeryValue();

@@ -5,22 +5,17 @@ export class Command {
     constructor(public name: string) {
     }
 
-    buttonConfig: Partial<Button>;
+    /** the defaults are important for new buttons that just know this command */
+    buttonDefaults: Partial<Button>;
 
     protected merge(icon: string, translateKey: string, uiOnly: boolean, partOfPage: boolean, more: Partial<Button>): void {
-        //
-        // stv: v1 code
-        const partialButtonConfig: Partial<Button> = {
-            icon: (context: ContextComplete) => `icon-sxc-${icon}`,
-            title: (context: ContextComplete) => `Toolbar.${translateKey}`,
-            uiActionOnly: (context: ContextComplete) => uiOnly,
-            partOfPage: (context: ContextComplete) => partOfPage,
+        this.buttonDefaults = {
+            icon: (_) => `icon-sxc-${icon}`,
+            title: (_) => `Toolbar.${translateKey}`,
+            uiActionOnly: (_) => uiOnly,
+            partOfPage: (_) => partOfPage,
             ...more,
         };
-
-        // O.bject.assign(partialButtonConfig, more);
-
-        this.buttonConfig = partialButtonConfig;
     }
 
     static build(name: string,
