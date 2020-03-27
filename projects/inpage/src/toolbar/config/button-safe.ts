@@ -15,8 +15,8 @@ export class ButtonSafe {
 
     classes = () => this.button.classes || '';
 
-    /** The dialog name - should default to blank, as it then falls back to action-names */
-    dialog = () => getVal (this.button.dialog, this.context, '');
+    /** The dialog name - should default to the name */
+    dialog = () => getVal (this.button.dialog, this.context, this.button.action.name);
 
     /** Determines if the button should be disabled */
     disabled = () => getVal (this.button.disabled, this.context, false);

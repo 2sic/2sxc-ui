@@ -1,5 +1,6 @@
 ﻿import { HasLog, Insights } from '../logging/';
 import * as DialogFrameElement from './iDialogFrameElement';
+import { QuickDialog } from './quick-dialog';
 import IDialogFrameElement = DialogFrameElement.IDialogFrameElement;
 
 /**
@@ -14,11 +15,10 @@ const containerTemplate = `<div class="${containerClass}"><div class="${iframeCl
 const resizeInterval = 200;
 
 
-class QuickDialogContainerSingleton extends HasLog {
+export class QuickDialogContainer extends HasLog {
 
-    constructor() {
-        super('QDl.Contnr');
-        Insights.add('quick-dialog', 'container', this.log);
+    constructor(quickDialog: typeof QuickDialog) {
+        super('QDl.Contnr', quickDialog.log);
     }
 
     private isFullscreen: boolean = false;
@@ -42,7 +42,7 @@ class QuickDialogContainerSingleton extends HasLog {
         if ($('#personaBar-iframe').length > 0)
             container.addClass('persona-bar-visible');
         const newIFrame = document.createElement(iframeTag);
-        const extendedIFrame = IDialogFrameElement.build(newIFrame, this.log);
+        const extendedIFrame = IDialogFrameElement.build(newIFrame, this);
         container.find(`.${iframeClass}`).append(extendedIFrame);
         $('body').append(container);
         this.watchForResize(container);
@@ -111,7 +111,7 @@ class QuickDialogContainerSingleton extends HasLog {
 
 }
 
-export const QuickDialogContainer = new QuickDialogContainerSingleton();
+// export const QuickDialogContainer = new QuickDialogContainerSingleton();
 
 
 

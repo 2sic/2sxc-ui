@@ -20,9 +20,11 @@ interface IFrameWindow extends Window {
  * it always has a reference to the latest dialog created by a.ny module instance
  */
 class QuickDialogManagerSingleton extends HasLog {
+    private container: QuickDialogContainer;
     constructor() {
         super('Qdl.Managr');
         Insights.add('quick-dialog', 'manager', this.log);
+        this.container = new QuickDialogContainer(this);
     }
 
     /**
@@ -38,13 +40,13 @@ class QuickDialogManagerSingleton extends HasLog {
      */
     setVisible(show: boolean): void {
         const cl = this.log.call('setVisible');
-        const cont = QuickDialogContainer.getOrCreate();
+        const cont = this.container.getOrCreate();
         // if (show === undefined)
         //  show = !cont.hasClass(diagShowClass);
         // show/hide visually
         cont.toggleClass(diagShowClass, show);
-        this.rememberDialogState(QuickDialogContainer.getIFrame(cont), show);
-        current = show ? QuickDialogContainer.getIFrame() : null;
+        this.rememberDialogState(this.container.getIFrame(cont), show);
+        current = show ? this.container.getIFrame() : null;
         cl.done();
     }
 
@@ -63,17 +65,17 @@ class QuickDialogManagerSingleton extends HasLog {
         isFullscreen: boolean,
         dialogName: string,
     ): Promise<boolean> {
-        const cl = this.log.call('showOrToggleFromToolbar');
-        QuickDialogContainer.setSize(isFullscreen);
-        const iFrame = QuickDialogContainer.getIFrame();
+        const cl = this.log.call('showOrToggleFromToolbar', `ctx, url: '${url}', isFullScreen:${isFullscreen}, name:'${dialogName}'`);
+        this.container.setSize(isFullscreen);
+        const iFrame = this.container.getIFrame();
 
         // in case it's a toggle
         if (this.isVisible()) {
+            cl.add('is already visible');
             // check if we're just toggling the current, or will show a new one afterwards
-            const togglePromise = dialogName && current
-                && current.bridge.isConfiguredFor(context.sxc.cacheKey, dialogName)
-                ? this.promise
-                : null;
+            const isForSame = dialogName && current
+                && current.bridge.isConfiguredFor(context.sxc.cacheKey, dialogName);
+            const togglePromise = isForSame ? this.promise : null;
             this.cancel(current.bridge);
             // just a hide this, return the old promise
             if (togglePromise) return cl.return(togglePromise, 'just toggle off');

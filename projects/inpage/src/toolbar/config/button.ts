@@ -31,7 +31,6 @@ export class Button {
     /** Configure the link generator before it creates the link */
     configureLinkGenerator: (context: ContextComplete, linkGenerator: CommandLinkGenerator) => void;
 
-
     /** The dialog name */
     dialog?: ButtonGenOrProp<string>;
 
@@ -59,16 +58,20 @@ export class Button {
     /** The title of this button which will usually be i18n keys */
     title?: ButtonPropGen<string>;
 
-
-
     /** Determines if this button runs in the page - affecting publishing */
     partOfPage?: ButtonPropGen<boolean>;
 
-    code: CommandCode; // void;
+    /** The code to run for this button - if empty, will default to open a dialog */
+    code?: CommandCode;
+
+
+
+
 
     /** The parameters which are used to run the command */
     params?: ButtonPropGen<CommandParams>;
 
+    /** this is just a UI interaction, won't create data so won't need pre-flight */
     uiActionOnly: ButtonPropGen<boolean>;
 
     /** Detect if this is a Button */

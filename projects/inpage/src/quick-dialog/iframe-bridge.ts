@@ -1,14 +1,15 @@
-﻿import { ContentBlockEditor } from '../contentBlock/content-block-editor';
+﻿import IIFrameBridge = Iiframebridge.IIFrameBridge;
+import { QuickDialogContainer } from '.';
+import { ContentBlockEditor } from '../contentBlock/content-block-editor';
 import { renderer } from '../contentBlock/render';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
 import * as Iiframebridge from '../interfaces/iiframe-bridge';
 import { IQuickDialogConfig } from '../interfaces/iquick-dialog-config';
 import { SxcEdit } from '../interfaces/sxc-instance-editable';
-import { HasLog, Log } from '../logging';
+import { HasLog } from '../logging';
 import { TypeUnsafe } from '../plumbing/TypeTbD';
 import { QuickDialog } from './quick-dialog';
 import { QuickDialogConfig } from './quick-dialog-config';
-import IIFrameBridge = Iiframebridge.IIFrameBridge;
 
 const scrollTopOffset: number = 80;
 const animationTime: number = 400;
@@ -19,8 +20,8 @@ const animationTime: number = 400;
 // ReSharper disable once InconsistentNaming
 export class IFrameBridge extends HasLog implements IIFrameBridge {
 
-    constructor(parentLog: Log) {
-        super('QDl.IfBrig', parentLog);
+    constructor(parent: QuickDialogContainer) {
+        super('QDl.IfBrig', parent.log);
     }
 
     private sxcCacheKey: string;
@@ -126,8 +127,10 @@ export class IFrameBridge extends HasLog implements IIFrameBridge {
      * @returns {boolean} true if it's currently showing for this sxc-instance
      */
     isConfiguredFor(instanceId: string, dialogName: string): boolean {
-        return this.sxcCacheKey === instanceId // the iframe is showing for the current sxc
+        const cl = this.log.call('isConfiguredFor', `id:${instanceId}, dialog:${dialogName}`)
+        const result = this.sxcCacheKey === instanceId // the iframe is showing for the current sxc
             && this.dialogName === dialogName; // the view is the same as previously
+        return cl.return(result);
     }
 
     private scrollToTarget(target: JQuery): void {

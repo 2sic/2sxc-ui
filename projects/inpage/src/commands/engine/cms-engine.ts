@@ -10,10 +10,9 @@ import { TypeUnsafe } from '../../plumbing';
 import { QuickDialog } from '../../quick-dialog/quick-dialog';
 import { Button, ButtonSafe } from '../../toolbar/config';
 import { ButtonCommand } from '../../toolbar/config';
-import { InPageCommandJson } from '../../toolbar/config-loaders/config-formats/in-page-command';
+import { InPageButtonJson } from '../../toolbar/config-loaders/config-formats/in-page-button';
 import { CommandLinkGenerator } from '../command-link-generator';
 import { CommandParams } from '../command-params';
-import { InPageButtonJson } from '../../toolbar/config-loaders/config-formats/in-page-button';
 
 /**
  * The CMS engine is global, and needs the context to work.
@@ -79,40 +78,33 @@ export class CmsEngine extends HasLog {
         const newButtonConfig = new Button(newButtonAction, name);
 
         // merge conf & settings, but settings has higher priority
-        // cl.data('newButnConf before', newButtonConfig);
-        // cl.data('buttonDefaults before')
-        // cl.data('cmdParams before', cmdParams);
-        const button = (context.button = {
+        const button: Button = {
             ...newButtonConfig,
-            ...newButtonAction.command.buttonDefaults,
+            // 2020-03-27 2dm disabled this, already happens in the constructor of the button
+            // ...newButtonAction.command.buttonDefaults,
             ...InPageButtonJson.toButton(cmdParams),
-            // ...Button.propertyToMethod(cmdParams as unknown),
-        } as unknown as Button);
-        // cl.data('button', button);
-        // const v2 = {
-        //     ...newButtonConfig,
-        //     ...newButtonAction.command.buttonDefaults,
-        //     ...InPageCommandJson.noAction(cmdParams as unknown),
-        // };
-        // CommandParams.
-        // cl.data('v2', v2);
+        };
 
-        // todo: stv, fix this in case that is function
-        if (!button.code) {
+        // attach to context for inner calls which might access it
+        context.button = button;
+
+        // In case we don't have special code, use generic code
+        let code = button.code;
+        if (!code) {
             cl.add('button, no code - generating code to open standard dialog');
-            button.code = (contextParam: ContextComplete, evt: MouseEvent) => CmsEngine.openDialog(contextParam, evt);
+            code = (contextParam: ContextComplete, evt: MouseEvent) => CmsEngine.openDialog(contextParam, evt);
         }
 
         if (button.uiActionOnly(context)) {
             cl.add('UI command, no pre-flight to ensure content-block');
-            return cl.return(button.code(context, origEvent));
+            return cl.return(code(context, origEvent));
         }
 
         // if more than just a UI-action, then it needs to be sure the content-group is created first
         cl.add('command might change data, wrap in pre-flight to ensure content-block');
         const promise = ContentBlockEditor
             .prepareToAddContent(context, cmdParams.useModuleList)
-            .then(() => context.button.code(context, origEvent));
+            .then(() => code(context, origEvent));
         return cl.return(promise) as Promise<T>;
     }
 
@@ -172,10 +164,8 @@ export class CmsEngine extends HasLog {
             // check if inline window (quick-dialog)
             if (Button.getVal(btn.inlineWindow, context, false)) {
                 // test if it should be full screen (value or resolve-function)
-                const fullScreen = btn.fullScreen();
-                const diagName = btn.dialog();
                 QuickDialog
-                    .showOrToggleFromToolbar(context, link, fullScreen, diagName)
+                    .showOrToggleFromToolbar(context, link, btn.fullScreen(), btn.dialog())
                     .then((isChanged) => { if (isChanged) completePromise(); });
             } else {
                 // else it's a normal pop-up dialog
