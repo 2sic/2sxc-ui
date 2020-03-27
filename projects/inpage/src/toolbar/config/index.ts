@@ -10,4 +10,4 @@ export * from './toolbar';
 
 export * from './toolbar-settings';
 
-export * from './button-modifier';
+export * from '../modify/button-modifier';

@@ -39,7 +39,7 @@ class ToolbarManagerGlobal extends HasLog {
 
     loadConfig(context: ContextComplete, config: ToolbarInitConfig): Toolbar {
         const loader = this.getLoader(JSON.stringify(config.toolbar || ''));
-        return loader.load(context, config.toolbar, config.settings);
+        return loader.load(context, config);
     }
 
     /** Generate a single-use loader. It must be single use so the logs work */

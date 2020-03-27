@@ -11,6 +11,7 @@ export class ToolbarSettings {
     classes: string = '';
 
     /**
+     * BETA EXPERIMENTAL
      * color configuration which applies to all buttons
      * use "colorname", "#xxyyzz" or "color1,color2" to specify the colors
      */
@@ -25,6 +26,22 @@ export class ToolbarSettings {
     constructor(toolbarSettings?: Partial<ToolbarSettings>) {
         if (toolbarSettings)
             Obj.TypeSafeAssign(this, toolbarSettings);
+    }
+
+
+    /**
+     * removes autoAddMore and classes if are null or empty, to keep same behaviour like in v1
+     *
+     * Note 2dm: not sure why we're doing this, but it seems like we only need this to merge
+     * various objects, so we probably want to make sure the in-html-toolbar doesn't accidentally
+     * contain null-items we don't want passed on
+     * @param toolbarSettings
+     */
+    static dropEmptyProperties(toolbarSettings: ToolbarSettings): Partial<ToolbarSettings> {
+        const partialSettings = {...toolbarSettings};
+        if (!partialSettings.autoAddMore) delete partialSettings.autoAddMore;
+        if (!partialSettings.classes) delete partialSettings.classes;
+        return partialSettings;
     }
 
 }

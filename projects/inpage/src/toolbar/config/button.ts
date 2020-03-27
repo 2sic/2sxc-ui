@@ -4,7 +4,8 @@ import { CommandLinkGenerator } from '../../commands/command-link-generator';
 import { CommandParams } from '../../commands/command-params';
 import { ContextComplete } from '../../context/bundles/context-bundle-button';
 import { Obj, TypeTbD } from '../../plumbing';
-import { ButtonModifier } from './button-modifier';
+import { ButtonModifier } from '../modify/button-modifier';
+import { BuildRule } from '../rules';
 
 /** This is the most common call signature on most ButtonConfig properties */
 export type ButtonPropGen<T> = (context: ContextComplete) => T;
@@ -17,7 +18,7 @@ type ButtonGenOrProp<T> = ButtonPropGen<T> | T;
 export class Button {
     action: ButtonCommand;
     classes: string = '';
-    modifier?: ButtonModifier;
+    modifier?: BuildRule;
 
     constructor(action: ButtonCommand, public name: string) {
         this.action = action;

@@ -1,7 +1,6 @@
 ﻿import { ButtonGroup } from '.';
 import { ToolbarSettings } from '.';
 import { DictionaryValue } from '../../plumbing';
-import { ButtonModifier } from './button-modifier';
 
 /**
  * Runtime configuration of the toolbar.
@@ -22,6 +21,4 @@ export class Toolbar {
 
     /**  the button defaults like icon, etc. */
     defaults: DictionaryValue;
-
-    // modifiers?: ButtonModifier[];
 }

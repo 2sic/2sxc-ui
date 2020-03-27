@@ -7,15 +7,15 @@ import { ContextComplete } from '../../context/bundles';
 import { HasLog } from '../../logging';
 import { DictionaryValue } from '../../plumbing';
 import { Button, Toolbar } from '../config';
-import { ButtonModifier } from '../config/button-modifier';
 import { ButtonSafe } from '../config/button-safe';
+import { Operations } from '../rules';
 
 /**
  * This is a system to build button configurations
  */
 export class ButtonConfigLoader extends HasLog {
 
-    constructor(toolbar: ToolbarConfigLoader) {
+    constructor(private toolbar: ToolbarConfigLoader) {
         super('Tlb.BtCfBl', toolbar.log);
     }
 
@@ -118,20 +118,20 @@ export class ButtonConfigLoader extends HasLog {
         // config: InstanceConfig,
         const cl = this.log.call('removeUnfitButtons');
         let removals = '';
-        const modifiers = toolbar.settings && toolbar.settings._modifiers || [];
+        // const modifiers = toolbar.settings && toolbar.settings._modifiers || [];
         for (let i = 0; i < btns.length; i++) {
             const btn = btns[i];
             if (btn.action) {
-                const modifier = ButtonModifier.findOrCreate(modifiers, btn.action.name);
+                const modifier = this.toolbar.rules.find(btn.action.name); // ButtonModifier.findOrCreate(modifiers, btn.action.name);
                 btn.modifier = modifier;
                 context.button = btn; // add to context for calls
-                const remove = modifier.remove
+                const remove = modifier?.ruleOperation === Operations.remove
                     || !(new ButtonSafe(btn, context).showCondition());
-                if (!modifier.add && remove) {
+                if (!(modifier?.ruleOperation === Operations.add) && remove) {
                     removals += `#${i} "${btn.action.name}"; `;
                     btns.splice(i--, 1);
                 }
-                cl.add(`btn '${btn.action.name}' remove ${remove} - modifierMessage ${modifier.reason}`);
+                cl.add(`btn '${btn.action.name}' remove ${remove}`);
             }
         }
         if (removals)

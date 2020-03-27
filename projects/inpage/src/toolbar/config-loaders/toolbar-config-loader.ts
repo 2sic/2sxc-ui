@@ -6,7 +6,8 @@ import { ContextComplete } from '../../context/bundles/context-bundle-button';
 import { Entry, HasLog } from '../../logging';
 import { ButtonGroup, ButtonModifier, Toolbar } from '../config';
 import { ToolbarSettings, ToolbarSettingsDefaults, ToolbarSettingsForEmpty } from '../config';
-import { InPageToolbarConfigVariations } from '../initialize/toolbar-init-config';
+import { InPageToolbarConfigVariations, ToolbarInitConfig } from '../initialize/toolbar-init-config';
+import { RuleManager } from '../rules';
 import { ToolbarTemplateManager } from '../templates';
 import { ToolbarTemplate } from '../templates';
 import { ToolbarTemplateButtonGroup } from '../templates';
@@ -21,12 +22,13 @@ export class ToolbarConfigLoader extends HasLog {
     public groups: ButtonGroupConfigLoader;
     public button: ButtonConfigLoader;
     public command: CommandConfigLoader;
+    public rules: RuleManager;
 
     public logs: Array<{ key: string, entries: Entry[]}>;
 
     /** Special constructor that can only be called from the ToolbarManager */
     constructor(_owner: typeof ToolbarManager) {
-        // important: always create a new log
+        // important: always create a new log as it will be stored in insights
         super('Tlb.TlbCnf');
     }
 
@@ -47,39 +49,70 @@ export class ToolbarConfigLoader extends HasLog {
         this.groups = new ButtonGroupConfigLoader(this);
         this.button = new ButtonConfigLoader(this);
         this.command = new CommandConfigLoader(this);
+        this.rules = new RuleManager(this);
     }
 
-    load(context: ContextComplete, toolbarData: InPageToolbarConfigVariations, toolbarSettings: ToolbarSettings): Toolbar {
+    load(context: ContextComplete, config: ToolbarInitConfig): Toolbar {
         const cl = this.log.call('load', '', 'expand start');
-        this.setLoggingAndCreateHelpers(toolbarData);
-
         // if null/undefined, use empty object
-        toolbarData = toolbarData || {};
+        const raw = config.toolbar = config.toolbar || {};
+        this.setLoggingAndCreateHelpers(raw);
+
+        // check if it's a V10 tolbar
+        if (Array.isArray(raw) && raw.length >= 0 && typeof raw[0] === 'string')
+            return cl.return(this.loadV10(context, config, raw), 'v10');
+
+        // do standard V3 procedures
+        return cl.return(this.loadV9(context, config), 'expand done');
+    }
+
+    private loadV10(context: ContextComplete, config: ToolbarInitConfig, raw: string[]): Toolbar {
+        const cl = this.log.call('loadV10');
+        this.rules.load(raw);
+
+        let template: ToolbarTemplate;
+        // todo: prepare settings if no rule configured it
+        const settingRule = this.rules.getSettings();
+        const settings: ToolbarSettings = (Object.keys(settingRule?.params || {}).length > 0)
+            ? settingRule.params as unknown as ToolbarSettings
+            : ToolbarSettingsForEmpty;
+
+        // todo: special case if first rule is clear
+        if (false) {
+            // todo
+        } else {
+            template = ToolbarTemplateManager.Instance(this.log).copy(ToolbarTemplateDefault.name);
+        }
+
+        const toolbar = this.buildFullDefinition(context, template, settings);
+
+        // process the rules one by one
+        return cl.return(toolbar, 'ok');
+    }
+
+    private loadV9(context: ContextComplete, config: ToolbarInitConfig): Toolbar {
+        const cl = this.log.call('loadV9');
+        let toolbarSettings = config.settings;
 
         // Default to empty toolbar settings if we don't have a toolbar or settings
-        if (Object.keys(toolbarData).length + Object.keys(toolbarSettings || {}).length === 0) {
+        if (Object.keys(config.toolbar).length + Object.keys(toolbarSettings || {}).length === 0) {
             cl.add('no data or settings, will use default settings for empty');
             toolbarSettings = ToolbarSettingsForEmpty;
         }
 
         // if it has an action or is an array, keep that. Otherwise get standard buttons
-        toolbarData = this.getTemplateIfNoButtonsSpecified(toolbarData);
-        cl.data('after template check', toolbarData);
+        const draftToolbar = this.getTemplateIfNoButtonsSpecified(config.toolbar);
+        cl.data('after template check', draftToolbar);
 
-        // #CodeChange#2020-03-22#InstanceConfig - believe this is completely unused; remove in June
-        // const instanceConfig = InstanceConfig.fromContext(context);
-
-        // whatever we had, if more settings were provided, override with these...
-        // #CodeChange#2020-03-22#InstanceConfig - believe this is completely unused; remove in June
-        const config = this.buildFullDefinition(context, toolbarData, /* instanceConfig, */ toolbarSettings);
-        return cl.return(config, 'expand done');
+        const toolbar = this.buildFullDefinition(context, draftToolbar, toolbarSettings);
+        return cl.return(toolbar, 'ok');
     }
 
     /**
      * If the raw data has specs for what buttons, use that
      * Otherwise load the button list from the template
      */
-    private getTemplateIfNoButtonsSpecified(raw: InPageToolbarConfigVariations) {
+    private getTemplateIfNoButtonsSpecified(raw: InPageToolbarConfigVariations): InPageToolbarConfigVariations {
         const wrapLog = this.log.call('getTemplateIfNoButtonsSpecified');
         wrapLog.add('before', raw);
         const modifiers: ButtonModifier[] = this.extractModifiers(raw);
@@ -180,8 +213,7 @@ export class ToolbarConfigLoader extends HasLog {
 
         const probablyTemplate = unstructuredConfig as ToolbarTemplate;
         newToolbar.params = probablyTemplate.params || {}; // these are the default command parameters
-        newToolbar.settings = { ...ToolbarSettingsDefaults, ...probablyTemplate.settings, ...cleanDeprecatedSettings(toolbarSettings)};
-        // toolbarConfig.settings = O.bject.assign({}, defaultToolbarSettings, unstructuredConfig.settings, cleanDeprecatedSettings(toolbarSettings)) as ToolbarSettings;
+        newToolbar.settings = { ...ToolbarSettingsDefaults, ...probablyTemplate.settings, ...ToolbarSettings.dropEmptyProperties(toolbarSettings)};
 
         newToolbar.debug = probablyTemplate.debug || false; // show more debug info
         newToolbar.defaults = probablyTemplate.defaults || {}; // the button defaults like icon, etc.
@@ -218,12 +250,11 @@ export class ToolbarConfigLoader extends HasLog {
         } else
             wrapLog.add('its an object or array, use that');
 
-        if (ButtonGroup.isArray(arrBtnsOrGroups)) { // unstructuredConfig[0].buttons) {
+        if (ButtonGroup.isArray(arrBtnsOrGroups)) {
             return wrapLog.return(arrBtnsOrGroups, 'detected buttons on first item, assume button-group, moving into .groups');
-        } else if (InPageButtonJson.isArray(arrBtnsOrGroups)) { // unstructuredConfig[0].action) {
+        } else if (InPageButtonJson.isArray(arrBtnsOrGroups)) {
             return wrapLog.return([{ buttons:  arrBtnsOrGroups } as InPageButtonGroupJson],
                 'detected command or action on first item, assume buttons, move into .groups[buttons] ');
-            // unstructuredConfig = { groups: [{ buttons: unstructuredConfig }] };
         }
 
         wrapLog.add('can\'t detect what this is - show warning');
@@ -234,21 +265,3 @@ export class ToolbarConfigLoader extends HasLog {
   //#endregion initial toolbar object
 
 }
-
-
-
-
-/**
- * removes autoAddMore and classes if are null or empty, to keep same behaviour like in v1
- *
- * Note 2dm: not sure why we're doing this, but it seems like we only need this to merge
- * various objects, so we probably want to make sure the in-html-toolbar doesn't accidentally
- * contain stuff we don't want passed on
- * @param toolbarSettings
- */
-function cleanDeprecatedSettings(toolbarSettings: ToolbarSettings): ToolbarSettings {
-    const partialSettings = {...toolbarSettings};
-    if (!partialSettings.autoAddMore) delete partialSettings.autoAddMore;
-    if (!partialSettings.classes) delete partialSettings.classes;
-    return partialSettings;
-  }

@@ -1,7 +1,5 @@
+import { Rule } from '.';
 
-export interface ButtonModify {
-    color?: string;
-}
 
 // tslint:disable-next-line: max-classes-per-file
 export class ButtonModifier {
@@ -18,7 +16,7 @@ export class ButtonModifier {
     /** true if there are really rules that apply */
     found: boolean = false;
 
-    constructor(code: string, public rules?: ButtonModify) {
+    constructor(code: string, public rules?: Rule) {
         // handle the key / code
         if (!code || !code.length) return;
         code = code.trim();
@@ -42,4 +40,6 @@ export class ButtonModifier {
 
         return { reason: 'modifier found', ...mod};
     }
+
+    // static findDefault()
 }
