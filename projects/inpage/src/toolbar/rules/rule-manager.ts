@@ -32,7 +32,7 @@ export class RuleManager extends HasLog {
     }
 
     find(name: string): BuildRule | undefined {
-        const found = this.rules.find((r) => r.ruleName === name);
+        const found = this.rules.find((r) => r.name === name);
         return found;
     }
 
@@ -40,7 +40,7 @@ export class RuleManager extends HasLog {
     getParams = () => this.getSystem('params');
 
     private getSystem(name: string): BuildRule | undefined {
-        const found = this.rules.find((r) => r.ruleOperation === Operations.system && r.ruleName === name);
+        const found = this.rules.find((r) => r.operation === Operations.system && r.name === name);
         return found;
     }
 }

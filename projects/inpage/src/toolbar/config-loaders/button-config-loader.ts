@@ -124,9 +124,9 @@ export class ButtonConfigLoader extends HasLog {
                 const modifier = this.toolbar.rules.find(btn.action.name);
                 btn.modifier = modifier;
                 context.button = btn; // add to context for calls
-                const remove = modifier?.ruleOperation === Operations.remove
+                const remove = modifier?.operation === Operations.remove
                     || !(new ButtonSafe(btn, context).showCondition());
-                if (!(modifier?.ruleOperation === Operations.add) && remove) {
+                if (!(modifier?.operation === Operations.add) && remove) {
                     removals += `#${i} "${btn.action.name}"; `;
                     btns.splice(i--, 1);
                 }

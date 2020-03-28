@@ -2869,29 +2869,6 @@ var ToolbarConfigLoader = /** @class */ (function (_super) {
         // template.settings._rules = modifiers;
         return wrapLog.return(template, 'use template');
     };
-    // /**
-    //  * Extract action params with +edit or -delete
-    //  */
-    // private extractModifiers(raw: InPageToolbarConfigVariations): ButtonModifier[] {
-    //     const cl = this.log.call('extractModifiers');
-    //     let buttonModifiers: ButtonModifier[] = null;
-    //     // if we have an actions node,
-    //     // check if it's just a modifier (with +/-) or a standalone list
-    //     if (!InPageCommandJson.hasModify(raw)) return cl.return([], 'no actions/modifiers');
-    //     cl.add(`found modify: ${raw.modify}`);
-    //     const modify = raw.modify;
-    //     delete raw.modify; // clean up to prevent side-effects
-    //     if (typeof modify === 'string') {
-    //         cl.add('string modifier');
-    //         if (!modify.length) return cl.return([], 'empty modifiers');
-    //         cl.add('have +/-, assume they are only modifiers - will extract');
-    //         buttonModifiers = modify.split(',').map((btnMod) => new ButtonModifier(btnMod));
-    //     } else {
-    //         cl.add('detected modifier object - will pass it on');
-    //         buttonModifiers = Object.keys(modify).map((k) => new ButtonModifier(k, modify[k]));
-    //     }
-    //     return cl.return(buttonModifiers, 'had modifiers');
-    // }
     /**
      * take various common input format and convert it to a full toolbar-structure definition
      * can handle the following input formats (the param unstructuredConfig):
@@ -3168,9 +3145,9 @@ var ButtonConfigLoader = /** @class */ (function (_super) {
                 var modifier = this.toolbar.rules.find(btn.action.name);
                 btn.modifier = modifier;
                 context.button = btn; // add to context for calls
-                var remove = (modifier === null || modifier === void 0 ? void 0 : modifier.ruleOperation) === __WEBPACK_IMPORTED_MODULE_4__rules__["a" /* Operations */].remove
+                var remove = (modifier === null || modifier === void 0 ? void 0 : modifier.operation) === __WEBPACK_IMPORTED_MODULE_4__rules__["a" /* Operations */].remove
                     || !(new __WEBPACK_IMPORTED_MODULE_3__config_button_safe__["ButtonSafe"](btn, context).showCondition());
-                if (!((modifier === null || modifier === void 0 ? void 0 : modifier.ruleOperation) === __WEBPACK_IMPORTED_MODULE_4__rules__["a" /* Operations */].add) && remove) {
+                if (!((modifier === null || modifier === void 0 ? void 0 : modifier.operation) === __WEBPACK_IMPORTED_MODULE_4__rules__["a" /* Operations */].add) && remove) {
                     removals += "#" + i + " \"" + btn.action.name + "\"; ";
                     btns.splice(i--, 1);
                 }
@@ -4863,7 +4840,7 @@ var RenderButton = /** @class */ (function (_super) {
         var cl = this.log.call('render', "contex: obj, group: " + groupIndex + ", btn: " + ctx.button.name);
         var btn = new __WEBPACK_IMPORTED_MODULE_1__config__["ButtonSafe"](ctx.button, ctx);
         // check if we have modifiers
-        var rule = (_c = (_b = (_a = ctx.toolbar) === null || _a === void 0 ? void 0 : _a.settings) === null || _b === void 0 ? void 0 : _b._rules) === null || _c === void 0 ? void 0 : _c.find(ctx.button.name); // ButtonModifier.findOrCreate(ctx.toolbar?.settings?._rules, ctx.button.name);
+        var rule = (_c = (_b = (_a = ctx.toolbar) === null || _a === void 0 ? void 0 : _a.settings) === null || _b === void 0 ? void 0 : _b._rules) === null || _c === void 0 ? void 0 : _c.find(ctx.button.name);
         if (rule)
             cl.data('modifier found', rule);
         var btnLink = document.createElement('a');
@@ -10087,35 +10064,43 @@ var BuildRule = /** @class */ (function (_super) {
             _this.log.add('rule is empty');
             return _this;
         }
-        var rest1 = _this.loadHeader(ruleString);
-        if (!rest1)
-            return _this;
-        var rest2 = _this.loadParams(rest1);
+        var parts = safeSplitOriginal(ruleString);
+        var rest1 = _this.loadHeader(parts.key);
+        if (parts.params)
+            _this.loadParams(parts.params);
+        if (parts.hash)
+            _this.loadButton(parts.hash);
         return _this;
     }
     BuildRule.prototype.loadHeader = function (rule) {
         var cl = this.log.call('loadHeader', rule);
         // todo: also split correctly if there is no ? but only a #
-        var parts = this.splitAtChar(rule, '?');
-        var firstChar = parts.first[0];
-        cl.add("name part '" + parts.first + "', firstChar '" + firstChar + "', rest '" + parts.rest + "'");
+        // const parts = this.splitAtChar(rule, '?');
+        var firstChar = rule[0];
+        cl.add("name part '" + rule + "', firstChar '" + firstChar + "'");
         if (Object.values(__WEBPACK_IMPORTED_MODULE_0____["a" /* Operations */]).includes(firstChar)) {
-            this.ruleOperation = firstChar;
-            this.ruleName = parts.first.substring(1);
+            this.operation = firstChar;
+            this.name = rule.substring(1);
         }
         else {
-            this.ruleOperation = __WEBPACK_IMPORTED_MODULE_0____["a" /* Operations */].modify;
-            this.ruleName = parts.first;
+            this.operation = __WEBPACK_IMPORTED_MODULE_0____["a" /* Operations */].modify;
+            this.name = rule;
         }
-        return cl.return(parts.rest);
+        return cl.done();
     };
     BuildRule.prototype.loadParams = function (rule) {
         var cl = this.log.call('loadParams', rule);
-        var parts = this.splitAtChar(rule, '#');
-        if (parts.first)
-            this.params = this.splitParams(parts.first);
+        if (rule)
+            this.params = this.splitParams(rule);
         cl.data('params', this.params);
-        return cl.return(parts.rest);
+        return cl.done();
+    };
+    BuildRule.prototype.loadButton = function (rule) {
+        var cl = this.log.call('loadButton', rule);
+        if (rule)
+            this.button = this.splitParams(rule);
+        cl.data('button', this.button);
+        return cl.done();
     };
     //#endregion
     //#region display / button parts
@@ -10142,6 +10127,17 @@ var BuildRule = /** @class */ (function (_super) {
     return BuildRule;
 }(__WEBPACK_IMPORTED_MODULE_1__logging__["HasLog"]));
 
+function safeSplitOriginal(str) {
+    // dev link: https://regex101.com/r/vK4rV7/519
+    // inpsired by https://stackoverflow.com/questions/27745/getting-parts-of-a-url-regex
+    var regex = /^([^\/?#]*)?([^?#]*)(\?([^#]*))?(#(.*))?/i;
+    // const str = `+edit&something=other&els=ok?aoeuaoeu=5&aoeuaou=aoeu#but=thi&aouoaeu`;
+    var m = regex.exec(str);
+    if (!m)
+        return undefined;
+    if (m !== null)
+        return { key: m[1], params: m[4], hash: m[6] };
+}
 
 
 /***/ }),
@@ -10235,11 +10231,11 @@ var RuleManager = /** @class */ (function (_super) {
         return cl.return(this.rules, 'final rules');
     };
     RuleManager.prototype.find = function (name) {
-        var found = this.rules.find(function (r) { return r.ruleName === name; });
+        var found = this.rules.find(function (r) { return r.name === name; });
         return found;
     };
     RuleManager.prototype.getSystem = function (name) {
-        var found = this.rules.find(function (r) { return r.ruleOperation === __WEBPACK_IMPORTED_MODULE_2__operations__["a" /* Operations */].system && r.ruleName === name; });
+        var found = this.rules.find(function (r) { return r.operation === __WEBPACK_IMPORTED_MODULE_2__operations__["a" /* Operations */].system && r.name === name; });
         return found;
     };
     return RuleManager;

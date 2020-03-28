@@ -4,8 +4,8 @@ import { DictionaryValue } from '../../plumbing';
 
 export class BuildRule extends HasLog {
     //#region Rule parts
-    ruleName: string;
-    ruleOperation: Operations;
+    name: string;
+    operation: Operations;
 
     //#endregion
 
@@ -15,39 +15,45 @@ export class BuildRule extends HasLog {
             this.log.add('rule is empty');
             return;
         }
+        const parts = safeSplitOriginal(ruleString);
 
-        const rest1 = this.loadHeader(ruleString);
+        const rest1 = this.loadHeader(parts.key);
 
-        if (!rest1) return;
-        const rest2 = this.loadParams(rest1);
+        if (parts.params) this.loadParams(parts.params);
+        if (parts.hash) this.loadButton(parts.hash);
 
     }
 
-    private loadHeader(rule: string): string {
+    private loadHeader(rule: string): void {
         const cl = this.log.call('loadHeader', rule);
         // todo: also split correctly if there is no ? but only a #
-        const parts = this.splitAtChar(rule, '?');
-        const firstChar = parts.first[0];
-        cl.add(`name part '${parts.first}', firstChar '${firstChar}', rest '${parts.rest}'`);
+        // const parts = this.splitAtChar(rule, '?');
+        const firstChar = rule[0];
+        cl.add(`name part '${rule}', firstChar '${firstChar}'`);
 
         if ((Object as any).values(Operations).includes(firstChar)) {
-            this.ruleOperation = firstChar as Operations;
-            this.ruleName = parts.first.substring(1);
+            this.operation = firstChar as Operations;
+            this.name = rule.substring(1);
         } else {
-            this.ruleOperation = Operations.modify;
-            this.ruleName = parts.first;
+            this.operation = Operations.modify;
+            this.name = rule;
         }
 
-        return cl.return(parts.rest);
+        return cl.done();
     }
 
-    private loadParams(rule: string): string {
+    private loadParams(rule: string) {
         const cl = this.log.call('loadParams', rule);
-        const parts = this.splitAtChar(rule, '#');
-        if (parts.first)
-            this.params = this.splitParams(parts.first);
+        if (rule) this.params = this.splitParams(rule);
         cl.data('params', this.params);
-        return cl.return(parts.rest);
+        return cl.done();
+    }
+
+    private loadButton(rule: string) {
+        const cl = this.log.call('loadButton', rule);
+        if (rule) this.button = this.splitParams(rule);
+        cl.data('button', this.button);
+        return cl.done();
     }
 
     //#region command parts
@@ -88,3 +94,16 @@ export class BuildRule extends HasLog {
 }
 
 
+
+function safeSplitOriginal(str: string): { key: string, params: string, hash: string } | undefined {
+    // dev link: https://regex101.com/r/vK4rV7/519
+    // inpsired by https://stackoverflow.com/questions/27745/getting-parts-of-a-url-regex
+
+    const regex = /^([^\/?#]*)?([^?#]*)(\?([^#]*))?(#(.*))?/i;
+    // const str = `+edit&something=other&els=ok?aoeuaoeu=5&aoeuaou=aoeu#but=thi&aouoaeu`;
+    const m = regex.exec(str);
+
+    if (!m) return undefined;
+    if (m !== null)
+        return { key: m[1], params: m[4], hash: m[6]};
+}

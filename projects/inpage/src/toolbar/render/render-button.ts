@@ -15,7 +15,7 @@ export class RenderButton extends RenderPart {
         const btn = new ButtonSafe(ctx.button, ctx);
 
         // check if we have modifiers
-        const rule = ctx.toolbar?.settings?._rules?.find(ctx.button.name); // ButtonModifier.findOrCreate(ctx.toolbar?.settings?._rules, ctx.button.name);
+        const rule = ctx.toolbar?.settings?._rules?.find(ctx.button.name);
         if (rule) cl.data('modifier found', rule);
 
         const btnLink = document.createElement('a');

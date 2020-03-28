@@ -130,33 +130,6 @@ export class ToolbarConfigLoader extends HasLog {
         return wrapLog.return(template, 'use template');
     }
 
-    // /**
-    //  * Extract action params with +edit or -delete
-    //  */
-    // private extractModifiers(raw: InPageToolbarConfigVariations): ButtonModifier[] {
-    //     const cl = this.log.call('extractModifiers');
-    //     let buttonModifiers: ButtonModifier[] = null;
-    //     // if we have an actions node,
-    //     // check if it's just a modifier (with +/-) or a standalone list
-    //     if (!InPageCommandJson.hasModify(raw)) return cl.return([], 'no actions/modifiers');
-    //     cl.add(`found modify: ${raw.modify}`);
-    //     const modify = raw.modify;
-    //     delete raw.modify; // clean up to prevent side-effects
-
-    //     if (typeof modify === 'string') {
-    //         cl.add('string modifier');
-    //         if (!modify.length) return cl.return([], 'empty modifiers');
-
-    //         cl.add('have +/-, assume they are only modifiers - will extract');
-    //         buttonModifiers = modify.split(',').map((btnMod) => new ButtonModifier(btnMod));
-    //     } else {
-    //         cl.add('detected modifier object - will pass it on');
-    //         buttonModifiers = Object.keys(modify).map((k) => new ButtonModifier(k, modify[k]));
-    //     }
-    //     return cl.return(buttonModifiers, 'had modifiers');
-    // }
-
-
     /**
      * take various common input format and convert it to a full toolbar-structure definition
      * can handle the following input formats (the param unstructuredConfig):
