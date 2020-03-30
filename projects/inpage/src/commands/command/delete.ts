@@ -27,6 +27,6 @@ Commands.add(CmdDelete, 'Delete', 'cancel', true, false, {
     code(context) {
         const p = context.button.command.params;
         const title = p.title || p.entityTitle; // prefer new title, and fallback to old for pre 10.27 configs
-        return contentItems.delete(context, p.entityId, p.entityGuid, p.title || p.entityTitle);
+        return contentItems.delete(context, p.entityId, p.entityGuid, title);
     },
 });

@@ -47,6 +47,7 @@ export class BuildRule extends HasLog {
         color?: string,
         show?: boolean,
         code?: string,
+        title?: string,
         [key: string]: TypeValue,
     } = {};
 

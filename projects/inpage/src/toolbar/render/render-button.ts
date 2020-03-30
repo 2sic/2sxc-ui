@@ -42,9 +42,14 @@ export class RenderButton extends RenderPart {
         HtmlTools.addClasses(btnLink, classes);
 
         // set title for i18n
-        if (btn.title)
-            btnLink.setAttribute('data-i18n', `[title]${btn.title()}`); // localization support
-
+        const uiTitle = rule?.ui?.title;
+        if (uiTitle)
+            btnLink.setAttribute('title', uiTitle);
+        else {
+            const title = btn.title();
+            if (title)
+                btnLink.setAttribute('data-i18n', `[title]${title}`); // localization support
+        }
 
         const divTag = document.createElement('div');
         divTag.appendChild(this.iconTag(btn, rule));

@@ -1,5 +1,4 @@
-﻿import { ContextComplete } from '../context/bundles/context-bundle-button';
-import { Button } from '../toolbar/config/button';
+﻿import { Button } from '../toolbar/config/button';
 
 export class Command {
     constructor(public name: string) {

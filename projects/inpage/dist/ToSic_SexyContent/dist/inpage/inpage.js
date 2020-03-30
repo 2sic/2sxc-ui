@@ -4729,7 +4729,7 @@ var RenderButton = /** @class */ (function (_super) {
         return _super.call(this, parent, 'Rnd.Button') || this;
     }
     RenderButton.prototype.render = function (ctx, groupIndex) {
-        var _a, _b, _c, _d, _e, _f, _g;
+        var _a, _b, _c, _d, _e, _f, _g, _h;
         var cl = this.log.call('render', "contex: obj, group: " + groupIndex + ", btn: " + ctx.button.id + "/" + ((_a = ctx.button.command) === null || _a === void 0 ? void 0 : _a.name));
         var btn = new __WEBPACK_IMPORTED_MODULE_1__config__["ButtonSafe"](ctx.button, ctx);
         // check if we have rules to modify it
@@ -4754,13 +4754,19 @@ var RenderButton = /** @class */ (function (_super) {
         cl.add('classes: ' + classes);
         __WEBPACK_IMPORTED_MODULE_0__html_dom_tools__["HtmlTools"].addClasses(btnLink, classes);
         // set title for i18n
-        if (btn.title)
-            btnLink.setAttribute('data-i18n', "[title]" + btn.title()); // localization support
+        var uiTitle = (_g = rule === null || rule === void 0 ? void 0 : rule.ui) === null || _g === void 0 ? void 0 : _g.title;
+        if (uiTitle)
+            btnLink.setAttribute('title', uiTitle);
+        else {
+            var title = btn.title();
+            if (title)
+                btnLink.setAttribute('data-i18n', "[title]" + title); // localization support
+        }
         var divTag = document.createElement('div');
         divTag.appendChild(this.iconTag(btn, rule));
         btnLink.appendChild(divTag);
         // set color - new in 10.27
-        var color = ((_g = rule === null || rule === void 0 ? void 0 : rule.ui) === null || _g === void 0 ? void 0 : _g.color) || ctx.toolbar.settings.color;
+        var color = ((_h = rule === null || rule === void 0 ? void 0 : rule.ui) === null || _h === void 0 ? void 0 : _h.color) || ctx.toolbar.settings.color;
         if (color && typeof color === 'string') {
             cl.add('color: ' + color);
             var parts = color.split(',');
@@ -7141,7 +7147,7 @@ __WEBPACK_IMPORTED_MODULE_0____["Commands"].add(CmdDelete, 'Delete', 'cancel', t
     code: function (context) {
         var p = context.button.command.params;
         var title = p.title || p.entityTitle; // prefer new title, and fallback to old for pre 10.27 configs
-        return __WEBPACK_IMPORTED_MODULE_1__entity_manipulation_item_commands__["contentItems"].delete(context, p.entityId, p.entityGuid, p.title || p.entityTitle);
+        return __WEBPACK_IMPORTED_MODULE_1__entity_manipulation_item_commands__["contentItems"].delete(context, p.entityId, p.entityGuid, title);
     },
 });
 
