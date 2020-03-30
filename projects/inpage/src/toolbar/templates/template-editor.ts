@@ -10,7 +10,6 @@ export class TemplateEditor extends HasLog {
     }
 
     addButton(template: ToolbarTemplate, groupName: string, name: string, pos: number, fromStart: boolean): void {
-        console.log('test TemplateEditor');
         const cl = this.log.call('addButton', `..., ${groupName}, ${name}`);
         if (!template) return cl.done('no template');
         let group = this.findGroupOrDefault(template, groupName);

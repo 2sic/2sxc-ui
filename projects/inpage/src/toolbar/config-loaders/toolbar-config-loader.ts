@@ -7,7 +7,7 @@ import { Entry, HasLog } from '../../logging';
 import { ButtonGroup, Toolbar } from '../config';
 import { ToolbarSettings, ToolbarSettingsDefaults, ToolbarSettingsForEmpty } from '../config';
 import { InPageToolbarConfigVariations, ToolbarInitConfig } from '../initialize/toolbar-init-config';
-import { RuleManager } from '../rules';
+import { RuleConstants, RuleManager } from '../rules';
 import { TemplateEditor, ToolbarTemplate, ToolbarTemplateManager } from '../templates';
 import { ToolbarTemplateGroup } from '../templates';
 import { ToolbarTemplateDefault } from '../templates/template-default';
@@ -89,8 +89,8 @@ export class ToolbarConfigLoader extends HasLog {
         // Add additional buttons
         const add = this.rules.getAdd();
         add.forEach((a) => {
-            console.log('add rule', a);
-            if (a.id === 'group') this.templateEditor.addGroup(template, a.name, a.pos, a.fromStart);
+            // console.log('add rule', a);
+            if (a.id === RuleConstants.Keys.Group) this.templateEditor.addGroup(template, a.name, a.pos, a.fromStart);
             else this.templateEditor.addButton(template, a.group, a.name, a.pos, a.fromStart);
         });
 

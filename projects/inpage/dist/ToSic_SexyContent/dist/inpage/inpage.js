@@ -2827,8 +2827,8 @@ var ToolbarConfigLoader = /** @class */ (function (_super) {
         // Add additional buttons
         var add = this.rules.getAdd();
         add.forEach(function (a) {
-            console.log('add rule', a);
-            if (a.id === 'group')
+            // console.log('add rule', a);
+            if (a.id === __WEBPACK_IMPORTED_MODULE_3__rules__["RuleConstants"].Keys.Group)
                 _this.templateEditor.addGroup(template, a.name, a.pos, a.fromStart);
             else
                 _this.templateEditor.addButton(template, a.group, a.name, a.pos, a.fromStart);
@@ -5491,6 +5491,10 @@ var InPageButtonGroupJson = /** @class */ (function () {
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RuleConstants", function() { return RuleConstants; });
 var RuleConstants = {
+    Keys: {
+        None: 'none',
+        Group: 'group',
+    },
     Settings: 'settings',
     Params: 'params',
 };
@@ -5578,29 +5582,33 @@ var BuildRule = /** @class */ (function (_super) {
         return cl.done();
     };
     BuildRule.prototype.loadHeader = function (rule) {
+        var _a, _b;
         var cl = this.log.call('loadHeader', rule);
-        var keyAndRest = this.splitAtChar(rule, '&');
-        var keyPart = keyAndRest.first;
-        var firstChar = keyPart[0];
-        cl.add("name part '" + keyPart + "', firstChar '" + firstChar + "'");
+        var parts = this.splitParamsArray(rule);
+        var key = ((_a = parts === null || parts === void 0 ? void 0 : parts[0]) === null || _a === void 0 ? void 0 : _a[0]) || __WEBPACK_IMPORTED_MODULE_0____["RuleConstants"].Keys.None;
+        // console.log('key', key, parts);
+        var firstChar = key[0];
+        cl.add("name part '" + key + "', firstChar '" + firstChar + "'");
         if (Object.values(__WEBPACK_IMPORTED_MODULE_0____["Operations"]).includes(firstChar)) {
             this.operation = firstChar;
-            this.id = keyPart.substring(1);
+            this.id = key.substring(1);
         }
         else {
             this.operation = __WEBPACK_IMPORTED_MODULE_0____["Operations"].add;
-            this.id = keyPart;
+            this.id = key;
         }
         // command name defaults to name, can be reset by load-headers
-        this.name = this.id;
-        this.loadHeaderParts(keyAndRest.rest);
+        // assumes key is something like "something=edit" or just "edit"
+        this.name = ((_b = parts === null || parts === void 0 ? void 0 : parts[0]) === null || _b === void 0 ? void 0 : _b[1]) || this.id;
+        if (parts.length > 1)
+            this.loadHeaderParts(parts.slice(1));
         return cl.done();
     };
     BuildRule.prototype.loadHeaderParts = function (rest) {
         var cl = this.log.call('loadHeaderParts');
-        if (!rest || !rest.trim().length)
+        if (!rest.length)
             return cl.done('nothing to load');
-        var parts = this.splitParams(rest);
+        var parts = this.dicToArray(rest);
         if (parts.name)
             this.name = parts.name;
         if (typeof parts.group === 'string')
@@ -5614,36 +5622,50 @@ var BuildRule = /** @class */ (function (_super) {
             if (pos.length)
                 this.pos = parseInt(pos, 10);
         }
+        cl.done();
     };
     BuildRule.prototype.loadParams = function (rule) {
         var cl = this.log.call('loadParams', rule);
-        this.params = this.splitParams(rule);
+        this.params = this.splitParamsDic(rule);
         cl.data('params', this.params);
         return cl.done();
     };
     BuildRule.prototype.loadButton = function (rule) {
         var cl = this.log.call('loadButton', rule);
-        this.button = this.splitParams(rule);
+        this.button = this.splitParamsDic(rule);
         cl.data('button', this.button);
         return cl.done();
     };
     //#region string manipulation helpers
-    BuildRule.prototype.splitAtChar = function (original, char) {
-        var index = original.indexOf(char);
-        var first = index > 0 ? original.substring(0, index) : original;
-        // todo: catch trailing ?, would error
-        var rest = index > 0 && original.length > index + 1 ? original.substring(index + 1) : '';
-        return { first: first, rest: rest };
-    };
-    BuildRule.prototype.splitParams = function (original) {
+    // private splitAtChar(original: string, char: string): { first: string, rest: string} {
+    //     const index = original.indexOf(char);
+    //     const first = index > 0 ? original.substring(0, index) : original;
+    //     // todo: catch trailing ?, would error
+    //     const rest = index > 0 && original.length > index + 1 ? original.substring(index + 1) : '';
+    //     return { first, rest };
+    // }
+    BuildRule.prototype.splitParamsArray = function (original) {
         if (!original)
-            return {};
+            return [];
         var split1 = original.split('&');
         var split2 = split1.map(function (p) { return p.split('='); });
-        var result = split2.reduce(function (map, obj) {
+        return split2;
+    };
+    BuildRule.prototype.dicToArray = function (original) {
+        return original.reduce(function (map, obj) {
             map[obj[0]] = obj[1];
             return map;
         }, {});
+    };
+    BuildRule.prototype.splitParamsDic = function (original) {
+        // if (!original) return {};
+        // const split1 = original.split('&');
+        // const split2 = split1.map((p) => p.split('='));
+        var result = this.dicToArray(this.splitParamsArray(original));
+        // .reduce((map, obj) => {
+        //     map[obj[0]] = obj[1];
+        //     return map;
+        // }, {} as Dictionary<string>);
         return result;
     };
     return BuildRule;
@@ -5868,7 +5890,6 @@ var TemplateEditor = /** @class */ (function (_super) {
     }
     TemplateEditor.prototype.addButton = function (template, groupName, name, pos, fromStart) {
         var _a, _b;
-        console.log('test TemplateEditor');
         var cl = this.log.call('addButton', "..., " + groupName + ", " + name);
         if (!template)
             return cl.done('no template');

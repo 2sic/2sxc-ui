@@ -1,6 +1,6 @@
-import { Operations } from '.';
+import { Operations, RuleConstants } from '.';
 import { HasLog, Log } from '../../logging';
-import { DictionaryValue } from '../../plumbing';
+import { Dictionary } from '../../plumbing';
 import { TemplateConstants } from '../templates';
 
 export class BuildRule extends HasLog {
@@ -29,9 +29,9 @@ export class BuildRule extends HasLog {
 
     //#region command parts
 
-    params?: DictionaryValue = {};
+    params?: Dictionary<string> = {};
 
-    button?: DictionaryValue = {};
+    button?: Dictionary<string> = {};
 
     //#endregion
 
@@ -57,30 +57,32 @@ export class BuildRule extends HasLog {
 
     private loadHeader(rule: string): void {
         const cl = this.log.call('loadHeader', rule);
-        const keyAndRest = this.splitAtChar(rule, '&');
-        const keyPart = keyAndRest.first;
-        const firstChar = keyPart[0];
-        cl.add(`name part '${keyPart}', firstChar '${firstChar}'`);
+        const parts = this.splitParamsArray(rule);
+        const key = parts?.[0]?.[0] || RuleConstants.Keys.None;
+// console.log('key', key, parts);
+        const firstChar = key[0];
+        cl.add(`name part '${key}', firstChar '${firstChar}'`);
 
         if ((Object as any).values(Operations).includes(firstChar)) {
             this.operation = firstChar as Operations;
-            this.id = keyPart.substring(1);
+            this.id = key.substring(1);
         } else {
             this.operation = Operations.add;
-            this.id = keyPart;
+            this.id = key;
         }
-        // command name defaults to name, can be reset by load-headers
-        this.name = this.id;
 
-        this.loadHeaderParts(keyAndRest.rest);
+        // command name defaults to name, can be reset by load-headers
+        // assumes key is something like "something=edit" or just "edit"
+        this.name = parts?.[0]?.[1] || this.id;
+        if (parts.length > 1) this.loadHeaderParts(parts.slice(1));
 
         return cl.done();
     }
 
-    private loadHeaderParts(rest: string) {
+    private loadHeaderParts(rest: string[][]) {
         const cl = this.log.call('loadHeaderParts');
-        if (!rest || !rest.trim().length) return cl.done('nothing to load');
-        const parts = this.splitParams(rest);
+        if (!rest.length) return cl.done('nothing to load');
+        const parts = this.dicToArray(rest);
         if (parts.name) this.name = parts.name as string;
         if (typeof parts.group === 'string') this.group = parts.group;
         if (typeof parts.pos === 'string' && parts.pos.length > 0) {
@@ -91,18 +93,19 @@ export class BuildRule extends HasLog {
             }
             if (pos.length) this.pos = parseInt(pos, 10);
         }
+        cl.done();
     }
 
     private loadParams(rule: string) {
         const cl = this.log.call('loadParams', rule);
-        this.params = this.splitParams(rule);
+        this.params = this.splitParamsDic(rule);
         cl.data('params', this.params);
         return cl.done();
     }
 
     private loadButton(rule: string) {
         const cl = this.log.call('loadButton', rule);
-        this.button = this.splitParams(rule);
+        this.button = this.splitParamsDic(rule);
         cl.data('button', this.button);
         return cl.done();
     }
@@ -110,22 +113,37 @@ export class BuildRule extends HasLog {
 
 
     //#region string manipulation helpers
-    private splitAtChar(original: string, char: string): { first: string, rest: string} {
-        const index = original.indexOf(char);
-        const first = index > 0 ? original.substring(0, index) : original;
-        // todo: catch trailing ?, would error
-        const rest = index > 0 && original.length > index + 1 ? original.substring(index + 1) : '';
-        return { first, rest };
-    }
+    // private splitAtChar(original: string, char: string): { first: string, rest: string} {
+    //     const index = original.indexOf(char);
+    //     const first = index > 0 ? original.substring(0, index) : original;
+    //     // todo: catch trailing ?, would error
+    //     const rest = index > 0 && original.length > index + 1 ? original.substring(index + 1) : '';
+    //     return { first, rest };
+    // }
 
-    private splitParams(original: string): DictionaryValue {
-        if (!original) return {};
+    private splitParamsArray(original: string): string[][] {
+        if (!original) return [];
         const split1 = original.split('&');
         const split2 = split1.map((p) => p.split('='));
-        const result = split2.reduce((map, obj) => {
+        return split2;
+    }
+
+    private dicToArray(original: string[][]): Dictionary<string> {
+        return original.reduce((map, obj) => {
             map[obj[0]] = obj[1];
             return map;
-        }, {} as DictionaryValue);
+        }, {} as Dictionary<string>);
+    }
+
+    private splitParamsDic(original: string): Dictionary<string> {
+        // if (!original) return {};
+        // const split1 = original.split('&');
+        // const split2 = split1.map((p) => p.split('='));
+        const result = this.dicToArray(this.splitParamsArray(original));
+        // .reduce((map, obj) => {
+        //     map[obj[0]] = obj[1];
+        //     return map;
+        // }, {} as Dictionary<string>);
         return result;
     }
     //#endregion
