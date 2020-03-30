@@ -2,9 +2,9 @@
 export const RuleConstants = {
     Keys: {
         None: 'none',
-        Group: 'group',
+        // Group: 'group',
     },
-    Settings: 'settings',
-    Params: 'params',
-    Toolbar: 'toolbar'
+    // Settings: 'settings',
+    // Params: 'params',
+    // Toolbar: 'toolbar',
 };

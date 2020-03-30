@@ -3,6 +3,7 @@ import { BuildRule } from '.';
 import { RuleConstants } from '.';
 import { HasLog } from '../../logging';
 import { ToolbarConfigLoader } from '../config-loaders';
+import { BuildSteps } from './build-steps';
 
 
 export class RuleManager extends HasLog {
@@ -36,14 +37,16 @@ export class RuleManager extends HasLog {
         return found;
     }
 
-    getSettings = () => this.getSystem(RuleConstants.Settings);
-    getParams = () => this.getSystem(RuleConstants.Params);
-    getToolbar = () => this.getSystem(RuleConstants.Toolbar);
+    getSettings = () => this.getSystem(BuildSteps.settings);
+    getParams = () => this.getSystem(BuildSteps.params);
+    getToolbar = () => this.getSystem(BuildSteps.toolbar);
 
-    getAdd = () => this.getListByCriteria((br) => br.operation === Operations.add);
+    getAdd = () => this.getListByCriteria((br) => br.operator === Operations.add);
 
-    private getSystem(name: string): BuildRule | undefined {
-        const found = this.rules.find((r) => r.operation === Operations.system && r.id === name);
+    getRemovGroups = () => this.getListByCriteria((br) => br.operator === Operations.remove && br.step === BuildSteps.group);
+
+    private getSystem(name: BuildSteps): BuildRule | undefined {
+        const found = this.rules.find((r) => r.operator === Operations.system && r.step === name);
         return found;
     }
 

@@ -4,6 +4,7 @@ import { ButtonCommand, ButtonSafe } from '../config';
 import { BuildRule } from '../rules/rule';
 import { RenderPart } from './render-part-base';
 import { ToolbarRenderer } from './toolbar-renderer';
+import { DictionaryValue } from '../../plumbing';
 
 
 export class RenderButton extends RenderPart {
@@ -27,14 +28,14 @@ export class RenderButton extends RenderPart {
         const disabled = btn.disabled();
 
         // put call as plain JavaScript to preserve even if DOM is serialized
-        if (!disabled) btnLink.setAttribute('onclick', this.generateRunJs(btn, ctx));
+        if (!disabled) btnLink.setAttribute('onclick', this.generateRunJs(btn.action(), ctx , rule?.params));
 
         // Add various classes
         const classes = (disabled ? ' disabled' : '')
             + (btn.action() ? ` sc-${btn.action().name}` : '')
             + ` in-group-${groupIndex}`
             + (groupName ? ` in-group-${groupName}` : '')
-            + ' ' + rule?.button.class
+            + ' ' + rule?.ui.class
             + ' ' + btn.classes()
             + ' ' + btn.dynamicClasses();
         cl.add('classes: ' + classes);
@@ -50,7 +51,7 @@ export class RenderButton extends RenderPart {
         btnLink.appendChild(divTag);
 
         // set color - new in 10.27
-        const color = rule?.button?.color || ctx.toolbar.settings.color;
+        const color = rule?.ui?.color || ctx.toolbar.settings.color;
         if (color && typeof color === 'string') {
             cl.add('color: ' + color);
             const parts = color.split(',');
@@ -63,14 +64,14 @@ export class RenderButton extends RenderPart {
 
 
 
-    private generateRunJs(btn: ButtonSafe, ctx: ContextComplete) {
-        const runParams = ButtonCommand.prepareForUsingInLink(btn.action());
+    private generateRunJs(command: ButtonCommand, ctx: ContextComplete, additionalParams: DictionaryValue) {
+        const runParams = ButtonCommand.prepareForUsingInLink(command, additionalParams);
         return `$2sxc(${ctx.instance.id}, ${ctx.contentBlock.id}).manage.run(${JSON.stringify(runParams)}, event);`;
     }
 
     private iconTag(btn: ButtonSafe, rule: BuildRule) {
         const symbol = document.createElement('i');
-        const icon = rule?.button?.icon || btn.icon();
+        const icon = rule?.ui?.icon || btn.icon();
         HtmlTools.addClasses(symbol, icon);
         symbol.setAttribute('aria-hidden', 'true');
         return symbol;

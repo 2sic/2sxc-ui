@@ -7,7 +7,7 @@ import { Entry, HasLog } from '../../logging';
 import { ButtonGroup, Toolbar } from '../config';
 import { ToolbarSettings, ToolbarSettingsDefaults, ToolbarSettingsForEmpty } from '../config';
 import { InPageToolbarConfigVariations, ToolbarInitConfig } from '../initialize/toolbar-init-config';
-import { RuleConstants as RC, RuleManager } from '../rules';
+import { RuleConstants as RC, RuleManager, BuildSteps } from '../rules';
 import { TemplateEditor, ToolbarTemplate, ToolbarTemplateManager } from '../templates';
 import { ToolbarTemplateGroup } from '../templates';
 import { ToolbarTemplateDefault } from '../templates/template-default';
@@ -62,10 +62,10 @@ export class ToolbarConfigLoader extends HasLog {
 
         // check if it's a V10 tolbar
         if (Array.isArray(raw) && raw.length >= 0 && typeof raw[0] === 'string')
-            return cl.return(this.loadV10(context, config, raw), 'v10');
+            return cl.return(this.loadV10(context, config, raw), 'v10 done');
 
         // do standard V3 procedures
-        return cl.return(this.loadV9(context, config), 'expand done');
+        return cl.return(this.loadV9(context, config), 'V9 done');
     }
 
     private loadV10(context: ContextComplete, config: ToolbarInitConfig, raw: string[]): Toolbar {
@@ -75,13 +75,13 @@ export class ToolbarConfigLoader extends HasLog {
         let template: ToolbarTemplate;
         // #1 prepare settings if no rule configured it
         const settingRule = this.rules.getSettings();
-        const settings: ToolbarSettings = (Object.keys(settingRule?.params || {}).length > 0)
-            ? settingRule.params as unknown as ToolbarSettings
-            : ToolbarSettingsForEmpty;
+        const settings: ToolbarSettings = (Object.keys(settingRule?.ui || {}).length > 0)
+            ? settingRule.ui as unknown as ToolbarSettings
+            : ToolbarSettingsDefaults; // note: Settings Empty currently don't use the V10 mechanism yet
 
         // #2 load either the default toolbar or the one specified
         const toolbarRule = this.rules.getToolbar();
-        const toolbarTemplateName = (toolbarRule && toolbarRule.name !== RC.Toolbar)
+        const toolbarTemplateName = toolbarRule
             ? toolbarRule.name
             : ToolbarTemplateDefault.name;
         template = this.templates.copy(toolbarTemplateName);
@@ -90,10 +90,14 @@ export class ToolbarConfigLoader extends HasLog {
         const params = this.rules.getParams();
         if (params) template.params = params.params;
 
+        // #4 Remove unwanted groups
+        const removeGroups = this.rules.getRemovGroups();
+        removeGroups.forEach((rg) => this.templateEditor.removeGroup(template, rg.name));
+
         // Add additional buttons
         const add = this.rules.getAdd();
         add.forEach((a) => {
-            if (a.id === RC.Keys.Group) this.templateEditor.addGroup(template, a.name, a.pos, a.fromStart);
+            if (a.step === BuildSteps.group) this.templateEditor.addGroup(template, a.name, a.pos, a.fromStart);
             else this.templateEditor.addButton(template, a.group, a.id, a.name, a.pos, a.fromStart);
         });
 
@@ -103,6 +107,8 @@ export class ToolbarConfigLoader extends HasLog {
         // process the rules one by one
         return cl.return(toolbar, 'ok');
     }
+
+
 
     private loadV9(context: ContextComplete, config: ToolbarInitConfig): Toolbar {
         const cl = this.log.call('loadV9');

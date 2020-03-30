@@ -1,4 +1,4 @@
-import { ToolbarTemplate, ToolbarTemplateGroup } from '.';
+import { ListWithCursor, ToolbarTemplate, ToolbarTemplateGroup } from '.';
 import { HasLog } from '../../logging';
 import { ToolbarConfigLoader } from '../config-loaders';
 import { TemplateConstants as TC } from './constants';
@@ -17,7 +17,7 @@ export class TemplateEditor extends HasLog {
         const buttons = group.buttons?.split(TC.ButtonSeparator) ?? [];
         const buttonId = id === name ? name : `${id}=${name}`;
         const posStartEnd = this.correctPosStartEnd(buttons, pos, fromStart);
-        const posInsert = fromStart ? this.findGroupInsertPosition(group, posStartEnd) : posStartEnd;
+        const posInsert = fromStart ? this.findInsertPosition(group, posStartEnd) : posStartEnd;
         cl.add(`pos: ${pos}, startEnd: ${posStartEnd}, insert:${posInsert}`);
         buttons.splice(posInsert, 0, buttonId);
         group.buttons = buttons
@@ -25,12 +25,11 @@ export class TemplateEditor extends HasLog {
             .join(TC.ButtonSeparator);
         cl.done();
     }
-    private findGroupInsertPosition(group: ToolbarTemplateGroup, pos: number): number {
-        group._insertIndex = group._insertIndex || 0;
-        if (pos === 0) {
-            group._insertIndex++;
-            pos = group._insertIndex;
-        }
+
+
+    private findInsertPosition(group: ListWithCursor, pos: number): number {
+        group._insertCursor = group._insertCursor || 0;
+        if (pos === 0) pos = group._insertCursor++;
         return pos;
     }
 
@@ -47,8 +46,18 @@ export class TemplateEditor extends HasLog {
         if (alreadyExists) return cl.return(alreadyExists, 'already exists');
         const newGroup = new ToolbarTemplateGroup();
         newGroup.name = groupName;
-        template.groups.splice(this.correctPosStartEnd(template.groups, pos, fromStart), 0, newGroup);
+        const posStartEnd = this.correctPosStartEnd(template.groups, pos, fromStart);
+        const posInsert = fromStart ? this.findInsertPosition(template, posStartEnd) : posStartEnd;
+        template.groups.splice(posInsert, 0, newGroup);
         return cl.return(newGroup, 'created');
+    }
+
+    removeGroup(template: ToolbarTemplate, groupName: string): void {
+        const group = this.findGroup(template, groupName);
+        if (!group) return;
+        const index = template.groups.indexOf(group);
+        if (index < 0) return;
+        template.groups.splice(index, 1);
     }
 
     private ensureGroups = (template: ToolbarTemplate): void => { if (!template.groups) template.groups = []; };

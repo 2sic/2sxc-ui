@@ -25,7 +25,7 @@ export type InPageToolbarConfigVariations =
  * The configuration / settings of a toolbar as loaded from the DOM
  */
 export class ToolbarInitConfig {
-    toolbar: InPageToolbarConfigVariations;
+    toolbar: InPageToolbarConfigVariations | string[];
     settings: ToolbarSettings;
 
     /**
@@ -37,14 +37,18 @@ export class ToolbarInitConfig {
         try {
             const newConfigFormat = HtmlTools.tryGetAttrText(tag, C.Toolbar.attr.full);
             if (newConfigFormat) {
-                return JSON.parse(newConfigFormat) as ToolbarInitConfig;
+                const result = JSON.parse(newConfigFormat);
+                // check for new V10.27 format, which is just an array!
+                if (Array.isArray(result))
+                    return { toolbar: result } as ToolbarInitConfig;
+                return result as ToolbarInitConfig;
             } else {
                 const at = C.IDs.attr;
                 const data = HtmlTools.getFirstAttribute(tag, at.toolbar, at.toolbarData);
                 const settings = HtmlTools.getFirstAttribute(tag, at.settings, at.settingsData);
                 return {
-                toolbar: JSON.parse(data),
-                settings: JSON.parse(settings) as ToolbarSettings,
+                    toolbar: JSON.parse(data),
+                    settings: JSON.parse(settings) as ToolbarSettings,
                 } as ToolbarInitConfig;
             }
         } catch (err) {

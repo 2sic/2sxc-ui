@@ -35,12 +35,13 @@ export class ToolbarRenderer extends HasLog {
         tlbTag.classList.add('group-0'); // IE11 fix, add each class separately
 
         // add behaviour classes
-        tlbTag.classList.add(`sc-tb-hover-${context.toolbar.settings.hover}`);
-        tlbTag.classList.add(`sc-tb-show-${context.toolbar.settings.show}`);
+        const settings = context.toolbar.settings;
+        tlbTag.classList.add(`sc-tb-hover-${settings.hover}`);
+        tlbTag.classList.add(`sc-tb-show-${settings.show}`);
         if (context.toolbar.params.sortOrder === -1)
             tlbTag.classList.add('listContent');
 
-        HtmlTools.addClasses(tlbTag, context.toolbar.settings.classes);
+        HtmlTools.addClasses(tlbTag, settings.class || settings.classes);
 
         // add button groups to toolbar
         tlbTag.setAttribute('group-count', context.toolbar.groups.length.toString());

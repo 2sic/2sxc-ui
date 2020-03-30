@@ -8,10 +8,15 @@ export class ToolbarSettings {
     autoAddMore: null | 'start' | 'end' | true = null; //  [true: used to be right/start]
     hover: 'left' | 'right' | 'none' = 'right';
     show: 'always' | 'hover' = 'hover';
+
+    // old term, keep for compatibility, but new is class
     classes: string = '';
 
+    // New 10.27 term for the class for simplicity and consistency with button styling
+    class: string = '';
+
     /**
-     * BETA EXPERIMENTAL
+     * New in 10.27
      * color configuration which applies to all buttons
      * use "colorname", "#xxyyzz" or "color1,color2" to specify the colors
      */
