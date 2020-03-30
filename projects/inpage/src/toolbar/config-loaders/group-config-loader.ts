@@ -68,7 +68,8 @@ export class ButtonGroupConfigLoader extends HasLog {
             console.warn('warning: toolbar-button with unknown action-name:', btnCommand.action);
         }
 
-        const name = btnCommand.action;
+        const identifier = btnCommand.action;
+        const name = Button.splitName(identifier).name;
         const contentType = btnCommand.contentType;
 
         // if the button belongs to a content-item, move the specs up to the item into the settings-object
@@ -79,7 +80,7 @@ export class ButtonGroupConfigLoader extends HasLog {
 
         // Toolbar API v2
         const command = new ButtonCommand(name, contentType, params);
-        let newButtonConfig = new Button(command, command.name);
+        let newButtonConfig = new Button(command, identifier);
 
         // settings adapter from v1 to v2
         newButtonConfig = { ...newButtonConfig, ...InPageButtonJson.toButton(btn) };

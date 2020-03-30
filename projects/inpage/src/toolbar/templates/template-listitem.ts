@@ -12,19 +12,19 @@ export const ToolbarTemplateInListRight: ToolbarTemplate = {
         classes: 'group-inlist',
       },
     }, {
-      name: 'list',
+      name: TC.GroupList,
       buttons: 'add,remove,moveup,movedown,instance-list,replace,item-history',
       defaults: {
         classes: 'group-inlist',
       },
     }, {
-      name: 'data',
+      name: TC.GroupEditAdvanced,
       buttons: 'delete',
       defaults: {
         classes: 'group-inlist',
       },
     }, {
-      name: 'instance',
+      name: TC.GroupApp,
       buttons: 'contentitems,contenttype',
       defaults: {
         classes: 'group-inlist group-pro',

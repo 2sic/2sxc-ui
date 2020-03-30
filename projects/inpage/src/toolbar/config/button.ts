@@ -16,19 +16,25 @@ type ButtonGenOrProp<T> = ButtonPropGen<T> | T;
  */
 export class Button {
     id: string;
+    name: string;
     action: ButtonCommand;
     classes: string = '';
     modifier?: BuildRule;
 
-    constructor(action: ButtonCommand, public name: string) {
+    constructor(action: ButtonCommand, name: string) {
         this.action = action;
         // if the name is an identifier, split it
-        const parts = name.split('=');
-        this.id = parts[0];
-        this.name = parts[1] || name;
+        const parts = Button.splitName(name);
+        this.id = parts.id;
+        this.name = parts.name;
         // get defaults from action commandDefinition
         if (action?.command?.buttonDefaults)
             Obj.TypeSafeAssign(this, action.command.buttonDefaults);
+    }
+
+    static splitName(identifier: string): { id: string, name: string} {
+        const parts = identifier.split('=');
+        return { id: parts[0], name: parts[1] || identifier};
     }
 
     /** Configure the link generator before it creates the link */

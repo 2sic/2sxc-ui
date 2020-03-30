@@ -9,21 +9,21 @@ export const ToolbarTemplateDefault: ToolbarTemplate = {
       name: TC.GroupDefault,
       buttons: 'edit,new,metadata,publish,layout',
     }, {
-      name: 'list',
+      name: TC.GroupList,
       buttons: 'add,remove,moveup,movedown,instance-list,replace,item-history',
     }, {
         // todo: rename - and in all templates
-      name: 'data',
+      name: TC.GroupEditAdvanced,
       buttons: 'delete',
     }, {
         // todo: rename - and in all templates - probably 'view'
-      name: 'instance',
+      name: TC.GroupView,
       buttons: 'template-develop,template-settings,contentitems,template-query,contenttype',
       defaults: {
         classes: 'group-pro',
       },
     }, {
-      name: 'app',
+      name: TC.GroupApp,
       buttons: 'app,app-settings,app-resources,zone',
       defaults: {
         classes: 'group-pro',

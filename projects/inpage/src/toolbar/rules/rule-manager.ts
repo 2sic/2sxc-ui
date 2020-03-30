@@ -31,8 +31,8 @@ export class RuleManager extends HasLog {
         return cl.return(this.rules, 'final rules');
     }
 
-    find(name: string): BuildRule | undefined {
-        const found = this.rules.find((r) => r.id === name);
+    find(id: string): BuildRule | undefined {
+        const found = this.rules.find((r) => r.id === id);
         return found;
     }
 

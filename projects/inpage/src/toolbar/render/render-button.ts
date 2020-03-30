@@ -11,11 +11,11 @@ export class RenderButton extends RenderPart {
     }
 
     render(ctx: ContextComplete, groupIndex: number): HTMLElement {
-        const cl = this.log.call('render', `contex: obj, group: ${groupIndex}, btn: ${ctx.button.name}`);
+        const cl = this.log.call('render', `contex: obj, group: ${groupIndex}, btn: ${ctx.button.id}/${ctx.button.name}`);
         const btn = new ButtonSafe(ctx.button, ctx);
 
         // check if we have rules to modify it
-        const rule = ctx.toolbar?.settings?._rules?.find(ctx.button.name);
+        const rule = ctx.toolbar?.settings?._rules?.find(ctx.button.id);
         if (rule) cl.data('rule found', rule);
 
         const btnLink = document.createElement('a');

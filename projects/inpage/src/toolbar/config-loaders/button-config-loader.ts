@@ -70,8 +70,8 @@ export class ButtonConfigLoader extends HasLog {
     removeDisableButtons(context: ContextComplete, full: Toolbar,
         // #CodeChange#2020-03-22#InstanceConfig - believe this is completely unused; remove in June
         // config: InstanceConfig
-        ): void {
-        const wrapLog = this.log.call('removeDisableButtons', `length of groups: ${full.groups.length}`); // new Log('Tlb.RmvDsb', this.log,  `start remove disabled buttons for ${full.groups.length} groups`);
+    ): void {
+        const wrapLog = this.log.call('removeDisableButtons', `length of groups: ${full.groups.length}`);
         const btnGroups = full.groups;
         for (let g = 0; g < btnGroups.length; g++) {
             const btns = btnGroups[g].buttons;
