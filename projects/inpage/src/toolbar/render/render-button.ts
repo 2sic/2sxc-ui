@@ -47,9 +47,9 @@ export class RenderButton extends RenderPart {
         const color = rule?.button?.color || ctx.toolbar.settings.color;
         if (color && typeof color === 'string') {
             cl.add('color: ' + color);
-            const split = color.split(',');
-            if (split[0]) divTag.style.backgroundColor = split[0];
-            if (split[1]) divTag.style.color = split[1];
+            const parts = color.split(',');
+            if (parts[0]) divTag.style.backgroundColor = correctColorCodes(parts[0]);
+            if (parts[1]) divTag.style.color = correctColorCodes(parts[1]);
         }
 
         return cl.return(btnLink);
@@ -68,4 +68,12 @@ export class RenderButton extends RenderPart {
         symbol.setAttribute('aria-hidden', 'true');
         return symbol;
     }
+}
+
+// detect Hex-colors 6-digits or 8 in case transparent
+const colorDetect = '^([A-Fa-f0-9]{6,8})$';
+
+function correctColorCodes(color: string) {
+    if (color && color.match(colorDetect)) return '#' + color;
+    return color;
 }

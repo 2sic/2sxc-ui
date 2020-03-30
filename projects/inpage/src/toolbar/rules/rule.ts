@@ -33,6 +33,8 @@ export class BuildRule extends HasLog {
 
     button?: Dictionary<string> = {};
 
+    hash?: Dictionary<string> = {};
+
     //#endregion
 
     constructor(public ruleString: string, parentLog: Log) {
@@ -51,7 +53,7 @@ export class BuildRule extends HasLog {
 
         this.loadHeader(parts.key);
         if (parts.params) this.loadParams(parts.params);
-        if (parts.button) this.loadButton(parts.button);
+        if (parts.button) this.loadHash(parts.button);
         return cl.done();
     }
 
@@ -87,7 +89,10 @@ export class BuildRule extends HasLog {
         // pick up name
         if (parts.name) this.name = parts.name as string;
         // pick up group
-        if (typeof parts.group === 'string') this.group = parts.group;
+        if (typeof parts.group === 'string') {
+            this.group = parts.group;
+            delete parts.group;
+        }
         // position can be number or -number to indicate from other side
         if (typeof parts.pos === 'string' && parts.pos.length > 0) {
             let pos = parts.pos;
@@ -96,7 +101,9 @@ export class BuildRule extends HasLog {
                 pos = pos.substring(1);
             }
             if (pos.length) this.pos = parseInt(pos, 10);
+            delete parts.pos;
         }
+        this.button = parts;
         cl.done();
     }
 
@@ -107,10 +114,10 @@ export class BuildRule extends HasLog {
         return cl.done();
     }
 
-    private loadButton(rule: string) {
+    private loadHash(rule: string) {
         const cl = this.log.call('loadButton', rule);
-        this.button = this.splitParamsDic(rule);
-        cl.data('button', this.button);
+        this.hash = this.splitParamsDic(rule);
+        cl.data('button', this.hash);
         return cl.done();
     }
 

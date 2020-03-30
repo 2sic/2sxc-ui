@@ -16,14 +16,25 @@ export class TemplateEditor extends HasLog {
         if (!group) group = this.addGroup(template, groupName, 1000, true); // create group at end
         const buttons = group.buttons?.split(TC.ButtonSeparator) ?? [];
         const buttonId = id === name ? name : `${id}=${name}`;
-        buttons.splice(this.correctPos(buttons, pos, fromStart), 0, buttonId);
+        const posStartEnd = this.correctPosStartEnd(buttons, pos, fromStart);
+        const posInsert = fromStart ? this.findGroupInsertPosition(group, posStartEnd) : posStartEnd;
+        cl.add(`pos: ${pos}, startEnd: ${posStartEnd}, insert:${posInsert}`);
+        buttons.splice(posInsert, 0, buttonId);
         group.buttons = buttons
             .filter((b) => b.length) // drop empty items
             .join(TC.ButtonSeparator);
         cl.done();
     }
+    private findGroupInsertPosition(group: ToolbarTemplateGroup, pos: number): number {
+        group._insertIndex = group._insertIndex || 0;
+        if (pos === 0) {
+            group._insertIndex++;
+            pos = group._insertIndex;
+        }
+        return pos;
+    }
 
-    private correctPos(target: Array<unknown>, pos: number, fromStart: boolean) {
+    private correctPosStartEnd(target: Array<unknown>, pos: number, fromStart: boolean) {
         if (fromStart) return pos;
         pos = target.length - pos;
         return pos >= 0 ? pos : target.length;
@@ -36,7 +47,7 @@ export class TemplateEditor extends HasLog {
         if (alreadyExists) return cl.return(alreadyExists, 'already exists');
         const newGroup = new ToolbarTemplateGroup();
         newGroup.name = groupName;
-        template.groups.splice(this.correctPos(template.groups, pos, fromStart), 0, newGroup);
+        template.groups.splice(this.correctPosStartEnd(template.groups, pos, fromStart), 0, newGroup);
         return cl.return(newGroup, 'created');
     }
 

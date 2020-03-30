@@ -4736,11 +4736,11 @@ var RenderButton = /** @class */ (function (_super) {
         var color = ((_d = rule === null || rule === void 0 ? void 0 : rule.button) === null || _d === void 0 ? void 0 : _d.color) || ctx.toolbar.settings.color;
         if (color && typeof color === 'string') {
             cl.add('color: ' + color);
-            var split = color.split(',');
-            if (split[0])
-                divTag.style.backgroundColor = split[0];
-            if (split[1])
-                divTag.style.color = split[1];
+            var parts = color.split(',');
+            if (parts[0])
+                divTag.style.backgroundColor = correctColorCodes(parts[0]);
+            if (parts[1])
+                divTag.style.color = correctColorCodes(parts[1]);
         }
         return cl.return(btnLink);
     };
@@ -4757,6 +4757,13 @@ var RenderButton = /** @class */ (function (_super) {
     return RenderButton;
 }(__WEBPACK_IMPORTED_MODULE_2__render_part_base__["RenderPart"]));
 
+// detect Hex-colors 6-digits or 8 in case transparent
+var colorDetect = '^([A-Fa-f0-9]{6,8})$';
+function correctColorCodes(color) {
+    if (color && color.match(colorDetect))
+        return '#' + color;
+    return color;
+}
 
 
 /***/ }),
@@ -5420,6 +5427,7 @@ var BuildRule = /** @class */ (function (_super) {
         //#region command parts
         _this.params = {};
         _this.button = {};
+        _this.hash = {};
         if (!ruleString) {
             _this.log.add('rule is empty');
             return _this;
@@ -5436,7 +5444,7 @@ var BuildRule = /** @class */ (function (_super) {
         if (parts.params)
             this.loadParams(parts.params);
         if (parts.button)
-            this.loadButton(parts.button);
+            this.loadHash(parts.button);
         return cl.done();
     };
     BuildRule.prototype.loadHeader = function (rule) {
@@ -5472,8 +5480,10 @@ var BuildRule = /** @class */ (function (_super) {
         if (parts.name)
             this.name = parts.name;
         // pick up group
-        if (typeof parts.group === 'string')
+        if (typeof parts.group === 'string') {
             this.group = parts.group;
+            delete parts.group;
+        }
         // position can be number or -number to indicate from other side
         if (typeof parts.pos === 'string' && parts.pos.length > 0) {
             var pos = parts.pos;
@@ -5483,7 +5493,9 @@ var BuildRule = /** @class */ (function (_super) {
             }
             if (pos.length)
                 this.pos = parseInt(pos, 10);
+            delete parts.pos;
         }
+        this.button = parts;
         cl.done();
     };
     BuildRule.prototype.loadParams = function (rule) {
@@ -5492,10 +5504,10 @@ var BuildRule = /** @class */ (function (_super) {
         cl.data('params', this.params);
         return cl.done();
     };
-    BuildRule.prototype.loadButton = function (rule) {
+    BuildRule.prototype.loadHash = function (rule) {
         var cl = this.log.call('loadButton', rule);
-        this.button = this.splitParamsDic(rule);
-        cl.data('button', this.button);
+        this.hash = this.splitParamsDic(rule);
+        cl.data('button', this.hash);
         return cl.done();
     };
     //#region string manipulation helpers
@@ -5644,7 +5656,7 @@ var ToolbarTemplateManagerSingleton = /** @class */ (function (_super) {
         _this.configTemplateList = [];
         /** hash - table of templates, to be used a list()['template - name'] */
         _this.list = {};
-        __WEBPACK_IMPORTED_MODULE_1__logging__["Insights"].add('toolbars', 'template-manager', _this.log);
+        __WEBPACK_IMPORTED_MODULE_1__logging__["Insights"].add('toolbar', 'template-manager', _this.log);
         _this.add(__WEBPACK_IMPORTED_MODULE_0____["ToolbarTemplateEmpty"]);
         _this.add(__WEBPACK_IMPORTED_MODULE_0____["ToolbarTemplateDefault"]);
         // CodeChange #2020-03-20#TemplateToolbarLeftUnused - if no side-effects, delete in June
@@ -5779,13 +5791,24 @@ var TemplateEditor = /** @class */ (function (_super) {
             group = this.addGroup(template, groupName, 1000, true); // create group at end
         var buttons = (_b = (_a = group.buttons) === null || _a === void 0 ? void 0 : _a.split(__WEBPACK_IMPORTED_MODULE_2__constants__["TemplateConstants"].ButtonSeparator)) !== null && _b !== void 0 ? _b : [];
         var buttonId = id === name ? name : id + "=" + name;
-        buttons.splice(this.correctPos(buttons, pos, fromStart), 0, buttonId);
+        var posStartEnd = this.correctPosStartEnd(buttons, pos, fromStart);
+        var posInsert = fromStart ? this.findGroupInsertPosition(group, posStartEnd) : posStartEnd;
+        cl.add("pos: " + pos + ", startEnd: " + posStartEnd + ", insert:" + posInsert);
+        buttons.splice(posInsert, 0, buttonId);
         group.buttons = buttons
             .filter(function (b) { return b.length; }) // drop empty items
             .join(__WEBPACK_IMPORTED_MODULE_2__constants__["TemplateConstants"].ButtonSeparator);
         cl.done();
     };
-    TemplateEditor.prototype.correctPos = function (target, pos, fromStart) {
+    TemplateEditor.prototype.findGroupInsertPosition = function (group, pos) {
+        group._insertIndex = group._insertIndex || 0;
+        if (pos === 0) {
+            group._insertIndex++;
+            pos = group._insertIndex;
+        }
+        return pos;
+    };
+    TemplateEditor.prototype.correctPosStartEnd = function (target, pos, fromStart) {
         if (fromStart)
             return pos;
         pos = target.length - pos;
@@ -5799,7 +5822,7 @@ var TemplateEditor = /** @class */ (function (_super) {
             return cl.return(alreadyExists, 'already exists');
         var newGroup = new __WEBPACK_IMPORTED_MODULE_0____["ToolbarTemplateGroup"]();
         newGroup.name = groupName;
-        template.groups.splice(this.correctPos(template.groups, pos, fromStart), 0, newGroup);
+        template.groups.splice(this.correctPosStartEnd(template.groups, pos, fromStart), 0, newGroup);
         return cl.return(newGroup, 'created');
     };
     TemplateEditor.prototype.findGroupOrDefault = function (template, name) {
