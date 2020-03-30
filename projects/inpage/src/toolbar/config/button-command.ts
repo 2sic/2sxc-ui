@@ -6,7 +6,7 @@ import { DictionaryValue } from '../../plumbing';
 export class ButtonCommand {
     readonly command: Command; // reference to action to be run
 
-    customCode: string; // custom code if used
+    // customCode: string;
 
     constructor(public name: string, contentType?: string, public params?: CommandParams) {
         if (!params) this.params = {};

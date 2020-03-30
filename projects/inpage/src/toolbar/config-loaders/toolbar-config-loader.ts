@@ -58,7 +58,7 @@ export class ToolbarConfigLoader extends HasLog {
         const cl = this.log.call('load', '', 'expand start');
         // if null/undefined, use empty object
         const raw = config.toolbar = config.toolbar || {};
-        this.setLoggingAndCreateHelpers(raw);
+        this.setLoggingAndCreateHelpers(raw as InPageToolbarConfigVariations);
 
         // check if it's a V10 tolbar
         if (Array.isArray(raw) && raw.length >= 0 && typeof raw[0] === 'string')
@@ -121,7 +121,7 @@ export class ToolbarConfigLoader extends HasLog {
         }
 
         // if it has an action or is an array, keep that. Otherwise get standard buttons
-        const draftToolbar = this.getTemplateIfNoButtonsSpecified(config.toolbar);
+        const draftToolbar = this.getTemplateIfNoButtonsSpecified(config.toolbar as InPageToolbarConfigVariations);
         cl.data('after template check', draftToolbar);
 
         const toolbar = this.buildFullDefinition(context, draftToolbar, toolbarSettings);

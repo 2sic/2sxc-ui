@@ -35,9 +35,12 @@ export interface CommandParams {
     isPublished?: boolean;
     prefill?: DictionaryValue;
 
-    // 2020-03-11 2dm in this case it seems that it's a string according to the code
-    // but I'm simply not sure if this is true...
+    /** Custom Code in the previous V9 standard */
     customCode?: string;
+
+    /** Custom Code function name only in the new V10.27 standard */
+    call?: string;
+
 
     /** New in 10.27 - list of apps for the quick dialog */
     apps?: string;

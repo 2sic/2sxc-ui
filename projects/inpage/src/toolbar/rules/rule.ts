@@ -4,6 +4,9 @@ import { Dictionary, DictionaryValue, TypeValue } from '../../plumbing';
 import { TemplateConstants } from '../templates';
 import { BuildSteps } from './build-steps';
 
+/**
+ * Contains a rule how to add/modify a toolbar.
+ */
 export class BuildRule extends HasLog {
     //#region Rule parts
     /** The ID for this rule - often the same as the name */
@@ -43,6 +46,7 @@ export class BuildRule extends HasLog {
         class?: string,
         color?: string,
         show?: boolean,
+        code?: string,
         [key: string]: TypeValue,
     } = {};
 

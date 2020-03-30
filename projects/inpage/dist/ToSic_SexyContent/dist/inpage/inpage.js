@@ -4816,6 +4816,7 @@ var __assign = (this && this.__assign) || function () {
 };
 
 var ButtonCommand = /** @class */ (function () {
+    // customCode: string;
     function ButtonCommand(name, contentType, params) {
         this.name = name;
         this.params = params;
@@ -5699,6 +5700,9 @@ var __extends = (this && this.__extends) || (function () {
 
 
 
+/**
+ * Contains a rule how to add/modify a toolbar.
+ */
 var BuildRule = /** @class */ (function (_super) {
     __extends(BuildRule, _super);
     //#endregion
@@ -6102,6 +6106,10 @@ var __extends = (this && this.__extends) || (function () {
 
 
 
+/**
+ * This object is used to change the structure of a toolbar template.
+ * It's only purpose is to assist in the new V10 format for quickly making toolbars.
+ */
 var TemplateEditor = /** @class */ (function (_super) {
     __extends(TemplateEditor, _super);
     function TemplateEditor(toolbar) {
@@ -7064,7 +7072,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 var CmdCustom = 'custom';
 var ctxName = 'context';
 var evtName = 'event';
-var errNoCode = 'Trying to run Custom-Code action, but no customCode found to run - see console for debug info.';
+var errNoCode = "Trying to run Custom-Code action, but no 'customCode' (v9) or 'call' (v10) found to run - see console for debug info.";
 /**
  * import this module to commands.ts
  */
@@ -7072,13 +7080,21 @@ __WEBPACK_IMPORTED_MODULE_0__commands__["Commands"].add(CmdCustom, 'Custom', 'bo
     code: function (context, event) {
         return new Promise(function (resolve, reject) {
             var actPar = context.button.command.params;
-            if (!actPar.customCode) {
+            // the old V9 name
+            var code = actPar.customCode;
+            // also try the V10 edition
+            if (!code) {
+                code = actPar.call;
+                if (typeof code === 'string' && code.indexOf(' ') === -1 && code.indexOf('(') === -1)
+                    code += "(" + ctxName + ", " + evtName + ")";
+            }
+            if (!code) {
                 console.warn(errNoCode, actPar);
                 alert(errNoCode);
                 resolve();
             }
             try {
-                var fn = new Function(ctxName, evtName, actPar.customCode);
+                var fn = new Function(ctxName, evtName, code);
                 resolve(fn(context, event));
             }
             catch (err) {

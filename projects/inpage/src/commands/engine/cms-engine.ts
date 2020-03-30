@@ -82,7 +82,7 @@ export class CmsEngine extends HasLog {
             ...newButtonConfig,
             // 2020-03-27 2dm disabled this, already happens in the constructor of the button
             // ...newButtonAction.command.buttonDefaults,
-            ...InPageButtonJson.toButton(cmdParams),
+            ...InPageButtonJson.toButton(cmdParams as unknown),
         };
 
         // attach to context for inner calls which might access it
