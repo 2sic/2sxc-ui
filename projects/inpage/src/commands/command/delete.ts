@@ -10,7 +10,7 @@ export const CmdDelete = 'delete';
 Commands.add(CmdDelete, 'Delete', 'cancel', true, false, {
     // disabled: true,
     showCondition(context) {
-        const p = context.button.action.params;
+        const p = context.button.command.params;
         // can never be used for a modulelist item, as it is always in use somewhere
         if (p.useModuleList) return false;
 
@@ -25,7 +25,7 @@ Commands.add(CmdDelete, 'Delete', 'cancel', true, false, {
 
 
     code(context) {
-        const p = context.button.action.params;
+        const p = context.button.command.params;
         const title = p.title || p.entityTitle; // prefer new title, and fallback to old for pre 10.27 configs
         return contentItems.delete(context, p.entityId, p.entityGuid, p.title || p.entityTitle);
     },

@@ -9,16 +9,16 @@ Commands.add(CmdMoveUp, 'MoveUp', 'move-up', false, true, {
     showCondition(context) {
         return (
             context.contentBlock.isList &&
-            context.button.action.params.useModuleList &&
-            context.button.action.params.sortOrder !== -1 &&
-            context.button.action.params.sortOrder !== 0
+            context.button.command.params.useModuleList &&
+            context.button.command.params.sortOrder !== -1 &&
+            context.button.command.params.sortOrder !== 0
         );
     },
     code(context) {
         return Actions.changeOrder(
             context,
-            context.button.action.params.sortOrder,
-            Math.max(context.button.action.params.sortOrder - 1, 0),
+            context.button.command.params.sortOrder,
+            Math.max(context.button.command.params.sortOrder - 1, 0),
         );
     },
 });

@@ -1,6 +1,7 @@
 ﻿import { ContextComplete } from '../../context/bundles/context-bundle-button';
 import { HtmlTools } from '../../html/dom-tools';
 import { ButtonCommand, ButtonSafe } from '../config';
+import { BuildRule } from '../rules/rule';
 import { RenderPart } from './render-part-base';
 import { ToolbarRenderer } from './toolbar-renderer';
 
@@ -11,12 +12,15 @@ export class RenderButton extends RenderPart {
     }
 
     render(ctx: ContextComplete, groupIndex: number): HTMLElement {
-        const cl = this.log.call('render', `contex: obj, group: ${groupIndex}, btn: ${ctx.button.id}/${ctx.button.name}`);
+        const cl = this.log.call('render', `contex: obj, group: ${groupIndex}, btn: ${ctx.button.id}/${ctx.button.command?.name}`);
         const btn = new ButtonSafe(ctx.button, ctx);
 
         // check if we have rules to modify it
         const rule = ctx.toolbar?.settings?._rules?.find(ctx.button.id);
         if (rule) cl.data('rule found', rule);
+
+        const group = ctx.toolbar?.groups?.[groupIndex];
+        const groupName = group?.name;
 
         const btnLink = document.createElement('a');
 
@@ -28,7 +32,9 @@ export class RenderButton extends RenderPart {
         // Add various classes
         const classes = (disabled ? ' disabled' : '')
             + (btn.action() ? ` sc-${btn.action().name}` : '')
-            + ` group-${groupIndex}`
+            + ` in-group-${groupIndex}`
+            + (groupName ? ` in-group-${groupName}` : '')
+            + ' ' + rule?.button.class
             + ' ' + btn.classes()
             + ' ' + btn.dynamicClasses();
         cl.add('classes: ' + classes);
@@ -40,7 +46,7 @@ export class RenderButton extends RenderPart {
 
 
         const divTag = document.createElement('div');
-        divTag.appendChild(this.iconTag(btn, ctx));
+        divTag.appendChild(this.iconTag(btn, rule));
         btnLink.appendChild(divTag);
 
         // set color - new in 10.27
@@ -62,9 +68,10 @@ export class RenderButton extends RenderPart {
         return `$2sxc(${ctx.instance.id}, ${ctx.contentBlock.id}).manage.run(${JSON.stringify(runParams)}, event);`;
     }
 
-    private iconTag(btn: ButtonSafe, context: ContextComplete) {
+    private iconTag(btn: ButtonSafe, rule: BuildRule) {
         const symbol = document.createElement('i');
-        HtmlTools.addClasses(symbol, btn.icon());
+        const icon = rule?.button?.icon || btn.icon();
+        HtmlTools.addClasses(symbol, icon);
         symbol.setAttribute('aria-hidden', 'true');
         return symbol;
     }

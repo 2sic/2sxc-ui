@@ -22,7 +22,7 @@ Commands.add(CmdLayout, 'ChangeLayout', 'glasses', true, true, {
         // Now check if we have apps-parameters to pass on
         if (listSpecs.length > 0) {
            const specs = ContextForLists.getFromDom(listSpecs);
-           context.button.action.params.apps = specs.apps;
+           context.button.command.params.apps = specs.apps;
         }
         return CmsEngine.openDialog(context, event);
     },

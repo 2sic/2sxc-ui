@@ -116,7 +116,6 @@ body.sc-tb-show-all [sxc-toolbar-hover] .sc-menu {
   vertical-align: text-bottom;
 }
 
-/* 2018-04-04 sbs new show/hide */
 /* Because of IE11 issue with cascading class there need to be .sc-menu.group-X on each group declaration */
 /* hide all links by default */
 .sc-menu.group-0 a,
@@ -129,28 +128,31 @@ body.sc-tb-show-all [sxc-toolbar-hover] .sc-menu {
 }
 
 /* show them group-wise */
-.sc-menu.group-0 a.group-0 {
+.sc-menu.group-0 a.in-group-0 {
   display: inline-block;
 }
-.sc-menu.group-1 a.group-1 {
+.sc-menu.group-1 a.in-group-1 {
   display: inline-block;
 }
-.sc-menu.group-2 a.group-2 {
+.sc-menu.group-2 a.in-group-2 {
   display: inline-block;
 }
-.sc-menu.group-3 a.group-3 {
+.sc-menu.group-3 a.in-group-3 {
   display: inline-block;
 }
-.sc-menu.group-4 a.group-4 {
+.sc-menu.group-4 a.in-group-4 {
   display: inline-block;
 }
-.sc-menu.group-5 a.group-5 {
+.sc-menu.group-5 a.in-group-5 {
   display: inline-block;
 }
 
 .sc-menu a.group-default div {
   background-color: #0088f4;
 }
+.sc-menu a.in-group-edit-advanced div {
+    background-color: grey;
+  }  
 .sc-menu a.group-pro div {
   background-color: #96d500;
 }
@@ -162,12 +164,13 @@ body.sc-tb-show-all [sxc-toolbar-hover] .sc-menu {
   color: #aaa;
 }
 
-.group-1 i.btn-mode:before,
-.group-5 i.btn-mode:before {
+/* the more group is rotated in these groups */
+.in-group-1 i.btn-mode:before,
+.in-group-5 i.btn-mode:before {
   transform: rotate(45deg);
 }
-.group-2 i.btn-mode:before,
-.group-6 i.btn-mode:before {
+.in-group-2 i.btn-mode:before,
+.in-group-6 i.btn-mode:before {
   transform: rotate(90deg);
 }
 .group-3 i.btn-mode:before,

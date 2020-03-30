@@ -6,7 +6,7 @@ export const CmdContentItems = 'contentitems';
  */
 Commands.add(CmdContentItems, 'ContentItems', 'table', true, false, {
     params: (context) => {
-        const typeName = context.button.action.params.contentType
+        const typeName = context.button.command.params.contentType
             || context.contentBlock.contentTypeId;
         return {
             // old name for the previous UI
@@ -19,7 +19,7 @@ Commands.add(CmdContentItems, 'ContentItems', 'table', true, false, {
     // only show to admin-users and in cases where we know the content-type
     showCondition: (context) => {
         return context.user.canDesign &&
-            (!!context.button.action.params.contentType ||
+            (!!context.button.command.params.contentType ||
                 !!context.contentBlock.contentTypeId);
     },
 
@@ -30,8 +30,8 @@ Commands.add(CmdContentItems, 'ContentItems', 'table', true, false, {
         //     linkGenerator.urlParams.contentTypeName =
         //         linkGenerator.context.button.action.params.contentType;
 
-        if (context.button.action.params.filters) {
-            let enc = JSON.stringify(context.button.action.params.filters);
+        if (context.button.command.params.filters) {
+            let enc = JSON.stringify(context.button.command.params.filters);
 
             // special case - if it contains a "+" character, this won't survive
             // encoding through the hash as it's always replaced with a space, even if it would be pre converted to %2b

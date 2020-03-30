@@ -18,7 +18,7 @@ export class ToolbarSettings {
     color?: string = '';
 
     /**
-     * Experimental 10.27 - modifiers for the buttons
+     * New in 10.27 - modifiers for the buttons
      * Should never be set from the page, but the toolbar initializer will set this
      */
     _rules: RuleManager;

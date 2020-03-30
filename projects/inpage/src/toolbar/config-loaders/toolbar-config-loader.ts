@@ -73,18 +73,22 @@ export class ToolbarConfigLoader extends HasLog {
         this.rules.load(raw);
 
         let template: ToolbarTemplate;
-        // todo: prepare settings if no rule configured it
+        // #1 prepare settings if no rule configured it
         const settingRule = this.rules.getSettings();
         const settings: ToolbarSettings = (Object.keys(settingRule?.params || {}).length > 0)
             ? settingRule.params as unknown as ToolbarSettings
             : ToolbarSettingsForEmpty;
 
-        // #1 special case if toolbar rule contains a custom name
+        // #2 load either the default toolbar or the one specified
         const toolbarRule = this.rules.getToolbar();
         const toolbarTemplateName = (toolbarRule && toolbarRule.name !== RC.Toolbar)
             ? toolbarRule.name
             : ToolbarTemplateDefault.name;
         template = this.templates.copy(toolbarTemplateName);
+
+        // #3 attach params
+        const params = this.rules.getParams();
+        if (params) template.params = params.params;
 
         // Add additional buttons
         const add = this.rules.getAdd();

@@ -62,14 +62,14 @@ export class ButtonGroupConfigLoader extends HasLog {
                     groupDefaults: DictionaryValue,
                     ): Button {
         let btnCommand = (btn as unknown as { command: CommandParams; }).command;
-
-        if (!(Commands.get(btnCommand.action))) {
-            this.log.add(`couldn't find action ${btnCommand.action} - show warning`);
-            console.warn('warning: toolbar-button with unknown action-name:', btnCommand.action);
-        }
-
         const identifier = btnCommand.action;
         const name = Button.splitName(identifier).name;
+
+        if (!(Commands.get(name))) {
+            this.log.add(`couldn't find action ${name} - show warning`);
+            console.warn('warning: toolbar-button with unknown action-name:', name);
+        }
+
         const contentType = btnCommand.contentType;
 
         // if the button belongs to a content-item, move the specs up to the item into the settings-object
@@ -171,7 +171,7 @@ export class ButtonGroupConfigLoader extends HasLog {
         if (toolbar.groups.length !== 1) return cl.done('not just 1 group');
         cl.add('exactly one group found, will remove more');
         const buttons = toolbar.groups[0].buttons;
-        const index = buttons.findIndex((b) => b.name === CmdMore);
+        const index = buttons.findIndex((b) => b.command?.name === CmdMore);
         if (index === -1) return cl.done("no 'more' button found");
         buttons.splice(index, 1);
         cl.done('more removed');

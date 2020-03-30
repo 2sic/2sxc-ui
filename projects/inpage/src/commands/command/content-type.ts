@@ -7,14 +7,14 @@ export const CmdContentType = 'contenttype';
 Commands.add(CmdContentType, 'ContentType', 'fields', true, false, {
     params: (context) => ({
         // added in 10.27 to help with the new edit ui
-        contentType: context.button.action.params.contentType
+        contentType: context.button.command.params.contentType
             || context.contentBlock.contentTypeId,
     }),
 
     // only show to admin-users and in cases where we know the content-type
     showCondition: (context) => {
         return context.user.canDesign &&
-            (!!context.button.action.params.contentType ||
+            (!!context.button.command.params.contentType ||
                 !!context.contentBlock.contentTypeId);
     },
 });

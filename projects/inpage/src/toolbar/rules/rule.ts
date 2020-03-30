@@ -1,7 +1,8 @@
 import { Operations, RuleConstants as RC } from '.';
 import { HasLog, Log } from '../../logging';
-import { Dictionary } from '../../plumbing';
+import { Dictionary, DictionaryValue } from '../../plumbing';
 import { TemplateConstants } from '../templates';
+import { type } from 'os';
 
 export class BuildRule extends HasLog {
     //#region Rule parts
@@ -31,11 +32,24 @@ export class BuildRule extends HasLog {
 
     params?: Dictionary<string> = {};
 
-    button?: Dictionary<string> = {};
+    button: {
+        icon?: string,
+        class?: string,
+        color?: string,
+        show?: boolean,
+    } = {};
 
-    hash?: Dictionary<string> = {};
+    hash: Dictionary<string> = {};
 
     //#endregion
+
+    showOverride() {
+        if (this.operation === Operations.remove) return false;
+        if (this.operation === Operations.add) return true;
+        if (this.operation === Operations.modify && this?.button?.show !== undefined)
+            return this.button.show;
+        return undefined;
+    }
 
     constructor(public ruleString: string, parentLog: Log) {
         super('Tlb.BdRule', parentLog);
@@ -86,14 +100,14 @@ export class BuildRule extends HasLog {
         const cl = this.log.call('loadHeaderParts');
         if (!rest.length) return cl.done('nothing to load');
         const parts = this.dicToArray(rest);
-        // pick up name
+        // #1 pick up name
         if (parts.name) this.name = parts.name as string;
-        // pick up group
+        // #2 pick up group
         if (typeof parts.group === 'string') {
             this.group = parts.group;
             delete parts.group;
         }
-        // position can be number or -number to indicate from other side
+        // #3 position can be number or -number to indicate from other side
         if (typeof parts.pos === 'string' && parts.pos.length > 0) {
             let pos = parts.pos;
             if (pos[0] === '-') {
@@ -103,8 +117,12 @@ export class BuildRule extends HasLog {
             if (pos.length) this.pos = parseInt(pos, 10);
             delete parts.pos;
         }
+        // #4 icon is automatically kept
+        // #5 show override
+        if (typeof parts.show === 'string')
+            (parts as DictionaryValue).show = parts.show === 'true';
         this.button = parts;
-        cl.done();
+        return cl.return(this.button, 'button rules');
     }
 
     private loadParams(rule: string) {

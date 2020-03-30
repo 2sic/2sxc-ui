@@ -7,7 +7,6 @@ import { HasLog } from '../../logging';
 import { DictionaryValue } from '../../plumbing';
 import { Button, Toolbar } from '../config';
 import { ButtonSafe } from '../config/button-safe';
-import { Operations } from '../rules';
 
 /**
  * This is a system to build button configurations
@@ -76,14 +75,14 @@ export class ButtonConfigLoader extends HasLog {
         for (let g = 0; g < btnGroups.length; g++) {
             const btns = btnGroups[g].buttons;
             // #CodeChange#2020-03-22#InstanceConfig - believe this is completely unused; remove in June
-            this.removeUnfitButtons(context, full, btns /* config, */);
+            this.removeUnfitButtons(context, /* full,*/ btns /* config, */);
 
             wrapLog.add('will disable appropriate buttons');
             // #CodeChange#2020-03-22#InstanceConfig - believe this is completely unused; remove in June
             // disableButtons(context, btns/*, config */);
 
             // remove the group, if no buttons left, or only "more"
-            if (btns.length === 0 || (btns.length === 1 && btns[0].action.name === CmdMore)) {
+            if (btns.length === 0 || (btns.length === 1 && btns[0].command.name === CmdMore)) {
                 wrapLog.add('found no more buttons except for the "more" - will remove that group');
                 btnGroups.splice(g--, 1); // remove, and decrement counter
             }
@@ -104,7 +103,7 @@ export class ButtonConfigLoader extends HasLog {
                           groupDefaults: DictionaryValue | null,
                           tlbDefaults: DictionaryValue | null | undefined,
                           actions: typeof Commands) {
-        const cl = this.log.call('addDefaultBtnSettings', '', `for ${() => btn.action.name}`);
+        const cl = this.log.call('addDefaultBtnSettings', '', `for ${() => btn.command.name}`);
         for (let d = 0; d < btnProperties.length; d++)
             fallbackBtnSetting(btn, groupDefaults, tlbDefaults, actions, btnProperties[d]);
         cl.return(null);
@@ -112,24 +111,23 @@ export class ButtonConfigLoader extends HasLog {
 
 
 
-    private removeUnfitButtons(context: ContextComplete, toolbar: Toolbar, btns: Button[]): void {
+    private removeUnfitButtons(context: ContextComplete, btns: Button[]): void {
         // #CodeChange#2020-03-22#InstanceConfig - believe this is completely unused; remove in June
         // config: InstanceConfig,
         const cl = this.log.call('removeUnfitButtons');
         let removals = '';
         for (let i = 0; i < btns.length; i++) {
             const btn = btns[i];
-            if (btn.action) {
-                const modifier = this.toolbar.rules.find(btn.action.name);
-                btn.modifier = modifier;
+            if (btn.command) {
                 context.button = btn; // add to context for calls
-                const remove = modifier?.operation === Operations.remove
-                    || !(new ButtonSafe(btn, context).showCondition());
-                if (!(modifier?.operation === Operations.add) && remove) {
-                    removals += `#${i} "${btn.action.name}"; `;
+                const rule = this.toolbar.rules.find(btn.id || btn.command.name);
+                let show: boolean = rule?.showOverride();
+                if (show === undefined) show = new ButtonSafe(btn, context).showCondition();
+                if (show === false) {
+                    removals += `#${i} "${btn.command.name}"; `;
                     btns.splice(i--, 1);
                 }
-                cl.add(`btn '${btn.action.name}' remove ${remove}`);
+                cl.add(`btn '${btn.command.name}' show ${show}`);
             }
         }
         if (removals)
@@ -138,20 +136,6 @@ export class ButtonConfigLoader extends HasLog {
     }
 
 }
-
-
-// 2020-03-27 2dm removed this - it's resolved at render level anyhow!
-// function disableButtons(context: ContextComplete, btns: Button[],
-//     ): void {
-//     for (let i = 0; i < btns.length; i++) {
-//         context.button = btns[i];
-//         if (btns[i].action)
-//             btns[i].disabled = Button.genToValue(btns[i].disabled, context,  false);
-//         else
-//             btns[i].disabled = ((_) => false);
-//     }
-// }
-
 
 const btnProperties = [
   'classes',
@@ -190,8 +174,8 @@ function fallbackBtnSetting(btn: Button,
         return target[propName] = toolbarDefaults[propName];
 
     // if there is an action, try to use that property name
-    if (btn.action && btn.action.name) {
-        const a = actions.get(btn.action.name);
+    if (btn.command && btn.command.name) {
+        const a = actions.get(btn.command.name);
         if (a && a.buttonDefaults) {
             const c = a.buttonDefaults as DictionaryValue;
             if (c[propName])

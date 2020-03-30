@@ -85,7 +85,7 @@ export class CommandLinkGenerator {
 
   private addItem() {
     const item = {} as ItemIdentifierSimple;
-    const params = this.context.button.action.params;
+    const params = this.context.button.command.params;
 
     // two ways to name the content-type-name this, v 7.2+ and older
     const ct = params.contentType || (params as TypeUnsafe).attributeSetName;
@@ -106,10 +106,10 @@ export class CommandLinkGenerator {
    * optionally together with the presentation item
    */
   private addContentGroupItems(withPresentation: boolean) {
-    const params = this.context.button.action.params;
+    const params = this.context.button.command.params;
     const isContentAndNotHeader = (params.sortOrder !== -1);
     const index = isContentAndNotHeader ? params.sortOrder : 0;
-    const isAdd = this.context.button.action.name === 'new';
+    const isAdd = this.context.button.command.name === 'new';
     const groupId = this.context.contentBlock.contentGroupId;
 
     const fields: string[] = [this.findPartName(true)];
@@ -146,9 +146,9 @@ export class CommandLinkGenerator {
      * this is relevant when adding new items
      */
     private addItemInList() {
-        const params = this.context.button.action.params;
+        const params = this.context.button.command.params;
         const index = params.sortOrder;
-        const isAdd = this.context.button.action.name === 'new';
+        const isAdd = this.context.button.command.name === 'new';
         const groupId = params.parent;
 
 
@@ -167,7 +167,7 @@ export class CommandLinkGenerator {
    * find the part name for both the API to give the right item (when using groups) and for i18n
    */
   private findPartName(content: boolean): string {
-    const isContentAndNotHeader = (this.context.button.action.params.sortOrder !== -1);
+    const isContentAndNotHeader = (this.context.button.command.params.sortOrder !== -1);
     return (isContentAndNotHeader ? '' : 'List') + (content ? 'Content' : 'Presentation');
   }
 

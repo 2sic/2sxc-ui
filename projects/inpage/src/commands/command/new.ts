@@ -18,15 +18,15 @@ Commands.add(CmdNew, 'New', 'plus', false, true, {
 
     showCondition(context) {
         return (
-            !!context.button.action.params.contentType ||
+            !!context.button.command.params.contentType ||
             (context.contentBlock.isList &&
-                context.button.action.params.useModuleList &&
-                context.button.action.params.sortOrder !== -1)
+                context.button.command.params.useModuleList &&
+                context.button.command.params.sortOrder !== -1)
         ); // don't provide new on the header-item
     },
     code(context, event) {
         // todo - should refactor this to be a toolbarManager.contentBlock command
-        context.button.action.params.sortOrder = context.button.action.params.sortOrder + 1;
+        context.button.command.params.sortOrder = context.button.command.params.sortOrder + 1;
         // O.bject.assign(context.button.action.params, {
         //     sortOrder: context.button.action.params.sortOrder + 1,
         // });

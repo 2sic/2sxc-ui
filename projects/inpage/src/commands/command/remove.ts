@@ -12,8 +12,8 @@ Commands.add(CmdRemove, 'Remove', 'minus-circled', false, true, {
     showCondition(context) {
         return (
             context.contentBlock.isList &&
-            context.button.action.params.useModuleList &&
-            context.button.action.params.sortOrder !== -1
+            context.button.command.params.useModuleList &&
+            context.button.command.params.sortOrder !== -1
         );
     },
     code(context) {
@@ -21,7 +21,7 @@ Commands.add(CmdRemove, 'Remove', 'minus-circled', false, true, {
             if (confirm(translate('Toolbar.ConfirmRemove'))) {
                 return Actions.removeFromList(
                     context,
-                    context.button.action.params.sortOrder,
+                    context.button.command.params.sortOrder,
                 );
             }
             return resolve();

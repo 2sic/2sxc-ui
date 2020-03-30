@@ -1099,8 +1099,8 @@ __WEBPACK_IMPORTED_MODULE_0____["Commands"].add(CmdEdit, 'Edit', 'pencil', false
         return { mode: 'edit' };
     },
     showCondition: function (context) {
-        return (!!context.button.action.params.entityId ||
-            context.button.action.params.useModuleList); // need ID or a "slot", otherwise edit won't work
+        return (!!context.button.command.params.entityId ||
+            context.button.command.params.useModuleList); // need ID or a "slot", otherwise edit won't work
     },
 });
 
@@ -1805,7 +1805,7 @@ __WEBPACK_IMPORTED_MODULE_4__commands__["Commands"].add(CmdLayout, 'ChangeLayout
         // Now check if we have apps-parameters to pass on
         if (listSpecs.length > 0) {
             var specs = __WEBPACK_IMPORTED_MODULE_3__quick_edit_context_for_lists__["ContextForLists"].getFromDom(listSpecs);
-            context.button.action.params.apps = specs.apps;
+            context.button.command.params.apps = specs.apps;
         }
         return __WEBPACK_IMPORTED_MODULE_0____["CmsEngine"].openDialog(context, event);
     },
@@ -2397,10 +2397,10 @@ var ButtonSafe = /** @class */ (function () {
         var _this = this;
         this.button = button;
         this.context = context;
-        this.action = function () { return _this.button.action; };
+        this.action = function () { return _this.button.command; };
         this.classes = function () { return _this.button.classes || ''; };
         /** The dialog name - should default to the name */
-        this.dialog = function () { return getVal(_this.button.dialog, _this.context, _this.button.action.name); };
+        this.dialog = function () { return getVal(_this.button.dialog, _this.context, _this.button.command.name); };
         /** Determines if the button should be disabled */
         this.disabled = function () { return getVal(_this.button.disabled, _this.context, false); };
         /** Dynamicaly determine classes - must always be a function */
@@ -2809,17 +2809,21 @@ var ToolbarConfigLoader = /** @class */ (function (_super) {
         var cl = this.log.call('loadV10');
         this.rules.load(raw);
         var template;
-        // todo: prepare settings if no rule configured it
+        // #1 prepare settings if no rule configured it
         var settingRule = this.rules.getSettings();
         var settings = (Object.keys((settingRule === null || settingRule === void 0 ? void 0 : settingRule.params) || {}).length > 0)
             ? settingRule.params
             : __WEBPACK_IMPORTED_MODULE_2__config__["ToolbarSettingsForEmpty"];
-        // #1 special case if toolbar rule contains a custom name
+        // #2 load either the default toolbar or the one specified
         var toolbarRule = this.rules.getToolbar();
         var toolbarTemplateName = (toolbarRule && toolbarRule.name !== __WEBPACK_IMPORTED_MODULE_3__rules__["RuleConstants"].Toolbar)
             ? toolbarRule.name
             : __WEBPACK_IMPORTED_MODULE_5__templates_template_default__["ToolbarTemplateDefault"].name;
         template = this.templates.copy(toolbarTemplateName);
+        // #3 attach params
+        var params = this.rules.getParams();
+        if (params)
+            template.params = params.params;
         // Add additional buttons
         var add = this.rules.getAdd();
         add.forEach(function (a) {
@@ -2991,7 +2995,6 @@ var InPageButtonJson = /** @class */ (function () {
         if (oldFormat.icon)
             config.icon = oldFormat.icon;
         // Method Properties
-        // if (oldFormat.dynamicClasses) config.dynamicClasses = evalPropOrFun(oldFormat.dynamicClasses);
         if (oldFormat.fullScreen)
             config.fullScreen = evalPropOrFun(oldFormat.fullScreen);
         if (oldFormat.icon)
@@ -3002,9 +3005,10 @@ var InPageButtonJson = /** @class */ (function () {
             config.newWindow = evalPropOrFun(oldFormat.newWindow);
         if (oldFormat.partOfPage)
             config.partOfPage = evalPropOrFun(oldFormat.partOfPage);
-        // if (oldFormat.showCondition) config.showCondition = evalPropOrFun(oldFormat.showCondition);
         if (oldFormat.title)
             config.title = evalPropOrFun(oldFormat.title);
+        // if (oldFormat.dynamicClasses) config.dynamicClasses = evalPropOrFun(oldFormat.dynamicClasses);
+        // if (oldFormat.showCondition) config.showCondition = evalPropOrFun(oldFormat.showCondition);
         return config;
     };
     return InPageButtonJson;
@@ -3030,7 +3034,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__commands__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__logging__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__config_button_safe__ = __webpack_require__(43);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__rules__ = __webpack_require__(12);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -3044,7 +3047,6 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-
 
 
 
@@ -3106,12 +3108,12 @@ var ButtonConfigLoader = /** @class */ (function (_super) {
         for (var g = 0; g < btnGroups.length; g++) {
             var btns = btnGroups[g].buttons;
             // #CodeChange#2020-03-22#InstanceConfig - believe this is completely unused; remove in June
-            this.removeUnfitButtons(context, full, btns /* config, */);
+            this.removeUnfitButtons(context, /* full,*/ btns /* config, */);
             wrapLog.add('will disable appropriate buttons');
             // #CodeChange#2020-03-22#InstanceConfig - believe this is completely unused; remove in June
             // disableButtons(context, btns/*, config */);
             // remove the group, if no buttons left, or only "more"
-            if (btns.length === 0 || (btns.length === 1 && btns[0].action.name === __WEBPACK_IMPORTED_MODULE_1__commands__["CmdMore"])) {
+            if (btns.length === 0 || (btns.length === 1 && btns[0].command.name === __WEBPACK_IMPORTED_MODULE_1__commands__["CmdMore"])) {
                 wrapLog.add('found no more buttons except for the "more" - will remove that group');
                 btnGroups.splice(g--, 1); // remove, and decrement counter
             }
@@ -3126,29 +3128,29 @@ var ButtonConfigLoader = /** @class */ (function (_super) {
      * @param actions
      */
     ButtonConfigLoader.prototype.addDefaultBtnSettings = function (btn, groupDefaults, tlbDefaults, actions) {
-        var cl = this.log.call('addDefaultBtnSettings', '', "for " + function () { return btn.action.name; });
+        var cl = this.log.call('addDefaultBtnSettings', '', "for " + function () { return btn.command.name; });
         for (var d = 0; d < btnProperties.length; d++)
             fallbackBtnSetting(btn, groupDefaults, tlbDefaults, actions, btnProperties[d]);
         cl.return(null);
     };
-    ButtonConfigLoader.prototype.removeUnfitButtons = function (context, toolbar, btns) {
+    ButtonConfigLoader.prototype.removeUnfitButtons = function (context, btns) {
         // #CodeChange#2020-03-22#InstanceConfig - believe this is completely unused; remove in June
         // config: InstanceConfig,
         var cl = this.log.call('removeUnfitButtons');
         var removals = '';
         for (var i = 0; i < btns.length; i++) {
             var btn = btns[i];
-            if (btn.action) {
-                var modifier = this.toolbar.rules.find(btn.action.name);
-                btn.modifier = modifier;
+            if (btn.command) {
                 context.button = btn; // add to context for calls
-                var remove = (modifier === null || modifier === void 0 ? void 0 : modifier.operation) === __WEBPACK_IMPORTED_MODULE_4__rules__["Operations"].remove
-                    || !(new __WEBPACK_IMPORTED_MODULE_3__config_button_safe__["ButtonSafe"](btn, context).showCondition());
-                if (!((modifier === null || modifier === void 0 ? void 0 : modifier.operation) === __WEBPACK_IMPORTED_MODULE_4__rules__["Operations"].add) && remove) {
-                    removals += "#" + i + " \"" + btn.action.name + "\"; ";
+                var rule = this.toolbar.rules.find(btn.id || btn.command.name);
+                var show = rule === null || rule === void 0 ? void 0 : rule.showOverride();
+                if (show === undefined)
+                    show = new __WEBPACK_IMPORTED_MODULE_3__config_button_safe__["ButtonSafe"](btn, context).showCondition();
+                if (show === false) {
+                    removals += "#" + i + " \"" + btn.command.name + "\"; ";
                     btns.splice(i--, 1);
                 }
-                cl.add("btn '" + btn.action.name + "' remove " + remove);
+                cl.add("btn '" + btn.command.name + "' show " + show);
             }
         }
         if (removals)
@@ -3158,17 +3160,6 @@ var ButtonConfigLoader = /** @class */ (function (_super) {
     return ButtonConfigLoader;
 }(__WEBPACK_IMPORTED_MODULE_2__logging__["HasLog"]));
 
-// 2020-03-27 2dm removed this - it's resolved at render level anyhow!
-// function disableButtons(context: ContextComplete, btns: Button[],
-//     ): void {
-//     for (let i = 0; i < btns.length; i++) {
-//         context.button = btns[i];
-//         if (btns[i].action)
-//             btns[i].disabled = Button.genToValue(btns[i].disabled, context,  false);
-//         else
-//             btns[i].disabled = ((_) => false);
-//     }
-// }
 var btnProperties = [
     'classes',
     'icon',
@@ -3196,8 +3187,8 @@ function fallbackBtnSetting(btn, groupDefaults, toolbarDefaults, actions, propNa
     if (toolbarDefaults && toolbarDefaults[propName])
         return target[propName] = toolbarDefaults[propName];
     // if there is an action, try to use that property name
-    if (btn.action && btn.action.name) {
-        var a = actions.get(btn.action.name);
+    if (btn.command && btn.command.name) {
+        var a = actions.get(btn.command.name);
         if (a && a.buttonDefaults) {
             var c = a.buttonDefaults;
             if (c[propName])
@@ -3279,14 +3270,14 @@ __WEBPACK_IMPORTED_MODULE_0____["Commands"].add(CmdNew, 'New', 'plus', false, tr
     params: function (context) { return ({ mode: CmdNewMode }); },
     dialog: function (context) { return 'edit'; },
     showCondition: function (context) {
-        return (!!context.button.action.params.contentType ||
+        return (!!context.button.command.params.contentType ||
             (context.contentBlock.isList &&
-                context.button.action.params.useModuleList &&
-                context.button.action.params.sortOrder !== -1)); // don't provide new on the header-item
+                context.button.command.params.useModuleList &&
+                context.button.command.params.sortOrder !== -1)); // don't provide new on the header-item
     },
     code: function (context, event) {
         // todo - should refactor this to be a toolbarManager.contentBlock command
-        context.button.action.params.sortOrder = context.button.action.params.sortOrder + 1;
+        context.button.command.params.sortOrder = context.button.command.params.sortOrder + 1;
         // O.bject.assign(context.button.action.params, {
         //     sortOrder: context.button.action.params.sortOrder + 1,
         // });
@@ -4364,11 +4355,11 @@ var CmdAdd = 'add';
 __WEBPACK_IMPORTED_MODULE_0____["Commands"].add(CmdAdd, 'AddDemo', 'plus-circled', false, true, {
     showCondition: function (context) {
         return context.contentBlock.isList &&
-            context.button.action.params.useModuleList &&
-            context.button.action.params.sortOrder !== -1;
+            context.button.command.params.useModuleList &&
+            context.button.command.params.sortOrder !== -1;
     },
     code: function (context) {
-        return __WEBPACK_IMPORTED_MODULE_1__content_list_actions__["Actions"].addItem(context, context.button.action.params.sortOrder + 1);
+        return __WEBPACK_IMPORTED_MODULE_1__content_list_actions__["Actions"].addItem(context, context.button.command.params.sortOrder + 1);
     },
 });
 
@@ -4706,13 +4697,15 @@ var RenderButton = /** @class */ (function (_super) {
         return _super.call(this, parent, 'Rnd.Button') || this;
     }
     RenderButton.prototype.render = function (ctx, groupIndex) {
-        var _a, _b, _c, _d;
-        var cl = this.log.call('render', "contex: obj, group: " + groupIndex + ", btn: " + ctx.button.id + "/" + ctx.button.name);
+        var _a, _b, _c, _d, _e, _f, _g;
+        var cl = this.log.call('render', "contex: obj, group: " + groupIndex + ", btn: " + ctx.button.id + "/" + ((_a = ctx.button.command) === null || _a === void 0 ? void 0 : _a.name));
         var btn = new __WEBPACK_IMPORTED_MODULE_1__config__["ButtonSafe"](ctx.button, ctx);
         // check if we have rules to modify it
-        var rule = (_c = (_b = (_a = ctx.toolbar) === null || _a === void 0 ? void 0 : _a.settings) === null || _b === void 0 ? void 0 : _b._rules) === null || _c === void 0 ? void 0 : _c.find(ctx.button.id);
+        var rule = (_d = (_c = (_b = ctx.toolbar) === null || _b === void 0 ? void 0 : _b.settings) === null || _c === void 0 ? void 0 : _c._rules) === null || _d === void 0 ? void 0 : _d.find(ctx.button.id);
         if (rule)
             cl.data('rule found', rule);
+        var group = (_f = (_e = ctx.toolbar) === null || _e === void 0 ? void 0 : _e.groups) === null || _f === void 0 ? void 0 : _f[groupIndex];
+        var groupName = group === null || group === void 0 ? void 0 : group.name;
         var btnLink = document.createElement('a');
         var disabled = btn.disabled();
         // put call as plain JavaScript to preserve even if DOM is serialized
@@ -4721,7 +4714,9 @@ var RenderButton = /** @class */ (function (_super) {
         // Add various classes
         var classes = (disabled ? ' disabled' : '')
             + (btn.action() ? " sc-" + btn.action().name : '')
-            + (" group-" + groupIndex)
+            + (" in-group-" + groupIndex)
+            + (groupName ? " in-group-" + groupName : '')
+            + ' ' + (rule === null || rule === void 0 ? void 0 : rule.button.class)
             + ' ' + btn.classes()
             + ' ' + btn.dynamicClasses();
         cl.add('classes: ' + classes);
@@ -4730,10 +4725,10 @@ var RenderButton = /** @class */ (function (_super) {
         if (btn.title)
             btnLink.setAttribute('data-i18n', "[title]" + btn.title()); // localization support
         var divTag = document.createElement('div');
-        divTag.appendChild(this.iconTag(btn, ctx));
+        divTag.appendChild(this.iconTag(btn, rule));
         btnLink.appendChild(divTag);
         // set color - new in 10.27
-        var color = ((_d = rule === null || rule === void 0 ? void 0 : rule.button) === null || _d === void 0 ? void 0 : _d.color) || ctx.toolbar.settings.color;
+        var color = ((_g = rule === null || rule === void 0 ? void 0 : rule.button) === null || _g === void 0 ? void 0 : _g.color) || ctx.toolbar.settings.color;
         if (color && typeof color === 'string') {
             cl.add('color: ' + color);
             var parts = color.split(',');
@@ -4748,9 +4743,11 @@ var RenderButton = /** @class */ (function (_super) {
         var runParams = __WEBPACK_IMPORTED_MODULE_1__config__["ButtonCommand"].prepareForUsingInLink(btn.action());
         return "$2sxc(" + ctx.instance.id + ", " + ctx.contentBlock.id + ").manage.run(" + JSON.stringify(runParams) + ", event);";
     };
-    RenderButton.prototype.iconTag = function (btn, context) {
+    RenderButton.prototype.iconTag = function (btn, rule) {
+        var _a;
         var symbol = document.createElement('i');
-        __WEBPACK_IMPORTED_MODULE_0__html_dom_tools__["HtmlTools"].addClasses(symbol, btn.icon());
+        var icon = ((_a = rule === null || rule === void 0 ? void 0 : rule.button) === null || _a === void 0 ? void 0 : _a.icon) || btn.icon();
+        __WEBPACK_IMPORTED_MODULE_0__html_dom_tools__["HtmlTools"].addClasses(symbol, icon);
         symbol.setAttribute('aria-hidden', 'true');
         return symbol;
     };
@@ -4824,19 +4821,20 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
  * The real button configuration as it's used at runtime
  */
 var Button = /** @class */ (function () {
-    function Button(action, name) {
+    function Button(command, name) {
         var _a;
+        /** classes which will be applied to this button */
         this.classes = '';
         /** Determine if it should use the inline window, always a function */
         this.inlineWindow = function () { return false; };
-        this.action = action;
+        this.command = command;
         // if the name is an identifier, split it
         var parts = Button.splitName(name);
         this.id = parts.id;
-        this.name = parts.name;
+        // this.name = parts.name;
         // get defaults from action commandDefinition
-        if ((_a = action === null || action === void 0 ? void 0 : action.command) === null || _a === void 0 ? void 0 : _a.buttonDefaults)
-            __WEBPACK_IMPORTED_MODULE_0__plumbing__["Obj"].TypeSafeAssign(this, action.command.buttonDefaults);
+        if ((_a = command === null || command === void 0 ? void 0 : command.command) === null || _a === void 0 ? void 0 : _a.buttonDefaults)
+            __WEBPACK_IMPORTED_MODULE_0__plumbing__["Obj"].TypeSafeAssign(this, command.command.buttonDefaults);
     }
     Button.splitName = function (identifier) {
         var parts = identifier.split('=');
@@ -4844,7 +4842,7 @@ var Button = /** @class */ (function () {
     };
     /** Detect if this is a Button */
     Button.is = function (thing) {
-        return thing.action !== undefined;
+        return thing.command !== undefined;
     };
     Button.isArray = function (thing) {
         return thing.length && Button.is(thing[0]);
@@ -5410,7 +5408,6 @@ var __extends = (this && this.__extends) || (function () {
 
 var BuildRule = /** @class */ (function (_super) {
     __extends(BuildRule, _super);
-    //#endregion
     function BuildRule(ruleString, parentLog) {
         var _this = _super.call(this, 'Tlb.BdRule', parentLog) || this;
         _this.ruleString = ruleString;
@@ -5435,6 +5432,17 @@ var BuildRule = /** @class */ (function (_super) {
         _this.load();
         return _this;
     }
+    //#endregion
+    BuildRule.prototype.showOverride = function () {
+        var _a;
+        if (this.operation === __WEBPACK_IMPORTED_MODULE_0____["Operations"].remove)
+            return false;
+        if (this.operation === __WEBPACK_IMPORTED_MODULE_0____["Operations"].add)
+            return true;
+        if (this.operation === __WEBPACK_IMPORTED_MODULE_0____["Operations"].modify && ((_a = this === null || this === void 0 ? void 0 : this.button) === null || _a === void 0 ? void 0 : _a.show) !== undefined)
+            return this.button.show;
+        return undefined;
+    };
     BuildRule.prototype.load = function () {
         var cl = this.log.call('load', this.ruleString);
         var parts = safeSplitOriginal(this.ruleString);
@@ -5476,15 +5484,15 @@ var BuildRule = /** @class */ (function (_super) {
         if (!rest.length)
             return cl.done('nothing to load');
         var parts = this.dicToArray(rest);
-        // pick up name
+        // #1 pick up name
         if (parts.name)
             this.name = parts.name;
-        // pick up group
+        // #2 pick up group
         if (typeof parts.group === 'string') {
             this.group = parts.group;
             delete parts.group;
         }
-        // position can be number or -number to indicate from other side
+        // #3 position can be number or -number to indicate from other side
         if (typeof parts.pos === 'string' && parts.pos.length > 0) {
             var pos = parts.pos;
             if (pos[0] === '-') {
@@ -5495,8 +5503,12 @@ var BuildRule = /** @class */ (function (_super) {
                 this.pos = parseInt(pos, 10);
             delete parts.pos;
         }
+        // #4 icon is automatically kept
+        // #5 show override
+        if (typeof parts.show === 'string')
+            parts.show = parts.show === 'true';
         this.button = parts;
-        cl.done();
+        return cl.return(this.button, 'button rules');
     };
     BuildRule.prototype.loadParams = function (rule) {
         var cl = this.log.call('loadParams', rule);
@@ -6056,12 +6068,12 @@ var ButtonGroupConfigLoader = /** @class */ (function (_super) {
     // group: ButtonGroupWip
     groupDefaults) {
         var btnCommand = btn.command;
-        if (!(__WEBPACK_IMPORTED_MODULE_1__commands__["Commands"].get(btnCommand.action))) {
-            this.log.add("couldn't find action " + btnCommand.action + " - show warning");
-            console.warn('warning: toolbar-button with unknown action-name:', btnCommand.action);
-        }
         var identifier = btnCommand.action;
         var name = __WEBPACK_IMPORTED_MODULE_3__config__["Button"].splitName(identifier).name;
+        if (!(__WEBPACK_IMPORTED_MODULE_1__commands__["Commands"].get(name))) {
+            this.log.add("couldn't find action " + name + " - show warning");
+            console.warn('warning: toolbar-button with unknown action-name:', name);
+        }
         var contentType = btnCommand.contentType;
         // if the button belongs to a content-item, move the specs up to the item into the settings-object
         btnCommand = this.toolbar.command.updateToV9(btnCommand);
@@ -6157,7 +6169,7 @@ var ButtonGroupConfigLoader = /** @class */ (function (_super) {
             return cl.done('not just 1 group');
         cl.add('exactly one group found, will remove more');
         var buttons = toolbar.groups[0].buttons;
-        var index = buttons.findIndex(function (b) { return b.name === __WEBPACK_IMPORTED_MODULE_1__commands__["CmdMore"]; });
+        var index = buttons.findIndex(function (b) { var _a; return ((_a = b.command) === null || _a === void 0 ? void 0 : _a.name) === __WEBPACK_IMPORTED_MODULE_1__commands__["CmdMore"]; });
         if (index === -1)
             return cl.done("no 'more' button found");
         buttons.splice(index, 1);
@@ -6888,7 +6900,7 @@ var CmdContentItems = 'contentitems';
  */
 __WEBPACK_IMPORTED_MODULE_0____["Commands"].add(CmdContentItems, 'ContentItems', 'table', true, false, {
     params: function (context) {
-        var typeName = context.button.action.params.contentType
+        var typeName = context.button.command.params.contentType
             || context.contentBlock.contentTypeId;
         return {
             // old name for the previous UI
@@ -6900,7 +6912,7 @@ __WEBPACK_IMPORTED_MODULE_0____["Commands"].add(CmdContentItems, 'ContentItems',
     // only show to admin-users and in cases where we know the content-type
     showCondition: function (context) {
         return context.user.canDesign &&
-            (!!context.button.action.params.contentType ||
+            (!!context.button.command.params.contentType ||
                 !!context.contentBlock.contentTypeId);
     },
     configureLinkGenerator: function (context, linkGenerator) {
@@ -6909,8 +6921,8 @@ __WEBPACK_IMPORTED_MODULE_0____["Commands"].add(CmdContentItems, 'ContentItems',
         // if (linkGenerator.context.button.action.params.contentType)
         //     linkGenerator.urlParams.contentTypeName =
         //         linkGenerator.context.button.action.params.contentType;
-        if (context.button.action.params.filters) {
-            var enc = JSON.stringify(context.button.action.params.filters);
+        if (context.button.command.params.filters) {
+            var enc = JSON.stringify(context.button.command.params.filters);
             // special case - if it contains a "+" character, this won't survive
             // encoding through the hash as it's always replaced with a space, even if it would be pre converted to %2b
             // so we're base64 encoding it - see https://github.com/2sic/2sxc/issues/1061
@@ -6956,13 +6968,13 @@ var CmdContentType = 'contenttype';
 __WEBPACK_IMPORTED_MODULE_0____["Commands"].add(CmdContentType, 'ContentType', 'fields', true, false, {
     params: function (context) { return ({
         // added in 10.27 to help with the new edit ui
-        contentType: context.button.action.params.contentType
+        contentType: context.button.command.params.contentType
             || context.contentBlock.contentTypeId,
     }); },
     // only show to admin-users and in cases where we know the content-type
     showCondition: function (context) {
         return context.user.canDesign &&
-            (!!context.button.action.params.contentType ||
+            (!!context.button.command.params.contentType ||
                 !!context.contentBlock.contentTypeId);
     },
 });
@@ -6987,7 +6999,7 @@ var errNoCode = 'Trying to run Custom-Code action, but no customCode found to ru
 __WEBPACK_IMPORTED_MODULE_0__commands__["Commands"].add(CmdCustom, 'Custom', 'bomb', true, false, {
     code: function (context, event) {
         return new Promise(function (resolve, reject) {
-            var actPar = context.button.action.params;
+            var actPar = context.button.command.params;
             if (!actPar.customCode) {
                 console.warn(errNoCode, actPar);
                 alert(errNoCode);
@@ -7026,7 +7038,7 @@ var CmdDelete = 'delete';
 __WEBPACK_IMPORTED_MODULE_0____["Commands"].add(CmdDelete, 'Delete', 'cancel', true, false, {
     // disabled: true,
     showCondition: function (context) {
-        var p = context.button.action.params;
+        var p = context.button.command.params;
         // can never be used for a modulelist item, as it is always in use somewhere
         if (p.useModuleList)
             return false;
@@ -7039,7 +7051,7 @@ __WEBPACK_IMPORTED_MODULE_0____["Commands"].add(CmdDelete, 'Delete', 'cancel', t
         return (!!p.entityId && !!p.entityGuid && !!p.entityTitle);
     },
     code: function (context) {
-        var p = context.button.action.params;
+        var p = context.button.command.params;
         var title = p.title || p.entityTitle; // prefer new title, and fallback to old for pre 10.27 configs
         return __WEBPACK_IMPORTED_MODULE_1__entity_manipulation_item_commands__["contentItems"].delete(context, p.entityId, p.entityGuid, p.title || p.entityTitle);
     },
@@ -7125,8 +7137,8 @@ var CmdInstanceList = 'instance-list';
 __WEBPACK_IMPORTED_MODULE_0____["Commands"].add(CmdInstanceList, 'Sort', 'list-numbered', false, true, {
     showCondition: function (context) {
         return (context.contentBlock.isList &&
-            context.button.action.params.useModuleList &&
-            context.button.action.params.sortOrder !== -1);
+            context.button.command.params.useModuleList &&
+            context.button.command.params.sortOrder !== -1);
     },
 });
 
@@ -7186,13 +7198,13 @@ __WEBPACK_IMPORTED_MODULE_0____["Commands"].add(CmdMetadata, 'Metadata', 'tag', 
     params: function (context) { return ({ mode: __WEBPACK_IMPORTED_MODULE_2__new__["CmdNewMode"] }); },
     dialog: function (context) { return __WEBPACK_IMPORTED_MODULE_1__edit__["CmdEditDialog"]; },
     // if it doesn't have data yet, make it less strong
-    dynamicClasses: function (context) { return context.button.action.params.entityId ? '' : 'empty'; },
+    dynamicClasses: function (context) { return context.button.command.params.entityId ? '' : 'empty'; },
     // only add a metadata-button if it has metadata-infos
-    showCondition: function (context) { return !!context.button.action.params.metadata; },
+    showCondition: function (context) { return !!context.button.command.params.metadata; },
     configureLinkGenerator: function (_, linkGenerator) {
         var itm = {
             Title: 'EditFormTitle.Metadata',
-            Metadata: __assign({ keyType: 'string', targetType: 10 }, linkGenerator.context.button.action.params.metadata),
+            Metadata: __assign({ keyType: 'string', targetType: 10 }, linkGenerator.context.button.command.params.metadata),
         };
         linkGenerator.items[0] = __assign(__assign({}, linkGenerator.items[0]), itm);
         // O.bject.assign(command.items[0], itm);
@@ -7275,12 +7287,12 @@ __WEBPACK_IMPORTED_MODULE_0____["Commands"].add(CmdMoveDown, 'MoveDown', 'move-d
     showCondition: function (context) {
         // TODO: do not display if is last item in list
         return (context.contentBlock.isList &&
-            context.button.action.params.useModuleList &&
-            context.button.action.params.sortOrder !== -1);
+            context.button.command.params.useModuleList &&
+            context.button.command.params.sortOrder !== -1);
     },
     code: function (context) {
         // TODO: make sure index is never greater than the amount of items
-        return __WEBPACK_IMPORTED_MODULE_1__content_list_actions__["Actions"].changeOrder(context, context.button.action.params.sortOrder, context.button.action.params.sortOrder + 1);
+        return __WEBPACK_IMPORTED_MODULE_1__content_list_actions__["Actions"].changeOrder(context, context.button.command.params.sortOrder, context.button.command.params.sortOrder + 1);
     },
 });
 
@@ -7303,12 +7315,12 @@ var CmdMoveUp = 'moveup';
 __WEBPACK_IMPORTED_MODULE_0__commands__["Commands"].add(CmdMoveUp, 'MoveUp', 'move-up', false, true, {
     showCondition: function (context) {
         return (context.contentBlock.isList &&
-            context.button.action.params.useModuleList &&
-            context.button.action.params.sortOrder !== -1 &&
-            context.button.action.params.sortOrder !== 0);
+            context.button.command.params.useModuleList &&
+            context.button.command.params.sortOrder !== -1 &&
+            context.button.command.params.sortOrder !== 0);
     },
     code: function (context) {
-        return __WEBPACK_IMPORTED_MODULE_1__content_list_actions__["Actions"].changeOrder(context, context.button.action.params.sortOrder, Math.max(context.button.action.params.sortOrder - 1, 0));
+        return __WEBPACK_IMPORTED_MODULE_1__content_list_actions__["Actions"].changeOrder(context, context.button.command.params.sortOrder, Math.max(context.button.command.params.sortOrder - 1, 0));
     },
 });
 
@@ -7334,7 +7346,7 @@ var CmdPublish = 'publish';
  */
 __WEBPACK_IMPORTED_MODULE_0____["Commands"].add(CmdPublish, 'Unpublished', 'eye-off', false, false, {
     showCondition: function (context) {
-        return context.button.action.params.isPublished === false;
+        return context.button.command.params.isPublished === false;
     },
     disabled: function (context) {
         console.log('disabled:', context.instance);
@@ -7342,20 +7354,20 @@ __WEBPACK_IMPORTED_MODULE_0____["Commands"].add(CmdPublish, 'Unpublished', 'eye-
     },
     code: function (context, event) {
         return new Promise(function (resolve, reject) {
-            if (context.button.action.params.isPublished) {
+            if (context.button.command.params.isPublished) {
                 alert(Object(__WEBPACK_IMPORTED_MODULE_1__translate_2sxc_translate__["translate"])('Toolbar.AlreadyPublished'));
                 return resolve();
             }
             // if we have an entity-id, publish based on that
-            if (context.button.action.params.entityId) {
-                return __WEBPACK_IMPORTED_MODULE_2__content_list_actions__["Actions"].publishId(context, context.button.action.params.entityId);
+            if (context.button.command.params.entityId) {
+                return __WEBPACK_IMPORTED_MODULE_2__content_list_actions__["Actions"].publishId(context, context.button.command.params.entityId);
             }
-            var part = context.button.action.params.sortOrder === -1
+            var part = context.button.command.params.sortOrder === -1
                 ? 'listcontent'
                 : 'content';
-            var index = context.button.action.params.sortOrder === -1
+            var index = context.button.command.params.sortOrder === -1
                 ? 0
-                : context.button.action.params.sortOrder;
+                : context.button.command.params.sortOrder;
             return __WEBPACK_IMPORTED_MODULE_2__content_list_actions__["Actions"].publish(context, part, index);
         });
     },
@@ -7384,13 +7396,13 @@ var CmdRemove = 'remove';
 __WEBPACK_IMPORTED_MODULE_0____["Commands"].add(CmdRemove, 'Remove', 'minus-circled', false, true, {
     showCondition: function (context) {
         return (context.contentBlock.isList &&
-            context.button.action.params.useModuleList &&
-            context.button.action.params.sortOrder !== -1);
+            context.button.command.params.useModuleList &&
+            context.button.command.params.sortOrder !== -1);
     },
     code: function (context) {
         return new Promise(function (resolve, reject) {
             if (confirm(Object(__WEBPACK_IMPORTED_MODULE_1__translate_2sxc_translate__["translate"])('Toolbar.ConfirmRemove'))) {
-                return __WEBPACK_IMPORTED_MODULE_2__content_list_actions__["Actions"].removeFromList(context, context.button.action.params.sortOrder);
+                return __WEBPACK_IMPORTED_MODULE_2__content_list_actions__["Actions"].removeFromList(context, context.button.command.params.sortOrder);
             }
             return resolve();
         });
@@ -7413,7 +7425,7 @@ var CmdReplace = 'replace';
  */
 __WEBPACK_IMPORTED_MODULE_0____["Commands"].add(CmdReplace, 'Replace', 'replace', false, true, {
     showCondition: function (context) {
-        return context.button.action.params.useModuleList;
+        return context.button.command.params.useModuleList;
     },
 });
 
@@ -7903,7 +7915,7 @@ var CommandLinkGenerator = /** @class */ (function () {
     };
     CommandLinkGenerator.prototype.addItem = function () {
         var item = {};
-        var params = this.context.button.action.params;
+        var params = this.context.button.command.params;
         // two ways to name the content-type-name this, v 7.2+ and older
         var ct = params.contentType || params.attributeSetName;
         if (params.entityId)
@@ -7923,10 +7935,10 @@ var CommandLinkGenerator = /** @class */ (function () {
      */
     CommandLinkGenerator.prototype.addContentGroupItems = function (withPresentation) {
         var _this = this;
-        var params = this.context.button.action.params;
+        var params = this.context.button.command.params;
         var isContentAndNotHeader = (params.sortOrder !== -1);
         var index = isContentAndNotHeader ? params.sortOrder : 0;
-        var isAdd = this.context.button.action.name === 'new';
+        var isAdd = this.context.button.command.name === 'new';
         var groupId = this.context.contentBlock.contentGroupId;
         var fields = [this.findPartName(true)];
         if (withPresentation)
@@ -7958,9 +7970,9 @@ var CommandLinkGenerator = /** @class */ (function () {
      */
     CommandLinkGenerator.prototype.addItemInList = function () {
         var _this = this;
-        var params = this.context.button.action.params;
+        var params = this.context.button.command.params;
         var index = params.sortOrder;
-        var isAdd = this.context.button.action.name === 'new';
+        var isAdd = this.context.button.command.name === 'new';
         var groupId = params.parent;
         // New in 10.27 - if params has a field, use that
         if (params.fields)
@@ -7976,7 +7988,7 @@ var CommandLinkGenerator = /** @class */ (function () {
      * find the part name for both the API to give the right item (when using groups) and for i18n
      */
     CommandLinkGenerator.prototype.findPartName = function (content) {
-        var isContentAndNotHeader = (this.context.button.action.params.sortOrder !== -1);
+        var isContentAndNotHeader = (this.context.button.command.params.sortOrder !== -1);
         return (isContentAndNotHeader ? '' : 'List') + (content ? 'Content' : 'Presentation');
     };
     /**
@@ -8027,8 +8039,8 @@ var NgUrlValuesWithoutParams = /** @class */ (function () {
         // todo= probably move the user into the dashboard info
         this.user = __WEBPACK_IMPORTED_MODULE_0__context_parts_context_user__["ContextOfUser"].fromContext(context);
         this.approot = context.app.appPath || null; // this is the only value which doesn't have a slash by default. note that the app-root doesn't exist when opening "manage-app"
-        if ((_c = (_b = (_a = context === null || context === void 0 ? void 0 : context.button) === null || _a === void 0 ? void 0 : _a.action) === null || _b === void 0 ? void 0 : _b.params) === null || _c === void 0 ? void 0 : _c.apps)
-            this.apps = context.button.action.params.apps;
+        if ((_c = (_b = (_a = context === null || context === void 0 ? void 0 : context.button) === null || _a === void 0 ? void 0 : _a.command) === null || _b === void 0 ? void 0 : _b.params) === null || _c === void 0 ? void 0 : _c.apps)
+            this.apps = context.button.command.params.apps;
         this.fa = !context.app.isContent;
         this.rvt = $.ServicesFramework(0).getAntiForgeryValue();
     }
@@ -8899,13 +8911,12 @@ __webpack_require__(6);
 __webpack_require__(56);
 __webpack_require__(107);
 __webpack_require__(102);
-__webpack_require__(201);
 __webpack_require__(103);
 __webpack_require__(106);
 __webpack_require__(104);
 __webpack_require__(105);
+__webpack_require__(201);
 __webpack_require__(202);
-__webpack_require__(203);
 __webpack_require__(25);
 __webpack_require__(149);
 __webpack_require__(13);
@@ -10281,51 +10292,6 @@ if (__WEBPACK_IMPORTED_MODULE_1__interfaces_window_in_page__["windowInPage"].$2s
 
 /***/ }),
 /* 201 */
-/***/ (function(module, exports) {
-
-// CodeChange #2020-03-20#TemplateToolbarLeftUnused - if no side-effects, delete in June
-// import { ToolbarTemplate } from './toolbar-template-toolbar';
-//
-// the default / initial buttons in a standard toolbar
-// ToDo: refactor to avoid side-effects
-// export const ToolbarTemplateLeft: ToolbarTemplate = {
-//   groups: [
-//     {
-//       name: 'default',
-//       buttons: 'edit,new,metadata,publish,layout',
-//     }, {
-//       name: 'list',
-//       buttons: 'add,remove,moveup,movedown,instance-list,replace,item-history',
-//     }, {
-//       name: 'data',
-//       buttons: 'delete',
-//     }, {
-//       name: 'instance',
-//       buttons: 'template-develop,template-settings,contentitems,template-query,contenttype',
-//       defaults: {
-//         classes: 'group-pro',
-//       },
-//     }, {
-//       name: 'app',
-//       buttons: 'app,app-settings,app-resources,zone',
-//       defaults: {
-//         classes: 'group-pro',
-//       },
-//     },
-//   ],
-//   defaults: {},
-//   params: {},
-//   settings: {
-//     autoAddMore: 'start',
-//     // these are defaults, don't set again
-//     // hover: "right",
-//   },
-//   _isToolbarTemplate: true,
-// };
-
-
-/***/ }),
-/* 202 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -10337,11 +10303,11 @@ $(__WEBPACK_IMPORTED_MODULE_0__constants__["C"].IDs.sel.scMenu).click(function (
 
 
 /***/ }),
-/* 203 */
+/* 202 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // tslint:disable-next-line: no-var-requires
-var Shake = __webpack_require__(204);
+var Shake = __webpack_require__(203);
 // ReSharper disable once InconsistentNaming
 // enable shake detection on all toolbars
 $(function () {
@@ -10356,7 +10322,7 @@ $(function () {
 
 
 /***/ }),
-/* 204 */
+/* 203 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_RESULT__;/*

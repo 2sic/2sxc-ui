@@ -10,12 +10,12 @@ export class ButtonSafe {
     constructor(private button: Button, private context: ContextComplete) {
     }
 
-    action = () => this.button.action;
+    action = () => this.button.command;
 
     classes = () => this.button.classes || '';
 
     /** The dialog name - should default to the name */
-    dialog = () => getVal (this.button.dialog, this.context, this.button.action.name);
+    dialog = () => getVal (this.button.dialog, this.context, this.button.command.name);
 
     /** Determines if the button should be disabled */
     disabled = () => getVal (this.button.disabled, this.context, false);

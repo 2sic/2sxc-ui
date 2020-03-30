@@ -15,21 +15,24 @@ type ButtonGenOrProp<T> = ButtonPropGen<T> | T;
  * The real button configuration as it's used at runtime
  */
 export class Button {
+    /** The ID is important for tracking this button and applying modifiers */
     id: string;
-    name: string;
-    action: ButtonCommand;
-    classes: string = '';
-    modifier?: BuildRule;
 
-    constructor(action: ButtonCommand, name: string) {
-        this.action = action;
+    /** The underlying command which will be run */
+    command: ButtonCommand;
+
+    /** classes which will be applied to this button */
+    classes: string = '';
+
+    constructor(command: ButtonCommand, name: string) {
+        this.command = command;
         // if the name is an identifier, split it
         const parts = Button.splitName(name);
         this.id = parts.id;
-        this.name = parts.name;
+        // this.name = parts.name;
         // get defaults from action commandDefinition
-        if (action?.command?.buttonDefaults)
-            Obj.TypeSafeAssign(this, action.command.buttonDefaults);
+        if (command?.command?.buttonDefaults)
+            Obj.TypeSafeAssign(this, command.command.buttonDefaults);
     }
 
     static splitName(identifier: string): { id: string, name: string} {
@@ -83,7 +86,7 @@ export class Button {
 
     /** Detect if this is a Button */
     static is(thing: TypeTbD): thing is Button {
-        return (thing as Button).action !== undefined;
+        return (thing as Button).command !== undefined;
     }
 
     static isArray(thing: TypeTbD): thing is Button[] {

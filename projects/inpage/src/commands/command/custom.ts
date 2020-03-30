@@ -12,7 +12,7 @@ const errNoCode = 'Trying to run Custom-Code action, but no customCode found to 
 Commands.add(CmdCustom, 'Custom', 'bomb', true, false, {
     code(context, event) {
         return new Promise((resolve, reject) => {
-            const actPar = context.button.action.params;
+            const actPar = context.button.command.params;
             if (!actPar.customCode) {
                 console.warn(errNoCode, actPar);
                 alert(errNoCode);

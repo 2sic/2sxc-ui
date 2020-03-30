@@ -42,9 +42,6 @@ export class InPageButtonJson {
     inlineWindow?: boolean;
     fullScreen?: boolean;
 
-    /** Set the button color - new in 10.27 BETA */
-    color?: string;
-
     _expanded?: boolean; // marker to determine that the configuration has already been initialized
 
     // check two common signatures - command and action
@@ -66,14 +63,14 @@ export class InPageButtonJson {
         if (oldFormat.icon) config.icon = oldFormat.icon;
 
         // Method Properties
-        // if (oldFormat.dynamicClasses) config.dynamicClasses = evalPropOrFun(oldFormat.dynamicClasses);
         if (oldFormat.fullScreen) config.fullScreen = evalPropOrFun(oldFormat.fullScreen);
         if (oldFormat.icon) config.icon = evalPropOrFun(oldFormat.icon);
         if (oldFormat.inlineWindow) config.inlineWindow = evalPropOrFun(oldFormat.inlineWindow);
         if (oldFormat.newWindow) config.newWindow = evalPropOrFun(oldFormat.newWindow);
         if (oldFormat.partOfPage) config.partOfPage = evalPropOrFun(oldFormat.partOfPage);
-        // if (oldFormat.showCondition) config.showCondition = evalPropOrFun(oldFormat.showCondition);
         if (oldFormat.title) config.title = evalPropOrFun(oldFormat.title);
+        // if (oldFormat.dynamicClasses) config.dynamicClasses = evalPropOrFun(oldFormat.dynamicClasses);
+        // if (oldFormat.showCondition) config.showCondition = evalPropOrFun(oldFormat.showCondition);
 
         return config;
     }

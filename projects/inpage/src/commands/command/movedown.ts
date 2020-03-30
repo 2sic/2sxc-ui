@@ -11,16 +11,16 @@ Commands.add(CmdMoveDown, 'MoveDown', 'move-down', false, true, {
         // TODO: do not display if is last item in list
         return (
             context.contentBlock.isList &&
-            context.button.action.params.useModuleList &&
-            context.button.action.params.sortOrder !== -1
+            context.button.command.params.useModuleList &&
+            context.button.command.params.sortOrder !== -1
         );
     },
     code(context) {
         // TODO: make sure index is never greater than the amount of items
         return Actions.changeOrder(
             context,
-            context.button.action.params.sortOrder,
-            context.button.action.params.sortOrder + 1,
+            context.button.command.params.sortOrder,
+            context.button.command.params.sortOrder + 1,
         );
     },
 });

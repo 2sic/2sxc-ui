@@ -16,11 +16,11 @@ Commands.add(
     {
         showCondition(context) {
             return context.contentBlock.isList &&
-                context.button.action.params.useModuleList &&
-                context.button.action.params.sortOrder !== -1;
+                context.button.command.params.useModuleList &&
+                context.button.command.params.sortOrder !== -1;
         },
         code(context) {
-            return Actions.addItem(context, context.button.action.params.sortOrder + 1);
+            return Actions.addItem(context, context.button.command.params.sortOrder + 1);
         },
     },
 );
