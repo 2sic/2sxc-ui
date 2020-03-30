@@ -1,6 +1,6 @@
 ﻿import { DictionaryValue, TypeTbD } from '../../plumbing';
 import { ToolbarSettings } from '../config/toolbar-settings';
-import { ToolbarTemplateButtonGroup } from './toolbar-templaten-button-group';
+import { ToolbarTemplateGroup } from './toolbar-template-group';
 
 /**
  * This describes a template configuration of a toolbar
@@ -8,7 +8,7 @@ import { ToolbarTemplateButtonGroup } from './toolbar-templaten-button-group';
  */
 export class ToolbarTemplate {
     name: string;
-    groups: ToolbarTemplateButtonGroup[] = [];
+    groups: ToolbarTemplateGroup[] = [];
     defaults?: DictionaryValue = {};
     params?: DictionaryValue = {};
     settings?: Partial<ToolbarSettings> = {};

@@ -1,20 +1,20 @@
-import { isArray } from 'util';
+import { Operations } from '.';
+import { BuildRule } from '.';
+import { RuleConstants } from '.';
 import { HasLog } from '../../logging';
 import { ToolbarConfigLoader } from '../config-loaders';
-import { Operations } from './operations';
-import { BuildRule } from './rule';
 
 
 export class RuleManager extends HasLog {
     rules: BuildRule[] = [];
     constructor(parent: ToolbarConfigLoader) {
         super('Tlb.RlMngr', parent.log);
-        this.log.liveDump = true;
+        // this.log.liveDump = true;
     }
 
     load(rawList: string[]): BuildRule[] {
         const cl = this.log.call('load', `${() => rawList.length}`);
-        if (!isArray(rawList))
+        if (!Array.isArray(rawList))
             return cl.return([], 'raw is empty');
 
         rawList.forEach((raw) => {
@@ -32,15 +32,21 @@ export class RuleManager extends HasLog {
     }
 
     find(name: string): BuildRule | undefined {
-        const found = this.rules.find((r) => r.name === name);
+        const found = this.rules.find((r) => r.id === name);
         return found;
     }
 
-    getSettings = () => this.getSystem('settings');
-    getParams = () => this.getSystem('params');
+    getSettings = () => this.getSystem(RuleConstants.Settings);
+    getParams = () => this.getSystem(RuleConstants.Params);
+
+    getAdd = () => this.getListByCriteria((br) => br.operation === Operations.add);
 
     private getSystem(name: string): BuildRule | undefined {
-        const found = this.rules.find((r) => r.operation === Operations.system && r.name === name);
+        const found = this.rules.find((r) => r.operation === Operations.system && r.id === name);
         return found;
+    }
+
+    private getListByCriteria(criteria: (x: BuildRule) => boolean): BuildRule[] {
+        return this.rules.filter(criteria);
     }
 }

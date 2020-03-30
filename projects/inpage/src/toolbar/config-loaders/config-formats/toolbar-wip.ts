@@ -2,12 +2,12 @@ import { InPageButtonGroupJson } from '..';
 import { CommandParams } from '../../../commands/command-params';
 import { DictionaryValue } from '../../../plumbing';
 import { ButtonGroup, ToolbarSettings } from '../../config';
-import { ToolbarTemplateButtonGroup } from '../../templates/toolbar-templaten-button-group';
+import { ToolbarTemplateGroup } from '../../templates/toolbar-template-group';
 
 
 export type ButtonGroupsWip = ButtonGroupWip[];
 
-export type ButtonGroupWip = ButtonGroup | InPageButtonGroupJson | ToolbarTemplateButtonGroup;
+export type ButtonGroupWip = ButtonGroup | InPageButtonGroupJson | ToolbarTemplateGroup;
 
 /**
  * Runtime configuration of the toolbar.

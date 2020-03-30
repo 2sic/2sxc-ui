@@ -8,9 +8,8 @@ import { ButtonGroup, Toolbar } from '../config';
 import { ToolbarSettings, ToolbarSettingsDefaults, ToolbarSettingsForEmpty } from '../config';
 import { InPageToolbarConfigVariations, ToolbarInitConfig } from '../initialize/toolbar-init-config';
 import { RuleManager } from '../rules';
-import { ToolbarTemplateManager } from '../templates';
-import { ToolbarTemplate } from '../templates';
-import { ToolbarTemplateButtonGroup } from '../templates';
+import { TemplateEditor, ToolbarTemplate, ToolbarTemplateManager } from '../templates';
+import { ToolbarTemplateGroup } from '../templates';
 import { ToolbarTemplateDefault } from '../templates/template-default';
 import { ButtonConfigLoader } from './button-config-loader';
 
@@ -23,6 +22,8 @@ export class ToolbarConfigLoader extends HasLog {
     public button: ButtonConfigLoader;
     public command: CommandConfigLoader;
     public rules: RuleManager;
+    public templates = ToolbarTemplateManager;
+    public templateEditor: TemplateEditor;
 
     public logs: Array<{ key: string, entries: Entry[]}>;
 
@@ -50,6 +51,7 @@ export class ToolbarConfigLoader extends HasLog {
         this.button = new ButtonConfigLoader(this);
         this.command = new CommandConfigLoader(this);
         this.rules = new RuleManager(this);
+        this.templateEditor = new TemplateEditor(this);
     }
 
     load(context: ContextComplete, config: ToolbarInitConfig): Toolbar {
@@ -81,10 +83,19 @@ export class ToolbarConfigLoader extends HasLog {
         if (false) {
             // todo
         } else {
-            template = ToolbarTemplateManager.Instance(this.log).copy(ToolbarTemplateDefault.name);
+            template = this.templates.copy(ToolbarTemplateDefault.name);
         }
 
+        // Add additional buttons
+        const add = this.rules.getAdd();
+        add.forEach((a) => {
+            console.log('add rule', a);
+            if (a.id === 'group') this.templateEditor.addGroup(template, a.name, a.pos, a.fromStart);
+            else this.templateEditor.addButton(template, a.group, a.name, a.pos, a.fromStart);
+        });
+
         const toolbar = this.buildFullDefinition(context, template, settings);
+        toolbar.settings._rules = this.rules;
 
         // process the rules one by one
         return cl.return(toolbar, 'ok');
@@ -119,12 +130,12 @@ export class ToolbarConfigLoader extends HasLog {
 
         if (InPageCommandJson.hasActions(raw)
             || ToolbarTemplate.hasGroups(raw)
-            || ToolbarTemplateButtonGroup.is(raw)
+            || ToolbarTemplateGroup.is(raw)
             || Array.isArray(raw))
                 return wrapLog.return(raw, 'keep raw');
 
         wrapLog.add('no toolbar structure specified, will use standard toolbar template');
-        const template = ToolbarTemplateManager.Instance(this.log).copy(ToolbarTemplateDefault.name);
+        const template = this.templates.copy(ToolbarTemplateDefault.name);
         template.params = (Array.isArray(raw) && raw[0]) || raw; // attach parameters
         // template.settings._rules = modifiers;
         return wrapLog.return(template, 'use template');

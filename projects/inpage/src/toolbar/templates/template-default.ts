@@ -1,4 +1,4 @@
-﻿import { ToolbarTemplate } from '.';
+﻿import { TemplateConstants, ToolbarTemplate } from '.';
 
 // the default / initial buttons in a standard toolbar
 // ToDo: refactor to avoid side-effects
@@ -6,15 +6,17 @@ export const ToolbarTemplateDefault: ToolbarTemplate = {
   name: 'default',
   groups: [
     {
-      name: 'default',
+      name: TemplateConstants.NameDefault,
       buttons: 'edit,new,metadata,publish,layout',
     }, {
       name: 'list',
       buttons: 'add,remove,moveup,movedown,instance-list,replace,item-history',
     }, {
+        // todo: rename - and in all templates
       name: 'data',
       buttons: 'delete',
     }, {
+        // todo: rename - and in all templates - probably 'view'
       name: 'instance',
       buttons: 'template-develop,template-settings,contentitems,template-query,contenttype',
       defaults: {
