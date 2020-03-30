@@ -7,7 +7,7 @@ import { Entry, HasLog } from '../../logging';
 import { ButtonGroup, Toolbar } from '../config';
 import { ToolbarSettings, ToolbarSettingsDefaults, ToolbarSettingsForEmpty } from '../config';
 import { InPageToolbarConfigVariations, ToolbarInitConfig } from '../initialize/toolbar-init-config';
-import { RuleConstants, RuleManager } from '../rules';
+import { RuleConstants as RC, RuleManager } from '../rules';
 import { TemplateEditor, ToolbarTemplate, ToolbarTemplateManager } from '../templates';
 import { ToolbarTemplateGroup } from '../templates';
 import { ToolbarTemplateDefault } from '../templates/template-default';
@@ -79,19 +79,18 @@ export class ToolbarConfigLoader extends HasLog {
             ? settingRule.params as unknown as ToolbarSettings
             : ToolbarSettingsForEmpty;
 
-        // todo: special case if first rule is clear
-        if (false) {
-            // todo
-        } else {
-            template = this.templates.copy(ToolbarTemplateDefault.name);
-        }
+        // #1 special case if toolbar rule contains a custom name
+        const toolbarRule = this.rules.getToolbar();
+        const toolbarTemplateName = (toolbarRule && toolbarRule.name !== RC.Toolbar)
+            ? toolbarRule.name
+            : ToolbarTemplateDefault.name;
+        template = this.templates.copy(toolbarTemplateName);
 
         // Add additional buttons
         const add = this.rules.getAdd();
         add.forEach((a) => {
-            // console.log('add rule', a);
-            if (a.id === RuleConstants.Keys.Group) this.templateEditor.addGroup(template, a.name, a.pos, a.fromStart);
-            else this.templateEditor.addButton(template, a.group, a.name, a.pos, a.fromStart);
+            if (a.id === RC.Keys.Group) this.templateEditor.addGroup(template, a.name, a.pos, a.fromStart);
+            else this.templateEditor.addButton(template, a.group, a.id, a.name, a.pos, a.fromStart);
         });
 
         const toolbar = this.buildFullDefinition(context, template, settings);

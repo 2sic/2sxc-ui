@@ -45,7 +45,7 @@ class ToolbarManagerGlobal extends HasLog {
     /** Generate a single-use loader. It must be single use so the logs work */
     getLoader(instanceName: string) {
         const loader = new ToolbarConfigLoader(this);
-        Insights.add('toolbars', instanceName, loader.log);
+        Insights.add('toolbar', instanceName, loader.log);
         return loader;
     }
 }

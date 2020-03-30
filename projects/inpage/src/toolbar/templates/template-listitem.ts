@@ -1,4 +1,4 @@
-﻿import { TemplateConstants, ToolbarTemplate } from '.';
+﻿import { TemplateConstants as TC, ToolbarTemplate } from '.';
 
 // the default / initial buttons in a standard toolbar
 // ToDo: refactor to avoid side-effects
@@ -6,7 +6,7 @@ export const ToolbarTemplateInListRight: ToolbarTemplate = {
   name: 'listitem',
   groups: [
     {
-      name: TemplateConstants.NameDefault,
+      name: TC.GroupDefault,
       buttons: 'edit,new,publish',
       defaults: {
         classes: 'group-inlist',

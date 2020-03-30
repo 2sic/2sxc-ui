@@ -1,8 +1,7 @@
 ﻿import { InPageCommandJson } from '.';
 import { InPageButtonJson } from '.';
 import { ToolbarConfigLoader } from '.';
-import { CmdMore } from '../../commands/command/more';
-import { Commands } from '../../commands/commands';
+import { CmdMore, Commands } from '../../commands';
 import { ContextComplete } from '../../context/bundles';
 import { HasLog } from '../../logging';
 import { DictionaryValue } from '../../plumbing';

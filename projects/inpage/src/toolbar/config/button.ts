@@ -15,12 +15,17 @@ type ButtonGenOrProp<T> = ButtonPropGen<T> | T;
  * The real button configuration as it's used at runtime
  */
 export class Button {
+    id: string;
     action: ButtonCommand;
     classes: string = '';
     modifier?: BuildRule;
 
     constructor(action: ButtonCommand, public name: string) {
         this.action = action;
+        // if the name is an identifier, split it
+        const parts = name.split('=');
+        this.id = parts[0];
+        this.name = parts[1] || name;
         // get defaults from action commandDefinition
         if (action?.command?.buttonDefaults)
             Obj.TypeSafeAssign(this, action.command.buttonDefaults);

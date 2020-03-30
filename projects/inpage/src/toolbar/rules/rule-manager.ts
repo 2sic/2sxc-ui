@@ -38,6 +38,7 @@ export class RuleManager extends HasLog {
 
     getSettings = () => this.getSystem(RuleConstants.Settings);
     getParams = () => this.getSystem(RuleConstants.Params);
+    getToolbar = () => this.getSystem(RuleConstants.Toolbar);
 
     getAdd = () => this.getListByCriteria((br) => br.operation === Operations.add);
 

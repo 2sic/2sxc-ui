@@ -1,12 +1,12 @@
 ﻿import { ToolbarWip } from '.';
 import { InPageButtonJson, InPageCommandJson } from '.';
 import { ButtonGroupWip } from '.';
-import { CommandParams, Commands } from '../../commands';
-import { CmdMore } from '../../commands/command/more';
+import { CmdMore, CommandParams, Commands } from '../../commands';
 import { HasLog } from '../../logging';
 import { DictionaryValue } from '../../plumbing';
 import { Button, ButtonCommand, Toolbar, ToolbarSettings } from '../config';
 import { ButtonGroup } from '../config';
+import { TemplateConstants as TC } from '../templates/constants';
 import { ToolbarConfigLoader } from './toolbar-config-loader';
 
 export class ButtonGroupConfigLoader extends HasLog {
@@ -21,10 +21,10 @@ export class ButtonGroupConfigLoader extends HasLog {
      * @param fullToolbar
      */
     expandButtonGroups(fullToolbar: ToolbarWip): Toolbar {
-        const wrapLog = this.log.call('expandButtonGroups'); // new Log('Tlb.ExpGrp', parentLog, 'start');
+        const cl = this.log.call('expandButtonGroups');
 
         // by now we should have a structure, let's check/fix the buttons
-        wrapLog.add(`will expand groups - found ${fullToolbar.groups.length} items`);
+        cl.add(`will expand groups - found ${fullToolbar.groups.length} items`);
         for (let g = 0; g < fullToolbar.groups.length; g++) {
             // expand a verb-list like "edit,new" into objects like [{ action: "edit" }, {action: "new"}]
             const group = fullToolbar.groups[g];
@@ -33,16 +33,18 @@ export class ButtonGroupConfigLoader extends HasLog {
             const buttonConfigs: Button[] = [];
 
             if (Array.isArray(btns)) {
-                wrapLog.add(`will process ${btns.length} buttons`);
+                cl.add(`will process ${btns.length} buttons`);
                 for (let b = 0; b < btns.length; b++)
                     buttonConfigs.push(this.convertToButton(btns[b], fullToolbar.params, fullToolbar.defaults, groupDefaults));
             } else
-                wrapLog.add("no button array found, won't do a.nything");
+                cl.add("no button array found, won't do a.nything");
 
             // Toolbar API v2 overwrite V1
             group.buttons = buttonConfigs;
         }
-        return wrapLog.return(fullToolbar as Toolbar);
+        const toolbar = fullToolbar as Toolbar;
+        this.dropMoreIfOnlyOneGroup(toolbar);
+        return cl.return(toolbar);
     }
 
 
@@ -76,8 +78,8 @@ export class ButtonGroupConfigLoader extends HasLog {
         const params = { ...InPageCommandJson.noAction(btnCommand), ...sharedParams };
 
         // Toolbar API v2
-        const newButtonAction = new ButtonCommand(name, contentType, params);
-        let newButtonConfig = new Button(newButtonAction, name);
+        const command = new ButtonCommand(name, contentType, params);
+        let newButtonConfig = new Button(command, command.name);
 
         // settings adapter from v1 to v2
         newButtonConfig = { ...newButtonConfig, ...InPageButtonJson.toButton(btn) };
@@ -136,7 +138,7 @@ export class ButtonGroupConfigLoader extends HasLog {
 
     private expandButtonAndAddToList(list: InPageButtonJson[], btn: InPageButtonJson, names: string): void {
         const cl = this.log.call('expandButtonAndAddToList', '', `button def "${btn} is string of ma.ny names, will expand into array with action-properties"`);
-        const actions = names.split(',');
+        const actions = names.length ? names.split(TC.ButtonSeparator) : [];
         for (let a = 0; a < actions.length; a++)
             list.push({...btn, ...this.toolbar.button.getFromName(actions[a])} as InPageButtonJson);
         cl.return(list);
@@ -159,5 +161,19 @@ export class ButtonGroupConfigLoader extends HasLog {
         cl.return(list);
     }
 
+    /**
+     * If there is only one group, then remove the More button.
+     * Note that this has to happen almost at the end, because groups will be removed if empty
+     */
+    private dropMoreIfOnlyOneGroup(toolbar: Toolbar): void {
+        const cl = this.log.call('dropMoreIfOnlyOneGroup');
+        if (toolbar.groups.length !== 1) return cl.done('not just 1 group');
+        cl.add('exactly one group found, will remove more');
+        const buttons = toolbar.groups[0].buttons;
+        const index = buttons.findIndex((b) => b.name === CmdMore);
+        if (index === -1) return cl.done("no 'more' button found");
+        buttons.splice(index, 1);
+        cl.done('more removed');
+    }
 
 }

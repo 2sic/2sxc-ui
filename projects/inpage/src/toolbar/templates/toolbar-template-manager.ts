@@ -1,4 +1,4 @@
-﻿import { ToolbarTemplate, ToolbarTemplateDefault, ToolbarTemplateInListRight } from '.';
+﻿import { ToolbarTemplate, ToolbarTemplateDefault, ToolbarTemplateEmpty, ToolbarTemplateInListRight } from '.';
 import { HasLog, Insights } from '../../logging';
 import { Obj } from '../../plumbing';
 
@@ -15,6 +15,7 @@ class ToolbarTemplateManagerSingleton extends HasLog {
     constructor() {
         super('Tlb.TmpMan', null, 'build');
         Insights.add('toolbars', 'template-manager', this.log);
+        this.add(ToolbarTemplateEmpty);
         this.add(ToolbarTemplateDefault);
         // CodeChange #2020-03-20#TemplateToolbarLeftUnused - if no side-effects, delete in June
         // this.add('left', ToolbarTemplateLeft);
@@ -25,7 +26,12 @@ class ToolbarTemplateManagerSingleton extends HasLog {
      * Deep copy toolbar template, so it can be modified without changing the next use
      */
     copy(name: string): ToolbarTemplate {
-        return Obj.DeepClone(this.list[name]);
+        return Obj.DeepClone(this.findOrShowError(name));
+    }
+    private findOrShowError(name: string): ToolbarTemplate {
+        const found = this.list[name];
+        if (found) return found;
+        throw `try to find toolbar template '${name}' but not found`;
     }
 
     /**

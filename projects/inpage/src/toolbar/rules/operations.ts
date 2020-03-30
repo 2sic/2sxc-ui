@@ -2,7 +2,7 @@
 export enum Operations {
     add = '+',
     remove = '-',
-    system = '$', // for $clear
+    system = '$', // for $params, $settings?
     modify = '%',
     comment = '/',
 }

@@ -74,19 +74,49 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony namespace reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in __WEBPACK_IMPORTED_MODULE_0__command_code__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return __WEBPACK_IMPORTED_MODULE_0__command_code__[key]; }) }(__WEBPACK_IMPORT_KEY__));
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__command__ = __webpack_require__(39);
 /* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "Command", function() { return __WEBPACK_IMPORTED_MODULE_1__command__["Command"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__command_params__ = __webpack_require__(64);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__command_params___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__command_params__);
-/* harmony namespace reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in __WEBPACK_IMPORTED_MODULE_2__command_params__) if(["Command","default"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return __WEBPACK_IMPORTED_MODULE_2__command_params__[key]; }) }(__WEBPACK_IMPORT_KEY__));
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__commands__ = __webpack_require__(10);
-/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "Commands", function() { return __WEBPACK_IMPORTED_MODULE_3__commands__["Commands"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__engine_cms_engine__ = __webpack_require__(77);
-/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "CmsEngine", function() { return __WEBPACK_IMPORTED_MODULE_4__engine_cms_engine__["CmsEngine"]; });
-/* harmony namespace reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in __WEBPACK_IMPORTED_MODULE_0__command_code__) if(["Command","Commands","CmsEngine","default"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return __WEBPACK_IMPORTED_MODULE_0__command_code__[key]; }) }(__WEBPACK_IMPORT_KEY__));
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__metadata_for__ = __webpack_require__(121);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__metadata_for___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__metadata_for__);
-/* harmony namespace reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in __WEBPACK_IMPORTED_MODULE_5__metadata_for__) if(["Command","Commands","CmsEngine","default"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return __WEBPACK_IMPORTED_MODULE_5__metadata_for__[key]; }) }(__WEBPACK_IMPORT_KEY__));
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__engine_sxc_instance_engine__ = __webpack_require__(122);
-/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "SxcInstanceEngine", function() { return __WEBPACK_IMPORTED_MODULE_6__engine_sxc_instance_engine__["SxcInstanceEngine"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__commands__ = __webpack_require__(10);
+/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "Commands", function() { return __WEBPACK_IMPORTED_MODULE_2__commands__["Commands"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__command_index__ = __webpack_require__(185);
+/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "CmdAdd", function() { return __WEBPACK_IMPORTED_MODULE_3__command_index__["CmdAdd"]; });
+/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "CmdAppImport", function() { return __WEBPACK_IMPORTED_MODULE_3__command_index__["CmdAppImport"]; });
+/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "CmdAppResources", function() { return __WEBPACK_IMPORTED_MODULE_3__command_index__["CmdAppResources"]; });
+/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "CmdAppSettings", function() { return __WEBPACK_IMPORTED_MODULE_3__command_index__["CmdAppSettings"]; });
+/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "CmdContentItems", function() { return __WEBPACK_IMPORTED_MODULE_3__command_index__["CmdContentItems"]; });
+/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "ContentListActionParams", function() { return __WEBPACK_IMPORTED_MODULE_3__command_index__["ContentListActionParams"]; });
+/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "Actions", function() { return __WEBPACK_IMPORTED_MODULE_3__command_index__["Actions"]; });
+/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "CmdContentType", function() { return __WEBPACK_IMPORTED_MODULE_3__command_index__["CmdContentType"]; });
+/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "CmdCustom", function() { return __WEBPACK_IMPORTED_MODULE_3__command_index__["CmdCustom"]; });
+/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "CmdDelete", function() { return __WEBPACK_IMPORTED_MODULE_3__command_index__["CmdDelete"]; });
+/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "CmdEdit", function() { return __WEBPACK_IMPORTED_MODULE_3__command_index__["CmdEdit"]; });
+/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "CmdEditDialog", function() { return __WEBPACK_IMPORTED_MODULE_3__command_index__["CmdEditDialog"]; });
+/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "CmdInstanceList", function() { return __WEBPACK_IMPORTED_MODULE_3__command_index__["CmdInstanceList"]; });
+/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "CmdItemHistory", function() { return __WEBPACK_IMPORTED_MODULE_3__command_index__["CmdItemHistory"]; });
+/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "CmdLayout", function() { return __WEBPACK_IMPORTED_MODULE_3__command_index__["CmdLayout"]; });
+/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "CmdMetadata", function() { return __WEBPACK_IMPORTED_MODULE_3__command_index__["CmdMetadata"]; });
+/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "CmdMore", function() { return __WEBPACK_IMPORTED_MODULE_3__command_index__["CmdMore"]; });
+/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "CmdMoveDown", function() { return __WEBPACK_IMPORTED_MODULE_3__command_index__["CmdMoveDown"]; });
+/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "CmdMoveUp", function() { return __WEBPACK_IMPORTED_MODULE_3__command_index__["CmdMoveUp"]; });
+/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "CmdNew", function() { return __WEBPACK_IMPORTED_MODULE_3__command_index__["CmdNew"]; });
+/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "CmdNewMode", function() { return __WEBPACK_IMPORTED_MODULE_3__command_index__["CmdNewMode"]; });
+/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "CmdPublish", function() { return __WEBPACK_IMPORTED_MODULE_3__command_index__["CmdPublish"]; });
+/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "CmdRemove", function() { return __WEBPACK_IMPORTED_MODULE_3__command_index__["CmdRemove"]; });
+/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "CmdReplace", function() { return __WEBPACK_IMPORTED_MODULE_3__command_index__["CmdReplace"]; });
+/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "CmdTemplateDevelop", function() { return __WEBPACK_IMPORTED_MODULE_3__command_index__["CmdTemplateDevelop"]; });
+/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "CmdTemplateQuery", function() { return __WEBPACK_IMPORTED_MODULE_3__command_index__["CmdTemplateQuery"]; });
+/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "CmdTemplateSettings", function() { return __WEBPACK_IMPORTED_MODULE_3__command_index__["CmdTemplateSettings"]; });
+/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "CmdZone", function() { return __WEBPACK_IMPORTED_MODULE_3__command_index__["CmdZone"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__command_params__ = __webpack_require__(64);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__command_params___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__command_params__);
+/* harmony namespace reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in __WEBPACK_IMPORTED_MODULE_4__command_params__) if(["Command","Commands","CmdAdd","CmdAppImport","CmdAppResources","CmdAppSettings","CmdContentItems","ContentListActionParams","Actions","CmdContentType","CmdCustom","CmdDelete","CmdEdit","CmdEditDialog","CmdInstanceList","CmdItemHistory","CmdLayout","CmdMetadata","CmdMore","CmdMoveDown","CmdMoveUp","CmdNew","CmdNewMode","CmdPublish","CmdRemove","CmdReplace","CmdTemplateDevelop","CmdTemplateQuery","CmdTemplateSettings","CmdZone","default"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return __WEBPACK_IMPORTED_MODULE_4__command_params__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__engine_cms_engine__ = __webpack_require__(77);
+/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "CmsEngine", function() { return __WEBPACK_IMPORTED_MODULE_5__engine_cms_engine__["CmsEngine"]; });
+/* harmony namespace reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in __WEBPACK_IMPORTED_MODULE_0__command_code__) if(["Command","Commands","CmdAdd","CmdAppImport","CmdAppResources","CmdAppSettings","CmdContentItems","ContentListActionParams","Actions","CmdContentType","CmdCustom","CmdDelete","CmdEdit","CmdEditDialog","CmdInstanceList","CmdItemHistory","CmdLayout","CmdMetadata","CmdMore","CmdMoveDown","CmdMoveUp","CmdNew","CmdNewMode","CmdPublish","CmdRemove","CmdReplace","CmdTemplateDevelop","CmdTemplateQuery","CmdTemplateSettings","CmdZone","CmsEngine","default"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return __WEBPACK_IMPORTED_MODULE_0__command_code__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__metadata_for__ = __webpack_require__(121);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__metadata_for___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6__metadata_for__);
+/* harmony namespace reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in __WEBPACK_IMPORTED_MODULE_6__metadata_for__) if(["Command","Commands","CmdAdd","CmdAppImport","CmdAppResources","CmdAppSettings","CmdContentItems","ContentListActionParams","Actions","CmdContentType","CmdCustom","CmdDelete","CmdEdit","CmdEditDialog","CmdInstanceList","CmdItemHistory","CmdLayout","CmdMetadata","CmdMore","CmdMoveDown","CmdMoveUp","CmdNew","CmdNewMode","CmdPublish","CmdRemove","CmdReplace","CmdTemplateDevelop","CmdTemplateQuery","CmdTemplateSettings","CmdZone","CmsEngine","default"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return __WEBPACK_IMPORTED_MODULE_6__metadata_for__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__engine_sxc_instance_engine__ = __webpack_require__(122);
+/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "SxcInstanceEngine", function() { return __WEBPACK_IMPORTED_MODULE_7__engine_sxc_instance_engine__["SxcInstanceEngine"]; });
+
 
 
 
@@ -402,18 +432,21 @@ var ContextComplete = /** @class */ (function (_super) {
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__constants__ = __webpack_require__(56);
 /* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "TemplateConstants", function() { return __WEBPACK_IMPORTED_MODULE_0__constants__["TemplateConstants"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__template_default__ = __webpack_require__(57);
-/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "ToolbarTemplateDefault", function() { return __WEBPACK_IMPORTED_MODULE_1__template_default__["ToolbarTemplateDefault"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__template_listitem__ = __webpack_require__(103);
-/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "ToolbarTemplateInListRight", function() { return __WEBPACK_IMPORTED_MODULE_2__template_listitem__["ToolbarTemplateInListRight"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__toolbar_template_manager__ = __webpack_require__(104);
-/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "ToolbarTemplateManager", function() { return __WEBPACK_IMPORTED_MODULE_3__toolbar_template_manager__["ToolbarTemplateManager"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__toolbar_template__ = __webpack_require__(105);
-/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "ToolbarTemplate", function() { return __WEBPACK_IMPORTED_MODULE_4__toolbar_template__["ToolbarTemplate"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__toolbar_template_group__ = __webpack_require__(106);
-/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "ToolbarTemplateGroup", function() { return __WEBPACK_IMPORTED_MODULE_5__toolbar_template_group__["ToolbarTemplateGroup"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__template_editor__ = __webpack_require__(107);
-/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "TemplateEditor", function() { return __WEBPACK_IMPORTED_MODULE_6__template_editor__["TemplateEditor"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__template_empty__ = __webpack_require__(219);
+/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "ToolbarTemplateEmpty", function() { return __WEBPACK_IMPORTED_MODULE_1__template_empty__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__template_default__ = __webpack_require__(57);
+/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "ToolbarTemplateDefault", function() { return __WEBPACK_IMPORTED_MODULE_2__template_default__["ToolbarTemplateDefault"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__template_listitem__ = __webpack_require__(103);
+/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "ToolbarTemplateInListRight", function() { return __WEBPACK_IMPORTED_MODULE_3__template_listitem__["ToolbarTemplateInListRight"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__toolbar_template_manager__ = __webpack_require__(104);
+/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "ToolbarTemplateManager", function() { return __WEBPACK_IMPORTED_MODULE_4__toolbar_template_manager__["ToolbarTemplateManager"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__toolbar_template__ = __webpack_require__(105);
+/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "ToolbarTemplate", function() { return __WEBPACK_IMPORTED_MODULE_5__toolbar_template__["ToolbarTemplate"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__toolbar_template_group__ = __webpack_require__(106);
+/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "ToolbarTemplateGroup", function() { return __WEBPACK_IMPORTED_MODULE_6__toolbar_template_group__["ToolbarTemplateGroup"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__template_editor__ = __webpack_require__(107);
+/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "TemplateEditor", function() { return __WEBPACK_IMPORTED_MODULE_7__template_editor__["TemplateEditor"]; });
+
 
 
 
@@ -1465,7 +1498,7 @@ var ToolbarManagerGlobal = /** @class */ (function (_super) {
     /** Generate a single-use loader. It must be single use so the logs work */
     ToolbarManagerGlobal.prototype.getLoader = function (instanceName) {
         var loader = new __WEBPACK_IMPORTED_MODULE_2__config_loaders_toolbar_config_loader__["ToolbarConfigLoader"](this);
-        __WEBPACK_IMPORTED_MODULE_1__logging__["Insights"].add('toolbars', instanceName, loader.log);
+        __WEBPACK_IMPORTED_MODULE_1__logging__["Insights"].add('toolbar', instanceName, loader.log);
         return loader;
     };
     return ToolbarManagerGlobal;
@@ -2817,21 +2850,19 @@ var ToolbarConfigLoader = /** @class */ (function (_super) {
         var settings = (Object.keys((settingRule === null || settingRule === void 0 ? void 0 : settingRule.params) || {}).length > 0)
             ? settingRule.params
             : __WEBPACK_IMPORTED_MODULE_2__config__["ToolbarSettingsForEmpty"];
-        // todo: special case if first rule is clear
-        if (false) {
-            // todo
-        }
-        else {
-            template = this.templates.copy(__WEBPACK_IMPORTED_MODULE_5__templates_template_default__["ToolbarTemplateDefault"].name);
-        }
+        // #1 special case if toolbar rule contains a custom name
+        var toolbarRule = this.rules.getToolbar();
+        var toolbarTemplateName = (toolbarRule && toolbarRule.name !== __WEBPACK_IMPORTED_MODULE_3__rules__["RuleConstants"].Toolbar)
+            ? toolbarRule.name
+            : __WEBPACK_IMPORTED_MODULE_5__templates_template_default__["ToolbarTemplateDefault"].name;
+        template = this.templates.copy(toolbarTemplateName);
         // Add additional buttons
         var add = this.rules.getAdd();
         add.forEach(function (a) {
-            // console.log('add rule', a);
             if (a.id === __WEBPACK_IMPORTED_MODULE_3__rules__["RuleConstants"].Keys.Group)
                 _this.templateEditor.addGroup(template, a.name, a.pos, a.fromStart);
             else
-                _this.templateEditor.addButton(template, a.group, a.name, a.pos, a.fromStart);
+                _this.templateEditor.addButton(template, a.group, a.id, a.name, a.pos, a.fromStart);
         });
         var toolbar = this.buildFullDefinition(context, template, settings);
         toolbar.settings._rules = this.rules;
@@ -3032,7 +3063,7 @@ function evalPropOrFun(propOrFunction) {
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ButtonConfigLoader", function() { return ButtonConfigLoader; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0____ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__commands_command_more__ = __webpack_require__(33);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__commands__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__logging__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__config_button_safe__ = __webpack_require__(43);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__rules__ = __webpack_require__(11);
@@ -3116,7 +3147,7 @@ var ButtonConfigLoader = /** @class */ (function (_super) {
             // #CodeChange#2020-03-22#InstanceConfig - believe this is completely unused; remove in June
             // disableButtons(context, btns/*, config */);
             // remove the group, if no buttons left, or only "more"
-            if (btns.length === 0 || (btns.length === 1 && btns[0].action.name === __WEBPACK_IMPORTED_MODULE_1__commands_command_more__["CmdMore"])) {
+            if (btns.length === 0 || (btns.length === 1 && btns[0].action.name === __WEBPACK_IMPORTED_MODULE_1__commands__["CmdMore"])) {
                 wrapLog.add('found no more buttons except for the "more" - will remove that group');
                 btnGroups.splice(g--, 1); // remove, and decrement counter
             }
@@ -3221,6 +3252,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TemplateConstants", function() { return TemplateConstants; });
 var TemplateConstants = {
     NameDefault: 'default',
+    NameEmpty: 'empty',
+    GroupDefault: 'default',
     GroupUnknown: 'unknown',
     ButtonSeparator: ',',
 };
@@ -3238,10 +3271,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 // the default / initial buttons in a standard toolbar
 // ToDo: refactor to avoid side-effects
 var ToolbarTemplateDefault = {
-    name: 'default',
+    name: __WEBPACK_IMPORTED_MODULE_0____["TemplateConstants"].NameDefault,
     groups: [
         {
-            name: __WEBPACK_IMPORTED_MODULE_0____["TemplateConstants"].NameDefault,
+            name: __WEBPACK_IMPORTED_MODULE_0____["TemplateConstants"].GroupDefault,
             buttons: 'edit,new,metadata,publish,layout',
         }, {
             name: 'list',
@@ -4417,8 +4450,8 @@ var CmsEngine = /** @class */ (function (_super) {
         var contentType = cmdParams.contentType;
         cl.add("run command '" + name + "' for type " + contentType);
         // Toolbar API v2
-        var newButtonAction = new __WEBPACK_IMPORTED_MODULE_7__toolbar_config__["ButtonCommand"](name, contentType, cmdParams);
-        var newButtonConfig = new __WEBPACK_IMPORTED_MODULE_7__toolbar_config__["Button"](newButtonAction, name);
+        var command = new __WEBPACK_IMPORTED_MODULE_7__toolbar_config__["ButtonCommand"](name, contentType, cmdParams);
+        var newButtonConfig = new __WEBPACK_IMPORTED_MODULE_7__toolbar_config__["Button"](command, command.name);
         // merge conf & settings, but settings has higher priority
         var button = __assign(__assign({}, newButtonConfig), __WEBPACK_IMPORTED_MODULE_8__toolbar_config_loaders_config_formats_in_page_button__["InPageButtonJson"].toButton(cmdParams));
         // attach to context for inner calls which might access it
@@ -4974,6 +5007,10 @@ var Button = /** @class */ (function () {
         /** Determine if it should use the inline window, always a function */
         this.inlineWindow = function () { return false; };
         this.action = action;
+        // if the name is an identifier, split it
+        var parts = name.split('=');
+        this.id = parts[0];
+        this.name = parts[1] || name;
         // get defaults from action commandDefinition
         if ((_a = action === null || action === void 0 ? void 0 : action.command) === null || _a === void 0 ? void 0 : _a.buttonDefaults)
             __WEBPACK_IMPORTED_MODULE_0__plumbing__["Obj"].TypeSafeAssign(this, action.command.buttonDefaults);
@@ -5497,6 +5534,7 @@ var RuleConstants = {
     },
     Settings: 'settings',
     Params: 'params',
+    Toolbar: 'toolbar'
 };
 
 
@@ -5586,17 +5624,18 @@ var BuildRule = /** @class */ (function (_super) {
         var cl = this.log.call('loadHeader', rule);
         var parts = this.splitParamsArray(rule);
         var key = ((_a = parts === null || parts === void 0 ? void 0 : parts[0]) === null || _a === void 0 ? void 0 : _a[0]) || __WEBPACK_IMPORTED_MODULE_0____["RuleConstants"].Keys.None;
-        // console.log('key', key, parts);
-        var firstChar = key[0];
-        cl.add("name part '" + key + "', firstChar '" + firstChar + "'");
-        if (Object.values(__WEBPACK_IMPORTED_MODULE_0____["Operations"]).includes(firstChar)) {
-            this.operation = firstChar;
-            this.id = key.substring(1);
+        var operation = key[0];
+        cl.add("name part '" + key + "', firstChar '" + operation + "'");
+        // check if the operation should be auto-set because of known name
+        var hadOperation = Object.values(__WEBPACK_IMPORTED_MODULE_0____["Operations"]).includes(operation);
+        if (!hadOperation) {
+            if (key === __WEBPACK_IMPORTED_MODULE_0____["RuleConstants"].Params || key === __WEBPACK_IMPORTED_MODULE_0____["RuleConstants"].Settings || key === __WEBPACK_IMPORTED_MODULE_0____["RuleConstants"].Toolbar)
+                operation = __WEBPACK_IMPORTED_MODULE_0____["Operations"].system;
+            else
+                operation = __WEBPACK_IMPORTED_MODULE_0____["Operations"].add;
         }
-        else {
-            this.operation = __WEBPACK_IMPORTED_MODULE_0____["Operations"].add;
-            this.id = key;
-        }
+        this.operation = operation;
+        this.id = hadOperation ? key.substring(1) : key;
         // command name defaults to name, can be reset by load-headers
         // assumes key is something like "something=edit" or just "edit"
         this.name = ((_b = parts === null || parts === void 0 ? void 0 : parts[0]) === null || _b === void 0 ? void 0 : _b[1]) || this.id;
@@ -5609,10 +5648,13 @@ var BuildRule = /** @class */ (function (_super) {
         if (!rest.length)
             return cl.done('nothing to load');
         var parts = this.dicToArray(rest);
+        // pick up name
         if (parts.name)
             this.name = parts.name;
+        // pick up group
         if (typeof parts.group === 'string')
             this.group = parts.group;
+        // position can be number or -number to indicate from other side
         if (typeof parts.pos === 'string' && parts.pos.length > 0) {
             var pos = parts.pos;
             if (pos[0] === '-') {
@@ -5637,13 +5679,6 @@ var BuildRule = /** @class */ (function (_super) {
         return cl.done();
     };
     //#region string manipulation helpers
-    // private splitAtChar(original: string, char: string): { first: string, rest: string} {
-    //     const index = original.indexOf(char);
-    //     const first = index > 0 ? original.substring(0, index) : original;
-    //     // todo: catch trailing ?, would error
-    //     const rest = index > 0 && original.length > index + 1 ? original.substring(index + 1) : '';
-    //     return { first, rest };
-    // }
     BuildRule.prototype.splitParamsArray = function (original) {
         if (!original)
             return [];
@@ -5658,15 +5693,7 @@ var BuildRule = /** @class */ (function (_super) {
         }, {});
     };
     BuildRule.prototype.splitParamsDic = function (original) {
-        // if (!original) return {};
-        // const split1 = original.split('&');
-        // const split2 = split1.map((p) => p.split('='));
-        var result = this.dicToArray(this.splitParamsArray(original));
-        // .reduce((map, obj) => {
-        //     map[obj[0]] = obj[1];
-        //     return map;
-        // }, {} as Dictionary<string>);
-        return result;
+        return this.dicToArray(this.splitParamsArray(original));
     };
     return BuildRule;
 }(__WEBPACK_IMPORTED_MODULE_1__logging__["HasLog"]));
@@ -5677,10 +5704,9 @@ function safeSplitOriginal(str) {
     var regex = /^([^\/?#]*)?([^?#]*)(\?([^#]*))?(#(.*))?/i;
     // const str = `+edit&something=other&els=ok?aoeuaoeu=5&aoeuaou=aoeu#but=thi&aouoaeu`;
     var m = regex.exec(str);
-    if (!m)
-        return undefined;
-    if (m !== null)
+    if (m && m !== null)
         return { key: m[1], params: m[4], button: m[6] };
+    return undefined;
 }
 
 
@@ -5699,7 +5725,7 @@ var ToolbarTemplateInListRight = {
     name: 'listitem',
     groups: [
         {
-            name: __WEBPACK_IMPORTED_MODULE_0____["TemplateConstants"].NameDefault,
+            name: __WEBPACK_IMPORTED_MODULE_0____["TemplateConstants"].GroupDefault,
             buttons: 'edit,new,publish',
             defaults: {
                 classes: 'group-inlist',
@@ -5771,6 +5797,7 @@ var ToolbarTemplateManagerSingleton = /** @class */ (function (_super) {
         /** hash - table of templates, to be used a list()['template - name'] */
         _this.list = {};
         __WEBPACK_IMPORTED_MODULE_1__logging__["Insights"].add('toolbars', 'template-manager', _this.log);
+        _this.add(__WEBPACK_IMPORTED_MODULE_0____["ToolbarTemplateEmpty"]);
         _this.add(__WEBPACK_IMPORTED_MODULE_0____["ToolbarTemplateDefault"]);
         // CodeChange #2020-03-20#TemplateToolbarLeftUnused - if no side-effects, delete in June
         // this.add('left', ToolbarTemplateLeft);
@@ -5781,7 +5808,13 @@ var ToolbarTemplateManagerSingleton = /** @class */ (function (_super) {
      * Deep copy toolbar template, so it can be modified without changing the next use
      */
     ToolbarTemplateManagerSingleton.prototype.copy = function (name) {
-        return __WEBPACK_IMPORTED_MODULE_2__plumbing__["Obj"].DeepClone(this.list[name]);
+        return __WEBPACK_IMPORTED_MODULE_2__plumbing__["Obj"].DeepClone(this.findOrShowError(name));
+    };
+    ToolbarTemplateManagerSingleton.prototype.findOrShowError = function (name) {
+        var found = this.list[name];
+        if (found)
+            return found;
+        throw "try to find toolbar template '" + name + "' but not found";
     };
     /**
      * adds a template to the list, if it doesn't exist
@@ -5888,7 +5921,7 @@ var TemplateEditor = /** @class */ (function (_super) {
         };
         return _this;
     }
-    TemplateEditor.prototype.addButton = function (template, groupName, name, pos, fromStart) {
+    TemplateEditor.prototype.addButton = function (template, id, groupName, name, pos, fromStart) {
         var _a, _b;
         var cl = this.log.call('addButton', "..., " + groupName + ", " + name);
         if (!template)
@@ -5897,6 +5930,7 @@ var TemplateEditor = /** @class */ (function (_super) {
         if (!group)
             group = this.addGroup(template, groupName, 1000, true); // create group at end
         var buttons = (_b = (_a = group.buttons) === null || _a === void 0 ? void 0 : _a.split(__WEBPACK_IMPORTED_MODULE_2__constants__["TemplateConstants"].ButtonSeparator)) !== null && _b !== void 0 ? _b : [];
+        var buttonId = id === name ? name : id + "=" + name;
         buttons.splice(this.correctPos(buttons, pos, fromStart), 0, name);
         group.buttons = buttons
             .filter(function (b) { return b.length; }) // drop empty items
@@ -5968,6 +6002,7 @@ var RuleManager = /** @class */ (function (_super) {
         _this.rules = [];
         _this.getSettings = function () { return _this.getSystem(__WEBPACK_IMPORTED_MODULE_0____["RuleConstants"].Settings); };
         _this.getParams = function () { return _this.getSystem(__WEBPACK_IMPORTED_MODULE_0____["RuleConstants"].Params); };
+        _this.getToolbar = function () { return _this.getSystem(__WEBPACK_IMPORTED_MODULE_0____["RuleConstants"].Toolbar); };
         _this.getAdd = function () { return _this.getListByCriteria(function (br) { return br.operation === __WEBPACK_IMPORTED_MODULE_0____["Operations"].add; }); };
         return _this;
         // this.log.liveDump = true;
@@ -6072,9 +6107,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ButtonGroupConfigLoader", function() { return ButtonGroupConfigLoader; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0____ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__commands__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__commands_command_more__ = __webpack_require__(33);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__logging__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__config__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__logging__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__config__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__templates_constants__ = __webpack_require__(56);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -6117,9 +6152,9 @@ var ButtonGroupConfigLoader = /** @class */ (function (_super) {
      * @param fullToolbar
      */
     ButtonGroupConfigLoader.prototype.expandButtonGroups = function (fullToolbar) {
-        var wrapLog = this.log.call('expandButtonGroups'); // new Log('Tlb.ExpGrp', parentLog, 'start');
+        var cl = this.log.call('expandButtonGroups');
         // by now we should have a structure, let's check/fix the buttons
-        wrapLog.add("will expand groups - found " + fullToolbar.groups.length + " items");
+        cl.add("will expand groups - found " + fullToolbar.groups.length + " items");
         for (var g = 0; g < fullToolbar.groups.length; g++) {
             // expand a verb-list like "edit,new" into objects like [{ action: "edit" }, {action: "new"}]
             var group = fullToolbar.groups[g];
@@ -6127,16 +6162,18 @@ var ButtonGroupConfigLoader = /** @class */ (function (_super) {
             var btns = this.expandButtonList(group, fullToolbar.settings);
             var buttonConfigs = [];
             if (Array.isArray(btns)) {
-                wrapLog.add("will process " + btns.length + " buttons");
+                cl.add("will process " + btns.length + " buttons");
                 for (var b = 0; b < btns.length; b++)
                     buttonConfigs.push(this.convertToButton(btns[b], fullToolbar.params, fullToolbar.defaults, groupDefaults));
             }
             else
-                wrapLog.add("no button array found, won't do a.nything");
+                cl.add("no button array found, won't do a.nything");
             // Toolbar API v2 overwrite V1
             group.buttons = buttonConfigs;
         }
-        return wrapLog.return(fullToolbar);
+        var toolbar = fullToolbar;
+        this.dropMoreIfOnlyOneGroup(toolbar);
+        return cl.return(toolbar);
     };
     /**
      * Converts the InPageButtonJson to a Button
@@ -6159,8 +6196,8 @@ var ButtonGroupConfigLoader = /** @class */ (function (_super) {
         // parameters adapter from v1 to v2
         var params = __assign(__assign({}, __WEBPACK_IMPORTED_MODULE_0____["InPageCommandJson"].noAction(btnCommand)), sharedParams);
         // Toolbar API v2
-        var newButtonAction = new __WEBPACK_IMPORTED_MODULE_4__config__["ButtonCommand"](name, contentType, params);
-        var newButtonConfig = new __WEBPACK_IMPORTED_MODULE_4__config__["Button"](newButtonAction, name);
+        var command = new __WEBPACK_IMPORTED_MODULE_3__config__["ButtonCommand"](name, contentType, params);
+        var newButtonConfig = new __WEBPACK_IMPORTED_MODULE_3__config__["Button"](command, command.name);
         // settings adapter from v1 to v2
         newButtonConfig = __assign(__assign({}, newButtonConfig), __WEBPACK_IMPORTED_MODULE_0____["InPageButtonJson"].toButton(btn));
         // ensure all buttons have either own settings, or the fallback
@@ -6214,7 +6251,7 @@ var ButtonGroupConfigLoader = /** @class */ (function (_super) {
     };
     ButtonGroupConfigLoader.prototype.expandButtonAndAddToList = function (list, btn, names) {
         var cl = this.log.call('expandButtonAndAddToList', '', "button def \"" + btn + " is string of ma.ny names, will expand into array with action-properties\"");
-        var actions = names.split(',');
+        var actions = names.length ? names.split(__WEBPACK_IMPORTED_MODULE_4__templates_constants__["TemplateConstants"].ButtonSeparator) : [];
         for (var a = 0; a < actions.length; a++)
             list.push(__assign(__assign({}, btn), this.toolbar.button.getFromName(actions[a])));
         cl.return(list);
@@ -6224,7 +6261,7 @@ var ButtonGroupConfigLoader = /** @class */ (function (_super) {
         var cl = this.log.call('addMoreButtons');
         var addMore = settings.autoAddMore;
         if (addMore) {
-            var moreButton = this.toolbar.button.getFromName(__WEBPACK_IMPORTED_MODULE_2__commands_command_more__["CmdMore"]);
+            var moreButton = this.toolbar.button.getFromName(__WEBPACK_IMPORTED_MODULE_1__commands__["CmdMore"]);
             if ((addMore === 'end') || (addMore.toString() === 'right')) { // fallback for older v1 setting
                 this.log.add('will add a more "..." button to end');
                 list.push(moreButton);
@@ -6238,8 +6275,24 @@ var ButtonGroupConfigLoader = /** @class */ (function (_super) {
             this.log.add('will not add more "..." button');
         cl.return(list);
     };
+    /**
+     * If there is only one group, then remove the More button.
+     * Note that this has to happen almost at the end, because groups will be removed if empty
+     */
+    ButtonGroupConfigLoader.prototype.dropMoreIfOnlyOneGroup = function (toolbar) {
+        var cl = this.log.call('dropMoreIfOnlyOneGroup');
+        if (toolbar.groups.length !== 1)
+            return cl.done('not just 1 group');
+        cl.add('exactly one group found, will remove more');
+        var buttons = toolbar.groups[0].buttons;
+        var index = buttons.findIndex(function (b) { return b.name === __WEBPACK_IMPORTED_MODULE_1__commands__["CmdMore"]; });
+        if (index === -1)
+            return cl.done("no 'more' button found");
+        buttons.splice(index, 1);
+        cl.done('more removed');
+    };
     return ButtonGroupConfigLoader;
-}(__WEBPACK_IMPORTED_MODULE_3__logging__["HasLog"]));
+}(__WEBPACK_IMPORTED_MODULE_2__logging__["HasLog"]));
 
 
 
@@ -10433,6 +10486,45 @@ var __WEBPACK_AMD_DEFINE_RESULT__;/*
 
     return Shake;
 }));
+
+
+/***/ }),
+/* 207 */,
+/* 208 */,
+/* 209 */,
+/* 210 */,
+/* 211 */,
+/* 212 */,
+/* 213 */,
+/* 214 */,
+/* 215 */,
+/* 216 */,
+/* 217 */,
+/* 218 */,
+/* 219 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ToolbarTemplateEmpty; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0____ = __webpack_require__(8);
+
+// the default / initial buttons in a standard toolbar
+// ToDo: refactor to avoid side-effects
+var ToolbarTemplateEmpty = {
+    name: __WEBPACK_IMPORTED_MODULE_0____["TemplateConstants"].NameEmpty,
+    groups: [
+        {
+            name: __WEBPACK_IMPORTED_MODULE_0____["TemplateConstants"].GroupDefault,
+            buttons: '',
+        },
+    ],
+    defaults: {},
+    params: {},
+    settings: {
+        autoAddMore: 'end',
+    },
+    _isToolbarTemplate: true,
+};
 
 
 /***/ })

@@ -1,5 +1,6 @@
 
 export * from './constants';
+export * from './template-empty';
 export * from './template-default';
 export * from './template-listitem';
 export * from './toolbar-template-manager';

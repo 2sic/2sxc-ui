@@ -1,4 +1,4 @@
-import { Operations, RuleConstants } from '.';
+import { Operations, RuleConstants as RC } from '.';
 import { HasLog, Log } from '../../logging';
 import { Dictionary } from '../../plumbing';
 import { TemplateConstants } from '../templates';
@@ -58,18 +58,19 @@ export class BuildRule extends HasLog {
     private loadHeader(rule: string): void {
         const cl = this.log.call('loadHeader', rule);
         const parts = this.splitParamsArray(rule);
-        const key = parts?.[0]?.[0] || RuleConstants.Keys.None;
-// console.log('key', key, parts);
-        const firstChar = key[0];
-        cl.add(`name part '${key}', firstChar '${firstChar}'`);
+        const key = parts?.[0]?.[0] || RC.Keys.None;
+        let operation = key[0];
+        cl.add(`name part '${key}', firstChar '${operation}'`);
 
-        if ((Object as any).values(Operations).includes(firstChar)) {
-            this.operation = firstChar as Operations;
-            this.id = key.substring(1);
-        } else {
-            this.operation = Operations.add;
-            this.id = key;
+        // check if the operation should be auto-set because of known name
+        const hadOperation = (Object as any).values(Operations).includes(operation);
+        if (!hadOperation) {
+            if (key === RC.Params || key === RC.Settings || key === RC.Toolbar)
+                operation = Operations.system;
+            else operation = Operations.add;
         }
+        this.operation = operation as Operations;
+        this.id = hadOperation ? key.substring(1) : key;
 
         // command name defaults to name, can be reset by load-headers
         // assumes key is something like "something=edit" or just "edit"
@@ -83,8 +84,11 @@ export class BuildRule extends HasLog {
         const cl = this.log.call('loadHeaderParts');
         if (!rest.length) return cl.done('nothing to load');
         const parts = this.dicToArray(rest);
+        // pick up name
         if (parts.name) this.name = parts.name as string;
+        // pick up group
         if (typeof parts.group === 'string') this.group = parts.group;
+        // position can be number or -number to indicate from other side
         if (typeof parts.pos === 'string' && parts.pos.length > 0) {
             let pos = parts.pos;
             if (pos[0] === '-') {
@@ -113,13 +117,6 @@ export class BuildRule extends HasLog {
 
 
     //#region string manipulation helpers
-    // private splitAtChar(original: string, char: string): { first: string, rest: string} {
-    //     const index = original.indexOf(char);
-    //     const first = index > 0 ? original.substring(0, index) : original;
-    //     // todo: catch trailing ?, would error
-    //     const rest = index > 0 && original.length > index + 1 ? original.substring(index + 1) : '';
-    //     return { first, rest };
-    // }
 
     private splitParamsArray(original: string): string[][] {
         if (!original) return [];
@@ -136,15 +133,7 @@ export class BuildRule extends HasLog {
     }
 
     private splitParamsDic(original: string): Dictionary<string> {
-        // if (!original) return {};
-        // const split1 = original.split('&');
-        // const split2 = split1.map((p) => p.split('='));
-        const result = this.dicToArray(this.splitParamsArray(original));
-        // .reduce((map, obj) => {
-        //     map[obj[0]] = obj[1];
-        //     return map;
-        // }, {} as Dictionary<string>);
-        return result;
+        return this.dicToArray(this.splitParamsArray(original));
     }
     //#endregion
 }
@@ -159,7 +148,7 @@ function safeSplitOriginal(str: string): { key: string, params: string, button: 
     // const str = `+edit&something=other&els=ok?aoeuaoeu=5&aoeuaou=aoeu#but=thi&aouoaeu`;
     const m = regex.exec(str);
 
-    if (!m) return undefined;
-    if (m !== null)
+    if (m && m !== null)
         return { key: m[1], params: m[4], button: m[6]};
+    return undefined;
 }

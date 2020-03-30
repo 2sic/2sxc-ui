@@ -9,12 +9,13 @@ export class TemplateEditor extends HasLog {
         super('Tlb.TplEdt', toolbar.log);
     }
 
-    addButton(template: ToolbarTemplate, groupName: string, name: string, pos: number, fromStart: boolean): void {
+    addButton(template: ToolbarTemplate, id: string, groupName: string, name: string, pos: number, fromStart: boolean): void {
         const cl = this.log.call('addButton', `..., ${groupName}, ${name}`);
         if (!template) return cl.done('no template');
         let group = this.findGroupOrDefault(template, groupName);
         if (!group) group = this.addGroup(template, groupName, 1000, true); // create group at end
         const buttons = group.buttons?.split(TC.ButtonSeparator) ?? [];
+        const buttonId = id === name ? name : `${id}=${name}`;
         buttons.splice(this.correctPos(buttons, pos, fromStart), 0, name);
         group.buttons = buttons
             .filter((b) => b.length) // drop empty items

@@ -1,12 +1,12 @@
-﻿import { TemplateConstants, ToolbarTemplate } from '.';
+﻿import { TemplateConstants as TC, ToolbarTemplate } from '.';
 
 // the default / initial buttons in a standard toolbar
 // ToDo: refactor to avoid side-effects
 export const ToolbarTemplateDefault: ToolbarTemplate = {
-  name: 'default',
+  name: TC.NameDefault,
   groups: [
     {
-      name: TemplateConstants.NameDefault,
+      name: TC.GroupDefault,
       buttons: 'edit,new,metadata,publish,layout',
     }, {
       name: 'list',
