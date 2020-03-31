@@ -1,0 +1,16 @@
+/* You can add global styles to this file, and also import other style files */
+
+body {
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+}
+
+.cdk-overlay-pane {
+    max-height: 100%;
+    overflow: auto;
+}
+
+mat-dialog-container {
+    background: #fafafa !important;
+    padding: 12px !important;
+}

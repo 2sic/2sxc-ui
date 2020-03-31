@@ -1,0 +1,62 @@
+{
+  "Environment": {
+    "WebsiteId": 0,
+    "WebsiteUrl": "//2sxc.org/en/",
+    "PageId": 56,
+    "PageUrl": "https://2sxc.org/en/",
+    "parameters": [
+      {
+        "Key": "TabId",
+        "Value": "56"
+      },
+      {
+        "Key": "language",
+        "Value": "en-US"
+      }
+    ],
+    "InstanceId": 421,
+    "SxcVersion": "9.11.1.19251",
+    "SxcRootUrl": "/",
+    "IsEditable": true
+  },
+  "User": {
+    "CanDesign": true,
+    "CanDevelop": true
+  },
+  "Language": {
+    "Current": "en-us",
+    "Primary": "en-us",
+    "All": [
+
+    ]
+  },
+  "ContentBlock": {
+    "ShowTemplatePicker": true,
+    "IsEntity": false,
+    "VersioningRequirements": "DraftOptional",
+    "Id": 421,
+    "ParentFieldName": null,
+    "ParentFieldSortOrder": 0,
+    "PartOfPage": true
+  },
+  "ContentGroup": {
+    "IsCreated": true,
+    "IsList": false,
+    "TemplateId": 3770,
+    "QueryId": null,
+    "ContentTypeName": "e2351b42-87f2-427e-9566-ff271e3e5a9f",
+    "AppUrl": "/Portals/0/2sxc/Content",
+    "AppSettingsId": null,
+    "AppResourcesId": null,
+    "IsContent": true,
+    "HasContent": true,
+    "SupportsAjax": true,
+    "ZoneId": 2,
+    "AppId": 2,
+    "Guid": "c238e78b-a6e5-4811-a5c9-51d5ebf48b39",
+    "Id": 3894
+  },
+  "error": {
+    "type": null
+  }
+}

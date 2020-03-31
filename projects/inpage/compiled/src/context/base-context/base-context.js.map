@@ -1,0 +1,1 @@
+{"version":3,"file":"base-context.js","sourceRoot":"","sources":["../../../../src/context/base-context/base-context.ts"],"names":[],"mappings":";;AAEA;IAAA;QACE,MAAM;QAER,4CAA4C;QAC1C,eAAU,GAAG,IAAI,CAAC;IACpB,CAAC;IAAD,kBAAC;AAAD,CAAC,AALD,IAKC;AALY,kCAAW;AASxB,SAAgB,SAAS,CAAC,KAAU;IAClC,IAAM,WAAW,GAAG,KAAoB,CAAC;IACzC,OAAO,WAAW,CAAC,UAAU,KAAK,SAAS,CAAC;AAC9C,CAAC;AAHD,8BAGC"}

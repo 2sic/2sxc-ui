@@ -1,0 +1,39 @@
+{
+  "version": "10.25.3",
+  "types": "./index.d.ts",
+  "scripts": {
+    "dry-run": "npm publish --dry-run"
+  },
+  "author": {
+    "name": "2sic Internet Solutions, Switzerland & Liechtenstein",
+    "url": "https://2sic.com/"
+  },
+  "bugs": {
+    "url": "https://github.com/2sic/2sxc-ui/issues"
+  },
+  "files": [
+    "*.d.ts",
+    "src/*.*"
+  ],
+  "description": "Typescript typings to work with core 2sxc objects",
+  "homepage": "https://github.com/2sic/2sxc-ui/tree/master/typings#readme",
+  "keywords": [
+    "DNN",
+    "2sxc",
+    "Content",
+    "Management",
+    "CMS",
+    "TypeScript",
+    "JavaScript"
+  ],
+  "license": "MIT",
+  "name": "@2sic.com/2sxc-typings",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/2sic/2sxc-ui.git"
+  },
+  "main": "",
+  "dependencies": {
+    "@types/jquery": "^3.3.31"
+  }
+}

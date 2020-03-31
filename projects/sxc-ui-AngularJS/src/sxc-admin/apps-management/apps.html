@@ -1,0 +1,204 @@
+﻿<div>
+    <div class="modal-header">
+        <button icon="remove" class="btn btn-default btn-square btn-subtle pull-right" type="button" ng-click="vm.close()"></button>
+        <h3 class="modal-title" translate="AppManagement.Title"></h3>
+    </div>
+    <div class="modal-body">
+        <uib-tabset>
+            <uib-tab>
+                <uib-tab-heading>
+                    <span uib-tooltip="{{'AppManagement.Tab.Apps' | translate }}">
+                        <i class="eav-icon-app"></i> {{'AppManagement.Tab.Apps' | translate | trustHtml }}
+                    </span>
+                </uib-tab-heading>
+
+                <span class="btn-group">
+                    <button type="button" class="btn btn-primary" ng-click="vm.browseCatalog()">
+                        <span icon="search"></span> {{ 'AppManagement.Buttons.Browse' | translate }}
+                    </button>
+                    <button type="button" class="btn" ng-click="vm.import()">
+                        <span icon="import" uib-tooltip="{{ 'AppManagement.Buttons.Import' | translate }}"></span>
+                    </button>
+
+                    <button type="button" class="btn" ng-click="vm.add()">
+                        <span icon="plus" uib-tooltip="{{ 'AppManagement.Buttons.Create' | translate }}"></span>
+                    </button>
+                    <button type="button" class="btn" ng-click="vm.refresh()">
+                        <span icon="repeat" uib-tooltip="{{ 'AppManagement.Buttons.Reload' | translate }}"></span>
+                    </button>
+                </span>
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th translate="AppManagement.Table.Name"></th>
+                        <th translate="AppManagement.Table.Folder"></th>
+                        <!--<th translate="AppManagement.Table.Templates"></th>-->
+                        <th> <span icon="eye-open" uib-tooltip="{{ 'AppManagement.Table.Show' | translate }}"></span></th>
+                        <th translate="AppManagement.Table.Actions"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="item in vm.items | orderBy:'Title'" ng-click="vm.manage(item)">
+                        <td class="clickable">
+                            <span uib-tooltip="
+Id: {{item.Id}}
+Guid: {{item.Guid}}">{{item.Name}}</span>
+                        </td>
+                        <td class="clickable">{{item.Folder}}</td>
+                        <!--<td></td>-->
+                        <td><span icon="{{ item.IsHidden ? 'eye-close' : 'eye-open' }}"></span> </td>
+                        <td stop-event="click">
+                            <!--<button icon="cog" ng-disabled="!item.IsApp" type="button" class="btn btn-xs" ng-click="vm.config(item)"></button>-->
+                            <!-- disabled export because there's no good way to pass the app-id to the dialog with dependency injection - part of #887 -->
+                            <!--<button icon="export" class="btn btn-xs" type="button" ng-click="vm.export(item)"></button>-->
+                            <button icon="remove" ng-disabled="{{!item.IsApp}}" type="button" class="btn btn-xs" ng-click="vm.tryToDelete(item)"></button>
+                        </td>
+                    </tr>
+                    <tr ng-if="!vm.items.length">
+                        <td colspan="100" translate="General.Messages.NothingFound"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </uib-tab>
+            
+            
+            
+            <uib-tab>
+                <uib-tab-heading>
+                    <span uib-tooltip="{{'AppManagement.Tab.Settings' | translate }}">
+                        <i class="eav-icon-settings"></i> {{'AppManagement.Tab.Settings' | translate | trustHtml }}
+                    </span>
+                </uib-tab-heading>
+                
+                <h4>Settings for the current Zone/Portal</h4>
+
+                <span class="btn-group">
+                    <button type="button" class="btn btn-primary" ng-click="vm.languages()" uib-tooltip="{{ 'AppManagement.Buttons.Languages' | translate }}">
+                        <i class="eav-icon-globe"></i>
+                        {{ 'AppManagement.Buttons.Languages' | translate }}
+                    </button>
+                </span>
+
+
+
+            </uib-tab>
+
+            
+
+            <uib-tab>
+                <uib-tab-heading>
+                    <span uib-tooltip="{{'AppManagement.Features.Tab.Help' | translate }}">
+                        <i class="eav-icon-sliders"></i> {{'AppManagement.Features.Tab' | translate | trustHtml }}
+                    </span>
+                </uib-tab-heading>
+                <p>
+                    {{ "AppManagement.Features.Intro" | translate | trustHtml }}
+                </p>
+
+                <button type="button" class="btn btn-primary" ng-click="vm.featuresSwitch()">
+                    <span class="eav-icon-sliders" uib-tooltip="{{ 'AppManagement.Features.Manage.Help' | translate }}"></span>
+                    {{ 'AppManagement.Features.Manage' | translate }}
+                </button>
+                <button type="button" class="btn btn-primary" ng-click="vm.featureReload()">
+                    <span class="eav-icon-reload" todo-uib-tooltip="{{ 'AppManagement.Features.Manage.Help' | translate }}"></span>
+                    Reload
+                </button>
+
+
+                <table class="table table-hover" ng-show="vm.featuresShow">
+                    <thead>
+                        <tr>
+                            <th>
+                                <i class="eav-icon-toggle-on" uib-tooltip="{{'AppManagement.Features.Table.Enabled.Help' | translate }}"></i>
+                            </th>
+                            <th>
+                                <span uib-tooltip="{{'AppManagement.Features.Table.Name.Help' | translate }}">
+                                    {{ "AppManagement.Features.Table.Name" | translate }}
+                                </span>
+                            </th>
+                            <th>
+                                <span uib-tooltip="{{'AppManagement.Features.Table.Id.Help' | translate }}">
+                                    {{ "AppManagement.Features.Table.Id" | translate }}
+                                </span>
+                            </th>
+                            <th>
+                                <span uib-tooltip="{{'AppManagement.Features.Table.Expires.Help' | translate }}">
+                                    {{ "AppManagement.Features.Table.Expires" | translate }}
+                                </span>
+                            </th>
+                            <th>
+                                <span uib-tooltip="{{'AppManagement.Features.Table.Ui.Help' | translate }}">
+                                    {{ "AppManagement.Features.Table.Ui" | translate }}
+                                </span>
+                            </th>
+                            <th>
+                                <span uib-tooltip="{{'AppManagement.Features.Table.Public.Help' | translate }}">
+                                    {{ "AppManagement.Features.Table.Public" | translate }}
+                                </span>
+                            </th>
+                            <th>
+                                <span uib-tooltip="{{'AppManagement.Features.Table.Security.Help' | translate }}">
+                                    {{ "AppManagement.Features.Table.Security" | translate }}
+                                </span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="item in vm.loadFeatures">
+                            <td>
+                                <i ng-class=" item.enabled ? 'eav-icon-toggle-on' : 'eav-icon-toggle-off'"
+                                   uib-tooltip="{{'General.State.OnOff.' + item.enabled | translate }}"></i>
+                            </td>
+                            <td><a href="{{ 'https://2sxc.org/r/f/' + item.id }}" target="_blank">details</a> (name lookup still WIP)</td>
+                            <td style="font-family: monospace">{{item.id}}</td>
+                            <td><span uib-tooltip="{{item.expires}}">{{item.expires | date:'yyyy-MM-dd' }}</span></td>
+                            <td><i ng-class="item.ui ? 'eav-icon-eye' : 'eav-icon-minus'"></i></td>
+                            <td><i ng-class=" item.public ? 'eav-icon-user' : 'eav-icon-minus'"></i></td>
+                            <td>
+                                <!-- todo: get the status from the 2sxc.org web-api and change colors -->
+                                <i class="eav-icon-help-circled"
+                                   uib-tooltip="Security Status still work-in progress"
+                                   style="color: green"></i>
+                            </td>
+                        </tr>
+                        <tr ng-if="!vm.loadFeatures.length">
+                            <td colspan="100" translate="General.Messages.NothingFound"></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="sxc-spinner" ng-show="vm.featureSpinner" class="sxc-import-spinner"><i class="eav-icon-spinner animate-spin"></i></div>
+                <iframe ng-repeat="url in vm.manageFeaturesUrl" ng-src="{{ url | trustAsResourceUrl }}" ng-show="!vm.featuresShow" style="border: none; width: 100%; height: 500px"></iframe>
+
+
+            </uib-tab>
+            
+            <uib-tab>
+                <uib-tab-heading>
+                    <span uib-tooltip="Insights">
+                        <i class="eav-icon-database"></i> 2sxc Insights
+                    </span>
+                </uib-tab-heading>
+                
+                <h4>2sxc Insights for Super Users</h4>
+                <p>
+                    This is to access a special section to see what is really in the server memory. It's intended for extensive debugging - see also 
+                    <a href="https://2sxc.org/en/blog/post/using-2sxc-insights" target="_blank">this blog post</a>. 
+                </p>
+
+                <span class="btn-group">
+                    <a type="button" class="btn btn-primary" ng-href="{{vm.insightsUrl}}" target="_blank">
+                        <i class="eav-icon-database"></i>
+                        Open 2sxc Insights
+                    </a>
+                </span>
+
+
+
+            </uib-tab>
+            
+
+
+        </uib-tabset>
+    </div>
+</div>
