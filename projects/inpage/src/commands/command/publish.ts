@@ -14,7 +14,6 @@ Commands.add(CmdPublish, 'Unpublished', 'eye-off', false, false, {
         return context.button.command.params.isPublished === false;
     },
     disabled(context) {
-        console.log('disabled:', context.instance);
         return !context.instance.allowPublish;
     },
     code(context, event): Promise<void> {

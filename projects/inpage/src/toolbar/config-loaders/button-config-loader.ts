@@ -128,9 +128,7 @@ export class ButtonConfigLoader extends HasLog {
                 const rule = this.toolbar.rules.find(btn.id || btn.command.name);
                 let show: boolean = rule?.showOverride();
                 if (show === undefined) {
-// console.log('removeUnfit - before', show);
                     show = new ButtonSafe(btn, context).showCondition();
-console.log('removeUnfit - after for ' + btn.command.name, show);
                 }
                 if (show === false) {
                     removals += `#${i} "${btn.command.name}"; `;

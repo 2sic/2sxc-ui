@@ -12,18 +12,18 @@ export const CmdNewMode = 'new';
  * import this module to commands.ts
  */
 Commands.add(CmdNew, 'New', 'plus', false, true, {
-    params: (context) => ({ mode: CmdNewMode }),
+    params: (_) => ({ mode: CmdNewMode }),
 
-    dialog: (context) => 'edit', // don't use "new" (default) but use "edit"
+    dialog: (_) => 'edit', // don't use "new" (default) but use "edit"
 
     showCondition(context) {
+        // don't provide new if type unknown or on the header-item
         const result = (
             !!context.button.command.params.contentType ||
             !!(context.contentBlock.isList &&
                 context.button.command.params.useModuleList &&
                 context.button.command.params.sortOrder !== -1)
-        ); // don't provide new on the header-item
-console.log('new', result);
+        );
         return result;
     },
     code(context, event) {

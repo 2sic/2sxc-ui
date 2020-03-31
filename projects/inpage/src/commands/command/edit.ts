@@ -9,15 +9,14 @@ export const CmdEditDialog = 'edit';
  * import this module to commands.ts
  */
 Commands.add(CmdEdit, 'Edit', 'pencil', false, true, {
-    params: (context) => {
+    params: (_) => {
         return { mode: 'edit' };
     },
     showCondition(context) {
-        const result = (
+        // need ID or a "slot", otherwise edit won't work
+        const result =
             !!context.button.command.params.entityId ||
-            !!context.button.command.params.useModuleList
-        ); // need ID or a "slot", otherwise edit won't work
-console.log('showCondition edit', context.button.command.params.entityId, result, );
+            !!context.button.command.params.useModuleList;
         return result;
     },
 });

@@ -81,7 +81,6 @@ export class ButtonGroupConfigLoader extends HasLog {
 
         // parameters adapter from v1 to v2
         const params = { ...realParams, ...sharedParams };
-console.log('params', params);
         // Toolbar API v2
         const command = new ButtonCommand(name, contentType, params);
         let newButtonConfig = new Button(command, identifier);
@@ -148,7 +147,6 @@ console.log('params', params);
         delete params.action;
         for (let a = 0; a < actions.length; a++) {
             const commandPart = this.toolbar.button.btnConfigStructure(actions[a], params);
-console.log('commandPart', commandPart);
             cl.data('commandPart', commandPart);
             list.push(commandPart); // {...btn, ...commandPart });
         }

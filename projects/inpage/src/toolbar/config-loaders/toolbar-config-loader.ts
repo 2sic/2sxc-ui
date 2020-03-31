@@ -175,7 +175,6 @@ export class ToolbarConfigLoader extends HasLog {
 
         const configWip = this.ensureDefinitionTree(unstructuredConfig, toolbarSettings); // as unknown as Toolbar;
 
-        // ToDo: don't use console.log in production
         if (ToolbarTemplate.is(unstructuredConfig) && unstructuredConfig.debug)
             console.log('toolbar: detailed debug on; start build full Def');
 
