@@ -12,7 +12,7 @@ export class ToolbarRenderer extends HasLog {
 
     constructor(private context: ContextBundleToolbar) {
         super('Rnd.Toolbr');
-        Insights.add('toolbar-render', '', this.log);
+        Insights.add('toolbar-render', context.toolbar?.identifier || '', this.log);
         this.groups = new RenderButtonGroups(this);
         this.button = new RenderButton(this);
     }
@@ -31,6 +31,7 @@ export class ToolbarRenderer extends HasLog {
 
         // render toolbar
         const tlbTag = document.createElement('ul');
+        tlbTag.setAttribute('toolbar-identifier', context.toolbar?.identifier);
         tlbTag.classList.add('sc-menu');
         tlbTag.classList.add('group-0'); // IE11 fix, add each class separately
 

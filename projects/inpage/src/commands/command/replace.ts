@@ -6,6 +6,6 @@ export const CmdReplace = 'replace';
  */
 Commands.add(CmdReplace, 'Replace', 'replace', false, true, {
     showCondition(context) {
-        return context.button.command.params.useModuleList;
+        return !!context.button.command.params.useModuleList;
     },
 });

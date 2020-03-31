@@ -13,7 +13,7 @@ Commands.add(CmdAppResources, 'AppResources', 'translate', true, false, {
     title: (context) => `Toolbar.AppResources${context.app.resourcesId === null ? 'Disabled' : ''}`,
 
     // only if resources exist or are 0 (to be created)...
-    showCondition: (context) => context.user.canDesign && !context.app.isContent,
+    showCondition: (context) => !!context.user.canDesign && !context.app.isContent,
 
     configureLinkGenerator: (context, linkGenerator) => {
         linkGenerator.items = [{ EntityId: context.app.resourcesId }];

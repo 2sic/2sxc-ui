@@ -10,7 +10,7 @@ export const CmdRemove = 'remove';
  */
 Commands.add(CmdRemove, 'Remove', 'minus-circled', false, true, {
     showCondition(context) {
-        return (
+        return !!(
             context.contentBlock.isList &&
             context.button.command.params.useModuleList &&
             context.button.command.params.sortOrder !== -1

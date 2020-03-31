@@ -13,9 +13,11 @@ Commands.add(CmdEdit, 'Edit', 'pencil', false, true, {
         return { mode: 'edit' };
     },
     showCondition(context) {
-        return (
+        const result = (
             !!context.button.command.params.entityId ||
-            context.button.command.params.useModuleList
+            !!context.button.command.params.useModuleList
         ); // need ID or a "slot", otherwise edit won't work
+console.log('showCondition edit', result);
+        return result;
     },
 });

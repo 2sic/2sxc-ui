@@ -18,7 +18,7 @@ Commands.add(CmdContentItems, 'ContentItems', 'table', true, false, {
 
     // only show to admin-users and in cases where we know the content-type
     showCondition: (context) => {
-        return context.user.canDesign &&
+        return !!context.user.canDesign &&
             (!!context.button.command.params.contentType ||
                 !!context.contentBlock.contentTypeId);
     },

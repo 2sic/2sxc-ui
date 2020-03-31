@@ -15,9 +15,9 @@ Commands.add(
     true,
     {
         showCondition(context) {
-            return context.contentBlock.isList &&
+            return !!(context.contentBlock.isList &&
                 context.button.command.params.useModuleList &&
-                context.button.command.params.sortOrder !== -1;
+                context.button.command.params.sortOrder !== -1);
         },
         code(context) {
             return Actions.addItem(context, context.button.command.params.sortOrder + 1);

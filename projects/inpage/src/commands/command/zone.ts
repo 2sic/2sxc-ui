@@ -6,6 +6,6 @@ export const CmdZone = 'zone';
  */
 Commands.add(CmdZone, 'Zone', 'manage', true, false, {
     showCondition: (context) => {
-        return context.user.canDesign;
+        return !!context.user.canDesign;
     },
 });

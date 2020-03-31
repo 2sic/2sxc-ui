@@ -58,7 +58,7 @@ export class ButtonSafe {
 
 /** Evaluate a property or generator and return the property */
 function getVal<T>(propOrGen: ButtonPropGen<T> | T, ctx: ContextComplete, fallback: T): T {
-    return (isNothing(propOrGen))
-        ? fallback
-        : (Button.isPropGen(propOrGen) ? propOrGen(ctx) : propOrGen);
+    if (isNothing(propOrGen)) return fallback;
+    const result = (Button.isPropGen(propOrGen) ? propOrGen(ctx) : propOrGen);
+    return result === undefined ? fallback : result;
 }

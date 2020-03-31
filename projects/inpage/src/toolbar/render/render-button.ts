@@ -1,10 +1,10 @@
 ﻿import { ContextComplete } from '../../context/bundles/context-bundle-button';
 import { HtmlTools } from '../../html/dom-tools';
+import { DictionaryValue } from '../../plumbing';
 import { ButtonCommand, ButtonSafe } from '../config';
 import { BuildRule } from '../rules/rule';
 import { RenderPart } from './render-part-base';
 import { ToolbarRenderer } from './toolbar-renderer';
-import { DictionaryValue } from '../../plumbing';
 
 
 export class RenderButton extends RenderPart {

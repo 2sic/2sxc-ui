@@ -7,6 +7,9 @@ import { DictionaryValue } from '../../plumbing';
  * contains a toolbar config + settings + mny groups
  */
 export class Toolbar {
+    /** Toolbar ID to better identify which toolbar we're looking at - has special long name to never confuse with other IDs */
+    identifier: string;
+
     /** The groups of buttons in this toolbar */
     groups: ButtonGroup[] = [];
 
@@ -21,4 +24,8 @@ export class Toolbar {
 
     /**  the button defaults like icon, etc. */
     defaults: DictionaryValue;
+
+    constructor() {
+        this.identifier = 'Toolbar' + Math.floor(Math.random() * 99999);
+    }
 }

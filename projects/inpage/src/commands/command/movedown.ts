@@ -9,7 +9,7 @@ export const CmdMoveDown = 'movedown';
 Commands.add(CmdMoveDown, 'MoveDown', 'move-down', false, true, {
     showCondition(context) {
         // TODO: do not display if is last item in list
-        return (
+        return !!(
             context.contentBlock.isList &&
             context.button.command.params.useModuleList &&
             context.button.command.params.sortOrder !== -1

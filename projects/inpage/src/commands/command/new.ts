@@ -17,12 +17,14 @@ Commands.add(CmdNew, 'New', 'plus', false, true, {
     dialog: (context) => 'edit', // don't use "new" (default) but use "edit"
 
     showCondition(context) {
-        return (
+        const result = (
             !!context.button.command.params.contentType ||
-            (context.contentBlock.isList &&
+            !!(context.contentBlock.isList &&
                 context.button.command.params.useModuleList &&
                 context.button.command.params.sortOrder !== -1)
         ); // don't provide new on the header-item
+console.log('new', result);
+        return result;
     },
     code(context, event) {
         // todo - should refactor this to be a toolbarManager.contentBlock command

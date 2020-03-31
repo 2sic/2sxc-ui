@@ -6,7 +6,7 @@ export const CmdInstanceList = 'instance-list';
  */
 Commands.add(CmdInstanceList, 'Sort', 'list-numbered', false, true, {
     showCondition(context) {
-        return (
+        return !!(
             context.contentBlock.isList &&
             context.button.command.params.useModuleList &&
             context.button.command.params.sortOrder !== -1

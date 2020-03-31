@@ -4,6 +4,7 @@ import { ToolbarConfigLoader } from '.';
 import { CmdMore, Commands } from '../../commands';
 import { ContextComplete } from '../../context/bundles';
 import { HasLog } from '../../logging';
+import { InstanceConfig } from '../../manage/instance-config';
 import { DictionaryValue } from '../../plumbing';
 import { Button, Toolbar } from '../config';
 import { ButtonSafe } from '../config/button-safe';
@@ -75,6 +76,7 @@ export class ButtonConfigLoader extends HasLog {
         for (let g = 0; g < btnGroups.length; g++) {
             const btns = btnGroups[g].buttons;
             // #CodeChange#2020-03-22#InstanceConfig - believe this is completely unused; remove in June
+            // const config = InstanceConfig.fromContext(context);
             this.removeUnfitButtons(context, /* full,*/ btns /* config, */);
 
             wrapLog.add('will disable appropriate buttons');
@@ -122,7 +124,11 @@ export class ButtonConfigLoader extends HasLog {
                 context.button = btn; // add to context for calls
                 const rule = this.toolbar.rules.find(btn.id || btn.command.name);
                 let show: boolean = rule?.showOverride();
-                if (show === undefined) show = new ButtonSafe(btn, context).showCondition();
+                if (show === undefined) {
+// console.log('removeUnfit - before', show);
+                    show = new ButtonSafe(btn, context).showCondition();
+console.log('removeUnfit - after for ' + btn.command.name, show);
+                }
                 if (show === false) {
                     removals += `#${i} "${btn.command.name}"; `;
                     btns.splice(i--, 1);

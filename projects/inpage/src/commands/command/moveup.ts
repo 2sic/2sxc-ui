@@ -7,7 +7,7 @@ export const CmdMoveUp = 'moveup';
  */
 Commands.add(CmdMoveUp, 'MoveUp', 'move-up', false, true, {
     showCondition(context) {
-        return (
+        return !!(
             context.contentBlock.isList &&
             context.button.command.params.useModuleList &&
             context.button.command.params.sortOrder !== -1 &&

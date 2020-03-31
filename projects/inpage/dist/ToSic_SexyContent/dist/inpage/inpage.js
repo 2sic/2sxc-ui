@@ -180,7 +180,7 @@ var C = {
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SxcEdit", function() { return SxcEdit; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__2sxc_src__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__2sxc_src__ = __webpack_require__(17);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -385,7 +385,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ContextComplete", function() { return ContextComplete; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__interfaces_sxc_instance_editable__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__plumbing__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__plumbing__ = __webpack_require__(16);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__context_bundle_toolbar__ = __webpack_require__(27);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
@@ -662,6 +662,30 @@ function translate(key) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return ToSxcName; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return SxcVersion; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return HeaderNames; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ApiExtensionPlaceholder; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return MetaHeaderJsApi; });
+var ToSxcName = "2sxc";
+var SxcVersion = "10.27.00";
+var HeaderNames = {
+    // 2sxc specific header
+    ContentBlockId: "ContentBlockId",
+    // headers as defined by DNN
+    ModuleId: "ModuleId",
+    TabId: "TabId",
+    Rvt: "RequestVerificationToken"
+};
+var ApiExtensionPlaceholder = '{extension}';
+var MetaHeaderJsApi = '_jsApi';
+
+
+/***/ }),
+/* 14 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HtmlTools", function() { return HtmlTools; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__constants__ = __webpack_require__(2);
@@ -711,7 +735,7 @@ var HtmlTools = /** @class */ (function () {
 
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -737,7 +761,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -751,7 +775,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -818,30 +842,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /***/ }),
-/* 17 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return ToSxcName; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return SxcVersion; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return HeaderNames; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ApiExtensionPlaceholder; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return MetaHeaderJsApi; });
-var ToSxcName = "2sxc";
-var SxcVersion = "10.27.00";
-var HeaderNames = {
-    // 2sxc specific header
-    ContentBlockId: "ContentBlockId",
-    // headers as defined by DNN
-    ModuleId: "ModuleId",
-    TabId: "TabId",
-    Rvt: "RequestVerificationToken"
-};
-var ApiExtensionPlaceholder = '{extension}';
-var MetaHeaderJsApi = '_jsApi';
-
-
-/***/ }),
 /* 18 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -849,7 +849,7 @@ var MetaHeaderJsApi = '_jsApi';
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "renderer", function() { return renderer; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__constants__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__html_dom_tools__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__html_dom_tools__ = __webpack_require__(14);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__interfaces_sxc_instance_editable__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__interfaces_window_in_page__ = __webpack_require__(9);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__quick_edit_quick_e__ = __webpack_require__(24);
@@ -1106,8 +1106,10 @@ __WEBPACK_IMPORTED_MODULE_0____["Commands"].add(CmdEdit, 'Edit', 'pencil', false
         return { mode: 'edit' };
     },
     showCondition: function (context) {
-        return (!!context.button.command.params.entityId ||
-            context.button.command.params.useModuleList); // need ID or a "slot", otherwise edit won't work
+        var result = (!!context.button.command.params.entityId ||
+            !!context.button.command.params.useModuleList); // need ID or a "slot", otherwise edit won't work
+        console.log('showCondition edit', result);
+        return result;
     },
 });
 
@@ -1298,7 +1300,7 @@ function toggleParts() {
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ToolbarManager", function() { return ToolbarManager; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0____ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0____ = __webpack_require__(15);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__logging__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__config_loaders_toolbar_config_loader__ = __webpack_require__(54);
 var __extends = (this && this.__extends) || (function () {
@@ -1366,7 +1368,7 @@ var ToolbarManager = new ToolbarManagerGlobal();
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ToolbarRenderer", function() { return ToolbarRenderer; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__html_dom_tools__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__html_dom_tools__ = __webpack_require__(14);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__logging__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__render_button__ = __webpack_require__(87);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__render_groups__ = __webpack_require__(94);
@@ -1390,9 +1392,10 @@ var __extends = (this && this.__extends) || (function () {
 var ToolbarRenderer = /** @class */ (function (_super) {
     __extends(ToolbarRenderer, _super);
     function ToolbarRenderer(context) {
+        var _a;
         var _this = _super.call(this, 'Rnd.Toolbr') || this;
         _this.context = context;
-        __WEBPACK_IMPORTED_MODULE_1__logging__["Insights"].add('toolbar-render', '', _this.log);
+        __WEBPACK_IMPORTED_MODULE_1__logging__["Insights"].add('toolbar-render', ((_a = context.toolbar) === null || _a === void 0 ? void 0 : _a.identifier) || '', _this.log);
         _this.groups = new __WEBPACK_IMPORTED_MODULE_3__render_groups__["RenderButtonGroups"](_this);
         _this.button = new __WEBPACK_IMPORTED_MODULE_2__render_button__["RenderButton"](_this);
         return _this;
@@ -1402,6 +1405,7 @@ var ToolbarRenderer = /** @class */ (function (_super) {
         return cl.return(this.generate().outerHTML);
     };
     ToolbarRenderer.prototype.generate = function () {
+        var _a;
         var cl = this.log.call('generate');
         // render groups of buttons
         var context = this.context;
@@ -1409,6 +1413,7 @@ var ToolbarRenderer = /** @class */ (function (_super) {
         var groups = this.groups.generate(context);
         // render toolbar
         var tlbTag = document.createElement('ul');
+        tlbTag.setAttribute('toolbar-identifier', (_a = context.toolbar) === null || _a === void 0 ? void 0 : _a.identifier);
         tlbTag.classList.add('sc-menu');
         tlbTag.classList.add('group-0'); // IE11 fix, add each class separately
         // add behaviour classes
@@ -1650,7 +1655,7 @@ var BuildSteps;
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ContentBlockEditor", function() { return ContentBlockEditor; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__html_dom_tools__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__html_dom_tools__ = __webpack_require__(14);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__logging__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__render__ = __webpack_require__(18);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__constants_index__ = __webpack_require__(2);
@@ -2213,7 +2218,7 @@ var ModifierContentBlock = /** @class */ (function (_super) {
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TagToolbar", function() { return TagToolbar; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0____ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0____ = __webpack_require__(15);
 
 
 /**
@@ -2410,7 +2415,7 @@ $(window).on('mousemove', function (e) {
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ButtonSafe", function() { return ButtonSafe; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0____ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__plumbing__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__plumbing__ = __webpack_require__(16);
 
 
 /**
@@ -2454,9 +2459,10 @@ var ButtonSafe = /** @class */ (function () {
 
 /** Evaluate a property or generator and return the property */
 function getVal(propOrGen, ctx, fallback) {
-    return (Object(__WEBPACK_IMPORTED_MODULE_1__plumbing__["isNothing"])(propOrGen))
-        ? fallback
-        : (__WEBPACK_IMPORTED_MODULE_0____["Button"].isPropGen(propOrGen) ? propOrGen(ctx) : propOrGen);
+    if (Object(__WEBPACK_IMPORTED_MODULE_1__plumbing__["isNothing"])(propOrGen))
+        return fallback;
+    var result = (__WEBPACK_IMPORTED_MODULE_0____["Button"].isPropGen(propOrGen) ? propOrGen(ctx) : propOrGen);
+    return result === undefined ? fallback : result;
 }
 
 
@@ -2510,7 +2516,7 @@ var RenderPart = /** @class */ (function (_super) {
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ToolbarInitConfig", function() { return ToolbarInitConfig; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__constants__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__html_dom_tools__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__html_dom_tools__ = __webpack_require__(14);
 
 
 /**
@@ -3140,6 +3146,7 @@ var ButtonConfigLoader = /** @class */ (function (_super) {
         for (var g = 0; g < btnGroups.length; g++) {
             var btns = btnGroups[g].buttons;
             // #CodeChange#2020-03-22#InstanceConfig - believe this is completely unused; remove in June
+            // const config = InstanceConfig.fromContext(context);
             this.removeUnfitButtons(context, /* full,*/ btns /* config, */);
             wrapLog.add('will disable appropriate buttons');
             // #CodeChange#2020-03-22#InstanceConfig - believe this is completely unused; remove in June
@@ -3176,8 +3183,11 @@ var ButtonConfigLoader = /** @class */ (function (_super) {
                 context.button = btn; // add to context for calls
                 var rule = this.toolbar.rules.find(btn.id || btn.command.name);
                 var show = rule === null || rule === void 0 ? void 0 : rule.showOverride();
-                if (show === undefined)
+                if (show === undefined) {
+                    // console.log('removeUnfit - before', show);
                     show = new __WEBPACK_IMPORTED_MODULE_3__config_button_safe__["ButtonSafe"](btn, context).showCondition();
+                    console.log('removeUnfit - after for ' + btn.command.name, show);
+                }
                 if (show === false) {
                     removals += "#" + i + " \"" + btn.command.name + "\"; ";
                     btns.splice(i--, 1);
@@ -3302,10 +3312,12 @@ __WEBPACK_IMPORTED_MODULE_0____["Commands"].add(CmdNew, 'New', 'plus', false, tr
     params: function (context) { return ({ mode: CmdNewMode }); },
     dialog: function (context) { return 'edit'; },
     showCondition: function (context) {
-        return (!!context.button.command.params.contentType ||
-            (context.contentBlock.isList &&
+        var result = (!!context.button.command.params.contentType ||
+            !!(context.contentBlock.isList &&
                 context.button.command.params.useModuleList &&
                 context.button.command.params.sortOrder !== -1)); // don't provide new on the header-item
+        console.log('new', result);
+        return result;
     },
     code: function (context, event) {
         // todo - should refactor this to be a toolbarManager.contentBlock command
@@ -3787,7 +3799,7 @@ var UrlParamManager = /** @class */ (function () {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Environment; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__env_loader_meta__ = __webpack_require__(172);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__constants__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__constants__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__logging__ = __webpack_require__(4);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
@@ -3884,8 +3896,8 @@ var Environment = /** @class */ (function (_super) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SxcHttp; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__constants__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1____ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__constants__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1____ = __webpack_require__(17);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -4236,7 +4248,7 @@ var SxcInstanceWithInternals = /** @class */ (function (_super) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__environment__ = __webpack_require__(178);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__http_sxc_http__ = __webpack_require__(68);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__logging__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__constants__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__constants__ = __webpack_require__(13);
 
 
 
@@ -4386,9 +4398,9 @@ var CmdAdd = 'add';
  */
 __WEBPACK_IMPORTED_MODULE_0____["Commands"].add(CmdAdd, 'AddDemo', 'plus-circled', false, true, {
     showCondition: function (context) {
-        return context.contentBlock.isList &&
+        return !!(context.contentBlock.isList &&
             context.button.command.params.useModuleList &&
-            context.button.command.params.sortOrder !== -1;
+            context.button.command.params.sortOrder !== -1);
     },
     code: function (context) {
         return __WEBPACK_IMPORTED_MODULE_1__content_list_actions__["Actions"].addItem(context, context.button.command.params.sortOrder + 1);
@@ -4704,7 +4716,7 @@ var ModifierContentBlockInstance = /** @class */ (function (_super) {
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RenderButton", function() { return RenderButton; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__html_dom_tools__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__html_dom_tools__ = __webpack_require__(14);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__config__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__render_part_base__ = __webpack_require__(45);
 var __extends = (this && this.__extends) || (function () {
@@ -4854,7 +4866,7 @@ var ButtonCommand = /** @class */ (function () {
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Button", function() { return Button; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__plumbing__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__plumbing__ = __webpack_require__(16);
 
 /**
  * The real button configuration as it's used at runtime
@@ -4952,6 +4964,7 @@ var Toolbar = /** @class */ (function () {
         this.groups = [];
         /** show more debug info */
         this.debug = false;
+        this.identifier = 'Toolbar' + Math.floor(Math.random() * 99999);
     }
     return Toolbar;
 }());
@@ -4968,7 +4981,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ToolbarSettingsDefaults", function() { return ToolbarSettingsDefaults; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ToolbarSettingsForEmpty", function() { return ToolbarSettingsForEmpty; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ToolbarEmpty", function() { return ToolbarEmpty; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__plumbing__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__plumbing__ = __webpack_require__(16);
 var __assign = (this && this.__assign) || function () {
     __assign = Object.assign || function(t) {
         for (var s, i = 1, n = arguments.length; i < n; i++) {
@@ -5977,7 +5990,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ToolbarTemplateManager", function() { return ToolbarTemplateManager; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0____ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__logging__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__plumbing__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__plumbing__ = __webpack_require__(16);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -6937,7 +6950,7 @@ __WEBPACK_IMPORTED_MODULE_0____["Commands"].add(CmdAppResources, 'AppResources',
     disabled: function (context) { return context.app.resourcesId === null; },
     title: function (context) { return "Toolbar.AppResources" + (context.app.resourcesId === null ? 'Disabled' : ''); },
     // only if resources exist or are 0 (to be created)...
-    showCondition: function (context) { return context.user.canDesign && !context.app.isContent; },
+    showCondition: function (context) { return !!context.user.canDesign && !context.app.isContent; },
     configureLinkGenerator: function (context, linkGenerator) {
         linkGenerator.items = [{ EntityId: context.app.resourcesId }];
     },
@@ -7003,7 +7016,7 @@ __WEBPACK_IMPORTED_MODULE_0____["Commands"].add(CmdContentItems, 'ContentItems',
     },
     // only show to admin-users and in cases where we know the content-type
     showCondition: function (context) {
-        return context.user.canDesign &&
+        return !!context.user.canDesign &&
             (!!context.button.command.params.contentType ||
                 !!context.contentBlock.contentTypeId);
     },
@@ -7065,7 +7078,7 @@ __WEBPACK_IMPORTED_MODULE_0____["Commands"].add(CmdContentType, 'ContentType', '
     }); },
     // only show to admin-users and in cases where we know the content-type
     showCondition: function (context) {
-        return context.user.canDesign &&
+        return !!context.user.canDesign &&
             (!!context.button.command.params.contentType ||
                 !!context.contentBlock.contentTypeId);
     },
@@ -7236,7 +7249,7 @@ var CmdInstanceList = 'instance-list';
  */
 __WEBPACK_IMPORTED_MODULE_0____["Commands"].add(CmdInstanceList, 'Sort', 'list-numbered', false, true, {
     showCondition: function (context) {
-        return (context.contentBlock.isList &&
+        return !!(context.contentBlock.isList &&
             context.button.command.params.useModuleList &&
             context.button.command.params.sortOrder !== -1);
     },
@@ -7386,7 +7399,7 @@ var CmdMoveDown = 'movedown';
 __WEBPACK_IMPORTED_MODULE_0____["Commands"].add(CmdMoveDown, 'MoveDown', 'move-down', false, true, {
     showCondition: function (context) {
         // TODO: do not display if is last item in list
-        return (context.contentBlock.isList &&
+        return !!(context.contentBlock.isList &&
             context.button.command.params.useModuleList &&
             context.button.command.params.sortOrder !== -1);
     },
@@ -7414,7 +7427,7 @@ var CmdMoveUp = 'moveup';
  */
 __WEBPACK_IMPORTED_MODULE_0__commands__["Commands"].add(CmdMoveUp, 'MoveUp', 'move-up', false, true, {
     showCondition: function (context) {
-        return (context.contentBlock.isList &&
+        return !!(context.contentBlock.isList &&
             context.button.command.params.useModuleList &&
             context.button.command.params.sortOrder !== -1 &&
             context.button.command.params.sortOrder !== 0);
@@ -7495,7 +7508,7 @@ var CmdRemove = 'remove';
  */
 __WEBPACK_IMPORTED_MODULE_0____["Commands"].add(CmdRemove, 'Remove', 'minus-circled', false, true, {
     showCondition: function (context) {
-        return (context.contentBlock.isList &&
+        return !!(context.contentBlock.isList &&
             context.button.command.params.useModuleList &&
             context.button.command.params.sortOrder !== -1);
     },
@@ -7525,7 +7538,7 @@ var CmdReplace = 'replace';
  */
 __WEBPACK_IMPORTED_MODULE_0____["Commands"].add(CmdReplace, 'Replace', 'replace', false, true, {
     showCondition: function (context) {
-        return context.button.command.params.useModuleList;
+        return !!context.button.command.params.useModuleList;
     },
 });
 
@@ -7546,7 +7559,7 @@ var CmdTemplateDevelop = 'template-develop';
 __WEBPACK_IMPORTED_MODULE_0____["Commands"].add(CmdTemplateDevelop, 'Develop', 'code', true, false, {
     newWindow: function (_) { return true; },
     dialog: function (_) { return 'develop'; },
-    showCondition: function (context) { return context.user.canDesign; },
+    showCondition: function (context) { return !!context.user.canDesign; },
     configureLinkGenerator: function (context, linkGenerator) {
         linkGenerator.items = [{ EntityId: context.contentBlock.templateId }];
     },
@@ -7572,7 +7585,7 @@ __WEBPACK_IMPORTED_MODULE_0____["Commands"].add(CmdTemplateQuery, 'QueryEdit', '
     newWindow: function (_) { return true; },
     disabled: function (ctx) { return ctx.app.settingsId === null || !ctx.contentBlock.queryId; },
     title: function (ctx) { return "Toolbar.QueryEdit" + (ctx.contentBlock.queryId === null ? 'Disabled' : ''); },
-    showCondition: function (ctx) { return ctx.user.canDesign && !ctx.app.isContent; },
+    showCondition: function (ctx) { return !!ctx.user.canDesign && !ctx.app.isContent; },
     // if it doesn't have a query, make it less strong
     dynamicClasses: function (ctx) { return ctx.contentBlock.queryId ? '' : 'empty'; },
 });
@@ -7593,7 +7606,7 @@ var CmdTemplateSettings = 'template-settings';
  */
 __WEBPACK_IMPORTED_MODULE_0____["Commands"].add(CmdTemplateSettings, 'TemplateSettings', 'sliders', true, false, {
     dialog: function (context) { return 'edit'; },
-    showCondition: function (context) { return context.user.canDesign && !context.app.isContent; },
+    showCondition: function (context) { return !!context.user.canDesign && !context.app.isContent; },
     configureLinkGenerator: function (context, linkGenerator) {
         linkGenerator.items = [{ EntityId: context.contentBlock.templateId }];
     },
@@ -7615,7 +7628,7 @@ var CmdZone = 'zone';
  */
 __WEBPACK_IMPORTED_MODULE_0____["Commands"].add(CmdZone, 'Zone', 'manage', true, false, {
     showCondition: function (context) {
-        return context.user.canDesign;
+        return !!context.user.canDesign;
     },
 });
 
@@ -8253,7 +8266,7 @@ var Manage = /** @class */ (function () {
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EditManager", function() { return EditManager; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__interfaces_sxc_instance_editable__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__toolbar__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__toolbar__ = __webpack_require__(15);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__toolbar_render_toolbar_renderer__ = __webpack_require__(26);
 var __assign = (this && this.__assign) || function () {
     __assign = Object.assign || function(t) {
@@ -8934,7 +8947,7 @@ __webpack_require__(97);
 __webpack_require__(190);
 __webpack_require__(191);
 __webpack_require__(128);
-__webpack_require__(13);
+__webpack_require__(14);
 __webpack_require__(192);
 __webpack_require__(193);
 __webpack_require__(194);
@@ -8950,7 +8963,7 @@ __webpack_require__(150);
 __webpack_require__(149);
 __webpack_require__(146);
 __webpack_require__(144);
-__webpack_require__(15);
+__webpack_require__(16);
 __webpack_require__(199);
 __webpack_require__(90);
 __webpack_require__(61);
@@ -8991,7 +9004,7 @@ __webpack_require__(89);
 __webpack_require__(5);
 __webpack_require__(93);
 __webpack_require__(92);
-__webpack_require__(14);
+__webpack_require__(15);
 __webpack_require__(202);
 __webpack_require__(95);
 __webpack_require__(46);
@@ -9104,7 +9117,7 @@ var HasLog = /** @class */ (function () {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Log; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0____ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1____ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1____ = __webpack_require__(17);
 
 
 var maxScopeLen = 3;
@@ -9321,7 +9334,7 @@ var Log = /** @class */ (function () {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return EnvironmentMetaLoader; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__env_loader_dnn_sf__ = __webpack_require__(173);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__constants__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__constants__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__logging__ = __webpack_require__(4);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
@@ -9466,7 +9479,7 @@ var EnvironmentDnnSfLoader = /** @class */ (function (_super) {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SxcInstance; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__web_api_sxc_web_api__ = __webpack_require__(70);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__constants__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__constants__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__logging__ = __webpack_require__(4);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
@@ -9698,7 +9711,7 @@ var SxcInstanceDataDeprecated = /** @class */ (function () {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Debug; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0____ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0____ = __webpack_require__(17);
 
 var urlManager = new __WEBPACK_IMPORTED_MODULE_0____["UrlParamManager"]();
 var urlDebugState = urlManager.get('debug') === 'true';
@@ -9738,8 +9751,10 @@ var Debug = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Stats__ = __webpack_require__(180);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__sxc_instance_sxc_instance_with_internals__ = __webpack_require__(73);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__sxc_root__ = __webpack_require__(74);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5____ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5____ = __webpack_require__(17);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__logging__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__constants__ = __webpack_require__(13);
+
 
 
 
@@ -9819,6 +9834,7 @@ function buildSxcRoot() {
     };
     var merged = addOn.jq().extend(FindSxcInstance, addOn, rootApiV2);
     merged.log.add('sxc controller built');
+    console.log("$2sxc " + __WEBPACK_IMPORTED_MODULE_7__constants__["d" /* SxcVersion */] + " with insights-logging - see https://r.2sxc.org/insights");
     return merged; //FindSxcInstance as SxcRoot & SxcRootInternals;
 }
 function autoFind(domElement) {
@@ -10565,4 +10581,4 @@ var __WEBPACK_AMD_DEFINE_RESULT__;/*
 
 /***/ })
 /******/ ]);
-//# sourceMappingURL=https://sources.2sxc.org/10.27.00/./inpage/inpage.js.map
+//# sourceMappingURL=inpage.js.map
