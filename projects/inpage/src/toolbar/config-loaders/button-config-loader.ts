@@ -4,7 +4,7 @@ import { ToolbarConfigLoader } from '.';
 import { CmdMore, Commands } from '../../commands';
 import { ContextComplete } from '../../context/bundles';
 import { HasLog } from '../../logging';
-import { InstanceConfig } from '../../manage/instance-config';
+// import { InstanceConfig } from '../../manage/instance-config';
 import { DictionaryValue } from '../../plumbing';
 import { Button, Toolbar } from '../config';
 import { ButtonSafe } from '../config/button-safe';
@@ -34,7 +34,7 @@ export class ButtonConfigLoader extends HasLog {
         // if just a name, turn into a command
         // use the deep version with command.action, because of more clean-up later on
         if (typeof original === 'string')
-            return cl.return(this.getFromName(original), 'found name, use that');
+            return cl.return(this.btnConfigStructure(original, {}), 'found name, use that');
 
         // if it's a command w/action, wrap into command + trim
         if (InPageCommandJson.hasActions(original)) {
@@ -49,10 +49,13 @@ export class ButtonConfigLoader extends HasLog {
         throw 'can\'t expand InPageButtonConfiguration - unexpected type signature encountered';
     }
 
-    getFromName(name: string): InPageButtonJson {
-        const wrapLog = this.log.call('getFromName');
+    btnConfigStructure(name: string, params: {}): InPageButtonJson {
+        const wrapLog = this.log.call('getFromName', name);
         return wrapLog.return({
-            command: { action: name.trim() },
+            command: {
+                action: name.trim(),
+                params: params,
+            },
             _expanded: true,
         }, `name "${name}" found, will re-map to .command.action`);
     }

@@ -68,7 +68,7 @@ export const ToolbarSettingsForEmpty = new ToolbarSettings({
 });
 
 // TODO: this is in the wrong place, shouldn't be in settings
-export const ToolbarEmpty = {
+export const ToolbarWhenNoToolbarProvided = {
   toolbar: {} as ToolbarTemplate,
   settings: ToolbarSettingsForEmpty,
 } as ToolbarInitConfig;

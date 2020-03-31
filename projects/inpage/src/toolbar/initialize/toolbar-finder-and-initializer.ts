@@ -1,7 +1,7 @@
 ﻿import { C } from '../../constants/index';
 import { ContextComplete } from '../../context/bundles/context-bundle-button';
 import { HasLog } from '../../logging';
-import { ToolbarEmpty } from '../config';
+import { ToolbarWhenNoToolbarProvided } from '../config';
 import { ToolbarRenderer } from '../render/toolbar-renderer';
 import { TagToolbar } from '../tag-toolbars/tag-toolbar';
 import { ToolbarManager } from '../toolbar-manager';
@@ -184,7 +184,7 @@ function addDefaultToolbarConfigToTag(parentTag: JQuery): JQuery {
   if (ctx.ui.autoToolbar === false)
     return null;
 
-  contentTag.attr(C.Toolbar.attr.full, JSON.stringify(ToolbarEmpty));
+  contentTag.attr(C.Toolbar.attr.full, JSON.stringify(ToolbarWhenNoToolbarProvided));
 
   return contentTag;
 }

@@ -17,7 +17,7 @@ Commands.add(CmdEdit, 'Edit', 'pencil', false, true, {
             !!context.button.command.params.entityId ||
             !!context.button.command.params.useModuleList
         ); // need ID or a "slot", otherwise edit won't work
-console.log('showCondition edit', result);
+console.log('showCondition edit', context.button.command.params.entityId, result, );
         return result;
     },
 });

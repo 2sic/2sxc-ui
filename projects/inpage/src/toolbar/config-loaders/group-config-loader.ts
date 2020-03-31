@@ -70,14 +70,18 @@ export class ButtonGroupConfigLoader extends HasLog {
             console.warn('warning: toolbar-button with unknown action-name:', name);
         }
 
-        const contentType = btnCommand.contentType;
+        // first check if we already got params in the object - then we will use those, otherwise the main object
+        const realParams = (btnCommand as ButtonCommand).params
+            || InPageCommandJson.noAction(btnCommand);
+
+        const contentType = realParams.contentType;
 
         // if the button belongs to a content-item, move the specs up to the item into the settings-object
         btnCommand = this.toolbar.command.updateToV9(btnCommand);
 
         // parameters adapter from v1 to v2
-        const params = { ...InPageCommandJson.noAction(btnCommand), ...sharedParams };
-
+        const params = { ...realParams, ...sharedParams };
+console.log('params', params);
         // Toolbar API v2
         const command = new ButtonCommand(name, contentType, params);
         let newButtonConfig = new Button(command, identifier);
@@ -138,10 +142,16 @@ export class ButtonGroupConfigLoader extends HasLog {
 
 
     private expandButtonAndAddToList(list: InPageButtonJson[], btn: InPageButtonJson, names: string): void {
-        const cl = this.log.call('expandButtonAndAddToList', '', `button def "${btn} is string of ma.ny names, will expand into array with action-properties"`);
+        const cl = this.log.call('expandButtonAndAddToList', `..., ..., '${names}'`, `button def "${btn} is string of mult names, will expand into array with action-properties"`);
         const actions = names.length ? names.split(TC.ButtonSeparator) : [];
-        for (let a = 0; a < actions.length; a++)
-            list.push({...btn, ...this.toolbar.button.getFromName(actions[a])} as InPageButtonJson);
+        const params = {...btn} as InPageCommandJson;
+        delete params.action;
+        for (let a = 0; a < actions.length; a++) {
+            const commandPart = this.toolbar.button.btnConfigStructure(actions[a], params);
+console.log('commandPart', commandPart);
+            cl.data('commandPart', commandPart);
+            list.push(commandPart); // {...btn, ...commandPart });
+        }
         cl.return(list);
     }
 
@@ -150,7 +160,7 @@ export class ButtonGroupConfigLoader extends HasLog {
         const cl = this.log.call('addMoreButtons');
         const addMore = settings.autoAddMore;
         if (addMore) {
-            const moreButton = this.toolbar.button.getFromName(CmdMore);
+            const moreButton = this.toolbar.button.btnConfigStructure(CmdMore, {});
             if ((addMore === 'end') || (addMore.toString() === 'right')) { // fallback for older v1 setting
                 this.log.add('will add a more "..." button to end');
                 list.push(moreButton);

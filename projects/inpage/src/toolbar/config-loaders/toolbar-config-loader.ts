@@ -4,10 +4,10 @@ import { ButtonGroupsWip } from '.';
 import { ToolbarManager } from '..';
 import { ContextComplete } from '../../context/bundles/context-bundle-button';
 import { Entry, HasLog } from '../../logging';
-import { ButtonGroup, Toolbar } from '../config';
-import { ToolbarSettings, ToolbarSettingsDefaults, ToolbarSettingsForEmpty } from '../config';
+import { ButtonGroup, Toolbar, ToolbarSettings } from '../config';
+import { ToolbarSettingsDefaults, ToolbarSettingsForEmpty } from '../config';
 import { InPageToolbarConfigVariations, ToolbarInitConfig } from '../initialize/toolbar-init-config';
-import { RuleConstants as RC, RuleManager, BuildSteps } from '../rules';
+import { BuildSteps, RuleManager } from '../rules';
 import { TemplateEditor, ToolbarTemplate, ToolbarTemplateManager } from '../templates';
 import { ToolbarTemplateGroup } from '../templates';
 import { ToolbarTemplateDefault } from '../templates/template-default';
@@ -56,6 +56,8 @@ export class ToolbarConfigLoader extends HasLog {
 
     load(context: ContextComplete, config: ToolbarInitConfig): Toolbar {
         const cl = this.log.call('load', '', 'expand start');
+        cl.data('initial context', context);
+        cl.data('initial config', config);
         // if null/undefined, use empty object
         const raw = config.toolbar = config.toolbar || {};
         this.setLoggingAndCreateHelpers(raw as InPageToolbarConfigVariations);
@@ -115,7 +117,9 @@ export class ToolbarConfigLoader extends HasLog {
         let toolbarSettings = config.settings;
 
         // Default to empty toolbar settings if we don't have a toolbar or settings
-        if (Object.keys(config.toolbar).length + Object.keys(toolbarSettings || {}).length === 0) {
+        // important: the checks look a bit strange, but there are cases where {} settings are handed in
+        // and we can't count the keys because that would result in other checks
+        if (Object.keys(config.toolbar).length > 0 && toolbarSettings === ({} as ToolbarSettings)) {
             cl.add('no data or settings, will use default settings for empty');
             toolbarSettings = ToolbarSettingsForEmpty;
         }

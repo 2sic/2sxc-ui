@@ -293,7 +293,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "ToolbarSettings", function() { return __WEBPACK_IMPORTED_MODULE_5__toolbar_settings__["ToolbarSettings"]; });
 /* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "ToolbarSettingsDefaults", function() { return __WEBPACK_IMPORTED_MODULE_5__toolbar_settings__["ToolbarSettingsDefaults"]; });
 /* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "ToolbarSettingsForEmpty", function() { return __WEBPACK_IMPORTED_MODULE_5__toolbar_settings__["ToolbarSettingsForEmpty"]; });
-/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "ToolbarEmpty", function() { return __WEBPACK_IMPORTED_MODULE_5__toolbar_settings__["ToolbarEmpty"]; });
+/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "ToolbarWhenNoToolbarProvided", function() { return __WEBPACK_IMPORTED_MODULE_5__toolbar_settings__["ToolbarWhenNoToolbarProvided"]; });
 
 
 
@@ -1108,7 +1108,7 @@ __WEBPACK_IMPORTED_MODULE_0____["Commands"].add(CmdEdit, 'Edit', 'pencil', false
     showCondition: function (context) {
         var result = (!!context.button.command.params.entityId ||
             !!context.button.command.params.useModuleList); // need ID or a "slot", otherwise edit won't work
-        console.log('showCondition edit', result);
+        console.log('showCondition edit', context.button.command.params.entityId, result);
         return result;
     },
 });
@@ -2830,6 +2830,8 @@ var ToolbarConfigLoader = /** @class */ (function (_super) {
     };
     ToolbarConfigLoader.prototype.load = function (context, config) {
         var cl = this.log.call('load', '', 'expand start');
+        cl.data('initial context', context);
+        cl.data('initial config', config);
         // if null/undefined, use empty object
         var raw = config.toolbar = config.toolbar || {};
         this.setLoggingAndCreateHelpers(raw);
@@ -2879,7 +2881,9 @@ var ToolbarConfigLoader = /** @class */ (function (_super) {
         var cl = this.log.call('loadV9');
         var toolbarSettings = config.settings;
         // Default to empty toolbar settings if we don't have a toolbar or settings
-        if (Object.keys(config.toolbar).length + Object.keys(toolbarSettings || {}).length === 0) {
+        // important: the checks look a bit strange, but there are cases where {} settings are handed in
+        // and we can't count the keys because that would result in other checks
+        if (Object.keys(config.toolbar).length > 0 && toolbarSettings === {}) {
             cl.add('no data or settings, will use default settings for empty');
             toolbarSettings = __WEBPACK_IMPORTED_MODULE_2__config__["ToolbarSettingsForEmpty"];
         }
@@ -3113,7 +3117,7 @@ var ButtonConfigLoader = /** @class */ (function (_super) {
         // if just a name, turn into a command
         // use the deep version with command.action, because of more clean-up later on
         if (typeof original === 'string')
-            return cl.return(this.getFromName(original), 'found name, use that');
+            return cl.return(this.btnConfigStructure(original, {}), 'found name, use that');
         // if it's a command w/action, wrap into command + trim
         if (__WEBPACK_IMPORTED_MODULE_0____["InPageCommandJson"].hasActions(original)) {
             cl.add('action found, will move down to .command', original);
@@ -3126,10 +3130,13 @@ var ButtonConfigLoader = /** @class */ (function (_super) {
         }
         throw 'can\'t expand InPageButtonConfiguration - unexpected type signature encountered';
     };
-    ButtonConfigLoader.prototype.getFromName = function (name) {
-        var wrapLog = this.log.call('getFromName');
+    ButtonConfigLoader.prototype.btnConfigStructure = function (name, params) {
+        var wrapLog = this.log.call('getFromName', name);
         return wrapLog.return({
-            command: { action: name.trim() },
+            command: {
+                action: name.trim(),
+                params: params,
+            },
             _expanded: true,
         }, "name \"" + name + "\" found, will re-map to .command.action");
     };
@@ -4980,7 +4987,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ToolbarSettings", function() { return ToolbarSettings; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ToolbarSettingsDefaults", function() { return ToolbarSettingsDefaults; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ToolbarSettingsForEmpty", function() { return ToolbarSettingsForEmpty; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ToolbarEmpty", function() { return ToolbarEmpty; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ToolbarWhenNoToolbarProvided", function() { return ToolbarWhenNoToolbarProvided; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__plumbing__ = __webpack_require__(16);
 var __assign = (this && this.__assign) || function () {
     __assign = Object.assign || function(t) {
@@ -5045,7 +5052,7 @@ var ToolbarSettingsForEmpty = new ToolbarSettings({
     show: 'hover',
 });
 // TODO: this is in the wrong place, shouldn't be in settings
-var ToolbarEmpty = {
+var ToolbarWhenNoToolbarProvided = {
     toolbar: {},
     settings: ToolbarSettingsForEmpty,
 };
@@ -5296,7 +5303,7 @@ function addDefaultToolbarConfigToTag(parentTag) {
     var ctx = __WEBPACK_IMPORTED_MODULE_1__context_bundles_context_bundle_button__["ContextComplete"].findContext(contentTag);
     if (ctx.ui.autoToolbar === false)
         return null;
-    contentTag.attr(__WEBPACK_IMPORTED_MODULE_0__constants_index__["C"].Toolbar.attr.full, JSON.stringify(__WEBPACK_IMPORTED_MODULE_3__config__["ToolbarEmpty"]));
+    contentTag.attr(__WEBPACK_IMPORTED_MODULE_0__constants_index__["C"].Toolbar.attr.full, JSON.stringify(__WEBPACK_IMPORTED_MODULE_3__config__["ToolbarWhenNoToolbarProvided"]));
     return contentTag;
 }
 
@@ -5548,11 +5555,15 @@ var ButtonGroupConfigLoader = /** @class */ (function (_super) {
             this.log.add("couldn't find action " + name + " - show warning");
             console.warn('warning: toolbar-button with unknown action-name:', name);
         }
-        var contentType = btnCommand.contentType;
+        // first check if we already got params in the object - then we will use those, otherwise the main object
+        var realParams = btnCommand.params
+            || __WEBPACK_IMPORTED_MODULE_0____["InPageCommandJson"].noAction(btnCommand);
+        var contentType = realParams.contentType;
         // if the button belongs to a content-item, move the specs up to the item into the settings-object
         btnCommand = this.toolbar.command.updateToV9(btnCommand);
         // parameters adapter from v1 to v2
-        var params = __assign(__assign({}, __WEBPACK_IMPORTED_MODULE_0____["InPageCommandJson"].noAction(btnCommand)), sharedParams);
+        var params = __assign(__assign({}, realParams), sharedParams);
+        console.log('params', params);
         // Toolbar API v2
         var command = new __WEBPACK_IMPORTED_MODULE_3__config__["ButtonCommand"](name, contentType, params);
         var newButtonConfig = new __WEBPACK_IMPORTED_MODULE_3__config__["Button"](command, identifier);
@@ -5608,10 +5619,16 @@ var ButtonGroupConfigLoader = /** @class */ (function (_super) {
         return wrapLog.return(result, 'done');
     };
     ButtonGroupConfigLoader.prototype.expandButtonAndAddToList = function (list, btn, names) {
-        var cl = this.log.call('expandButtonAndAddToList', '', "button def \"" + btn + " is string of ma.ny names, will expand into array with action-properties\"");
+        var cl = this.log.call('expandButtonAndAddToList', "..., ..., '" + names + "'", "button def \"" + btn + " is string of mult names, will expand into array with action-properties\"");
         var actions = names.length ? names.split(__WEBPACK_IMPORTED_MODULE_4__templates_constants__["TemplateConstants"].ButtonSeparator) : [];
-        for (var a = 0; a < actions.length; a++)
-            list.push(__assign(__assign({}, btn), this.toolbar.button.getFromName(actions[a])));
+        var params = __assign({}, btn);
+        delete params.action;
+        for (var a = 0; a < actions.length; a++) {
+            var commandPart = this.toolbar.button.btnConfigStructure(actions[a], params);
+            console.log('commandPart', commandPart);
+            cl.data('commandPart', commandPart);
+            list.push(commandPart); // {...btn, ...commandPart });
+        }
         cl.return(list);
     };
     /** Add the "more" button at the end or beginning */
@@ -5619,7 +5636,7 @@ var ButtonGroupConfigLoader = /** @class */ (function (_super) {
         var cl = this.log.call('addMoreButtons');
         var addMore = settings.autoAddMore;
         if (addMore) {
-            var moreButton = this.toolbar.button.getFromName(__WEBPACK_IMPORTED_MODULE_1__commands__["CmdMore"]);
+            var moreButton = this.toolbar.button.btnConfigStructure(__WEBPACK_IMPORTED_MODULE_1__commands__["CmdMore"], {});
             if ((addMore === 'end') || (addMore.toString() === 'right')) { // fallback for older v1 setting
                 this.log.add('will add a more "..." button to end');
                 list.push(moreButton);
