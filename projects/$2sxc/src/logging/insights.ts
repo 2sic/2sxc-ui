@@ -2,6 +2,11 @@ import { HasLog, Log } from '.';
 
 type LogList = Array<{ key: string, log: Log}>;
 
+const msgIntro = 'This is the $2sxc JS Insights - see https://r.2sxc.org/insights \n'
+    + 'Add ?debug=true to the url to log more data. \n'
+    + 'Copy/paste code lines below to see details. \n'
+    + '----------------------------------------------------------------------\n';
+
 class InsightsSingleton extends HasLog {
 
     constructor() {
@@ -22,7 +27,7 @@ class InsightsSingleton extends HasLog {
         // if nothing specified, list what to do to see inner parts
         if (!partName) {
             const keys = Object.keys(this.history);
-            console.log(`${keys.length} parts found. Execute the code shown below to list the items inside: \n` + keys.map((p) => `$2sxc.insights('${p}')`).join('\n'));
+            console.log(`${msgIntro}${keys.length} insights-sections found: \n` + keys.map((p) => `$2sxc.insights('${p}');`).join('\n'));
             return;
         }
 
@@ -37,9 +42,9 @@ class InsightsSingleton extends HasLog {
         if (index === undefined) {
             let count = 0;
             const logNames = part.logs
-                .map((s) => `$2sxc.insights('${partName}', ${count++}) - will show for '${s.key}'`)
+                .map((s) => `$2sxc.insights('${partName}', ${count++}); - will show for '${s.key}'`)
                 .join('\n');
-            console.log(logNames);
+            console.log(`'${partName}' contains ${part.logs.length} entries. Copy/paste the code to to see the logs: \n` + logNames);
             return;
         }
 

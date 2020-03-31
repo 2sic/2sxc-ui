@@ -9369,13 +9369,13 @@ var EnvironmentMetaLoader = /** @class */ (function (_super) {
             this.retries++;
             if (forceFallback || this.retries >= maxRetries) {
                 new __WEBPACK_IMPORTED_MODULE_0__env_loader_dnn_sf__["a" /* EnvironmentDnnSfLoader */](this.env).dnnSfFallback();
-                return cl.done('done');
+                return cl.done();
             }
             setTimeout(function () { _this.loadMetaFromHeader(); }, 1);
             return cl.done('will retry');
         }
         this.env.load(JSON.parse(meta), 'meta header');
-        cl.done('ok');
+        cl.done();
     };
     EnvironmentMetaLoader.prototype.getMeta = function (metaName) {
         var metas = document.getElementsByTagName('meta');
@@ -9883,10 +9883,10 @@ var LogCall = /** @class */ (function () {
         this.log.addData(message, data);
     };
     LogCall.prototype.done = function (message) {
-        this.return(null, message);
+        this.return(null, message || '👍');
     };
     LogCall.prototype.return = function (result, message) {
-        message = message || 'ok';
+        message = message || '👍';
         this.initialEntry.result = message;
         this.log._callDepthRemove(this.name);
         // if we're in keep-data / debug mode, keep that
@@ -10038,6 +10038,10 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 
+var msgIntro = 'This is the $2sxc JS Insights - see https://r.2sxc.org/insights \n'
+    + 'Add ?debug=true to the url to log more data. \n'
+    + 'Copy/paste code lines below to see details. \n'
+    + '----------------------------------------------------------------------\n';
 var InsightsSingleton = /** @class */ (function (_super) {
     __extends(InsightsSingleton, _super);
     function InsightsSingleton() {
@@ -10056,7 +10060,7 @@ var InsightsSingleton = /** @class */ (function (_super) {
         // if nothing specified, list what to do to see inner parts
         if (!partName) {
             var keys = Object.keys(this.history);
-            console.log(keys.length + " parts found. Execute the code shown below to list the items inside: \n" + keys.map(function (p) { return "$2sxc.insights('" + p + "')"; }).join('\n'));
+            console.log("" + msgIntro + keys.length + " insights-sections found: \n" + keys.map(function (p) { return "$2sxc.insights('" + p + "');"; }).join('\n'));
             return;
         }
         // partName found, check if it exists
@@ -10069,9 +10073,9 @@ var InsightsSingleton = /** @class */ (function (_super) {
         if (index === undefined) {
             var count_1 = 0;
             var logNames = part.logs
-                .map(function (s) { return "$2sxc.insights('" + partName + "', " + count_1++ + ") - will show for '" + s.key + "'"; })
+                .map(function (s) { return "$2sxc.insights('" + partName + "', " + count_1++ + "); - will show for '" + s.key + "'"; })
                 .join('\n');
-            console.log(logNames);
+            console.log("'" + partName + "' contains " + part.logs.length + " entries. Copy/paste the code to to see the logs: \n" + logNames);
             return;
         }
         // verify the entry exists

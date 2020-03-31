@@ -35,13 +35,13 @@ export class EnvironmentMetaLoader extends Log.HasLog {
             this.retries++;
             if(forceFallback || this.retries >= maxRetries) {
                 new EnvironmentDnnSfLoader(this.env).dnnSfFallback();
-                return cl.done('done')
+                return cl.done()
             }
             setTimeout(() => { this.loadMetaFromHeader();}, 1);
             return cl.done('will retry');
         }
         this.env.load(JSON.parse(meta) as JsInfo, 'meta header');
-        cl.done('ok')
+        cl.done()
     }
     
     private getMeta(metaName: string): string {

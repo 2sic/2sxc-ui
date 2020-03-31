@@ -7,6 +7,7 @@ import { SxcRoot, getRootPartsV2 } from './sxc-root';
 import { Window } from "../_/window";
 import { Debug } from '..';
 import { Insights } from '../logging';
+import { SxcVersion } from '../constants';
 
 declare const $2sxc_jQSuperlight: any;
 declare const window: Window;
@@ -91,6 +92,8 @@ export function buildSxcRoot(): SxcRoot & SxcRootInternals {
 
     const merged = addOn.jq().extend(FindSxcInstance, addOn, rootApiV2) as SxcRoot & SxcRootInternals;
     merged.log.add('sxc controller built');
+
+    console.log(`$2sxc ${SxcVersion} with insights-logging - see https://r.2sxc.org/insights`)
 
     return merged; //FindSxcInstance as SxcRoot & SxcRootInternals;
 }

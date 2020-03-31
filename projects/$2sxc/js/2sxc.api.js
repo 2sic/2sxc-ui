@@ -154,6 +154,8 @@ var MetaHeaderJsApi = '_jsApi';
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__sxc_root__ = __webpack_require__(12);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5____ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__logging__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__constants__ = __webpack_require__(1);
+
 
 
 
@@ -210,6 +212,7 @@ function buildSxcRoot() {
     };
     var merged = addOn.jq().extend(FindSxcInstance, addOn, rootApiV2);
     merged.log.add('sxc controller built');
+    console.log("$2sxc " + __WEBPACK_IMPORTED_MODULE_7__constants__["d" /* SxcVersion */] + " with insights-logging - see https://r.2sxc.org/insights");
     return merged;
 }
 function autoFind(domElement) {
@@ -1076,13 +1079,13 @@ var EnvironmentMetaLoader = (function (_super) {
             this.retries++;
             if (forceFallback || this.retries >= maxRetries) {
                 new __WEBPACK_IMPORTED_MODULE_0__env_loader_dnn_sf__["a" /* EnvironmentDnnSfLoader */](this.env).dnnSfFallback();
-                return cl.done('done');
+                return cl.done();
             }
             setTimeout(function () { _this.loadMetaFromHeader(); }, 1);
             return cl.done('will retry');
         }
         this.env.load(JSON.parse(meta), 'meta header');
-        cl.done('ok');
+        cl.done();
     };
     EnvironmentMetaLoader.prototype.getMeta = function (metaName) {
         var metas = document.getElementsByTagName('meta');
@@ -1215,10 +1218,10 @@ var LogCall = (function () {
         this.log.addData(message, data);
     };
     LogCall.prototype.done = function (message) {
-        this.return(null, message);
+        this.return(null, message || '👍');
     };
     LogCall.prototype.return = function (result, message) {
-        message = message || 'ok';
+        message = message || '👍';
         this.initialEntry.result = message;
         this.log._callDepthRemove(this.name);
         this.initialEntry.data = result;
@@ -1356,6 +1359,10 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 
+var msgIntro = 'This is the $2sxc JS Insights - see https://r.2sxc.org/insights \n'
+    + 'Add ?debug=true to the url to log more data. \n'
+    + 'Copy/paste code lines below to see details. \n'
+    + '----------------------------------------------------------------------\n';
 var InsightsSingleton = (function (_super) {
     __extends(InsightsSingleton, _super);
     function InsightsSingleton() {
@@ -1373,7 +1380,7 @@ var InsightsSingleton = (function (_super) {
     InsightsSingleton.prototype.show = function (partName, index) {
         if (!partName) {
             var keys = Object.keys(this.history);
-            console.log(keys.length + " parts found. Execute the code shown below to list the items inside: \n" + keys.map(function (p) { return "$2sxc.insights('" + p + "')"; }).join('\n'));
+            console.log("" + msgIntro + keys.length + " insights-sections found: \n" + keys.map(function (p) { return "$2sxc.insights('" + p + "');"; }).join('\n'));
             return;
         }
         var part = this.history[partName];
@@ -1384,9 +1391,9 @@ var InsightsSingleton = (function (_super) {
         if (index === undefined) {
             var count_1 = 0;
             var logNames = part.logs
-                .map(function (s) { return "$2sxc.insights('" + partName + "', " + count_1++ + ") - will show for '" + s.key + "'"; })
+                .map(function (s) { return "$2sxc.insights('" + partName + "', " + count_1++ + "); - will show for '" + s.key + "'"; })
                 .join('\n');
-            console.log(logNames);
+            console.log("'" + partName + "' contains " + part.logs.length + " entries. Copy/paste the code to to see the logs: \n" + logNames);
             return;
         }
         var logSet = part.logs.length >= index && part.logs[index];

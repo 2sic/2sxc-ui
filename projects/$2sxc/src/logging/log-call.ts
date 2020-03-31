@@ -27,11 +27,11 @@ export class LogCall {
     }
 
     done(message?: string): void {
-        this.return(null, message);
+        this.return(null, message || '👍');
     }
 
     return<T>(result: T, message?: string) {
-        message = message || 'ok';
+        message = message || '👍';
         this.initialEntry.result = message;
         this.log._callDepthRemove(this.name);
         // if we're in keep-data / debug mode, keep that
