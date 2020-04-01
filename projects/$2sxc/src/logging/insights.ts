@@ -23,7 +23,7 @@ class InsightsSingleton extends HasLog {
         this.history[setName].logs.push({key: logName, log: log});
     }
 
-    show(partName: string, index?: number): void {
+    show(partName: string, index?: number, start?: number, length?: number): void {
         // if nothing specified, list what to do to see inner parts
         if (!partName) {
             const keys = Object.keys(this.history);
@@ -60,9 +60,17 @@ class InsightsSingleton extends HasLog {
             return;
         }
 
-        console.log(`Will dump the log on ${partName}[${index}] '${logSet.key}'`);
-        logSet.log.dump();
-    }
+        console.log(`Will dump the log for ${partName}[${index}] '${logSet.key}'`);
+        let autoLimit = false;
+        if (start === undefined) {
+            autoLimit = true;
+            start = 0;
+            length = 25;
+        }
+        logSet.log.dumpList(start || 0, length);
+        if (autoLimit && logSet.log.entries.length > length)
+            console.warn(`Only showing ${length} of ${logSet.log.entries.length} logs. To show all, add start param '..., 0)' or start/length '..., 0, 100)'`)
+}
 }
 
 // tslint:disable-next-line: max-classes-per-file
