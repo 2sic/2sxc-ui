@@ -75,7 +75,7 @@ export function buildSxcRoot(): SxcRoot & SxcRootInternals {
         // debug state which is needed in various places
         debug,
         stats: stats,
-        insights: (partName: string, index?: number) => Insights.show(partName, index),
+        insights: (partName: string, index?: number, start?: number, length?: number) => Insights.show(partName, index, start, length),
         _insights: Insights,
         // mini-helpers to manage 2sxc parts, a bit like a dependency loader
         // which will optimize to load min/max depending on debug state

@@ -5,7 +5,7 @@ import { renderer } from '../../contentBlock/render';
 import { ContextComplete } from '../../context/bundles/context-bundle-button';
 import { ContextBundleInstance } from '../../context/bundles/context-bundle-instance';
 import { $2sxcInPage as $2sxc } from '../../interfaces/sxc-controller-in-page';
-import { HasLog, Log } from '../../logging';
+import { HasLog, Log, Insights } from '../../logging';
 import { TypeUnsafe } from '../../plumbing';
 import { QuickDialog } from '../../quick-dialog/quick-dialog';
 import { Button, ButtonSafe } from '../../toolbar/config';
@@ -66,7 +66,7 @@ export class CmsEngine extends HasLog {
         const cl = this.log.call('run<T>');
         let cmdParams = this.nameOrSettingsAdapter(nameOrParams);
 
-        cmdParams = this.expandSettingsWithDefaults(cmdParams);
+        cmdParams = this.expandParamsWithDefaults(cmdParams);
 
         const origEvent = event;
         const name = cmdParams.action;
@@ -87,6 +87,7 @@ export class CmsEngine extends HasLog {
 
         // attach to context for inner calls which might access it
         context.button = button;
+        cl.data('button', context.button);
 
         // In case we don't have special code, use generic code
         let code = button.code;
@@ -128,17 +129,17 @@ export class CmsEngine extends HasLog {
      * Take a settings-name or partial settings object,
      * and return a full settings object with all defaults from
      * the command definition
-     * @param settings
+     * @param params
      */
-    private expandSettingsWithDefaults(settings: CommandParams): CommandParams {
-        const cl = this.log.call('expandSettingsWithDefaults');
-        const name = settings.action;
+    private expandParamsWithDefaults(params: CommandParams): CommandParams {
+        const cl = this.log.call('expandParamsWithDefaults');
+        const name = params.action;
         cl.add(`will add defaults for ${name} from buttonConfig`);
         const defaults = Commands.get(name).buttonDefaults;
         cl.data('defaults to merge', defaults);
         // TODO: 2dm - suspicious cast
-        // merge conf & settings, but
-        return cl.return({...defaults, ...settings} as CommandParams);
+        // merge conf & settings, but...?
+        return cl.return({...defaults, ...params} as CommandParams);
     }
 
 
@@ -147,8 +148,10 @@ export class CmsEngine extends HasLog {
      * open a new dialog of the angular-ui
      */
     static openDialog<T>(context: ContextComplete, event: MouseEvent): Promise<T> {
+        const log = new Log('Cms.OpnDlg');
+        Insights.add('cms', 'open-dialog', log);
         // the link contains everything to open a full dialog (lots of params added)
-        let link = new CommandLinkGenerator(context).getLink();
+        let link = new CommandLinkGenerator(context, log).getLink();
         const btn = new ButtonSafe(context.button, context);
 
         const origEvent = event || (window.event as MouseEvent);

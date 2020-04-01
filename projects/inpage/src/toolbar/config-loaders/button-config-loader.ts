@@ -125,7 +125,7 @@ export class ButtonConfigLoader extends HasLog {
             const btn = btns[i];
             if (btn.command) {
                 context.button = btn; // add to context for calls
-                const rule = this.toolbar.rules.find(btn.id || btn.command.name);
+                const rule = this.toolbar.toolbarV10.rules.find(btn.id || btn.command.name);
                 let show: boolean = rule?.showOverride();
                 if (show === undefined) {
                     show = new ButtonSafe(btn, context).showCondition();

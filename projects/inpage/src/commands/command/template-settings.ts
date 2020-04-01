@@ -5,11 +5,11 @@ export const CmdTemplateSettings = 'template-settings';
  * import this module to commands.ts
  */
 Commands.add(CmdTemplateSettings, 'TemplateSettings', 'sliders', true, false, {
-    dialog: (context) => 'edit',
+    dialog: (_) => 'edit',
 
-    showCondition: (context) => !!context.user.canDesign && !context.app.isContent,
+    showCondition: (ctx) => !!ctx.user.canDesign && !ctx.app.isContent,
 
-    configureLinkGenerator: (context, linkGenerator) => {
-        linkGenerator.items = [{ EntityId: context.contentBlock.templateId }];
+    configureLinkGenerator: (ctx, linkGen) => {
+        linkGen.items = [{ EntityId: ctx.contentBlock.templateId }];
     },
 });

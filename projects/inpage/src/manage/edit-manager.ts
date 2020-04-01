@@ -40,7 +40,6 @@ export class EditManager implements SxcInstanceManage {
     getButton(actDef: InPageButtonJson, groupIndex: number): string {
         this.context.button = ToolbarManager.getLoader('getButton')
             .groups.convertToButton(actDef, {}, {}, {});
-        // new ButtonConfigLoader(null).convertToButton(actDef);
         const button = new ToolbarRenderer(this.context).button.render(this.context, groupIndex);
         return button.outerHTML;
     }
@@ -54,7 +53,9 @@ export class EditManager implements SxcInstanceManage {
      * it is publicly used in Razor scripts of inpage, so take a care to preserve function signature
      */
     getToolbar(tbConfig: TypeUnsafe, moreSettings: ToolbarSettings): string {
-        tbConfig = {settings: {...tbConfig.settings, ...moreSettings}, ...tbConfig};
+        // if toolbar is an array, use as-is, otherwise assume properties are params
+        const toolbar = Array.isArray(tbConfig) ? tbConfig : {...tbConfig};
+        tbConfig = {settings: {...tbConfig.settings, ...moreSettings}, toolbar: toolbar};
         const toolbarConfig = ToolbarManager.loadConfig(this.context, tbConfig);
         this.context.toolbar = toolbarConfig;
         return new ToolbarRenderer(this.context).render();

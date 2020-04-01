@@ -159,6 +159,12 @@ export class Log implements ILog {
         else this.entries.forEach((e) => this.dumpOne(e, separator));
     }
 
+    dumpList(start: number = 0, length?: number) {
+        this.entries
+            .slice(start, length ? start + length : undefined           )
+            .forEach((e) => this.dumpOne(e));
+    }
+
     private dumpOne(e: Entry, separator = ' - '): void {
         const result = (e.result) ? ' =' + e.result : '';
         const line = e.source() + separator + '..'.repeat(e.depth) + e.message + result;

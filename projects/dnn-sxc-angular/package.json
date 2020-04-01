@@ -1,48 +1,51 @@
 {
-  "name": "@2sic.com/dnn-sxc-angular",
-  "version": "10.25.3",
-  "author": "2sic.com - daniel mettler and raphael müller",
-  "bugs": {
-    "url": "https://github.com/2sic/dnn-sxc-angular/issues"
-  },
+  "name": "dnn-sxc-angular-workspace",
+  "version": "0.0.0",
   "scripts": {
-    "dsa-build:main": "ngc",
-    "dsa-copy:dist": "cpx \"{,!(node_modules)/**/}*.*\" \"../../../app-dnn-sxc-angular-dev/node_modules/@2sic.com/dnn-sxc-angular\" -w",
-    "dsa-copy:2dm": "cpx \"{,!(node_modules|dist)/**/}*.*\" \"../../../app-Directory/node_modules/@2sic.com/dnn-sxc-angular\" -w -v",
-    "dsa-copy:template-ng8": "cpx \"dist/{,**/}*.*\" \"../../../app-template-angular8/ng/node_modules/@2sic.com/dnn-sxc-angular/dist\" -w -v",
-    "dsa-test": "echo \"Error: no test specified\" && exit 1",
-    "dsa-develop": "tsc -watch"
+    "build": "ng build --prod",
+    "dsa-copy:dist": "cpx \"dist/dnn-sxc-angular/{,**/}*.**.*\" \"../../../app-dnn-sxc-angular-dev/node_modules/@2sic.com/dnn-sxc-angular\" -w",
+    "dsa-copy:2dm": "cpx \"dist/dnn-sxc-angular/{,**/}*.**.*\" \"../../../app-Directory/node_modules/@2sic.com/dnn-sxc-angular\" -w -v",
+    "dsa-copy:template-ng8": "cpx \"dist/dnn-sxc-angular/{,**/}*.*\" \"../../../app-template-angular8/ng/node_modules/@2sic.com/dnn-sxc-angular/dist\" -w -v",
+    "test": "ng test",
+    "lint": "ng lint",
+    "e2e": "ng e2e"
   },
+  "private": true,
   "dependencies": {
-    "@2sic.com/2sxc-typings": "^10.25.2"
-  },
-  "peerDependencies": {
-    "@angular/common": "^6.1.3",
-    "@angular/core": "^6.1.3",
-    "@angular/http": "^6.1.3",
-    "@angular/platform-browser": "^6.1.3",
-    "rxjs": "^6.5.0"
+    "@angular/animations": "~9.0.2",
+    "@angular/common": "~9.0.2",
+    "@angular/compiler": "~9.0.2",
+    "@angular/core": "~9.0.2",
+    "@angular/forms": "~9.0.2",
+    "@angular/platform-browser": "~9.0.2",
+    "@angular/platform-browser-dynamic": "~9.0.2",
+    "@angular/router": "~9.0.2",
+    "rxjs": "~6.5.4",
+    "tslib": "^1.10.0",
+    "zone.js": "~0.10.2",
+    "@2sic.com/2sxc-typings": "^10.24.4"
   },
   "devDependencies": {
-    "@angular-devkit/schematics": "^0.7.4",
-    "@angular/compiler": "^6.1.3",
-    "@angular/compiler-cli": "^6.1.3",
-    "cpx": "^1.5.0",
-    "npm-install-peers": "^1.2.1",
-    "rollup": "^0.56.5",
-    "tslint-config-airbnb": "^5.2.1",
-    "typescript": "^2.9.2",
-    "uglify-js": "^3.3.13",
-    "zone.js": "^0.8.26"
-  },
-  "gitHead": "08eb8fc3226c22f147609bffd9d7090c26a48f7e",
-  "homepage": "https://github.com/2sic/dnn-sxc-angular#readme",
-  "license": "MIT",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "readme": "Connect DNN / DotNetNuke and 2sxc to Angular 6-8",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/2sic/dnn-sxc-angular.git"
+    "@angular-devkit/build-angular": "~0.900.3",
+    "@angular-devkit/build-ng-packagr": "~0.900.3",
+    "@angular/cli": "~9.0.3",
+    "@angular/compiler-cli": "~9.0.2",
+    "@angular/language-service": "~9.0.2",
+    "@types/node": "^12.11.1",
+    "@types/jasmine": "~3.5.0",
+    "@types/jasminewd2": "~2.0.3",
+    "codelyzer": "^5.1.2",
+    "jasmine-core": "~3.5.0",
+    "jasmine-spec-reporter": "~4.2.1",
+    "karma": "~4.3.0",
+    "karma-chrome-launcher": "~3.1.0",
+    "karma-coverage-istanbul-reporter": "~2.1.0",
+    "karma-jasmine": "~2.0.1",
+    "karma-jasmine-html-reporter": "^1.4.2",
+    "ng-packagr": "^9.0.0",
+    "protractor": "~5.4.3",
+    "ts-node": "~8.3.0",
+    "tslint": "~5.18.0",
+    "typescript": "~3.7.5"
   }
 }

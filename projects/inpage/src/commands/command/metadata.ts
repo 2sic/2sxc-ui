@@ -11,24 +11,23 @@ export const CmdMetadata = 'metadata';
  */
 Commands.add(CmdMetadata, 'Metadata', 'tag', false, false, {
 
-    params: (context) => ({ mode: CmdNewMode }),
+    params: (_) => ({ mode: CmdNewMode }),
 
-    dialog: (context) => CmdEditDialog, // don't use "new" (default) but use "edit"
+    dialog: (_) => CmdEditDialog, // don't use "new" (default) but use "edit"
 
     // if it doesn't have data yet, make it less strong
-    dynamicClasses: (context) => context.button.command.params.entityId ? '' : 'empty',
+    dynamicClasses: (ctx) => ctx.button.command.params.entityId ? '' : 'empty',
 
     // only add a metadata-button if it has metadata-infos
-    showCondition: (context) => !!context.button.command.params.metadata,
+    showCondition: (ctx) => !!ctx.button.command.params.metadata,
 
     configureLinkGenerator(_, linkGenerator) {
         const itm: Partial<ItemIdentifierSimple> = {
             Title: 'EditFormTitle.Metadata',
-            Metadata: { // O.bject.assign(
+            Metadata: {
                 ...{ keyType: 'string', targetType: 10 },
                 ...linkGenerator.context.button.command.params.metadata },
         };
         linkGenerator.items[0] = {...linkGenerator.items[0], ...itm };
-        // O.bject.assign(command.items[0], itm);
     },
 });
