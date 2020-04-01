@@ -17,7 +17,7 @@ export interface ToolbarWip {
     /** The groups of buttons in this toolbar */
     groups: ButtonGroupsWip;
 
-    /** Setttings like floating of toolbar, etc. */
+    /** Settings like floating of toolbar, etc. */
     settings: ToolbarSettings;
 
     /** Params for the commands, like EntityId, Content - Type - Name */

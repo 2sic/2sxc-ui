@@ -1,4 +1,4 @@
-﻿import { Commands } from '..';
+﻿import { Commands, SharedLogic } from '..';
 
 export const CmdEdit = 'edit';
 export const CmdEditDialog = 'edit';
@@ -9,14 +9,18 @@ export const CmdEditDialog = 'edit';
  * import this module to commands.ts
  */
 Commands.add(CmdEdit, 'Edit', 'pencil', false, true, {
-    params: (_) => {
+    params: (ctx) => {
+// console.log('edit-params', ctx);
+//         const result = { ...SharedLogic.paramsPreferListParamsToId(ctx), ...{ mode: 'edit' }};
+// console.log('result', result);
+//         return result;
         return { mode: 'edit' };
     },
-    showCondition(context) {
+    showCondition(ctx) {
         // need ID or a "slot", otherwise edit won't work
         const result =
-            !!context.button.command.params.entityId ||
-            !!context.button.command.params.useModuleList;
+            !!ctx.button.command.params.entityId ||
+            !!ctx.button.command.params.useModuleList;
         return result;
     },
 });

@@ -1,3 +1,4 @@
+export * from './shared-logic';
 export * from './add';
 export * from './app-import';
 export * from './app-resources';

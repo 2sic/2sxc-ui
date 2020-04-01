@@ -11,7 +11,7 @@ import { ToolbarConfigLoader } from './toolbar-config-loader';
 
 export class ButtonGroupConfigLoader extends HasLog {
 
-    constructor(public toolbar: ToolbarConfigLoader) {
+    constructor(private toolbar: ToolbarConfigLoader) {
         super('Tlb.GrpCnf', toolbar.log);
     }
 
