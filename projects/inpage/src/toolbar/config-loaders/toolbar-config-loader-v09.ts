@@ -48,11 +48,6 @@ export class ToolbarConfigLoaderV09 extends HasLog {
         if (ToolbarTemplateGroup.is(raw)) return cl.return(raw, 'is group, keep raw');
         if (Array.isArray(raw)) return cl.return(raw, 'is array, keep raw');
 
-        // special check: in some cases we get an object which is actually an array
-        // for example in timelineJs
-        // but we must make sure that they are real sub-objects, not a list of params!
-        // const asArray = 
-
         // final: nothing defined, use template
         cl.add('no toolbar structure specified, will use standard toolbar template');
         const template = this.toolbar.templates.copy(ToolbarTemplateDefault.name);

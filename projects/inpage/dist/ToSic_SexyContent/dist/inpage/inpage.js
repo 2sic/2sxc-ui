@@ -103,9 +103,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "CmdContentType", function() { return __WEBPACK_IMPORTED_MODULE_3__command_index__["CmdContentType"]; });
 /* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "CmdCustom", function() { return __WEBPACK_IMPORTED_MODULE_3__command_index__["CmdCustom"]; });
 /* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "CmdDelete", function() { return __WEBPACK_IMPORTED_MODULE_3__command_index__["CmdDelete"]; });
-/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "SharedLogic", function() { return __WEBPACK_IMPORTED_MODULE_3__command_index__["SharedLogic"]; });
 /* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "CmdEdit", function() { return __WEBPACK_IMPORTED_MODULE_3__command_index__["CmdEdit"]; });
 /* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "CmdEditDialog", function() { return __WEBPACK_IMPORTED_MODULE_3__command_index__["CmdEditDialog"]; });
+/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "SharedLogic", function() { return __WEBPACK_IMPORTED_MODULE_3__command_index__["SharedLogic"]; });
 /* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "CmdInstanceList", function() { return __WEBPACK_IMPORTED_MODULE_3__command_index__["CmdInstanceList"]; });
 /* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "CmdItemHistory", function() { return __WEBPACK_IMPORTED_MODULE_3__command_index__["CmdItemHistory"]; });
 /* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "CmdLayout", function() { return __WEBPACK_IMPORTED_MODULE_3__command_index__["CmdLayout"]; });
@@ -124,13 +124,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "CmdZone", function() { return __WEBPACK_IMPORTED_MODULE_3__command_index__["CmdZone"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__command_params__ = __webpack_require__(145);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__command_params___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__command_params__);
-/* harmony namespace reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in __WEBPACK_IMPORTED_MODULE_4__command_params__) if(["Command","Commands","CmdAdd","CmdAppImport","CmdAppResources","CmdAppSettings","CmdContentItems","ContentListActionParams","Actions","CmdContentType","CmdCustom","CmdDelete","SharedLogic","CmdEdit","CmdEditDialog","CmdInstanceList","CmdItemHistory","CmdLayout","CmdMetadata","CmdMore","CmdMoveDown","CmdMoveUp","CmdNew","CmdNewMode","CmdPublish","CmdRemove","CmdReplace","CmdTemplateDevelop","CmdTemplateQuery","CmdTemplateSettings","CmdZone","default"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return __WEBPACK_IMPORTED_MODULE_4__command_params__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+/* harmony namespace reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in __WEBPACK_IMPORTED_MODULE_4__command_params__) if(["Command","Commands","CmdAdd","CmdAppImport","CmdAppResources","CmdAppSettings","CmdContentItems","ContentListActionParams","Actions","CmdContentType","CmdCustom","CmdDelete","CmdEdit","CmdEditDialog","SharedLogic","CmdInstanceList","CmdItemHistory","CmdLayout","CmdMetadata","CmdMore","CmdMoveDown","CmdMoveUp","CmdNew","CmdNewMode","CmdPublish","CmdRemove","CmdReplace","CmdTemplateDevelop","CmdTemplateQuery","CmdTemplateSettings","CmdZone","default"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return __WEBPACK_IMPORTED_MODULE_4__command_params__[key]; }) }(__WEBPACK_IMPORT_KEY__));
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__engine_cms_engine__ = __webpack_require__(146);
 /* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "CmsEngine", function() { return __WEBPACK_IMPORTED_MODULE_5__engine_cms_engine__["CmsEngine"]; });
-/* harmony namespace reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in __WEBPACK_IMPORTED_MODULE_0__command_code__) if(["Command","Commands","CmdAdd","CmdAppImport","CmdAppResources","CmdAppSettings","CmdContentItems","ContentListActionParams","Actions","CmdContentType","CmdCustom","CmdDelete","SharedLogic","CmdEdit","CmdEditDialog","CmdInstanceList","CmdItemHistory","CmdLayout","CmdMetadata","CmdMore","CmdMoveDown","CmdMoveUp","CmdNew","CmdNewMode","CmdPublish","CmdRemove","CmdReplace","CmdTemplateDevelop","CmdTemplateQuery","CmdTemplateSettings","CmdZone","CmsEngine","default"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return __WEBPACK_IMPORTED_MODULE_0__command_code__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+/* harmony namespace reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in __WEBPACK_IMPORTED_MODULE_0__command_code__) if(["Command","Commands","CmdAdd","CmdAppImport","CmdAppResources","CmdAppSettings","CmdContentItems","ContentListActionParams","Actions","CmdContentType","CmdCustom","CmdDelete","CmdEdit","CmdEditDialog","SharedLogic","CmdInstanceList","CmdItemHistory","CmdLayout","CmdMetadata","CmdMore","CmdMoveDown","CmdMoveUp","CmdNew","CmdNewMode","CmdPublish","CmdRemove","CmdReplace","CmdTemplateDevelop","CmdTemplateQuery","CmdTemplateSettings","CmdZone","CmsEngine","default"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return __WEBPACK_IMPORTED_MODULE_0__command_code__[key]; }) }(__WEBPACK_IMPORT_KEY__));
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__metadata_for__ = __webpack_require__(150);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__metadata_for___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6__metadata_for__);
-/* harmony namespace reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in __WEBPACK_IMPORTED_MODULE_6__metadata_for__) if(["Command","Commands","CmdAdd","CmdAppImport","CmdAppResources","CmdAppSettings","CmdContentItems","ContentListActionParams","Actions","CmdContentType","CmdCustom","CmdDelete","SharedLogic","CmdEdit","CmdEditDialog","CmdInstanceList","CmdItemHistory","CmdLayout","CmdMetadata","CmdMore","CmdMoveDown","CmdMoveUp","CmdNew","CmdNewMode","CmdPublish","CmdRemove","CmdReplace","CmdTemplateDevelop","CmdTemplateQuery","CmdTemplateSettings","CmdZone","CmsEngine","default"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return __WEBPACK_IMPORTED_MODULE_6__metadata_for__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+/* harmony namespace reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in __WEBPACK_IMPORTED_MODULE_6__metadata_for__) if(["Command","Commands","CmdAdd","CmdAppImport","CmdAppResources","CmdAppSettings","CmdContentItems","ContentListActionParams","Actions","CmdContentType","CmdCustom","CmdDelete","CmdEdit","CmdEditDialog","SharedLogic","CmdInstanceList","CmdItemHistory","CmdLayout","CmdMetadata","CmdMore","CmdMoveDown","CmdMoveUp","CmdNew","CmdNewMode","CmdPublish","CmdRemove","CmdReplace","CmdTemplateDevelop","CmdTemplateQuery","CmdTemplateSettings","CmdZone","CmsEngine","default"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return __WEBPACK_IMPORTED_MODULE_6__metadata_for__[key]; }) }(__WEBPACK_IMPORT_KEY__));
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__engine_sxc_instance_engine__ = __webpack_require__(151);
 /* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "SxcInstanceEngine", function() { return __WEBPACK_IMPORTED_MODULE_7__engine_sxc_instance_engine__["SxcInstanceEngine"]; });
 
@@ -4005,18 +4005,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SharedLogic", function() { return SharedLogic; });
+/**
+ * TODO: place shared logic like for deciding if we show list buttons
+ * here
+ */
 var SharedLogic = /** @class */ (function () {
     function SharedLogic() {
     }
-    SharedLogic.paramsPreferListParamsToId = function (context) {
-        var params = context.button.command.params;
-        if (params.useModuleList)
-            return {
-                useModuleList: true,
-                sortOrder: params.sortOrder,
-            };
-        return params;
-    };
     return SharedLogic;
 }());
 
@@ -4677,7 +4672,7 @@ var ToolbarSettings = /** @class */ (function () {
 
 // ToDo: refactor to avoid side-effects
 var ToolbarSettingsDefaults = new ToolbarSettings({
-    autoAddMore: null,
+    autoAddMore: 'end',
     hover: 'right',
     show: 'hover',
 });
@@ -5447,6 +5442,7 @@ var ButtonGroupConfigLoader = /** @class */ (function (_super) {
     };
     /** Add the "more" button at the end or beginning */
     ButtonGroupConfigLoader.prototype.addMoreButton = function (settings, list) {
+        console.log('addMore');
         var cl = this.log.call('addMoreButtons');
         var addMore = settings.autoAddMore;
         if (addMore) {
@@ -5562,10 +5558,6 @@ var ToolbarConfigLoaderV09 = /** @class */ (function (_super) {
             return cl.return(raw, 'is group, keep raw');
         if (Array.isArray(raw))
             return cl.return(raw, 'is array, keep raw');
-        // special check: in some cases we get an object which is actually an array
-        // for example in timelineJs
-        // but we must make sure that they are real sub-objects, not a list of params!
-        // const asArray = 
         // final: nothing defined, use template
         cl.add('no toolbar structure specified, will use standard toolbar template');
         var template = this.toolbar.templates.copy(__WEBPACK_IMPORTED_MODULE_3__templates__["ToolbarTemplateDefault"].name);
@@ -6061,6 +6053,17 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 
 
 
@@ -6081,7 +6084,7 @@ var ToolbarConfigLoaderV10 = /** @class */ (function (_super) {
         // #1 prepare settings if no rule configured it
         var settingRule = this.rules.getSettings();
         var settings = (Object.keys((settingRule === null || settingRule === void 0 ? void 0 : settingRule.ui) || {}).length > 0)
-            ? settingRule.ui
+            ? __assign(__assign({}, __WEBPACK_IMPORTED_MODULE_1__config__["ToolbarSettingsDefaults"]), settingRule.ui)
             : __WEBPACK_IMPORTED_MODULE_1__config__["ToolbarSettingsDefaults"]; // note: Settings Empty currently don't use the V10 mechanism yet
         // #2 load either the default toolbar or the one specified
         var toolbarRule = this.rules.getToolbar();
@@ -8122,6 +8125,7 @@ var __assign = (this && this.__assign) || function () {
 
 
 
+
 /**
  * This is responsible for taking a context with command and everything
  * then building the link for opening the correct dialogs
@@ -9452,25 +9456,27 @@ var Log = /** @class */ (function () {
      * @param end
      */
     Log.prototype.dump = function (one, separator) {
-        var _this = this;
         if (one === void 0) { one = null; }
         if (separator === void 0) { separator = ' - '; }
         if (one)
-            this.dumpOne(one, separator);
-        else
-            this.entries.forEach(function (e) { return _this.dumpOne(e, separator); });
+            this.dumpOne(0, one, separator);
+        else {
+            this.dumpList();
+            // this.entries.forEach((e) => this.dumpOne(e, separator));
+        }
     };
     Log.prototype.dumpList = function (start, length) {
         var _this = this;
         if (start === void 0) { start = 0; }
+        var index = start;
         this.entries
             .slice(start, length ? start + length : undefined)
-            .forEach(function (e) { return _this.dumpOne(e); });
+            .forEach(function (e) { return _this.dumpOne(index++, e); });
     };
-    Log.prototype.dumpOne = function (e, separator) {
+    Log.prototype.dumpOne = function (index, e, separator) {
         if (separator === void 0) { separator = ' - '; }
         var result = (e.result) ? ' =' + e.result : '';
-        var line = e.source() + separator + '..'.repeat(e.depth) + e.message + result;
+        var line = ('0000' + index).slice(-4) + ' ' + e.source() + separator + '..'.repeat(e.depth) + e.message + result;
         if (e.data)
             console.log(line, e.data);
         else

@@ -55,7 +55,7 @@ export class ToolbarSettings {
 
 // ToDo: refactor to avoid side-effects
 export const ToolbarSettingsDefaults = new ToolbarSettings({
-  autoAddMore: null, // null | 'start' | 'end' | true
+  autoAddMore: 'end', // null | 'start' | 'end' | true
   hover: 'right', // 'left' |'right' | 'none'
   show: 'hover', // 'always' | 'hover'
 });

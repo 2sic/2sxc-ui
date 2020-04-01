@@ -26,7 +26,7 @@ export class ToolbarConfigLoaderV10 extends HasLog {
         // #1 prepare settings if no rule configured it
         const settingRule = this.rules.getSettings();
         const settings: ToolbarSettings = (Object.keys(settingRule?.ui || {}).length > 0)
-            ? settingRule.ui as unknown as ToolbarSettings
+            ? { ...ToolbarSettingsDefaults, ...settingRule.ui} as ToolbarSettings
             : ToolbarSettingsDefaults; // note: Settings Empty currently don't use the V10 mechanism yet
 
         // #2 load either the default toolbar or the one specified
