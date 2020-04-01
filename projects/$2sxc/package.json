@@ -1,6 +1,6 @@
 {
   "name": "2sic-2sxc-js-api",
-  "version": "10.27.00",
+  "version": "10.27.01",
   "description": "The $2sxc JS API for 2sxc.org",
   "scripts": {
     "2sxc-js-prod": "webpack --config webpack.$2sxc.js --watch --env.prod=true",

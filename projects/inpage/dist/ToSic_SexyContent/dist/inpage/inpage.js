@@ -10825,4 +10825,4 @@ var __WEBPACK_AMD_DEFINE_RESULT__;/*
 
 /***/ })
 /******/ ]);
-//# sourceMappingURL=https://sources.2sxc.org/10.27.00/./inpage/inpage.js.map
+//# sourceMappingURL=https://sources.2sxc.org/10.27.01/./inpage/inpage.js.map
