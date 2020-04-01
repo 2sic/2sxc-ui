@@ -5442,7 +5442,6 @@ var ButtonGroupConfigLoader = /** @class */ (function (_super) {
     };
     /** Add the "more" button at the end or beginning */
     ButtonGroupConfigLoader.prototype.addMoreButton = function (settings, list) {
-        console.log('addMore');
         var cl = this.log.call('addMoreButtons');
         var addMore = settings.autoAddMore;
         if (addMore) {

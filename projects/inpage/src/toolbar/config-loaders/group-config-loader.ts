@@ -155,7 +155,6 @@ export class ButtonGroupConfigLoader extends HasLog {
 
     /** Add the "more" button at the end or beginning */
     private addMoreButton(settings: ToolbarSettings, list: InPageButtonJson[]): void {
-console.log('addMore');
         const cl = this.log.call('addMoreButtons');
         const addMore = settings.autoAddMore;
         if (addMore) {
