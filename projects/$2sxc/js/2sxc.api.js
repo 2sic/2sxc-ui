@@ -198,7 +198,7 @@ function buildSxcRoot() {
         urlParams: urlManager,
         debug: debug,
         stats: stats,
-        insights: function (partName, index) { return __WEBPACK_IMPORTED_MODULE_6__logging__["c" /* Insights */].show(partName, index); },
+        insights: function (partName, index, start, length) { return __WEBPACK_IMPORTED_MODULE_6__logging__["c" /* Insights */].show(partName, index, start, length); },
         _insights: __WEBPACK_IMPORTED_MODULE_6__logging__["c" /* Insights */],
         parts: {
             getUrl: function (url, preventUnmin) {
@@ -999,6 +999,13 @@ var Log = (function () {
         else
             this.entries.forEach(function (e) { return _this.dumpOne(e, separator); });
     };
+    Log.prototype.dumpList = function (start, length) {
+        var _this = this;
+        if (start === void 0) { start = 0; }
+        this.entries
+            .slice(start, length ? start + length : undefined)
+            .forEach(function (e) { return _this.dumpOne(e); });
+    };
     Log.prototype.dumpOne = function (e, separator) {
         if (separator === void 0) { separator = ' - '; }
         var result = (e.result) ? ' =' + e.result : '';
@@ -1377,7 +1384,7 @@ var InsightsSingleton = (function (_super) {
             this.history[setName] = new InsightsLogSet(setName);
         this.history[setName].logs.push({ key: logName, log: log });
     };
-    InsightsSingleton.prototype.show = function (partName, index) {
+    InsightsSingleton.prototype.show = function (partName, index, start, length) {
         if (!partName) {
             var keys = Object.keys(this.history);
             console.log("" + msgIntro + keys.length + " insights-sections found: \n" + keys.map(function (p) { return "$2sxc.insights('" + p + "');"; }).join('\n'));
@@ -1405,8 +1412,8 @@ var InsightsSingleton = (function (_super) {
             console.error("found index " + index + " on part '" + partName + "' but it has no logs");
             return;
         }
-        console.log("Will dump the log on " + partName + "[" + index + "] '" + logSet.key + "'");
-        logSet.log.dump();
+        console.log("Will dump the log on " + partName + "[" + index + "] '" + logSet.key + "'. To limit results, add '..., start, length)'");
+        logSet.log.dumpList(start, length);
     };
     return InsightsSingleton;
 }(__WEBPACK_IMPORTED_MODULE_0____["b" /* HasLog */]));
