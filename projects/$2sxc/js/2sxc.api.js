@@ -1412,8 +1412,16 @@ var InsightsSingleton = (function (_super) {
             console.error("found index " + index + " on part '" + partName + "' but it has no logs");
             return;
         }
-        console.log("Will dump the log on " + partName + "[" + index + "] '" + logSet.key + "'. To limit results, add '..., start, length)'");
-        logSet.log.dumpList(start, length);
+        console.log("Will dump the log for " + partName + "[" + index + "] '" + logSet.key + "'");
+        var autoLimit = false;
+        if (start === undefined) {
+            autoLimit = true;
+            start = 0;
+            length = 25;
+        }
+        logSet.log.dumpList(start || 0, length);
+        if (autoLimit && logSet.log.entries.length > length)
+            console.warn("Only showing " + length + " of " + logSet.log.entries.length + " logs. To show all, add start param '..., 0)' or start/length '..., 0, 100)'");
     };
     return InsightsSingleton;
 }(__WEBPACK_IMPORTED_MODULE_0____["b" /* HasLog */]));
