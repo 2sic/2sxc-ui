@@ -1,11 +1,8 @@
-import { Operations as Operators, RuleConstants as RC } from '.';
+import { Operations as Operators, RuleConstants as RC, RuleParams, RuleParamsHelper } from '.';
 import { HasLog, Log } from '../../logging';
 import { Dictionary, DictionaryValue, TypeValue } from '../../plumbing';
 import { TemplateConstants } from '../templates';
 import { BuildSteps } from './build-steps';
-
-const prefillPrefix = 'prefill:';
-const prefillLen = prefillPrefix.length;
 
 /**
  * Contains a rule how to add/modify a toolbar.
@@ -42,13 +39,7 @@ export class BuildRule extends HasLog {
 
     //#region command parts
 
-    params?: Dictionary<string> & {
-        /** Speciall prefill-list used for any kind of new-action/operation with prefill */
-        prefill?: DictionaryValue,
-    } = {};
-
-    /** Speciall prefill-list used for any kind of new-action/operation with prefill */
-    // prefill?: DictionaryValue = {};
+    params?: RuleParams = {};
 
     ui: {
         icon?: string,
@@ -167,7 +158,7 @@ export class BuildRule extends HasLog {
         const cl = this.log.call('loadParams', rule);
         this.params = this.splitParamsDic(rule);
         cl.data('params', this.params);
-        this.params.prefill = this.processPrefill();
+        this.params = RuleParamsHelper.processParams(this.params, this.log);
         return cl.done();
     }
 
@@ -177,64 +168,6 @@ export class BuildRule extends HasLog {
         cl.data('button', this.hash);
         return cl.done();
     }
-
-    /** Do special processing on all prefill:Field=Value rules */
-    private processPrefill(): DictionaryValue {
-        const cl = this.log.call('processPrefill');
-
-        // only load special prefills if we don't already have a prefill
-        if (!this.params) return cl.return({}, 'no params');
-
-        const keys = Object.keys(this.params).filter((k) => k.indexOf(prefillPrefix) === 0);
-        if (!keys) cl.done("no speciall 'prefill:' keys");
-        const prefill: DictionaryValue = {};
-        keys.forEach((k) => {
-            let value: any = this.params[k];
-            // 2020-04-02 prefill is a bit flaky - this should fix the common issues
-            // fix boolean true must be "true"
-            if (value === true || value === false) value = value.toString();
-            // fix arrays of GUIDs
-            // else if (this.isProbabablyArray(value))
-            //     try { value = JSON.parse(value); } catch { /* ignore */ }
-            else {
-                // try to detect list of guids
-                value = this.convertGuidListToArray(value);
-            }
-            prefill[k.substring(prefillLen)] = value;
-            delete this.params[k];
-        });
-        cl.data('settings prefill', prefill);
-        return cl.return(prefill);
-    }
-
-    // disabled again, as we don't want to promote this use case / format
-    // private isProbabablyArray(value: string) {
-    //     // must be string
-    //     if (!value || typeof value !== 'string') return false;
-    //     // must be surrounded by quotes [...]
-    //     if (value.indexOf('[') !== 0 || value.indexOf(']') !== value.length - 1) return false;
-    //     // must have 0 or even amount of any quote
-    //     if (value.indexOf('"') >= 0 && value.match(/\"/g)?.length % 2 !== 0) return false;
-    //     if (value.indexOf("'") >= 0 && value.match(/\'/g)?.length % 2 !== 0) return false;
-    //     return true;
-    // }
-
-    private convertGuidListToArray(value: string): string | string[] {
-        // must be string
-        if (!value || typeof value !== 'string') return value;
-        // must have a comma to become an array
-        if (value.indexOf(',') === -1) return value;
-        // shouldn't have any quotes
-        if (value.indexOf('"') >= 0 || value.indexOf("'") >= 0) return value;
-        const probablyArray = value.split(',').map((g) => g.trim());
-        // guid check regex from https://stackoverflow.com/questions/7905929/how-to-test-valid-uuid-guid
-        const guidCount = probablyArray
-            .filter((g) => g.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/i) !== null);
-            // .filter((m) => m === true);
-        if (guidCount && guidCount.length === probablyArray.length) return probablyArray;
-        return value;
-    }
-
 
     //#region string manipulation helpers
 

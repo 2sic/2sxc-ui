@@ -1080,10 +1080,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "Operations", function() { return __WEBPACK_IMPORTED_MODULE_1__operators__["Operations"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__build_steps__ = __webpack_require__(33);
 /* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "BuildSteps", function() { return __WEBPACK_IMPORTED_MODULE_2__build_steps__["BuildSteps"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__rule__ = __webpack_require__(114);
-/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "BuildRule", function() { return __WEBPACK_IMPORTED_MODULE_3__rule__["BuildRule"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__rule_manager__ = __webpack_require__(115);
-/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "RuleManager", function() { return __WEBPACK_IMPORTED_MODULE_4__rule_manager__["RuleManager"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__rule_params__ = __webpack_require__(222);
+/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "RuleParamsHelper", function() { return __WEBPACK_IMPORTED_MODULE_3__rule_params__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__rule__ = __webpack_require__(114);
+/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "BuildRule", function() { return __WEBPACK_IMPORTED_MODULE_4__rule__["BuildRule"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__rule_manager__ = __webpack_require__(115);
+/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "RuleManager", function() { return __WEBPACK_IMPORTED_MODULE_5__rule_manager__["RuleManager"]; });
+
 
 
 
@@ -6177,8 +6180,6 @@ var __extends = (this && this.__extends) || (function () {
 
 
 
-var prefillPrefix = 'prefill:';
-var prefillLen = prefillPrefix.length;
 /**
  * Contains a rule how to add/modify a toolbar.
  */
@@ -6200,8 +6201,6 @@ var BuildRule = /** @class */ (function (_super) {
         //#endregion
         //#region command parts
         _this.params = {};
-        /** Speciall prefill-list used for any kind of new-action/operation with prefill */
-        // prefill?: DictionaryValue = {};
         _this.ui = {};
         /** ATM unused url-part after the hash - will probably be needed in future */
         _this.hash = {};
@@ -6304,7 +6303,7 @@ var BuildRule = /** @class */ (function (_super) {
         var cl = this.log.call('loadParams', rule);
         this.params = this.splitParamsDic(rule);
         cl.data('params', this.params);
-        this.params.prefill = this.processPrefill();
+        this.params = __WEBPACK_IMPORTED_MODULE_0____["RuleParamsHelper"].processParams(this.params, this.log);
         return cl.done();
     };
     BuildRule.prototype.loadHash = function (rule) {
@@ -6312,66 +6311,6 @@ var BuildRule = /** @class */ (function (_super) {
         this.hash = this.splitParamsDic(rule);
         cl.data('button', this.hash);
         return cl.done();
-    };
-    /** Do special processing on all prefill:Field=Value rules */
-    BuildRule.prototype.processPrefill = function () {
-        var _this = this;
-        var cl = this.log.call('processPrefill');
-        // only load special prefills if we don't already have a prefill
-        if (!this.params)
-            return cl.return({}, 'no params');
-        var keys = Object.keys(this.params).filter(function (k) { return k.indexOf(prefillPrefix) === 0; });
-        if (!keys)
-            cl.done("no speciall 'prefill:' keys");
-        var prefill = {};
-        keys.forEach(function (k) {
-            var value = _this.params[k];
-            // 2020-04-02 prefill is a bit flaky - this should fix the common issues
-            // fix boolean true must be "true"
-            if (value === true || value === false)
-                value = value.toString();
-            // fix arrays of GUIDs
-            // else if (this.isProbabablyArray(value))
-            //     try { value = JSON.parse(value); } catch { /* ignore */ }
-            else {
-                // try to detect list of guids
-                value = _this.convertGuidListToArray(value);
-            }
-            prefill[k.substring(prefillLen)] = value;
-            delete _this.params[k];
-        });
-        cl.data('settings prefill', prefill);
-        return cl.return(prefill);
-    };
-    // disabled again, as we don't want to promote this use case / format
-    // private isProbabablyArray(value: string) {
-    //     // must be string
-    //     if (!value || typeof value !== 'string') return false;
-    //     // must be surrounded by quotes [...]
-    //     if (value.indexOf('[') !== 0 || value.indexOf(']') !== value.length - 1) return false;
-    //     // must have 0 or even amount of any quote
-    //     if (value.indexOf('"') >= 0 && value.match(/\"/g)?.length % 2 !== 0) return false;
-    //     if (value.indexOf("'") >= 0 && value.match(/\'/g)?.length % 2 !== 0) return false;
-    //     return true;
-    // }
-    BuildRule.prototype.convertGuidListToArray = function (value) {
-        // must be string
-        if (!value || typeof value !== 'string')
-            return value;
-        // must have a comma to become an array
-        if (value.indexOf(',') === -1)
-            return value;
-        // shouldn't have any quotes
-        if (value.indexOf('"') >= 0 || value.indexOf("'") >= 0)
-            return value;
-        var probablyArray = value.split(',').map(function (g) { return g.trim(); });
-        // guid check regex from https://stackoverflow.com/questions/7905929/how-to-test-valid-uuid-guid
-        var guidCount = probablyArray
-            .filter(function (g) { return g.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/i) !== null; });
-        // .filter((m) => m === true);
-        if (guidCount && guidCount.length === probablyArray.length)
-            return probablyArray;
-        return value;
     };
     //#region string manipulation helpers
     BuildRule.prototype.dicToArray = function (original) {
@@ -7518,6 +7457,8 @@ var __assign = (this && this.__assign) || function () {
 
 
 var CmdMetadata = 'metadata';
+var MetadataDefaultKeyType = 'string';
+var MetadataDefaultTargetType = 10; // cms-item
 /**
  * create a metadata toolbar
  *
@@ -7533,7 +7474,7 @@ __WEBPACK_IMPORTED_MODULE_0____["Commands"].add(CmdMetadata, 'Metadata', 'tag', 
     configureLinkGenerator: function (_, linkGenerator) {
         var itm = {
             Title: 'EditFormTitle.Metadata',
-            Metadata: __assign({ keyType: 'string', targetType: 10 }, linkGenerator.context.button.command.params.metadata),
+            Metadata: __assign({ keyType: MetadataDefaultKeyType, targetType: MetadataDefaultTargetType }, linkGenerator.context.button.command.params.metadata),
         };
         linkGenerator.items[0] = __assign(__assign({}, linkGenerator.items[0]), itm);
     },
@@ -10890,6 +10831,124 @@ var __WEBPACK_AMD_DEFINE_RESULT__;/*
 
     return Shake;
 }));
+
+
+/***/ }),
+/* 210 */,
+/* 211 */,
+/* 212 */,
+/* 213 */,
+/* 214 */,
+/* 215 */,
+/* 216 */,
+/* 217 */,
+/* 218 */,
+/* 219 */,
+/* 220 */,
+/* 221 */,
+/* 222 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return RuleParamsHelper; });
+var prefillPrefix = 'prefill:';
+var prefillLen = prefillPrefix.length;
+var metadataPrefix = 'metadata';
+var RuleParamsHelper = /** @class */ (function () {
+    function RuleParamsHelper() {
+    }
+    RuleParamsHelper.processParams = function (params, log) {
+        var prefill = RuleParamsHelper.processPrefill(params, log);
+        if (prefill)
+            params.prefill = prefill;
+        if (params.metadata)
+            params.metadata = RuleParamsHelper.processMetadata(params.metadata, log);
+        return params;
+    };
+    RuleParamsHelper.processMetadata = function (original, log) {
+        if (!original)
+            return undefined;
+        // just one part, use it as key
+        if (original.indexOf(',') === -1)
+            return { key: original };
+        var parts = original.split(',').map(function (p) { return p.trim(); });
+        if (parts.length !== 3) {
+            console.error("tried to process metadata and expect 1 or 3 params, but got " + parts.length + " - invalid, will ignore");
+            return undefined;
+        }
+        // part 1 must be a number
+        var targetType = +parts[0];
+        if (isNaN(targetType)) {
+            console.error("first part should be a number, but got " + targetType + " - invalid, will ignore");
+            return undefined;
+        }
+        // part 2 must be a string with 'string', 'guid' or 'number'
+        var keyType = parts[1];
+        if (keyType !== 'string' && keyType !== 'guid' && keyType !== 'number') {
+            console.error("the key type should be string, guid or number, but got " + keyType + " - invalid, will ignore");
+            return undefined;
+        }
+        // part 3 is the key
+        var key = parts[2];
+        if (key === null || key === undefined || key === '') {
+            console.error("expected a key, but got " + key + " - invalid, will ignore");
+            return undefined;
+        }
+        return {
+            key: key,
+            targetType: targetType,
+            keyType: keyType,
+        };
+    };
+    /** Do special processing on all prefill:Field=Value rules */
+    RuleParamsHelper.processPrefill = function (params, log) {
+        var cl = log.call('processPrefill');
+        // only load special prefills if we don't already have a prefill
+        if (!params)
+            return cl.return(undefined, 'no params');
+        var keys = Object.keys(params).filter(function (k) { return k.indexOf(prefillPrefix) === 0; });
+        if (!keys)
+            return cl.return(undefined, "no speciall 'prefill:' keys");
+        var prefill = {};
+        keys.forEach(function (k) {
+            var value = params[k];
+            // 2020-04-02 prefill is a bit flaky - this should fix the common issues
+            // fix boolean true must be "true"
+            if (value === true || value === false)
+                value = value.toString();
+            else {
+                // try to detect list of guids
+                value = RuleParamsHelper.convertGuidListToArrayOrKeepOriginal(value);
+            }
+            prefill[k.substring(prefillLen)] = value;
+            delete params[k];
+        });
+        cl.data('settings prefill', prefill);
+        return cl.return(prefill);
+    };
+    // static processMetadata
+    RuleParamsHelper.convertGuidListToArrayOrKeepOriginal = function (value) {
+        // must be string
+        if (!value || typeof value !== 'string')
+            return value;
+        // must have a comma to become an array
+        if (value.indexOf(',') === -1)
+            return value;
+        // shouldn't have any quotes
+        if (value.indexOf('"') >= 0 || value.indexOf("'") >= 0)
+            return value;
+        var probablyArray = value.split(',').map(function (g) { return g.trim(); });
+        // guid check regex from https://stackoverflow.com/questions/7905929/how-to-test-valid-uuid-guid
+        var guidCount = probablyArray
+            .filter(function (g) { return g.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/i) !== null; });
+        // .filter((m) => m === true);
+        if (guidCount && guidCount.length === probablyArray.length)
+            return probablyArray;
+        return value;
+    };
+    return RuleParamsHelper;
+}());
+
 
 
 /***/ })
