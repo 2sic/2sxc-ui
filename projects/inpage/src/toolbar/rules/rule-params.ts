@@ -22,7 +22,7 @@ export class RuleParamsHelper {
         return params;
     }
 
-    static processMetadata(original: string, log: Log): MetadataFor {
+    private static processMetadata(original: string, log: Log): MetadataFor {
         if (!original) return undefined;
         // just one part, use it as key
         if (original.indexOf(',') === -1) return { key: original };
@@ -61,14 +61,14 @@ export class RuleParamsHelper {
 
 
     /** Do special processing on all prefill:Field=Value rules */
-    static processPrefill(params: RuleParams, log: Log): DictionaryValue {
+    private static processPrefill(params: RuleParams, log: Log): DictionaryValue {
         const cl = log.call('processPrefill');
 
         // only load special prefills if we don't already have a prefill
         if (!params) return cl.return(undefined, 'no params');
 
         const keys = Object.keys(params).filter((k) => k.indexOf(prefillPrefix) === 0);
-        if (!keys) return cl.return(undefined, "no speciall 'prefill:' keys");
+        if (!keys || keys.length === 0) return cl.return(undefined, "no speciall 'prefill:' keys");
 
         const prefill: DictionaryValue = {};
         keys.forEach((k) => {

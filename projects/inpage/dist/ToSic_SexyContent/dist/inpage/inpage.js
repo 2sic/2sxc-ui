@@ -6304,6 +6304,7 @@ var BuildRule = /** @class */ (function (_super) {
         this.params = this.splitParamsDic(rule);
         cl.data('params', this.params);
         this.params = __WEBPACK_IMPORTED_MODULE_0____["RuleParamsHelper"].processParams(this.params, this.log);
+        console.log('...');
         return cl.done();
     };
     BuildRule.prototype.loadHash = function (rule) {
@@ -10907,7 +10908,7 @@ var RuleParamsHelper = /** @class */ (function () {
         if (!params)
             return cl.return(undefined, 'no params');
         var keys = Object.keys(params).filter(function (k) { return k.indexOf(prefillPrefix) === 0; });
-        if (!keys)
+        if (!keys || keys.length === 0)
             return cl.return(undefined, "no speciall 'prefill:' keys");
         var prefill = {};
         keys.forEach(function (k) {

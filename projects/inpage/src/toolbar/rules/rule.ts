@@ -159,6 +159,7 @@ export class BuildRule extends HasLog {
         this.params = this.splitParamsDic(rule);
         cl.data('params', this.params);
         this.params = RuleParamsHelper.processParams(this.params, this.log);
+console.log('...');
         return cl.done();
     }
 
