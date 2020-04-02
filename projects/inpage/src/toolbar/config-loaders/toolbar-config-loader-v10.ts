@@ -13,7 +13,7 @@ export class ToolbarConfigLoaderV10 extends HasLog {
     public rules: RuleManager;
 
     constructor(private toolbar: ToolbarConfigLoader) {
-        super('Tlb.TlbV10', toolbar.log);
+        super('Tlb.TlbV10', toolbar.log, 'constructor');
         this.rules = new RuleManager(toolbar);
     }
 
@@ -42,7 +42,7 @@ export class ToolbarConfigLoaderV10 extends HasLog {
         if (params) template.params = params.params;
 
         // #4 Remove unwanted groups
-        const removeGroups = this.rules.getRemovGroups();
+        const removeGroups = this.rules.getRemoveGroups();
         removeGroups.forEach((rg) => this.toolbar.templateEditor.removeGroup(template, rg.name));
 
         // Add additional buttons
@@ -54,7 +54,7 @@ export class ToolbarConfigLoaderV10 extends HasLog {
 
         const toolbar = this.toolbar.buildTreeAndModifyAccordingToRules(context, template as ToolbarWip);
         toolbar.settings._rules = this.rules;
-
+// console.log('toolbar with settings', toolbar.settings);
         // process the rules one by one
         return cl.return(toolbar, 'ok');
     }

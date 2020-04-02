@@ -5162,7 +5162,7 @@ var ButtonConfigLoader = /** @class */ (function (_super) {
             if (btn.command) {
                 context.button = btn; // add to context for calls
                 var rule = this.toolbar.toolbarV10.rules.find(btn.id || btn.command.name);
-                var show = rule === null || rule === void 0 ? void 0 : rule.showOverride();
+                var show = rule === null || rule === void 0 ? void 0 : rule.overrideShow();
                 if (show === undefined) {
                     show = new __WEBPACK_IMPORTED_MODULE_3__config_button_safe__["ButtonSafe"](btn, context).showCondition();
                 }
@@ -6070,7 +6070,7 @@ var __assign = (this && this.__assign) || function () {
 var ToolbarConfigLoaderV10 = /** @class */ (function (_super) {
     __extends(ToolbarConfigLoaderV10, _super);
     function ToolbarConfigLoaderV10(toolbar) {
-        var _this = _super.call(this, 'Tlb.TlbV10', toolbar.log) || this;
+        var _this = _super.call(this, 'Tlb.TlbV10', toolbar.log, 'constructor') || this;
         _this.toolbar = toolbar;
         _this.rules = new __WEBPACK_IMPORTED_MODULE_2__rules__["RuleManager"](toolbar);
         return _this;
@@ -6097,7 +6097,7 @@ var ToolbarConfigLoaderV10 = /** @class */ (function (_super) {
         if (params)
             template.params = params.params;
         // #4 Remove unwanted groups
-        var removeGroups = this.rules.getRemovGroups();
+        var removeGroups = this.rules.getRemoveGroups();
         removeGroups.forEach(function (rg) { return _this.toolbar.templateEditor.removeGroup(template, rg.name); });
         // Add additional buttons
         var add = this.rules.getAdd();
@@ -6109,6 +6109,7 @@ var ToolbarConfigLoaderV10 = /** @class */ (function (_super) {
         });
         var toolbar = this.toolbar.buildTreeAndModifyAccordingToRules(context, template);
         toolbar.settings._rules = this.rules;
+        // console.log('toolbar with settings', toolbar.settings);
         // process the rules one by one
         return cl.return(toolbar, 'ok');
     };
@@ -6176,6 +6177,8 @@ var __extends = (this && this.__extends) || (function () {
 
 
 
+var prefillPrefix = 'prefill:';
+var prefillLen = prefillPrefix.length;
 /**
  * Contains a rule how to add/modify a toolbar.
  */
@@ -6197,7 +6200,10 @@ var BuildRule = /** @class */ (function (_super) {
         //#endregion
         //#region command parts
         _this.params = {};
+        /** Speciall prefill-list used for any kind of new-action/operation with prefill */
+        // prefill?: DictionaryValue = {};
         _this.ui = {};
+        /** ATM unused url-part after the hash - will probably be needed in future */
         _this.hash = {};
         if (!ruleString) {
             _this.log.add('rule is empty');
@@ -6206,19 +6212,8 @@ var BuildRule = /** @class */ (function (_super) {
         _this.load();
         return _this;
     }
-    BuildRule.prototype.load = function () {
-        var cl = this.log.call('load', this.ruleString);
-        var parts = safeSplitOriginal(this.ruleString);
-        if (!parts.key)
-            return cl.done("no key, won't load");
-        this.loadHeader(parts.key);
-        if (parts.params)
-            this.loadParams(parts.params);
-        if (parts.button)
-            this.loadHash(parts.button);
-        return cl.done();
-    };
-    BuildRule.prototype.showOverride = function () {
+    /** Tells if this rule will override the show settings  */
+    BuildRule.prototype.overrideShow = function () {
         var _a;
         if (this.operator === __WEBPACK_IMPORTED_MODULE_0____["Operations"].remove)
             return false;
@@ -6227,6 +6222,18 @@ var BuildRule = /** @class */ (function (_super) {
         if (this.operator === __WEBPACK_IMPORTED_MODULE_0____["Operations"].modify && ((_a = this === null || this === void 0 ? void 0 : this.ui) === null || _a === void 0 ? void 0 : _a.show) !== undefined)
             return this.ui.show;
         return undefined;
+    };
+    BuildRule.prototype.load = function () {
+        var cl = this.log.call('load', this.ruleString);
+        var parts = splitUrlSections(this.ruleString);
+        if (!parts.key)
+            return cl.done("no key, won't load");
+        this.loadHeader(parts.key);
+        if (parts.params)
+            this.loadParamsAndPrefill(parts.params);
+        if (parts.button)
+            this.loadHash(parts.button);
+        return cl.done();
     };
     BuildRule.prototype.loadHeader = function (rule) {
         var _a, _b;
@@ -6293,10 +6300,11 @@ var BuildRule = /** @class */ (function (_super) {
         this.ui = parts;
         return cl.return(this.ui, 'button rules');
     };
-    BuildRule.prototype.loadParams = function (rule) {
+    BuildRule.prototype.loadParamsAndPrefill = function (rule) {
         var cl = this.log.call('loadParams', rule);
         this.params = this.splitParamsDic(rule);
         cl.data('params', this.params);
+        this.params.prefill = this.processPrefill();
         return cl.done();
     };
     BuildRule.prototype.loadHash = function (rule) {
@@ -6305,7 +6313,76 @@ var BuildRule = /** @class */ (function (_super) {
         cl.data('button', this.hash);
         return cl.done();
     };
+    /** Do special processing on all prefill:Field=Value rules */
+    BuildRule.prototype.processPrefill = function () {
+        var _this = this;
+        var cl = this.log.call('processPrefill');
+        // only load special prefills if we don't already have a prefill
+        if (!this.params)
+            return cl.return({}, 'no params');
+        var keys = Object.keys(this.params).filter(function (k) { return k.indexOf(prefillPrefix) === 0; });
+        if (!keys)
+            cl.done("no speciall 'prefill:' keys");
+        var prefill = {};
+        keys.forEach(function (k) {
+            var value = _this.params[k];
+            // 2020-04-02 prefill is a bit flaky - this should fix the common issues
+            // fix boolean true must be "true"
+            if (value === true || value === false)
+                value = value.toString();
+            // fix arrays of GUIDs
+            // else if (this.isProbabablyArray(value))
+            //     try { value = JSON.parse(value); } catch { /* ignore */ }
+            else {
+                // try to detect list of guids
+                value = _this.convertGuidListToArray(value);
+            }
+            prefill[k.substring(prefillLen)] = value;
+            delete _this.params[k];
+        });
+        cl.data('settings prefill', prefill);
+        return cl.return(prefill);
+    };
+    // disabled again, as we don't want to promote this use case / format
+    // private isProbabablyArray(value: string) {
+    //     // must be string
+    //     if (!value || typeof value !== 'string') return false;
+    //     // must be surrounded by quotes [...]
+    //     if (value.indexOf('[') !== 0 || value.indexOf(']') !== value.length - 1) return false;
+    //     // must have 0 or even amount of any quote
+    //     if (value.indexOf('"') >= 0 && value.match(/\"/g)?.length % 2 !== 0) return false;
+    //     if (value.indexOf("'") >= 0 && value.match(/\'/g)?.length % 2 !== 0) return false;
+    //     return true;
+    // }
+    BuildRule.prototype.convertGuidListToArray = function (value) {
+        // must be string
+        if (!value || typeof value !== 'string')
+            return value;
+        // must have a comma to become an array
+        if (value.indexOf(',') === -1)
+            return value;
+        // shouldn't have any quotes
+        if (value.indexOf('"') >= 0 || value.indexOf("'") >= 0)
+            return value;
+        var probablyArray = value.split(',').map(function (g) { return g.trim(); });
+        // guid check regex from https://stackoverflow.com/questions/7905929/how-to-test-valid-uuid-guid
+        var guidCount = probablyArray
+            .filter(function (g) { return g.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/i) !== null; });
+        // .filter((m) => m === true);
+        if (guidCount && guidCount.length === probablyArray.length)
+            return probablyArray;
+        return value;
+    };
     //#region string manipulation helpers
+    BuildRule.prototype.dicToArray = function (original) {
+        return original.reduce(function (map, obj) {
+            map[obj[0]] = obj[1];
+            return map;
+        }, {});
+    };
+    BuildRule.prototype.splitParamsDic = function (original) {
+        return this.dicToArray(this.splitParamsArray(original));
+    };
     BuildRule.prototype.splitParamsArray = function (original) {
         if (!original)
             return [];
@@ -6322,28 +6399,19 @@ var BuildRule = /** @class */ (function (_super) {
                 val = decodeURIComponent(val);
             // cast C# typed true/false
             if (val === 'True' || val === 'true')
-                val = true;
+                return [key, true]; // val = true;
             if (val === 'False' || val === 'false')
-                val = false;
+                return [key, false]; // val = false;
             // cast numbers to numbers
-            val = isNaN(val) ? val : Number(val);
+            val = isNaN(+val) ? val : Number(val);
             return [key, val];
         });
         return split2;
     };
-    BuildRule.prototype.dicToArray = function (original) {
-        return original.reduce(function (map, obj) {
-            map[obj[0]] = obj[1];
-            return map;
-        }, {});
-    };
-    BuildRule.prototype.splitParamsDic = function (original) {
-        return this.dicToArray(this.splitParamsArray(original));
-    };
     return BuildRule;
 }(__WEBPACK_IMPORTED_MODULE_1__logging__["HasLog"]));
 
-function safeSplitOriginal(str) {
+function splitUrlSections(str) {
     // dev link: https://regex101.com/r/vK4rV7/519
     // inpsired by https://stackoverflow.com/questions/27745/getting-parts-of-a-url-regex
     var regex = /^([^\/?#]*)?([^?#]*)(\?([^#]*))?(#(.*))?/i;
@@ -6382,19 +6450,22 @@ var __extends = (this && this.__extends) || (function () {
 
 
 
+var throwOnError = true;
 var RuleManager = /** @class */ (function (_super) {
     __extends(RuleManager, _super);
+    /** Basic constructor, must be called from a ToolbarConfigLoader */
     function RuleManager(parent) {
-        var _this = _super.call(this, 'Tlb.RlMngr', parent.log) || this;
+        var _this = _super.call(this, 'Tlb.RlMngr', parent.log, 'constructor') || this;
+        /** List of rules which were picked up and will be applied */
         _this.rules = [];
-        _this.getSettings = function () { return _this.getSystem(__WEBPACK_IMPORTED_MODULE_2__build_steps__["BuildSteps"].settings); };
-        _this.getParams = function () { return _this.getSystem(__WEBPACK_IMPORTED_MODULE_2__build_steps__["BuildSteps"].params); };
-        _this.getToolbar = function () { return _this.getSystem(__WEBPACK_IMPORTED_MODULE_2__build_steps__["BuildSteps"].toolbar); };
-        _this.getAdd = function () { return _this.getListByCriteria(function (br) { return br.operator === __WEBPACK_IMPORTED_MODULE_0____["Operations"].add; }); };
-        _this.getRemovGroups = function () { return _this.getListByCriteria(function (br) { return br.operator === __WEBPACK_IMPORTED_MODULE_0____["Operations"].remove && br.step === __WEBPACK_IMPORTED_MODULE_2__build_steps__["BuildSteps"].group; }); };
+        _this.getSettings = function () { return _this.getSystemRule(__WEBPACK_IMPORTED_MODULE_2__build_steps__["BuildSteps"].settings); };
+        _this.getParams = function () { return _this.getSystemRule(__WEBPACK_IMPORTED_MODULE_2__build_steps__["BuildSteps"].params); };
+        _this.getToolbar = function () { return _this.getSystemRule(__WEBPACK_IMPORTED_MODULE_2__build_steps__["BuildSteps"].toolbar); };
+        _this.getAdd = function () { return _this.filter(function (br) { return br.operator === __WEBPACK_IMPORTED_MODULE_0____["Operations"].add; }); };
+        _this.getRemoveGroups = function () { return _this.filter(function (br) { return br.operator === __WEBPACK_IMPORTED_MODULE_0____["Operations"].remove && br.step === __WEBPACK_IMPORTED_MODULE_2__build_steps__["BuildSteps"].group; }); };
         return _this;
-        // this.log.liveDump = true;
     }
+    /** Load/initialize the rules which were found */
     RuleManager.prototype.load = function (rawList) {
         var _this = this;
         var cl = this.log.call('load', "" + function () { return rawList.length; });
@@ -6406,25 +6477,24 @@ var RuleManager = /** @class */ (function (_super) {
                     _this.rules.push(new __WEBPACK_IMPORTED_MODULE_0____["BuildRule"](raw, _this.log));
                 }
                 catch (e) {
+                    if (throwOnError)
+                        throw e;
                     cl.add("error adding string-rule '" + raw + "'", e);
                 }
             }
             else {
-                // todo
+                console.error('tried to parse a toolbar rule and expected a string, but got something else');
             }
         });
         return cl.return(this.rules, 'final rules');
     };
-    RuleManager.prototype.find = function (id) {
-        var found = this.rules.find(function (r) { return r.id === id; });
-        return found;
-    };
-    RuleManager.prototype.getSystem = function (name) {
-        var found = this.rules.find(function (r) { return r.operator === __WEBPACK_IMPORTED_MODULE_0____["Operations"].system && r.step === name; });
-        return found;
-    };
-    RuleManager.prototype.getListByCriteria = function (criteria) {
-        return this.rules.filter(criteria);
+    /** Find a single rule matching an ID */
+    RuleManager.prototype.find = function (id) { return this.rules.find(function (r) { return r.id === id; }); };
+    /** find all rules matching a criteria */
+    RuleManager.prototype.filter = function (criteria) { return this.rules.filter(criteria); };
+    /** Find a system rule (marked with '$') */
+    RuleManager.prototype.getSystemRule = function (name) {
+        return this.rules.find(function (r) { return r.operator === __WEBPACK_IMPORTED_MODULE_0____["Operations"].system && r.step === name; });
     };
     return RuleManager;
 }(__WEBPACK_IMPORTED_MODULE_1__logging__["HasLog"]));
@@ -10824,4 +10894,4 @@ var __WEBPACK_AMD_DEFINE_RESULT__;/*
 
 /***/ })
 /******/ ]);
-//# sourceMappingURL=https://sources.2sxc.org/10.27.01/./inpage/inpage.js.map
+//# sourceMappingURL=inpage.js.map

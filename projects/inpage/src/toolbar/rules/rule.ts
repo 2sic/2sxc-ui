@@ -4,6 +4,9 @@ import { Dictionary, DictionaryValue, TypeValue } from '../../plumbing';
 import { TemplateConstants } from '../templates';
 import { BuildSteps } from './build-steps';
 
+const prefillPrefix = 'prefill:';
+const prefillLen = prefillPrefix.length;
+
 /**
  * Contains a rule how to add/modify a toolbar.
  */
@@ -39,7 +42,13 @@ export class BuildRule extends HasLog {
 
     //#region command parts
 
-    params?: Dictionary<string> = {};
+    params?: Dictionary<string> & {
+        /** Speciall prefill-list used for any kind of new-action/operation with prefill */
+        prefill?: DictionaryValue,
+    } = {};
+
+    /** Speciall prefill-list used for any kind of new-action/operation with prefill */
+    // prefill?: DictionaryValue = {};
 
     ui: {
         icon?: string,
@@ -51,7 +60,8 @@ export class BuildRule extends HasLog {
         [key: string]: TypeValue,
     } = {};
 
-    hash: Dictionary<string> = {};
+    /** ATM unused url-part after the hash - will probably be needed in future */
+    private hash: Dictionary<string> = {};
 
     //#endregion
 
@@ -64,24 +74,27 @@ export class BuildRule extends HasLog {
         this.load();
     }
 
-    private load() {
-        const cl = this.log.call('load', this.ruleString);
-        const parts = safeSplitOriginal(this.ruleString);
-        if (!parts.key) return cl.done("no key, won't load");
-
-        this.loadHeader(parts.key);
-        if (parts.params) this.loadParams(parts.params);
-        if (parts.button) this.loadHash(parts.button);
-        return cl.done();
-    }
-
-    showOverride() {
+    /** Tells if this rule will override the show settings  */
+    overrideShow(): boolean | undefined {
         if (this.operator === Operators.remove) return false;
         if (this.operator === Operators.add) return true;
         if (this.operator === Operators.modify && this?.ui?.show !== undefined)
             return this.ui.show;
         return undefined;
     }
+
+
+    private load() {
+        const cl = this.log.call('load', this.ruleString);
+        const parts = splitUrlSections(this.ruleString);
+        if (!parts.key) return cl.done("no key, won't load");
+
+        this.loadHeader(parts.key);
+        if (parts.params)  this.loadParamsAndPrefill(parts.params);
+        if (parts.button) this.loadHash(parts.button);
+        return cl.done();
+    }
+
 
 
     private loadHeader(rule: string): void {
@@ -150,10 +163,11 @@ export class BuildRule extends HasLog {
         return cl.return(this.ui, 'button rules');
     }
 
-    private loadParams(rule: string) {
+    private loadParamsAndPrefill(rule: string) {
         const cl = this.log.call('loadParams', rule);
         this.params = this.splitParamsDic(rule);
         cl.data('params', this.params);
+        this.params.prefill = this.processPrefill();
         return cl.done();
     }
 
@@ -164,9 +178,76 @@ export class BuildRule extends HasLog {
         return cl.done();
     }
 
+    /** Do special processing on all prefill:Field=Value rules */
+    private processPrefill(): DictionaryValue {
+        const cl = this.log.call('processPrefill');
+
+        // only load special prefills if we don't already have a prefill
+        if (!this.params) return cl.return({}, 'no params');
+
+        const keys = Object.keys(this.params).filter((k) => k.indexOf(prefillPrefix) === 0);
+        if (!keys) cl.done("no speciall 'prefill:' keys");
+        const prefill: DictionaryValue = {};
+        keys.forEach((k) => {
+            let value: any = this.params[k];
+            // 2020-04-02 prefill is a bit flaky - this should fix the common issues
+            // fix boolean true must be "true"
+            if (value === true || value === false) value = value.toString();
+            // fix arrays of GUIDs
+            // else if (this.isProbabablyArray(value))
+            //     try { value = JSON.parse(value); } catch { /* ignore */ }
+            else {
+                // try to detect list of guids
+                value = this.convertGuidListToArray(value);
+            }
+            prefill[k.substring(prefillLen)] = value;
+            delete this.params[k];
+        });
+        cl.data('settings prefill', prefill);
+        return cl.return(prefill);
+    }
+
+    // disabled again, as we don't want to promote this use case / format
+    // private isProbabablyArray(value: string) {
+    //     // must be string
+    //     if (!value || typeof value !== 'string') return false;
+    //     // must be surrounded by quotes [...]
+    //     if (value.indexOf('[') !== 0 || value.indexOf(']') !== value.length - 1) return false;
+    //     // must have 0 or even amount of any quote
+    //     if (value.indexOf('"') >= 0 && value.match(/\"/g)?.length % 2 !== 0) return false;
+    //     if (value.indexOf("'") >= 0 && value.match(/\'/g)?.length % 2 !== 0) return false;
+    //     return true;
+    // }
+
+    private convertGuidListToArray(value: string): string | string[] {
+        // must be string
+        if (!value || typeof value !== 'string') return value;
+        // must have a comma to become an array
+        if (value.indexOf(',') === -1) return value;
+        // shouldn't have any quotes
+        if (value.indexOf('"') >= 0 || value.indexOf("'") >= 0) return value;
+        const probablyArray = value.split(',').map((g) => g.trim());
+        // guid check regex from https://stackoverflow.com/questions/7905929/how-to-test-valid-uuid-guid
+        const guidCount = probablyArray
+            .filter((g) => g.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/i) !== null);
+            // .filter((m) => m === true);
+        if (guidCount && guidCount.length === probablyArray.length) return probablyArray;
+        return value;
+    }
 
 
     //#region string manipulation helpers
+
+    private dicToArray(original: string[][]): Dictionary<string> {
+        return original.reduce((map, obj) => {
+            map[obj[0]] = obj[1];
+            return map;
+        }, {} as Dictionary<string>);
+    }
+
+    private splitParamsDic(original: string): Dictionary<string> {
+        return this.dicToArray(this.splitParamsArray(original));
+    }
 
     private splitParamsArray(original: string): string[][] {
         if (!original) return [];
@@ -182,32 +263,24 @@ export class BuildRule extends HasLog {
             // fix url encoding
             if (val?.indexOf('%') > -1) val = decodeURIComponent(val);
             // cast C# typed true/false
-            if (val === 'True' || val === 'true') val = true;
-            if (val === 'False' || val === 'false') val = false;
+            if (val === 'True' || val === 'true') return [key, true]; // val = true;
+            if (val === 'False' || val === 'false') return [key, false]; // val = false;
 
             // cast numbers to numbers
-            val = isNaN(val) ? val : Number(val);
+            val = isNaN(+val) ? val : Number(val);
             return [key, val];
         });
         return split2;
     }
 
-    private dicToArray(original: string[][]): Dictionary<string> {
-        return original.reduce((map, obj) => {
-            map[obj[0]] = obj[1];
-            return map;
-        }, {} as Dictionary<string>);
-    }
 
-    private splitParamsDic(original: string): Dictionary<string> {
-        return this.dicToArray(this.splitParamsArray(original));
-    }
     //#endregion
 }
 
 
 
-function safeSplitOriginal(str: string): { key: string, params: string, button: string } | undefined {
+
+function splitUrlSections(str: string): { key: string, params: string, button: string } | undefined {
     // dev link: https://regex101.com/r/vK4rV7/519
     // inpsired by https://stackoverflow.com/questions/27745/getting-parts-of-a-url-regex
 
