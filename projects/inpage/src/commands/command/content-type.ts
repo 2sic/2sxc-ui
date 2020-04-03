@@ -5,7 +5,7 @@ export const CmdContentType = 'contenttype';
  * import this module to commands.ts
  */
 Commands.add(CmdContentType, 'ContentType', 'fields', true, false, {
-    params: (context) => ({
+    addParamsToLink: (context) => ({
         // added in 10.27 to help with the new edit ui
         contentType: context.button.command.params.contentType
             || context.contentBlock.contentTypeId,

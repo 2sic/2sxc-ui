@@ -26,6 +26,10 @@ export class Toolbar {
     defaults: DictionaryValue;
 
     constructor() {
-        this.identifier = 'Toolbar' + Math.floor(Math.random() * 99999);
+        this.identifier = Toolbar.createIdentifier();
+    }
+
+    static createIdentifier() {
+        return 'Toolbar' + Math.floor(Math.random() * 99999);
     }
 }

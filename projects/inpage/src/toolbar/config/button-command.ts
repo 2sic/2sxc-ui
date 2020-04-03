@@ -14,12 +14,14 @@ export class ButtonCommand {
         this.command = Commands.get(name); // activate command for this
     }
 
-    static prepareForUsingInLink(action: ButtonCommand, additionalParams: DictionaryValue): CommandParams {
+    /** make static, as many ButtonCommand signatures are actually not objects */
+    static mergeAdditionalParams(command: ButtonCommand, additionalParams: DictionaryValue): CommandParams {
         let params: CommandParams = {};
-        if (action) {
-            if (action.name) params.action = action.name;
-            if (action.params) params = {...params, ...action.params, ...additionalParams};
+        if (command) {
+            if (command.name) params.action = command.name;
+            if (command.params) params = {...params, ...command.params, ...additionalParams};
         }
+        command.params = params;
         return params;
     }
 }

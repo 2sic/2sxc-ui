@@ -159,7 +159,6 @@ export class BuildRule extends HasLog {
         this.params = this.splitParamsDic(rule);
         cl.data('params', this.params);
         this.params = RuleParamsHelper.processParams(this.params, this.log);
-console.log('...');
         return cl.done();
     }
 
@@ -190,13 +189,14 @@ console.log('...');
             const keyValues = p.split('=');
             const key = keyValues[0];
             let val: any = keyValues[1];
+            // disabled, don't see a use case for this
             // check if the value had '=' - then re-join
-            if (keyValues.length > 1)
-                val = keyValues.slice(1).join('=');
+            // if (keyValues.length > 1)
+            //     val = keyValues.slice(1).join('=');
 
             // fix url encoding
             if (val?.indexOf('%') > -1) val = decodeURIComponent(val);
-            // cast C# typed true/false
+            // fix C# typed true/false or string representations
             if (val === 'True' || val === 'true') return [key, true]; // val = true;
             if (val === 'False' || val === 'false') return [key, false]; // val = false;
 

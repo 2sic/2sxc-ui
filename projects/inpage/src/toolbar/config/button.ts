@@ -76,8 +76,11 @@ export class Button {
     /** The code to run for this button - if empty, will default to open a dialog */
     code?: CommandCode;
 
-    /** The parameters which are used to run the command */
-    params?: ButtonPropGen<CommandParams>;
+    /**
+     * Additional parameters which are used to RUN the command.
+     * So it's not used when preparing a toolbar button, but only when executing
+     */
+    addParamsToLink?: ButtonPropGen<CommandParams>;
 
     /** this is just a UI interaction, won't create data so won't need pre-flight */
     uiActionOnly: ButtonPropGen<boolean>;

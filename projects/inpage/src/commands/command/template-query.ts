@@ -7,7 +7,7 @@ export const CmdTemplateQuery = 'template-query';
 Commands.add(CmdTemplateQuery, 'QueryEdit', 'filter', true, false, {
     dialog: (_) => 'pipeline-designer',
 
-    params: (ctx) => ({ pipelineId: ctx.contentBlock.queryId }),
+    addParamsToLink: (ctx) => ({ pipelineId: ctx.contentBlock.queryId }),
 
     newWindow: (_) => true,
 

@@ -12,7 +12,7 @@ export const CmdNewMode = 'new';
  * import this module to commands.ts
  */
 Commands.add(CmdNew, 'New', 'plus', false, true, {
-    params: (_) => ({ mode: CmdNewMode }),
+    addParamsToLink: (_) => ({ mode: CmdNewMode }),
 
     dialog: (_) => 'edit', // don't use "new" (default) but use "edit"
 

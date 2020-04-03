@@ -9,7 +9,7 @@ export const CmdEditDialog = 'edit';
  * import this module to commands.ts
  */
 Commands.add(CmdEdit, 'Edit', 'pencil', false, true, {
-    params: (ctx) => {
+    addParamsToLink: (ctx) => {
 // console.log('edit-params', ctx);
 //         const result = { ...SharedLogic.paramsPreferListParamsToId(ctx), ...{ mode: 'edit' }};
 // console.log('result', result);

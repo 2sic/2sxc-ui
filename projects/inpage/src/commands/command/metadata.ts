@@ -13,7 +13,7 @@ const MetadataDefaultTargetType = 10; // cms-item
  */
 Commands.add(CmdMetadata, 'Metadata', 'tag', false, false, {
 
-    params: (_) => ({ mode: CmdNewMode }),
+    addParamsToLink: (_) => ({ mode: CmdNewMode }),
 
     dialog: (_) => CmdEditDialog, // don't use "new" (default) but use "edit"
 

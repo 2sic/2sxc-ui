@@ -1,6 +1,6 @@
-﻿import { ContextComplete } from '../../context/bundles/context-bundle-button';
+﻿import { CommandParams } from '../../commands';
+import { ContextComplete } from '../../context/bundles/context-bundle-button';
 import { HtmlTools } from '../../html/dom-tools';
-import { DictionaryValue } from '../../plumbing';
 import { ButtonCommand, ButtonSafe } from '../config';
 import { BuildRule } from '../rules/rule';
 import { RenderPart } from './render-part-base';
@@ -16,9 +16,11 @@ export class RenderButton extends RenderPart {
         const cl = this.log.call('render', `contex: obj, group: ${groupIndex}, btn: ${ctx.button.id}/${ctx.button.command?.name}`);
         const btn = new ButtonSafe(ctx.button, ctx);
 
-        // check if we have rules to modify it
+        // check if we have rules and merge params into the button
         const rule = ctx.toolbar?.settings?._rules?.find(ctx.button.id);
-        if (rule) cl.data('rule found', rule);
+        if (rule) cl.data('rule found, will try to merge params', rule);
+        const params = ButtonCommand.mergeAdditionalParams(btn.action(), rule?.params);
+
 
         const group = ctx.toolbar?.groups?.[groupIndex];
         const groupName = group?.name;
@@ -28,7 +30,7 @@ export class RenderButton extends RenderPart {
         const disabled = btn.disabled();
 
         // put call as plain JavaScript to preserve even if DOM is serialized
-        if (!disabled) btnLink.setAttribute('onclick', this.generateRunJs(btn.action(), ctx , rule?.params));
+        if (!disabled) btnLink.setAttribute('onclick', this.generateRunJs(ctx , params));
 
         // Add various classes
         const classes = (disabled ? ' disabled' : '')
@@ -69,9 +71,8 @@ export class RenderButton extends RenderPart {
 
 
 
-    private generateRunJs(command: ButtonCommand, ctx: ContextComplete, additionalParams: DictionaryValue) {
-        const runParams = ButtonCommand.prepareForUsingInLink(command, additionalParams);
-        return `$2sxc(${ctx.instance.id}, ${ctx.contentBlock.id}).manage.run(${JSON.stringify(runParams)}, event);`;
+    private generateRunJs(ctx: ContextComplete, params: CommandParams) {
+        return `$2sxc(${ctx.instance.id}, ${ctx.contentBlock.id}).manage.run(${JSON.stringify(params)}, event);`;
     }
 
     private iconTag(btn: ButtonSafe, rule: BuildRule) {

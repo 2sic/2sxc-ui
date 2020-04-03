@@ -5,7 +5,7 @@ export const CmdContentItems = 'contentitems';
  * import this module to commands.ts
  */
 Commands.add(CmdContentItems, 'ContentItems', 'table', true, false, {
-    params: (context) => {
+    addParamsToLink: (context) => {
         const typeName = context.button.command.params.contentType
             || context.contentBlock.contentTypeId;
         return {

@@ -36,7 +36,7 @@ export class ButtonSafe {
     newWindow = () => getVal (this.button.newWindow, this.context, false);
 
     /** The parameters which are used to run the command */
-    params = () => getVal (this.button.params, this.context, {});
+    addParamsToLink = () => getVal (this.button.addParamsToLink, this.context, {});
 
 
     /** Determines if this button runs in the page - affecting publishing */

@@ -52,9 +52,9 @@ export class ToolbarConfigLoader extends HasLog {
 
 
     load(context: ContextComplete, config: ToolbarInitConfig): Toolbar {
-        const cl = this.log.call('load', '', 'expand start');
-        cl.data('initial context', context);
-        cl.data('initial config', config);
+        const cl = this.log.call('load', '', 'expand start', { context: context, config: config });
+        // cl.data('initial context', context);
+        // cl.data('initial config', config);
         // if null/undefined, use empty object
         const raw = config.toolbar = config.toolbar || {};
         this.setLoggingAndCreateHelpers(raw as InPageToolbarConfigVariations);

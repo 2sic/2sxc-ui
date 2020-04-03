@@ -1,62 +1,78 @@
 import { MetadataFor } from '../../commands';
-import { Log } from '../../logging';
+import { Log, LogEntryOptions as LEO } from '../../logging';
 import { Dictionary, DictionaryValue } from '../../plumbing';
 
 const prefillPrefix = 'prefill:';
 const prefillLen = prefillPrefix.length;
 
-const metadataPrefix = 'metadata';
+// const metadataPrefix = 'for';
 
 export type RuleParams = Dictionary<string> & {
     /** Speciall prefill-list used for any kind of new-action/operation with prefill */
+    contentType?: string;
+    entityId?: string | number;
     prefill?: DictionaryValue;
-    metadata?: MetadataFor | string;
+    // this is how the metadata-param comes in - as a 'for=someId'
+    for?: string;
+    metadata?: MetadataFor;
 };
 
 export class RuleParamsHelper {
 
     static processParams(params: RuleParams, log: Log): RuleParams {
+        const cl = log.call('processParams');
         const prefill = RuleParamsHelper.processPrefill(params, log);
         if (prefill) params.prefill = prefill;
-        if (params.metadata) params.metadata = RuleParamsHelper.processMetadata(params.metadata as string, log);
-        return params;
+
+        // catch a very common mistake
+        if (params.metadata) {
+            delete params.metadata;
+            cl.add('params had additional metadata - invalid, will remove', null, LEO.error);
+        }
+
+        // process metadata
+        if (params.for) params.metadata = RuleParamsHelper.processMetadata(params, log);
+        return cl.return(params);
     }
 
-    private static processMetadata(original: string, log: Log): MetadataFor {
-        if (!original) return undefined;
+    private static processMetadata(params: RuleParams, log: Log): MetadataFor {
+        const cl = log.call('processMetadata');
+
+        // get the for-target and if exists, delete from params
+        const mdFor = params.for;
+        if (!mdFor) return cl.return(undefined, 'no metadata');
+        delete params.for;
+
         // just one part, use it as key
-        if (original.indexOf(',') === -1) return { key: original };
-        const parts = original.split(',').map((p) => p.trim());
-        if (parts.length !== 3) {
-            console.error(`tried to process metadata and expect 1 or 3 params, but got ${parts.length} - invalid, will ignore`);
-            return undefined;
-        }
+        if (mdFor.indexOf(',') === -1) return cl.return({ key: mdFor }, 'only has key');
+        const parts = mdFor.split(',').map((p) => p.trim());
+        if (parts.length !== 3)
+            return cl.return(undefined, `error: metadata-for parts count expected 3: ${parts.length}`, LEO.error);
+
         // part 1 must be a number
         const targetType = +parts[0];
-        if (isNaN(targetType)) {
-            console.error(`first part should be a number, but got ${targetType} - invalid, will ignore`);
-            return undefined;
-        }
+        if (isNaN(targetType))
+            return cl.return(undefined, `error: first key part is not number - got ${targetType}`, LEO.error);
 
         // part 2 must be a string with 'string', 'guid' or 'number'
         const keyType = parts[1];
-        if (keyType !== 'string' && keyType !== 'guid' && keyType !== 'number') {
-            console.error(`the key type should be string, guid or number, but got ${keyType} - invalid, will ignore`);
-            return undefined;
-        }
+        if (keyType !== 'string' && keyType !== 'guid' && keyType !== 'number')
+            return cl.return(undefined, `error: key is not known type, should be string, guid or number, but got ${keyType}`, LEO.error);
 
         // part 3 is the key
         const key = parts[2];
-        if (key === null || key === undefined || key === '') {
-            console.error(`expected a key, but got ${key} - invalid, will ignore`);
-            return undefined;
-        }
+        if (key === null || key === undefined || key === '')
+            return cl.return(undefined, `error: key strange value: '${key}'`, LEO.error);
 
-        return {
+        // todo: warn if no metadata or id!
+        if (!params.contentType || params.entityId == null)
+            return cl.return(undefined, 'error: contentType and entityId missing', LEO.error);
+
+        return cl.return({
             key: key,
             targetType: targetType,
             keyType: keyType,
-        };
+        });
     }
 
 
