@@ -131,8 +131,8 @@ export class Log implements ILog {
     }
 
 
-    call(name: string, callParams?: string, message?: string): LogCall {
-        return new LogCall(this, name, callParams, message);
+    call(name: string, callParams?: string, message?: string, data?: {[key:string]: unknown }): LogCall {
+        return new LogCall(this, name, callParams, message, data);
     }
 
     _callDepthAdd(name: string): void {

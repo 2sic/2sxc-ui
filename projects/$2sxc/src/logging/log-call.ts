@@ -9,9 +9,7 @@ export class LogCall {
         this.log._callDepthAdd(name);
         this.log._addEntry(this.initialEntry);
         if (typeof message === 'string') this.add(message);
-        if (data) {
-            // todo: add logging for data
-        }
+        if (data) for (let key in data) this.data('initial:' + key, data[key]);
     }
 
     private lastMessage: string;
@@ -56,7 +54,7 @@ export class LogCall {
      * to allow setting a debug stop point when needed
      * then you can trace the stack-call to see where the error originated
      */
-    private processExtraBehavior<T>(behavior?: LEO, message: string, result: T) {
+    private processExtraBehavior<T>(behavior: LEO, message: string, result: T) {
         if (!behavior) return;
         debugger;
         if (behavior === LEO.log) console.log(message, result);
