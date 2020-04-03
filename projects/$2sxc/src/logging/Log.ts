@@ -156,10 +156,7 @@ export class Log implements ILog {
      */
     dump(one: Entry = null, separator = ' - '): void {
         if (one) this.dumpOne(0, one, separator);
-        else {
-            this.dumpList();
-            // this.entries.forEach((e) => this.dumpOne(e, separator));
-        }
+        else this.dumpList();
     }
 
     dumpList(start: number = 0, length?: number) {
