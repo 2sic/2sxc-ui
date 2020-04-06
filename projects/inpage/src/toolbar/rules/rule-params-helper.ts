@@ -6,8 +6,6 @@ import { DictionaryValue } from '../../plumbing';
 const prefillPrefix = 'prefill:';
 const filterPrefix = 'filter:';
 
-// const metadataPrefix = 'for';
-
 export class RuleParamsHelper {
 
     static processParams(params: RuleParams, log: Log): RuleParams {

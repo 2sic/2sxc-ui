@@ -3,6 +3,7 @@ import { BuildRule } from '.';
 import { HasLog } from '../../logging';
 import { ToolbarConfigLoader } from '../config-loaders';
 import { BuildSteps } from './build-steps';
+import { Toolbar } from '../config/toolbar';
 
 const throwOnError = true;
 
@@ -49,8 +50,12 @@ export class RuleManager extends HasLog {
     filter(criteria: (x: BuildRule) => boolean): BuildRule[] { return this.rules.filter(criteria); }
 
 
-    getSettings = () => this.getSystemRule(BuildSteps.settings);
-    getParams = () => this.getSystemRule(BuildSteps.params);
+    /** the settings are usually retrieved on settings, but you can also put them behind the toolbar */
+    getSettings = () => this.getSystemRule(BuildSteps.settings) || this.getToolbar();
+
+    /** the params for the command - if not found, will use the toolbar params */
+    getParams = () => this.getSystemRule(BuildSteps.params) || this.getToolbar();
+
     getToolbar = () => this.getSystemRule(BuildSteps.toolbar);
     getAdd = () => this.filter((br) => br.operator === OP.add);
     getRemoveGroups = () => this.filter((br) => br.operator === OP.remove && br.step === BuildSteps.group);

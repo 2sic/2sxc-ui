@@ -6167,7 +6167,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 var prefillPrefix = 'prefill:';
 var filterPrefix = 'filter:';
-// const metadataPrefix = 'for';
 var RuleParamsHelper = /** @class */ (function () {
     function RuleParamsHelper() {
     }
@@ -6521,8 +6520,10 @@ var RuleManager = /** @class */ (function (_super) {
         /** List of rules which were picked up and will be applied */
         _this.rules = [];
         _this.tempId = Math.floor(Math.random() * 99999);
-        _this.getSettings = function () { return _this.getSystemRule(__WEBPACK_IMPORTED_MODULE_2__build_steps__["BuildSteps"].settings); };
-        _this.getParams = function () { return _this.getSystemRule(__WEBPACK_IMPORTED_MODULE_2__build_steps__["BuildSteps"].params); };
+        /** the settings are usually retrieved on settings, but you can also put them behind the toolbar */
+        _this.getSettings = function () { return _this.getSystemRule(__WEBPACK_IMPORTED_MODULE_2__build_steps__["BuildSteps"].settings) || _this.getToolbar(); };
+        /** the params for the command - if not found, will use the toolbar params */
+        _this.getParams = function () { return _this.getSystemRule(__WEBPACK_IMPORTED_MODULE_2__build_steps__["BuildSteps"].params) || _this.getToolbar(); };
         _this.getToolbar = function () { return _this.getSystemRule(__WEBPACK_IMPORTED_MODULE_2__build_steps__["BuildSteps"].toolbar); };
         _this.getAdd = function () { return _this.filter(function (br) { return br.operator === __WEBPACK_IMPORTED_MODULE_0____["Operations"].add; }); };
         _this.getRemoveGroups = function () { return _this.filter(function (br) { return br.operator === __WEBPACK_IMPORTED_MODULE_0____["Operations"].remove && br.step === __WEBPACK_IMPORTED_MODULE_2__build_steps__["BuildSteps"].group; }); };
