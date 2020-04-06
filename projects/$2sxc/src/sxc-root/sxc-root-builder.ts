@@ -81,10 +81,10 @@ export function buildSxcRoot(): SxcRoot & SxcRootInternals {
         // which will optimize to load min/max depending on debug state
         parts: {
             getUrl(url: string, preventUnmin: boolean) {
-                let r = (preventUnmin || !debug.load) ? url : url.replace('.min', ''); // use min or not
-                if (debug.uncache && r.indexOf('sxcver') === -1)
-                    r = r + ((r.indexOf('?') === -1) ? '?' : '&') + 'sxcver=' + debug.uncache;
-                return r;
+                // let r = url;// (preventUnmin || !debug.load) ? url : url.replace('.min', ''); // use min or not
+                if (debug.uncache && url.indexOf('sxcver') === -1)
+                    return url + ((url.indexOf('?') === -1) ? '?' : '&') + 'sxcver=' + debug.uncache;
+                return url;
             },
         },
         jq: function() { return  $2sxc_jQSuperlight; },

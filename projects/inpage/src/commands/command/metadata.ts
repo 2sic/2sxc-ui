@@ -4,6 +4,8 @@ import { CmdEditDialog } from './edit';
 import { CmdNewMode } from './new';
 
 export const CmdMetadata = 'metadata';
+const MetadataDefaultKeyType = 'string';
+const MetadataDefaultTargetType = 10; // cms-item
 /**
  * create a metadata toolbar
  *
@@ -11,7 +13,7 @@ export const CmdMetadata = 'metadata';
  */
 Commands.add(CmdMetadata, 'Metadata', 'tag', false, false, {
 
-    params: (_) => ({ mode: CmdNewMode }),
+    addParamsToLink: (_) => ({ mode: CmdNewMode }),
 
     dialog: (_) => CmdEditDialog, // don't use "new" (default) but use "edit"
 
@@ -25,7 +27,7 @@ Commands.add(CmdMetadata, 'Metadata', 'tag', false, false, {
         const itm: Partial<ItemIdentifierSimple> = {
             Title: 'EditFormTitle.Metadata',
             Metadata: {
-                ...{ keyType: 'string', targetType: 10 },
+                ...{ keyType: MetadataDefaultKeyType, targetType: MetadataDefaultTargetType },
                 ...linkGenerator.context.button.command.params.metadata },
         };
         linkGenerator.items[0] = {...linkGenerator.items[0], ...itm };

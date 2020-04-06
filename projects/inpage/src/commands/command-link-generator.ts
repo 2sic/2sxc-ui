@@ -27,8 +27,8 @@ export class CommandLinkGenerator extends HasLog {
         cl.data('items', this.items);
 
         // initialize params
-        this.urlParams = button.params() as unknown; // Button.getVal(context.button.params, context, {} as unknown);
-        const dialog = button.dialog(); // Button.getVal(context.button.dialog, context, '');
+        this.urlParams = button.addParamsToLink() as unknown;
+        const dialog = button.dialog();
         // note: this corrects how the variable to name the dialog changed in the history of 2sxc from action to dialog
         this.urlParams = {...{ dialog: dialog || command.name }, ...this.urlParams};
         cl.data('urlParmas', this.urlParams);

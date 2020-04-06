@@ -131,8 +131,8 @@ export class Log implements ILog {
     }
 
 
-    call(name: string, callParams?: string, message?: string): LogCall {
-        return new LogCall(this, name, callParams, message);
+    call(name: string, callParams?: string, message?: string, data?: {[key:string]: unknown }): LogCall {
+        return new LogCall(this, name, callParams, message, data);
     }
 
     _callDepthAdd(name: string): void {
@@ -155,19 +155,20 @@ export class Log implements ILog {
      * @param end
      */
     dump(one: Entry = null, separator = ' - '): void {
-        if (one) this.dumpOne(one, separator);
-        else this.entries.forEach((e) => this.dumpOne(e, separator));
+        if (one) this.dumpOne(0, one, separator);
+        else this.dumpList();
     }
 
     dumpList(start: number = 0, length?: number) {
+        let index = start;
         this.entries
             .slice(start, length ? start + length : undefined           )
-            .forEach((e) => this.dumpOne(e));
+            .forEach((e) => this.dumpOne(index++, e));
     }
 
-    private dumpOne(e: Entry, separator = ' - '): void {
+    private dumpOne(index: number, e: Entry, separator = ' - '): void {
         const result = (e.result) ? ' =' + e.result : '';
-        const line = e.source() + separator + '..'.repeat(e.depth) + e.message + result;
+        const line = ('0000' + index).slice(-4) + ' ' + e.source() + separator + '..'.repeat(e.depth) + e.message + result;
         if (e.data) console.log(line, e.data);
         else console.log(line);
     }

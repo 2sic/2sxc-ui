@@ -1,13 +1,16 @@
-﻿import { Obj } from '../../plumbing';
-import { ToolbarInitConfig } from '../initialize/toolbar-init-config';
+﻿import { ToolbarInitConfig } from '../initialize/toolbar-init-config';
 import { RuleManager } from '../rules/rule-manager';
 import { ToolbarTemplate } from '../templates';
 
+type TypeAutoAddMore = null | 'start' | 'end' | true; //  [true: used to be right/start]
+type TypeHover = 'left' | 'right' | 'none';
+type TypeShow = 'always' | 'hover';
+
 /** contains toolbar behaviour settings like float, etc. */
 export class ToolbarSettings {
-    autoAddMore: null | 'start' | 'end' | true = null; //  [true: used to be right/start]
-    hover: 'left' | 'right' | 'none' = 'right';
-    show: 'always' | 'hover' = 'hover';
+    autoAddMore: TypeAutoAddMore = null;
+    hover: TypeHover = 'right';
+    show: TypeShow = 'hover';
 
     // old term, keep for compatibility, but new is class
     classes: string = '';
@@ -26,11 +29,12 @@ export class ToolbarSettings {
      * New in 10.27 - modifiers for the buttons
      * Should never be set from the page, but the toolbar initializer will set this
      */
-    _rules: RuleManager;
+    _rules?: RuleManager;
 
-    constructor(toolbarSettings?: Partial<ToolbarSettings>) {
-        if (toolbarSettings)
-            Obj.TypeSafeAssign(this, toolbarSettings);
+    constructor(defaults: { autoAddMore?: TypeAutoAddMore, hover?: TypeHover, show?: TypeShow }) {
+        if (defaults.autoAddMore) this.autoAddMore = defaults.autoAddMore;
+        if (defaults.hover) this.hover = defaults.hover;
+        if (defaults.show)  this.show = defaults.show;
     }
 
 
@@ -49,26 +53,15 @@ export class ToolbarSettings {
         return partialSettings;
     }
 
+    static getDefaults = () => new ToolbarSettings({ autoAddMore: 'end', hover: 'right', show: 'hover' });
+
+    /** Setup for situations where an empty toolbar is needed, without any data or configuration */
+    static getForEmpty = () => new ToolbarSettings({ autoAddMore: 'start', hover: 'left', show: 'hover' });
 }
 
-
-
-// ToDo: refactor to avoid side-effects
-export const ToolbarSettingsDefaults = new ToolbarSettings({
-  autoAddMore: null, // null | 'start' | 'end' | true
-  hover: 'right', // 'left' |'right' | 'none'
-  show: 'hover', // 'always' | 'hover'
-});
-
-/** default / fallback settings for toolbars when nothings is specified */
-export const ToolbarSettingsForEmpty = new ToolbarSettings({
-  autoAddMore: 'start', // ex: 'left'
-  hover: 'left',
-  show: 'hover',
-});
 
 // TODO: this is in the wrong place, shouldn't be in settings
 export const ToolbarWhenNoToolbarProvided = {
   toolbar: {} as ToolbarTemplate,
-  settings: ToolbarSettingsForEmpty,
+  settings: ToolbarSettings.getForEmpty(),
 } as ToolbarInitConfig;

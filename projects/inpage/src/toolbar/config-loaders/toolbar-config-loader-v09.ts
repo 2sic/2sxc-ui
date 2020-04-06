@@ -2,7 +2,7 @@ import { InPageButtonGroupJson, InPageButtonJson, InPageCommandJson, ToolbarConf
 import { InPageToolbarConfigVariations, ToolbarInitConfig } from '..';
 import { ContextComplete } from '../../context';
 import { HasLog } from '../../logging';
-import { Button, Toolbar, ToolbarSettings, ToolbarSettingsDefaults, ToolbarSettingsForEmpty } from '../config';
+import { Button, Toolbar, ToolbarSettings } from '../config';
 import { ToolbarTemplate, ToolbarTemplateDefault, ToolbarTemplateGroup } from '../templates';
 
 
@@ -23,7 +23,7 @@ export class ToolbarConfigLoaderV09 extends HasLog {
         // and we can't count the keys because that would result in other checks
         if (Object.keys(config.toolbar).length > 0 && toolbarSettings === ({} as ToolbarSettings)) {
             cl.add('no data or settings, will use default settings for empty');
-            toolbarSettings = ToolbarSettingsForEmpty;
+            toolbarSettings = ToolbarSettings.getForEmpty();
         }
 
         // if it has an action or is an array, keep that. Otherwise get standard buttons
@@ -47,11 +47,6 @@ export class ToolbarConfigLoaderV09 extends HasLog {
         if (ToolbarTemplate.hasGroups(raw)) return cl.return(raw, 'has groups, keep raw');
         if (ToolbarTemplateGroup.is(raw)) return cl.return(raw, 'is group, keep raw');
         if (Array.isArray(raw)) return cl.return(raw, 'is array, keep raw');
-
-        // special check: in some cases we get an object which is actually an array
-        // for example in timelineJs
-        // but we must make sure that they are real sub-objects, not a list of params!
-        // const asArray = 
 
         // final: nothing defined, use template
         cl.add('no toolbar structure specified, will use standard toolbar template');
@@ -115,7 +110,7 @@ export class ToolbarConfigLoaderV09 extends HasLog {
 
         const probablyTemplate = unstructuredConfig as ToolbarTemplate;
         newToolbar.params = probablyTemplate.params || {}; // these are the default command parameters
-        newToolbar.settings = { ...ToolbarSettingsDefaults, ...probablyTemplate.settings, ...ToolbarSettings.dropEmptyProperties(toolbarSettings)};
+        newToolbar.settings = { ...ToolbarSettings.getDefaults(), ...probablyTemplate.settings, ...ToolbarSettings.dropEmptyProperties(toolbarSettings)};
 
         newToolbar.debug = probablyTemplate.debug || false; // show more debug info
         newToolbar.defaults = probablyTemplate.defaults || {}; // the button defaults like icon, etc.

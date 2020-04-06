@@ -1,4 +1,4 @@
-import { Operations as Operators, RuleConstants as RC } from '.';
+import { Operations as Operators, RuleConstants as RC, RuleParams, RuleParamsHelper } from '.';
 import { HasLog, Log } from '../../logging';
 import { Dictionary, DictionaryValue, TypeValue } from '../../plumbing';
 import { TemplateConstants } from '../templates';
@@ -39,7 +39,7 @@ export class BuildRule extends HasLog {
 
     //#region command parts
 
-    params?: Dictionary<string> = {};
+    params?: RuleParams = {};
 
     ui: {
         icon?: string,
@@ -51,7 +51,8 @@ export class BuildRule extends HasLog {
         [key: string]: TypeValue,
     } = {};
 
-    hash: Dictionary<string> = {};
+    /** ATM unused url-part after the hash - will probably be needed in future */
+    private hash: Dictionary<string> = {};
 
     //#endregion
 
@@ -64,24 +65,27 @@ export class BuildRule extends HasLog {
         this.load();
     }
 
-    private load() {
-        const cl = this.log.call('load', this.ruleString);
-        const parts = safeSplitOriginal(this.ruleString);
-        if (!parts.key) return cl.done("no key, won't load");
-
-        this.loadHeader(parts.key);
-        if (parts.params) this.loadParams(parts.params);
-        if (parts.button) this.loadHash(parts.button);
-        return cl.done();
-    }
-
-    showOverride() {
+    /** Tells if this rule will override the show settings  */
+    overrideShow(): boolean | undefined {
         if (this.operator === Operators.remove) return false;
         if (this.operator === Operators.add) return true;
         if (this.operator === Operators.modify && this?.ui?.show !== undefined)
             return this.ui.show;
         return undefined;
     }
+
+
+    private load() {
+        const cl = this.log.call('load', this.ruleString);
+        const parts = splitUrlSections(this.ruleString);
+        if (!parts.key) return cl.done("no key, won't load");
+
+        this.loadHeader(parts.key);
+        if (parts.params)  this.loadParamsAndPrefill(parts.params);
+        if (parts.button) this.loadHash(parts.button);
+        return cl.done();
+    }
+
 
 
     private loadHeader(rule: string): void {
@@ -150,10 +154,11 @@ export class BuildRule extends HasLog {
         return cl.return(this.ui, 'button rules');
     }
 
-    private loadParams(rule: string) {
+    private loadParamsAndPrefill(rule: string) {
         const cl = this.log.call('loadParams', rule);
         this.params = this.splitParamsDic(rule);
         cl.data('params', this.params);
+        this.params = RuleParamsHelper.processParams(this.params, this.log);
         return cl.done();
     }
 
@@ -164,33 +169,7 @@ export class BuildRule extends HasLog {
         return cl.done();
     }
 
-
-
     //#region string manipulation helpers
-
-    private splitParamsArray(original: string): string[][] {
-        if (!original) return [];
-        const split1 = original.split('&');
-        const split2 = split1.map((p) => {
-            const keyValues = p.split('=');
-            const key = keyValues[0];
-            let val: any = keyValues[1];
-            // check if the value had '=' - then re-join
-            if (keyValues.length > 1)
-                val = keyValues.slice(1).join('=');
-
-            // fix url encoding
-            if (val?.indexOf('%') > -1) val = decodeURIComponent(val);
-            // cast C# typed true/false
-            if (val === 'True' || val === 'true') val = true;
-            if (val === 'False' || val === 'false') val = false;
-
-            // cast numbers to numbers
-            val = isNaN(val) ? val : Number(val);
-            return [key, val];
-        });
-        return split2;
-    }
 
     private dicToArray(original: string[][]): Dictionary<string> {
         return original.reduce((map, obj) => {
@@ -202,12 +181,40 @@ export class BuildRule extends HasLog {
     private splitParamsDic(original: string): Dictionary<string> {
         return this.dicToArray(this.splitParamsArray(original));
     }
+
+    private splitParamsArray(original: string): string[][] {
+        if (!original) return [];
+        const split1 = original.split('&');
+        const split2 = split1.map((p) => {
+            const keyValues = p.split('=');
+            const key = keyValues[0];
+            let val: any = keyValues[1];
+            // disabled, don't see a use case for this
+            // check if the value had '=' - then re-join
+            // if (keyValues.length > 1)
+            //     val = keyValues.slice(1).join('=');
+
+            // fix url encoding
+            if (val?.indexOf('%') > -1) val = decodeURIComponent(val);
+            // fix C# typed true/false or string representations
+            if (val === 'True' || val === 'true') return [key, true]; // val = true;
+            if (val === 'False' || val === 'false') return [key, false]; // val = false;
+
+            // cast numbers to numbers
+            val = isNaN(+val) ? val : Number(val);
+            return [key, val];
+        });
+        return split2;
+    }
+
+
     //#endregion
 }
 
 
 
-function safeSplitOriginal(str: string): { key: string, params: string, button: string } | undefined {
+
+function splitUrlSections(str: string): { key: string, params: string, button: string } | undefined {
     // dev link: https://regex101.com/r/vK4rV7/519
     // inpsired by https://stackoverflow.com/questions/27745/getting-parts-of-a-url-regex
 

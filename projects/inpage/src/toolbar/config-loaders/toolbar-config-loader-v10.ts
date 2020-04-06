@@ -2,7 +2,7 @@ import { ToolbarConfigLoader } from '.';
 import { ToolbarInitConfig } from '..';
 import { ContextComplete } from '../../context';
 import { HasLog } from '../../logging';
-import { Toolbar, ToolbarSettings, ToolbarSettingsDefaults } from '../config';
+import { Toolbar, ToolbarSettings } from '../config';
 import { BuildSteps, RuleManager } from '../rules';
 import { ToolbarTemplate, ToolbarTemplateDefault } from '../templates';
 import { ToolbarWip } from './config-formats/toolbar-wip';
@@ -13,7 +13,7 @@ export class ToolbarConfigLoaderV10 extends HasLog {
     public rules: RuleManager;
 
     constructor(private toolbar: ToolbarConfigLoader) {
-        super('Tlb.TlbV10', toolbar.log);
+        super('Tlb.TlbV10', toolbar.log, 'constructor');
         this.rules = new RuleManager(toolbar);
     }
 
@@ -25,9 +25,10 @@ export class ToolbarConfigLoaderV10 extends HasLog {
         let template: ToolbarTemplate;
         // #1 prepare settings if no rule configured it
         const settingRule = this.rules.getSettings();
+        const settingsDefaults = ToolbarSettings.getDefaults();
         const settings: ToolbarSettings = (Object.keys(settingRule?.ui || {}).length > 0)
-            ? settingRule.ui as unknown as ToolbarSettings
-            : ToolbarSettingsDefaults; // note: Settings Empty currently don't use the V10 mechanism yet
+            ? { ...settingsDefaults, ...settingRule.ui} as ToolbarSettings
+            : settingsDefaults; // note: Settings Empty currently don't use the V10 mechanism yet
 
         // #2 load either the default toolbar or the one specified
         const toolbarRule = this.rules.getToolbar();
@@ -42,7 +43,7 @@ export class ToolbarConfigLoaderV10 extends HasLog {
         if (params) template.params = params.params;
 
         // #4 Remove unwanted groups
-        const removeGroups = this.rules.getRemovGroups();
+        const removeGroups = this.rules.getRemoveGroups();
         removeGroups.forEach((rg) => this.toolbar.templateEditor.removeGroup(template, rg.name));
 
         // Add additional buttons
@@ -53,8 +54,8 @@ export class ToolbarConfigLoaderV10 extends HasLog {
         });
 
         const toolbar = this.toolbar.buildTreeAndModifyAccordingToRules(context, template as ToolbarWip);
+        if (!toolbar.identifier) toolbar.identifier = Toolbar.createIdentifier();
         toolbar.settings._rules = this.rules;
-
         // process the rules one by one
         return cl.return(toolbar, 'ok');
     }
