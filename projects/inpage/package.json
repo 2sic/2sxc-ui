@@ -5,6 +5,9 @@
   "description": "",
   "main": "webpack.config.js",
   "dependencies": {
+    "i18next": "^19.3.4",
+    "i18next-xhr-backend": "^3.2.2",
+    "jquery-i18next": "^1.2.1",
     "shake.js": "git+https://github.com/alexgibson/shake.js.git"
   },
   "devDependencies": {

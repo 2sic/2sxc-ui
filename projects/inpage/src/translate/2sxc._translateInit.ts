@@ -1,22 +1,10 @@
-﻿import { ContextComplete } from '../context/bundles/context-bundle-button';
+﻿import i18n from 'i18next';
+import XHR from 'i18next-xhr-backend';
+import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { SxcEdit } from '../interfaces/sxc-instance-editable';
-import { windowInPage as window } from '../interfaces/window-in-page';
 import { EditManager } from '../manage/edit-manager';
-import { TypeUnsafe, TypeWeDontCare } from '../plumbing';
-import * as i18next from './libs/i18next.min';
-import * as i18nextXHRBackend from './libs/i18nextXHRBackend.min';
-import * as jqueryI18next from './libs/jquery-i18next.min';
 
-/**
- * initialize the translation system; ensure toolbars etc. are translated
- */
-interface Windowi18n extends Window {
-    i18next: TypeWeDontCare;
-    i18nextXHRBackend: TypeWeDontCare;
-}
-const win18n = window as TypeUnsafe as Windowi18n;
-win18n.i18next = i18next;
-win18n.i18nextXHRBackend = i18nextXHRBackend;
+const jqueryI18next = require('jquery-i18next/jquery-i18next');
 
 let initialized: boolean = false;
 
@@ -38,8 +26,8 @@ export function _translateInit(manage: EditManager): void {
     context.sxc = sxc;
   }
 
-  win18n.i18next
-    .use(i18nextXHRBackend)
+  i18n
+    .use(XHR)
     .init({
       lng: context.app.currentLanguage.substr(0, 2), // "en",
       fallbackLng: 'en',
@@ -54,7 +42,7 @@ export function _translateInit(manage: EditManager): void {
         // for options see
         // https://github.com/i18next/jquery-i18next#initialize-the-plugin
         // ReSharper disable once TsResolvedFromInaccessibleModule
-        jqueryI18next.init(i18next, $);
+        jqueryI18next.init(i18n, $);
         // start localizing, details:
         // https://github.com/i18next/jquery-i18next#usage-of-selector-function
         $('ul.sc-menu').localize(); // inline toolbars
