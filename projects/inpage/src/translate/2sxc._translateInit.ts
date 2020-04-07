@@ -1,12 +1,15 @@
-﻿import i18n from 'i18next';
+﻿import i18next from 'i18next';
 import XHR from 'i18next-xhr-backend';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { SxcEdit } from '../interfaces/sxc-instance-editable';
 import { EditManager } from '../manage/edit-manager';
 
+// tslint:disable-next-line: no-var-requires
 const jqueryI18next = require('jquery-i18next/jquery-i18next');
 
 let initialized: boolean = false;
+
+export const i18n = i18next;
 
 // ReSharper disable once InconsistentNaming
 export function _translateInit(manage: EditManager): void {
@@ -16,9 +19,9 @@ export function _translateInit(manage: EditManager): void {
 
   let context = manage._context;
   if (!context) {
-    initialized = true; // getScxInstance is calling _translate so that we can skip the loop...
     // trying to get context...
     const htmlElementOrId = $('div[data-cb-id]')[0];
+    initialized = true; // the next SxcEdit.get will call _translate so we must set true to prevent loops
     const sxc = SxcEdit.get(htmlElementOrId);
     initialized = false; // for real, it is not initialized...
     const editContext = SxcEdit.getEditContext(sxc);
@@ -26,7 +29,7 @@ export function _translateInit(manage: EditManager): void {
     context.sxc = sxc;
   }
 
-  i18n
+  i18next
     .use(XHR)
     .init({
       lng: context.app.currentLanguage.substr(0, 2), // "en",
@@ -39,12 +42,9 @@ export function _translateInit(manage: EditManager): void {
       // ReSharper disable UnusedParameter
     },
       () => {
-        // for options see
-        // https://github.com/i18next/jquery-i18next#initialize-the-plugin
-        // ReSharper disable once TsResolvedFromInaccessibleModule
-        jqueryI18next.init(i18n, $);
-        // start localizing, details:
-        // https://github.com/i18next/jquery-i18next#usage-of-selector-function
+        // for options see https://github.com/i18next/jquery-i18next#initialize-the-plugin
+        jqueryI18next.init(i18next, $);
+        // start localizing, details: https://github.com/i18next/jquery-i18next#usage-of-selector-function
         $('ul.sc-menu').localize(); // inline toolbars
         $('.sc-i18n').localize(); // quick-insert menus
     });

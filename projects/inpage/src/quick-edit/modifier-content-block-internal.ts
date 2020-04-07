@@ -2,7 +2,7 @@
 import { SxcEdit } from '../interfaces/sxc-instance-editable';
 import { HasLog } from '../logging';
 import { ToolbarManager } from '../toolbar/toolbar-manager';
-import { translate } from '../translate/2sxc.translate';
+import { translate } from '../translate';
 
 /** contains commands to create/move/delete a content-block in an inner-content */
 export class ModifierContentBlockInstance extends HasLog {

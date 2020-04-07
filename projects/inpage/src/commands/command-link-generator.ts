@@ -5,7 +5,7 @@ import { HasLog, Log } from '../logging';
 import { NgUrlValuesWithoutParams } from '../manage/ng-dialog-params';
 import { DictionaryValue, TypeUnsafe } from '../plumbing';
 import { ButtonSafe } from '../toolbar/config';
-import { translate } from '../translate/2sxc.translate';
+import { translate } from '../translate';
 
 /**
  * This is responsible for taking a context with command and everything

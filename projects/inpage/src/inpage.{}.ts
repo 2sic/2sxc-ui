@@ -4,8 +4,7 @@ import { $2sxcInPage as $2sxc } from './interfaces/sxc-controller-in-page';
 import { windowInPage as window } from './interfaces/window-in-page';
 import { Manage } from './manage/manage';
 import { QuickE } from './quick-edit/quick-e';
-import { _translateInit } from './translate/2sxc._translateInit';
-import { translate } from './translate/2sxc.translate';
+import { _translateInit, translate } from './translate';
 import './x-bootstrap/x-bootstrap';
 
 $2sxc.context = ContextComplete.findContext; // primary API to get the context
