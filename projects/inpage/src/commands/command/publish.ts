@@ -1,5 +1,5 @@
 ﻿import { Commands } from '..';
-import { translate } from '../../translate';
+import { translate } from '../../i18n';
 import { Actions } from './content-list-actions';
 
 export const CmdPublish = 'publish';

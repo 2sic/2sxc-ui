@@ -1,5 +1,5 @@
 ﻿import { ContextComplete } from '../context/bundles/context-bundle-button';
-import { translate } from '../translate';
+import { translate } from '../i18n';
 
 /**
  * this enhances the $2sxc client controller with stuff only needed when logged in

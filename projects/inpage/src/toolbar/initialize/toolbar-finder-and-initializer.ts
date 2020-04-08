@@ -6,6 +6,7 @@ import { ToolbarRenderer } from '../render/toolbar-renderer';
 import { TagToolbar } from '../tag-toolbars/tag-toolbar';
 import { ToolbarManager } from '../toolbar-manager';
 import { ToolbarInitConfig } from './toolbar-init-config';
+import { Translator } from '../../i18n/translator';
 
 // quick debug - set to false if not needed for production
 const dbg = false;
@@ -46,6 +47,9 @@ export class ToolbarConfigFinderAndInitializer extends HasLog {
         }
 
         toolbars.each((i, e: HTMLElement) => this.loadConfigAndInitialize(e));
+
+        // ensure translations are rebuilt
+        Translator.autoTranslateMenus();
         cl.done();
     }
 
@@ -130,7 +134,7 @@ export class ToolbarConfigFinderAndInitializer extends HasLog {
         // V2 where the full toolbar is included in one setting
         if (tag.attr(C.Toolbar.attr.full)) {
             cl.add('V2 TagToolbar detected');
-            tag.data(C.Toolbar.attrToMarkInitalized, new TagToolbar(tag, context));
+            tag.data(C.Toolbar.attrToMarkInitalized, new TagToolbar(tag, context, Translator));
             this.addHoverAttributeToTag(tag);
             return cl.done();
         }

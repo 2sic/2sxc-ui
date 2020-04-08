@@ -53,11 +53,6 @@ class Renderer {
             // ignore
           }
         }
-
-        // 2017-09-02 2dm - believe this was meant to re-init the dialog manager, but it doesn't actually work
-        // must check for side-effects, which would need the manager to re-build the configuration
-        // 2018-11-03 2dm disabled completely for now
-        // quickDialog.hide();
         return result;
       }).catch((error) => console.log('Error in reloadAndReInitialize', error));
   }

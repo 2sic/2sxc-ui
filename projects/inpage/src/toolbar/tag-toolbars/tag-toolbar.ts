@@ -1,6 +1,7 @@
 ﻿import { ToolbarRenderer } from '..';
 import { TagToolbarManager } from '..';
 import { ContextComplete } from '../../context/bundles/context-bundle-button';
+import { Translator } from '../../i18n';
 
 /**
  * This is the modern toolbar which is attached to a tag from whic it hovers.
@@ -12,7 +13,14 @@ export class TagToolbar {
     private toolbarElement = null as JQuery;
     private initialized = false;
 
-    constructor(private readonly hoverTag: JQuery, private readonly context: ContextComplete) {
+    /**
+     * A Tag-Toolbar which is outside of the module DOM and floating freely
+     * @param {JQuery} hoverTag
+     * @param {ContextComplete} context
+     * @param {typeof Translator} [translator] special translator, only included because otherwise WebPack causes circular references
+     * @memberof TagToolbar
+     */
+    constructor(private readonly hoverTag: JQuery, private readonly context: ContextComplete, private translator?: typeof Translator) {
         // Ensure toolbar gets visible when hovering
         this.addMouseEvents(hoverTag);
     }
@@ -56,6 +64,8 @@ export class TagToolbar {
 
         this.toolbarElement.css({ display: 'none', position: 'absolute', transition: 'top 0.5s ease-out' });
 
+        // ensure it's translated
+        this.translator?.autoTranslateMenus();
         this.initialized = true;
     }
 
