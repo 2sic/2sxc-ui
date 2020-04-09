@@ -13,11 +13,14 @@ Commands.add(CmdLayout, 'ChangeLayout', 'glasses', true, true, {
     inlineWindow: (_) => true,
 
     code(context, event) {
+        // console.log('layout');
         // Try to find the closest tag based on the click
         // if this fails, try to find it based on the sxc-instance
         const attrSel = '[' + QeSelectors.blocks.cb.context + ']';
-        let listSpecs = $(event.target).closest(attrSel);
-        if (listSpecs.length === 0) listSpecs = $(SxcEdit.getTag(context.sxc)).closest(attrSel);
+        // note: sometimes when the page loads, this can be auto-triggered and not have an event
+        let listSpecs = event && $(event.target).closest(attrSel);
+        if (!Array.isArray(listSpecs) || listSpecs.length === 0)
+            listSpecs = $(SxcEdit.getTag(context.sxc)).closest(attrSel);
 
         // Now check if we have apps-parameters to pass on
         if (listSpecs.length > 0) {
