@@ -1,8 +1,8 @@
-﻿import { ContextComplete } from '../context/bundles/context-bundle-button';
+﻿import { C } from '../constants/index';
+import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { HtmlTools } from '../html/dom-tools';
 import { HasLog, Insights } from '../logging';
 import { renderer } from './render';
-import { C } from '../constants/index';
 
 class ContentBlockEditorSingleton extends HasLog {
 

@@ -838,26 +838,39 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__html_dom_tools__ = __webpack_require__(14);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__interfaces_sxc_instance_editable__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__interfaces_window_in_page__ = __webpack_require__(12);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__quick_edit_quick_e__ = __webpack_require__(24);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__content_block_editor__ = __webpack_require__(34);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__logging__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__quick_edit_quick_e__ = __webpack_require__(24);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__content_block_editor__ = __webpack_require__(34);
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 
 
 
 
 
 
-/*
- * this is the content block manager in the browser
- *
- * A Content Block is a stand alone unit of content, with it's own definition of
- * 1. content items
- * 2. template
- * + some other stuff
- *
- * it should be able to render itself
+
+/**
+ * This is the rendering compontent, responsible to update the page when something changes.
+ * Depending on the feature-set it will use ajax or not
  */
-var Renderer = /** @class */ (function () {
-    function Renderer() {
+var RendererGlobal = /** @class */ (function (_super) {
+    __extends(RendererGlobal, _super);
+    function RendererGlobal() {
+        var _this = _super.call(this, 'Rnd.Rndrer') || this;
+        __WEBPACK_IMPORTED_MODULE_4__logging__["Insights"].add('system', 'renderer', _this.log);
+        return _this;
     }
     /**
      * Show a message where the content of a module should be - usually as placeholder till something else happens
@@ -865,7 +878,7 @@ var Renderer = /** @class */ (function () {
      * @param {string} newContent
      * @returns {} nothing
      */
-    Renderer.prototype.showMessage = function (context, newContent) {
+    RendererGlobal.prototype.showMessage = function (context, newContent) {
         $(__WEBPACK_IMPORTED_MODULE_2__interfaces_sxc_instance_editable__["SxcEdit"].getTag(context.sxc)).html(newContent);
     };
     /**
@@ -874,25 +887,28 @@ var Renderer = /** @class */ (function () {
      * @param {boolean} forceAjax
      * @param {boolean} preview
      */
-    Renderer.prototype.reloadAndReInitialize = function (context, forceAjax, preview) {
+    RendererGlobal.prototype.reloadAndReInitialize = function (context, forceAjax, preview) {
+        var cl = this.log.call('reloadAndReInitialize', "..., forceAjax: " + forceAjax + ", preview: " + preview, null, { context: context });
         // if ajax is not supported, we must reload the whole page
         if (!forceAjax && !context.app.supportsAjax) {
+            cl.done('not ajax - reloading page');
             __WEBPACK_IMPORTED_MODULE_3__interfaces_window_in_page__["windowInPage"].location.reload();
             return Promise.resolve();
         }
+        cl.add('is ajax, calling ajaxReload');
         return this.ajaxLoad(context, __WEBPACK_IMPORTED_MODULE_0__constants__["C"].ContentBlock.UseExistingTemplate, preview)
             .then(function (result) {
             // If Evoq, tell Evoq that page has changed if it has changed (Ajax call)
             if (__WEBPACK_IMPORTED_MODULE_3__interfaces_window_in_page__["windowInPage"].dnn_tabVersioningEnabled) { // this only exists in evoq or on new DNNs with tabVersioning
+                cl.add('system is using tabVersioning - will inform DNN');
                 try {
                     __WEBPACK_IMPORTED_MODULE_3__interfaces_window_in_page__["windowInPage"].dnn.ContentEditorManager.triggerChangeOnPageContentEvent();
                 }
-                catch (e) {
-                    // ignore
-                }
+                catch (e) { /* ignore */ }
             }
-            return result;
-        }).catch(function (error) { return console.log('Error in reloadAndReInitialize', error); });
+            return cl.return(result);
+        })
+            .catch(function (error) { return console.log('Error in reloadAndReInitialize', error); });
     };
     /**
      * ajax-call, then replace
@@ -900,15 +916,20 @@ var Renderer = /** @class */ (function () {
      * @param {number} alternateTemplateId
      * @param {boolean} justPreview
      */
-    Renderer.prototype.ajaxLoad = function (context, alternateTemplateId, justPreview) {
+    RendererGlobal.prototype.ajaxLoad = function (context, alternateTemplateId, justPreview) {
         var _this = this;
-        return __WEBPACK_IMPORTED_MODULE_5__content_block_editor__["ContentBlockEditor"].getPreviewWithTemplate(context, alternateTemplateId)
+        var cl = this.log.call('ajaxLoad');
+        cl.add('starting promise chain');
+        return __WEBPACK_IMPORTED_MODULE_6__content_block_editor__["ContentBlockEditor"].getPreviewWithTemplate(context, alternateTemplateId)
             .then(function (result) {
+            cl.add("get preview done, let's replace the content");
             _this.replaceContentBlock(context, result, justPreview);
         })
             .then(function () {
-            __WEBPACK_IMPORTED_MODULE_4__quick_edit_quick_e__["QuickE"].reset();
-        }); // reset quick-edit, because the config could have changed
+            cl.add('replace done, resetting quickE');
+            __WEBPACK_IMPORTED_MODULE_5__quick_edit_quick_e__["QuickE"].reset(); // reset quick-edit, because the config could have changed
+            cl.done();
+        });
     };
     /**
      * ajax update/replace the content of the content-block
@@ -917,7 +938,8 @@ var Renderer = /** @class */ (function () {
      * @param {string} newContent
      * @param {boolean} justPreview
      */
-    Renderer.prototype.replaceContentBlock = function (context, newContent, justPreview) {
+    RendererGlobal.prototype.replaceContentBlock = function (context, newContent, justPreview) {
+        var cl = this.log.call('replaceContentBlock');
         try {
             var newDom = $(newContent);
             // Must disable toolbar before we attach to DOM
@@ -930,10 +952,11 @@ var Renderer = /** @class */ (function () {
         catch (e) {
             console.log('Error while rendering template:', e);
         }
+        cl.done();
     };
-    return Renderer;
-}());
-var renderer = new Renderer();
+    return RendererGlobal;
+}(__WEBPACK_IMPORTED_MODULE_4__logging__["HasLog"]));
+var renderer = new RendererGlobal();
 
 
 /***/ }),
@@ -1129,6 +1152,20 @@ __WEBPACK_IMPORTED_MODULE_0____["Commands"].add(CmdEdit, 'Edit', 'pencil', false
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "QuickE", function() { return QuickE; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0____ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__logging__ = __webpack_require__(0);
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var __assign = (this && this.__assign) || function () {
     __assign = Object.assign || function(t) {
         for (var s, i = 1, n = arguments.length; i < n; i++) {
@@ -1141,6 +1178,10 @@ var __assign = (this && this.__assign) || function () {
     return __assign.apply(this, arguments);
 };
 
+
+function btn(action, icon, i18N, invisible, unavailable, classes) {
+    return "<a class='sc-content-block-menu-btn sc-cb-action icon-sxc-" + icon + " " + (invisible ? ' sc-invisible ' : '') + (unavailable ? ' sc-unavailable ' : '') + classes + "' data-action='" + action + "' data-i18n='[title]QuickInsertMenu." + i18N + "'></a>";
+}
 var configAttr = 'quick-edit-config';
 var classForAddContent = 'sc-content-block-menu-addcontent';
 var classForAddApp = 'sc-content-block-menu-addapp';
@@ -1157,50 +1198,59 @@ selectedOverlay.toggleOverlay = function (target) {
         selectedOverlay.target = target;
     }
 };
+function getNewDefaultConfig() {
+    return {
+        enable: true,
+        innerBlocks: {
+            enable: null,
+        },
+        modules: {
+            enable: null,
+        },
+    };
+}
 /**
  * the quick-edit object
  * the quick-insert object
  */
-var QuickESingleton = /** @class */ (function () {
+var QuickESingleton = /** @class */ (function (_super) {
+    __extends(QuickESingleton, _super);
     function QuickESingleton() {
-        this.body = $('body');
-        this.win = $(window);
-        this.main = $("<div class='sc-content-block-menu sc-content-block-quick-insert sc-i18n'></div>");
-        this.template = "<a class='" + classForAddContent + " sc-invisible' data-type='Default' data-i18n='[titleTemplate]QuickInsertMenu.AddBlockContent'>x</a>"
+        var _this = _super.call(this, 'Q-E.Main') || this;
+        _this.body = $('body');
+        _this.win = $(window);
+        _this.main = $("<div class='sc-content-block-menu sc-content-block-quick-insert sc-i18n'></div>");
+        _this.template = "<a class='" + classForAddContent + " sc-invisible' data-type='Default' data-i18n='[titleTemplate]QuickInsertMenu.AddBlockContent'>x</a>"
             + ("<a class='" + classForAddApp + " sc-invisible' data-type='' data-i18n='[titleTemplate]QuickInsertMenu.AddBlockApp'>x</a>")
             + ("" + btn('select', 'ok', 'Select', true) + btn('paste', 'paste', 'Paste', true, true));
-        this.selected = selectedOverlay;
+        _this.selected = selectedOverlay;
         // will be populated later in the module section
-        this.contentBlocks = null;
-        this.cachedPanes = null;
-        this.modules = null;
-        this.nearestCb = null;
-        this.nearestMod = null;
+        _this.contentBlocks = null;
+        _this.cachedPanes = null;
+        _this.modules = null;
+        _this.nearestCb = null;
+        _this.nearestMod = null;
         // add stuff which depends on other values to create
-        this.cbActions = $(this.template);
-        this.modActions = $(this.template.replace(/QuickInsertMenu.AddBlock/g, 'QuickInsertMenu.AddModule'))
+        _this.cbActions = $(_this.template);
+        _this.modActions = $(_this.template.replace(/QuickInsertMenu.AddBlock/g, 'QuickInsertMenu.AddModule'))
             .attr('data-context', 'module')
             .addClass('sc-content-block-menu-module');
         //
-        this.config = {
-            enable: true,
-            innerBlocks: {
-                enable: null,
-            },
-            modules: {
-                enable: null,
-            },
-        };
-        this.modActions.click(__WEBPACK_IMPORTED_MODULE_0____["ModifierDnnModule"].onModuleButtonClick);
-        this.cbActions.click(__WEBPACK_IMPORTED_MODULE_0____["ModifierContentBlock"].onCbButtonClick);
+        _this.config = getNewDefaultConfig();
+        __WEBPACK_IMPORTED_MODULE_1__logging__["Insights"].add('Q-E', 'manager', _this.log);
+        _this.modActions.click(__WEBPACK_IMPORTED_MODULE_0____["ModifierDnnModule"].onModuleButtonClick);
+        _this.cbActions.click(__WEBPACK_IMPORTED_MODULE_0____["ModifierContentBlock"].onCbButtonClick);
+        return _this;
     }
     QuickESingleton.prototype.prepareToolbarInDom = function () {
+        var cl = this.log.call('prepareToolbarInDom');
         this.body
             .append(this.main)
             .append(this.selected);
         this.main
             .append(this.cbActions)
             .append(this.modActions);
+        cl.done();
     };
     QuickESingleton.prototype.start = function () {
         try {
@@ -1208,9 +1258,9 @@ var QuickESingleton = /** @class */ (function () {
             if (this.config.enable) {
                 // initialize first body-offset
                 this.bodyOffset = __WEBPACK_IMPORTED_MODULE_0____["Positioning"].getBodyPosition();
-                enable();
-                toggleParts();
-                watchMouse();
+                this.enable();
+                // this.toggleParts();
+                this.initWatchMouse();
             }
         }
         catch (e) {
@@ -1222,82 +1272,135 @@ var QuickESingleton = /** @class */ (function () {
      * for example after ajax-loading a content-block, which may cause changed configurations
      */
     QuickESingleton.prototype.reset = function () {
+        var cl = this.log.call('reset');
         this.loadPageConfig();
-        toggleParts();
+        // this.toggleParts();
+        cl.done();
     };
+    /**
+     * This checks if the page has any alternate configuration
+     * Note that it's also used after ajax refreshes, which can change the config
+     * So if it does reconfigure itself, it will start with the default config again
+     */
     QuickESingleton.prototype.loadPageConfig = function () {
-        var conf = this.config;
+        var cl = this.log.call('loadPageConfig', null, null, { config: this.config });
+        this.logConfig();
         var configs = $("[" + configAttr + "]");
         var confJ;
-        // a.ny inner blocks found? will currently affect if modules can be inserted...
-        var hasInnerCBs = ($(__WEBPACK_IMPORTED_MODULE_0____["QeSelectors"].blocks.cb.listSelector).length > 0);
         if (configs.length > 0) {
+            cl.add('found configs', configs);
             // go through reverse list, as the last is the most important...
             var finalConfig = {};
             for (var c = configs.length; c >= 0; c--) {
                 confJ = configs[0].getAttribute(configAttr);
                 try {
                     var confO = JSON.parse(confJ);
+                    cl.data('additional config', confO);
                     finalConfig = __assign(__assign({}, finalConfig), confO);
+                    cl.data('merged config', finalConfig);
                 }
                 catch (e) {
+                    cl.add('had trouble with json');
                     console.warn('had trouble with json', e);
                 }
             }
-            conf = this.config = __assign(__assign({}, conf), finalConfig);
+            this.config = __assign(__assign({}, getNewDefaultConfig()), finalConfig);
         }
-        // re-check "auto" or "null"
+        else
+            cl.add('no configs found, will use exiting');
+        this.logConfig();
+        this.detectWhichMenusToActivate();
+        cl.done();
+    };
+    /**
+     * existing inner blocks found? Will affect if modules can be quick-inserted...
+     */
+    QuickESingleton.prototype.detectWhichMenusToActivate = function () {
+        var conf = this.config;
+        var cl = this.log.call('detectWhichMenusToActivate');
+        var innerCBs = $(__WEBPACK_IMPORTED_MODULE_0____["QeSelectors"].blocks.cb.listSelector);
+        var hasInnerCBs = (innerCBs.length > 0);
+        cl.add("has Content Blocks marked with " + __WEBPACK_IMPORTED_MODULE_0____["QeSelectors"].blocks.cb.listSelector + ": " + hasInnerCBs, innerCBs);
         // if it has inner-content, then it's probably a details page, where quickly adding modules would be a problem, so for now, disable modules in this case
         if (conf.modules.enable === null || conf.modules.enable === 'auto')
             conf.modules.enable = !hasInnerCBs;
         // for now, ContentBlocks are only enabled if they exist on the page
         if (conf.innerBlocks.enable === null || conf.innerBlocks.enable === 'auto')
             conf.innerBlocks.enable = hasInnerCBs;
+        cl.add("module.enable: " + conf.modules.enable);
+        cl.add("innerBlocks.enable: " + conf.innerBlocks.enable);
+        cl.done();
+    };
+    QuickESingleton.prototype.enable = function () {
+        var cl = this.log.call('enable');
+        // build all toolbar html-elements
+        this.prepareToolbarInDom();
+        // Cache the panes (because panes can't change dynamically)
+        this.initPanes();
+        cl.done();
+    };
+    /**
+     * cache the panes which can contain modules
+     */
+    QuickESingleton.prototype.initPanes = function () {
+        var cl = this.log.call('initPanes');
+        this.cachedPanes = $(__WEBPACK_IMPORTED_MODULE_0____["QeSelectors"].blocks.mod.listSelector);
+        this.cachedPanes.addClass('sc-cb-pane-glow');
+        cl.done();
+    };
+    /**
+     * start watching for mouse-move
+     */
+    QuickESingleton.prototype.initWatchMouse = function () {
+        var cl = this.log.call('initWatchMouse');
+        var refreshTimeout = null;
+        $('body').on('mousemove', function (e) {
+            if (refreshTimeout === null)
+                refreshTimeout = window.setTimeout(function () {
+                    requestAnimationFrame(function () {
+                        __WEBPACK_IMPORTED_MODULE_0____["Positioning"].refresh(e);
+                        refreshTimeout = null;
+                    });
+                }, 20);
+        });
+        cl.done();
+    };
+    QuickESingleton.prototype.logConfig = function () {
+        this.log.add("config enabled: " + this.config.enable + ", mod: " + this.config.modules.enable + ", cb: " + this.config.innerBlocks.enable);
     };
     return QuickESingleton;
-}());
+}(__WEBPACK_IMPORTED_MODULE_1__logging__["HasLog"]));
 var QuickE = new QuickESingleton();
-function btn(action, icon, i18N, invisible, unavailable, classes) {
-    return "<a class='sc-content-block-menu-btn sc-cb-action icon-sxc-" + icon + " " + (invisible ? ' sc-invisible ' : '') + (unavailable ? ' sc-unavailable ' : '') + classes + "' data-action='" + action + "' data-i18n='[title]QuickInsertMenu." + i18N + "'></a>";
-}
-function enable() {
-    // build all toolbar html-elements
-    QuickE.prepareToolbarInDom();
-    // Cache the panes (because panes can't change dynamically)
-    initPanes();
-}
-/**
- * start watching for mouse-move
- */
-function watchMouse() {
-    var refreshTimeout = null;
-    $('body').on('mousemove', function (e) {
-        if (refreshTimeout === null)
-            refreshTimeout = window.setTimeout(function () {
-                requestAnimationFrame(function () {
-                    __WEBPACK_IMPORTED_MODULE_0____["Positioning"].refresh(e);
-                    refreshTimeout = null;
-                });
-            }, 20);
-    });
-}
-/**
- * cache the panes which can contain modules
- */
-function initPanes() {
-    QuickE.cachedPanes = $(__WEBPACK_IMPORTED_MODULE_0____["QeSelectors"].blocks.mod.listSelector);
-    QuickE.cachedPanes.addClass('sc-cb-pane-glow');
-}
-/**
- * enable/disable module/content-blocks as configured
- * TODO: 2dm - unclear why this is commented out, probably a bug that was never fixed
- */
-function toggleParts() {
-    //// content blocks actions
-    // quickE.cbActions.toggle(quickE.config.innerBlocks.enable);
-    //// module actions
-    // quickE.modActions.hide(quickE.config.modules.enable);
-}
+// 2020-04-10 2dm - disabled all this - it didn't do anything before, and doesn't seem needed
+// tried to rewrite but it only causes problems and really seems unneeded. 
+// /**
+//  * enable/disable module/content-blocks as configured
+//  * TODO: 2dm - unclear why this is commented out, probably a bug that was never fixed
+//  */
+// function toggleParts(): void {
+//     //// content blocks actions
+//     // quickE.cbActions.toggle(quickE.config.innerBlocks.enable);
+//     //// module actions
+//     // quickE.modActions.hide(quickE.config.modules.enable);
+// }
+// /**
+//  * enable/disable module/content-blocks as configured
+//  * TODO: 2dm - unclear why this is commented out, probably a bug that was never fixed
+//  */
+// private toggleParts(): void {
+//     const cl = this.log.call('toggleParts', 'disabled!!');
+//     // content blocks actions
+//     const cbMenuState = !!this.config.innerBlocks.enable;
+//     const modMenuState = !!this.config.modules.enable;
+//     cl.add(`cbMenuState: ${cbMenuState}, modMenuState: ${modMenuState}`);
+//     // this.cbActions.toggle(cbMenuState);
+//     // module actions
+//     // TODO: 2020-04-10 2dm - not sure why the previous code did a .hide(this.config.modules.enable)
+//     // this.modActions.toggle(modMenuState);
+//     // if (modMenuState)
+//     //     this.modActions.hide();
+//     cl.done();
+// }
 
 
 /***/ }),
@@ -1662,10 +1765,10 @@ var BuildSteps;
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ContentBlockEditor", function() { return ContentBlockEditor; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__html_dom_tools__ = __webpack_require__(14);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__logging__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__render__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__constants_index__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__constants_index__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__html_dom_tools__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__logging__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__render__ = __webpack_require__(17);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -1687,7 +1790,7 @@ var ContentBlockEditorSingleton = /** @class */ (function (_super) {
     __extends(ContentBlockEditorSingleton, _super);
     function ContentBlockEditorSingleton() {
         var _this = _super.call(this, 'Sys.CbEdit') || this;
-        __WEBPACK_IMPORTED_MODULE_1__logging__["Insights"].add('system', 'cb-editor-api', _this.log);
+        __WEBPACK_IMPORTED_MODULE_2__logging__["Insights"].add('system', 'cb-editor-api', _this.log);
         return _this;
     }
     /**
@@ -1712,14 +1815,14 @@ var ContentBlockEditorSingleton = /** @class */ (function (_super) {
      */
     ContentBlockEditorSingleton.prototype.updateTemplateFromDia = function (context, templateId) {
         var cl = this.log.call('updateTemplateFromDia', "..., " + templateId);
-        var wasShowingPreview = __WEBPACK_IMPORTED_MODULE_0__html_dom_tools__["HtmlTools"].isDisabled(context.sxc);
+        var wasShowingPreview = __WEBPACK_IMPORTED_MODULE_1__html_dom_tools__["HtmlTools"].isDisabled(context.sxc);
         cl.add("wasShowingPreview: " + wasShowingPreview);
         var promise = this.updateTemplate(context, templateId, false)
             .then(function () {
             // only reload on ajax, not on app as that was already re-loaded on the preview
             // necessary to show the original template again
             if (wasShowingPreview)
-                __WEBPACK_IMPORTED_MODULE_2__render__["renderer"].reloadAndReInitialize(context);
+                __WEBPACK_IMPORTED_MODULE_3__render__["renderer"].reloadAndReInitialize(context);
         });
         return cl.return(promise);
     };
@@ -1731,7 +1834,7 @@ var ContentBlockEditorSingleton = /** @class */ (function (_super) {
      */
     ContentBlockEditorSingleton.prototype.getPreviewWithTemplate = function (context, templateId) {
         var cl = this.log.call('getPreviewWithTemplate', "..., " + templateId);
-        templateId = templateId || __WEBPACK_IMPORTED_MODULE_3__constants_index__["C"].ContentBlock.UseExistingTemplate; // fallback, meaning use saved ID
+        templateId = templateId || __WEBPACK_IMPORTED_MODULE_0__constants_index__["C"].ContentBlock.UseExistingTemplate; // fallback, meaning use saved ID
         var params = {
             templateId: templateId,
             lang: context.app.currentLanguage,
@@ -1805,7 +1908,7 @@ var ContentBlockEditorSingleton = /** @class */ (function (_super) {
         return cl.return(promise);
     };
     return ContentBlockEditorSingleton;
-}(__WEBPACK_IMPORTED_MODULE_1__logging__["HasLog"]));
+}(__WEBPACK_IMPORTED_MODULE_2__logging__["HasLog"]));
 var ContentBlockEditor = new ContentBlockEditorSingleton();
 
 
@@ -1833,11 +1936,13 @@ var CmdLayout = 'layout';
 __WEBPACK_IMPORTED_MODULE_4__commands__["Commands"].add(CmdLayout, 'ChangeLayout', 'glasses', true, true, {
     inlineWindow: function (_) { return true; },
     code: function (context, event) {
+        // console.log('layout');
         // Try to find the closest tag based on the click
         // if this fails, try to find it based on the sxc-instance
         var attrSel = '[' + __WEBPACK_IMPORTED_MODULE_2__quick_edit__["QeSelectors"].blocks.cb.context + ']';
-        var listSpecs = $(event.target).closest(attrSel);
-        if (listSpecs.length === 0)
+        // note: sometimes when the page loads, this can be auto-triggered and not have an event
+        var listSpecs = event && $(event.target).closest(attrSel);
+        if (!Array.isArray(listSpecs) || listSpecs.length === 0)
             listSpecs = $(__WEBPACK_IMPORTED_MODULE_1__interfaces_sxc_instance_editable__["SxcEdit"].getTag(context.sxc)).closest(attrSel);
         // Now check if we have apps-parameters to pass on
         if (listSpecs.length > 0) {
@@ -14061,4 +14166,4 @@ var __WEBPACK_AMD_DEFINE_RESULT__;/*
 
 /***/ })
 /******/ ]);
-//# sourceMappingURL=https://sources.2sxc.org/10.29.00/./inpage/inpage.js.map
+//# sourceMappingURL=inpage.js.map
