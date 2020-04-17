@@ -1,6 +1,6 @@
 {
   "name": "2sxc-quick-dialog",
-  "version": "10.27.00",
+  "version": "10.29.00",
   "license": "MIT",
   "scripts": {
     "start": "ng serve",
