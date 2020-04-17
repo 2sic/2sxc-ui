@@ -2,8 +2,7 @@ import * as Public from '../../../sxc-typings/index';
 import { SxcInstanceWithInternals } from '../sxc-instance/sxc-instance-with-internals';
 import { Environment } from '../environment';
 import { SxcHttp } from '../http/sxc-http';
-import { Log } from '../logging';
-import { SxcVersion } from '../constants';
+import { Log, SxcVersion } from '..';
 
 /**
  * This is the interface for the main $2sxc object on the window

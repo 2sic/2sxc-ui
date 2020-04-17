@@ -1,8 +1,8 @@
 ﻿import * as Public from '../../../sxc-typings/index';
 import { SxcWebApi } from './web-api/sxc-web-api';
-import { ToSxcName } from '../constants';
+import { ToSxcName } from '..';
 import { SxcRoot } from '../sxc-root/sxc-root';
-import { HasLog } from '../logging';
+import { HasLog } from '..';
 import { SxcRootInternals } from '../sxc-root/sxc-root-internals';
 import { SxcInstanceManage } from './sxc-instance-manage';
 

@@ -2,7 +2,7 @@ import * as Public from '../../../sxc-typings/index';
 import { JsInfo } from '.';
 import { EnvironmentMetaLoader } from './env-loader-meta';
 import { ApiExtensionPlaceholder } from '../constants';
-import { HasLog, Insights } from '../logging';
+import { HasLog, Insights } from '..';
 
 declare const _jsApi: JsInfo;
 

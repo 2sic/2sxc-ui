@@ -113,7 +113,7 @@ var config = {
     rules: [
       {
         test: /\.tsx?$/,
-        include: /src/,
+        // include: /src/,
         loader: 'ts-loader',
         options: {
           transpileOnly: true, // IMPORTANT! use transpileOnly mode to speed-up compilation

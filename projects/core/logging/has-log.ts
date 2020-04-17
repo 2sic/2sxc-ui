@@ -1,5 +1,5 @@
 import { Log } from '.';
-import { HasLog as IHasLog } from '../../../sxc-typings/index';
+import { HasLog as IHasLog } from '../../sxc-typings/index';
 export abstract class HasLog  implements Omit<IHasLog, 'log'> {
   log: Log;
 

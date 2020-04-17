@@ -7,6 +7,9 @@
     As webpack needs the order to be correct, meaning some depedencies need to be early
 */
 
+// core library stuff
+export * from '../../core';
+
 
 // early things without dependencies, which may be needed by others
 export * from './_/window';
@@ -16,7 +19,7 @@ export * from './tools/url-param-manager';
 // must be pretty early, because most objects rely on this
 // and ATM having this on top changes the load order
 // this is a side-effect-problem from not clearly using modules
-export * from './logging';
+// export * from './logging';
 
 
 export * from './environment/root-environment';

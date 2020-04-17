@@ -3,7 +3,7 @@ import { TotalPopup } from '../tools/total-popup';
 import { Stats } from '../Stats';
 import { SxcRoot } from './sxc-root';
 import { Debug } from '..';
-import { Insights } from '../logging';
+import { Insights } from '..';
 
 export interface SxcRootInternals {
     _controllers: { [id: string] : SxcInstanceWithInternals };

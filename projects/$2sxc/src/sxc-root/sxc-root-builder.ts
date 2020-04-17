@@ -5,9 +5,7 @@ import { SxcInstanceWithInternals } from '../sxc-instance/sxc-instance-with-inte
 import { SxcRootInternals } from './sxc-root-internals';
 import { SxcRoot, getRootPartsV2 } from './sxc-root';
 import { Window } from "../_/window";
-import { Debug } from '..';
-import { Insights } from '../logging';
-import { SxcVersion } from '../constants';
+import { Debug, Insights, SxcVersion } from '..';
 
 declare const $2sxc_jQSuperlight: any;
 declare const window: Window;

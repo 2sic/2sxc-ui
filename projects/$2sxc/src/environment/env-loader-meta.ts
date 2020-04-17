@@ -2,7 +2,7 @@ import { Environment } from '.';
 import { JsInfo } from './js-info';
 import { EnvironmentDnnSfLoader } from './env-loader-dnn-sf';
 import { MetaHeaderJsApi } from '../constants';
-import * as Log from '../logging';
+import * as Log from '..';
 
 const maxRetries = 10;
 

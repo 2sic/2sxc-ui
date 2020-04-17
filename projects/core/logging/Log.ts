@@ -1,7 +1,7 @@
 import { Entry, LogCall } from '.';
-import { Log as ILog } from '../../../sxc-typings/index';
-import { Debug } from '..';
+import { Log as ILog } from '../../sxc-typings/index';
 
+const keepData = location.search.indexOf("debug=true") !== -1;
 
 const maxScopeLen = 3;
 const maxNameLen = 6;
@@ -39,7 +39,7 @@ export class Log implements ILog {
     /* if we should live-dump, can be selectively activated */
     liveDump: boolean = liveDump;
     _parentHasLiveDump: boolean = false;
-    keepData: boolean = Debug.urlState; // C.Debug.urlState;
+    keepData: boolean = keepData; //Debug.urlState; // C.Debug.urlState;
     _parentHasKeepData: boolean = false;
 
     /**

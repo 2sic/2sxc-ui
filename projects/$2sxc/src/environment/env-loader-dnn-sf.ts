@@ -1,5 +1,5 @@
 import { Environment } from '.';
-import { HasLog } from '../logging';
+import { HasLog } from '..';
 
 const helpAutoDetect = 'You must either include jQuery on the page or inject the jsApi parameters to prevent auto-detection.';
 

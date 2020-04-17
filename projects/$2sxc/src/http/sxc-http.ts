@@ -1,5 +1,6 @@
 import * as Public from '../../../sxc-typings';
-import { HeaderNames, ToSxcName, ApiExtensionPlaceholder } from '../constants';
+import { ApiExtensionPlaceholder } from '../constants';
+import { HeaderNames, ToSxcName } from '..';
 import { Environment, HasLog } from '..';
 
 export class SxcHttp extends HasLog implements Omit<Public.Http, 'log'> {
