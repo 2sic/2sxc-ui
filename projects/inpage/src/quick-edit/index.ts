@@ -11,3 +11,4 @@ export * from './quick-e';
 export * from './quick-e-clipboard';
 export * from './selectors-instance';
 
+const css = require('./quickE.css');
