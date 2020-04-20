@@ -19,7 +19,7 @@ const subPath = 'dist/inpage';
 const webPath = "C:\\Projects\\2sxc-dnn742\\Website\\DesktopModules\\ToSIC_SexyContent\\";
 // const webPath = "c:\\temp\\2020-04-20\\";
 const dist = webPath + '/' + subPath;
-const externalSourcePath = 'https://sources.2sxc.org/' + version + '/' + subPath + '/';
+const externalSourcePath = 'https://sources.2sxc.org/' + version + '/inpage/';
 
 
 const configuration = {
@@ -27,12 +27,7 @@ const configuration = {
     entry: SxcApiPath,
     devtool: 'source-map',
     optimization: {
-        // minimize: false,
         minimizer: [
-            // new webpack.SourceMapDevToolPlugin({
-            //     filename: '[name].map',
-            //     publicPath: externalSourcePath,
-            // }),
             new TerserJSPlugin({
                 sourceMap: true,
             }), 
@@ -88,6 +83,6 @@ const configuration = {
 module.exports = (env, argv) => {
     // console.log(env);
     // console.log(argv);
-    ExternalSourceMaps.setExternalSourceMaps(argv.mode, configuration, 'dist/inpage');
+    ExternalSourceMaps.setExternalSourceMaps(argv.mode, configuration, 'inpage');
     return configuration;
 }
