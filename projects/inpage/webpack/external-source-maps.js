@@ -30,6 +30,7 @@ function setExternalSourceMaps(mode, configuration, part) {
       ...configuration.plugins,
       sourceMapDevToolPlugin,
     ];
+    delete configuration.devtool;
   }
 
   return configuration;

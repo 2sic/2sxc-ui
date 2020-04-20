@@ -1,24 +1,49 @@
-﻿// const path = require("path");
+﻿// Plugins
 const ExternalSourceMaps = require('./webpack/external-source-maps');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const TerserJSPlugin = require('terser-webpack-plugin');
+const webpack = require('webpack');
 
-const sxcJsFileBase = "inpage";
+// Version for source maps
+const pjson = require('./package.json');
+const version = pjson.version;
+
+// Starting values
 const SxcApiPath = "./src/inpage.{}.ts";
-const SxcDevWebPath = "C:\\Projects\\2sxc-dnn742\\Website\\DesktopModules\\ToSIC_SexyContent\\";
-// const SxcDevWebPath = "c:\\temp\\2020-04-20\\";
+
+// Output values
 const webpackLibName = '$2sxcInpage';
-
-const sxcJsDist = SxcDevWebPath + '/dist/inpage';
-
-// Get the version, for cache-breaking
-var package = require('./package.json');
-var version = package.version;
+const bundleName = "inpage";
+const subPath = 'dist/inpage';
+const webPath = "C:\\Projects\\2sxc-dnn742\\Website\\DesktopModules\\ToSIC_SexyContent\\";
+// const webPath = "c:\\temp\\2020-04-20\\";
+const dist = webPath + '/' + subPath;
+const externalSourcePath = 'https://sources.2sxc.org/' + version + '/' + subPath + '/';
 
 
 const configuration = {
     mode: 'development',
     entry: SxcApiPath,
     devtool: 'source-map',
+    optimization: {
+        // minimize: false,
+        minimizer: [
+            // new webpack.SourceMapDevToolPlugin({
+            //     filename: '[name].map',
+            //     publicPath: externalSourcePath,
+            // }),
+            new TerserJSPlugin({
+                sourceMap: true,
+            }), 
+            new OptimizeCSSAssetsPlugin({
+                cssProcessorOptions: { map: {
+                    inline: false, 
+                    annotation: externalSourcePath + bundleName + ".min.css.map" }
+                }
+            })
+        ],
+    },
     plugins: [new MiniCssExtractPlugin({
         filename: 'inpage.min.css',
         sourceMap: true
@@ -39,29 +64,13 @@ const configuration = {
                     { loader: 'css-loader', options: { sourceMap: true } }
                 ]
             },
-            // {
-            //     test: /\.(woff)$/,
-            //     exclude: /node_modules/,
-            //     use: {
-            //       loader: 'file-loader',
-            //       options: {
-            //         name: 'assets/[name].[ext]?' + version, // package.json version
-            //       },
-            //     },
-            // },
             {
                 // place images and font-files directly into the CSS
                 // makes deployment, cache-breaking etc. much easier and transfers fewer files
                 // https://www.npmjs.com/package/base64-inline-loader
                 test: /\.(png|woff)$/,
                 exclude: /node_modules/,
-                use: 'base64-inline-loader?limit=1000&name=[name].[ext]'
-                // use: {
-                //   loader: 'file-loader',
-                //   options: {
-                //     name: 'assets/[name].[ext]?' + version, 
-                //   },
-                // },
+                use: 'base64-inline-loader?limit=1000&name=[name].[ext]',
             }
         ]
     },
@@ -69,17 +78,16 @@ const configuration = {
         extensions: [".tsx", ".ts", ".js"]
     },
     output: {
-        filename: sxcJsFileBase + ".min.js",
-        path: sxcJsDist,
+        filename: bundleName + ".min.js",
+        path: dist,
         library: webpackLibName,
     },
 };
 
 /* change source map generation based on production mode */
-
 module.exports = (env, argv) => {
     // console.log(env);
     // console.log(argv);
-    ExternalSourceMaps.setExternalSourceMaps(argv.mode, configuration, 'js');
+    ExternalSourceMaps.setExternalSourceMaps(argv.mode, configuration, 'dist/inpage');
     return configuration;
 }
