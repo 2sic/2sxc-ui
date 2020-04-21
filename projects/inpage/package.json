@@ -24,7 +24,8 @@
     "ts-loader": "^7.0.1",
     "tslint": "^5.10.0",
     "typescript": "^3.8.3",
-    "webpack": "^4.42.1"
+    "webpack": "^4.42.1",
+    "webpack-cli": "^3.3.11"
   },
   "scripts": {
     "lint": "tslint ./src/**/*.ts -t verbose",

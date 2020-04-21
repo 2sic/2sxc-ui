@@ -10,7 +10,7 @@ const pjson = require('./package.json');
 const version = pjson.version;
 
 // Starting values
-const SxcApiPath = "./src/inpage.{}.ts";
+const SxcApiPath = "./src/index.ts";
 
 // Output values
 const webpackLibName = '$2sxcInpage';

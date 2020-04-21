@@ -6,7 +6,6 @@ import { HasLog, Insights, Log } from '../logging';
 import { TypeUnsafe } from '../plumbing';
 import { QuickDialog } from '../quick-dialog';
 import * as QuickEditState from '../quick-dialog/state';
-import { Translator } from '../i18n';
 import { TagToolbarManager } from '../toolbar/tag-toolbars/tag-toolbar-manager';
 import { ToolbarManager } from '../toolbar/toolbar-manager';
 

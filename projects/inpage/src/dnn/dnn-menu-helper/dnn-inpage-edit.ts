@@ -1,7 +1,6 @@
 ﻿import { SxcInstanceEngine } from '../../commands';
 import { CmdLayout } from '../../commands/command/layout';
 import { SxcEdit } from '../../interfaces/sxc-instance-editable';
-import { windowInPage as window } from '../../interfaces/window-in-page';
 import { HasLog, Insights } from '../../logging';
 
 
@@ -21,7 +20,8 @@ export class DnnActionMenu extends HasLog {
 
     changeLayoutOrContent = () => { this.run(CmdLayout); };
 
-    addItem = () => { this.run('add', { useModuleList: true, sortOrder: 0 }); };
+    // 2020-04-21 2dm disabled this, as it doesn't make sense to have this in the DNN menu - since add can be used in each position
+    // addItem = () => { this.run('new', { useModuleList: true, sortOrder: 0 }); };
 
     edit = () => { this.run('edit', { useModuleList: true, sortOrder: 0 }); };
 
@@ -32,6 +32,3 @@ export class DnnActionMenu extends HasLog {
     develop = () => { this.run('template-develop'); };
 }
 
-window.$2sxcActionMenuMapper = (moduleId: number) => {
-    return new DnnActionMenu(moduleId);
-};

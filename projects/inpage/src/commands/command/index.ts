@@ -3,6 +3,7 @@ export * from './add';
 export * from './app-import';
 export * from './app-resources';
 export * from './app-settings';
+export * from './app';
 export * from './content-items';
 export * from './content-list-action-params';
 export * from './content-list-actions';

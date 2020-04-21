@@ -18,7 +18,3 @@ export class SystemUpgrader {
     }
 }
 
-/** this enhances the $2sxc client controller with stuff only needed when logged in */
-if (window.$2sxc && !window.$2sxc.system) {
-    window.$2sxc.system = new SystemUpgrader();
-}
