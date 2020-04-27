@@ -3,7 +3,7 @@
 .icon-sxc-list:before { content: '\e801'; } /* '' */
 .icon-sxc-minus:before { content: '\e802'; } /* '' */
 .icon-sxc-move:before { content: '\e803'; } /* '' */
-.icon-sxc-options:before { content: '\e804'; } /* '' */
+.icon-sxc-options-old:before { content: '\e804'; } /* '' */
 .icon-sxc-ok:before { content: '\e806'; } /* '' */
 .icon-sxc-fields:before { content: '\e807'; } /* '' */
 .icon-sxc-filter:before { content: '\e808'; } /* '' */
@@ -30,3 +30,4 @@
 .icon-sxc-eye:before { content: '\e820'; } /* '' */
 .icon-sxc-eye-off:before { content: '\e821'; } /* '' */
 .icon-sxc-clock:before { content: '\e824'; } /* '' */
+.icon-sxc-options:before { content: '\eddd'; } /* '' */
