@@ -1,0 +1,17 @@
+
+
+/* Use SVG filters to correct positioning & color of the pure SVGs */
+.icon-sxc-filter, .icon-sxc-speed {
+    width: 100%;
+    height: 100%;
+    display: inline-block;
+    filter: invert(100%) contrast(100%);
+    background-position: center !important;
+}
+ 
+
+.icon-sxc-filter { background: url(filter_list-24px.svg); }
+.icon-sxc-speed { background: url(speed-24px.svg); }
+
+/* Options must wait, as it needs al the turn/rotation styling etc. */
+/* .icon-sxc-options {content: url(ellipsis-circles-wide.svg);} */

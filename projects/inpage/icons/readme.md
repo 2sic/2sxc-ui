@@ -18,3 +18,5 @@ The icons are automatically detected using webpack and included in the build.
 ## My icon sources are
 
 1. Google Material Icons only as of 2sxc 10
+
+1. V11 - still mostly material icons, but the speed-icon is missing from google material icons github, so I had to improvise :(

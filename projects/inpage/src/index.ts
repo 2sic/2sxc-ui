@@ -40,3 +40,5 @@ $(document).ready(() => {
 // Tell Webpack to load CSS
 const cssEdit = require('./inpage.css');
 const cssIcons = require('../icons/inpage-icons-codes.css');
+const cssV11 = require('./icons/v11.css');
+

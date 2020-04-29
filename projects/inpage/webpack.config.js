@@ -63,7 +63,7 @@ const configuration = {
                 // place images and font-files directly into the CSS
                 // makes deployment, cache-breaking etc. much easier and transfers fewer files
                 // https://www.npmjs.com/package/base64-inline-loader
-                test: /\.(png|woff)$/,
+                test: /\.(png|woff|svg)$/,
                 exclude: /node_modules/,
                 use: 'base64-inline-loader?limit=1000&name=[name].[ext]',
             }
