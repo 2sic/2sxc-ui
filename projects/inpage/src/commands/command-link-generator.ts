@@ -90,10 +90,10 @@ export class CommandLinkGenerator extends HasLog {
      */
     private getDialogUrl(dialogName: string): string {
         const context = this.context;
-        const path = (context.ui.form === 'ng8') // v11 applies to all forms, not just edit: //  && dialogName === 'edit')
-            ? C.DialogPaths.ng8
-            : `${C.DialogPaths.ng1}?sxcver=${context.instance.sxcVersion}`;
-        return `${context.instance.sxcRootUrl}desktopmodules/tosic_sexycontent/${path}`;
+        // const path = (context.ui.form === 'ng8') // v11 applies to all forms, not just edit: //  && dialogName === 'edit')
+        //     ? C.DialogPaths.ng8
+        //     : C.DialogPaths.ng1;
+        return `${context.instance.sxcRootUrl}desktopmodules/tosic_sexycontent/${C.DialogPaths.ng8}?sxcver=${context.instance.sxcVersion}`;
     }
 
     private addItem() {
