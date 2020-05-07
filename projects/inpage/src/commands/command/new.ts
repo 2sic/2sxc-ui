@@ -19,7 +19,7 @@ Commands.add(CmdNew, 'New', 'plus', false, true, {
 
     showCondition(context) {
         // don't provide new if type unknown or on the header-item
-        return  !context.button.command.params.contentType || SharedLogic.isList(context);
+        return  !!context.button.command.params.contentType || SharedLogic.isList(context);
     },
     code(context, event) {
         // todo - should refactor this to be a toolbarManager.contentBlock command
