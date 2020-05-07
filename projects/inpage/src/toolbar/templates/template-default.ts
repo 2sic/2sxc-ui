@@ -10,7 +10,7 @@ export const ToolbarTemplateDefault: ToolbarTemplate = {
       buttons: 'edit,new,metadata,publish,layout',
     }, {
       name: TC.GroupList,
-      buttons: 'add,remove,moveup,movedown,instance-list,replace,item-history',
+      buttons: 'add,add-existing,replace,remove,moveup,movedown,instance-list,item-history',
     }, {
         // todo: rename - and in all templates
       name: TC.GroupEditAdvanced,

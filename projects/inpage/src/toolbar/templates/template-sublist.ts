@@ -13,7 +13,7 @@ export const ToolbarTemplateSublist: ToolbarTemplate = {
       },
     }, {
       name: TC.GroupList,
-      buttons: 'add,remove,moveup,movedown,instance-list,replace,item-history',
+      buttons: /* 'add,' + */ 'add-existing,replace,remove,moveup,movedown,instance-list,item-history',
       defaults: {
         classes: 'group-inlist',
       },

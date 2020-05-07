@@ -1,5 +1,6 @@
 export * from './shared-logic';
 export * from './add';
+export * from './add-existing';
 export * from './app-import';
 export * from './app-resources';
 export * from './app-settings';
