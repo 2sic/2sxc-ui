@@ -172,7 +172,7 @@ export class CommandLinkGenerator extends HasLog {
         // New in 10.27 - if params has a field, use that
         if (params.fields)
             params.fields.split(',').map((f) => this.items.push({
-                    EntityId: params.entityId,
+                    EntityId: isAdd ? 0 : params.entityId,
                     Field: f,
                     Parent: groupId,
                     Add: isAdd,

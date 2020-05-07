@@ -24,9 +24,6 @@ Commands.add(CmdNew, 'New', 'plus', false, true, {
     code(context, event) {
         // todo - should refactor this to be a toolbarManager.contentBlock command
         context.button.command.params.sortOrder = context.button.command.params.sortOrder + 1;
-        // O.bject.assign(context.button.action.params, {
-        //     sortOrder: context.button.action.params.sortOrder + 1,
-        // });
         return CmsEngine.openDialog(context, event);
     },
 });
