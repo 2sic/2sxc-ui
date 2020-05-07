@@ -31,7 +31,7 @@ export class InPageCommandJson  {
     /** Experimental for 10.30 */
     parent?: string;
     /** Experimental for 10.30 */
-    field?: string;
+    fields?: string;
 
     static hasActions(thing: TypeTbD): thing is InPageCommandJson {
         // check two common signatures - command and action
