@@ -1,5 +1,6 @@
 ﻿import { Commands } from '../commands';
 import { Actions } from './content-list-actions';
+import { SharedLogic } from './shared-logic';
 
 export const CmdMoveUp = 'moveup';
 /**
@@ -7,10 +8,7 @@ export const CmdMoveUp = 'moveup';
  */
 Commands.add(CmdMoveUp, 'MoveUp', 'move-up', false, true, {
     showCondition(context) {
-        return !!(
-            context.contentBlock.isList &&
-            context.button.command.params.useModuleList &&
-            context.button.command.params.sortOrder !== -1 &&
+        return !!(SharedLogic.isList(context) &&
             context.button.command.params.sortOrder !== 0
         );
     },

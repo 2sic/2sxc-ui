@@ -4,6 +4,11 @@
 export class ContentListActionParams {
   id?: number;
   part?: string;
-  sortOrder?: number;
-  destinationSortOrder?: number;
+  parent?: string;
+  fields?: string;
+//   sortOrder?: number;
+
+  // temp: new replacement for sortOrder
+  index?: number;
+  toIndex?: number;
 }

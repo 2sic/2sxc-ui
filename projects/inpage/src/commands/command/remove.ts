@@ -1,4 +1,4 @@
-﻿import { Commands } from '..';
+﻿import { Commands, SharedLogic } from '..';
 import { translate } from '../../i18n';
 import { Actions } from './content-list-actions';
 
@@ -9,21 +9,11 @@ export const CmdRemove = 'remove';
  * import this module to commands.ts
  */
 Commands.add(CmdRemove, 'Remove', 'minus-circled', false, true, {
-    showCondition(context) {
-        return !!(
-            context.contentBlock.isList &&
-            context.button.command.params.useModuleList &&
-            context.button.command.params.sortOrder !== -1
-        );
-    },
+    showCondition: (context) => SharedLogic.isList(context),
     code(context) {
         return new Promise((resolve, reject) => {
-            if (confirm(translate('Toolbar.ConfirmRemove'))) {
-                return Actions.removeFromList(
-                    context,
-                    context.button.command.params.sortOrder,
-                );
-            }
+            if (confirm(translate('Toolbar.ConfirmRemove')))
+                return Actions.removeFromList(context);
             return resolve();
         });
     },

@@ -1,6 +1,6 @@
 {
   "name": "2sxc-inpage",
-  "version": "11.00.00",
+  "version": "11.01.00",
   "description": "",
   "main": "webpack.config.js",
   "dependencies": {
