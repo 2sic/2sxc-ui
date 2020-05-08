@@ -33,17 +33,17 @@ export class ToolbarConfigLoaderV10 extends HasLog {
         // #2 load either the default toolbar or the one specified
         const toolbarRule = this.rules.getToolbar();
 
-        // If it's a sub-list toolbar, use the special template for it
-        const defToolbarname = (config.toolbar as InPageCommandJson).fields ? ToolbarTemplateSublist.name : ToolbarTemplateDefault.name;
+        // #3 find params
+        const params = this.rules.getParams();
 
+        // If it's a sub-list toolbar, use the special template for it
+        const isSublist = (config.toolbar as InPageCommandJson).fields || params?.params?.fields;
+        const defToolbarname = isSublist ? ToolbarTemplateSublist.name : ToolbarTemplateDefault.name;
         const toolbarTemplateName = toolbarRule
             ? toolbarRule.name
             : defToolbarname;
         template = this.toolbar.templates.copy(toolbarTemplateName);
         template.settings = settings;
-
-        // #3 attach params
-        const params = this.rules.getParams();
         if (params) template.params = params.params;
 
         // #4 Remove unwanted groups
