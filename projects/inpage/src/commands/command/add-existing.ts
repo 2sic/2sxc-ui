@@ -19,7 +19,7 @@ Commands.add(CmdAddExisting, 'AddExisting', 'add-existing', false, true, {
         linkGenerator.items = [{ Group: {
             Guid: params.parent,
             Part: params.fields,
-            Index: params.sortOrder,
+            Index: params.sortOrder + 1,
             Add: true,
         }}];
     },

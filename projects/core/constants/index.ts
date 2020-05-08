@@ -1,7 +1,7 @@
 
 export const ToSxcName = "2sxc";
 
-export const SxcVersion = "11.00.00";
+export const SxcVersion = "11.01.00";
 
 export const HeaderNames = {
     // 2sxc specific header
