@@ -1,11 +1,11 @@
 ﻿import { C } from '../constants';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
+import { translate } from '../i18n';
 import { ItemIdentifierGroup, ItemIdentifierSimple, ItemInField } from '../interfaces/item-identifiers';
 import { HasLog, Log } from '../logging';
 import { NgUrlValuesWithoutParams } from '../manage/ng-dialog-params';
-import { DictionaryValue, TypeUnsafe } from '../plumbing';
+import { DictionaryValue, TypeUnsafe, SxcPath } from '../plumbing';
 import { ButtonSafe } from '../toolbar/config';
-import { translate } from '../i18n';
 
 /**
  * This is responsible for taking a context with command and everything
@@ -93,7 +93,7 @@ export class CommandLinkGenerator extends HasLog {
         // const path = (context.ui.form === 'ng8') // v11 applies to all forms, not just edit: //  && dialogName === 'edit')
         //     ? C.DialogPaths.ng8
         //     : C.DialogPaths.ng1;
-        return `${context.instance.sxcRootUrl}desktopmodules/tosic_sexycontent/${C.DialogPaths.ng8}?sxcver=${context.instance.sxcVersion}`;
+        return `${context.instance.sxcRootUrl}${SxcPath}${C.DialogPaths.ng8}?sxcver=${context.instance.sxcVersion}`;
     }
 
     private addItem() {

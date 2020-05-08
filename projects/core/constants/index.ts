@@ -3,6 +3,10 @@ export const ToSxcName = "2sxc";
 
 export const SxcVersion = "11.01.00";
 
+export const SxcPath = 'desktopmodules/tosic_sexycontent/';
+
+export const SxcApiUrlRoot = 'desktopmodules/2sxc/api/';
+
 export const HeaderNames = {
     // 2sxc specific header
     ContentBlockId: "ContentBlockId",

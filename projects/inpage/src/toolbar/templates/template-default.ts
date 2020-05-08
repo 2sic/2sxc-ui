@@ -24,7 +24,7 @@ export const ToolbarTemplateDefault: ToolbarTemplate = {
       },
     }, {
       name: TC.GroupApp,
-      buttons: 'app,app-settings,app-resources,zone',
+      buttons: 'app,app-settings,app-resources,zone,insights-server',
       defaults: {
         classes: 'group-pro',
       },
