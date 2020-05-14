@@ -26,14 +26,11 @@ export class BuildRule extends HasLog {
     /** Group name - when adding more buttons */
     group: string = TemplateConstants.NameDefault;
 
-    /** position where something is added - the group or the button */
-    pos: number = 0;
-
     /**
-     * if the position is from start or end.
-     * Is calculated from pos +/-, but can also be -0 = end
+     * position where something is added - the group or the button
+     * Note that JS preserves -0
      */
-    fromStart = true;
+    pos: number = 0;
 
     //#endregion
 
@@ -137,15 +134,9 @@ export class BuildRule extends HasLog {
             delete parts.group;
         }
         // #3 position can be number or -number to indicate from other side
-        if (typeof parts.pos === 'string' && parts.pos.length > 0) {
-            let pos = parts.pos;
-            if (pos[0] === '-') {
-                this.fromStart = false;
-                pos = pos.substring(1);
-            }
-            if (pos.length) this.pos = parseInt(pos, 10);
-            delete parts.pos;
-        }
+        // Note that JS preserves -0, which is kind of unique
+        if (parts.pos != null) this.pos = Number(parts.pos);
+
         // #4 icon is automatically kept
         // #5 show override
         if (typeof parts.show === 'string')

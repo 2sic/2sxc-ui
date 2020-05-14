@@ -53,8 +53,8 @@ export class ToolbarConfigLoaderV10 extends HasLog {
         // Add additional buttons
         const add = this.rules.getAdd();
         add.forEach((a) => {
-            if (a.step === BuildSteps.group) this.toolbar.templateEditor.addGroup(template, a.name, a.pos, a.fromStart);
-            else this.toolbar.templateEditor.addButton(template, a.group, a.id, a.name, a.pos, a.fromStart);
+            if (a.step === BuildSteps.group) this.toolbar.templateEditor.addGroup(template, a.name, a.pos);
+            else this.toolbar.templateEditor.addButton(template, a.group, a.id, a.name, a.pos);
         });
 
         const toolbar = this.toolbar.buildTreeAndModifyAccordingToRules(context, template as ToolbarWip);

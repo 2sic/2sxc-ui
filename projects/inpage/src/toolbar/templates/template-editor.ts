@@ -12,11 +12,15 @@ export class TemplateEditor extends HasLog {
         super('Tlb.TplEdt', toolbar.log);
     }
 
-    addButton(template: ToolbarTemplate, groupName: string, id: string, name: string, pos: number, fromStart: boolean): void {
-        const cl = this.log.call('addButton', `..., ${groupName}, ${name}`);
+    addButton(template: ToolbarTemplate, groupName: string, id: string, name: string, pos: number): void {
+        // fromStart
+        const fromStart = !(Object.is(pos, -0) || pos < 0);
+        pos = Math.abs(pos);
+        console.log('addbutton - pos', `${fromStart ? '+' : '-'}${pos}`);
+        const cl = this.log.call('addButton', `..., ${groupName}, ${id}, ${name}, ${fromStart ? '+' : '-'}${pos}, ${fromStart}`);
         if (!template) return cl.done('no template');
         let group = this.findGroupOrDefault(template, groupName);
-        if (!group) group = this.addGroup(template, groupName, 1000, true); // create group at end
+        if (!group) group = this.addGroup(template, groupName, 1000); // create group at end
         const buttons = group.buttons?.split(TC.ButtonSeparator) ?? [];
         const buttonId = id === name ? name : `${id}=${name}`;
         const posStartEnd = this.correctPosStartEnd(buttons, pos, fromStart);
@@ -42,8 +46,10 @@ export class TemplateEditor extends HasLog {
         return pos >= 0 ? pos : target.length;
     }
 
-    addGroup(template: ToolbarTemplate, groupName: string, pos: number, fromStart: boolean): ToolbarTemplateGroup {
-        const cl = this.log.call('addGroup', `..., ${groupName}, ${pos}`);
+    addGroup(template: ToolbarTemplate, groupName: string, pos: number): ToolbarTemplateGroup {
+        const fromStart = !(Object.is(pos, -0) || pos < 0);
+        pos = Math.abs(pos);
+        const cl = this.log.call('addGroup', `..., ${groupName}, ${fromStart ? '+' : '-'}${pos}`);
         this.ensureGroups(template);
         const alreadyExists = this.findGroup(template, groupName);
         if (alreadyExists) return cl.return(alreadyExists, 'already exists');
