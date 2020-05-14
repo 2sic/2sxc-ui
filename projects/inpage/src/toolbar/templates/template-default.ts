@@ -12,11 +12,9 @@ export const ToolbarTemplateDefault: ToolbarTemplate = {
       name: TC.GroupList,
       buttons: 'add,add-existing,replace,remove,moveup,movedown,instance-list,item-history',
     }, {
-        // todo: rename - and in all templates
       name: TC.GroupEditAdvanced,
       buttons: 'delete',
     }, {
-        // todo: rename - and in all templates - probably 'view'
       name: TC.GroupView,
       buttons: 'template-develop,template-settings,contentitems,template-query,contenttype',
       defaults: {
