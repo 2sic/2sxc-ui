@@ -10,4 +10,8 @@ export abstract class ModifierBase extends HasLog {
     }
 
     abstract delete(clip: Selection): Promise<void>;
+
+    abstract isRealMove(oldClip: Selection, newClip: Selection): boolean;
+
+    abstract move(oldClip: Selection, newClip: Selection): void;
 }

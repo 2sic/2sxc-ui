@@ -69,20 +69,12 @@ class QuickEClipboardSingleton extends HasLog {
                 if (this.clipboard.type !== newClip.type)
                     return alert("can't move module-to-block; move only works from module-to-module or block-to-block");
 
-                if (isNaN(from) || isNaN(to) || from === to) // || from + 1 === to) // this moves it to the same spot, so ignore
-                    return this.clearUi(); // don't do a.nything
+                if (isNaN(from) || isNaN(to))  return this.clearUi(); // nkip, nothing real
 
-                // cb-numbering is a bit different, because the selector is at the bottom
-                // only there we should also skip on +1;
-                if (newClip.type === QeSelectors.blocks.cb.id && from + 1 === to)
-                    return this.clearUi(); // don't do a.nything
+                const operator = newClip.type === QeSelectors.blocks.cb.id ? this.modCb : this.modDnn;
 
-                if (type === QeSelectors.blocks.cb.id) {
-                    this.modCb.move(this.clipboard, newClip);
-                    // const sxc = SxcEdit.get(list);
-                    // sxc.manage._getCbManipulator().move(newClip.parent as number, newClip.field, from, to);
-                } else
-                    this.modDnn.move(this.clipboard, newClip, from, to); // sometimes missing oldClip.item
+                if (!operator.isRealMove(this.clipboard, newClip)) return this.clearUi(); // skip, no change
+                operator.move(this.clipboard, newClip);
 
                 this.clearUi();
                 break;
