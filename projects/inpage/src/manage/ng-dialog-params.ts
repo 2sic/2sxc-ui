@@ -44,7 +44,7 @@ export class NgUrlValuesWithoutParams {
     this.portalroot = context.tenant.url;
     this.websiteroot = context.instance.sxcRootUrl;
 
-    this.partOfPage = partOfPage; // context.contentBlock.partOfPage;
+    this.partOfPage = partOfPage;
     if (partOfPage) {
         // 2020-03-11 2dm - this never seems to be set a.nywhere
         // versioningRequirements= editContext.ContentBlock.VersioningRequirements;
@@ -57,7 +57,6 @@ export class NgUrlValuesWithoutParams {
         this.apps = context.button.command.params.apps;
     this.fa = !context.app.isContent;
     this.rvt = $2sxc.env.rvt();
-    console.log('rvt', this.rvt);
   }
 
 }
