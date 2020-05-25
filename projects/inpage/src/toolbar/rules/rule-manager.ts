@@ -3,7 +3,6 @@ import { BuildRule } from '.';
 import { HasLog } from '../../logging';
 import { ToolbarConfigLoader } from '../config-loaders';
 import { BuildSteps } from './build-steps';
-import { Toolbar } from '../config/toolbar';
 
 const throwOnError = true;
 

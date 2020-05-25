@@ -31,6 +31,12 @@ export class ModifierContentBlock extends ModifierBase {
         this.getInstanceModifier(oldClip.list).move(newClip.parent as number, newClip.field, from, to);
     }
 
+    // cb-numbering is a bit different, because the selector is at the bottom
+    // only there we should also skip on +1;
+    isRealMove(oldClip: Selection, newClip: Selection): boolean {
+        return oldClip.index + 1 !== newClip.index;
+    }
+
     static onCbButtonClick() {
         const list = QuickE.main.activeContentBlock.closest(QeSelectors.blocks.cb.listSelector);
         const listItems = list.find(QeSelectors.blocks.cb.selector);

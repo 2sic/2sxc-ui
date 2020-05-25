@@ -1,13 +1,15 @@
 ﻿import { Commands } from '..';
 import { SharedLogic } from './shared-logic';
 
-export const CmdReplace = 'replace';
+export const CmdAddExisting = 'add-existing';
 /**
  * import this module to commands.ts
  */
-Commands.add(CmdReplace, 'Replace', 'replace', false, true, {
+Commands.add(CmdAddExisting, 'AddExisting', 'add-existing', false, true, {
+    dialog: (_) => 'replace',
+
     showCondition(context) {
-        return !!context.button.command.params.useModuleList || SharedLogic.isFieldList(context);
+        return SharedLogic.isList(context);
     },
 
     configureLinkGenerator: (context, linkGenerator) => {
@@ -17,8 +19,8 @@ Commands.add(CmdReplace, 'Replace', 'replace', false, true, {
         linkGenerator.items = [{ Group: {
             Guid: params.parent,
             Part: params.fields,
-            Index: params.sortOrder,
-            Add: false,
+            Index: params.sortOrder + 1,
+            Add: true,
         }}];
     },
 });

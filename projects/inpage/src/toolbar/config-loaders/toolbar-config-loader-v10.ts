@@ -1,10 +1,10 @@
-import { ToolbarConfigLoader } from '.';
+import { ToolbarConfigLoader, InPageCommandJson } from '.';
 import { ToolbarInitConfig } from '..';
 import { ContextComplete } from '../../context';
 import { HasLog } from '../../logging';
 import { Toolbar, ToolbarSettings } from '../config';
 import { BuildSteps, RuleManager } from '../rules';
-import { ToolbarTemplate, ToolbarTemplateDefault } from '../templates';
+import { ToolbarTemplate, ToolbarTemplateDefault, ToolbarTemplateSublist } from '../templates';
 import { ToolbarWip } from './config-formats/toolbar-wip';
 
 
@@ -32,14 +32,18 @@ export class ToolbarConfigLoaderV10 extends HasLog {
 
         // #2 load either the default toolbar or the one specified
         const toolbarRule = this.rules.getToolbar();
+
+        // #3 find params
+        const params = this.rules.getParams();
+
+        // If it's a sub-list toolbar, use the special template for it
+        const isSublist = (config.toolbar as InPageCommandJson).fields || params?.params?.fields;
+        const defToolbarname = isSublist ? ToolbarTemplateSublist.name : ToolbarTemplateDefault.name;
         const toolbarTemplateName = toolbarRule
             ? toolbarRule.name
-            : ToolbarTemplateDefault.name;
+            : defToolbarname;
         template = this.toolbar.templates.copy(toolbarTemplateName);
         template.settings = settings;
-
-        // #3 attach params
-        const params = this.rules.getParams();
         if (params) template.params = params.params;
 
         // #4 Remove unwanted groups
@@ -49,8 +53,8 @@ export class ToolbarConfigLoaderV10 extends HasLog {
         // Add additional buttons
         const add = this.rules.getAdd();
         add.forEach((a) => {
-            if (a.step === BuildSteps.group) this.toolbar.templateEditor.addGroup(template, a.name, a.pos, a.fromStart);
-            else this.toolbar.templateEditor.addButton(template, a.group, a.id, a.name, a.pos, a.fromStart);
+            if (a.step === BuildSteps.group) this.toolbar.templateEditor.addGroup(template, a.name, a.pos);
+            else this.toolbar.templateEditor.addButton(template, a.group, a.id, a.name, a.pos);
         });
 
         const toolbar = this.toolbar.buildTreeAndModifyAccordingToRules(context, template as ToolbarWip);

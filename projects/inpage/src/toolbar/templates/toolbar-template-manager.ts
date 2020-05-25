@@ -1,4 +1,4 @@
-﻿import { ToolbarTemplate, ToolbarTemplateDefault, ToolbarTemplateEmpty, ToolbarTemplateInListRight } from '.';
+﻿import { ToolbarTemplate, ToolbarTemplateDefault, ToolbarTemplateEmpty, ToolbarTemplateSublist } from '.';
 import { HasLog, Insights } from '../../logging';
 import { Obj } from '../../plumbing';
 
@@ -19,7 +19,7 @@ class ToolbarTemplateManagerSingleton extends HasLog {
         this.add(ToolbarTemplateDefault);
         // CodeChange #2020-03-20#TemplateToolbarLeftUnused - if no side-effects, delete in June
         // this.add('left', ToolbarTemplateLeft);
-        this.add(ToolbarTemplateInListRight);
+        this.add(ToolbarTemplateSublist);
     }
 
     /**

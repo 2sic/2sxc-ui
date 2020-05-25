@@ -2,8 +2,8 @@
 
 // the default / initial buttons in a standard toolbar
 // ToDo: refactor to avoid side-effects
-export const ToolbarTemplateInListRight: ToolbarTemplate = {
-  name: 'listitem',
+export const ToolbarTemplateSublist: ToolbarTemplate = {
+  name: 'sublist',
   groups: [
     {
       name: TC.GroupDefault,
@@ -13,7 +13,7 @@ export const ToolbarTemplateInListRight: ToolbarTemplate = {
       },
     }, {
       name: TC.GroupList,
-      buttons: 'add,remove,moveup,movedown,instance-list,replace,item-history',
+      buttons: 'add-existing,replace,remove,moveup,movedown,instance-list,item-history',
       defaults: {
         classes: 'group-inlist',
       },
@@ -22,12 +22,6 @@ export const ToolbarTemplateInListRight: ToolbarTemplate = {
       buttons: 'delete',
       defaults: {
         classes: 'group-inlist',
-      },
-    }, {
-      name: TC.GroupApp,
-      buttons: 'contentitems,contenttype',
-      defaults: {
-        classes: 'group-inlist group-pro',
       },
     },
   ],

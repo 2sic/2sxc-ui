@@ -101,12 +101,13 @@ export class ModifierDnnModuleInternal extends HasLog {
         }
 
         // attach click event...
+        const _this = this;
         targets.find('a').click(function() {
             const link = $(this);
             const clip = QuickEClipboard.clipboard;
-            const modId = this.getModuleId(clip.item.className);
+            const modId = _this.getModuleId(clip.item.className);
             const newPane = link.attr('data');
-            this.moveMod(modId, newPane, 0);
+            _this.move(modId, newPane, 0);
         });
 
         return targets;

@@ -1,6 +1,6 @@
 ﻿import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { ContextOfUser } from '../context/parts/context-user';
-
+import { $2sxcInPage as $2sxc } from '../interfaces/sxc-controller-in-page';
 /**
  * This is for building/serializing the main url params when opening a dialog.
  * It does not contain the "params" / "items" part
@@ -44,7 +44,7 @@ export class NgUrlValuesWithoutParams {
     this.portalroot = context.tenant.url;
     this.websiteroot = context.instance.sxcRootUrl;
 
-    this.partOfPage = partOfPage; // context.contentBlock.partOfPage;
+    this.partOfPage = partOfPage;
     if (partOfPage) {
         // 2020-03-11 2dm - this never seems to be set a.nywhere
         // versioningRequirements= editContext.ContentBlock.VersioningRequirements;
@@ -56,7 +56,7 @@ export class NgUrlValuesWithoutParams {
     if (context?.button?.command?.params?.apps)
         this.apps = context.button.command.params.apps;
     this.fa = !context.app.isContent;
-    this.rvt = $.ServicesFramework(0).getAntiForgeryValue();
+    this.rvt = $2sxc.env.rvt();
   }
 
 }

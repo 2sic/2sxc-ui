@@ -10,10 +10,10 @@ class ContentListActions {
     /**
      * add an item to the list at this position
      * @param {ContextComplete} context
-     * @param {number} sortOrder
+     * @param {number} index
      */
-    addItem<T>(context: ContextComplete, sortOrder: number) {
-        return getAndReload<T>(context, 'view/module/additem', { sortOrder });
+    addItem<T>(context: ContextComplete, index: number) {
+        return getAndReload<T>(context, 'view/module/additem', { index });
     }
 
     /**
@@ -21,20 +21,28 @@ class ContentListActions {
      * @param {ContextComplete} context
      * @param {number} sortOrder
      */
-    removeFromList(context: ContextComplete, sortOrder: number) {
-        return getAndReload<void>(context, 'view/module/removefromlist', { sortOrder });
+    removeFromList(context: ContextComplete) {
+        const params = context.button.command.params;
+        return getAndReload<void>(context, 'view/module/removefromlist', {
+            index: params.sortOrder,
+            parent: params.parent,
+            fields: params.fields,
+         });
     }
 
     /**
      * change the order of an item in a list, then reload
      * @param {ContextComplete} context
-     * @param {number} initOrder
-     * @param {number} newOrder
+     * @param {number} index
+     * @param {number} toIndex
      */
-    changeOrder(context: ContextComplete, initOrder: number, newOrder: number) {
+    changeOrder(context: ContextComplete, index: number, toIndex: number) {
+        const params = context.button.command.params;
         return getAndReload<void>(context, 'view/module/changeorder', {
-            sortOrder: initOrder,
-            destinationSortOrder: newOrder,
+            parent: params.parent,
+            fields: params.fields,
+            index,
+            toIndex,
         });
     }
 
@@ -42,12 +50,12 @@ class ContentListActions {
      * set a content-item in this block to published, then reload
      * @param {ContextComplete} context
      * @param {string} part
-     * @param {number} sortOrder
+     * @param {number} index
      */
-    publish(context: ContextComplete, part: string, sortOrder: number) {
+    publish(context: ContextComplete, part: string, index: number) {
         return getAndReload<void>(context, 'view/module/publish', {
-            part: part,
-            sortOrder,
+            part,
+            index,
         });
     }
 

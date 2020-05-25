@@ -16,10 +16,18 @@ export class ModifierDnnModule extends ModifierBase {
     }
 
     // todo: unsure if this is a good place for this bit of code...
-    move(oldClip: Selection, newClip: Selection, from: number, to: number): void {
+    move(oldClip: Selection, newClip: Selection /*, from: number, to: number*/): void {
+        const from = oldClip.index;
+        const to = newClip.index;
         const modId = this.modInternal.getModuleId(oldClip.item.className);
         const pane: string = this.modInternal.getPaneName(newClip.list);
         this.modInternal.move(modId, pane, to);
+    }
+
+    isRealMove(oldClip: Selection, newClip: Selection): boolean {
+        const oldPane = this.modInternal.getPaneName(oldClip.list);
+        const newPane = this.modInternal.getPaneName(newClip.list);
+        return oldPane !== newPane || oldClip.index !== newClip.index;
     }
 
 

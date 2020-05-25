@@ -1,5 +1,6 @@
 export * from './shared-logic';
 export * from './add';
+export * from './add-existing';
 export * from './app-import';
 export * from './app-resources';
 export * from './app-settings';
@@ -11,6 +12,7 @@ export * from './content-type';
 export * from './custom';
 export * from './delete';
 export * from './edit';
+export * from './insights-server';
 export * from './instance-list';
 export * from './item-history';
 export * from './layout';

@@ -41,6 +41,8 @@ export class ToolbarRenderer extends HasLog {
         tlbTag.classList.add(`sc-tb-show-${settings.show}`);
         if (context.toolbar.params.sortOrder === -1)
             tlbTag.classList.add('listContent');
+        if (context.toolbar.params.fields)
+            tlbTag.classList.add('sc-sublist');
 
         HtmlTools.addClasses(tlbTag, settings.class || settings.classes);
 

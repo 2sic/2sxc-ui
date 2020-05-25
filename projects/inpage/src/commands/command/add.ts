@@ -1,5 +1,6 @@
 ﻿import { Commands } from '..';
 import { Actions } from './content-list-actions';
+import { SharedLogic } from './shared-logic';
 
 export const CmdAdd = 'add';
 /**
@@ -14,11 +15,7 @@ Commands.add(
     false,
     true,
     {
-        showCondition(context) {
-            return !!(context.contentBlock.isList &&
-                context.button.command.params.useModuleList &&
-                context.button.command.params.sortOrder !== -1);
-        },
+        showCondition: (context) => SharedLogic.isList(context),
         code(context) {
             return Actions.addItem(context, context.button.command.params.sortOrder + 1);
         },

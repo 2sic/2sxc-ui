@@ -1,4 +1,5 @@
 ﻿import { CmsEngine, Commands } from '..';
+import { SharedLogic } from './shared-logic';
 
 export const CmdNew = 'new';
 export const CmdNewMode = 'new';
@@ -18,20 +19,11 @@ Commands.add(CmdNew, 'New', 'plus', false, true, {
 
     showCondition(context) {
         // don't provide new if type unknown or on the header-item
-        const result = (
-            !!context.button.command.params.contentType ||
-            !!(context.contentBlock.isList &&
-                context.button.command.params.useModuleList &&
-                context.button.command.params.sortOrder !== -1)
-        );
-        return result;
+        return  !!context.button.command.params.contentType || SharedLogic.isList(context);
     },
     code(context, event) {
         // todo - should refactor this to be a toolbarManager.contentBlock command
         context.button.command.params.sortOrder = context.button.command.params.sortOrder + 1;
-        // O.bject.assign(context.button.action.params, {
-        //     sortOrder: context.button.action.params.sortOrder + 1,
-        // });
         return CmsEngine.openDialog(context, event);
     },
 });

@@ -3,7 +3,7 @@ import { InPageToolbarConfigVariations, ToolbarInitConfig } from '..';
 import { ContextComplete } from '../../context';
 import { HasLog } from '../../logging';
 import { Button, Toolbar, ToolbarSettings } from '../config';
-import { ToolbarTemplate, ToolbarTemplateDefault, ToolbarTemplateGroup } from '../templates';
+import { ToolbarTemplate, ToolbarTemplateDefault, ToolbarTemplateGroup, ToolbarTemplateSublist } from '../templates';
 
 
 export class ToolbarConfigLoaderV09 extends HasLog {
@@ -50,7 +50,9 @@ export class ToolbarConfigLoaderV09 extends HasLog {
 
         // final: nothing defined, use template
         cl.add('no toolbar structure specified, will use standard toolbar template');
-        const template = this.toolbar.templates.copy(ToolbarTemplateDefault.name);
+        // If it's a sub-list toolbar, use the special template for it
+        const defToolbarname = (raw as InPageCommandJson).fields ? ToolbarTemplateSublist.name : ToolbarTemplateDefault.name;
+        const template = this.toolbar.templates.copy(defToolbarname);
         template.params = (Array.isArray(raw) && raw[0]) || raw; // attach parameters
         return cl.return(template, 'use template');
     }
