@@ -69,7 +69,7 @@ class QuickEClipboardSingleton extends HasLog {
                 if (this.clipboard.type !== newClip.type)
                     return alert("can't move module-to-block; move only works from module-to-module or block-to-block");
 
-                if (isNaN(from) || isNaN(to))  return this.clearUi(); // nkip, nothing real
+                if (isNaN(from) || isNaN(to))  return this.clearUi(); // skip, nothing real
 
                 const operator = newClip.type === QeSelectors.blocks.cb.id ? this.modCb : this.modDnn;
 
