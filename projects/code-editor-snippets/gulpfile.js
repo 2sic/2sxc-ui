@@ -10,7 +10,7 @@
     gulp.task('default', xlsxSnippetsToJson);
 
     function xlsxSnippetsToJson() {
-        var src = 'src/snippets.xlsx';
+        var src = 'snippets.xlsx';
         return gulp.src(src)
             .pipe(jsXlsx.run({
                 parseWorksheet: 'row_array'
@@ -18,7 +18,7 @@
             .pipe(rename({
                 extname: '.json.js'
             }))
-            .pipe(gulp.dest(rootDist + 'code-snippets/'))
+            .pipe(gulp.dest(rootDist))
             .pipe(gulp.dest(dest2sxc));
     }
 
