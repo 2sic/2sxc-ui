@@ -1,8 +1,10 @@
-var setExternalSourceMaps = require('./build/external-source-maps');
+const webpack = require('webpack');
+const nodeEnv = (process.env.NODE_ENV || 'development').trim(); // trim is important because of an issue with package.json
+
+const webpackHelpers = require('../webpack/webpack-helpers');
 
 var configuration = {};
 
-// 2020-02-25 2dm temporarily disabled
-setExternalSourceMaps(configuration, 'ng');
+webpackHelpers.SetExternalSourceMaps(webpack, nodeEnv, configuration, 'ng');
 
 module.exports = configuration;
