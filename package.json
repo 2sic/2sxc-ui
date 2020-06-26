@@ -1,7 +1,10 @@
 {
   "name": "2sxc-ui",
-  "version": "11.02.01",
+  "version": "11.03.00",
   "description": "2sxc UI - the JS UI of 2sxc\r ============",
+  "scripts": {
+      "release-all": "(cd projects/$2sxc && npm run release && cd ../..) && (cd projects/inpage && npm run release)"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/2sic/2sxc-ui.git"
