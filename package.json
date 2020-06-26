@@ -3,7 +3,10 @@
   "version": "11.03.00",
   "description": "2sxc UI - the JS UI of 2sxc\r ============",
   "scripts": {
-      "release-all": "(cd projects/$2sxc && npm run release && cd ../..) && (cd projects/inpage && npm run release)"
+      "release-all": "npm run ci-$2sxc && npm run ci-inpage && npm run ci-snippets",
+      "ci-$2sxc": "cd projects/$2sxc && npm run release && cd ../..",
+      "ci-inpage": "cd projects/inpage && npm run release && cd ../..",
+      "ci-snippets": "cd projects/code-editor-snippets && gulp && cd ../.."
   },
   "repository": {
     "type": "git",
