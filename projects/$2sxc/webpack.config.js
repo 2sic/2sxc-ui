@@ -1,15 +1,9 @@
-﻿// const path = require("path");
-const sm = require('./webpack/external-source-maps');
-
-const sxcJsFileBase = "2sxc.api";
-const SxcApiPath = "./src/2sxc.api.ts";
-const SxcDevWebPath = "C:\\Projects\\2sxc-dnn742\\Website\\DesktopModules\\ToSIC_SexyContent\\";
-
-const sxcJsDist = SxcDevWebPath + '/js';
+﻿const webpack = require('webpack');
+const webpackHelpers = require('../webpack/webpack-helpers.js');
 
 const configuration = {
     mode: 'development',
-    entry: SxcApiPath,
+    entry: "./src/2sxc.api.ts",
     devtool: 'source-map',
     module: {
         rules: [
@@ -24,18 +18,18 @@ const configuration = {
         extensions: [".tsx", ".ts", ".js"]
     },
     output: {
-        filename: sxcJsFileBase + ".min.js",
-        path: sxcJsDist,
+        filename: "2sxc.api" + ".min.js",
+        path: webpackHelpers.DnnTargetFolder + '/js',
         library: '$2sxcJsApi',
     },
-    // plugins: enableMc ? [] : [copyAfterBuild]
+    plugins: [
+        webpackHelpers.CreateDefinePlugin(webpack),
+    ]
 };
 
 /* change source map generation based on production mode */
 
 module.exports = (env, argv) => {
-    // console.log(env);
-    // console.log(argv);
-    sm.setExternalSourceMaps(argv.mode, configuration, 'js');
+    webpackHelpers.SetExternalSourceMaps(webpack, argv.mode, configuration, 'js');
     return configuration;
 }

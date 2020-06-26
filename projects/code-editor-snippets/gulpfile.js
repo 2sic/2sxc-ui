@@ -4,7 +4,6 @@
         gulp = require('gulp'),
         jsXlsx = require('gulp-js-xlsx'),
         rename = require('gulp-rename'),
-        // $ = require('gulp-load-plugins')({ lazy: false }),
         rootDist = 'dist/';
     
     gulp.task('default', xlsxSnippetsToJson);

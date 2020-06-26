@@ -1,30 +1,14 @@
-﻿// Plugins
-const ExternalSourceMaps = require('./webpack/external-source-maps');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+﻿const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const TerserJSPlugin = require('terser-webpack-plugin');
 const webpack = require('webpack');
+const webpackHelpers = require('../webpack/webpack-helpers.js');
 
-// Version for source maps
-const pjson = require('./package.json');
-const version = pjson.version;
-
-// Starting values
-const SxcApiPath = "./src/index.ts";
-
-// Output values
-const webpackLibName = '$2sxcInpage';
 const bundleName = "inpage";
-const subPath = 'dist/inpage';
-const webPath = "C:\\Projects\\2sxc-dnn742\\Website\\DesktopModules\\ToSIC_SexyContent\\";
-// const webPath = "c:\\temp\\2020-04-20\\";
-const dist = webPath + '/' + subPath;
-const externalSourcePath = 'https://sources.2sxc.org/' + version + '/inpage/';
-
 
 const configuration = {
     mode: 'development',
-    entry: SxcApiPath,
+    entry: "./src/index.ts",
     devtool: 'source-map',
     optimization: {
         minimizer: [
@@ -34,15 +18,18 @@ const configuration = {
             new OptimizeCSSAssetsPlugin({
                 cssProcessorOptions: { map: {
                     inline: false, 
-                    annotation: externalSourcePath + bundleName + ".min.css.map" }
+                    annotation: webpackHelpers.ExternalSourcePath(bundleName) + bundleName + ".min.css.map" }
                 }
             })
         ],
     },
-    plugins: [new MiniCssExtractPlugin({
-        filename: 'inpage.min.css',
-        sourceMap: true
-    })],
+    plugins: [
+        new MiniCssExtractPlugin({
+            filename: 'inpage.min.css',
+            sourceMap: true
+        }),
+        webpackHelpers.CreateDefinePlugin(webpack),
+    ],
     module: {
         rules: [
             {
@@ -74,15 +61,13 @@ const configuration = {
     },
     output: {
         filename: bundleName + ".min.js",
-        path: dist,
-        library: webpackLibName,
+        path: webpackHelpers.DnnTargetFolder + '/dist/' + bundleName,
+        library: '$2sxcInpage',
     },
 };
 
 /* change source map generation based on production mode */
 module.exports = (env, argv) => {
-    // console.log(env);
-    // console.log(argv);
-    ExternalSourceMaps.setExternalSourceMaps(argv.mode, configuration, 'inpage');
+    webpackHelpers.SetExternalSourceMaps(webpack, argv.mode, configuration, bundleName);
     return configuration;
 }

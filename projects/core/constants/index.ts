@@ -1,7 +1,10 @@
 
+declare const ROOTVERSION: string; // set by the definePlugin with string-replace
+
 export const ToSxcName = "2sxc";
 
-export const SxcVersion = "11.03.00";
+// export const SxcVersion = "11.03.00";
+export const SxcVersion = ROOTVERSION;
 
 export const SxcPath = 'desktopmodules/tosic_sexycontent/';
 
