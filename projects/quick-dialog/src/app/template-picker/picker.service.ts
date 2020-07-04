@@ -62,7 +62,7 @@ export class PickerService {
   public saveAppId(appId: string, reloadParts: boolean): Promise<any> {
     log.add(`saveAppId(${appId}, ${reloadParts})`);
     // skip doing anything here, if we're in content-mode (which doesn't use/change apps)
-    if (!this.loadApps) throw "can't save app, as we're not in app-mode";
+    if (!this.loadApps) throw new Error(`can't save app, as we're not in app-mode`);
     return this.http.get(`${Constants.apiRoot}SetAppId?appId=${appId}`).toPromise();
   }
 
@@ -90,7 +90,7 @@ export class PickerService {
     const obs = this.http.get<Template[]>(`${Constants.apiRoot}GetSelectableTemplates`)
       .pipe(share(), /* ensure it's only run once */ );
 
-    obs.subscribe(response => this.templates$.next(response/*.json()*/ || []));
+    obs.subscribe(response => this.templates$.next(response /*.json()*/ || []));
     return obs;
   }
 
@@ -102,7 +102,7 @@ export class PickerService {
     this.contentTypes$.reset();
     const obs = this.http.get<any[]>(`${Constants.apiRoot}GetSelectableContentTypes`)
       .pipe(share(), /* ensure it's only run once */ );
-    obs.pipe(map(response => (response/*.json*/ || []).map(x => {
+    obs.pipe(map(response => (response || []).map(x => {
         x.Label = (x.Metadata && x.Metadata.Label)
           ? x.Metadata.Label
           : x.Name;
@@ -128,15 +128,6 @@ export class PickerService {
     obs.subscribe(response => this.apps$.subject.next(response.map(a => new App(a))));
     return obs;
   }
-
-  // private pascalCaseToLower(obj): any {
-  //   return Object.keys(obj)
-  //     .reduce((t, v) => {
-  //       t[v.split('').reduce((prev, current, i) => prev + (i === 0 ? current.toLowerCase() : current), '')] = obj[v];
-  //       return t;
-  //     }, {});
-  // }
-
 
   private enableLogging() {
     const streamLog = parentLog.subLog('api-streams', DebugConfig.api.streams);

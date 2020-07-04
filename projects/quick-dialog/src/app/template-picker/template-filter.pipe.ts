@@ -27,7 +27,6 @@ export class TemplateFilterPipe implements PipeTransform {
 class TransformParams {
   constructor(
     public isContent: boolean,
-    // public typeId: string,
     public contentType: ContentType
   ) { }
 }

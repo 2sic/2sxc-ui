@@ -1,8 +1,6 @@
 
 import {merge, combineLatest,  timer } from 'rxjs';
-
 import {filter, startWith, skipUntil} from 'rxjs/operators';
-//#region imports
 import { Component, ChangeDetectorRef, OnInit } from '@angular/core';
 import { IDialogFrameElement } from 'app/interfaces-shared/idialog-frame-element';
 import { Observable } from 'rxjs';
@@ -17,8 +15,6 @@ import { PickerService } from './picker.service';
 import { CurrentDataService } from './current-data.service';
 import { DebugConfig } from 'app/debug-config';
 import { BehaviorObservable } from 'app/core/behavior-observable';
-
-//#endregion
 
 const log = parentLog.subLog('picker', DebugConfig.picker.enabled);
 
@@ -172,7 +168,6 @@ export class TemplatePickerComponent implements OnInit {
     this.state.types$.subscribe(t => this.types = t);
     this.state.type$.subscribe(t => this.contentType = t);
 
-    // this.state.types$.subscribe(t => log.add('type update: ', t));
     this.ready$.subscribe(r => this.ready = r);
     merge(
       this.ready$,
@@ -194,10 +189,6 @@ export class TemplatePickerComponent implements OnInit {
     this.preventAppSwich = config.hasContent;
     this.showCancel = config.templateId != null;
   }
-
-  // private updateConfigAfterAppChange(config: IQuickDialogConfig): void {
-  //   this.showCancel = config.templateId != null;
-  // }
 
   //#region basic UI action binding
   cancel(): void { this.bridge.cancel(); }

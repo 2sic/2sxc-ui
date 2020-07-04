@@ -1,9 +1,9 @@
 
 import {map} from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import { /* Response, Headers, RequestOptions, */ HttpClient } from '@angular/common/http';
-import { ReplaySubject ,  Observable } from "rxjs";
-import { Version } from "app/version-dialog/version";
+import { HttpClient } from '@angular/common/http';
+import { ReplaySubject ,  Observable } from 'rxjs';
+import { Version } from 'app/version-dialog/version';
 
 declare const $2sxc;
 
@@ -41,7 +41,7 @@ export class SxcVersionsService {
     const url = `eav/entities/history?appId=${appId}`;
 
     this.http.post<any[]>(url, item).pipe(
-      map(res => res//.json()
+      map(res => res
         .map((v, i, all) => Object.assign(v, {
           Data: (() => {
             let lastVersion = all.find(v2 => v2.VersionNumber === v.VersionNumber - 1);

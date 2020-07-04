@@ -25,7 +25,6 @@ import { HttpClientModule } from '@angular/common/http';
     SxcVersionsService,
     // todo: added, probably should be in core module
     $2sxcService,
-    // Http2SxcHttpProvider,
   ],
   declarations: [
     DialogComponent,

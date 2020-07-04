@@ -1,8 +1,6 @@
 
 import { startWith, map, tap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-// import { Observable } from 'rxjs/Rx';
-
 import { HttpClient } from '@angular/common/http';
 import { Subject, Observable } from 'rxjs';
 import { log } from 'app/core/log';
@@ -27,7 +25,6 @@ export class GettingStartedService {
 
   public loadGettingStarted(isContentApp: boolean): void {
     this.http.get<string>(`${Constants.apiRoot}RemoteInstallDialogUrl?dialog=gettingstarted&isContentApp=${isContentApp}`)
-      // .pipe(map(response => response.json()))
       .subscribe(json => this.gettingStartedSubject.next(json));
   }
 

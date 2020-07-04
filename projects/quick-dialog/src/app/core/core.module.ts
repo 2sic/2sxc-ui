@@ -17,7 +17,6 @@ import { CurrentDataService } from 'app/template-picker/current-data.service';
     PickerService,
     CurrentDataService,
     $2sxcService,
-    // Http2SxcHttpProvider,
   ]
 })
 export class CoreModule { }

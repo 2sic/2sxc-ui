@@ -1,10 +1,8 @@
-import { Component, OnInit, Input, Inject } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { trigger, style, transition, animate, state } from '@angular/animations';
 import { SxcVersionsService } from 'app/version-dialog/sxc-versions.service';
 import { Version } from 'app/version-dialog/version';
 
-declare const $2sxc;
 
 @Component({
   selector: 'app-dialog',

@@ -1,4 +1,4 @@
-import { BehaviorSubject, Observable } from "rxjs";
+import { BehaviorSubject, Observable } from 'rxjs';
 
 export class BehaviorObservable<T> extends Observable<T> {
   private constructor() {
@@ -26,10 +26,10 @@ export class BehaviorObservable<T> extends Observable<T> {
     obs.subject = subj;
     obs.reset = () => {
       obs.subject.next(obs.initialValue);
-    }
+    };
     obs.isInitial = () => {
       return obs.subject.value === obs.initialValue;
-    }
+    };
     obs.next = (value: T) => obs.subject.next(value);
     return obs;
   }

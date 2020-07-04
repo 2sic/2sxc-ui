@@ -1,5 +1,5 @@
 import { TranslateService } from '@ngx-translate/core';
-import { Component, Inject, ElementRef } from '@angular/core';
+import { Component, ElementRef } from '@angular/core';
 import { DialogComponent } from 'app/version-dialog/dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { IDialogFrameElement } from './interfaces-shared/idialog-frame-element';
@@ -25,8 +25,6 @@ export class AppComponent extends DnnAppComponent {
     super(el, context.preConfigure(
       {
         sxc: $2sxc($2sxc.urlParams.require('mid'), $2sxc.urlParams.require('cbid'))
-        // moduleId: $2sxc.urlParams.require('mid'),
-        // contentBlockId: $2sxc.urlParams.require('cbid')
       }), false);
     const langs = ['en', 'de', 'es', 'fr', 'it', 'nl', 'uk'];
     translate.addLangs(langs);
@@ -37,7 +35,6 @@ export class AppComponent extends DnnAppComponent {
     const frame = <IDialogFrameElement>window.frameElement;
     if (this.name === 'item-history') {
       this.dialog.open(DialogComponent).afterClosed()
-      // todo 2dm - probably change to cancel()
         .subscribe(() => frame.bridge.hide());
     }
   }

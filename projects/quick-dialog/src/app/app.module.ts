@@ -1,9 +1,9 @@
-import {TranslateHttpLoader} from '@ngx-translate/http-loader';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { DnnInterceptor /*, ContentManagerModule */ } from '@2sic.com/dnn-sxc-angular';
+import { DnnInterceptor } from '@2sic.com/dnn-sxc-angular';
 import { AppComponent } from './app.component';
 import { TemplatePickerModule } from 'app/template-picker/template-picker.module';
 import { VersionDialogModule } from 'app/version-dialog/version-dialog.module';

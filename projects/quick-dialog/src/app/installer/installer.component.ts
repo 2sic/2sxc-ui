@@ -7,7 +7,6 @@ import { fromEvent, Subscription } from 'rxjs';
 import { GettingStartedService } from './getting-started.service';
 
 declare const $2sxc: any;
-// declare const window: Window;
 
 @Component({
   selector: 'app-installer',
@@ -35,7 +34,6 @@ export class InstallerComponent implements OnInit {
         this.ready = true;
       }));
 
-    // bootController.watchReboot()
     window.bootController.rebootRequest$.pipe(
       debounceTime(1000))
       .subscribe(() => this.destroy());
