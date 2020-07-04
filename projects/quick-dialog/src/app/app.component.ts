@@ -5,7 +5,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { IDialogFrameElement } from './interfaces-shared/idialog-frame-element';
 import { log } from './core/log';
 import { DnnAppComponent, Context } from '@2sic.com/dnn-sxc-angular';
-import { SxcRoot } from '../../../sxc-typings/index.d';
+import { SxcRoot } from '../../../sxc-typings';
+import { Config } from './config';
 
 declare const window: any, $2sxc: SxcRoot;
 
@@ -25,13 +26,13 @@ export class AppComponent extends DnnAppComponent {
   ) {
     super(el, context.preConfigure(
       {
-        sxc: $2sxc(Number($2sxc.urlParams.require('mid')), Number($2sxc.urlParams.require('cbid')))
+        sxc: $2sxc(Config.moduleId(), Config.cbId())
       }), false);
     const langs = ['en', 'de', 'es', 'fr', 'it', 'nl', 'uk'];
     translate.addLangs(langs);
-    translate.setDefaultLang($2sxc.urlParams.require('langpri').split('-')[0]);
-    translate.use($2sxc.urlParams.require('lang').split('-')[0]);
-    this.name = $2sxc.urlParams.require('dialog');
+    translate.setDefaultLang(Config.langPri());
+    translate.use(Config.lang());
+    this.name = Config.dialog();
     log.add(`loading '${this.name}'`);
     const frame = <IDialogFrameElement>window.frameElement;
     if (this.name === 'item-history') {

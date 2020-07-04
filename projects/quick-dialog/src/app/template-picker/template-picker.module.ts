@@ -13,7 +13,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { InstallerModule } from 'app/installer/installer.module';
 import { DebugPipe } from './debug.pipe';
 import { ContentTypesProcessor } from './data/content-types-processor.service';
-import { MaterialModule } from 'app/xtempUpgrading/material-module';
+import { MaterialModule } from 'app/material-module';
 
 @NgModule({
   exports: [

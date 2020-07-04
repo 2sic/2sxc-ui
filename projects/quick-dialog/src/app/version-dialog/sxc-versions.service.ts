@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { ReplaySubject ,  Observable } from 'rxjs';
 import { Version } from 'app/version-dialog/version';
 import { SxcRoot } from '../../../../sxc-typings/index.d';
+import { Config } from '../config';
 
 declare const $2sxc: SxcRoot;
 
@@ -29,16 +30,16 @@ export class SxcVersionsService {
   }
 
   restore(changeId: number): Observable<any> {
-    const appId = $2sxc.urlParams.require('appId');
-    const item = JSON.parse($2sxc.urlParams.require('items'))[0];
+    const appId = Config.appId();
+    const item = Config.item();
     const url = `eav/entities/restore?appId=${appId}&changeId=${changeId}`;
 
     return this.http.post<any>(url, item);
   }
 
   private loadVersions(): void {
-    const appId = $2sxc.urlParams.require('appId');
-    const item = JSON.parse($2sxc.urlParams.require('items'))[0];
+    const appId = Config.appId();
+    const item = Config.item();
     const url = `eav/entities/history?appId=${appId}`;
 
     this.http.post<any[]>(url, item).pipe(

@@ -5,6 +5,7 @@ import { InstallerService } from 'app/installer/installer.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { fromEvent, Subscription } from 'rxjs';
 import { GettingStartedService } from './getting-started.service';
+import { Config } from '../config';
 
 declare const $2sxc: any;
 
@@ -65,7 +66,7 @@ export class InstallerComponent implements OnInit {
 
       // Check if data is correct.
       filter(data => data
-        && ~~data.moduleId === ~~$2sxc.urlParams.require('mid')
+        && Number(data.moduleId) === Config.moduleId()
         && data.action === 'install'),
 
       // Get packages from data.
@@ -79,7 +80,7 @@ export class InstallerComponent implements OnInit {
         const msg = `Do you want to install these packages?
 
 ${packagesDisplayNames}
-This takes 10 to 30 seconds per package. Don't reload the page while it's installing.`;
+This takes 5 - 30 seconds per package. Don't reload the page while it's installing.`;
         return confirm(msg);
       }),
 
@@ -91,7 +92,7 @@ This takes 10 to 30 seconds per package. Don't reload the page while it's instal
 
       tap(() => {
         this.showProgress = false;
-        alert('Installation complete. If you saw no errors, everything worked.');
+        alert('Installation complete 👍');
         window.top.location.reload();
       }))
 

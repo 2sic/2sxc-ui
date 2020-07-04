@@ -12,6 +12,7 @@ import { Constants } from 'app/core/constants';
 import { DebugConfig } from 'app/debug-config';
 import { BehaviorObservable } from 'app/core/behavior-observable';
 import { SxcRoot } from '../../../../sxc-typings/index.d';
+import { Config } from '../config';
 // #endregion
 
 declare const $2sxc: SxcRoot;
@@ -121,7 +122,7 @@ export class PickerService {
     log.add(`loadApps() - skip:${alreadyLoaded}`);
     if (alreadyLoaded) return;
 
-    const appsFilter = $2sxc.urlParams.get('apps');
+    const appsFilter = Config.apps();
 
     const obs = this.http.get<any[]>(`${Constants.apiRoot}GetSelectableApps?apps=${appsFilter}`)
       .pipe(share(), /* ensure it's only run once */ );

@@ -8,7 +8,7 @@ import { AppComponent } from './app.component';
 import { TemplatePickerModule } from 'app/template-picker/template-picker.module';
 import { VersionDialogModule } from 'app/version-dialog/version-dialog.module';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { MaterialModule } from './xtempUpgrading/material-module';
+import { MaterialModule } from './material-module';
 import { log } from './core/log';
 
 export function HttpLoaderFactory(http: HttpClient) {
