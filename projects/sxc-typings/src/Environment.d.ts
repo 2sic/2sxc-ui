@@ -45,8 +45,12 @@ export interface Environment extends HasLog {
 }
 
 export interface JsInfo {
-    page: number;
-    api: string;
-    root: string;
-    rvt: string;
+  /** Page ID */
+  page: number;
+  /** Optional API key - optional if set from external, because it's auto derived from root */
+  api: string;
+  /** Portal root path - used for various things incl. the API root */
+  root: string;
+  /** Request verification token */
+  rvt: string;
 }

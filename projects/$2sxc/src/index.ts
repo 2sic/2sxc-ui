@@ -7,27 +7,18 @@
     As webpack needs the order to be correct, meaning some depedencies need to be early
 */
 
-// core library stuff
+// core library stuff, including Logging
 export * from '../../core';
-
 
 // early things without dependencies, which may be needed by others
 export * from './_/window';
 export * from './tools/total-popup';
 export * from './tools/url-param-manager';
 
-// must be pretty early, because most objects rely on this
-// and ATM having this on top changes the load order
-// this is a side-effect-problem from not clearly using modules
-// export * from './logging';
-
-
-export * from './environment/root-environment';
-export * from './environment/js-info';
+export * from './environment';
 
 export * from './http/sxc-http';
 export * from './sxc-instance';
-
 
 export * from './sxc-root/debug';
 export * from './sxc-root/sxc-root';

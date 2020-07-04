@@ -1,5 +1,5 @@
+import * as Public from '../../../sxc-typings/index';
 import { Environment } from '.';
-import { JsInfo } from './js-info';
 import { EnvironmentDnnSfLoader } from './env-loader-dnn-sf';
 import { MetaHeaderJsApi } from '../constants';
 import * as Log from '..';
@@ -40,7 +40,7 @@ export class EnvironmentMetaLoader extends Log.HasLog {
             setTimeout(() => { this.loadMetaFromHeader();}, 1);
             return cl.done('will retry');
         }
-        this.env.load(JSON.parse(meta) as JsInfo, 'meta header');
+        this.env.load(JSON.parse(meta) as Public.JsInfo, 'meta header');
         cl.done()
     }
     
