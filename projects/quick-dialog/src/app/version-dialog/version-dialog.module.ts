@@ -6,7 +6,6 @@ import { DialogComponent, ConfirmRestoreDialog } from 'app/version-dialog/dialog
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MaterialModule } from 'app/xtempUpgrading/material-module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { $2sxcService } from 'app/core/$2sxc.service';
 import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
@@ -23,13 +22,10 @@ import { HttpClientModule } from '@angular/common/http';
   ],
   providers: [
     SxcVersionsService,
-    // todo: added, probably should be in core module
-    $2sxcService,
   ],
   declarations: [
     DialogComponent,
     ConfirmRestoreDialog,
-
   ],
   entryComponents: [
     DialogComponent,

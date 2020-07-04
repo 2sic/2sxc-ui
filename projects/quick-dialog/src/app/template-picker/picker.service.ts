@@ -11,9 +11,10 @@ import { log as parentLog } from 'app/core/log';
 import { Constants } from 'app/core/constants';
 import { DebugConfig } from 'app/debug-config';
 import { BehaviorObservable } from 'app/core/behavior-observable';
+import { SxcRoot } from '../../../../sxc-typings/index.d';
 // #endregion
 
-declare const $2sxc;
+declare const $2sxc: SxcRoot;
 const log = parentLog.subLog('api', DebugConfig.api.enabled);
 const uninitializedList = []; // this must be created as a variable, so we can check later if it's still the original or a new empty list
 @Injectable()

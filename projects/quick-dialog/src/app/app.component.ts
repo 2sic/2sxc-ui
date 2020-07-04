@@ -5,8 +5,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { IDialogFrameElement } from './interfaces-shared/idialog-frame-element';
 import { log } from './core/log';
 import { DnnAppComponent, Context } from '@2sic.com/dnn-sxc-angular';
+import { SxcRoot } from '../../../sxc-typings/index.d';
 
-declare const window, $2sxc;
+declare const window: any, $2sxc: SxcRoot;
 
 @Component({
   selector: 'app-root',
@@ -24,7 +25,7 @@ export class AppComponent extends DnnAppComponent {
   ) {
     super(el, context.preConfigure(
       {
-        sxc: $2sxc($2sxc.urlParams.require('mid'), $2sxc.urlParams.require('cbid'))
+        sxc: $2sxc(Number($2sxc.urlParams.require('mid')), Number($2sxc.urlParams.require('cbid')))
       }), false);
     const langs = ['en', 'de', 'es', 'fr', 'it', 'nl', 'uk'];
     translate.addLangs(langs);

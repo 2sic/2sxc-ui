@@ -4,8 +4,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ReplaySubject ,  Observable } from 'rxjs';
 import { Version } from 'app/version-dialog/version';
+import { SxcRoot } from '../../../../sxc-typings/index.d';
 
-declare const $2sxc;
+declare const $2sxc: SxcRoot;
 
 @Injectable()
 export class SxcVersionsService {
