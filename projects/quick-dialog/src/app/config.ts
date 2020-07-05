@@ -14,6 +14,8 @@ export class Config {
   static moduleId = () => Number(req('mid'));
   static cbId = () => Number(req('cbid'));
   static dialog = () => req('dialog');
+
+  static getSxcInstance = () => $2sxc(Config.moduleId(), Config.cbId());
 }
 
 

@@ -1,10 +1,11 @@
 import { ContentType } from '../content-type';
-import { cViewWithoutContent, i18nTemplatePicker } from '../constants';
+import { cViewWithoutContent } from '../constants';
 import { Template } from '../template';
 import { Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { log as parentLog } from 'app/core/log';
 import { DebugConfig } from 'app/debug-config';
+import { i18nPrefix } from 'app/i18n';
 
 // const debug = true;
 const log = parentLog.subLog('ct-processor', DebugConfig.typeProcessor);
@@ -32,9 +33,8 @@ export class ContentTypesProcessor {
    * Ensure current content-type is visible, just in case it's configured as hidden
    */
   private unhideSelectedType(contentTypes: ContentType[], currentType: ContentType, currentTemplate: Template): ContentType[] {
-    contentTypes.filter(
-      c => (currentTemplate && currentTemplate.TemplateId === c.TemplateId)
-        || (currentType && c.StaticName === currentType.StaticName))
+    contentTypes
+      .filter(c => (currentTemplate?.TemplateId === c.TemplateId) || (c.StaticName === currentType?.StaticName))
       .forEach(c => c.IsHidden = false);
     return contentTypes;
   }
@@ -44,7 +44,7 @@ export class ContentTypesProcessor {
    * add an empty content-type for UI selection if any template would support "no content-type"
    */
   private addEmptyTypeIfNeeded(contentTypes: ContentType[], templates: Template[]): ContentType[] {
-    const layoutElementLabel = (this.translate && this.translate.instant(i18nTemplatePicker))
+    const layoutElementLabel = (this.translate && this.translate.instant(i18nPrefix))
       || cViewWithoutContent; // if translate is not ready, use the nicer label
 
     // add option for empty content type
@@ -52,7 +52,7 @@ export class ContentTypesProcessor {
       contentTypes = contentTypes.slice(); // copy it first to not change original
       contentTypes.push({
         StaticName: cViewWithoutContent,
-        Name: i18nTemplatePicker,
+        Name: i18nPrefix,
         Thumbnail: null,
         Label: layoutElementLabel,
         IsHidden: false,

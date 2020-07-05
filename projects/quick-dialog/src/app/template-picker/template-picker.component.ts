@@ -62,7 +62,7 @@ export class TemplatePickerComponent implements OnInit {
   /** Ajax-support changes how saving/changing is handled */
   private supportsAjax: boolean;
 
-  private preventAppSwich = false;
+  preventAppSwich = false;
 
   public showDebug = DebugConfig.picker.showDebugPanel;
   // #endregion
@@ -138,8 +138,8 @@ export class TemplatePickerComponent implements OnInit {
       this.api.contentTypes$,
       this.api.apps$,
       this.api.ready$.pipe(filter(r => !!r)),
-      (templates, c, apps) => {
-        log.add('apps/templates loaded, will check if we should show installer')
+      (templates, _, apps) => {
+        log.add('apps/templates loaded, will check if we should show installer');
       this.showInstaller = this.isContent
         ? templates.length === 0
         : apps.filter(a => a.AppId !== cAppActionImport).length === 0;
@@ -156,7 +156,7 @@ export class TemplatePickerComponent implements OnInit {
     // but don't do this when initializing, that's why we listen to initDone$
     this.state.template$.pipe(
       filter(t => !!t),
-      skipUntil(initTrue$),)
+      skipUntil(initTrue$))
       .subscribe(t => this.previewTemplate(t));
   }
 

@@ -1,4 +1,3 @@
-// #region imports
 import { combineLatest } from 'rxjs';
 import { map, startWith, share } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
@@ -11,11 +10,8 @@ import { log as parentLog } from 'app/core/log';
 import { Constants } from 'app/core/constants';
 import { DebugConfig } from 'app/debug-config';
 import { BehaviorObservable } from 'app/core/behavior-observable';
-import { SxcRoot } from '../../../../sxc-typings/index.d';
 import { Config } from '../config';
-// #endregion
 
-declare const $2sxc: SxcRoot;
 const log = parentLog.subLog('api', DebugConfig.api.enabled);
 const uninitializedList = []; // this must be created as a variable, so we can check later if it's still the original or a new empty list
 @Injectable()
@@ -90,9 +86,9 @@ export class PickerService {
     log.add('loadTemplates()');
     this.templates$.reset();
     const obs = this.http.get<Template[]>(`${Constants.apiRoot}GetSelectableTemplates`)
-      .pipe(share(), /* ensure it's only run once */ );
+      .pipe(share()); // ensure it's only run once
 
-    obs.subscribe(response => this.templates$.next(response /*.json()*/ || []));
+    obs.subscribe(response => this.templates$.next(response || []));
     return obs;
   }
 
@@ -103,12 +99,12 @@ export class PickerService {
     log.add(`loadContentTypes()`);
     this.contentTypes$.reset();
     const obs = this.http.get<any[]>(`${Constants.apiRoot}GetSelectableContentTypes`)
-      .pipe(share(), /* ensure it's only run once */ );
-    obs.pipe(map(response => (response || []).map(x => {
-        x.Label = (x.Metadata && x.Metadata.Label)
-          ? x.Metadata.Label
-          : x.Name;
-        return x;
+      .pipe(share()); // ensure it's only run once
+    obs.pipe(map(response => (response || []).map(ct => {
+        ct.Label = (ct.Metadata && ct.Metadata.Label)
+          ? ct.Metadata.Label
+          : ct.Name;
+        return ct;
       })))
       .subscribe(json => this.contentTypes$.next(json));
     return obs;
@@ -125,7 +121,7 @@ export class PickerService {
     const appsFilter = Config.apps();
 
     const obs = this.http.get<any[]>(`${Constants.apiRoot}GetSelectableApps?apps=${appsFilter}`)
-      .pipe(share(), /* ensure it's only run once */ );
+      .pipe(share()); // ensure it's only run once
 
     obs.subscribe(response => this.apps$.subject.next(response.map(a => new App(a))));
     return obs;

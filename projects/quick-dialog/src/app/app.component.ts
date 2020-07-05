@@ -7,6 +7,7 @@ import { log } from './core/log';
 import { DnnAppComponent, Context } from '@2sic.com/dnn-sxc-angular';
 import { SxcRoot } from '../../../sxc-typings';
 import { Config } from './config';
+import { SupportedLanguages } from './i18n';
 
 declare const window: any, $2sxc: SxcRoot;
 
@@ -24,12 +25,8 @@ export class AppComponent extends DnnAppComponent {
     el: ElementRef,
     context: Context
   ) {
-    super(el, context.preConfigure(
-      {
-        sxc: $2sxc(Config.moduleId(), Config.cbId())
-      }), false);
-    const langs = ['en', 'de', 'es', 'fr', 'it', 'nl', 'uk'];
-    translate.addLangs(langs);
+    super(el, context.preConfigure({ sxc: Config.getSxcInstance() }), false);
+    translate.addLangs(SupportedLanguages);
     translate.setDefaultLang(Config.langPri());
     translate.use(Config.lang());
     this.name = Config.dialog();

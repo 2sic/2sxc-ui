@@ -9,7 +9,7 @@ import { ContentType } from './content-type';
 export class TemplateFilterPipe implements PipeTransform {
 
 
-  transform(templates: Template[], args: TransformParams): Template[] {
+  transform(templates: Template[], args: {isContent: boolean, contentType: ContentType } ): Template[] {
 
     const typeId = args.contentType ? args.contentType.StaticName : undefined;
 
@@ -22,11 +22,4 @@ export class TemplateFilterPipe implements PipeTransform {
       .filter(t => !t.IsHidden)
       .filter(t => !args.isContent || t.ContentTypeStaticName === typeNameFilter);
   }
-}
-
-class TransformParams {
-  constructor(
-    public isContent: boolean,
-    public contentType: ContentType
-  ) { }
 }

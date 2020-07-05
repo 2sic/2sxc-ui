@@ -1,5 +1,6 @@
 import { BehaviorSubject, Observable } from 'rxjs';
 
+// Todo: probably not needed any more, since now Subjects are automatically observables
 export class BehaviorObservable<T> extends Observable<T> {
   private constructor() {
     super();

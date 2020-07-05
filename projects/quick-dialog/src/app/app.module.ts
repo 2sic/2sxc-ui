@@ -10,9 +10,10 @@ import { VersionDialogModule } from 'app/version-dialog/version-dialog.module';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { MaterialModule } from './material-module';
 import { log } from './core/log';
+import { pathToI18n } from './i18n';
 
 export function HttpLoaderFactory(http: HttpClient) {
-  const loader = new TranslateHttpLoader(http, '../i18n/sxc-admin-', '.js');
+  const loader = new TranslateHttpLoader(http, pathToI18n, '.js');
   log.add('created translate-loader', loader);
   return loader;
 }
