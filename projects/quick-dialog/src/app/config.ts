@@ -8,9 +8,6 @@ export class Config {
 
   static item = () => JSON.parse(req('items'))[0];
 
-  static lang = () => req('lang').split('-')[0];
-  static langPri = () => req('langpri').split('-')[0];
-
   static moduleId = () => Number(req('mid'));
   static cbId = () => Number(req('cbid'));
   static dialog = () => req('dialog');

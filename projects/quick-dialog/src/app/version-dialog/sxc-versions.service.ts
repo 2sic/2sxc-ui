@@ -2,12 +2,9 @@
 import {map} from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { ReplaySubject ,  Observable } from 'rxjs';
-import { Version } from 'app/version-dialog/version';
-import { SxcRoot } from '../../../../sxc-typings/index.d';
+import { ReplaySubject, Observable } from 'rxjs';
 import { Config } from '../config';
-
-declare const $2sxc: SxcRoot;
+import { VersionDto, Version } from '.';
 
 @Injectable()
 export class SxcVersionsService {
@@ -29,12 +26,12 @@ export class SxcVersionsService {
     this.loadVersions();
   }
 
-  restore(changeId: number): Observable<any> {
+  restore(changeId: number): Observable<void> {
     const appId = Config.appId();
     const item = Config.item();
     const url = `eav/entities/restore?appId=${appId}&changeId=${changeId}`;
 
-    return this.http.post<any>(url, item);
+    return this.http.post<void>(url, item);
   }
 
   private loadVersions(): void {
@@ -42,7 +39,7 @@ export class SxcVersionsService {
     const item = Config.item();
     const url = `eav/entities/history?appId=${appId}`;
 
-    this.http.post<any[]>(url, item).pipe(
+    this.http.post<VersionDto[]>(url, item).pipe(
       map(res => res
         .map((v, i, all) => Object.assign(v, {
           Data: (() => {

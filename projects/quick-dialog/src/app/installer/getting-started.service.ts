@@ -24,7 +24,7 @@ export class GettingStartedService {
   }
 
   public loadGettingStarted(isContentApp: boolean): void {
-    this.http.get<string>(`${Constants.apiRoot}RemoteInstallDialogUrl?dialog=gettingstarted&isContentApp=${isContentApp}`)
+    this.http.get<string>(`${Constants.apiRootTemplates}RemoteInstallDialogUrl?dialog=gettingstarted&isContentApp=${isContentApp}`)
       .subscribe(json => this.gettingStartedSubject.next(json));
   }
 

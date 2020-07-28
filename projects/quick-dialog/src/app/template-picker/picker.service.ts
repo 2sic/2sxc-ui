@@ -61,7 +61,7 @@ export class PickerService {
     log.add(`saveAppId(${appId}, ${reloadParts})`);
     // skip doing anything here, if we're in content-mode (which doesn't use/change apps)
     if (!this.loadApps) throw new Error(`can't save app, as we're not in app-mode`);
-    return this.http.get(`${Constants.apiRoot}SetAppId?appId=${appId}`).toPromise();
+    return this.http.get(`${Constants.apiRootTemplates}SetAppId?appId=${appId}`).toPromise();
   }
 
 
@@ -85,7 +85,7 @@ export class PickerService {
   public loadTemplates(): Observable<any> {
     log.add('loadTemplates()');
     this.templates$.reset();
-    const obs = this.http.get<Template[]>(`${Constants.apiRoot}GetSelectableTemplates`)
+    const obs = this.http.get<Template[]>(`${Constants.apiRootTemplates}GetSelectableTemplates`)
       .pipe(share()); // ensure it's only run once
 
     obs.subscribe(response => this.templates$.next(response || []));
@@ -98,7 +98,7 @@ export class PickerService {
   private loadContentTypes(): Observable<any> {
     log.add(`loadContentTypes()`);
     this.contentTypes$.reset();
-    const obs = this.http.get<any[]>(`${Constants.apiRoot}GetSelectableContentTypes`)
+    const obs = this.http.get<any[]>(`${Constants.apiRootTemplates}GetSelectableContentTypes`)
       .pipe(share()); // ensure it's only run once
     obs.pipe(map(response => (response || []).map(ct => {
         ct.Label = (ct.Metadata && ct.Metadata.Label)
@@ -120,7 +120,7 @@ export class PickerService {
 
     const appsFilter = Config.apps();
 
-    const obs = this.http.get<any[]>(`${Constants.apiRoot}GetSelectableApps?apps=${appsFilter}`)
+    const obs = this.http.get<any[]>(`${Constants.apiRootTemplates}GetSelectableApps?apps=${appsFilter}`)
       .pipe(share()); // ensure it's only run once
 
     obs.subscribe(response => this.apps$.subject.next(response.map(a => new App(a))));

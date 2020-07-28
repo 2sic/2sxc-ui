@@ -7,7 +7,10 @@ import { log } from './core/log';
 import { DnnAppComponent, Context } from '@2sic.com/dnn-sxc-angular';
 import { SxcRoot } from '../../../sxc-typings';
 import { Config } from './config';
-import { SupportedLanguages } from './i18n';
+import { SupportedLanguages, langCode2 } from './i18n';
+import { HttpClient } from '@angular/common/http';
+import { Constants } from 'app/core/constants';
+import { ContextDto } from './dto/index';
 
 declare const window: any, $2sxc: SxcRoot;
 
@@ -17,18 +20,29 @@ declare const window: any, $2sxc: SxcRoot;
   styleUrls: ['./app.component.css']
 })
 export class AppComponent extends DnnAppComponent {
-  name: string;
+  // name is used in template
+  public name: string;
 
   constructor(
     public translate: TranslateService,
     private dialog: MatDialog,
     el: ElementRef,
-    context: Context
+    context: Context,
+    http: HttpClient
   ) {
     super(el, context.preConfigure({ sxc: Config.getSxcInstance() }), false);
     translate.addLangs(SupportedLanguages);
-    translate.setDefaultLang(Config.langPri());
-    translate.use(Config.lang());
+
+    http.get<{ Context: ContextDto }>(`${Constants.apiDialogCtx}?appId=${Config.appId()}`)
+      .subscribe(ctxDto => {
+        const lang = ctxDto.Context.Language;
+        translate.setDefaultLang(langCode2(lang.Primary));
+        translate.use(langCode2(lang.Current));
+        this.showDialog();
+      });
+  }
+
+  private showDialog() {
     this.name = Config.dialog();
     log.add(`loading '${this.name}'`);
     const frame = <IDialogFrameElement>window.frameElement;
