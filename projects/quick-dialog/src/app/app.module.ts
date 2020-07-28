@@ -10,10 +10,10 @@ import { VersionDialogModule } from 'app/history/version-dialog.module';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { MaterialModule } from './material-module';
 import { log } from './core/log';
-import { pathToI18n } from './i18n';
+import { pathToI18n, i18nExtension } from './i18n';
 
 export function HttpLoaderFactory(http: HttpClient) {
-  const loader = new TranslateHttpLoader(http, pathToI18n, '.js');
+  const loader = new TranslateHttpLoader(http, pathToI18n, i18nExtension);
   log.add('created translate-loader', loader);
   return loader;
 }
