@@ -1,12 +1,12 @@
 import { VersionDto } from './version-dto';
 
-export interface Version extends VersionDto {
-    // ChangeSetId: number;
+export interface Version {
+    ChangeSetId: number;
     Data: VersionData[];
-    // HistoryId: number;
-    // TimeStamp: string;
-    // User: string;
-    // VersionNumber: number;
+    HistoryId: number;
+    TimeStamp: string;
+    User: string;
+    VersionNumber: number;
 }
 
 export interface VersionData {

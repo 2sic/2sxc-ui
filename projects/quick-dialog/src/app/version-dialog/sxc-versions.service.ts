@@ -41,41 +41,32 @@ export class SxcVersionsService {
     const item = Config.item();
     const url = `eav/entities/history?appId=${appId}`;
 
-    this.http.post<VersionDto[]>(url, item).pipe(
-      map(res => res
-        .map((v, _, all) => Object.assign(v, {
-          Data: ((): VersionData[] => {
-            const attr = (JSON.parse(v.Json) as EntityJsonDto).Entity.Attributes;
-
-            const prevVersion = all.find(v2 => v2.VersionNumber === v.VersionNumber - 1);
-            const prevVerAttrs = prevVersion && (JSON.parse(prevVersion.Json) as EntityJsonDto).Entity.Attributes;
-
-            return Object.entries(attr)
-              .reduce((t, c) => Array.prototype.concat(t,
-                Object.entries(c[1])
-                  .map(([key, value]) => ({
-                    key,
-                    value: Object.entries(value),
-                    type: c[0],
-                    hasChanged: prevVerAttrs && JSON.stringify(prevVerAttrs[c[0]][key]) !== JSON.stringify(value),
-                  } as VersionData))
-                ), []);
-          })(),
-          TimeStamp: formatTimestamp(v.TimeStamp),
-        }) as Version)))
+    this.http.post<VersionDto[]>(url, item)
+      .pipe(
+        map(all =>
+          all.map((ver) => ({
+            ChangeSetId: ver.ChangeSetId,
+            HistoryId: ver.HistoryId,
+            Data: convertVersionJsonToData(ver, findPrevious(all, ver)),
+            TimeStamp: formatTimestamp(ver.TimeStamp),
+            User: ver.User,
+            VersionNumber: ver.VersionNumber,
+          } as Version)
+        ))
+      )
       .subscribe(
         v => this.versionsSubject.next(v),
-        () => { this.errorSubject.next('Could not load versions.');
-      });
+        () => { this.errorSubject.next('Could not load versions.'); }
+      );
   }
 }
 
-function convertVersionJsonToData(v: VersionDto, all: VersionDto[]): VersionData[] {
-  const attr = (JSON.parse(v.Json) as EntityJsonDto).Entity.Attributes;
 
-  const prevAttrs = findPrevious(all, v);
+/** Take the multi-level Attributes and flatten for use in the UI */
+function convertVersionJsonToData(v: VersionDto, prevAttrs: any[]): VersionData[] {
+  const attrs = (JSON.parse(v.Json) as EntityJsonDto).Entity.Attributes;
 
-  return Object.entries(attr)
+  return Object.entries(attrs)
     .reduce((t, c) => Array.prototype.concat(t,
       Object.entries(c[1])
         .map(([key, value]) => ({
