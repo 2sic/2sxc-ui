@@ -4,9 +4,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ReplaySubject, Observable } from 'rxjs';
 import { Config } from '../config';
-import { VersionDto, Version } from '.';
-import { VersionData } from './version';
-import { EntityJsonDto } from './version-dto';
+import { VersionDto, Version, historyApiRoot, VersionData, EntityJsonDto } from '.';
 
 @Injectable()
 export class SxcVersionsService {
@@ -31,7 +29,7 @@ export class SxcVersionsService {
   restore(changeId: number): Observable<void> {
     const appId = Config.appId();
     const item = Config.item();
-    const url = `eav/entities/restore?appId=${appId}&changeId=${changeId}`;
+    const url = `${historyApiRoot}/restore?appId=${appId}&changeId=${changeId}`;
 
     return this.http.post<void>(url, item);
   }
@@ -39,7 +37,7 @@ export class SxcVersionsService {
   private loadVersions(): void {
     const appId = Config.appId();
     const item = Config.item();
-    const url = `eav/entities/history?appId=${appId}`;
+    const url = `${historyApiRoot}/history?appId=${appId}`;
 
     this.http.post<VersionDto[]>(url, item)
       .pipe(
