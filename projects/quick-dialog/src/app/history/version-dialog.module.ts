@@ -1,8 +1,8 @@
 import {TranslateModule} from '@ngx-translate/core';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SxcVersionsService } from 'app/version-dialog/sxc-versions.service';
-import { DialogComponent } from 'app/version-dialog/dialog.component';
+import { SxcVersionsService } from './sxc-versions.service';
+import { HistoryComponent } from './history.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MaterialModule } from 'app/material-module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -10,7 +10,7 @@ import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   exports: [
-    DialogComponent
+    HistoryComponent
   ],
   imports: [
     CommonModule,
@@ -24,10 +24,10 @@ import { HttpClientModule } from '@angular/common/http';
     SxcVersionsService,
   ],
   declarations: [
-    DialogComponent,
+    HistoryComponent,
   ],
   entryComponents: [
-    DialogComponent,
+    HistoryComponent,
   ],
 })
 export class VersionDialogModule { }

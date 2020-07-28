@@ -1,4 +1,3 @@
-import { VersionDto } from './version-dto';
 
 export interface Version {
     ChangeSetId: number;

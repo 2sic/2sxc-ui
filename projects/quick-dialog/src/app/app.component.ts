@@ -1,6 +1,6 @@
 import { TranslateService } from '@ngx-translate/core';
 import { Component, ElementRef } from '@angular/core';
-import { DialogComponent } from 'app/version-dialog/dialog.component';
+import { HistoryComponent } from 'app/history/history.component';
 import { MatDialog } from '@angular/material/dialog';
 import { IDialogFrameElement } from './interfaces-shared/idialog-frame-element';
 import { log } from './core/log';
@@ -47,7 +47,7 @@ export class AppComponent extends DnnAppComponent {
     log.add(`loading '${this.name}'`);
     const frame = <IDialogFrameElement>window.frameElement;
     if (this.name === 'item-history') {
-      this.dialog.open(DialogComponent).afterClosed()
+      this.dialog.open(HistoryComponent).afterClosed()
         .subscribe(() => frame.bridge.hide());
     }
   }

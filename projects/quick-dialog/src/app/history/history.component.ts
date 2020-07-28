@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
-import { SxcVersionsService } from 'app/version-dialog/sxc-versions.service';
-import { Version } from 'app/version-dialog/version';
+import { SxcVersionsService } from './sxc-versions.service';
+import { Version } from './version';
 
 @Component({
-  selector: 'app-dialog',
-  templateUrl: './dialog.component.html',
-  styleUrls: ['./dialog.component.scss'],
+  selector: 'app-history',
+  templateUrl: './history.component.html',
+  styleUrls: ['./history.component.scss'],
 })
-export class DialogComponent {
+export class HistoryComponent {
   // versions: Version[] = [];
   // versionParam: any;
 
