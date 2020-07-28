@@ -7,7 +7,7 @@ import { log } from './core/log';
 import { DnnAppComponent, Context } from '@2sic.com/dnn-sxc-angular';
 import { SxcRoot } from '../../../sxc-typings';
 import { Config } from './config';
-import { SupportedLanguages, langCode2 } from './i18n';
+import { SupportedLanguages, langCode2, PrimaryUiLanguage } from './i18n';
 import { HttpClient } from '@angular/common/http';
 import { Constants } from 'app/core/constants';
 import { ContextDto } from './dto/index';
@@ -36,7 +36,7 @@ export class AppComponent extends DnnAppComponent {
     http.get<{ Context: ContextDto }>(`${Constants.apiDialogCtx}?appId=${Config.appId()}`)
       .subscribe(ctxDto => {
         const lang = ctxDto.Context.Language;
-        translate.setDefaultLang(langCode2(lang.Primary));
+        translate.setDefaultLang(PrimaryUiLanguage);
         translate.use(langCode2(lang.Current));
         this.showDialog();
       });
