@@ -26,8 +26,8 @@ import { HttpClientModule } from '@angular/common/http';
   declarations: [
     HistoryComponent,
   ],
-  entryComponents: [
-    HistoryComponent,
-  ],
+  // entryComponents: [
+  //   HistoryComponent,
+  // ],
 })
 export class VersionDialogModule { }
