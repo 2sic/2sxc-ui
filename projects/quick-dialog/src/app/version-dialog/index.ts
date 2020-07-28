@@ -1,3 +1,3 @@
 
 export * from './version-dto';
-export * from './history';
+export * from './version';

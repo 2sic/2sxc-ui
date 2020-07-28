@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { SxcVersionsService } from 'app/version-dialog/sxc-versions.service';
-import { Version } from 'app/version-dialog/history';
-
+import { Version } from 'app/version-dialog/version';
 
 @Component({
   selector: 'app-dialog',
@@ -9,8 +8,8 @@ import { Version } from 'app/version-dialog/history';
   styleUrls: ['./dialog.component.scss'],
 })
 export class DialogComponent {
-  versions: Version[] = [];
-  versionParam: any;
+  // versions: Version[] = [];
+  // versionParam: any;
 
   constructor(
     public sxcVersion: SxcVersionsService
@@ -20,7 +19,7 @@ export class DialogComponent {
     this.sxcVersion.restore(version.ChangeSetId)
       .subscribe(_ => window.parent.location.reload());
   }
-
+}
   // 2020-07-28 2dm turned off, not used anywhere ATM
   // Might be activated some time, but not now
   // restoreDraft(version) {
@@ -29,8 +28,8 @@ export class DialogComponent {
   //   }).afterClosed()
   //     .subscribe(res => res ? alert('restoring draft') : undefined);
   // }
-}
-
+// }
+//
 // @Component({
 //   selector: 'confirm-restore-dialog',
 //   template: `

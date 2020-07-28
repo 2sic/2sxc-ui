@@ -7,3 +7,9 @@ export interface VersionDto {
   User: string;
   VersionNumber: number;
 }
+
+export interface EntityJsonDto {
+  Entity: {
+    Attributes: any[]
+  };
+}

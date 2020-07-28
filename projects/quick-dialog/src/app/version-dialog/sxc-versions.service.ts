@@ -1,10 +1,12 @@
 
-import {map} from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ReplaySubject, Observable } from 'rxjs';
 import { Config } from '../config';
 import { VersionDto, Version } from '.';
+import { VersionData } from './version';
+import { EntityJsonDto } from './version-dto';
 
 @Injectable()
 export class SxcVersionsService {
@@ -41,38 +43,63 @@ export class SxcVersionsService {
 
     this.http.post<VersionDto[]>(url, item).pipe(
       map(res => res
-        .map((v, i, all) => Object.assign(v, {
-          Data: (() => {
-            let lastVersion = all.find(v2 => v2.VersionNumber === v.VersionNumber - 1);
-            const attr = JSON.parse(v.Json).Entity.Attributes;
+        .map((v, _, all) => Object.assign(v, {
+          Data: ((): VersionData[] => {
+            const attr = (JSON.parse(v.Json) as EntityJsonDto).Entity.Attributes;
 
-            if (lastVersion) {
-              lastVersion = JSON.parse(lastVersion.Json).Entity.Attributes;
-            }
+            const prevVersion = all.find(v2 => v2.VersionNumber === v.VersionNumber - 1);
+            const prevVerAttrs = prevVersion && (JSON.parse(prevVersion.Json) as EntityJsonDto).Entity.Attributes;
 
             return Object.entries(attr)
-              .reduce((t, c) => Array.prototype.concat(t, Object.entries(c[1])
-                .map(([key, value]) => ({
-                  key,
-                  value: Object.entries(value),
-                  type: c[0],
-                  hasChanged: lastVersion
-                    ? JSON.stringify(lastVersion[c[0]][key]) !== JSON.stringify(value)
-                    : false
-                }))), []);
+              .reduce((t, c) => Array.prototype.concat(t,
+                Object.entries(c[1])
+                  .map(([key, value]) => ({
+                    key,
+                    value: Object.entries(value),
+                    type: c[0],
+                    hasChanged: prevVerAttrs && JSON.stringify(prevVerAttrs[c[0]][key]) !== JSON.stringify(value),
+                  } as VersionData))
+                ), []);
           })(),
-          TimeStamp: (timestamp => {
-            const date = new Date(timestamp);
-            const y = date.getFullYear();
-            const m = date.getUTCMonth() + 1;
-            const d = date.getDate();
-            const h = date.getHours();
-            const min = date.getMinutes();
-            return `${y}-${m < 10 ? '0' : ''}${m}-${d < 10 ? '0' : ''}${d} ${h < 10 ? '0' : ''}${h}:${min < 10 ? '0' : ''}${min}`;
-          })(v.TimeStamp),
-        }))))
-      .subscribe(v => this.versionsSubject.next(v), () => {
-          this.errorSubject.next('Could not load versions for this item. Please make sure to assign an initial content.');
-        });
+          TimeStamp: formatTimestamp(v.TimeStamp),
+        }) as Version)))
+      .subscribe(
+        v => this.versionsSubject.next(v),
+        () => { this.errorSubject.next('Could not load versions.');
+      });
   }
+}
+
+function convertVersionJsonToData(v: VersionDto, all: VersionDto[]): VersionData[] {
+  const attr = (JSON.parse(v.Json) as EntityJsonDto).Entity.Attributes;
+
+  const prevAttrs = findPrevious(all, v);
+
+  return Object.entries(attr)
+    .reduce((t, c) => Array.prototype.concat(t,
+      Object.entries(c[1])
+        .map(([key, value]) => ({
+          key,
+          value: Object.entries(value),
+          type: c[0],
+          hasChanged: prevAttrs && JSON.stringify(prevAttrs[c[0]][key]) !== JSON.stringify(value),
+        } as VersionData))
+      ), []);
+}
+
+
+function findPrevious(all: VersionDto[], v: VersionDto) {
+  const prevVersion = all.find(v2 => v2.VersionNumber === v.VersionNumber - 1);
+  const prevVerAttrs = prevVersion && (JSON.parse(prevVersion.Json) as EntityJsonDto).Entity.Attributes;
+  return prevVerAttrs;
+}
+
+function formatTimestamp(timestamp: string) {
+  const date = new Date(timestamp);
+  const y = date.getFullYear();
+  const m = date.getUTCMonth() + 1;
+  const d = date.getDate();
+  const h = date.getHours();
+  const min = date.getMinutes();
+  return `${y}-${m < 10 ? '0' : ''}${m}-${d < 10 ? '0' : ''}${d} ${h < 10 ? '0' : ''}${h}:${min < 10 ? '0' : ''}${min}`;
 }
