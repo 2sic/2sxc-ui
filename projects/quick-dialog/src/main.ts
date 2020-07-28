@@ -1,8 +1,7 @@
 
-import {startWith} from 'rxjs/operators';
+import { startWith } from 'rxjs/operators';
 import { enableProdMode } from '@angular/core';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-
 import { AppModule } from './app/app.module';
 import { environment } from './environments/environment';
 import { BootController } from './app/core/boot-control';
@@ -33,7 +32,7 @@ function init() {
   platformBrowserDynamic().bootstrapModule(AppModule)
     .then(() => window.appBootstrap && window.appBootstrap())
     .catch(err => console.error('NG Bootstrap Error =>', err));
-};
+}
 
 
 // provide hook for outside reboot calls

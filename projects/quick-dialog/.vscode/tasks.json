@@ -5,12 +5,13 @@
     "tasks": [
       {
         "type": "npm",
-        "script": "watch:release",
+        "script": "release",
+        "group": "build",
         "problemMatcher": []
       },
       {
         "type": "npm",
-        "script": "watch:dev",
+        "script": "dev",
         "group": "build",
         "problemMatcher": []
       }

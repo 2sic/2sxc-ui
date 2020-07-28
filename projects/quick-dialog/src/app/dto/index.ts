@@ -1,3 +1,9 @@
+/*
+  Note: these DTO objects have two issues we must solve some time
+  1. They are also used in the main eav-admin dialog, so the type should be shared
+  1. It's still missing some objects not needed in the quick-dialog
+*/
+
 import { Dictionary } from '../../../../sxc-typings';
 
 // missing ATM

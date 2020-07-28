@@ -6,10 +6,10 @@ This is a UI component of 2sxc - a dialog which slides in from the bottom of the
 1. Start the installer to auto-install packages
 1. View / restore the history of items
 
-## Building
+## Build
 
-The package is standalone, but when built will copy the result to a very specific path in c:\
+The package is standalone, but when built will copy the result to a very specific path in `c:\`. The build scripts always use watchers.
 
-For development (unminified) use: `npm run watch:web`
+For development (unminified) use: `npm run dev`
 
-For production (minified with external source files) use: `npm run watch:prod:web`
+For production (minified with external source files) use: `npm run release`
