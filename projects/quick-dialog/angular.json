@@ -40,7 +40,6 @@
               "aot": true,
               "extractLicenses": true,
               "vendorChunk": true,
-              "vendorSourceMap": true,
               "buildOptimizer": true,
               "fileReplacements": [
                 {
