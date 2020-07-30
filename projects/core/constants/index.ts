@@ -1,9 +1,12 @@
-
-declare const ROOTVERSION: string; // set by the definePlugin with string-replace
+/** 
+ * Special version which is filled in during compile by the definePlugin
+ * The real version comes from the main package.json file in this repo
+ * The sub-projects also use this version
+ */
+declare const ROOTVERSION: string;
 
 export const ToSxcName = "2sxc";
 
-// export const SxcVersion = "11.03.00";
 export const SxcVersion = ROOTVERSION;
 
 export const SxcPath = 'desktopmodules/tosic_sexycontent/';
