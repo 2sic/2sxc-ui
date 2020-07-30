@@ -1,4 +1,5 @@
 ﻿import { IDialogFrameElement } from '.';
+import { CmdItemHistory } from '../commands';
 import { C } from '../constants';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { HasLog, Insights } from '../logging';
@@ -38,14 +39,14 @@ class QuickDialogManagerSingleton extends HasLog {
      * toggle visibility
      * @param {boolean} [show] true/false optional
      */
-    setVisible(show: boolean): void {
+    setVisible(show: boolean, dialogName?: string): void {
         const cl = this.log.call('setVisible');
         const cont = this.container.getOrCreate();
-        // if (show === undefined)
-        //  show = !cont.hasClass(diagShowClass);
-        // show/hide visually
         cont.toggleClass(diagShowClass, show);
-        this.rememberDialogState(this.container.getIFrame(cont), show);
+        // remember the state if it's a normal dialog, but not on history
+        // this ensures the dialog pops up again after a page reload
+        const rememberShowState = (dialogName === CmdItemHistory) ? false : show ;
+        this.rememberDialogState(this.container.getIFrame(cont), rememberShowState);
         current = show ? this.container.getIFrame() : null;
         cl.done();
     }
@@ -89,7 +90,7 @@ class QuickDialogManagerSingleton extends HasLog {
             (iFrame.contentWindow as IFrameWindow).reboot();
 
         // make sure it's visible'
-        this.setVisible(true);
+        this.setVisible(true, dialogName);
         return cl.return(this.promiseRestart(), 'restart');
     }
 

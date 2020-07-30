@@ -1,8 +1,6 @@
 
 import {merge, combineLatest,  timer } from 'rxjs';
-
 import {filter, startWith, skipUntil} from 'rxjs/operators';
-//#region imports
 import { Component, ChangeDetectorRef, OnInit } from '@angular/core';
 import { IDialogFrameElement } from 'app/interfaces-shared/idialog-frame-element';
 import { Observable } from 'rxjs';
@@ -17,8 +15,6 @@ import { PickerService } from './picker.service';
 import { CurrentDataService } from './current-data.service';
 import { DebugConfig } from 'app/debug-config';
 import { BehaviorObservable } from 'app/core/behavior-observable';
-
-//#endregion
 
 const log = parentLog.subLog('picker', DebugConfig.picker.enabled);
 
@@ -66,7 +62,7 @@ export class TemplatePickerComponent implements OnInit {
   /** Ajax-support changes how saving/changing is handled */
   private supportsAjax: boolean;
 
-  private preventAppSwich = false;
+  preventAppSwich = false;
 
   public showDebug = DebugConfig.picker.showDebugPanel;
   // #endregion
@@ -142,8 +138,8 @@ export class TemplatePickerComponent implements OnInit {
       this.api.contentTypes$,
       this.api.apps$,
       this.api.ready$.pipe(filter(r => !!r)),
-      (templates, c, apps) => {
-        log.add('apps/templates loaded, will check if we should show installer')
+      (templates, _, apps) => {
+        log.add('apps/templates loaded, will check if we should show installer');
       this.showInstaller = this.isContent
         ? templates.length === 0
         : apps.filter(a => a.AppId !== cAppActionImport).length === 0;
@@ -160,7 +156,7 @@ export class TemplatePickerComponent implements OnInit {
     // but don't do this when initializing, that's why we listen to initDone$
     this.state.template$.pipe(
       filter(t => !!t),
-      skipUntil(initTrue$),)
+      skipUntil(initTrue$))
       .subscribe(t => this.previewTemplate(t));
   }
 
@@ -172,7 +168,6 @@ export class TemplatePickerComponent implements OnInit {
     this.state.types$.subscribe(t => this.types = t);
     this.state.type$.subscribe(t => this.contentType = t);
 
-    // this.state.types$.subscribe(t => log.add('type update: ', t));
     this.ready$.subscribe(r => this.ready = r);
     merge(
       this.ready$,
@@ -194,10 +189,6 @@ export class TemplatePickerComponent implements OnInit {
     this.preventAppSwich = config.hasContent;
     this.showCancel = config.templateId != null;
   }
-
-  // private updateConfigAfterAppChange(config: IQuickDialogConfig): void {
-  //   this.showCancel = config.templateId != null;
-  // }
 
   //#region basic UI action binding
   cancel(): void { this.bridge.cancel(); }

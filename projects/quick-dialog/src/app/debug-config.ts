@@ -21,7 +21,7 @@ export const DebugConfig = {
   },
 
   /** template picker */
-  picker: { 
+  picker: {
     enabled: false,
     streams: false,
     showDebugPanel: false

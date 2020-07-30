@@ -1,18 +1,19 @@
-import {TranslateHttpLoader} from '@ngx-translate/http-loader';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { DnnInterceptor /*, ContentManagerModule */ } from '@2sic.com/dnn-sxc-angular';
+import { DnnInterceptor } from '@2sic.com/dnn-sxc-angular';
 import { AppComponent } from './app.component';
 import { TemplatePickerModule } from 'app/template-picker/template-picker.module';
-import { VersionDialogModule } from 'app/version-dialog/version-dialog.module';
+import { VersionDialogModule } from 'app/history/version-dialog.module';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { MaterialModule } from './xtempUpgrading/material-module';
+import { MaterialModule } from './material-module';
 import { log } from './core/log';
+import { pathToI18n, i18nExtension } from './i18n';
 
 export function HttpLoaderFactory(http: HttpClient) {
-  const loader = new TranslateHttpLoader(http, '../i18n/sxc-admin-', '.js');
+  const loader = new TranslateHttpLoader(http, pathToI18n, i18nExtension);
   log.add('created translate-loader', loader);
   return loader;
 }

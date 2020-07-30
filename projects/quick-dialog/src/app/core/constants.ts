@@ -1,4 +1,5 @@
 export const Constants = {
   logName: 'quick-edit',
-  apiRoot: 'view/Module/'
+  apiRootTemplates: 'view/Module/',
+  apiDialogCtx: 'app-sys/system/dialogsettings'
 };

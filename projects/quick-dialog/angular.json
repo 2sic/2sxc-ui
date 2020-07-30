@@ -12,7 +12,8 @@
           "builder": "@angular-builders/custom-webpack:browser",
           "options": {
             "customWebpackConfig": {
-              "path": "./webpack.extra.js"
+              "path": "./webpack.extra.js",
+              "replaceDuplicatePlugins": false
             },
             "outputPath": "dist/ng",
             "index": "src/ui.html",
@@ -20,8 +21,8 @@
             "tsConfig": "src/tsconfig.app.json",
             "polyfills": "src/polyfills.ts",
             "assets": [
-              "src/assets",
-              "src/favicon.ico"
+              "src/favicon.ico",
+              "src/i18n"
             ],
             "styles": [
               "src/styles.css",
@@ -32,14 +33,13 @@
           "configurations": {
             "production": {
               "optimization": true,
-              "outputHashing": "none",
+              "outputHashing": "all",
               "sourceMap": true,
               "extractCss": true,
               "namedChunks": false,
               "aot": true,
               "extractLicenses": true,
               "vendorChunk": true,
-              "vendorSourceMap": true,
               "buildOptimizer": true,
               "fileReplacements": [
                 {

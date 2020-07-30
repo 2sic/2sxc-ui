@@ -79,7 +79,7 @@ export class CurrentDataService {
     // the current template is either the last selected, or auto-selected when conditions change
     const initialTemplate$ = combineLatest(
       this.initialTemplateId$,
-      this.api.templates$, //.pipe(first()),
+      this.api.templates$,
       (id, templates) => templates.find(t => t.TemplateId === id)).pipe(
         filter(t => t != null), // only allow new values which are not null, to guarantee later template$ updates don't affect this
         startWith(null),

@@ -1,0 +1,25 @@
+{
+  "name": "2sic-2sxc-code-editor-snippets",
+  "version": "11.03.00",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "no scripts": "use gulp commands instead"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/2sic/2sxc-ui"
+  },
+  "author": "2sic Internet Solutions",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/2sic/2sxc-ui/issues"
+  },
+  "homepage": "https://github.com/2sic/2sxc-ui",
+  "devDependencies": {
+    "gulp": "^4.0.2",
+    "gulp-js-xlsx": "0.1.0",
+    "gulp-rename": "1.2.2"
+  },
+  "dependencies": {}
+}

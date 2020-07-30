@@ -1,4 +1,3 @@
-// #region imports
 import { combineLatest } from 'rxjs';
 import { map, startWith, share } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
@@ -11,9 +10,8 @@ import { log as parentLog } from 'app/core/log';
 import { Constants } from 'app/core/constants';
 import { DebugConfig } from 'app/debug-config';
 import { BehaviorObservable } from 'app/core/behavior-observable';
-// #endregion
+import { Config } from '../config';
 
-declare const $2sxc;
 const log = parentLog.subLog('api', DebugConfig.api.enabled);
 const uninitializedList = []; // this must be created as a variable, so we can check later if it's still the original or a new empty list
 @Injectable()
@@ -62,8 +60,8 @@ export class PickerService {
   public saveAppId(appId: string, reloadParts: boolean): Promise<any> {
     log.add(`saveAppId(${appId}, ${reloadParts})`);
     // skip doing anything here, if we're in content-mode (which doesn't use/change apps)
-    if (!this.loadApps) throw "can't save app, as we're not in app-mode";
-    return this.http.get(`${Constants.apiRoot}SetAppId?appId=${appId}`).toPromise();
+    if (!this.loadApps) throw new Error(`can't save app, as we're not in app-mode`);
+    return this.http.get(`${Constants.apiRootTemplates}SetAppId?appId=${appId}`).toPromise();
   }
 
 
@@ -87,10 +85,10 @@ export class PickerService {
   public loadTemplates(): Observable<any> {
     log.add('loadTemplates()');
     this.templates$.reset();
-    const obs = this.http.get<Template[]>(`${Constants.apiRoot}GetSelectableTemplates`)
-      .pipe(share(), /* ensure it's only run once */ );
+    const obs = this.http.get<Template[]>(`${Constants.apiRootTemplates}GetSelectableTemplates`)
+      .pipe(share()); // ensure it's only run once
 
-    obs.subscribe(response => this.templates$.next(response/*.json()*/ || []));
+    obs.subscribe(response => this.templates$.next(response || []));
     return obs;
   }
 
@@ -100,13 +98,13 @@ export class PickerService {
   private loadContentTypes(): Observable<any> {
     log.add(`loadContentTypes()`);
     this.contentTypes$.reset();
-    const obs = this.http.get<any[]>(`${Constants.apiRoot}GetSelectableContentTypes`)
-      .pipe(share(), /* ensure it's only run once */ );
-    obs.pipe(map(response => (response/*.json*/ || []).map(x => {
-        x.Label = (x.Metadata && x.Metadata.Label)
-          ? x.Metadata.Label
-          : x.Name;
-        return x;
+    const obs = this.http.get<any[]>(`${Constants.apiRootTemplates}GetSelectableContentTypes`)
+      .pipe(share()); // ensure it's only run once
+    obs.pipe(map(response => (response || []).map(ct => {
+        ct.Label = (ct.Metadata && ct.Metadata.Label)
+          ? ct.Metadata.Label
+          : ct.Name;
+        return ct;
       })))
       .subscribe(json => this.contentTypes$.next(json));
     return obs;
@@ -120,23 +118,14 @@ export class PickerService {
     log.add(`loadApps() - skip:${alreadyLoaded}`);
     if (alreadyLoaded) return;
 
-    const appsFilter = $2sxc.urlParams.get('apps');
+    const appsFilter = Config.apps();
 
-    const obs = this.http.get<any[]>(`${Constants.apiRoot}GetSelectableApps?apps=${appsFilter}`)
-      .pipe(share(), /* ensure it's only run once */ );
+    const obs = this.http.get<any[]>(`${Constants.apiRootTemplates}GetSelectableApps?apps=${appsFilter}`)
+      .pipe(share()); // ensure it's only run once
 
     obs.subscribe(response => this.apps$.subject.next(response.map(a => new App(a))));
     return obs;
   }
-
-  // private pascalCaseToLower(obj): any {
-  //   return Object.keys(obj)
-  //     .reduce((t, v) => {
-  //       t[v.split('').reduce((prev, current, i) => prev + (i === 0 ? current.toLowerCase() : current), '')] = obj[v];
-  //       return t;
-  //     }, {});
-  // }
-
 
   private enableLogging() {
     const streamLog = parentLog.subLog('api-streams', DebugConfig.api.streams);
