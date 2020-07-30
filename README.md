@@ -24,15 +24,8 @@ Each project has different ways of building / deploying, mostly because they hav
 1. `projects/sxc-typings` Source for the NPM package [@2sic/sxc-typings](https://www.npmjs.com/package/@2sic.com/2sxc-typings)
 
 
-## Projects going Obsolete
-
-The following packages will become obsolete as of 2sxc 11.04 or 11.05
-
-1. `projects/sxc-ui-AngularJS` contains the 2sxc-ui parts of 2sxc extending the eav-ui
-
-
 ## Obsolete Projects
 
 1. `AngularJS` - previous versions of 2sxc included a library to make it easier to create AngularJS projects - now deprecated
 1. `published` - contains the built releases of the angular libraries - in case someone needs it for old apps
-
+1. `sxc-ui-AngularJS` contains the 2sxc-ui parts of 2sxc extending the eav-ui - removed as of 11.05
