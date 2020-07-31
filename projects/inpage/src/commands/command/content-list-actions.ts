@@ -2,6 +2,13 @@
 import { ContextComplete } from '../../context/bundles/context-bundle-button';
 import { ContentListActionParams } from './content-list-action-params';
 
+//#region WebApi Endpoints used: 2sxc
+const webApiAdd = 'view/module/additem';
+const webApiRemoveFromList = 'view/module/removefromlist';
+const webApiReorder = 'view/module/changeorder';
+const webApiPublish = 'view/module/publish';
+//#endregion
+
 /**
  * These actions make changes to a content-block - like adding, removing or publishing items in the block
  * @class ActionsCatalog
@@ -13,7 +20,7 @@ class ContentListActions {
      * @param {number} index
      */
     addItem<T>(context: ContextComplete, index: number) {
-        return getAndReload<T>(context, 'view/module/additem', { index });
+        return getAndReload<T>(context, webApiAdd , { index });
     }
 
     /**
@@ -23,7 +30,7 @@ class ContentListActions {
      */
     removeFromList(context: ContextComplete) {
         const params = context.button.command.params;
-        return getAndReload<void>(context, 'view/module/removefromlist', {
+        return getAndReload<void>(context, webApiRemoveFromList, {
             index: params.sortOrder,
             parent: params.parent,
             fields: params.fields,
@@ -38,7 +45,7 @@ class ContentListActions {
      */
     changeOrder(context: ContextComplete, index: number, toIndex: number) {
         const params = context.button.command.params;
-        return getAndReload<void>(context, 'view/module/changeorder', {
+        return getAndReload<void>(context, webApiReorder, {
             parent: params.parent,
             fields: params.fields,
             index,
@@ -53,7 +60,7 @@ class ContentListActions {
      * @param {number} index
      */
     publish(context: ContextComplete, part: string, index: number) {
-        return getAndReload<void>(context, 'view/module/publish', {
+        return getAndReload<void>(context, webApiPublish, {
             part,
             index,
         });
@@ -65,7 +72,7 @@ class ContentListActions {
      * @param {number} entityId
      */
     publishId(context: ContextComplete, entityId: number) {
-        return getAndReload<void>(context, 'view/module/publish', { id: entityId });
+        return getAndReload<void>(context, webApiPublish, { id: entityId });
     }
 }
 
