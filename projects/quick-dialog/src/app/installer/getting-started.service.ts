@@ -6,7 +6,6 @@ import { Subject, Observable } from 'rxjs';
 import { log } from 'app/core/log';
 import { Constants } from 'app/core/constants';
 
-
 @Injectable()
 export class GettingStartedService {
   gettingStarted$: Observable<string>;
@@ -24,7 +23,7 @@ export class GettingStartedService {
   }
 
   public loadGettingStarted(isContentApp: boolean): void {
-    this.http.get<string>(`${Constants.apiRootTemplates}RemoteInstallDialogUrl?dialog=gettingstarted&isContentApp=${isContentApp}`)
+    this.http.get<string>(`${Constants.webApiRemoteInstaller}?dialog=gettingstarted&isContentApp=${isContentApp}`)
       .subscribe(json => this.gettingStartedSubject.next(json));
   }
 

@@ -33,7 +33,7 @@ export class AppComponent extends DnnAppComponent {
     super(el, context.preConfigure({ sxc: Config.getSxcInstance() }), false);
     translate.addLangs(SupportedLanguages);
 
-    http.get<{ Context: ContextDto }>(`${Constants.apiDialogCtx}?appId=${Config.appId()}`)
+    http.get<{ Context: ContextDto }>(`${Constants.webApiDialogContext}?appId=${Config.appId()}`)
       .subscribe(ctxDto => {
         const lang = ctxDto.Context.Language;
         translate.setDefaultLang(PrimaryUiLanguage);
