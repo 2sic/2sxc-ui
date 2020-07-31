@@ -28,4 +28,4 @@ Each project has different ways of building / deploying, mostly because they hav
 
 1. `AngularJS` - previous versions of 2sxc included a library to make it easier to create AngularJS projects - now deprecated
 1. `published` - contains the built releases of the angular libraries - in case someone needs it for old apps
-1. `sxc-ui-AngularJS` contains the 2sxc-ui parts of 2sxc extending the eav-ui - removed as of 11.05
+1. `sxc-ui-v5-v10` contains the 2sxc-ui parts of 2sxc extending the eav-ui - removed as of 2sxc 11.05
