@@ -7,7 +7,8 @@ export class ContextOfContentBlock {
     // ContentBlock
     id: number; // the CB ID
     isEntity: boolean;
-    showTemplatePicker: boolean;
+    // 2020-08-14 #2146 2dm believe unused
+    // showTemplatePicker: boolean;
     versioningRequirements: string;
     parentFieldName: string;
     parentFieldSortOrder: number;
@@ -26,7 +27,8 @@ export class ContextOfContentBlock {
         if (editCtx.ContentBlock) {
             this.id = editCtx.ContentBlock.Id; // or sxc.cbid or InstanceConfig.cbid
             this.isEntity = editCtx.ContentBlock.IsEntity; // ex: InstanceConfig.cbIsEntity
-            this.showTemplatePicker = editCtx.ContentBlock.ShowTemplatePicker;
+            // 2020-08-14 #2146 2dm believe unused
+            // this.showTemplatePicker = editCtx.ContentBlock.ShowTemplatePicker;
             this.versioningRequirements = editCtx.ContentBlock.VersioningRequirements;
             this.parentFieldName = editCtx.ContentBlock.ParentFieldName;
             this.parentFieldSortOrder = editCtx.ContentBlock.ParentFieldSortOrder;
