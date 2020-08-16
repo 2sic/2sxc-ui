@@ -67,7 +67,8 @@ class ContentBlockEditorSingleton extends HasLog {
         const params: WebApiParams = {
             templateId: templateId,
             lang: context.app.currentLanguage,
-            cbisentity: context.contentBlock.isEntity,
+            // 2020-08-16 clean-up #2148
+            // cbisentity: context.contentBlock.isEntity,
             cbid: context.contentBlock.id,
             originalparameters: JSON.stringify(context.instance.parameters),
         };

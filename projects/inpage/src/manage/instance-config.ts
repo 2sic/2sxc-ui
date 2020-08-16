@@ -9,7 +9,8 @@ export class InstanceConfig {
   moduleId: number;
   version: string;
   contentGroupId: string;
-  cbIsEntity: boolean;
+  // 2020-08-16 clean-up #2148
+//   cbIsEntity: boolean;
   cbId: number;
   appPath: string;
   isList: boolean;
@@ -37,7 +38,8 @@ export class InstanceConfig {
     config.moduleId = contextOfButton.instance.id;
     config.version = contextOfButton.instance.sxcVersion;
     config.contentGroupId = contextOfButton.contentBlock.contentGroupId;
-    config.cbIsEntity = contextOfButton.contentBlock.isEntity;
+    // 2020-08-16 clean-up #2148
+    // config.cbIsEntity = contextOfButton.contentBlock.isEntity;
     config.cbId = contextOfButton.contentBlock.id;
     config.appPath = contextOfButton.app.appPath;
     config.isList = contextOfButton.contentBlock.isList;

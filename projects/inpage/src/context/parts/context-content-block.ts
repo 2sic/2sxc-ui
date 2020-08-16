@@ -6,7 +6,8 @@
 export class ContextOfContentBlock {
     // ContentBlock
     id: number; // the CB ID
-    isEntity: boolean;
+    // 2020-08-16 clean-up #2148
+    // isEntity: boolean;
     // 2020-08-14 #2146 2dm believe unused
     // showTemplatePicker: boolean;
     versioningRequirements: string;
@@ -26,7 +27,8 @@ export class ContextOfContentBlock {
         // Initialize Content-Block values
         if (editCtx.ContentBlock) {
             this.id = editCtx.ContentBlock.Id; // or sxc.cbid or InstanceConfig.cbid
-            this.isEntity = editCtx.ContentBlock.IsEntity; // ex: InstanceConfig.cbIsEntity
+            // 2020-08-16 clean-up #2148
+            // this.isEntity = editCtx.ContentBlock.IsEntity; // ex: InstanceConfig.cbIsEntity
             // 2020-08-14 #2146 2dm believe unused
             // this.showTemplatePicker = editCtx.ContentBlock.ShowTemplatePicker;
             this.versioningRequirements = editCtx.ContentBlock.VersioningRequirements;
