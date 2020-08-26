@@ -58,14 +58,16 @@ function setExternalSourceMaps(webpack, mode, configuration, part) {
   return configuration;
 }
 
-function createCopyAfterBuildPlugin(source, target) {
+function createCopyAfterBuildPlugin(source, target, target2) {
     const WebpackShellPlugin = require('webpack-shell-plugin');
+    const commands = [
+        'echo Webpack Compile done - will now copy from project assets to DNN',
+        // special note: folders in robocopy need to have a space after the name before closing " - special bug
+        'robocopy /mir /nfl /ndl /njs "' + source + ' " "' + target + ' " & exit 0'
+    ];
+    if(target2) commands.push('robocopy /mir /nfl /ndl /njs "' + source + ' " "' + target2 + ' " & exit 0');
     return new WebpackShellPlugin({
-        onBuildEnd: [
-            'echo Webpack Compile done - will now copy from project assets to DNN',
-            // special note: folders in robocopy need to have a space after the name before closing " - special bug
-            'robocopy /mir /nfl /ndl /njs "' + source + ' " "' + target + ' " & exit 0'
-        ],
+        onBuildEnd: commands,
         dev: false  // run on every build end, not just once
     })
 }
