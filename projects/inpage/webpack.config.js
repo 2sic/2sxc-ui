@@ -6,6 +6,8 @@ const webpackHelpers = require('../webpack/webpack-helpers.js');
 const CopyPlugin = require('copy-webpack-plugin');
 
 const bundleName = "inpage";
+const dnnTarget = webpackHelpers.DnnTargetFolder + '/dist/' + bundleName;
+const assetsTarget = webpackHelpers.AssetsTarget + '/dist/' + bundleName;
 
 const configuration = {
     mode: 'development',
@@ -41,6 +43,7 @@ const configuration = {
                 }
             ],
         }),
+        webpackHelpers.createCopyAfterBuildPlugin(assetsTarget, dnnTarget),
     ],
     module: {
         rules: [
@@ -73,7 +76,7 @@ const configuration = {
     },
     output: {
         filename: bundleName + ".min.js",
-        path: webpackHelpers.DnnTargetFolder + '/dist/' + bundleName,
+        path: assetsTarget, // webpackHelpers.DnnTargetFolder + '/dist/' + bundleName,
         library: '$2sxcInpage',
     },
 };
