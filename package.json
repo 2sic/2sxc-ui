@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/2sic/2sxc-ui#readme",
   "devDependencies": {
-    "webpack-shell-plugin": "^0.5.0"
+    "webpack-shell-plugin": "^0.5.0",
+    "webpack-shell-plugin-next": "^1.2.0"
   }
 }

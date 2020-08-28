@@ -5,9 +5,8 @@
   "license": "MIT",
   "scripts": {
     "dev": "ng build --watch",
-    "x-dev": "ng build --watch --output-path=\"/Projects/2sxc-dnn742/Website/DesktopModules/ToSIC_SexyContent/dist/ng/\"",
-    "release": "set NODE_ENV=production && ng build --prod --output-path=\"/Projects/2sxc-dnn742/Website/DesktopModules/ToSIC_SexyContent/dist/ng/\" ",
-    "release-watch": "set NODE_ENV=production && ng build --prod --watch --output-path=\"/Projects/2sxc-dnn742/Website/DesktopModules/ToSIC_SexyContent/dist/ng/\" ",
+    "release": "set NODE_ENV=production && ng build --prod",
+    "release-watch": "set NODE_ENV=production && ng build --prod --watch",
     "postinstall": "ngcc"
   },
   "private": true,

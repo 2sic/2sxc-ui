@@ -13,7 +13,10 @@
           "options": {
             "customWebpackConfig": {
               "path": "./webpack.extra.js",
-              "replaceDuplicatePlugins": false
+              "replaceDuplicatePlugins": false,
+              "mergeStrategies": {
+                "plugins": "append"
+              }
             },
             "outputPath": "dist/ng",
             "index": "src/ui.html",
@@ -21,8 +24,7 @@
             "tsConfig": "src/tsconfig.app.json",
             "polyfills": "src/polyfills.ts",
             "assets": [
-              "src/favicon.ico",
-              "src/i18n"
+              "src/favicon.ico"
             ],
             "styles": [
               "src/styles.css",
