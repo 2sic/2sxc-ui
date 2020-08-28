@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "concurrently \"ng build --watch\" \"node ../webpack/distribute.js ./dist/ng**/**/*.* /dist -w\"",
-    "release": "set NODE_ENV=production && concurrently \"ng build --prod\" \"node ../webpack/distribute.js ./dist/ng**/**/*.* /dist\"",
+    "release": "set NODE_ENV=production && ng build --prod && node ../webpack/distribute.js ./dist/ng**/**/*.* /dist",
     "release-watch": "set NODE_ENV=production && concurrently \"ng build --prod --watch\"  \"node ../webpack/distribute.js ./dist/ng**/**/*.* /dist -w\"",
     "postinstall": "ngcc"
   },

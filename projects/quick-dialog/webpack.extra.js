@@ -8,20 +8,21 @@ const debugWebpack = false;
 // 2020-08-28 2dm adding i18n files
 const CopyPlugin = require('copy-webpack-plugin');
 var copyI18n = new CopyPlugin({
-    patterns: [
-      {
-        from: './src/i18n/*.js*',
-        to: './i18n',
-        flatten: true,
+  patterns: [
+    {
+      from: './src/i18n/*.js*',
+      to: './i18n',
+      flatten: true,
+      transformPath(targetPath, absolutePath) {
         // rename .json files to .js, so that they work on every web server
         // even if .json is not a registered mime type
-        transformPath(targetPath, absolutePath) {
-          return targetPath.replace('.json', '.js');
-        }
-      },
-    ],
-  });
+        return targetPath.replace('.json', '.js');
+      }
+    },
+  ],
+});
 
+// Function to reconfigure the existing options
 module.exports = (config, _options, _targetOptions) => {
   const plugins = config.plugins;
 
