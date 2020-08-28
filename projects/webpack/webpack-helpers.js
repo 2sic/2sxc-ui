@@ -1,3 +1,4 @@
+
 const rootPackage = require('../../package.json');
 const rootVersion = rootPackage.version;
 
@@ -25,39 +26,43 @@ function CreateDefinePlugin(webpack) {
   our goal is to not include source maps in the distribution
   but have them when developing
 */
-// function setExternalSourceMaps(webpack, mode, configuration, part) {
-//   // const nodeEnv = mode;
-//   const isProd = isProduction(mode); // mode === 'production';
-// //   const pjson = require('../package.json');
+function setExternalSourceMaps(webpack, mode, configuration, part) {
+  // const nodeEnv = mode;
+  const isProd = isProduction(mode); // mode === 'production';
+//   const pjson = require('../package.json');
 
-//   console.log('setExternalSourceMaps:isprod', isProd, '; process.env... ', process.env.NODE_ENV);
+  console.log('setExternalSourceMaps:isprod', isProd, '; process.env... ', process.env.NODE_ENV);
 
-//   if (isProd) {
-//     // devTool option is not needed anymore for prod
-//     // but for development it's just easier to use then SourceMapDevToolPlugin
-//     configuration.devtool = false;
+  if (isProd) {
+    // devTool option is not needed anymore for prod
+    // but for development it's just easier to use then SourceMapDevToolPlugin
+    configuration.devtool = false;
 
-//     if (!configuration.plugins) { configuration.plugins = []; }
+    if (!configuration.plugins) { configuration.plugins = []; }
 
-//     const sourceMapDevToolPlugin = new webpack.SourceMapDevToolPlugin({
-//       // this is the url of our local sourcemap server
-//       publicPath: getSourcesRootUrl(part), // 'https://sources.2sxc.org/' + rootVersion + '/' + part + '/',
-//       filename: '[file].map',
-//     });
+    const sourceMapDevToolPlugin = new webpack.SourceMapDevToolPlugin({
+      // this is the url of our local sourcemap server
+      publicPath: getSourcesRootUrl(part), // 'https://sources.2sxc.org/' + rootVersion + '/' + part + '/',
+      filename: '[file].map',
+    });
 
-//     configuration.plugins = [
-//       // ... other plugins
-//       ...configuration.plugins,
-//       sourceMapDevToolPlugin,
-//     ];
-//   }
+    configuration.plugins = [
+      // ... other plugins
+      ...configuration.plugins,
+      sourceMapDevToolPlugin,
+    ];
+  }
 
-//   return configuration;
-// }
+  return configuration;
+}
 
-function getSourcesRootUrl(part) {  return 'https://sources.2sxc.org/' + rootVersion + '/' + part + '/';  }
+function getSourcesRootUrl(part) {
+    return 'https://sources.2sxc.org/' + rootVersion + '/' + part + '/';
+}
 
-function isProduction(mode) { return mode === 'production'; }
+function isProduction(mode) {
+    return mode === 'production';
+}
 
 function createCopyAfterBuildPlugin(source, target, target2) {
     const WebpackShellPlugin = require('webpack-shell-plugin-next');
@@ -85,7 +90,7 @@ function createCopyAfterBuildPlugin(source, target, target2) {
 
 module.exports.isProduction = isProduction;
 module.exports.getSourcesRootUrl = getSourcesRootUrl;
-// module.exports.SetExternalSourceMaps = setExternalSourceMaps;
+module.exports.SetExternalSourceMaps = setExternalSourceMaps;
 module.exports.CreateDefinePlugin = CreateDefinePlugin;
 module.exports.Version = rootVersion;
 module.exports.DnnTargetFolder = targetDnn;
