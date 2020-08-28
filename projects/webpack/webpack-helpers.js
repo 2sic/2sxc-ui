@@ -67,10 +67,6 @@ function isProduction(mode) {
 function createCopyAfterBuildPlugin(source, target, target2) {
     const WebpackShellPlugin = require('webpack-shell-plugin-next');
     const commands = [
-        () => {
-            console.log('Waiting 1 second, to ensure additional files are copied/created');
-            setTimeout(() => console.log('end Timeout 1'), 1000);
-        },
         'echo Webpack Compile done - will now copy from project assets to DNN',
         // folders in robocopy need to have a space after the name before closing " - special bug
         'robocopy /mir /nfl /ndl /njs "' + source + ' " "' + target + ' " & exit 0'
