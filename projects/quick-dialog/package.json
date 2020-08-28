@@ -4,9 +4,9 @@
   "version": "11.03.00",
   "license": "MIT",
   "scripts": {
-    "dev": "concurrently \"ng build --watch\" \"node ./build/distribute.js ./dist/ng**/**/*.* /dist -w\"",
-    "release": "set NODE_ENV=production && concurrently \"ng build --prod\" \"node ./build/distribute.js ./dist/ng**/**/*.* /dist\"",
-    "release-watch": "set NODE_ENV=production && concurrently \"ng build --prod --watch\"  \"node ./build/distribute.js ./dist/ng**/**/*.* /dist -w\"",
+    "dev": "concurrently \"ng build --watch\" \"node ../webpack/distribute.js ./dist/ng**/**/*.* /dist -w\"",
+    "release": "set NODE_ENV=production && concurrently \"ng build --prod\" \"node ../webpack/distribute.js ./dist/ng**/**/*.* /dist\"",
+    "release-watch": "set NODE_ENV=production && concurrently \"ng build --prod --watch\"  \"node ../webpack/distribute.js ./dist/ng**/**/*.* /dist -w\"",
     "postinstall": "ngcc"
   },
   "private": true,

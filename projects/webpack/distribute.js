@@ -1,7 +1,9 @@
 
 var cpx = require('cpx');
 var chalk = require('chalk');
-const webpackHelpers = require('../../webpack/webpack-helpers');
+const webpackHelpers = require('./webpack-helpers');
+
+console.log(chalk.red(process.cwd()));
 
 //#region helpers
 
