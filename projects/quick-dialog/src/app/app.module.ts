@@ -17,7 +17,7 @@ export function HttpLoaderFactory(http: HttpClient) {
   log.add('created translate-loader', loader);
   return loader;
 }
-
+console.log('22');
 @NgModule({
   declarations: [
     AppComponent
