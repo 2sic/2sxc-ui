@@ -1,6 +1,7 @@
 import * as Public from '../../../sxc-typings/index';
 import { EnvironmentMetaLoader } from './env-loader-meta';
 import { HasLog, Insights, SxcApiUrlRoot } from '..';
+import { DnnUiRoot } from '../constants';
 
 declare const _jsApi: Public.JsInfo;
 
@@ -62,6 +63,10 @@ export class Environment extends HasLog implements Public.Environment {
         return this.header.rvt; 
     }
 
+    public uiRoot(): string { 
+        this.ensureReadyOrThrow(); 
+        return this.header.uiRoot || DnnUiRoot; 
+    }
 
     private ensureReadyOrThrow(): void {
         if(this.ready) return;

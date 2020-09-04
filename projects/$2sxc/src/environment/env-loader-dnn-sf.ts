@@ -1,5 +1,6 @@
 import { Environment } from '.';
 import { HasLog } from '..';
+import { DnnUiRoot } from '../constants/index';
 
 const helpAutoDetect = 'You must either include jQuery on the page or inject the jsApi parameters to prevent auto-detection.';
 
@@ -40,7 +41,8 @@ export class EnvironmentDnnSfLoader extends HasLog {
             page: dnnSf.getTabId(),
             root: 'unknown',
             api: dnnSf.getServiceRoot('2sxc'),
-            rvt: dnnSf.getAntiForgeryValue()
+            rvt: dnnSf.getAntiForgeryValue(),
+            uiRoot: DnnUiRoot
         };
         this.env.load(sfJsInfo, 'dnn SF');
         cl.done();
