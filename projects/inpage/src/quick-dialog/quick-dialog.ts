@@ -6,6 +6,7 @@ import { HasLog, Insights } from '../logging';
 import { IFrameBridge } from './iframe-bridge';
 import { QuickDialogContainer } from './quick-dialog-container';
 import * as QuickEditState from './state';
+import { $2sxcInPage } from '../interfaces/sxc-controller-in-page';
 
 const diagShowClass: string = 'dia-select';
 
@@ -156,7 +157,7 @@ class QuickDialogManagerSingleton extends HasLog {
         try {
             const devMode = localStorage.getItem('devMode');
             if (devMode && !!devMode)
-                return url.replace('/desktopmodules/tosic_sexycontent/dist/ng/ui.html', 'http://localhost:4200');
+                return url.replace($2sxcInPage.env.uiRoot() + 'dist/ng/ui.html', 'http://localhost:4200');
         } catch (e) {
             // ignore
         }

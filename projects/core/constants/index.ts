@@ -9,8 +9,6 @@ export const ToSxcName = "2sxc";
 
 export const SxcVersion = ROOTVERSION;
 
-export const SxcPath = 'desktopmodules/tosic_sexycontent/';
-
 export const SxcApiUrlRoot = 'desktopmodules/2sxc/api/';
 
 export const HeaderNames = {

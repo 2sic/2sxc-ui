@@ -2,8 +2,9 @@
 import XHR from 'i18next-xhr-backend';
 import { primaryLanguage, translations, translationsPath } from '.';
 import { ContextComplete } from '../context/bundles';
+import { $2sxcInPage } from '../interfaces/sxc-controller-in-page';
 import { SxcEdit } from '../interfaces/sxc-instance-editable';
-import { HasLog, Insights } from '../logging';
+import { HasLog, Insights, urlClean } from '../logging';
 import { EditManager } from '../manage/edit-manager';
 
 // tslint:disable-next-line: no-var-requires
@@ -39,6 +40,7 @@ class TranslatorGlobal extends HasLog {
         const context = manage._context || this.tryToFindAContext();
 
         cl.add('will initialize');
+        const realRootPath = $2sxcInPage.env.uiRoot();
         this.i18n
             .use(XHR)
             .init({
@@ -47,7 +49,7 @@ class TranslatorGlobal extends HasLog {
                 whitelist: translations,
                 preload: [primaryLanguage],
                 backend: {
-                    loadPath: context.instance.sxcRootUrl + translationsPath,
+                    loadPath: urlClean(context.instance.sxcRootUrl + realRootPath + translationsPath),
                 },
             }, () => this.initjQuery());
         this.initialized = true;
