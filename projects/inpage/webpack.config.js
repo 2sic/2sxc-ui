@@ -3,8 +3,11 @@ const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const TerserJSPlugin = require('terser-webpack-plugin');
 const webpack = require('webpack');
 const webpackHelpers = require('../webpack/webpack-helpers.js');
+const CopyPlugin = require('copy-webpack-plugin');
 
 const bundleName = "inpage";
+const dnnTarget = webpackHelpers.DnnTargetFolder + '/dist/' + bundleName;
+const assetsTarget = webpackHelpers.AssetsTarget + '/dist/' + bundleName;
 
 const configuration = {
     mode: 'development',
@@ -29,6 +32,18 @@ const configuration = {
             sourceMap: true
         }),
         webpackHelpers.CreateDefinePlugin(webpack),
+          new CopyPlugin({
+            patterns: [
+                {
+                    from: './i18n/*.json',
+                    to: './',
+                    transformPath(targetPath, absolutePath) {
+                      return targetPath.replace('.json', '.js');
+                    }
+                }
+            ],
+        }),
+        webpackHelpers.createCopyAfterBuildPlugin(assetsTarget, dnnTarget),
     ],
     module: {
         rules: [
@@ -61,7 +76,7 @@ const configuration = {
     },
     output: {
         filename: bundleName + ".min.js",
-        path: webpackHelpers.DnnTargetFolder + '/dist/' + bundleName,
+        path: assetsTarget, // webpackHelpers.DnnTargetFolder + '/dist/' + bundleName,
         library: '$2sxcInpage',
     },
 };

@@ -139,7 +139,7 @@ class QuickDialogManagerSingleton extends HasLog {
         const cl = this.log.call('setUrlToQuickDialog', url);
         // change default url-schema from the primary angular-app to the quick-dialog
         url = url
-            .replace(C.DialogPaths.ng1, C.DialogPaths.quickDialog)
+            // 2020-07-31 #2134 .replace(C.DialogPaths.ng1, C.DialogPaths.quickDialog)
             .replace(C.DialogPaths.ng8, C.DialogPaths.quickDialog);
         url = this.changePathToLocalhostForDev(url);
         return cl.return(url);

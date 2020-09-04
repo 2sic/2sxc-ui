@@ -70,7 +70,8 @@ describe('Commands test suite', function() {
         },
         ContentBlock: {
           ShowTemplatePicker: true,
-          IsEntity: false,
+          // 2020-08-16 clean-up #2148
+        //   IsEntity: false,
           VersioningRequirements: 'DraftOptional',
           Id: 2507,
           ParentFieldName: null,

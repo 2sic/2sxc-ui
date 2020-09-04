@@ -5,7 +5,7 @@ import {switchMap} from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-
+import { Constants } from 'app/core/constants';
 
 @Injectable()
 export class InstallerService {
@@ -19,7 +19,7 @@ export class InstallerService {
         switchMap(() => {
           if (!c.url) return observableOf(true);
           step(c);
-          return <Observable<any>>this.http.get(`app-sys/installer/installpackage?packageUrl=${c.url}`);
+          return <Observable<any>>this.http.get(`${Constants.webApiInstallPackage}?packageUrl=${c.url}`);
         })), observableOf(true));
   }
 }

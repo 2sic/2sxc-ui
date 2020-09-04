@@ -1,11 +1,11 @@
 ﻿import { Commands } from '..';
-import { C } from '../../constants';
+// 2020-07-31 #2134 import { C } from '../../constants';
 import { ContentBlockEditor } from '../../contentBlock/content-block-editor';
 import { renderer } from '../../contentBlock/render';
 import { ContextComplete } from '../../context/bundles/context-bundle-button';
 import { ContextBundleInstance } from '../../context/bundles/context-bundle-instance';
 import { $2sxcInPage as $2sxc } from '../../interfaces/sxc-controller-in-page';
-import { HasLog, Log, Insights } from '../../logging';
+import { HasLog, Insights, Log } from '../../logging';
 import { TypeUnsafe } from '../../plumbing';
 import { QuickDialog } from '../../quick-dialog/quick-dialog';
 import { Button, ButtonSafe } from '../../toolbar/config';
@@ -151,7 +151,7 @@ export class CmsEngine extends HasLog {
         const log = new Log('Cms.OpnDlg');
         Insights.add('cms', 'open-dialog', log);
         // the link contains everything to open a full dialog (lots of params added)
-        let link = new CommandLinkGenerator(context, log).getLink();
+        const link = new CommandLinkGenerator(context, log).getLink();
         const btn = new ButtonSafe(context.button, context);
 
         const origEvent = event || (window.event as MouseEvent);
@@ -172,7 +172,7 @@ export class CmsEngine extends HasLog {
                     .then((isChanged) => { if (isChanged) completePromise(); });
             } else {
                 // else it's a normal pop-up dialog
-                link = CmsEngine.convertUrlIfAltPressed(origEvent, link);
+                // 2020-07-31 #2134link = CmsEngine.convertUrlIfAltPressed(origEvent, link);
                 const isNewWindow = btn.newWindow();
                 // check if new-window
                 if (isNewWindow || (origEvent && origEvent.shiftKey)) {
@@ -187,11 +187,12 @@ export class CmsEngine extends HasLog {
     }
 
     /** Switch to old NG9 dialog if the user pressed ALT */
-    private static convertUrlIfAltPressed(origEvent: MouseEvent, link: string) {
-        if (origEvent && origEvent.altKey) {
-            const toOld = link.indexOf(C.DialogPaths.ng8) > 0;
-            link = link.replace(toOld ? C.DialogPaths.ng8 : C.DialogPaths.ng1, toOld ? C.DialogPaths.ng1 : C.DialogPaths.ng8);
-        }
-        return link;
-    }
+    // 2020-07-31 #2134
+    // private static convertUrlIfAltPressed(origEvent: MouseEvent, link: string) {
+    //     if (origEvent && origEvent.altKey) {
+    //         const toOld = link.indexOf(C.DialogPaths.ng8) > 0;
+    //         link = link.replace(toOld ? C.DialogPaths.ng8 : C.DialogPaths.ng1, toOld ? C.DialogPaths.ng1 : C.DialogPaths.ng8);
+    //     }
+    //     return link;
+    // }
 }

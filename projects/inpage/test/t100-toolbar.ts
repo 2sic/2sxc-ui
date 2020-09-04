@@ -19,7 +19,10 @@ const expandToolbarConfig = (cnt: ContextComplete, toolbarData: TypeUnsafe, tool
 };
 
 describe('Toolbar test suite', function() {
-  const editContext: AttrJsonEditContext = { Environment: { WebsiteId: 0, WebsiteUrl: '//2sxc914lts-dnn742.dnndev.me/', PageId: 93, PageUrl: 'http://2sxc914lts-dnn742.dnndev.me/TB3', parameters: [{ Key: 'TabId', Value: '93' }, { Key: 'language', Value: 'en-US' }], InstanceId: 2506, SxcVersion: '9.14.0.27116', SxcRootUrl: '/', IsEditable: true }, User: { CanDesign: true, CanDevelop: true }, Language: { Current: 'en-us', Primary: 'en-us', All: [] }, ContentBlock: { ShowTemplatePicker: true, IsEntity: false, VersioningRequirements: 'DraftOptional', Id: 2506, ParentFieldName: null, ParentFieldSortOrder: 0, PartOfPage: true }, ContentGroup: { IsCreated: true, IsList: true, TemplateId: 4994, QueryId: null, ContentTypeName: '5a3932e9-cff0-46a2-a465-d2370154c39e', AppUrl: '/Portals/0/2sxc/TestToolbar', AppSettingsId: null, AppResourcesId: null, IsContent: false, HasContent: true, SupportsAjax: false, ZoneId: 2, AppId: 16, Guid: 'bacde468-fe3c-4993-8b0b-b6813f5141cc', Id: 4995 }, error: { type: null } } as AttrJsonEditContext;
+  const editContext: AttrJsonEditContext = { Environment: { WebsiteId: 0, WebsiteUrl: '//2sxc914lts-dnn742.dnndev.me/', PageId: 93, PageUrl: 'http://2sxc914lts-dnn742.dnndev.me/TB3', parameters: [{ Key: 'TabId', Value: '93' }, { Key: 'language', Value: 'en-US' }], InstanceId: 2506, SxcVersion: '9.14.0.27116', SxcRootUrl: '/', IsEditable: true }, User: { CanDesign: true, CanDevelop: true }, Language: { Current: 'en-us', Primary: 'en-us', All: [] }, ContentBlock: { ShowTemplatePicker: true, 
+  // 2020-08-16 clean-up #2148
+  // IsEntity: false, 
+  VersioningRequirements: 'DraftOptional', Id: 2506, ParentFieldName: null, ParentFieldSortOrder: 0, PartOfPage: true }, ContentGroup: { IsCreated: true, IsList: true, TemplateId: 4994, QueryId: null, ContentTypeName: '5a3932e9-cff0-46a2-a465-d2370154c39e', AppUrl: '/Portals/0/2sxc/TestToolbar', AppSettingsId: null, AppResourcesId: null, IsContent: false, HasContent: true, SupportsAjax: false, ZoneId: 2, AppId: 16, Guid: 'bacde468-fe3c-4993-8b0b-b6813f5141cc', Id: 4995 }, error: { type: null } } as AttrJsonEditContext;
 
   it('1 jasmine smoke test', function() {
     expect(true).toBe(true);

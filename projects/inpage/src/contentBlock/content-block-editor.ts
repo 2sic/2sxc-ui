@@ -4,6 +4,11 @@ import { HtmlTools } from '../html/dom-tools';
 import { HasLog, Insights } from '../logging';
 import { renderer } from './render';
 
+//#region WebApi Endpoints used: 2sxc
+const webApiRender = 'view/module/rendertemplate';
+const webApiSave = 'view/module/savetemplateid';
+//#endregion
+
 class ContentBlockEditorSingleton extends HasLog {
 
     constructor() {
@@ -62,13 +67,12 @@ class ContentBlockEditorSingleton extends HasLog {
         const params: WebApiParams = {
             templateId: templateId,
             lang: context.app.currentLanguage,
-            cbisentity: context.contentBlock.isEntity,
             cbid: context.contentBlock.id,
             originalparameters: JSON.stringify(context.instance.parameters),
         };
         cl.data('params', params);
         const promise = new Promise<string>((resolve, reject) => {
-                context.sxc.webApi.get({ url: 'view/module/rendertemplate', params: params, dataType: 'html' })
+                context.sxc.webApi.get({ url: webApiRender, params: params, dataType: 'html' })
                     .done((data, textStatus: string, jqXhr) => {
                         if (jqXhr.status === 204 || jqXhr.status === 200) {
                             resolve(data); // resolve the promise with the response text
@@ -124,7 +128,7 @@ class ContentBlockEditorSingleton extends HasLog {
         };
         cl.data('params', params);
         const promise = new Promise<string>((resolve, reject) => {
-            context.sxc.webApi.get( { url: 'view/module/savetemplateid', params: params })
+            context.sxc.webApi.get( { url: webApiSave, params: params })
                 .done((data, textStatus, jqXhr) => {
                     // resolve or reject based on http-status: 200 & 204 = ok
                     if (jqXhr.status === 204 || jqXhr.status === 200) resolve(data);

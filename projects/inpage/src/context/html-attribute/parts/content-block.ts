@@ -1,7 +1,6 @@
 ﻿export class AttrJsonContentBlock {
   // ReSharper disable InconsistentNaming
   ShowTemplatePicker: boolean;
-  IsEntity: boolean;
   VersioningRequirements: string;
   Id: number;
   ParentFieldName: string;

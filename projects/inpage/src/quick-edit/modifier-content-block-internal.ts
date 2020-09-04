@@ -2,7 +2,17 @@
 import { SxcEdit } from '../interfaces/sxc-instance-editable';
 import { HasLog } from '../logging';
 import { ToolbarManager } from '../toolbar/toolbar-manager';
+// note: this import must be at the end of the list, for reasons unknown
+// otherwise you get an error at runtime, something about constructors
+// Object prototype may only be an Object or null: undefined
+// not sure why though
 import { translate } from '../i18n';
+
+//#region WebApi Endpoints used: 2sxc
+const webApiNew = 'view/module/generatecontentblock';
+const webApiMove = 'view/module/moveiteminlist';
+const webApiRemove = 'view/module/RemoveItemInList';
+//#endregion
 
 /** contains commands to create/move/delete a content-block in an inner-content */
 export class ModifierContentBlockInstance extends HasLog {
@@ -43,7 +53,7 @@ export class ModifierContentBlockInstance extends HasLog {
         };
 
         const jqPromise = this.sxcInstance.webApi
-            .get({ url: 'view/module/generatecontentblock', params: params })
+            .get({ url: webApiNew, params: params })
             .then((result) => {
                 const newTag = $(result); // prepare tag for inserting
 
@@ -78,7 +88,7 @@ export class ModifierContentBlockInstance extends HasLog {
         };
 
         const jqPromise = this.sxcInstance.webApi
-            .get({ url: 'view/module/moveiteminlist', params: params })
+            .get({ url: webApiMove, params: params })
             .then(() => {
                 console.log('done moving!');
                 window.location.reload();
@@ -104,7 +114,7 @@ export class ModifierContentBlockInstance extends HasLog {
         };
 
         const jqPromise = this.sxcInstance.webApi
-            .get({ url: 'view/module/RemoveItemInList', params: params })
+            .get({ url: webApiRemove, params: params })
             .then(() => {
                 console.log('done deleting!');
                 window.location.reload();

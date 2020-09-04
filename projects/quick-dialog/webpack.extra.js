@@ -1,36 +1,40 @@
 const webpack = require('webpack');
 const nodeEnv = (process.env.NODE_ENV || 'development').trim(); // trim is important because of an issue with package.json
-
 const webpackHelpers = require('../webpack/webpack-helpers');
 
-var configuration = {};
+// set to true to see a lot of details about the plugins used
+const debugWebpack = false;
 
-webpackHelpers.SetExternalSourceMaps(webpack, nodeEnv, configuration, 'ng');
+// 2020-08-28 2dm adding i18n files
+const CopyPlugin = require('copy-webpack-plugin');
+var copyI18n = new CopyPlugin({
+  patterns: [
+    {
+      from: './src/i18n/*.js*',
+      to: './i18n',
+      flatten: true,
+      transformPath(targetPath, absolutePath) {
+        // rename .json files to .js, so that they work on every web server
+        // even if .json is not a registered mime type
+        return targetPath.replace('.json', '.js');
+      }
+    },
+  ],
+});
 
-// 2020-07-28 2dm adding i18n files
-// not working - so I'll just pre-rename to .js to be safe
-// console.log('maybe doing extra i18n');
-// if (!configuration.plugins) { configuration.plugins = []; }
-// const CopyPlugin = require('copy-webpack-plugin');
-// configuration.plugins.push(
-//   new CopyPlugin({
-//     patterns: [
-//       {
-//         from: './src/i18n/*.js*',
-//         to: './i18n',
-//         flatten: true,
-//         // transformPath(targetPath, absolutePath) {
-//         //   console.log('debug');
-//         //   return targetPath;
-//         // }
-//       },
-//       {
-//         from: './i18n/*.*',
-//         to: './test'
-//       },
-//     ],
-//   })
-// )
-// console.log('config added', configuration.plugins);
+// Function to reconfigure the existing options
+module.exports = (config, _options, _targetOptions) => {
+  const plugins = config.plugins;
 
-module.exports = configuration;
+  // if production, change how the source maps are made
+  if(webpackHelpers.isProduction(nodeEnv)) {
+    // find the plugin with duckTyping - very unique property
+    var sourceMapPluginConfig = plugins.find(p => p.fallbackModuleFilenameTemplate);
+    sourceMapPluginConfig.options.publicPath = webpackHelpers.getSourcesRootUrl('ng');
+  }
+
+  plugins.push(webpackHelpers.CreateDefinePlugin(webpack));
+  plugins.push(copyI18n);
+  if (debugWebpack) console.warn('plugins after modifications: ', config.plugins);
+  return config;
+}

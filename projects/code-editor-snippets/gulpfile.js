@@ -1,11 +1,12 @@
 ﻿
-const
-    webpackHelpers = require('../webpack/webpack-helpers');
-    dest2sxc = webpackHelpers.DnnTargetFolder + 'dist/ng-assets/';
-    gulp = require('gulp'),
+const webpackHelpers = require('../webpack/webpack-helpers');
+const gulp = require('gulp'),
     jsXlsx = require('gulp-js-xlsx'),
     rename = require('gulp-rename'),
     rootDist = 'dist/';
+
+const destDnn = webpackHelpers.DnnTargetFolder + 'dist/ng-assets/';
+const dest2sxc = webpackHelpers.AssetsTarget + 'dist/ng-assets/';
 
 gulp.task('default', xlsxSnippetsToJson);
 
@@ -19,5 +20,6 @@ function xlsxSnippetsToJson() {
             extname: '.json.js'
         }))
         .pipe(gulp.dest(rootDist))
+        .pipe(gulp.dest(destDnn))
         .pipe(gulp.dest(dest2sxc));
 }

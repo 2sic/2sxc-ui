@@ -1,5 +1,6 @@
 ﻿import i18next, { i18n } from 'i18next';
 import XHR from 'i18next-xhr-backend';
+import { primaryLanguage, translations, translationsPath } from '.';
 import { ContextComplete } from '../context/bundles';
 import { SxcEdit } from '../interfaces/sxc-instance-editable';
 import { HasLog, Insights } from '../logging';
@@ -26,8 +27,6 @@ class TranslatorGlobal extends HasLog {
         if (!this.initialized) return key;
         if (!this.i18n.isInitialized) return key;
         return this.i18n.t(key) || key;
-        // const tFn = ($ as TypeWeDontCare).t;
-        // return (tFn && tFn(key)) || key;
     }
 
     /**
@@ -43,12 +42,12 @@ class TranslatorGlobal extends HasLog {
         this.i18n
             .use(XHR)
             .init({
-                lng: context.app.currentLanguage.substr(0, 2), // "en",
-                fallbackLng: 'en',
-                whitelist: ['en', 'de', 'fr', 'it', 'uk', 'nl'],
-                preload: ['en'],
+                lng: context.app.currentLanguage.substr(0, 2),
+                fallbackLng: primaryLanguage,
+                whitelist: translations,
+                preload: [primaryLanguage],
                 backend: {
-                    loadPath: context.instance.sxcRootUrl + 'desktopmodules/tosic_sexycontent/dist/i18n/inpage-{{lng}}.js',
+                    loadPath: context.instance.sxcRootUrl + translationsPath,
                 },
             }, () => this.initjQuery());
         this.initialized = true;
