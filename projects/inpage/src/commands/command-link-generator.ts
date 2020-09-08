@@ -83,7 +83,7 @@ export class CommandLinkGenerator extends HasLog {
         const partOfPage = button.partOfPage();
         const ngDialogParams = new NgUrlValuesWithoutParams(context, partOfPage);
 
-        return `${this.rootUrl}#${$.param(ngDialogParams)}&${$.param(urlItems)}${this.debugUrlParam}`;
+        return `${this.rootUrl}#${$.param(ngDialogParams).replace(/%2F/g, '/')}&${$.param(urlItems)}${this.debugUrlParam}`;
     }
 
     /**
@@ -130,11 +130,6 @@ export class CommandLinkGenerator extends HasLog {
         const fields: string[] = [this.findPartName(true)];
         if (withPresentation) fields.push(this.findPartName(false));
         fields.map((f) => this.addContentGroupItem(groupId, index, f, isAdd));
-        // previous code before 10.27
-        // this.addContentGroupItem(groupId, index, this.findPartName(true), isAdd);
-
-        // if (withPresentation)
-        //   this.addContentGroupItem(groupId, index, this.findPartName(false), isAdd);
         cl.done();
     }
 
