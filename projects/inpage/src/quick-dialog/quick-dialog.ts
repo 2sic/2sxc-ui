@@ -2,11 +2,11 @@
 import { CmdItemHistory } from '../commands';
 import { C } from '../constants';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
+import { $2sxcInPage } from '../interfaces/sxc-controller-in-page';
 import { HasLog, Insights } from '../logging';
 import { IFrameBridge } from './iframe-bridge';
 import { QuickDialogContainer } from './quick-dialog-container';
 import * as QuickEditState from './state';
-import { $2sxcInPage } from '../interfaces/sxc-controller-in-page';
 
 const diagShowClass: string = 'dia-select';
 
