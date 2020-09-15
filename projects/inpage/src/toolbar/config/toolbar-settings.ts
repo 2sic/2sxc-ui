@@ -5,12 +5,14 @@ import { ToolbarTemplate } from '../templates';
 type TypeAutoAddMore = null | 'start' | 'end' | true; //  [true: used to be right/start]
 type TypeHover = 'left' | 'right' | 'none';
 type TypeShow = 'always' | 'hover';
+export type TypeFollow = 'default' | 'none' | 'initial' | 'always' | 'scroll' ;
 
 /** contains toolbar behaviour settings like float, etc. */
 export class ToolbarSettings {
     autoAddMore: TypeAutoAddMore = null;
     hover: TypeHover = 'right';
     show: TypeShow = 'hover';
+    follow: TypeFollow = 'default';
 
     // old term, keep for compatibility, but new is class
     classes: string = '';
@@ -31,10 +33,12 @@ export class ToolbarSettings {
      */
     _rules?: RuleManager;
 
-    constructor(defaults: { autoAddMore?: TypeAutoAddMore, hover?: TypeHover, show?: TypeShow }) {
+    constructor(defaults: { autoAddMore?: TypeAutoAddMore, hover?: TypeHover, show?: TypeShow, follow?: TypeFollow }) {
         if (defaults.autoAddMore) this.autoAddMore = defaults.autoAddMore;
         if (defaults.hover) this.hover = defaults.hover;
         if (defaults.show)  this.show = defaults.show;
+        this.follow = defaults.follow ?? 'default';
+        if (this.follow === 'default') this.follow = 'none';
     }
 
 
@@ -53,10 +57,10 @@ export class ToolbarSettings {
         return partialSettings;
     }
 
-    static getDefaults = () => new ToolbarSettings({ autoAddMore: 'end', hover: 'right', show: 'hover' });
+    static getDefaults = () => new ToolbarSettings({ autoAddMore: 'end', hover: 'right', show: 'hover', follow: 'default' });
 
     /** Setup for situations where an empty toolbar is needed, without any data or configuration */
-    static getForEmpty = () => new ToolbarSettings({ autoAddMore: 'start', hover: 'left', show: 'hover' });
+    static getForEmpty = () => new ToolbarSettings({ autoAddMore: 'start', hover: 'left', show: 'hover', follow: 'default' });
 }
 
 
