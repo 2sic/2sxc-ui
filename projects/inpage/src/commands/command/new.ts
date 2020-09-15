@@ -22,8 +22,16 @@ Commands.add(CmdNew, 'New', 'plus', false, true, {
         return  !!context.button.command.params.contentType || SharedLogic.isList(context);
     },
     code(context, event) {
+        const params = context.button.command.params;
         // todo - should refactor this to be a toolbarManager.contentBlock command
-        context.button.command.params.sortOrder = context.button.command.params.sortOrder + 1;
+        params.sortOrder = params.sortOrder + 1;
+
+        // if we have an EntityId, this means that it picked up id/guid from the current item, so we must reset both IDs
+        // note that we don't reset this if entityId = 0, because that usually means the guid was preset on purpose
+        if (params.entityId && params.entityId !== 0) {
+            delete params.entityId;
+            delete params.entityGuid;
+        }
         return CmsEngine.openDialog(context, event);
     },
 });

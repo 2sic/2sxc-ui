@@ -57,7 +57,6 @@ export class LogCall {
      * then you can trace the stack-call to see where the error originated
      */
     private processExtraBehavior<T>(behavior: LEO, message: string, data: T) {
-        debugger;
         if (behavior === LEO.log) console.log(message, data);
         if (behavior === LEO.warn) console.warn(message, data);
         if (behavior === LEO.error || behavior === LEO.throw) console.error(message, data);
