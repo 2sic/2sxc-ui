@@ -1,4 +1,5 @@
 ﻿import { Commands } from '..';
+import { ItemIdentifierGroup } from '../../interfaces/item-identifiers';
 import { SharedLogic } from './shared-logic';
 
 export const CmdAddExisting = 'add-existing';
@@ -13,14 +14,19 @@ Commands.add(CmdAddExisting, 'AddExisting', 'add-existing', false, true, {
     },
 
     configureLinkGenerator: (context, linkGenerator) => {
-        if (!SharedLogic.isFieldList(context)) return;
-
-        const params = context.button.command.params;
-        linkGenerator.items = [{ Group: {
-            Guid: params.parent,
-            Part: params.fields,
-            Index: params.sortOrder + 1,
-            Add: true,
-        }}];
+        if (SharedLogic.isFieldList(context)) {
+            const params = context.button.command.params;
+            linkGenerator.items = [{ Group: {
+                Guid: params.parent,
+                Part: params.fields,
+                Index: params.sortOrder + 1,
+                Add: true,
+            }}];
+        } else if (SharedLogic.isBlockList(context)) {
+            const topItem = linkGenerator.items[0] as ItemIdentifierGroup;
+            topItem.Group.Add = true;
+            topItem.Group.Index++;
+            linkGenerator.items = [topItem];
+        }
     },
 });
