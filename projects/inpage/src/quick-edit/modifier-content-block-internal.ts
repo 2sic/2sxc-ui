@@ -6,6 +6,7 @@ import { ToolbarManager } from '../toolbar/toolbar-manager';
 // otherwise you get an error at runtime, something about constructors
 // Object prototype may only be an Object or null: undefined
 // not sure why though
+// tslint:disable-next-line: ordered-imports
 import { translate } from '../i18n';
 
 //#region WebApi Endpoints used: 2sxc

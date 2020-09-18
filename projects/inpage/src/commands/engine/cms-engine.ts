@@ -1,5 +1,4 @@
 ﻿import { Commands } from '..';
-// 2020-07-31 #2134 import { C } from '../../constants';
 import { ContentBlockEditor } from '../../contentBlock/content-block-editor';
 import { renderer } from '../../contentBlock/render';
 import { ContextComplete } from '../../context/bundles/context-bundle-button';
@@ -172,7 +171,6 @@ export class CmsEngine extends HasLog {
                     .then((isChanged) => { if (isChanged) completePromise(); });
             } else {
                 // else it's a normal pop-up dialog
-                // 2020-07-31 #2134link = CmsEngine.convertUrlIfAltPressed(origEvent, link);
                 const isNewWindow = btn.newWindow();
                 // check if new-window
                 if (isNewWindow || (origEvent && origEvent.shiftKey)) {
@@ -185,14 +183,4 @@ export class CmsEngine extends HasLog {
             }
         });
     }
-
-    /** Switch to old NG9 dialog if the user pressed ALT */
-    // 2020-07-31 #2134
-    // private static convertUrlIfAltPressed(origEvent: MouseEvent, link: string) {
-    //     if (origEvent && origEvent.altKey) {
-    //         const toOld = link.indexOf(C.DialogPaths.ng8) > 0;
-    //         link = link.replace(toOld ? C.DialogPaths.ng8 : C.DialogPaths.ng1, toOld ? C.DialogPaths.ng1 : C.DialogPaths.ng8);
-    //     }
-    //     return link;
-    // }
 }
