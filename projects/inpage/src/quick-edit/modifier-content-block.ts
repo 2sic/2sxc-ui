@@ -18,7 +18,7 @@ export class ModifierContentBlock extends ModifierBase {
     }
 
     delete(clip: Selection): Promise<void> {
-        return this.getInstanceModifier(clip.list).delete(clip.parent as number, clip.field, clip.index);
+        return this.getInstanceModifier(clip.list).delete(clip.parentGuid, clip.field, clip.index);
     }
 
     create(parent: number, field: string, index: number, appOrContent: string, list: JQuery, newGuid: string): Promise<void> {
@@ -28,7 +28,7 @@ export class ModifierContentBlock extends ModifierBase {
     move(oldClip: Selection, newClip: Selection) {
         const from = oldClip.index;
         const to = newClip.index;
-        this.getInstanceModifier(oldClip.list).move(newClip.parent as number, newClip.field, from, to);
+        this.getInstanceModifier(oldClip.list).move(newClip.parentGuid, newClip.field, from, to);
     }
 
     // cb-numbering is a bit different, because the selector is at the bottom
