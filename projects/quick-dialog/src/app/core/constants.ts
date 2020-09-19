@@ -5,9 +5,9 @@ export const Constants = {
   webApiDialogContext: 'app-sys/system/dialogsettings',
   webApiInstallPackage: 'app-sys/installer/installpackage',
   webApiRemoteInstaller: 'view/Module/RemoteInstallDialogUrl',
-  webApiGetTemplates: 'view/Module/GetSelectableTemplates',
-  webApiGetTypes: 'view/Module/GetSelectableContentTypes',
-  webApiGetApps: 'view/Module/GetSelectableApps',
-  webApiSetApp: 'view/Module/SetAppId',
+  webApiGetTemplates: 'cms/block/Templates',
+  webApiGetTypes: 'cms/block/ContentTypes',
+  webApiGetApps: 'cms/block/Apps',
+  webApiSetApp: 'cms/block/App',
   //#endregion
 };

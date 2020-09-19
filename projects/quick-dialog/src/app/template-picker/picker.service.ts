@@ -61,7 +61,7 @@ export class PickerService {
     log.add(`saveAppId(${appId}, ${reloadParts})`);
     // skip doing anything here, if we're in content-mode (which doesn't use/change apps)
     if (!this.loadApps) throw new Error(`can't save app, as we're not in app-mode`);
-    return this.http.get(`${Constants.webApiSetApp}?appId=${appId}`).toPromise();
+    return this.http.post(`${Constants.webApiSetApp}?appId=${appId}`, {}).toPromise();
   }
 
 
