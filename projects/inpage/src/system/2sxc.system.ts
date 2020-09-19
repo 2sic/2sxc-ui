@@ -1,7 +1,7 @@
 ﻿import { SxcEdit } from '../interfaces/sxc-instance-editable';
 
 //#region WebApi Endpoints used: 2sxc
-const webApiInstallComplete = 'view/module/finishinstallation';
+const webApiInstallComplete = 'sys/install/resume';
 //#endregion
 
 export class SystemUpgrader {
