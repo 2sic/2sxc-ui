@@ -37,7 +37,7 @@ export class SxcVersionsService {
   private loadVersions(): void {
     const appId = Config.appId();
     const item = Config.item();
-    const url = `${webApiHistory}/history?appId=${appId}`;
+    const url = `${webApiHistory}/get?appId=${appId}`;
 
     this.http.post<VersionDto[]>(url, item)
       .pipe(
