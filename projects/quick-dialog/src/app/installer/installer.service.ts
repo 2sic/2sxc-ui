@@ -19,7 +19,7 @@ export class InstallerService {
         switchMap(() => {
           if (!c.url) return observableOf(true);
           step(c);
-          return <Observable<any>>this.http.get(`${Constants.webApiInstallPackage}?packageUrl=${c.url}`);
+          return <Observable<any>>this.http.post(`${Constants.webApiInstallPackage}?packageUrl=${c.url}`, {});
         })), observableOf(true));
   }
 }

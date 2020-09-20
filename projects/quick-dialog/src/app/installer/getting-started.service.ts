@@ -23,7 +23,7 @@ export class GettingStartedService {
   }
 
   public loadGettingStarted(isContentApp: boolean): void {
-    this.http.get<string>(`${Constants.webApiRemoteInstaller}?dialog=gettingstarted&isContentApp=${isContentApp}`)
+    this.http.get<string>(`${Constants.webApiRemoteInstaller}?isContentApp=${isContentApp}`)
       .subscribe(json => this.gettingStartedSubject.next(json));
   }
 

@@ -3,8 +3,8 @@ export const Constants = {
 
   //#region WebApi Endpoints used: 2sxc
   webApiDialogContext: 'app-sys/system/dialogsettings',
-  webApiInstallPackage: 'app-sys/installer/installpackage',
-  webApiRemoteInstaller: 'view/Module/RemoteInstallDialogUrl',
+  webApiInstallPackage: 'sys/install/RemotePackage',
+  webApiRemoteInstaller: 'sys/install/RemoteWizardUrl',
   webApiGetTemplates: 'cms/block/Templates',
   webApiGetTypes: 'cms/block/ContentTypes',
   webApiGetApps: 'cms/block/Apps',

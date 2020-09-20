@@ -80,7 +80,7 @@ export class InstallerComponent implements OnInit {
         const msg = `Do you want to install these packages?
 
 ${packagesDisplayNames}
-This takes 5 - 30 seconds per package. Don't reload the page while it's installing.`;
+This takes about 10 seconds per package. Don't reload the page while it's installing.`;
         return confirm(msg);
       }),
 
