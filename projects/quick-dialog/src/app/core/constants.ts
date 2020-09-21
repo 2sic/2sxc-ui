@@ -2,7 +2,7 @@ export const Constants = {
   logName: 'quick-edit',
 
   //#region WebApi Endpoints used: 2sxc
-  webApiDialogContext: 'app-sys/system/dialogsettings',
+  webApiDialogContext: 'admin/dialog/settings',
   webApiInstallPackage: 'sys/install/RemotePackage',
   webApiRemoteInstaller: 'sys/install/RemoteWizardUrl',
   webApiGetTemplates: 'cms/block/Templates',
