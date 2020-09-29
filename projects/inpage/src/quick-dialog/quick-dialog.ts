@@ -2,6 +2,7 @@
 import { CmdItemHistory } from '../commands';
 import { C } from '../constants';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
+import { $2sxcInPage } from '../interfaces/sxc-controller-in-page';
 import { HasLog, Insights } from '../logging';
 import { IFrameBridge } from './iframe-bridge';
 import { QuickDialogContainer } from './quick-dialog-container';
@@ -139,7 +140,6 @@ class QuickDialogManagerSingleton extends HasLog {
         const cl = this.log.call('setUrlToQuickDialog', url);
         // change default url-schema from the primary angular-app to the quick-dialog
         url = url
-            // 2020-07-31 #2134 .replace(C.DialogPaths.ng1, C.DialogPaths.quickDialog)
             .replace(C.DialogPaths.ng8, C.DialogPaths.quickDialog);
         url = this.changePathToLocalhostForDev(url);
         return cl.return(url);
@@ -156,7 +156,7 @@ class QuickDialogManagerSingleton extends HasLog {
         try {
             const devMode = localStorage.getItem('devMode');
             if (devMode && !!devMode)
-                return url.replace('/desktopmodules/tosic_sexycontent/dist/ng/ui.html', 'http://localhost:4200');
+                return url.replace($2sxcInPage.env.uiRoot() + 'dist/ng/ui.html', 'http://localhost:4200');
         } catch (e) {
             // ignore
         }

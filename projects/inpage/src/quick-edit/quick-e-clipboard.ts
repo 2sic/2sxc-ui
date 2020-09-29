@@ -142,15 +142,20 @@ class QuickEClipboardSingleton extends HasLog {
             ? listItems[listItems.length - 1]
             : listItems[index];
 
-        const editContext = ContextForLists.getFromDom(list) || { parent: 'dnn', field: list.id };
+        const editContext = ContextForLists.getFromDom(list) || {
+            parent: 'dnn',
+            field: list.id,
+            parentGuid: null as string,
+        };
         return cl.return({
             parent: editContext.parent,
+            parentGuid: editContext.parentGuid,
             field: editContext.field,
             list: list,
             item: currentItem,
             index: index,
             type: type,
-        });
+        } as Selection);
     }
 
 }

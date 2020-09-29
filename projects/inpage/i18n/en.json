@@ -15,6 +15,7 @@
     "Delete": "delete item",
     "Develop": "edit template",
     "Edit": "edit",
+    "Insights": "insights and logs",
     "ItemHistory": "history",
     "Metadata": "metadata / descriptions",
     "MoreActions": "more actions",

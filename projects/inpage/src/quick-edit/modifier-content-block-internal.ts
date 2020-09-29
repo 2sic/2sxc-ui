@@ -1,4 +1,5 @@
 ﻿import { ModifierContentBlock } from '.';
+import { ContentListActionParams } from '../commands';
 import { SxcEdit } from '../interfaces/sxc-instance-editable';
 import { HasLog } from '../logging';
 import { ToolbarManager } from '../toolbar/toolbar-manager';
@@ -6,12 +7,13 @@ import { ToolbarManager } from '../toolbar/toolbar-manager';
 // otherwise you get an error at runtime, something about constructors
 // Object prototype may only be an Object or null: undefined
 // not sure why though
+// tslint:disable-next-line: ordered-imports
 import { translate } from '../i18n';
 
 //#region WebApi Endpoints used: 2sxc
-const webApiNew = 'view/module/generatecontentblock';
-const webApiMove = 'view/module/moveiteminlist';
-const webApiRemove = 'view/module/RemoveItemInList';
+const webApiNew = 'cms/block/block';
+const webApiMove = 'cms/list/move';
+const webApiRemove = 'cms/list/Delete';
 //#endregion
 
 /** contains commands to create/move/delete a content-block in an inner-content */
@@ -44,7 +46,7 @@ export class ModifierContentBlockInstance extends HasLog {
         const cblockList = container.find('div.sc-content-block');
         if (index > cblockList.length) index = cblockList.length; // make sure index is never greater than the amount of items
 
-        const params: ManipulateParams = {
+        const params = {
             parentId: parentId,
             field: fieldName,
             sortOrder: index,
@@ -53,7 +55,7 @@ export class ModifierContentBlockInstance extends HasLog {
         };
 
         const jqPromise = this.sxcInstance.webApi
-            .get({ url: webApiNew, params: params })
+            .post({ url: webApiNew, params: params })
             .then((result) => {
                 const newTag = $(result); // prepare tag for inserting
 
@@ -78,17 +80,17 @@ export class ModifierContentBlockInstance extends HasLog {
      * @param indexFrom
      * @param indexTo
      */
-    move(parentId: number, field: string, indexFrom: number, indexTo: number): Promise<void> {
+    move(parent: string, field: string, indexFrom: number, indexTo: number): Promise<void> {
 
-        const params: ManipulateParams = {
-            parentId: parentId,
-            field: field,
-            indexFrom: indexFrom,
-            indexTo: indexTo,
+        const params: ContentListActionParams = {
+            parent: parent,
+            fields: field,
+            index: indexFrom,
+            toIndex: indexTo,
         };
 
         const jqPromise = this.sxcInstance.webApi
-            .get({ url: webApiMove, params: params })
+            .post({ url: webApiMove, params: params })
             .then(() => {
                 console.log('done moving!');
                 window.location.reload();
@@ -99,37 +101,25 @@ export class ModifierContentBlockInstance extends HasLog {
 
     /**
      * delete a content-block inside a list of content-blocks
-     * @param parentId
+     * @param parent
      * @param field
      * @param index
      */
-    delete(parentId: number, field: string, index: number): Promise<void> {
+    delete(parent: string, field: string, index: number): Promise<void> {
 
         if (!confirm(translate('QuickInsertMenu.ConfirmDelete'))) return null;
-
-        const params: ManipulateParams = {
-            parentId: parentId,
-            field: field,
+        const params: ContentListActionParams = {
+            parent: parent,
+            fields: field,
             index: index,
         };
 
         const jqPromise = this.sxcInstance.webApi
-            .get({ url: webApiRemove, params: params })
+            .delete({ url: webApiRemove, params: params })
             .then(() => {
                 console.log('done deleting!');
                 window.location.reload();
             });
         return Promise.resolve(jqPromise);
     }
-}
-
-interface ManipulateParams {
-    parentId: number;
-    field: string;
-    sortOrder?: number;
-    index?: number;
-    indexFrom?: number;
-    indexTo?: number;
-    app?: string;
-    guid?: string;
 }

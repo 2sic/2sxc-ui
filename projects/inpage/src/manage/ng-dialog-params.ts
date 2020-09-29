@@ -23,6 +23,12 @@ export class NgUrlValuesWithoutParams {
   readonly user: ContextOfUser;
   readonly approot: string | null;
 
+  /** The api root for all 2sxc API calls - will vary by platform */
+  readonly api: string;
+
+  /** The root path to the UIs (scripts, css etc.) */
+  readonly uiRoot: string;
+
   /** new in 10.27 */
   readonly apps?: string;
 
@@ -44,12 +50,12 @@ export class NgUrlValuesWithoutParams {
     this.portalroot = context.tenant.url;
     this.websiteroot = context.instance.sxcRootUrl;
 
+    // New in 11.05.01
+    this.api = $2sxc.env.api();
+    this.uiRoot = $2sxc.env.uiRoot();
+
     this.partOfPage = partOfPage;
-    if (partOfPage) {
-        // 2020-03-11 2dm - this never seems to be set a.nywhere
-        // versioningRequirements= editContext.ContentBlock.VersioningRequirements;
-        this.publishing = context.contentBlock.versioningRequirements;
-    }
+    if (partOfPage) this.publishing = context.contentBlock.versioningRequirements;
     // todo= probably move the user into the dashboard info
     this.user = ContextOfUser.fromContext(context);
     this.approot = context.app.appPath || null; // this is the only value which doesn't have a slash by default. note that the app-root doesn't exist when opening "manage-app"
@@ -58,5 +64,4 @@ export class NgUrlValuesWithoutParams {
     this.fa = !context.app.isContent;
     this.rvt = $2sxc.env.rvt();
   }
-
 }

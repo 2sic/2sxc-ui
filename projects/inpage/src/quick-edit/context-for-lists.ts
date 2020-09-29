@@ -2,6 +2,10 @@ import { QeSelectors } from '.';
 
 export class ContextForLists {
     parent: string | number;
+
+    // new in 11.06 - all list-operations now use the parentGuid for inner-content
+    parentGuid: string;
+
     field: string;
     type?: string;
     guid?: string;

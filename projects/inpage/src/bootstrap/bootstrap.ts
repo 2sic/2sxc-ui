@@ -61,19 +61,22 @@ export class BootstrapInPage extends HasLog {
             window.$2sxc.stats.watchDomChanges++;
             let processed = 0;
 
-            // 2019-08-29 2rm added automatic initialization of toolbars (not only module nodes)
+            // Loop through each changed item, check if it's something we want to initialize
             m.forEach((v) => {
                 Array.prototype.forEach.call(v.addedNodes, (n: HTMLElement) => {
                     const node = $(n);
-                    // Ignore added menu nodes as this may cause performance issues
+                    // Menus which appear also cause DOM changes, but we want to ignore these for performance reasons
                     if (node.is('.sc-menu')) return;
 
                     processed++;
 
                     // If the added node is a [data-edit-context], it is either a module or a content block which was replaced
                     // re-initialize the module
-                    if (node.is('div[data-edit-context]'))
+                    if (node.is('div[data-edit-context]')) {
                         this.initInstance(node, false);
+                        // in case it has inner content, try to open the picker-dialog
+                        if (!QuickDialog.isVisible()) this.tryShowTemplatePicker();
+                    }
                     // If the added node contains [data-edit-context] nodes, it is likely the DNN module drag manager which added
                     // the node. To prevent multiple initialization while dragging modules, we additionally check for the
                     // .active-module class which seems to be applied while dragging the module.
@@ -155,17 +158,16 @@ export class BootstrapInPage extends HasLog {
     private initInstance(module: JQuery, isFirstRun: boolean): void {
         const cl = this.log.call('initInstance', `module: obj, isFirstRun: ${isFirstRun}) initialized: ${this.initializedInstances}`);
 
-        // check if module is already in the list of initialized modules
+        // if instance is already in the list of initialized modules, skip
+        // otherwise add for next time to prevent recursions
         if (this.initializedInstances.find((m) => m === module)) return;
-
-        // add to modules-list first, in case we run into recursions
         this.initializedInstances.push(module);
 
         let sxc = SxcEdit.get(module);
 
         // check if the sxc must be re-created. This is necessary when modules are dynamically changed
         // because the configuration may change, and that is cached otherwise, resulting in toolbars with wrong config
-        if (!isFirstRun) sxc = sxc.recreate(true) as TypeUnsafe as SxcEdit;
+        if (!isFirstRun) sxc = sxc.recreate(true) as SxcEdit;
 
         // check if we must show the glasses
         // this must always run because it can be added ajax-style

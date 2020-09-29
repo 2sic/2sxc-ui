@@ -5,8 +5,8 @@ import { HasLog, Insights } from '../logging';
 import { renderer } from './render';
 
 //#region WebApi Endpoints used: 2sxc
-const webApiRender = 'view/module/rendertemplate';
-const webApiSave = 'view/module/savetemplateid';
+const webApiRender = 'cms/block/render';
+const webApiSave = 'cms/block/template';
 //#endregion
 
 class ContentBlockEditorSingleton extends HasLog {
@@ -128,7 +128,7 @@ class ContentBlockEditorSingleton extends HasLog {
         };
         cl.data('params', params);
         const promise = new Promise<string>((resolve, reject) => {
-            context.sxc.webApi.get( { url: webApiSave, params: params })
+            context.sxc.webApi.post( { url: webApiSave, params: params })
                 .done((data, textStatus, jqXhr) => {
                     // resolve or reject based on http-status: 200 & 204 = ok
                     if (jqXhr.status === 204 || jqXhr.status === 200) resolve(data);

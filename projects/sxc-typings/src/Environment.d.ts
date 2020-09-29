@@ -18,30 +18,25 @@ export interface Environment extends HasLog {
 
   /**
    *The API endpoint url from the environment
-   *
-   * @returns {string}
-   * @memberof Environment
    */
   api(): string;
  
 
   /**
    * The current page ID
-   *
-   * @returns {number}
-   * @memberof Environment
    */
   page(): number;
 
   /**
    * The Request Verification Token
-   *
-   * @returns {string}
-   * @memberof Environment
    */
   rvt(): string ;
 
 
+  /**
+   * The uiRoot path
+   */
+  uiRoot(): string;
 }
 
 export interface JsInfo {
@@ -53,4 +48,7 @@ export interface JsInfo {
   root: string;
   /** Request verification token */
   rvt: string;
+
+  /** The root path for the UI */
+  uiRoot: string;
 }

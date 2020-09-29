@@ -2,6 +2,7 @@
 import { TagToolbarManager } from '..';
 import { ContextComplete } from '../../context/bundles/context-bundle-button';
 import { Translator } from '../../i18n';
+import { TypeFollow } from '../config/toolbar-settings';
 
 /**
  * This is the modern toolbar which is attached to a tag from whic it hovers.
@@ -12,6 +13,7 @@ import { Translator } from '../../i18n';
 export class TagToolbar {
     private toolbarElement = null as JQuery;
     private initialized = false;
+    private follow: TypeFollow;
 
     /**
      * A Tag-Toolbar which is outside of the module DOM and floating freely
@@ -21,6 +23,7 @@ export class TagToolbar {
      * @memberof TagToolbar
      */
     constructor(private readonly hoverTag: JQuery, private readonly context: ContextComplete, private translator?: typeof Translator) {
+        this.follow = context.toolbar.settings.follow;
         // Ensure toolbar gets visible when hovering
         this.addMouseEvents(hoverTag);
     }
@@ -69,7 +72,7 @@ export class TagToolbar {
         this.initialized = true;
     }
 
-    private updatePosition() {
+    private updatePosition(initial: boolean = false) {
         const position = {
             top: 'auto' as string | number,
             left: 'auto' as string | number,
@@ -91,10 +94,14 @@ export class TagToolbar {
         position.tagScrollOffset = Math.min(position.viewportOffset - position.bodyOffset.top, 0);
 
         // Update top coordinates
-        if (position.tagScrollOffset === 0)
-            position.top = position.tagOffset.top + tagToolbarPadding - position.bodyOffset.top;
-        else
-            position.top = position.mousePos.y + position.win.scrollY - position.bodyOffset.top - toolbarHeight / 2;
+        // new: only do this on initial=true && follow != 'none' or not-initial
+        // start by setting default-top
+        position.top = position.tagOffset.top + tagToolbarPadding - position.bodyOffset.top;
+        const trackMouse = (this.follow === 'always')
+            || (this.follow === 'initial' && initial)
+            || (this.follow === 'scroll' && position.tagScrollOffset !== 0);
+        if (trackMouse)
+                position.top = position.mousePos.y + position.win.scrollY - position.bodyOffset.top - toolbarHeight / 2;
 
         // Update left / right coordinates
         // todo: try to change class to use attribute or something
@@ -117,19 +124,41 @@ export class TagToolbar {
      * Hide the toolbar and detach scrolling-watcher
      */
     private hide() {
-        $(window).off('scroll', () => this.updatePosition());
         this.toolbarElement.css({ display: 'none' });
+        this.disableScrollWatcher();
     }
 
 
     /**
-     * Show the toolbar and attach scrolling watcher
+     * Show the toolbar
      */
     private show() {
         this.toolbarElement.css({ display: 'block' });
-        $(window).on('scroll', () => this.updatePosition());
-        this.updatePosition();
+        this.updatePosition(true);
+        this.activateScrollWatcher();
     }
+
+    /** Remember if scrollwatcher has been enabled */
+    private watcherActive = false;
+    /** The update function as a prebuild function, so it can be reused in on/off */
+    private updateFn = () => this.updatePosition();
+    /** Enable scroll watcher & remember */
+    private activateScrollWatcher() {
+        if (this.watcherActive) return;
+        const trackOngoing = this.follow === 'scroll' || this.follow === 'always';
+        if (!trackOngoing) return;
+        $(window).on('scroll', this.updateFn);
+        if (this.follow === 'always') $(window).on('mousemove', this.updateFn);
+        this.watcherActive = true;
+    }
+
+    /** Disable scroll watcher - if it is active */
+    private disableScrollWatcher() {
+        if (!this.watcherActive) return;
+        $(window).off('scroll', this.updateFn);
+        $(window).off('mousemove', this.updateFn);
+    }
+
 
 }
 

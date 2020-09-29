@@ -2,9 +2,10 @@
 import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { translate } from '../i18n';
 import { ItemIdentifierGroup, ItemIdentifierSimple, ItemInField } from '../interfaces/item-identifiers';
+import { $2sxcInPage } from '../interfaces/sxc-controller-in-page';
 import { HasLog, Log } from '../logging';
 import { NgUrlValuesWithoutParams } from '../manage/ng-dialog-params';
-import { DictionaryValue, TypeUnsafe, SxcPath } from '../plumbing';
+import { DictionaryValue, TypeUnsafe, urlClean } from '../plumbing';
 import { ButtonSafe } from '../toolbar/config';
 
 /**
@@ -82,7 +83,7 @@ export class CommandLinkGenerator extends HasLog {
         const partOfPage = button.partOfPage();
         const ngDialogParams = new NgUrlValuesWithoutParams(context, partOfPage);
 
-        return `${this.rootUrl}#${$.param(ngDialogParams)}&${$.param(urlItems)}${this.debugUrlParam}`;
+        return `${this.rootUrl}#${$.param(ngDialogParams).replace(/%2F/g, '/')}&${$.param(urlItems)}${this.debugUrlParam}`;
     }
 
     /**
@@ -93,7 +94,7 @@ export class CommandLinkGenerator extends HasLog {
         // const path = (context.ui.form === 'ng8') // v11 applies to all forms, not just edit: //  && dialogName === 'edit')
         //     ? C.DialogPaths.ng8
         //     : C.DialogPaths.ng1;
-        return `${context.instance.sxcRootUrl}${SxcPath}${C.DialogPaths.ng8}?sxcver=${context.instance.sxcVersion}`;
+        return urlClean(`${context.instance.sxcRootUrl}${$2sxcInPage.env.uiRoot()}${C.DialogPaths.ng8}`) + `?sxcver=${context.instance.sxcVersion}`;
     }
 
     private addItem() {
@@ -129,11 +130,6 @@ export class CommandLinkGenerator extends HasLog {
         const fields: string[] = [this.findPartName(true)];
         if (withPresentation) fields.push(this.findPartName(false));
         fields.map((f) => this.addContentGroupItem(groupId, index, f, isAdd));
-        // previous code before 10.27
-        // this.addContentGroupItem(groupId, index, this.findPartName(true), isAdd);
-
-        // if (withPresentation)
-        //   this.addContentGroupItem(groupId, index, this.findPartName(false), isAdd);
         cl.done();
     }
 

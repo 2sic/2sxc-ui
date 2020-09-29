@@ -1,12 +1,14 @@
 ﻿import { renderer } from '../../contentBlock/render';
 import { ContextComplete } from '../../context/bundles/context-bundle-button';
+import { TypeUnsafe } from '../../plumbing/TypeTbD';
 import { ContentListActionParams } from './content-list-action-params';
 
 //#region WebApi Endpoints used: 2sxc
-const webApiAdd = 'view/module/additem';
-const webApiRemoveFromList = 'view/module/removefromlist';
-const webApiReorder = 'view/module/changeorder';
-const webApiPublish = 'view/module/publish';
+const webApiAdd = 'cms/block/item';
+const webApiRemoveFromList = 'cms/list/delete';
+const webApiReorder = 'cms/list/move';
+const webApiItemPublish = 'cms/item/publish';
+const webApiBlockPublish = 'cms/block/publish';
 //#endregion
 
 /**
@@ -20,7 +22,7 @@ class ContentListActions {
      * @param {number} index
      */
     addItem<T>(context: ContextComplete, index: number) {
-        return getAndReload<T>(context, webApiAdd , { index });
+        return doAndReload<T>(context, webApiAdd , { index }, 'post');
     }
 
     /**
@@ -30,11 +32,11 @@ class ContentListActions {
      */
     removeFromList(context: ContextComplete) {
         const params = context.button.command.params;
-        return getAndReload<void>(context, webApiRemoveFromList, {
+        return doAndReload<void>(context, webApiRemoveFromList, {
             index: params.sortOrder,
             parent: params.parent,
             fields: params.fields,
-         });
+         }, 'delete');
     }
 
     /**
@@ -45,12 +47,12 @@ class ContentListActions {
      */
     changeOrder(context: ContextComplete, index: number, toIndex: number) {
         const params = context.button.command.params;
-        return getAndReload<void>(context, webApiReorder, {
+        return doAndReload<void>(context, webApiReorder, {
             parent: params.parent,
             fields: params.fields,
             index,
             toIndex,
-        });
+        }, 'post');
     }
 
     /**
@@ -60,10 +62,10 @@ class ContentListActions {
      * @param {number} index
      */
     publish(context: ContextComplete, part: string, index: number) {
-        return getAndReload<void>(context, webApiPublish, {
+        return doAndReload<void>(context, webApiBlockPublish, {
             part,
             index,
-        });
+        }, 'post');
     }
 
     /**
@@ -72,7 +74,9 @@ class ContentListActions {
      * @param {number} entityId
      */
     publishId(context: ContextComplete, entityId: number) {
-        return getAndReload<void>(context, webApiPublish, { id: entityId });
+        return doAndReload<void>(context, webApiItemPublish,
+            { id: entityId },
+            'post');
     }
 }
 
@@ -96,18 +100,29 @@ export const Actions = new ContentListActions();
  * @param {ContentListActionParams} params
  * @returns {void | T}
  */
-function getAndReload<T>(
+function doAndReload<T>(
     context: ContextComplete,
     url: string,
     params: ContentListActionParams,
+    verb: 'get' | 'post' | 'delete' = 'get',
+    postData: TypeUnsafe = {},
 ): Promise<void | T> {
     return new Promise<T>((resolve, reject) => {
-        context.sxc.webApi
-            .get({
+        const call = verb === 'post'
+          ? context.sxc.webApi.post({
                 url: url,
                 params: params,
-            })
-            .done((data, textStatus: string, jqXHR) => {
+            }, postData)
+          : verb === 'delete'
+            ? context.sxc.webApi.delete({
+                url: url,
+                params: params,
+              })
+            : context.sxc.webApi.get({
+                url: url,
+                params: params,
+              });
+        call.done((data, textStatus: string, jqXHR) => {
                 if (jqXHR.status === 204 || jqXHR.status === 200) {
                     // resolve the promise with the response text
                     resolve(data);

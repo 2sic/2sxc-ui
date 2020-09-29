@@ -11,9 +11,11 @@
       // This must be a new script tag, so that the previously dynamic-script tag has already been run
       // Tell 2sxc all the parameters it needs to work properly
       $2sxc.env.load({
-        page: $2sxc.urlParams.require("tid"),
-        rvt: $2sxc.urlParams.require("rvt"),
-        root: $2sxc.urlParams.require("portalroot"),
+        page: $2sxc.urlParams.require('tid'),
+        rvt: $2sxc.urlParams.require('rvt'),
+        root: $2sxc.urlParams.require('portalroot'),
+        api: $2sxc.urlParams.require('api'),
+        uiRoot: $2sxc.urlParams.require('uiRoot'),
       });
 
       // send message to the angular-observable to restart the app
@@ -22,7 +24,7 @@
         if (window.bootController) window.bootController.reboot();
       }
     </script>
-    
+
     <meta charset="utf-8">
     <title>Quick Dialog</title>
 
