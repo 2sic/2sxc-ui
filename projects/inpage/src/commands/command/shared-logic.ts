@@ -1,6 +1,4 @@
-import { CommandParams } from '..';
 import { ContextComplete } from '../../context';
-
 
 /**
  * TODO: place shared logic like for deciding if we show list buttons
