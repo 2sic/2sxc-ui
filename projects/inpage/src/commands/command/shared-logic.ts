@@ -15,10 +15,19 @@ export class SharedLogic {
     //     return params;
     // }
 
-    static isBlockList(context: ContextComplete) {
+    static isPartOfBlockList(context: ContextComplete) {
         return !!(context.contentBlock.isList &&
             context.button.command.params.useModuleList &&
             context.button.command.params.sortOrder !== -1);    // -1 is the header item
+    }
+
+    /**
+     * This will tell us, if the item is being referenced (like in a list)
+     * It's similar to isBlockList, but will return true even if it's
+     * a non-list (single item only)
+     */
+    static isBlockReference(context: ContextComplete) {
+        return !!context.button.command.params.useModuleList;    // -1 is the header item
     }
 
     static isFieldList(context: ContextComplete) {
@@ -27,6 +36,10 @@ export class SharedLogic {
     }
 
     static isList(context: ContextComplete) {
-        return this.isBlockList(context) || this.isFieldList(context);
+        return this.isPartOfBlockList(context) || this.isFieldList(context);
+    }
+
+    static isReferencedItem(context: ContextComplete) {
+        return this.isBlockReference(context) || this.isFieldList(context);
     }
 }
