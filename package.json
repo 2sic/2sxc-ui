@@ -1,6 +1,6 @@
 {
   "name": "2sxc-ui",
-  "version": "11.07.02",
+  "version": "11.07.03",
   "description": "2sxc UI - the JS UI of 2sxc\r ============",
   "scripts": {
     "release-all": "npm run js2sxc && npm run inpage && npm run snippets && npm run quickdialog",
