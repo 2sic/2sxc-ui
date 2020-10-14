@@ -2,9 +2,16 @@
 <html>
   <head>
     <script>
-      var jsVersionCacheId = window.location.search;
+      // Ensure that 2sxc.api.min is always reloaded to prevent caching of old code
+      // If last digit is a 0, then we're missing a real build number, so use a random one to ensure cache breaking
+      // fix https://github.com/2sic/2sxc/issues/2216
+      var vBuild = window.location.search;
+      var vParts = vBuild.substr(vBuild.indexOf("=") + 1).split('.');
+      for (var vi = 0; vi < vParts.length; vi++) vParts[vi] = Number(vParts[vi]);
+      if (vParts[3] === 0) vParts[3] = Math.floor(Math.random() * 100000);
+      var cacheBreak = vParts.join('.');
       document.write('<base href="' + window.location.pathname + '">');
-      document.write('<script src="../../js/2sxc.api.min.js' + jsVersionCacheId + '"></scr' + 'ipt>');
+      document.write('<script src="../../js/2sxc.api.min.js?cacheBreak=' + cacheBreak + '"></scr' + 'ipt>');
     </script>
 
     <script>
