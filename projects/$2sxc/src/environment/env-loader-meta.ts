@@ -36,7 +36,7 @@ export class EnvironmentMetaLoader extends Log.HasLog {
         if(this.env.ready) return cl.done('loadMeta - ready');
 
         this.log.add('loadMetaFromHeader: start, retry:' + this.retries + ', force fallback: ' + forceFallback);
-        const meta = this.getMeta(MetaHeaderJsApi);
+        const meta = this.getMetaContent();
         if(!meta) {
             this.retries++;
             if(forceFallback || this.retries >= maxRetries) {
@@ -54,14 +54,10 @@ export class EnvironmentMetaLoader extends Log.HasLog {
         cl.done();
     }
 
-    private getMeta(metaName: string): string {
-        const metas = document.getElementsByTagName('meta');
-        
-        for (let i = 0; i < metas.length; i++)
-            if (metas[i].getAttribute('name') === metaName) 
-                return metas[i].getAttribute(MetaProperty);
-
-        return '';
+    private getMetaContent(): string {
+        const ourMeta = this.getJsApiMetaTag();
+        if (!ourMeta) return null;
+        return ourMeta.getAttribute(MetaProperty)
     }
 
     private getJsApiMetaTag() {
@@ -76,17 +72,15 @@ export class EnvironmentMetaLoader extends Log.HasLog {
      */
     private startObserver(): void {
         if (!!this.observer) return;
-        this.observer = new MutationObserver((m) => this.mutationCallback(m));
+        this.observer = new MutationObserver((mutationsList: MutationRecord[]) => {
+            for(const mutation of mutationsList) {
+                if (mutation.type === 'attributes' && mutation.attributeName === MetaProperty) {
+                    this.log.add('meta env info updated');
+                    this.env.load(JSON.parse(this.getMetaContent()) as Public.JsInfo, MetaSourceId);
+                }
+            }
+        });
         this.log.add('start observing');
         this.observer.observe(this.getJsApiMetaTag(), { attributes: true, childList: false, subtree: false });
-    }
-    
-    private mutationCallback(mutationsList: MutationRecord[]) {
-        for(const mutation of mutationsList) {
-            if (mutation.type === 'attributes' && mutation.attributeName === MetaProperty) {
-                this.log.add('meta env info updated');
-                this.env.load(JSON.parse(this.getMeta(MetaHeaderJsApi)) as Public.JsInfo, MetaSourceId);
-            }
-        }
     }
 }
