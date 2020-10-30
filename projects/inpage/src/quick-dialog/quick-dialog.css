@@ -33,14 +33,14 @@
   padding-left: 80px;
 }
 
-.DNNModuleContent .sc-uninitialized {
+div.sc-uninitialized {
   cursor: pointer;
   width: 100%;
   display: inline-block;
   text-align: center;
 }
 
-.DNNModuleContent .sc-uninitialized div {
+div.sc-uninitialized div {
   margin: 5px auto;
   color: #fff;
   background: rgb(2, 139, 255);
@@ -55,8 +55,8 @@
   display: inline-block;
 }
 
-.DNNModuleContent .sc-uninitialized div[class^='icon-sxc-']:before,
-.DNNModuleContent .sc-uninitialized div[class*=' icon-sxc-']:before {
+div.sc-uninitialized div[class^='icon-sxc-']:before,
+div.sc-uninitialized div[class*=' icon-sxc-']:before {
   /* margin-left: 0.3em; */
   margin-top: 0.6em;
 }
