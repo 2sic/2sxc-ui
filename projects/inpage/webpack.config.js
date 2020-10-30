@@ -6,7 +6,7 @@ const webpackHelpers = require('../webpack/webpack-helpers.js');
 const CopyPlugin = require('copy-webpack-plugin');
 
 const bundleName = "inpage";
-const dnnTarget = webpackHelpers.DnnTargetFolder + '/dist/' + bundleName;
+// const dnnTarget = webpackHelpers.DnnTargetFolder + '/dist/' + bundleName;
 const assetsTarget = webpackHelpers.AssetsTarget + '/dist/' + bundleName;
 
 const configuration = {
@@ -43,7 +43,7 @@ const configuration = {
                 }
             ],
         }),
-        webpackHelpers.createCopyAfterBuildPlugin(assetsTarget, dnnTarget),
+        webpackHelpers.createCopyAfterBuildPlugin(assetsTarget, webpackHelpers.TargetsWithoutAssets, '/dist/' + bundleName),
     ],
     module: {
         rules: [

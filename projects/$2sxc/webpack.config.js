@@ -28,7 +28,7 @@ const configuration = {
     plugins: [
         webpackHelpers.CreateDefinePlugin(webpack),
         // after build, copy the files from the project assets
-        webpackHelpers.createCopyAfterBuildPlugin(assetsTarget, dnnTarget),
+        webpackHelpers.createCopyAfterBuildPlugin(assetsTarget, /* dnnTarget */ webpackHelpers.TargetsWithoutAssets, 'js'),
     ]
 };
 

@@ -27,8 +27,11 @@ function startCpx(src, target, useWatch) {
 function runAllCpx(root, targetAddOn, watch) {
     const cpxFilter = root + '/**/*.*';
     // Start CPX in copy or watch mode
-    startCpx(cpxFilter, webpackHelpers.AssetsTarget + targetAddOn, watch);
-    startCpx(cpxFilter, webpackHelpers.DnnTargetFolder + targetAddOn, watch);
+    webpackHelpers.Targets.forEach(t => {
+        startCpx(cpxFilter, t + targetAddOn, watch);
+    });
+    // startCpx(cpxFilter, webpackHelpers.AssetsTarget + targetAddOn, watch);
+    // startCpx(cpxFilter, webpackHelpers.DnnTargetFolder + targetAddOn, watch);
 }
 
 // Watch the dist folder till the important folders are created, then start file sync
