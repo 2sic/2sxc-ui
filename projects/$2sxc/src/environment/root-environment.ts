@@ -49,35 +49,35 @@ export class Environment extends HasLog implements Public.Environment {
     }
 
     public api(): string {
-        this.ensureReadyOrThrow();
+        this.ensureReadyOrThrow('api');
         return this.header.api;
     }
 
     public page(): number { 
-        this.ensureReadyOrThrow(); 
+        this.ensureReadyOrThrow('page'); 
         return this.header.page; 
     }
 
     public rvt(): string { 
-        this.ensureReadyOrThrow(); 
+        this.ensureReadyOrThrow('rvt'); 
         return this.header.rvt; 
     }
 
     public uiRoot(): string { 
-        this.ensureReadyOrThrow(); 
+        this.ensureReadyOrThrow('uiRoot'); 
         return this.header.uiRoot || DnnUiRoot; 
     }
 
-    private ensureReadyOrThrow(): void {
+    private ensureReadyOrThrow(partRequested: string): void {
         if(this.ready) return;
 
         // try one last time - usually it should really be ready by now
-        this.log.add('ensureReady - force last attempt to load MetaHeader')
+        this.log.add('ensureReady - force last attempt to load MetaHeader for ' + partRequested)
         this.metaLoader.loadMetaFromHeader(true);
 
         // if still not ready, throw exception to console log
         if(this.ready) return;
-        throw "Can't find apiRoot - something went wrong, pls contact 2sxc.org"
+        throw `Can't find ${partRequested} - something went wrong, pls contact 2sxc.org`;
     }
 
 }
