@@ -18,5 +18,8 @@ export const HeaderNames = {
     // headers as defined by DNN
     ModuleId: "ModuleId",
     TabId: "TabId",
-    Rvt: "RequestVerificationToken"
+    Rvt: "RequestVerificationToken",
+
+    // Header which should replace "TabId" in the long run
+    PageId: "PageId",
 };
