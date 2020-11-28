@@ -1,4 +1,5 @@
-﻿import * as Public from '../../../sxc-typings/index';
+﻿import { ContextIdentifier } from './../sxc-root/context-identifier';
+import * as Public from '../../../sxc-typings/index';
 import { SxcWebApi } from './web-api/sxc-web-api';
 import { ToSxcName } from '..';
 import { SxcRoot } from '../sxc-root/sxc-root';
@@ -35,6 +36,10 @@ export class SxcInstance extends HasLog implements Public.SxcInstance {
         public cbid: number,
         /** The environment information, important for http-calls */
         public readonly root: SxcRoot & SxcRootInternals,
+        /**
+         * Custom context information provided by the constructor - will replace auto-context detection
+         */
+        public ctx?: ContextIdentifier,
     ) {
         super('SxcInstance', null, 'Generating for ' + id + ':' + cbid);
         this.webApi = new SxcWebApi(this);
