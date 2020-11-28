@@ -5,6 +5,11 @@ import { IQuickDialogConfig } from '../interfaces/iquick-dialog-config';
 
 export class QuickDialogConfig implements IQuickDialogConfig {
     appId: number;
+    /**
+     * This will cause the quick-dialog to start in a different mode
+     * True means it starts with Content-Type picker and then view
+     * False means it starts with App-Picker and then View
+     */
     isContent: boolean;
     isInnerContent: boolean;
     hasContent: boolean;

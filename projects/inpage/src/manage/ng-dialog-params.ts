@@ -16,7 +16,8 @@ export class NgUrlValuesWithoutParams {
   readonly lang: string;
   readonly langpri: string;
   readonly langs: string;
-  readonly portalroot: string;
+  // 2020-11-28 #cleanup11.11 2dm - not used, disabled - keep till Jan 2021, then remove from backend-json and drop these comments
+  // readonly portalroot: string;
   readonly websiteroot: string;
   readonly partOfPage?: boolean;
   readonly publishing?: string;
@@ -47,7 +48,8 @@ export class NgUrlValuesWithoutParams {
     this.lang = context.app.currentLanguage;
     this.langpri = context.app.primaryLanguage;
     this.langs = JSON.stringify(context.app.allLanguages);
-    this.portalroot = context.tenant.url;
+    // 2020-11-28 #cleanup11.11 2dm - not used, disabled - keep till Jan 2021, then remove from backend-json and drop these comments
+    // this.portalroot = context.tenant.url;
     this.websiteroot = context.instance.sxcRootUrl;
 
     // New in 11.05.01

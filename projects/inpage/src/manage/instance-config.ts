@@ -4,7 +4,8 @@ import { ContextComplete } from '../context/bundles/context-bundle-button';
  * used to build instance config
  */
 export class InstanceConfig {
-  portalId: number;
+  // 2020-11-28 #cleanup11.11 2dm - not used, disabled - keep till Jan 2021, then remove from backend-json and drop these comments
+  // portalId: number;
   tabId: number;
   moduleId: number;
   version: string;
@@ -15,7 +16,8 @@ export class InstanceConfig {
 
   static fromContext(contextOfButton: ContextComplete): InstanceConfig {
     const config = new InstanceConfig();
-    config.portalId = contextOfButton.tenant.id;
+    // 2020-11-28 #cleanup11.11 2dm - not used, disabled - keep till Jan 2021, then remove from backend-json and drop these comments
+    // config.portalId = contextOfButton.tenant.id;
     config.tabId = contextOfButton.page.id;
     config.moduleId = contextOfButton.instance.id;
     config.version = contextOfButton.instance.sxcVersion;

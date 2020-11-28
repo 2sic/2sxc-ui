@@ -65,7 +65,7 @@ class TranslatorGlobal extends HasLog {
         const sxc = SxcEdit.get(htmlElementOrId);
         this.initialized = false; // for real, it is not initialized...
         const editContext = SxcEdit.getEditContext(sxc);
-        const context = new ContextComplete(editContext);
+        const context = new ContextComplete(editContext, sxc);
         context.sxc = sxc;
         return cl.return(context);
     }

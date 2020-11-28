@@ -61,7 +61,7 @@ export class SxcEdit extends SxcInstanceWithInternals {
  * @return {AttrJsonEditContext} edit-context object
  */
 function getEditContextOfTag(htmlTag: HTMLElement): AttrJsonEditContext {
-  const attr = htmlTag.getAttribute('data-edit-context');
+  const attr = htmlTag?.getAttribute('data-edit-context');
   return JSON.parse(attr || '{ }') as AttrJsonEditContext;
 }
 

@@ -1,11 +1,12 @@
-﻿import { AttrJsonEditContext } from '../html-attribute';
+﻿import { NumberNotDefinedHuge } from '../../../../core';
+import { AttrJsonEditContext } from '../html-attribute';
 
 /**
  * information related to the current contentBlock, incl
  */
 export class ContextOfContentBlock {
     // ContentBlock
-    id: number; // the CB ID
+    id: number = NumberNotDefinedHuge; // the CB ID
     versioningRequirements: string;
     parentFieldName: string;
     parentFieldSortOrder: number;

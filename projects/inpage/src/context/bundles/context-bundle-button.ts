@@ -7,8 +7,8 @@ import { ContextBundleToolbar } from './context-bundle-toolbar';
 export class ContextComplete extends ContextBundleToolbar {
     button?: Button;
 
-    constructor(editCtx: AttrJsonEditContext) {
-        super(editCtx);
+    constructor(editCtx: AttrJsonEditContext, sxc?: SxcEdit) {
+        super(editCtx, sxc);
         // note that the button will not be filled here, as it will be filled somewhere else
     }
 
@@ -58,7 +58,7 @@ export class ContextComplete extends ContextBundleToolbar {
      */
     static getContextInstance(sxc: SxcEdit, htmlElement?: HTMLElement): ContextComplete {
         const editContext = SxcEdit.getEditContext(sxc, htmlElement);
-        return new ContextComplete(editContext);
+        return new ContextComplete(editContext, sxc);
     }
 
 }

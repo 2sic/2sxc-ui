@@ -68,7 +68,7 @@ export class EditManager implements SxcInstanceManage {
     /**
      * internal method to find out if it's in edit-mode
      */
-    _isEditMode = () => this.editContext.Environment.IsEditable;
+    _isEditMode = () => this.editContext.Environment.IsEditable || false;
 
     /**
      * used for various dialogues
