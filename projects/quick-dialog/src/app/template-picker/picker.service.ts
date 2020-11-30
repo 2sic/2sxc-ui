@@ -47,9 +47,9 @@ export class PickerService {
     log.add(`buildObservables()`);
 
     // ready requires all to have data, but app can be skipped if not required
-    this.ready$ = combineLatest(this.apps$, this.contentTypes$, this.templates$,
-      (a, ct, t) => ({ apps: a, types: ct, templates: t }))
+    this.ready$ = combineLatest([this.apps$, this.contentTypes$, this.templates$])
       .pipe(
+        map(([a, ct, t]) => ({ apps: a, types: ct, templates: t })),
         map(set => set.templates !== uninitializedList
           && set.types !== uninitializedList
           && (!this.mustLoadApps || !!(set.apps && set.apps !== uninitializedList))),
@@ -74,9 +74,7 @@ export class PickerService {
   }
 
   public reloadAppParts(): Observable<any> {
-    return combineLatest(
-      this.loadTemplates(),
-      this.loadContentTypes());
+    return combineLatest([this.loadTemplates(), this.loadContentTypes()]);
   }
 
   /**

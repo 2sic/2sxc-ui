@@ -55,54 +55,51 @@ export class CurrentDataService {
 
   private buildBasicObservables() {
     // app-stream should contain selected app, once the ID is known - or null
-    this.app$ = combineLatest(
+    this.app$ = combineLatest([
       this.api.apps$,
-      this.appId$,
-      (apps, appId) => apps.find(a => a.AppId === appId));
+      this.appId$]).pipe(map(([apps, appId]) => apps.find(a => a.AppId === appId)));
 
     // current type should be either the initial type, or a manually selected type
-    const initialType$ = combineLatest(
-      this.initialTypeId$,
-      this.api.contentTypes$,
-      (typeId, all) => ContentTypesProcessor.findContentTypesById(all, typeId));
+    const initialType$ = combineLatest([this.initialTypeId$, this.api.contentTypes$])
+      .pipe(map(([typeId, all]) => ContentTypesProcessor.findContentTypesById(all, typeId)));
     this.type$ = merge(initialType$, this.selectedType$).pipe(
-      startWith(null),
+      startWith(null as ContentType),
       share());
 
     // the templates-list is always filtered by the currently selected type
-    this.templates$ = combineLatest(
-      this.api.templates$,
-      this.type$,
-      (all, current) => this.findTemplatesForTypeOrAll(all, current))
+    this.templates$ = combineLatest([this.api.templates$, this.type$])
+      .pipe(map(([all, current]) => this.findTemplatesForTypeOrAll(all, current)))
       .pipe(startWith(new Array<Template>()));
 
     // the current template is either the last selected, or auto-selected when conditions change
-    const initialTemplate$ = combineLatest(
+    const initialTemplate$ = combineLatest([
       this.initialTemplateId$,
-      this.api.templates$,
-      (id, templates) => templates.find(t => t.TemplateId === id)).pipe(
+      this.api.templates$])
+      .pipe(map(([id, templates]) => templates.find(t => t.TemplateId === id)))
+      .pipe(
         filter(t => t != null), // only allow new values which are not null, to guarantee later template$ updates don't affect this
-        startWith(null),
+        startWith(null as Template),
         share());
 
     const selected$ = merge(initialTemplate$, this.selectedTemplate$.pipe(filter(t => t !== null)));
-    this.template$ = combineLatest(
+    this.template$ = combineLatest([
       selected$,
       this.templates$,
       this.type$,
-      this.app$,
-      (selected, templates, type, app) => TemplateProcessor.pickSelected(selected, templates, type, app))
+      this.app$]).pipe(map(
+        ([selected, templates, type, app]) => TemplateProcessor.pickSelected(selected, templates, type, app)
+      ))
       .pipe(
-        startWith(null),
+        startWith(null as Template),
         share());
 
     // construct list of relevant types for the UI
-    this.types$ = combineLatest(
+    this.types$ = combineLatest([
       this.api.contentTypes$,
       this.type$,
       this.api.templates$,
-      this.template$,
-      (types, type, templates, template) => this.ctProcessor.buildList(types, type, templates, template));
+      this.template$])
+      .pipe(map(([types, type, templates, template]) => this.ctProcessor.buildList(types, type, templates, template)));
   }
 
   init(config: IQuickDialogConfig): O<boolean> {
@@ -111,17 +108,20 @@ export class CurrentDataService {
     log.add(`initializing with config:${JSON.stringify(config)}`, config);
     const appReady$ = this.app$.pipe(
       map(a => config.isContent || !!a),
-      startWith(config.isContent || !config.appId));
+      startWith(config.isContent || !config.appId)
+    );
 
     const typeReady$ = this.type$.pipe(
       map(t => !!t),
-      scan((acc, value) => acc || value, !config.contentTypeId));
+      scan((acc, value) => acc || value, !config.contentTypeId)
+    );
     const templReady$ = this.template$.pipe(
       map(t => !!t),
       debounceTime(100), // need to debounce, because the template might have a value and change again
-      startWith(!config.templateId));
+      startWith(!config.templateId)
+    );
 
-    const loadAll$ = combineLatest(appReady$, templReady$, typeReady$)
+    const loadAll$ = combineLatest([appReady$, templReady$, typeReady$])
       .pipe(map(set => set[0] && set[1] && set[2]));
 
     this.initLogging(appReady$, typeReady$, templReady$, loadAll$);
