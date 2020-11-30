@@ -1,4 +1,3 @@
-
 const chalk = require('chalk');
 const cpxHelpers = require('./distribute-helpers2.js');
 
@@ -12,9 +11,10 @@ const root = args[argId++];
 const dst = args[argId++];
 const watch = args.length >= argId && args[argId++] === '-w';
 
-if(watch) 
+if(watch) {
+  console.log(chalk.red(`will watch ${root}`));
   cpxHelpers.waitToRunAllCpx(root, dst);
-else
+} else
   cpxHelpers.runAllCpx(root, dst, false);
 
 console.log(chalk.blue('Copy watchers running...'));
