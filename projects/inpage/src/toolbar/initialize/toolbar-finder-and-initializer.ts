@@ -7,6 +7,7 @@ import { TagToolbar } from '../tag-toolbars/tag-toolbar';
 import { ToolbarManager } from '../toolbar-manager';
 import { ToolbarInitConfig } from './toolbar-init-config';
 import { Translator } from '../../i18n/translator';
+import { $jq } from '../../interfaces/sxc-controller-in-page';
 
 // quick debug - set to false if not needed for production
 const dbg = false;
@@ -33,7 +34,7 @@ export class ToolbarConfigFinderAndInitializer extends HasLog {
      */
     buildDnnModule(parentTag: JQuery, optionalId?: number): void {
         const cl = this.log.call('buildDnnModule');
-        parentTag = $(parentTag || '.DnnModule-' + optionalId);
+        parentTag = $jq(parentTag || '.DnnModule-' + optionalId);
 
         // if something says the toolbars are disabled, then skip
         if (parentTag.attr(C.Toolbar.attr.disable)) return cl.done('disabled');
@@ -62,14 +63,14 @@ export class ToolbarConfigFinderAndInitializer extends HasLog {
         // go up the DOM to find the parent which has context-information
         // if we have no contextNode (a parent content block), we can
         // assume the node is outside of a 2sxc module so not interesting
-        const contextNode = $(node).closest(C.Cb.selectors.ofName)[0];
+        const contextNode = $jq(node).closest(C.Cb.selectors.ofName)[0];
         if (contextNode == null) return;
 
         // check if the parent-node needs a toolbar
         if (node.is(toolbarSelector)) this.loadConfigAndInitialize(node[0]);
 
         // activate all child-nodes with toolbars
-        const toolbars = $(toolbarSelector, node);
+        const toolbars = $jq(toolbarSelector, node);
         toolbars.each((i, e: HTMLElement) => this.loadConfigAndInitialize(e));
     }
 
@@ -80,12 +81,12 @@ export class ToolbarConfigFinderAndInitializer extends HasLog {
      * find current toolbars inside this wrapper-tag
      */
     private findChildTagsWithConfig(parentTag: JQuery): JQuery {
-        const allInner = $(toolbarSelector, parentTag);
+        const allInner = $jq(toolbarSelector, parentTag);
 
         // return only those, which don't belong to a sub-item
         const onlyDirectDescendents = allInner
             .filter((i: number, e: HTMLElement) =>
-                $(e).closest(C.Cb.selectors.ofName)[0] === parentTag[0]);
+                $jq(e).closest(C.Cb.selectors.ofName)[0] === parentTag[0]);
         if (dbg)
             console.log('found toolbars for parent', parentTag, onlyDirectDescendents);
         return onlyDirectDescendents;
@@ -99,7 +100,7 @@ export class ToolbarConfigFinderAndInitializer extends HasLog {
      */
     private loadConfigAndInitialize(node: HTMLElement): void {
         const cl = this.log.call('loadConfigAndInitialize');
-        const tag = $(node);
+        const tag = $jq(node);
 
         // Do not process tag if a toolbar has already been attached
         if (tag.data(C.Toolbar.attrToMarkInitalized))

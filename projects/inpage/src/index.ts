@@ -3,7 +3,7 @@ import { Cms } from './cms/Cms';
 import { ContextComplete } from './context/bundles/context-bundle-button';
 import { DnnActionMenu } from './dnn';
 import { translate, Translator } from './i18n';
-import { $2sxcInPage as $2sxc } from './interfaces/sxc-controller-in-page';
+import { $2sxcInPage as $2sxc, $jq } from './interfaces/sxc-controller-in-page';
 import { windowInPage as window } from './interfaces/window-in-page';
 import { EditManager } from './manage/edit-manager';
 import { Manage } from './manage/manage';
@@ -21,7 +21,7 @@ window.$quickE = QuickE;        // note: not sure if this is needed as a global 
 $2sxc.cms = new Cms();
 
 // #3 Initialize all objects as needed
-$(document).ready(() => {
+function loadInpage() {
     // check if already initialized - just in case these scripts were loaded multiple times
     const bootstrapper = new BootstrapInPage();
     bootstrapper.initialize();
@@ -34,7 +34,12 @@ $(document).ready(() => {
     window.$2sxcActionMenuMapper = (moduleId: number) => {
         return new DnnActionMenu(moduleId);
     };
-});
+}
+
+// document.addEventListener('DOMContentLoaded', loadInpage);
+$jq(document).ready(loadInpage);
+// #dropJquery
+// $(document).ready(loadInpage);
 
 
 // Tell Webpack to load CSS

@@ -1,5 +1,6 @@
 import { CmdLayout } from '../commands/command/layout';
 import { C } from '../constants';
+import { $jq } from '../interfaces/sxc-controller-in-page';
 import { SxcEdit } from '../interfaces/sxc-instance-editable';
 import { windowInPage as window } from '../interfaces/window-in-page';
 import { HasLog, Insights, Log } from '../logging';
@@ -44,8 +45,8 @@ export class BootstrapInPage extends HasLog {
      */
     private initAllInstances(isFirstRun: boolean): void {
         const callLog = this.log.call('initAllInstances');
-        $('div[data-edit-context]').each((i, e) => {
-            this.initInstance($(e), isFirstRun);
+        $jq('div[data-edit-context]').each((i, e) => {
+            this.initInstance($jq(e), isFirstRun);
         });
         if (isFirstRun) this.tryShowTemplatePicker();
         callLog.return('initAllInstances done');
@@ -64,7 +65,7 @@ export class BootstrapInPage extends HasLog {
             // Loop through each changed item, check if it's something we want to initialize
             m.forEach((v) => {
                 Array.prototype.forEach.call(v.addedNodes, (n: HTMLElement) => {
-                    const node = $(n);
+                    const node = $jq(n);
                     // Menus which appear also cause DOM changes, but we want to ignore these for performance reasons
                     if (node.is('.sc-menu')) return;
 
@@ -81,8 +82,8 @@ export class BootstrapInPage extends HasLog {
                     // the node. To prevent multiple initialization while dragging modules, we additionally check for the
                     // .active-module class which seems to be applied while dragging the module.
                     else if (node.is(':not(.active-module)') && node.has('div[data-edit-context]')) {
-                        $('div[data-edit-context]', node).each((i, e) => {
-                            this.initInstance($(e), false);
+                        $jq('div[data-edit-context]', node).each((i, e) => {
+                            this.initInstance($jq(e), false);
                         });
                     } else
                         ToolbarManager.build(node);
@@ -117,7 +118,7 @@ export class BootstrapInPage extends HasLog {
         const openDialogId = QuickEditState.cbId.get();
         if (openDialogId) {
             // must check if it's on this page, as it could be from another page
-            const found = $(`[data-cb-id="${openDialogId}"]`);
+            const found = $jq(`[data-cb-id="${openDialogId}"]`);
             if (found.length) {
                 // since the CB-ID could also be an inner content (marked as a negative "-" number)
                 // we must be sure that we use the right id a.nyhow
@@ -129,7 +130,7 @@ export class BootstrapInPage extends HasLog {
         }
 
         if (!sxc) {
-            const uninitializedModules = $('.sc-uninitialized');
+            const uninitializedModules = $jq('.sc-uninitialized');
 
             if (this.diagCancelStateOnStart || this.openedTemplatePickerOnce)
                 return cl.return(false, 'cancelled');
@@ -190,12 +191,12 @@ export class BootstrapInPage extends HasLog {
             return callLog.return(false, 'is initialized');
 
         // already has a glasses button
-        const tag = $(SxcEdit.getTag(sxci));
+        const tag = $jq(SxcEdit.getTag(sxci));
         if (tag.find('.sc-uninitialized').length !== 0)
             return callLog.return(false, 'already has button');
 
         // note: title is added on mouseover, as the translation isn't ready at page-load
-        const btn = $(
+        const btn = $jq(
           '<div class="sc-uninitialized" onmouseover="this.title = $2sxc.translate(this.title)" title="InPage.NewElement">' +
             '<div class="icon-sxc-glasses"></div>' +
             '</div>',

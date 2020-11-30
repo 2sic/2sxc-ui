@@ -1,3 +1,4 @@
+import { $jq } from '../../interfaces/sxc-controller-in-page';
 
 /**
  * The global Tag Toolbar Manager is responsible for the new TagToolbars
@@ -28,8 +29,9 @@ export class TagToolbarManager {
      * Returns the body offset if positioning is relative or absolute
      */
     static getBodyScrollOffset() {
-        const body = $('body');
-        const bodyPos = body.css('position');
+        const posNoJq = document.body.style.position;
+        const body = $jq('body');
+        const bodyPos = posNoJq; // body.css('position');
         if (bodyPos === 'relative' || bodyPos === 'absolute') {
             const offset = body.offset();
             return {
@@ -49,11 +51,11 @@ export class TagToolbarManager {
      * leaving behind un-attached TagToolbars.
      */
     static CleanupOrphanedToolbars() {
-        const tagToolbars = $(`[${TagToolbarManager.TagToolbarForAttr}]`);
+        const tagToolbars = $jq(`[${TagToolbarManager.TagToolbarForAttr}]`);
         tagToolbars.each((i, e) => {
-        const id = $(e).attr(TagToolbarManager.TagToolbarForAttr);
-        if (!$(`[${TagToolbarManager.TagToolbarAttr}=${id}]`).length) {
-            $(e).remove();
+        const id = $jq(e).attr(TagToolbarManager.TagToolbarForAttr);
+        if (!$jq(`[${TagToolbarManager.TagToolbarAttr}=${id}]`).length) {
+            $jq(e).remove();
         }
         });
     }
@@ -65,7 +67,7 @@ export class TagToolbarManager {
 /**
  * Keep the mouse-position update for future use
  */
-$(window).on('mousemove', (e) => {
+$jq(window).on('mousemove', (e) => {
     TagToolbarManager.mousePosition.x = e.clientX;
     TagToolbarManager.mousePosition.y = e.clientY;
 });

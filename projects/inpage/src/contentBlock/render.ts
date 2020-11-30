@@ -1,6 +1,7 @@
 ﻿import { C } from '../constants';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { HtmlTools } from '../html/dom-tools';
+import { $jq } from '../interfaces/sxc-controller-in-page';
 import { SxcEdit } from '../interfaces/sxc-instance-editable';
 import { windowInPage as window } from '../interfaces/window-in-page';
 import { HasLog, Insights } from '../logging';
@@ -25,7 +26,7 @@ class RendererGlobal extends HasLog {
      * @returns {} nothing
      */
     showMessage(context: ContextComplete, newContent: string): void {
-        $(SxcEdit.getTag(context.sxc)).html(newContent);
+        $jq(SxcEdit.getTag(context.sxc)).html(newContent);
     }
 
 
@@ -91,12 +92,12 @@ class RendererGlobal extends HasLog {
     private replaceContentBlock(context: ContextComplete, newContent: string, justPreview: boolean): void {
         const cl = this.log.call('replaceContentBlock');
         try {
-            const newDom = $(newContent);
+            const newDom = $jq(newContent);
 
             // Must disable toolbar before we attach to DOM
             if (justPreview) HtmlTools.disable(newDom);
 
-            $(SxcEdit.getTag(context.sxc)).replaceWith(newDom);
+            $jq(SxcEdit.getTag(context.sxc)).replaceWith(newDom);
 
             // reset the cache, so the sxc-object is refreshed
             context.sxc.recreate(true);

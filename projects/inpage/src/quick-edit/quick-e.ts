@@ -1,4 +1,5 @@
 ﻿import { ModifierContentBlock, ModifierDnnModule, PositionCoordinates, Positioning, QeSelectors } from '.';
+import { $jq, $original } from '../interfaces/sxc-controller-in-page';
 import { HasLog, Insights } from '../logging';
 
 
@@ -11,7 +12,7 @@ function btn(action: string, icon: string, i18N: string, invisible?: boolean, un
 const configAttr: string = 'quick-edit-config';
 const classForAddContent = 'sc-content-block-menu-addcontent';
 const classForAddApp = 'sc-content-block-menu-addapp';
-const selectedOverlay = $("<div class='sc-content-block-menu sc-content-block-selected-menu sc-i18n'></div>")
+const selectedOverlay = $jq("<div class='sc-content-block-menu sc-content-block-selected-menu sc-i18n'></div>")
     .append(
     btn('delete', 'trash-empty', 'Delete'),
     btn('sendToPane', 'move', 'Move', null, null, 'sc-cb-mod-only'),
@@ -46,9 +47,9 @@ function getNewDefaultConfig(): QuickEdit.QuickEConfiguration {
  * the quick-insert object
  */
 class QuickESingleton extends HasLog {
-    body = $('body');
-    win = $(window);
-    main = $("<div class='sc-content-block-menu sc-content-block-quick-insert sc-i18n'></div>") as QuickEdit.MainOverlay;
+    body = $original('body');
+    win = $original(window);
+    main = $original("<div class='sc-content-block-menu sc-content-block-quick-insert sc-i18n'></div>") as QuickEdit.MainOverlay;
     template =
         `<a class='${classForAddContent} sc-invisible' data-type='Default' data-i18n='[titleTemplate]QuickInsertMenu.AddBlockContent'>&nbsp;</a>`
         + `<a class='${classForAddApp} sc-invisible' data-type='' data-i18n='[titleTemplate]QuickInsertMenu.AddBlockApp'>&nbsp;</a>`
@@ -61,8 +62,8 @@ class QuickESingleton extends HasLog {
     nearestCb: PositionCoordinates = null;
     nearestMod: PositionCoordinates = null;
     // add stuff which depends on other values to create
-    cbActions = $(this.template);
-    modActions = $(this.template.replace(/QuickInsertMenu.AddBlock/g, 'QuickInsertMenu.AddModule'))
+    cbActions = $original(this.template);
+    modActions = $original(this.template.replace(/QuickInsertMenu.AddBlock/g, 'QuickInsertMenu.AddModule'))
         .attr('data-context', 'module')
         .addClass('sc-content-block-menu-module');
 
@@ -74,8 +75,8 @@ class QuickESingleton extends HasLog {
     constructor() {
         super('Q-E.Main');
         Insights.add('Q-E', 'manager', this.log);
-        this.modActions.click(ModifierDnnModule.onModuleButtonClick);
-        this.cbActions.click(ModifierContentBlock.onCbButtonClick);
+        this.modActions.on('click', ModifierDnnModule.onModuleButtonClick);
+        this.cbActions.on('click', ModifierContentBlock.onCbButtonClick);
     }
 
     prepareToolbarInDom(): void {
@@ -124,7 +125,7 @@ class QuickESingleton extends HasLog {
     loadPageConfig() {
         const cl = this.log.call('loadPageConfig', null, null, {config: this.config});
         this.logConfig();
-        const configs = $(`[${configAttr}]`);
+        const configs = $jq(`[${configAttr}]`);
         let confJ: string;
 
         if (configs.length > 0) {
@@ -164,7 +165,7 @@ class QuickESingleton extends HasLog {
     private detectWhichMenusToActivate() {
         const conf = this.config;
         const cl = this.log.call('detectWhichMenusToActivate');
-        const innerCBs = $(QeSelectors.blocks.cb.listSelector);
+        const innerCBs = $jq(QeSelectors.blocks.cb.listSelector);
         const hasInnerCBs = (innerCBs.length > 0);
         cl.add(`has Content Blocks marked with ${QeSelectors.blocks.cb.listSelector}: ${hasInnerCBs}`, innerCBs);
         // if it has inner-content, then it's probably a details page, where quickly adding modules would be a problem, so for now, disable modules in this case
@@ -193,7 +194,7 @@ class QuickESingleton extends HasLog {
      */
     private initPanes(): void {
         const cl = this.log.call('initPanes');
-        this.cachedPanes = $(QeSelectors.blocks.mod.listSelector);
+        this.cachedPanes = $jq(QeSelectors.blocks.mod.listSelector);
         this.cachedPanes.addClass('sc-cb-pane-glow');
         cl.done();
     }
@@ -205,7 +206,7 @@ class QuickESingleton extends HasLog {
     private initWatchMouse() {
         const cl = this.log.call('initWatchMouse');
         let refreshTimeout: number = null;
-        $('body').on('mousemove', (e) => {
+        $jq('body').on('mousemove', (e) => {
             if (refreshTimeout === null)
                 refreshTimeout = window.setTimeout(() => {
                     requestAnimationFrame(() => {

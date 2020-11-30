@@ -2,6 +2,7 @@ import { SxcInstanceWithInternals } from '../../../$2sxc/src';
 import { AttrJsonEditContext } from '../context/html-attribute';
 import { EditManager } from '../manage/edit-manager';
 import { TypeTbD } from '../plumbing';
+import { $jq } from './sxc-controller-in-page';
 
 
 export class SxcEdit extends SxcInstanceWithInternals {
@@ -40,7 +41,7 @@ export class SxcEdit extends SxcInstanceWithInternals {
      * @param htmlTag
      */
     static getContainerTag(htmlTag: HTMLElement): HTMLElement {
-        return $(htmlTag).closest('div[data-edit-context]')[0];
+        return $jq(htmlTag).closest('div[data-edit-context]')[0];
     }
 
     /**
@@ -49,7 +50,7 @@ export class SxcEdit extends SxcInstanceWithInternals {
      * @return {jquery} - resulting html
      */
     static getTag(sxci: SxcEdit): HTMLElement {
-        return $(`div[data-cb-id='${sxci.cbid}']`)[0];
+        return $jq(`div[data-cb-id='${sxci.cbid}']`)[0];
     }
 
 }

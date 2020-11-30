@@ -10,6 +10,7 @@ import { HasLog } from '../logging';
 import { TypeUnsafe } from '../plumbing/TypeTbD';
 import { QuickDialog } from './quick-dialog';
 import { QuickDialogConfig } from './quick-dialog-config';
+import { $jq } from '../interfaces/sxc-controller-in-page';
 
 const scrollTopOffset: number = 80;
 const animationTime: number = 400;
@@ -115,7 +116,7 @@ export class IFrameBridge extends HasLog implements IIFrameBridge {
 
         this.changed = false;
         this.instanceSxc = sxc;
-        this.tagModule = $($(SxcEdit.getTag(sxc)).parent().eq(0));
+        this.tagModule = $jq($jq(SxcEdit.getTag(sxc)).parent().eq(0));
         this.sxcCacheKey = sxc.cacheKey;
         if (dialogName) this.dialogName = dialogName;
         cl.done();
@@ -140,7 +141,7 @@ export class IFrameBridge extends HasLog implements IIFrameBridge {
         const specs = {
             scrollTop: target.offset().top - scrollTopOffset,
         };
-        $('body').animate(specs, animationTime);
+        $jq('body').animate(specs, animationTime);
         cl.done();
     }
 }

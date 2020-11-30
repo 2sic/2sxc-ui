@@ -1,4 +1,5 @@
-﻿import { HasLog, Insights } from '../logging/';
+﻿import { $jq } from '../interfaces/sxc-controller-in-page';
+import { HasLog, Insights } from '../logging/';
 import * as DialogFrameElement from './iDialogFrameElement';
 import { QuickDialog } from './quick-dialog';
 import IDialogFrameElement = DialogFrameElement.IDialogFrameElement;
@@ -28,7 +29,7 @@ export class QuickDialogContainer extends HasLog {
      * @returns {element} html element of the div
      */
     getOrCreate(): JQuery {
-        const container = $(`.${containerClass}`);
+        const container = $jq(`.${containerClass}`);
         return container.length > 0 ? container : this.buildContainerAndIFrame();
     }
 
@@ -38,13 +39,13 @@ export class QuickDialogContainer extends HasLog {
      */
     private buildContainerAndIFrame(): JQuery {
         const callLog = this.log.call('buildContainerAndIFrame');
-        const container = $(containerTemplate);
-        if ($('#personaBar-iframe').length > 0)
+        const container = $jq(containerTemplate);
+        if ($jq('#personaBar-iframe').length > 0)
             container.addClass('persona-bar-visible');
         const newIFrame = document.createElement(iframeTag);
         const extendedIFrame = IDialogFrameElement.build(newIFrame, this);
         container.find(`.${iframeClass}`).append(extendedIFrame);
-        $('body').append(container);
+        $jq('body').append(container);
         this.watchForResize(container);
         return callLog.return(container, 'ok');
     }
