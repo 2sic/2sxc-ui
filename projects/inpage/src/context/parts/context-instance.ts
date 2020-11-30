@@ -19,11 +19,11 @@ export class ContextOfInstance {
     constructor(editCtx: AttrJsonEditContext, sxc: SxcEdit) {
         if (editCtx.Environment) {
             this.id = editCtx.Environment.InstanceId;
-            this.isEditable = editCtx.Environment.IsEditable || false;
+            this.isEditable = editCtx.Environment.IsEditable ?? false;
             // sxc
-            this.sxcVersion = editCtx.Environment.SxcVersion || SxcVersion;
+            this.sxcVersion = editCtx.Environment.SxcVersion ?? SxcVersion;
             this.parameters = editCtx.Environment.parameters;
-            this.sxcRootUrl = editCtx.Environment.SxcRootUrl || '';
+            this.sxcRootUrl = editCtx.Environment.SxcRootUrl ?? '';
         }
 
         if (!this.id && sxc?.ctx?.moduleId)

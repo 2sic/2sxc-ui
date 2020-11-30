@@ -29,19 +29,19 @@ export class ContextOfApp {
         // Initialize Content-Group App information
         if (editCtx.ContentGroup) {
             this.id = editCtx.ContentGroup.AppId;
-            this.isContent = editCtx.ContentGroup.IsContent || true;
-            this.resourcesId = editCtx.ContentGroup.AppResourcesId || null;
-            this.settingsId = editCtx.ContentGroup.AppSettingsId || null;
+            this.isContent = editCtx.ContentGroup.IsContent ?? true;
+            this.resourcesId = editCtx.ContentGroup.AppResourcesId ?? null;
+            this.settingsId = editCtx.ContentGroup.AppSettingsId ?? null;
             this.appPath = editCtx.ContentGroup.AppUrl; // this is the only value which doesn't have a slash by default. note that the app-root doesn't exist when opening "manage-app"
             this.hasContent = editCtx.ContentGroup.HasContent;
-            this.supportsAjax = editCtx.ContentGroup.SupportsAjax || false;
+            this.supportsAjax = editCtx.ContentGroup.SupportsAjax ?? false;
             this.zoneId = editCtx.ContentGroup.ZoneId;
         }
 
         // if we have more context information, use this to provide possibly missing data
         if (sxc && sxc.ctx) {
-            this.id = this.id || sxc.ctx.appId;
-            this.zoneId = this.id || sxc.ctx.zoneId;
+            this.id = this.id ?? sxc.ctx.appId;
+            this.zoneId = this.id ?? sxc.ctx.zoneId;
         }
 
         // Initialize language information
