@@ -8,7 +8,7 @@ export const CmdReplace = 'replace';
 Commands.add(CmdReplace, 'Replace', 'replace', false, true, {
 
     showCondition(context) {
-        return SharedLogic.isList(context);
+        return SharedLogic.isReferencedItem(context);
     },
 
     configureLinkGenerator: (context, linkGenerator) => {

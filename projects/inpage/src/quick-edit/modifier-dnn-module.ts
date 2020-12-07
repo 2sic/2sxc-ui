@@ -1,4 +1,5 @@
 ﻿import { ModifierBase, ModifierDnnModuleInternal, QeSelectors, QuickE, QuickEClipboard, Selection } from '.';
+import { $jq } from '../interfaces/sxc-controller-in-page';
 
 export class ModifierDnnModule extends ModifierBase {
 
@@ -41,7 +42,7 @@ export class ModifierDnnModule extends ModifierBase {
     }
 
     static onModuleButtonClick() {
-        const type = $(this).data('type');
+        const type = $jq(this).data('type');
         const dnnMod = QuickE.main.activeModule;
         const pane = dnnMod.closest(QeSelectors.blocks.mod.listSelector);
         let index = 0;
@@ -49,7 +50,7 @@ export class ModifierDnnModule extends ModifierBase {
         if (dnnMod.hasClass('DnnModule'))
             index = pane.find('.DnnModule').index(dnnMod[0]) + 1;
 
-        const cbAction = $(this).data('action');
+        const cbAction = $jq(this).data('action');
         if (cbAction)
             return QuickEClipboard.do(cbAction, pane, index, QeSelectors.blocks.mod.id); // copy/paste
         const modManage = QuickEClipboard.modDnn.modInternal;

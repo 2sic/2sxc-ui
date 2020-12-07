@@ -10,6 +10,7 @@ import { HasLog } from '../logging';
 import { TypeUnsafe } from '../plumbing/TypeTbD';
 import { QuickDialog } from './quick-dialog';
 import { QuickDialogConfig } from './quick-dialog-config';
+import { $jq } from '../interfaces/sxc-controller-in-page';
 
 const scrollTopOffset: number = 80;
 const animationTime: number = 400;
@@ -115,7 +116,7 @@ export class IFrameBridge extends HasLog implements IIFrameBridge {
 
         this.changed = false;
         this.instanceSxc = sxc;
-        this.tagModule = $($(SxcEdit.getTag(sxc)).parent().eq(0));
+        this.tagModule = $jq($jq(SxcEdit.getTag(sxc)).parent().eq(0));
         this.sxcCacheKey = sxc.cacheKey;
         if (dialogName) this.dialogName = dialogName;
         cl.done();
@@ -127,18 +128,20 @@ export class IFrameBridge extends HasLog implements IIFrameBridge {
      * @returns {boolean} true if it's currently showing for this sxc-instance
      */
     isConfiguredFor(instanceId: string, dialogName: string): boolean {
-        const cl = this.log.call('isConfiguredFor', `id:${instanceId}, dialog:${dialogName}`)
+        const cl = this.log.call('isConfiguredFor', `id:${instanceId}, dialog:${dialogName}`);
         const result = this.sxcCacheKey === instanceId // the iframe is showing for the current sxc
             && this.dialogName === dialogName; // the view is the same as previously
         return cl.return(result);
     }
 
     private scrollToTarget(target: JQuery): void {
+        // Oqtane doesn't include jquery animations, so exit early
+        if (!($ as any).Animation) return;
         const cl = this.log.call('scrollToTarget');
         const specs = {
             scrollTop: target.offset().top - scrollTopOffset,
         };
-        $('body').animate(specs, animationTime);
+        $jq('body').animate(specs, animationTime);
         cl.done();
     }
 }

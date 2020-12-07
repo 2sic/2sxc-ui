@@ -3,6 +3,7 @@ import { SxcInstanceEngine } from '../commands';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { AttrJsonEditContext } from '../context/html-attribute/edit-context-root';
 import { ContextOfUser } from '../context/parts/context-user';
+import { $jq } from '../interfaces/sxc-controller-in-page';
 import { SxcEdit } from '../interfaces/sxc-instance-editable';
 import { TypeUnsafe } from '../plumbing';
 import { ToolbarManager } from '../toolbar';
@@ -68,7 +69,7 @@ export class EditManager implements SxcInstanceManage {
     /**
      * internal method to find out if it's in edit-mode
      */
-    _isEditMode = () => this.editContext.Environment.IsEditable;
+    _isEditMode = () => this.editContext.Environment.IsEditable ?? false;
 
     /**
      * used for various dialogues
@@ -112,9 +113,9 @@ export class EditManager implements SxcInstanceManage {
  * private: show error when the app-data hasn't been installed yet for this imported-module
  */
 function handleErrors(errType: string, cbTag: HTMLElement): void {
-    const errWrapper = $('<div class="dnnFormMessage dnnFormWarning sc-element"></div>');
+    const errWrapper = $jq('<div class="dnnFormMessage dnnFormWarning sc-element"></div>');
     let msg = '';
-    const toolbar = $("<ul class='sc-menu'></ul>");
+    const toolbar = $jq("<ul class='sc-menu'></ul>");
     if (errType === 'DataIsMissing') {
         msg =
             'Error: System.Exception: Data is missing - usually when a site is copied but the content / apps have not been imported yet - check 2sxc.org/help?tag=export-import';
@@ -122,5 +123,5 @@ function handleErrors(errType: string, cbTag: HTMLElement): void {
     }
     errWrapper.append(msg);
     errWrapper.append(toolbar);
-    $(cbTag).append(errWrapper);
+    $jq(cbTag).append(errWrapper);
 }

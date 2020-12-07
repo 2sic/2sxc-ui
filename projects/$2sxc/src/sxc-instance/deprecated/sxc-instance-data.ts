@@ -25,7 +25,7 @@ export class SxcInstanceDataDeprecated {
 
     // source path defaulting to current page + optional params
     sourceUrl(params?: string): string {
-        let url = this.controller.root.http.apiUrl('app-sys/appcontent/GetContentBlockData');
+        let url = this.controller.root.http.apiUrl('app/auto/InstanceData');
         if (typeof params === 'string') // text like 'id=7'
             url += '&' + params;
         return url;

@@ -23,7 +23,7 @@ export interface SxcRootInternals {
     parts: any;
 
     /** internal helper to get jQuery from DNN or internal */
-    jq(): JQuery;
+    jq(): JQueryStatic;
 
     totalPopup: TotalPopup;
 }

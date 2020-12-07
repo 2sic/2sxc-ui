@@ -6,6 +6,7 @@ import { SxcRootInternals } from './sxc-root-internals';
 import { SxcRoot, getRootPartsV2 } from './sxc-root';
 import { Window } from "../_/window";
 import { Debug, Insights, SxcVersion } from '..';
+import { ContextIdentifier, isContextIdentifier, throwIfIncomplete } from './context-identifier';
 
 declare const $2sxc_jQSuperlight: any;
 declare const window: Window;
@@ -16,14 +17,21 @@ declare const window: Window;
  * @param cbid
  * @returns {}
  */
-function FindSxcInstance(id: number | HTMLElement, cbid?: number): SxcInstanceWithInternals {
+function FindSxcInstance(id: number | ContextIdentifier | HTMLElement, cbid?: number): SxcInstanceWithInternals {
     const $2sxc = window.$2sxc as SxcRoot & SxcRootInternals;
     $2sxc.log.add('FindSxcInstance(' + id + ',' + cbid);
     if (!$2sxc._controllers) 
         throw new Error('$2sxc not initialized yet');
 
-    // if it's a dom-element, use auto-find
-    if (typeof id === 'object') {
+    // check if it's a context identifier (new in 11.11)
+    let ctxId: ContextIdentifier = null;
+    if (isContextIdentifier(id)) {
+        throwIfIncomplete(id);
+        ctxId = id;
+        // create a fake id, based on zone and app
+        id = id.zoneId * 100000 + id.appId;
+    } else if (typeof id === 'object') {
+        // if it's a dom-element, use auto-find
         const idTuple = autoFind(id);
         id = idTuple[0];
         cbid = idTuple[1];
@@ -43,7 +51,7 @@ function FindSxcInstance(id: number | HTMLElement, cbid?: number): SxcInstanceWi
     if (!$2sxc._data[cacheKey]) $2sxc._data[cacheKey] = {};
 
     return ($2sxc._controllers[cacheKey]
-        = new SxcInstanceWithInternals(id, cbid, cacheKey, $2sxc));
+        = new SxcInstanceWithInternals(id, cbid, cacheKey, $2sxc, ctxId));
 }
 
 /**

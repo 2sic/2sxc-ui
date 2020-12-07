@@ -2,6 +2,7 @@
 import { TagToolbarManager } from '..';
 import { ContextComplete } from '../../context/bundles/context-bundle-button';
 import { Translator } from '../../i18n';
+import { $jq } from '../../interfaces/sxc-controller-in-page';
 import { TypeFollow } from '../config/toolbar-settings';
 
 /**
@@ -52,7 +53,7 @@ export class TagToolbar {
         const toolbarId = `${this.context.instance.id}-${this.context.contentBlock.id}-${nextFreeId}`;
 
         // render toolbar and append tag to body
-        this.toolbarElement = $(new ToolbarRenderer(this.context).render());
+        this.toolbarElement = $jq(new ToolbarRenderer(this.context).render());
 
         this.toolbarElement.on('mouseleave', (e) => {
         // if we do not hover the tag now, hide it
@@ -60,7 +61,7 @@ export class TagToolbar {
             this.hide();
         });
 
-        $('body').append(this.toolbarElement);
+        $jq('body').append(this.toolbarElement);
 
         this.toolbarElement.attr(TagToolbarManager.TagToolbarForAttr, toolbarId);
         this.hoverTag.attr(TagToolbarManager.TagToolbarAttr, toolbarId);
@@ -85,7 +86,7 @@ export class TagToolbar {
             mousePos: TagToolbarManager.mousePosition,
             win: {
                 scrollY: window.scrollY,
-                width: $(window).width(),
+                width: $jq(window).width(),
             },
             padding: tagToolbarPadding,
         };
@@ -147,16 +148,16 @@ export class TagToolbar {
         if (this.watcherActive) return;
         const trackOngoing = this.follow === 'scroll' || this.follow === 'always';
         if (!trackOngoing) return;
-        $(window).on('scroll', this.updateFn);
-        if (this.follow === 'always') $(window).on('mousemove', this.updateFn);
+        $jq(window).on('scroll', this.updateFn);
+        if (this.follow === 'always') $jq(window).on('mousemove', this.updateFn);
         this.watcherActive = true;
     }
 
     /** Disable scroll watcher - if it is active */
     private disableScrollWatcher() {
         if (!this.watcherActive) return;
-        $(window).off('scroll', this.updateFn);
-        $(window).off('mousemove', this.updateFn);
+        $jq(window).off('scroll', this.updateFn);
+        $jq(window).off('mousemove', this.updateFn);
     }
 
 

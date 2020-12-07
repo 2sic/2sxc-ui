@@ -21,6 +21,7 @@ export * from './http/sxc-http';
 export * from './sxc-instance';
 
 export * from './sxc-root/debug';
+export * from './sxc-root/context-identifier';
 export * from './sxc-root/sxc-root';
 export * from './sxc-root/sxc-root-builder';
 export * from './sxc-root/sxc-root-internals';

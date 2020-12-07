@@ -1,4 +1,5 @@
 ﻿import { ModifierBase, ModifierDnnModule, QeSelectors, QuickE, Selection } from '.';
+import { $jq } from '../interfaces/sxc-controller-in-page';
 import { HasLog, Insights } from '../logging';
 import { ContextForLists } from './context-for-lists';
 import { ModifierContentBlock } from './modifier-content-block';
@@ -24,7 +25,7 @@ class QuickEClipboardSingleton extends HasLog {
         this.mods.mod = this.modDnn = new ModifierDnnModule();
 
         // initialize once the DOM is ready
-        $(() => this.initializeSecondaryButtons());
+        $jq(() => this.initializeSecondaryButtons());
     }
 
     /**
@@ -33,8 +34,8 @@ class QuickEClipboardSingleton extends HasLog {
     initializeSecondaryButtons() {
         const cl = this.log.call('initializeSecondaryButtons');
         const qem = this;
-        $('a', QuickE.selected).click(function() {
-            const action: string = $(this).data('action');
+        $jq('a', QuickE.selected).on('click', function() {
+            const action: string = $jq(this).data('action');
             switch (action) {
                 case 'delete': return qem.mods[qem.clipboard.type].delete(qem.clipboard);
                 case 'sendToPane': return qem.modDnn.showSendToPane();
@@ -100,7 +101,7 @@ class QuickEClipboardSingleton extends HasLog {
         // sometimes missing data.item
         if (!this.clipboard.item) return cl.done();
 
-        const cb = $(this.clipboard.item);
+        const cb = $jq(this.clipboard.item);
         cb.addClass(QeSelectors.selected);
         if (cb.prev().is('iframe'))
             cb.prev().addClass(QeSelectors.selected);
@@ -121,12 +122,12 @@ class QuickEClipboardSingleton extends HasLog {
 
 
     private removeSelectionMarker() {
-        $(`.${QeSelectors.selected}`).removeClass(QeSelectors.selected);
+        $jq(`.${QeSelectors.selected}`).removeClass(QeSelectors.selected);
     }
 
     private setSecondaryActionsState(state: boolean): void {
         const cl = this.log.call('setSecondaryActionsState');
-        let btns = $('a.sc-content-block-menu-btn');
+        let btns = $jq('a.sc-content-block-menu-btn');
         btns = btns.filter('.icon-sxc-paste');
         btns.toggleClass('sc-unavailable', !state);
         cl.done();

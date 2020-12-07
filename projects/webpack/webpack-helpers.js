@@ -6,6 +6,10 @@ var dnnRoot = process.env.Dev2sxcDnnRoot;
 if(!dnnRoot) throw "Problem: environment variable 'Dev2sxcDnnRoot' doesn't exist. It should point to the web folder of your dev DNN";
 var targetDnn = (dnnRoot + "DesktopModules\\ToSIC_SexyContent\\").replace('//', '/').replace('\\\\', '\\');
 
+var oqtRoot = process.env.Dev2sxcOqtaneRoot;
+if(!oqtRoot) console.log("Oqtane root env variable Dev2sxcOqtaneRoot doesn't exist - will not build to oqtane. It should point to your OqtaneServer root path before wwwroot");
+var targetOqt = oqtRoot + '\\wwwroot\\Modules\\ToSic.Sxc\\';
+
 var devAssets = process.env.Dev2sxcAssets;
 if(!devAssets) throw "Problem: environment variable 'Dev2sxcAssets' doesn't exist. It should point to the assets source folder in your 2sxc environment";
 const targetAssets = (devAssets + '\\').replace('//', '/').replace('\\\\', '\\')
@@ -64,14 +68,21 @@ function isProduction(mode) {
     return mode === 'production';
 }
 
-function createCopyAfterBuildPlugin(source, target, target2) {
+function createCopyAfterBuildPlugin(source, targets, addon) { // , target2) {
+    if(!Array.isArray(targets)) throw "Targets should be an array";
+    if(!addon) throw "addon parameter missing - something like 'inpage'";
+
+
     const WebpackShellPlugin = require('webpack-shell-plugin-next');
     const commands = [
         'echo Webpack Compile done - will now copy from project assets to DNN',
         // folders in robocopy need to have a space after the name before closing " - special bug
-        'robocopy /mir /nfl /ndl /njs "' + source + ' " "' + target + ' " & exit 0'
+        // 'robocopy /mir /nfl /ndl /njs "' + source + ' " "' + target + ' " & exit 0'
     ];
-    if(target2) commands.push('robocopy /mir /nfl /ndl /njs "' + source + ' " "' + target2 + ' " & exit 0');
+    targets.forEach(t => {
+        commands.push('robocopy /mir /nfl /ndl /njs "' + source + ' " "' + t + addon + ' " & exit 0');
+    });
+    // if(target2) commands.push('robocopy /mir /nfl /ndl /njs "' + source + ' " "' + target2 + ' " & exit 0');
     return new WebpackShellPlugin({
         // must use onBuildExit and not onBuildEnd, as i18n files are otherwise not ready yet
         onBuildExit: { 
@@ -92,5 +103,15 @@ module.exports.Version = rootVersion;
 module.exports.DnnTargetFolder = targetDnn;
 module.exports.AssetsTarget = targetAssets;
 module.exports.createCopyAfterBuildPlugin = createCopyAfterBuildPlugin;
+
+// new 2020-10-30 for multi-targets
+var targets = [targetDnn, targetAssets];
+var targetsWithoutAssets = [targetDnn];
+if(targetOqt) { 
+    targets.push(targetOqt);
+    targetsWithoutAssets.push(targetOqt);
+}
+module.exports.Targets = targets;
+module.exports.TargetsWithoutAssets = targetsWithoutAssets;
 
 module.exports.ExternalSourcePath = (part) => 'https://sources.2sxc.org/' + rootVersion + '/' + part + '/';

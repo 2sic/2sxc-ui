@@ -1,4 +1,5 @@
 ﻿import { PositionCoordinates, QeSelectors, QuickE } from '.';
+import { $jq } from '../interfaces/sxc-controller-in-page';
 import { ContextForLists } from './context-for-lists';
 
 /**
@@ -29,7 +30,8 @@ export class Positioning {
      * Prepare offset calculation based on body positioning
      */
     static getBodyPosition(): PositionCoordinates {
-        const bodyPos = QuickE.body.css('position');
+        const posNoJq = document.body.style.position;
+        const bodyPos = posNoJq; // QuickE.body.css('position');
         return bodyPos === 'relative' || bodyPos === 'absolute'
             ? new PositionCoordinates(QuickE.body.offset().left, QuickE.body.offset().top)
             : new PositionCoordinates(0, 0);
@@ -47,7 +49,7 @@ function refreshDomObjects(): void {
 
     if (QuickE.config.innerBlocks.enable) {
         // get all content-block lists which are empty, or which allow multiple child-items
-        const lists = $(QeSelectors.blocks.cb.listSelector).filter(`:not(.${QeSelectors.blocks.cb.singleItem}), :empty`);
+        const lists = $jq(QeSelectors.blocks.cb.listSelector).filter(`:not(.${QeSelectors.blocks.cb.singleItem}), :empty`);
         QuickE.contentBlocks = lists
             .find(QeSelectors.blocks.cb.selector)
             .add(lists);
@@ -106,8 +108,8 @@ function refresh(e: JQueryEventObject) {
         const alignTo = QuickE.nearestCb || QuickE.nearestMod;
 
         // find parent pane to highlight
-        const parentPane = $(alignTo.element).closest(QeSelectors.blocks.mod.listSelector);
-        const parentCbList = $(alignTo.element).closest(QeSelectors.blocks.cb.listSelector);
+        const parentPane = $jq(alignTo.element).closest(QeSelectors.blocks.mod.listSelector);
+        const parentCbList = $jq(alignTo.element).closest(QeSelectors.blocks.cb.listSelector);
         const parentContainer = (parentCbList.length ? parentCbList : parentPane)[0];
         provideCorrectAddButtons(parentContainer);
         // put part of the pane-name into the button-labels
@@ -115,7 +117,7 @@ function refresh(e: JQueryEventObject) {
             let paneName: string = parentPane.attr('id') || '';
             if (paneName.length > 4) paneName = paneName.substr(4);
             QuickE.modActions.filter('[titleTemplate]').each(function() {
-                const t = $(this);
+                const t = $jq(this);
                 t.attr('title', t.attr('titleTemplate').replace('{0}', paneName));
             });
         }
@@ -126,7 +128,7 @@ function refresh(e: JQueryEventObject) {
         QuickE.main.activeContentBlock = QuickE.nearestCb ? QuickE.nearestCb.element : null;
         QuickE.main.activeModule = QuickE.nearestMod ? QuickE.nearestMod.element : null;
         QuickE.main.parentNode = parentContainer;
-        $(parentContainer).addClass(highlightClass);
+        $jq(parentContainer).addClass(highlightClass);
     } else {
         QuickE.main.parentNode = null;
         QuickE.main.hide();
@@ -134,7 +136,7 @@ function refresh(e: JQueryEventObject) {
 
     // if previously a parent-pane was highlighted, un-highlight it now
     if (oldParent && oldParent !== QuickE.main.parentNode)
-        $(oldParent).removeClass(highlightClass);
+        $jq(oldParent).removeClass(highlightClass);
 }
 
 function provideCorrectAddButtons(tag: HTMLElement) {
@@ -166,7 +168,7 @@ function findNearest(elements: JQuery, position: PositionCoordinates): PositionC
 
   // Find nearest element
   elements.each(function() {
-    const e = Positioning.get($(this));
+    const e = Positioning.get($jq(this));
 
     // First check x coordinates - must be within container
     if (posX < e.x || posX > e.x + e.w)

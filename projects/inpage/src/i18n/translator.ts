@@ -2,7 +2,7 @@
 import XHR from 'i18next-xhr-backend';
 import { primaryLanguage, translations, translationsPath } from '.';
 import { ContextComplete } from '../context/bundles';
-import { $2sxcInPage } from '../interfaces/sxc-controller-in-page';
+import { $2sxcInPage, $jq } from '../interfaces/sxc-controller-in-page';
 import { SxcEdit } from '../interfaces/sxc-instance-editable';
 import { HasLog, Insights, urlClean } from '../logging';
 import { EditManager } from '../manage/edit-manager';
@@ -60,12 +60,12 @@ class TranslatorGlobal extends HasLog {
         const cl = this.log.call('tryToFindAContext');
         cl.add('no context found, will seek');
         // trying to get context...
-        const htmlElementOrId = $('div[data-cb-id]')[0];
+        const htmlElementOrId = $jq('div[data-cb-id]')[0];
         this.initialized = true; // the next SxcEdit.get will call _translate so we must set true to prevent loops
         const sxc = SxcEdit.get(htmlElementOrId);
         this.initialized = false; // for real, it is not initialized...
         const editContext = SxcEdit.getEditContext(sxc);
-        const context = new ContextComplete(editContext);
+        const context = new ContextComplete(editContext, sxc);
         context.sxc = sxc;
         return cl.return(context);
     }
@@ -77,7 +77,7 @@ class TranslatorGlobal extends HasLog {
     initjQuery() {
         const cl = this.log.call('initJQuery');
         // for options see https://github.com/i18next/jquery-i18next#initialize-the-plugin
-        jqueryI18next.init(i18next, $);
+        jqueryI18next.init(i18next, $jq);
         this.jQueryReady = true;
         this.autoTranslateMenus();
         cl.done();
@@ -91,9 +91,9 @@ class TranslatorGlobal extends HasLog {
         const cl = this.log.call('autoTranslateMenus');
         if (!this.jQueryReady) return cl.done('jQuery not ready');
         // start localizing, details: https://github.com/i18next/jquery-i18next#usage-of-selector-function
-        const menus = $('ul.sc-menu');
+        const menus = $jq('ul.sc-menu');
         menus.localize(); // inline toolbars
-        const quickEButtons = $('.sc-i18n');
+        const quickEButtons = $jq('.sc-i18n');
         quickEButtons.localize();   // quick-insert menus
         cl.add(`found ${menus.length} menus and ${quickEButtons.length} buttons`);
         cl.done();

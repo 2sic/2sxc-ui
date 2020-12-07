@@ -22,7 +22,7 @@ Commands.add(CmdAddExisting, 'AddExisting', 'add-existing', false, true, {
                 Index: params.sortOrder + 1,
                 Add: true,
             }}];
-        } else if (SharedLogic.isBlockList(context)) {
+        } else if (SharedLogic.isPartOfBlockList(context)) {
             const topItem = linkGenerator.items[0] as ItemIdentifierGroup;
             topItem.Group.Add = true;
             topItem.Group.Index++;

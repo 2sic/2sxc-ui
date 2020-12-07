@@ -1,6 +1,6 @@
 
 import {merge, combineLatest,  timer } from 'rxjs';
-import {filter, startWith, skipUntil} from 'rxjs/operators';
+import {filter, startWith, skipUntil, map} from 'rxjs/operators';
 import { Component, ChangeDetectorRef, OnInit } from '@angular/core';
 import { IDialogFrameElement } from 'app/interfaces-shared/idialog-frame-element';
 import { Observable } from 'rxjs';
@@ -121,36 +121,38 @@ export class TemplatePickerComponent implements OnInit {
     const initTrue$ = initDone$.pipe(filter(t => !!t));
 
     // wire up basic observables
-    this.ready$ = combineLatest(
-      this.api.ready$,
-      this.loading$,
-      (r, l) => r && !l);
+    this.ready$ = combineLatest([this.api.ready$, this.loading$])
+      .pipe(map(([r, l]) => r && !l));
 
     // all apps are the same as provided by the api
     this.apps$ = this.api.apps$;
 
     // if the content-type or app is set, switch tabs (ignore null/empty states)
-    const typeOrAppReady = merge(this.state.type$, this.state.app$).pipe(filter(t => !!t));
-    combineLatest(typeOrAppReady, initTrue$).subscribe(_ => this.switchTab());
+    const typeOrAppReady = merge(this.state.type$, this.state.app$)
+      .pipe(filter(t => !!t));
+    combineLatest([typeOrAppReady, initTrue$])
+      .subscribe(_ => this.switchTab());
 
     // once the data is known, check if installer is needed
-    combineLatest(this.api.templates$,
+    combineLatest([this.api.templates$,
       this.api.contentTypes$,
       this.api.apps$,
-      this.api.ready$.pipe(filter(r => !!r)),
-      (templates, _, apps) => {
-        log.add('apps/templates loaded, will check if we should show installer');
-      this.showInstaller = this.isContent
-        ? templates.length === 0
-        : apps.filter(a => a.AppId !== cAppActionImport).length === 0;
-    }).subscribe();
+      this.api.ready$.pipe(filter(r => !!r))])
+      .pipe(
+        map(([templates, _, apps, _2]) => {
+          log.add('apps/templates loaded, will check if we should show installer');
+          this.showInstaller = this.isContent
+            ? templates.length === 0
+            : apps.filter(a => a.AppId !== cAppActionImport).length === 0;
+        }))
+      .subscribe();
 
     // template loading is true, when the template-list or selected template are not ready
-    this.templatesLoading$ = combineLatest(
-      this.state.templates$,
-      this.state.template$,
-      (all, selected) => !(all && selected)).pipe(
-      startWith(false));
+    this.templatesLoading$ = combineLatest([this.state.templates$, this.state.template$])
+      .pipe(
+        map(([all, selected]) => !(all && selected)),
+        startWith(false)
+      );
 
     // whenever the template changes, ensure the preview reloads
     // but don't do this when initializing, that's why we listen to initDone$

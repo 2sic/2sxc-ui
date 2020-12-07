@@ -1,4 +1,5 @@
 ﻿import { ContextBundleContent, ContextComplete } from '.';
+import { SxcEdit } from '../../interfaces/sxc-instance-editable';
 import { Button } from '../../toolbar/config/button';
 import { Toolbar } from '../../toolbar/config/toolbar';
 import { AttrJsonEditContext } from '../html-attribute';
@@ -6,8 +7,8 @@ import { AttrJsonEditContext } from '../html-attribute';
 export class ContextBundleToolbar extends ContextBundleContent {
     toolbar: Toolbar;
 
-    constructor(editCtx: AttrJsonEditContext) {
-        super(editCtx);
+    constructor(editCtx: AttrJsonEditContext, sxc: SxcEdit) {
+        super(editCtx, sxc);
         // note that the toolbar will not be filled here, as it will be filled somewhere else
     }
 

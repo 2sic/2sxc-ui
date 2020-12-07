@@ -18,18 +18,18 @@ export class ContextBundleInstance {
 
     _isContext = true;
 
-    constructor(editCtx: AttrJsonEditContext) {
+    constructor(editCtx: AttrJsonEditContext, sxc: SxcEdit) {
         // this will be about the current app, settings of the app, app - paths, etc.
-        this.app = new ContextOfApp(editCtx);
+        this.app = new ContextOfApp(editCtx, sxc);
 
         // information related to the current DNN module, incl.instanceId, etc.
-        this.instance = new ContextOfInstance(editCtx);
+        this.instance = new ContextOfInstance(editCtx, sxc);
 
         // things about the user
         this.user = new ContextOfUser(editCtx);
 
         // this will be information related to the current page
-        this.page = new ContextOfPage(editCtx);
+        this.page = new ContextOfPage(editCtx, sxc);
 
         // this will be everything about the current system, like system / api -paths etc.
         this.system = new ContextOfSystem(editCtx);

@@ -1,4 +1,5 @@
 ﻿import { ModifierDnnModule, QuickE, QuickEClipboard } from '.';
+import { $jq } from '../interfaces/sxc-controller-in-page';
 import { HasLog } from '../logging';
 
 /**
@@ -74,11 +75,11 @@ export class ModifierDnnModuleInternal extends HasLog {
         } as Partial<JQueryAjaxSettings>);
 
         // fire window resize to reposition action menus
-        $(window).resize();
+        $jq(window).resize();
     }
 
     getPaneName(pane: HTMLElement | JQuery): string {
-        return $(pane).attr('id').replace('dnn_', '');
+        return $jq(pane).attr('id').replace('dnn_', '');
     }
 
     /**
@@ -92,7 +93,7 @@ export class ModifierDnnModuleInternal extends HasLog {
     getMoveButtons(current: string): JQuery {
         const pns = QuickE.cachedPanes;
         // generate list of panes as links
-        const targets = $('<div>');
+        const targets = $jq('<div>');
         for (let p = 0; p < pns.length; p++) {
             const pName: string = this.getPaneName(pns[p]);
             const selected: string = (current === pName) ? ' selected ' : '';
@@ -102,8 +103,8 @@ export class ModifierDnnModuleInternal extends HasLog {
 
         // attach click event...
         const _this = this;
-        targets.find('a').click(function() {
-            const link = $(this);
+        targets.find('a').on('click', function() {
+            const link = $jq(this);
             const clip = QuickEClipboard.clipboard;
             const modId = _this.getModuleId(clip.item.className);
             const newPane = link.attr('data');

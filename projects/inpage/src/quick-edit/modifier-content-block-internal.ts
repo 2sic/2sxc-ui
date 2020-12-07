@@ -9,6 +9,7 @@ import { ToolbarManager } from '../toolbar/toolbar-manager';
 // not sure why though
 // tslint:disable-next-line: ordered-imports
 import { translate } from '../i18n';
+import { $jq } from '../interfaces/sxc-controller-in-page';
 
 //#region WebApi Endpoints used: 2sxc
 const webApiNew = 'cms/block/block';
@@ -57,11 +58,11 @@ export class ModifierContentBlockInstance extends HasLog {
         const jqPromise = this.sxcInstance.webApi
             .post({ url: webApiNew, params: params })
             .then((result) => {
-                const newTag = $(result); // prepare tag for inserting
+                const newTag = $jq(result); // prepare tag for inserting
 
                 // should I add it to a specific position...
                 if (cblockList.length > 0 && index > 0)
-                $(cblockList[cblockList.length > index - 1 ? index - 1 : cblockList.length - 1])
+                $jq(cblockList[cblockList.length > index - 1 ? index - 1 : cblockList.length - 1])
                     .after(newTag);
                 else // ...or just at the beginning?
                     container.prepend(newTag);

@@ -15,9 +15,11 @@ export class SxcHttp extends HasLog implements Omit<Public.Http, 'log'> {
     headers(id?: number, cbid?: number): Public.Dictionary<string> {
         const cl = this.log.call('headers', `${id}, ${cbid}`);
         const fHeaders : Public.Dictionary<string> = {}; // as any;
+        const pageId = this.env.page().toString();
         if(id) fHeaders[HeaderNames.ModuleId] = id.toString();
         if(cbid) fHeaders[HeaderNames.ContentBlockId] = cbid.toString();
-        fHeaders[HeaderNames.TabId] = this.env.page().toString();
+        fHeaders[HeaderNames.TabId] = pageId;
+        fHeaders[HeaderNames.PageId] = pageId;
         fHeaders[HeaderNames.Rvt] = this.env.rvt();
         return cl.return(fHeaders, `headers(id:${id}, cbid:${cbid})`);
     }

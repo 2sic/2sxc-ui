@@ -18,5 +18,18 @@ export const HeaderNames = {
     // headers as defined by DNN
     ModuleId: "ModuleId",
     TabId: "TabId",
-    Rvt: "RequestVerificationToken"
+    Rvt: "RequestVerificationToken",
+
+    // Header which should replace "TabId" in the long run
+    PageId: "PageId",
 };
+
+// These are Not-Defined-IDs. 
+// Because 
+
+/**
+ * This is a marker for an ID which is not defined
+ * This is for situations where a 0 or even a negative number
+ * could be real numbers, so this number is so big, it should never be a real ID
+ */
+export const NumberNotDefinedHuge = 274200000000;

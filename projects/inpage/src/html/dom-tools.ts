@@ -1,15 +1,16 @@
 import { C } from '../constants';
+import { $jq } from '../interfaces/sxc-controller-in-page';
 import { SxcEdit } from '../interfaces/sxc-instance-editable';
 
 export class HtmlTools {
 
     static disable(tag: HTMLElement | JQuery): void {
-        const jtag = $(tag);
+        const jtag = $jq(tag);
         jtag.attr(C.Toolbar.attr.disable, 'true');
     }
 
     static isDisabled(sxc: SxcEdit): boolean {
-        const tag = $(SxcEdit.getTag(sxc));
+        const tag = $jq(SxcEdit.getTag(sxc));
         return !!tag.attr(C.Toolbar.attr.disable);
     }
 

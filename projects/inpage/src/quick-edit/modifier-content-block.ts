@@ -1,4 +1,5 @@
 ﻿import { ModifierBase, QeSelectors, QuickE, QuickEClipboard, Selection } from '.';
+import { $jq } from '../interfaces/sxc-controller-in-page';
 import { SxcEdit } from '../interfaces/sxc-instance-editable';
 import { ContextForLists } from './context-for-lists';
 import { ModifierContentBlockInstance } from './modifier-content-block-internal';
@@ -48,11 +49,11 @@ export class ModifierContentBlock extends ModifierBase {
             index = listItems.index(QuickE.main.activeContentBlock[0]) + 1;
 
         // check if it's a cut/paste action
-        const cbAction = $(this).data('action');
+        const cbAction = $jq(this).data('action');
         if (cbAction)
             return QuickEClipboard.do(cbAction, list, index, QeSelectors.blocks.cb.id);
 
-        const appOrContent = $(this).data('type');
+        const appOrContent = $jq(this).data('type');
         return QuickEClipboard.modCb.create(actionConfig.parent as number, actionConfig.field, index, appOrContent, list, newGuid);
     }
 
