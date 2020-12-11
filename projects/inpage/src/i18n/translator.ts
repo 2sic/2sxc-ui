@@ -49,7 +49,7 @@ class TranslatorGlobal extends HasLog {
                 whitelist: translations,
                 preload: [primaryLanguage],
                 backend: {
-                    loadPath: urlClean(context.instance.sxcRootUrl + realRootPath + translationsPath),
+                    loadPath: urlClean(realRootPath + translationsPath),
                 },
             }, () => this.initjQuery());
         this.initialized = true;

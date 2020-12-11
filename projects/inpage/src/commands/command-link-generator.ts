@@ -94,7 +94,8 @@ export class CommandLinkGenerator extends HasLog {
         // const path = (context.ui.form === 'ng8') // v11 applies to all forms, not just edit: //  && dialogName === 'edit')
         //     ? C.DialogPaths.ng8
         //     : C.DialogPaths.ng1;
-        return urlClean(`${context.instance.sxcRootUrl}${$2sxcInPage.env.uiRoot()}${C.DialogPaths.ng8}`) + `?sxcver=${context.instance.sxcVersion}`;
+        return urlClean(`${$2sxcInPage.env.uiRoot()}${C.DialogPaths.ng8}`) + `?sxcver=${context.instance.sxcVersion}`;
+        // old till 11.11.02 return urlClean(`${context.instance.sxcRootUrl}${$2sxcInPage.env.uiRoot()}${C.DialogPaths.ng8}`) + `?sxcver=${context.instance.sxcVersion}`;
     }
 
     private addItem() {
