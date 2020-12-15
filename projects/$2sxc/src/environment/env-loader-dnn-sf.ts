@@ -1,5 +1,6 @@
 import { Environment } from '.';
 import { HasLog } from '..';
+import { JsInfo } from '../../../sxc-typings';
 import { DnnUiRoot } from '../constants/index';
 
 const helpAutoDetect = 'You must either include jQuery on the page or inject the jsApi parameters to prevent auto-detection.';
@@ -37,7 +38,7 @@ export class EnvironmentDnnSfLoader extends HasLog {
             throw `can't load pageid, moduleid etc. and DNN SF is not available. \n ${helpAutoDetect}`;
         }
         const dnnSf = sf(0);
-        var sfJsInfo = {
+        var sfJsInfo: JsInfo = {
             page: dnnSf.getTabId(),
             root: 'unknown',
             api: dnnSf.getServiceRoot('2sxc'),
