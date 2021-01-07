@@ -1,5 +1,4 @@
 ﻿import { IDialogFrameElement } from '.';
-import { CmdItemHistory } from '../commands';
 import { C } from '../constants';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { $2sxcInPage } from '../interfaces/sxc-controller-in-page';
@@ -46,8 +45,8 @@ class QuickDialogManagerSingleton extends HasLog {
         cont.toggleClass(diagShowClass, show);
         // remember the state if it's a normal dialog, but not on history
         // this ensures the dialog pops up again after a page reload
-        const rememberShowState = (dialogName === CmdItemHistory) ? false : show ;
-        this.rememberDialogState(this.container.getIFrame(cont), rememberShowState);
+        // https://github.com/2sic/2sxc/issues/2320 const rememberShowState = (dialogName === CmdItemHistory) ? false : show ;
+        this.rememberDialogState(this.container.getIFrame(cont), show);
         current = show ? this.container.getIFrame() : null;
         cl.done();
     }

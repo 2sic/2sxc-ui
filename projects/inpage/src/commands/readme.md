@@ -5,6 +5,5 @@ Here is the definition / code of commands for the CMS, things like
 
 * edit - edit an item
 * layout - show the layout/view picker
-* item-history - show the item-history dialog
 
-etc.
+See full list here: https://docs.2sxc.org/specs/js/commands.html
