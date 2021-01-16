@@ -29,7 +29,7 @@ export class ContextOfInstance {
         if (!this.id && sxc?.ctx?.moduleId)
             this.id = sxc.ctx.moduleId;
 
-        if (editCtx.ContentBlock)
-            this.allowPublish = editCtx.ContentBlock.VersioningRequirements === C.IDs.publishAllowed;
+        if (editCtx.contentBlockReference)
+            this.allowPublish = editCtx.contentBlockReference.publishingMode === C.IDs.publishAllowed;
     }
 }

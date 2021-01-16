@@ -72,7 +72,7 @@ export class RenderButton extends RenderPart {
 
 
     private generateRunJs(ctx: ContextComplete, params: CommandParams) {
-        return `$2sxc(${ctx.instance.id}, ${ctx.contentBlock.id}).manage.run(${JSON.stringify(params)}, event);`;
+        return `$2sxc(${ctx.instance.id}, ${ctx.contentBlockReference.id}).manage.run(${JSON.stringify(params)}, event);`;
     }
 
     private iconTag(btn: ButtonSafe, rule: BuildRule) {

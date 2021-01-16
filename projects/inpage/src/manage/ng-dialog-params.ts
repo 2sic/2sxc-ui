@@ -45,7 +45,7 @@ export class NgUrlValuesWithoutParams {
     this.appId = context.app.id;
     this.tid = context.page.id;
     this.mid = context.instance.id;
-    this.cbid = context.contentBlock.id;
+    this.cbid = context.contentBlockReference.id;
     this.lang = context.app.currentLanguage;
     this.langpri = context.app.primaryLanguage;
     this.langs = JSON.stringify(context.app.allLanguages);
@@ -59,7 +59,7 @@ export class NgUrlValuesWithoutParams {
     this.uiRoot = $2sxc.env.uiRoot();
 
     this.partOfPage = partOfPage;
-    if (partOfPage) this.publishing = context.contentBlock.versioningRequirements;
+    if (partOfPage) this.publishing = context.contentBlockReference.publishingMode;
     // todo= probably move the user into the dashboard info
     this.user = ContextOfUser.fromContext(context);
     this.approot = context.app.appPath || null; // this is the only value which doesn't have a slash by default. note that the app-root doesn't exist when opening "manage-app"

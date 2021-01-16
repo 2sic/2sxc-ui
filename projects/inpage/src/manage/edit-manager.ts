@@ -91,7 +91,7 @@ export class EditManager implements SxcInstanceManage {
      */
     _updateContentGroupGuid(context: ContextComplete, newGuid: string) {
         context.contentBlock.contentGroupId = newGuid;
-        this.editContext.ContentGroup.Guid = newGuid;
+        this.editContext.contentBlock.Guid = newGuid;
     }
 
     /**

@@ -27,15 +27,15 @@ export class ContextOfApp {
 
     constructor(editCtx: AttrJsonEditContext, sxc: SxcEdit) {
         // Initialize Content-Group App information
-        if (editCtx.ContentGroup) {
-            this.id = editCtx.ContentGroup.AppId;
-            this.isContent = editCtx.ContentGroup.IsContent ?? true;
-            this.resourcesId = editCtx.ContentGroup.AppResourcesId ?? null;
-            this.settingsId = editCtx.ContentGroup.AppSettingsId ?? null;
-            this.appPath = editCtx.ContentGroup.AppUrl; // this is the only value which doesn't have a slash by default. note that the app-root doesn't exist when opening "manage-app"
-            this.hasContent = editCtx.ContentGroup.HasContent;
-            this.supportsAjax = editCtx.ContentGroup.SupportsAjax ?? false;
-            this.zoneId = editCtx.ContentGroup.ZoneId;
+        if (editCtx.contentBlock) {
+            this.id = editCtx.contentBlock.AppId;
+            this.isContent = editCtx.contentBlock.IsContent ?? true;
+            this.resourcesId = editCtx.contentBlock.AppResourcesId ?? null;
+            this.settingsId = editCtx.contentBlock.AppSettingsId ?? null;
+            this.appPath = editCtx.contentBlock.AppUrl; // this is the only value which doesn't have a slash by default. note that the app-root doesn't exist when opening "manage-app"
+            this.hasContent = editCtx.contentBlock.HasContent;
+            this.supportsAjax = editCtx.contentBlock.SupportsAjax ?? false;
+            this.zoneId = editCtx.contentBlock.ZoneId;
         }
 
         // if we have more context information, use this to provide possibly missing data

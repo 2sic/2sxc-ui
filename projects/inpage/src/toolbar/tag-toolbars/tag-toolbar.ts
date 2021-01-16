@@ -50,7 +50,7 @@ export class TagToolbar {
         if (this.initialized) return;
 
         const nextFreeId = TagToolbarManager.getNextToolbarId();
-        const toolbarId = `${this.context.instance.id}-${this.context.contentBlock.id}-${nextFreeId}`;
+        const toolbarId = `${this.context.instance.id}-${this.context.contentBlockReference.id}-${nextFreeId}`;
 
         // render toolbar and append tag to body
         this.toolbarElement = $jq(new ToolbarRenderer(this.context).render());

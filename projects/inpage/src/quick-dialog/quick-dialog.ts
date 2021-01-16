@@ -111,7 +111,7 @@ class QuickDialogManagerSingleton extends HasLog {
         if (state) {
             const cbId = (iframe.bridge as IFrameBridge)
                 .getContext()
-                .contentBlock.id.toString();
+                .contentBlockReference.id.toString();
             callLog.add(`contentBlockId: ${cbId})`);
             return callLog.return(QuickEditState.cbId.set(cbId));
         }

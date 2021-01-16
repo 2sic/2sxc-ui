@@ -24,7 +24,7 @@ export class QuickDialogConfig implements IQuickDialogConfig {
         const config = new QuickDialogConfig();
         config.appId = context.app.id;
         config.isContent = context.app.isContent;
-        config.isInnerContent = context.instance.id !== context.contentBlock.id; // if it differs, it's inner
+        config.isInnerContent = context.instance.id !== context.contentBlockReference.id; // if it differs, it's inner
         config.hasContent = context.app.hasContent;
         config.isList = context.contentBlock.isList;
         config.templateId = context.contentBlock.templateId;
