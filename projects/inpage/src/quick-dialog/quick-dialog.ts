@@ -1,4 +1,4 @@
-﻿import { IDialogFrameElement } from '.';
+﻿import { IDialogFrameElement, IIFrameBridge } from '.';
 import { C } from '../constants';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { $2sxcInPage } from '../interfaces/sxc-controller-in-page';
@@ -39,13 +39,10 @@ class QuickDialogManagerSingleton extends HasLog {
      * toggle visibility
      * @param {boolean} [show] true/false optional
      */
-    setVisible(show: boolean, dialogName?: string): void {
+    setVisible(show: boolean): void {
         const cl = this.log.call('setVisible');
         const cont = this.container.getOrCreate();
         cont.toggleClass(diagShowClass, show);
-        // remember the state if it's a normal dialog, but not on history
-        // this ensures the dialog pops up again after a page reload
-        // https://github.com/2sic/2sxc/issues/2320 const rememberShowState = (dialogName === CmdItemHistory) ? false : show ;
         this.rememberDialogState(this.container.getIFrame(cont), show);
         current = show ? this.container.getIFrame() : null;
         cl.done();
@@ -75,7 +72,7 @@ class QuickDialogManagerSingleton extends HasLog {
             cl.add('is already visible');
             // check if we're just toggling the current, or will show a new one afterwards
             const isForSame = dialogName && current
-                && current.bridge.isConfiguredFor(context.sxc.cacheKey, dialogName);
+                && (current.bridge as IFrameBridge).isConfiguredFor(context.sxc.cacheKey, dialogName);
             const togglePromise = isForSame ? this.promise : null;
             this.cancel(current.bridge);
             // just a hide this, return the old promise
@@ -83,18 +80,18 @@ class QuickDialogManagerSingleton extends HasLog {
         }
 
         const dialogUrl = this.setUrlToQuickDialog(url);
-        iFrame.bridge.setup(context.sxc, dialogName);
+        (iFrame.bridge as IFrameBridge).setup(context.sxc, dialogName);
         iFrame.setAttribute('src', dialogUrl);
         // if the window had already been loaded, re-init
         if (iFrame.contentWindow && (iFrame.contentWindow as IFrameWindow).reboot)
             (iFrame.contentWindow as IFrameWindow).reboot();
 
         // make sure it's visible'
-        this.setVisible(true, dialogName);
+        this.setVisible(true);
         return cl.return(this.promiseRestart(), 'restart');
     }
 
-    cancel(bridge: IFrameBridge) {
+    cancel(bridge: IIFrameBridge) {
         const callLog = this.log.call('cancel');
         this.setVisible(false);
         QuickEditState.cancelled.set('true');

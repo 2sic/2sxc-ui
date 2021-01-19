@@ -1,16 +1,15 @@
-﻿import IIFrameBridge = Iiframebridge.IIFrameBridge;
-import { QuickDialogContainer } from '.';
+﻿import { QuickDialogContainer } from '.';
+import { IIFrameBridge } from '../../../connect-parts/inpage-quick-dialog';
+import { IQuickDialogConfig } from '../../../connect-parts/inpage-quick-dialog';
 import { ContentBlockEditor } from '../contentBlock/content-block-editor';
 import { renderer } from '../contentBlock/render';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
-import * as Iiframebridge from '../interfaces/iiframe-bridge';
-import { IQuickDialogConfig } from '../interfaces/iquick-dialog-config';
+import { $jq } from '../interfaces/sxc-controller-in-page';
 import { SxcEdit } from '../interfaces/sxc-instance-editable';
 import { HasLog } from '../logging';
 import { TypeUnsafe } from '../plumbing/TypeTbD';
 import { QuickDialog } from './quick-dialog';
 import { QuickDialogConfig } from './quick-dialog-config';
-import { $jq } from '../interfaces/sxc-controller-in-page';
 
 const scrollTopOffset: number = 80;
 const animationTime: number = 400;

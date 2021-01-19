@@ -2,7 +2,7 @@
 // Note: this interface is copied/shared between this and angular quick-edit
 //
 
-import { IUserOfEditContext } from './iuser-of-edit-context';
+import { IContextOfUser } from './icontext-of-user';
 
 /**
  * configuration for quick-dialog, so it can adjust the UI
@@ -15,7 +15,7 @@ export interface IQuickDialogConfig {
   isList: boolean;
   templateId: number;
   contentTypeId: string;
-  user: IUserOfEditContext; // not part of the interface, which is shared to the angular project
+  user: IContextOfUser; // not part of the interface, which is shared to the angular project
   supportsAjax: boolean;
   debug: boolean;
 }

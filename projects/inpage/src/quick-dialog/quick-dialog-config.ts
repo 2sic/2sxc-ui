@@ -1,6 +1,6 @@
-﻿import { ContextComplete } from '../context';
+﻿import { IQuickDialogConfig } from '../../../connect-parts/inpage-quick-dialog';
+import { ContextComplete } from '../context';
 import { ContextOfUser } from '../context';
-import { IQuickDialogConfig } from '../interfaces/iquick-dialog-config';
 
 
 export class QuickDialogConfig implements IQuickDialogConfig {

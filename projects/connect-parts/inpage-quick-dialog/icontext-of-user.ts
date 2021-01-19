@@ -5,7 +5,7 @@
 /**
  * user information, basically so the UI knows user capabilities
  */
-export interface IUserOfEditContext {
+export interface IContextOfUser {
   canDesign: boolean;
   canDevelop: boolean;
 }

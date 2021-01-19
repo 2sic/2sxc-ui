@@ -6,7 +6,6 @@ import { Observable as O, combineLatest, merge } from 'rxjs';
 
 import { App } from 'app/core/app';
 import { PickerService } from './picker.service';
-import { IQuickDialogConfig } from 'app/interfaces-shared/iquick-dialog-config';
 import { Template } from './template';
 import { ContentType } from './content-type';
 import { TemplateFilterPipe } from './template-filter.pipe';
@@ -15,6 +14,7 @@ import { ContentTypesProcessor } from './data/content-types-processor.service';
 import { TemplateProcessor } from './data/template-processor';
 import { DebugConfig } from 'app/debug-config';
 import { BehaviorObservable } from 'app/core/behavior-observable';
+import { IQuickDialogConfig } from 'app/interfaces/shared';
 // #endregion
 
 const log = parentLog.subLog('state', DebugConfig.state.enabled);

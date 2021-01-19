@@ -1,8 +1,7 @@
-﻿import { $jq } from '../interfaces/sxc-controller-in-page';
-import { HasLog, Insights } from '../logging/';
-import * as DialogFrameElement from './iDialogFrameElement';
+﻿import { IDialogFrameElement, IFrameBridge } from '.';
+import { $jq } from '../interfaces/sxc-controller-in-page';
+import { HasLog } from '../logging/';
 import { QuickDialog } from './quick-dialog';
-import IDialogFrameElement = DialogFrameElement.IDialogFrameElement;
 
 /**
  * this is a dialog manager which is in charge of all quick-dialoges
@@ -43,7 +42,7 @@ export class QuickDialogContainer extends HasLog {
         if ($jq('#personaBar-iframe').length > 0)
             container.addClass('persona-bar-visible');
         const newIFrame = document.createElement(iframeTag);
-        const extendedIFrame = IDialogFrameElement.build(newIFrame, this);
+        const extendedIFrame = convertIFrameToQuickDialog(newIFrame, this);
         container.find(`.${iframeClass}`).append(extendedIFrame);
         $jq('body').append(container);
         this.watchForResize(container);
@@ -117,4 +116,11 @@ export class QuickDialogContainer extends HasLog {
 
 
 
-
+function convertIFrameToQuickDialog(iFrame: HTMLIFrameElement, parent: QuickDialogContainer): IDialogFrameElement {
+    const callLog = parent.log.call('build');
+    callLog.data('prototype', IFrameBridge.prototype);
+    const iFrameExtended = iFrame as IDialogFrameElement;
+    iFrameExtended.bridge = new IFrameBridge(parent);
+    callLog.data('extensions', iFrameExtended.bridge);
+    return callLog.return(iFrameExtended);
+}

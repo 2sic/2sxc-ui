@@ -1,2 +1,2 @@
 
-export * from './inpage-to-quick-dialog';
+export * from './inpage-quick-dialog/quick-dialog-params';

@@ -2,19 +2,17 @@
 import {merge, combineLatest,  timer } from 'rxjs';
 import {filter, startWith, skipUntil, map} from 'rxjs/operators';
 import { Component, ChangeDetectorRef, OnInit } from '@angular/core';
-import { IDialogFrameElement } from 'app/interfaces-shared/idialog-frame-element';
 import { Observable } from 'rxjs';
 import { App } from 'app/core/app';
 import { Template } from 'app/template-picker/template';
 import { ContentType } from 'app/template-picker/content-type';
-import { IIFrameBridge } from 'app/interfaces-shared/iiframe-bridge';
-import { IQuickDialogConfig } from 'app/interfaces-shared/iquick-dialog-config';
 import { cAppActionImport } from './constants';
 import { log as parentLog, Log } from 'app/core/log';
 import { PickerService } from './picker.service';
 import { CurrentDataService } from './current-data.service';
 import { DebugConfig } from 'app/debug-config';
 import { BehaviorObservable } from 'app/core/behavior-observable';
+import { IDialogFrameElement, IIFrameBridge, IQuickDialogConfig } from 'app/interfaces/shared';
 
 const log = parentLog.subLog('picker', DebugConfig.picker.enabled);
 

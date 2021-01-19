@@ -1,11 +1,13 @@
 ﻿import { ContextComplete } from '..';
 import { AttrJsonEditContext } from '../html-attribute';
 
+import { IContextOfUser } from '../../../../connect-parts/inpage-quick-dialog';
+
 /**
  * things about the user
  * note that the properties are also used in url-params and ajax calls, so don't rename
  */
-export class ContextOfUser {
+export class ContextOfUser implements IContextOfUser {
     canDesign: boolean;
     canDevelop: boolean;
 

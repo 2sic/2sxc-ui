@@ -12,4 +12,4 @@ export const Constants = {
   //#endregion
 };
 
-export * from '../../../../connect-parts/inpage-to-quick-dialog';
+export * from '../../../../connect-parts/inpage-quick-dialog/quick-dialog-params';
