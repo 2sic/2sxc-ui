@@ -7,11 +7,8 @@ export class Config {
   static appId = () => get(urlParams.appId);
   static apps = () => get(urlParams.apps);
 
-  // 2021-01-18 static item = () => JSON.parse(req('items'))[0];
-
   static moduleId = () => Number(req(urlParams.moduleId));
   static cbId = () => Number(req(urlParams.contentBlockId));
-  // 2021-01-18 static dialog = () => req('dialog');
 
   static getSxcInstance = () => $2sxc(Config.moduleId(), Config.cbId());
 }
