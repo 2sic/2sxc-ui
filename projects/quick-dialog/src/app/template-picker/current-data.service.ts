@@ -2,7 +2,7 @@
 // #region imports
 import { scan, debounceTime, share, startWith, map, filter } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import { Observable as O, combineLatest, merge } from 'rxjs';
+import { Observable, combineLatest, merge } from 'rxjs';
 
 import { App } from 'app/core/app';
 import { PickerService } from './picker.service';
@@ -22,19 +22,19 @@ const log = parentLog.subLog('state', DebugConfig.state.enabled);
 @Injectable()
 export class CurrentDataService {
   /** Currently selected app */
-  app$: O<App>;
+  app$: Observable<App>;
 
   /** Relevant types */
-  types$: O<ContentType[]>;
+  types$: Observable<ContentType[]>;
 
   /** The currently selected type */
-  type$: O<ContentType>;
+  type$: Observable<ContentType>;
 
   /** Stream containing the currently selected template or null if not selected */
-  template$: O<Template>;
+  template$: Observable<Template>;
 
   /** all templates relevant for the UI */
-  templates$: O<Template[]>;
+  templates$: Observable<Template[]>;
 
   private appId$ = BehaviorObservable.create<number>(null);
   private initialTypeId$ = BehaviorObservable.create<string>(null);
@@ -102,7 +102,7 @@ export class CurrentDataService {
       .pipe(map(([types, type, templates, template]) => this.ctProcessor.buildList(types, type, templates, template)));
   }
 
-  init(config: IQuickDialogConfig): O<boolean> {
+  init(config: IQuickDialogConfig): Observable<boolean> {
     this.config = config;
     // app-init is ready, if it has an app or doesn't need to init one
     log.add(`initializing with config:${JSON.stringify(config)}`, config);
@@ -134,10 +134,10 @@ export class CurrentDataService {
     return loadAll$;
   }
 
-  private initLogging(inita$: O<boolean>,
-    inittyp$: O<boolean>,
-    initt$: O<boolean>,
-    initAll$: O<boolean>): void {
+  private initLogging(inita$: Observable<boolean>,
+    inittyp$: Observable<boolean>,
+    initt$: Observable<boolean>,
+    initAll$: Observable<boolean>): void {
     const slog = log.subLog('stream', DebugConfig.state.streams);
     this.type$.subscribe(t => slog.add(`type$ update:'${t && t.Label}'`, t));
     this.app$.subscribe(a => slog.add(`app$ update:'${a && a.AppId}'`, a));

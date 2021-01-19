@@ -4,8 +4,7 @@ import { DnnAppComponent, Context } from '@2sic.com/dnn-sxc-angular';
 import { Config } from './config';
 import { SupportedLanguages, langCode2, PrimaryUiLanguage } from './i18n';
 import { HttpClient } from '@angular/common/http';
-import { Constants } from 'app/core/constants';
-import { ContextDto } from './dto/index';
+import { BackendSettings } from './core/backend-settings';
 
 
 @Component({
@@ -18,14 +17,16 @@ export class AppComponent extends DnnAppComponent {
     public translate: TranslateService,
     el: ElementRef,
     context: Context,
-    http: HttpClient
+    backendSettings: BackendSettings,
   ) {
     super(el, context.preConfigure({ sxc: Config.getSxcInstance() }), false);
     translate.addLangs(SupportedLanguages);
 
-    http.get<{ Context: ContextDto }>(`${Constants.webApiDialogContext}?appId=${Config.appId()}`)
+    backendSettings.setApp(Config.appId());
+
+    backendSettings.data
       .subscribe(ctxDto => {
-        const lang = ctxDto.Context.Language;
+        const lang = ctxDto.Language;
         translate.setDefaultLang(PrimaryUiLanguage);
         translate.use(langCode2(lang.Current));
       });

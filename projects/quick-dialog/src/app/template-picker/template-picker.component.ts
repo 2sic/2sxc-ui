@@ -13,6 +13,7 @@ import { CurrentDataService } from './current-data.service';
 import { DebugConfig } from 'app/debug-config';
 import { BehaviorObservable } from 'app/core/behavior-observable';
 import { IDialogFrameElement, IIFrameBridge, IQuickDialogConfig } from 'app/interfaces/shared';
+import { BackendSettings } from '../core/backend-settings';
 
 const log = parentLog.subLog('picker', DebugConfig.picker.enabled);
 
@@ -75,6 +76,7 @@ export class TemplatePickerComponent implements OnInit {
   //#endregion
 
   constructor(
+    private backendSettings: BackendSettings,
     private api: PickerService,
     public state: CurrentDataService,
     private cdRef: ChangeDetectorRef
@@ -95,6 +97,12 @@ export class TemplatePickerComponent implements OnInit {
   private boot(dashInfo: IQuickDialogConfig) {
     this.showDebug = dashInfo.debug;
     Log.configureRuntimeLogging(dashInfo.debug);
+
+    // Make sure we have the latest backend settings
+    this.backendSettings.setApp(dashInfo.appId);
+    this.backendSettings.data.subscribe(settings => {
+      this.showAdvanced = settings.Enable?.CodeEditor ?? false;
+    });
 
     // start data-loading
     this.api.initLoading(!dashInfo.isContent);
@@ -185,7 +193,6 @@ export class TemplatePickerComponent implements OnInit {
     this.isBadContextForInstaller = config.isInnerContent;
     this.isContent = config.isContent;
     this.supportsAjax = this.isContent || config.supportsAjax;
-    this.showAdvanced = config.user.canDesign;
     this.preventAppSwich = config.hasContent;
     this.showCancel = config.templateId != null;
   }
