@@ -1,6 +1,5 @@
 import { TranslateService } from '@ngx-translate/core';
 import { Component, ElementRef } from '@angular/core';
-import { HistoryComponent } from 'app/history/history.component';
 import { MatDialog } from '@angular/material/dialog';
 import { IDialogFrameElement } from './interfaces-shared/idialog-frame-element';
 import { log } from './core/log';
@@ -20,12 +19,8 @@ declare const window: any, $2sxc: SxcRoot;
   styleUrls: ['./app.component.css']
 })
 export class AppComponent extends DnnAppComponent {
-  // name is used in template
-  public name: string;
-
   constructor(
     public translate: TranslateService,
-    private dialog: MatDialog,
     el: ElementRef,
     context: Context,
     http: HttpClient
@@ -38,17 +33,6 @@ export class AppComponent extends DnnAppComponent {
         const lang = ctxDto.Context.Language;
         translate.setDefaultLang(PrimaryUiLanguage);
         translate.use(langCode2(lang.Current));
-        this.showDialog();
       });
-  }
-
-  private showDialog() {
-    this.name = Config.dialog();
-    log.add(`loading '${this.name}'`);
-    const frame = <IDialogFrameElement>window.frameElement;
-    if (this.name === 'item-history') {
-      this.dialog.open(HistoryComponent).afterClosed()
-        .subscribe(() => frame.bridge.hide());
-    }
   }
 }

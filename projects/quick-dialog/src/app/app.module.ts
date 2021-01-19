@@ -6,7 +6,6 @@ import { FormsModule } from '@angular/forms';
 import { DnnInterceptor } from '@2sic.com/dnn-sxc-angular';
 import { AppComponent } from './app.component';
 import { TemplatePickerModule } from 'app/template-picker/template-picker.module';
-import { VersionDialogModule } from 'app/history/version-dialog.module';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { MaterialModule } from './material-module';
 import { log } from './core/log';
@@ -36,10 +35,8 @@ export function HttpLoaderFactory(http: HttpClient) {
       }
     }),
     MaterialModule, // must be after BrowserModule
-    VersionDialogModule,
   ],
-  providers: [ DnnInterceptor
-  ],
+  providers: [DnnInterceptor],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

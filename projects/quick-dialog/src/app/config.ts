@@ -1,16 +1,17 @@
 import { SxcRoot } from '../../../sxc-typings';
+import { urlParams } from './core/constants';
 
 declare const $2sxc: SxcRoot;
 
 export class Config {
-  static appId = () => get('appId');
-  static apps = () => get('apps');
+  static appId = () => get(urlParams.appId);
+  static apps = () => get(urlParams.apps);
 
-  static item = () => JSON.parse(req('items'))[0];
+  // 2021-01-18 static item = () => JSON.parse(req('items'))[0];
 
-  static moduleId = () => Number(req('mid'));
-  static cbId = () => Number(req('cbid'));
-  static dialog = () => req('dialog');
+  static moduleId = () => Number(req(urlParams.moduleId));
+  static cbId = () => Number(req(urlParams.contentBlockId));
+  // 2021-01-18 static dialog = () => req('dialog');
 
   static getSxcInstance = () => $2sxc(Config.moduleId(), Config.cbId());
 }
