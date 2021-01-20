@@ -27,10 +27,24 @@ module.exports = (config, _options, _targetOptions) => {
   const plugins = config.plugins;
 
   // if production, change how the source maps are made
-  if(webpackHelpers.isProduction(nodeEnv)) {
+  // check production based on angular info, but also on nodeEnv (just because it used to just be nodeEnv, and I'm not sure if we'll run into problems)
+  if(config.mode == 'production' || webpackHelpers.isProduction(nodeEnv)) {
     // find the plugin with duckTyping - very unique property
     var sourceMapPluginConfig = plugins.find(p => p.fallbackModuleFilenameTemplate);
     sourceMapPluginConfig.options.publicPath = webpackHelpers.getSourcesRootUrl('ng');
+
+    // new correction in Angular 11
+    // Terser complains because the i18n js files are actually JSON, so it's not really valid JS.
+    // Find all terser plugins and exclude our i18n js files. Can have multiple for whatever reason
+    var optimization = config.optimization;
+    var terserPlugins = optimization.minimizer.filter(m => m.options && m.options.terserOptions);
+    terserPlugins.forEach(terser => {
+      if (!Array.isArray(terser.options.exclude)) {
+        // include previous value, if it had one
+        terser.options.exclude = terser.options.exclude ? [terser.options.exclude] : [];
+      }
+      terser.options.exclude.push(/.*i18n\/[a-z]{2}\.js/);
+    });
   }
 
   plugins.push(webpackHelpers.CreateDefinePlugin(webpack));

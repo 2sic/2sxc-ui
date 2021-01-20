@@ -14,7 +14,7 @@
             "customWebpackConfig": {
               "path": "./webpack.extra.js",
               "replaceDuplicatePlugins": false,
-              "mergeStrategies": {
+              "mergeRules": {
                 "plugins": "append"
               }
             },
