@@ -145,6 +145,15 @@ a.sc-content-block-selected-menu.sc-content-block-menu-btn {
 .sc-content-block-menu-addapp.disable-addApp {
     display: none !important;
 }
-.sc-content-block-menu-btn.disable-select {
+.sc-content-block-menu-btn.icon-sxc-ok.disable-select {
+    display: none !important;
+}
+.sc-content-block-menu-btn.icon-sxc-paste.disable-paste {
+    display: none !important;
+}
+.sc-content-block-menu-btn.icon-sxc-trash-empty.disable-delete {
+    display: none !important;
+}
+.sc-content-block-menu-btn.icon-sxc-move.disable-move {
     display: none !important;
 }

@@ -101,12 +101,15 @@ class QuickEClipboardSingleton extends HasLog {
         // sometimes missing data.item
         if (!this.clipboard.item) return cl.done();
 
-        const cb = $jq(this.clipboard.item);
-        cb.addClass(QeSelectors.selected);
-        if (cb.prev().is('iframe'))
-            cb.prev().addClass(QeSelectors.selected);
+        const selectedItem = $jq(this.clipboard.item);
+        selectedItem.addClass(QeSelectors.selected);
+        if (selectedItem.prev().is('iframe'))
+            selectedItem.prev().addClass(QeSelectors.selected);
         this.setSecondaryActionsState(true);
-        QuickE.selected.toggleOverlay(cb);
+        const btnConfig = this.clipboard?.type === QeSelectors.blocks.cb.id
+            ? QuickE.config.innerBlocks.buttons
+            : QuickE.config.modules.buttons;
+        QuickE.selected.toggleOverlay(selectedItem, btnConfig);
         cl.done();
     }
 

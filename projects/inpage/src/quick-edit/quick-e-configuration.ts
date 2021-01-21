@@ -4,6 +4,7 @@
  */
 export namespace QuickEditConfig {
 
+  /** Buttons on a quick-edit toolbar */
   export interface Buttons {
     addContent: boolean;
     addApp: boolean;
@@ -13,10 +14,22 @@ export namespace QuickEditConfig {
     move: boolean;
   }
 
+  export const DefaultButtons: Buttons = {
+    addApp: true,
+    addContent: true,
+    select: true,
+    paste: true,
+    delete: true,
+    move: true,
+  };
+
+  /** Configuration set used in the root and in each sub-node (innerblocks/modules) */
   interface ConfigSet {
     enable: boolean | string | null;
     buttons?: Buttons;
   }
+
+  /** Full configuration set */
   export interface FullConfig extends ConfigSet {
     innerBlocks: ConfigSet;
     modules: ConfigSet;

@@ -4,44 +4,50 @@ import { HasLog, Insights } from '../logging';
 
 
 function btn(action: string, icon: string, i18N: string, invisible?: boolean, unavailable?: boolean, classes?: string): string {
-    return `<a class='sc-content-block-menu-btn sc-cb-action icon-sxc-${icon} ${invisible ? ' sc-invisible ' : ''}${
-      unavailable ? ' sc-unavailable ' : ''}${classes}' data-action='${action
-      }' data-i18n='[title]QuickInsertMenu.${i18N}'></a>`;
-  }
+  return `<a class='sc-content-block-menu-btn sc-cb-action icon-sxc-${icon} ${invisible ? ' sc-invisible ' : ''}${
+    unavailable ? ' sc-unavailable ' : ''}${classes}' data-action='${action
+    }' data-i18n='[title]QuickInsertMenu.${i18N}'></a>`;
+}
+
+function setButtonActivationClasses(buttons: QuickEditConfig.Buttons, linkTags: JQuery) {
+  // remove any previously set classes for these
+  for (const [k, v] of Object.entries(QuickEditConfig.DefaultButtons))
+    linkTags.removeClass(`enable-${k} disable-${k}`);
+
+  // set classes from config
+  for (const [k, v] of Object.entries(buttons))
+    linkTags.addClass(`${(v ? 'enable' : 'disable')}-${k}`);
+}
 
 const configAttr: string = 'quick-edit-config';
 const classForAddContent = 'sc-content-block-menu-addcontent';
 const classForAddApp = 'sc-content-block-menu-addapp';
 const selectedOverlay = $jq("<div class='sc-content-block-menu sc-content-block-selected-menu sc-i18n'></div>")
-    .append(
+  .append(
     btn('delete', 'trash-empty', 'Delete'),
     btn('sendToPane', 'move', 'Move', null, null, 'sc-cb-mod-only'),
     "<div id='paneList'></div>",
-    ) as QuickEditSelectionOverlay;
+  ) as QuickEditSelectionOverlay;
 
-selectedOverlay.toggleOverlay = (target: boolean | JQuery) => {
-    if (!target || (target as JQuery).length === 0) {
-      selectedOverlay.hide();
-    } else {
-      const coords = Positioning.get(target as JQuery);
-      coords.yh = coords.y + 20;
-      Positioning.positionAndAlign(selectedOverlay, coords);
-      selectedOverlay.target = target as JQuery;
-    }
+selectedOverlay.toggleOverlay = (target: boolean | JQuery, buttons?: QuickEditConfig.Buttons) => {
+  if (!target || (target as JQuery).length === 0) {
+    selectedOverlay.hide();
+  } else {
+    // 1. set overlay at the right coordinates
+    const coords = Positioning.get(target as JQuery);
+    coords.yh = coords.y + 20;
+    Positioning.positionAndAlign(selectedOverlay, coords);
+    selectedOverlay.target = target as JQuery;
+
+    // 2. Activate / deactivate correct buttons
+    setButtonActivationClasses(buttons, selectedOverlay.children('a'));
+  }
 };
 
 function getNewDefaultConfig() {
-  const buttons: QuickEditConfig.Buttons = {
-    addApp: true,
-    addContent: true,
-    select: true,
-    paste: true,
-    delete: true,
-    move: true,
-  };
-
   return {
     enable: true,
+    buttons: QuickEditConfig.DefaultButtons,
     innerBlocks: {
       enable: null, // default: auto-detect
     },
@@ -141,7 +147,11 @@ class QuickESingleton extends HasLog {
                 }
             }
             const defConfig = getNewDefaultConfig();
-            this.config = {...defConfig, ...finalConfig};
+            this.config = {...defConfig, ...finalConfig, buttons: { ...defConfig.buttons, ...finalConfig.buttons }};
+            // expand/merge configs on the sub-nodes module/block
+            const c = this.config;
+            c.innerBlocks.buttons = { ...c?.buttons, ...c?.innerBlocks?.buttons };
+            c.modules.buttons = { ...c?.buttons, ...c?.modules?.buttons };
         } else
             cl.add('no configs found, will use exiting');
 
@@ -193,16 +203,8 @@ class QuickESingleton extends HasLog {
             .append(this.modActions);
 
         // use config to enable/disable some buttons
-        const c = this.config;
-        const mergedCbButtons = { ...c?.buttons, ...c?.innerBlocks?.buttons };
-        const mergedModButtons = { ...c?.buttons, ...c?.modules?.buttons };
-
-        for (const [k, v] of Object.entries(mergedCbButtons))
-            this.cbActions.addClass(`${(v ? 'enable' : 'disable')}-${k}`);
-
-        for (const [k, v] of Object.entries(mergedModButtons))
-            this.modActions.addClass(`${(v ? 'enable' : 'disable')}-${k}`);
-
+        setButtonActivationClasses(this.config.innerBlocks.buttons, this.cbActions);
+        setButtonActivationClasses(this.config.modules.buttons, this.modActions);
         cl.done();
     }
 
@@ -244,41 +246,3 @@ class QuickESingleton extends HasLog {
 }
 
 export const QuickE = new QuickESingleton();
-
-
-
-// 2020-04-10 2dm - disabled all this - it didn't do anything before, and doesn't seem needed
-// tried to rewrite but it only causes problems and really seems unneeded. 
-
-// /**
-//  * enable/disable module/content-blocks as configured
-//  * TODO: 2dm - unclear why this is commented out, probably a bug that was never fixed
-//  */
-// function toggleParts(): void {
-//     //// content blocks actions
-//     // quickE.cbActions.toggle(quickE.config.innerBlocks.enable);
-
-//     //// module actions
-//     // quickE.modActions.hide(quickE.config.modules.enable);
-// }
-
-
-    // /**
-    //  * enable/disable module/content-blocks as configured
-    //  * TODO: 2dm - unclear why this is commented out, probably a bug that was never fixed
-    //  */
-    // private toggleParts(): void {
-    //     const cl = this.log.call('toggleParts', 'disabled!!');
-    //     // content blocks actions
-    //     const cbMenuState = !!this.config.innerBlocks.enable;
-    //     const modMenuState = !!this.config.modules.enable;
-    //     cl.add(`cbMenuState: ${cbMenuState}, modMenuState: ${modMenuState}`);
-    //     // this.cbActions.toggle(cbMenuState);
-
-    //     // module actions
-    //     // TODO: 2020-04-10 2dm - not sure why the previous code did a .hide(this.config.modules.enable)
-    //     // this.modActions.toggle(modMenuState);
-    //     // if (modMenuState)
-    //     //     this.modActions.hide();
-    //     cl.done();
-    // }

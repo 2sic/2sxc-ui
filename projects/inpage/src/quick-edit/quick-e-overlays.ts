@@ -1,5 +1,7 @@
+import { QuickEditConfig } from '.';
+
 export interface QuickEditSelectionOverlay extends JQuery {
-  toggleOverlay(target: boolean | JQuery): void;
+  toggleOverlay(target: boolean | JQuery, buttons?: QuickEditConfig.Buttons): void;
   target: JQuery;
 }
 
