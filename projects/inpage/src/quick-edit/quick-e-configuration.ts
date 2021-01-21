@@ -23,6 +23,20 @@ export namespace QuickEditConfig {
     move: true,
   };
 
+  export function getNewDefaultConfig() {
+    return {
+      enable: true,
+      buttons: QuickEditConfig.DefaultButtons,
+      innerBlocks: {
+        enable: null, // default: auto-detect
+      },
+      modules: {
+        enable: null, // default: auto-detect
+      },
+    } as QuickEditConfig.FullConfig;
+  }
+  
+
   /** Configuration set used in the root and in each sub-node (innerblocks/modules) */
   interface ConfigSet {
     enable: boolean | string | null;

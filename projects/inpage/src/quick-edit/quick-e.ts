@@ -1,61 +1,10 @@
-﻿import { ModifierContentBlock, ModifierDnnModule, PositionCoordinates, Positioning, QeSelectors, QuickEditConfig, QuickEditMainOverlay, QuickEditSelectionOverlay } from '.';
+﻿import { ModifierContentBlock, ModifierDnnModule, PositionCoordinates, Positioning, QeSelectors, QuickEditConfig, QuickEditOverlay } from '.';
 import { $jq, $original } from '../interfaces/sxc-controller-in-page';
 import { HasLog, Insights } from '../logging';
-
-
-function btn(action: string, icon: string, i18N: string, invisible?: boolean, unavailable?: boolean, classes?: string): string {
-  return `<a class='sc-content-block-menu-btn sc-cb-action icon-sxc-${icon} ${invisible ? ' sc-invisible ' : ''}${
-    unavailable ? ' sc-unavailable ' : ''}${classes}' data-action='${action
-    }' data-i18n='[title]QuickInsertMenu.${i18N}'></a>`;
-}
-
-function setButtonActivationClasses(buttons: QuickEditConfig.Buttons, linkTags: JQuery) {
-  // remove any previously set classes for these
-  for (const [k, v] of Object.entries(QuickEditConfig.DefaultButtons))
-    linkTags.removeClass(`enable-${k} disable-${k}`);
-
-  // set classes from config
-  for (const [k, v] of Object.entries(buttons))
-    linkTags.addClass(`${(v ? 'enable' : 'disable')}-${k}`);
-}
 
 const configAttr: string = 'quick-edit-config';
 const classForAddContent = 'sc-content-block-menu-addcontent';
 const classForAddApp = 'sc-content-block-menu-addapp';
-const selectedOverlay = $jq("<div class='sc-content-block-menu sc-content-block-selected-menu sc-i18n'></div>")
-  .append(
-    btn('delete', 'trash-empty', 'Delete'),
-    btn('sendToPane', 'move', 'Move', null, null, 'sc-cb-mod-only'),
-    "<div id='paneList'></div>",
-  ) as QuickEditSelectionOverlay;
-
-selectedOverlay.toggleOverlay = (target: boolean | JQuery, buttons?: QuickEditConfig.Buttons) => {
-  if (!target || (target as JQuery).length === 0) {
-    selectedOverlay.hide();
-  } else {
-    // 1. set overlay at the right coordinates
-    const coords = Positioning.get(target as JQuery);
-    coords.yh = coords.y + 20;
-    Positioning.positionAndAlign(selectedOverlay, coords);
-    selectedOverlay.target = target as JQuery;
-
-    // 2. Activate / deactivate correct buttons
-    setButtonActivationClasses(buttons, selectedOverlay.children('a'));
-  }
-};
-
-function getNewDefaultConfig() {
-  return {
-    enable: true,
-    buttons: QuickEditConfig.DefaultButtons,
-    innerBlocks: {
-      enable: null, // default: auto-detect
-    },
-    modules: {
-      enable: null, // default: auto-detect
-    },
-  } as QuickEditConfig.FullConfig;
-}
 
 /**
  * the quick-edit object
@@ -64,12 +13,12 @@ function getNewDefaultConfig() {
 class QuickESingleton extends HasLog {
     body = $original('body');
     win = $original(window);
-    main = $original("<div class='sc-content-block-menu sc-content-block-quick-insert sc-i18n'></div>") as QuickEditMainOverlay;
+    main = $original("<div class='sc-content-block-menu sc-content-block-quick-insert sc-i18n'></div>") as QuickEditOverlay.Main;
     template =
         `<a class='${classForAddContent} sc-invisible' data-type='Default' data-i18n='[titleTemplate]QuickInsertMenu.AddBlockContent'>&nbsp;</a>`
         + `<a class='${classForAddApp} sc-invisible' data-type='' data-i18n='[titleTemplate]QuickInsertMenu.AddBlockApp'>&nbsp;</a>`
-        + `${btn('select', 'ok', 'Select', true)}${btn('paste', 'paste', 'Paste', true, true)}`;
-    selected = selectedOverlay;
+        + `${QuickEditOverlay.btn('select', 'ok', 'Select', true)}${QuickEditOverlay.btn('paste', 'paste', 'Paste', true, true)}`;
+    selected = QuickEditOverlay.selectedOverlay;
     // will be populated later in the module section
     contentBlocks: JQuery = null;
     cachedPanes: JQuery = null;
@@ -83,7 +32,7 @@ class QuickESingleton extends HasLog {
         .addClass('sc-content-block-menu-module');
 
     //
-    config = getNewDefaultConfig();
+    config = QuickEditConfig.getNewDefaultConfig();
 
     bodyOffset: PositionCoordinates;
 
@@ -146,7 +95,7 @@ class QuickESingleton extends HasLog {
                     console.warn('had trouble with json', e);
                 }
             }
-            const defConfig = getNewDefaultConfig();
+            const defConfig = QuickEditConfig.getNewDefaultConfig();
             this.config = {...defConfig, ...finalConfig, buttons: { ...defConfig.buttons, ...finalConfig.buttons }};
             // expand/merge configs on the sub-nodes module/block
             const c = this.config;
@@ -203,8 +152,8 @@ class QuickESingleton extends HasLog {
             .append(this.modActions);
 
         // use config to enable/disable some buttons
-        setButtonActivationClasses(this.config.innerBlocks.buttons, this.cbActions);
-        setButtonActivationClasses(this.config.modules.buttons, this.modActions);
+        QuickEditOverlay.setButtonActivationClasses(this.config.innerBlocks.buttons, this.cbActions);
+        QuickEditOverlay.setButtonActivationClasses(this.config.modules.buttons, this.modActions);
         cl.done();
     }
 
