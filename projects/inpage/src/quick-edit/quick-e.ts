@@ -1,4 +1,4 @@
-﻿import { ModifierContentBlock, ModifierDnnModule, PositionCoordinates, Positioning, QeSelectors } from '.';
+﻿import { ModifierContentBlock, ModifierDnnModule, PositionCoordinates, Positioning, QeSelectors, QuickEditConfig, QuickEditMainOverlay, QuickEditSelectionOverlay } from '.';
 import { $jq, $original } from '../interfaces/sxc-controller-in-page';
 import { HasLog, Insights } from '../logging';
 
@@ -17,7 +17,7 @@ const selectedOverlay = $jq("<div class='sc-content-block-menu sc-content-block-
     btn('delete', 'trash-empty', 'Delete'),
     btn('sendToPane', 'move', 'Move', null, null, 'sc-cb-mod-only'),
     "<div id='paneList'></div>",
-    ) as QuickEdit.SelectionOverlay;
+    ) as QuickEditSelectionOverlay;
 
 selectedOverlay.toggleOverlay = (target: boolean | JQuery) => {
     if (!target || (target as JQuery).length === 0) {
@@ -30,16 +30,25 @@ selectedOverlay.toggleOverlay = (target: boolean | JQuery) => {
     }
 };
 
-function getNewDefaultConfig(): QuickEdit.QuickEConfiguration {
-    return {
-        enable: true,
-        innerBlocks: {
-            enable: null, // default: auto-detect
-        },
-        modules: {
-            enable: null, // default: auto-detect
-        },
-    } as QuickEdit.QuickEConfiguration;
+function getNewDefaultConfig() {
+  const buttons: QuickEditConfig.Buttons = {
+    addApp: true,
+    addContent: true,
+    select: true,
+    paste: true,
+    delete: true,
+    move: true,
+  };
+
+  return {
+    enable: true,
+    innerBlocks: {
+      enable: null, // default: auto-detect
+    },
+    modules: {
+      enable: null, // default: auto-detect
+    },
+  } as QuickEditConfig.FullConfig;
 }
 
 /**
@@ -49,7 +58,7 @@ function getNewDefaultConfig(): QuickEdit.QuickEConfiguration {
 class QuickESingleton extends HasLog {
     body = $original('body');
     win = $original(window);
-    main = $original("<div class='sc-content-block-menu sc-content-block-quick-insert sc-i18n'></div>") as QuickEdit.MainOverlay;
+    main = $original("<div class='sc-content-block-menu sc-content-block-quick-insert sc-i18n'></div>") as QuickEditMainOverlay;
     template =
         `<a class='${classForAddContent} sc-invisible' data-type='Default' data-i18n='[titleTemplate]QuickInsertMenu.AddBlockContent'>&nbsp;</a>`
         + `<a class='${classForAddApp} sc-invisible' data-type='' data-i18n='[titleTemplate]QuickInsertMenu.AddBlockApp'>&nbsp;</a>`
@@ -79,17 +88,6 @@ class QuickESingleton extends HasLog {
         this.cbActions.on('click', ModifierContentBlock.onCbButtonClick);
     }
 
-    prepareToolbarInDom(): void {
-        const cl = this.log.call('prepareToolbarInDom');
-        this.body
-            .append(this.main)
-            .append(this.selected);
-        this.main
-            .append(this.cbActions)
-            .append(this.modActions);
-        cl.done();
-    }
-
     start(): void {
         try {
             this.loadPageConfig();
@@ -97,7 +95,6 @@ class QuickESingleton extends HasLog {
                 // initialize first body-offset
                 this.bodyOffset = Positioning.getBodyPosition();
                 this.enable();
-                // this.toggleParts();
                 this.initWatchMouse();
             }
         } catch (e) {
@@ -112,7 +109,6 @@ class QuickESingleton extends HasLog {
     reset(): void {
         const cl = this.log.call('reset');
         this.loadPageConfig();
-        // this.toggleParts();
         cl.done();
     }
 
@@ -131,11 +127,11 @@ class QuickESingleton extends HasLog {
         if (configs.length > 0) {
             cl.add('found configs', configs);
             // go through reverse list, as the last is the most important...
-            let finalConfig = {} as QuickEdit.QuickEConfiguration;
+            let finalConfig = {} as QuickEditConfig.FullConfig;
             for (let c = configs.length; c >= 0; c--) {
                 confJ = configs[0].getAttribute(configAttr);
                 try {
-                    const confO = JSON.parse(confJ) as QuickEdit.QuickEConfiguration;
+                    const confO = JSON.parse(confJ) as Partial<QuickEditConfig.FullConfig>;
                     cl.data('additional config', confO);
                     finalConfig = {...finalConfig, ...confO };
                     cl.data('merged config', finalConfig);
@@ -144,7 +140,8 @@ class QuickESingleton extends HasLog {
                     console.warn('had trouble with json', e);
                 }
             }
-            this.config = {...getNewDefaultConfig(), ...finalConfig};
+            const defConfig = getNewDefaultConfig();
+            this.config = {...defConfig, ...finalConfig};
         } else
             cl.add('no configs found, will use exiting');
 
@@ -155,9 +152,6 @@ class QuickESingleton extends HasLog {
         cl.done();
     }
 
-
-
-    
 
     /**
      * existing inner blocks found? Will affect if modules can be quick-inserted...
@@ -183,8 +177,32 @@ class QuickESingleton extends HasLog {
         const cl = this.log.call('enable');
         // build all toolbar html-elements
         this.prepareToolbarInDom();
+
         // Cache the panes (because panes can't change dynamically)
         this.initPanes();
+        cl.done();
+    }
+
+    prepareToolbarInDom(): void {
+        const cl = this.log.call('prepareToolbarInDom');
+        this.body
+            .append(this.main)
+            .append(this.selected);
+        this.main
+            .append(this.cbActions)
+            .append(this.modActions);
+
+        // use config to enable/disable some buttons
+        const c = this.config;
+        const mergedCbButtons = { ...c?.buttons, ...c?.innerBlocks?.buttons };
+        const mergedModButtons = { ...c?.buttons, ...c?.modules?.buttons };
+
+        for (const [k, v] of Object.entries(mergedCbButtons))
+            this.cbActions.addClass(`${(v ? 'enable' : 'disable')}-${k}`);
+
+        for (const [k, v] of Object.entries(mergedModButtons))
+            this.modActions.addClass(`${(v ? 'enable' : 'disable')}-${k}`);
+
         cl.done();
     }
 
@@ -220,7 +238,7 @@ class QuickESingleton extends HasLog {
     }
 
     private logConfig() {
-        this.log.add(`config enabled: ${this.config.enable}, mod: ${this.config.modules.enable}, cb: ${this.config.innerBlocks.enable}`);
+        this.log.add(`config enabled: ${this.config.enable}, mod: ${this.config.modules.enable}, cb: ${this.config.innerBlocks.enable}. ${JSON.stringify(this.config)})`);
     }
 
 }
