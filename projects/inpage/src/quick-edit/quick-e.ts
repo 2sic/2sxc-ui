@@ -96,12 +96,12 @@ class QuickESingleton extends HasLog {
             }
             const defConfig = QuickEditConfig.getNewDefaultConfig();
             this.config = {...defConfig, ...finalConfig, buttons: { ...defConfig.buttons, ...finalConfig.buttons }};
-            // expand/merge configs on the sub-nodes module/block
-            const c = this.config;
-            c.innerBlocks.buttons = { ...c?.buttons, ...c?.innerBlocks?.buttons };
-            c.modules.buttons = { ...c?.buttons, ...c?.modules?.buttons };
         } else
             cl.add('no configs found, will use exiting');
+
+        // expand/merge configs on the sub-nodes module/block
+        this.config.innerBlocks.buttons = { ...this.config?.buttons, ...this.config?.innerBlocks?.buttons };
+        this.config.modules.buttons = { ...this.config?.buttons, ...this.config?.modules?.buttons };
 
         this.logConfig();
 
