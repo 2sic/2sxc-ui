@@ -11,9 +11,8 @@ const classForAddApp = 'sc-content-block-menu-addapp';
  * the quick-insert object
  */
 class QuickESingleton extends HasLog {
-    body = $original('body');
-    win = $original(window);
-    main = $original("<div class='sc-content-block-menu sc-content-block-quick-insert sc-i18n'></div>") as QuickEditOverlay.Main;
+    body = $jq('body');
+    main = $jq("<div class='sc-content-block-menu sc-content-block-quick-insert sc-i18n'></div>") as QuickEditOverlay.Main;
     template =
         `<a class='${classForAddContent} sc-invisible' data-type='Default' data-i18n='[titleTemplate]QuickInsertMenu.AddBlockContent'>&nbsp;</a>`
         + `<a class='${classForAddApp} sc-invisible' data-type='' data-i18n='[titleTemplate]QuickInsertMenu.AddBlockApp'>&nbsp;</a>`
