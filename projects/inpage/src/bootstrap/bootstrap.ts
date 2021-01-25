@@ -214,7 +214,7 @@ export class BootstrapInPage extends HasLog {
           sxci &&
           sxci.manage &&
           sxci.manage._editContext &&
-          sxci.manage._editContext.ContentGroup;
+          sxci.manage._editContext.contentBlock;
         return cg && cg.TemplateId !== 0;
     }
 }

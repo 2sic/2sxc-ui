@@ -19,5 +19,7 @@ export interface IIFrameBridge {
    * the cancel callback to close this dialog cancelling changes
    */
   cancel(): void;
+
+  changed: boolean;
 }
 

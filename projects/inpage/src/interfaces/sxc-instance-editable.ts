@@ -33,8 +33,18 @@ export class SxcEdit extends SxcInstanceWithInternals {
         } else {
             editContextTag = SxcEdit.getTag(sxc);
         }
-        return getEditContextOfTag(editContextTag);
+        return SxcEdit.getEditContextOfTag(editContextTag);
     }
+
+    /**
+     * get the edit-context object (a json object) of the current tag/sxc-instance
+     * @return {AttrJsonEditContext} edit-context object
+     */
+    static getEditContextOfTag(htmlTag: HTMLElement): AttrJsonEditContext {
+        const attr = htmlTag?.getAttribute('data-edit-context');
+        return JSON.parse(attr || '{ }') as AttrJsonEditContext;
+    }
+
 
     /**
      * get nearest html tag of the sxc instance with data-edit-context
@@ -56,13 +66,4 @@ export class SxcEdit extends SxcInstanceWithInternals {
 }
 
 
-
-/**
- * get the edit-context object (a json object) of the current tag/sxc-instance
- * @return {AttrJsonEditContext} edit-context object
- */
-function getEditContextOfTag(htmlTag: HTMLElement): AttrJsonEditContext {
-  const attr = htmlTag?.getAttribute('data-edit-context');
-  return JSON.parse(attr || '{ }') as AttrJsonEditContext;
-}
 

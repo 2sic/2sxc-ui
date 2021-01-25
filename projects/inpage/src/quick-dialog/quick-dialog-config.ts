@@ -1,7 +1,5 @@
-﻿import { ContextComplete } from '../context';
-import { ContextOfUser } from '../context';
-import { IQuickDialogConfig } from '../interfaces/iquick-dialog-config';
-
+﻿import { IQuickDialogConfig } from '../../../connect-parts/inpage-quick-dialog';
+import { ContextComplete } from '../context';
 
 export class QuickDialogConfig implements IQuickDialogConfig {
     appId: number;
@@ -16,7 +14,7 @@ export class QuickDialogConfig implements IQuickDialogConfig {
     isList: boolean;
     templateId: number;
     contentTypeId: string;
-    user: ContextOfUser;
+    // user: ContextOfUser;
     supportsAjax: boolean;
     debug: boolean;
 
@@ -24,12 +22,12 @@ export class QuickDialogConfig implements IQuickDialogConfig {
         const config = new QuickDialogConfig();
         config.appId = context.app.id;
         config.isContent = context.app.isContent;
-        config.isInnerContent = context.instance.id !== context.contentBlock.id; // if it differs, it's inner
+        config.isInnerContent = context.instance.id !== context.contentBlockReference.id; // if it differs, it's inner
         config.hasContent = context.app.hasContent;
         config.isList = context.contentBlock.isList;
         config.templateId = context.contentBlock.templateId;
         config.contentTypeId = context.contentBlock.contentTypeId;
-        config.user = ContextOfUser.fromContext(context);
+        // config.user = ContextOfUser.fromContext(context);
         config.supportsAjax = context.app.supportsAjax;
         config.debug = window.$2sxc.debug.load;
         return config;

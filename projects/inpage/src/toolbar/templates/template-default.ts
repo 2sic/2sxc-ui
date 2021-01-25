@@ -10,7 +10,7 @@ export const ToolbarTemplateDefault: ToolbarTemplate = {
       buttons: 'edit,new,metadata,publish,layout',
     }, {
       name: TC.GroupList,
-      buttons: 'add,add-existing,replace,remove,moveup,movedown,instance-list,item-history',
+      buttons: 'add,add-existing,replace,remove,moveup,movedown,instance-list', // https://github.com/2sic/2sxc/issues/2320 ,item-history',
     }, {
       name: TC.GroupEditAdvanced,
       buttons: 'delete',

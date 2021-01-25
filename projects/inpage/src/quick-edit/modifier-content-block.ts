@@ -19,42 +19,72 @@ export class ModifierContentBlock extends ModifierBase {
     }
 
     delete(clip: Selection): Promise<void> {
-        return this.getInstanceModifier(clip.list).delete(clip.parentGuid, clip.field, clip.index);
+        return this.getInstanceModifier(clip.list).delete(clip.parentGuid, clip.field, this.findClipListIndex(clip));
     }
 
-    create(parent: number, field: string, index: number, appOrContent: string, list: JQuery, newGuid: string): Promise<void> {
-        return this.getInstanceModifier(list).create(parent, field, index, appOrContent, list, newGuid);
+    create(parent: number, field: string, listIndex: number, appOrContent: string, list: JQuery, newGuid: string): Promise<void> {
+        return this.getInstanceModifier(list).create(parent, field, listIndex, appOrContent, list, newGuid);
     }
 
     move(oldClip: Selection, newClip: Selection) {
-        const from = oldClip.index;
-        const to = newClip.index;
+        const from = this.findClipListIndex(oldClip);
+        const to = this.findClipListIndex(newClip);
         this.getInstanceModifier(oldClip.list).move(newClip.parentGuid, newClip.field, from, to);
     }
 
     // cb-numbering is a bit different, because the selector is at the bottom
     // only there we should also skip on +1;
     isRealMove(oldClip: Selection, newClip: Selection): boolean {
-        return oldClip.index + 1 !== newClip.index;
+        return this.findClipListIndex(oldClip) + 1 !== this.findClipListIndex(newClip);
     }
 
+    /**
+     * find the real index of this block in the list - may not match the DOM index
+     */
+    findClipListIndex(clip: Selection): number {
+        return this.findListIndex(clip.item, clip.index);
+    }
+
+    /**
+     * find the real index of a block tag as it may not match the DOM index
+     */
+    findListIndex(tag: HTMLElement, fallback: number): number {
+        const editContext = SxcEdit.getEditContextOfTag(tag);
+        const listIndex = editContext?.contentBlockReference?.parentIndex ?? fallback;
+        return listIndex;
+    }
+
+    /**
+     * The button click handler. Must be static, as it will be attached to the buttons using jQuery
+     * So the 'this' is not a ContentBlockModifier, but the html-tag which was clicked
+     */
     static onCbButtonClick() {
-        const list = QuickE.main.activeContentBlock.closest(QeSelectors.blocks.cb.listSelector);
+        const target = QuickE.main.activeContentBlock;
+        const blockTag = target[0];
+        const button = $jq(this);
+        const list = target.closest(QeSelectors.blocks.cb.listSelector);
         const listItems = list.find(QeSelectors.blocks.cb.selector);
         const actionConfig = ContextForLists.getFromDom(list);
-        let index: number = 0;
         const newGuid: string | null = actionConfig.guid || null;
 
-        if (QuickE.main.activeContentBlock.hasClass(QeSelectors.blocks.cb.class))
-            index = listItems.index(QuickE.main.activeContentBlock[0]) + 1;
+        // if the target is a content-block, then the list already has items
+        // so the domIndex must be based on that. Otherwise use 0
+        const domIndex = target.hasClass(QeSelectors.blocks.cb.class)
+            ? listItems.index(blockTag) + 1
+            : 0;
 
-        // check if it's a cut/paste action
-        const cbAction = $jq(this).data('action');
+        // Check if it's a cut/paste action
+        const cbAction = button.data('action');
         if (cbAction)
-            return QuickEClipboard.do(cbAction, list, index, QeSelectors.blocks.cb.id);
+            return QuickEClipboard.do(cbAction, list, domIndex, QeSelectors.blocks.cb.id);
 
-        const appOrContent = $jq(this).data('type');
-        return QuickEClipboard.modCb.create(actionConfig.parent as number, actionConfig.field, index, appOrContent, list, newGuid);
+        // this is a create-additional block action
+        // in this case the clipboard doesn't exist
+        // so we'll have to find the dom object and get the list index
+        const listIndex = QuickEClipboard.modCb.findListIndex(blockTag, domIndex - 1) + 1;
+
+        const appOrContent = button.data('type');
+        return QuickEClipboard.modCb.create(actionConfig.parent as number, actionConfig.field, listIndex, appOrContent, list, newGuid);
     }
 
 }

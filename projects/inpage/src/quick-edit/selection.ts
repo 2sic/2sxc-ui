@@ -11,5 +11,5 @@
     list: JQuery;
     item: HTMLElement;
     index: number;
-    type: string;
+    type: 'mod' | 'cb';
 }

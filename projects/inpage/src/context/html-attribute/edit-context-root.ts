@@ -1,11 +1,16 @@
-﻿import { AttrJsonContentBlock, AttrJsonContentGroup, AttrJsonEnvironment, AttrJsonError, AttrJsonLanguage, AttrJsonUi, AttrJsonUser } from '.';
+﻿import { AttrJsonContentGroup, AttrJsonEnvironment, AttrJsonError, AttrJsonLanguage, AttrJsonUi, AttrJsonUser, ContentBlockReference } from '.';
 
 export class AttrJsonEditContext {
   Environment: AttrJsonEnvironment;
   User: AttrJsonUser;
   Language: AttrJsonLanguage;
-  ContentBlock: AttrJsonContentBlock;
-  ContentGroup: AttrJsonContentGroup;
+
+  /** Reference to the content block with information about the parent */
+  contentBlockReference: ContentBlockReference;
+
+  /** Information about the content block itself */
+  contentBlock: AttrJsonContentGroup;
+
   error: AttrJsonError;
   Ui: AttrJsonUi;
 }

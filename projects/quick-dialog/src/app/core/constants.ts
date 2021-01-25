@@ -11,3 +11,5 @@ export const Constants = {
   webApiSetApp: 'cms/block/App',
   //#endregion
 };
+
+export * from '../../../../connect-parts/inpage-quick-dialog/quick-dialog-params';

@@ -68,17 +68,17 @@ describe('Commands test suite', function() {
           Primary: 'en-us',
           All: [],
         },
-        ContentBlock: {
+        contentBlockReference: {
           ShowTemplatePicker: true,
           // 2020-08-16 clean-up #2148
         //   IsEntity: false,
           VersioningRequirements: 'DraftOptional',
-          Id: 2507,
-          ParentFieldName: null,
-          ParentFieldSortOrder: 0,
-          PartOfPage: true,
+          id: 2507,
+          parentField: null,
+          parentIndex: 0,
+          partOfPage: true,
         },
-        ContentGroup: {
+        contentBlock: {
           IsCreated: true,
           IsList: true,
           TemplateId: 4994,
@@ -95,7 +95,7 @@ describe('Commands test suite', function() {
           Guid: 'bacde468-fe3c-4993-8b0b-b6813f5141cc',
           Id: 4995,
         }, error: { type: null },
-      } as AttrJsonEditContext;
+      } as unknown as AttrJsonEditContext;
 
       this.context = new ContextComplete(this.editContext2);
 

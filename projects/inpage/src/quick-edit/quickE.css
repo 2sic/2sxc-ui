@@ -136,3 +136,24 @@ a.sc-content-block-selected-menu.sc-content-block-menu-btn {
     filter: grayscale(0);
 }
 
+/* Disable certain buttons as configured - new in 11.11.03 */
+
+.sc-content-block-menu-addcontent.disable-addContent {
+    display: none !important;
+}
+
+.sc-content-block-menu-addapp.disable-addApp {
+    display: none !important;
+}
+.sc-content-block-menu-btn.icon-sxc-ok.disable-select {
+    display: none !important;
+}
+.sc-content-block-menu-btn.icon-sxc-paste.disable-paste {
+    display: none !important;
+}
+.sc-content-block-menu-btn.icon-sxc-trash-empty.disable-delete {
+    display: none !important;
+}
+.sc-content-block-menu-btn.icon-sxc-move.disable-move {
+    display: none !important;
+}

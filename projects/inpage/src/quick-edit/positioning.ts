@@ -152,6 +152,7 @@ function provideCorrectAddButtons(tag: HTMLElement) {
     QuickE.cbActions.toggleClass('hide-app', !showApps);
 }
 
+const jQwin = $jq(window);
 /**
  * Return the nearest element to the mouse cursor from elements (jQuery elements)
  * @param elements
@@ -163,8 +164,8 @@ function findNearest(elements: JQuery, position: PositionCoordinates): PositionC
   let nearestItem: PositionCoordinates = null;
   let nearestDistance = maxDistance;
 
-  const posX: number = position.x + QuickE.win.scrollLeft();
-  const posY: number = position.y + QuickE.win.scrollTop();
+  const posX: number = position.x + jQwin.scrollLeft();
+  const posY: number = position.y + jQwin.scrollTop();
 
   // Find nearest element
   elements.each(function() {

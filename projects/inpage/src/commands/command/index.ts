@@ -14,7 +14,7 @@ export * from './delete';
 export * from './edit';
 export * from './insights-server';
 export * from './instance-list';
-export * from './item-history';
+// https://github.com/2sic/2sxc/issues/2320 export * from './item-history';
 export * from './layout';
 export * from './metadata';
 export * from './more';

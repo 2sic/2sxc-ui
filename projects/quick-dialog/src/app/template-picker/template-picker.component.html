@@ -3,7 +3,7 @@
 
   <!-- debug info section -->
   <div *ngIf="showDebug">
-    <h4>Debug</h4>
+    <h4>Debug 2sxc 11 / ng 11</h4>
     <ul>
       <li>Types: {{ types?.length }}, current: {{contentType?.StaticName}}</li>
       <li>Apps: {{ (apps$ | async)?.length }}, current: {{app?.AppId }} </li>
@@ -33,17 +33,17 @@
     <mat-tab-group [(selectedIndex)]="tabIndex">
       <mat-tab>
         <ng-template mat-tab-label>
-          {{(isContent 
-            ? (contentType?.Name || ('TemplatePicker.ContentTypePickerDefault' | translate)) 
+          {{(isContent
+            ? (contentType?.Name || ('TemplatePicker.ContentTypePickerDefault' | translate))
             : (app?.Name || ('TemplatePicker.AppPickerDefault' | translate)))}}
         </ng-template>
 
         <!-- App Selector -->
         <div *ngIf="!isContent; else contentApp" class="tiles">
 
-          <div class="tile" 
-            [ngClass]="{ active: app?.AppId === a.AppId, blocked: preventTypeSwitch }" 
-            [attr.title]="a.Name" 
+          <div class="tile"
+            [ngClass]="{ active: app?.AppId === a.AppId, blocked: preventTypeSwitch }"
+            [attr.title]="a.Name"
             (click)="selectApp(app, a)"
             (dblclick)="switchTab()" *ngFor="let a of apps$ | async">
             <div class="bg">
@@ -85,11 +85,11 @@
         <!-- Content-Type selection (when not a generic app, but the default content-app -->
         <ng-template #contentApp>
           <div class="tiles">
-            <div mat-button class="tile" 
+            <div mat-button class="tile"
               [ngClass]="{ active: contentType?.StaticName === c.StaticName, blocked: preventTypeSwitch }"
-              [attr.title]="(c.Label | translate) + (showDebug ? ' (' + c.StaticName + ')' : '')" 
+              [attr.title]="(c.Label | translate) + (showDebug ? ' (' + c.StaticName + ')' : '')"
               (click)="selectContentType(contentType, c)"
-              (dblclick)="switchTab()" 
+              (dblclick)="switchTab()"
               *ngFor="let c of types"
             >
               <div class="bg">
@@ -110,9 +110,9 @@
       <mat-tab *ngIf="isContent ? contentType : app" [label]="('TemplatePicker.ChangeView' | translate) + '(' + templates.length + ')'">
         <div class="tiles">
           <mat-spinner class="templates-spinner" *ngIf="templatesLoading$ | async"></mat-spinner>
-          <div class="tile" 
-            [ngClass]="{ active: template?.TemplateId === t.TemplateId }" 
-            [attr.title]="t.Name + (showDebug ? ' (' + t.TemplateId + ')' : '')" 
+          <div class="tile"
+            [ngClass]="{ active: template?.TemplateId === t.TemplateId }"
+            [attr.title]="t.Name + (showDebug ? ' (' + t.TemplateId + ')' : '')"
             (click)="selectTemplate(t)"
             *ngFor="let t of templates">
             <div class="bg">

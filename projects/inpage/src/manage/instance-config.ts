@@ -22,7 +22,7 @@ export class InstanceConfig {
     config.moduleId = contextOfButton.instance.id;
     config.version = contextOfButton.instance.sxcVersion;
     config.contentGroupId = contextOfButton.contentBlock.contentGroupId;
-    config.cbId = contextOfButton.contentBlock.id;
+    config.cbId = contextOfButton.contentBlockReference.id;
     config.appPath = contextOfButton.app.appPath;
     config.isList = contextOfButton.contentBlock.isList;
     return config;

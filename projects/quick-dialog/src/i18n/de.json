@@ -15,15 +15,5 @@
     "App": "App Konfigurieren",
     "Zone": "Apps verwalten"
 
-  },
-
-  "ItemHistory": {
-    "Title": "Versionen dieses Elements",
-    "Version": "Version {{version}}",
-    "NoHistory": "Es gibt keine früheren Versionen dieses Elements",
-    "Buttons": {
-      "RestoreLive": "Wiederherstellen",
-      "RestoreDraft": "Als Entwurf wiederherstellen"
-    }
   }
 }

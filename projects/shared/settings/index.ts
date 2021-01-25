@@ -4,11 +4,10 @@
   1. It's still missing some objects not needed in the quick-dialog
 */
 
-import { Dictionary } from '../../../../sxc-typings';
+import { Dictionary } from '../../sxc-typings';
 
 // missing ATM
 // UserDto
-// EnableDto
 
 export class ContextDto {
   App?: AppDto;
@@ -16,6 +15,7 @@ export class ContextDto {
   System?: WebResourceDto;
   Site?: WebResourceDto;
   Page?: WebResourceDto;
+  Enable?: EnableDto;
 }
 
 class WebResourceDto {
@@ -33,4 +33,10 @@ class LanguageDto {
   Primary: string;
   Current: string;
   All: Dictionary<string>;
+}
+
+class EnableDto {
+  AppPermissions: boolean;
+  CodeEditor: boolean;
+  Query: boolean;
 }

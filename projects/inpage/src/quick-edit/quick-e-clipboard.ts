@@ -50,12 +50,12 @@ class QuickEClipboardSingleton extends HasLog {
      * perform copy and paste commands - needs the clipboard
      * @param cbAction
      * @param list
-     * @param index
+     * @param domIndex
      * @param type
      */
-    do(cbAction: string, list: JQuery, index: number, type: string): void {
-        const cl = this.log.call('do', `${cbAction}, ..., ${index}`);
-        const newClip = this.createSpecs(type, list, index);
+    do(cbAction: string, list: JQuery, domIndex: number, type: string): void {
+        const cl = this.log.call('do', `${cbAction}, ..., ${domIndex}`);
+        const newClip = this.createSpecs(type, list, domIndex);
 
         // action!
         switch (cbAction) {
@@ -101,12 +101,15 @@ class QuickEClipboardSingleton extends HasLog {
         // sometimes missing data.item
         if (!this.clipboard.item) return cl.done();
 
-        const cb = $jq(this.clipboard.item);
-        cb.addClass(QeSelectors.selected);
-        if (cb.prev().is('iframe'))
-            cb.prev().addClass(QeSelectors.selected);
+        const selectedItem = $jq(this.clipboard.item);
+        selectedItem.addClass(QeSelectors.selected);
+        if (selectedItem.prev().is('iframe'))
+            selectedItem.prev().addClass(QeSelectors.selected);
         this.setSecondaryActionsState(true);
-        QuickE.selected.toggleOverlay(cb);
+        const btnConfig = this.clipboard?.type === QeSelectors.blocks.cb.id
+            ? QuickE.config.innerBlocks.buttons
+            : QuickE.config.modules.buttons;
+        QuickE.selected.toggleOverlay(selectedItem, btnConfig);
         cl.done();
     }
 
@@ -134,27 +137,28 @@ class QuickEClipboardSingleton extends HasLog {
     }
 
 
-    private createSpecs(type: string, list: JQuery, index: number): Selection {
-        const cl = this.log.call('createSpecs', `${type}, ..., ${index}`);
+    private createSpecs(type: string, list: JQuery, domIndex: number): Selection {
+        const cl = this.log.call('createSpecs', `${type}, ..., ${domIndex}`);
         const listItems = list.find(QeSelectors.blocks[type].selector);
         // when paste module below the last module in pane
         // index is 1 larger than the length, then select last
-        const currentItem: HTMLElement = (index >= listItems.length)
+        const currentItem: HTMLElement = (domIndex >= listItems.length)
             ? listItems[listItems.length - 1]
-            : listItems[index];
+            : listItems[domIndex];
 
-        const editContext = ContextForLists.getFromDom(list) || {
+        // get info what item/block is being edited
+        const contextInfo = ContextForLists.getFromDom(list) || {
             parent: 'dnn',
             field: list.id,
             parentGuid: null as string,
         };
         return cl.return({
-            parent: editContext.parent,
-            parentGuid: editContext.parentGuid,
-            field: editContext.field,
+            parent: contextInfo.parent,
+            parentGuid: contextInfo.parentGuid,
+            field: contextInfo.field,
             list: list,
             item: currentItem,
-            index: index,
+            index: domIndex,
             type: type,
         } as Selection);
     }

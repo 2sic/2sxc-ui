@@ -33,7 +33,7 @@ export class Manage {
             const myContext = ContextComplete.findContext(sxc);
             const editContext = SxcEdit.getEditContext(myContext.sxc);
 
-            const userInfo = ContextOfUser.fromContext(myContext); // 2dm simplified getUserOfEditContext(context);
+            const userInfo = ContextOfUser.fromContext(myContext);
             const cmdEngine = new SxcInstanceEngine(myContext.sxc);
 
             const editManager = new EditManager(myContext.sxc, editContext, userInfo, cmdEngine, myContext);
