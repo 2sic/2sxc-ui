@@ -50,10 +50,9 @@ There is a `Context` object which provides these properties as streams (observab
 * `sxc$`
 * etc. (there are about 3 more...)
 
-## Internal Notes
+## Todo (status 2021-02)
 
-* read [npm instructions](https://azing.org/2sxc/r/ItPxPh9D) to see how to publish a release
-
-## Todo
+These are things the 2sxc developers plan on enhancing
 
 * enhance the content-manager to provide write commands (ATM read-only)
+* enhance toolbar system to give angular call-backs when dialogs close
