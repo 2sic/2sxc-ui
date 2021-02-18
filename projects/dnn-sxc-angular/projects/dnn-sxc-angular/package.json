@@ -6,12 +6,12 @@
     "url": "https://github.com/2sic/2sxc-ui/issues"
   },
   "dependencies": {
-    "@2sic.com/2sxc-typings": "^10.24.4"
+    "@2sic.com/2sxc-typings": "^10.24.4",
+    "tslib": "^2.0.0"
   },
   "peerDependencies": {
     "@angular/common": ">=6.1.3",
     "@angular/core": ">=6.1.3",
-    "tslib": ">=2.0.0",
     "@angular/platform-browser": ">/6.1.3",
     "rxjs": ">=6.5.0"
   },
