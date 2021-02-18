@@ -1,9 +1,9 @@
 # dnn-sxc-angular - Connecting Angular to DNN and/or 2sxc
 
-This is a connector for angular 8+ ([git](https://github.com/angular/angular) | [web](https://angular.io/)) for developers using
+This is a connector for angular 6-11+ ([git](https://github.com/angular/angular) | [web](https://angular.io/)) for developers using
 
-1. the open source platform DNN 7+ ([git](https://github.com/dnnsoftware/Dnn.Platform) | [web](http://dnnsoftware.com/)) 
-1. and/or the open source CMS 2sxc 10+ ([git](https://github.com/2sic/2sxc/) | [web](https://2sxc.org/)) 
+1. the open source platform DNN 7-9+ ([git](https://github.com/dnnsoftware/Dnn.Platform) | [web](http://dnnsoftware.com/)) 
+1. and/or the open source CMS 2sxc 10-11+ ([git](https://github.com/2sic/2sxc/) | [web](https://2sxc.org/)) 
 
 This connector does
 
