@@ -1,5 +1,4 @@
-﻿import { ButtonGroup } from '.';
-import { ToolbarSettings } from '.';
+﻿import { ButtonGroup, ToolbarSettings } from '.';
 import { DictionaryValue } from '../../plumbing';
 
 /**

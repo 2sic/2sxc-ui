@@ -16,17 +16,9 @@ import { EditManager } from './edit-manager';
  */
 export class Manage {
     /**
-     * A helper-controller in charge of opening edit-dialogues + creating the toolbars for it
-     * all in-page toolbars etc.
-     * if loaded, it's found under the $2sxc(module).manage
-     * it has commands to
-     * - getButton
-     * - getToolbar
-     * - run(...)
-     * - isEditMode
+     * Init the manager object
+     * we must keep signature of initInstance in sync with the 2sxc.api.js
      * @param sxc
-     *
-     * we must keep signature of initInstance for compatibility because it is used out of this project in ToSic.Sxc.Instance and 2sxc.api.js
      */
     initInstance(sxc: SxcEdit) {
         try {

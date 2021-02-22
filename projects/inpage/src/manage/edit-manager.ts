@@ -8,7 +8,7 @@ import { SxcEdit } from '../interfaces/sxc-instance-editable';
 import { TypeUnsafe } from '../plumbing';
 import { ToolbarManager } from '../toolbar';
 import { ToolbarSettings } from '../toolbar/config';
-import { ButtonConfigLoader, InPageButtonJson } from '../toolbar/config-loaders';
+import { InPageButtonJson } from '../toolbar/config-loaders';
 import { ToolbarRenderer } from '../toolbar/render/toolbar-renderer';
 
 /**
