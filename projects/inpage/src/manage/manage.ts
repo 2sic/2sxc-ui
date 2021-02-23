@@ -2,6 +2,7 @@
 import { ContextComplete } from '../context';
 import { ContextOfUser } from '../context';
 import { SxcEdit } from '../interfaces/sxc-instance-editable';
+import { ToolbarManager } from '../toolbar';
 import { EditManager } from './edit-manager';
 
 /**
@@ -36,4 +37,7 @@ export class Manage {
           console.error('error in 2sxc - will log but not throw', e);
         }
     }
+
+    /** Internal - ATM only used in dnn-sxc-angular to enable toolbar initialization */
+    _toolbarManager = ToolbarManager;
 }
