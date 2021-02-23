@@ -10,12 +10,12 @@ export class RuleManager extends HasLog {
     /** List of rules which were picked up and will be applied */
     rules: BuildRule[] = [];
 
-    tempId = Math.floor(Math.random() * 99999);
+    ruleManagerId = Math.floor(Math.random() * 99999);
 
     /** Basic constructor, must be called from a ToolbarConfigLoader */
     constructor(parent: ToolbarConfigLoader) {
         super('Tlb.RlMngr', parent.log, 'constructor');
-        this.log.add('tempId:' + this.tempId);
+        this.log.add('tempId:' + this.ruleManagerId);
     }
 
     /** Load/initialize the rules which were found */

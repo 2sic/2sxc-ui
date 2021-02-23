@@ -1,4 +1,6 @@
 
+// The parts themselves must also be constants
+
 export const ToolbarConstants = {
   attrToMarkInitalized: '2sxc-tagtoolbar',
   attr: {
@@ -11,5 +13,8 @@ export const ToolbarConstants = {
   },
   selectors: {
     ofOldHover: '.sc-element',
+  },
+  eventNames: {
+    onInit: 'toolbar-init',
   },
 };

@@ -38,6 +38,13 @@ class RendererGlobal extends HasLog {
      */
     reloadAndReInitialize(context: ContextComplete, forceAjax?: boolean, preview?: boolean): Promise<void> {
         const cl = this.log.call('reloadAndReInitialize', `..., forceAjax: ${forceAjax}, preview: ${preview}`, null, {context: context});
+
+        // 2021-02-21 2dm WIP trying to enable toolbar to not reload in a SPA scenario
+        if (context?.toolbar?.settings?.disableReload === true) {
+            cl.done("reload disabled, don't do anything");
+            return Promise.resolve();
+        }
+
         // if ajax is not supported, we must reload the whole page
         if (!forceAjax && !context.app.supportsAjax) {
             cl.done('not ajax - reloading page');

@@ -7,31 +7,60 @@ type TypeHover = 'left' | 'right' | 'none';
 type TypeShow = 'always' | 'hover';
 export type TypeFollow = 'default' | 'none' | 'initial' | 'always' | 'scroll' ;
 
-/** contains toolbar behaviour settings like float, etc. */
+/**
+ * Toolbar behavior settings like float, etc.
+ */
 export class ToolbarSettings {
+    /** Automatically add the '...' more button to the toolbar */
     autoAddMore: TypeAutoAddMore = null;
+
+    /** Hover placement of the toolbar */
     hover: TypeHover = 'right';
+
+    /** Show behavior (always, hover, ...) */
     show: TypeShow = 'hover';
+
+    /** Follow behavior - if the toolbar should scroll with the page or remain where it was hovered */
     follow: TypeFollow = 'default';
 
-    // old term, keep for compatibility, but new is class
+    /**
+     * Old term, keep for compatibility. Please use `.class` instead
+     * @obsolete
+     */
     classes: string = '';
 
-    // New 10.27 term for the class for simplicity and consistency with button styling
+    /**
+     * Term for the class for simplicity and consistency with button styling
+     * New 10.27
+     */
     class: string = '';
 
     /**
-     * New in 10.27
      * color configuration which applies to all buttons
      * use "colorname", "#xxyyzz" or "color1,color2" to specify the colors
+     * New in 10.27
      */
     color?: string = '';
 
     /**
-     * New in 10.27 - modifiers for the buttons
+     * modifiers for the buttons
      * Should never be set from the page, but the toolbar initializer will set this
+     * New in 10.27
      */
     _rules?: RuleManager;
+
+    /**
+     * New in 11.12 WIP
+     *
+     * @type {string}
+     * @memberof ToolbarSettings
+     */
+    id: string;
+
+    /**
+     * New in 11.12 - WIP
+     */
+    disableReload: boolean = false;
 
     constructor(defaults: { autoAddMore?: TypeAutoAddMore, hover?: TypeHover, show?: TypeShow, follow?: TypeFollow }) {
         if (defaults.autoAddMore) this.autoAddMore = defaults.autoAddMore;

@@ -1,5 +1,6 @@
-﻿import { ToolbarRenderer } from '..';
-import { TagToolbarManager } from '..';
+﻿import { TagToolbarManager, ToolbarEventParams, ToolbarRenderer } from '..';
+import { WorkflowManager } from '../../commands';
+import { C } from '../../constants';
 import { ContextComplete } from '../../context/bundles/context-bundle-button';
 import { Translator } from '../../i18n';
 import { $jq } from '../../interfaces/sxc-controller-in-page';
@@ -15,6 +16,8 @@ export class TagToolbar {
     private toolbarElement = null as JQuery;
     private initialized = false;
     private follow: TypeFollow;
+
+    private commandWorkflow = new WorkflowManager(null);
 
     /**
      * A Tag-Toolbar which is outside of the module DOM and floating freely
@@ -56,9 +59,9 @@ export class TagToolbar {
         this.toolbarElement = $jq(new ToolbarRenderer(this.context).render());
 
         this.toolbarElement.on('mouseleave', (e) => {
-        // if we do not hover the tag now, hide it
-        if (!$.contains(this.hoverTag[0], e.relatedTarget) && this.hoverTag[0] !== e.relatedTarget)
-            this.hide();
+            // if we do not hover the tag now, hide it
+            if (!$.contains(this.hoverTag[0], e.relatedTarget) && this.hoverTag[0] !== e.relatedTarget)
+                this.hide();
         });
 
         $jq('body').append(this.toolbarElement);
@@ -66,11 +69,30 @@ export class TagToolbar {
         this.toolbarElement.attr(TagToolbarManager.TagToolbarForAttr, toolbarId);
         this.hoverTag.attr(TagToolbarManager.TagToolbarAttr, toolbarId);
 
+        // WIP 11.12
+        this.commandWorkflow.attach(this.toolbarElement[0]);
+
         this.toolbarElement.css({ display: 'none', position: 'absolute', transition: 'top 0.5s ease-out' });
 
         // ensure it's translated
         this.translator?.autoTranslateMenus();
         this.initialized = true;
+        this.raiseToolbarInitEvent();
+    }
+
+    /** WIP v11.12 */
+    private raiseToolbarInitEvent() {
+        // const cl = this.log.cal
+        const event = new CustomEvent(C.Toolbar.eventNames.onInit, {
+            detail: {
+                type: 'tag',
+                element: this.toolbarElement[0],
+                id: this.context.toolbar?.settings?.id,
+                identifier: this.context.toolbar?.identifier,
+                workflow: this.commandWorkflow,
+            } as ToolbarEventParams,
+        });
+        this.hoverTag?.[0]?.dispatchEvent(event);
     }
 
     private updatePosition(initial: boolean = false) {

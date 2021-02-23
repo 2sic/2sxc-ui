@@ -28,3 +28,6 @@ export * from './template-develop';
 export * from './template-query';
 export * from './template-settings';
 export * from './zone';
+
+// wip workflow
+export * from './special-commands';
