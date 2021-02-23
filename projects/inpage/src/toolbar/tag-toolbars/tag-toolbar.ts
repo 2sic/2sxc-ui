@@ -108,7 +108,6 @@ export class TagToolbar {
                 position.top = position.mousePos.y + position.win.scrollY - position.bodyOffset.top - toolbarHeight / 2;
 
         // Update left / right coordinates
-        // todo: try to change class to use attribute or something
         if (this.toolbarElement.hasClass('sc-tb-hover-right'))
             position.right = position.win.width - position.tagOffset.left - position.tagWidth + tagToolbarPaddingRight - position.bodyOffset.left;
         else

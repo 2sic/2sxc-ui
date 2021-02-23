@@ -10,8 +10,7 @@
   special-instructions: 'read more on 2sxc.org/help?tag=quick-edit';
 }
 
-/* todo: discuss w/2rm, maybe there's a better way without changing the positioning of the main element... */
-/* ReSharper disable Html.AttributeNotResolved */
+/* note: maybe there's a better way without changing the positioning of the main element... */
 *[sxc-toolbar-hover] {
   position: relative;
 }
@@ -215,10 +214,6 @@ body.sc-tb-show-all [sxc-toolbar-hover] .sc-menu {
 
   /* fix buttons height, for twitter bootstrap */
   line-height: 28px;
-
-  /* Animation center compensation - margins should be symmetric */
-  /* remove if not needed */
-  /* margin-left: 0.225em; */
 
   /* you can be more comfortable with increased icons size */
   font-size: 125%;

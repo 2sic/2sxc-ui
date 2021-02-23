@@ -14,7 +14,6 @@ export * from './delete';
 export * from './edit';
 export * from './insights-server';
 export * from './instance-list';
-// https://github.com/2sic/2sxc/issues/2320 export * from './item-history';
 export * from './layout';
 export * from './metadata';
 export * from './more';
@@ -29,5 +28,5 @@ export * from './template-query';
 export * from './template-settings';
 export * from './zone';
 
-// wip workflow
+// Workflow
 export * from './special-commands';

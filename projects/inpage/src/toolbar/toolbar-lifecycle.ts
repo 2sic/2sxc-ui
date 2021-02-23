@@ -1,4 +1,4 @@
-import { ToolbarEventArguments, ToolbarTypes } from '.';
+import { ToolbarEventArguments } from '.';
 import { C } from '../constants';
 import { ContextComplete } from '../context';
 import { WorkflowManager } from '../workflow';
@@ -10,7 +10,7 @@ export class ToolbarLifecycle {
 
         const event = new CustomEvent(C.Toolbar.eventNames.onInit, {
             detail: {
-                type: ToolbarTypes.tag,
+                // type: ToolbarTypes.tag,
                 element: toolbarElement,
                 identifier: context.toolbar?.identifier,
                 workflow: commandWorkflow,

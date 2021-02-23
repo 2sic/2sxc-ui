@@ -1,4 +1,3 @@
-import { ToolbarTypes } from '.';
 import { WorkflowManager } from '../workflow';
 
 /**
@@ -11,8 +10,8 @@ export interface ToolbarEventArguments {
      * - standalone means that it's a toolbar that was added
      */
 
-    // TODO: classic toolbar doesn't have this yet
-    type: ToolbarTypes;
+    // note: this was an idea, but we're not sure if it's actually needde, so don't use yet classic toolbar doesn't have this yet
+    // type: ToolbarTypes;
 
     element: HTMLElement;
 

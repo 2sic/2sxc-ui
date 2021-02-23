@@ -3,8 +3,6 @@ import { contentItems } from '../../entity-manipulation/item-commands';
 
 export const CmdDelete = 'delete';
 /**
- * todo: work in progress related to https://github.com/2sic/2sxc/issues/618
- *
  * import this module to commands.ts
  */
 Commands.add(CmdDelete, 'Delete', 'cancel', true, false, {
