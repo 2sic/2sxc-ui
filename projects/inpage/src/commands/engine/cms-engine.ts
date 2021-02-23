@@ -12,6 +12,7 @@ import { CommandLinkGenerator } from '../command-link-generator';
 import { CommandParams } from '../command-params';
 import { WorkflowArguments, WorkflowHelper, WorkflowPhases } from '../workflow';
 import { RunParameters } from './run-parameters';
+import { WorkflowManager } from '../workflow/workflow-manager';
 
 type CommandPromise<T> = Promise<T|void>;
 
@@ -107,14 +108,18 @@ export class CmsEngine extends HasLog {
         let finalPromise: CommandPromise<T>;
         if (new ButtonSafe(button, context).uiActionOnly()) {
             cl.add('UI command, no pre-flight to ensure content-block');
-            finalPromise = wrapperPromise.then(() => commandPromise(context, origEvent));
+            finalPromise = wrapperPromise.then((wfArgs) => WorkflowManager.isCancelled(wfArgs)
+                ? Promise.resolve<T>(null)
+                : commandPromise(context, origEvent));
         } else {
             // if more than just a UI-action, then it needs to be sure the content-group is created first
             cl.add('command might change data, wrap in pre-flight to ensure content-block');
             finalPromise = wrapperPromise.then(
-                () => ContentBlockEditor
-                    .prepareToAddContent(context, cmdParams.useModuleList)
-                    .then(() => commandPromise(context, origEvent)));
+                (wfArgs) => WorkflowManager.isCancelled(wfArgs)
+                    ? Promise.resolve<T>(null)
+                    : ContentBlockEditor
+                        .prepareToAddContent(context, cmdParams.useModuleList)
+                        .then(() => commandPromise(context, origEvent)));
         }
 
         // Attach post-command workflow

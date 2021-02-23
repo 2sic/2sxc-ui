@@ -1,7 +1,10 @@
 import { WorkflowArguments, WorkflowPhases } from '.';
 import { SpecialCommands } from '..';
 
-export type WorkflowPromiseFactory = (args: WorkflowArguments) => Promise<WorkflowArguments>;
+export type PromiseFactory<T> = (args: T) => Promise<T>;
+
+
+export type WorkflowPromiseFactory = PromiseFactory<WorkflowArguments>; // (args: WorkflowArguments) => Promise<WorkflowArguments>;
 
 export interface WorkflowStep {
     /**
