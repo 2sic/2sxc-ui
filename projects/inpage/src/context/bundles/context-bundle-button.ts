@@ -1,7 +1,7 @@
-﻿import { WorkflowManager } from '../../commands';
-import { SxcEdit } from '../../interfaces/sxc-instance-editable';
+﻿import { SxcEdit } from '../../interfaces/sxc-instance-editable';
 import { Obj } from '../../plumbing';
 import { Button } from '../../toolbar/config/button';
+import { WorkflowManager } from '../../workflow';
 import { AttrJsonEditContext } from '../html-attribute';
 import { ContextBundleToolbar } from './context-bundle-toolbar';
 

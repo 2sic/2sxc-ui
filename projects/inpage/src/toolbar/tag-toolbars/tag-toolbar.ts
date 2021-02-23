@@ -1,9 +1,9 @@
 ﻿import { TagToolbarManager, ToolbarEventArguments, ToolbarRenderer } from '..';
-import { WorkflowManager } from '../../commands';
 import { C } from '../../constants';
 import { ContextComplete } from '../../context/bundles/context-bundle-button';
 import { Translator } from '../../i18n';
 import { $jq } from '../../interfaces/sxc-controller-in-page';
+import { WorkflowManager } from '../../workflow';
 import { TypeFollow } from '../config/toolbar-settings';
 
 /**

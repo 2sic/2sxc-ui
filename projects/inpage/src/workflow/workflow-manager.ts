@@ -1,10 +1,9 @@
 import { WorkflowArguments, WorkflowPhases, WorkflowStep, WorkflowStepHelper } from '.';
-import { SpecialCommands } from '..';
-import { HasLog, Log } from '../../logging';
+import { SpecialCommands } from '../commands';
+import { HasLog, Log } from '../logging';
 import { ToolbarWithWorkflow } from './toolbar-with-workflow';
 import { WorkflowHelper } from './workflow-helper';
 import { WorkflowPromiseFactory } from './workflow-step';
-import { cancelled } from '../../quick-dialog/state';
 
 export class WorkflowManager extends HasLog {
 

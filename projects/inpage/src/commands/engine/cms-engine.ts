@@ -10,7 +10,7 @@ import { ButtonCommand } from '../../toolbar/config';
 import { InPageButtonJson } from '../../toolbar/config-loaders/config-formats/in-page-button';
 import { CommandLinkGenerator } from '../command-link-generator';
 import { CommandParams } from '../command-params';
-import { WorkflowArguments, WorkflowHelper, WorkflowPhases } from '../workflow';
+import { WorkflowArguments, WorkflowHelper, WorkflowPhases } from '../../workflow';
 import { RunParameters } from './run-parameters';
 
 type CommandPromise<T> = Promise<T|void>;

@@ -1,5 +1,5 @@
-import { ContextComplete } from '../../context';
-import { WorkflowPhases } from './workflow-phases';
+import { WorkflowPhases } from '.';
+import { ContextComplete } from '../context';
 
 
 export class WorkflowArguments {

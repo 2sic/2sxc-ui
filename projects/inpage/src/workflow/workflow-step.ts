@@ -1,5 +1,5 @@
 import { WorkflowArguments, WorkflowPhases } from '.';
-import { SpecialCommands } from '..';
+import { SpecialCommands } from '../commands';
 
 export type PromiseFactory<T> = (args: T) => Promise<T>;
 

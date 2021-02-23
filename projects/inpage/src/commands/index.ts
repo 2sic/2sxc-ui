@@ -10,5 +10,3 @@ export * from './interception';
 export * from './metadata-for';
 export * from './engine/sxc-instance-engine';
 
-// Workflow WIP
-export * from './workflow';
