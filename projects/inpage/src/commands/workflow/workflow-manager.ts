@@ -77,26 +77,9 @@ export class WorkflowManager extends HasLog {
         (node as ToolbarWithWorkflow).commandWorkflow = this;
     }
 
-    static isCancelled(currentArgs: WorkflowArguments | boolean) {
-        const cancel = this._isCancelled(currentArgs);
-        console.log('is cancelled: ' + cancel, currentArgs);
-        return cancel;
-    }
-
-    private static _isCancelled(currentArgs: WorkflowArguments | boolean) {
-        // promise forgot to return anything, no cancel
-        if (currentArgs == null) return false;
-
-        // promise returned simple false, cancel
-        if (currentArgs === false) return true;
-
-        // determine cancel based on either a boolean result or a real WorkflowArguments with cancel.
-        return (currentArgs as WorkflowArguments).cancel === true;
-    }
-
     private runNextPromiseIfNotCancelled(currentArgs: WorkflowArguments | boolean, prevArgs: WorkflowArguments, nextFactory: WorkflowPromiseFactory) {
         // determine cancel based on either a boolean result or a real WorkflowArguments with cancel.
-        const cancel = WorkflowManager.isCancelled(currentArgs);
+        const cancel = WorkflowHelper.isCancelled(currentArgs);
         // make sure we have real arguments no matter what came in - assuming we have prevArgs
         currentArgs = (currentArgs && typeof(currentArgs) !== 'boolean') ? currentArgs : { ...prevArgs };
         // in case the cancel came as boolean, we must now set it on the currentArgs

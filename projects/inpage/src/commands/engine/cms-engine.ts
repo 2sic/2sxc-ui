@@ -12,7 +12,6 @@ import { CommandLinkGenerator } from '../command-link-generator';
 import { CommandParams } from '../command-params';
 import { WorkflowArguments, WorkflowHelper, WorkflowPhases } from '../workflow';
 import { RunParameters } from './run-parameters';
-import { WorkflowManager } from '../workflow/workflow-manager';
 
 type CommandPromise<T> = Promise<T|void>;
 
@@ -91,10 +90,7 @@ export class CmsEngine extends HasLog {
         cl.data('button', context.button);
 
         // WIP 11.12 - find commandWorkflow
-        console.log('event', event);
         const wf = context.commandWorkflow = WorkflowHelper.getWorkflow(origEvent.target as HTMLElement);
-        console.log('wf', wf);
-
         const wrapperPromise = wf.run(new WorkflowArguments(name, WorkflowPhases.before, context));
 
         // In case we don't have special code, use generic code
@@ -108,14 +104,14 @@ export class CmsEngine extends HasLog {
         let finalPromise: CommandPromise<T>;
         if (new ButtonSafe(button, context).uiActionOnly()) {
             cl.add('UI command, no pre-flight to ensure content-block');
-            finalPromise = wrapperPromise.then((wfArgs) => WorkflowManager.isCancelled(wfArgs)
+            finalPromise = wrapperPromise.then((wfArgs) => WorkflowHelper.isCancelled(wfArgs)
                 ? Promise.resolve<T>(null)
                 : commandPromise(context, origEvent));
         } else {
             // if more than just a UI-action, then it needs to be sure the content-group is created first
             cl.add('command might change data, wrap in pre-flight to ensure content-block');
             finalPromise = wrapperPromise.then(
-                (wfArgs) => WorkflowManager.isCancelled(wfArgs)
+                (wfArgs) => WorkflowHelper.isCancelled(wfArgs)
                     ? Promise.resolve<T>(null)
                     : ContentBlockEditor
                         .prepareToAddContent(context, cmdParams.useModuleList)
@@ -124,12 +120,8 @@ export class CmsEngine extends HasLog {
 
         // Attach post-command workflow
         const promiseWithAfterEffects = finalPromise.then((result) => {
-            console.log('entering post-promise start');
             return wf.run(new WorkflowArguments(name, WorkflowPhases.after, null, result))
-                .then(() => {
-                    console.log('done with post-promise');
-                    return result;
-                });
+                .then(() => result);
         });
 
         return cl.return(promiseWithAfterEffects);

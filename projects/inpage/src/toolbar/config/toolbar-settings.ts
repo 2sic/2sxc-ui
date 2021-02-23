@@ -57,11 +57,6 @@ export class ToolbarSettings {
      */
     // id: string;
 
-    /**
-     * New in 11.12 - WIP
-     */
-    disableReload: boolean = false;
-
     constructor(defaults: { autoAddMore?: TypeAutoAddMore, hover?: TypeHover, show?: TypeShow, follow?: TypeFollow }) {
         if (defaults.autoAddMore) this.autoAddMore = defaults.autoAddMore;
         if (defaults.hover) this.hover = defaults.hover;
