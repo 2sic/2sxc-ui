@@ -10,7 +10,7 @@ import { ButtonCommand } from '../../toolbar/config';
 import { InPageButtonJson } from '../../toolbar/config-loaders/config-formats/in-page-button';
 import { CommandLinkGenerator } from '../command-link-generator';
 import { CommandParams } from '../command-params';
-import { WorkflowArguments, WorkflowHelper, WorkflowPhases } from '../../workflow';
+import { WorkflowStepArguments, WorkflowHelper, WorkflowPhases } from '../../workflow';
 import { RunParameters } from './run-parameters';
 
 type CommandPromise<T> = Promise<T|void>;
@@ -89,9 +89,9 @@ export class CmsEngine extends HasLog {
         context.button = button;
         cl.data('button', context.button);
 
-        // WIP 11.12 - find commandWorkflow
+        // New in 11.12 - find commandWorkflow of toolbar or use a dummy so the remaining code will always work
         const wf = context.commandWorkflow = WorkflowHelper.getWorkflow(origEvent.target as HTMLElement);
-        const wrapperPromise = wf.run(new WorkflowArguments(name, WorkflowPhases.before, context));
+        const wrapperPromise = wf.run(new WorkflowStepArguments(name, WorkflowPhases.before, context));
 
         // In case we don't have special code, use generic code
         let commandPromise = button.code;
@@ -120,7 +120,7 @@ export class CmsEngine extends HasLog {
 
         // Attach post-command workflow
         const promiseWithAfterEffects = finalPromise.then((result) => {
-            return wf.run(new WorkflowArguments(name, WorkflowPhases.after, null, result))
+            return wf.run(new WorkflowStepArguments(name, WorkflowPhases.after, null, result))
                 .then(() => result);
         });
 

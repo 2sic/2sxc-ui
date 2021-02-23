@@ -8,6 +8,7 @@ import { ToolbarManager } from '../toolbar-manager';
 import { ToolbarInitConfig } from './toolbar-init-config';
 import { Translator } from '../../i18n/translator';
 import { $jq } from '../../interfaces/sxc-controller-in-page';
+import { ToolbarLifecycle } from '../toolbar-lifecycle';
 
 // quick debug - set to false if not needed for production
 const dbg = false;
@@ -150,6 +151,10 @@ export class ToolbarConfigFinderAndInitializer extends HasLog {
             cl.add('V1 hover-toolbar and parents found - will add attribute');
             this.addHoverAttributeToTag(hoverParent);
         }
+
+        // TODO: get init to run
+        ToolbarLifecycle.raiseToolbarInitEvent(tag?.[0], hoverParent?.[0], context);
+
         cl.done();
     }
 

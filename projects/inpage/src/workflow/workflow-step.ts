@@ -1,10 +1,11 @@
-import { WorkflowArguments, WorkflowPhases } from '.';
+import { WorkflowStepArguments, WorkflowPhases } from '.';
 import { SpecialCommands } from '../commands';
 
 export type PromiseFactory<T> = (args: T) => Promise<T>;
 
+export type WorkflowPromiseFactory = PromiseFactory<WorkflowStepArguments>;
 
-export type WorkflowPromiseFactory = PromiseFactory<WorkflowArguments>; // (args: WorkflowArguments) => Promise<WorkflowArguments>;
+export type WorkflowCode = (args: WorkflowStepArguments) => WorkflowStepArguments;
 
 export interface WorkflowStep {
     /**
@@ -33,10 +34,10 @@ export interface WorkflowStep {
 
     /**
      * The code which is run, must be a promise-factory.
-     * So it's a function that will return a promise. 
+     * So it's a function that will return a promise.
      * Required.
      */
-    promise: WorkflowPromiseFactory;
+    code: WorkflowCode;
 }
 
 export class WorkflowStepHelper {
@@ -45,6 +46,7 @@ export class WorkflowStepHelper {
         step.command = step.command ?? SpecialCommands.all;
         step.phase = step.phase ?? WorkflowPhases.before;
         step.priority = step.priority ?? 1;
+        if (!step.code || typeof(step.code) !== 'function') throw `Tried preparing a workflow step, but the promise either doesn't exist or is not a promise factory`;
         return step;
     }
 }

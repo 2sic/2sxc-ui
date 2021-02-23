@@ -2,7 +2,7 @@ import { WorkflowPhases } from '.';
 import { ContextComplete } from '../context';
 
 
-export class WorkflowArguments {
+export class WorkflowStepArguments {
     constructor(
         /** Name this workflow is running for */
         public command: string,
@@ -10,10 +10,13 @@ export class WorkflowArguments {
         /** The phase it's in (before, after, etc.) */
         public phase: WorkflowPhases,
 
-        /** Todo/WIP */
+        /** Context of the current command / step being run */
         public context: ContextComplete,
 
-        /** Result in after-phases of the workflow */
+        /**
+         * Result in after-phases of the workflow
+         * BETA - never really tested this
+         */
         public result: unknown = null,
         ) {
 

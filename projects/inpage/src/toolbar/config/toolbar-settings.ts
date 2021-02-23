@@ -49,14 +49,6 @@ export class ToolbarSettings {
      */
     _rules?: RuleManager;
 
-    /**
-     * New in 11.12 WIP
-     *
-     * @type {string}
-     * @memberof ToolbarSettings
-     */
-    // id: string;
-
     constructor(defaults: { autoAddMore?: TypeAutoAddMore, hover?: TypeHover, show?: TypeShow, follow?: TypeFollow }) {
         if (defaults.autoAddMore) this.autoAddMore = defaults.autoAddMore;
         if (defaults.hover) this.hover = defaults.hover;

@@ -7,7 +7,7 @@ import { SxcEdit } from '../interfaces/sxc-instance-editable';
 import { windowInPage as window } from '../interfaces/window-in-page';
 import { HasLog, Insights } from '../logging';
 import { QuickE } from '../quick-edit/quick-e';
-import { WorkflowArguments, WorkflowHelper, WorkflowPhases } from '../workflow';
+import { WorkflowStepArguments, WorkflowHelper, WorkflowPhases } from '../workflow';
 import { ContentBlockEditor } from './content-block-editor';
 
 /**
@@ -43,9 +43,9 @@ class RendererGlobal extends HasLog {
 
         // get workflow engine or a dummy engine
         const wf = context.commandWorkflow ?? WorkflowHelper.getDummy();
-        const promiseChain = wf.run(new WorkflowArguments(SpecialCommands.refresh, WorkflowPhases.before, context));
+        const promiseChain = wf.run(new WorkflowStepArguments(SpecialCommands.refresh, WorkflowPhases.before, context));
 
-        // 2021-02-21 2dm WIP trying to enable toolbar to not reload in a SPA scenario
+        // 2021-02-21 2dm New in 11.12 enable toolbar to not reload in a SPA scenario
         const finalPromise = promiseChain.then((wfArgs) => {
             if (WorkflowHelper.isCancelled(wfArgs)) {
                 cl.add('Workflow return false, will cancel and not refresh.');

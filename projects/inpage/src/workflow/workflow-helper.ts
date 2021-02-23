@@ -1,4 +1,4 @@
-import { ToolbarWithWorkflow, WorkflowArguments, WorkflowManager } from '.';
+import { ToolbarWithWorkflow, WorkflowStepArguments, WorkflowManager } from '.';
 
 let dummyWorkflowHelper: WorkflowManager;
 const debug = false;
@@ -29,13 +29,13 @@ export class WorkflowHelper {
         return dummyWorkflowHelper;
     }
 
-    static isCancelled(currentArgs: WorkflowArguments | boolean) {
+    static isCancelled(currentArgs: WorkflowStepArguments | boolean) {
         const cancel = this._isCancelled(currentArgs);
         if (debug) console.log('is cancelled: ' + cancel, currentArgs);
         return cancel;
     }
 
-    private static _isCancelled(currentArgs: WorkflowArguments | boolean) {
+    private static _isCancelled(currentArgs: WorkflowStepArguments | boolean) {
         // promise forgot to return anything, no cancel
         if (currentArgs == null) return false;
 
@@ -43,7 +43,7 @@ export class WorkflowHelper {
         if (currentArgs === false) return true;
 
         // determine cancel based on either a boolean result or a real WorkflowArguments with cancel.
-        return (currentArgs as WorkflowArguments).cancel === true;
+        return (currentArgs as WorkflowStepArguments).cancel === true;
     }
 
 }
