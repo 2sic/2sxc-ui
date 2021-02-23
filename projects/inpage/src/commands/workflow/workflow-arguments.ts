@@ -1,3 +1,4 @@
+import { ContextComplete } from '../../context';
 import { WorkflowPhases } from './workflow-phases';
 
 
@@ -10,7 +11,7 @@ export class WorkflowArguments {
         public phase: WorkflowPhases,
 
         /** Todo/WIP */
-        public params: unknown,
+        public context: ContextComplete,
 
         /** Result in after-phases of the workflow */
         public result: unknown = null,

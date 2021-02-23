@@ -55,7 +55,7 @@ export class ToolbarSettings {
      * @type {string}
      * @memberof ToolbarSettings
      */
-    id: string;
+    // id: string;
 
     /**
      * New in 11.12 - WIP

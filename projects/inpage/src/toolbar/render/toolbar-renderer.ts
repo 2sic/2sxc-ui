@@ -6,7 +6,7 @@ import { RenderButton } from './render-button';
 import { RenderButtonGroups } from './render-groups';
 
 const attrIdentifier = 'toolbar-identifier';
-const attrCustomId = 'toolbar-id';
+// const attrCustomId = 'toolbar-id';
 
 export class ToolbarRenderer extends HasLog {
     private readonly groups: RenderButtonGroups;
@@ -34,7 +34,7 @@ export class ToolbarRenderer extends HasLog {
         // render toolbar
         const tlbTag = document.createElement('ul');
         tlbTag.setAttribute(attrIdentifier, context.toolbar?.identifier);
-        tlbTag.setAttribute(attrCustomId, context.toolbar?.settings?.id);
+        // tlbTag.setAttribute(attrCustomId, context.toolbar?.settings?.id);
         tlbTag.classList.add('sc-menu');
         tlbTag.classList.add('group-0'); // IE11 fix, add each class separately
 

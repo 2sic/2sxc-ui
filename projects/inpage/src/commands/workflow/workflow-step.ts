@@ -1,7 +1,7 @@
 import { WorkflowArguments, WorkflowPhases } from '.';
 import { SpecialCommands } from '..';
 
-export type WorkflowPromise = (args: WorkflowArguments) => Promise<WorkflowArguments>;
+export type WorkflowPromiseFactory = (args: WorkflowArguments) => Promise<WorkflowArguments>;
 
 export interface WorkflowStep {
     /**
@@ -33,7 +33,7 @@ export interface WorkflowStep {
      * So it's a function that will return a promise. 
      * Required.
      */
-    promise: WorkflowPromise;
+    promise: WorkflowPromiseFactory;
 }
 
 export class WorkflowStepHelper {

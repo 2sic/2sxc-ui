@@ -1,4 +1,4 @@
-﻿import { TagToolbarManager, ToolbarEventParams, ToolbarRenderer } from '..';
+﻿import { TagToolbarManager, ToolbarEventArguments, ToolbarRenderer } from '..';
 import { WorkflowManager } from '../../commands';
 import { C } from '../../constants';
 import { ContextComplete } from '../../context/bundles/context-bundle-button';
@@ -87,10 +87,10 @@ export class TagToolbar {
             detail: {
                 type: 'tag',
                 element: this.toolbarElement[0],
-                id: this.context.toolbar?.settings?.id,
+                // id: this.context.toolbar?.settings?.id,
                 identifier: this.context.toolbar?.identifier,
                 workflow: this.commandWorkflow,
-            } as ToolbarEventParams,
+            } as ToolbarEventArguments,
         });
         this.hoverTag?.[0]?.dispatchEvent(event);
     }

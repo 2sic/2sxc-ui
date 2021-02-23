@@ -12,4 +12,5 @@ export * from './initialize/toolbar-finder-and-initializer';
 
 
 // WIP
-export * from './wip/toolbar-events';
+export * from './toolbar-types';
+export * from './toolbar-event-arguments';

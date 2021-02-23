@@ -94,7 +94,7 @@ export class CmsEngine extends HasLog {
         const wf = context.commandWorkflow = WorkflowHelper.getWorkflow(origEvent.target as HTMLElement);
         console.log('wf', wf);
 
-        const wrapperPromise = wf.run(new WorkflowArguments(name, WorkflowPhases.before, null));
+        const wrapperPromise = wf.run(new WorkflowArguments(name, WorkflowPhases.before, context));
 
         // In case we don't have special code, use generic code
         let commandPromise = button.code;

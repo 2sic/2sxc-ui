@@ -2,6 +2,8 @@ import { WorkflowArguments, WorkflowPhases, WorkflowStep, WorkflowStepHelper } f
 import { SpecialCommands } from '..';
 import { HasLog, Log } from '../../logging';
 import { ToolbarWithWorkflow } from './toolbar-with-workflow';
+import { WorkflowHelper } from './workflow-helper';
+import { WorkflowPromiseFactory } from './workflow-step';
 
 export class WorkflowManager extends HasLog {
 
@@ -38,9 +40,26 @@ export class WorkflowManager extends HasLog {
         // run in sequence but cancel at any time if necessary
         const promise = new Promise<WorkflowArguments>((resolve, reject) => {
             const innerChain = Promise.resolve(wfArgs);
+            let previousArgs = wfArgs;
+            let interruptChain = false;
             for (let stepCount = 0; stepCount < stepsForCommand.length; stepCount++) {
-                const currentStep = stepsForCommand[stepCount];
-                innerChain.then(currentStep.promise);
+                const nextStep = stepsForCommand[stepCount];
+                innerChain.then((resultingArgs) => {
+                    // return this.runNextPromiseIfNotCancelled(resultingArgs, previousArgs, nextStep.promise);
+                    // make sure that empty resulting args will mean we continue with the previous ones
+                    resultingArgs = resultingArgs ?? previousArgs;
+                    // make sure that a simple 'false' will be treaded as cancel
+                    if (resultingArgs as unknown as boolean === false) {
+                        interruptChain = true;
+                        resultingArgs = { cancel: true, ...previousArgs };
+                    }
+                    if (resultingArgs?.cancel === true) interruptChain = true;
+
+                    // preserve for next iteration
+                    previousArgs = resultingArgs;
+
+                    return (interruptChain) ? emptyWorkflow(previousArgs) : nextStep.promise(previousArgs);
+                });
             }
 
             innerChain.then((finalArgs) => {
@@ -57,7 +76,14 @@ export class WorkflowManager extends HasLog {
         (node as ToolbarWithWorkflow).commandWorkflow = this;
     }
 
+    private runNextPromiseIfNotCancelled(currentArgs: WorkflowArguments | boolean, prevArgs: WorkflowArguments, nextFactory: WorkflowPromiseFactory) {
+        // determine cancel based on either a boolean result or a real WorkflowArguments with cancel.
+        const cancel = currentArgs === false || ((currentArgs as WorkflowArguments)?.cancel === false ?? false);
+        // make sure we have real arguments no matter what came in - assuming we have prevArgs
+        currentArgs = (currentArgs && typeof(currentArgs) !== 'boolean') ? currentArgs : { cancel, ...prevArgs };
 
+        return cancel ? emptyWorkflow : nextFactory;
+    }
 
 }
 
