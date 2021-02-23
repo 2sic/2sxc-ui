@@ -10,5 +10,4 @@ export * from './render/toolbar-renderer';
 export * from './initialize/toolbar-init-config';
 export * from './initialize/toolbar-finder-and-initializer';
 
-export * from './toolbar-types';
 export * from './toolbar-event-arguments';
