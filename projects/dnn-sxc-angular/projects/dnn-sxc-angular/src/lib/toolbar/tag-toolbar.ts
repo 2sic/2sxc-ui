@@ -1,5 +1,5 @@
 import { Directive, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Context } from '..';
+import { Context } from '../context';
 
 @Directive({
   selector: '[sxc-toolbar]',

@@ -5,7 +5,7 @@ import { HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Query } from './query';
-import { QueryConstruction } from '../interfaces/query-construction';
+import { QueryConstruction } from './query-construction';
 
 /**
  * 2sxc data provider
