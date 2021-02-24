@@ -7,4 +7,4 @@ export { Data } from './sxc/data';
 export { DnnInterceptor } from './http/dnn.interceptor';
 
 export { SxcToolbarDirective } from "./beta/edit"
-export { SxcTagToolbarDirective } from "./beta/tag-toolbar"
+export { SxcTagToolbarDirective } from "./toolbar/tag-toolbar"

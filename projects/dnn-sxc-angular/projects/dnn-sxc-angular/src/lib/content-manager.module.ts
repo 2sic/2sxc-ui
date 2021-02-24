@@ -4,7 +4,7 @@ import { Data } from './sxc/data';
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { SxcToolbarDirective } from './beta/edit';
-import { SxcTagToolbarDirective } from './beta/tag-toolbar';
+import { SxcTagToolbarDirective } from './toolbar/tag-toolbar';
 
 @NgModule({
   imports: [
