@@ -11,6 +11,8 @@ const runtimeDefaults: Partial<ContextInfo> = {
     addHttpHeaders: true
 };
 
+let constructorCount = 0;
+
 @Injectable({
     providedIn: 'root',
 })
@@ -33,6 +35,11 @@ export class Context implements ContextInfo {
             throw new Error('window.$2sxc is null - you probably forgot to include the script before loading angular');
         }
         this.check2sxcVersion();
+
+        constructorCount++;
+        if (constructorCount > 1) {
+          console.warn('The Context object of dnn-sxc-angular was created more than once. This is unexpected, and will probably lead to problems with the api calls.')
+        }
     }
 
     private check2sxcVersion() {
@@ -81,7 +88,7 @@ export class Context implements ContextInfo {
         if (!settings.sxc) {
             throw new Error('couldn\'t get sxc instance - reason unknown');
         }
-        
+
         this.sxc = settings.sxc;
         this.addHttpHeaders = settings.addHttpHeaders;
         this.appNameInPath = settings.appNameInPath;
