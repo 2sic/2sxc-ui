@@ -16,7 +16,7 @@ export class TemplateEditor extends HasLog {
         // fromStart
         const fromStart = !(Object.is(pos, -0) || pos < 0);
         pos = Math.abs(pos);
-        console.log('addbutton - pos', `${fromStart ? '+' : '-'}${pos}`);
+        // console.log('addbutton - pos', `${fromStart ? '+' : '-'}${pos}`);
         const cl = this.log.call('addButton', `..., ${groupName}, ${id}, ${name}, ${fromStart ? '+' : '-'}${pos}, ${fromStart}`);
         if (!template) return cl.done('no template');
         let group = this.findGroupOrDefault(template, groupName);
