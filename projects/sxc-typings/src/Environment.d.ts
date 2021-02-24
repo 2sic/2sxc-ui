@@ -32,11 +32,11 @@ export interface Environment extends HasLog {
    */
   rvt(): string ;
 
-
-  /**
-   * The uiRoot path
-   */
-  uiRoot(): string;
+// 2021-02 2dm - removed this, as far as I know it's never used
+//   /**
+//    * The uiRoot path
+//    */
+//   uiRoot(): string;
 }
 
 export interface JsInfo {
@@ -49,6 +49,7 @@ export interface JsInfo {
   /** Request verification token */
   rvt: string;
 
+  // 2021-02 2dm - as far as I know it's never used outside of 2sxc
   /** The root path for the UI */
   uiRoot: string;
 }
