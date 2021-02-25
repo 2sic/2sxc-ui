@@ -25,7 +25,7 @@ _TODO: update these docs to the latest angular 11 sample_
 It's published on [npm](https://www.npmjs.com/package/@2sic.com/dnn-sxc-angular), so the most common way is to get it using npm with 
 `npm i "@2sic.com/dnn-sxc-angular" --save`. But we recommend that you follow the quick-start guide.
 
-1. Start discovery using the [tutorial app](https://2sxc.org/en/apps/app/tutorial-angular-8) - ideally using the [getting started recipe](https://azing.org/2sxc/r/oCmPBI3p)
+1. Start discovery using the [tutorial app](https://2sxc.org/en/apps/app/tutorial-and-template-app-for-angular-11) - ideally using the [getting started recipe](https://azing.org/2sxc/r/oCmPBI3p)
 1. If you've already mastered the basics and wish to build your own, you can
     1. [Rename the tutorial app](https://azing.org/2sxc/r/S-VS0nPH) and continue working with that
     1. or modify an existing app to work with the same conventions
@@ -38,13 +38,15 @@ This will now work automatically, because all headers etc. are now automatically
 
 ### Using 2sxc Content-Items, Queries and APIs
 
-This package is fully documented with intellisense. It contains a `Data` and `Api` object, which provides 3 observable streams
+This package is fully documented with intellisense. Once configured it ensures that all HTTP requests in angular include DNN headers. It also contains a `Data` and `Api` object, which provides 3 observable streams
 
-* `content$`
-* `query$`
-* `api$`
+* `data.content$<T>(contentTypeName)`
+* `data.query$<T>(queryName)`
+* `api.get$<T>(apiNameAndParams)`
+* `api.post$<T>(apiNameAndParams)`
+* plus various overloads
 
-To use them, best check out the [tutorial app](https://2sxc.org/en/apps/app/tutorial-angular-8) or simply work through TypeScript intelisense - we documented all the commands. 
+To use them, best check out the [tutorial app](https://2sxc.org/en/apps/app/tutorial-and-template-app-for-angular-11) or simply work through TypeScript intelisense - we documented all the commands. 
 
 
 ## History

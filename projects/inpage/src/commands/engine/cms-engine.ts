@@ -90,7 +90,8 @@ export class CmsEngine extends HasLog {
         cl.data('button', context.button);
 
         // New in 11.12 - find commandWorkflow of toolbar or use a dummy so the remaining code will always work
-        const wf = context.commandWorkflow = WorkflowHelper.getWorkflow(origEvent.target as HTMLElement);
+        // note: in cases where the click comes from elsewhere (like from the quick-dialog) there is no event
+        const wf = context.commandWorkflow = WorkflowHelper.getWorkflow(origEvent?.target as HTMLElement);
         const wrapperPromise = wf.run(new WorkflowStepArguments(name, WorkflowPhases.before, context));
 
         // In case we don't have special code, use generic code
@@ -161,7 +162,7 @@ export class CmsEngine extends HasLog {
                 // else it's a normal pop-up dialog
                 const isNewWindow = btn.newWindow();
                 // check if new-window
-                if (isNewWindow || (origEvent && origEvent.shiftKey)) {
+                if (isNewWindow || (origEvent?.shiftKey)) {
                     // resolve promise, as the window won't report when closed
                     resolve(context as unknown as T);
                     window.open(link);
