@@ -1,3 +1,5 @@
+<img src="assets/logo-dark.png" width="250px" align="right">
+
 ## Dnn-Sxc-Angular
 
 This is a library to help create awesome Angular solutions in DNN. 
