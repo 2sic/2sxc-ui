@@ -5,7 +5,10 @@ import { SxcToolbarDirective } from './beta/edit';
 import { SxcTagToolbarDirective } from './toolbar/tag-toolbar';
 
 /**
- * This module provides content-editing / management features to Angular
+ * This module provides content-editing / management features to Angular.
+ * It ensures that you can use attributes like sxc-toolbar
+ * and tags like <sxc-toolbar>
+ *
  * @export
  * @class ContentManagerModule
  */

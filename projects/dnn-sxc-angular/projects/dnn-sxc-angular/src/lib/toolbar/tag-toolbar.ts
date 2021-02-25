@@ -1,6 +1,14 @@
 import { Directive, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Context } from '../context';
 
+/**
+ * The toolbar attribute to be used on any HTML tag.
+ * Will bring the floating edit-toolbar to the UI if the user is logged in
+ *
+ * @export
+ * @class SxcTagToolbarDirective
+ * @implements {OnInit}
+ */
 @Directive({
   selector: '[sxc-toolbar]',
 })
@@ -10,7 +18,6 @@ export class SxcTagToolbarDirective implements OnInit {
    * The configuration of this toolbar
    * @type {*} see 2sxc docs, can be a string, string[], or an object
    */
-  // @Input('sxcToolbar') sxcToolbar: any;
   @Input('sxc-toolbar') sxcToolbar: any; // old name for compatibility
 
   /**
@@ -24,6 +31,7 @@ export class SxcTagToolbarDirective implements OnInit {
   }
 
   ngOnInit() {
+    if (!this.context?.sxc?.isEditMode()) return;
     const node = this.element.nativeElement;
     this.preventRefreshIfListenerConfigured();
     node.setAttribute("sxc-toolbar", JSON.stringify(this.sxcToolbar || {}));

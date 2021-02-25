@@ -10,7 +10,10 @@ import { QueryConstruction } from './query-construction';
 /**
  * 2sxc data provider
  * gives you access to content and query streams using the content$ and query$ commands
- * you can also use the content and query managers, but these are currently not so useful
+ * you can also use the content and query managers, but these are currently not so useful.
+ *
+ * @export
+ * @class Data
  */
 @Injectable({
   providedIn: 'root',
@@ -21,7 +24,7 @@ export class Data {
   ) { }
 
   /**
-   * get a content manager object
+   * Cet a content manager object for a specific ContentType
    * usually you will prefer the the observable stream content$
    * this manager is currently included for consistency, and will later also offer write commands
    * @param contentType name of the content-type
