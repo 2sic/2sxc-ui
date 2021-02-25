@@ -1,3 +1,5 @@
+<img src="https://raw.githubusercontent.com/2sic/2sxc-ui/develop/projects/dnn-sxc-angular/assets/logo-dark.png" width="300px" align="right">
+
 # dnn-sxc-angular - Connecting Angular to DNN and/or 2sxc
 
 This is a connector for angular 6-11+ ([git](https://github.com/angular/angular) | [web](https://angular.io/)) for developers using

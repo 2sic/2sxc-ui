@@ -1,4 +1,4 @@
-<img src="assets/logo-dark.png" width="250px" align="right">
+<img src="assets/logo-dark.png" width="300px" align="right">
 
 ## Dnn-Sxc-Angular
 
