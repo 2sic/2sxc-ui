@@ -20,8 +20,6 @@ It uses **observables** to make it happen, thereby avoiding timing / async probl
 
 ## Setup & Discover Dnn-Sxc-Angular
 
-_TODO: update these docs to the latest angular 11 sample_
-
 It's published on [npm](https://www.npmjs.com/package/@2sic.com/dnn-sxc-angular), so the most common way is to get it using npm with 
 `npm i "@2sic.com/dnn-sxc-angular" --save`. But we recommend that you follow the quick-start guide.
 
@@ -34,7 +32,42 @@ It's published on [npm](https://www.npmjs.com/package/@2sic.com/dnn-sxc-angular)
 
 ### Using WebAPIs inside DNN
 
-This will now work automatically, because all headers etc. are now automatically added by the system. So just use your normal http-requests and everything works like magic :)
+This will now work automatically, because all headers etc. are now automatically added by the system. So just use your normal http-requests and everything works like magic 😊
+
+### Configuring Alternate Context / Startup Configuration
+
+By default **dnn-sxc-angular** will pick up all the values on the page automatically by asking `$2sxc` for the initial values. Yet there are some things that `$2sxc` doesn't know, or why you may want to override. 
+
+#### Method 1: Attributes on the Angular app-root Tag
+
+**dnn-sxc-angular** will check for some properties on the `<app-root>` tag to see if it should do something special. If not found, it will default to the most common value. 
+
+* `edition` would tell angular that it's running in an app-edition where multiple editions exist. So it would use `live` etc. for it base path. Default is empty/not set.
+* `api-edition` is important to access another edition of the API. default is empty/not set
+* `angular-path` (new in 11.01)
+
+#### Method 2: Set values on initialization
+
+Once installed correctly, the context is autoloaded when the `AppComponent` which inherits `DnnAppComponent` does the `super(...)` call - like this:
+
+```javascript
+export class AppComponent extends DnnAppComponent {
+  constructor(el: ElementRef, context: Context) {
+    super(el, context);
+  }
+}
+```
+
+If you want to provide alternate configurations, you can do this here, by changing the `super` call. Here's an example (you can do more, check the code):
+
+```javascript
+export class AppComponent extends DnnAppComponent {
+  constructor(el: ElementRef, context: Context) {
+    super(el, context.preConfigure({moduleId: 42}));
+  }
+}
+```
+
 
 ### Using 2sxc Content-Items, Queries and APIs
 
@@ -56,6 +89,7 @@ To use them, best check out the [tutorial app](https://2sxc.org/en/apps/app/tuto
 1. 2019 Enhanced with Hot-Reloading features for Angular 8 and completely reworked how context is detected in DNN
 1. 2020 Improved Hot-Reloading
 1. 2021-02 Added tag-toolbar attribute and created refresh callback so the page doesn't reload (_requires 2sxc 11.12_)
+1. 2021-02-26 v.11.01 - added new attribute `angular-path` to use as base for lazy loading
 
 ## Todo (status 2021-02)
 
