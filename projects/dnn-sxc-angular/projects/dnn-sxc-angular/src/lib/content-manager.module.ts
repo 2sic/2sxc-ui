@@ -1,23 +1,28 @@
-import { CommonModule } from '@angular/common';
-import { Context } from './context/context.service';
 import { Data } from './sxc/data';
-import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { SxcToolbarDirective } from './beta/edit';
-import { SxcTagToolbarDirective } from './beta/tag-toolbar';
+// important: for funny reasons this must really got to the real path - if you get it from '.' index it will fail building
+import { SxcTagToolbarDirective } from './toolbar/tag-toolbar';
 
+/**
+ * This module provides content-editing / management features to Angular.
+ * It ensures that you can use attributes like sxc-toolbar
+ * and tags like <sxc-toolbar>
+ *
+ * @export
+ * @class ContentManagerModule
+ */
 @NgModule({
-  imports: [
-    HttpClientModule
-  ],
   declarations: [
     SxcToolbarDirective,
-    SxcTagToolbarDirective
+    SxcTagToolbarDirective,
   ],
   providers: [
-    Context,
     Data,
   ],
-  exports: [SxcToolbarDirective, SxcTagToolbarDirective]
+  exports: [
+    SxcToolbarDirective,
+    SxcTagToolbarDirective,
+  ]
 })
 export class ContentManagerModule { }

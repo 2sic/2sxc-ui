@@ -32,7 +32,7 @@ export class Interceptor implements HttpInterceptor {
       headers = ctx.sxc.webApi.headers();
       headers = this.convertAllPropertiesToString(headers);
     }
-    
+
     // Clone the request and update the url with 2sxc params.
     const newReq = req.clone({
       url: url,

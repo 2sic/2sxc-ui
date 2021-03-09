@@ -19,8 +19,7 @@ export interface SxcInstance {
      * checks if we're currently in edit mode
      * @returns {boolean}
      */
-    // isEditMode(): boolean,
-    // TODO: 2DM
+    isEditMode(): boolean,
 
     /**
      * helpers for ajax calls

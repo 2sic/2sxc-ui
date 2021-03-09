@@ -9,7 +9,7 @@ import { SxcInstance, SxcRoot } from "@2sic.com/2sxc-typings";
  * or with the DNN around it.
  */
 export interface ContextInfo {
-  
+
   /**
    * The $2sxc root object which is globally accessible through window.$2sxc
    */
@@ -50,4 +50,13 @@ export interface ContextInfo {
    * The content block id of the current block
    */
   contentBlockId: number;
+
+  /**
+   * Location for the angular files
+   *
+   * New in v11.01
+   * @type {string}
+   * @memberof ContextInfo
+   */
+  angularPath?: string;
 }

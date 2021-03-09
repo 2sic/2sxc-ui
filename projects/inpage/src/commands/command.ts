@@ -31,7 +31,6 @@ export class Command {
         const commandDefinition = new Command(name);
 
         // Toolbar API v2
-        // this.commandDefinition.name = name;
         commandDefinition.merge(icon, translateKey, uiOnly, partOfPage, more);
 
         return commandDefinition;

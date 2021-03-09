@@ -1,8 +1,14 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { apiRouteName, routeQuery } from '../contants';
+import { routeQuery } from '../contants';
 
+/**
+ * Query object for getting typed data.
+ * @export
+ * @class Query
+ * @template T type (usually an interface) of the data coming back
+ */
 export class Query<T> {
   constructor(
     private http: HttpClient,

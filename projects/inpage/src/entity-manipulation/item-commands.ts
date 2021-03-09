@@ -14,9 +14,7 @@ export let contentItems = {
       .replace('{id}', String(itemId))
       .replace('{title}', itemTitle));
 
-    if (!ok) {
-      return Promise.resolve();
-    }
+    if (!ok) return Promise.resolve();
 
     /**
      * ZoneId and AppId are sent becase of rare, special case that is not default

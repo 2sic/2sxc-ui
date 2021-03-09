@@ -1,11 +1,14 @@
 ﻿import { SxcEdit } from '../../interfaces/sxc-instance-editable';
 import { Obj } from '../../plumbing';
 import { Button } from '../../toolbar/config/button';
+import { WorkflowManager } from '../../workflow';
 import { AttrJsonEditContext } from '../html-attribute';
 import { ContextBundleToolbar } from './context-bundle-toolbar';
 
 export class ContextComplete extends ContextBundleToolbar {
     button?: Button;
+
+    commandWorkflow?: WorkflowManager;
 
     constructor(editCtx: AttrJsonEditContext, sxc?: SxcEdit) {
         super(editCtx, sxc);

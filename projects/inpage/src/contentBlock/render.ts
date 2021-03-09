@@ -1,4 +1,5 @@
-﻿import { C } from '../constants';
+﻿import { SpecialCommands } from '../commands';
+import { C } from '../constants';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { HtmlTools } from '../html/dom-tools';
 import { $jq } from '../interfaces/sxc-controller-in-page';
@@ -6,6 +7,7 @@ import { SxcEdit } from '../interfaces/sxc-instance-editable';
 import { windowInPage as window } from '../interfaces/window-in-page';
 import { HasLog, Insights } from '../logging';
 import { QuickE } from '../quick-edit/quick-e';
+import { WorkflowStepArguments, WorkflowHelper, WorkflowPhases } from '../workflow';
 import { ContentBlockEditor } from './content-block-editor';
 
 /**
@@ -38,26 +40,41 @@ class RendererGlobal extends HasLog {
      */
     reloadAndReInitialize(context: ContextComplete, forceAjax?: boolean, preview?: boolean): Promise<void> {
         const cl = this.log.call('reloadAndReInitialize', `..., forceAjax: ${forceAjax}, preview: ${preview}`, null, {context: context});
-        // if ajax is not supported, we must reload the whole page
-        if (!forceAjax && !context.app.supportsAjax) {
-            cl.done('not ajax - reloading page');
-            window.location.reload();
-            return Promise.resolve();
-        }
 
-        cl.add('is ajax, calling ajaxReload');
-        return this.ajaxLoad(context, C.ContentBlock.UseExistingTemplate, preview)
-            .then((result) => {
-                // If Evoq, tell Evoq that page has changed if it has changed (Ajax call)
-                if (window.dnn_tabVersioningEnabled) { // this only exists in evoq or on new DNNs with tabVersioning
-                    cl.add('system is using tabVersioning - will inform DNN');
-                    try {
-                        window.dnn.ContentEditorManager.triggerChangeOnPageContentEvent();
-                    } catch (e) { /* ignore */ }
-                }
-                return cl.return(result);
-            })
-            .catch((error) => console.log('Error in reloadAndReInitialize', error));
+        // get workflow engine or a dummy engine
+        const wf = context.commandWorkflow ?? WorkflowHelper.getDummy();
+        const promiseChain = wf.run(new WorkflowStepArguments(SpecialCommands.refresh, WorkflowPhases.before, context));
+
+        // 2021-02-21 2dm New in 11.12 enable toolbar to not reload in a SPA scenario
+        const finalPromise = promiseChain.then((wfArgs) => {
+            if (WorkflowHelper.isCancelled(wfArgs)) {
+                cl.add('Workflow return false, will cancel and not refresh.');
+                return Promise.resolve();
+            }
+
+            // if ajax is not supported, we must reload the whole page
+            if (!forceAjax && !context.app.supportsAjax) {
+                cl.done('not ajax - reloading page');
+                window.location.reload();
+                return Promise.resolve();
+            }
+
+            cl.add('is ajax, calling ajaxReload');
+            return this.ajaxLoad(context, C.ContentBlock.UseExistingTemplate, preview)
+                .then((result) => {
+                    // If Evoq, tell Evoq that page has changed if it has changed (Ajax call)
+                    if (window.dnn_tabVersioningEnabled) { // this only exists in evoq or on new DNNs with tabVersioning
+                        cl.add('system is using tabVersioning - will inform DNN');
+                        try {
+                            window.dnn.ContentEditorManager.triggerChangeOnPageContentEvent();
+                        } catch (e) { /* ignore */ }
+                    }
+                    return cl.return(result);
+                })
+                .catch((error) => console.log('Error in reloadAndReInitialize', error));
+        });
+
+        return finalPromise;
     }
 
     /**

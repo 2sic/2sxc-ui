@@ -1,7 +1,6 @@
 ﻿import { TemplateConstants as TC, ToolbarTemplate } from '.';
 
 // the default / initial buttons in a standard toolbar
-// ToDo: refactor to avoid side-effects
 export const ToolbarTemplateDefault: ToolbarTemplate = {
   name: TC.NameDefault,
   groups: [
@@ -10,7 +9,7 @@ export const ToolbarTemplateDefault: ToolbarTemplate = {
       buttons: 'edit,new,metadata,publish,layout',
     }, {
       name: TC.GroupList,
-      buttons: 'add,add-existing,replace,remove,moveup,movedown,instance-list', // https://github.com/2sic/2sxc/issues/2320 ,item-history',
+      buttons: 'add,add-existing,replace,remove,moveup,movedown,instance-list',
     }, {
       name: TC.GroupEditAdvanced,
       buttons: 'delete',

@@ -1,24 +1,30 @@
-﻿import { Commands } from '..';
-import { ContentBlockEditor } from '../../contentBlock/content-block-editor';
+﻿import { ContentBlockEditor } from '../../contentBlock/content-block-editor';
 import { renderer } from '../../contentBlock/render';
 import { ContextComplete } from '../../context/bundles/context-bundle-button';
 import { ContextBundleInstance } from '../../context/bundles/context-bundle-instance';
 import { $2sxcInPage as $2sxc } from '../../interfaces/sxc-controller-in-page';
 import { HasLog, Insights, Log } from '../../logging';
-import { TypeUnsafe } from '../../plumbing';
 import { QuickDialog } from '../../quick-dialog/quick-dialog';
 import { Button, ButtonSafe } from '../../toolbar/config';
 import { ButtonCommand } from '../../toolbar/config';
 import { InPageButtonJson } from '../../toolbar/config-loaders/config-formats/in-page-button';
 import { CommandLinkGenerator } from '../command-link-generator';
 import { CommandParams } from '../command-params';
+import { WorkflowStepArguments, WorkflowHelper, WorkflowPhases } from '../../workflow';
+import { RunParameters } from './run-parameters';
+
+type CommandPromise<T> = Promise<T|void>;
 
 /**
  * The CMS engine is global, and needs the context to work.
  */
 export class CmsEngine extends HasLog {
+
+    private runParams: RunParameters;
+
     constructor(parentLog?: Log) {
         super('Cmd.Exec', parentLog, 'start');
+        this.runParams = new RunParameters(this.log);
     }
 
     detectParamsAndRun<T>(
@@ -37,18 +43,18 @@ export class CmsEngine extends HasLog {
             // no event param, but settings contains the event-object
             cl.add('cycling params; event missing & eventOrSettings seems to be an event; settings assumed empty');
             event = eventOrParams as MouseEvent; // move it to the correct variable
-            cmdParams = this.nameOrSettingsAdapter(nameOrParams);
+            cmdParams = this.runParams.getParamsFromNameOrParams(nameOrParams);
         } else {
-            cmdParams = { //  O.bject.assign(
+            cmdParams = {
                 ...(eventOrParams || {}),
-                ...this.nameOrSettingsAdapter(nameOrParams),
+                ...this.runParams.getParamsFromNameOrParams(nameOrParams),
             };
         }
 
         // ensure we have the right event despite browser differences
         event = event || (window.event as MouseEvent);
 
-        const result: Promise<T|void> = this.run(context as ContextComplete, cmdParams, event);
+        const result: CommandPromise<T> = this.run(context as ContextComplete, cmdParams, event);
         return cl.return(result);
     }
 
@@ -59,13 +65,10 @@ export class CmsEngine extends HasLog {
      * @param settings
      * @param event
      */
-    run<T>(context: ContextComplete, nameOrParams: string | CommandParams,
-           event: MouseEvent,
-    ): Promise<T | void> {
+    run<T>(context: ContextComplete, nameOrParams: string | CommandParams, event: MouseEvent): CommandPromise<T> {
         const cl = this.log.call('run<T>');
-        let cmdParams = this.nameOrSettingsAdapter(nameOrParams);
-
-        cmdParams = this.expandParamsWithDefaults(cmdParams);
+        let cmdParams = this.runParams.getParamsFromNameOrParams(nameOrParams);
+        cmdParams = this.runParams.expandParamsWithDefaults(cmdParams);
 
         const origEvent = event;
         const name = cmdParams.action;
@@ -79,8 +82,6 @@ export class CmsEngine extends HasLog {
         // merge conf & settings, but settings has higher priority
         const button: Button = {
             ...newButtonConfig,
-            // 2020-03-27 2dm disabled this, already happens in the constructor of the button
-            // ...newButtonAction.command.buttonDefaults,
             ...InPageButtonJson.toButton(cmdParams as unknown),
         };
 
@@ -88,65 +89,51 @@ export class CmsEngine extends HasLog {
         context.button = button;
         cl.data('button', context.button);
 
+        // New in 11.12 - find commandWorkflow of toolbar or use a dummy so the remaining code will always work
+        // note: in cases where the click comes from elsewhere (like from the quick-dialog) there is no event
+        const wf = context.commandWorkflow = WorkflowHelper.getWorkflow(origEvent?.target as HTMLElement);
+        const wrapperPromise = wf.run(new WorkflowStepArguments(name, WorkflowPhases.before, context));
+
         // In case we don't have special code, use generic code
-        let code = button.code;
-        if (!code) {
+        let commandPromise = button.code;
+        if (!commandPromise) {
             cl.add('button, no code - generating code to open standard dialog');
-            code = (contextParam: ContextComplete, evt: MouseEvent) => CmsEngine.openDialog(contextParam, evt);
+            commandPromise = CmsEngine.openDialog;
         }
 
+        // get button configuration to detect if it's only a UI action (like the more-button)
+        let finalPromise: CommandPromise<T>;
         if (new ButtonSafe(button, context).uiActionOnly()) {
             cl.add('UI command, no pre-flight to ensure content-block');
-            return cl.return(code(context, origEvent));
+            finalPromise = wrapperPromise.then((wfArgs) => WorkflowHelper.isCancelled(wfArgs)
+                ? Promise.resolve<T>(null)
+                : commandPromise(context, origEvent));
+        } else {
+            // if more than just a UI-action, then it needs to be sure the content-group is created first
+            cl.add('command might change data, wrap in pre-flight to ensure content-block');
+            finalPromise = wrapperPromise.then(
+                (wfArgs) => WorkflowHelper.isCancelled(wfArgs)
+                    ? Promise.resolve<T>(null)
+                    : ContentBlockEditor
+                        .prepareToAddContent(context, cmdParams.useModuleList)
+                        .then(() => commandPromise(context, origEvent)));
         }
 
-        // if more than just a UI-action, then it needs to be sure the content-group is created first
-        cl.add('command might change data, wrap in pre-flight to ensure content-block');
-        const promise = ContentBlockEditor
-            .prepareToAddContent(context, cmdParams.useModuleList)
-            .then(() => code(context, origEvent));
-        return cl.return(promise) as Promise<T>;
-    }
+        // Attach post-command workflow
+        const promiseWithAfterEffects = finalPromise.then((result) => {
+            return wf.run(new WorkflowStepArguments(name, WorkflowPhases.after, null, result))
+                .then(() => result);
+        });
 
-    /**
-     * name or settings adapter to settings
-     * @param nameOrSettings
-     * @returns settings
-     */
-    private nameOrSettingsAdapter(nameOrSettings: string | CommandParams): CommandParams {
-        const cl = this.log.call('nameOrSettingsAdapter', `${nameOrSettings}`);
-        // check if nameOrString is name (string) or object (settings)
-        const nameIsString = typeof nameOrSettings === 'string';
-        cl.add(`adapting settings; name string: ${nameIsString}; name = ${nameOrSettings}`);
-        const result = (nameIsString
-            ? { action: nameOrSettings }
-            : nameOrSettings) as CommandParams;
-        return cl.return(result);
-    }
-
-    /**
-     * Take a settings-name or partial settings object,
-     * and return a full settings object with all defaults from
-     * the command definition
-     * @param params
-     */
-    private expandParamsWithDefaults(params: CommandParams): CommandParams {
-        const cl = this.log.call('expandParamsWithDefaults');
-        const name = params.action;
-        cl.add(`will add defaults for ${name} from buttonConfig`);
-        const defaults = Commands.get(name).buttonDefaults;
-        cl.data('defaults to merge', defaults);
-        // TODO: 2dm - suspicious cast
-        // merge conf & settings, but...?
-        return cl.return({...defaults, ...params} as CommandParams);
+        return cl.return(promiseWithAfterEffects);
     }
 
 
 
     /**
-     * open a new dialog of the angular-ui
+     * Open a new dialog of the angular-ui
      */
-    static openDialog<T>(context: ContextComplete, event: MouseEvent): Promise<T> {
+    static openDialog<T>(context: ContextComplete, event: MouseEvent): CommandPromise<T> {
         const log = new Log('Cms.OpnDlg');
         Insights.add('cms', 'open-dialog', log);
         // the link contains everything to open a full dialog (lots of params added)
@@ -155,11 +142,13 @@ export class CmsEngine extends HasLog {
 
         const origEvent = event || (window.event as MouseEvent);
 
-        return new Promise<T>((resolvePromise) => {
+        return new Promise<T>((resolve) => {
             // prepare promise for callback when the dialog closes
             // to reload the in-page view w/ajax or page reload
             const completePromise = () => {
-                resolvePromise(context as unknown as T);
+                // call the normal promise-resolve so the `.then` will be continued
+                resolve(context as unknown as T);
+                // reload the UI as specified
                 renderer.reloadAndReInitialize(context);
             };
 
@@ -173,9 +162,9 @@ export class CmsEngine extends HasLog {
                 // else it's a normal pop-up dialog
                 const isNewWindow = btn.newWindow();
                 // check if new-window
-                if (isNewWindow || (origEvent && origEvent.shiftKey)) {
+                if (isNewWindow || (origEvent?.shiftKey)) {
                     // resolve promise, as the window won't report when closed
-                    resolvePromise(context as TypeUnsafe as T);
+                    resolve(context as unknown as T);
                     window.open(link);
                 } else {
                     $2sxc.totalPopup.open(link, completePromise);

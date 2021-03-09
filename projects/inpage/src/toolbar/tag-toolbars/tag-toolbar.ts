@@ -1,9 +1,9 @@
-﻿import { ToolbarRenderer } from '..';
-import { TagToolbarManager } from '..';
+﻿import { TagToolbarManager, ToolbarRenderer } from '..';
 import { ContextComplete } from '../../context/bundles/context-bundle-button';
 import { Translator } from '../../i18n';
 import { $jq } from '../../interfaces/sxc-controller-in-page';
 import { TypeFollow } from '../config/toolbar-settings';
+import { ToolbarLifecycle } from '../toolbar-lifecycle';
 
 /**
  * This is the modern toolbar which is attached to a tag from whic it hovers.
@@ -53,12 +53,12 @@ export class TagToolbar {
         const toolbarId = `${this.context.instance.id}-${this.context.contentBlockReference.id}-${nextFreeId}`;
 
         // render toolbar and append tag to body
-        this.toolbarElement = $jq(new ToolbarRenderer(this.context).render());
+        this.toolbarElement = $jq(new ToolbarRenderer(this.context).generate());
 
         this.toolbarElement.on('mouseleave', (e) => {
-        // if we do not hover the tag now, hide it
-        if (!$.contains(this.hoverTag[0], e.relatedTarget) && this.hoverTag[0] !== e.relatedTarget)
-            this.hide();
+            // if we do not hover the tag now, hide it
+            if (!$.contains(this.hoverTag[0], e.relatedTarget) && this.hoverTag[0] !== e.relatedTarget)
+                this.hide();
         });
 
         $jq('body').append(this.toolbarElement);
@@ -71,6 +71,9 @@ export class TagToolbar {
         // ensure it's translated
         this.translator?.autoTranslateMenus();
         this.initialized = true;
+
+        // new in v11.12 - toolbar Workflow
+        ToolbarLifecycle.raiseToolbarInitEvent(this.toolbarElement[0], this.hoverTag?.[0], this.context);
     }
 
     private updatePosition(initial: boolean = false) {
@@ -105,7 +108,6 @@ export class TagToolbar {
                 position.top = position.mousePos.y + position.win.scrollY - position.bodyOffset.top - toolbarHeight / 2;
 
         // Update left / right coordinates
-        // todo: try to change class to use attribute or something
         if (this.toolbarElement.hasClass('sc-tb-hover-right'))
             position.right = position.win.width - position.tagOffset.left - position.tagWidth + tagToolbarPaddingRight - position.bodyOffset.left;
         else

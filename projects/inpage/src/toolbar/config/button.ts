@@ -96,7 +96,7 @@ export class Button {
         return thing.length && Button.is(thing[0]);
     }
 
-    static isPropGen<T>(thing: ButtonPropGen<T> | T): thing is ButtonPropGen<T> {
+    static isPropGen<T>(thing: ButtonGenOrProp<T>): thing is ButtonPropGen<T> {
         return typeof thing === 'function';
     }
 }

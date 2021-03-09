@@ -134,6 +134,6 @@ export class SxcInstance extends HasLog implements Public.SxcInstance {
      * @returns {boolean}
      */
     isEditMode(): boolean {
-        return this.manage && this.manage._isEditMode();
+        return (this.manage && this.manage._isEditMode()) === true;
     }
 }

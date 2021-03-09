@@ -6,4 +6,6 @@ export const appTag = {
   tabId: 'tab-id',
   contentBlockId: 'content-block-id',
 
+  // new in 11.01
+  angularPath: 'angular-path',
 }

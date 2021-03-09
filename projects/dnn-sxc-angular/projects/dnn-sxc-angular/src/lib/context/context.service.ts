@@ -11,18 +11,56 @@ const runtimeDefaults: Partial<ContextInfo> = {
     addHttpHeaders: true
 };
 
+let constructorCount = 0;
+
+/** WebPack variable for loading chunks in angular */
+declare let __webpack_public_path__: any;
+
+
+/**
+ * The Context gives you things from DNN and 2sxc which matches the current runtime context.
+ * So it auto-detects what's going on in the page and initializes / provides everything.
+ *
+ * Note: some properties like moduleId are probably not actually in use any more and will probably be empty
+ *
+ * @export
+ * @class Context
+ * @implements {ContextInfo}
+ */
 @Injectable({
     providedIn: 'root',
 })
 export class Context implements ContextInfo {
-    $2sxc: SxcRoot;
-    sxc: SxcInstance;
-    addHttpHeaders: boolean;
-    appNameInPath: string;
-    edition: string;
-    apiEdition: string;
-    moduleId: number;
-    contentBlockId: number;
+  /** The global $2sxc object */
+  $2sxc: SxcRoot;
+
+  /** The current module-instance 2sxc-controller */
+  sxc: SxcInstance;
+
+  /** Setting if it should add HTTP headers. Default is true. You may want to change this if you have an own interceptor.  */
+  addHttpHeaders: boolean;
+
+  /** The current app name - used in API calls */
+  appNameInPath: string;
+
+  /** The current edition to use for the application. */
+  edition: string;
+
+  /** The API edition to use - if you use API-editions (recommended). Will usually be the same as the edition. */
+  apiEdition: string;
+
+  /** The Module ID if it was custom-configured. Will be 'unknown' if not manually set, as then the auto-configure will be used */
+  moduleId: number;
+
+  /** The Content Block ID if it was custom-configured. Will be 'unknown' if not manually set, as then the auto-configure will be used */
+  contentBlockId: number;
+
+  /**
+   * The path angular is running in - it's important for lazy-loading to work properly.
+   *
+   * New in v11.01
+   */
+  angularPath?: string;
 
     private appTagService: AppTagService;
     private preConfiguration: Partial<ContextInfoPreconfigure>;
@@ -33,6 +71,11 @@ export class Context implements ContextInfo {
             throw new Error('window.$2sxc is null - you probably forgot to include the script before loading angular');
         }
         this.check2sxcVersion();
+
+        constructorCount++;
+        if (constructorCount > 1) {
+          console.warn('The Context object of dnn-sxc-angular was created more than once. This is unexpected, and will probably lead to problems with the api calls.')
+        }
     }
 
     private check2sxcVersion() {
@@ -81,12 +124,20 @@ export class Context implements ContextInfo {
         if (!settings.sxc) {
             throw new Error('couldn\'t get sxc instance - reason unknown');
         }
-        
+
         this.sxc = settings.sxc;
         this.addHttpHeaders = settings.addHttpHeaders;
         this.appNameInPath = settings.appNameInPath;
         this.edition = settings.edition;
         this.apiEdition = settings.apiEdition;
+
+        // new in 11.01 - change the base path for angular chunks if needed
+        if (settings.angularPath) {
+          this.angularPath = settings.angularPath;
+          console.log('will set webpcak base to: ' + settings.angularPath);
+          __webpack_public_path__ = settings.angularPath;
+          console.log('done setting');
+        }
     }
 
     /**
@@ -103,10 +154,11 @@ export class Context implements ContextInfo {
      */
     private getContextFromAppTag() : Partial<ContextInfo> {
 
-        let contextFromApp = {
-            // 2019-09-29 2dm important now
+        let contextFromApp: Partial<ContextInfo> = {
             edition: this.appTagService.getAttribute(appTag.edition),
-            apiEdition: this.appTagService.getAttribute(appTag.apiEdition)
+            apiEdition: this.appTagService.getAttribute(appTag.apiEdition),
+            // 2021-02-26 2dm v11.01 added
+            angularPath: this.appTagService.getAttribute(appTag.angularPath),
         }
 
         // Return an object containing only the not-null properties

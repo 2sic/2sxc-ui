@@ -24,18 +24,20 @@ class ToolbarManagerGlobal extends HasLog {
         this.toolbarFinder.buildDnnModule(parentTag, optionalId);
     }
 
-    build(node: JQuery) {
+    build(node: JQuery | HTMLElement) {
         this.toolbarFinder.build(node);
     }
 
+    // 2021-02-23 2dm v11.12 - believe this is an internal API and not used anywhere
+    // delete ca. 2021-04
     // generate button html
-    generateButtonHtml(context: ContextComplete, groupIndex: number) {
-        new ToolbarRenderer(context).button.render(context, groupIndex);
-    }
+    // generateButtonHtml(context: ContextComplete, groupIndex: number) {
+    //     new ToolbarRenderer(context).button.render(context, groupIndex);
+    // }
 
-    generateToolbarHtml(context: ContextComplete) {
-        return new ToolbarRenderer(context).render();
-    }
+    // generateToolbarHtml(context: ContextComplete) {
+    //     return new ToolbarRenderer(context).render();
+    // }
 
     loadConfig(context: ContextComplete, config: ToolbarInitConfig): Toolbar {
         const loader = this.getLoader(JSON.stringify(config.toolbar || ''));

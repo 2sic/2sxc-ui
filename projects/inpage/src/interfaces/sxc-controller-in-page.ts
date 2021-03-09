@@ -1,12 +1,8 @@
 ﻿import { SxcRootWithInternals } from '../../../$2sxc/src/index';
-import { BootstrapInPage } from '../bootstrap/bootstrap';
 import { Cms } from '../cms/Cms';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
-import { Insights } from '../logging';
 import { Manage } from '../manage/manage';
-import { QuickDialog } from '../quick-dialog/quick-dialog';
 import { SystemUpgrader } from '../system/2sxc.system';
-import { ToolbarManager } from '../toolbar/toolbar-manager';
 import { SxcEdit } from './sxc-instance-editable';
 import { windowInPage as window } from './window-in-page';
 
