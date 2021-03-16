@@ -18,6 +18,10 @@ This connector...
 
 It uses **observables** to make it happen, thereby avoiding timing / async problems common in this scenario. 
 
+## First Step: Watch Introduction Video
+
+Best watch the [introduction video](https://docs.2sxc.org/js-code/angular/index.html) and read the general docs.
+
 ## Setup & Discover Dnn-Sxc-Angular
 
 It's published on [npm](https://www.npmjs.com/package/@2sic.com/dnn-sxc-angular), so the most common way is to get it using npm with 
