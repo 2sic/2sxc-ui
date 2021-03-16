@@ -3,3 +3,5 @@
 
 # node and grunt
 node_*/
+docs/preview
+docs/**/*.yml

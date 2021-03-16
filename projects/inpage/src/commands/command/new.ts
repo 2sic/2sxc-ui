@@ -1,4 +1,4 @@
-﻿import { CmsEngine, Commands } from '..';
+﻿import { CmdEditDialog, CmsEngine, Commands } from '..';
 import { SharedLogic } from './shared-logic';
 
 export const CmdNew = 'new';
@@ -15,17 +15,20 @@ export const CmdNewMode = 'new';
 Commands.add(CmdNew, 'New', 'plus', false, true, {
     addParamsToLink: (_) => ({ mode: CmdNewMode }),
 
-    dialog: (_) => 'edit', // don't use "new" (default) but use "edit"
+    dialog: (_) => CmdEditDialog, // don't use "new" (default) but use "edit"
 
     showCondition(context) {
         // don't provide new if type unknown or on the header-item
         return  !!context.button.command.params.contentType || SharedLogic.isList(context);
     },
+
     code(context, event) {
         const params = context.button.command.params;
         // todo - should refactor this to be a toolbarManager.contentBlock command
         params.sortOrder = params.sortOrder + 1;
-        // if we have an EntityId, this means that it picked up id/guid from the current item, so we must reset both IDs
+
+        // if we have an EntityId, this means that it picked up id/guid from the current item,
+        // so we must reset both EntityId and EntityGuid
         // note that we don't reset this if entityId = 0, because that usually means the guid was preset on purpose
         if (params.entityId && params.entityId !== 0) {
             delete params.entityId;

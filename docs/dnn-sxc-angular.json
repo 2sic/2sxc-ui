@@ -1,0 +1,3455 @@
+{
+	"id": 0,
+	"name": "dnn-sxc-angular",
+	"kind": 0,
+	"kindString": "Project",
+	"flags": {},
+	"children": [
+		{
+			"id": 88,
+			"name": "Api",
+			"kind": 128,
+			"kindString": "Class",
+			"flags": {},
+			"comment": {
+				"shortText": "Quickly call WebApis on the current App",
+				"tags": [
+					{
+						"tag": "export",
+						"text": ""
+					}
+				]
+			},
+			"children": [
+				{
+					"id": 89,
+					"name": "constructor",
+					"kind": 512,
+					"kindString": "Constructor",
+					"flags": {},
+					"signatures": [
+						{
+							"id": 90,
+							"name": "new Api",
+							"kind": 16384,
+							"kindString": "Constructor signature",
+							"flags": {},
+							"parameters": [
+								{
+									"id": 91,
+									"name": "http",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "reference",
+										"name": "HttpClient"
+									}
+								},
+								{
+									"id": 92,
+									"name": "controller",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "intrinsic",
+										"name": "string"
+									}
+								}
+							],
+							"type": {
+								"type": "reference",
+								"id": 88,
+								"name": "Api"
+							}
+						}
+					]
+				},
+				{
+					"id": 93,
+					"name": "get",
+					"kind": 2048,
+					"kindString": "Method",
+					"flags": {},
+					"sources": [
+						{
+							"fileName": "src/lib/sxc/api.ts",
+							"line": 20,
+							"character": 5
+						}
+					],
+					"signatures": [
+						{
+							"id": 94,
+							"name": "get",
+							"kind": 4096,
+							"kindString": "Call signature",
+							"flags": {},
+							"comment": {
+								"shortText": "Do a GET request a 2sxc api controller method"
+							},
+							"typeParameter": [
+								{
+									"id": 95,
+									"name": "T",
+									"kind": 131072,
+									"kindString": "Type parameter",
+									"flags": {}
+								}
+							],
+							"parameters": [
+								{
+									"id": 96,
+									"name": "method",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "intrinsic",
+										"name": "string"
+									}
+								},
+								{
+									"id": 97,
+									"name": "params",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {
+										"isOptional": true
+									},
+									"type": {
+										"type": "reference",
+										"name": "HttpParams"
+									}
+								}
+							],
+							"type": {
+								"type": "reference",
+								"typeArguments": [
+									{
+										"type": "reference",
+										"name": "T"
+									}
+								],
+								"name": "Observable"
+							}
+						}
+					]
+				},
+				{
+					"id": 98,
+					"name": "post",
+					"kind": 2048,
+					"kindString": "Method",
+					"flags": {},
+					"sources": [
+						{
+							"fileName": "src/lib/sxc/api.ts",
+							"line": 28,
+							"character": 6
+						}
+					],
+					"signatures": [
+						{
+							"id": 99,
+							"name": "post",
+							"kind": 4096,
+							"kindString": "Call signature",
+							"flags": {},
+							"comment": {
+								"shortText": "Do a POST request to a 2sxc api controller method"
+							},
+							"typeParameter": [
+								{
+									"id": 100,
+									"name": "T",
+									"kind": 131072,
+									"kindString": "Type parameter",
+									"flags": {}
+								}
+							],
+							"parameters": [
+								{
+									"id": 101,
+									"name": "method",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "intrinsic",
+										"name": "string"
+									}
+								},
+								{
+									"id": 102,
+									"name": "body",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "intrinsic",
+										"name": "any"
+									}
+								},
+								{
+									"id": 103,
+									"name": "params",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {
+										"isOptional": true
+									},
+									"type": {
+										"type": "reference",
+										"name": "HttpParams"
+									}
+								}
+							],
+							"type": {
+								"type": "reference",
+								"typeArguments": [
+									{
+										"type": "reference",
+										"name": "T"
+									}
+								],
+								"name": "Observable"
+							}
+						}
+					]
+				}
+			],
+			"groups": [
+				{
+					"title": "Constructors",
+					"kind": 512,
+					"children": [
+						89
+					]
+				},
+				{
+					"title": "Methods",
+					"kind": 2048,
+					"children": [
+						93,
+						98
+					]
+				}
+			],
+			"sources": [
+				{
+					"fileName": "src/lib/sxc/api.ts",
+					"line": 11,
+					"character": 16
+				}
+			]
+		},
+		{
+			"id": 34,
+			"name": "AppTagService",
+			"kind": 128,
+			"kindString": "Class",
+			"flags": {},
+			"children": [
+				{
+					"id": 35,
+					"name": "constructor",
+					"kind": 512,
+					"kindString": "Constructor",
+					"flags": {},
+					"signatures": [
+						{
+							"id": 36,
+							"name": "new AppTagService",
+							"kind": 16384,
+							"kindString": "Constructor signature",
+							"flags": {},
+							"parameters": [
+								{
+									"id": 37,
+									"name": "el",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "reference",
+										"typeArguments": [
+											{
+												"type": "intrinsic",
+												"name": "any"
+											}
+										],
+										"name": "ElementRef"
+									}
+								}
+							],
+							"type": {
+								"type": "reference",
+								"id": 34,
+								"name": "AppTagService"
+							}
+						}
+					]
+				},
+				{
+					"id": 38,
+					"name": "getAttribute",
+					"kind": 2048,
+					"kindString": "Method",
+					"flags": {
+						"isPublic": true
+					},
+					"sources": [
+						{
+							"fileName": "src/lib/context/apptag.service.ts",
+							"line": 9,
+							"character": 23
+						}
+					],
+					"signatures": [
+						{
+							"id": 39,
+							"name": "getAttribute",
+							"kind": 4096,
+							"kindString": "Call signature",
+							"flags": {},
+							"parameters": [
+								{
+									"id": 40,
+									"name": "attribute",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "intrinsic",
+										"name": "string"
+									}
+								}
+							],
+							"type": {
+								"type": "intrinsic",
+								"name": "string"
+							}
+						}
+					]
+				}
+			],
+			"groups": [
+				{
+					"title": "Constructors",
+					"kind": 512,
+					"children": [
+						35
+					]
+				},
+				{
+					"title": "Methods",
+					"kind": 2048,
+					"children": [
+						38
+					]
+				}
+			],
+			"sources": [
+				{
+					"fileName": "src/lib/context/apptag.service.ts",
+					"line": 3,
+					"character": 26
+				}
+			]
+		},
+		{
+			"id": 104,
+			"name": "Content",
+			"kind": 128,
+			"kindString": "Class",
+			"flags": {},
+			"comment": {
+				"shortText": "A helper to access content from 2sxc"
+			},
+			"children": [
+				{
+					"id": 105,
+					"name": "constructor",
+					"kind": 512,
+					"kindString": "Constructor",
+					"flags": {},
+					"signatures": [
+						{
+							"id": 106,
+							"name": "new Content",
+							"kind": 16384,
+							"kindString": "Constructor signature",
+							"flags": {},
+							"typeParameter": [
+								{
+									"id": 107,
+									"name": "T",
+									"kind": 131072,
+									"kindString": "Type parameter",
+									"flags": {}
+								}
+							],
+							"parameters": [
+								{
+									"id": 108,
+									"name": "http",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "reference",
+										"name": "HttpClient"
+									}
+								},
+								{
+									"id": 109,
+									"name": "contentType",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "intrinsic",
+										"name": "string"
+									}
+								}
+							],
+							"type": {
+								"type": "reference",
+								"id": 104,
+								"typeArguments": [
+									{
+										"type": "reference",
+										"name": "T"
+									}
+								],
+								"name": "Content"
+							}
+						}
+					]
+				},
+				{
+					"id": 110,
+					"name": "get",
+					"kind": 2048,
+					"kindString": "Method",
+					"flags": {},
+					"sources": [
+						{
+							"fileName": "src/lib/sxc/content.ts",
+							"line": 20,
+							"character": 5
+						}
+					],
+					"signatures": [
+						{
+							"id": 111,
+							"name": "get",
+							"kind": 4096,
+							"kindString": "Call signature",
+							"flags": {},
+							"comment": {
+								"shortText": "Get all items of this type"
+							},
+							"type": {
+								"type": "reference",
+								"typeArguments": [
+									{
+										"type": "array",
+										"elementType": {
+											"type": "reference",
+											"name": "T"
+										}
+									}
+								],
+								"name": "Observable"
+							}
+						},
+						{
+							"id": 112,
+							"name": "get",
+							"kind": 4096,
+							"kindString": "Call signature",
+							"flags": {},
+							"comment": {
+								"shortText": "get the specific item with the ID"
+							},
+							"parameters": [
+								{
+									"id": 113,
+									"name": "id",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "intrinsic",
+										"name": "number"
+									}
+								}
+							],
+							"type": {
+								"type": "reference",
+								"typeArguments": [
+									{
+										"type": "reference",
+										"name": "T"
+									}
+								],
+								"name": "Observable"
+							}
+						}
+					]
+				},
+				{
+					"id": 114,
+					"name": "post",
+					"kind": 2048,
+					"kindString": "Method",
+					"flags": {},
+					"sources": [
+						{
+							"fileName": "src/lib/sxc/content.ts",
+							"line": 43,
+							"character": 6
+						}
+					],
+					"signatures": [
+						{
+							"id": 115,
+							"name": "post",
+							"kind": 4096,
+							"kindString": "Call signature",
+							"flags": {},
+							"comment": {
+								"shortText": "This method doesn't exist yet - maybe one day we'll enhance for creating data-items"
+							},
+							"type": {
+								"type": "reference",
+								"typeArguments": [
+									{
+										"type": "reference",
+										"name": "T"
+									}
+								],
+								"name": "Observable"
+							}
+						}
+					]
+				}
+			],
+			"groups": [
+				{
+					"title": "Constructors",
+					"kind": 512,
+					"children": [
+						105
+					]
+				},
+				{
+					"title": "Methods",
+					"kind": 2048,
+					"children": [
+						110,
+						114
+					]
+				}
+			],
+			"sources": [
+				{
+					"fileName": "src/lib/sxc/content.ts",
+					"line": 11,
+					"character": 20
+				}
+			],
+			"typeParameter": [
+				{
+					"id": 116,
+					"name": "T",
+					"kind": 131072,
+					"kindString": "Type parameter",
+					"flags": {},
+					"comment": {
+						"shortText": "Type which the system will return\n"
+					}
+				}
+			]
+		},
+		{
+			"id": 5,
+			"name": "ContentManagerModule",
+			"kind": 128,
+			"kindString": "Class",
+			"flags": {},
+			"comment": {
+				"shortText": "This module provides content-editing / management features to Angular.\nIt ensures that you can use attributes like sxc-toolbar\nand tags like <sxc-toolbar>",
+				"tags": [
+					{
+						"tag": "export",
+						"text": ""
+					}
+				]
+			},
+			"decorators": [
+				{
+					"name": "NgModule",
+					"type": {
+						"type": "reference",
+						"name": "NgModule"
+					},
+					"arguments": {
+						"obj": "{\r\n  declarations: [\r\n    SxcToolbarDirective,\r\n    SxcTagToolbarDirective,\r\n  ],\r\n  providers: [\r\n    Data,\r\n  ],\r\n  exports: [\r\n    SxcToolbarDirective,\r\n    SxcTagToolbarDirective,\r\n  ]\r\n}"
+					}
+				}
+			],
+			"children": [
+				{
+					"id": 6,
+					"name": "constructor",
+					"kind": 512,
+					"kindString": "Constructor",
+					"flags": {},
+					"signatures": [
+						{
+							"id": 7,
+							"name": "new ContentManagerModule",
+							"kind": 16384,
+							"kindString": "Constructor signature",
+							"flags": {},
+							"type": {
+								"type": "reference",
+								"id": 5,
+								"name": "ContentManagerModule"
+							}
+						}
+					]
+				}
+			],
+			"groups": [
+				{
+					"title": "Constructors",
+					"kind": 512,
+					"children": [
+						6
+					]
+				}
+			],
+			"sources": [
+				{
+					"fileName": "src/lib/content-manager.module.ts",
+					"line": 28,
+					"character": 33
+				}
+			]
+		},
+		{
+			"id": 61,
+			"name": "Context",
+			"kind": 128,
+			"kindString": "Class",
+			"flags": {},
+			"comment": {
+				"shortText": "The Context gives you things from DNN and 2sxc which matches the current runtime context.\nSo it auto-detects what's going on in the page and initializes / provides everything.",
+				"text": "Note: some properties like moduleId are probably not actually in use any more and will probably be empty\n",
+				"tags": [
+					{
+						"tag": "export",
+						"text": ""
+					},
+					{
+						"tag": "implements",
+						"text": "{ContextInfo}\n"
+					}
+				]
+			},
+			"decorators": [
+				{
+					"name": "Injectable",
+					"type": {
+						"type": "reference",
+						"name": "Injectable"
+					},
+					"arguments": {
+						"options": "{\r\n    providedIn: 'root',\r\n}"
+					}
+				}
+			],
+			"children": [
+				{
+					"id": 62,
+					"name": "constructor",
+					"kind": 512,
+					"kindString": "Constructor",
+					"flags": {},
+					"signatures": [
+						{
+							"id": 63,
+							"name": "new Context",
+							"kind": 16384,
+							"kindString": "Constructor signature",
+							"flags": {},
+							"type": {
+								"type": "reference",
+								"id": 61,
+								"name": "Context"
+							}
+						}
+					]
+				},
+				{
+					"id": 64,
+					"name": "$2sxc",
+					"kind": 1024,
+					"kindString": "Property",
+					"flags": {},
+					"comment": {
+						"shortText": "The global $2sxc object"
+					},
+					"sources": [
+						{
+							"fileName": "src/lib/context/context.service.ts",
+							"line": 35,
+							"character": 7
+						}
+					],
+					"type": {
+						"type": "reference",
+						"name": "SxcRoot"
+					},
+					"implementationOf": {
+						"type": "reference",
+						"id": 42,
+						"name": "ContextInfo.$2sxc"
+					}
+				},
+				{
+					"id": 66,
+					"name": "addHttpHeaders",
+					"kind": 1024,
+					"kindString": "Property",
+					"flags": {},
+					"comment": {
+						"shortText": "Setting if it should add HTTP headers. Default is true. You may want to change this if you have an own interceptor."
+					},
+					"sources": [
+						{
+							"fileName": "src/lib/context/context.service.ts",
+							"line": 41,
+							"character": 16
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "boolean"
+					},
+					"implementationOf": {
+						"type": "reference",
+						"id": 44,
+						"name": "ContextInfo.addHttpHeaders"
+					}
+				},
+				{
+					"id": 72,
+					"name": "angularPath",
+					"kind": 1024,
+					"kindString": "Property",
+					"flags": {
+						"isOptional": true
+					},
+					"comment": {
+						"shortText": "The path angular is running in - it's important for lazy-loading to work properly.",
+						"text": "New in v11.01\n"
+					},
+					"sources": [
+						{
+							"fileName": "src/lib/context/context.service.ts",
+							"line": 63,
+							"character": 13
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					},
+					"implementationOf": {
+						"type": "reference",
+						"id": 50,
+						"name": "ContextInfo.angularPath"
+					}
+				},
+				{
+					"id": 69,
+					"name": "apiEdition",
+					"kind": 1024,
+					"kindString": "Property",
+					"flags": {},
+					"comment": {
+						"shortText": "The API edition to use - if you use API-editions (recommended). Will usually be the same as the edition."
+					},
+					"sources": [
+						{
+							"fileName": "src/lib/context/context.service.ts",
+							"line": 50,
+							"character": 12
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					},
+					"implementationOf": {
+						"type": "reference",
+						"id": 47,
+						"name": "ContextInfo.apiEdition"
+					}
+				},
+				{
+					"id": 67,
+					"name": "appNameInPath",
+					"kind": 1024,
+					"kindString": "Property",
+					"flags": {},
+					"comment": {
+						"shortText": "The current app name - used in API calls"
+					},
+					"sources": [
+						{
+							"fileName": "src/lib/context/context.service.ts",
+							"line": 44,
+							"character": 15
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					},
+					"implementationOf": {
+						"type": "reference",
+						"id": 45,
+						"name": "ContextInfo.appNameInPath"
+					}
+				},
+				{
+					"id": 73,
+					"name": "appTagService",
+					"kind": 1024,
+					"kindString": "Property",
+					"flags": {
+						"isPrivate": true
+					},
+					"sources": [
+						{
+							"fileName": "src/lib/context/context.service.ts",
+							"line": 65,
+							"character": 25
+						}
+					],
+					"type": {
+						"type": "reference",
+						"id": 34,
+						"name": "AppTagService"
+					}
+				},
+				{
+					"id": 71,
+					"name": "contentBlockId",
+					"kind": 1024,
+					"kindString": "Property",
+					"flags": {},
+					"comment": {
+						"shortText": "The Content Block ID if it was custom-configured. Will be 'unknown' if not manually set, as then the auto-configure will be used"
+					},
+					"sources": [
+						{
+							"fileName": "src/lib/context/context.service.ts",
+							"line": 56,
+							"character": 16
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "number"
+					},
+					"implementationOf": {
+						"type": "reference",
+						"id": 49,
+						"name": "ContextInfo.contentBlockId"
+					}
+				},
+				{
+					"id": 68,
+					"name": "edition",
+					"kind": 1024,
+					"kindString": "Property",
+					"flags": {},
+					"comment": {
+						"shortText": "The current edition to use for the application."
+					},
+					"sources": [
+						{
+							"fileName": "src/lib/context/context.service.ts",
+							"line": 47,
+							"character": 9
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					},
+					"implementationOf": {
+						"type": "reference",
+						"id": 46,
+						"name": "ContextInfo.edition"
+					}
+				},
+				{
+					"id": 70,
+					"name": "moduleId",
+					"kind": 1024,
+					"kindString": "Property",
+					"flags": {},
+					"comment": {
+						"shortText": "The Module ID if it was custom-configured. Will be 'unknown' if not manually set, as then the auto-configure will be used"
+					},
+					"sources": [
+						{
+							"fileName": "src/lib/context/context.service.ts",
+							"line": 53,
+							"character": 10
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "number"
+					},
+					"implementationOf": {
+						"type": "reference",
+						"id": 48,
+						"name": "ContextInfo.moduleId"
+					}
+				},
+				{
+					"id": 74,
+					"name": "preConfiguration",
+					"kind": 1024,
+					"kindString": "Property",
+					"flags": {
+						"isPrivate": true
+					},
+					"sources": [
+						{
+							"fileName": "src/lib/context/context.service.ts",
+							"line": 66,
+							"character": 28
+						}
+					],
+					"type": {
+						"type": "reference",
+						"typeArguments": [
+							{
+								"type": "reference",
+								"id": 51,
+								"name": "ContextInfoPreconfigure"
+							}
+						],
+						"name": "Partial"
+					}
+				},
+				{
+					"id": 65,
+					"name": "sxc",
+					"kind": 1024,
+					"kindString": "Property",
+					"flags": {},
+					"comment": {
+						"shortText": "The current module-instance 2sxc-controller"
+					},
+					"sources": [
+						{
+							"fileName": "src/lib/context/context.service.ts",
+							"line": 38,
+							"character": 5
+						}
+					],
+					"type": {
+						"type": "reference",
+						"name": "SxcInstance"
+					},
+					"implementationOf": {
+						"type": "reference",
+						"id": 43,
+						"name": "ContextInfo.sxc"
+					}
+				},
+				{
+					"id": 80,
+					"name": "autoConfigure",
+					"kind": 2048,
+					"kindString": "Method",
+					"flags": {},
+					"sources": [
+						{
+							"fileName": "src/lib/context/context.service.ts",
+							"line": 107,
+							"character": 17
+						}
+					],
+					"signatures": [
+						{
+							"id": 81,
+							"name": "autoConfigure",
+							"kind": 4096,
+							"kindString": "Call signature",
+							"flags": {},
+							"comment": {
+								"shortText": "Configure 2sxc in the context of a HTMLNode."
+							},
+							"parameters": [
+								{
+									"id": 82,
+									"name": "htmlNode",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"comment": {
+										"text": "the HTMLNode\n"
+									},
+									"type": {
+										"type": "reference",
+										"typeArguments": [
+											{
+												"type": "intrinsic",
+												"name": "any"
+											}
+										],
+										"name": "ElementRef"
+									}
+								}
+							],
+							"type": {
+								"type": "intrinsic",
+								"name": "void"
+							}
+						}
+					]
+				},
+				{
+					"id": 75,
+					"name": "check2sxcVersion",
+					"kind": 2048,
+					"kindString": "Method",
+					"flags": {
+						"isPrivate": true
+					},
+					"sources": [
+						{
+							"fileName": "src/lib/context/context.service.ts",
+							"line": 81,
+							"character": 28
+						}
+					],
+					"signatures": [
+						{
+							"id": 76,
+							"name": "check2sxcVersion",
+							"kind": 4096,
+							"kindString": "Call signature",
+							"flags": {},
+							"type": {
+								"type": "intrinsic",
+								"name": "void"
+							}
+						}
+					]
+				},
+				{
+					"id": 83,
+					"name": "getAppAttribute",
+					"kind": 2048,
+					"kindString": "Method",
+					"flags": {
+						"isPublic": true
+					},
+					"sources": [
+						{
+							"fileName": "src/lib/context/context.service.ts",
+							"line": 147,
+							"character": 26
+						}
+					],
+					"signatures": [
+						{
+							"id": 84,
+							"name": "getAppAttribute",
+							"kind": 4096,
+							"kindString": "Call signature",
+							"flags": {},
+							"comment": {
+								"shortText": "Get an attribute value from the app-tag"
+							},
+							"parameters": [
+								{
+									"id": 85,
+									"name": "name",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"comment": {
+										"text": "attribute name\n"
+									},
+									"type": {
+										"type": "intrinsic",
+										"name": "string"
+									}
+								}
+							],
+							"type": {
+								"type": "intrinsic",
+								"name": "string"
+							}
+						}
+					]
+				},
+				{
+					"id": 86,
+					"name": "getContextFromAppTag",
+					"kind": 2048,
+					"kindString": "Method",
+					"flags": {
+						"isPrivate": true
+					},
+					"sources": [
+						{
+							"fileName": "src/lib/context/context.service.ts",
+							"line": 155,
+							"character": 32
+						}
+					],
+					"signatures": [
+						{
+							"id": 87,
+							"name": "getContextFromAppTag",
+							"kind": 4096,
+							"kindString": "Call signature",
+							"flags": {},
+							"comment": {
+								"shortText": "Get context information like module-id from the app-root tag\nnew in Dnn-Sxc-Angular 8"
+							},
+							"type": {
+								"type": "reference",
+								"typeArguments": [
+									{
+										"type": "reference",
+										"id": 41,
+										"name": "ContextInfo"
+									}
+								],
+								"name": "Partial"
+							}
+						}
+					]
+				},
+				{
+					"id": 77,
+					"name": "preConfigure",
+					"kind": 2048,
+					"kindString": "Method",
+					"flags": {},
+					"sources": [
+						{
+							"fileName": "src/lib/context/context.service.ts",
+							"line": 98,
+							"character": 16
+						}
+					],
+					"signatures": [
+						{
+							"id": 78,
+							"name": "preConfigure",
+							"kind": 4096,
+							"kindString": "Call signature",
+							"flags": {},
+							"comment": {
+								"shortText": "Pre-Configure this context - can be used to configure values in a subclass"
+							},
+							"parameters": [
+								{
+									"id": 79,
+									"name": "preConfig",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"comment": {
+										"text": "Pre-Configuration values for this context\n"
+									},
+									"type": {
+										"type": "reference",
+										"typeArguments": [
+											{
+												"type": "reference",
+												"id": 51,
+												"name": "ContextInfoPreconfigure"
+											}
+										],
+										"name": "Partial"
+									}
+								}
+							],
+							"type": {
+								"type": "reference",
+								"id": 61,
+								"name": "Context"
+							}
+						}
+					]
+				}
+			],
+			"groups": [
+				{
+					"title": "Constructors",
+					"kind": 512,
+					"children": [
+						62
+					]
+				},
+				{
+					"title": "Properties",
+					"kind": 1024,
+					"children": [
+						64,
+						66,
+						72,
+						69,
+						67,
+						73,
+						71,
+						68,
+						70,
+						74,
+						65
+					]
+				},
+				{
+					"title": "Methods",
+					"kind": 2048,
+					"children": [
+						80,
+						75,
+						83,
+						86,
+						77
+					]
+				}
+			],
+			"sources": [
+				{
+					"fileName": "src/lib/context/context.service.ts",
+					"line": 33,
+					"character": 20
+				}
+			],
+			"implementedTypes": [
+				{
+					"type": "reference",
+					"id": 41,
+					"name": "ContextInfo"
+				}
+			]
+		},
+		{
+			"id": 117,
+			"name": "Data",
+			"kind": 128,
+			"kindString": "Class",
+			"flags": {},
+			"comment": {
+				"shortText": "2sxc data provider\ngives you access to content and query streams using the content$ and query$ commands\nyou can also use the content and query managers, but these are currently not so useful.",
+				"tags": [
+					{
+						"tag": "export",
+						"text": ""
+					}
+				]
+			},
+			"decorators": [
+				{
+					"name": "Injectable",
+					"type": {
+						"type": "reference",
+						"name": "Injectable"
+					},
+					"arguments": {
+						"options": "{\r\n  providedIn: 'root',\r\n}"
+					}
+				}
+			],
+			"children": [
+				{
+					"id": 118,
+					"name": "constructor",
+					"kind": 512,
+					"kindString": "Constructor",
+					"flags": {},
+					"signatures": [
+						{
+							"id": 119,
+							"name": "new Data",
+							"kind": 16384,
+							"kindString": "Constructor signature",
+							"flags": {},
+							"parameters": [
+								{
+									"id": 120,
+									"name": "http",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "reference",
+										"name": "HttpClient"
+									}
+								}
+							],
+							"type": {
+								"type": "reference",
+								"id": 117,
+								"name": "Data"
+							}
+						}
+					]
+				},
+				{
+					"id": 142,
+					"name": "api",
+					"kind": 2048,
+					"kindString": "Method",
+					"flags": {
+						"isPublic": true
+					},
+					"sources": [
+						{
+							"fileName": "src/lib/sxc/data.ts",
+							"line": 83,
+							"character": 12
+						}
+					],
+					"signatures": [
+						{
+							"id": 143,
+							"name": "api",
+							"kind": 4096,
+							"kindString": "Call signature",
+							"flags": {},
+							"comment": {
+								"shortText": "get an api object to then start api-calls\nusually you'll be better off using the quick observable stream api$, this is included primarily for consistency in the api",
+								"returns": "an API object with a .get<T>() method\n"
+							},
+							"parameters": [
+								{
+									"id": 144,
+									"name": "controller",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"comment": {
+										"text": "the api controller"
+									},
+									"type": {
+										"type": "intrinsic",
+										"name": "string"
+									}
+								}
+							],
+							"type": {
+								"type": "reference",
+								"id": 88,
+								"name": "Api"
+							}
+						}
+					]
+				},
+				{
+					"id": 145,
+					"name": "api$",
+					"kind": 2048,
+					"kindString": "Method",
+					"flags": {
+						"isPublic": true
+					},
+					"sources": [
+						{
+							"fileName": "src/lib/sxc/data.ts",
+							"line": 93,
+							"character": 13
+						}
+					],
+					"signatures": [
+						{
+							"id": 146,
+							"name": "api$",
+							"kind": 4096,
+							"kindString": "Call signature",
+							"flags": {},
+							"comment": {
+								"shortText": "retrieve a api stream from the server",
+								"returns": "a typed observable which will give you the query\n"
+							},
+							"typeParameter": [
+								{
+									"id": 147,
+									"name": "T",
+									"kind": 131072,
+									"kindString": "Type parameter",
+									"flags": {}
+								}
+							],
+							"parameters": [
+								{
+									"id": 148,
+									"name": "apiName",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"comment": {
+										"text": "controller/method"
+									},
+									"type": {
+										"type": "intrinsic",
+										"name": "string"
+									}
+								},
+								{
+									"id": 149,
+									"name": "params",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {
+										"isOptional": true
+									},
+									"comment": {
+										"text": "optional parameters-object"
+									},
+									"type": {
+										"type": "reference",
+										"name": "HttpParams"
+									}
+								}
+							],
+							"type": {
+								"type": "reference",
+								"typeArguments": [
+									{
+										"type": "reference",
+										"name": "T"
+									}
+								],
+								"name": "Observable"
+							}
+						}
+					]
+				},
+				{
+					"id": 121,
+					"name": "content",
+					"kind": 2048,
+					"kindString": "Method",
+					"flags": {
+						"isPublic": true
+					},
+					"sources": [
+						{
+							"fileName": "src/lib/sxc/data.ts",
+							"line": 32,
+							"character": 16
+						}
+					],
+					"signatures": [
+						{
+							"id": 122,
+							"name": "content",
+							"kind": 4096,
+							"kindString": "Call signature",
+							"flags": {},
+							"comment": {
+								"shortText": "Cet a content manager object for a specific ContentType\nusually you will prefer the the observable stream content$\nthis manager is currently included for consistency, and will later also offer write commands"
+							},
+							"typeParameter": [
+								{
+									"id": 123,
+									"name": "T",
+									"kind": 131072,
+									"kindString": "Type parameter",
+									"flags": {}
+								}
+							],
+							"parameters": [
+								{
+									"id": 124,
+									"name": "contentType",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"comment": {
+										"text": "name of the content-type\n"
+									},
+									"type": {
+										"type": "intrinsic",
+										"name": "string"
+									}
+								}
+							],
+							"type": {
+								"type": "reference",
+								"id": 104,
+								"typeArguments": [
+									{
+										"type": "reference",
+										"name": "T"
+									}
+								],
+								"name": "Content"
+							}
+						}
+					]
+				},
+				{
+					"id": 125,
+					"name": "content$",
+					"kind": 2048,
+					"kindString": "Method",
+					"flags": {},
+					"sources": [
+						{
+							"fileName": "src/lib/sxc/data.ts",
+							"line": 42,
+							"character": 10
+						}
+					],
+					"signatures": [
+						{
+							"id": 126,
+							"name": "content$",
+							"kind": 4096,
+							"kindString": "Call signature",
+							"flags": {},
+							"comment": {
+								"shortText": "get a stream of content items or (if ID is provided) a stream containing one item",
+								"returns": "an observable containing a single item (if ID is provided) or an array of these items\n"
+							},
+							"typeParameter": [
+								{
+									"id": 127,
+									"name": "T",
+									"kind": 131072,
+									"kindString": "Type parameter",
+									"flags": {}
+								}
+							],
+							"parameters": [
+								{
+									"id": 128,
+									"name": "contentType",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"comment": {
+										"text": "name of the content-type"
+									},
+									"type": {
+										"type": "intrinsic",
+										"name": "string"
+									}
+								},
+								{
+									"id": 129,
+									"name": "id",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {
+										"isOptional": true
+									},
+									"comment": {
+										"text": "optional id of a single item"
+									},
+									"type": {
+										"type": "intrinsic",
+										"name": "number"
+									}
+								}
+							],
+							"type": {
+								"type": "reference",
+								"typeArguments": [
+									{
+										"type": "reference",
+										"name": "T"
+									}
+								],
+								"name": "Observable"
+							}
+						}
+					]
+				},
+				{
+					"id": 130,
+					"name": "query",
+					"kind": 2048,
+					"kindString": "Method",
+					"flags": {
+						"isPublic": true
+					},
+					"sources": [
+						{
+							"fileName": "src/lib/sxc/data.ts",
+							"line": 55,
+							"character": 14
+						}
+					],
+					"signatures": [
+						{
+							"id": 131,
+							"name": "query",
+							"kind": 4096,
+							"kindString": "Call signature",
+							"flags": {},
+							"comment": {
+								"shortText": "get a query object to then start queries\nusually you'll be better off using the observable stream query$, this is included primarily for consistency in the api",
+								"returns": "a query object with a .get()\n"
+							},
+							"typeParameter": [
+								{
+									"id": 132,
+									"name": "T",
+									"kind": 131072,
+									"kindString": "Type parameter",
+									"flags": {}
+								}
+							],
+							"parameters": [
+								{
+									"id": 133,
+									"name": "name",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"comment": {
+										"text": "the query name"
+									},
+									"type": {
+										"type": "intrinsic",
+										"name": "string"
+									}
+								}
+							],
+							"type": {
+								"type": "reference",
+								"id": 150,
+								"typeArguments": [
+									{
+										"type": "reference",
+										"name": "T"
+									}
+								],
+								"name": "Query"
+							}
+						}
+					]
+				},
+				{
+					"id": 134,
+					"name": "query$",
+					"kind": 2048,
+					"kindString": "Method",
+					"flags": {
+						"isPublic": true
+					},
+					"sources": [
+						{
+							"fileName": "src/lib/sxc/data.ts",
+							"line": 65,
+							"character": 15
+						}
+					],
+					"signatures": [
+						{
+							"id": 135,
+							"name": "query$",
+							"kind": 4096,
+							"kindString": "Call signature",
+							"flags": {},
+							"comment": {
+								"shortText": "retrieve a query stream from the server",
+								"returns": "a typed observable which will give you the query\n"
+							},
+							"typeParameter": [
+								{
+									"id": 136,
+									"name": "T",
+									"kind": 131072,
+									"kindString": "Type parameter",
+									"flags": {}
+								}
+							],
+							"parameters": [
+								{
+									"id": 137,
+									"name": "name",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"comment": {
+										"text": "the query name"
+									},
+									"type": {
+										"type": "intrinsic",
+										"name": "string"
+									}
+								},
+								{
+									"id": 138,
+									"name": "params",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {
+										"isOptional": true
+									},
+									"comment": {
+										"text": "optional parameters-object"
+									},
+									"type": {
+										"type": "reference",
+										"name": "HttpParams"
+									}
+								}
+							],
+							"type": {
+								"type": "reference",
+								"typeArguments": [
+									{
+										"type": "reference",
+										"name": "T"
+									}
+								],
+								"name": "Observable"
+							}
+						},
+						{
+							"id": 139,
+							"name": "query$",
+							"kind": 4096,
+							"kindString": "Call signature",
+							"flags": {},
+							"typeParameter": [
+								{
+									"id": 140,
+									"name": "T",
+									"kind": 131072,
+									"kindString": "Type parameter",
+									"flags": {}
+								}
+							],
+							"parameters": [
+								{
+									"id": 141,
+									"name": "__namedParameters",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "reference",
+										"id": 167,
+										"name": "QueryConstruction"
+									}
+								}
+							],
+							"type": {
+								"type": "reference",
+								"typeArguments": [
+									{
+										"type": "reference",
+										"name": "T"
+									}
+								],
+								"name": "Observable"
+							}
+						}
+					]
+				}
+			],
+			"groups": [
+				{
+					"title": "Constructors",
+					"kind": 512,
+					"children": [
+						118
+					]
+				},
+				{
+					"title": "Methods",
+					"kind": 2048,
+					"children": [
+						142,
+						145,
+						121,
+						125,
+						130,
+						134
+					]
+				}
+			],
+			"sources": [
+				{
+					"fileName": "src/lib/sxc/data.ts",
+					"line": 21,
+					"character": 17
+				}
+			]
+		},
+		{
+			"id": 8,
+			"name": "DnnAppComponent",
+			"kind": 128,
+			"kindString": "Class",
+			"flags": {},
+			"comment": {
+				"shortText": "A root app component which initializes the context-providers once the app is loaded\nThis is the earliest moment we can access the ElementRef, because before that\nit's not attached to the DOM, so auto-detect wouldn't work.",
+				"tags": [
+					{
+						"tag": "export",
+						"text": ""
+					}
+				]
+			},
+			"children": [
+				{
+					"id": 9,
+					"name": "constructor",
+					"kind": 512,
+					"kindString": "Constructor",
+					"flags": {},
+					"signatures": [
+						{
+							"id": 10,
+							"name": "new DnnAppComponent",
+							"kind": 16384,
+							"kindString": "Constructor signature",
+							"flags": {},
+							"comment": {},
+							"parameters": [
+								{
+									"id": 11,
+									"name": "element",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"comment": {
+										"text": "the angular ElementRef - required to auto-detect moduleId and more"
+									},
+									"type": {
+										"type": "reference",
+										"typeArguments": [
+											{
+												"type": "intrinsic",
+												"name": "any"
+											}
+										],
+										"name": "ElementRef"
+									}
+								},
+								{
+									"id": 12,
+									"name": "context",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"comment": {
+										"text": "the context service, which handles and shares auto-detection"
+									},
+									"type": {
+										"type": "reference",
+										"id": 61,
+										"name": "Context"
+									}
+								},
+								{
+									"id": 13,
+									"name": "enableDefaultSubmit",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {
+										"isOptional": true
+									},
+									"comment": {
+										"text": "causes enter-hits to submit the asp.net forms (defaults to false)\n"
+									},
+									"type": {
+										"type": "intrinsic",
+										"name": "boolean"
+									}
+								}
+							],
+							"type": {
+								"type": "reference",
+								"id": 8,
+								"name": "DnnAppComponent"
+							}
+						}
+					]
+				}
+			],
+			"groups": [
+				{
+					"title": "Constructors",
+					"kind": 512,
+					"children": [
+						9
+					]
+				}
+			],
+			"sources": [
+				{
+					"fileName": "src/lib/dnn-app.component.ts",
+					"line": 11,
+					"character": 28
+				}
+			]
+		},
+		{
+			"id": 1,
+			"name": "DnnSxcRootModule",
+			"kind": 128,
+			"kindString": "Class",
+			"flags": {},
+			"comment": {
+				"shortText": "The Root module which must be included in the application root.\nIt ensures that context etc. is singleton across the entire application",
+				"tags": [
+					{
+						"tag": "export",
+						"text": ""
+					}
+				]
+			},
+			"decorators": [
+				{
+					"name": "NgModule",
+					"type": {
+						"type": "reference",
+						"name": "NgModule"
+					},
+					"arguments": {
+						"obj": "{\r\n  imports: [\r\n    // Note: it's extremely important that HttpClientModule is _not_ imported\r\n    // anywhere. Otherwise it will break sub-modules\r\n    // because it will create a new HttpClientModule which won't have the interceptor\r\n    // HttpClientModule,\r\n  ],\r\n  providers: [\r\n    Data,\r\n    Context,\r\n    DnnInterceptor,\r\n  ]\r\n}"
+					}
+				}
+			],
+			"children": [
+				{
+					"id": 2,
+					"name": "constructor",
+					"kind": 512,
+					"kindString": "Constructor",
+					"flags": {},
+					"signatures": [
+						{
+							"id": 3,
+							"name": "new DnnSxcRootModule",
+							"kind": 16384,
+							"kindString": "Constructor signature",
+							"flags": {},
+							"parameters": [
+								{
+									"id": 4,
+									"name": "parentModule",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {
+										"isOptional": true
+									},
+									"decorators": [
+										{
+											"name": "Optional",
+											"type": {
+												"type": "reference",
+												"name": "Optional"
+											},
+											"arguments": {}
+										},
+										{
+											"name": "SkipSelf",
+											"type": {
+												"type": "reference",
+												"name": "SkipSelf"
+											},
+											"arguments": {}
+										}
+									],
+									"type": {
+										"type": "reference",
+										"id": 1,
+										"name": "DnnSxcRootModule"
+									}
+								}
+							],
+							"type": {
+								"type": "reference",
+								"id": 1,
+								"name": "DnnSxcRootModule"
+							}
+						}
+					]
+				}
+			],
+			"groups": [
+				{
+					"title": "Constructors",
+					"kind": 512,
+					"children": [
+						2
+					]
+				}
+			],
+			"sources": [
+				{
+					"fileName": "src/lib/dnn-sxc-root.module.ts",
+					"line": 27,
+					"character": 29
+				}
+			]
+		},
+		{
+			"id": 150,
+			"name": "Query",
+			"kind": 128,
+			"kindString": "Class",
+			"flags": {},
+			"comment": {
+				"shortText": "Query object for getting typed data.",
+				"tags": [
+					{
+						"tag": "export",
+						"text": ""
+					}
+				]
+			},
+			"children": [
+				{
+					"id": 151,
+					"name": "constructor",
+					"kind": 512,
+					"kindString": "Constructor",
+					"flags": {},
+					"signatures": [
+						{
+							"id": 152,
+							"name": "new Query",
+							"kind": 16384,
+							"kindString": "Constructor signature",
+							"flags": {},
+							"typeParameter": [
+								{
+									"id": 153,
+									"name": "T",
+									"kind": 131072,
+									"kindString": "Type parameter",
+									"flags": {}
+								}
+							],
+							"parameters": [
+								{
+									"id": 154,
+									"name": "http",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "reference",
+										"name": "HttpClient"
+									}
+								},
+								{
+									"id": 155,
+									"name": "name",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "intrinsic",
+										"name": "string"
+									}
+								}
+							],
+							"type": {
+								"type": "reference",
+								"id": 150,
+								"typeArguments": [
+									{
+										"type": "reference",
+										"name": "T"
+									}
+								],
+								"name": "Query"
+							}
+						}
+					]
+				},
+				{
+					"id": 157,
+					"name": "defaultStreamName",
+					"kind": 1024,
+					"kindString": "Property",
+					"flags": {
+						"isReadonly": true
+					},
+					"sources": [
+						{
+							"fileName": "src/lib/sxc/query.ts",
+							"line": 19,
+							"character": 28
+						}
+					],
+					"type": {
+						"type": "literal",
+						"value": "Default"
+					},
+					"defaultValue": "'Default'"
+				},
+				{
+					"id": 156,
+					"name": "streamParamKey",
+					"kind": 1024,
+					"kindString": "Property",
+					"flags": {
+						"isReadonly": true
+					},
+					"sources": [
+						{
+							"fileName": "src/lib/sxc/query.ts",
+							"line": 18,
+							"character": 25
+						}
+					],
+					"type": {
+						"type": "literal",
+						"value": "stream"
+					},
+					"defaultValue": "'stream'"
+				},
+				{
+					"id": 158,
+					"name": "get",
+					"kind": 2048,
+					"kindString": "Method",
+					"flags": {},
+					"sources": [
+						{
+							"fileName": "src/lib/sxc/query.ts",
+							"line": 25,
+							"character": 5
+						}
+					],
+					"signatures": [
+						{
+							"id": 159,
+							"name": "get",
+							"kind": 4096,
+							"kindString": "Call signature",
+							"flags": {},
+							"comment": {
+								"shortText": "will retrieve a 2sxc query\nremember to set the permissions on the query, so it can be accessed by the group you want"
+							},
+							"parameters": [
+								{
+									"id": 160,
+									"name": "params",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {
+										"isOptional": true
+									},
+									"type": {
+										"type": "reference",
+										"name": "HttpParams"
+									}
+								},
+								{
+									"id": 161,
+									"name": "streams",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {
+										"isOptional": true
+									},
+									"type": {
+										"type": "union",
+										"types": [
+											{
+												"type": "intrinsic",
+												"name": "string"
+											},
+											{
+												"type": "array",
+												"elementType": {
+													"type": "intrinsic",
+													"name": "string"
+												}
+											}
+										]
+									}
+								}
+							],
+							"type": {
+								"type": "reference",
+								"typeArguments": [
+									{
+										"type": "reference",
+										"name": "T"
+									}
+								],
+								"name": "Observable"
+							}
+						}
+					]
+				},
+				{
+					"id": 162,
+					"name": "setStreamParam",
+					"kind": 2048,
+					"kindString": "Method",
+					"flags": {
+						"isPrivate": true
+					},
+					"sources": [
+						{
+							"fileName": "src/lib/sxc/query.ts",
+							"line": 52,
+							"character": 24
+						}
+					],
+					"signatures": [
+						{
+							"id": 163,
+							"name": "setStreamParam",
+							"kind": 4096,
+							"kindString": "Call signature",
+							"flags": {},
+							"comment": {
+								"shortText": "Returns either the existing or a new HttpParams object, with the stream parameter appended."
+							},
+							"parameters": [
+								{
+									"id": 164,
+									"name": "params",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"comment": {
+										"text": "the HttpParams which might be undefined or null"
+									},
+									"type": {
+										"type": "reference",
+										"name": "HttpParams"
+									}
+								},
+								{
+									"id": 165,
+									"name": "streams",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"comment": {
+										"text": "the array of streams which will be appended to the HttpParams object\n"
+									},
+									"type": {
+										"type": "array",
+										"elementType": {
+											"type": "intrinsic",
+											"name": "string"
+										}
+									}
+								}
+							],
+							"type": {
+								"type": "reference",
+								"name": "HttpParams"
+							}
+						}
+					]
+				}
+			],
+			"groups": [
+				{
+					"title": "Constructors",
+					"kind": 512,
+					"children": [
+						151
+					]
+				},
+				{
+					"title": "Properties",
+					"kind": 1024,
+					"children": [
+						157,
+						156
+					]
+				},
+				{
+					"title": "Methods",
+					"kind": 2048,
+					"children": [
+						158,
+						162
+					]
+				}
+			],
+			"sources": [
+				{
+					"fileName": "src/lib/sxc/query.ts",
+					"line": 12,
+					"character": 18
+				}
+			],
+			"typeParameter": [
+				{
+					"id": 166,
+					"name": "T",
+					"kind": 131072,
+					"kindString": "Type parameter",
+					"flags": {},
+					"comment": {
+						"shortText": "type (usually an interface) of the data coming back\n"
+					}
+				}
+			]
+		},
+		{
+			"id": 23,
+			"name": "SxcTagToolbarDirective",
+			"kind": 128,
+			"kindString": "Class",
+			"flags": {},
+			"comment": {
+				"shortText": "The toolbar attribute to be used on any HTML tag.\nWill bring the floating edit-toolbar to the UI if the user is logged in",
+				"tags": [
+					{
+						"tag": "export",
+						"text": ""
+					},
+					{
+						"tag": "implements",
+						"text": "{OnInit}\n"
+					}
+				]
+			},
+			"decorators": [
+				{
+					"name": "Directive",
+					"type": {
+						"type": "reference",
+						"name": "Directive"
+					},
+					"arguments": {
+						"obj": "{\r\n  selector: '[sxc-toolbar]',\r\n}"
+					}
+				}
+			],
+			"children": [
+				{
+					"id": 24,
+					"name": "constructor",
+					"kind": 512,
+					"kindString": "Constructor",
+					"flags": {},
+					"signatures": [
+						{
+							"id": 25,
+							"name": "new SxcTagToolbarDirective",
+							"kind": 16384,
+							"kindString": "Constructor signature",
+							"flags": {},
+							"parameters": [
+								{
+									"id": 26,
+									"name": "element",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "reference",
+										"typeArguments": [
+											{
+												"type": "intrinsic",
+												"name": "any"
+											}
+										],
+										"name": "ElementRef"
+									}
+								},
+								{
+									"id": 27,
+									"name": "context",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "reference",
+										"id": 61,
+										"name": "Context"
+									}
+								}
+							],
+							"type": {
+								"type": "reference",
+								"id": 23,
+								"name": "SxcTagToolbarDirective"
+							}
+						}
+					]
+				},
+				{
+					"id": 29,
+					"name": "refresh",
+					"kind": 1024,
+					"kindString": "Property",
+					"flags": {},
+					"comment": {
+						"shortText": "A refresh callback when an action on the toolbar requires data to be refreshed.\nIf not specified, the page will simply reload, if specified, this action will run and page-reload won't happen.\nNew in v.11.12"
+					},
+					"decorators": [
+						{
+							"name": "Output",
+							"type": {
+								"type": "reference",
+								"name": "Output"
+							},
+							"arguments": {
+								"bindingPropertyName": "'refresh'"
+							}
+						}
+					],
+					"sources": [
+						{
+							"fileName": "src/lib/toolbar/tag-toolbar.ts",
+							"line": 28,
+							"character": 28
+						}
+					],
+					"type": {
+						"type": "reference",
+						"typeArguments": [
+							{
+								"type": "intrinsic",
+								"name": "any"
+							}
+						],
+						"name": "EventEmitter"
+					},
+					"defaultValue": "..."
+				},
+				{
+					"id": 28,
+					"name": "sxcToolbar",
+					"kind": 1024,
+					"kindString": "Property",
+					"flags": {},
+					"comment": {
+						"shortText": "The configuration of this toolbar"
+					},
+					"decorators": [
+						{
+							"name": "Input",
+							"type": {
+								"type": "reference",
+								"name": "Input"
+							},
+							"arguments": {
+								"bindingPropertyName": "'sxc-toolbar'"
+							}
+						}
+					],
+					"sources": [
+						{
+							"fileName": "src/lib/toolbar/tag-toolbar.ts",
+							"line": 21,
+							"character": 34
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "any"
+					}
+				},
+				{
+					"id": 30,
+					"name": "ngOnInit",
+					"kind": 2048,
+					"kindString": "Method",
+					"flags": {},
+					"sources": [
+						{
+							"fileName": "src/lib/toolbar/tag-toolbar.ts",
+							"line": 33,
+							"character": 10
+						}
+					],
+					"signatures": [
+						{
+							"id": 31,
+							"name": "ngOnInit",
+							"kind": 4096,
+							"kindString": "Call signature",
+							"flags": {},
+							"type": {
+								"type": "intrinsic",
+								"name": "any"
+							},
+							"implementationOf": {
+								"type": "reference",
+								"name": "OnInit.ngOnInit"
+							}
+						}
+					],
+					"implementationOf": {
+						"type": "reference",
+						"name": "OnInit.ngOnInit"
+					}
+				},
+				{
+					"id": 32,
+					"name": "preventRefreshIfListenerConfigured",
+					"kind": 2048,
+					"kindString": "Method",
+					"flags": {
+						"isPrivate": true
+					},
+					"sources": [
+						{
+							"fileName": "src/lib/toolbar/tag-toolbar.ts",
+							"line": 44,
+							"character": 44
+						}
+					],
+					"signatures": [
+						{
+							"id": 33,
+							"name": "preventRefreshIfListenerConfigured",
+							"kind": 4096,
+							"kindString": "Call signature",
+							"flags": {},
+							"comment": {
+								"shortText": "Check if the event emiter has a listener, and if yes, stop automatic page reload"
+							},
+							"type": {
+								"type": "intrinsic",
+								"name": "void"
+							}
+						}
+					]
+				}
+			],
+			"groups": [
+				{
+					"title": "Constructors",
+					"kind": 512,
+					"children": [
+						24
+					]
+				},
+				{
+					"title": "Properties",
+					"kind": 1024,
+					"children": [
+						29,
+						28
+					]
+				},
+				{
+					"title": "Methods",
+					"kind": 2048,
+					"children": [
+						30,
+						32
+					]
+				}
+			],
+			"sources": [
+				{
+					"fileName": "src/lib/toolbar/tag-toolbar.ts",
+					"line": 15,
+					"character": 35
+				}
+			],
+			"implementedTypes": [
+				{
+					"type": "reference",
+					"name": "OnInit"
+				}
+			]
+		},
+		{
+			"id": 15,
+			"name": "SxcToolbarDirective",
+			"kind": 128,
+			"kindString": "Class",
+			"flags": {},
+			"decorators": [
+				{
+					"name": "Directive",
+					"type": {
+						"type": "reference",
+						"name": "Directive"
+					},
+					"arguments": {
+						"obj": "{\r\n  selector: 'sxc-toolbar'\r\n}"
+					}
+				}
+			],
+			"children": [
+				{
+					"id": 16,
+					"name": "constructor",
+					"kind": 512,
+					"kindString": "Constructor",
+					"flags": {},
+					"signatures": [
+						{
+							"id": 17,
+							"name": "new SxcToolbarDirective",
+							"kind": 16384,
+							"kindString": "Constructor signature",
+							"flags": {},
+							"parameters": [
+								{
+									"id": 18,
+									"name": "elementRef",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "reference",
+										"typeArguments": [
+											{
+												"type": "intrinsic",
+												"name": "any"
+											}
+										],
+										"name": "ElementRef"
+									}
+								},
+								{
+									"id": 19,
+									"name": "context",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "reference",
+										"id": 61,
+										"name": "Context"
+									}
+								}
+							],
+							"type": {
+								"type": "reference",
+								"id": 15,
+								"name": "SxcToolbarDirective"
+							}
+						}
+					]
+				},
+				{
+					"id": 20,
+					"name": "config",
+					"kind": 1024,
+					"kindString": "Property",
+					"flags": {},
+					"decorators": [
+						{
+							"name": "Input",
+							"type": {
+								"type": "reference",
+								"name": "Input"
+							},
+							"arguments": {}
+						}
+					],
+					"sources": [
+						{
+							"fileName": "src/lib/beta/edit.ts",
+							"line": 9,
+							"character": 17
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "any"
+					},
+					"defaultValue": "..."
+				},
+				{
+					"id": 21,
+					"name": "ngOnInit",
+					"kind": 2048,
+					"kindString": "Method",
+					"flags": {},
+					"sources": [
+						{
+							"fileName": "src/lib/beta/edit.ts",
+							"line": 12,
+							"character": 10
+						}
+					],
+					"signatures": [
+						{
+							"id": 22,
+							"name": "ngOnInit",
+							"kind": 4096,
+							"kindString": "Call signature",
+							"flags": {},
+							"type": {
+								"type": "intrinsic",
+								"name": "void"
+							},
+							"implementationOf": {
+								"type": "reference",
+								"name": "OnInit.ngOnInit"
+							}
+						}
+					],
+					"implementationOf": {
+						"type": "reference",
+						"name": "OnInit.ngOnInit"
+					}
+				}
+			],
+			"groups": [
+				{
+					"title": "Constructors",
+					"kind": 512,
+					"children": [
+						16
+					]
+				},
+				{
+					"title": "Properties",
+					"kind": 1024,
+					"children": [
+						20
+					]
+				},
+				{
+					"title": "Methods",
+					"kind": 2048,
+					"children": [
+						21
+					]
+				}
+			],
+			"sources": [
+				{
+					"fileName": "src/lib/beta/edit.ts",
+					"line": 8,
+					"character": 32
+				}
+			],
+			"implementedTypes": [
+				{
+					"type": "reference",
+					"name": "OnInit"
+				}
+			]
+		},
+		{
+			"id": 41,
+			"name": "ContextInfo",
+			"kind": 256,
+			"kindString": "Interface",
+			"flags": {},
+			"comment": {
+				"shortText": "The context in which the current app is running.\nImportant to interact with the server\nor with the DNN around it."
+			},
+			"children": [
+				{
+					"id": 42,
+					"name": "$2sxc",
+					"kind": 1024,
+					"kindString": "Property",
+					"flags": {},
+					"comment": {
+						"shortText": "The $2sxc root object which is globally accessible through window.$2sxc"
+					},
+					"sources": [
+						{
+							"fileName": "src/lib/context/context-info.ts",
+							"line": 16,
+							"character": 7
+						}
+					],
+					"type": {
+						"type": "reference",
+						"name": "SxcRoot"
+					}
+				},
+				{
+					"id": 44,
+					"name": "addHttpHeaders",
+					"kind": 1024,
+					"kindString": "Property",
+					"flags": {},
+					"comment": {
+						"shortText": "If false, does not append any custom headers to DNN requests"
+					},
+					"sources": [
+						{
+							"fileName": "src/lib/context/context-info.ts",
+							"line": 26,
+							"character": 16
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "boolean"
+					}
+				},
+				{
+					"id": 50,
+					"name": "angularPath",
+					"kind": 1024,
+					"kindString": "Property",
+					"flags": {
+						"isOptional": true
+					},
+					"comment": {
+						"shortText": "Location for the angular files",
+						"text": "New in v11.01",
+						"tags": [
+							{
+								"tag": "memberof",
+								"text": "ContextInfo\n"
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "src/lib/context/context-info.ts",
+							"line": 61,
+							"character": 13
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					}
+				},
+				{
+					"id": 47,
+					"name": "apiEdition",
+					"kind": 1024,
+					"kindString": "Property",
+					"flags": {},
+					"comment": {
+						"shortText": "the edition to be used in the api\nusually it's the same as the edition, but in same cases you may want to use another edition, especially when developing"
+					},
+					"sources": [
+						{
+							"fileName": "src/lib/context/context-info.ts",
+							"line": 42,
+							"character": 12
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					}
+				},
+				{
+					"id": 45,
+					"name": "appNameInPath",
+					"kind": 1024,
+					"kindString": "Property",
+					"flags": {},
+					"comment": {
+						"shortText": "Replace app name in path; replaces /app/auto/"
+					},
+					"sources": [
+						{
+							"fileName": "src/lib/context/context-info.ts",
+							"line": 31,
+							"character": 15
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					}
+				},
+				{
+					"id": 49,
+					"name": "contentBlockId",
+					"kind": 1024,
+					"kindString": "Property",
+					"flags": {},
+					"comment": {
+						"shortText": "The content block id of the current block"
+					},
+					"sources": [
+						{
+							"fileName": "src/lib/context/context-info.ts",
+							"line": 52,
+							"character": 16
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "number"
+					}
+				},
+				{
+					"id": 46,
+					"name": "edition",
+					"kind": 1024,
+					"kindString": "Property",
+					"flags": {},
+					"comment": {
+						"shortText": "the edition of the current app - if you are working with polymorph editions"
+					},
+					"sources": [
+						{
+							"fileName": "src/lib/context/context-info.ts",
+							"line": 36,
+							"character": 9
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					}
+				},
+				{
+					"id": 48,
+					"name": "moduleId",
+					"kind": 1024,
+					"kindString": "Property",
+					"flags": {},
+					"comment": {
+						"shortText": "The id of the current module"
+					},
+					"sources": [
+						{
+							"fileName": "src/lib/context/context-info.ts",
+							"line": 47,
+							"character": 10
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "number"
+					}
+				},
+				{
+					"id": 43,
+					"name": "sxc",
+					"kind": 1024,
+					"kindString": "Property",
+					"flags": {},
+					"comment": {
+						"shortText": "the helper sxc-object to communicate with the server"
+					},
+					"sources": [
+						{
+							"fileName": "src/lib/context/context-info.ts",
+							"line": 21,
+							"character": 5
+						}
+					],
+					"type": {
+						"type": "reference",
+						"name": "SxcInstance"
+					}
+				}
+			],
+			"groups": [
+				{
+					"title": "Properties",
+					"kind": 1024,
+					"children": [
+						42,
+						44,
+						50,
+						47,
+						45,
+						49,
+						46,
+						48,
+						43
+					]
+				}
+			],
+			"sources": [
+				{
+					"fileName": "src/lib/context/context-info.ts",
+					"line": 11,
+					"character": 28
+				}
+			],
+			"extendedBy": [
+				{
+					"type": "reference",
+					"id": 51,
+					"name": "ContextInfoPreconfigure"
+				}
+			],
+			"implementedBy": [
+				{
+					"type": "reference",
+					"id": 61,
+					"name": "Context"
+				}
+			]
+		},
+		{
+			"id": 51,
+			"name": "ContextInfoPreconfigure",
+			"kind": 256,
+			"kindString": "Interface",
+			"flags": {},
+			"comment": {
+				"shortText": "The context in which the current app is running.\nImportant to interact with the server\nor with the DNN around it."
+			},
+			"children": [
+				{
+					"id": 54,
+					"name": "$2sxc",
+					"kind": 1024,
+					"kindString": "Property",
+					"flags": {},
+					"comment": {
+						"shortText": "The $2sxc root object which is globally accessible through window.$2sxc"
+					},
+					"sources": [
+						{
+							"fileName": "src/lib/context/context-info.ts",
+							"line": 16,
+							"character": 7
+						}
+					],
+					"type": {
+						"type": "reference",
+						"name": "SxcRoot"
+					},
+					"inheritedFrom": {
+						"type": "reference",
+						"id": 42,
+						"name": "ContextInfo.$2sxc"
+					}
+				},
+				{
+					"id": 56,
+					"name": "addHttpHeaders",
+					"kind": 1024,
+					"kindString": "Property",
+					"flags": {},
+					"comment": {
+						"shortText": "If false, does not append any custom headers to DNN requests"
+					},
+					"sources": [
+						{
+							"fileName": "src/lib/context/context-info.ts",
+							"line": 26,
+							"character": 16
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "boolean"
+					},
+					"inheritedFrom": {
+						"type": "reference",
+						"id": 44,
+						"name": "ContextInfo.addHttpHeaders"
+					}
+				},
+				{
+					"id": 60,
+					"name": "angularPath",
+					"kind": 1024,
+					"kindString": "Property",
+					"flags": {
+						"isOptional": true
+					},
+					"comment": {
+						"shortText": "Location for the angular files",
+						"text": "New in v11.01",
+						"tags": [
+							{
+								"tag": "memberof",
+								"text": "ContextInfo\n"
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "src/lib/context/context-info.ts",
+							"line": 61,
+							"character": 13
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					},
+					"inheritedFrom": {
+						"type": "reference",
+						"id": 50,
+						"name": "ContextInfo.angularPath"
+					}
+				},
+				{
+					"id": 59,
+					"name": "apiEdition",
+					"kind": 1024,
+					"kindString": "Property",
+					"flags": {},
+					"comment": {
+						"shortText": "the edition to be used in the api\nusually it's the same as the edition, but in same cases you may want to use another edition, especially when developing"
+					},
+					"sources": [
+						{
+							"fileName": "src/lib/context/context-info.ts",
+							"line": 42,
+							"character": 12
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					},
+					"inheritedFrom": {
+						"type": "reference",
+						"id": 47,
+						"name": "ContextInfo.apiEdition"
+					}
+				},
+				{
+					"id": 57,
+					"name": "appNameInPath",
+					"kind": 1024,
+					"kindString": "Property",
+					"flags": {},
+					"comment": {
+						"shortText": "Replace app name in path; replaces /app/auto/"
+					},
+					"sources": [
+						{
+							"fileName": "src/lib/context/context-info.ts",
+							"line": 31,
+							"character": 15
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					},
+					"inheritedFrom": {
+						"type": "reference",
+						"id": 45,
+						"name": "ContextInfo.appNameInPath"
+					}
+				},
+				{
+					"id": 53,
+					"name": "contentBlockId",
+					"kind": 1024,
+					"kindString": "Property",
+					"flags": {},
+					"comment": {
+						"shortText": "The content block id of the current block"
+					},
+					"sources": [
+						{
+							"fileName": "src/lib/context/context-info-preconfigure.ts",
+							"line": 21,
+							"character": 16
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "number"
+					},
+					"overwrites": {
+						"type": "reference",
+						"id": 49,
+						"name": "ContextInfo.contentBlockId"
+					}
+				},
+				{
+					"id": 58,
+					"name": "edition",
+					"kind": 1024,
+					"kindString": "Property",
+					"flags": {},
+					"comment": {
+						"shortText": "the edition of the current app - if you are working with polymorph editions"
+					},
+					"sources": [
+						{
+							"fileName": "src/lib/context/context-info.ts",
+							"line": 36,
+							"character": 9
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					},
+					"inheritedFrom": {
+						"type": "reference",
+						"id": 46,
+						"name": "ContextInfo.edition"
+					}
+				},
+				{
+					"id": 52,
+					"name": "moduleId",
+					"kind": 1024,
+					"kindString": "Property",
+					"flags": {},
+					"comment": {
+						"shortText": "The id of the current module"
+					},
+					"sources": [
+						{
+							"fileName": "src/lib/context/context-info-preconfigure.ts",
+							"line": 16,
+							"character": 10
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "number"
+					},
+					"overwrites": {
+						"type": "reference",
+						"id": 48,
+						"name": "ContextInfo.moduleId"
+					}
+				},
+				{
+					"id": 55,
+					"name": "sxc",
+					"kind": 1024,
+					"kindString": "Property",
+					"flags": {},
+					"comment": {
+						"shortText": "the helper sxc-object to communicate with the server"
+					},
+					"sources": [
+						{
+							"fileName": "src/lib/context/context-info.ts",
+							"line": 21,
+							"character": 5
+						}
+					],
+					"type": {
+						"type": "reference",
+						"name": "SxcInstance"
+					},
+					"inheritedFrom": {
+						"type": "reference",
+						"id": 43,
+						"name": "ContextInfo.sxc"
+					}
+				}
+			],
+			"groups": [
+				{
+					"title": "Properties",
+					"kind": 1024,
+					"children": [
+						54,
+						56,
+						60,
+						59,
+						57,
+						53,
+						58,
+						52,
+						55
+					]
+				}
+			],
+			"sources": [
+				{
+					"fileName": "src/lib/context/context-info-preconfigure.ts",
+					"line": 11,
+					"character": 40
+				}
+			],
+			"extendedTypes": [
+				{
+					"type": "reference",
+					"id": 41,
+					"name": "ContextInfo"
+				}
+			]
+		},
+		{
+			"id": 167,
+			"name": "QueryConstruction",
+			"kind": 256,
+			"kindString": "Interface",
+			"flags": {},
+			"children": [
+				{
+					"id": 168,
+					"name": "name",
+					"kind": 1024,
+					"kindString": "Property",
+					"flags": {},
+					"sources": [
+						{
+							"fileName": "src/lib/sxc/query-construction.ts",
+							"line": 4,
+							"character": 8
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					}
+				},
+				{
+					"id": 169,
+					"name": "params",
+					"kind": 1024,
+					"kindString": "Property",
+					"flags": {
+						"isOptional": true
+					},
+					"sources": [
+						{
+							"fileName": "src/lib/sxc/query-construction.ts",
+							"line": 5,
+							"character": 10
+						}
+					],
+					"type": {
+						"type": "reference",
+						"name": "HttpParams"
+					}
+				},
+				{
+					"id": 170,
+					"name": "streams",
+					"kind": 1024,
+					"kindString": "Property",
+					"flags": {
+						"isOptional": true
+					},
+					"sources": [
+						{
+							"fileName": "src/lib/sxc/query-construction.ts",
+							"line": 6,
+							"character": 11
+						}
+					],
+					"type": {
+						"type": "union",
+						"types": [
+							{
+								"type": "intrinsic",
+								"name": "string"
+							},
+							{
+								"type": "array",
+								"elementType": {
+									"type": "intrinsic",
+									"name": "string"
+								}
+							}
+						]
+					}
+				}
+			],
+			"groups": [
+				{
+					"title": "Properties",
+					"kind": 1024,
+					"children": [
+						168,
+						169,
+						170
+					]
+				}
+			],
+			"sources": [
+				{
+					"fileName": "src/lib/sxc/query-construction.ts",
+					"line": 3,
+					"character": 34
+				}
+			]
+		},
+		{
+			"id": 14,
+			"name": "DnnInterceptor",
+			"kind": 32,
+			"kindString": "Variable",
+			"flags": {
+				"isConst": true
+			},
+			"sources": [
+				{
+					"fileName": "src/lib/http/dnn.interceptor.ts",
+					"line": 5,
+					"character": 27
+				}
+			],
+			"type": {
+				"type": "reference",
+				"name": "Provider"
+			},
+			"defaultValue": "..."
+		}
+	],
+	"groups": [
+		{
+			"title": "Classes",
+			"kind": 128,
+			"children": [
+				88,
+				34,
+				104,
+				5,
+				61,
+				117,
+				8,
+				1,
+				150,
+				23,
+				15
+			]
+		},
+		{
+			"title": "Interfaces",
+			"kind": 256,
+			"children": [
+				41,
+				51,
+				167
+			]
+		},
+		{
+			"title": "Variables",
+			"kind": 32,
+			"children": [
+				14
+			]
+		}
+	],
+	"sources": [
+		{
+			"fileName": "index.ts",
+			"line": 1,
+			"character": 0
+		}
+	]
+}
