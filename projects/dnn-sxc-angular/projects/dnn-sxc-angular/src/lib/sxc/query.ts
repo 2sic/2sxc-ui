@@ -17,31 +17,32 @@ export class Query<T> {
 
   readonly streamParamKey = 'stream';
   readonly defaultStreamName = 'Default';
+  readonly allStreams = `*`;
 
   /**
    * will retrieve a 2sxc query
    * remember to set the permissions on the query, so it can be accessed by the group you want
    */
   get(params?: HttpParams, streams?: string | string[]): Observable<T> {
-    if (streams === undefined) {
-      streams = [this.defaultStreamName];
-    }
+    if (streams === undefined) streams = [this.defaultStreamName];
+
     if (typeof streams === 'string') {
+      // the backend has trouble with `*` and it will take time to fix
+      // so if it's *, just assume it's empty
+      if(streams === this.allStreams) streams = '';
       streams = streams.split(',');
     }
-    if (streams) {
-      params = this.setStreamParam(params, streams);
-    }
+
+    if (streams) params = this.setStreamParam(params, streams);
 
     const url = `${routeQuery}/${this.name}`;
     let observable = this.http.get<any>(url, { params });
 
     // If only one stream is requested, directly return the stream in the returned observable
-    if (streams && streams.length === 1 && streams[0].length && streams[0] !== '*') {
-      observable = observable.pipe(map(queryResult => queryResult[streams[0]]))
-    }
-
-    return observable;
+    if (streams && streams.length === 1 && streams[0].length && streams[0] !== this.allStreams)
+      return observable.pipe(map(queryResult => queryResult[streams[0]]))
+    else
+      return observable;
   }
 
   /**
