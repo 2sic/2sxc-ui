@@ -37,7 +37,7 @@ export class Query<T> {
     let observable = this.http.get<any>(url, { params });
 
     // If only one stream is requested, directly return the stream in the returned observable
-    if (streams && streams.length === 1) {
+    if (streams && streams.length === 1 && streams[0].length && streams[0] !== '*') {
       observable = observable.pipe(map(queryResult => queryResult[streams[0]]))
     }
 
