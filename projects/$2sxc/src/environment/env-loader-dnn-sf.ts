@@ -38,10 +38,12 @@ export class EnvironmentDnnSfLoader extends HasLog {
             throw `can't load pageid, moduleid etc. and DNN SF is not available. \n ${helpAutoDetect}`;
         }
         const dnnSf = sf(0);
+        var apiRoot = dnnSf.getServiceRoot('2sxc');
         var sfJsInfo: JsInfo = {
             page: dnnSf.getTabId(),
             root: 'unknown',
-            api: dnnSf.getServiceRoot('2sxc'),
+            api: apiRoot,
+            appApi: apiRoot,
             rvt: dnnSf.getAntiForgeryValue(),
             uiRoot: DnnUiRoot
         };

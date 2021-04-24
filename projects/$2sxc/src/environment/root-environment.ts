@@ -53,6 +53,13 @@ export class Environment extends HasLog implements Public.Environment {
         return this.header.api;
     }
 
+    // WIP - may return undefined
+    public appApi(): string {
+        // WIP - must get it to work without 'appApi' but only 'api' to ensure ...
+        this.ensureReadyOrThrow('appApi');
+        return this.header.appApi;
+    }
+
     public page(): number { 
         this.ensureReadyOrThrow('page'); 
         return this.header.page; 

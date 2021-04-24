@@ -24,6 +24,14 @@ export const HeaderNames = {
     PageId: "PageId",
 };
 
+export const ApiUrlRoots = ['app', 'app-sys', 'app-api', 'app-query', 'app-content', 'eav', 'view', 'dnn'];
+export const AppApiMarker = 'app';
+export const AppApiMap = {
+    'app-api': 'app/[name]/api',
+    'app-query': 'app/[name]/query',
+    'app-content': 'app/[name]/content'
+};
+
 // These are Not-Defined-IDs. 
 // Because 
 

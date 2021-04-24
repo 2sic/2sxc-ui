@@ -44,8 +44,13 @@ export interface JsInfo {
   page: number;
   /** Optional API key - optional if set from external, because it's auto derived from root */
   api: string;
+
+  /** Optional App API Root - required because in Oqtane we'll have a different root for appAPIs */
+  appApi: string;
+
   /** Portal root path - used for various things incl. the API root */
   root: string;
+  
   /** Request verification token */
   rvt: string;
 
