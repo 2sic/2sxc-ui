@@ -17,6 +17,11 @@ The icons are automatically detected using webpack and included in the build.
 
 ## My icon sources are
 
-1. Google Material Icons only as of 2sxc 10
+1. Almost all are Google Material Icons as of 2sxc 10 / 11 / 12
 
-1. V11 - still mostly material icons, but the speed-icon is missing from google material icons github, so I had to improvise :(
+All icons are Creative Commons. Almost all are from Google Material.
+
+These are the Exceptions
+
+1. Ellipsis with holes - TheNounProject (https://thenounproject.com/term/ellipsis/60330/)
+
