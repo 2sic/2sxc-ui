@@ -92,7 +92,7 @@ body.sc-tb-show-all [sxc-toolbar-hover] .sc-menu {
   width: 28px !important;
   height: 28px !important;
   line-height: 28px !important;
-  background-color: #0088f4;
+  background-color: #002753; /* #012C4F; */ /* #0088f4; */
   border-style: solid;
   box-sizing: content-box;
   -webkit-border-radius: 20px;
@@ -105,8 +105,36 @@ body.sc-tb-show-all [sxc-toolbar-hover] .sc-menu {
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
+/* Experimental: electric glow */
+
+.sc-menu a div /* .glow */ {
+  /* font-size: 80px;
+  color: #fff;
+  text-align: center; */
+  animation: glow 1s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+  from {
+    text-shadow: 0 0 5px #6dffca, 0 0 3px #002c50, 0 0 8px #16ffaa, 0 0 8px #08c6ff;
+  }
+ 
+  to {
+    text-shadow: 0 0 3px #09c28d, 0 0 8px #09c28d, 0 0 7px #08c6ff, 0 0 10px #09c28d, 0 0 8px #09c28d;
+  }
+  /* from {
+    text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #11f8df, 0 0 30px #11f8df, 0 0 40px #00aeff, 0 0 50px #00aeff, 0 0 40px #00aeff;
+  }
+  
+  to {
+    text-shadow: 0 0 10px #fff, 0 0 15px #11f8df, 0 0 30px #00aeff, 0 0 40px #00aeff, 0 0 45px #00aeff, 0 0 50px #11f8df, 0 0 40px #11f8df;
+  } */
+}
+
+
+/* Modify the color of sub-lists to be more transparent / lighter */
 .sc-menu.sc-sublist a div {
-    background-color: #0088f4ad;
+    background-color: #012C4Fad; /* #0088f4ad */;
 }
 
 .sc-menu a div:hover {
@@ -151,13 +179,13 @@ body.sc-tb-show-all [sxc-toolbar-hover] .sc-menu {
 }
 
 .sc-menu a.group-default div {
-  background-color: #0088f4;
+  background-color:  #002753; /* #012C4F; /* #0088f4; */
 }
 .sc-menu a.in-group-edit-advanced div {
     background-color: grey;
   }  
 .sc-menu a.group-pro div {
-  background-color: #96d500;
+  background-color: #018552; /* #2caf8a; /* #96d500; */
 }
 .sc-menu a.group-alert div {
   background-color: #ff0000;

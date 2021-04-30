@@ -25,7 +25,7 @@
 }
 
 .sc-content-block-quick-insert:before, .sc-content-block-quick-insert:after {
-    background: #0088f4;
+    background: #012C4F; /* #0088f4; */
     content: ' ';
     display: block;
     height: 2px;
