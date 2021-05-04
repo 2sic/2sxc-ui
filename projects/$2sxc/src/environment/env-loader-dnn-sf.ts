@@ -45,7 +45,8 @@ export class EnvironmentDnnSfLoader extends HasLog {
             api: apiRoot,
             appApi: apiRoot,
             rvt: dnnSf.getAntiForgeryValue(),
-            uiRoot: DnnUiRoot
+            uiRoot: DnnUiRoot,
+            platform: 'dnn',
         };
         this.env.load(sfJsInfo, 'dnn SF');
         cl.done();

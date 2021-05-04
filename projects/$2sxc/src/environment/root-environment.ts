@@ -75,6 +75,11 @@ export class Environment extends HasLog implements Public.Environment {
         return this.header.uiRoot || DnnUiRoot; 
     }
 
+    public platform(): string {
+        this.ensureReadyOrThrow('platform'); 
+        return this.header.platform || 'dnn';
+    }
+
     private ensureReadyOrThrow(partRequested: string): void {
         if(this.ready) return;
 

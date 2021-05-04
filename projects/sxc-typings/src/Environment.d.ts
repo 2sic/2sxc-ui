@@ -30,7 +30,12 @@ export interface Environment extends HasLog {
   /**
    * The Request Verification Token
    */
-  rvt(): string ;
+  rvt(): string;
+
+  /**
+   * The platform code like 'oqt' or 'dnn' in case the JS needs to know the difference
+   */
+  platform(): string;
 
 // 2021-02 2dm - removed this, as far as I know it's never used
 //   /**
@@ -57,4 +62,7 @@ export interface JsInfo {
   // 2021-02 2dm - as far as I know it's never used outside of 2sxc
   /** The root path for the UI */
   uiRoot: string;
+
+  /** The platform code like 'dnn' or 'oqt' */
+  platform: string;
 }
