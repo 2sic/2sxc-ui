@@ -7,3 +7,6 @@ export const MetaHeaderJsApi = '_jsApi';
 
 /** The fallback path to the UI */
 export const DnnUiRoot = '/desktopmodules/tosic_sexycontent/';
+
+export const PlatformOqtane = 'oqtane';
+export const PlatformDnn = 'dnn';

@@ -43,9 +43,22 @@ export class Environment extends HasLog implements Public.Environment {
             newJsInfo.api = `${newJsInfo.root}${addSlash}${SxcApiUrlRoot}`;
         }
         this.header = newJsInfo;
+
+        // in some cases the UpdateRvt may already have been called before
+        // in which case it's probably more relevant
+        // so we should set it again
+        if(this.replacedRvt) this.header.rvt = this.replacedRvt;
+
         this.ready = true;
-        this.source = source || 'external/unknown';
+        this.source = source || 'external/unknown' + (this.replacedRvt ? '+rvt': '');
         cl.return(newJsInfo, 'loaded from ' + this.source);
+    }
+
+    private replacedRvt: string;
+    public updateRvt(newRvt: string) {
+        if(!newRvt) return;
+        this.replacedRvt = newRvt;
+        this.header.rvt = newRvt;
     }
 
     public api(): string {
