@@ -1,13 +1,13 @@
 ﻿import { ContextIdentifier } from './../sxc-root/context-identifier';
 import * as Public from '../../../sxc-typings/index';
 import { SxcWebApi } from './web-api/sxc-web-api';
-import { ToSxcName } from '..';
+import { ApiUrlRoots, ToSxcName } from '..';
 import { SxcRoot } from '../sxc-root/sxc-root';
 import { HasLog } from '..';
 import { SxcRootInternals } from '../sxc-root/sxc-root-internals';
 import { SxcInstanceManage } from './sxc-instance-manage';
 
-const serviceScopes = ['app', 'app-sys', 'app-api', 'app-query', 'app-content', 'eav', 'view', 'dnn'];
+// const serviceScopes = ['app', 'app-sys', 'app-api', 'app-query', 'app-content', 'eav', 'view', 'dnn'];
 
 /**
  * The typical sxc-instance object for a specific DNN module or content-block
@@ -67,11 +67,10 @@ export class SxcInstance extends HasLog implements Public.SxcInstance {
      * @returns mapped path
      */
     resolveServiceUrl(virtualPath: string) {
-        // console.warn('used resolveServiceUrl:' + virtualPath);
         const scope = virtualPath.split('/')[0].toLowerCase();
 
         // stop if it's not one of our special paths
-        if (serviceScopes.indexOf(scope) === -1)
+        if (ApiUrlRoots.indexOf(scope) === -1)
             return virtualPath;
 
         return this.root.http.apiRoot(ToSxcName) + scope + '/' + virtualPath.substring(virtualPath.indexOf('/') + 1);

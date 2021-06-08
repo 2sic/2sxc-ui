@@ -1,14 +1,15 @@
 {
   "name": "2sxc-ui",
-  "version": "11.12.01",
+  "version": "12.02.00",
   "description": "2sxc UI - the JS UI of 2sxc\r ============",
   "scripts": {
-    "release-all": "npm run js2sxc && npm run inpage && npm run snippets && npm run quickdialog",
+    "release-all": "npm run js2sxc && npm run inpage && npm run snippets && npm run quickdialog && npm run turn-on",
     "js2sxc": "cd projects/$2sxc && npm run release && cd ../..",
     "inpage": "cd projects/inpage && npm run release && cd ../..",
     "snippets": "cd projects/code-editor-snippets && gulp && cd ../..",
     "quickdialog": "cd projects/quick-dialog && npm run release && cd ../..",
-    "doc-dnn-sxc-angular": "cd projects/dnn-sxc-angular/ && typedoc --tsconfig projects/dnn-sxc-angular && cd ../.."
+    "doc-dnn-sxc-angular": "cd projects/dnn-sxc-angular/ && typedoc --tsconfig projects/dnn-sxc-angular && cd ../..",
+    "turn-on": "robocopy projects/turnOn/dist/ %Dev2sxcAssets%/dist/turnOn && robocopy projects/turnOn/dist/ %Dev2sxcDnnRoot%/DesktopModules/ToSIC_SexyContent/dist/turnOn"
   },
   "repository": {
     "type": "git",

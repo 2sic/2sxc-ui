@@ -43,14 +43,34 @@ export class Environment extends HasLog implements Public.Environment {
             newJsInfo.api = `${newJsInfo.root}${addSlash}${SxcApiUrlRoot}`;
         }
         this.header = newJsInfo;
+
+        // in some cases the UpdateRvt may already have been called before
+        // in which case it's probably more relevant
+        // so we should set it again
+        if(this.replacedRvt) this.header.rvt = this.replacedRvt;
+
         this.ready = true;
-        this.source = source || 'external/unknown';
+        this.source = source || 'external/unknown' + (this.replacedRvt ? '+rvt': '');
         cl.return(newJsInfo, 'loaded from ' + this.source);
+    }
+
+    private replacedRvt: string;
+    public updateRvt(newRvt: string) {
+        if(!newRvt) return;
+        this.replacedRvt = newRvt;
+        this.header.rvt = newRvt;
     }
 
     public api(): string {
         this.ensureReadyOrThrow('api');
         return this.header.api;
+    }
+
+    // WIP - may return undefined
+    public appApi(): string {
+        // WIP - must get it to work without 'appApi' but only 'api' to ensure ...
+        this.ensureReadyOrThrow('appApi');
+        return this.header.appApi;
     }
 
     public page(): number { 
@@ -66,6 +86,11 @@ export class Environment extends HasLog implements Public.Environment {
     public uiRoot(): string { 
         this.ensureReadyOrThrow('uiRoot'); 
         return this.header.uiRoot || DnnUiRoot; 
+    }
+
+    public platform(): string {
+        this.ensureReadyOrThrow('platform'); 
+        return this.header.platform || 'dnn';
     }
 
     private ensureReadyOrThrow(partRequested: string): void {

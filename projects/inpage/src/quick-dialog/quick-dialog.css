@@ -43,7 +43,7 @@ div.sc-uninitialized {
 div.sc-uninitialized div {
   margin: 5px auto;
   color: #fff;
-  background: rgb(2, 139, 255);
+  background: #002753;/* rgb(2, 139, 255); */
   font-size: 48px;
   margin: 5px;
   width: 100px;
@@ -53,6 +53,9 @@ div.sc-uninitialized div {
   vertical-align: middle;
   line-height: 100px;
   display: inline-block;
+
+  /* Experimental: electric glow */
+  animation: glow 1s ease-in-out infinite alternate;
 }
 
 div.sc-uninitialized div[class^='icon-sxc-']:before,

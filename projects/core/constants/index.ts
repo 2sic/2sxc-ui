@@ -24,6 +24,17 @@ export const HeaderNames = {
     PageId: "PageId",
 };
 
+export const ApiUrlRoots = ['app', 'app-sys', 'app-api', 'app-query', 'app-content', 'eav', 'view', 'dnn'];
+export const AppApiMarker = 'app';
+
+// TODO: this should later lead to remapping of old url calls, but it's not in use yet
+// note that these were always 'auto' so `app-content` would need to be come `app/auto/content`
+export const AppApiMap = {
+    'app-api': 'app/[name]/api',
+    'app-query': 'app/[name]/query',
+    'app-content': 'app/[name]/content'
+};
+
 // These are Not-Defined-IDs. 
 // Because 
 

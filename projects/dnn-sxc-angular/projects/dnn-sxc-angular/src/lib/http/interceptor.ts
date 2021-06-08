@@ -6,11 +6,13 @@ import { Context } from '../context/context.service';
 
 @Injectable()
 export class Interceptor implements HttpInterceptor {
-  constructor(
-    private context: Context
-  ) { }
+  constructor(private context: Context) { }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+
+    // skip interceptor for CORS requests
+    if (!this.isSameOrigin(req)) return next.handle(req);
+
     let url = req.url;
     let ctx = this.context;
     if (ctx.$2sxc) {
@@ -41,6 +43,26 @@ export class Interceptor implements HttpInterceptor {
 
     return next.handle(newReq);
   }
+
+  private isSameOrigin(req: HttpRequest<any>) {
+    let url = req.url.toLowerCase();
+    let isRelativeUrl = true;
+
+    if (url.startsWith('https://') || url.startsWith('http://')) {
+      isRelativeUrl = false;
+    } else if (url.startsWith('//')) {
+      // protocol relative url
+      isRelativeUrl = false;
+      url = window.location.protocol + url;
+    }
+
+    if (isRelativeUrl) return true;
+    if (url.startsWith(`${window.location.protocol}//${window.location.host}`))
+      return true;
+
+    return false;
+  }
+
 
   private convertAllPropertiesToString(obj: any): any {
     return Object.keys(obj).reduce((a,k) => ({...a, [k]:obj[k].toString()}), {})

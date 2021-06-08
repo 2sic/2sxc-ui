@@ -43,44 +43,61 @@ export class RenderButton extends RenderPart {
         cl.add('classes: ' + classes);
         HtmlTools.addClasses(btnLink, classes);
 
-        // set title for i18n
-        const uiTitle = rule?.ui?.title;
-        if (uiTitle)
-            btnLink.setAttribute('title', uiTitle);
-        else {
-            const title = btn.title();
-            if (title)
-                btnLink.setAttribute('data-i18n', `[title]${title}`); // localization support
-        }
+        // set title for button, optionally with i18n
+        this.setTitle(rule, btnLink, btn);
 
         const divTag = document.createElement('div');
         divTag.appendChild(this.iconTag(btn, rule));
         btnLink.appendChild(divTag);
 
         // set color - new in 10.27
-        const color = rule?.ui?.color || ctx.toolbar.settings.color;
-        if (color && typeof color === 'string') {
-            cl.add('color: ' + color);
-            const parts = color.split(',');
-            if (parts[0]) divTag.style.backgroundColor = correctColorCodes(parts[0]);
-            if (parts[1]) divTag.style.color = correctColorCodes(parts[1]);
-        }
+        this.processColorRules(rule, ctx, divTag);
 
         return cl.return(btnLink);
     }
 
 
 
+    private setTitle(rule: BuildRule, btnLink: HTMLAnchorElement, btn: ButtonSafe) {
+        const callLog = this.log.call('setTitles');
+        const uiTitle = rule?.ui?.title;
+        if (uiTitle) {
+            callLog.add(`uiTitle: ${uiTitle}`);
+            btnLink.setAttribute('title', uiTitle);
+        } else {
+            const i18nTitle = btn.title();
+            callLog.add(`i18nTitle: ${i18nTitle}`);
+            if (i18nTitle) btnLink.setAttribute('data-i18n', `[title]${i18nTitle}`);
+        }
+        callLog.done();
+    }
+
+    private processColorRules(rule: BuildRule, ctx: ContextComplete, divTag: HTMLDivElement) {
+        const callLog = this.log.call('processColorRules');
+        let color = rule?.ui?.color || ctx.toolbar.settings.color;
+
+        // catch edge case where the color is something like 808080 - which is treated as a number
+        if (color && typeof color === 'number') color = (color as number).toString();
+        if (color && typeof color === 'string') {
+            const parts = color.split(',');
+            if (parts[0]) divTag.style.backgroundColor = correctColorCodes(parts[0]);
+            if (parts[1]) divTag.style.color = correctColorCodes(parts[1]);
+        }
+
+        return callLog.done(color ?? 'no color');
+    }
+
     private generateRunJs(ctx: ContextComplete, params: CommandParams) {
         return `$2sxc(${ctx.instance.id}, ${ctx.contentBlockReference.id}).manage.run(${JSON.stringify(params)}, event);`;
     }
 
     private iconTag(btn: ButtonSafe, rule: BuildRule) {
+        const callLog = this.log.call('iconTag');
         const symbol = document.createElement('i');
         const icon = rule?.ui?.icon || btn.icon();
         HtmlTools.addClasses(symbol, icon);
         symbol.setAttribute('aria-hidden', 'true');
-        return symbol;
+        return callLog.return(symbol, icon);
     }
 }
 

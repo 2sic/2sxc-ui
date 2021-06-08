@@ -1,7 +1,7 @@
 {
   "name": "2sxc-quick-dialog",
   "//version-notes": "FYI: This version isn't used for the build.",
-  "version": "11.03.00",
+  "version": "12.01.00",
   "license": "MIT",
   "scripts": {
     "dev-t1": "ng build --watch",

@@ -1,6 +1,6 @@
 import * as Public from '../../../sxc-typings';
 import { ApiExtensionPlaceholder } from '../constants';
-import { HeaderNames, ToSxcName } from '..';
+import { AppApiMarker, HeaderNames, ToSxcName } from '..';
 import { Environment, HasLog } from '..';
 
 export class SxcHttp extends HasLog implements Omit<Public.Http, 'log'> {
@@ -37,6 +37,20 @@ export class SxcHttp extends HasLog implements Omit<Public.Http, 'log'> {
     }
 
     /**
+     * Get the API-Root path for Apps
+     * new in v12
+     * @param {string} endpointName
+     * @returns {string}
+     * @memberof SxcHttp
+     */
+     appApiRoot(): string {
+        const cl = this.log.call('appApiRoot');
+        // try to get it, or fall back to the previous / old convention
+        var result = this.env.appApi() ?? this.apiRoot(ToSxcName);
+        return cl.return(result, `appApiRoot()`);
+    }
+
+    /**
      * Get the URL for a specific web API endpoint
      * Will ignore urls which clearly already are the full url.
      * @param {string} url
@@ -48,6 +62,10 @@ export class SxcHttp extends HasLog implements Omit<Public.Http, 'log'> {
     {
         const cl = this.log.call('apiUrl');
         this.log.add(`apiUrl(url:'${url}', endpointName:'${endpointName}')`);
+
+        // null/undefined check
+        if(url == null) return url;
+
         // if starts with http: or https: then ignore
         if(!url || url.indexOf('http:') == 0 || url.indexOf('https:') == 0 || url.indexOf('//') == 0)
             return cl.return(url);
@@ -56,7 +74,11 @@ export class SxcHttp extends HasLog implements Omit<Public.Http, 'log'> {
         if(!endpointName && (url.indexOf('/') == 0 || url.indexOf('.') == 0))
             return cl.return(url);
 
-        var baseUrl = this.apiRoot(endpointName || ToSxcName);
+        var baseUrl = url.toLocaleLowerCase().startsWith(AppApiMarker)
+            ? this.appApiRoot()
+            : this.apiRoot(endpointName || ToSxcName);
+
+
         // ensure base ends with slash
         if(baseUrl[baseUrl.length-1] != '/') baseUrl += '/';
         // ensure url doesn't start with slash
