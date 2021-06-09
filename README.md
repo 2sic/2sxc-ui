@@ -29,7 +29,9 @@ Each project has different ways of building / deploying, mostly because they hav
     put into `[target]/dist/ng`
 1. `projects/sxc-typings` Source for the NPM package [@2sic/sxc-typings](https://www.npmjs.com/package/@2sic.com/2sxc-typings)
 
-## Obsolete Projects in `projects/obsolete`
+## Obsolete Projects
+
+These projects have been moved to the [2sxc-js-archive repo](https://github.com/2sic/2sxc-js-archive)
 
 1. `AngularJS` - previous versions of 2sxc included a library to make it easier to create AngularJS projects - now deprecated
 1. `published` - contains the built releases of the angular libraries - in case someone needs it for old apps
