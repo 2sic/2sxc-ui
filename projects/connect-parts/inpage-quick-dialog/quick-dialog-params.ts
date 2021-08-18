@@ -3,17 +3,27 @@
 export const urlParams = {
   // These are used in UI.html, but we keep them here so we have a full list documented
   pageId: 'tid',
+
+  /**
+   *  request verification token header name
+   */
+  requestVerificationTokenHeader: 'rvth',
+
+  /**
+   *  request verification token value
+   */
   requestVerificationToken: 'rvt',
+
   api: 'api',
 
-  /** 
-   * Context: App we're on. 
-   * This is often 0 (zero) as initially it's not known. 
+  /**
+   * Context: App we're on.
+   * This is often 0 (zero) as initially it's not known.
    */
   appId: 'appId',
 
-  /** 
-   * Selection of what apps should be shown by the dialog 
+  /**
+   * Selection of what apps should be shown by the dialog
    * this is an optional parameter
    */
   apps: 'apps',

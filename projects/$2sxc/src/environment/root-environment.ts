@@ -1,7 +1,7 @@
 import * as Public from '../../../sxc-typings/index';
 import { EnvironmentMetaLoader } from './env-loader-meta';
 import { HasLog, Insights, SxcApiUrlRoot } from '..';
-import { DnnUiRoot } from '../constants';
+import { AntiForgeryTokenHeaderNameDnn, DnnUiRoot, PlatformDnn } from '../constants';
 
 declare const _jsApi: Public.JsInfo;
 
@@ -73,24 +73,29 @@ export class Environment extends HasLog implements Public.Environment {
         return this.header.appApi;
     }
 
-    public page(): number { 
-        this.ensureReadyOrThrow('page'); 
-        return this.header.page; 
+    public page(): number {
+        this.ensureReadyOrThrow('page');
+        return this.header.page;
     }
 
-    public rvt(): string { 
-        this.ensureReadyOrThrow('rvt'); 
-        return this.header.rvt; 
+    public rvtHeader(): string {
+        this.ensureReadyOrThrow('rvtHeader');
+        return this.header.rvtHeader || AntiForgeryTokenHeaderNameDnn;
     }
 
-    public uiRoot(): string { 
-        this.ensureReadyOrThrow('uiRoot'); 
-        return this.header.uiRoot || DnnUiRoot; 
+    public rvt(): string {
+        this.ensureReadyOrThrow('rvt');
+        return this.header.rvt;
+    }
+
+    public uiRoot(): string {
+        this.ensureReadyOrThrow('uiRoot');
+        return this.header.uiRoot || DnnUiRoot;
     }
 
     public platform(): string {
-        this.ensureReadyOrThrow('platform'); 
-        return this.header.platform || 'dnn';
+        this.ensureReadyOrThrow('platform');
+        return this.header.platform || PlatformDnn;
     }
 
     private ensureReadyOrThrow(partRequested: string): void {
