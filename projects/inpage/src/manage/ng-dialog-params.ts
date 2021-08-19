@@ -40,7 +40,10 @@ export class NgUrlValuesWithoutParams {
   /** features of App - this is to tell the UI it can show advanced features of an app like permissions, API, REST etc. */
   readonly fa: boolean;
 
-  /** request verification token for form */
+  /** request verification token header name */
+  readonly rvth: string;
+
+  /** request verification token value */
   readonly rvt: string;
 
   constructor(context: ContextComplete, partOfPage: boolean) {
@@ -74,6 +77,7 @@ export class NgUrlValuesWithoutParams {
     if (context?.button?.command?.params?.apps)
         this.apps = context.button.command.params.apps;
     this.fa = !context.app.isContent;
+    this.rvth = $2sxc.env.rvtHeader();
     this.rvt = $2sxc.env.rvt();
   }
 }

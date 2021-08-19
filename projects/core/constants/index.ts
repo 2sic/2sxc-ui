@@ -1,4 +1,4 @@
-/** 
+/**
  * Special version which is filled in during compile by the definePlugin
  * The real version comes from the main package.json file in this repo
  * The sub-projects also use this version
@@ -18,7 +18,6 @@ export const HeaderNames = {
     // headers as defined by DNN
     ModuleId: "ModuleId",
     TabId: "TabId",
-    Rvt: "RequestVerificationToken",
 
     // Header which should replace "TabId" in the long run
     PageId: "PageId",
@@ -35,8 +34,8 @@ export const AppApiMap = {
     'app-content': 'app/[name]/content'
 };
 
-// These are Not-Defined-IDs. 
-// Because 
+// These are Not-Defined-IDs.
+// Because
 
 /**
  * This is a marker for an ID which is not defined

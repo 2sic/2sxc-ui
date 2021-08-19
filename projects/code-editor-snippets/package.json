@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "no scripts": "use gulp commands instead"
+    "gulp": "gulp"
   },
   "repository": {
     "type": "git",

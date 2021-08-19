@@ -1,5 +1,5 @@
 import * as Public from '../../../sxc-typings';
-import { ApiExtensionPlaceholder } from '../constants';
+import { ApiExtensionPlaceholder, PlatformDnn, PlatformOqtane } from '../constants';
 import { AppApiMarker, HeaderNames, ToSxcName } from '..';
 import { Environment, HasLog } from '..';
 
@@ -20,7 +20,7 @@ export class SxcHttp extends HasLog implements Omit<Public.Http, 'log'> {
         if(cbid) fHeaders[HeaderNames.ContentBlockId] = cbid.toString();
         fHeaders[HeaderNames.TabId] = pageId;
         fHeaders[HeaderNames.PageId] = pageId;
-        fHeaders[HeaderNames.Rvt] = this.env.rvt();
+        fHeaders[this.env.rvtHeader()] = this.env.rvt();
         return cl.return(fHeaders, `headers(id:${id}, cbid:${cbid})`);
     }
 
@@ -69,7 +69,7 @@ export class SxcHttp extends HasLog implements Omit<Public.Http, 'log'> {
         // if starts with http: or https: then ignore
         if(!url || url.indexOf('http:') == 0 || url.indexOf('https:') == 0 || url.indexOf('//') == 0)
             return cl.return(url);
-        
+
         // if no endpoint specified, then also skip absolute and relative urls
         if(!endpointName && (url.indexOf('/') == 0 || url.indexOf('.') == 0))
             return cl.return(url);

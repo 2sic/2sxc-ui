@@ -20,7 +20,7 @@ export interface Environment extends HasLog {
    *The API endpoint url from the environment
    */
   api(): string;
- 
+
 
   /**
    * The current page ID
@@ -28,7 +28,12 @@ export interface Environment extends HasLog {
   page(): number;
 
   /**
-   * The Request Verification Token
+   * The request verification token header name
+   */
+  rvtHeader(): string;
+
+  /**
+   * The request verification token value
    */
   rvt(): string;
 
@@ -55,8 +60,11 @@ export interface JsInfo {
 
   /** Portal root path - used for various things incl. the API root */
   root: string;
-  
-  /** Request verification token */
+
+  /** Request verification token header name */
+  rvtHeader: string;
+
+  /** Request verification token value*/
   rvt: string;
 
   // 2021-02 2dm - as far as I know it's never used outside of 2sxc

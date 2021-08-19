@@ -10,3 +10,6 @@ export const DnnUiRoot = '/desktopmodules/tosic_sexycontent/';
 
 export const PlatformOqtane = 'oqtane';
 export const PlatformDnn = 'dnn';
+
+/** The fallback AntiForgery token header name (as in Dnn) */
+export const AntiForgeryTokenHeaderNameDnn = 'RequestVerificationToken';

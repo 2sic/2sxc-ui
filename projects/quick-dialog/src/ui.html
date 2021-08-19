@@ -19,6 +19,7 @@
       // Tell 2sxc all the parameters it needs to work properly
       $2sxc.env.load({
         page: $2sxc.urlParams.require('tid'),
+        rvtHeader: $2sxc.urlParams.require('rvth'),
         rvt: $2sxc.urlParams.require('rvt'),
         api: $2sxc.urlParams.require('api'),
       });
