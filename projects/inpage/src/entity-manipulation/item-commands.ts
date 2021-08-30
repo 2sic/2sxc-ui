@@ -1,9 +1,5 @@
-﻿import { PlatformOqtane } from '../../../$2sxc/src/constants';
-import { ContextComplete } from '../context/bundles/context-bundle-button';
+﻿import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { translate } from '../i18n';
-import { $2sxcInPage as $2sxc } from '../interfaces/sxc-controller-in-page';
-
-const webApiAdd = ($2sxc.env.platform() == PlatformOqtane.toString()) ? `app/auto/content/`:`app-content/`;
 
 /**
  * this enhances the $2sxc client controller with stuff only needed when logged in
@@ -32,7 +28,7 @@ export let contentItems = {
     };
 
     return new Promise((resolve, reject) => {
-      context.sxc.webApi.delete(`${webApiAdd}any/${itemGuid}`, params, null, true)
+      context.sxc.webApi.delete(`app/auto/content/any/${itemGuid}`, params, null, true)
         .done((data, textStatus: string, jqXHR) => {
           if (jqXHR.status === 204 || jqXHR.status === 200) {
             // resolve the promise with the response text
