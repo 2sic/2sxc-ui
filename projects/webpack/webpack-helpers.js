@@ -4,7 +4,7 @@ const rootVersion = rootPackage.version;
 
 var dnnRoot = process.env.Dev2sxcDnnRoot;
 if(!dnnRoot) throw "Problem: environment variable 'Dev2sxcDnnRoot' doesn't exist. It should point to the web folder of your dev DNN";
-var targetDnn = (dnnRoot + "DesktopModules\\ToSIC_SexyContent\\").replace('//', '/').replace('\\\\', '\\');
+var targetDnn = (dnnRoot + "\\DesktopModules\\ToSIC_SexyContent\\").replace('//', '/').replace('\\\\', '\\');
 
 var oqtRoot = process.env.Dev2sxcOqtaneRoot;
 if(!oqtRoot) console.log("Oqtane root env variable Dev2sxcOqtaneRoot doesn't exist - will not build to oqtane. It should point to your OqtaneServer root path before wwwroot");
@@ -85,7 +85,7 @@ function createCopyAfterBuildPlugin(source, targets, addon) { // , target2) {
     // if(target2) commands.push('robocopy /mir /nfl /ndl /njs "' + source + ' " "' + target2 + ' " & exit 0');
     return new WebpackShellPlugin({
         // must use onBuildExit and not onBuildEnd, as i18n files are otherwise not ready yet
-        onBuildExit: { 
+        onBuildExit: {
             scripts: commands,
             parallel: false,
             blocking: true,
@@ -107,7 +107,7 @@ module.exports.createCopyAfterBuildPlugin = createCopyAfterBuildPlugin;
 // new 2020-10-30 for multi-targets
 var targets = [targetDnn, targetAssets];
 var targetsWithoutAssets = [targetDnn];
-if(targetOqt) { 
+if(targetOqt) {
     targets.push(targetOqt);
     targetsWithoutAssets.push(targetOqt);
 }

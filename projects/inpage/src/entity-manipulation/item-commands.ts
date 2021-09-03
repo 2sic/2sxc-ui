@@ -28,7 +28,7 @@ export let contentItems = {
     };
 
     return new Promise((resolve, reject) => {
-      context.sxc.webApi.delete(`app-content/any/${itemGuid}`, params, null, true)
+      context.sxc.webApi.delete(`app/auto/content/any/${itemGuid}`, params, null, true)
         .done((data, textStatus: string, jqXHR) => {
           if (jqXHR.status === 204 || jqXHR.status === 200) {
             // resolve the promise with the response text

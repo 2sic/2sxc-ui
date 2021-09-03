@@ -20,7 +20,7 @@ function logTest(): boolean
     return true;
 }
 /**
- * This loads environment information from the meta-header tag. 
+ * This loads environment information from the meta-header tag.
  * Because of timing issues, it will try multiple times
  */
 export class EnvironmentMetaLoader extends Log.HasLog {
@@ -73,7 +73,7 @@ export class EnvironmentMetaLoader extends Log.HasLog {
     }
 
     public getJsApiMetaTag() {
-        return document.querySelector(`meta[name=${MetaHeaderJsApi}]`);    
+        return document.querySelector(`meta[name=${MetaHeaderJsApi}]`);
     }
 
 
@@ -92,6 +92,5 @@ export class EnvironmentMetaLoader extends Log.HasLog {
       this.observer.observe(this.getJsApiMetaTag(), { attributes: true, childList: false, subtree: false });
     }
     private observer: MutationObserver;
-    
 
 }

@@ -1,7 +1,7 @@
 import { Environment } from '.';
 import { HasLog } from '..';
 import { JsInfo } from '../../../sxc-typings';
-import { DnnUiRoot } from '../constants/index';
+import { AntiForgeryTokenHeaderNameDnn, DnnUiRoot, PlatformDnn } from '../constants/index';
 
 const helpAutoDetect = 'You must either include jQuery on the page or inject the jsApi parameters to prevent auto-detection.';
 
@@ -44,9 +44,10 @@ export class EnvironmentDnnSfLoader extends HasLog {
             root: 'unknown',
             api: apiRoot,
             appApi: apiRoot,
+            rvtHeader: AntiForgeryTokenHeaderNameDnn,
             rvt: dnnSf.getAntiForgeryValue(),
             uiRoot: DnnUiRoot,
-            platform: 'dnn',
+            platform: PlatformDnn,
         };
         this.env.load(sfJsInfo, 'dnn SF');
         cl.done();

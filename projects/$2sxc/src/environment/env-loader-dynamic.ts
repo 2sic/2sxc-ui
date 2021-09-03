@@ -15,7 +15,7 @@ export class EnvironmentLoaderDynamic {
 
   constructor(
       private mainLoader: EnvironmentMetaLoader
-  ) { 
+  ) {
     this.log = new Log('ldr.dynmic', mainLoader.log);
   }
 
@@ -34,7 +34,7 @@ export class EnvironmentLoaderDynamic {
     this.observer.observe(this.mainLoader.getJsApiMetaTag(), { attributes: true, childList: false, subtree: false });
   }
   private observer: MutationObserver;
-  
+
   /**
    * Load RequestVerificationToken from the hidden form-field in Oqtane
    */
@@ -55,6 +55,6 @@ export class EnvironmentLoaderDynamic {
   private loadRvtFromHiddenInput(input: HTMLInputElement){
     this.log.add('Input Rvt updated');
     if(input && input.value)
-      this.mainLoader.env.updateRvt(input.value);        
+      this.mainLoader.env.updateRvt(input.value);
   }
 }
