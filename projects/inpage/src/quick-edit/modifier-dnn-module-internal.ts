@@ -1,6 +1,9 @@
 ﻿import { ModifierDnnModule, QuickE, QuickEClipboard } from '.';
+import { NoJQ } from '../interfaces/no-jquery';
 import { $jq } from '../interfaces/sxc-controller-in-page';
 import { HasLog } from '../logging';
+
+const dnnSF = (id?: number) => $jq.dnnSF(id);
 
 /**
  * module specific stuff
@@ -15,14 +18,14 @@ export class ModifierDnnModuleInternal extends HasLog {
      * Delete a module
      */
     delete(modId: number): JQueryXHR {
-        const service = $.dnnSF(modId);
+        const service = dnnSF(modId);
         const tabId: number = service.getTabId();
         return sendDnnAjax(modId, '2sxc/dnn/module/delete', {
-            url: $.dnnSF().getServiceRoot('2sxc') + 'dnn/module/delete',
+            url: dnnSF().getServiceRoot('2sxc') + 'dnn/module/delete',
             type: 'GET',
             data: {
-            tabId: tabId,
-            modId: modId,
+                tabId: tabId,
+                modId: modId,
             },
             // ReSharper disable once UnusedParameter
             success: () => window.location.reload(),
@@ -42,7 +45,7 @@ export class ModifierDnnModuleInternal extends HasLog {
                 // ReSharper disable once UnusedParameter
                 desktopModules.forEach((e, i: number) => {
                     if (e.ModuleName === moduleToFind)
-                    module = e;
+                        module = e;
                 });
 
                 return (!module)
@@ -52,11 +55,11 @@ export class ModifierDnnModuleInternal extends HasLog {
         } as Partial<JQueryAjaxSettings>);
     }
 
-  /**
-   * Move a DNN Module
-   */
+    /**
+     * Move a DNN Module
+     */
     move(modId: number, pane: string, order: number): void {
-        const service = $.dnnSF(modId);
+        const service = dnnSF(modId);
         const tabId = service.getTabId();
         const dataVar = {
             TabId: tabId,
@@ -73,13 +76,10 @@ export class ModifierDnnModuleInternal extends HasLog {
             data: dataVar,
             success: () => window.location.reload(),
         } as Partial<JQueryAjaxSettings>);
-
-        // fire window resize to reposition action menus
-        $jq(window).resize();
     }
 
-    getPaneName(pane: HTMLElement | JQuery): string {
-        return $jq(pane).attr('id').replace('dnn_', '');
+    getPaneName(pane: HTMLElement): string {
+        return pane.getAttribute('id').replace('dnn_', '');
     }
 
     /**
@@ -90,25 +90,29 @@ export class ModifierDnnModuleInternal extends HasLog {
         return (result && result.length === 2) ? Number(result[1]) : null;
     }
 
-    getMoveButtons(current: string): JQuery {
+    getMoveButtons(current: string): HTMLElement {
         const pns = QuickE.cachedPanes;
         // generate list of panes as links
-        const targets = $jq('<div>');
+        const targets = NoJQ.domFromString('<div></div>')[0];
         for (let p = 0; p < pns.length; p++) {
             const pName: string = this.getPaneName(pns[p]);
             const selected: string = (current === pName) ? ' selected ' : '';
-            if (selected === '')
-                targets.append(`<a data='${pName}'>${pName}</a>`);
+            if (selected === '') {
+                const target = NoJQ.domFromString(`<a data='${pName}'>${pName}</a>`)[0];
+                targets.append(target);
+            }
         }
 
         // attach click event...
         const _this = this;
-        targets.find('a').on('click', function() {
-            const link = $jq(this);
-            const clip = QuickEClipboard.clipboard;
-            const modId = _this.getModuleId(clip.item.className);
-            const newPane = link.attr('data');
-            _this.move(modId, newPane, 0);
+        targets.querySelectorAll<HTMLElement>('a').forEach((e) => {
+            e.addEventListener('click', function () {
+                const link = this;
+                const clip = QuickEClipboard.clipboard;
+                const modId = _this.getModuleId(clip.item.className);
+                const newPane = link.getAttribute('data');
+                _this.move(modId, newPane, 0);
+            });
         });
 
         return targets;
@@ -117,14 +121,14 @@ export class ModifierDnnModuleInternal extends HasLog {
 
 // show an error when an xhr error occurs
 function xhrError(xhr: JQueryXHR, optionalMessage: string): void {
-  alert(optionalMessage || 'Error while talking to server.');
-  console.log(xhr);
+    alert(optionalMessage || 'Error while talking to server.');
+    console.log(xhr);
 }
 
 // call an api on dnn
 function sendDnnAjax(modId: number, serviceName: string, options: Partial<JQueryAjaxSettings>): JQueryXHR {
-    const service = $.dnnSF(modId);
-    return $.ajax({
+    const service = dnnSF(modId);
+    return $jq.ajax({
         type: 'GET',
         url: service.getServiceRoot('internalservices') + serviceName,
         beforeSend: service.setModuleHeaders,

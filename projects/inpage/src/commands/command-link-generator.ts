@@ -2,6 +2,7 @@
 import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { translate } from '../i18n';
 import { ItemIdentifierGroup, ItemIdentifierSimple, ItemInField } from '../interfaces/item-identifiers';
+import { NoJQ } from '../interfaces/no-jquery';
 import { $2sxcInPage } from '../interfaces/sxc-controller-in-page';
 import { HasLog, Log } from '../logging';
 import { NgUrlValuesWithoutParams } from '../manage/ng-dialog-params';
@@ -31,7 +32,7 @@ export class CommandLinkGenerator extends HasLog {
         this.urlParams = button.addParamsToLink() as unknown;
         const dialog = button.dialog();
         // note: this corrects how the variable to name the dialog changed in the history of 2sxc from action to dialog
-        this.urlParams = {...{ dialog: dialog || command.name }, ...this.urlParams};
+        this.urlParams = { ...{ dialog: dialog || command.name }, ...this.urlParams };
         cl.data('urlParmas', this.urlParams);
 
         // initialize root url to dialog
@@ -83,7 +84,7 @@ export class CommandLinkGenerator extends HasLog {
         const partOfPage = button.partOfPage();
         const ngDialogParams = new NgUrlValuesWithoutParams(context, partOfPage);
 
-        return `${this.rootUrl}#${$.param(ngDialogParams).replace(/%2F/g, '/')}&${$.param(urlItems)}${this.debugUrlParam}`;
+        return `${this.rootUrl}#${NoJQ.param(ngDialogParams).replace(/%2F/g, '/')}&${NoJQ.param(urlItems)}${this.debugUrlParam}`;
     }
 
     /**
@@ -169,12 +170,12 @@ export class CommandLinkGenerator extends HasLog {
         // New in 10.27 - if params has a field, use that
         if (params.fields)
             params.fields.split(',').map((f) => this.items.push({
-                    EntityId: isAdd ? 0 : params.entityId,
-                    Field: f,
-                    Parent: groupId,
-                    Add: isAdd,
-                    Index: index,
-                    } as ItemInField));
+                EntityId: isAdd ? 0 : params.entityId,
+                Field: f,
+                Parent: groupId,
+                Add: isAdd,
+                Index: index,
+            } as ItemInField));
     }
 
     /**

@@ -1,5 +1,4 @@
 ﻿import { CmsEngine } from '..';
-import { $jq } from '../../interfaces/sxc-controller-in-page';
 import { SxcEdit } from '../../interfaces/sxc-instance-editable';
 import { QeSelectors } from '../../quick-edit';
 import { ContextForLists } from '../../quick-edit/context-for-lists';
@@ -19,14 +18,12 @@ Commands.add(CmdLayout, 'ChangeLayout', 'glasses', true, true, {
         // if this fails, try to find it based on the sxc-instance
         const attrSel = '[' + QeSelectors.blocks.cb.context + ']';
         // note: sometimes when the page loads, this can be auto-triggered and not have an event
-        let listSpecs = event && $jq(event.target).closest(attrSel);
-        if (!Array.isArray(listSpecs) || listSpecs.length === 0)
-            listSpecs = $jq(SxcEdit.getTag(context.sxc)).closest(attrSel);
+        const listSpecs = SxcEdit.getTag(context.sxc).closest<HTMLElement>(attrSel);
 
         // Now check if we have apps-parameters to pass on
-        if (listSpecs.length > 0) {
-           const specs = ContextForLists.getFromDom(listSpecs);
-           context.button.command.params.apps = specs.apps;
+        if (listSpecs) {
+            const specs = ContextForLists.getFromDom(listSpecs);
+            context.button.command.params.apps = specs.apps;
         }
         return CmsEngine.openDialog(context, event);
     },

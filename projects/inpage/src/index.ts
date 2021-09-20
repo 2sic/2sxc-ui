@@ -3,12 +3,13 @@ import { Cms } from './cms/Cms';
 import { ContextComplete } from './context/bundles/context-bundle-button';
 import { DnnActionMenu } from './dnn';
 import { translate, Translator } from './i18n';
-import { $2sxcInPage as $2sxc, $jq } from './interfaces/sxc-controller-in-page';
+import { $2sxcInPage as $2sxc } from './interfaces/sxc-controller-in-page';
 import { windowInPage as window } from './interfaces/window-in-page';
 import { EditManager } from './manage/edit-manager';
 import { Manage } from './manage/manage';
 import { QuickE } from './quick-edit/quick-e';
 import { SystemUpgrader } from './system';
+import './toolbar/toolbar-global-enable-shake';
 
 // #1 Note that $2sxc must always exist, the server ensures the load order
 
@@ -36,11 +37,7 @@ function loadInpage() {
     };
 }
 
-// document.addEventListener('DOMContentLoaded', loadInpage);
-$jq(document).ready(loadInpage);
-// #dropJquery
-// $(document).ready(loadInpage);
-
+document.addEventListener('DOMContentLoaded', loadInpage);
 
 // Tell Webpack to load CSS
 const cssEdit = require('./inpage.css');

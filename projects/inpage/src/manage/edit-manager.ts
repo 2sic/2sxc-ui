@@ -3,7 +3,7 @@ import { SxcInstanceEngine } from '../commands';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { AttrJsonEditContext } from '../context/html-attribute/edit-context-root';
 import { ContextOfUser } from '../context/parts/context-user';
-import { $jq } from '../interfaces/sxc-controller-in-page';
+import { NoJQ } from '../interfaces/no-jquery';
 import { SxcEdit } from '../interfaces/sxc-instance-editable';
 import { TypeUnsafe } from '../plumbing';
 import { ToolbarManager } from '../toolbar';
@@ -16,11 +16,13 @@ import { ToolbarRenderer } from '../toolbar/render/toolbar-renderer';
  */
 export class EditManager implements SxcInstanceManage {
 
-    constructor(private sxc: SxcEdit,
-                private editContext: AttrJsonEditContext,
-                private userInfo: ContextOfUser,
-                private cmdEngine: SxcInstanceEngine,
-                public context: ContextComplete) {
+    constructor(
+        private sxc: SxcEdit,
+        private editContext: AttrJsonEditContext,
+        private userInfo: ContextOfUser,
+        private cmdEngine: SxcInstanceEngine,
+        public context: ContextComplete,
+    ) {
     }
 
     //#region Official, public properties and commands, which are stable for use from the outside
@@ -55,8 +57,8 @@ export class EditManager implements SxcInstanceManage {
      */
     getToolbar(tbConfig: TypeUnsafe, moreSettings: ToolbarSettings): string {
         // if toolbar is an array, use as-is, otherwise assume properties are params
-        const toolbar = Array.isArray(tbConfig) ? tbConfig : {...tbConfig};
-        tbConfig = {settings: {...tbConfig.settings, ...moreSettings}, toolbar: toolbar};
+        const toolbar = Array.isArray(tbConfig) ? tbConfig : { ...tbConfig };
+        tbConfig = { settings: { ...tbConfig.settings, ...moreSettings }, toolbar: toolbar };
         const toolbarConfig = ToolbarManager.loadConfig(this.context, tbConfig);
         this.context.toolbar = toolbarConfig;
         return new ToolbarRenderer(this.context).render();
@@ -102,7 +104,7 @@ export class EditManager implements SxcInstanceManage {
         // enhance UI in case there are known errors / issues
         const isErrorState = this.editContext && this.editContext.error && this.editContext.error.type;
         if (isErrorState)
-        handleErrors(this.editContext.error.type, tag);
+            handleErrors(this.editContext.error.type, tag);
     }
 
 
@@ -113,15 +115,15 @@ export class EditManager implements SxcInstanceManage {
  * private: show error when the app-data hasn't been installed yet for this imported-module
  */
 function handleErrors(errType: string, cbTag: HTMLElement): void {
-    const errWrapper = $jq('<div class="dnnFormMessage dnnFormWarning sc-element"></div>');
+    const errWrapper = NoJQ.domFromString('<div class="dnnFormMessage dnnFormWarning sc-element"></div>')[0];
     let msg = '';
-    const toolbar = $jq("<ul class='sc-menu'></ul>");
+    const toolbar = NoJQ.domFromString('<ul class="sc-menu"></ul>')[0];
     if (errType === 'DataIsMissing') {
         msg =
             'Error: System.Exception: Data is missing - usually when a site is copied but the content / apps have not been imported yet - check 2sxc.org/help?tag=export-import';
-        toolbar.attr('data-toolbar', '[{\"action\": \"zone\"}, {\"action\": \"more\"}]');
+        toolbar.setAttribute('data-toolbar', '[{\"action\": \"zone\"}, {\"action\": \"more\"}]');
     }
     errWrapper.append(msg);
     errWrapper.append(toolbar);
-    $jq(cbTag).append(errWrapper);
+    cbTag.append(errWrapper);
 }

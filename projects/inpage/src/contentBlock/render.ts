@@ -2,7 +2,7 @@
 import { C } from '../constants';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { HtmlTools } from '../html/dom-tools';
-import { $jq } from '../interfaces/sxc-controller-in-page';
+import { NoJQ } from '../interfaces/no-jquery';
 import { SxcEdit } from '../interfaces/sxc-instance-editable';
 import { windowInPage as window } from '../interfaces/window-in-page';
 import { HasLog, Insights } from '../logging';
@@ -28,7 +28,7 @@ class RendererGlobal extends HasLog {
      * @returns {} nothing
      */
     showMessage(context: ContextComplete, newContent: string): void {
-        $jq(SxcEdit.getTag(context.sxc)).html(newContent);
+        SxcEdit.getTag(context.sxc).innerHTML = newContent;
     }
 
 
@@ -39,7 +39,7 @@ class RendererGlobal extends HasLog {
      * @param {boolean} preview
      */
     reloadAndReInitialize(context: ContextComplete, forceAjax?: boolean, preview?: boolean): Promise<void> {
-        const cl = this.log.call('reloadAndReInitialize', `..., forceAjax: ${forceAjax}, preview: ${preview}`, null, {context: context});
+        const cl = this.log.call('reloadAndReInitialize', `..., forceAjax: ${forceAjax}, preview: ${preview}`, null, { context: context });
 
         // get workflow engine or a dummy engine
         const wf = context.commandWorkflow ?? WorkflowHelper.getDummy();
@@ -109,12 +109,12 @@ class RendererGlobal extends HasLog {
     private replaceContentBlock(context: ContextComplete, newContent: string, justPreview: boolean): void {
         const cl = this.log.call('replaceContentBlock');
         try {
-            const newDom = $jq(newContent);
+            const newDom = NoJQ.domFromString(newContent)[0];
 
             // Must disable toolbar before we attach to DOM
             if (justPreview) HtmlTools.disable(newDom);
 
-            $jq(SxcEdit.getTag(context.sxc)).replaceWith(newDom);
+            NoJQ.replaceWith(SxcEdit.getTag(context.sxc), newDom);
 
             // reset the cache, so the sxc-object is refreshed
             context.sxc.recreate(true);

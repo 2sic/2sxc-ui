@@ -20,11 +20,11 @@ class ToolbarManagerGlobal extends HasLog {
         this.toolbarFinder = new ToolbarConfigFinderAndInitializer(this);
     }
 
-    buildModule(parentTag: JQuery, optionalId?: number) {
-        this.toolbarFinder.buildDnnModule(parentTag, optionalId);
+    buildModule(parentTag: HTMLElement) {
+        this.toolbarFinder.buildDnnModule(parentTag);
     }
 
-    build(node: JQuery | HTMLElement) {
+    build(node: HTMLElement) {
         this.toolbarFinder.build(node);
     }
 

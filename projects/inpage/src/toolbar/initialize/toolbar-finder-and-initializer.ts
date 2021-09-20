@@ -1,7 +1,6 @@
 ﻿import { C } from '../../constants/index';
 import { ContextComplete } from '../../context/bundles/context-bundle-button';
 import { Translator } from '../../i18n/translator';
-import { $jq } from '../../interfaces/sxc-controller-in-page';
 import { HasLog } from '../../logging';
 import { ToolbarWhenNoToolbarProvided } from '../config';
 import { ToolbarRenderer } from '../render/toolbar-renderer';
@@ -33,12 +32,13 @@ export class ToolbarConfigFinderAndInitializer extends HasLog {
      * @param parentTag
      * @param optionalId
      */
-    buildDnnModule(parentTag: JQuery, optionalId?: number): void {
+    buildDnnModule(parentTag: HTMLElement/*, optionalId?: number*/): void {
         const cl = this.log.call('buildDnnModule');
-        parentTag = $jq(parentTag || '.DnnModule-' + optionalId);
+        // 2021-09-17 optionalId is probably never used
+        // parentTag = parentTag ?? document.querySelector<HTMLElement>('.DnnModule-' + optionalId);
 
         // if something says the toolbars are disabled, then skip
-        if (parentTag.attr(C.Toolbar.attr.disable)) return cl.done('disabled');
+        if (parentTag.getAttribute(C.Toolbar.attr.disable)) return cl.done('disabled');
 
         let toolbars = this.findChildTagsWithConfig(parentTag);
 
@@ -48,7 +48,7 @@ export class ToolbarConfigFinderAndInitializer extends HasLog {
             if (toolbars == null) return cl.done('toolbars=null');
         }
 
-        toolbars.each((i, e: HTMLElement) => this.loadConfigAndInitialize(e));
+        toolbars.forEach((e) => this.loadConfigAndInitialize(e));
 
         // ensure translations are rebuilt
         Translator.autoTranslateMenus();
@@ -60,35 +60,32 @@ export class ToolbarConfigFinderAndInitializer extends HasLog {
      * Will automatically find a wrapping sc-edit-context and all containing toolbars
      * @param node
      */
-    build(node: JQuery | HTMLElement): void {
-        node = $jq(node);
+    build(node: HTMLElement): void {
         // go up the DOM to find the parent which has context-information
         // if we have no contextNode (a parent content block), we can
         // assume the node is outside of a 2sxc module so not interesting
-        const contextNode = $jq(node).closest(C.Cb.selectors.ofName)[0];
+        const contextNode = node.closest<HTMLElement>(C.Cb.selectors.ofName);
         if (contextNode == null) return;
 
         // check if the current node needs a toolbar
-        if (node.is(toolbarSelector)) this.loadConfigAndInitialize(node[0]);
+        if (node.matches(toolbarSelector)) this.loadConfigAndInitialize(node);
 
         // activate all child-nodes with toolbars
-        const toolbars = $jq(toolbarSelector, node);
-        toolbars.each((i, e: HTMLElement) => this.loadConfigAndInitialize(e));
+        const toolbars = node.querySelectorAll<HTMLElement>(toolbarSelector);
+        toolbars.forEach((e) => this.loadConfigAndInitialize(e));
     }
 
 
-//////////////////////////////// Private Functions ////////////////////////////////////
+    //////////////////////////////// Private Functions ////////////////////////////////////
 
     /**
      * find current toolbars inside this wrapper-tag
      */
-    private findChildTagsWithConfig(parentTag: JQuery): JQuery {
-        const allInner = $jq(toolbarSelector, parentTag);
+    private findChildTagsWithConfig(parentTag: HTMLElement): HTMLElement[] {
+        const allInner = Array.from(parentTag.querySelectorAll<HTMLElement>(toolbarSelector));
 
         // return only those, which don't belong to a sub-item
-        const onlyDirectDescendents = allInner
-            .filter((i: number, e: HTMLElement) =>
-                $jq(e).closest(C.Cb.selectors.ofName)[0] === parentTag[0]);
+        const onlyDirectDescendents = allInner.filter((e) => e.closest(C.Cb.selectors.ofName) === parentTag);
         if (dbg)
             console.log('found toolbars for parent', parentTag, onlyDirectDescendents);
         return onlyDirectDescendents;
@@ -100,15 +97,14 @@ export class ToolbarConfigFinderAndInitializer extends HasLog {
      * and replacing / preparing the toolbar as needed.
      * @param node
      */
-    private loadConfigAndInitialize(node: HTMLElement): void {
+    private loadConfigAndInitialize(tag: HTMLElement): void {
         const cl = this.log.call('loadConfigAndInitialize');
-        const tag = $jq(node);
 
         // Do not process tag if a toolbar has already been attached
-        if (tag.data(C.Toolbar.attrToMarkInitalized))
+        if (tag.getAttribute(`data-${C.Toolbar.attrToMarkInitalized}`))
             return cl.done('already initialized');
 
-        const config = ToolbarInitConfig.loadFromTag(node);
+        const config = ToolbarInitConfig.loadFromTag(tag);
 
         if (config != null) {  // is null if load failed
             // catch errors, as this is very common - make sure the others are still rendered
@@ -127,7 +123,7 @@ export class ToolbarConfigFinderAndInitializer extends HasLog {
      * @param tag
      * @param config
      */
-    private convertConfigToToolbars(tag: JQuery, config: ToolbarInitConfig): void {
+    private convertConfigToToolbars(tag: HTMLElement, config: ToolbarInitConfig): void {
         const cl = this.log.call('convertConfigToToolbars');
         cl.data('tag', tag);
         cl.data('config', config);
@@ -135,26 +131,27 @@ export class ToolbarConfigFinderAndInitializer extends HasLog {
         context.toolbar = this.tlbManager.loadConfig(context, config);
 
         // V2 where the full toolbar is included in one setting
-        if (tag.attr(C.Toolbar.attr.full)) {
+        if (tag.getAttribute(C.Toolbar.attr.full)) {
             cl.add('V2 TagToolbar detected');
-            tag.data(C.Toolbar.attrToMarkInitalized, new TagToolbar(tag, context, Translator));
+            const tagToolbar = new TagToolbar(tag, context, Translator);
+            tag.setAttribute(`data-${C.Toolbar.attrToMarkInitalized}`, `${tagToolbar != null}`);
             this.addHoverAttributeToTag(tag);
             return cl.done();
         }
 
         // default case, tag is the old <ul> tag, so find the sc-element parent before replacing
         const toolbar = new ToolbarRenderer(context).generate();
-        const hoverParent = tag.closest(C.Toolbar.selectors.ofOldHover);
+        const hoverParent = tag.closest<HTMLElement>(C.Toolbar.selectors.ofOldHover);
         cl.data('parentTag', hoverParent);
         tag.replaceWith(toolbar);
 
-        if (hoverParent.length > 0) {
+        if (hoverParent) {
             cl.add('V1 hover-toolbar and parents found - will add attribute');
             this.addHoverAttributeToTag(hoverParent);
         }
 
         // TODO: get init to run
-        ToolbarLifecycle.raiseToolbarInitEvent(tag?.[0], hoverParent?.[0], context);
+        ToolbarLifecycle.raiseToolbarInitEvent(tag, hoverParent, context);
 
         cl.done();
     }
@@ -163,10 +160,9 @@ export class ToolbarConfigFinderAndInitializer extends HasLog {
     /**
      * add hover-attribute to tag which is responsible for the menu to appear/disappear
      */
-    private addHoverAttributeToTag(jtag: JQuery): void {
+    private addHoverAttributeToTag(tag: HTMLElement): void {
         const cl = this.log.call('addHoverAttributeToTag');
-        if (jtag.length <= 0) return cl.done('no tag found'); // skip in case nothing was given
-        const tag = jtag[0];
+        if (!tag) return cl.done('no tag found'); // skip in case nothing was given
         if (!tag.hasAttribute(C.Toolbar.attr.hover)) {
             cl.add('will add attribute ' + C.Toolbar.attr.hover);
             tag.setAttribute(C.Toolbar.attr.hover, '');
@@ -184,18 +180,18 @@ export class ToolbarConfigFinderAndInitializer extends HasLog {
 /**
  * Create a default/fallback toolbar and return it
  */
-function addDefaultToolbarConfigToTag(parentTag: JQuery): JQuery {
-  if (dbg) console.log("didn't find toolbar, so will auto-create", parentTag);
+function addDefaultToolbarConfigToTag(parentTag: HTMLElement): HTMLElement[] {
+    if (dbg) console.log("didn't find toolbar, so will auto-create", parentTag);
 
-  const outsideCb = !parentTag.hasClass(C.Cb.classes.name);
-  const contentTag = outsideCb ? parentTag.find(`div${C.Cb.selectors.ofName}`) : parentTag;
+    const outsideCb = !parentTag.classList.contains(C.Cb.classes.name);
+    const contentTag = outsideCb ? parentTag.querySelector<HTMLElement>(`div${C.Cb.selectors.ofName}`) : parentTag;
 
-  // auto toolbar
-  const ctx = ContextComplete.findContext(contentTag);
-  if (ctx.ui.autoToolbar === false)
-    return null;
+    // auto toolbar
+    const ctx = ContextComplete.findContext(contentTag);
+    if (ctx.ui.autoToolbar === false)
+        return null;
 
-  contentTag.attr(C.Toolbar.attr.full, JSON.stringify(ToolbarWhenNoToolbarProvided));
+    contentTag.setAttribute(C.Toolbar.attr.full, JSON.stringify(ToolbarWhenNoToolbarProvided));
 
-  return contentTag;
+    return [contentTag];
 }

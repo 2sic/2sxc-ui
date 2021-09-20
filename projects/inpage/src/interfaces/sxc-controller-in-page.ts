@@ -18,8 +18,9 @@ export interface SxcRoot extends SxcRootWithInternals {
    * @param cbid number
    * @returns SxcInstance
    */
-  (id: number | HTMLElement | JQuery, cbid?: number): SxcEdit;
-//   insights: typeof Insights;
+  // 2021-09-17 spm assume this function doesn't use jquery
+  (id: number | HTMLElement, cbid?: number): SxcEdit;
+  // insights: typeof Insights;
   _manage: Manage;
   system: SystemUpgrader;
   translate(key: string): string;
@@ -31,5 +32,3 @@ export interface SxcRoot extends SxcRootWithInternals {
 export const $2sxcInPage: SxcRoot = window.$2sxc;
 
 export const $jq = $; // window.$2sxc.jq(); // as JQueryStatic;
-
-export const $original = $;

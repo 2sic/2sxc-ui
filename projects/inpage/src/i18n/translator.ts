@@ -1,21 +1,21 @@
 ﻿import i18next, { i18n } from 'i18next';
 import XHR from 'i18next-xhr-backend';
+// @ts-ignore
+import locI18next from 'loc-i18next';
 import { primaryLanguage, translations, translationsPath } from '.';
 import { ContextComplete } from '../context/bundles';
-import { $2sxcInPage, $jq } from '../interfaces/sxc-controller-in-page';
+import { $2sxcInPage } from '../interfaces/sxc-controller-in-page';
 import { SxcEdit } from '../interfaces/sxc-instance-editable';
 import { HasLog, Insights, urlClean } from '../logging';
 import { EditManager } from '../manage/edit-manager';
 
-// tslint:disable-next-line: no-var-requires
-const jqueryI18next = require('jquery-i18next/jquery-i18next');
-
+let localize: any;
 // let initialized: boolean = false;
 
 class TranslatorGlobal extends HasLog {
     i18n: i18n;
 
-    private jQueryReady = false;
+    private locReady = false;
     private initialized = false;
 
     constructor() {
@@ -51,7 +51,7 @@ class TranslatorGlobal extends HasLog {
                 backend: {
                     loadPath: urlClean(realRootPath + translationsPath),
                 },
-            }, () => this.initjQuery());
+            }, () => this.initLoc());
         this.initialized = true;
         cl.done();
     }
@@ -60,7 +60,7 @@ class TranslatorGlobal extends HasLog {
         const cl = this.log.call('tryToFindAContext');
         cl.add('no context found, will seek');
         // trying to get context...
-        const htmlElementOrId = $jq('div[data-cb-id]')[0];
+        const htmlElementOrId = document.querySelector<HTMLElement>('div[data-cb-id]');
         this.initialized = true; // the next SxcEdit.get will call _translate so we must set true to prevent loops
         const sxc = SxcEdit.get(htmlElementOrId);
         this.initialized = false; // for real, it is not initialized...
@@ -71,30 +71,30 @@ class TranslatorGlobal extends HasLog {
     }
 
     /**
-     * Initialize jQuery and auto-translate menu nodes in the DOM
+     * Initialize loc and auto-translate menu nodes in the DOM
      * This is called when the initialize-promise resolves
      */
-    initjQuery() {
-        const cl = this.log.call('initJQuery');
-        // for options see https://github.com/i18next/jquery-i18next#initialize-the-plugin
-        jqueryI18next.init(i18next, $jq);
-        this.jQueryReady = true;
+    initLoc() {
+        const cl = this.log.call('initLoc');
+        // for options see https://github.com/mthh/loc-i18next#initialize-the-plugin
+        localize = locI18next.init(i18next);
+        this.locReady = true;
         this.autoTranslateMenus();
         cl.done();
     }
 
     /**
-     * Tell jQuery to translate all the translatable menu nodes
+     * Tell loc to translate all the translatable menu nodes
      * Do this on initial load, and every time dynamic content gets re-created
      */
     autoTranslateMenus() {
         const cl = this.log.call('autoTranslateMenus');
-        if (!this.jQueryReady) return cl.done('jQuery not ready');
-        // start localizing, details: https://github.com/i18next/jquery-i18next#usage-of-selector-function
-        const menus = $jq('ul.sc-menu');
-        menus.localize(); // inline toolbars
-        const quickEButtons = $jq('.sc-i18n');
-        quickEButtons.localize();   // quick-insert menus
+        if (!this.locReady) return cl.done('loc not ready');
+        // start localizing, details: https://github.com/mthh/loc-i18next#usage-of-selector-function
+        const menus = document.querySelectorAll<HTMLElement>('ul.sc-menu');
+        localize('ul.sc-menu'); // inline toolbars
+        const quickEButtons = document.querySelectorAll<HTMLElement>('.sc-i18n');
+        localize('.sc-i18n'); // quick-insert menus
         cl.add(`found ${menus.length} menus and ${quickEButtons.length} buttons`);
         cl.done();
     }

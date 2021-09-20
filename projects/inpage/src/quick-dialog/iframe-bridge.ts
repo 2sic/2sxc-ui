@@ -4,7 +4,7 @@ import { IQuickDialogConfig } from '../../../connect-parts/inpage-quick-dialog';
 import { ContentBlockEditor } from '../contentBlock/content-block-editor';
 import { renderer } from '../contentBlock/render';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
-import { $jq } from '../interfaces/sxc-controller-in-page';
+import { NoJQ } from '../interfaces/no-jquery';
 import { SxcEdit } from '../interfaces/sxc-instance-editable';
 import { HasLog } from '../logging';
 import { TypeUnsafe } from '../plumbing/TypeTbD';
@@ -31,7 +31,7 @@ export class IFrameBridge extends HasLog implements IIFrameBridge {
     private instanceSxc: SxcEdit;
 
     /** The html-tag of the current module */
-    private tagModule: JQuery;
+    private tagModule: HTMLElement;
 
     /**
      * get the sxc-object of this iframe
@@ -115,7 +115,7 @@ export class IFrameBridge extends HasLog implements IIFrameBridge {
 
         this.changed = false;
         this.instanceSxc = sxc;
-        this.tagModule = $jq($jq(SxcEdit.getTag(sxc)).parent().eq(0));
+        this.tagModule = SxcEdit.getTag(sxc).parentElement;
         this.sxcCacheKey = sxc.cacheKey;
         if (dialogName) this.dialogName = dialogName;
         cl.done();
@@ -133,14 +133,15 @@ export class IFrameBridge extends HasLog implements IIFrameBridge {
         return cl.return(result);
     }
 
-    private scrollToTarget(target: JQuery): void {
-        // Oqtane doesn't include jquery animations, so exit early
-        if (!($ as any).Animation) return;
+    private scrollToTarget(target: HTMLElement): void {
         const cl = this.log.call('scrollToTarget');
-        const specs = {
-            scrollTop: target.offset().top - scrollTopOffset,
+        const specs: ScrollToOptions = {
+            top: NoJQ.offset(target).top - scrollTopOffset,
+            left: 0,
+            behavior: 'smooth',
         };
-        $jq('body').animate(specs, animationTime);
+        // debugger; // scrolls to wrong location. Target is wrong
+        // window.scrollTo(specs);
         cl.done();
     }
 }

@@ -1,5 +1,5 @@
 ﻿import { ModifierBase, ModifierDnnModuleInternal, QeSelectors, QuickE, QuickEClipboard, Selection } from '.';
-import { $jq } from '../interfaces/sxc-controller-in-page';
+import { NoJQ } from '../interfaces/no-jquery';
 
 export class ModifierDnnModule extends ModifierBase {
 
@@ -33,24 +33,29 @@ export class ModifierDnnModule extends ModifierBase {
 
 
     showSendToPane(): void {
-        const pane = QuickE.main.activeModule.closest(QeSelectors.blocks.mod.listSelector);
+        // debugger; // there is a bug where pane options are not updated when user clicks send to pane once, until that button is clicked again
+        // to reproduce: select module in header pane, click sendToPane. Now select module in content pane and notice panes list is showing panes for previous module
+        const pane = QeSelectors.blocks.mod.findClosestList(QuickE.main.activeModule);
+        // debugger; // breaks in inner content buttons, like Accordion App. Check if I can hide this button in inner content
+        if (!pane) return;
 
         // show the pane-options
-        const pl = QuickE.selected.find('#paneList');
-        if (!pl.is(':empty')) pl.empty();
+        const pl = QuickE.selected.querySelector<HTMLElement>('#paneList');
+        if (!pl.matches(':empty')) NoJQ.empty(pl);
         pl.append(this.modInternal.getMoveButtons(this.modInternal.getPaneName(pane)));
     }
 
     static onModuleButtonClick() {
-        const type = $jq(this).data('type');
+        const _this = this as unknown as HTMLElement;
+        const type = _this.getAttribute('data-type');
         const dnnMod = QuickE.main.activeModule;
-        const pane = dnnMod.closest(QeSelectors.blocks.mod.listSelector);
+        const pane = QeSelectors.blocks.mod.findClosestList(dnnMod);
         let index = 0;
 
-        if (dnnMod.hasClass('DnnModule'))
-            index = pane.find('.DnnModule').index(dnnMod[0]) + 1;
+        if (dnnMod.classList.contains('DnnModule'))
+            index = Array.from(pane.querySelectorAll<HTMLElement>('.DnnModule')).indexOf(dnnMod) + 1;
 
-        const cbAction = $jq(this).data('action');
+        const cbAction = _this.getAttribute('data-action');
         if (cbAction)
             return QuickEClipboard.do(cbAction, pane, index, QeSelectors.blocks.mod.id); // copy/paste
         const modManage = QuickEClipboard.modDnn.modInternal;

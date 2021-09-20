@@ -20,7 +20,8 @@ export class ContextComplete extends ContextBundleToolbar {
      * @param htmlElement or Id (moduleId)
      * @param cbid
      */
-    static findContext(tagOrSxc: SxcEdit | HTMLElement | JQuery| number, cbid?: number): ContextComplete {
+    static findContext(tagOrSxc: SxcEdit | HTMLElement | number, cbid?: number): ContextComplete {
+        // 2021-09-17 spm assume this function doesn't use jquery
         let sxc: SxcEdit;
         let containerTag: HTMLElement = null;
 
@@ -28,9 +29,9 @@ export class ContextComplete extends ContextBundleToolbar {
             sxc = tagOrSxc;
         } else if (typeof tagOrSxc === 'number') { // it is number
             sxc = SxcEdit.get(tagOrSxc, cbid);
-        } else  { // it is HTMLElement
+        } else { // it is HTMLElement
             sxc = SxcEdit.get(tagOrSxc);
-            containerTag = SxcEdit.getContainerTag(tagOrSxc as HTMLElement);
+            containerTag = SxcEdit.getContainerTag(tagOrSxc);
         }
 
         const contextOfButton = ContextComplete.getContextInstance(sxc, containerTag);

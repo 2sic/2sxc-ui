@@ -1,5 +1,4 @@
 ﻿import { ModifierBase, ModifierDnnModule, QeSelectors, QuickE, Selection } from '.';
-import { $jq } from '../interfaces/sxc-controller-in-page';
 import { HasLog, Insights } from '../logging';
 import { ContextForLists } from './context-for-lists';
 import { ModifierContentBlock } from './modifier-content-block';
@@ -14,7 +13,7 @@ class QuickEClipboardSingleton extends HasLog {
      */
     clipboard = new Selection();
 
-    mods: {[key: string]: ModifierBase } = {};
+    mods: { [key: string]: ModifierBase } = {};
     modDnn: ModifierDnnModule;
     modCb: ModifierContentBlock;
 
@@ -25,7 +24,7 @@ class QuickEClipboardSingleton extends HasLog {
         this.mods.mod = this.modDnn = new ModifierDnnModule();
 
         // initialize once the DOM is ready
-        $jq(() => this.initializeSecondaryButtons());
+        document.addEventListener('DOMContentLoaded', () => this.initializeSecondaryButtons());
     }
 
     /**
@@ -34,13 +33,15 @@ class QuickEClipboardSingleton extends HasLog {
     initializeSecondaryButtons() {
         const cl = this.log.call('initializeSecondaryButtons');
         const qem = this;
-        $jq('a', QuickE.selected).on('click', function() {
-            const action: string = $jq(this).data('action');
-            switch (action) {
-                case 'delete': return qem.mods[qem.clipboard.type].delete(qem.clipboard);
-                case 'sendToPane': return qem.modDnn.showSendToPane();
-                default: throw new Error(`unexpected action: ${action}`);
-            }
+        QuickE.selected.querySelectorAll<HTMLElement>('a').forEach((e) => {
+            e.addEventListener('click', function () {
+                const action = this.getAttribute('data-action');
+                switch (action) {
+                    case 'delete': return qem.mods[qem.clipboard.type].delete(qem.clipboard);
+                    case 'sendToPane': return qem.modDnn.showSendToPane();
+                    default: throw new Error(`unexpected action: ${action}`);
+                }
+            });
         });
         cl.done();
     }
@@ -53,7 +54,7 @@ class QuickEClipboardSingleton extends HasLog {
      * @param domIndex
      * @param type
      */
-    do(cbAction: string, list: JQuery, domIndex: number, type: string): void {
+    do(cbAction: string, list: HTMLElement, domIndex: number, type: string): void {
         const cl = this.log.call('do', `${cbAction}, ..., ${domIndex}`);
         const newClip = this.createSpecs(type, list, domIndex);
 
@@ -70,7 +71,7 @@ class QuickEClipboardSingleton extends HasLog {
                 if (this.clipboard.type !== newClip.type)
                     return alert("can't move module-to-block; move only works from module-to-module or block-to-block");
 
-                if (isNaN(from) || isNaN(to))  return this.clearUi(); // skip, nothing real
+                if (isNaN(from) || isNaN(to)) return this.clearUi(); // skip, nothing real
 
                 const operator = newClip.type === QeSelectors.blocks.cb.id ? this.modCb : this.modDnn;
 
@@ -101,10 +102,10 @@ class QuickEClipboardSingleton extends HasLog {
         // sometimes missing data.item
         if (!this.clipboard.item) return cl.done();
 
-        const selectedItem = $jq(this.clipboard.item);
-        selectedItem.addClass(QeSelectors.selected);
-        if (selectedItem.prev().is('iframe'))
-            selectedItem.prev().addClass(QeSelectors.selected);
+        const selectedItem = this.clipboard.item;
+        selectedItem.classList.add(QeSelectors.selected);
+        if (selectedItem.previousElementSibling?.matches('iframe'))
+            selectedItem.previousElementSibling.classList.add(QeSelectors.selected);
         this.setSecondaryActionsState(true);
         const btnConfig = this.clipboard?.type === QeSelectors.blocks.cb.id
             ? QuickE.config.innerBlocks.buttons
@@ -125,21 +126,21 @@ class QuickEClipboardSingleton extends HasLog {
 
 
     private removeSelectionMarker() {
-        $jq(`.${QeSelectors.selected}`).removeClass(QeSelectors.selected);
+        document.querySelectorAll<HTMLElement>(`.${QeSelectors.selected}`).forEach((s) => s.classList.remove(QeSelectors.selected));
     }
 
     private setSecondaryActionsState(state: boolean): void {
         const cl = this.log.call('setSecondaryActionsState');
-        let btns = $jq('a.sc-content-block-menu-btn');
-        btns = btns.filter('.icon-sxc-paste');
-        btns.toggleClass('sc-unavailable', !state);
+        let btns = Array.from(document.querySelectorAll<HTMLElement>('a.sc-content-block-menu-btn'));
+        btns = btns.filter((btn) => btn.classList.contains('icon-sxc-paste'));
+        btns.forEach((btn) => btn.classList.toggle('sc-unavailable', !state));
         cl.done();
     }
 
 
-    private createSpecs(type: string, list: JQuery, domIndex: number): Selection {
+    private createSpecs(type: string, list: HTMLElement, domIndex: number): Selection {
         const cl = this.log.call('createSpecs', `${type}, ..., ${domIndex}`);
-        const listItems = list.find(QeSelectors.blocks[type].selector);
+        const listItems = list.querySelectorAll<HTMLElement>(QeSelectors.blocks[type].selector);
         // when paste module below the last module in pane
         // index is 1 larger than the length, then select last
         const currentItem: HTMLElement = (domIndex >= listItems.length)

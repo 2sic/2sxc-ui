@@ -8,7 +8,7 @@
     /** The field inside the parent used for this content */
     field: string;
 
-    list: JQuery;
+    list: HTMLElement;
     item: HTMLElement;
     index: number;
     type: 'mod' | 'cb';

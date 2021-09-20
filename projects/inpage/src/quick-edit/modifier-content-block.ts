@@ -1,5 +1,4 @@
 ﻿import { ModifierBase, QeSelectors, QuickE, QuickEClipboard, Selection } from '.';
-import { $jq } from '../interfaces/sxc-controller-in-page';
 import { SxcEdit } from '../interfaces/sxc-instance-editable';
 import { ContextForLists } from './context-for-lists';
 import { ModifierContentBlockInstance } from './modifier-content-block-internal';
@@ -13,7 +12,7 @@ export class ModifierContentBlock extends ModifierBase {
         super('QE.CntBlk');
     }
 
-    getInstanceModifier(tag: JQuery) {
+    getInstanceModifier(tag: HTMLElement) {
         const sxc = SxcEdit.get(tag);
         return new ModifierContentBlockInstance(this, sxc);
     }
@@ -22,7 +21,7 @@ export class ModifierContentBlock extends ModifierBase {
         return this.getInstanceModifier(clip.list).delete(clip.parentGuid, clip.field, this.findClipListIndex(clip));
     }
 
-    create(parent: number, field: string, listIndex: number, appOrContent: string, list: JQuery, newGuid: string): Promise<void> {
+    create(parent: number, field: string, listIndex: number, appOrContent: string, list: HTMLElement, newGuid: string): Promise<void> {
         return this.getInstanceModifier(list).create(parent, field, listIndex, appOrContent, list, newGuid);
     }
 
@@ -55,26 +54,25 @@ export class ModifierContentBlock extends ModifierBase {
     }
 
     /**
-     * The button click handler. Must be static, as it will be attached to the buttons using jQuery
+     * The button click handler. Must be static, as it will be attached to the buttons
      * So the 'this' is not a ContentBlockModifier, but the html-tag which was clicked
      */
     static onCbButtonClick() {
-        const target = QuickE.main.activeContentBlock;
-        const blockTag = target[0];
-        const button = $jq(this);
-        const list = target.closest(QeSelectors.blocks.cb.listSelector);
-        const listItems = list.find(QeSelectors.blocks.cb.selector);
+        const blockTag = QuickE.main.activeContentBlock;
+        const button = this as unknown as HTMLElement;
+        const list = QeSelectors.blocks.cb.findClosestList(blockTag);
+        const listItems = list.querySelectorAll<HTMLElement>(QeSelectors.blocks.cb.selector);
         const actionConfig = ContextForLists.getFromDom(list);
         const newGuid: string | null = actionConfig.guid || null;
 
         // if the target is a content-block, then the list already has items
         // so the domIndex must be based on that. Otherwise use 0
-        const domIndex = target.hasClass(QeSelectors.blocks.cb.class)
-            ? listItems.index(blockTag) + 1
+        const domIndex = blockTag.classList.contains(QeSelectors.blocks.cb.class)
+            ? Array.from(listItems).indexOf(blockTag) + 1
             : 0;
 
         // Check if it's a cut/paste action
-        const cbAction = button.data('action');
+        const cbAction = button.getAttribute('data-action');
         if (cbAction)
             return QuickEClipboard.do(cbAction, list, domIndex, QeSelectors.blocks.cb.id);
 
@@ -83,7 +81,7 @@ export class ModifierContentBlock extends ModifierBase {
         // so we'll have to find the dom object and get the list index
         const listIndex = QuickEClipboard.modCb.findListIndex(blockTag, domIndex - 1) + 1;
 
-        const appOrContent = button.data('type');
+        const appOrContent = button.getAttribute('data-type');
         return QuickEClipboard.modCb.create(actionConfig.parent as number, actionConfig.field, listIndex, appOrContent, list, newGuid);
     }
 

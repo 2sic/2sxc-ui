@@ -42,7 +42,7 @@ class QuickDialogManagerSingleton extends HasLog {
     setVisible(show: boolean): void {
         const cl = this.log.call('setVisible');
         const cont = this.container.getOrCreate();
-        cont.toggleClass(diagShowClass, show);
+        cont.classList.toggle(diagShowClass, show);
         this.rememberDialogState(this.container.getIFrame(cont), show);
         current = show ? this.container.getIFrame() : null;
         cl.done();
@@ -55,7 +55,7 @@ class QuickDialogManagerSingleton extends HasLog {
      * @param {function()} closeCallback - callback event
      * @param {boolean} isFullscreen - if it should open full screen
      * @param {string} [dialogName] - optional name of dialog, to check if it's already open
-     * @returns {Promise<boolean>} jquery object of the iframe
+     * @returns {Promise<boolean>}
      */
     showOrToggleFromToolbar(
         context: ContextComplete,

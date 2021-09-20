@@ -1,6 +1,6 @@
 import { CmdLayout } from '../commands/command/layout';
 import { C } from '../constants';
-import { $jq } from '../interfaces/sxc-controller-in-page';
+import { NoJQ } from '../interfaces/no-jquery';
 import { SxcEdit } from '../interfaces/sxc-instance-editable';
 import { windowInPage as window } from '../interfaces/window-in-page';
 import { HasLog, Insights, Log } from '../logging';
@@ -21,7 +21,7 @@ export class BootstrapInPage extends HasLog {
         Insights.add('system', 'bootstrap', this.log);
     }
 
-    private initializedInstances: JQuery[] = [];
+    private initializedInstances: HTMLElement[] = [];
     private openedTemplatePickerOnce: boolean = false;
     private diagCancelStateOnStart: boolean = QuickEditState.cancelled.get();
 
@@ -45,8 +45,8 @@ export class BootstrapInPage extends HasLog {
      */
     private initAllInstances(isFirstRun: boolean): void {
         const callLog = this.log.call('initAllInstances');
-        $jq('div[data-edit-context]').each((i, e) => {
-            this.initInstance($jq(e), isFirstRun);
+        document.querySelectorAll<HTMLElement>('div[data-edit-context]').forEach((e) => {
+            this.initInstance(e, isFirstRun);
         });
         if (isFirstRun) this.tryShowTemplatePicker();
         callLog.return('initAllInstances done');
@@ -64,16 +64,19 @@ export class BootstrapInPage extends HasLog {
 
             // Loop through each changed item, check if it's something we want to initialize
             m.forEach((v) => {
-                Array.prototype.forEach.call(v.addedNodes, (n: HTMLElement) => {
-                    const node = $jq(n);
+                v.addedNodes.forEach((n) => {
+                    // remove #comment and text nodes
+                    if ((n as HTMLElement).matches == null) return;
+                    const node = n as HTMLElement;
+
                     // Menus which appear also cause DOM changes, but we want to ignore these for performance reasons
-                    if (node.is('.sc-menu')) return;
+                    if (node.matches('sc-menu')) return;
 
                     processed++;
 
                     // If the added node is a [data-edit-context], it is either a module or a content block which was replaced
                     // re-initialize the module
-                    if (node.is('div[data-edit-context]')) {
+                    if (node.matches('div[data-edit-context]')) {
                         this.initInstance(node, false);
                         // in case it has inner content, try to open the picker-dialog
                         if (!QuickDialog.isVisible()) this.tryShowTemplatePicker();
@@ -81,9 +84,9 @@ export class BootstrapInPage extends HasLog {
                     // If the added node contains [data-edit-context] nodes, it is likely the DNN module drag manager which added
                     // the node. To prevent multiple initialization while dragging modules, we additionally check for the
                     // .active-module class which seems to be applied while dragging the module.
-                    else if (node.is(':not(.active-module)') && node.has('div[data-edit-context]')) {
-                        $jq('div[data-edit-context]', node).each((i, e) => {
-                            this.initInstance($jq(e), false);
+                    else if (node.matches(':not(.active-module)') && node.querySelectorAll<HTMLElement>('div[data-edit-context]').length > 0) {
+                        node.querySelectorAll<HTMLElement>('div[data-edit-context]').forEach((e) => {
+                            this.initInstance(e, false);
                         });
                     } else
                         ToolbarManager.build(node);
@@ -118,7 +121,7 @@ export class BootstrapInPage extends HasLog {
         const openDialogId = QuickEditState.cbId.get();
         if (openDialogId) {
             // must check if it's on this page, as it could be from another page
-            const found = $jq(`[data-cb-id="${openDialogId}"]`);
+            const found = document.querySelectorAll<HTMLElement>(`[data-cb-id="${openDialogId}"]`);
             if (found.length) {
                 // since the CB-ID could also be an inner content (marked as a negative "-" number)
                 // we must be sure that we use the right id a.nyhow
@@ -130,7 +133,7 @@ export class BootstrapInPage extends HasLog {
         }
 
         if (!sxc) {
-            const uninitializedModules = $jq('.sc-uninitialized');
+            const uninitializedModules = document.querySelectorAll<HTMLElement>('.sc-uninitialized');
 
             if (this.diagCancelStateOnStart || this.openedTemplatePickerOnce)
                 return cl.return(false, 'cancelled');
@@ -144,7 +147,7 @@ export class BootstrapInPage extends HasLog {
                 return cl.return(false, 'has un-init modules');
 
             // show the template picker of this module
-            const module = uninitializedModules.parent('div[data-edit-context]')[0];
+            const module = Array.from(uninitializedModules).find((e) => e.parentElement.matches('div[data-edit-context]'))?.parentElement;
             sxc = SxcEdit.get(module);
         }
 
@@ -156,7 +159,7 @@ export class BootstrapInPage extends HasLog {
     }
 
 
-    private initInstance(module: JQuery, isFirstRun: boolean): void {
+    private initInstance(module: HTMLElement, isFirstRun: boolean): void {
         const cl = this.log.call('initInstance', `module: obj, isFirstRun: ${isFirstRun}) initialized: ${this.initializedInstances}`);
 
         // if instance is already in the list of initialized modules, skip
@@ -175,10 +178,10 @@ export class BootstrapInPage extends HasLog {
         const wasEmpty = this.showGlassesButtonIfUninitialized(sxc);
 
         if (isFirstRun || !wasEmpty) {
-          // use a logger for each iteration
-          const log = new Log('Bts.Module');
+            // use a logger for each iteration
+            const log = new Log('Bts.Module');
 
-          ToolbarManager.buildModule(module);
+            ToolbarManager.buildModule(module);
         }
         cl.done();
     }
@@ -191,18 +194,18 @@ export class BootstrapInPage extends HasLog {
             return callLog.return(false, 'is initialized');
 
         // already has a glasses button
-        const tag = $jq(SxcEdit.getTag(sxci));
-        if (tag.find('.sc-uninitialized').length !== 0)
+        const tag = SxcEdit.getTag(sxci);
+        if (tag.querySelectorAll<HTMLElement>('.sc-uninitialized').length !== 0)
             return callLog.return(false, 'already has button');
 
         // note: title is added on mouseover, as the translation isn't ready at page-load
-        const btn = $jq(
-          '<div class="sc-uninitialized" onmouseover="this.title = $2sxc.translate(this.title)" title="InPage.NewElement">' +
+        const btn = NoJQ.domFromString(
+            '<div class="sc-uninitialized" onmouseover="this.title = $2sxc.translate(this.title)" title="InPage.NewElement">' +
             '<div class="icon-sxc-glasses"></div>' +
             '</div>',
-        );
+        )[0];
 
-        btn.on('click', () => sxci.manage.run(CmdLayout));
+        btn.addEventListener('click', () => sxci.manage.run(CmdLayout));
 
         tag.append(btn);
         return callLog.return(true, 'ok');
@@ -211,10 +214,10 @@ export class BootstrapInPage extends HasLog {
 
     isInitialized(sxci: SxcEdit): boolean {
         const cg =
-          sxci &&
-          sxci.manage &&
-          sxci.manage._editContext &&
-          sxci.manage._editContext.contentBlock;
+            sxci &&
+            sxci.manage &&
+            sxci.manage._editContext &&
+            sxci.manage._editContext.contentBlock;
         return cg && cg.TemplateId !== 0;
     }
 }
