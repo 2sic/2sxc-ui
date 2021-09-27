@@ -31,4 +31,4 @@ export interface SxcRoot extends SxcRootWithInternals {
 
 export const $2sxcInPage: SxcRoot = window.$2sxc;
 
-export const $jq = $; // window.$2sxc.jq(); // as JQueryStatic;
+export const $jq = $;

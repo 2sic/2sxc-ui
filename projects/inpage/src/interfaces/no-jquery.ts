@@ -66,7 +66,7 @@ export class NoJQ {
         });
     }
 
-    /** Removes content from the DOM and inserts new content in its place */
+    /** https://api.jquery.com/replacewith/ */
     static replaceWith(toBeReplaced: HTMLElement, newElement: HTMLElement): void {
         const parent = toBeReplaced.parentElement;
         parent.removeChild(toBeReplaced);
