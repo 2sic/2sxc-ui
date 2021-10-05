@@ -1,6 +1,7 @@
 ﻿import { SxcInstanceWithInternals } from '..';
+import { Window } from '../..';
 
-declare const $2sxc_jQSuperlight: any;
+declare const window: Window;
 
 /**
  * This is a old 2sxc concept from 2sxc ca. V3
@@ -61,7 +62,7 @@ export class SxcInstanceDataDeprecated {
 
                 this.controller.isLoaded = true;
                 this.controller.lastRefresh = new Date();
-                (this as any)._triggerLoaded();
+                this._triggerLoaded();
             };
             source.error = (request: any) => { alert(request.statusText); };
             source.preventAutoFail = true; // use our fail message
@@ -77,19 +78,22 @@ export class SxcInstanceDataDeprecated {
     }
 
     on(events: Event, callback: () => void): Promise<any> {
-        return $2sxc_jQSuperlight(this).on('2scLoad', callback)[0]._triggerLoaded();
+        // debugger; // probably never used. Types are broken
+        return (window.$2sxc_jQSuperlight(this) as any).on('2scLoad', callback)[0]._triggerLoaded();
     }
 
-// ReSharper disable once InconsistentNaming
+    // ReSharper disable once InconsistentNaming
     _triggerLoaded(): Promise<any> {
+        // debugger; // probably never used. Types are broken
         return this.controller.isLoaded
-            ? $2sxc_jQSuperlight(this).trigger('2scLoad', [this])[0]
+            ? (window.$2sxc_jQSuperlight(this) as any).trigger('2scLoad', [this])[0]
             : this;
     }
 
     one(events: Event, callback: (x: any, y: any) => void): SxcInstanceDataDeprecated {
+        // debugger; // probably never used. Types are broken
         if (!this.controller.isLoaded)
-            return $2sxc_jQSuperlight(this).one('2scLoad', callback)[0];
+            return (window.$2sxc_jQSuperlight(this) as any).one('2scLoad', callback)[0];
         callback({}, this);
         return this;
     }

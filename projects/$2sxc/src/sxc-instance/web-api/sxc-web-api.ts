@@ -4,8 +4,6 @@ import { AjaxPromise } from './ajax-promise';
 import { Environment } from '../../environment';
 import { AjaxSettings } from './ajax-settings';
 
-declare const $2sxc_jQSuperlight: JQuery;
-
 /**
  * helper API to run ajax / REST calls to the server
  * it will ensure that the headers etc. are set correctly
@@ -112,7 +110,7 @@ export class SxcWebApi implements Public.SxcWebApi {
         // new 10.25
         var http = new AjaxPromise(this, this.sxc);
 
-        settings = $2sxc_jQSuperlight.extend({}, defaults, settings);
+        settings = Object.assign({}, defaults, settings);
 
         const promise = http.makePromise(settings as AjaxSettings);
 

@@ -15,7 +15,8 @@ export interface SxcRoot extends Public.SxcRoot {
      * @param cbid number
      * @returns SxcInstance
      */
-    (id: number | HTMLElement | JQuery, cbid?: number): SxcInstanceWithInternals,
+    // 2021-10-04 spm assume this function doesn't use jquery
+    (id: number | HTMLElement, cbid?: number): SxcInstanceWithInternals,
 
     /**
      * Environment information
@@ -31,7 +32,7 @@ export interface SxcRoot extends Public.SxcRoot {
 }
 
 
-export function getRootPartsV2() : Partial<SxcRoot> {
+export function getRootPartsV2(): Partial<SxcRoot> {
     const log = new Log('$2sxc', null, 'building');
     var env = new Environment();
     return {

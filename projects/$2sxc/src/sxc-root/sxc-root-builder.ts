@@ -8,7 +8,6 @@ import { Window } from "../_/window";
 import { Debug, Insights, SxcVersion } from '..';
 import { ContextIdentifier, isContextIdentifier, throwIfIncomplete } from './context-identifier';
 
-declare const $2sxc_jQSuperlight: any;
 declare const window: Window;
 
 /**
@@ -20,7 +19,7 @@ declare const window: Window;
 function FindSxcInstance(id: number | ContextIdentifier | HTMLElement, cbid?: number): SxcInstanceWithInternals {
     const $2sxc = window.$2sxc as SxcRoot & SxcRootInternals;
     $2sxc.log.add('FindSxcInstance(' + id + ',' + cbid);
-    if (!$2sxc._controllers) 
+    if (!$2sxc._controllers)
         throw new Error('$2sxc not initialized yet');
 
     // check if it's a context identifier (new in 11.11)
@@ -93,23 +92,24 @@ export function buildSxcRoot(): SxcRoot & SxcRootInternals {
                 return url;
             },
         },
-        jq: function() { return  $2sxc_jQSuperlight; },
+        // debugger;
+        jq: function () { return window.$2sxc_jQSuperlight; },
     };
 
-    const merged = addOn.jq().extend(FindSxcInstance, addOn, rootApiV2) as SxcRoot & SxcRootInternals;
+    const merged = Object.assign(FindSxcInstance, addOn, rootApiV2) as SxcRoot & SxcRootInternals;
     merged.log.add('sxc controller built');
 
     console.log(`$2sxc ${SxcVersion} with insights-logging - see https://r.2sxc.org/insights`)
 
-    return merged; //FindSxcInstance as SxcRoot & SxcRootInternals;
+    return merged;
 }
 
 
-function autoFind(domElement: HTMLElement | JQuery): [number, number] {
-    const containerTag = $2sxc_jQSuperlight(domElement).closest('.sc-content-block')[0];
+function autoFind(domElement: HTMLElement): [number, number] {
+    const containerTag = domElement.closest('.sc-content-block');
     if (!containerTag) return null;
     const iid = containerTag.getAttribute('data-cb-instance');
     const cbid = containerTag.getAttribute('data-cb-id');
     if (!iid || !cbid) return null;
-    return [iid, cbid];
+    return [parseInt(iid, 10), parseInt(cbid, 10)];
 }
