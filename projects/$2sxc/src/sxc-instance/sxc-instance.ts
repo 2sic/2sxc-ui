@@ -6,6 +6,7 @@ import { SxcRoot } from '../sxc-root/sxc-root';
 import { HasLog } from '..';
 import { SxcRootInternals } from '../sxc-root/sxc-root-internals';
 import { SxcInstanceManage } from './sxc-instance-manage';
+import { HttpError2, SxcWebApi2 } from './web-api/sxc-web-api2';
 
 // const serviceScopes = ['app', 'app-sys', 'app-api', 'app-query', 'app-content', 'eav', 'view', 'dnn'];
 
@@ -17,6 +18,7 @@ export class SxcInstance extends HasLog implements Public.SxcInstance {
      * helpers for ajax calls
      */
     webApi: SxcWebApi;
+    webApi2: SxcWebApi2;
 
     /**
      * The manage controller for edit/cms actions
@@ -43,6 +45,7 @@ export class SxcInstance extends HasLog implements Public.SxcInstance {
     ) {
         super('SxcInstance', null, 'Generating for ' + id + ':' + cbid);
         this.webApi = new SxcWebApi(this);
+        this.webApi2 = new SxcWebApi2(this);
 
         // add manage property, but not within initializer, because inside the manage-initializer it may reference 2sxc again
         try { // sometimes the manage can't be built, like before installing
@@ -52,11 +55,11 @@ export class SxcInstance extends HasLog implements Public.SxcInstance {
         }
 
         // this only works when manage exists (not installing) and translator exists too
-        if (root._translateInit && this.manage) 
+        if (root._translateInit && this.manage)
             // ensure that we really have a manage context, otherwise we can't initialize i18n and it doesn't make sense
-            if(this.manage.context && this.manage.context.app && this.manage.context.app.currentLanguage)
+            if (this.manage.context && this.manage.context.app && this.manage.context.app.currentLanguage)
                 root._translateInit(this.manage);    // init translate, not really nice, but ok for now
-    
+
     }
 
     /**
@@ -126,6 +129,58 @@ export class SxcInstance extends HasLog implements Public.SxcInstance {
         alert(infoText);
 
         return result;
+    }
+
+    // Show a nice error with more infos around 2sxc
+    showDetailedHttpError2(error: HttpError2): void {
+        const request = error._request;
+        const response = error._response;
+        const data = error._responseText;
+        if (request == null || response == null) {
+            return;
+        }
+
+        // check if the error was just because a language file couldn't be loaded - then don't show a message
+        if (response.status === 404 && request.url.includes('/dist/i18n/')) {
+            console.log('Failed to load language resource. Will have to use the default');
+            return;
+        }
+
+        // if it's an unspecified 0-error, it's probably not an error but a cancelled request,
+        // (happens when closing popups containing AngularJS)
+        if (response.status === 0 || response.status === -1) {
+            return;
+        }
+
+        // let's try to show good messages in most cases
+        let infoText = `Had an error talking to the server (status ${response.status}).`;
+        try {
+            const srvResp = JSON.parse(data);
+            const msg = srvResp.Message;
+            if (msg) {
+                infoText += `\nMessage: ${msg}`;
+            }
+            const msgDet = srvResp.MessageDetail || srvResp.ExceptionMessage;
+            if (msgDet) {
+                infoText += `\nDetail: ${msgDet}`;
+            }
+
+            if (msgDet && msgDet.indexOf('No action was found') === 0) {
+                if (msgDet.indexOf('that matches the name') > 0) {
+                    infoText += '\n\nTip from 2sxc: you probably got the action-name wrong in your JS.';
+                } else if (msgDet.indexOf('that matches the request.') > 0) {
+                    infoText += '\n\nTip from 2sxc: Seems like the parameters are the wrong amount or type.';
+                }
+            }
+
+            if (msg && msg.indexOf('Controller') === 0 && msg.indexOf('not found') > 0) {
+                infoText += `\n\nTip from 2sxc: you probably spelled the controller name wrong or forgot to remove the word 'controller' from the call in JS. To call a controller called 'DemoController' only use 'Demo'.`;
+            }
+        } catch {
+            infoText += `\n\nMessage: ${response.statusText}`;
+        }
+        infoText += `\n\nIf you are an advanced user you can learn more about what went wrong - discover how on 2sxc.org/help?tag=debug`;
+        alert(infoText);
     }
 
     /**
