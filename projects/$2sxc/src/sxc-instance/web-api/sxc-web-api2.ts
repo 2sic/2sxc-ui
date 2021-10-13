@@ -143,6 +143,17 @@ export class SxcWebApi2 {
     headers(): Record<string, string> {
         return this.sxc.root.http.headers(this.sxc.id, this.sxc.cbid);
     }
+
+    url(url: string): string {
+        const urlParts = url.split('/');
+        if (urlParts.length === 2 && urlParts[0] && urlParts[1]) {
+            const controller = urlParts[0];
+            const action = urlParts[1];
+            url = `app/auto/api/${controller}/${action}`;
+        }
+        url = this.sxc.root.http.apiUrl(url);
+        return url;
+    }
 }
 
 export interface HttpError2 extends Error {
