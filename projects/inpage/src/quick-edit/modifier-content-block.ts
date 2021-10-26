@@ -58,7 +58,7 @@ export class ModifierContentBlock extends ModifierBase {
      * So the 'this' is not a ContentBlockModifier, but the html-tag which was clicked
      */
     static onCbButtonClick() {
-        const blockTag = QuickE.main.activeContentBlock;
+        const blockTag = QuickE.singleton().main.activeContentBlock;
         const button = this as unknown as HTMLElement;
         const list = QeSelectors.blocks.cb.findClosestList(blockTag);
         const listItems = list.querySelectorAll<HTMLElement>(QeSelectors.blocks.cb.selector);
@@ -74,15 +74,15 @@ export class ModifierContentBlock extends ModifierBase {
         // Check if it's a cut/paste action
         const cbAction = button.getAttribute('data-action');
         if (cbAction)
-            return QuickEClipboard.do(cbAction, list, domIndex, QeSelectors.blocks.cb.id);
+            return QuickEClipboard.singleton().do(cbAction, list, domIndex, QeSelectors.blocks.cb.id);
 
         // this is a create-additional block action
         // in this case the clipboard doesn't exist
         // so we'll have to find the dom object and get the list index
-        const listIndex = QuickEClipboard.modCb.findListIndex(blockTag, domIndex - 1) + 1;
+        const listIndex = QuickEClipboard.singleton().modCb.findListIndex(blockTag, domIndex - 1) + 1;
 
         const appOrContent = button.getAttribute('data-type');
-        return QuickEClipboard.modCb.create(actionConfig.parent as number, actionConfig.field, listIndex, appOrContent, list, newGuid);
+        return QuickEClipboard.singleton().modCb.create(actionConfig.parent as number, actionConfig.field, listIndex, appOrContent, list, newGuid);
     }
 
 }

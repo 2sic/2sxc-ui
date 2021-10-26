@@ -92,7 +92,7 @@ class RendererGlobal extends HasLog {
             })
             .then(() => {
                 cl.add('replace done, resetting quickE');
-                QuickE.reset(); // reset quick-edit, because the config could have changed
+                QuickE.singleton().reset(); // reset quick-edit, because the config could have changed
                 cl.done();
             });
     }

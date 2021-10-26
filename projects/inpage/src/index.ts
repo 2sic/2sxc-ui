@@ -19,7 +19,7 @@ $2sxc.context = ContextComplete.findContext; // primary API to get the context
 $2sxc._translateInit = (manage: EditManager) => Translator.initManager(manage); // reference in ./2sxc-api/js/ToSic.Sxc.Instance.ts
 $2sxc.translate = translate;    // provide an official translate API for 2sxc
 $2sxc._manage = new Manage();   // used out of this project in ToSic.Sxc.Instance and 2sxc.api.js
-window.$quickE = QuickE;        // note: not sure if this is needed as a global object...
+window.$quickE = QuickE.singleton();        // note: not sure if this is needed as a global object...
 $2sxc.cms = new Cms();
 
 // #3 Initialize all objects as needed
@@ -27,7 +27,7 @@ function loadInpage() {
     // check if already initialized - just in case these scripts were loaded multiple times
     const bootstrapper = new BootstrapInPage();
     bootstrapper.initialize();
-    QuickE.start();
+    QuickE.singleton().start();
 
     /** this enhances the $2sxc client controller with stuff only needed when logged in */
     if (!window.$2sxc.system) window.$2sxc.system = new SystemUpgrader();

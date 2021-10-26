@@ -3,11 +3,17 @@ import { HasLog, Insights, NoJQ } from '../logging';
 import { ContextForLists } from './context-for-lists';
 import { ModifierContentBlock } from './modifier-content-block';
 
-
 /**
  * add a clipboard to the quick edit
  */
-class QuickEClipboardSingleton extends HasLog {
+export class QuickEClipboard extends HasLog {
+
+    /** Singleton */
+    public static singleton(): QuickEClipboard {
+        return this._singleton ?? (this._singleton = new QuickEClipboard());
+    }
+    private static _singleton: QuickEClipboard;
+
     /**
      * clipboard object - remembers what module (or content-block) was previously copied / needs to be pasted
      */
@@ -17,7 +23,7 @@ class QuickEClipboardSingleton extends HasLog {
     modDnn: ModifierDnnModule;
     modCb: ModifierContentBlock;
 
-    constructor() {
+    private constructor() {
         super('Q-E.Clpbrd');
         Insights.add('Q-E', 'clipboard', this.log);
         this.mods.cb = this.modCb = new ModifierContentBlock();
@@ -33,7 +39,7 @@ class QuickEClipboardSingleton extends HasLog {
     initializeSecondaryButtons() {
         const cl = this.log.call('initializeSecondaryButtons');
         const qem = this;
-        QuickE.selected.querySelectorAll<HTMLElement>('a').forEach((e) => {
+        QuickE.singleton().selected.querySelectorAll<HTMLElement>('a').forEach((e) => {
             e.addEventListener('click', function () {
                 const action = this.getAttribute('data-action');
                 switch (action) {
@@ -107,10 +113,11 @@ class QuickEClipboardSingleton extends HasLog {
         if (selectedItem.previousElementSibling?.matches('iframe'))
             selectedItem.previousElementSibling.classList.add(QeSelectors.selected);
         this.setSecondaryActionsState(true);
+        const quickE = QuickE.singleton();
         const btnConfig = this.clipboard?.type === QeSelectors.blocks.cb.id
-            ? QuickE.config.innerBlocks.buttons
-            : QuickE.config.modules.buttons;
-        QuickE.selected.toggleOverlay(selectedItem, btnConfig);
+            ? quickE.config.innerBlocks.buttons
+            : quickE.config.modules.buttons;
+        quickE.selected.toggleOverlay(selectedItem, btnConfig);
         cl.done();
     }
 
@@ -120,7 +127,7 @@ class QuickEClipboardSingleton extends HasLog {
         this.removeSelectionMarker();
         this.clipboard = null;
         this.setSecondaryActionsState(false);
-        QuickE.selected.toggleOverlay(false);
+        QuickE.singleton().selected.toggleOverlay(false);
         cl.done();
     }
 
@@ -165,5 +172,3 @@ class QuickEClipboardSingleton extends HasLog {
     }
 
 }
-
-export const QuickEClipboard = new QuickEClipboardSingleton();

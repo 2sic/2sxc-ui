@@ -9,7 +9,15 @@ const classForAddApp = 'sc-content-block-menu-addapp';
  * the quick-edit object
  * the quick-insert object
  */
-class QuickESingleton extends HasLog {
+export class QuickE extends HasLog {
+
+    /** Singleton */
+    public static singleton(): QuickE {
+        return this._singleton ?? (this._singleton = new QuickE());
+    }
+    private static _singleton: QuickE;
+
+
     body = document.body;
     main = NoJQ.domFromString('<div class="sc-content-block-menu sc-content-block-quick-insert sc-i18n"></div>')[0] as QuickEditOverlay.Main;
     template =
@@ -36,7 +44,7 @@ class QuickESingleton extends HasLog {
 
     bodyOffset: PositionCoordinates;
 
-    constructor() {
+    private constructor() {
         super('Q-E.Main');
         Insights.add('Q-E', 'manager', this.log);
         this.modActions.forEach((a) => {
@@ -198,5 +206,3 @@ class QuickESingleton extends HasLog {
     }
 
 }
-
-export const QuickE = new QuickESingleton();

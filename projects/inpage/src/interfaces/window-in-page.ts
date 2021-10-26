@@ -10,7 +10,7 @@ export interface WindowInPage extends Window, sxcWindow {
   // event: Event;
   dnn_tabVersioningEnabled: boolean;
   dnn: TypeWeDontCare;
-  $quickE: typeof QuickE ;
+  $quickE: QuickE ;
   $2sxcActionMenuMapper: (moduleId: number) => DnnActionMenu;
 }
 // ReSharper restore InconsistentNaming

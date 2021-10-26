@@ -96,7 +96,7 @@ export class ModifierDnnModuleInternal extends HasLog {
     }
 
     getMoveButtons(current: string): HTMLElement {
-        const pns = QuickE.cachedPanes;
+        const pns = QuickE.singleton().cachedPanes;
         // generate list of panes as links
         const targets = NoJQ.domFromString('<div></div>')[0];
         for (let p = 0; p < pns.length; p++) {
@@ -113,7 +113,7 @@ export class ModifierDnnModuleInternal extends HasLog {
         targets.querySelectorAll<HTMLElement>('a').forEach((e) => {
             e.addEventListener('click', function () {
                 const link = this;
-                const clip = QuickEClipboard.clipboard;
+                const clip = QuickEClipboard.singleton().clipboard;
                 const modId = _this.getModuleId(clip.item.className);
                 const newPane = link.getAttribute('data');
                 _this.move(modId, newPane, 0);

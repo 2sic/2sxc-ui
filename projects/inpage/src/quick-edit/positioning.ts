@@ -32,8 +32,9 @@ export class Positioning {
     static getBodyPosition(): PositionCoordinates {
         const posNoJq = document.body.style.position;
         const bodyPos = posNoJq; // QuickE.body.css('position');
+        const quickE = QuickE.singleton();
         return bodyPos === 'relative' || bodyPos === 'absolute'
-            ? new PositionCoordinates(NoJQ.offset(QuickE.body).left, NoJQ.offset(QuickE.body).top)
+            ? new PositionCoordinates(NoJQ.offset(quickE.body).left, NoJQ.offset(quickE.body).top)
             : new PositionCoordinates(0, 0);
     }
 }
@@ -45,25 +46,26 @@ export class Positioning {
  */
 function refreshDomObjects(): void {
     // must update this, as sometimes after finishing page load the position changes, like when dnn adds the toolbar
-    QuickE.bodyOffset = Positioning.getBodyPosition();
+    const quickE = QuickE.singleton();
+    quickE.bodyOffset = Positioning.getBodyPosition();
 
-    if (QuickE.config.innerBlocks.enable) {
+    if (quickE.config.innerBlocks.enable) {
         // get all content-block lists which are empty, or which allow multiple child-items
         const lists = QeSelectors.blocks.cb.findAllLists().filter((e) => e.matches(`:not(.${QeSelectors.blocks.cb.singleItem}), :empty`));
         const children: HTMLElement[] = [];
         lists.forEach((l) => {
             children.push(...Array.from(l.querySelectorAll<HTMLElement>(QeSelectors.blocks.cb.selector)));
         });
-        QuickE.contentBlocks = [...lists, ...children];
+        quickE.contentBlocks = [...lists, ...children];
     }
 
-    if (QuickE.config.modules.enable) {
-        const panes = QuickE.cachedPanes;
+    if (quickE.config.modules.enable) {
+        const panes = quickE.cachedPanes;
         const children: HTMLElement[] = [];
         panes.forEach((p) => {
             children.push(...Array.from(p.querySelectorAll<HTMLElement>(QeSelectors.blocks.mod.selector)));
         });
-        QuickE.modules = [...panes, ...children];
+        quickE.modules = [...panes, ...children];
     }
 }
 
@@ -77,8 +79,9 @@ let lastCall: Date;
  * position, align and show a menu linked to another item
  */
 function positionAndAlign(element: HTMLElement, coords: PositionCoordinates) {
-    element.style.left = `${coords.x - QuickE.bodyOffset.x}px`;
-    element.style.top = `${coords.yh - QuickE.bodyOffset.y}px`;
+    const quickE = QuickE.singleton();
+    element.style.left = `${coords.x - quickE.bodyOffset.x}px`;
+    element.style.top = `${coords.yh - quickE.bodyOffset.y}px`;
     element.style.width = `${NoJQ.width(coords.element)}px`;
     element.style.display = 'block';
     return element;
@@ -99,23 +102,24 @@ function refresh(e: MouseEvent) {
 
     // find the closest content-blocks and modules
     const currentCoords = new PositionCoordinates(e.clientX, e.clientY);
-    if (QuickE.config.innerBlocks.enable && QuickE.contentBlocks)
-        QuickE.nearestCb = findNearest(QuickE.contentBlocks, currentCoords);
-    if (QuickE.config.modules.enable && QuickE.modules)
-        QuickE.nearestMod = findNearest(QuickE.modules, currentCoords);
+    const quickE = QuickE.singleton();
+    if (quickE.config.innerBlocks.enable && quickE.contentBlocks)
+        quickE.nearestCb = findNearest(quickE.contentBlocks, currentCoords);
+    if (quickE.config.modules.enable && quickE.modules)
+        quickE.nearestMod = findNearest(quickE.modules, currentCoords);
 
     // hide the buttons for content-block or module, if they are not affected
-    QuickE.modActions.forEach((a) => {
-        a.classList.toggle('sc-invisible', QuickE.nearestMod === null);
+    quickE.modActions.forEach((a) => {
+        a.classList.toggle('sc-invisible', quickE.nearestMod === null);
     });
-    QuickE.cbActions.forEach((a) => {
-        a.classList.toggle('sc-invisible', QuickE.nearestCb === null);
+    quickE.cbActions.forEach((a) => {
+        a.classList.toggle('sc-invisible', quickE.nearestCb === null);
     });
 
-    const oldParent = QuickE.main._parentNode;
+    const oldParent = quickE.main._parentNode;
 
-    if (QuickE.nearestCb !== null || QuickE.nearestMod !== null) {
-        const alignTo = QuickE.nearestCb || QuickE.nearestMod;
+    if (quickE.nearestCb !== null || quickE.nearestMod !== null) {
+        const alignTo = quickE.nearestCb || quickE.nearestMod;
 
         // find parent pane to highlight
         const parentPane = QeSelectors.blocks.mod.findClosestList(alignTo.element);
@@ -126,25 +130,25 @@ function refresh(e: MouseEvent) {
         if (parentPane) {
             let paneName: string = parentPane.getAttribute('id') || '';
             if (paneName.length > 4) paneName = paneName.substr(4);
-            QuickE.modActions.filter((a) => a.matches('[titleTemplate]')).forEach((a) => {
+            quickE.modActions.filter((a) => a.matches('[titleTemplate]')).forEach((a) => {
                 a.setAttribute('title', a.getAttribute('titleTemplate').replace('{0}', paneName));
             });
         }
 
-        positionAndAlign(QuickE.main, alignTo);
+        positionAndAlign(quickE.main, alignTo);
 
         // Keep current block as current on menu
-        QuickE.main.activeContentBlock = QuickE.nearestCb ? QuickE.nearestCb.element : null;
-        QuickE.main.activeModule = QuickE.nearestMod ? QuickE.nearestMod.element : null;
-        QuickE.main._parentNode = parentContainer;
+        quickE.main.activeContentBlock = quickE.nearestCb ? quickE.nearestCb.element : null;
+        quickE.main.activeModule = quickE.nearestMod ? quickE.nearestMod.element : null;
+        quickE.main._parentNode = parentContainer;
         parentContainer.classList.add(highlightClass);
     } else {
-        QuickE.main._parentNode = null;
-        QuickE.main.style.display = 'none';
+        quickE.main._parentNode = null;
+        quickE.main.style.display = 'none';
     }
 
     // if previously a parent-pane was highlighted, un-highlight it now
-    if (oldParent && oldParent !== QuickE.main._parentNode)
+    if (oldParent && oldParent !== quickE.main._parentNode)
         oldParent.classList.remove(highlightClass);
 }
 
@@ -157,7 +161,7 @@ function provideCorrectAddButtons(tag: HTMLElement) {
         // only show apps if the list is longer than 'Content' if it contains that
         showApps = listSettings.appList.length - (showContent ? 1 : 0) > 0;
     }
-    QuickE.cbActions.forEach((a) => {
+    QuickE.singleton().cbActions.forEach((a) => {
         a.classList.toggle('hide-content', !showContent);
         a.classList.toggle('hide-app', !showApps);
     });

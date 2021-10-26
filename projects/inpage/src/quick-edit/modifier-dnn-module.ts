@@ -35,12 +35,13 @@ export class ModifierDnnModule extends ModifierBase {
     showSendToPane(): void {
         // debugger; // there is a bug where pane options are not updated when user clicks send to pane once, until that button is clicked again
         // to reproduce: select module in header pane, click sendToPane. Now select module in content pane and notice panes list is showing panes for previous module
-        const pane = QeSelectors.blocks.mod.findClosestList(QuickE.main.activeModule);
+        const quickE = QuickE.singleton();
+        const pane = QeSelectors.blocks.mod.findClosestList(quickE.main.activeModule);
         // debugger; // breaks in inner content buttons, like Accordion App. Check if I can hide this button in inner content
         if (!pane) return;
 
         // show the pane-options
-        const pl = QuickE.selected.querySelector<HTMLElement>('#paneList');
+        const pl = quickE.selected.querySelector<HTMLElement>('#paneList');
         if (!pl.matches(':empty')) NoJQ.empty(pl);
         pl.append(this.modInternal.getMoveButtons(this.modInternal.getPaneName(pane)));
     }
@@ -48,7 +49,7 @@ export class ModifierDnnModule extends ModifierBase {
     static onModuleButtonClick() {
         const _this = this as unknown as HTMLElement;
         const type = _this.getAttribute('data-type');
-        const dnnMod = QuickE.main.activeModule;
+        const dnnMod = QuickE.singleton().main.activeModule;
         const pane = QeSelectors.blocks.mod.findClosestList(dnnMod);
         let index = 0;
 
@@ -57,8 +58,8 @@ export class ModifierDnnModule extends ModifierBase {
 
         const cbAction = _this.getAttribute('data-action');
         if (cbAction)
-            return QuickEClipboard.do(cbAction, pane, index, QeSelectors.blocks.mod.id); // copy/paste
-        const modManage = QuickEClipboard.modDnn.modInternal;
+            return QuickEClipboard.singleton().do(cbAction, pane, index, QeSelectors.blocks.mod.id); // copy/paste
+        const modManage = QuickEClipboard.singleton().modDnn.modInternal;
         return modManage.create(modManage.getPaneName(pane), index, type);
     }
 }
