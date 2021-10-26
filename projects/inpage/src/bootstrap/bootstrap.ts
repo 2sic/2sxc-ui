@@ -78,7 +78,7 @@ export class BootstrapInPage extends HasLog {
                     if (node.matches('div[data-edit-context]')) {
                         this.initInstance(node, false);
                         // in case it has inner content, try to open the picker-dialog
-                        if (!QuickDialog.isVisible()) this.tryShowTemplatePicker();
+                        if (!QuickDialog.singleton().isVisible()) this.tryShowTemplatePicker();
                     }
                     // If the added node contains [data-edit-context] nodes, it is likely the DNN module drag manager which added
                     // the node. To prevent multiple initialization while dragging modules, we additionally check for the
@@ -138,7 +138,7 @@ export class BootstrapInPage extends HasLog {
                 return cl.return(false, 'cancelled');
 
             // already showing a dialog
-            if (QuickDialog.isVisible())
+            if (QuickDialog.singleton().isVisible())
                 return cl.return(false, 'should be invisible');
 
             // not exactly one uninitialized module

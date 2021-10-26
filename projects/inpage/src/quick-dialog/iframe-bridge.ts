@@ -51,14 +51,14 @@ export class IFrameBridge extends HasLog implements IIFrameBridge {
     }
 
     hide(): void {
-        QuickDialog.setVisible(false);
+        QuickDialog.singleton().setVisible(false);
     }
 
     run(verb: string) {
         this.uncachedSxc().manage.run(verb);
     }
 
-    cancel(): void { QuickDialog.cancel(this); }
+    cancel(): void { QuickDialog.singleton().cancel(this); }
 
     showMessage(message: string) {
         const cl = this.log.call('showMessage');
@@ -93,7 +93,7 @@ export class IFrameBridge extends HasLog implements IIFrameBridge {
             : renderer.ajaxLoad(context, templateId, true);
 
         if (final)
-            promise = promise.then(() => QuickDialog.setVisible(false));
+            promise = promise.then(() => QuickDialog.singleton().setVisible(false));
 
         promise = ajax
             ? promise.then(() => this.scrollToTarget(this.tagModule))

@@ -16,7 +16,7 @@ const resizeInterval = 200;
 
 export class QuickDialogContainer extends HasLog {
 
-    constructor(quickDialog: typeof QuickDialog) {
+    constructor(quickDialog: QuickDialog) {
         super('QDl.Contnr', quickDialog.log);
     }
 
@@ -109,9 +109,6 @@ export class QuickDialogContainer extends HasLog {
     }
 
 }
-
-// export const QuickDialogContainer = new QuickDialogContainerSingleton();
-
 
 
 

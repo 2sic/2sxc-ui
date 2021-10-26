@@ -155,7 +155,7 @@ export class CmsEngine extends HasLog {
             // check if inline window (quick-dialog)
             if (btn.inlineWindow()) {
                 // test if it should be full screen (value or resolve-function)
-                QuickDialog
+                QuickDialog.singleton()
                     .showOrToggleFromToolbar(context, link, btn.fullScreen(), btn.dialog())
                     .then((isChanged) => { if (isChanged) completePromise(); });
             } else {

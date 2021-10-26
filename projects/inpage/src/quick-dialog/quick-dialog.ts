@@ -20,9 +20,17 @@ interface IFrameWindow extends Window {
  * this is a dialog manager which is in charge of all quick-dialogues
  * it always has a reference to the latest dialog created by a.ny module instance
  */
-class QuickDialogManagerSingleton extends HasLog {
+export class QuickDialog extends HasLog {
+
+    /** Singleton */
+    public static singleton(): QuickDialog {
+        return this._singleton ?? (this._singleton = new QuickDialog());
+    }
+    private static _singleton: QuickDialog;
+
+
     private container: QuickDialogContainer;
-    constructor() {
+    private constructor() {
         super('Qdl.Managr');
         Insights.add('quick-dialog', 'manager', this.log);
         this.container = new QuickDialogContainer(this);
@@ -159,9 +167,3 @@ class QuickDialogManagerSingleton extends HasLog {
         return cl.return(url);
     }
 }
-
-export let QuickDialog = new QuickDialogManagerSingleton();
-
-
-
-
