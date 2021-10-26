@@ -1,5 +1,5 @@
 import { Positioning, QuickEditConfig } from '.';
-import { NoJQ } from '../interfaces/no-jquery';
+import { NoJQ } from '../plumbing';
 
 export namespace QuickEditOverlay {
   export interface Selection extends HTMLElement {

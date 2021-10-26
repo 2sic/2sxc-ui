@@ -1,6 +1,5 @@
 ﻿import { IDialogFrameElement, IFrameBridge } from '.';
-import { NoJQ } from '../interfaces/no-jquery';
-import { HasLog } from '../logging/';
+import { HasLog, NoJQ } from '../logging/';
 import { QuickDialog } from './quick-dialog';
 
 /**

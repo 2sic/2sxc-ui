@@ -2,10 +2,9 @@
 import { C } from '../constants';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { HtmlTools } from '../html/dom-tools';
-import { NoJQ } from '../interfaces/no-jquery';
 import { SxcEdit } from '../interfaces/sxc-instance-editable';
 import { windowInPage as window } from '../interfaces/window-in-page';
-import { HasLog, Insights } from '../logging';
+import { HasLog, Insights, NoJQ } from '../logging';
 import { QuickE } from '../quick-edit/quick-e';
 import { WorkflowStepArguments, WorkflowHelper, WorkflowPhases } from '../workflow';
 import { ContentBlockEditor } from './content-block-editor';

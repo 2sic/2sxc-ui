@@ -1,5 +1,5 @@
 ﻿import { ModifierBase, ModifierDnnModuleInternal, QeSelectors, QuickE, QuickEClipboard, Selection } from '.';
-import { NoJQ } from '../interfaces/no-jquery';
+import { NoJQ } from '../plumbing';
 
 export class ModifierDnnModule extends ModifierBase {
 

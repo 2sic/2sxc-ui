@@ -1,5 +1,5 @@
 ﻿import { PositionCoordinates, QeSelectors, QuickE } from '.';
-import { NoJQ } from '../interfaces/no-jquery';
+import { NoJQ } from '../plumbing';
 import { ContextForLists } from './context-for-lists';
 
 /**

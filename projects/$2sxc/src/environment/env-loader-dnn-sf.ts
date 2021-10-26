@@ -1,8 +1,7 @@
 import { Environment } from '.';
-import { HasLog, Window } from '..';
+import { HasLog, NoJQ, Window } from '..';
 import { JsInfo } from '../../../sxc-typings';
 import { AntiForgeryTokenHeaderNameDnn, DnnUiRoot, PlatformDnn } from '../constants/index';
-import { NoJQ } from '../jquery-ajax/no-jquery';
 
 const helpAutoDetect = 'You must either include jQuery on the page or inject the jsApi parameters to prevent auto-detection.';
 declare const window: Window;

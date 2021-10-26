@@ -1,9 +1,8 @@
-﻿import { SxcInstanceManage } from '../../../$2sxc/src';
+﻿import { NoJQ, SxcInstanceManage } from '../../../$2sxc/src';
 import { SxcInstanceEngine } from '../commands';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { AttrJsonEditContext } from '../context/html-attribute/edit-context-root';
 import { ContextOfUser } from '../context/parts/context-user';
-import { NoJQ } from '../interfaces/no-jquery';
 import { SxcEdit } from '../interfaces/sxc-instance-editable';
 import { TypeUnsafe } from '../plumbing';
 import { ToolbarManager } from '../toolbar';

@@ -1,4 +1,4 @@
-﻿import { NoJQ } from '../../jquery-ajax/no-jquery';
+﻿import { NoJQ } from '../..';
 import { SxcInstance } from '../sxc-instance';
 
 /**

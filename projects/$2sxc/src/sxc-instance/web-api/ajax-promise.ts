@@ -1,6 +1,5 @@
 import { SxcInstance, SxcWebApi } from '..';
-import { Window } from '../..';
-import { NoJQ } from '../../jquery-ajax/no-jquery';
+import { NoJQ, Window } from '../..';
 import { AjaxSettings } from './ajax-settings';
 
 declare const window: Window;

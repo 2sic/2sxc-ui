@@ -1,7 +1,7 @@
 ﻿import { ModifierContentBlock } from '.';
 import { ContentListActionParams } from '../commands';
 import { SxcEdit } from '../interfaces/sxc-instance-editable';
-import { HasLog } from '../logging';
+import { HasLog, NoJQ } from '../logging';
 import { ToolbarManager } from '../toolbar/toolbar-manager';
 // note: this import must be at the end of the list, for reasons unknown
 // otherwise you get an error at runtime, something about constructors
@@ -9,7 +9,6 @@ import { ToolbarManager } from '../toolbar/toolbar-manager';
 // not sure why though
 // tslint:disable-next-line: ordered-imports
 import { translate } from '../i18n';
-import { NoJQ } from '../interfaces/no-jquery';
 
 //#region WebApi Endpoints used: 2sxc
 const webApiNew = 'cms/block/block';

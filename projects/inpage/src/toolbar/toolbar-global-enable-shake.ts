@@ -1,4 +1,4 @@
-﻿import { NoJQ } from '../interfaces/no-jquery';
+﻿import { NoJQ } from '../plumbing';
 
 // tslint:disable-next-line: no-var-requires
 const Shake = require('shake.js');

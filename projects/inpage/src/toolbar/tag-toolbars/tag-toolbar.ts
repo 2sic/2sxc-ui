@@ -1,7 +1,7 @@
 ﻿import { TagToolbarManager, ToolbarRenderer } from '..';
 import { ContextComplete } from '../../context/bundles/context-bundle-button';
 import { Translator } from '../../i18n';
-import { NoJQ } from '../../interfaces/no-jquery';
+import { NoJQ } from '../../plumbing';
 import { TypeFollow } from '../config/toolbar-settings';
 import { ToolbarLifecycle } from '../toolbar-lifecycle';
 

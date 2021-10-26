@@ -1,4 +1,4 @@
-import { NoJQ } from '../../interfaces/no-jquery';
+import { NoJQ } from '../../plumbing';
 
 /**
  * The global Tag Toolbar Manager is responsible for the new TagToolbars

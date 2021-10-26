@@ -2,11 +2,10 @@
 import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { translate } from '../i18n';
 import { ItemIdentifierGroup, ItemIdentifierSimple, ItemInField } from '../interfaces/item-identifiers';
-import { NoJQ } from '../interfaces/no-jquery';
 import { $2sxcInPage } from '../interfaces/sxc-controller-in-page';
 import { HasLog, Log } from '../logging';
 import { NgUrlValuesWithoutParams } from '../manage/ng-dialog-params';
-import { DictionaryValue, TypeUnsafe, urlClean } from '../plumbing';
+import { DictionaryValue, NoJQ, TypeUnsafe, urlClean } from '../plumbing';
 import { ButtonSafe } from '../toolbar/config';
 
 /**

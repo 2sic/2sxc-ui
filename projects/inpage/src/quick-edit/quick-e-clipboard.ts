@@ -1,6 +1,5 @@
 ﻿import { ModifierBase, ModifierDnnModule, QeSelectors, QuickE, Selection } from '.';
-import { NoJQ } from '../interfaces/no-jquery';
-import { HasLog, Insights } from '../logging';
+import { HasLog, Insights, NoJQ } from '../logging';
 import { ContextForLists } from './context-for-lists';
 import { ModifierContentBlock } from './modifier-content-block';
 

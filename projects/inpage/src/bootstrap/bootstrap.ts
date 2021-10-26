@@ -1,10 +1,9 @@
 import { CmdLayout } from '../commands/command/layout';
 import { C } from '../constants';
-import { NoJQ } from '../interfaces/no-jquery';
 import { SxcEdit } from '../interfaces/sxc-instance-editable';
 import { windowInPage as window } from '../interfaces/window-in-page';
 import { HasLog, Insights, Log } from '../logging';
-import { TypeUnsafe } from '../plumbing';
+import { NoJQ, TypeUnsafe } from '../plumbing';
 import { QuickDialog } from '../quick-dialog';
 import * as QuickEditState from '../quick-dialog/state';
 import { TagToolbarManager } from '../toolbar/tag-toolbars/tag-toolbar-manager';

@@ -1,7 +1,6 @@
 ﻿import { ModifierDnnModule, QuickE, QuickEClipboard } from '.';
-import { NoJQ } from '../interfaces/no-jquery';
 import { $jq } from '../interfaces/sxc-controller-in-page';
-import { HasLog } from '../logging';
+import { HasLog, NoJQ } from '../logging';
 
 const dnnSF = (id?: number) => $jq.dnnSF(id);
 
