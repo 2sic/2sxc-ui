@@ -3,6 +3,7 @@ import { Cms } from './cms/Cms';
 import { ContextComplete } from './context/bundles/context-bundle-button';
 import { DnnActionMenu } from './dnn';
 import { translate, Translator } from './i18n';
+import { NoJQ } from './interfaces/no-jquery';
 import { $2sxcInPage as $2sxc } from './interfaces/sxc-controller-in-page';
 import { windowInPage as window } from './interfaces/window-in-page';
 import { EditManager } from './manage/edit-manager';
@@ -37,7 +38,7 @@ function loadInpage() {
     };
 }
 
-document.addEventListener('DOMContentLoaded', loadInpage);
+NoJQ.ready(loadInpage);
 
 // Tell Webpack to load CSS
 const cssEdit = require('./inpage.css');

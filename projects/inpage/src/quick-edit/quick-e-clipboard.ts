@@ -1,4 +1,5 @@
 ﻿import { ModifierBase, ModifierDnnModule, QeSelectors, QuickE, Selection } from '.';
+import { NoJQ } from '../interfaces/no-jquery';
 import { HasLog, Insights } from '../logging';
 import { ContextForLists } from './context-for-lists';
 import { ModifierContentBlock } from './modifier-content-block';
@@ -24,7 +25,7 @@ class QuickEClipboardSingleton extends HasLog {
         this.mods.mod = this.modDnn = new ModifierDnnModule();
 
         // initialize once the DOM is ready
-        document.addEventListener('DOMContentLoaded', () => this.initializeSecondaryButtons());
+        NoJQ.ready(() => this.initializeSecondaryButtons());
     }
 
     /**
