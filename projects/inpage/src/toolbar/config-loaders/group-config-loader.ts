@@ -65,7 +65,7 @@ export class ButtonGroupConfigLoader extends HasLog {
         const identifier = btnCommand.action;
         const name = Button.splitName(identifier).name;
 
-        if (!(Commands.get(name))) {
+        if (!(Commands.singleton().get(name))) {
             this.log.add(`couldn't find action ${name} - show warning`);
             console.warn('warning: toolbar-button with unknown action-name:', name);
         }
@@ -89,7 +89,7 @@ export class ButtonGroupConfigLoader extends HasLog {
         newButtonConfig = { ...newButtonConfig, ...InPageButtonJson.toButton(btn) };
 
         // ensure all buttons have either own settings, or the fallback
-        this.toolbar.button.addDefaultBtnSettings(newButtonConfig, groupDefaults, sharedDefaults, Commands);
+        this.toolbar.button.addDefaultBtnSettings(newButtonConfig, groupDefaults, sharedDefaults, Commands.singleton());
         return newButtonConfig;
     }
 

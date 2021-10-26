@@ -3,7 +3,20 @@ import { Button } from '../toolbar/config';
 import { Command } from './command';
 
 /** Singleton Catalog of all commands */
-class CommandsManagerSingleton extends HasLog {
+export class Commands extends HasLog {
+
+  /** Singleton */
+  public static singleton(): Commands {
+    return this._singleton ?? (this._singleton = new Commands());
+  }
+  private static _singleton: Commands;
+
+  public static add(name: string, translateKey: string, icon: string, uiOnly: boolean, partOfPage: boolean, more: Partial<Button>): Command {
+    return this.singleton().add(name, translateKey, icon, uiOnly, partOfPage, more);
+  }
+
+
+
   private commandList: Command[] = [];
   list: HashTable<Command> = {}; // hash - table of action definitions, to be used a list()["action - name"]
 
@@ -34,6 +47,3 @@ class CommandsManagerSingleton extends HasLog {
   }
 
 }
-
-// only create the catalog once, then use that everywhere
-export const Commands = new CommandsManagerSingleton();

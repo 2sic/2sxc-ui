@@ -40,7 +40,7 @@ export class RunParameters extends HasLog {
         const cl = this.log.call('expandParamsWithDefaults');
         const name = params.action;
         cl.add(`will add defaults for ${name} from buttonConfig`);
-        const defaults = Commands.get(name).buttonDefaults;
+        const defaults = Commands.singleton().get(name).buttonDefaults;
         cl.data('defaults to merge', defaults);
         // TODO: 2dm - suspicious cast
         // merge conf & settings, but...?
