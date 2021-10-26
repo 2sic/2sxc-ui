@@ -1,8 +1,10 @@
-﻿// tslint:disable-next-line: no-var-requires
+﻿import { NoJQ } from '../interfaces/no-jquery';
+
+// tslint:disable-next-line: no-var-requires
 const Shake = require('shake.js');
 // ReSharper disable once InconsistentNaming
 // enable shake detection on all toolbars
-document.addEventListener('DOMContentLoaded', () => {
+NoJQ.ready(() => {
   // this will add a css-class to auto-show all toolbars (or remove it again)
   function toggleAllToolbars() {
     document.body.classList.toggle('sc-tb-show-all');

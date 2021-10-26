@@ -2,6 +2,7 @@ import { Environment } from '.';
 import { HasLog, Window } from '..';
 import { JsInfo } from '../../../sxc-typings';
 import { AntiForgeryTokenHeaderNameDnn, DnnUiRoot, PlatformDnn } from '../constants/index';
+import { NoJQ } from '../jquery-ajax/no-jquery';
 
 const helpAutoDetect = 'You must either include jQuery on the page or inject the jsApi parameters to prevent auto-detection.';
 declare const window: Window;
@@ -23,7 +24,7 @@ export class EnvironmentDnnSfLoader extends HasLog {
     dnnSfFallback(): void {
         const cl = this.log.call('dnnSfFallback');
         // await page-ready to then initialize the stuff
-        document.addEventListener('DOMContentLoaded', () => this.dnnSfLoadWhenDocumentReady());
+        NoJQ.ready(() => this.dnnSfLoadWhenDocumentReady());
         cl.done('started dom-ready watcher')
     }
 
