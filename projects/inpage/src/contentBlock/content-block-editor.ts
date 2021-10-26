@@ -18,7 +18,7 @@ export class ContentBlockEditor extends HasLog {
     private static _singleton: ContentBlockEditor;
 
 
-    constructor() {
+    private constructor() {
         super('Sys.CbEdit');
         Insights.add('system', 'cb-editor-api', this.log);
     }

@@ -23,7 +23,7 @@ export class ToolbarConfigFinderAndInitializer extends HasLog {
      * Special constructor which only allows this builder to be instatiated from the TagManager
      * This is to simplify program control flow
      */
-    constructor(private tlbManager: typeof ToolbarManager) {
+    constructor(private tlbManager: ToolbarManager) {
         super('Tlb.Buildr', tlbManager.log);
     }
 

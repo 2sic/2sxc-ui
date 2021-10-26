@@ -69,7 +69,7 @@ export class ModifierContentBlockInstance extends HasLog {
 
                 // ReSharper disable once UnusedLocals
                 const sxcNew = SxcEdit.get(newTag);
-                ToolbarManager.buildModule(newTag);
+                ToolbarManager.singleton().buildModule(newTag);
             });
         return Promise.resolve(jqPromise);
     }

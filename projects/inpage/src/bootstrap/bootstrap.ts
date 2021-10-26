@@ -88,7 +88,7 @@ export class BootstrapInPage extends HasLog {
                             this.initInstance(e, false);
                         });
                     } else
-                        ToolbarManager.build(node);
+                        ToolbarManager.singleton().build(node);
                 });
             });
 
@@ -180,7 +180,7 @@ export class BootstrapInPage extends HasLog {
             // use a logger for each iteration
             const log = new Log('Bts.Module');
 
-            ToolbarManager.buildModule(module);
+            ToolbarManager.singleton().buildModule(module);
         }
         cl.done();
     }
