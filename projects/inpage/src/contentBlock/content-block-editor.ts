@@ -9,7 +9,14 @@ const webApiRender = 'cms/block/render';
 const webApiSave = 'cms/block/template';
 //#endregion
 
-class ContentBlockEditorSingleton extends HasLog {
+export class ContentBlockEditor extends HasLog {
+
+    /** Singleton */
+    public static singleton(): ContentBlockEditor {
+        return this._singleton ?? (this._singleton = new ContentBlockEditor());
+    }
+    private static _singleton: ContentBlockEditor;
+
 
     constructor() {
         super('Sys.CbEdit');
@@ -141,8 +148,6 @@ class ContentBlockEditorSingleton extends HasLog {
     }
 
 }
-
-export const ContentBlockEditor = new ContentBlockEditorSingleton();
 
 
 interface WebApiParams {

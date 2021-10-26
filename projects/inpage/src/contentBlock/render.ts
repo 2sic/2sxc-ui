@@ -85,7 +85,7 @@ class RendererGlobal extends HasLog {
     ajaxLoad(context: ContextComplete, alternateTemplateId: number, justPreview: boolean): Promise<void> {
         const cl = this.log.call('ajaxLoad');
         cl.add('starting promise chain');
-        return ContentBlockEditor.getPreviewWithTemplate(context, alternateTemplateId)
+        return ContentBlockEditor.singleton().getPreviewWithTemplate(context, alternateTemplateId)
             .then((result: string) => {
                 cl.add("get preview done, let's replace the content");
                 this.replaceContentBlock(context, result, justPreview);

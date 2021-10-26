@@ -89,7 +89,7 @@ export class IFrameBridge extends HasLog implements IIFrameBridge {
 
         const reallySave = final || !ajax;
         let promise = reallySave
-            ? ContentBlockEditor.updateTemplateFromDia(context, templateId)
+            ? ContentBlockEditor.singleton().updateTemplateFromDia(context, templateId)
             : renderer.ajaxLoad(context, templateId, true);
 
         if (final)

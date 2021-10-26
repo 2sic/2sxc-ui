@@ -114,7 +114,7 @@ export class CmsEngine extends HasLog {
             finalPromise = wrapperPromise.then(
                 (wfArgs) => WorkflowHelper.isCancelled(wfArgs)
                     ? Promise.resolve<T>(null)
-                    : ContentBlockEditor
+                    : ContentBlockEditor.singleton()
                         .prepareToAddContent(context, cmdParams.useModuleList)
                         .then(() => commandPromise(context, origEvent)));
         }

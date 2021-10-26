@@ -20,7 +20,7 @@ export class Commands extends HasLog {
   private commandList: Command[] = [];
   list: HashTable<Command> = {}; // hash - table of action definitions, to be used a list()["action - name"]
 
-  constructor() {
+  private constructor() {
       super('Cmd.Catlog');
       Insights.add('system', 'command-catalog', this.log);
   }
