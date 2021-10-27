@@ -21,6 +21,17 @@ export class NoJQ {
     static domFromString(string: string): HTMLElement[] {
         const container = document.createElement('div');
         container.insertAdjacentHTML('afterbegin', string);
+
+        // recreating script tags manually because they don't fire if created with insertAdjacentHTML
+        Array.from(container.querySelectorAll('script')).forEach((element) => {
+            const manual = document.createElement('script');
+            Array.from(element.attributes).forEach((someAttribute) => {
+                manual.setAttribute(someAttribute.nodeName, someAttribute.nodeValue);
+            });
+            manual.textContent = element.textContent;
+            NoJQ.replaceWith(element as HTMLElement, manual);
+        });
+
         const elements = Array.from(container.children) as HTMLElement[];
         elements.forEach((e) => {
             container.removeChild(e);

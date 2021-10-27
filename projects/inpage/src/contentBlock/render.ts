@@ -110,12 +110,13 @@ class RendererGlobal extends HasLog {
         try {
             try {
                 const newContentObj = JSON.parse(newContent) as ContentBlockReplacement;
-                const newDom = NoJQ.domFromString(newContentObj.Html)[0];
+                this.loadResources(newContentObj.Resources, () => {
+                    const newDom = NoJQ.domFromString(newContentObj.Html)[0];
 
-                // Must disable toolbar before we attach to DOM
-                if (justPreview) HtmlTools.disable(newDom);
-                NoJQ.replaceWith(SxcEdit.getTag(context.sxc), newDom);
-                this.loadResources(newDom, newContentObj.Resources);
+                    // Must disable toolbar before we attach to DOM
+                    if (justPreview) HtmlTools.disable(newDom);
+                    NoJQ.replaceWith(SxcEdit.getTag(context.sxc), newDom);
+                });
             } catch {
                 const newDom = NoJQ.domFromString(newContent)[0];
 
@@ -133,10 +134,13 @@ class RendererGlobal extends HasLog {
     }
 
     /** loads scripts and stylesheets one after the other */
-    private loadResources(parent: HTMLElement, resources: ContentBlockResource[]): void {
+    private loadResources(resources: ContentBlockResource[], callbackWhenDone: () => void): void {
         const resource = resources[0];
         const others = resources.slice(1);
-        if (resource == null) { return; }
+        if (resource == null) {
+            callbackWhenDone();
+            return;
+        }
 
         let tag: HTMLScriptElement | HTMLLinkElement;
         switch (resource.Type) {
@@ -153,12 +157,19 @@ class RendererGlobal extends HasLog {
         }
 
         if (tag == null) {
-            this.loadResources(parent, others);
+            this.loadResources(others, callbackWhenDone);
             return;
         }
 
-        tag.addEventListener('load', () => { this.loadResources(parent, others); }, { once: true });
-        parent.appendChild(tag);
+        const listener = () => {
+            tag.onload = null;
+            tag.onerror = null;
+            this.loadResources(others, callbackWhenDone);
+        };
+        tag.onload = listener;
+        tag.onerror = listener;
+
+        document.head.appendChild(tag);
     }
 }
 
