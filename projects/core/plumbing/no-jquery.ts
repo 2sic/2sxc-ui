@@ -78,7 +78,6 @@ export class NoJQ {
     /** https://api.jquery.com/replacewith/ */
     static replaceWith(toBeReplaced: HTMLElement, newElement: HTMLElement): void {
         const parent = toBeReplaced.parentElement;
-        parent.removeChild(toBeReplaced);
-        parent.appendChild(newElement);
+        parent.replaceChild(newElement, toBeReplaced);
     }
 }

@@ -108,12 +108,21 @@ class RendererGlobal extends HasLog {
     private replaceContentBlock(context: ContextComplete, newContent: string, justPreview: boolean): void {
         const cl = this.log.call('replaceContentBlock');
         try {
-            const newDom = NoJQ.domFromString(newContent)[0];
+            try {
+                const newContentObj = JSON.parse(newContent) as ContentBlockReplacement;
+                const newDom = NoJQ.domFromString(newContentObj.Html)[0];
 
-            // Must disable toolbar before we attach to DOM
-            if (justPreview) HtmlTools.disable(newDom);
+                // Must disable toolbar before we attach to DOM
+                if (justPreview) HtmlTools.disable(newDom);
+                NoJQ.replaceWith(SxcEdit.getTag(context.sxc), newDom);
+                this.loadResources(newDom, newContentObj.Resources);
+            } catch {
+                const newDom = NoJQ.domFromString(newContent)[0];
 
-            NoJQ.replaceWith(SxcEdit.getTag(context.sxc), newDom);
+                // Must disable toolbar before we attach to DOM
+                if (justPreview) HtmlTools.disable(newDom);
+                NoJQ.replaceWith(SxcEdit.getTag(context.sxc), newDom);
+            }
 
             // reset the cache, so the sxc-object is refreshed
             context.sxc.recreate(true);
@@ -122,8 +131,49 @@ class RendererGlobal extends HasLog {
         }
         cl.done();
     }
+
+    /** loads scripts and stylesheets one after the other */
+    private loadResources(parent: HTMLElement, resources: ContentBlockResource[]): void {
+        const resource = resources[0];
+        const others = resources.slice(1);
+        if (resource == null) { return; }
+
+        let tag: HTMLScriptElement | HTMLLinkElement;
+        switch (resource.Type) {
+            case 'js':
+                tag = document.createElement('script');
+                tag.type = 'text/javascript';
+                tag.src = resource.Url;
+                break;
+            case 'css':
+                tag = document.createElement('link');
+                tag.rel = 'stylesheet';
+                tag.href = resource.Url;
+                break;
+        }
+
+        if (tag == null) {
+            this.loadResources(parent, others);
+            return;
+        }
+
+        tag.addEventListener('load', () => { this.loadResources(parent, others); }, { once: true });
+        parent.appendChild(tag);
+    }
 }
 
 
 
 export const renderer = new RendererGlobal();
+
+export interface ContentBlockReplacement {
+    Html: string;
+    Resources: ContentBlockResource[];
+}
+
+export interface ContentBlockResource {
+    Contents: null;
+    Id: null;
+    Type: 'js' | 'css';
+    Url: string;
+}
