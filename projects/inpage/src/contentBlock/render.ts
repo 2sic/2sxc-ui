@@ -110,12 +110,23 @@ class RendererGlobal extends HasLog {
         try {
             try {
                 const newContentObj = JSON.parse(newContent) as ContentBlockReplacement;
-                const newDom = NoJQ.domFromString(newContentObj.Html)[0];
+                const resourcesHtml = newContentObj.Resources
+                    .map((resource) => {
+                        if (resource.Type === 'js') {
+                            return `<script type="text/javascript" src="${resource.Url}"></script>`;
+                        } else if (resource.Type === 'css') {
+                            return `<link rel="stylesheet" href="${resource.Url}">`;
+                        } else {
+                            return '';
+                        }
+                    })
+                    .filter((resource) => !!resource)
+                    .join('\n');
+                const newDom = NoJQ.domFromString(`${newContentObj.Html}\n${resourcesHtml}`)[0];
 
                 // Must disable toolbar before we attach to DOM
                 if (justPreview) HtmlTools.disable(newDom);
                 NoJQ.replaceWith(SxcEdit.getTag(context.sxc), newDom);
-                this.loadResources(newDom, newContentObj.Resources);
             } catch {
                 const newDom = NoJQ.domFromString(newContent)[0];
 
@@ -130,35 +141,6 @@ class RendererGlobal extends HasLog {
             console.log('Error while rendering template:', e);
         }
         cl.done();
-    }
-
-    /** loads scripts and stylesheets one after the other */
-    private loadResources(parent: HTMLElement, resources: ContentBlockResource[]): void {
-        const resource = resources[0];
-        const others = resources.slice(1);
-        if (resource == null) { return; }
-
-        let tag: HTMLScriptElement | HTMLLinkElement;
-        switch (resource.Type) {
-            case 'js':
-                tag = document.createElement('script');
-                tag.type = 'text/javascript';
-                tag.src = resource.Url;
-                break;
-            case 'css':
-                tag = document.createElement('link');
-                tag.rel = 'stylesheet';
-                tag.href = resource.Url;
-                break;
-        }
-
-        if (tag == null) {
-            this.loadResources(parent, others);
-            return;
-        }
-
-        tag.addEventListener('load', () => { this.loadResources(parent, others); }, { once: true });
-        parent.appendChild(tag);
     }
 }
 
