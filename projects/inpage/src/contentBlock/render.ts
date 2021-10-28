@@ -4,7 +4,7 @@ import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { HtmlTools } from '../html/dom-tools';
 import { SxcEdit } from '../interfaces/sxc-instance-editable';
 import { windowInPage as window } from '../interfaces/window-in-page';
-import { HasLog, Insights, NoJQ } from '../logging';
+import { AssetsLoader, HasLog, Insights, NoJQ } from '../logging';
 import { QuickE } from '../quick-edit/quick-e';
 import { WorkflowStepArguments, WorkflowHelper, WorkflowPhases } from '../workflow';
 import { ContentBlockEditor } from './content-block-editor';
@@ -110,19 +110,37 @@ class RendererGlobal extends HasLog {
         try {
             try {
                 const newContentObj = JSON.parse(newContent) as ContentBlockReplacement;
-                this.loadResources(newContentObj.Resources, () => {
-                    const newDom = NoJQ.domFromString(newContentObj.Html)[0];
+                const newHeadHtml = newContentObj.Resources
+                    .map((resource) => {
+                        if (resource.Type === 'js') {
+                            return `<script type="text/javascript" src="${resource.Url}"></script>`;
+                        }
+                        if (resource.Type === 'css') {
+                            return `<link rel="stylesheet" href="${resource.Url}">`;
+                        }
+                    })
+                    .filter((resource) => resource != null)
+                    .join('\n');
+                const newHead = NoJQ.domFromString(newHeadHtml);
+                const newDom = NoJQ.domFromString(newContentObj.Html)[0];
 
-                    // Must disable toolbar before we attach to DOM
-                    if (justPreview) HtmlTools.disable(newDom);
-                    NoJQ.replaceWith(SxcEdit.getTag(context.sxc), newDom);
-                });
+                NoJQ.append(document.head, newHead, false);
+                // Must disable toolbar before we attach to DOM
+                if (justPreview) HtmlTools.disable(newDom);
+                NoJQ.replaceWith(SxcEdit.getTag(context.sxc), newDom, false);
+
+                // run scripts manually to ensure proper timing
+                const scripts = [
+                    ...newHead.filter((asset) => asset.tagName.toLocaleLowerCase() === 'script'),
+                    ...Array.from(newDom.querySelectorAll('script')),
+                ] as HTMLScriptElement[];
+                AssetsLoader.runScripts(scripts, undefined);
             } catch {
                 const newDom = NoJQ.domFromString(newContent)[0];
 
                 // Must disable toolbar before we attach to DOM
                 if (justPreview) HtmlTools.disable(newDom);
-                NoJQ.replaceWith(SxcEdit.getTag(context.sxc), newDom);
+                NoJQ.replaceWith(SxcEdit.getTag(context.sxc), newDom, true);
             }
 
             // reset the cache, so the sxc-object is refreshed
@@ -132,57 +150,18 @@ class RendererGlobal extends HasLog {
         }
         cl.done();
     }
-
-    /** loads scripts and stylesheets one after the other */
-    private loadResources(resources: ContentBlockResource[], callbackWhenDone: () => void): void {
-        const resource = resources[0];
-        const others = resources.slice(1);
-        if (resource == null) {
-            callbackWhenDone();
-            return;
-        }
-
-        let tag: HTMLScriptElement | HTMLLinkElement;
-        switch (resource.Type) {
-            case 'js':
-                tag = document.createElement('script');
-                tag.type = 'text/javascript';
-                tag.src = resource.Url;
-                break;
-            case 'css':
-                tag = document.createElement('link');
-                tag.rel = 'stylesheet';
-                tag.href = resource.Url;
-                break;
-        }
-
-        if (tag == null) {
-            this.loadResources(others, callbackWhenDone);
-            return;
-        }
-
-        const listener = () => {
-            tag.onload = null;
-            tag.onerror = null;
-            this.loadResources(others, callbackWhenDone);
-        };
-        tag.onload = listener;
-        tag.onerror = listener;
-
-        document.head.appendChild(tag);
-    }
 }
 
 
 
 export const renderer = new RendererGlobal();
 
-export interface ContentBlockReplacement {
+interface ContentBlockReplacement {
     Html: string;
     Resources: ContentBlockResource[];
 }
 
-export interface ContentBlockResource {
+interface ContentBlockResource {
     Contents: null;
     Id: null;
     Type: 'js' | 'css';
