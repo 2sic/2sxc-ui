@@ -4,7 +4,7 @@ import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { HtmlTools } from '../html/dom-tools';
 import { SxcEdit } from '../interfaces/sxc-instance-editable';
 import { windowInPage as window } from '../interfaces/window-in-page';
-import { HasLog, Insights, NoJQ } from '../logging';
+import { AssetsLoader, HasLog, Insights, NoJQ } from '../logging';
 import { QuickE } from '../quick-edit/quick-e';
 import { WorkflowStepArguments, WorkflowHelper, WorkflowPhases } from '../workflow';
 import { ContentBlockEditor } from './content-block-editor';
@@ -110,29 +110,37 @@ class RendererGlobal extends HasLog {
         try {
             try {
                 const newContentObj = JSON.parse(newContent) as ContentBlockReplacement;
-                const resourcesHtml = newContentObj.Resources
+                const newHeadHtml = newContentObj.Resources
                     .map((resource) => {
                         if (resource.Type === 'js') {
                             return `<script type="text/javascript" src="${resource.Url}"></script>`;
-                        } else if (resource.Type === 'css') {
+                        }
+                        if (resource.Type === 'css') {
                             return `<link rel="stylesheet" href="${resource.Url}">`;
-                        } else {
-                            return '';
                         }
                     })
-                    .filter((resource) => !!resource)
+                    .filter((resource) => resource != null)
                     .join('\n');
-                const newDom = NoJQ.domFromString(`${newContentObj.Html}\n${resourcesHtml}`)[0];
+                const newHead = NoJQ.domFromString(newHeadHtml);
+                const newDom = NoJQ.domFromString(newContentObj.Html)[0];
 
+                NoJQ.append(document.head, newHead, false);
                 // Must disable toolbar before we attach to DOM
                 if (justPreview) HtmlTools.disable(newDom);
-                NoJQ.replaceWith(SxcEdit.getTag(context.sxc), newDom);
+                NoJQ.replaceWith(SxcEdit.getTag(context.sxc), newDom, false);
+
+                // run scripts manually to ensure proper timing
+                const scripts = [
+                    ...newHead.filter((asset) => asset.tagName.toLocaleLowerCase() === 'script'),
+                    ...Array.from(newDom.querySelectorAll('script')),
+                ] as HTMLScriptElement[];
+                AssetsLoader.runScripts(scripts, undefined);
             } catch {
                 const newDom = NoJQ.domFromString(newContent)[0];
 
                 // Must disable toolbar before we attach to DOM
                 if (justPreview) HtmlTools.disable(newDom);
-                NoJQ.replaceWith(SxcEdit.getTag(context.sxc), newDom);
+                NoJQ.replaceWith(SxcEdit.getTag(context.sxc), newDom, true);
             }
 
             // reset the cache, so the sxc-object is refreshed
@@ -148,12 +156,12 @@ class RendererGlobal extends HasLog {
 
 export const renderer = new RendererGlobal();
 
-export interface ContentBlockReplacement {
+interface ContentBlockReplacement {
     Html: string;
     Resources: ContentBlockResource[];
 }
 
-export interface ContentBlockResource {
+interface ContentBlockResource {
     Contents: null;
     Id: null;
     Type: 'js' | 'css';

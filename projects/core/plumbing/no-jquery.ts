@@ -19,22 +19,27 @@ export class NoJQ {
 
     /** Build DOM elements from string */
     static domFromString(string: string): HTMLElement[] {
-        const container = document.createElement('div');
-        container.insertAdjacentHTML('afterbegin', string);
+        // build elements from string into dummy parent
+        const dummyParent = document.createElement('div');
+        dummyParent.insertAdjacentHTML('afterbegin', string);
 
-        // recreating script tags manually because they don't fire if created with insertAdjacentHTML
-        Array.from(container.querySelectorAll('script')).forEach((element) => {
-            const manual = document.createElement('script');
-            Array.from(element.attributes).forEach((someAttribute) => {
-                manual.setAttribute(someAttribute.nodeName, someAttribute.nodeValue);
+        // scripts created from string are not executable and have to recreated manually to be executable
+        Array.from(dummyParent.querySelectorAll('script')).forEach((brokenScript) => {
+            const workingScript = document.createElement('script');
+            // copy attributes
+            Array.from(brokenScript.attributes).forEach((attribute) => {
+                workingScript.setAttribute(attribute.nodeName, attribute.nodeValue);
             });
-            manual.textContent = element.textContent;
-            NoJQ.replaceWith(element as HTMLElement, manual);
+            // copy inline part
+            workingScript.textContent = brokenScript.textContent;
+            // replace a non executable script with executable one
+            NoJQ.replaceWith(brokenScript, workingScript, false);
         });
 
-        const elements = Array.from(container.children) as HTMLElement[];
-        elements.forEach((e) => {
-            container.removeChild(e);
+        // remove created elements from dummy parent so it can be garbage collected
+        const elements = Array.from(dummyParent.children) as HTMLElement[];
+        elements.forEach((element) => {
+            dummyParent.removeChild(element);
         });
         return elements;
     }
@@ -87,8 +92,102 @@ export class NoJQ {
     }
 
     /** https://api.jquery.com/replacewith/ */
-    static replaceWith(toBeReplaced: HTMLElement, newElement: HTMLElement): void {
+    static replaceWith(toBeReplaced: HTMLElement, newElement: HTMLElement, runScripts: boolean): void {
         const parent = toBeReplaced.parentElement;
+
+        // disable scripts before replacing dom
+        const scripts = Array.from(newElement.querySelectorAll('script'));
+        const restores: ScriptTypeRestore[] = [];
+        scripts.forEach((script) => {
+            restores.push({ script, type: script.type });
+            script.type = null;
+        });
+
+        // replace dom
         parent.replaceChild(newElement, toBeReplaced);
+
+        // enable scripts
+        restores.forEach((restore) => {
+            restore.script.type = restore.type;
+        });
+
+        if (runScripts) {
+            // run scripts manually to ensure proper timing
+            AssetsLoader.runScripts(scripts, undefined);
+        }
     }
+
+    /** https://api.jquery.com/append/ */
+    static append(parent: HTMLElement, newElements: HTMLElement[], runScripts: boolean): void {
+        const scripts: HTMLScriptElement[] = [];
+
+        newElements.forEach((element) => {
+            if (element.tagName.toLocaleLowerCase() === 'script') {
+                const script = element as HTMLScriptElement;
+                // disable script before inserting to the dom
+                const restoreType = script.type;
+                script.type = null;
+                // insert to dom
+                parent.appendChild(script);
+                // enable script
+                script.type = restoreType;
+                scripts.push(script);
+            } else {
+                parent.appendChild(element);
+            }
+        });
+
+        if (runScripts && scripts.length > 0) {
+            // run scripts manually to ensure proper timing
+            AssetsLoader.runScripts(scripts, undefined);
+        }
+    }
+}
+
+export class AssetsLoader {
+
+    /** Asynchronously runs external and inline scripts in series */
+    static runScripts(scripts: HTMLScriptElement[], callback: () => void): void {
+        const script = scripts[0];
+        const others = scripts.slice(1);
+        if (script == null) {
+            callback?.();
+            return;
+        }
+
+        // create copy
+        const copy = document.createElement('script');
+        // attributes
+        Array.from(script.attributes).forEach((attribute) => {
+            copy.setAttribute(attribute.nodeName, attribute.nodeValue);
+        });
+        // inline part
+        copy.textContent = script.textContent;
+
+        // if src then insert in head, wait for onload or onerror, remove from head and move to next one
+        if (copy.type && copy.src) {
+            const listener = () => {
+                copy.onload = null;
+                copy.onerror = null;
+                document.head.removeChild(copy);
+                this.runScripts(others, callback);
+            };
+            copy.onload = listener;
+            copy.onerror = listener;
+            document.head.appendChild(copy);
+            return;
+        }
+
+        // if no src then inline, insert to head and remove instantly and move to next one
+        setTimeout(() => {
+            document.head.appendChild(copy);
+            document.head.removeChild(copy);
+            this.runScripts(others, callback);
+        });
+    }
+}
+
+interface ScriptTypeRestore {
+    script: HTMLScriptElement;
+    type: string;
 }
