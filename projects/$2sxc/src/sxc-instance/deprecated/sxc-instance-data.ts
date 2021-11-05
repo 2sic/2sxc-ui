@@ -83,7 +83,7 @@ export class SxcInstanceDataDeprecated {
         // and run callback when SxcInstanceDataDeprecated.load() runs
         // dates since beginning of time:
         // https://github.com/2sic/2sxc-ui/blob/e98383f8cf06cd973cf28fa37dc6332af80e9a51/Js/2sxc.api.js
-        return (window.$2sxc_jQSuperlight(this).on('2scLoad', callback)[0] as unknown as SxcInstanceDataDeprecated)._triggerLoaded();
+        return (window.$(this).on('2scLoad', callback)[0] as unknown as SxcInstanceDataDeprecated)._triggerLoaded();
     }
 
     // ReSharper disable once InconsistentNaming
@@ -94,7 +94,7 @@ export class SxcInstanceDataDeprecated {
         // dates since beginning of time:
         // https://github.com/2sic/2sxc-ui/blob/e98383f8cf06cd973cf28fa37dc6332af80e9a51/Js/2sxc.api.js
         return this.controller.isLoaded
-            ? window.$2sxc_jQSuperlight(this).trigger('2scLoad', [this])[0] as unknown as SxcInstanceDataDeprecated
+            ? window.$(this).trigger('2scLoad', [this])[0] as unknown as SxcInstanceDataDeprecated
             : this;
     }
 
@@ -104,7 +104,7 @@ export class SxcInstanceDataDeprecated {
         // It probably attached 2scLoad event listener with .on, not .one, a long time ago, but oldest github version is from 2014 and it was already broken there:
         // https://github.com/2sic/2sxc-ui/blob/e98383f8cf06cd973cf28fa37dc6332af80e9a51/Js/2sxc.api.js
         if (!this.controller.isLoaded)
-            return (window.$2sxc_jQSuperlight(this) as JQuery & { one: (event: string, callback: (x: any, y: any) => void) => JQuery }).one('2scLoad', callback)[0] as unknown as SxcInstanceDataDeprecated;
+            return (window.$(this) as JQuery & { one: (event: string, callback: (x: any, y: any) => void) => JQuery }).one('2scLoad', callback)[0] as unknown as SxcInstanceDataDeprecated;
         callback({}, this);
         return this;
     }

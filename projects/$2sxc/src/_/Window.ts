@@ -5,8 +5,6 @@ export interface Window extends Public.WindowWith$2sxc {
     $2sxc: SxcRootWithInternals;
     // debugger;
     $: JQueryStatic & DnnJQueryExtensions;
-    // debugger;
-    $2sxc_jQSuperlight: JQueryStatic;
 }
 
 // export interface WindowInternal extends

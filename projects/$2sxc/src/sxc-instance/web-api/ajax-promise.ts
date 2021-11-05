@@ -17,7 +17,10 @@ export class AjaxPromise {
   public makePromise(settings: AjaxSettings): JQueryPromise<any> {
     var headers = this.api.headers();
     // debugger;
-    const promise = window.$2sxc_jQSuperlight.ajax({
+    if (window.$ == null) {
+      throw new Error('JQuery is now removed from 2sxc installation. Please use newer api like fetch or include JQuery in your project');
+    }
+    const promise = window.$.ajax({
       async: true,
       dataType: settings.dataType || 'json', // default is json if not specified
       data: JSON.stringify(settings.data),

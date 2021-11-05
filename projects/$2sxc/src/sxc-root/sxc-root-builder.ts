@@ -93,7 +93,7 @@ export function buildSxcRoot(): SxcRoot & SxcRootInternals {
             },
         },
         // debugger;
-        jq: function () { return window.$2sxc_jQSuperlight; },
+        jq: function () { return window.$; },
     };
 
     const merged = Object.assign(FindSxcInstance, addOn, rootApiV2) as SxcRoot & SxcRootInternals;
