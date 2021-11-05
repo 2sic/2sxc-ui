@@ -121,8 +121,21 @@ export class SxcWebApi implements Public.SxcWebApi {
      * All the headers which are needed in an ajax call for this to work reliably.
      * Use this if you need to get a list of headers in another system
      */
-    headers(): Public.Dictionary<string> {
-        return this.sxc.root.http.headers(this.sxc.id, this.sxc.cbid);
+    headers(method?: string): Public.Dictionary<string> {
+        const headers = this.sxc.root.http.headers(this.sxc.id, this.sxc.cbid);
+        if (method == null) {
+            return headers;
+        }
+
+        switch (method.toLocaleUpperCase()) {
+            case 'GET':
+                headers['Accept'] = 'application/json';
+                break;
+            default:
+                headers['Accept'] = 'application/json';
+                headers['Content-Type'] = 'application/json';
+        }
+        return headers;
     }
 
     url(url: string): string {
