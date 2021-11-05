@@ -119,7 +119,7 @@ export class SxcWebApi implements Public.SxcWebApi {
 
     fetch(url: string, data?: string | Record<string, any>, method?: string): Promise<Response> {
         url = this.url(url);
-        method = method || data ? 'POST' : 'GET';
+        method = method || (data ? 'POST' : 'GET');
         const headers = this.headers(method);
 
         if (data) {
