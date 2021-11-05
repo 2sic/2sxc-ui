@@ -117,13 +117,38 @@ export class SxcWebApi implements Public.SxcWebApi {
         return promise;
     }
 
+    fetch(url: string, data?: string | Record<string, any>, method?: string): Promise<Response> {
+        url = this.url(url);
+        method = method || data ? 'POST' : 'GET';
+        const headers = this.headers(method);
+
+        if (data) {
+            // test if data is a json. If it's not, convert it to json
+            try {
+                JSON.parse(data as string);
+            } catch {
+                data = JSON.stringify(data);
+            }
+        }
+
+        return fetch(url, {
+            headers,
+            method,
+            ...(data && { body: data as string }),
+        });
+    }
+
+    fetchJson(url: string, data?: string | Record<string, any>, method?: string): Promise<any> {
+        return this.fetch(url, data, method).then(response => response.json());
+    }
+
     /**
      * All the headers which are needed in an ajax call for this to work reliably.
      * Use this if you need to get a list of headers in another system
      */
-    headers(method?: string): Public.Dictionary<string> {
+    headers(method?: string): Record<string, string> {
         const headers = this.sxc.root.http.headers(this.sxc.id, this.sxc.cbid);
-        if (method == null) {
+        if (!method) {
             return headers;
         }
 
