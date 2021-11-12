@@ -9,7 +9,7 @@ import { HasLog, Log } from '../../logging';
  * @export
  * @class RunParameters
  */
-export class RunParameters extends HasLog {
+export class RunParametersHelper extends HasLog {
     constructor(parentLog?: Log) {
         super('Cmd.RunPrm', parentLog, 'start');
     }

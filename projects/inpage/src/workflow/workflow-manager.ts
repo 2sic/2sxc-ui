@@ -21,9 +21,21 @@ export class WorkflowManager extends HasLog {
     }
 
     /**
-     * Add a workflow step to this manager
+     * Add one or many steps to the workflow
      */
-    add(step: WorkflowStep) {
+    // @publicApi("Used publicly on the Workflow-object in toolbar-init")
+    add(steps: WorkflowStep | WorkflowStep[]) {
+        if (!steps) return;
+        if (Array.isArray(steps)) {
+            steps.forEach((s) => this.addOne(s));
+        } else
+            this.addOne(steps);
+    }
+
+    /**
+     * Add a single workflow step to this manager
+     */
+    private addOne(step: WorkflowStep) {
         step = WorkflowStepHelper.initDefaults(step);
         const cl = this.log.call('add', `'${step.name}' for '${step.command}'-'${step.phase}'`);
         if (!step) {
@@ -34,6 +46,7 @@ export class WorkflowManager extends HasLog {
         this.steps.push(step);
         cl.done();
     }
+
 
     /**
      * Run a workflow.
@@ -71,25 +84,10 @@ export class WorkflowManager extends HasLog {
                 const nextStep = stepsForCommand[stepCount];
                 promiseChain = promiseChain.then((resultingArgs) => {
                     return this.runNextPromiseIfNotCancelled(resultingArgs, wfArgs, nextStep.code);
-                    // make sure that empty resulting args will mean we continue with the previous ones
-                    // resultingArgs = resultingArgs ?? previousArgs;
-                    // // make sure that a simple 'false' will be treaded as cancel
-                    // if (resultingArgs as unknown as boolean === false) {
-                    //     interruptChain = true;
-                    //     resultingArgs = { cancel: true, ...previousArgs };
-                    // }
-                    // if (resultingArgs?.cancel === true) interruptChain = true;
-
-                    // // preserve for next iteration
-                    // previousArgs = resultingArgs;
-
-                    // return (interruptChain) ? emptyWorkflow(previousArgs) : nextStep.promise(previousArgs);
                 });
             }
 
-            promiseChain.then((finalArgs) => {
-                resolve(finalArgs);
-            });
+            promiseChain.then((finalArgs) => { resolve(finalArgs); });
             promiseChain.catch(reject);
         });
         return promise;
