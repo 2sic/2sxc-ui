@@ -1,10 +1,10 @@
-import { WorkflowStepArguments, WorkflowPhases, WorkflowStep, WorkflowStepHelper } from '.';
+import { WorkflowPhases, WorkflowStep, WorkflowStepArguments, WorkflowStepHelper } from '.';
 import { SpecialCommands } from '../commands';
 import { ContextComplete } from '../context';
 import { HasLog, Insights, Log } from '../logging';
 import { ToolbarWithWorkflow } from './toolbar-with-workflow';
 import { WorkflowHelper } from './workflow-helper';
-import { WorkflowCode, WorkflowPromiseFactory } from './workflow-step';
+import { WorkflowCode } from './workflow-step';
 
 /**
  * A workflow manager which will run stuff before / after commands.
