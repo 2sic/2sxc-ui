@@ -2,7 +2,7 @@
 import { ContextComplete } from '../../context/bundles/context-bundle-button';
 import { Translator } from '../../i18n';
 import { NoJQ } from '../../plumbing';
-import { TypeFollow } from '../config/toolbar-settings';
+import { TOOLBAR_FOLLOW_ALWAYS, TOOLBAR_FOLLOW_INITIAL, TOOLBAR_FOLLOW_SCROLL, TOOLBAR_SHOW_ALWAYS, TypeFollow } from '../config/toolbar-settings';
 import { ToolbarLifecycle } from '../toolbar-lifecycle';
 
 /**
@@ -15,6 +15,7 @@ export class TagToolbar {
     private toolbarElement = null as HTMLElement;
     private initialized = false;
     private follow: TypeFollow;
+    private alwaysShow = false;
 
     /**
      * A Tag-Toolbar which is outside of the module DOM and floating freely
@@ -25,25 +26,25 @@ export class TagToolbar {
      */
     constructor(private readonly hoverTag: HTMLElement, private readonly context: ContextComplete, private translator?: typeof Translator) {
         this.follow = context.toolbar.settings.follow;
+        this.alwaysShow = context.toolbar.settings.show === TOOLBAR_SHOW_ALWAYS;
         // Ensure toolbar gets visible when hovering
         this.addMouseEvents(hoverTag);
+        if (this.alwaysShow) this.showPermanently();
     }
 
     /**
      * Attach Mouse-Enter and Mouse-Leave events to ensure show/hide of the toolbar
      */
     private addMouseEvents(hoverTag: HTMLElement) {
-        hoverTag.addEventListener('mouseenter', () => {
-            this.initializeIfNecessary();
-            this.show();
-        });
-        hoverTag.addEventListener('mouseleave', (e) => {
-            this.initializeIfNecessary();
-            // if we hover the menu itself now, don't hide it
-            const relatedTarget = e.relatedTarget as HTMLElement;
-            if (!this.toolbarElement.contains(relatedTarget) && this.toolbarElement !== relatedTarget)
-                this.hide();
-        });
+        hoverTag.addEventListener('mouseenter', () => { this.show(); });
+        if (this.alwaysShow)
+            hoverTag.addEventListener('mouseleave', (e) => {
+                this.initializeIfNecessary();
+                // if we hover the menu itself now, don't hide it
+                const relatedTarget = e.relatedTarget as HTMLElement;
+                if (!this.toolbarElement.contains(relatedTarget) && this.toolbarElement !== relatedTarget)
+                    this.hide();
+            });
     }
 
 
@@ -56,21 +57,23 @@ export class TagToolbar {
         // render toolbar and append tag to body
         this.toolbarElement = new ToolbarRenderer(this.context).generate();
 
-        this.toolbarElement.addEventListener('mouseleave', (e) => {
-            // if we do not hover the tag now, hide it
-            const relatedTarget = e.relatedTarget as HTMLElement;
-            if (!this.hoverTag.contains(relatedTarget) && this.hoverTag !== relatedTarget)
-                this.hide();
-        });
+        // 2021-11-15 2dm disabled this, seems like a duplicate to the attach-mouse-enter which always runs
+        // this.toolbarElement.addEventListener('mouseleave', (e) => {
+        //     // if we do not hover the tag now, hide it
+        //     const relatedTarget = e.relatedTarget as HTMLElement;
+        //     if (!this.hoverTag.contains(relatedTarget) && this.hoverTag !== relatedTarget)
+        //         this.hide();
+        // });
 
         document.body.append(this.toolbarElement);
 
         this.toolbarElement.setAttribute(TagToolbarManager.TagToolbarForAttr, toolbarId);
         this.hoverTag.setAttribute(TagToolbarManager.TagToolbarAttr, toolbarId);
 
-        this.toolbarElement.style.display = 'none';
-        this.toolbarElement.style.position = 'absolute';
-        this.toolbarElement.style.transition = 'top 0.5s ease-out';
+        const toolbarStyle = this.toolbarElement.style;
+        toolbarStyle.position = 'absolute';
+        if (this.alwaysShow) toolbarStyle.display = 'none';                     // Only hide on toolbars which don't always show
+        if (!this.alwaysShow) toolbarStyle.transition = 'top 0.5s ease-out';    // Only ease toolbars which don't always show
 
         // ensure it's translated
         this.translator?.autoTranslateMenus();
@@ -80,7 +83,7 @@ export class TagToolbar {
         ToolbarLifecycle.raiseToolbarInitEvent(this.toolbarElement, this.hoverTag, this.context);
     }
 
-    private updatePosition(initial: boolean = false) {
+    private updatePosition(initial: boolean) {
         const position = {
             top: 'auto' as 'auto' | number,
             left: 'auto' as 'auto' | number,
@@ -105,9 +108,9 @@ export class TagToolbar {
         // new: only do this on initial=true && follow != 'none' or not-initial
         // start by setting default-top
         position.top = position.tagOffset.top + tagToolbarPadding - position.bodyOffset.top;
-        const trackMouse = (this.follow === 'always')
-            || (this.follow === 'initial' && initial)
-            || (this.follow === 'scroll' && position.tagScrollOffset !== 0);
+        const trackMouse = (this.follow === TOOLBAR_FOLLOW_ALWAYS)
+            || (this.follow === TOOLBAR_FOLLOW_INITIAL && initial)
+            || (this.follow === TOOLBAR_FOLLOW_SCROLL && position.tagScrollOffset !== 0);
         if (trackMouse)
             position.top = position.mousePos.y + position.win.scrollY - position.bodyOffset.top - toolbarHeight / 2;
 
@@ -127,6 +130,7 @@ export class TagToolbar {
      * Hide the toolbar and detach scrolling-watcher
      */
     private hide() {
+        if (this.alwaysShow) return;
         this.toolbarElement.style.display = 'none';
         this.disableScrollWatcher();
     }
@@ -136,22 +140,35 @@ export class TagToolbar {
      * Show the toolbar
      */
     private show() {
+        this.initializeIfNecessary();
         this.toolbarElement.style.display = 'block';
         this.updatePosition(true);
         this.activateScrollWatcher();
     }
 
+    /**
+     * Always show the toolbar.
+     */
+    private showPermanently() {
+        this.show();
+        // after a moment, adjust position because often initial position is a bit off
+        window.addEventListener('load', this.updateFn);
+        document.addEventListener('readystatechange', this.updateFn);
+        // Also watch resizing, as the position would be wrong otherwise
+        window.addEventListener('resize', this.updateFn);
+    }
+
     /** Remember if scrollwatcher has been enabled */
     private watcherActive = false;
     /** The update function as a prebuild function, so it can be reused in on/off */
-    private updateFn = () => this.updatePosition();
+    private updateFn = () => this.updatePosition(false);
     /** Enable scroll watcher & remember */
     private activateScrollWatcher() {
         if (this.watcherActive) return;
-        const trackOngoing = this.follow === 'scroll' || this.follow === 'always';
+        const trackOngoing = this.follow === TOOLBAR_FOLLOW_SCROLL || this.follow === TOOLBAR_FOLLOW_ALWAYS;
         if (!trackOngoing) return;
         window.addEventListener('scroll', this.updateFn);
-        if (this.follow === 'always') window.addEventListener('mousemove', this.updateFn);
+        if (this.follow === TOOLBAR_FOLLOW_ALWAYS) window.addEventListener('mousemove', this.updateFn);
         this.watcherActive = true;
     }
 

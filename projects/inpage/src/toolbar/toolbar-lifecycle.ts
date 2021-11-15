@@ -27,7 +27,6 @@ export class ToolbarLifecycle {
                 workflow: commandWorkflow,
             } as ToolbarEventArguments,
         });
-        // debugger;
         anchoredElement?.dispatchEvent(event);
     }
 }
