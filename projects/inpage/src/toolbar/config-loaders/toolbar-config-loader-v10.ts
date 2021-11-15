@@ -26,7 +26,7 @@ export class ToolbarConfigLoaderV10 extends HasLog {
         let template: ToolbarTemplate;
         // #1 prepare settings - get rules and mix with defaults
         const settingRule = this.rules.getSettings();
-        const settings = new ToolbarSettings(settingRule.params as Partial<ToolbarSettings>);
+        const settings = new ToolbarSettings(settingRule?.params as Partial<ToolbarSettings>);
 
         // #2 load either the default toolbar or the one specified
         const toolbarRule = this.rules.getToolbar();
