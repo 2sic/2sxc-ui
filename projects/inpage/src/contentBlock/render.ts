@@ -2,12 +2,11 @@
 import { C } from '../constants';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { HtmlTools } from '../html/dom-tools';
-import { $jq } from '../interfaces/sxc-controller-in-page';
 import { SxcEdit } from '../interfaces/sxc-instance-editable';
 import { windowInPage as window } from '../interfaces/window-in-page';
-import { HasLog, Insights } from '../logging';
+import { AssetsLoader, HasLog, Insights, NoJQ } from '../logging';
 import { QuickE } from '../quick-edit/quick-e';
-import { WorkflowStepArguments, WorkflowHelper, WorkflowPhases } from '../workflow';
+import { WorkflowArguments, WorkflowHelper, WorkflowPhases } from '../workflow';
 import { ContentBlockEditor } from './content-block-editor';
 
 /**
@@ -28,7 +27,7 @@ class RendererGlobal extends HasLog {
      * @returns {} nothing
      */
     showMessage(context: ContextComplete, newContent: string): void {
-        $jq(SxcEdit.getTag(context.sxc)).html(newContent);
+        SxcEdit.getTag(context.sxc).innerHTML = newContent;
     }
 
 
@@ -39,11 +38,11 @@ class RendererGlobal extends HasLog {
      * @param {boolean} preview
      */
     reloadAndReInitialize(context: ContextComplete, forceAjax?: boolean, preview?: boolean): Promise<void> {
-        const cl = this.log.call('reloadAndReInitialize', `..., forceAjax: ${forceAjax}, preview: ${preview}`, null, {context: context});
+        const cl = this.log.call('reloadAndReInitialize', `..., forceAjax: ${forceAjax}, preview: ${preview}`, null, { context: context });
 
         // get workflow engine or a dummy engine
-        const wf = context.commandWorkflow ?? WorkflowHelper.getDummy();
-        const promiseChain = wf.run(new WorkflowStepArguments(SpecialCommands.refresh, WorkflowPhases.before, context));
+        const wf = context.commandWorkflow ?? WorkflowHelper.getDummyManager();
+        const promiseChain = wf.run(new WorkflowArguments(SpecialCommands.refresh, WorkflowPhases.before, context));
 
         // 2021-02-21 2dm New in 11.12 enable toolbar to not reload in a SPA scenario
         const finalPromise = promiseChain.then((wfArgs) => {
@@ -86,14 +85,14 @@ class RendererGlobal extends HasLog {
     ajaxLoad(context: ContextComplete, alternateTemplateId: number, justPreview: boolean): Promise<void> {
         const cl = this.log.call('ajaxLoad');
         cl.add('starting promise chain');
-        return ContentBlockEditor.getPreviewWithTemplate(context, alternateTemplateId)
+        return ContentBlockEditor.singleton().getPreviewWithTemplate(context, alternateTemplateId)
             .then((result: string) => {
                 cl.add("get preview done, let's replace the content");
                 this.replaceContentBlock(context, result, justPreview);
             })
             .then(() => {
                 cl.add('replace done, resetting quickE');
-                QuickE.reset(); // reset quick-edit, because the config could have changed
+                QuickE.singleton().reset(); // reset quick-edit, because the config could have changed
                 cl.done();
             });
     }
@@ -109,12 +108,40 @@ class RendererGlobal extends HasLog {
     private replaceContentBlock(context: ContextComplete, newContent: string, justPreview: boolean): void {
         const cl = this.log.call('replaceContentBlock');
         try {
-            const newDom = $jq(newContent);
+            try {
+                const newContentObj = JSON.parse(newContent) as ContentBlockReplacement;
+                const newHeadHtml = newContentObj.Resources
+                    .map((resource) => {
+                        if (resource.Type === 'js') {
+                            return `<script type="text/javascript" src="${resource.Url}"></script>`;
+                        }
+                        if (resource.Type === 'css') {
+                            return `<link rel="stylesheet" href="${resource.Url}">`;
+                        }
+                    })
+                    .filter((resource) => resource != null)
+                    .join('\n');
+                const newHead = NoJQ.domFromString(newHeadHtml);
+                const newDom = NoJQ.domFromString(newContentObj.Html)[0];
 
-            // Must disable toolbar before we attach to DOM
-            if (justPreview) HtmlTools.disable(newDom);
+                NoJQ.append(document.head, newHead, false);
+                // Must disable toolbar before we attach to DOM
+                if (justPreview) HtmlTools.disable(newDom);
+                NoJQ.replaceWith(SxcEdit.getTag(context.sxc), newDom, false);
 
-            $jq(SxcEdit.getTag(context.sxc)).replaceWith(newDom);
+                // run scripts manually to ensure proper timing
+                const scripts = [
+                    ...newHead.filter((asset) => asset.tagName.toLocaleLowerCase() === 'script'),
+                    ...Array.from(newDom.querySelectorAll('script')),
+                ] as HTMLScriptElement[];
+                AssetsLoader.runScripts(scripts, undefined);
+            } catch {
+                const newDom = NoJQ.domFromString(newContent)[0];
+
+                // Must disable toolbar before we attach to DOM
+                if (justPreview) HtmlTools.disable(newDom);
+                NoJQ.replaceWith(SxcEdit.getTag(context.sxc), newDom, true);
+            }
 
             // reset the cache, so the sxc-object is refreshed
             context.sxc.recreate(true);
@@ -128,3 +155,15 @@ class RendererGlobal extends HasLog {
 
 
 export const renderer = new RendererGlobal();
+
+interface ContentBlockReplacement {
+    Html: string;
+    Resources: ContentBlockResource[];
+}
+
+interface ContentBlockResource {
+    Contents: null;
+    Id: null;
+    Type: 'js' | 'css';
+    Url: string;
+}

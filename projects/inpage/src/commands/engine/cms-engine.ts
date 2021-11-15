@@ -8,10 +8,12 @@ import { QuickDialog } from '../../quick-dialog/quick-dialog';
 import { Button, ButtonSafe } from '../../toolbar/config';
 import { ButtonCommand } from '../../toolbar/config';
 import { InPageButtonJson } from '../../toolbar/config-loaders/config-formats/in-page-button';
+import { WorkflowHelper, WorkflowPhases, WorkflowArguments } from '../../workflow';
 import { CommandLinkGenerator } from '../command-link-generator';
 import { CommandParams } from '../command-params';
-import { WorkflowStepArguments, WorkflowHelper, WorkflowPhases } from '../../workflow';
-import { RunParameters } from './run-parameters';
+import { RunParametersHelper } from './run-parameters';
+import { RunParams } from './run-params';
+import { WorkflowManager } from '../../workflow/workflow-manager';
 
 type CommandPromise<T> = Promise<T|void>;
 
@@ -20,11 +22,11 @@ type CommandPromise<T> = Promise<T|void>;
  */
 export class CmsEngine extends HasLog {
 
-    private runParams: RunParameters;
+    private runParamsHelper: RunParametersHelper;
 
     constructor(parentLog?: Log) {
         super('Cmd.Exec', parentLog, 'start');
-        this.runParams = new RunParameters(this.log);
+        this.runParamsHelper = new RunParametersHelper(this.log);
     }
 
     detectParamsAndRun<T>(
@@ -43,11 +45,11 @@ export class CmsEngine extends HasLog {
             // no event param, but settings contains the event-object
             cl.add('cycling params; event missing & eventOrSettings seems to be an event; settings assumed empty');
             event = eventOrParams as MouseEvent; // move it to the correct variable
-            cmdParams = this.runParams.getParamsFromNameOrParams(nameOrParams);
+            cmdParams = this.runParamsHelper.getParamsFromNameOrParams(nameOrParams);
         } else {
             cmdParams = {
                 ...(eventOrParams || {}),
-                ...this.runParams.getParamsFromNameOrParams(nameOrParams),
+                ...this.runParamsHelper.getParamsFromNameOrParams(nameOrParams),
             };
         }
 
@@ -65,10 +67,10 @@ export class CmsEngine extends HasLog {
      * @param settings
      * @param event
      */
-    run<T>(context: ContextComplete, nameOrParams: string | CommandParams, event: MouseEvent): CommandPromise<T> {
+    run<T>(context: ContextComplete, nameOrParams: string | CommandParams, event: MouseEvent, wipParamsWithWorkflow?: RunParams): CommandPromise<T> {
         const cl = this.log.call('run<T>');
-        let cmdParams = this.runParams.getParamsFromNameOrParams(nameOrParams);
-        cmdParams = this.runParams.expandParamsWithDefaults(cmdParams);
+        let cmdParams = this.runParamsHelper.getParamsFromNameOrParams(nameOrParams);
+        cmdParams = this.runParamsHelper.expandParamsWithDefaults(cmdParams);
 
         const origEvent = event;
         const name = cmdParams.action;
@@ -91,8 +93,18 @@ export class CmsEngine extends HasLog {
 
         // New in 11.12 - find commandWorkflow of toolbar or use a dummy so the remaining code will always work
         // note: in cases where the click comes from elsewhere (like from the quick-dialog) there is no event
-        const wf = context.commandWorkflow = WorkflowHelper.getWorkflow(origEvent?.target as HTMLElement);
-        const wrapperPromise = wf.run(new WorkflowStepArguments(name, WorkflowPhases.before, context));
+
+        // New in 12.10 - Workflow can be provided by run-call
+        let wf: WorkflowManager;
+        if (wipParamsWithWorkflow && wipParamsWithWorkflow.workflows) {
+            wf = new WorkflowManager(this.log);
+            wf.add(wipParamsWithWorkflow.workflows);
+        } else
+            wf = WorkflowHelper.getWorkflow(origEvent?.target as HTMLElement);
+
+        // Attach to context, so it's available after running the command
+        context.commandWorkflow = wf;
+        const wrapperPromise = wf.run(new WorkflowArguments(name, WorkflowPhases.before, context));
 
         // In case we don't have special code, use generic code
         let commandPromise = button.code;
@@ -114,14 +126,14 @@ export class CmsEngine extends HasLog {
             finalPromise = wrapperPromise.then(
                 (wfArgs) => WorkflowHelper.isCancelled(wfArgs)
                     ? Promise.resolve<T>(null)
-                    : ContentBlockEditor
+                    : ContentBlockEditor.singleton()
                         .prepareToAddContent(context, cmdParams.useModuleList)
                         .then(() => commandPromise(context, origEvent)));
         }
 
         // Attach post-command workflow
         const promiseWithAfterEffects = finalPromise.then((result) => {
-            return wf.run(new WorkflowStepArguments(name, WorkflowPhases.after, null, result))
+            return wf.run(new WorkflowArguments(name, WorkflowPhases.after, null, result))
                 .then(() => result);
         });
 
@@ -155,7 +167,7 @@ export class CmsEngine extends HasLog {
             // check if inline window (quick-dialog)
             if (btn.inlineWindow()) {
                 // test if it should be full screen (value or resolve-function)
-                QuickDialog
+                QuickDialog.singleton()
                     .showOrToggleFromToolbar(context, link, btn.fullScreen(), btn.dialog())
                     .then((isChanged) => { if (isChanged) completePromise(); });
             } else {

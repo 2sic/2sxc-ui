@@ -4,6 +4,7 @@ import { C } from '../constants';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { ContextBundleInstance } from '../context/bundles/context-bundle-instance';
 import { HasLog, Insights, Log } from '../logging';
+import { isRunParams, RunParams } from '../commands/engine/run-params';
 
 const logId = 'Cms.Api';
 
@@ -28,19 +29,31 @@ export class Cms extends HasLog {
     }
 
     run<T>(
-        context: ContextBundleInstance | HTMLElement,
+        context: ContextBundleInstance | HTMLElement | RunParams,
         nameOrSettings: string | CommandParams,
         eventOrSettings?: CommandParams | MouseEvent,
         event?: MouseEvent,
     ): Promise<void | T> {
         const cl = this.log.call('run<T>');
-        const realCtx = ContextBundleInstance.is(context)
-            ? context
-            : ContextComplete.findContext(context);
 
-        const result: Promise<void | T> = this.do(() =>
-            new CmsEngine(this.log)
-                .detectParamsAndRun(realCtx, nameOrSettings, eventOrSettings, event));
+        const cmsEngine = new CmsEngine(this.log);
+
+        // Figure out inner-call based on if context is new RunParams or not (in that case it should be a tag or a full context)
+        let innerCall: () => Promise<void>;
+        if (isRunParams(context)) {
+            // todo
+            const realCtx = ContextComplete.findContext(context.tag);
+            context.params = { action: context.action, ...context.params };
+            innerCall = () => cmsEngine.run(realCtx, context.params, context.event, context);
+        } else {
+            const realCtx = ContextBundleInstance.is(context)
+                ? context
+                : ContextComplete.findContext(context);
+
+            innerCall = () => cmsEngine.detectParamsAndRun(realCtx, nameOrSettings, eventOrSettings, event);
+        }
+
+        const result: Promise<void | T> = this.do(innerCall);
         return cl.return(result, 'ok');
     }
 

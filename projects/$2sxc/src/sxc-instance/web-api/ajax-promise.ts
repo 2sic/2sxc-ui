@@ -1,7 +1,8 @@
 import { SxcInstance, SxcWebApi } from '..';
+import { NoJQ, Window } from '../..';
 import { AjaxSettings } from './ajax-settings';
 
-declare const $2sxc_jQSuperlight: JQuery;
+declare const window: Window;
 
 export class AjaxPromise {
   constructor(private api: SxcWebApi, private sxc: SxcInstance) {
@@ -15,7 +16,11 @@ export class AjaxPromise {
    */
   public makePromise(settings: AjaxSettings): JQueryPromise<any> {
     var headers = this.api.headers();
-    const promise = $2sxc_jQSuperlight.ajax({
+    // debugger;
+    if (window.$ == null) {
+      throw new Error('JQuery is now removed from 2sxc installation. Please use newer api like fetch or include JQuery in your project');
+    }
+    const promise = window.$.ajax({
       async: true,
       dataType: settings.dataType || 'json', // default is json if not specified
       data: JSON.stringify(settings.data),
@@ -30,7 +35,7 @@ export class AjaxPromise {
     }) as JQueryPromise<any>;
 
     if (!settings.preventAutoFail)
-        promise.fail(this.sxc.showDetailedHttpError);
+      promise.fail(this.sxc.showDetailedHttpError);
 
     return promise;
   }
@@ -54,6 +59,6 @@ export class AjaxPromise {
     //     base = base.replace(env.apiRoot('2sxc'), 
     //         env.apiRoot(settings.endpoint));
 
-    return base + (!settings.params ? '' : ('?' + $2sxc_jQSuperlight.param(settings.params)));
+    return base + (!settings.params ? '' : ('?' + NoJQ.param(settings.params)));
   }
 }

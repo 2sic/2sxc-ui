@@ -1,5 +1,4 @@
 import { QeSelectors } from '.';
-import { $jq } from '../interfaces/sxc-controller-in-page';
 
 export class ContextForLists {
     parent: string | number;
@@ -15,10 +14,10 @@ export class ContextForLists {
 
     appList?: string[];
 
-    static getFromDom(tag: JQuery | HTMLElement): ContextForLists {
-        const result: ContextForLists = JSON.parse($jq(tag).attr(QeSelectors.blocks.cb.context) || null) || {};
+    static getFromDom(tag: HTMLElement): ContextForLists {
+        const result: ContextForLists = JSON.parse(tag.getAttribute(QeSelectors.blocks.cb.context) || null) || {};
         result.appList = []; // empty by default
-        if (result != null && typeof(result.apps) === 'string' && result.apps.length > 1)
+        if (result != null && typeof (result.apps) === 'string' && result.apps.length > 1)
             result.appList = result.apps
                 .split(',')
                 .map((s) => s.trim())   // trim

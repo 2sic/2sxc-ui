@@ -1,4 +1,5 @@
 ﻿import { C } from '../../constants';
+import { IDs } from '../../constants/ids';
 import { Commands } from '../commands';
 
 export const CmdMore = 'more';
@@ -9,7 +10,7 @@ Commands.add(CmdMore, 'MoreActions', 'options btn-mode', true, false, {
     code(context, event) {
         return new Promise((resolve, reject) => {
             const btn2 = event.target as HTMLElement;
-            const fullMenu2 = btn2.closest('ul.sc-menu') as HTMLElement;
+            const fullMenu2 = btn2.closest(IDs.sel.tagScMenu) as HTMLElement;
             const oldState2 = Number(fullMenu2.getAttribute('data-state') || 0);
             const max2 = Number(fullMenu2.getAttribute('group-count'));
             const newState2 = (oldState2 + 1) % max2;

@@ -2,7 +2,6 @@ import { SxcInstanceWithInternals } from '../../../$2sxc/src';
 import { AttrJsonEditContext } from '../context/html-attribute';
 import { EditManager } from '../manage/edit-manager';
 import { TypeTbD } from '../plumbing';
-import { $jq } from './sxc-controller-in-page';
 
 
 export class SxcEdit extends SxcInstanceWithInternals {
@@ -12,7 +11,8 @@ export class SxcEdit extends SxcInstanceWithInternals {
         return (thing as SxcEdit).showDetailedHttpError !== undefined;
     }
 
-    static get(module: number | HTMLElement | JQuery, cbid?: number): SxcEdit {
+    static get(module: number | HTMLElement, cbid?: number): SxcEdit {
+        // 2021-09-17 spm assume this function doesn't use jquery
         const sxc = window.$2sxc(module, cbid) as unknown as SxcEdit;
         return sxc;
     }
@@ -51,16 +51,16 @@ export class SxcEdit extends SxcInstanceWithInternals {
      * @param htmlTag
      */
     static getContainerTag(htmlTag: HTMLElement): HTMLElement {
-        return $jq(htmlTag).closest('div[data-edit-context]')[0];
+        return htmlTag.closest<HTMLElement>('div[data-edit-context]');
     }
 
     /**
      * get a html tag of the sxc instance
      * @param {SxcEdit} sxci
-     * @return {jquery} - resulting html
+     * @return {HTMLElement} - resulting html
      */
     static getTag(sxci: SxcEdit): HTMLElement {
-        return $jq(`div[data-cb-id='${sxci.cbid}']`)[0];
+        return document.querySelector<HTMLElement>(`div[data-cb-id='${sxci.cbid}']`);
     }
 
 }

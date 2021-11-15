@@ -12,9 +12,14 @@
  * Fix drag-drop functionality in dnn 08.00.04 - it has an incorrect regex
  */
 'use strict';
+
+import { $jq } from '../../interfaces/sxc-controller-in-page';
+
 (() => {
-  const fn = $.fn.attr;
-  $.fn.attr = function() {
+  if ($jq == null) return;
+
+  const fn = $jq.fn.attr;
+  $jq.fn.attr = function () {
     const val = fn.apply(this, arguments);
     if (arguments[0] !== 'class' || typeof val !== 'string' || val.search('DnnModule-2sxc ') === -1) return val;
     return val.replace('DnnModule-2sxc ', '') + ' DnnModule-2sxc';

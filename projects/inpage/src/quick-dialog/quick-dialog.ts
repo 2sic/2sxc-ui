@@ -20,9 +20,17 @@ interface IFrameWindow extends Window {
  * this is a dialog manager which is in charge of all quick-dialogues
  * it always has a reference to the latest dialog created by a.ny module instance
  */
-class QuickDialogManagerSingleton extends HasLog {
+export class QuickDialog extends HasLog {
+
+    /** Singleton */
+    public static singleton(): QuickDialog {
+        return this._singleton ?? (this._singleton = new QuickDialog());
+    }
+    private static _singleton: QuickDialog;
+
+
     private container: QuickDialogContainer;
-    constructor() {
+    private constructor() {
         super('Qdl.Managr');
         Insights.add('quick-dialog', 'manager', this.log);
         this.container = new QuickDialogContainer(this);
@@ -42,7 +50,7 @@ class QuickDialogManagerSingleton extends HasLog {
     setVisible(show: boolean): void {
         const cl = this.log.call('setVisible');
         const cont = this.container.getOrCreate();
-        cont.toggleClass(diagShowClass, show);
+        cont.classList.toggle(diagShowClass, show);
         this.rememberDialogState(this.container.getIFrame(cont), show);
         current = show ? this.container.getIFrame() : null;
         cl.done();
@@ -55,7 +63,7 @@ class QuickDialogManagerSingleton extends HasLog {
      * @param {function()} closeCallback - callback event
      * @param {boolean} isFullscreen - if it should open full screen
      * @param {string} [dialogName] - optional name of dialog, to check if it's already open
-     * @returns {Promise<boolean>} jquery object of the iframe
+     * @returns {Promise<boolean>}
      */
     showOrToggleFromToolbar(
         context: ContextComplete,
@@ -159,9 +167,3 @@ class QuickDialogManagerSingleton extends HasLog {
         return cl.return(url);
     }
 }
-
-export let QuickDialog = new QuickDialogManagerSingleton();
-
-
-
-

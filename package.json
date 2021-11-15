@@ -1,7 +1,7 @@
 {
   "name": "2sxc-ui",
-  "version": "12.07.00",
-  "description": "2sxc UI - the JS UI of 2sxc\r ============",
+  "version": "12.08.01",
+  "description": "2sxc UI - the JS UI of 2sxc",
   "scripts": {
     "release-all": "npm run js2sxc && npm run inpage && npm run snippets && npm run quickdialog && npm run turn-on",
     "js2sxc": "cd projects/$2sxc && npm run release && cd ../..",

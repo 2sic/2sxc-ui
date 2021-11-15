@@ -1,5 +1,5 @@
 ﻿import { PositionCoordinates, QeSelectors, QuickE } from '.';
-import { $jq } from '../interfaces/sxc-controller-in-page';
+import { NoJQ } from '../plumbing';
 import { ContextForLists } from './context-for-lists';
 
 /**
@@ -12,15 +12,15 @@ export class Positioning {
     /**
      * Find the position of an element
      */
-    static get(element: JQuery): PositionCoordinates {
+    static get(element: HTMLElement): PositionCoordinates {
         const coords: PositionCoordinates = {
             element: element,
-            x: element.offset().left,
-            w: element.width(),
-            y: element.offset().top,
+            x: NoJQ.offset(element).left,
+            w: NoJQ.width(element),
+            y: NoJQ.offset(element).top,
             // For content-block ITEMS, the menu must be visible at the end
             // For content-block-LISTS, the menu must be at top
-            yh: element.offset().top + (element.is(QeSelectors.eitherCbOrMod) ? element.height() : 0),
+            yh: NoJQ.offset(element).top + (element.matches(QeSelectors.eitherCbOrMod) ? NoJQ.height(element) : 0),
         };
 
         return coords;
@@ -32,8 +32,9 @@ export class Positioning {
     static getBodyPosition(): PositionCoordinates {
         const posNoJq = document.body.style.position;
         const bodyPos = posNoJq; // QuickE.body.css('position');
+        const quickE = QuickE.singleton();
         return bodyPos === 'relative' || bodyPos === 'absolute'
-            ? new PositionCoordinates(QuickE.body.offset().left, QuickE.body.offset().top)
+            ? new PositionCoordinates(NoJQ.offset(quickE.body).left, NoJQ.offset(quickE.body).top)
             : new PositionCoordinates(0, 0);
     }
 }
@@ -45,20 +46,27 @@ export class Positioning {
  */
 function refreshDomObjects(): void {
     // must update this, as sometimes after finishing page load the position changes, like when dnn adds the toolbar
-    QuickE.bodyOffset = Positioning.getBodyPosition();
+    const quickE = QuickE.singleton();
+    quickE.bodyOffset = Positioning.getBodyPosition();
 
-    if (QuickE.config.innerBlocks.enable) {
+    if (quickE.config.innerBlocks.enable) {
         // get all content-block lists which are empty, or which allow multiple child-items
-        const lists = $jq(QeSelectors.blocks.cb.listSelector).filter(`:not(.${QeSelectors.blocks.cb.singleItem}), :empty`);
-        QuickE.contentBlocks = lists
-            .find(QeSelectors.blocks.cb.selector)
-            .add(lists);
+        const lists = QeSelectors.blocks.cb.findAllLists().filter((e) => e.matches(`:not(.${QeSelectors.blocks.cb.singleItem}), :empty`));
+        const children: HTMLElement[] = [];
+        lists.forEach((l) => {
+            children.push(...Array.from(l.querySelectorAll<HTMLElement>(QeSelectors.blocks.cb.selector)));
+        });
+        quickE.contentBlocks = [...lists, ...children];
     }
 
-    if (QuickE.config.modules.enable)
-        QuickE.modules = QuickE.cachedPanes
-            .find(QeSelectors.blocks.mod.selector)
-            .add(QuickE.cachedPanes);
+    if (quickE.config.modules.enable) {
+        const panes = quickE.cachedPanes;
+        const children: HTMLElement[] = [];
+        panes.forEach((p) => {
+            children.push(...Array.from(p.querySelectorAll<HTMLElement>(QeSelectors.blocks.mod.selector)));
+        });
+        quickE.modules = [...panes, ...children];
+    }
 }
 
 /**
@@ -70,19 +78,20 @@ let lastCall: Date;
 /**
  * position, align and show a menu linked to another item
  */
-function positionAndAlign(element: JQuery, coords: PositionCoordinates) {
-    return element.css({
-        left: coords.x - QuickE.bodyOffset.x,
-        top: coords.yh - QuickE.bodyOffset.y,
-        width: coords.element.width(),
-    }).show();
+function positionAndAlign(element: HTMLElement, coords: PositionCoordinates) {
+    const quickE = QuickE.singleton();
+    element.style.left = `${coords.x - quickE.bodyOffset.x}px`;
+    element.style.top = `${coords.yh - quickE.bodyOffset.y}px`;
+    element.style.width = `${NoJQ.width(coords.element)}px`;
+    element.style.display = 'block';
+    return element;
 }
 
 /**
  * Refresh positioning / visibility of the quick-insert bar
  * @param e
  */
-function refresh(e: JQueryEventObject) {
+function refresh(e: MouseEvent) {
     const highlightClass: string = 'sc-cb-highlight-for-insert';
     const newDate = new Date();
     if ((!lastCall) || (newDate.getTime() - lastCall.getTime() > 1000)) {
@@ -93,50 +102,54 @@ function refresh(e: JQueryEventObject) {
 
     // find the closest content-blocks and modules
     const currentCoords = new PositionCoordinates(e.clientX, e.clientY);
-    if (QuickE.config.innerBlocks.enable && QuickE.contentBlocks)
-        QuickE.nearestCb = findNearest(QuickE.contentBlocks, currentCoords);
-    if (QuickE.config.modules.enable && QuickE.modules)
-        QuickE.nearestMod = findNearest(QuickE.modules, currentCoords);
+    const quickE = QuickE.singleton();
+    if (quickE.config.innerBlocks.enable && quickE.contentBlocks)
+        quickE.nearestCb = findNearest(quickE.contentBlocks, currentCoords);
+    if (quickE.config.modules.enable && quickE.modules)
+        quickE.nearestMod = findNearest(quickE.modules, currentCoords);
 
     // hide the buttons for content-block or module, if they are not affected
-    QuickE.modActions.toggleClass('sc-invisible', QuickE.nearestMod === null);
-    QuickE.cbActions.toggleClass('sc-invisible', QuickE.nearestCb === null);
+    quickE.modActions.forEach((a) => {
+        a.classList.toggle('sc-invisible', quickE.nearestMod === null);
+    });
+    quickE.cbActions.forEach((a) => {
+        a.classList.toggle('sc-invisible', quickE.nearestCb === null);
+    });
 
-    const oldParent = QuickE.main.parentNode;
+    const oldParent = quickE.main._parentNode;
 
-    if (QuickE.nearestCb !== null || QuickE.nearestMod !== null) {
-        const alignTo = QuickE.nearestCb || QuickE.nearestMod;
+    if (quickE.nearestCb !== null || quickE.nearestMod !== null) {
+        const alignTo = quickE.nearestCb || quickE.nearestMod;
 
         // find parent pane to highlight
-        const parentPane = $jq(alignTo.element).closest(QeSelectors.blocks.mod.listSelector);
-        const parentCbList = $jq(alignTo.element).closest(QeSelectors.blocks.cb.listSelector);
-        const parentContainer = (parentCbList.length ? parentCbList : parentPane)[0];
+        const parentPane = QeSelectors.blocks.mod.findClosestList(alignTo.element);
+        const parentCbList = QeSelectors.blocks.cb.findClosestList(alignTo.element);
+        const parentContainer = parentCbList ?? parentPane;
         provideCorrectAddButtons(parentContainer);
         // put part of the pane-name into the button-labels
-        if (parentPane.length > 0) {
-            let paneName: string = parentPane.attr('id') || '';
+        if (parentPane) {
+            let paneName: string = parentPane.getAttribute('id') || '';
             if (paneName.length > 4) paneName = paneName.substr(4);
-            QuickE.modActions.filter('[titleTemplate]').each(function() {
-                const t = $jq(this);
-                t.attr('title', t.attr('titleTemplate').replace('{0}', paneName));
+            quickE.modActions.filter((a) => a.matches('[titleTemplate]')).forEach((a) => {
+                a.setAttribute('title', a.getAttribute('titleTemplate').replace('{0}', paneName));
             });
         }
 
-        positionAndAlign(QuickE.main, alignTo);
+        positionAndAlign(quickE.main, alignTo);
 
         // Keep current block as current on menu
-        QuickE.main.activeContentBlock = QuickE.nearestCb ? QuickE.nearestCb.element : null;
-        QuickE.main.activeModule = QuickE.nearestMod ? QuickE.nearestMod.element : null;
-        QuickE.main.parentNode = parentContainer;
-        $jq(parentContainer).addClass(highlightClass);
+        quickE.main.activeContentBlock = quickE.nearestCb ? quickE.nearestCb.element : null;
+        quickE.main.activeModule = quickE.nearestMod ? quickE.nearestMod.element : null;
+        quickE.main._parentNode = parentContainer;
+        parentContainer.classList.add(highlightClass);
     } else {
-        QuickE.main.parentNode = null;
-        QuickE.main.hide();
+        quickE.main._parentNode = null;
+        quickE.main.style.display = 'none';
     }
 
     // if previously a parent-pane was highlighted, un-highlight it now
-    if (oldParent && oldParent !== QuickE.main.parentNode)
-        $jq(oldParent).removeClass(highlightClass);
+    if (oldParent && oldParent !== quickE.main._parentNode)
+        oldParent.classList.remove(highlightClass);
 }
 
 function provideCorrectAddButtons(tag: HTMLElement) {
@@ -146,43 +159,44 @@ function provideCorrectAddButtons(tag: HTMLElement) {
     if (listSettings.appList.length > 0) {
         showContent = listSettings.appList.indexOf('Content') > -1;
         // only show apps if the list is longer than 'Content' if it contains that
-        showApps = listSettings.appList.length - (showContent ? 1 : 0 ) > 0;
+        showApps = listSettings.appList.length - (showContent ? 1 : 0) > 0;
     }
-    QuickE.cbActions.toggleClass('hide-content', !showContent);
-    QuickE.cbActions.toggleClass('hide-app', !showApps);
+    QuickE.singleton().cbActions.forEach((a) => {
+        a.classList.toggle('hide-content', !showContent);
+        a.classList.toggle('hide-app', !showApps);
+    });
 }
 
-const jQwin = $jq(window);
 /**
- * Return the nearest element to the mouse cursor from elements (jQuery elements)
+ * Return the nearest element to the mouse cursor from elements
  * @param elements
  * @param position
  */
-function findNearest(elements: JQuery, position: PositionCoordinates): PositionCoordinates {
-  const maxDistance: number = 30; // Defines the maximal distance of the cursor when the menu is displayed
+function findNearest(elements: HTMLElement[], position: PositionCoordinates): PositionCoordinates {
+    const maxDistance: number = 30; // Defines the maximal distance of the cursor when the menu is displayed
 
-  let nearestItem: PositionCoordinates = null;
-  let nearestDistance = maxDistance;
+    let nearestItem: PositionCoordinates = null;
+    let nearestDistance = maxDistance;
 
-  const posX: number = position.x + jQwin.scrollLeft();
-  const posY: number = position.y + jQwin.scrollTop();
+    const posX: number = position.x + window.scrollX;
+    const posY: number = position.y + window.scrollY;
 
-  // Find nearest element
-  elements.each(function() {
-    const e = Positioning.get($jq(this));
+    // Find nearest element
+    elements.forEach((element) => {
+        const e = Positioning.get(element);
 
-    // First check x coordinates - must be within container
-    if (posX < e.x || posX > e.x + e.w)
-      return;
+        // First check x coordinates - must be within container
+        if (posX < e.x || posX > e.x + e.w)
+            return;
 
-    // Check if y coordinates are within boundaries
-    const distance = Math.abs(posY - e.yh);
+        // Check if y coordinates are within boundaries
+        const distance = Math.abs(posY - e.yh);
 
-    if (distance < maxDistance && distance < nearestDistance) {
-      nearestItem = e;
-      nearestDistance = distance;
-    }
-  });
+        if (distance < maxDistance && distance < nearestDistance) {
+            nearestItem = e;
+            nearestDistance = distance;
+        }
+    });
 
-  return nearestItem;
+    return nearestItem;
 }

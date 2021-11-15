@@ -107,7 +107,7 @@ export class ButtonConfigLoader extends HasLog {
     addDefaultBtnSettings(btn: Button,
                           groupDefaults: DictionaryValue | null,
                           tlbDefaults: DictionaryValue | null | undefined,
-                          actions: typeof Commands) {
+                          actions: Commands) {
         const cl = this.log.call('addDefaultBtnSettings', '', `for ${() => btn.command.name}`);
         for (let d = 0; d < btnProperties.length; d++)
             fallbackBtnSetting(btn, groupDefaults, tlbDefaults, actions, btnProperties[d]);
@@ -165,7 +165,7 @@ const btnProperties = [
 function fallbackBtnSetting(btn: Button,
                             groupDefaults: DictionaryValue | null,
                             toolbarDefaults: DictionaryValue | null | undefined,
-                            actions: typeof Commands,
+                            actions: Commands,
                             propName: string) {
     const target = btn as unknown as DictionaryValue;
 

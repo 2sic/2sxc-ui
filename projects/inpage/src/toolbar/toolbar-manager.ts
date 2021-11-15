@@ -1,8 +1,6 @@
-﻿// import { context } from '../context/context';
-import { ToolbarRenderer } from '.';
-import { ToolbarConfigFinderAndInitializer } from '.';
+﻿import { ToolbarConfigFinderAndInitializer } from '.';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
-import { HasLog, Insights, Log } from '../logging';
+import { HasLog, Insights } from '../logging';
 import { ToolbarConfigLoader } from './config-loaders/toolbar-config-loader';
 import { Toolbar } from './config/toolbar';
 import { ToolbarInitConfig } from './initialize/toolbar-init-config';
@@ -11,33 +9,29 @@ import { ToolbarInitConfig } from './initialize/toolbar-init-config';
  * Toolbar manager for the whole page - basically a set of APIs
  * the toolbar manager is an internal helper taking care of toolbars, buttons etc.
  */
-class ToolbarManagerGlobal extends HasLog {
+export class ToolbarManager extends HasLog {
+
+    /** Singleton */
+    public static singleton(): ToolbarManager {
+        return this._singleton ?? (this._singleton = new ToolbarManager());
+    }
+    private static _singleton: ToolbarManager;
+
     private readonly toolbarFinder: ToolbarConfigFinderAndInitializer;
 
-    constructor() {
+    private constructor() {
         super('Tlb.Mngr', null, 'init');
         Insights.add('system', 'toolbar-manager', this.log);
         this.toolbarFinder = new ToolbarConfigFinderAndInitializer(this);
     }
 
-    buildModule(parentTag: JQuery, optionalId?: number) {
-        this.toolbarFinder.buildDnnModule(parentTag, optionalId);
+    buildModule(parentTag: HTMLElement) {
+        this.toolbarFinder.buildDnnModule(parentTag);
     }
 
-    build(node: JQuery | HTMLElement) {
+    build(node: HTMLElement) {
         this.toolbarFinder.build(node);
     }
-
-    // 2021-02-23 2dm v11.12 - believe this is an internal API and not used anywhere
-    // delete ca. 2021-04
-    // generate button html
-    // generateButtonHtml(context: ContextComplete, groupIndex: number) {
-    //     new ToolbarRenderer(context).button.render(context, groupIndex);
-    // }
-
-    // generateToolbarHtml(context: ContextComplete) {
-    //     return new ToolbarRenderer(context).render();
-    // }
 
     loadConfig(context: ContextComplete, config: ToolbarInitConfig): Toolbar {
         const loader = this.getLoader(JSON.stringify(config.toolbar || ''));
@@ -52,4 +46,4 @@ class ToolbarManagerGlobal extends HasLog {
     }
 }
 
-export const ToolbarManager = new ToolbarManagerGlobal();
+// export const ToolbarManager = new ToolbarManagerGlobal();

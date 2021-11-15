@@ -2,26 +2,39 @@
 import { RuleManager } from '../rules/rule-manager';
 import { ToolbarTemplate } from '../templates';
 
+const autoAddMoreDefault = 'end';
 type TypeAutoAddMore = null | 'start' | 'end' | true; //  [true: used to be right/start]
+const hoverDefault = 'right';
 type TypeHover = 'left' | 'right' | 'none';
-type TypeShow = 'always' | 'hover';
-export type TypeFollow = 'default' | 'none' | 'initial' | 'always' | 'scroll' ;
+
+export const TOOLBAR_SHOW_ALWAYS = 'always';
+export const TOOLBAR_SHOW_HOVER = 'hover';
+type TypeShow = typeof TOOLBAR_SHOW_ALWAYS | typeof TOOLBAR_SHOW_HOVER;
+
+const followDefault = 'default';
+export const TOOLBAR_FOLLOW_INITIAL = 'initial';
+export const TOOLBAR_FOLLOW_ALWAYS = 'always';
+export const TOOLBAR_FOLLOW_SCROLL = 'scroll';
+
+export type TypeFollow = 'default' | 'none' | typeof TOOLBAR_FOLLOW_INITIAL | typeof TOOLBAR_FOLLOW_ALWAYS | typeof TOOLBAR_FOLLOW_SCROLL;
+
+
 
 /**
  * Toolbar behavior settings like float, etc.
  */
 export class ToolbarSettings {
     /** Automatically add the '...' more button to the toolbar */
-    autoAddMore: TypeAutoAddMore = null;
+    autoAddMore: TypeAutoAddMore = autoAddMoreDefault;
 
     /** Hover placement of the toolbar */
-    hover: TypeHover = 'right';
+    hover: TypeHover = hoverDefault;
 
     /** Show behavior (always, hover, ...) */
-    show: TypeShow = 'hover';
+    show: TypeShow = TOOLBAR_SHOW_HOVER;
 
     /** Follow behavior - if the toolbar should scroll with the page or remain where it was hovered */
-    follow: TypeFollow = 'default';
+    follow: TypeFollow = followDefault;
 
     /**
      * Old term, keep for compatibility. Please use `.class` instead
@@ -49,12 +62,15 @@ export class ToolbarSettings {
      */
     _rules?: RuleManager;
 
-    constructor(defaults: { autoAddMore?: TypeAutoAddMore, hover?: TypeHover, show?: TypeShow, follow?: TypeFollow }) {
-        if (defaults.autoAddMore) this.autoAddMore = defaults.autoAddMore;
-        if (defaults.hover) this.hover = defaults.hover;
-        if (defaults.show)  this.show = defaults.show;
-        this.follow = defaults.follow ?? 'default';
-        if (this.follow === 'default') this.follow = 'none';
+    constructor(defaults: Partial<ToolbarSettings>) { // } { autoAddMore?: TypeAutoAddMore, hover?: TypeHover, show?: TypeShow, follow?: TypeFollow }) {
+        if (defaults != null) {
+            if (defaults.autoAddMore) this.autoAddMore = defaults.autoAddMore;
+            if (defaults.hover) this.hover = defaults.hover;
+            if (defaults.show)  this.show = defaults.show;
+            if (defaults.follow) this.follow = defaults.follow;
+        }
+        // Swap the real follow-default to be "none"
+        if (this.follow === followDefault) this.follow = 'none';
     }
 
 

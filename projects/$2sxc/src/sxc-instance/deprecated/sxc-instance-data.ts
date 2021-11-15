@@ -1,6 +1,7 @@
 ﻿import { SxcInstanceWithInternals } from '..';
+import { Window } from '../..';
 
-declare const $2sxc_jQSuperlight: any;
+declare const window: Window;
 
 /**
  * This is a old 2sxc concept from 2sxc ca. V3
@@ -61,7 +62,7 @@ export class SxcInstanceDataDeprecated {
 
                 this.controller.isLoaded = true;
                 this.controller.lastRefresh = new Date();
-                (this as any)._triggerLoaded();
+                this._triggerLoaded();
             };
             source.error = (request: any) => { alert(request.statusText); };
             source.preventAutoFail = true; // use our fail message
@@ -76,20 +77,34 @@ export class SxcInstanceDataDeprecated {
         return this;
     }
 
-    on(events: Event, callback: () => void): Promise<any> {
-        return $2sxc_jQSuperlight(this).on('2scLoad', callback)[0]._triggerLoaded();
+    on(event: string, callback: () => void): SxcInstanceDataDeprecated {
+        // debugger;
+        // this is a hack to attach 2scLoad event listener to SxcInstanceDataDeprecated (not HTMLElement)
+        // and run callback when SxcInstanceDataDeprecated.load() runs
+        // dates since beginning of time:
+        // https://github.com/2sic/2sxc-ui/blob/e98383f8cf06cd973cf28fa37dc6332af80e9a51/Js/2sxc.api.js
+        return (window.$(this).on('2scLoad', callback)[0] as unknown as SxcInstanceDataDeprecated)._triggerLoaded();
     }
 
-// ReSharper disable once InconsistentNaming
-    _triggerLoaded(): Promise<any> {
+    // ReSharper disable once InconsistentNaming
+    _triggerLoaded(): SxcInstanceDataDeprecated {
+        // debugger;
+        // this is a hack to trigger 2scLoad event on SxcInstanceDataDeprecated (not HTMLElement)
+        // when SxcInstanceDataDeprecated.load() runs
+        // dates since beginning of time:
+        // https://github.com/2sic/2sxc-ui/blob/e98383f8cf06cd973cf28fa37dc6332af80e9a51/Js/2sxc.api.js
         return this.controller.isLoaded
-            ? $2sxc_jQSuperlight(this).trigger('2scLoad', [this])[0]
+            ? window.$(this).trigger('2scLoad', [this])[0] as unknown as SxcInstanceDataDeprecated
             : this;
     }
 
-    one(events: Event, callback: (x: any, y: any) => void): SxcInstanceDataDeprecated {
+    one(event: string, callback: (x: any, y: any) => void): SxcInstanceDataDeprecated {
+        // debugger;
+        // this basically just runs callback if controller is loaded. Really complicated looking line below doesn't do anything.
+        // It probably attached 2scLoad event listener with .on, not .one, a long time ago, but oldest github version is from 2014 and it was already broken there:
+        // https://github.com/2sic/2sxc-ui/blob/e98383f8cf06cd973cf28fa37dc6332af80e9a51/Js/2sxc.api.js
         if (!this.controller.isLoaded)
-            return $2sxc_jQSuperlight(this).one('2scLoad', callback)[0];
+            return (window.$(this) as JQuery & { one: (event: string, callback: (x: any, y: any) => void) => JQuery }).one('2scLoad', callback)[0] as unknown as SxcInstanceDataDeprecated;
         callback({}, this);
         return this;
     }

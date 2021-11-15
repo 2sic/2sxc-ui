@@ -2,7 +2,13 @@ import { WorkflowPhases } from '.';
 import { ContextComplete } from '../context';
 
 
-export class WorkflowStepArguments {
+/**
+ * Arguments for a workflow. Used when starting it and to determine result / cancelled.
+ *
+ * @export
+ * @class WorkflowArguments
+ */
+export class WorkflowArguments {
     constructor(
         /** Name this workflow is running for */
         public command: string,

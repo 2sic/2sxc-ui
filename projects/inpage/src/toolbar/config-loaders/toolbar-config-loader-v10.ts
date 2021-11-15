@@ -20,15 +20,13 @@ export class ToolbarConfigLoaderV10 extends HasLog {
 
     public loadV10(context: ContextComplete, config: ToolbarInitConfig, raw: string[]): Toolbar {
         const cl = this.log.call('loadV10');
+
         this.rules.load(raw);
 
         let template: ToolbarTemplate;
-        // #1 prepare settings if no rule configured it
+        // #1 prepare settings - get rules and mix with defaults
         const settingRule = this.rules.getSettings();
-        const settingsDefaults = ToolbarSettings.getDefaults();
-        const settings: ToolbarSettings = (Object.keys(settingRule?.ui || {}).length > 0)
-            ? { ...settingsDefaults, ...settingRule.ui} as ToolbarSettings
-            : settingsDefaults; // note: Settings Empty currently don't use the V10 mechanism yet
+        const settings = new ToolbarSettings(settingRule.params as Partial<ToolbarSettings>);
 
         // #2 load either the default toolbar or the one specified
         const toolbarRule = this.rules.getToolbar();
