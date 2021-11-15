@@ -3,6 +3,7 @@ import XHR from 'i18next-xhr-backend';
 // @ts-ignore
 import locI18next from 'loc-i18next';
 import { primaryLanguage, translations, translationsPath } from '.';
+import { IDs } from '../constants/ids';
 import { ContextComplete } from '../context/bundles';
 import { $2sxcInPage } from '../interfaces/sxc-controller-in-page';
 import { SxcEdit } from '../interfaces/sxc-instance-editable';
@@ -91,8 +92,8 @@ class TranslatorGlobal extends HasLog {
         const cl = this.log.call('autoTranslateMenus');
         if (!this.locReady) return cl.done('loc not ready');
         // start localizing, details: https://github.com/mthh/loc-i18next#usage-of-selector-function
-        const menus = document.querySelectorAll<HTMLElement>('ul.sc-menu');
-        localize('ul.sc-menu'); // inline toolbars
+        const menus = document.querySelectorAll<HTMLElement>(IDs.sel.tagScMenu);
+        localize(IDs.sel.tagScMenu); // inline toolbars
         const quickEButtons = document.querySelectorAll<HTMLElement>('.sc-i18n');
         localize('.sc-i18n'); // quick-insert menus
         cl.add(`found ${menus.length} menus and ${quickEButtons.length} buttons`);

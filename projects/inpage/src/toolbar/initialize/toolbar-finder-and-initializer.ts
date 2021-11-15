@@ -150,8 +150,11 @@ export class ToolbarConfigFinderAndInitializer extends HasLog {
             this.addHoverAttributeToTag(hoverParent);
         }
 
-        // TODO: get init to run
-        ToolbarLifecycle.raiseToolbarInitEvent(tag, hoverParent, context);
+        // Also run toolbar-init on the new toolbar.
+        // Must use var 'toolbar' and not 'tag', as that is kind of reset/not existing at this
+        // So the event would get lost
+        // Added in 12.10
+        ToolbarLifecycle.raiseToolbarInitEvent(toolbar, toolbar, context);
 
         cl.done();
     }

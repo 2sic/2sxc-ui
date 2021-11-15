@@ -13,5 +13,6 @@ export const IDs = {
   publishAllowed: 'DraftOptional',
   sel: {
     scMenu: '.sc-menu',
+    tagScMenu: 'ul.sc-menu',
   },
 };

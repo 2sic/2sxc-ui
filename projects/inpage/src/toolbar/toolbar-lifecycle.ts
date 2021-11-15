@@ -19,6 +19,7 @@ export class ToolbarLifecycle {
         commandWorkflow.attach(toolbarElement, context);
 
         const event = new CustomEvent(C.Toolbar.eventNames.onInit, {
+            bubbles: true,  // Important so it can be handled by a parent tag
             detail: {
                 // type: ToolbarTypes.tag,
                 element: toolbarElement,
@@ -26,6 +27,7 @@ export class ToolbarLifecycle {
                 workflow: commandWorkflow,
             } as ToolbarEventArguments,
         });
+        // debugger;
         anchoredElement?.dispatchEvent(event);
     }
 }

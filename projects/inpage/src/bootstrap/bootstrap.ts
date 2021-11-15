@@ -8,6 +8,7 @@ import { QuickDialog } from '../quick-dialog';
 import * as QuickEditState from '../quick-dialog/state';
 import { TagToolbarManager } from '../toolbar/tag-toolbars/tag-toolbar-manager';
 import { ToolbarManager } from '../toolbar/toolbar-manager';
+import { IDs } from '../constants/ids';
 
 /**
  * This contains everything necessary to bootstrap the edit mode.
@@ -69,7 +70,7 @@ export class BootstrapInPage extends HasLog {
                     const node = n as HTMLElement;
 
                     // Menus which appear also cause DOM changes, but we want to ignore these for performance reasons
-                    if (node.matches('sc-menu')) return;
+                    if (node.matches(IDs.cls.scMenu)) return;
 
                     processed++;
 
