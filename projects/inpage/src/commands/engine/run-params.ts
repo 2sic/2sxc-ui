@@ -1,4 +1,4 @@
-import { Workflow } from '../../workflow/workflow-step';
+import { Workflow } from '../../workflow/workflow';
 import { CommandParams } from '../command-params';
 
 /**
@@ -22,7 +22,7 @@ export interface RunParams {
     /** The event which triggered this command - sometimes useful internally further use */
     event?: MouseEvent;
 
-    /** Workflow steps work the same way as with a toolbar */
+    /** Workflows work the same way as with a toolbar, except that they are added here and not registered on init */
     workflows?: Workflow | Workflow[];
 }
 

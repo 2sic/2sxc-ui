@@ -6,7 +6,7 @@ import { SxcEdit } from '../interfaces/sxc-instance-editable';
 import { windowInPage as window } from '../interfaces/window-in-page';
 import { AssetsLoader, HasLog, Insights, NoJQ } from '../logging';
 import { QuickE } from '../quick-edit/quick-e';
-import { WorkflowStepArguments, WorkflowHelper, WorkflowPhases } from '../workflow';
+import { WorkflowArguments, WorkflowHelper, WorkflowPhases } from '../workflow';
 import { ContentBlockEditor } from './content-block-editor';
 
 /**
@@ -41,8 +41,8 @@ class RendererGlobal extends HasLog {
         const cl = this.log.call('reloadAndReInitialize', `..., forceAjax: ${forceAjax}, preview: ${preview}`, null, { context: context });
 
         // get workflow engine or a dummy engine
-        const wf = context.commandWorkflow ?? WorkflowHelper.getDummy();
-        const promiseChain = wf.run(new WorkflowStepArguments(SpecialCommands.refresh, WorkflowPhases.before, context));
+        const wf = context.commandWorkflow ?? WorkflowHelper.getDummyManager();
+        const promiseChain = wf.run(new WorkflowArguments(SpecialCommands.refresh, WorkflowPhases.before, context));
 
         // 2021-02-21 2dm New in 11.12 enable toolbar to not reload in a SPA scenario
         const finalPromise = promiseChain.then((wfArgs) => {

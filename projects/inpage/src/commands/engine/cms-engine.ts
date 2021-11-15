@@ -8,7 +8,7 @@ import { QuickDialog } from '../../quick-dialog/quick-dialog';
 import { Button, ButtonSafe } from '../../toolbar/config';
 import { ButtonCommand } from '../../toolbar/config';
 import { InPageButtonJson } from '../../toolbar/config-loaders/config-formats/in-page-button';
-import { WorkflowHelper, WorkflowPhases, WorkflowStepArguments } from '../../workflow';
+import { WorkflowHelper, WorkflowPhases, WorkflowArguments } from '../../workflow';
 import { CommandLinkGenerator } from '../command-link-generator';
 import { CommandParams } from '../command-params';
 import { RunParametersHelper } from './run-parameters';
@@ -104,7 +104,7 @@ export class CmsEngine extends HasLog {
 
         // Attach to context, so it's available after running the command
         context.commandWorkflow = wf;
-        const wrapperPromise = wf.run(new WorkflowStepArguments(name, WorkflowPhases.before, context));
+        const wrapperPromise = wf.run(new WorkflowArguments(name, WorkflowPhases.before, context));
 
         // In case we don't have special code, use generic code
         let commandPromise = button.code;
@@ -133,7 +133,7 @@ export class CmsEngine extends HasLog {
 
         // Attach post-command workflow
         const promiseWithAfterEffects = finalPromise.then((result) => {
-            return wf.run(new WorkflowStepArguments(name, WorkflowPhases.after, null, result))
+            return wf.run(new WorkflowArguments(name, WorkflowPhases.after, null, result))
                 .then(() => result);
         });
 
