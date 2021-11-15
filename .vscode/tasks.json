@@ -31,6 +31,14 @@
             "script": "release",
             "path": "projects/inpage/",
             "problemMatcher": []
+        },
+        {
+            "type": "npm",
+            "script": "release-all",
+            "group": "build",
+            "problemMatcher": [],
+            "label": "npm: release-all",
+            "detail": "npm run js2sxc && npm run inpage && npm run snippets && npm run quickdialog"
         }
     ]
 }

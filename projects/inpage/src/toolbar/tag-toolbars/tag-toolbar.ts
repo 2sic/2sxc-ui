@@ -37,7 +37,7 @@ export class TagToolbar {
      */
     private addMouseEvents(hoverTag: HTMLElement) {
         hoverTag.addEventListener('mouseenter', () => { this.show(); });
-        if (this.alwaysShow)
+        if (!this.alwaysShow)
             hoverTag.addEventListener('mouseleave', (e) => {
                 this.initializeIfNecessary();
                 // if we hover the menu itself now, don't hide it
@@ -58,12 +58,13 @@ export class TagToolbar {
         this.toolbarElement = new ToolbarRenderer(this.context).generate();
 
         // 2021-11-15 2dm disabled this, seems like a duplicate to the attach-mouse-enter which always runs
-        // this.toolbarElement.addEventListener('mouseleave', (e) => {
-        //     // if we do not hover the tag now, hide it
-        //     const relatedTarget = e.relatedTarget as HTMLElement;
-        //     if (!this.hoverTag.contains(relatedTarget) && this.hoverTag !== relatedTarget)
-        //         this.hide();
-        // });
+        if (!this.alwaysShow)
+            this.toolbarElement.addEventListener('mouseleave', (e) => {
+                // if we do not hover the tag now, hide it
+                const relatedTarget = e.relatedTarget as HTMLElement;
+                if (!this.hoverTag.contains(relatedTarget) && this.hoverTag !== relatedTarget)
+                    this.hide();
+            });
 
         document.body.append(this.toolbarElement);
 
@@ -72,8 +73,11 @@ export class TagToolbar {
 
         const toolbarStyle = this.toolbarElement.style;
         toolbarStyle.position = 'absolute';
-        if (this.alwaysShow) toolbarStyle.display = 'none';                     // Only hide on toolbars which don't always show
-        if (!this.alwaysShow) toolbarStyle.transition = 'top 0.5s ease-out';    // Only ease toolbars which don't always show
+        // Do the following things on toolbars which are invisible (show != always)
+        if (!this.alwaysShow) {
+            toolbarStyle.display = 'none';
+            toolbarStyle.transition = 'top 0.5s ease-out';
+        }
 
         // ensure it's translated
         this.translator?.autoTranslateMenus();
@@ -140,6 +144,7 @@ export class TagToolbar {
      * Show the toolbar
      */
     private show() {
+        console.log('show');
         this.initializeIfNecessary();
         this.toolbarElement.style.display = 'block';
         this.updatePosition(true);
@@ -150,6 +155,7 @@ export class TagToolbar {
      * Always show the toolbar.
      */
     private showPermanently() {
+        console.log('show permanently');
         this.show();
         // after a moment, adjust position because often initial position is a bit off
         window.addEventListener('load', this.updateFn);
