@@ -1,6 +1,5 @@
 ﻿import { IDialogFrameElement, IFrameBridge } from '.';
-import { $jq } from '../interfaces/sxc-controller-in-page';
-import { HasLog } from '../logging/';
+import { HasLog, NoJQ } from '../logging/';
 import { QuickDialog } from './quick-dialog';
 
 /**
@@ -17,7 +16,7 @@ const resizeInterval = 200;
 
 export class QuickDialogContainer extends HasLog {
 
-    constructor(quickDialog: typeof QuickDialog) {
+    constructor(quickDialog: QuickDialog) {
         super('QDl.Contnr', quickDialog.log);
     }
 
@@ -27,36 +26,36 @@ export class QuickDialogContainer extends HasLog {
      * get the current container
      * @returns {element} html element of the div
      */
-    getOrCreate(): JQuery {
-        const container = $jq(`.${containerClass}`);
-        return container.length > 0 ? container : this.buildContainerAndIFrame();
+    getOrCreate(): HTMLElement {
+        const container = document.querySelector<HTMLElement>(`.${containerClass}`);
+        return container ?? this.buildContainerAndIFrame();
     }
 
     /**
      * build the container in the dom w/iframe for re-use
-     * @return {jquery} jquery dom-object
+     * @return {HTMLElement} dom-object
      */
-    private buildContainerAndIFrame(): JQuery {
+    private buildContainerAndIFrame(): HTMLElement {
         const callLog = this.log.call('buildContainerAndIFrame');
-        const container = $jq(containerTemplate);
-        if ($jq('#personaBar-iframe').length > 0)
-            container.addClass('persona-bar-visible');
+        const container = NoJQ.domFromString(containerTemplate)[0];
+        if (document.querySelectorAll<HTMLElement>('#personaBar-iframe').length > 0)
+            container.classList.add('persona-bar-visible');
         const newIFrame = document.createElement(iframeTag);
         const extendedIFrame = convertIFrameToQuickDialog(newIFrame, this);
-        container.find(`.${iframeClass}`).append(extendedIFrame);
-        $jq('body').append(container);
+        container.querySelector<HTMLElement>(`.${iframeClass}`).append(extendedIFrame);
+        document.body.append(container);
         this.watchForResize(container);
         return callLog.return(container, 'ok');
     }
 
     /**
      * find the iframe which hosts the dialog
-     * @param {html} [container] - html-container as jQuery object
+     * @param {html} [container] - html-container
      * @returns {html} iframe object
      */
-    getIFrame(container?: JQuery): IDialogFrameElement {
+    getIFrame(container?: HTMLElement): IDialogFrameElement {
         if (!container) container = this.getOrCreate();
-        return container.find(iframeTag)[0] as IDialogFrameElement;
+        return container.querySelector<IDialogFrameElement>(iframeTag);
     }
 
     /**
@@ -67,7 +66,7 @@ export class QuickDialogContainer extends HasLog {
         const cl = this.log.call('setSize');
         const container = this.getOrCreate();
         // set container height
-        container.css('min-height', fullScreen ? '100%' : '225px');
+        container.style.minHeight = fullScreen ? '100%' : '225px';
         this.isFullscreen = fullScreen;
         cl.done();
     }
@@ -76,7 +75,7 @@ export class QuickDialogContainer extends HasLog {
     /**
      * create watcher which monitors the iframe size and adjusts the container as needed
      */
-    private watchForResize(container: JQuery): void {
+    private watchForResize(container: HTMLElement): void {
         // only add a timer if not already running
         if (this.resizeWatcher) return;
         const callLog = this.log.call('watchForResize');
@@ -94,7 +93,7 @@ export class QuickDialogContainer extends HasLog {
                     callLog.onlyAddIfNew('no height change');
                     return;
                 }
-                frm.style.minHeight = container.css('min-height');
+                frm.style.minHeight = container.style.minHeight;
                 frm.style.height = height + 'px';
                 frm.previousHeight = height;
                 if (this.isFullscreen) {
@@ -110,9 +109,6 @@ export class QuickDialogContainer extends HasLog {
     }
 
 }
-
-// export const QuickDialogContainer = new QuickDialogContainerSingleton();
-
 
 
 

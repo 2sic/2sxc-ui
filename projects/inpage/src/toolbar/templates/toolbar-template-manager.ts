@@ -6,7 +6,13 @@ import { Obj } from '../../plumbing';
  * The template manager provides toolbar templates to the entire system.
  * It basically keeps a list of predefined templates, and returns the ones needed
  */
-class ToolbarTemplateManagerSingleton extends HasLog {
+export class ToolbarTemplateManager extends HasLog {
+    /** Singleton */
+    public static singleton(): ToolbarTemplateManager {
+        return this._singleton ?? (this._singleton = new ToolbarTemplateManager());
+    }
+    private static _singleton: ToolbarTemplateManager;
+
     configTemplateList: ToolbarTemplate[] = [];
 
     /** hash - table of templates, to be used a list()['template - name'] */
@@ -41,5 +47,3 @@ class ToolbarTemplateManagerSingleton extends HasLog {
         this.list[template.name] = template;
     }
 }
-
-export const ToolbarTemplateManager = new ToolbarTemplateManagerSingleton();

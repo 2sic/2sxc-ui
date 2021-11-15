@@ -4,6 +4,7 @@ import { HtmlTools } from '../../html/dom-tools';
 import { HasLog, Insights } from '../../logging';
 import { RenderButton } from './render-button';
 import { RenderButtonGroups } from './render-groups';
+import { IDs } from '../../constants/ids';
 
 const attrIdentifier = 'toolbar-identifier';
 
@@ -40,7 +41,7 @@ export class ToolbarRenderer extends HasLog {
         // render toolbar
         const tlbTag = document.createElement('ul');
         tlbTag.setAttribute(attrIdentifier, context.toolbar?.identifier);
-        tlbTag.classList.add('sc-menu');
+        tlbTag.classList.add(IDs.cls.scMenu);
         tlbTag.classList.add('group-0'); // IE11 fix, add each class separately
 
         // add behaviour classes

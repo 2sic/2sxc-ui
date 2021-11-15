@@ -1,9 +1,10 @@
 import { Environment } from '.';
-import { HasLog } from '..';
+import { HasLog, NoJQ, Window } from '..';
 import { JsInfo } from '../../../sxc-typings';
 import { AntiForgeryTokenHeaderNameDnn, DnnUiRoot, PlatformDnn } from '../constants/index';
 
 const helpAutoDetect = 'You must either include jQuery on the page or inject the jsApi parameters to prevent auto-detection.';
+declare const window: Window;
 
 /**
  * This helps load environment information from DNN ServicesFramework - it's a fallback in case the other mechanisms fail
@@ -21,21 +22,22 @@ export class EnvironmentDnnSfLoader extends HasLog {
      */
     dnnSfFallback(): void {
         const cl = this.log.call('dnnSfFallback');
-        if(typeof $ === 'undefined') {
-            // cl.done('error');
-            throw `Can't load pageid, moduleid, etc. and $ is not available. \n ${helpAutoDetect}`;
-        }
         // await page-ready to then initialize the stuff
-        $(() => this.dnnSfLoadWhenDocumentReady());
+        NoJQ.ready(() => this.dnnSfLoadWhenDocumentReady());
         cl.done('started dom-ready watcher')
     }
 
     private dnnSfLoadWhenDocumentReady(): void {
         const cl = this.log.call('dnnSfLoadWhenDocumentReady');
-        const sf = ($ as any).ServicesFramework as any;
-        if(typeof sf === 'undefined') {
+        if (typeof window.$ === 'undefined') {
             cl.done('error');
-            throw `can't load pageid, moduleid etc. and DNN SF is not available. \n ${helpAutoDetect}`;
+            throw `Can't load pageid, moduleid, etc. and $ is not available. \n ${helpAutoDetect}`;
+        }
+
+        const sf = window.$.ServicesFramework;
+        if (typeof sf === 'undefined') {
+            cl.done('error');
+            throw `Can't load pageid, moduleid etc. and DNN SF is not available. \n ${helpAutoDetect}`;
         }
         const dnnSf = sf(0);
         var apiRoot = dnnSf.getServiceRoot('2sxc');

@@ -1,4 +1,4 @@
-import { $jq } from '../../interfaces/sxc-controller-in-page';
+import { NoJQ } from '../../plumbing';
 
 /**
  * The global Tag Toolbar Manager is responsible for the new TagToolbars
@@ -30,10 +30,10 @@ export class TagToolbarManager {
      */
     static getBodyScrollOffset() {
         const posNoJq = document.body.style.position;
-        const body = $jq('body');
+        const body = document.body;
         const bodyPos = posNoJq; // body.css('position');
         if (bodyPos === 'relative' || bodyPos === 'absolute') {
-            const offset = body.offset();
+            const offset = NoJQ.offset(body);
             return {
                 top: offset.top,
                 left: offset.left,
@@ -47,16 +47,16 @@ export class TagToolbarManager {
 
     /**
      * Remove orphan tag-toolbars from DOM
-     * This can be necessary if the module was replaced by ajax, 
+     * This can be necessary if the module was replaced by ajax,
      * leaving behind un-attached TagToolbars.
      */
     static CleanupOrphanedToolbars() {
-        const tagToolbars = $jq(`[${TagToolbarManager.TagToolbarForAttr}]`);
-        tagToolbars.each((i, e) => {
-        const id = $jq(e).attr(TagToolbarManager.TagToolbarForAttr);
-        if (!$jq(`[${TagToolbarManager.TagToolbarAttr}=${id}]`).length) {
-            $jq(e).remove();
-        }
+        const tagToolbars = document.querySelectorAll<HTMLElement>(`[${TagToolbarManager.TagToolbarForAttr}]`);
+        tagToolbars.forEach((e) => {
+            const id = e.getAttribute(TagToolbarManager.TagToolbarForAttr);
+            if (!document.querySelectorAll<HTMLElement>(`[${TagToolbarManager.TagToolbarAttr}="${id}"]`).length) {
+                e.remove();
+            }
         });
     }
 }
@@ -67,7 +67,7 @@ export class TagToolbarManager {
 /**
  * Keep the mouse-position update for future use
  */
-$jq(window).on('mousemove', (e) => {
+window.addEventListener('mousemove', (e) => {
     TagToolbarManager.mousePosition.x = e.clientX;
     TagToolbarManager.mousePosition.y = e.clientY;
 });

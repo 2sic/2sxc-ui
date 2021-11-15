@@ -9,9 +9,16 @@ const webApiRender = 'cms/block/render';
 const webApiSave = 'cms/block/template';
 //#endregion
 
-class ContentBlockEditorSingleton extends HasLog {
+export class ContentBlockEditor extends HasLog {
 
-    constructor() {
+    /** Singleton */
+    public static singleton(): ContentBlockEditor {
+        return this._singleton ?? (this._singleton = new ContentBlockEditor());
+    }
+    private static _singleton: ContentBlockEditor;
+
+
+    private constructor() {
         super('Sys.CbEdit');
         Insights.add('system', 'cb-editor-api', this.log);
     }
@@ -69,19 +76,20 @@ class ContentBlockEditorSingleton extends HasLog {
             lang: context.app.currentLanguage,
             cbid: context.contentBlockReference.id,
             originalparameters: JSON.stringify(context.instance.parameters),
+            v2: true,
         };
         cl.data('params', params);
         const promise = new Promise<string>((resolve, reject) => {
-                context.sxc.webApi.get({ url: webApiRender, params: params, dataType: 'html' })
-                    .done((data, textStatus: string, jqXhr) => {
-                        if (jqXhr.status === 204 || jqXhr.status === 200) {
-                            resolve(data); // resolve the promise with the response text
-                        } else {
-                            reject(Error(textStatus)); // reject with status text - should be a meaningful
-                        }
-                    }).fail((jqXhr, textStatus: string, errorThrown: string) => {
-                        reject(Error(errorThrown));
-                    });
+            context.sxc.webApi.get({ url: webApiRender + 'wip', params: params, dataType: 'html' })
+                .done((data, textStatus: string, jqXhr) => {
+                    if (jqXhr.status === 204 || jqXhr.status === 200) {
+                        resolve(data); // resolve the promise with the response text
+                    } else {
+                        reject(Error(textStatus)); // reject with status text - should be a meaningful
+                    }
+                }).fail((jqXhr, textStatus: string, errorThrown: string) => {
+                    reject(Error(errorThrown));
+                });
         });
         return cl.return(promise);
     }
@@ -128,7 +136,7 @@ class ContentBlockEditorSingleton extends HasLog {
         };
         cl.data('params', params);
         const promise = new Promise<string>((resolve, reject) => {
-            context.sxc.webApi.post( { url: webApiSave, params: params })
+            context.sxc.webApi.post({ url: webApiSave, params: params })
                 .done((data, textStatus, jqXhr) => {
                     // resolve or reject based on http-status: 200 & 204 = ok
                     if (jqXhr.status === 204 || jqXhr.status === 200) resolve(data);
@@ -142,8 +150,6 @@ class ContentBlockEditorSingleton extends HasLog {
 
 }
 
-export const ContentBlockEditor = new ContentBlockEditorSingleton();
-
 
 interface WebApiParams {
     templateId?: number;
@@ -155,4 +161,5 @@ interface WebApiParams {
     newTemplateChooserState?: boolean;
     zoneId?: number;
     appId?: number;
+    v2?: boolean;
 }

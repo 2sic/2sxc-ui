@@ -11,7 +11,7 @@ export class ButtonCommand {
     constructor(public name: string, contentType?: string, public params?: CommandParams) {
         if (!params) this.params = {};
         if (contentType) this.params.contentType = contentType;
-        this.command = Commands.get(name); // activate command for this
+        this.command = Commands.singleton().get(name); // activate command for this
     }
 
     /** make static, as many ButtonCommand signatures are actually not objects */

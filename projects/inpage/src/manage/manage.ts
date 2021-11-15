@@ -39,5 +39,5 @@ export class Manage {
     }
 
     /** Internal - ATM only used in dnn-sxc-angular to enable toolbar initialization */
-    _toolbarManager = ToolbarManager;
+    _toolbarManager = ToolbarManager.singleton();
 }

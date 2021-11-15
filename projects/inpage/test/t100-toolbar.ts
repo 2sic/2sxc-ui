@@ -14,7 +14,7 @@ import { ToolbarManager } from '../src/toolbar/toolbar-manager';
 
 const expandToolbarConfig = (cnt: ContextComplete, toolbarData: TypeUnsafe, toolbarSettings: ToolbarSettings) => {
     toolbarData = {settings: {...toolbarData.settings, ...toolbarSettings}, ...toolbarData};
-    return ToolbarManager.loadConfig(cnt, toolbarData);
+    return ToolbarManager.singleton().loadConfig(cnt, toolbarData);
     // return new ToolbarConfigLoader(null).expandToolbarConfig;
 };
 

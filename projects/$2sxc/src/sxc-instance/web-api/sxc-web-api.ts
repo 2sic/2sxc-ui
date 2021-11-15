@@ -4,8 +4,6 @@ import { AjaxPromise } from './ajax-promise';
 import { Environment } from '../../environment';
 import { AjaxSettings } from './ajax-settings';
 
-declare const $2sxc_jQSuperlight: JQuery;
-
 /**
  * helper API to run ajax / REST calls to the server
  * it will ensure that the headers etc. are set correctly
@@ -112,18 +110,67 @@ export class SxcWebApi implements Public.SxcWebApi {
         // new 10.25
         var http = new AjaxPromise(this, this.sxc);
 
-        settings = $2sxc_jQSuperlight.extend({}, defaults, settings);
+        settings = Object.assign({}, defaults, settings);
 
         const promise = http.makePromise(settings as AjaxSettings);
 
         return promise;
     }
 
+    fetch(url: string, data?: string | Record<string, any>, method?: string): Promise<Response> {
+        url = this.url(url);
+        method = method || (data ? 'POST' : 'GET');
+        const headers = this.headers(method);
+
+        if (data) {
+            // test if data is a json. If it's not, convert it to json
+            try {
+                JSON.parse(data as string);
+            } catch {
+                data = JSON.stringify(data);
+            }
+        }
+
+        return fetch(url, {
+            headers,
+            method,
+            ...(data && { body: data as string }),
+        });
+    }
+
+    fetchJson(url: string, data?: string | Record<string, any>, method?: string): Promise<any> {
+        return this.fetch(url, data, method).then(response => response.json());
+    }
+
     /**
      * All the headers which are needed in an ajax call for this to work reliably.
      * Use this if you need to get a list of headers in another system
      */
-    headers(): Public.Dictionary<string> {
-        return this.sxc.root.http.headers(this.sxc.id, this.sxc.cbid);
+    headers(method?: string): Record<string, string> {
+        const headers = this.sxc.root.http.headers(this.sxc.id, this.sxc.cbid);
+        if (!method) {
+            return headers;
+        }
+
+        switch (method.toLocaleUpperCase()) {
+            case 'GET':
+                headers['Accept'] = 'application/json';
+                break;
+            default:
+                headers['Accept'] = 'application/json';
+                headers['Content-Type'] = 'application/json';
+        }
+        return headers;
+    }
+
+    url(url: string): string {
+        const urlParts = url.split('/');
+        if (urlParts.length === 2 && urlParts[0] && urlParts[1]) {
+            const controller = urlParts[0];
+            const action = urlParts[1];
+            url = `app/auto/api/${controller}/${action}`;
+        }
+        url = this.sxc.root.http.apiUrl(url);
+        return url;
     }
 }

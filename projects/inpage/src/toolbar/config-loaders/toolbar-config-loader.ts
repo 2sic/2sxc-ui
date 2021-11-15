@@ -16,13 +16,13 @@ export class ToolbarConfigLoader extends HasLog {
     public groups: ButtonGroupConfigLoader;
     public button: ButtonConfigLoader;
     public command: CommandConfigLoader;
-    public templates = ToolbarTemplateManager;
+    public templates = ToolbarTemplateManager.singleton();
     public templateEditor: TemplateEditor;
 
     public logs: Array<{ key: string, entries: Entry[]}>;
 
     /** Special constructor that can only be called from the ToolbarManager */
-    constructor(_owner: typeof ToolbarManager) {
+    constructor(_owner: ToolbarManager) {
         // important: always create a new log as it will be stored in insights
         super('Tlb.TlbCnf');
     }

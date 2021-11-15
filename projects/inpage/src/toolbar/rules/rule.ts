@@ -38,6 +38,9 @@ export class BuildRule extends HasLog {
 
     params?: RuleParams = {};
 
+    /**
+     * Button Rules - determines what a button should do / not do
+     */
     ui: {
         icon?: string,
         class?: string,

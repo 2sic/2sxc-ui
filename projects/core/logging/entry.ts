@@ -29,14 +29,16 @@ export class Entry {
         data?: unknown,
         ) {
             if (data) {
-                if (data instanceof jQuery) {
-                    const jq = data as JQuery;
-                    this.data = {
-                        isJQuery: true,
-                        original: jq,
-                        html: jq.length && jq[0].outerHTML,
-                    };
-                } else
+                // #2492 - jQuery isn't used any more in 2sxc
+                // if (data instanceof jQuery) {
+                //     const jq = data as JQuery;
+                //     this.data = {
+                //         isJQuery: true,
+                //         original: jq,
+                //         html: jq.length && jq[0].outerHTML,
+                //     };
+                // } 
+                // else
                     this.data = data;
             }
     }

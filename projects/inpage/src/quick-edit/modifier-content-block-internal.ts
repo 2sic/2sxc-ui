@@ -1,7 +1,7 @@
 ﻿import { ModifierContentBlock } from '.';
 import { ContentListActionParams } from '../commands';
 import { SxcEdit } from '../interfaces/sxc-instance-editable';
-import { HasLog } from '../logging';
+import { HasLog, NoJQ } from '../logging';
 import { ToolbarManager } from '../toolbar/toolbar-manager';
 // note: this import must be at the end of the list, for reasons unknown
 // otherwise you get an error at runtime, something about constructors
@@ -9,7 +9,6 @@ import { ToolbarManager } from '../toolbar/toolbar-manager';
 // not sure why though
 // tslint:disable-next-line: ordered-imports
 import { translate } from '../i18n';
-import { $jq } from '../interfaces/sxc-controller-in-page';
 
 //#region WebApi Endpoints used: 2sxc
 const webApiNew = 'cms/block/block';
@@ -33,18 +32,20 @@ export class ModifierContentBlockInstance extends HasLog {
      * @param container
      * @param newGuid
      */
-    create(parentId: number,
-           fieldName: string,
-           index: number,
-           appName: string,
-           container: JQuery,
-           newGuid: string): Promise<void> {
+    create(
+        parentId: number,
+        fieldName: string,
+        index: number,
+        appName: string,
+        container: HTMLElement,
+        newGuid: string,
+    ): Promise<void> {
         // the wrapper, into which this will be placed and the list of pre-existing blocks
-        if (container.length === 0) {
+        if (!container) {
             alert('can\'t add content-block as we couldn\'t find the list');
             return Promise.resolve();
         }
-        const cblockList = container.find('div.sc-content-block');
+        const cblockList = container.querySelectorAll<HTMLElement>('div.sc-content-block');
         if (index > cblockList.length) index = cblockList.length; // make sure index is never greater than the amount of items
 
         const params = {
@@ -58,18 +59,17 @@ export class ModifierContentBlockInstance extends HasLog {
         const jqPromise = this.sxcInstance.webApi
             .post({ url: webApiNew, params: params })
             .then((result) => {
-                const newTag = $jq(result); // prepare tag for inserting
+                const newTag = NoJQ.domFromString(result)[0]; // prepare tag for inserting
 
                 // should I add it to a specific position...
                 if (cblockList.length > 0 && index > 0)
-                $jq(cblockList[cblockList.length > index - 1 ? index - 1 : cblockList.length - 1])
-                    .after(newTag);
+                    cblockList[cblockList.length > index - 1 ? index - 1 : cblockList.length - 1].after(newTag);
                 else // ...or just at the beginning?
                     container.prepend(newTag);
 
                 // ReSharper disable once UnusedLocals
                 const sxcNew = SxcEdit.get(newTag);
-                ToolbarManager.buildModule(newTag);
+                ToolbarManager.singleton().buildModule(newTag);
             });
         return Promise.resolve(jqPromise);
     }

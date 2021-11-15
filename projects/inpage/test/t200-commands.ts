@@ -8,7 +8,7 @@ import { Button } from '../src/toolbar/config/button';
 
 describe('Commands test suite', function() {
 
-  const commands = Commands;
+  const commands = Commands.singleton();
 
   it('200 number of commands', function() {
     const noOfCommands = Object.keys(commands.list).length;

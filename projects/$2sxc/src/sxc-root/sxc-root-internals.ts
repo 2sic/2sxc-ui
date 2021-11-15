@@ -6,7 +6,7 @@ import { Debug } from '..';
 import { Insights } from '..';
 
 export interface SxcRootInternals {
-    _controllers: { [id: string] : SxcInstanceWithInternals };
+    _controllers: { [id: string]: SxcInstanceWithInternals };
     beta: any;
     _data: any;
     debug: Debug;
@@ -23,9 +23,10 @@ export interface SxcRootInternals {
     parts: any;
 
     /** internal helper to get jQuery from DNN or internal */
+    // debugger;
     jq(): JQueryStatic;
 
     totalPopup: TotalPopup;
 }
 
-export interface SxcRootWithInternals extends SxcRoot, SxcRootInternals {}
+export interface SxcRootWithInternals extends SxcRoot, SxcRootInternals { }

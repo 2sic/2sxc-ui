@@ -1,5 +1,8 @@
-﻿import { C } from '../constants';
-import { $jq } from '../interfaces/sxc-controller-in-page';
+﻿// import { C } from '../constants';
 
 // prevent propagation of the click (if menu was clicked)
-$jq(C.IDs.sel.scMenu).on('click', (e) => e.stopPropagation());
+// 2021-09-17 spm this was used to fix click propagation to parent module, and now edit buttons
+// are in a separate layer where parent is document.body so this should not be necessary anymore
+// document.querySelectorAll<HTMLElement>(C.IDs.sel.scMenu).forEach((el) => {
+//   el.addEventListener('click', (e) => e.stopPropagation());
+// });
