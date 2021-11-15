@@ -1,4 +1,4 @@
-import { WorkflowStep } from '../../workflow/workflow-step';
+import { Workflow } from '../../workflow/workflow-step';
 import { CommandParams } from '../command-params';
 
 /**
@@ -23,7 +23,7 @@ export interface RunParams {
     event?: MouseEvent;
 
     /** Workflow steps work the same way as with a toolbar */
-    workflowSteps?: WorkflowStep | WorkflowStep[];
+    workflows?: Workflow | Workflow[];
 }
 
 export function isRunParams(maybeRunParams: unknown): maybeRunParams is RunParams {
