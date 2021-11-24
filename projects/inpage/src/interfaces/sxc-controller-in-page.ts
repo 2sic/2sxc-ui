@@ -30,5 +30,3 @@ export interface SxcRoot extends SxcRootWithInternals {
 // ReSharper restore InconsistentNaming
 
 export const $2sxcInPage: SxcRoot = window.$2sxc;
-
-export const $jq = $;
