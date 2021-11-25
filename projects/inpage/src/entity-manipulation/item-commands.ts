@@ -1,5 +1,6 @@
 ﻿import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { translate } from '../i18n';
+import { NoJQ } from '../plumbing';
 
 /**
  * this enhances the $2sxc client controller with stuff only needed when logged in
@@ -27,29 +28,19 @@ export let contentItems = {
       appId: context.app.id,
     };
 
-    return new Promise((resolve, reject) => {
-      context.sxc.webApi.delete(`app/auto/content/any/${itemGuid}`, params, null, true)
-        .done((data, textStatus: string, jqXHR) => {
-          if (jqXHR.status === 204 || jqXHR.status === 200) {
-            // resolve the promise with the response text
-            resolve(data);
-          } else {
-            // check if it's a permission config problem
-            const msgJs = translate('Delete.ErrCheckConsole');
-            if (jqXHR.status === 401) alert(translate('Delete.ErrPermission') + msgJs);
-            if (jqXHR.status === 400) alert(translate('Delete.ErrInUse') + msgJs);
-            // otherwise reject with the status text
-            // which will hopefully be a meaningful error
-            reject(Error(textStatus));
-          }
-        }).fail((jqXHR, textStatus: string, errorThrown: string) => {
-          reject(Error(errorThrown));
-        });
-    }).then((result) => {
-      location.reload();
-    }).catch((error) => {
-      console.log(error);
-    });
+    return context.sxc.webApi.fetch(`app/auto/content/any/${itemGuid}?${NoJQ.param(params)}`, undefined, 'DELETE')
+      .then((response) => {
+        if (response.status >= 200 && response.status < 300) {
+          location.reload();
+        } else if (response.status >= 400 && response.status < 500) {
+          // check if it's a permission config problem
+          const msgJs = translate('Delete.ErrCheckConsole');
+          if (response.status === 401) alert(translate('Delete.ErrPermission') + msgJs);
+          if (response.status === 400) alert(translate('Delete.ErrInUse') + msgJs);
+        }
+      }).catch((error) => {
+        console.log(error);
+      });
   },
 };
 

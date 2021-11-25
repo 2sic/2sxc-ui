@@ -7,12 +7,12 @@ const webApiInstallComplete = 'sys/install/resume';
 export class SystemUpgrader {
     // upgrade command - started when an error contains a link to start this
     finishUpgrade(domElement: HTMLElement): void {
-    const mc = SxcEdit.get(domElement);
-    mc.webApi.get(webApiInstallComplete)
-        .done(() => {
-            alert('Upgrade ok, restarting the CMS and reloading...');
-            location.reload();
-        });
-    alert('starting upgrade. This could take a few minutes. You\'ll see an \'ok\' when it\'s done. Please wait...');
+        const mc = SxcEdit.get(domElement);
+        mc.webApi.fetch(webApiInstallComplete)
+            .then(() => {
+                alert('Upgrade ok, restarting the CMS and reloading...');
+                location.reload();
+            });
+        alert('starting upgrade. This could take a few minutes. You\'ll see an \'ok\' when it\'s done. Please wait...');
     }
 }

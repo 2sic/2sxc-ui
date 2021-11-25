@@ -72,6 +72,7 @@ export class SxcInstanceDataDeprecated {
     }
 
     reload(): SxcInstanceDataDeprecated {
+        // debugger; // this part of the code probably never runs and has other stuff here that depends on jquery
         this.controller.webApi.get(this.source)
             .then(this.source.success, this.source.error);
         return this;

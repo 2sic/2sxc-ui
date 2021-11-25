@@ -1,5 +1,6 @@
 ﻿import { renderer } from '../../contentBlock/render';
 import { ContextComplete } from '../../context/bundles/context-bundle-button';
+import { NoJQ } from '../../plumbing';
 import { TypeUnsafe } from '../../plumbing/TypeTbD';
 import { ContentListActionParams } from './content-list-action-params';
 
@@ -22,7 +23,7 @@ class ContentListActions {
      * @param {number} index
      */
     addItem<T>(context: ContextComplete, index: number) {
-        return doAndReload<T>(context, webApiAdd , { index }, 'post');
+        return doAndReload<T>(context, webApiAdd, { index }, 'post');
     }
 
     /**
@@ -36,7 +37,7 @@ class ContentListActions {
             index: params.sortOrder,
             parent: params.parent,
             fields: params.fields,
-         }, 'delete');
+        }, 'delete');
     }
 
     /**
@@ -107,35 +108,12 @@ function doAndReload<T>(
     verb: 'get' | 'post' | 'delete' = 'get',
     postData: TypeUnsafe = {},
 ): Promise<void | T> {
-    return new Promise<T>((resolve, reject) => {
-        const call = verb === 'post'
-          ? context.sxc.webApi.post({
-                url: url,
-                params: params,
-            }, postData)
-          : verb === 'delete'
-            ? context.sxc.webApi.delete({
-                url: url,
-                params: params,
-              })
-            : context.sxc.webApi.get({
-                url: url,
-                params: params,
-              });
-        call.done((data, textStatus: string, jqXHR) => {
-                if (jqXHR.status === 204 || jqXHR.status === 200) {
-                    // resolve the promise with the response text
-                    resolve(data);
-                } else {
-                    // otherwise reject with the status text
-                    // which will hopefully be a meaningful error
-                    reject(Error(textStatus));
-                }
-            })
-            .fail((jqXHR, textStatus: string, errorThrown: string) => {
-                reject(Error(errorThrown));
-            });
-    }).then(() => {
-        renderer.reloadAndReInitialize(context);
-    });
+    return (verb === 'post'
+        ? context.sxc.webApi.fetch(`${url}?${NoJQ.param(params)}`, postData, 'POST')
+        : verb === 'delete'
+            ? context.sxc.webApi.fetch(`${url}?${NoJQ.param(params)}`, undefined, 'DELETE')
+            : context.sxc.webApi.fetchJson(`${url}?${NoJQ.param(params)}`))
+        .then(() => {
+            renderer.reloadAndReInitialize(context);
+        });
 }
