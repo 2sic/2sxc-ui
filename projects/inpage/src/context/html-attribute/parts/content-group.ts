@@ -3,6 +3,8 @@
   IsCreated: boolean;
   IsList: boolean;
   TemplateId: number;
+  // Edition: string; // not in use ATM
+  TemplatePath: string;
   QueryId: number | null;
   ContentTypeName: string;
   AppUrl: string;
