@@ -1,6 +1,5 @@
 ﻿import { renderer } from '../../contentBlock/render';
 import { ContextComplete } from '../../context/bundles/context-bundle-button';
-import { NoJQ } from '../../plumbing';
 import { TypeUnsafe } from '../../plumbing/TypeTbD';
 import { ContentListActionParams } from './content-list-action-params';
 
@@ -109,10 +108,10 @@ function doAndReload<T>(
     postData: TypeUnsafe = {},
 ): Promise<void | T> {
     return (verb === 'post'
-        ? context.sxc.webApi.fetch(`${url}?${NoJQ.param(params)}`, postData, 'POST')
+        ? context.sxc.webApi.fetch(context.sxc.webApi.url(url, params), postData, 'POST')
         : verb === 'delete'
-            ? context.sxc.webApi.fetch(`${url}?${NoJQ.param(params)}`, undefined, 'DELETE')
-            : context.sxc.webApi.fetchJson(`${url}?${NoJQ.param(params)}`))
+            ? context.sxc.webApi.fetch(context.sxc.webApi.url(url, params), undefined, 'DELETE')
+            : context.sxc.webApi.fetchJson(context.sxc.webApi.url(url, params)))
         .then(() => {
             renderer.reloadAndReInitialize(context);
         });

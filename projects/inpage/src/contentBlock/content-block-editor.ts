@@ -1,7 +1,7 @@
 ﻿import { C } from '../constants/index';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { HtmlTools } from '../html/dom-tools';
-import { HasLog, Insights, NoJQ } from '../logging';
+import { HasLog, Insights } from '../logging';
 import { renderer } from './render';
 
 //#region WebApi Endpoints used: 2sxc
@@ -79,7 +79,7 @@ export class ContentBlockEditor extends HasLog {
             v2: true,
         };
         cl.data('params', params);
-        const promise = context.sxc.webApi.fetch(`${webApiRender}wip?${NoJQ.param(params)}`)
+        const promise = context.sxc.webApi.fetch(context.sxc.webApi.url(webApiRender + 'wip', params))
             .then((response) => response.text());
         return cl.return(promise);
     }
@@ -125,7 +125,7 @@ export class ContentBlockEditor extends HasLog {
             newTemplateChooserState: false,
         };
         cl.data('params', params);
-        const promise = context.sxc.webApi.fetchJson(`${webApiSave}?${NoJQ.param(params)}`, undefined, 'POST');
+        const promise = context.sxc.webApi.fetchJson(context.sxc.webApi.url(webApiSave, params), undefined, 'POST');
         return cl.return(promise);
     }
 

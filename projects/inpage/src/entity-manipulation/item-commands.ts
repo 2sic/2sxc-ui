@@ -1,6 +1,5 @@
 ﻿import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { translate } from '../i18n';
-import { NoJQ } from '../plumbing';
 
 /**
  * this enhances the $2sxc client controller with stuff only needed when logged in
@@ -28,7 +27,7 @@ export let contentItems = {
       appId: context.app.id,
     };
 
-    return context.sxc.webApi.fetch(`app/auto/content/any/${itemGuid}?${NoJQ.param(params)}`, undefined, 'DELETE')
+    return context.sxc.webApi.fetch(context.sxc.webApi.url(`app/auto/content/any/${itemGuid}`, params), undefined, 'DELETE')
       .then((response) => {
         if (response.status >= 200 && response.status < 300) {
           location.reload();

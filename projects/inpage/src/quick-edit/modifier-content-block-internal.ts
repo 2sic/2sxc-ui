@@ -57,7 +57,7 @@ export class ModifierContentBlockInstance extends HasLog {
         };
 
         const promise = this.sxcInstance.webApi
-            .fetchJson(`${webApiNew}?${NoJQ.param(params)}`, undefined, 'POST')
+            .fetchJson(this.sxcInstance.webApi.url(webApiNew, params), undefined, 'POST')
             .then((result) => {
                 const newTag = NoJQ.domFromString(result)[0]; // prepare tag for inserting
 
@@ -91,7 +91,7 @@ export class ModifierContentBlockInstance extends HasLog {
         };
 
         const promise = this.sxcInstance.webApi
-            .fetch(`${webApiMove}?${NoJQ.param(params)}`, undefined, 'POST')
+            .fetch(this.sxcInstance.webApi.url(webApiMove, params), undefined, 'POST')
             .then(() => {
                 console.log('done moving!');
                 window.location.reload();
@@ -116,7 +116,7 @@ export class ModifierContentBlockInstance extends HasLog {
         };
 
         const promise = this.sxcInstance.webApi
-            .fetch(`${webApiRemove}?${NoJQ.param(params)}`, undefined, 'DELETE')
+            .fetch(this.sxcInstance.webApi.url(webApiRemove, params), undefined, 'DELETE')
             .then(() => {
                 console.log('done deleting!');
                 window.location.reload();
