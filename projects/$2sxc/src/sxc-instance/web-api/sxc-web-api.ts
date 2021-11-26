@@ -211,6 +211,8 @@ export class SxcWebApi implements Public.SxcWebApi {
      * it will auto-expand to have the full url as needed for an API call. 
      */
     url(url: string, params?: string | Record<string, any>): string {
+        if (url == null) return url;
+
         const urlAndParams = url.split('#')[0].split('?');
 
         // url fixes
