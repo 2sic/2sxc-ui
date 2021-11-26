@@ -3,6 +3,7 @@ import { SxcInstance } from '../sxc-instance';
 import { AjaxPromise } from './ajax-promise';
 import { Environment } from '../../environment';
 import { AjaxSettings } from './ajax-settings';
+import { NoJQ } from '../..';
 
 /**
  * helper API to run ajax / REST calls to the server
@@ -158,8 +159,8 @@ export class SxcWebApi implements Public.SxcWebApi {
      * @param method optional method, defaults to `GET` unless it has data, in which case it defaults to `POST`
      * @returns a Promise containing any object.
      */
-    fetchJson<T>(url: string, data?: string | Record<string, any>, method?: string): Promise<T> {
-        return this.fetch(url, data, method).then(response => response.json() as Promise<T>);
+    fetchJson<T = any>(url: string, data?: string | Record<string, any>, method?: string): Promise<T> {
+        return this.fetch(url, data, method).then(response => response.json());
     }
 
     // TODO: must standardize how to handle url params
@@ -210,20 +211,26 @@ export class SxcWebApi implements Public.SxcWebApi {
      * it will auto-expand to have the full url as needed for an API call. 
      */
     url(url: string, params?: string | Record<string, any>): string {
+        const urlAndParams = url.split('#')[0].split('?');
+
+        // url fixes
+        url = urlAndParams[0];
         const urlParts = url.split('/');
         if (urlParts.length === 2 && urlParts[0] && urlParts[1]) {
             const controller = urlParts[0];
             const action = urlParts[1];
             url = `app/auto/api/${controller}/${action}`;
         }
-        // TODO: SPM
-        // - discuss
-        // - idea is that it would take a string or params object
-        // - and add to the url
-        // - also be careful if the url has ? already, that it doesn't have two ?
-        // Don't fix mulpiple same params
-
         url = this.sxc.root.http.apiUrl(url);
+
+        // params fixes
+        params = `${urlAndParams[1] || ''}&${params ? typeof params === 'string' ? params : NoJQ.param(params) : ''}`
+            .split('&')
+            .filter(p => !!p)
+            .join('&');
+
+        // result
+        url = [url, params].filter(p => !!p).join('?');
         return url;
     }
 }
