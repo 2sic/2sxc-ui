@@ -4,8 +4,8 @@
   "version": "12.01.00",
   "license": "MIT",
   "scripts": {
-    "dev-t1": "ng build --watch",
-    "dev-w": "node ../webpack/distribute2.js ./dist/ng /dist/ng -w",
+    "dev-angular": "ng build --watch",
+    "dev-dist": "node ../webpack/distribute2.js ./dist/ng /dist/ng -w",
     "dev": "concurrently \"ng build --watch\" \"node ../webpack/distribute2.js ./dist/ng /dist/ng -w\"",
     "release": "set NODE_ENV=production && ng build --prod && node ../webpack/distribute2.js ./dist/ng /dist/ng",
     "release-watch": "set NODE_ENV=production && concurrently \"ng build --prod --watch\"  \"node ../webpack/distribute2.js ./dist/ng /dist/ng -w\"",
