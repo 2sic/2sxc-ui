@@ -16,7 +16,7 @@ Commands.add(CmdTemplateDevelop, 'Develop', 'code', true, false, {
     const cb = context.contentBlock;
     const identifier: TemplateIdentifier = { EntityId: cb.templateId };
     if (cb.templatePath) identifier.Path = cb.templatePath;
-    if (cb.edition) identifier.Path = cb.templatePath;
+    if (cb.edition) identifier.Edition = cb.edition;
     linkGenerator.items = [identifier];
   },
 });

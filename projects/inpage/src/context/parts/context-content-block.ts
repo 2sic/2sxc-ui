@@ -28,7 +28,7 @@ export class ContextOfContentBlock {
     this.queryId = cb.QueryId;
     this.templateId = cb.TemplateId;
     this.templatePath = cb.TemplatePath;
-    this.templatePath = cb.TemplatePath;
+    this.edition = cb.Edition;
     this.contentTypeId = cb.ContentTypeName;
     this.contentGroupId = cb.Guid;
   }
