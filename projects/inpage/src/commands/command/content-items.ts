@@ -10,7 +10,10 @@ Commands.add(CmdContentItems, 'ContentItems', 'table', true, false, {
             || context.contentBlock.contentTypeId;
         return {
             // old name for the previous UI
-            contentTypeName: typeName,
+            // 2021-11-29 2dm - believe this is obsolete, will turn off and see if everything works
+            // #cleanUp EOY 2021
+            // contentTypeName: typeName,
+
             // new name for the new UI
             contentType: typeName,
         };
@@ -24,12 +27,6 @@ Commands.add(CmdContentItems, 'ContentItems', 'table', true, false, {
     },
 
     configureLinkGenerator: (context, linkGenerator) => {
-        // optionally override with custom type
-        // 2020-03-26 2dm seems superflues, because it's already merged in the params
-        // if (linkGenerator.context.button.action.params.contentType)
-        //     linkGenerator.urlParams.contentTypeName =
-        //         linkGenerator.context.button.action.params.contentType;
-
         if (context.button.command.params.filters) {
             let enc = JSON.stringify(context.button.command.params.filters);
 
