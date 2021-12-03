@@ -163,18 +163,26 @@ export class SxcWebApi implements Public.SxcWebApi {
         return this.fetch(url, data, method).then(response => response.json());
     }
 
-    // TODO: must standardize how to handle url params
-    // option 1: part of the query name
-    // - great because it would be the same signature as fetch/fetchjson
-    // - bad because the the first param isn't clearly just the name
-    // - bad because the user must treat all edge cases like special characters
-    // option 2: second parameter
-    // discuss merits of each solution
-    fetchQueryWIP(query: string, data?: string | Record<string, any>, method?: string): Promise<any> {
-        // Do initial checks to ensure query is really just the name
-        // Could have ? - that's fine, and after ? it could have /, but never before the ?
-        return this.fetch(query, data, method).then(response => response.json());
-    }
+    // data<T = any>(typeName: string, ids?: string, params?: string | Record<string, any>): Promise<T> {
+    //     if (typeName == null) throw 'typeName is empty';
+    //     if (typeName.indexOf('/') != -1 || typeName.indexOf('\\') != -1) throw 'typeName has slashes - not allowed';
+    //     let path = 'app/auto/content/' + typeName;
+    //     if (ids && typeof(ids) === 'string') path += '/' + ids;
+    //     return this.fetch(this.url(path, params)).then(response => response.json());
+    // }
+
+    // // TODO: must standardize how to handle url params
+    // // option 1: part of the query name
+    // // - great because it would be the same signature as fetch/fetchjson
+    // // - bad because the the first param isn't clearly just the name
+    // // - bad because the user must treat all edge cases like special characters
+    // // option 2: second parameter
+    // // discuss merits of each solution
+    // query<T = any>(query: string, params?: string | Record<string, any> /*, data?: string | Record<string, any> */): Promise<T> {
+    //     // Do initial checks to ensure query is really just the name
+    //     // Could have ? - that's fine, and after ? it could have /, but never before the ?
+    //     return this.fetch(this.url(query, params)/*, data*/).then(response => response.json());
+    // }
 
     /**
      * All the headers which are needed in an ajax call for this to work reliably.
