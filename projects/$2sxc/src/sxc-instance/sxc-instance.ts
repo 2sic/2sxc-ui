@@ -6,6 +6,7 @@ import { SxcRoot } from '../sxc-root/sxc-root';
 import { HasLog } from '..';
 import { SxcRootInternals } from '../sxc-root/sxc-root-internals';
 import { SxcInstanceManage } from './sxc-instance-manage';
+import { SxcData } from './data/sxc-data';
 
 // const serviceScopes = ['app', 'app-sys', 'app-api', 'app-query', 'app-content', 'eav', 'view', 'dnn'];
 
@@ -57,6 +58,10 @@ export class SxcInstance extends HasLog implements Public.SxcInstance {
             if (this.manage.context && this.manage.context.app && this.manage.context.app.currentLanguage)
                 root._translateInit(this.manage);    // init translate, not really nice, but ok for now
 
+    }
+
+    data(contentType: string) {
+        return new SxcData(this, contentType);
     }
 
     /**

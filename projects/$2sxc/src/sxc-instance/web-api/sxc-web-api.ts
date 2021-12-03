@@ -12,12 +12,7 @@ import { NoJQ } from '../..';
  */
 export class SxcWebApi implements Public.SxcWebApi {
     public readonly env: Environment;
-    constructor(
-        private readonly sxc: SxcInstance,
-        // private readonly id: number,
-        // private readonly cbid: number,
-        // public readonly env: Environment
-    ) {
+    constructor(private readonly sxc: SxcInstance) {
         this.env = sxc.root.env;
     }
     /**
