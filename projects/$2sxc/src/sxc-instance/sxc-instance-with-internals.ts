@@ -18,6 +18,12 @@ export class SxcInstanceWithInternals extends SxcInstance {
       super(id, cbid, $2sxc, ctx);
       
       // Help cach error on call of old code
+      // Background: From v3 to v12 data had a unusualy system for retrieving data belonging to the module
+      // We believe it's almost never used, but the TimelineJs App always used it, and we believe
+      // 2-3 other examples may have as well. 
+      // Now in v13 sxc.data is used to get any kind of data,
+      // and we want to make sure that old code will show a warning helping people fix this
+      // All the old code would have started with sxc.data.on('load', ...) so this is where we give them the error
       (this.data as any).on = () => { 
         throw 'Warning Obsolete Feature on 2sxc JS: the .data has been obsolete for a long time and is repurposed. \n'
         + 'If you are calling .data.on(...) you are running very old code. \n' 

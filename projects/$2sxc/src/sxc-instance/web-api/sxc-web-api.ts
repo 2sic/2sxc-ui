@@ -158,14 +158,6 @@ export class SxcWebApi implements Public.SxcWebApi {
         return this.fetch(url, data, method).then(response => response.json());
     }
 
-    // data<T = any>(typeName: string, ids?: string, params?: string | Record<string, any>): Promise<T> {
-    //     if (typeName == null) throw 'typeName is empty';
-    //     if (typeName.indexOf('/') != -1 || typeName.indexOf('\\') != -1) throw 'typeName has slashes - not allowed';
-    //     let path = 'app/auto/content/' + typeName;
-    //     if (ids && typeof(ids) === 'string') path += '/' + ids;
-    //     return this.fetch(this.url(path, params)).then(response => response.json());
-    // }
-
     // // TODO: must standardize how to handle url params
     // // option 1: part of the query name
     // // - great because it would be the same signature as fetch/fetchjson
