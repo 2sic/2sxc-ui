@@ -2,7 +2,7 @@ import { SxcInstance } from "..";
 import { SxcDataQueryBase } from './sxc-data-query-base';
 
 /**
- * Instance Data accessor to get (and in future create/update) data items/entities
+ * Instance Query accessor
  */
 export class SxcQuery extends SxcDataQueryBase {
   
