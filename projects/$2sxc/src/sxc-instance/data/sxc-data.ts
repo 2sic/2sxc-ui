@@ -42,7 +42,7 @@ export class SxcData<T = unknown> extends SxcDataQueryBase {
   * @returns an array with 1 or n entities in the simple JSON format
   */
   private getInternal<TCall>(id?: string | number, params?: string | Record<string, unknown>): Promise<TCall> {
-    let path = "app/auto/content/" + this.name;
+    let path = "app/auto/data/" + this.name;
     if (id && (typeof id === 'string' || typeof id === 'number')) path += "/" + id;
     return this.webApi.fetchJson(this.webApi.url(path, params));
   }
