@@ -3,6 +3,10 @@ import { SxcRoot } from '../sxc-root/sxc-root';
 import { SxcInstance } from '.';
 import { ContextIdentifier } from '../sxc-root/context-identifier';
 
+const warning = 'Warning Obsolete Feature on 2sxc JS: the .data has been obsolete for a long time and is repurposed. \n'
++ 'If you are calling ".data.on(...)" or ".data.sourceUrl" you are running very old code. \n' 
++ 'Guidance to fix this: https://r.2sxc.org/brc-13-id.';
+
 export class SxcInstanceWithInternals extends SxcInstance {
   source: any = null;
   isLoaded = false;
@@ -24,11 +28,13 @@ export class SxcInstanceWithInternals extends SxcInstance {
       // Now in v13 sxc.data is used to get any kind of data,
       // and we want to make sure that old code will show a warning helping people fix this
       // All the old code would have started with sxc.data.on('load', ...) so this is where we give them the error
-      (this.data as any).on = () => { 
-        throw 'Warning Obsolete Feature on 2sxc JS: the .data has been obsolete for a long time and is repurposed. \n'
-        + 'If you are calling .data.on(...) you are running very old code. \n' 
-        + 'Guidance to fix this: https://r.2sxc.org/brc-13-id.' 
-      };
+      // We only do this if it hasn't been done already
+      if (!(this.data as any).on) {
+        (this.data as any).on = () => { throw warning };
+        Object.defineProperty(this.data, 'sourceUrl', {
+            get: function() { throw warning }
+        });
+    }
   }
 
   recreate(resetCache: boolean): SxcInstanceWithInternals {

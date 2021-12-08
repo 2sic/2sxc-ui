@@ -1,5 +1,4 @@
 import { SxcInstance } from "..";
-import { SxcWebApi } from "../web-api/sxc-web-api";
 import { SxcDataQueryBase } from './sxc-data-query-base';
 
 /**
