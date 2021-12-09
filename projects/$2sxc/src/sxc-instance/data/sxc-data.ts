@@ -14,14 +14,14 @@ export class SxcData<T = unknown> extends SxcDataQueryBase {
   constructor(sxc: SxcInstance, readonly name: string) {
     super(sxc, name, 'ContentType');
   }
-    
+
   /**
   * Get all items of this type.
   */
   getAll(): Promise<T[]> {
     return this.getInternal<T[]>();
   }
-  
+
   /**
   * Get the specific item with the ID. It will return null if not found
   */
@@ -33,8 +33,8 @@ export class SxcData<T = unknown> extends SxcDataQueryBase {
   private getMany(criteria: Record<string, unknown>, fields: Array<string>): Promise<T[]> {
     throw 'not implemented - probably v13.5 or something';
   }
-  
-  
+
+
   /**
   * Get all or one data entity from the backend
   * @param id optional id as number or string - if not provided, will get all
@@ -46,22 +46,30 @@ export class SxcData<T = unknown> extends SxcDataQueryBase {
     if (id && (typeof id === 'string' || typeof id === 'number')) path += "/" + id;
     return this.webApi.fetchJson(this.webApi.url(path, params));
   }
-  
-  // TODO: @SPM create
-  // - Create a type for the `metadataFor` attribute
-  // - implement create
-  // - capture various null-cases
-  // - if `metadataFor` is specified, add attribute `for` the the object before sending (that should work)
 
   create(values: Record<string, unknown>): Promise<Record<string, unknown>>;
+  create(values: Record<string, unknown>, metadataFor: MetadataFor): Promise<Record<string, unknown>>;
 
-  create(values: Record<string, unknown>, metadataFor?: any): Promise<Record<string, unknown>> {
-    return null;
+  create(values: Record<string, unknown>, metadataFor?: MetadataFor): Promise<Record<string, unknown>> {
+    const path = `app/auto/data/${this.name}`;
+    if (metadataFor != null) {
+      try {
+        values.For = metadataFor;
+      } catch { }
+    }
+    return this.webApi.fetchJson(this.webApi.url(path), values, 'POST');
   }
-  
-  // TODO: @SPM update
+
   update(id: number, values: Record<string, unknown>): Promise<Record<string, unknown>> {
-      return null;
+    const path = `app/auto/data/${this.name}/${id}`;
+    return this.webApi.fetchJson(this.webApi.url(path), values, 'POST');
   }
 }
-  
+
+export interface MetadataFor {
+  Target: string;
+  Number?: number;
+  String?: string;
+  Guid?: string;
+  Singleton?: boolean;
+}
