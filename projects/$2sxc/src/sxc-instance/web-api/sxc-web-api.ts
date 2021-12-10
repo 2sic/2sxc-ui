@@ -158,19 +158,6 @@ export class SxcWebApi implements Public.SxcWebApi {
         return this.fetch(url, data, method).then(response => response.json());
     }
 
-    // // TODO: must standardize how to handle url params
-    // // option 1: part of the query name
-    // // - great because it would be the same signature as fetch/fetchjson
-    // // - bad because the the first param isn't clearly just the name
-    // // - bad because the user must treat all edge cases like special characters
-    // // option 2: second parameter
-    // // discuss merits of each solution
-    // query<T = any>(query: string, params?: string | Record<string, any> /*, data?: string | Record<string, any> */): Promise<T> {
-    //     // Do initial checks to ensure query is really just the name
-    //     // Could have ? - that's fine, and after ? it could have /, but never before the ?
-    //     return this.fetch(this.url(query, params)/*, data*/).then(response => response.json());
-    // }
-
     /**
      * All the headers which are needed in an ajax call for this to work reliably.
      * Use this if you need to get a list of headers in another system

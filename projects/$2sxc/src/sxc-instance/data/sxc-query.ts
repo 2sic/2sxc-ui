@@ -21,6 +21,15 @@ export class SxcQuery extends SxcDataQueryBase {
     return this.getInternal<T>();
   }
 
+  // TODO: @SPM - OVERLOAD WITH FIRST PARAMETER urlParams and secondParam post params
+//   getAll<T = unknown>(urlParams: string | Record<string, unknown>): Promise<T> {
+//       todo
+//   }
+
+//   getAll<T = unknown>(urlParams: string | Record<string, unknown>, data: string | Record<string, unknown>): Promise<T> {
+//     todo
+//   }
+
   /**
    * Get just one stream, returning an array of items in that stream
    *
@@ -37,6 +46,8 @@ export class SxcQuery extends SxcDataQueryBase {
     })
   }
 
+  // TODO: @SPM - SAME OVERLOADS WITH URL / DATA
+
   /**
    * Get a query but only the selected streams.
    *
@@ -48,6 +59,8 @@ export class SxcQuery extends SxcDataQueryBase {
   getStreams<T = unknown>(streams: string): Promise<T> {
     return this.getInternal<T>(streams);
   }
+
+  // TODO: @SPM - SAME OVERLOADS WITH URL / DATA
 
   /**
    * Get all or one data entity from the backend
