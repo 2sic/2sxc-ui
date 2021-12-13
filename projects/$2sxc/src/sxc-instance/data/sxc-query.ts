@@ -5,11 +5,14 @@ import { SxcDataQueryBase } from './sxc-data-query-base';
  * Instance Query accessor
  */
 export class SxcQuery extends SxcDataQueryBase {
-  
+
   constructor(sxc: SxcInstance, readonly name: string) {
     super(sxc, name, 'Query');
   }
 
+  getAll<T = unknown>(): Promise<T>;
+  getAll<T = unknown>(urlParams: string | Record<string, unknown>): Promise<T>;
+  getAll<T = unknown>(urlParams: string | Record<string, unknown>, data: string | Record<string, unknown>): Promise<T>;
   /**
    * Retrieve the entire query with all streams
    *
@@ -17,18 +20,9 @@ export class SxcQuery extends SxcDataQueryBase {
    * @returns {Promise<T>} containing a object with stream-names and items in the streams.
    * @memberof SxcQuery
    */
-  getAll<T = unknown>(): Promise<T> {
-    return this.getInternal<T>();
+  getAll<T = unknown>(urlParams?: string | Record<string, unknown>, data?: string | Record<string, unknown>): Promise<T> {
+    return this.getInternal<T>(undefined, urlParams, data);
   }
-
-  // TODO: @SPM - OVERLOAD WITH FIRST PARAMETER urlParams and secondParam post params
-//   getAll<T = unknown>(urlParams: string | Record<string, unknown>): Promise<T> {
-//       todo
-//   }
-
-//   getAll<T = unknown>(urlParams: string | Record<string, unknown>, data: string | Record<string, unknown>): Promise<T> {
-//     todo
-//   }
 
   /**
    * Get just one stream, returning an array of items in that stream
@@ -46,8 +40,9 @@ export class SxcQuery extends SxcDataQueryBase {
     })
   }
 
-  // TODO: @SPM - SAME OVERLOADS WITH URL / DATA
-
+  getStreams<T = unknown>(streams: string): Promise<T>;
+  getStreams<T = unknown>(streams: string, urlParams: string | Record<string, unknown>): Promise<T>;
+  getStreams<T = unknown>(streams: string, urlParams: string | Record<string, unknown>, data: string | Record<string, unknown>): Promise<T>;
   /**
    * Get a query but only the selected streams.
    *
@@ -56,11 +51,9 @@ export class SxcQuery extends SxcDataQueryBase {
    * @returns {Promise<T>} containing a object with stream-names and items in the streams.
    * @memberof SxcQuery
    */
-  getStreams<T = unknown>(streams: string): Promise<T> {
-    return this.getInternal<T>(streams);
+  getStreams<T = unknown>(streams: string, urlParams?: string | Record<string, unknown>, data?: string | Record<string, unknown>): Promise<T> {
+    return this.getInternal<T>(streams, urlParams, data);
   }
-
-  // TODO: @SPM - SAME OVERLOADS WITH URL / DATA
 
   /**
    * Get all or one data entity from the backend
@@ -68,9 +61,9 @@ export class SxcQuery extends SxcDataQueryBase {
    * @param params optional parameters - ATM not usefuly but we plan to support more filters etc. 
    * @returns an array with 1 or n entities in the simple JSON format
    */
-  private getInternal<T = unknown>(streams?: string, params?: string | Record<string, any>): Promise<T> {
+  private getInternal<T = unknown>(streams?: string, params?: string | Record<string, any>, data?: string | Record<string, unknown>): Promise<T> {
     let path = "app/auto/query/" + this.name;
     if (streams && (typeof streams === 'string')) path += "?stream=" + streams;
-    return this.webApi.fetchJson(this.webApi.url(path, params));
+    return this.webApi.fetchJson(this.webApi.url(path, params), data);
   }
 }
