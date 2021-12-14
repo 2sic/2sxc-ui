@@ -64,6 +64,14 @@ export class SxcData<T = unknown> extends SxcDataQueryBase {
     const path = `app/auto/data/${this.name}/${id}`;
     return this.webApi.fetchJson(this.webApi.url(path), values, 'POST');
   }
+
+  delete(id: number): Promise<null>;
+  delete(guid: string): Promise<null>;
+
+  delete(idOrGuid: number | string): Promise<null> {
+    const path = `app/auto/data/${this.name}/${idOrGuid}`;
+    return this.webApi.fetch(this.webApi.url(path), undefined, 'DELETE').then(response => null);
+  }
 }
 
 export interface MetadataFor {
