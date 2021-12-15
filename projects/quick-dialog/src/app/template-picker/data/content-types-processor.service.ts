@@ -1,11 +1,11 @@
-import { ContentType } from '../content-type';
-import { cViewWithoutContent } from '../constants';
-import { Template } from '../template';
 import { Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { log as parentLog } from 'app/core/log';
 import { DebugConfig } from 'app/debug-config';
 import { i18nPrefix } from 'app/i18n';
+import { cViewWithoutContent } from '../constants';
+import { ContentType } from '../content-type';
+import { Template } from '../template';
 
 // const debug = true;
 const log = parentLog.subLog('ct-processor', DebugConfig.typeProcessor);
@@ -15,7 +15,7 @@ const log = parentLog.subLog('ct-processor', DebugConfig.typeProcessor);
  */
 @Injectable()
 export class ContentTypesProcessor {
-  constructor(private translate: TranslateService) {}
+  constructor(private translate: TranslateService) { }
 
   public buildList(allTypes: ContentType[], type: ContentType, allTemplates: Template[], template: Template): ContentType[] {
     log.add('buildList(...) of content-types to show');
@@ -69,6 +69,25 @@ export class ContentTypesProcessor {
     return contentTypes.sort((a, b) => ('' + a.Label).localeCompare(b.Label));
   }
 
+  /**
+   * Sort the types by IsDefault DESC and Label ASC
+  */
+  private static sortTypesWithDefault(contentTypes: ContentType[]): ContentType[] {
+    return contentTypes.sort((a, b) => {
+      // first sort by IsDefault DESC
+      if (a.IsDefault > b.IsDefault) return -1;
+      if (a.IsDefault < b.IsDefault) return 1;
+      // than sort by Label ASC
+      return ('' + a.Label).localeCompare(b.Label);
+    });
+  }
+
+  /**
+   * Get first default or alphabetically
+   */
+  static firstDefault(contentTypes: ContentType[]): ContentType {
+    return this.sortTypesWithDefault([...contentTypes])[0];
+  }
 
   // tslint:disable-next-line:member-ordering
   static findContentTypesById(contentTypes: ContentType[], selectedContentTypeId: string): ContentType {
@@ -79,4 +98,3 @@ export class ContentTypesProcessor {
   }
 
 }
-

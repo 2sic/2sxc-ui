@@ -5,7 +5,7 @@
   <div *ngIf="showDebug">
     <h4>Debug 2sxc 11 / ng 11</h4>
     <ul>
-      <li>Types: {{ types?.length }}, current: {{contentType?.StaticName}}</li>
+      <li>Types: {{ types?.length }}, current: {{contentType?.StaticName}}, default: {{defaultContentType?.Label}}</li>
       <li>Apps: {{ (apps$ | async)?.length }}, current: {{app?.AppId }} </li>
       <li>Templates: {{templates?.length}}, current: {{template?.TemplateId}}</li>
       <li>Config: isContent='{{isContent}}' Ready: {{ready}} </li>
@@ -86,7 +86,7 @@
         <ng-template #contentApp>
           <div class="tiles">
             <div mat-button class="tile"
-              [ngClass]="{ active: contentType?.StaticName === c.StaticName, blocked: preventTypeSwitch }"
+              [ngClass]="{ active: contentType ? contentType?.StaticName === c.StaticName : defaultContentType?.StaticName === c.StaticName, blocked: preventTypeSwitch }"
               [attr.title]="(c.Label | translate) + (showDebug ? ' (' + c.StaticName + ')' : '')"
               (click)="selectContentType(contentType, c)"
               (dblclick)="switchTab()"

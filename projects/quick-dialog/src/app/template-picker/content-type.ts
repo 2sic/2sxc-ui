@@ -10,6 +10,7 @@ export class ContentType {
      * This property is added by the UI, and does not come from the REST call
      */
     TemplateId: number;
+    IsDefault?: boolean = false;
 }
 
 class ContentTypeProperties {

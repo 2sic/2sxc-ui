@@ -1,20 +1,20 @@
 
 // #region imports
-import { scan, debounceTime, share, startWith, map, filter } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import { Observable, combineLatest, merge } from 'rxjs';
-
 import { App } from 'app/core/app';
-import { PickerService } from './picker.service';
-import { Template } from './template';
-import { ContentType } from './content-type';
-import { TemplateFilterPipe } from './template-filter.pipe';
+import { BehaviorObservable } from 'app/core/behavior-observable';
 import { log as parentLog } from 'app/core/log';
+import { DebugConfig } from 'app/debug-config';
+import { IQuickDialogConfig } from 'app/interfaces/shared';
+import { combineLatest, merge, Observable } from 'rxjs';
+import { debounceTime, filter, map, scan, share, startWith, tap } from 'rxjs/operators';
+import { ContentType } from './content-type';
 import { ContentTypesProcessor } from './data/content-types-processor.service';
 import { TemplateProcessor } from './data/template-processor';
-import { DebugConfig } from 'app/debug-config';
-import { BehaviorObservable } from 'app/core/behavior-observable';
-import { IQuickDialogConfig } from 'app/interfaces/shared';
+import { PickerService } from './picker.service';
+import { Template } from './template';
+import { TemplateFilterPipe } from './template-filter.pipe';
+
 // #endregion
 
 const log = parentLog.subLog('state', DebugConfig.state.enabled);
@@ -75,8 +75,8 @@ export class CurrentDataService {
     const initialTemplate$ = combineLatest([
       this.initialTemplateId$,
       this.api.templates$])
-      .pipe(map(([id, templates]) => templates.find(t => t.TemplateId === id)))
       .pipe(
+        map(([id, templates]) => templates.find(t => t.TemplateId === id)),
         filter(t => t != null), // only allow new values which are not null, to guarantee later template$ updates don't affect this
         startWith(null as Template),
         share());
@@ -86,12 +86,11 @@ export class CurrentDataService {
       selected$,
       this.templates$,
       this.type$,
-      this.app$]).pipe(map(
-        ([selected, templates, type, app]) => TemplateProcessor.pickSelected(selected, templates, type, app)
-      ))
-      .pipe(
+      this.app$]).pipe(
+        map(([selected, templates, type, app]) => TemplateProcessor.pickSelected(selected, templates, type, app)),
         startWith(null as Template),
-        share());
+        share(),
+      );
 
     // construct list of relevant types for the UI
     this.types$ = combineLatest([

@@ -4,4 +4,5 @@ export class Template {
     Thumbnail: string;
     IsHidden: boolean;
     ContentTypeStaticName: string;
+    IsDefault?: boolean = false;
 }
