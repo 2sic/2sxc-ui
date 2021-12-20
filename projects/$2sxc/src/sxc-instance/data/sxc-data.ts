@@ -1,6 +1,10 @@
 import { SxcInstance } from "..";
 import { SxcDataQueryBase } from './sxc-data-query-base';
 
+const ContentApiRoot = 'app/auto/data';
+
+const TargetTypeEntity = 4;
+
 /**
 * Instance Data accessor to get (and in future create/update) data items/entities
 */
@@ -42,17 +46,19 @@ export class SxcData<T = unknown> extends SxcDataQueryBase {
   * @returns an array with 1 or n entities in the simple JSON format
   */
   private getInternal<TCall>(id?: string | number, params?: string | Record<string, unknown>): Promise<TCall> {
-    let path = "app/auto/data/" + this.name;
+    let path = `${ContentApiRoot}/${this.name}`;
     if (id && (typeof id === 'string' || typeof id === 'number')) path += "/" + id;
     return this.webApi.fetchJson(this.webApi.url(path, params));
   }
 
   create(values: Record<string, unknown>): Promise<Record<string, unknown>>;
-  create(values: Record<string, unknown>, metadataFor: MetadataFor): Promise<Record<string, unknown>>;
+  create(values: Record<string, unknown>, metadataFor: MetadataFor | string): Promise<Record<string, unknown>>;
 
-  create(values: Record<string, unknown>, metadataFor?: MetadataFor): Promise<Record<string, unknown>> {
-    const path = `app/auto/data/${this.name}`;
+  create(values: Record<string, unknown>, metadataFor?: MetadataFor | string): Promise<Record<string, unknown>> {
+    const path = `${ContentApiRoot}/${this.name}`;
     if (metadataFor != null) {
+      if (typeof(metadataFor) === 'string')
+        metadataFor = { Target: TargetTypeEntity, Guid: metadataFor } as MetadataFor;
       try {
         values.For = metadataFor;
       } catch { }
@@ -61,7 +67,7 @@ export class SxcData<T = unknown> extends SxcDataQueryBase {
   }
 
   update(id: number, values: Record<string, unknown>): Promise<Record<string, unknown>> {
-    const path = `app/auto/data/${this.name}/${id}`;
+    const path = `${ContentApiRoot}/${this.name}/${id}`;
     return this.webApi.fetchJson(this.webApi.url(path), values, 'POST');
   }
 
@@ -69,13 +75,13 @@ export class SxcData<T = unknown> extends SxcDataQueryBase {
   delete(guid: string): Promise<null>;
 
   delete(idOrGuid: number | string): Promise<null> {
-    const path = `app/auto/data/${this.name}/${idOrGuid}`;
+    const path = `${ContentApiRoot}/${this.name}/${idOrGuid}`;
     return this.webApi.fetch(this.webApi.url(path), undefined, 'DELETE').then(response => null);
   }
 }
 
 export interface MetadataFor {
-  Target: string;
+  Target: string | number;
   Number?: number;
   String?: string;
   Guid?: string;
