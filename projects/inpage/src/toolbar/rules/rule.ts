@@ -40,6 +40,7 @@ export class BuildRule extends HasLog {
 
     /**
      * Button Rules - determines what a button should do / not do
+     * Note: can also be Partial<ToolbarSettings>
      */
     ui: {
         icon?: string,
