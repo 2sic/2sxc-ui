@@ -32,9 +32,13 @@ export class SxcQuery extends SxcDataQueryBase {
    * @returns {Promise<T[]>} containing an array of items - or empty if stream not found or nothing returned
    * @memberof SxcQuery
    */
-  getStream<T = unknown>(stream: string): Promise<T[]> {
+  getStream<T = unknown>(stream: string): Promise<T[]>;
+  getStream<T = unknown>(stream: string, urlParams: string | Record<string, unknown>): Promise<T[]>;
+  getStream<T = unknown>(stream: string, urlParams: string | Record<string, unknown>, data: string | Record<string, unknown>): Promise<T[]>;
+  
+  getStream<T = unknown>(stream: string, urlParams?: string | Record<string, unknown>, data?: string | Record<string, unknown>): Promise<T[]> {
     if (stream.indexOf(',') !== -1) throw "parameter 'stream' can only contain one stream name for 'getStream'";
-    return this.getInternal<unknown>(stream).then((data) => {
+    return this.getInternal<unknown>(stream, urlParams, data).then((data) => {
       if (data == null || !data.hasOwnProperty(stream)) return [];
       return (data as any)[stream] as T[];
     })
