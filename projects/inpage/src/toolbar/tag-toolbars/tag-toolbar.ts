@@ -144,7 +144,7 @@ export class TagToolbar {
      * Show the toolbar
      */
     private show() {
-        console.log('show');
+        // console.log('show');
         this.initializeIfNecessary();
         this.toolbarElement.style.display = 'block';
         this.updatePosition(true);
@@ -155,7 +155,7 @@ export class TagToolbar {
      * Always show the toolbar.
      */
     private showPermanently() {
-        console.log('show permanently');
+        // console.log('show permanently');
         this.show();
         // after a moment, adjust position because often initial position is a bit off
         window.addEventListener('load', this.updateFn);
