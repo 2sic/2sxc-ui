@@ -7,7 +7,7 @@ export const CmdInsightsServer = 'insights-server';
  * import this module to commands.ts
  */
 Commands.add(CmdInsightsServer, 'Insights', 'speed', true, false, {
-    showCondition: (context) => context.user.canDesign,
+    showCondition: (context) => context.user.canDevelop,
     code(context, event) {
         return new Promise((resolve, reject) => {
             console.log('context', context);

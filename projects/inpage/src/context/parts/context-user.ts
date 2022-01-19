@@ -9,16 +9,21 @@ export class ContextOfUser {
     canDesign: boolean;
     canDevelop: boolean;
 
+    // upper case to later merge with original class
+    CanAdmin: boolean;
+
     constructor(editCtx?: AttrJsonEditContext) {
         if (!editCtx || !editCtx.User) return;
         this.canDesign = editCtx.User.CanDesign;
         this.canDevelop = editCtx.User.CanDevelop;
+        this.CanAdmin = editCtx.User.CanAdmin;
     }
 
     static fromContext(context: ContextComplete): ContextOfUser {
         const user = new ContextOfUser();
         user.canDesign = context.user.canDesign;
         user.canDevelop = context.user.canDevelop;
+        user.CanAdmin = context.user.CanAdmin;
         return user;
     }
 }

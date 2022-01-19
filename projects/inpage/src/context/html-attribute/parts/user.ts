@@ -1,6 +1,7 @@
 ﻿export class AttrJsonUser {
-  // ReSharper disable InconsistentNaming
   CanDesign: boolean;
   CanDevelop: boolean;
-  // ReSharper restore InconsistentNaming
+
+  // new v13
+  CanAdmin: boolean;
 }
