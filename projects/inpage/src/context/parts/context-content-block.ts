@@ -16,6 +16,9 @@ export class ContextOfContentBlock {
   // New in 12.11
   templatePath?: string;
 
+  // New in 13, upper case to later have the same type as this as we want to reduce the amount of classes
+  TemplateIsShared: boolean;
+
   // New in 12.11
   edition?: string;
 
@@ -28,9 +31,9 @@ export class ContextOfContentBlock {
     this.queryId = cb.QueryId;
     this.templateId = cb.TemplateId;
     this.templatePath = cb.TemplatePath;
+    this.TemplateIsShared = cb.TemplateIsShared;
     this.edition = cb.Edition;
     this.contentTypeId = cb.ContentTypeName;
     this.contentGroupId = cb.Guid;
   }
-
 }

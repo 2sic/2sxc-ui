@@ -49,4 +49,7 @@ export interface CommandParams {
     parent?: string;
     /** Experimental in 10.27 */
     fields?: string;
+
+    /** for template edit dialog */
+    isshared?: boolean;
 }

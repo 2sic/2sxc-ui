@@ -5,6 +5,8 @@
   TemplateId: number;
   Edition: string;
   TemplatePath: string;
+  /** True if the template comes from the shared location - new in v13 */
+  TemplateIsShared: boolean;
   QueryId: number | null;
   ContentTypeName: string;
   AppUrl: string;

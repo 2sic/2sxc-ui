@@ -19,4 +19,7 @@ Commands.add(CmdTemplateDevelop, 'Develop', 'code', true, false, {
     if (cb.edition) identifier.Edition = cb.edition;
     linkGenerator.items = [identifier];
   },
+
+  addParamsToLink: (ctx) => ({ isshared: ctx.contentBlock.TemplateIsShared }),
+
 });
