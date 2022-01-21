@@ -2,12 +2,13 @@
 // #region imports
 import { Injectable } from '@angular/core';
 import { App } from 'app/core/app';
+import { BackendSettings } from 'app/core/backend-settings';
 import { BehaviorObservable } from 'app/core/behavior-observable';
 import { log as parentLog } from 'app/core/log';
 import { DebugConfig } from 'app/debug-config';
 import { IQuickDialogConfig } from 'app/interfaces/shared';
 import { combineLatest, merge, Observable } from 'rxjs';
-import { debounceTime, filter, map, scan, share, startWith, tap } from 'rxjs/operators';
+import { debounceTime, filter, map, scan, share, startWith } from 'rxjs/operators';
 import { ContentType } from './content-type';
 import { ContentTypesProcessor } from './data/content-types-processor.service';
 import { TemplateProcessor } from './data/template-processor';
@@ -48,6 +49,7 @@ export class CurrentDataService {
   constructor(
     private api: PickerService,
     private templateFilter: TemplateFilterPipe,
+    private backendSettings: BackendSettings,
     private ctProcessor: ContentTypesProcessor
   ) {
     this.buildBasicObservables();
@@ -103,7 +105,7 @@ export class CurrentDataService {
 
   init(config: IQuickDialogConfig): Observable<boolean> {
     this.config = config;
-    this.api.blockIds$.next(config.blockIds);
+    this.backendSettings.blockIds$.next(config.blockIds);
     // app-init is ready, if it has an app or doesn't need to init one
     log.add(`initializing with config:${JSON.stringify(config)}`, config);
     const appReady$ = this.app$.pipe(

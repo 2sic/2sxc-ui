@@ -18,6 +18,11 @@ export class SxcHttp extends HasLog implements Omit<Public.Http, 'log'> {
         const pageId = this.env.page().toString();
         if(id) fHeaders[HeaderNames.ModuleId] = id.toString();
         if(cbid) fHeaders[HeaderNames.ContentBlockId] = cbid.toString();
+        // if(id != cbid && cbid < 0) {
+        //   var blockIds = this.getBlockIds(id);
+        //   console.log('stv: *** blockIds', blockIds, id, cbid);
+        //   if(blockIds && blockIds.length > 0) fHeaders['BlockIds'] = blockIds;
+        // }
         fHeaders[HeaderNames.TabId] = pageId;
         fHeaders[HeaderNames.PageId] = pageId;
         fHeaders[this.env.rvtHeader()] = this.env.rvt();
@@ -85,4 +90,29 @@ export class SxcHttp extends HasLog implements Omit<Public.Http, 'log'> {
         if(url[0] == '/') url = url.slice(1);
         return cl.return(baseUrl + url);
     }
+
+
+
+
+  /**** POC */
+
+  // getBlockIds(id: number): string {
+  //   var blocks = new Array<string>();
+  //   var elements = window.document.querySelectorAll(`div[data-cb-instance='${id}']`);
+  //   elements.forEach(element => {
+  //     var cts = this.getEditContextOfTag(element);
+  //     blocks.push(this.getBlockId(cts));
+  //   });
+  //   return blocks.join(',');
+  // }
+
+  // getEditContextOfTag(htmlTag: any): any {
+  //   const attr = htmlTag.getAttribute('data-edit-context');
+  //   return JSON.parse(attr || '{ }');
+  // }
+
+  // getBlockId(ctx: any): string {
+  //   return `${ctx.Environment.InstanceId}:${ctx.contentBlockReference.id}`;
+  //   // return `${ctx.contentBlock.AppId}:${ctx.contentBlock.ContentTypeName}`;
+  // }
 }

@@ -1,15 +1,15 @@
-import { combineLatest, Subject } from 'rxjs';
-import { map, startWith, share, switchMap } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { App } from 'app/core/app';
+import { BackendSettings } from 'app/core/backend-settings';
+import { BehaviorObservable } from 'app/core/behavior-observable';
+import { Constants } from 'app/core/constants';
+import { log as parentLog } from 'app/core/log';
+import { DebugConfig } from 'app/debug-config';
 import { ContentType } from 'app/template-picker/content-type';
 import { Template } from 'app/template-picker/template';
-import { log as parentLog } from 'app/core/log';
-import { Constants } from 'app/core/constants';
-import { DebugConfig } from 'app/debug-config';
-import { BehaviorObservable } from 'app/core/behavior-observable';
+import { combineLatest, Observable, Subject } from 'rxjs';
+import { map, share, startWith, switchMap, take, tap } from 'rxjs/operators';
 import { Config } from '../config';
 import { requestOptions } from './request-options';
 
@@ -33,14 +33,12 @@ export class PickerService {
   ready$ = new Observable<boolean>();
   // #endregion
 
-  blockIds$ = new Subject<string>()
-
   // #region private properties
   private mustLoadApps = false;
   // all the subjects - these are all multi-cast, so don't use share!
   // #endregion
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private backendSettings: BackendSettings,) {
     log.add('constructor()');
     this.buildObservables();
     this.enableLogging();
@@ -64,8 +62,10 @@ export class PickerService {
     log.add(`saveAppId(${appId}, ${reloadParts})`);
     // skip doing anything here, if we're in content-mode (which doesn't use/change apps)
     if (!this.loadApps) throw new Error(`can't save app, as we're not in app-mode`);
-    return this.blockIds$.pipe(
+    return this.backendSettings.blockIds$.pipe(
+      take(1),
       switchMap(blockIds => this.http.post(`${Constants.webApiSetApp}?appId=${appId}`, {}, requestOptions(blockIds))),
+      tap(_ => log.add(`saveAppId#2(${appId}, ${reloadParts})`))
     ).toPromise();
   }
 
@@ -86,7 +86,8 @@ export class PickerService {
   public loadTemplates(): Observable<any> {
     log.add('loadTemplates()');
     this.templates$.reset();
-    const obs = this.blockIds$.pipe(
+    const obs = this.backendSettings.blockIds$.pipe(
+      take(1),
       switchMap(blockIds => this.http.get<Template[]>(Constants.webApiGetTemplates, requestOptions(blockIds))),
       share(), // ensure it's only run once
     );
@@ -101,7 +102,8 @@ export class PickerService {
   private loadContentTypes(): Observable<any> {
     log.add(`loadContentTypes()`);
     this.contentTypes$.reset();
-    const obs = this.blockIds$.pipe(
+    const obs = this.backendSettings.blockIds$.pipe(
+      take(1),
       switchMap(blockIds => this.http.get<ContentType[]>(Constants.webApiGetTypes, requestOptions(blockIds))),
       share(), // ensure it's only run once
     );
@@ -123,7 +125,8 @@ export class PickerService {
 
     const appsFilter = Config.apps();
 
-    const obs = this.blockIds$.pipe(
+    const obs = this.backendSettings.blockIds$.pipe(
+      take(1),
       switchMap(blockIds => this.http.get<any[]>(`${Constants.webApiGetApps}?apps=${appsFilter}`, requestOptions(blockIds))),
       share(), // ensure it's only run once
     );
@@ -139,4 +142,7 @@ export class PickerService {
     this.templates$.subscribe(t => streamLog.add(`templates$:${t && t.length}`));
     this.ready$.subscribe(r => streamLog.add(`ready$:${r}`));
   }
+}
+function combineLatestFrom(blockIds$: Subject<string>) {
+  throw new Error('Function not implemented.');
 }
