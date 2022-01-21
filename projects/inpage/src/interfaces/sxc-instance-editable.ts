@@ -1,3 +1,4 @@
+import { environment } from './../../../quick-dialog/src/environments/environment';
 import { SxcInstanceWithInternals } from '../../../$2sxc/src';
 import { AttrJsonEditContext } from '../context/html-attribute';
 import { EditManager } from '../manage/edit-manager';
@@ -63,7 +64,18 @@ export class SxcEdit extends SxcInstanceWithInternals {
         return document.querySelector<HTMLElement>(`div[data-cb-id='${sxci.cbid}']`);
     }
 
+    static getBlockIds(id: number): string {
+      var blocks = new Array<string>();
+      var elements = document.querySelectorAll<HTMLElement>(`div[data-cb-instance='${id}']`);
+      elements.forEach(element => {
+        var cts = this.getEditContextOfTag(element);
+        blocks.push(this.getBlockId(cts));
+      });
+      return blocks.join(',');
+    }
+
+    static getBlockId(ctx: AttrJsonEditContext): string {
+      return `${ctx.Environment.InstanceId}:${ctx.contentBlockReference.id}`;
+      // return `${ctx.contentBlock.AppId}:${ctx.contentBlock.ContentTypeName}`;
+    }
 }
-
-
-

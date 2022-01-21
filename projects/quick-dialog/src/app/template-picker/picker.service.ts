@@ -1,8 +1,8 @@
-import { combineLatest } from 'rxjs';
-import { map, startWith, share } from 'rxjs/operators';
+import { combineLatest, Subject } from 'rxjs';
+import { map, startWith, share, switchMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { App } from 'app/core/app';
 import { ContentType } from 'app/template-picker/content-type';
 import { Template } from 'app/template-picker/template';
@@ -11,6 +11,7 @@ import { Constants } from 'app/core/constants';
 import { DebugConfig } from 'app/debug-config';
 import { BehaviorObservable } from 'app/core/behavior-observable';
 import { Config } from '../config';
+import { requestOptions } from './request-options';
 
 const log = parentLog.subLog('api', DebugConfig.api.enabled);
 const uninitializedList = []; // this must be created as a variable, so we can check later if it's still the original or a new empty list
@@ -31,6 +32,8 @@ export class PickerService {
    * note that apps are not loaded if not needed */
   ready$ = new Observable<boolean>();
   // #endregion
+
+  blockIds$ = new Subject<string>()
 
   // #region private properties
   private mustLoadApps = false;
@@ -61,10 +64,10 @@ export class PickerService {
     log.add(`saveAppId(${appId}, ${reloadParts})`);
     // skip doing anything here, if we're in content-mode (which doesn't use/change apps)
     if (!this.loadApps) throw new Error(`can't save app, as we're not in app-mode`);
-    return this.http.post(`${Constants.webApiSetApp}?appId=${appId}`, {}).toPromise();
+    return this.blockIds$.pipe(
+      switchMap(blockIds => this.http.post(`${Constants.webApiSetApp}?appId=${appId}`, {}, requestOptions(blockIds))),
+    ).toPromise();
   }
-
-
 
   public initLoading(requireApps: boolean): Observable<any> {
     log.add(`initLoading(requireApps: ${requireApps})`);
@@ -83,8 +86,10 @@ export class PickerService {
   public loadTemplates(): Observable<any> {
     log.add('loadTemplates()');
     this.templates$.reset();
-    const obs = this.http.get<Template[]>(Constants.webApiGetTemplates)
-      .pipe(share()); // ensure it's only run once
+    const obs = this.blockIds$.pipe(
+      switchMap(blockIds => this.http.get<Template[]>(Constants.webApiGetTemplates, requestOptions(blockIds))),
+      share(), // ensure it's only run once
+    );
 
     obs.subscribe(response => this.templates$.next(response || []));
     return obs;
@@ -96,8 +101,10 @@ export class PickerService {
   private loadContentTypes(): Observable<any> {
     log.add(`loadContentTypes()`);
     this.contentTypes$.reset();
-    const obs = this.http.get<ContentType[]>(Constants.webApiGetTypes)
-      .pipe(share()); // ensure it's only run once
+    const obs = this.blockIds$.pipe(
+      switchMap(blockIds => this.http.get<ContentType[]>(Constants.webApiGetTypes, requestOptions(blockIds))),
+      share(), // ensure it's only run once
+    );
     obs.pipe(map(response => (response || []).map(ct => {
         ct.Label = ct.Properties?.Label ?? ct.Name;
         return ct;
@@ -116,8 +123,10 @@ export class PickerService {
 
     const appsFilter = Config.apps();
 
-    const obs = this.http.get<any[]>(`${Constants.webApiGetApps}?apps=${appsFilter}`)
-      .pipe(share()); // ensure it's only run once
+    const obs = this.blockIds$.pipe(
+      switchMap(blockIds => this.http.get<any[]>(`${Constants.webApiGetApps}?apps=${appsFilter}`, requestOptions(blockIds))),
+      share(), // ensure it's only run once
+    );
 
     obs.subscribe(response => this.apps$.subject.next(response.map(a => new App(a))));
     return obs;
@@ -130,5 +139,4 @@ export class PickerService {
     this.templates$.subscribe(t => streamLog.add(`templates$:${t && t.length}`));
     this.ready$.subscribe(r => streamLog.add(`ready$:${r}`));
   }
-
 }

@@ -103,6 +103,7 @@ export class CurrentDataService {
 
   init(config: IQuickDialogConfig): Observable<boolean> {
     this.config = config;
+    this.api.blockIds$.next(config.blockIds);
     // app-init is ready, if it has an app or doesn't need to init one
     log.add(`initializing with config:${JSON.stringify(config)}`, config);
     const appReady$ = this.app$.pipe(

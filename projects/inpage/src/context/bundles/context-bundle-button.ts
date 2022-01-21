@@ -35,6 +35,7 @@ export class ContextComplete extends ContextBundleToolbar {
         }
 
         const contextOfButton = ContextComplete.getContextInstance(sxc, containerTag);
+        sxc.blockIds = SxcEdit.getBlockIds(sxc.id);
         contextOfButton.sxc = sxc;
         return contextOfButton;
     }

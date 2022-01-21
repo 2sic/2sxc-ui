@@ -11,4 +11,5 @@ export interface IQuickDialogConfig {
   contentTypeId: string;
   supportsAjax: boolean;
   debug: boolean;
+  blockIds: string;
 }

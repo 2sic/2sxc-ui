@@ -100,6 +100,7 @@ export class TemplatePickerComponent implements OnInit {
     Log.configureRuntimeLogging(dashInfo.debug);
 
     // Make sure we have the latest backend settings
+    this.backendSettings.blockIds = dashInfo.blockIds;
     this.backendSettings.setApp(dashInfo.appId);
     this.backendSettings.data.subscribe(settings => {
       this.showAdvanced = settings.Enable?.CodeEditor ?? false;

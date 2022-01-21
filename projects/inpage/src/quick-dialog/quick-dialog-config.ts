@@ -17,6 +17,7 @@ export class QuickDialogConfig implements IQuickDialogConfig {
     // user: ContextOfUser;
     supportsAjax: boolean;
     debug: boolean;
+    blockIds: string;
 
     static fromContext(context: ContextComplete): QuickDialogConfig {
         const config = new QuickDialogConfig();
@@ -30,6 +31,7 @@ export class QuickDialogConfig implements IQuickDialogConfig {
         // config.user = ContextOfUser.fromContext(context);
         config.supportsAjax = context.app.supportsAjax;
         config.debug = window.$2sxc.debug.load;
+        config.blockIds = context.sxc.blockIds;
         return config;
     }
 }
