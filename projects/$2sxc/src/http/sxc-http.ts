@@ -12,17 +12,13 @@ export class SxcHttp extends HasLog implements Omit<Public.Http, 'log'> {
      * All the headers which are needed in an ajax call for this to work reliably.
      * Use this if you need to get a list of headers in another system
      */
-    headers(id?: number, cbid?: number): Public.Dictionary<string> {
+    headers(id?: number, cbid?: number, blockIds?: string): Public.Dictionary<string> {
         const cl = this.log.call('headers', `${id}, ${cbid}`);
         const fHeaders : Public.Dictionary<string> = {}; // as any;
         const pageId = this.env.page().toString();
         if(id) fHeaders[HeaderNames.ModuleId] = id.toString();
         if(cbid) fHeaders[HeaderNames.ContentBlockId] = cbid.toString();
-        // if(id != cbid && cbid < 0) {
-        //   var blockIds = this.getBlockIds(id);
-        //   console.log('stv: *** blockIds', blockIds, id, cbid);
-        //   if(blockIds && blockIds.length > 0) fHeaders['BlockIds'] = blockIds;
-        // }
+        if(blockIds) fHeaders[HeaderNames.BlockIds] = blockIds;
         fHeaders[HeaderNames.TabId] = pageId;
         fHeaders[HeaderNames.PageId] = pageId;
         fHeaders[this.env.rvtHeader()] = this.env.rvt();

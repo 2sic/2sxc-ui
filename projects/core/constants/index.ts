@@ -14,6 +14,7 @@ export const SxcApiUrlRoot = 'desktopmodules/2sxc/api/';
 export const HeaderNames = {
     // 2sxc specific header
     ContentBlockId: "ContentBlockId",
+    BlockIds: "BlockIds",
 
     // headers as defined by DNN
     ModuleId: "ModuleId",

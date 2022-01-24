@@ -114,11 +114,11 @@ export class SxcWebApi implements Public.SxcWebApi {
     }
 
     /**
-     * Will retrieve data from the backend using a standard fetch. 
-     * @param url a full url or short-hand like `controller/method?params` `app/auto/api/controller/method?params`. Note that params would also be specified on the url. 
+     * Will retrieve data from the backend using a standard fetch.
+     * @param url a full url or short-hand like `controller/method?params` `app/auto/api/controller/method?params`. Note that params would also be specified on the url.
      * @param data optional POST data
      * @param method optional method, defaults to `GET` unless it has data, in which case it defaults to `POST`
-     * @returns a Promise containing a Response object, just like a normal fetch would. 
+     * @returns a Promise containing a Response object, just like a normal fetch would.
      * example: webApi.fetch('Rss/Feed');
      * example: webApi.fetch(webApi.url('Rss/Feed', { id: 47 })); // url params
      * example: webApi.fetch('Rss/Feed', { id: 47 }); // post params
@@ -148,8 +148,8 @@ export class SxcWebApi implements Public.SxcWebApi {
     }
 
     /**
-     * Will retrieve data from the backend using a standard fetch and give you an object. 
-     * @param url a full url or short-hand like `controller/method?params` `app/auto/api/controller/method?params`. Note that params would also be specified on the url. 
+     * Will retrieve data from the backend using a standard fetch and give you an object.
+     * @param url a full url or short-hand like `controller/method?params` `app/auto/api/controller/method?params`. Note that params would also be specified on the url.
      * @param data optional POST data
      * @param method optional method, defaults to `GET` unless it has data, in which case it defaults to `POST`
      * @returns a Promise containing any object.
@@ -165,7 +165,7 @@ export class SxcWebApi implements Public.SxcWebApi {
      * @returns a Record / Dictionary of headers
      */
     headers(method?: string): Record<string, string> {
-        const headers = this.sxc.root.http.headers(this.sxc.id, this.sxc.cbid);
+        const headers = this.sxc.root.http.headers(this.sxc.id, this.sxc.cbid, this.sxc.blockIds);
         if (!method) {
             return headers;
         }
@@ -182,15 +182,15 @@ export class SxcWebApi implements Public.SxcWebApi {
     }
 
     /**
-     * 
-     * @param url A short, medium or long url. 
-     * Short like `controller/method`, 
+     *
+     * @param url A short, medium or long url.
+     * Short like `controller/method`,
      * medium like `app/auto/api/controller/method`
      * long like `https://xyz.
      * In all cases it can also have ?params etc.
-     * @param params Optional parameters as string or object, will be added to url-params. 
-     * @returns In the cases of a short/medium url, 
-     * it will auto-expand to have the full url as needed for an API call. 
+     * @param params Optional parameters as string or object, will be added to url-params.
+     * @returns In the cases of a short/medium url,
+     * it will auto-expand to have the full url as needed for an API call.
      */
     url(url: string, params?: string | Record<string, any>): string {
         if (url == null) return url;
