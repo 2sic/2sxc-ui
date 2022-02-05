@@ -34,6 +34,8 @@
             .tiles {
                 white-space: nowrap;
                 overflow-x: auto;
+                height: 132px;
+                overflow-y: hidden;
                 .tile {
                     box-sizing: border-box;
                     background: #fff;
@@ -192,6 +194,24 @@
             line-height: 24px;
             box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
             text-align: center;
+        }
+    }
+
+    .search-field {
+        display: block;
+        width: 180px;
+        font-size: 14px;
+        ::ng-deep .mat-form-field-suffix {
+            bottom: -4px;
+        }
+        .reset-icon {
+            cursor: pointer;
+            font-size: 20px;
+            width: 20px;
+            height: 20px;
+            line-height: 20px;
+            padding: 4px;
+            padding-right: 0px;
         }
     }
 }

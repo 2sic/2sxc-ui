@@ -2,6 +2,7 @@
   "TemplatePicker": {
     "AppPickerDefault": "App auswählen",
     "ContentTypePickerDefault": "Inhaltstyp auswählen",
+    "Search": "Suchen",
     "LayoutElement": "Design-Element",
     "ChangeView": "Darstellung anpassen",
 

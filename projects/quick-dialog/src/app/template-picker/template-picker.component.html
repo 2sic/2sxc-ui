@@ -38,6 +38,18 @@
             : (app?.Name || ('TemplatePicker.AppPickerDefault' | translate)))}}
         </ng-template>
 
+        <!-- App & ContentType Search -->
+        <mat-form-field appearance="standard" color="accent" class="search-field">
+          <mat-label>{{ 'TemplatePicker.Search' | translate }}</mat-label>
+          <input type="text" matInput *ngIf="!isContent" [(ngModel)]="appFilter">
+          <input type="text" matInput *ngIf="isContent" [(ngModel)]="contentTypeFilter">
+          <mat-icon matSuffix class="reset-icon"
+            *ngIf="!isContent ? appFilter : contentTypeFilter"
+            (click)="!isContent ? appFilter = '' : contentTypeFilter = ''">
+            close
+          </mat-icon>
+        </mat-form-field>
+
         <!-- App Selector -->
         <div *ngIf="!isContent; else contentApp" class="tiles">
 
@@ -45,7 +57,7 @@
             [ngClass]="{ active: app?.AppId === a.AppId, blocked: preventTypeSwitch }"
             [attr.title]="a.Name"
             (click)="selectApp(app, a)"
-            (dblclick)="switchTab()" *ngFor="let a of apps$ | async">
+            (dblclick)="switchTab()" *ngFor="let a of apps$ | async | filterByPropertyValue:'Name':appFilter">
             <div class="bg">
               <img *ngIf="a.Thumbnail !== null && a.Thumbnail !== ''" class="bg-img" [attr.src]="a.Thumbnail + '?w=176&h=176'">
               <div *ngIf="a.Thumbnail === null || a.Thumbnail === ''" class="bg-icon">
@@ -90,7 +102,7 @@
               [attr.title]="(c.Label | translate) + (showDebug ? ' (' + c.StaticName + ')' : '')"
               (click)="selectContentType(contentType, c)"
               (dblclick)="switchTab()"
-              *ngFor="let c of types"
+              *ngFor="let c of types | filterByPropertyValue:'Label':contentTypeFilter"
             >
               <div class="bg">
                 <img *ngIf="c.Thumbnail !== null && c.Thumbnail !== ''" class="bg-img" [attr.src]="c.Thumbnail + '?w=176&h=176'">
@@ -108,13 +120,20 @@
 
       <!-- template selection after app/content-type selection -->
       <mat-tab *ngIf="isContent ? contentType : app" [label]="('TemplatePicker.ChangeView' | translate) + '(' + templates.length + ')'">
+        <!-- Template Search -->
+        <mat-form-field appearance="standard" color="accent" class="search-field">
+          <mat-label>{{ 'TemplatePicker.Search' | translate }}</mat-label>
+          <input type="text" matInput [(ngModel)]="templateFilter">
+          <mat-icon matSuffix class="reset-icon" *ngIf="templateFilter" (click)="templateFilter = ''">close</mat-icon>
+        </mat-form-field>
+
         <div class="tiles">
           <mat-spinner class="templates-spinner" *ngIf="templatesLoading$ | async"></mat-spinner>
           <div class="tile"
             [ngClass]="{ active: template?.TemplateId === t.TemplateId }"
             [attr.title]="t.Name + (showDebug ? ' (' + t.TemplateId + ')' : '')"
             (click)="selectTemplate(t)"
-            *ngFor="let t of templates">
+            *ngFor="let t of templates | filterByPropertyValue:'Name':templateFilter">
             <div class="bg">
               <img *ngIf="t.Thumbnail !== null && t.Thumbnail !== ''" class="bg-img" [attr.src]="t.Thumbnail + '?w=176&h=176'">
               <div *ngIf="t.Thumbnail === null || t.Thumbnail === ''" class="bg-icon">

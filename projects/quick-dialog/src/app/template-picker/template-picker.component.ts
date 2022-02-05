@@ -64,6 +64,10 @@ export class TemplatePickerComponent implements OnInit {
   preventAppSwich = false;
 
   public showDebug = DebugConfig.picker.showDebugPanel;
+
+  appFilter = '';
+  contentTypeFilter = '';
+  templateFilter = '';
   // #endregion
 
   // #region data to show - using local variables, because streams didn't update correctly :(
@@ -212,17 +216,24 @@ export class TemplatePickerComponent implements OnInit {
    * app selection from UI
    */
   selectApp(before: App, after: App): void {
-    console.log('selectApp()');
-    if (before && before.AppId === after.AppId) this.switchTab();
-    else this.updateApp(after);
+    if (before && before.AppId === after.AppId) {
+      this.switchTab();
+    } else {
+      this.updateApp(after);
+      this.templateFilter = '';
+    }
   }
 
   /**
    * content-type selection from UI
    */
   selectContentType(before: ContentType, after: ContentType): void {
-    if (before && before.StaticName === after.StaticName) this.switchTab();
-    else this.setContentType(after);
+    if (before && before.StaticName === after.StaticName) {
+      this.switchTab();
+    } else {
+      this.setContentType(after);
+      this.templateFilter = '';
+    }
   }
 
   /**
