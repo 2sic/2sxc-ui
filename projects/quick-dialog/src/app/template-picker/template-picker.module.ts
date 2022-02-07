@@ -14,8 +14,6 @@ import { InstallerModule } from 'app/installer/installer.module';
 import { DebugPipe } from './debug.pipe';
 import { ContentTypesProcessor } from './data/content-types-processor.service';
 import { MaterialModule } from 'app/material-module';
-import { MatInputModule } from '@angular/material/input';
-import { MatFormFieldModule } from '@angular/material/form-field';
 import { FilterByPropertyValuePipe } from './filter-by-property-value.pipe';
 
 @NgModule({
@@ -34,8 +32,6 @@ import { FilterByPropertyValuePipe } from './filter-by-property-value.pipe';
     FlexLayoutModule,
     InstallerModule,
     TranslateModule,
-    MatInputModule,
-    MatFormFieldModule,
   ],
   providers: [
     TemplateFilterPipe,
