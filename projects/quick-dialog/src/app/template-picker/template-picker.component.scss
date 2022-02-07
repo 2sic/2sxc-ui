@@ -197,21 +197,23 @@
         }
     }
 
-    .search-field {
-        display: block;
-        width: 180px;
-        font-size: 14px;
-        ::ng-deep .mat-form-field-suffix {
-            bottom: -4px;
+    .mat-tab-group {
+        ::ng-deep .mat-tab-label.mat-tab-disabled {
+            opacity: initial;
+            color: initial;
+            margin-left: auto;
         }
-        .reset-icon {
-            cursor: pointer;
-            font-size: 20px;
-            width: 20px;
-            height: 20px;
-            line-height: 20px;
-            padding: 4px;
-            padding-right: 0px;
+    }
+
+    .search-field {
+        position: relative;
+        &::after {
+            position: absolute;
+            right: 0px;
+            top: 0;
+            padding: 3px;
+            font-family: "Material Icons";
+            content: "visibility";
         }
     }
 }
@@ -223,7 +225,7 @@
             display: none !important;
         }
         .mat-tab-labels {
-            display: block;
+            // display: block;
             .mat-tab-label {
                 min-width: 0 !important;
                 &.mat-tab-label-active {

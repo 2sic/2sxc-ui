@@ -38,18 +38,6 @@
             : (app?.Name || ('TemplatePicker.AppPickerDefault' | translate)))}}
         </ng-template>
 
-        <!-- App & ContentType Search -->
-        <mat-form-field appearance="standard" color="accent" class="search-field">
-          <mat-label>{{ 'TemplatePicker.Search' | translate }}</mat-label>
-          <input type="text" matInput *ngIf="!isContent" [(ngModel)]="appFilter">
-          <input type="text" matInput *ngIf="isContent" [(ngModel)]="contentTypeFilter">
-          <mat-icon matSuffix class="reset-icon"
-            *ngIf="!isContent ? appFilter : contentTypeFilter"
-            (click)="!isContent ? appFilter = '' : contentTypeFilter = ''">
-            close
-          </mat-icon>
-        </mat-form-field>
-
         <!-- App Selector -->
         <div *ngIf="!isContent; else contentApp" class="tiles">
 
@@ -120,13 +108,6 @@
 
       <!-- template selection after app/content-type selection -->
       <mat-tab *ngIf="isContent ? contentType : app" [label]="('TemplatePicker.ChangeView' | translate) + '(' + templates.length + ')'">
-        <!-- Template Search -->
-        <mat-form-field appearance="standard" color="accent" class="search-field">
-          <mat-label>{{ 'TemplatePicker.Search' | translate }}</mat-label>
-          <input type="text" matInput [(ngModel)]="templateFilter">
-          <mat-icon matSuffix class="reset-icon" *ngIf="templateFilter" (click)="templateFilter = ''">close</mat-icon>
-        </mat-form-field>
-
         <div class="tiles">
           <mat-spinner class="templates-spinner" *ngIf="templatesLoading$ | async"></mat-spinner>
           <div class="tile"
@@ -156,6 +137,16 @@
             </div>
           </div>
         </div>
+      </mat-tab>
+      <!-- Search -->
+      <mat-tab disabled>
+        <ng-template mat-tab-label>
+          <div class="search-field">
+            <input type="text" *ngIf="tabIndex === 0 && !isContent" [(ngModel)]="appFilter">
+            <input type="text" *ngIf="tabIndex === 0 && isContent" [(ngModel)]="contentTypeFilter">
+            <input type="text" *ngIf="tabIndex === 1" [(ngModel)]="templateFilter">
+          </div>
+        </ng-template>
       </mat-tab>
     </mat-tab-group>
 
