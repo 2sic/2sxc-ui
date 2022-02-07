@@ -207,13 +207,25 @@
 
     .search-field {
         position: relative;
+        input {
+            border: none;
+            outline: none;
+            border-bottom: 1px solid grey;
+            background: transparent;
+            padding-right: 20px;
+            width: 180px;
+            box-sizing: border-box;
+            &:focus {
+                border-color: black;
+            }
+        }
         &::after {
             position: absolute;
             right: 0px;
             top: 0;
-            padding: 3px;
+            padding: 2px;
             font-family: "Material Icons";
-            content: "visibility";
+            content: "search";
         }
     }
 }
