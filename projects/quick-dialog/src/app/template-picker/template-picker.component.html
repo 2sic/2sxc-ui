@@ -107,7 +107,7 @@
       </mat-tab>
 
       <!-- template selection after app/content-type selection -->
-      <mat-tab *ngIf="isContent ? contentType : app" [label]="('TemplatePicker.ChangeView' | translate) + '(' + templates.length + ')'">
+      <mat-tab *ngIf="isContent ? contentType : app" [label]="('TemplatePicker.ChangeView' | translate) + ' (' + templates.length + ')'">
         <div class="tiles">
           <mat-spinner class="templates-spinner" *ngIf="templatesLoading$ | async"></mat-spinner>
           <div class="tile"
