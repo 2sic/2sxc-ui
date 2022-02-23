@@ -7,7 +7,7 @@ export const CmdTemplateSettings = 'template-settings';
 Commands.add(CmdTemplateSettings, 'TemplateSettings', 'sliders', true, false, {
     dialog: (_) => 'edit',
 
-    showCondition: (ctx) => !!ctx.user.canDesign && !ctx.app.isContent,
+    showCondition: (ctx) => !!ctx.user.CanDevelop && !ctx.app.isContent,
 
     configureLinkGenerator: (ctx, linkGen) => {
         linkGen.items = [{ EntityId: ctx.contentBlock.templateId }];

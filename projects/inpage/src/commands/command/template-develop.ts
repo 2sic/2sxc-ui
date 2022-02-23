@@ -10,7 +10,7 @@ Commands.add(CmdTemplateDevelop, 'Develop', 'code', true, false, {
   newWindow: (_) => true,
   dialog: (_) => 'develop',
 
-  showCondition: (context) => !!context.user.canDesign,
+  showCondition: (context) => !!context.user.CanDevelop,
 
   configureLinkGenerator: (context, linkGenerator) => {
     const cb = context.contentBlock;
