@@ -6,7 +6,7 @@ import { SxcRootInternals } from './sxc-root-internals';
 import { SxcRoot, getRootPartsV2 } from './sxc-root';
 import { Window } from "../_/window";
 import { Debug, Insights, SxcVersion } from '..';
-import { ContextIdentifier, isContextIdentifier, throwIfIncomplete } from './context-identifier';
+import { ContextIdentifier, isContextIdentifier, ensureCompleteOrThrow } from './context-identifier';
 
 declare const window: Window;
 
@@ -25,7 +25,7 @@ function FindSxcInstance(id: number | ContextIdentifier | HTMLElement, cbid?: nu
     // check if it's a context identifier (new in 11.11)
     let ctxId: ContextIdentifier = null;
     if (isContextIdentifier(id)) {
-        throwIfIncomplete(id);
+        id = ensureCompleteOrThrow(id);
         ctxId = id;
         // create a fake id, based on zone and app because this is used to identify the object in the cache
         id = id.zoneId * 100000 + id.appId;

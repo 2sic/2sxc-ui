@@ -18,6 +18,6 @@ export class ContextOfPage {
         }
 
         // catch cases where it wasn't provided
-        this.id = this.id ?? sxc?.ctx?.pageId ?? $2sxcInPage.env.page();
+        this.id = this.id ?? sxc?.ctx?.pageId ?? $2sxcInPage.env.page() ?? -2742;
     }
 }
