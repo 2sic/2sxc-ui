@@ -1,8 +1,14 @@
-
+/**
+ * ContextIdentifier is used to initialize a Sxc object outside of the default context.
+ */
 export class ContextIdentifier {
+  /** ZoneId of this Context */
   zoneId: number;
+  /** AppId of this Context */
   appId: number;
+  /** PageId of this Context (optional) */
   pageId?: number;
+  /** ModuleId of this Context (optional) */
   moduleId?: number;
 }
 

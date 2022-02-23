@@ -27,7 +27,7 @@ function FindSxcInstance(id: number | ContextIdentifier | HTMLElement, cbid?: nu
     if (isContextIdentifier(id)) {
         throwIfIncomplete(id);
         ctxId = id;
-        // create a fake id, based on zone and app
+        // create a fake id, based on zone and app because this is used to identify the object in the cache
         id = id.zoneId * 100000 + id.appId;
     } else if (typeof id === 'object') {
         // if it's a dom-element, use auto-find
