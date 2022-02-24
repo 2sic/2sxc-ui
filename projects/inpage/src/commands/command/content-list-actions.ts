@@ -7,7 +7,7 @@ import { ContentListActionParams } from './content-list-action-params';
 const webApiAdd = 'cms/block/item';
 const webApiRemoveFromList = 'cms/list/delete';
 const webApiReorder = 'cms/list/move';
-const webApiItemPublish = 'cms/item/publish';
+const webApiItemPublish = 'cms/edit/publish';
 const webApiBlockPublish = 'cms/block/publish';
 //#endregion
 
