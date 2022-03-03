@@ -96,7 +96,7 @@ export class CmsEngine extends HasLog {
 
         // New in 12.10 - Workflow can be provided by run-call
         let wf: WorkflowManager;
-        if (wipParamsWithWorkflow && wipParamsWithWorkflow.workflows) {
+        if (wipParamsWithWorkflow?.workflows) {
             wf = new WorkflowManager(this.log);
             wf.add(wipParamsWithWorkflow.workflows);
         } else

@@ -5,6 +5,8 @@ import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { ContextBundleInstance } from '../context/bundles/context-bundle-instance';
 import { HasLog, Insights, Log } from '../logging';
 import { isRunParams, RunParams } from '../commands/engine/run-params';
+import { isContextIdentifier } from '../../../$2sxc/src';
+import { $2sxcInPage } from '../interfaces/sxc-controller-in-page';
 
 const logId = 'Cms.Api';
 
@@ -41,8 +43,11 @@ export class Cms extends HasLog {
         // Figure out inner-call based on if context is new RunParams or not (in that case it should be a tag or a full context)
         let innerCall: () => Promise<void>;
         if (isRunParams(context)) {
-            // todo
-            const realCtx = ContextComplete.findContext(context.tag);
+            // V1 with Context
+            const contextGiver = isContextIdentifier(context.context)
+                ? $2sxcInPage(context.context)
+                : context.tag;
+            const realCtx = ContextComplete.findContext(contextGiver);
             context.params = { action: context.action, ...context.params };
             innerCall = () => cmsEngine.run(realCtx, context.params, context.event, context);
         } else {
