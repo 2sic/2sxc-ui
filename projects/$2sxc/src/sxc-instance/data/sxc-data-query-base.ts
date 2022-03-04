@@ -1,10 +1,11 @@
 import { SxcInstance } from "..";
+import { SxcInstancePart } from '../sxc-instance-part';
 import { SxcWebApi } from "../web-api/sxc-web-api";
 
 /**
 * Base class doing common checks
 */
-export class SxcDataQueryBase {
+export class SxcDataQueryBase extends SxcInstancePart {
   protected readonly webApi: SxcWebApi;
   /**
   * Creates an instance of SxcData.
@@ -17,6 +18,7 @@ export class SxcDataQueryBase {
     readonly name: string,
     nameInError: string
   ) {
+    super(sxc, 'data');
     this.webApi = sxc.webApi;
     
     // Fail early if something is wrong

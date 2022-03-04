@@ -1,4 +1,5 @@
 import { Positioning, QuickEditConfig } from '.';
+import { C } from '../constants';
 import { NoJQ } from '../plumbing';
 
 export namespace QuickEditOverlay {
@@ -28,7 +29,7 @@ export namespace QuickEditOverlay {
   }
 
   export function btn(action: string, icon: string, i18N: string, invisible?: boolean, unavailable?: boolean, classes?: string): string {
-    return `<a class='sc-content-block-menu-btn sc-cb-action icon-sxc-${icon} ${invisible ? ' sc-invisible ' : ''}${unavailable ? ' sc-unavailable ' : ''}${classes}' data-action='${action}' data-i18n='[title]QuickInsertMenu.${i18N}'></a>`;
+    return `<a class='sc-content-block-menu-btn sc-cb-action icon-sxc-${icon} ${invisible ? ' sc-invisible ' : ''}${unavailable ? ` ${C.ClsNames.UnAvailable} ` : ''}${classes}' data-action='${action}' data-i18n='[title]QuickInsertMenu.${i18N}'></a>`;
   }
 
   export const selectedOverlay = NoJQ.domFromString('<div class="sc-content-block-menu sc-content-block-selected-menu sc-i18n"></div>').map((o) => {

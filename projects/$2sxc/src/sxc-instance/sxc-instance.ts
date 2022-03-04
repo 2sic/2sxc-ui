@@ -8,6 +8,7 @@ import { SxcRootInternals } from '../sxc-root/sxc-root-internals';
 import { SxcInstanceManage } from './sxc-instance-manage';
 import { SxcData } from './data/sxc-data';
 import { SxcQuery } from './data/sxc-query';
+import { SxcInstanceCms } from './sxc-instance-cms';
 
 // const serviceScopes = ['app', 'app-sys', 'app-api', 'app-query', 'app-content', 'eav', 'view', 'dnn'];
 
@@ -15,6 +16,7 @@ import { SxcQuery } from './data/sxc-query';
 * The typical sxc-instance object for a specific DNN module or content-block
 */
 export class SxcInstance extends HasLog implements Public.SxcInstance {
+  private _isSxcInstance = true;
   /**
   * helpers for ajax calls
   */
@@ -27,6 +29,11 @@ export class SxcInstance extends HasLog implements Public.SxcInstance {
   * @memberof SxcInstance
   */
   manage: SxcInstanceManage = null; // initialize correctly later on
+
+  /**
+   * CMS operations on this sxc-instance.
+   */
+  cms = new SxcInstanceCms(this, 'cms');
   
   constructor(
     /** the sxc-instance ID, which is usually the DNN Module Id */
@@ -58,6 +65,11 @@ export class SxcInstance extends HasLog implements Public.SxcInstance {
     // ensure that we really have a manage context, otherwise we can't initialize i18n and it doesn't make sense
     if (this.manage.context && this.manage.context.app && this.manage.context.app.currentLanguage)
     root._translateInit(this.manage);    // init translate, not really nice, but ok for now
+  }
+
+  public static is(thing: unknown): thing is SxcInstance {
+    const maybe = thing as SxcInstance;
+    return maybe._isSxcInstance;
   }
     
   /**
