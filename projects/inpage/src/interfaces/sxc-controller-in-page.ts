@@ -1,4 +1,4 @@
-﻿import { ContextIdentifier, SxcInstanceWithInternals, SxcRootWithInternals } from '../../../$2sxc/src/index';
+﻿import { ContextIdentifier, SxcInstance, SxcInstanceWithInternals, SxcRootWithInternals } from '../../../$2sxc/src/index';
 import { Cms } from '../cms/Cms';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { Manage } from '../manage/manage';
@@ -19,7 +19,7 @@ export interface SxcRoot extends SxcRootWithInternals {
    * @returns SxcInstance
    */
   // 2021-09-17 spm assume this function doesn't use jquery
-  (id: number | ContextIdentifier | HTMLElement | SxcInstanceWithInternals, cbid?: number): SxcEdit;
+  (id: number | ContextIdentifier | HTMLElement | SxcInstance | SxcInstanceWithInternals, cbid?: number): SxcEdit;
   // insights: typeof Insights;
   _manage: Manage;
   system: SystemUpgrader;

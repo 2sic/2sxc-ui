@@ -1,6 +1,6 @@
 import { SxcInstanceWithInternals } from '../../../$2sxc/src';
 import { Cms } from '../cms/Cms';
-import { ensureInstanceRunParamsOrError, RunParams } from '../commands/engine/run-params';
+import { ensureRunParamsInstanceOrError, RunParams } from '../commands/engine/run-params';
 import { C } from '../constants';
 import { AttrJsonEditContext } from '../context/html-attribute';
 import { EditManager } from '../manage/edit-manager';
@@ -11,7 +11,7 @@ export class SxcEdit extends SxcInstanceWithInternals {
 
     /// TODO: CONTINUE HERE, TRY TO GET THE RUN TO USE THE CURRENT 2SXC
     run<T>(runParams: RunParams): Promise<void | T> {
-        ensureInstanceRunParamsOrError(runParams);
+        ensureRunParamsInstanceOrError(runParams);
         return new Cms().run({ ...runParams, context: this });
     }
 

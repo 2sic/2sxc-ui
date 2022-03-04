@@ -1,7 +1,7 @@
 ﻿import { isContextIdentifier, SxcInstance } from '../../../$2sxc/src';
 import { CmsEngine } from '../commands/';
 import { CommandParams } from '../commands/command-params';
-import { is$sxcRunParams, RunParams } from '../commands/engine/run-params';
+import { is$sxcRunParams, RunParamsWithContext } from '../commands/engine/run-params';
 import { C } from '../constants';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { ContextBundleInstance } from '../context/bundles/context-bundle-instance';
@@ -31,7 +31,7 @@ export class Cms extends HasLog {
     }
 
     run<T>(
-        context: ContextBundleInstance | HTMLElement | RunParams,
+        context: ContextBundleInstance | HTMLElement | RunParamsWithContext,
         nameOrSettings?: string | CommandParams,
         eventOrSettings?: CommandParams | MouseEvent,
         event?: MouseEvent,

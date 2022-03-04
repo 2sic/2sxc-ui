@@ -1,6 +1,6 @@
 ﻿import { Cms } from '../cms/Cms';
 import { SxcInstanceEngine } from '../commands';
-import { ensureInstanceRunParamsOrError, RunParams } from '../commands/engine/run-params';
+import { ensureRunParamsInstanceOrError, RunParams } from '../commands/engine/run-params';
 import { ContextComplete } from '../context';
 import { ContextOfUser } from '../context';
 import { SxcEdit } from '../interfaces/sxc-instance-editable';
@@ -34,7 +34,7 @@ export class Manage {
             const editManager = new EditManager(myContext.sxc, editContext, userInfo, cmdEngine, myContext);
             sxc.manage = editManager;
             sxc.cms.run = <T>(runParams: RunParams): Promise<void | T> => {
-                ensureInstanceRunParamsOrError(runParams);
+                ensureRunParamsInstanceOrError(runParams);
                 return new Cms().run({ ...runParams, context: sxc });
             };
 
