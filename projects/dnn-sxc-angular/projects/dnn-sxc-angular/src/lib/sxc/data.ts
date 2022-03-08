@@ -18,7 +18,7 @@ export class Data<T> {
    * Get all items of this type
    */
   getAll(): Observable<T[]> {
-    let url = `${routeContent}/${this.contentType}`;
+    const url = `${routeContent}/${this.contentType}`;
     return this.http.get<T[]>(url);
   }
 
@@ -26,7 +26,7 @@ export class Data<T> {
    * get the specific item with the ID
    */
   getOne(id: number): Observable<T> {
-    let url = `${routeContent}/${this.contentType}/${id}`;
+    const url = `${routeContent}/${this.contentType}/${id}`;
     return this.http.get<T>(url);
   }
 
@@ -34,7 +34,7 @@ export class Data<T> {
    * Create new item
    */
   create(item: T): Observable<T> {
-    let url = `${routeContent}/${this.contentType}`;
+    const url = `${routeContent}/${this.contentType}`;
     return this.http.post<T>(url, item);
   }
 
@@ -42,7 +42,7 @@ export class Data<T> {
    * Update the specific item with the ID to the item
    */
   update(id: number, item: T): Observable<T> {
-    let url = `${routeContent}/${this.contentType}/${id}`;
+    const url = `${routeContent}/${this.contentType}/${id}`;
     return this.http.put<T>(url, item);
   }
 
@@ -52,16 +52,16 @@ export class Data<T> {
   delete(id: number): Observable<T>;
 
   /**
-  * Delete the specific item with the GUID
-  */
+   * Delete the specific item with the GUID
+   */
   delete(id: string): Observable<T>;
 
   /**
-  * internal implementation with ID/with GUID
-  */
+   * internal implementation with ID/with GUID
+   */
   delete(id: number | string): Observable<T[]> | Observable<T> {
-    let url = `${routeContent}/${this.contentType}/${id}`;
-    if (typeof(id) == 'string') {
+    const url = `${routeContent}/${this.contentType}/${id}`;
+    if (typeof(id) === 'string') {
       throw new Error('not implemented yet');
     }
 
