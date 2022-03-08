@@ -75,10 +75,10 @@ export class AppComponent extends DnnAppComponent {
 
 ### Using 2sxc Content-Items, Queries and APIs
 
-This package is fully documented with intellisense. Once configured it ensures that all HTTP requests in angular include DNN headers. It also contains a `Data` and `Api` object, which provides 3 observable streams
+This package is fully documented with intellisense. Once configured it ensures that all HTTP requests in angular include DNN headers. It also contains a `SxcData` and `Api` object, which provides 3 observable streams
 
-* `data.content$<T>(contentTypeName)`
-* `data.query$<T>(queryName)`
+* `SxcData.data$<T>(contentTypeName)`
+* `SxcData.query$<T>(queryName)`
 * `api.get$<T>(apiNameAndParams)`
 * `api.post$<T>(apiNameAndParams)`
 * plus various overloads

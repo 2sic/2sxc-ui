@@ -1,4 +1,4 @@
-import { Data } from './sxc/data';
+import { SxcData } from './sxc/sxc-data';
 import { NgModule } from '@angular/core';
 import { SxcToolbarDirective } from './beta/edit';
 // important: for funny reasons this must really got to the real path - if you get it from '.' index it will fail building
@@ -18,7 +18,7 @@ import { SxcTagToolbarDirective } from './toolbar/tag-toolbar';
     SxcTagToolbarDirective,
   ],
   providers: [
-    Data,
+    SxcData,
   ],
   exports: [
     SxcToolbarDirective,

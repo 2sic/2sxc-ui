@@ -27,7 +27,7 @@ export class Data<T> {
    */
   getOne(id: number): Observable<T> {
     let url = `${routeContent}/${this.contentType}/${id}`;
-    return this.http.get<T[]>(url);
+    return this.http.get<T>(url);
   }
 
   /**

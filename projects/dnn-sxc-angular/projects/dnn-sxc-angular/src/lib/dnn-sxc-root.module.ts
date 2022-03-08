@@ -1,5 +1,5 @@
 import { Context } from './context/context.service';
-import { Data } from './sxc/data';
+import { SxcData } from './sxc/sxc-data';
 import { DnnInterceptor } from './http/dnn.interceptor';
 import { NgModule, Optional, SkipSelf } from '@angular/core';
 
@@ -17,7 +17,7 @@ import { NgModule, Optional, SkipSelf } from '@angular/core';
     // HttpClientModule,
   ],
   providers: [
-    Data,
+    SxcData,
     Context,
     DnnInterceptor,
   ]
