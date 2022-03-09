@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { routeContent } from '../contants';
+import { MetaDataFor } from './metedata-for';
 
 /**
  * A helper to access data from 2sxc
@@ -33,8 +34,22 @@ export class Data<T> {
   /**
    * Create new item
    */
-  create(item: T): Observable<T> {
+  create(item: T): Observable<T>;
+
+  /**
+   * Create new item as metadata for something
+   */
+  create(item: T, metadataFor: MetaDataFor): Observable<T>;
+
+  /**
+   * Internal implementation of create
+   */
+  create(item: T, metadataFor: MetaDataFor = null): Observable<T> {
     const url = `${routeContent}/${this.contentType}`;
+    if (metadataFor != null) {
+      return this.http.post<T>(url, { ...item, For: metadataFor });
+    }
+
     return this.http.post<T>(url, item);
   }
 
@@ -59,12 +74,8 @@ export class Data<T> {
   /**
    * internal implementation with ID/with GUID
    */
-  delete(id: number | string): Observable<T[]> | Observable<T> {
+  delete(id: number | string): Observable<T> {
     const url = `${routeContent}/${this.contentType}/${id}`;
-    if (typeof(id) === 'string') {
-      throw new Error('not implemented yet');
-    }
-
     return this.http.delete<T>(url);
   }
 }
