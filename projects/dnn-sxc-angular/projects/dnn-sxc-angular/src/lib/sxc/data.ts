@@ -44,11 +44,9 @@ export class Data<T> {
   /**
    * Internal implementation of create
    */
-  create(item: T | any, metadataFor: MetaDataFor = null): Observable<T> {
+  create(item: T | any, metadataFor?: MetaDataFor): Observable<T> {
     const url = `${routeContent}/${this.contentType}`;
-    if (metadataFor != null)
-      return this.http.post<T>(url, { ...item, For: metadataFor });
-
+    item = (metadataFor != null ? { ...item, For: metadataFor } : item);
     return this.http.post<T>(url, item);
   }
 
@@ -61,17 +59,7 @@ export class Data<T> {
   }
 
   /**
-   * Delete the specific item with the ID
-   */
-  delete(id: number): Observable<T>;
-
-  /**
-   * Delete the specific item with the GUID
-   */
-  delete(id: string): Observable<T>;
-
-  /**
-   * internal implementation with ID/with GUID
+   * Delete the specific item with ID/with GUID
    */
   delete(id: number | string): Observable<T> {
     const url = `${routeContent}/${this.contentType}/${id}`;

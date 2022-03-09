@@ -23,14 +23,9 @@ export class Query<T> {
   getAll(): Observable<T>;
 
   /**
-   * Get an object with all the streams, each containing an array of all the data in that stream with url-parameters as HttpParams
+   * Get an object with all the streams, each containing an array of all the data in that stream with url-parameters as HttpParams or string
    */
-  getAll(params: HttpParams): Observable<T>;
-
-  /**
-   * Get an object with all the streams, each containing an array of all the data in that stream with url-parameters as string
-   */
-  getAll(params: string): Observable<T>;
+  getAll(params: HttpParams | string): Observable<T>;
 
   /**
    * Get an object with all the streams, each containing an array of all the data in that stream with url-parameters as string
@@ -40,17 +35,11 @@ export class Query<T> {
   /**
    * Internal implementation of getAll
    */
-  getAll(params: HttpParams | string = null, data: T = null): Observable<T> {
+  getAll(params?: HttpParams | string, data?: T): Observable<T> {
     const url = `${routeQuery}/${this.name}`;
-
-    if (data)
-      return (typeof(params) === 'string'
-        ? this.http.post<T>(`${url}${params !== null ? `?${params}` : ''}`, data)
-        : this.http.post<T>(url, data, { params }));
-    if (params)
-      return (typeof(params) === 'string'
-        ? this.http.get<T>(`${url}${params !== null ? `?${params}` : ''}`)
-        : this.http.get<T>(url, { params }));
+    const streamParams = new HttpParams({fromString: params.toString() });
+    if (data) return this.http.post<T>(url, data, { params: streamParams });
+    if (params) return this.http.get<T>(url, { params: streamParams });
 
     return this.http.get<T>(url);
   }
@@ -61,14 +50,9 @@ export class Query<T> {
   getStream(stream: string): Observable<T>;
 
   /**
-   * Get an object with the specified stream, containing an array of all the data in that stream with url-parameters as HttpParams
+   * Get an object with the specified stream, containing an array of all the data in that stream with url-parameters as HttpParams or string
    */
-  getStream(stream: string, params: HttpParams): Observable<T>;
-
-  /**
-   * Get an object with the specified stream, containing an array of all the data in that stream with url-parameters as string
-   */
-  getStream(stream: string, params: string): Observable<T>;
+  getStream(stream: string, params: HttpParams | string): Observable<T>;
 
   /**
    * Get an object with the specified stream, containing an array of all the data in that stream with url-parameters as string
@@ -78,17 +62,11 @@ export class Query<T> {
   /**
    * Internal implementation of getStream
    */
-  getStream(stream: string, params: HttpParams | string = null, data: T = null): Observable<T> {
+  getStream(stream: string, params?: HttpParams | string, data?: T): Observable<T> {
     const url = `${routeQuery}/${this.name}?${this.streamParamKey}=${stream}`;
-
-    if (data)
-      return (typeof(params) === 'string'
-      ? this.http.post<T>(`${url}${params !== null ? `?${params}` : ''}`, data)
-      : this.http.post<T>(url, data, { params }));
-    if (params)
-      return (typeof(params) === 'string'
-      ? this.http.get<T>(`${url}${params !== null ? `?${params}` : ''}`)
-      : this.http.get<T>(url, { params }));
+    const streamParams = new HttpParams({fromString: params.toString() });
+    if (data) return this.http.post<T>(url, data, { params: streamParams });
+    if (params) return this.http.get<T>(url, { params: streamParams });
 
     return this.http.get<T>(url);
   }
@@ -99,14 +77,10 @@ export class Query<T> {
   getStreams(streams: string[]): Observable<T>;
 
   /**
-   * Get an object with the specified streams, each containing an array of all the data in that stream with url-parameters as HttpParams
+   * Get an object with the specified streams, each containing an array of all the data in that stream
+   * with url-parameters as HttpParams or string
    */
-  getStreams(streams: string[], params: HttpParams): Observable<T>;
-
-  /**
-   * Get an object with the specified streams, each containing an array of all the data in that stream with url-parameters as string
-   */
-  getStreams(streams: string[], params: string): Observable<T>;
+  getStreams(streams: string[], params: HttpParams | string): Observable<T>;
 
   /**
    * Get an object with the specified streams, each containing an array of all the data in that stream with url-parameters as string
@@ -116,17 +90,11 @@ export class Query<T> {
   /**
    * Internal implementation of getStreams
    */
-  getStreams(streams: string[], params: HttpParams | string = null, data: T = null): Observable<T> {
+  getStreams(streams: string[], params?: HttpParams | string, data?: T): Observable<T> {
     const url = `${routeQuery}/${this.name}?${this.streamParamKey}=${streams.join(',')}`;
-
-    if (data)
-      return (typeof(params) === 'string'
-      ? this.http.post<T>(`${url}${params !== null ? `?${params}` : ''}`, data)
-      : this.http.post<T>(url, data, { params }));
-    if (params)
-      return (typeof(params) === 'string'
-      ? this.http.get<T>(`${url}${params !== null ? `?${params}` : ''}`)
-      : this.http.get<T>(url, { params }));
+    const streamParams = new HttpParams({fromString: params.toString() });
+    if (data) return this.http.post<T>(url, data, { params: streamParams });
+    if (params) return this.http.get<T>(url, { params: streamParams });
 
     return this.http.get<T>(url);
   }

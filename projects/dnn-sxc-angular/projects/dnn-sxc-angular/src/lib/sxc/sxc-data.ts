@@ -5,7 +5,6 @@ import { HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Query } from './query';
-import { QueryConstruction } from './query-construction';
 
 /**
  * 2sxc data provider
@@ -18,7 +17,7 @@ import { QueryConstruction } from './query-construction';
 @Injectable({
   providedIn: 'root',
 })
-export class SxcData {
+export class Sxc {
   constructor(
     private http: HttpClient,
   ) { }
@@ -34,19 +33,6 @@ export class SxcData {
   }
 
   /**
-   * get a stream of content items or (if ID is provided) a stream containing one item
-   * @param contentType name of the content-type
-   * @param id optional id of a single item
-   * @returns an observable containing a single item (if ID is provided) or an array of these items
-   */
-   data$<T>(contentType: string, id?: number): Observable<T> {
-    // When id is undefined, we would get back an Observable<T[]> instead of Observable<T>.
-    // Typescript does not take care of this; however we ignore it because we want the data
-    // service to always return an Observable of T.
-    return new Data<T>(this.http, contentType).getOne(id);
-  }
-
-  /**
    * get a query object to then start queries
    * usually you'll be better off using the observable stream query$, this is included primarily for consistency in the api
    * @param name the query name
@@ -55,23 +41,6 @@ export class SxcData {
   public query<T>(name: string) {
     return new Query<T>(this.http, name);
   }
-
-  /**
-   * retrieve a query stream from the server
-   * @param name the query name
-   * @param params optional parameters-object
-   * @returns a typed observable which will give you the query
-   */
-  public query$<T>(name: string, params?: HttpParams): Observable<T>;
-  public query$<T>({ name, params, streams }: QueryConstruction): Observable<T>;
-  public query$<T>(param1: any, param2?: HttpParams) {
-    if (typeof param1 === 'object') {
-      const { name, params, streams } = <QueryConstruction>param1;
-      const query = new Query<T>(this.http, name);
-      return (Array.isArray(streams) ? query.getStreams(streams, params) : query.getStream(streams, params));
-    } else return new Query<T>(this.http, param1).getAll();
-  }
-
 
   /**
    * get an api object to then start api-calls
@@ -89,15 +58,15 @@ export class SxcData {
    * @param params optional parameters-object
    * @returns a typed observable which will give you the query
    */
-  public api$<T>(apiName: string, params?: HttpParams): Observable<T> {
-    const separator = apiName.indexOf('/');
-    if (separator === -1) {
-      throw new Error(`Trying to get api$ but only got '${apiName}' - expected something in the format of 'controller/method'`);
-    }
+  // public api$<T>(apiName: string, params?: HttpParams): Observable<T> {
+  //   const separator = apiName.indexOf('/');
+  //   if (separator === -1) {
+  //     throw new Error(`Trying to get api$ but only got '${apiName}' - expected something in the format of 'controller/method'`);
+  //   }
 
-    const method = apiName.substr(separator + 1);
-    apiName = apiName.substr(0, separator);
+  //   const method = apiName.substr(separator + 1);
+  //   apiName = apiName.substr(0, separator);
 
-    return new Api(this.http, apiName).fetch<T>(method);
-  }
+  //   return new Api(this.http, apiName).fetch<T>(method);
+  // }
 }
