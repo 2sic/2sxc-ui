@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { routeContent } from '../contants';
-import { MetaDataFor } from './metedata-for';
+import { MetaDataFor } from './metadata-for';
 
 /**
  * A helper to access data from 2sxc
@@ -46,9 +46,8 @@ export class Data<T> {
    */
   create(item: T, metadataFor: MetaDataFor = null): Observable<T> {
     const url = `${routeContent}/${this.contentType}`;
-    if (metadataFor != null) {
+    if (metadataFor != null)
       return this.http.post<T>(url, { ...item, For: metadataFor });
-    }
 
     return this.http.post<T>(url, item);
   }

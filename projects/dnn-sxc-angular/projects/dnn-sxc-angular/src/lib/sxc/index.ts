@@ -3,3 +3,4 @@ export * from './data';
 export * from './sxc-data';
 export * from './query';
 export * from './query-construction';
+export * from './metadata-for';
