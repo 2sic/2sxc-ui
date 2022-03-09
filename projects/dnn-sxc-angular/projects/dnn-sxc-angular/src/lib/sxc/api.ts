@@ -47,6 +47,9 @@ export class Api {
     return this.http.get<T>(fullUrl, { params });
   }
 
+  /**
+   * Get the request URL of the api
+   */
   url(url: string): string {
     return `${routeApi}/${this.controller}/${url}`;
   }

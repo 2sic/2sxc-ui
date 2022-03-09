@@ -39,12 +39,12 @@ export class Data<T> {
   /**
    * Create new item as metadata for something
    */
-  create(item: T, metadataFor: MetaDataFor): Observable<T>;
+  create(item: T | any, metadataFor: MetaDataFor): Observable<T>;
 
   /**
    * Internal implementation of create
    */
-  create(item: T, metadataFor: MetaDataFor = null): Observable<T> {
+  create(item: T | any, metadataFor: MetaDataFor = null): Observable<T> {
     const url = `${routeContent}/${this.contentType}`;
     if (metadataFor != null)
       return this.http.post<T>(url, { ...item, For: metadataFor });
@@ -57,7 +57,7 @@ export class Data<T> {
    */
   update(id: number, item: T): Observable<T> {
     const url = `${routeContent}/${this.contentType}/${id}`;
-    return this.http.put<T>(url, item);
+    return this.http.post<T>(url, item);
   }
 
   /**
