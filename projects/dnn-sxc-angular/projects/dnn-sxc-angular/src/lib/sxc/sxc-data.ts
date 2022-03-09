@@ -67,10 +67,9 @@ export class SxcData {
   public query$<T>(param1: any, param2?: HttpParams) {
     if (typeof param1 === 'object') {
       const { name, params, streams } = <QueryConstruction>param1;
-      return new Query<T>(this.http, name).fetch(params, streams);
-    } else {
-      return new Query<T>(this.http, param1).fetch(param2);
-    }
+      const query = new Query<T>(this.http, name);
+      return (Array.isArray(streams) ? query.getStreams(streams, params) : query.getStream(streams, params));
+    } else return new Query<T>(this.http, param1).getAll();
   }
 
 
@@ -99,6 +98,6 @@ export class SxcData {
     const method = apiName.substr(separator + 1);
     apiName = apiName.substr(0, separator);
 
-    return new Api(this.http, apiName).fetch<T>(method, params);
+    return new Api(this.http, apiName).fetch<T>(method);
   }
 }

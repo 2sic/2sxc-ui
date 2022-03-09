@@ -94,33 +94,30 @@ export class Query<T> {
   }
 
   /**
-   * Get an object with the specified streams seperated by comma, each containing an array of all the data in that stream
+   * Get an object with the specified streams, each containing an array of all the data in that stream
    */
-  getStreams(streams: string): Observable<T>;
+  getStreams(streams: string[]): Observable<T>;
 
   /**
-   * Get an object with the specified streams seperated by comma,
-   * each containing an array of all the data in that stream with url-parameters as HttpParams
+   * Get an object with the specified streams, each containing an array of all the data in that stream with url-parameters as HttpParams
    */
-  getStreams(streams: string, params: HttpParams): Observable<T>;
+  getStreams(streams: string[], params: HttpParams): Observable<T>;
 
   /**
-   * Get an object with the specified streams seperated by comma,
-   * each containing an array of all the data in that stream with url-parameters as string
+   * Get an object with the specified streams, each containing an array of all the data in that stream with url-parameters as string
    */
-  getStreams(streams: string, params: string): Observable<T>;
+  getStreams(streams: string[], params: string): Observable<T>;
 
   /**
-   * Get an object with the specified streams seperated by comma,
-   * each containing an array of all the data in that stream with url-parameters as string
+   * Get an object with the specified streams, each containing an array of all the data in that stream with url-parameters as string
    */
-  getStreams(streams: string, params: HttpParams | string, data: T): Observable<T>;
+  getStreams(streams: string[], params: HttpParams | string, data: T): Observable<T>;
 
   /**
    * Internal implementation of getStreams
    */
-  getStreams(streams: string, params: HttpParams | string = null, data: T = null): Observable<T> {
-    const url = `${routeQuery}/${this.name}?${this.streamParamKey}=${streams}`;
+  getStreams(streams: string[], params: HttpParams | string = null, data: T = null): Observable<T> {
+    const url = `${routeQuery}/${this.name}?${this.streamParamKey}=${streams.join(',')}`;
 
     if (data)
       return (typeof(params) === 'string'
