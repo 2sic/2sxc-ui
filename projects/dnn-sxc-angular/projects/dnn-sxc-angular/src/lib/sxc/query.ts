@@ -23,12 +23,14 @@ export class Query<T> {
   getAll(): Observable<T>;
 
   /**
-   * Get an object with all the streams, each containing an array of all the data in that stream with url-parameters as HttpParams or string
+   * Get an object with all the streams, each containing an array of all the data in that stream
+   * with url-parameters as HttpParams or string
    */
   getAll(params: HttpParams | string): Observable<T>;
 
   /**
-   * Get an object with all the streams, each containing an array of all the data in that stream with url-parameters as string
+   * Get an object with all the streams, each containing an array of all the data in that stream
+   * with url-parameters as HttpParams or string using post data
    */
   getAll(params: HttpParams | string, data: T): Observable<T>;
 
@@ -51,12 +53,14 @@ export class Query<T> {
   getStream(stream: string): Observable<T>;
 
   /**
-   * Get an object with the specified stream, containing an array of all the data in that stream with url-parameters as HttpParams or string
+   * Get an object with the specified stream, containing an array of all the data in that stream
+   * with url-parameters as HttpParams or string
    */
   getStream(stream: string, params: HttpParams | string): Observable<T>;
 
   /**
-   * Get an object with the specified stream, containing an array of all the data in that stream with url-parameters as string
+   * Get an object with the specified stream, containing an array of all the data in that stream
+   * with url-parameters as HttpParams or string using post data
    */
   getStream(stream: string, params: HttpParams | string, data: T): Observable<T>;
 
@@ -85,7 +89,8 @@ export class Query<T> {
   getStreams(streams: string[], params: HttpParams | string): Observable<T>;
 
   /**
-   * Get an object with the specified streams, each containing an array of all the data in that stream with url-parameters as string
+   * Get an object with the specified streams, each containing an array of all the data in that stream
+   * with url-parameters as HttpParams or string using post data
    */
   getStreams(streams: string[], params: HttpParams | string, data: T): Observable<T>;
 
