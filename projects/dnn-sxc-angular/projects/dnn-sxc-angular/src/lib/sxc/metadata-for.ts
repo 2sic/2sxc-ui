@@ -1,5 +1,5 @@
 export interface MetaDataFor {
-  TargetType: number;
+  Target: number;
   Number?: number;
   String?: string;
   Guid?: string;
