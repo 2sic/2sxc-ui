@@ -1,10 +1,12 @@
-﻿import { CmsEngine } from '../commands/';
+﻿import { isContextIdentifier, SxcInstance } from '../../../$2sxc/src';
+import { CmsEngine } from '../commands/';
 import { CommandParams } from '../commands/command-params';
+import { is$sxcRunParams, RunParamsWithContext } from '../commands/engine/run-params';
 import { C } from '../constants';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { ContextBundleInstance } from '../context/bundles/context-bundle-instance';
+import { $2sxcInPage } from '../interfaces/sxc-controller-in-page';
 import { HasLog, Insights, Log } from '../logging';
-import { isRunParams, RunParams } from '../commands/engine/run-params';
 
 const logId = 'Cms.Api';
 
@@ -29,8 +31,8 @@ export class Cms extends HasLog {
     }
 
     run<T>(
-        context: ContextBundleInstance | HTMLElement | RunParams,
-        nameOrSettings: string | CommandParams,
+        context: ContextBundleInstance | HTMLElement | RunParamsWithContext,
+        nameOrSettings?: string | CommandParams,
         eventOrSettings?: CommandParams | MouseEvent,
         event?: MouseEvent,
     ): Promise<void | T> {
@@ -40,9 +42,12 @@ export class Cms extends HasLog {
 
         // Figure out inner-call based on if context is new RunParams or not (in that case it should be a tag or a full context)
         let innerCall: () => Promise<void>;
-        if (isRunParams(context)) {
-            // todo
-            const realCtx = ContextComplete.findContext(context.tag);
+        if (is$sxcRunParams(context)) {
+            // V1 with Context
+            const contextGiver = (isContextIdentifier(context.context) || SxcInstance.is(context.context))
+                ? $2sxcInPage(context.context)
+                : context.tag;
+            const realCtx = ContextComplete.findContext(contextGiver);
             context.params = { action: context.action, ...context.params };
             innerCall = () => cmsEngine.run(realCtx, context.params, context.event, context);
         } else {

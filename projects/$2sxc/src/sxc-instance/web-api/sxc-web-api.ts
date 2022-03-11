@@ -3,6 +3,7 @@ import { SxcInstance } from '../sxc-instance';
 import { AjaxPromise } from './ajax-promise';
 import { Environment } from '../../environment';
 import { AjaxSettings } from './ajax-settings';
+import { NoJQ } from '../..';
 
 /**
  * helper API to run ajax / REST calls to the server
@@ -11,12 +12,7 @@ import { AjaxSettings } from './ajax-settings';
  */
 export class SxcWebApi implements Public.SxcWebApi {
     public readonly env: Environment;
-    constructor(
-        private readonly sxc: SxcInstance,
-        // private readonly id: number,
-        // private readonly cbid: number,
-        // public readonly env: Environment
-    ) {
+    constructor(private readonly sxc: SxcInstance) {
         this.env = sxc.root.env;
     }
     /**
@@ -117,6 +113,19 @@ export class SxcWebApi implements Public.SxcWebApi {
         return promise;
     }
 
+    /**
+     * Will retrieve data from the backend using a standard fetch. 
+     * @param url a full url or short-hand like `controller/method?params` `app/auto/api/controller/method?params`. Note that params would also be specified on the url. 
+     * @param data optional POST data
+     * @param method optional method, defaults to `GET` unless it has data, in which case it defaults to `POST`
+     * @returns a Promise containing a Response object, just like a normal fetch would. 
+     * example: webApi.fetch('Rss/Feed');
+     * example: webApi.fetch(webApi.url('Rss/Feed', { id: 47 })); // url params
+     * example: webApi.fetch('Rss/Feed', { id: 47 }); // post params
+     * example: webApi.fetch(webApi.url('Rss/Feed', { id: 47 }), { something: 'this is a test' }); // url & post params
+     * maybe: webApi.fetch({url: 'Rss/Feed', params: { id: 47 }})
+     * maybe: webApi.fetch({url: ..., params: { ...}, body: { ...}, method: 'GET' })
+     */
     fetch(url: string, data?: string | Record<string, any>, method?: string): Promise<Response> {
         url = this.url(url);
         method = method || (data ? 'POST' : 'GET');
@@ -138,13 +147,22 @@ export class SxcWebApi implements Public.SxcWebApi {
         });
     }
 
-    fetchJson(url: string, data?: string | Record<string, any>, method?: string): Promise<any> {
+    /**
+     * Will retrieve data from the backend using a standard fetch and give you an object. 
+     * @param url a full url or short-hand like `controller/method?params` `app/auto/api/controller/method?params`. Note that params would also be specified on the url. 
+     * @param data optional POST data
+     * @param method optional method, defaults to `GET` unless it has data, in which case it defaults to `POST`
+     * @returns a Promise containing any object.
+     */
+    fetchJson<T = any>(url: string, data?: string | Record<string, any>, method?: string): Promise<T> {
         return this.fetch(url, data, method).then(response => response.json());
     }
 
     /**
      * All the headers which are needed in an ajax call for this to work reliably.
      * Use this if you need to get a list of headers in another system
+     * @param method Optional. If set, will add Accept or Content-Type headers
+     * @returns a Record / Dictionary of headers
      */
     headers(method?: string): Record<string, string> {
         const headers = this.sxc.root.http.headers(this.sxc.id, this.sxc.cbid);
@@ -163,7 +181,24 @@ export class SxcWebApi implements Public.SxcWebApi {
         return headers;
     }
 
-    url(url: string): string {
+    /**
+     * 
+     * @param url A short, medium or long url. 
+     * Short like `controller/method`, 
+     * medium like `app/auto/api/controller/method`
+     * long like `https://xyz.
+     * In all cases it can also have ?params etc.
+     * @param params Optional parameters as string or object, will be added to url-params. 
+     * @returns In the cases of a short/medium url, 
+     * it will auto-expand to have the full url as needed for an API call. 
+     */
+    url(url: string, params?: string | Record<string, any>): string {
+        if (url == null) return url;
+
+        const urlAndParams = url.split('#')[0].split('?');
+
+        // url fixes
+        url = urlAndParams[0];
         const urlParts = url.split('/');
         if (urlParts.length === 2 && urlParts[0] && urlParts[1]) {
             const controller = urlParts[0];
@@ -171,6 +206,15 @@ export class SxcWebApi implements Public.SxcWebApi {
             url = `app/auto/api/${controller}/${action}`;
         }
         url = this.sxc.root.http.apiUrl(url);
+
+        // params fixes
+        params = `${urlAndParams[1] || ''}&${params ? typeof params === 'string' ? params : NoJQ.param(params) : ''}`
+            .split('&')
+            .filter(p => !!p)
+            .join('&');
+
+        // result
+        url = [url, params].filter(p => !!p).join('?');
         return url;
     }
 }

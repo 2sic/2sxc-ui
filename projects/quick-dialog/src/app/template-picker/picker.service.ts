@@ -96,12 +96,10 @@ export class PickerService {
   private loadContentTypes(): Observable<any> {
     log.add(`loadContentTypes()`);
     this.contentTypes$.reset();
-    const obs = this.http.get<any[]>(Constants.webApiGetTypes)
+    const obs = this.http.get<ContentType[]>(Constants.webApiGetTypes)
       .pipe(share()); // ensure it's only run once
     obs.pipe(map(response => (response || []).map(ct => {
-        ct.Label = (ct.Metadata && ct.Metadata.Label)
-          ? ct.Metadata.Label
-          : ct.Name;
+        ct.Label = ct.Properties?.Label ?? ct.Name;
         return ct;
       })))
       .subscribe(json => this.contentTypes$.next(json));

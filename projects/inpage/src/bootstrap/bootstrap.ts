@@ -3,12 +3,11 @@ import { C } from '../constants';
 import { SxcEdit } from '../interfaces/sxc-instance-editable';
 import { windowInPage as window } from '../interfaces/window-in-page';
 import { HasLog, Insights, Log } from '../logging';
-import { NoJQ, TypeUnsafe } from '../plumbing';
+import { NoJQ } from '../plumbing';
 import { QuickDialog } from '../quick-dialog';
 import * as QuickEditState from '../quick-dialog/state';
 import { TagToolbarManager } from '../toolbar/tag-toolbars/tag-toolbar-manager';
 import { ToolbarManager } from '../toolbar/toolbar-manager';
-import { IDs } from '../constants/ids';
 
 /**
  * This contains everything necessary to bootstrap the edit mode.
@@ -45,7 +44,7 @@ export class BootstrapInPage extends HasLog {
      */
     private initAllInstances(isFirstRun: boolean): void {
         const callLog = this.log.call('initAllInstances');
-        document.querySelectorAll<HTMLElement>('div[data-edit-context]').forEach((e) => {
+        document.querySelectorAll<HTMLElement>(C.Sel.SxcDivs).forEach((e) => {
             this.initInstance(e, isFirstRun);
         });
         if (isFirstRun) this.tryShowTemplatePicker();
@@ -70,13 +69,13 @@ export class BootstrapInPage extends HasLog {
                     const node = n as HTMLElement;
 
                     // Menus which appear also cause DOM changes, but we want to ignore these for performance reasons
-                    if (node.matches(IDs.cls.scMenu)) return;
+                    if (node.matches(C.IDs.cls.scMenu)) return;
 
                     processed++;
 
                     // If the added node is a [data-edit-context], it is either a module or a content block which was replaced
                     // re-initialize the module
-                    if (node.matches('div[data-edit-context]')) {
+                    if (node.matches(C.Sel.SxcDivs)) {
                         this.initInstance(node, false);
                         // in case it has inner content, try to open the picker-dialog
                         if (!QuickDialog.singleton().isVisible()) this.tryShowTemplatePicker();
@@ -84,8 +83,8 @@ export class BootstrapInPage extends HasLog {
                     // If the added node contains [data-edit-context] nodes, it is likely the DNN module drag manager which added
                     // the node. To prevent multiple initialization while dragging modules, we additionally check for the
                     // .active-module class which seems to be applied while dragging the module.
-                    else if (node.matches(':not(.active-module)') && node.querySelectorAll<HTMLElement>('div[data-edit-context]').length > 0) {
-                        node.querySelectorAll<HTMLElement>('div[data-edit-context]').forEach((e) => {
+                    else if (node.matches(':not(.active-module)') && node.querySelectorAll<HTMLElement>(C.Sel.SxcDivs).length > 0) {
+                        node.querySelectorAll<HTMLElement>(C.Sel.SxcDivs).forEach((e) => {
                             this.initInstance(e, false);
                         });
                     } else
@@ -121,19 +120,19 @@ export class BootstrapInPage extends HasLog {
         const openDialogId = QuickEditState.cbId.get();
         if (openDialogId) {
             // must check if it's on this page, as it could be from another page
-            const found = document.querySelectorAll<HTMLElement>(`[data-cb-id="${openDialogId}"]`);
+            const found = document.querySelectorAll<HTMLElement>(`[${C.AttrNames.ContentBlockId}="${openDialogId}"]`);
             if (found.length) {
                 // since the CB-ID could also be an inner content (marked as a negative "-" number)
                 // we must be sure that we use the right id a.nyhow
                 if (openDialogId < 0) {
-                    const instanceId = Number(found[0].attributes.getNamedItem(C.Attributes.InstanceId).value);
+                    const instanceId = Number(found[0].attributes.getNamedItem(C.AttrNames.InstanceId).value);
                     sxc = SxcEdit.get(instanceId, openDialogId);
                 } else sxc = SxcEdit.get(openDialogId);
             }
         }
 
         if (!sxc) {
-            const uninitializedModules = document.querySelectorAll<HTMLElement>('.sc-uninitialized');
+            const uninitializedModules = document.querySelectorAll<HTMLElement>(`.${C.ClsNames.UnInitialized}`);
 
             if (this.diagCancelStateOnStart || this.openedTemplatePickerOnce)
                 return cl.return(false, 'cancelled');
@@ -147,7 +146,7 @@ export class BootstrapInPage extends HasLog {
                 return cl.return(false, 'has un-init modules');
 
             // show the template picker of this module
-            const module = Array.from(uninitializedModules).find((e) => e.parentElement.matches('div[data-edit-context]'))?.parentElement;
+            const module = Array.from(uninitializedModules).find((e) => e.parentElement.matches(C.Sel.SxcDivs))?.parentElement;
             sxc = SxcEdit.get(module);
         }
 
@@ -195,12 +194,12 @@ export class BootstrapInPage extends HasLog {
 
         // already has a glasses button
         const tag = SxcEdit.getTag(sxci);
-        if (tag.querySelectorAll<HTMLElement>('.sc-uninitialized').length !== 0)
+        if (tag.querySelectorAll<HTMLElement>(`.${C.ClsNames.UnInitialized}`).length !== 0)
             return callLog.return(false, 'already has button');
 
         // note: title is added on mouseover, as the translation isn't ready at page-load
         const btn = NoJQ.domFromString(
-            '<div class="sc-uninitialized" onmouseover="this.title = $2sxc.translate(this.title)" title="InPage.NewElement">' +
+            `<div class="${C.ClsNames.UnInitialized}" onmouseover="this.title = $2sxc.translate(this.title)" title="InPage.NewElement">` +
             '<div class="icon-sxc-glasses"></div>' +
             '</div>',
         )[0];

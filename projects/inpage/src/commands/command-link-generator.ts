@@ -1,7 +1,7 @@
 ﻿import { C } from '../constants';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { translate } from '../i18n';
-import { ItemIdentifierGroup, ItemIdentifierSimple, ItemInField } from '../interfaces/item-identifiers';
+import { ItemIdentifierGroup, ItemIdentifierSimple, ItemInField, TemplateIdentifier } from '../interfaces/item-identifiers';
 import { $2sxcInPage } from '../interfaces/sxc-controller-in-page';
 import { HasLog, Log } from '../logging';
 import { NgUrlValuesWithoutParams } from '../manage/ng-dialog-params';
@@ -13,7 +13,7 @@ import { ButtonSafe } from '../toolbar/config';
  * then building the link for opening the correct dialogs
  */
 export class CommandLinkGenerator extends HasLog {
-    public items: Array<ItemIdentifierSimple | ItemIdentifierGroup>;
+    public items: Array<ItemIdentifierSimple | ItemIdentifierGroup | TemplateIdentifier>;
     public readonly urlParams: UrlItemParams;
     private readonly rootUrl: string;
     private readonly debugUrlParam: string;
@@ -106,6 +106,9 @@ export class CommandLinkGenerator extends HasLog {
         const ct = params.contentType || (params as TypeUnsafe).attributeSetName;
         if (params.entityId) item.EntityId = params.entityId;
         if (ct) item.ContentTypeName = ct;
+
+        // v12.11 - also support cases where the template includes an edition
+        if (params )
 
         // only add if there was stuff to add
         if (item.EntityId || item.ContentTypeName) {

@@ -26,8 +26,11 @@ export class ContextOfInstance {
             this.sxcRootUrl = editCtx.Environment.SxcRootUrl ?? '';
         }
 
-        if (!this.id && sxc?.ctx?.moduleId)
-            this.id = sxc.ctx.moduleId;
+        if (!this.id)
+            // if the module isn't known, check the additional context.
+            // Otherwise give it a real number but an obvious fallback
+            // This is for integration into other systems which don't need a module-id
+            this.id = sxc?.ctx?.moduleId ?? -2742;
 
         if (editCtx.contentBlockReference)
             this.allowPublish = editCtx.contentBlockReference.publishingMode === C.IDs.publishAllowed;

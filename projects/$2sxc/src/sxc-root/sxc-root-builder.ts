@@ -6,7 +6,8 @@ import { SxcRootInternals } from './sxc-root-internals';
 import { SxcRoot, getRootPartsV2 } from './sxc-root';
 import { Window } from "../_/window";
 import { Debug, Insights, SxcVersion } from '..';
-import { ContextIdentifier, isContextIdentifier, throwIfIncomplete } from './context-identifier';
+import { ContextIdentifier, isContextIdentifier, ensureCompleteOrThrow } from './context-identifier';
+import { SxcInstance } from '../sxc-instance/sxc-instance';
 
 declare const window: Window;
 
@@ -16,18 +17,22 @@ declare const window: Window;
  * @param cbid
  * @returns {}
  */
-function FindSxcInstance(id: number | ContextIdentifier | HTMLElement, cbid?: number): SxcInstanceWithInternals {
+function FindSxcInstance(id: number | ContextIdentifier | HTMLElement | SxcInstanceWithInternals, cbid?: number): SxcInstanceWithInternals {
     const $2sxc = window.$2sxc as SxcRoot & SxcRootInternals;
     $2sxc.log.add('FindSxcInstance(' + id + ',' + cbid);
     if (!$2sxc._controllers)
         throw new Error('$2sxc not initialized yet');
 
+    // Test if it already is such an instance, in which case we just preserve it and return it
+    // Used in cases where the $2sxc(something) is just used to ensure it really is this
+    if (SxcInstance.is(id)) return id;
+
     // check if it's a context identifier (new in 11.11)
     let ctxId: ContextIdentifier = null;
     if (isContextIdentifier(id)) {
-        throwIfIncomplete(id);
+        id = ensureCompleteOrThrow(id);
         ctxId = id;
-        // create a fake id, based on zone and app
+        // create a fake id, based on zone and app because this is used to identify the object in the cache
         id = id.zoneId * 100000 + id.appId;
     } else if (typeof id === 'object') {
         // if it's a dom-element, use auto-find

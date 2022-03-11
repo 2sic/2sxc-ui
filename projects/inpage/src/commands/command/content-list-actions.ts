@@ -7,7 +7,7 @@ import { ContentListActionParams } from './content-list-action-params';
 const webApiAdd = 'cms/block/item';
 const webApiRemoveFromList = 'cms/list/delete';
 const webApiReorder = 'cms/list/move';
-const webApiItemPublish = 'cms/item/publish';
+const webApiItemPublish = 'cms/edit/publish';
 const webApiBlockPublish = 'cms/block/publish';
 //#endregion
 
@@ -22,7 +22,7 @@ class ContentListActions {
      * @param {number} index
      */
     addItem<T>(context: ContextComplete, index: number) {
-        return doAndReload<T>(context, webApiAdd , { index }, 'post');
+        return doAndReload<T>(context, webApiAdd, { index }, 'post');
     }
 
     /**
@@ -36,7 +36,7 @@ class ContentListActions {
             index: params.sortOrder,
             parent: params.parent,
             fields: params.fields,
-         }, 'delete');
+        }, 'delete');
     }
 
     /**
@@ -107,35 +107,12 @@ function doAndReload<T>(
     verb: 'get' | 'post' | 'delete' = 'get',
     postData: TypeUnsafe = {},
 ): Promise<void | T> {
-    return new Promise<T>((resolve, reject) => {
-        const call = verb === 'post'
-          ? context.sxc.webApi.post({
-                url: url,
-                params: params,
-            }, postData)
-          : verb === 'delete'
-            ? context.sxc.webApi.delete({
-                url: url,
-                params: params,
-              })
-            : context.sxc.webApi.get({
-                url: url,
-                params: params,
-              });
-        call.done((data, textStatus: string, jqXHR) => {
-                if (jqXHR.status === 204 || jqXHR.status === 200) {
-                    // resolve the promise with the response text
-                    resolve(data);
-                } else {
-                    // otherwise reject with the status text
-                    // which will hopefully be a meaningful error
-                    reject(Error(textStatus));
-                }
-            })
-            .fail((jqXHR, textStatus: string, errorThrown: string) => {
-                reject(Error(errorThrown));
-            });
-    }).then(() => {
-        renderer.reloadAndReInitialize(context);
-    });
+    return (verb === 'post'
+        ? context.sxc.webApi.fetch(context.sxc.webApi.url(url, params), postData, 'POST')
+        : verb === 'delete'
+            ? context.sxc.webApi.fetch(context.sxc.webApi.url(url, params), undefined, 'DELETE')
+            : context.sxc.webApi.fetchJson(context.sxc.webApi.url(url, params)))
+        .then(() => {
+            renderer.reloadAndReInitialize(context);
+        });
 }

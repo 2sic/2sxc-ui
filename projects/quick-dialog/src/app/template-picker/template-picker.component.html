@@ -5,7 +5,7 @@
   <div *ngIf="showDebug">
     <h4>Debug 2sxc 11 / ng 11</h4>
     <ul>
-      <li>Types: {{ types?.length }}, current: {{contentType?.StaticName}}</li>
+      <li>Types: {{ types?.length }}, current: {{contentType?.StaticName}}, default: {{defaultContentType?.Label}}</li>
       <li>Apps: {{ (apps$ | async)?.length }}, current: {{app?.AppId }} </li>
       <li>Templates: {{templates?.length}}, current: {{template?.TemplateId}}</li>
       <li>Config: isContent='{{isContent}}' Ready: {{ready}} </li>
@@ -45,7 +45,7 @@
             [ngClass]="{ active: app?.AppId === a.AppId, blocked: preventTypeSwitch }"
             [attr.title]="a.Name"
             (click)="selectApp(app, a)"
-            (dblclick)="switchTab()" *ngFor="let a of apps$ | async">
+            (dblclick)="switchTab()" *ngFor="let a of apps$ | async | filterByPropertyValue:'Name':appFilter">
             <div class="bg">
               <img *ngIf="a.Thumbnail !== null && a.Thumbnail !== ''" class="bg-img" [attr.src]="a.Thumbnail + '?w=176&h=176'">
               <div *ngIf="a.Thumbnail === null || a.Thumbnail === ''" class="bg-icon">
@@ -82,15 +82,15 @@
           </div>
         </div>
 
-        <!-- Content-Type selection (when not a generic app, but the default content-app -->
+        <!-- Content-Type selection (when not a generic app, but the default content-app) -->
         <ng-template #contentApp>
           <div class="tiles">
             <div mat-button class="tile"
-              [ngClass]="{ active: contentType?.StaticName === c.StaticName, blocked: preventTypeSwitch }"
+              [ngClass]="{ active: contentType ? contentType?.StaticName === c.StaticName : defaultContentType?.StaticName === c.StaticName, blocked: preventTypeSwitch }"
               [attr.title]="(c.Label | translate) + (showDebug ? ' (' + c.StaticName + ')' : '')"
               (click)="selectContentType(contentType, c)"
               (dblclick)="switchTab()"
-              *ngFor="let c of types"
+              *ngFor="let c of types | filterByPropertyValue:'Label':contentTypeFilter"
             >
               <div class="bg">
                 <img *ngIf="c.Thumbnail !== null && c.Thumbnail !== ''" class="bg-img" [attr.src]="c.Thumbnail + '?w=176&h=176'">
@@ -107,14 +107,14 @@
       </mat-tab>
 
       <!-- template selection after app/content-type selection -->
-      <mat-tab *ngIf="isContent ? contentType : app" [label]="('TemplatePicker.ChangeView' | translate) + '(' + templates.length + ')'">
+      <mat-tab *ngIf="isContent ? contentType : app" [label]="('TemplatePicker.ChangeView' | translate) + ' (' + templates.length + ')'">
         <div class="tiles">
           <mat-spinner class="templates-spinner" *ngIf="templatesLoading$ | async"></mat-spinner>
           <div class="tile"
             [ngClass]="{ active: template?.TemplateId === t.TemplateId }"
             [attr.title]="t.Name + (showDebug ? ' (' + t.TemplateId + ')' : '')"
             (click)="selectTemplate(t)"
-            *ngFor="let t of templates">
+            *ngFor="let t of templates | filterByPropertyValue:'Name':templateFilter">
             <div class="bg">
               <img *ngIf="t.Thumbnail !== null && t.Thumbnail !== ''" class="bg-img" [attr.src]="t.Thumbnail + '?w=176&h=176'">
               <div *ngIf="t.Thumbnail === null || t.Thumbnail === ''" class="bg-icon">
@@ -137,6 +137,16 @@
             </div>
           </div>
         </div>
+      </mat-tab>
+      <!-- Search -->
+      <mat-tab disabled>
+        <ng-template mat-tab-label>
+          <div class="search-field">
+            <input type="text" *ngIf="tabIndex === 0 && !isContent" [(ngModel)]="appFilter">
+            <input type="text" *ngIf="tabIndex === 0 && isContent" [(ngModel)]="contentTypeFilter">
+            <input type="text" *ngIf="tabIndex === 1" [(ngModel)]="templateFilter">
+          </div>
+        </ng-template>
       </mat-tab>
     </mat-tab-group>
 

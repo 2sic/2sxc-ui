@@ -8,12 +8,12 @@ import { QuickDialog } from '../../quick-dialog/quick-dialog';
 import { Button, ButtonSafe } from '../../toolbar/config';
 import { ButtonCommand } from '../../toolbar/config';
 import { InPageButtonJson } from '../../toolbar/config-loaders/config-formats/in-page-button';
-import { WorkflowHelper, WorkflowPhases, WorkflowArguments } from '../../workflow';
+import { WorkflowArguments, WorkflowHelper, WorkflowPhases } from '../../workflow';
+import { WorkflowManager } from '../../workflow/workflow-manager';
 import { CommandLinkGenerator } from '../command-link-generator';
 import { CommandParams } from '../command-params';
 import { RunParametersHelper } from './run-parameters';
 import { RunParams } from './run-params';
-import { WorkflowManager } from '../../workflow/workflow-manager';
 
 type CommandPromise<T> = Promise<T|void>;
 
@@ -96,7 +96,7 @@ export class CmsEngine extends HasLog {
 
         // New in 12.10 - Workflow can be provided by run-call
         let wf: WorkflowManager;
-        if (wipParamsWithWorkflow && wipParamsWithWorkflow.workflows) {
+        if (wipParamsWithWorkflow?.workflows) {
             wf = new WorkflowManager(this.log);
             wf.add(wipParamsWithWorkflow.workflows);
         } else

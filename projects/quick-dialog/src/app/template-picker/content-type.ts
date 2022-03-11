@@ -4,15 +4,16 @@ export class ContentType {
     StaticName: string;
     Label: string;
     Thumbnail: string;
-    Metadata?: ContentTypeMetadata;
+    Properties?: ContentTypeProperties;
 
     /**
      * This property is added by the UI, and does not come from the REST call
      */
     TemplateId: number;
+    IsDefault?: boolean = false;
 }
 
-class ContentTypeMetadata {
+class ContentTypeProperties {
     Description: string;
     EditInstructions: string;
     Icon: string;

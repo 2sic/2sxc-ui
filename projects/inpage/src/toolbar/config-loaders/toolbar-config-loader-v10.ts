@@ -7,7 +7,6 @@ import { BuildSteps, RuleManager } from '../rules';
 import { ToolbarTemplate, ToolbarTemplateDefault, ToolbarTemplateSublist } from '../templates';
 import { ToolbarWip } from './config-formats/toolbar-wip';
 
-
 export class ToolbarConfigLoaderV10 extends HasLog {
 
     public rules: RuleManager;
@@ -25,8 +24,14 @@ export class ToolbarConfigLoaderV10 extends HasLog {
 
         let template: ToolbarTemplate;
         // #1 prepare settings - get rules and mix with defaults
+        // We should use the `ui` parameter, as it's UI rules, but because previously
+        // it used the `params` - we must support both :(
         const settingRule = this.rules.getSettings();
-        const settings = new ToolbarSettings(settingRule.params as Partial<ToolbarSettings>);
+        let settingsUiRule = settingRule?.ui as unknown as Partial<ToolbarSettings>;
+        if (Object.keys(settingsUiRule || {}).length === 0)
+            settingsUiRule = settingRule?.params as Partial<ToolbarSettings>;
+        // settingsUiRule = { ...settingRule?.params, ...settingRule?.ui } as unknown as Partial<ToolbarSettings>;
+        const settings = new ToolbarSettings(settingsUiRule);
 
         // #2 load either the default toolbar or the one specified
         const toolbarRule = this.rules.getToolbar();

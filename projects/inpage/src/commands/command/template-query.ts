@@ -15,7 +15,7 @@ Commands.add(CmdTemplateQuery, 'QueryEdit', 'filter', true, false, {
 
     title: (ctx) => `Toolbar.QueryEdit${ctx.contentBlock.queryId === null ? 'Disabled' : ''}`,
 
-    showCondition: (ctx) => !!ctx.user.canDesign && !ctx.app.isContent,
+    showCondition: (ctx) => !!ctx.user.CanDevelop && !ctx.app.isContent,
 
     // if it doesn't have a query, make it less strong
     dynamicClasses: (ctx) => ctx.contentBlock.queryId ? '' : 'empty',

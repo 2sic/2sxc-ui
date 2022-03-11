@@ -6,6 +6,6 @@ export const CmdApp = 'app';
  */
 Commands.add(CmdApp, 'App', 'settings', true, false, {
     showCondition: (context) => {
-        return context.user.canDesign;
+        return context.user.CanAdmin;
     },
 });

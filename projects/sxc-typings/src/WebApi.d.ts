@@ -57,11 +57,15 @@ export interface SxcWebApi {
      */
     request(settings: string | any, params: any, data: any, preventAutoFail: boolean, method: string): JQueryPromise<any>;
 
+    fetch(url: string, data?: string | Record<string, any>, method?: string): Promise<Response>;
+
+    fetchJson(url: string, data?: string | Record<string, any>, method?: string): Promise<any>;
+
     /**
      * All the headers which are needed in an ajax call for this to work reliably.
      * Use this if you need to get a list of headers in another system
      */
-    headers(): Dictionary<string>;
+    headers(method?: string): Dictionary<string>;
 
 }
 

@@ -1,4 +1,4 @@
-import { Workflow, WorkflowPhases, WorkflowArguments, WorkflowStepHelper } from '.';
+import { WorkflowStep, WorkflowPhases, WorkflowArguments, WorkflowStepHelper } from '.';
 import { SpecialCommands } from '../commands';
 import { ContextComplete } from '../context';
 import { HasLog, Insights, Log } from '../logging';
@@ -14,7 +14,7 @@ import { WorkflowHelper } from './workflow-helper';
 export class WorkflowManager extends HasLog {
 
     /** The workflow steps registered here */
-    steps: Workflow[] = [];
+    steps: WorkflowStep[] = [];
 
     constructor(parentLog: Log, private isDummy = false) {
         super('Cmd.Wrkflw', parentLog, 'constructor');
@@ -24,7 +24,7 @@ export class WorkflowManager extends HasLog {
      * Add one or many steps to the workflow
      */
     // @publicApi("Used publicly on the Workflow-object in toolbar-init")
-    add(steps: Workflow | Workflow[]) {
+    add(steps: WorkflowStep | WorkflowStep[]) {
         if (!steps) return;
         if (Array.isArray(steps)) {
             steps.forEach((s) => this.addOne(s));
@@ -35,7 +35,7 @@ export class WorkflowManager extends HasLog {
     /**
      * Add a single workflow step to this manager
      */
-    private addOne(step: Workflow) {
+    private addOne(step: WorkflowStep) {
         step = WorkflowStepHelper.initDefaults(step);
         const cl = this.log.call('add', `'${step.name}' for '${step.command}'-'${step.phase}'`);
         if (!step) {

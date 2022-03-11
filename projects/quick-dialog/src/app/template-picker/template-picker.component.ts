@@ -1,19 +1,19 @@
 
-import {merge, combineLatest,  timer } from 'rxjs';
-import {filter, startWith, skipUntil, map} from 'rxjs/operators';
-import { Component, ChangeDetectorRef, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { App } from 'app/core/app';
-import { Template } from 'app/template-picker/template';
-import { ContentType } from 'app/template-picker/content-type';
-import { cAppActionImport } from './constants';
-import { log as parentLog, Log } from 'app/core/log';
-import { PickerService } from './picker.service';
-import { CurrentDataService } from './current-data.service';
-import { DebugConfig } from 'app/debug-config';
 import { BehaviorObservable } from 'app/core/behavior-observable';
+import { Log, log as parentLog } from 'app/core/log';
+import { DebugConfig } from 'app/debug-config';
 import { IDialogFrameElement, IIFrameBridge, IQuickDialogConfig } from 'app/interfaces/shared';
+import { ContentType } from 'app/template-picker/content-type';
+import { Template } from 'app/template-picker/template';
+import { combineLatest, merge, Observable, timer } from 'rxjs';
+import { filter, map, skipUntil, startWith } from 'rxjs/operators';
 import { BackendSettings } from '../core/backend-settings';
+import { cAppActionImport } from './constants';
+import { CurrentDataService } from './current-data.service';
+import { ContentTypesProcessor } from './data/content-types-processor.service';
+import { PickerService } from './picker.service';
 
 const log = parentLog.subLog('picker', DebugConfig.picker.enabled);
 
@@ -64,6 +64,10 @@ export class TemplatePickerComponent implements OnInit {
   preventAppSwich = false;
 
   public showDebug = DebugConfig.picker.showDebugPanel;
+
+  appFilter = '';
+  contentTypeFilter = '';
+  templateFilter = '';
   // #endregion
 
   // #region data to show - using local variables, because streams didn't update correctly :(
@@ -72,6 +76,7 @@ export class TemplatePickerComponent implements OnInit {
   template: Template;
   contentType: ContentType;
   types: ContentType[];
+  defaultContentType: ContentType;
   ready = false;
   //#endregion
 
@@ -173,7 +178,10 @@ export class TemplatePickerComponent implements OnInit {
     this.state.app$.subscribe(a => this.app = a);
     this.state.templates$.subscribe(t => this.templates = t);
     this.state.template$.subscribe(t => this.template = t);
-    this.state.types$.subscribe(t => this.types = t);
+    this.state.types$.subscribe(t => {
+      this.types = t;
+      this.defaultContentType = ContentTypesProcessor.firstDefault(t);
+    });
     this.state.type$.subscribe(t => this.contentType = t);
 
     this.ready$.subscribe(r => this.ready = r);
@@ -208,17 +216,24 @@ export class TemplatePickerComponent implements OnInit {
    * app selection from UI
    */
   selectApp(before: App, after: App): void {
-    console.log('selectApp()');
-    if (before && before.AppId === after.AppId) this.switchTab();
-    else this.updateApp(after);
+    if (before && before.AppId === after.AppId) {
+      this.switchTab();
+    } else {
+      this.updateApp(after);
+      this.templateFilter = '';
+    }
   }
 
   /**
    * content-type selection from UI
    */
   selectContentType(before: ContentType, after: ContentType): void {
-    if (before && before.StaticName === after.StaticName) this.switchTab();
-    else this.setContentType(after);
+    if (before && before.StaticName === after.StaticName) {
+      this.switchTab();
+    } else {
+      this.setContentType(after);
+      this.templateFilter = '';
+    }
   }
 
   /**

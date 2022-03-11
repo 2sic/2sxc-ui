@@ -1,4 +1,5 @@
 ﻿import { ModifierBase, ModifierDnnModule, QeSelectors, QuickE, Selection } from '.';
+import { C } from '../constants';
 import { HasLog, Insights, NoJQ } from '../logging';
 import { ContextForLists } from './context-for-lists';
 import { ModifierContentBlock } from './modifier-content-block';
@@ -140,7 +141,7 @@ export class QuickEClipboard extends HasLog {
         const cl = this.log.call('setSecondaryActionsState');
         let btns = Array.from(document.querySelectorAll<HTMLElement>('a.sc-content-block-menu-btn'));
         btns = btns.filter((btn) => btn.classList.contains('icon-sxc-paste'));
-        btns.forEach((btn) => btn.classList.toggle('sc-unavailable', !state));
+        btns.forEach((btn) => btn.classList.toggle(C.ClsNames.UnAvailable, !state));
         cl.done();
     }
 

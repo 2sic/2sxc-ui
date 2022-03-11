@@ -1,8 +1,12 @@
 ﻿export class AttrJsonContentGroup {
-// ReSharper disable InconsistentNaming
+  // ReSharper disable InconsistentNaming
   IsCreated: boolean;
   IsList: boolean;
   TemplateId: number;
+  Edition: string;
+  TemplatePath: string;
+  /** True if the template comes from the shared location - new in v13 */
+  TemplateIsShared: boolean;
   QueryId: number | null;
   ContentTypeName: string;
   AppUrl: string;
@@ -15,5 +19,5 @@
   AppId: number;
   Guid: string;
   Id: number;
-// ReSharper restore InconsistentNaming
+  // ReSharper restore InconsistentNaming
 }

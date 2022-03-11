@@ -56,8 +56,8 @@ export class ModifierContentBlockInstance extends HasLog {
             guid: newGuid,
         };
 
-        const jqPromise = this.sxcInstance.webApi
-            .post({ url: webApiNew, params: params })
+        const promise = this.sxcInstance.webApi
+            .fetchJson(this.sxcInstance.webApi.url(webApiNew, params), undefined, 'POST')
             .then((result) => {
                 const newTag = NoJQ.domFromString(result)[0]; // prepare tag for inserting
 
@@ -71,7 +71,7 @@ export class ModifierContentBlockInstance extends HasLog {
                 const sxcNew = SxcEdit.get(newTag);
                 ToolbarManager.singleton().buildModule(newTag);
             });
-        return Promise.resolve(jqPromise);
+        return Promise.resolve(promise);
     }
 
     /**
@@ -90,13 +90,13 @@ export class ModifierContentBlockInstance extends HasLog {
             toIndex: indexTo,
         };
 
-        const jqPromise = this.sxcInstance.webApi
-            .post({ url: webApiMove, params: params })
+        const promise = this.sxcInstance.webApi
+            .fetch(this.sxcInstance.webApi.url(webApiMove, params), undefined, 'POST')
             .then(() => {
                 console.log('done moving!');
                 window.location.reload();
             });
-        return Promise.resolve(jqPromise);
+        return Promise.resolve(promise);
     }
 
 
@@ -115,12 +115,12 @@ export class ModifierContentBlockInstance extends HasLog {
             index: index,
         };
 
-        const jqPromise = this.sxcInstance.webApi
-            .delete({ url: webApiRemove, params: params })
+        const promise = this.sxcInstance.webApi
+            .fetch(this.sxcInstance.webApi.url(webApiRemove, params), undefined, 'DELETE')
             .then(() => {
                 console.log('done deleting!');
                 window.location.reload();
             });
-        return Promise.resolve(jqPromise);
+        return Promise.resolve(promise);
     }
 }

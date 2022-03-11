@@ -34,6 +34,8 @@
             .tiles {
                 white-space: nowrap;
                 overflow-x: auto;
+                height: 132px;
+                overflow-y: hidden;
                 .tile {
                     box-sizing: border-box;
                     background: #fff;
@@ -194,6 +196,38 @@
             text-align: center;
         }
     }
+
+    .mat-tab-group {
+        ::ng-deep .mat-tab-label.mat-tab-disabled {
+            opacity: initial;
+            color: initial;
+            margin-left: auto;
+        }
+    }
+
+    .search-field {
+        position: relative;
+        input {
+            border: none;
+            outline: none;
+            border-bottom: 1px solid grey;
+            background: transparent;
+            padding-right: 20px;
+            width: 180px;
+            box-sizing: border-box;
+            &:focus {
+                border-color: black;
+            }
+        }
+        &::after {
+            position: absolute;
+            right: 0px;
+            top: 0;
+            padding: 2px;
+            font-family: "Material Icons";
+            content: "search";
+        }
+    }
 }
 
 ::ng-deep mat-tab-group {
@@ -203,7 +237,7 @@
             display: none !important;
         }
         .mat-tab-labels {
-            display: block;
+            // display: block;
             .mat-tab-label {
                 min-width: 0 !important;
                 &.mat-tab-label-active {

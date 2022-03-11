@@ -76,21 +76,10 @@ export class ContentBlockEditor extends HasLog {
             lang: context.app.currentLanguage,
             cbid: context.contentBlockReference.id,
             originalparameters: JSON.stringify(context.instance.parameters),
-            v2: true,
         };
         cl.data('params', params);
-        const promise = new Promise<string>((resolve, reject) => {
-            context.sxc.webApi.get({ url: webApiRender + 'wip', params: params, dataType: 'html' })
-                .done((data, textStatus: string, jqXhr) => {
-                    if (jqXhr.status === 204 || jqXhr.status === 200) {
-                        resolve(data); // resolve the promise with the response text
-                    } else {
-                        reject(Error(textStatus)); // reject with status text - should be a meaningful
-                    }
-                }).fail((jqXhr, textStatus: string, errorThrown: string) => {
-                    reject(Error(errorThrown));
-                });
-        });
+        const promise = context.sxc.webApi.fetch(context.sxc.webApi.url(webApiRender, params))
+            .then((response) => response.text());
         return cl.return(promise);
     }
 
@@ -135,16 +124,7 @@ export class ContentBlockEditor extends HasLog {
             newTemplateChooserState: false,
         };
         cl.data('params', params);
-        const promise = new Promise<string>((resolve, reject) => {
-            context.sxc.webApi.post({ url: webApiSave, params: params })
-                .done((data, textStatus, jqXhr) => {
-                    // resolve or reject based on http-status: 200 & 204 = ok
-                    if (jqXhr.status === 204 || jqXhr.status === 200) resolve(data);
-                    else reject(Error(textStatus));
-                }).fail((jqXhr, textStatus, errorThrown: string) => {
-                    reject(Error(errorThrown));
-                });
-        });
+        const promise = context.sxc.webApi.fetchJson(context.sxc.webApi.url(webApiSave, params), undefined, 'POST');
         return cl.return(promise);
     }
 

@@ -10,6 +10,6 @@ export type TypeUnsafe = any;
 /** TypeWeDontCare is used in places where we really want to cast something to any */
 export type TypeWeDontCare = any;
 
-export function isNothing(thing: TypeTbD) {
+export function isNothing(thing: unknown) {
     return thing === undefined || thing === null;
 }
