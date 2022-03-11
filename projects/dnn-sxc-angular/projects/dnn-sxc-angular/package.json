@@ -10,10 +10,10 @@
     "tslib": "^2.0.0"
   },
   "peerDependencies": {
-    "@angular/common": ">=6.1.3",
-    "@angular/core": ">=6.1.3",
-    "@angular/platform-browser": ">=6.1.3",
-    "rxjs": ">=6.5.0"
+    "@angular/common": ">=11.0.0",
+    "@angular/core": ">=11.0.0",
+    "@angular/platform-browser": ">=11.0.0",
+    "rxjs": ">=6.6.0"
   },
   "homepage": "https://github.com/2sic/2sxc-ui/tree/master/projects/dnn-sxc-angular#readme",
   "license": "MIT",
