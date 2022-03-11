@@ -1,6 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { getHttpParams } from '../../utils/params';
 import { routeQuery } from '../contants';
 
 /**
@@ -39,11 +40,9 @@ export class Query<T> {
    */
   getAll(params?: HttpParams | string, data?: T): Observable<T> {
     const url = `${routeQuery}/${this.name}`;
-    let streamParams: HttpParams = null;
+    const streamParams: HttpParams = getHttpParams(params);
 
-    if (params) streamParams = new HttpParams({fromString: params.toString() });
     if (data) return this.http.post<T>(url, data, { params: streamParams });
-
     return this.http.get<T>(url, { params: streamParams });
   }
 
@@ -69,11 +68,9 @@ export class Query<T> {
    */
   getStream(stream: string, params?: HttpParams | string, data?: T): Observable<T> {
     const url = `${routeQuery}/${this.name}?${this.streamParamKey}=${stream}`;
-    let streamParams: HttpParams = null;
+    const streamParams: HttpParams = getHttpParams(params);
 
-    if (params) streamParams = new HttpParams({fromString: params.toString() });
     if (data) return this.http.post<T>(url, data, { params: streamParams }).pipe(map(res => res[stream]));
-
     return this.http.get<T>(url, { params: streamParams }).pipe(map(res => res[stream]));
   }
 
@@ -99,11 +96,9 @@ export class Query<T> {
    */
   getStreams(streams: string[], params?: HttpParams | string, data?: T): Observable<T> {
     const url = `${routeQuery}/${this.name}?${this.streamParamKey}=${streams.join(',')}`;
-    let streamParams: HttpParams = null;
+    const streamParams: HttpParams = getHttpParams(params);
 
-    if (params) streamParams = new HttpParams({fromString: params.toString() });
     if (data) return this.http.post<T>(url, data, { params: streamParams });
-
     return this.http.get<T>(url, { params: streamParams });
   }
 }
