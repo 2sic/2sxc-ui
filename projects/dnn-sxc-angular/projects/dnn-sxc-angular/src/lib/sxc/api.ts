@@ -41,9 +41,9 @@ export class Api {
   /**
    * Do a PUT request to the specified 2sxc api controller
    */
-  put<T>(methodAndParams: string, params: HttpParams | string, body: T): Observable<T> {
+  put<T>(method: string, params: HttpParams | string, body: T): Observable<T> {
     const requestParams: HttpParams = getHttpParams(params);
-    return this.http.put<T>(this.url(methodAndParams), body, { params: requestParams });
+    return this.http.put<T>(this.url(method), body, { params: requestParams });
   }
 
   /**
