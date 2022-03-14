@@ -76,7 +76,7 @@ export class SxcData<T = unknown> extends SxcDataQueryBase {
 
   delete(idOrGuid: number | string): Promise<null> {
     const path = `${ContentApiRoot}/${this.name}/${idOrGuid}`;
-    return this.webApi.fetch(this.webApi.url(path), undefined, 'DELETE').then(response => null);
+    return this.webApi.fetchRaw(this.webApi.url(path), undefined, 'DELETE').then(response => null);
   }
 }
 

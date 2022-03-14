@@ -78,7 +78,7 @@ export class ContentBlockEditor extends HasLog {
             originalparameters: JSON.stringify(context.instance.parameters),
         };
         cl.data('params', params);
-        const promise = context.sxc.webApi.fetch(context.sxc.webApi.url(webApiRender, params))
+        const promise = context.sxc.webApi.fetchRaw(context.sxc.webApi.url(webApiRender, params))
             .then((response) => response.text());
         return cl.return(promise);
     }

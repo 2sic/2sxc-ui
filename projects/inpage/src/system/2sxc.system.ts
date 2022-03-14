@@ -8,7 +8,7 @@ export class SystemUpgrader {
     // upgrade command - started when an error contains a link to start this
     finishUpgrade(domElement: HTMLElement): void {
         const mc = SxcEdit.get(domElement);
-        mc.webApi.fetch(webApiInstallComplete)
+        mc.webApi.fetchRaw(webApiInstallComplete)
             .then(() => {
                 alert('Upgrade ok, restarting the CMS and reloading...');
                 location.reload();

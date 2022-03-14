@@ -57,7 +57,7 @@ export interface SxcWebApi {
      */
     request(settings: string | any, params: any, data: any, preventAutoFail: boolean, method: string): JQueryPromise<any>;
 
-    fetch(url: string, data?: string | Record<string, any>, method?: string): Promise<Response>;
+    fetchRaw(url: string, data?: string | Record<string, any>, method?: string): Promise<Response>;
 
     fetchJson(url: string, data?: string | Record<string, any>, method?: string): Promise<any>;
 

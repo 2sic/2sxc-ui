@@ -108,9 +108,9 @@ function doAndReload<T>(
     postData: TypeUnsafe = {},
 ): Promise<void | T> {
     return (verb === 'post'
-        ? context.sxc.webApi.fetch(context.sxc.webApi.url(url, params), postData, 'POST')
+        ? context.sxc.webApi.fetchRaw(context.sxc.webApi.url(url, params), postData, 'POST')
         : verb === 'delete'
-            ? context.sxc.webApi.fetch(context.sxc.webApi.url(url, params), undefined, 'DELETE')
+            ? context.sxc.webApi.fetchRaw(context.sxc.webApi.url(url, params), undefined, 'DELETE')
             : context.sxc.webApi.fetchJson(context.sxc.webApi.url(url, params)))
         .then(() => {
             renderer.reloadAndReInitialize(context);
