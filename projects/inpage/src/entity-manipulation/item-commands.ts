@@ -27,7 +27,7 @@ export let contentItems = {
       appId: context.app.id,
     };
 
-    return context.sxc.webApi.fetch(context.sxc.webApi.url(`app/auto/content/any/${itemGuid}`, params), undefined, 'DELETE')
+    return context.sxc.webApi.fetchRaw(context.sxc.webApi.url(`app/auto/content/any/${itemGuid}`, params), undefined, 'DELETE')
       .then((response) => {
         if (response.status >= 200 && response.status < 300) {
           location.reload();

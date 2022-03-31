@@ -119,14 +119,14 @@ export class SxcWebApi implements Public.SxcWebApi {
      * @param data optional POST data
      * @param method optional method, defaults to `GET` unless it has data, in which case it defaults to `POST`
      * @returns a Promise containing a Response object, just like a normal fetch would. 
-     * example: webApi.fetch('Rss/Feed');
-     * example: webApi.fetch(webApi.url('Rss/Feed', { id: 47 })); // url params
-     * example: webApi.fetch('Rss/Feed', { id: 47 }); // post params
-     * example: webApi.fetch(webApi.url('Rss/Feed', { id: 47 }), { something: 'this is a test' }); // url & post params
-     * maybe: webApi.fetch({url: 'Rss/Feed', params: { id: 47 }})
-     * maybe: webApi.fetch({url: ..., params: { ...}, body: { ...}, method: 'GET' })
+     * example: webApi.fetchRaw('Rss/Feed');
+     * example: webApi.fetchRaw(webApi.url('Rss/Feed', { id: 47 })); // url params
+     * example: webApi.fetchRaw('Rss/Feed', { id: 47 }); // post params
+     * example: webApi.fetchRaw(webApi.url('Rss/Feed', { id: 47 }), { something: 'this is a test' }); // url & post params
+     * maybe: webApi.fetchRaw({url: 'Rss/Feed', params: { id: 47 }})
+     * maybe: webApi.fetchRaw({url: ..., params: { ...}, body: { ...}, method: 'GET' })
      */
-    fetch(url: string, data?: string | Record<string, any>, method?: string): Promise<Response> {
+    fetchRaw(url: string, data?: string | Record<string, any>, method?: string): Promise<Response> {
         url = this.url(url);
         method = method || (data ? 'POST' : 'GET');
         const headers = this.headers(method);
@@ -147,6 +147,16 @@ export class SxcWebApi implements Public.SxcWebApi {
         });
     }
 
+    // Note: fetch was documented in v12.10 (December 2021) but will probably never be used externally
+    // So we rename it to fetchRaw and later will make fetch just be the json implementation.
+    // Renamed and added this warning in 13.04 (2022-03-14), will drop in v14 and probably make it do fetchJson by default
+    // Important: Do not document, as it shouldn't be used
+    fetch(url: string, data?: string | Record<string, any>, method?: string): Promise<Response> {
+        console.warn(`You are calling 'fetch' on the sxc.webApi. This is deprecated will stop in 2sxc v14, please use fetchRaw(...) or fetchJson(...) instead.`)
+        return this.fetchRaw(url, data, method);
+    }
+    
+
     /**
      * Will retrieve data from the backend using a standard fetch and give you an object. 
      * @param url a full url or short-hand like `controller/method?params` `app/auto/api/controller/method?params`. Note that params would also be specified on the url. 
@@ -155,7 +165,7 @@ export class SxcWebApi implements Public.SxcWebApi {
      * @returns a Promise containing any object.
      */
     fetchJson<T = any>(url: string, data?: string | Record<string, any>, method?: string): Promise<T> {
-        return this.fetch(url, data, method).then(response => response.json());
+        return this.fetchRaw(url, data, method).then(response => response.json());
     }
 
     /**

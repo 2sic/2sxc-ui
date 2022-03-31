@@ -91,7 +91,7 @@ export class ModifierContentBlockInstance extends HasLog {
         };
 
         const promise = this.sxcInstance.webApi
-            .fetch(this.sxcInstance.webApi.url(webApiMove, params), undefined, 'POST')
+            .fetchRaw(this.sxcInstance.webApi.url(webApiMove, params), undefined, 'POST')
             .then(() => {
                 console.log('done moving!');
                 window.location.reload();
@@ -116,7 +116,7 @@ export class ModifierContentBlockInstance extends HasLog {
         };
 
         const promise = this.sxcInstance.webApi
-            .fetch(this.sxcInstance.webApi.url(webApiRemove, params), undefined, 'DELETE')
+            .fetchRaw(this.sxcInstance.webApi.url(webApiRemove, params), undefined, 'DELETE')
             .then(() => {
                 console.log('done deleting!');
                 window.location.reload();
