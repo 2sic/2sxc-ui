@@ -1,9 +1,9 @@
 
-import { tap, switchMap, map, filter, debounceTime } from 'rxjs/operators';
+import { tap, switchMap, map, filter, debounceTime, catchError } from 'rxjs/operators';
 import { Component, OnInit, Input } from '@angular/core';
 import { InstallerService } from 'app/installer/installer.service';
 import { DomSanitizer } from '@angular/platform-browser';
-import { fromEvent, Subscription } from 'rxjs';
+import { fromEvent, of, Subscription } from 'rxjs';
 import { GettingStartedService } from './getting-started.service';
 import { Config } from '../config';
 
@@ -94,12 +94,20 @@ This takes about 10 seconds per package. Don't reload the page while it's instal
         this.showProgress = false;
         alert('Installation complete 👍');
         window.top.location.reload();
-      }))
+      }),
 
-      .subscribe(null, () => {
+      catchError(error => {
+        console.error('Error: ', error);
         this.showProgress = false;
-        alert('An error occurred.');
         alreadyProcessing = false;
-      }));
+        var errorMsg = `An error occurred: ${error.error?.Message ?? error.error?.message ?? ''}
+
+${error.message}
+
+Please try again later or check how to manually install content-templates: https://azing.org/2sxc/r/0O4OymoA`;
+        alert(errorMsg);
+        return of(error);
+      }),
+    ).subscribe());
   }
 }
