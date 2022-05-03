@@ -95,34 +95,36 @@ export class EditManager implements SxcInstanceManage {
         this.editContext.contentBlock.Guid = newGuid;
     }
 
-    /**
-     * init this object
-     */
-    init(): void {
-        const tag = SxcEdit.getTag(this.sxc);
-        // enhance UI in case there are known errors / issues
-        const isErrorState = this.editContext && this.editContext.error && this.editContext.error.type;
-        if (isErrorState)
-            handleErrors(this.editContext.error.type, tag);
-    }
+    // /**
+    //  * init this object
+    //  */
+    // init(): void {
+    //     // const tag = SxcEdit.getTag(this.sxc);
+    //     // enhance UI in case there are known errors / issues
+    //     // const isErrorState = this.editContext && this.editContext.error && this.editContext.error.type;
+    //     // 2022-05-02 2dm - not sure if this is actually needed any more... 
+    //     // it only handled a single error
+    //     // if (isErrorState)
+    //     //     handleErrors(this.editContext.error.type, tag);
+    // }
 
 
 }
 
 
-/**
- * private: show error when the app-data hasn't been installed yet for this imported-module
- */
-function handleErrors(errType: string, cbTag: HTMLElement): void {
-    const errWrapper = NoJQ.domFromString('<div class="dnnFormMessage dnnFormWarning sc-element"></div>')[0];
-    let msg = '';
-    const toolbar = NoJQ.domFromString('<ul class="sc-menu"></ul>')[0];
-    if (errType === 'DataIsMissing') {
-        msg =
-            'Error: System.Exception: Data is missing - usually when a site is copied but the content / apps have not been imported yet - check 2sxc.org/help?tag=export-import';
-        toolbar.setAttribute('data-toolbar', '[{\"action\": \"zone\"}, {\"action\": \"more\"}]');
-    }
-    errWrapper.append(msg);
-    errWrapper.append(toolbar);
-    cbTag.append(errWrapper);
-}
+// /**
+//  * private: show error when the app-data hasn't been installed yet for this imported-module
+//  */
+// function handleErrors(errType: string, cbTag: HTMLElement): void {
+//     const errWrapper = NoJQ.domFromString('<div class="dnnFormMessage dnnFormWarning sc-element"></div>')[0];
+//     let msg = '';
+//     const toolbar = NoJQ.domFromString('<ul class="sc-menu"></ul>')[0];
+//     if (errType === 'DataIsMissing') {
+//         msg =
+//             'Error: System.Exception: Data is missing - usually when a site is copied but the content / apps have not been imported yet - check 2sxc.org/help?tag=export-import';
+//         toolbar.setAttribute('data-toolbar', '[{\"action\": \"zone\"}, {\"action\": \"more\"}]');
+//     }
+//     errWrapper.append(msg);
+//     errWrapper.append(toolbar);
+//     cbTag.append(errWrapper);
+// }
