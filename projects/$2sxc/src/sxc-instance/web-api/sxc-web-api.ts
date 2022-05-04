@@ -150,10 +150,11 @@ export class SxcWebApi implements Public.SxcWebApi {
     // Note: fetch was documented in v12.10 (December 2021) but will probably never be used externally
     // So we rename it to fetchRaw and later will make fetch just be the json implementation.
     // Renamed and added this warning in 13.04 (2022-03-14), will drop in v14 and probably make it do fetchJson by default
+    // Changed functionality in 13.10 (2022-05-04) to make it do fetchJson by default
     // Important: Do not document, as it shouldn't be used
     fetch(url: string, data?: string | Record<string, any>, method?: string): Promise<Response> {
-        console.warn(`You are calling 'fetch' on the sxc.webApi. This is deprecated will stop in 2sxc v14, please use fetchRaw(...) or fetchJson(...) instead.`)
-        return this.fetchRaw(url, data, method);
+        // console.warn(`You are calling 'fetch' on the sxc.webApi. This is deprecated will stop in 2sxc v14, please use fetchRaw(...) or fetchJson(...) instead.`)
+        return this.fetchJson(url, data, method);
     }
     
 

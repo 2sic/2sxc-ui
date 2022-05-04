@@ -38,7 +38,9 @@ export class Manage {
                 return new Cms().run({ ...runParams, context: sxc });
             };
 
-            editManager.init();
+            // Init to handle special errors
+            // 2022-05-02 2dm disabled, don't think we need it any more
+            // editManager.init();
             return editManager;
         } catch (e) {
           console.error('error in 2sxc - will log but not throw', e);
