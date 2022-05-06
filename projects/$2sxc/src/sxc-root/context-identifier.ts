@@ -10,6 +10,8 @@ export class ContextIdentifier {
   pageId?: number;
   /** ModuleId of this Context (optional) */
   moduleId?: number;
+  /** Exclude pageId and moduleId headers in web requests */
+  _ignoreHeaders?: boolean;
 }
 
 export function isContextIdentifier(original: unknown): original is ContextIdentifier {

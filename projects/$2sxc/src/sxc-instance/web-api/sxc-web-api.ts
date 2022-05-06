@@ -127,7 +127,14 @@ export class SxcWebApi implements Public.SxcWebApi {
      * maybe: webApi.fetchRaw({url: ..., params: { ...}, body: { ...}, method: 'GET' })
      */
     fetchRaw(url: string, data?: string | Record<string, any>, method?: string): Promise<Response> {
-        url = this.url(url);
+        const ctxParams = {} as { appId?: number; zoneId?: number; };
+        const ctx = this.sxc.ctx;
+        const urlLower = url.toLocaleLowerCase();
+        if (urlLower.includes('app/auto/')) {
+          if (ctx?.appId && !urlLower.includes('appid=')) ctxParams.appId = ctx.appId;
+          if (ctx?.zoneId && !urlLower.includes('zoneId=')) ctxParams.zoneId = ctx.zoneId;
+        }
+        url = this.url(url, ctxParams);
         method = method || (data ? 'POST' : 'GET');
         const headers = this.headers(method);
 
@@ -176,7 +183,7 @@ export class SxcWebApi implements Public.SxcWebApi {
      * @returns a Record / Dictionary of headers
      */
     headers(method?: string): Record<string, string> {
-        const headers = this.sxc.root.http.headers(this.sxc.id, this.sxc.cbid);
+        const headers = this.sxc.root.http.headers(this.sxc.id, this.sxc.cbid, this.sxc.ctx);
         if (!method) {
             return headers;
         }

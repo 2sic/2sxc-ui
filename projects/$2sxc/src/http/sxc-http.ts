@@ -1,6 +1,6 @@
 import * as Public from '../../../sxc-typings';
 import { ApiExtensionPlaceholder, PlatformDnn, PlatformOqtane } from '../constants';
-import { AppApiMarker, HeaderNames, ToSxcName } from '..';
+import { AppApiMarker, ContextIdentifier, HeaderNames, ToSxcName } from '..';
 import { Environment, HasLog } from '..';
 
 export class SxcHttp extends HasLog implements Omit<Public.Http, 'log'> {
@@ -12,14 +12,16 @@ export class SxcHttp extends HasLog implements Omit<Public.Http, 'log'> {
      * All the headers which are needed in an ajax call for this to work reliably.
      * Use this if you need to get a list of headers in another system
      */
-    headers(id?: number, cbid?: number): Public.Dictionary<string> {
+    headers(id?: number, cbid?: number, ctx?: ContextIdentifier): Public.Dictionary<string> {
         const cl = this.log.call('headers', `${id}, ${cbid}`);
         const fHeaders : Public.Dictionary<string> = {}; // as any;
         const pageId = this.env.page().toString();
-        if(id) fHeaders[HeaderNames.ModuleId] = id.toString();
-        if(cbid) fHeaders[HeaderNames.ContentBlockId] = cbid.toString();
-        fHeaders[HeaderNames.TabId] = pageId;
-        fHeaders[HeaderNames.PageId] = pageId;
+        if (!ctx?._ignoreHeaders) {
+          if(id) fHeaders[HeaderNames.ModuleId] = id.toString();
+          if(cbid) fHeaders[HeaderNames.ContentBlockId] = cbid.toString();
+          fHeaders[HeaderNames.TabId] = pageId;
+          fHeaders[HeaderNames.PageId] = pageId;
+        }
         fHeaders[this.env.rvtHeader()] = this.env.rvt();
         return cl.return(fHeaders, `headers(id:${id}, cbid:${cbid})`);
     }
