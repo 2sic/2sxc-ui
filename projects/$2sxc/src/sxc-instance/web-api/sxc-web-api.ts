@@ -130,9 +130,9 @@ export class SxcWebApi implements Public.SxcWebApi {
         const ctxParams = {} as { appId?: number; zoneId?: number; };
         const ctx = this.sxc.ctx;
         const urlLower = url.toLocaleLowerCase();
-        if (urlLower.includes('app/auto/')) {
-          if (ctx?.appId && !urlLower.includes('appid=')) ctxParams.appId = ctx.appId;
-          if (ctx?.zoneId && !urlLower.includes('zoneId=')) ctxParams.zoneId = ctx.zoneId;
+        if (ctx?._ignoreHeaders && urlLower.includes('app/auto/')) {
+            if (ctx?.appId && !urlLower.includes('appid=')) ctxParams.appId = ctx.appId;
+            if (ctx?.zoneId && !urlLower.includes('zoneId=')) ctxParams.zoneId = ctx.zoneId;
         }
         url = this.url(url, ctxParams);
         method = method || (data ? 'POST' : 'GET');
