@@ -1,9 +1,10 @@
-﻿import { Commands } from '..';
+﻿import { Command, Commands } from '..';
 import { ItemIdentifierSimple } from '../../interfaces/item-identifiers';
 import { CmdEditDialog } from './edit';
 import { CmdNewMode } from './new';
 
 export const CmdMetadata = 'metadata';
+export const CmdImage = 'image';
 const MetadataDefaultKeyType = 'string';
 const MetadataDefaultTargetType = 10; // cms-item
 /**
@@ -11,7 +12,7 @@ const MetadataDefaultTargetType = 10; // cms-item
  *
  * import this module to commands.ts
  */
-Commands.add(CmdMetadata, 'Metadata', 'tag', false, false, {
+export const MetadataCommand = Command.build(CmdMetadata, 'Metadata', 'tag', false, false, {
 
     addParamsToLink: (_) => ({ mode: CmdNewMode }),
 
@@ -32,3 +33,15 @@ Commands.add(CmdMetadata, 'Metadata', 'tag', false, false, {
         linkGenerator.items[0] = {...linkGenerator.items[0], ...itm };
     },
 });
+
+export const ImageMetadataCommand = Command.build(CmdImage, 'Image', 'focus', false, false, {
+    addParamsToLink: MetadataCommand.buttonDefaults.addParamsToLink,
+    dialog: MetadataCommand.buttonDefaults.dialog,
+    classes: 'single-field',
+    dynamicClasses: MetadataCommand.buttonDefaults.dynamicClasses,
+    showCondition: MetadataCommand.buttonDefaults.showCondition,
+    configureLinkGenerator: MetadataCommand.buttonDefaults.configureLinkGenerator,
+});
+
+Commands.addCommand(MetadataCommand);
+Commands.addCommand(ImageMetadataCommand);

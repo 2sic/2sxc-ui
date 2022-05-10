@@ -124,6 +124,11 @@ body.sc-tb-show-all [sxc-toolbar-hover] .sc-menu {
     background-color: #012C4Fad; /* #0088f4ad */;
 }
 
+.sc-menu a.single-field div {
+    background-color: transparent;
+    box-shadow: none;
+}
+
 .sc-menu a div:hover {
   box-shadow: 0 10px 28px rgba(0, 0, 0, 0.25), 0 6px 10px rgba(0, 0, 0, 0.22);
 }
