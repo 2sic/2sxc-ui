@@ -150,8 +150,7 @@ export class CommandLinkGenerator extends HasLog {
                 Index: index,
                 Part: part.toLocaleLowerCase(),
                 Add: isAdd,
-            },
-            Title: translate(this.findTranslationKey(part)),
+            }
         });
         cl.done();
     }

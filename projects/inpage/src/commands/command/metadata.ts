@@ -25,7 +25,6 @@ Commands.add(CmdMetadata, 'Metadata', 'tag', false, false, {
 
     configureLinkGenerator(_, linkGenerator) {
         const itm: Partial<ItemIdentifierSimple> = {
-            Title: 'EditFormTitle.Metadata',
             Metadata: {
                 ...{ keyType: MetadataDefaultKeyType, targetType: MetadataDefaultTargetType },
                 ...linkGenerator.context.button.command.params.metadata },
