@@ -158,12 +158,12 @@ export class SxcWebApi implements Public.SxcWebApi {
     // So we rename it to fetchRaw and later will make fetch just be the json implementation.
     // Renamed and added this warning in 13.04 (2022-03-14), will drop in v14 and probably make it do fetchJson by default
     // Changed functionality in 13.10 (2022-05-04) to make it do fetchJson by default
-    // Important: Do not document, as it shouldn't be used
+    // Changed functionality back in 13.11 (2022-05-10) because it seems that Mobius was published using fetch
+    // Important: Do not document in the docs, as it shouldn't be used
     fetch(url: string, data?: string | Record<string, any>, method?: string): Promise<Response> {
-        // console.warn(`You are calling 'fetch' on the sxc.webApi. This is deprecated will stop in 2sxc v14, please use fetchRaw(...) or fetchJson(...) instead.`)
+        console.warn(`You are calling 'fetch' on the sxc.webApi. This is deprecated will stop in 2sxc v15, please use fetchRaw(...) or fetchJson(...) instead.`)
         return this.fetchJson(url, data, method);
     }
-    
 
     /**
      * Will retrieve data from the backend using a standard fetch and give you an object. 
