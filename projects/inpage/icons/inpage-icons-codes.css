@@ -1,3 +1,4 @@
+
 .icon-sxc-glasses:before { content: '\e800'; } /* '' */
 .icon-sxc-list:before { content: '\e801'; } /* '' */
 .icon-sxc-minus:before { content: '\e802'; } /* '' */
@@ -29,6 +30,7 @@
 .icon-sxc-eye:before { content: '\e820'; } /* '' */
 .icon-sxc-eye-off:before { content: '\e821'; } /* '' */
 .icon-sxc-clock:before { content: '\e824'; } /* '' */
+.icon-sxc-focus:before { content: '\e846'; } /* '' */
 .icon-sxc-speed:before { content: '\ec2c'; } /* '' */
 .icon-sxc-add-existing:before { content: '\ec2d'; } /* '' */
 .icon-sxc-filter:before { content: '\ec2e'; } /* '' */
