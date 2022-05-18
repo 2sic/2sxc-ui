@@ -95,7 +95,6 @@ export class RenderButton extends RenderPart {
         else
             modifyContext = { ...modifyContext, complete: true };
         const targetContext = modifyContext ? JSON.stringify(modifyContext) : `${ctx.instance.id}, ${ctx.contentBlockReference.id}`;
-        console.log('qt2dm - targetCtx:', targetContext);
         return `$2sxc(${targetContext}).manage.run(${JSON.stringify(params)}, event);`;
     }
 
