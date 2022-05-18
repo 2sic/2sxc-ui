@@ -27,7 +27,7 @@ function FindSxcInstance(id: number | ContextIdentifier | HTMLElement | SxcInsta
     // Used in cases where the $2sxc(something) is just used to ensure it really is this
     if (SxcInstance.is(id)) return id;
 
-    // check if it's a context identifier (new in 11.11)
+    // check if it's a context identifier
     let ctxId: ContextIdentifier = null;
     if (isContextIdentifier(id)) {
         id = ensureCompleteOrThrow(id);

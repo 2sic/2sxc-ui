@@ -14,9 +14,12 @@ export class ContextIdentifier {
   _ignoreHeaders?: boolean;
 
   /** Marks the context as complete, so it won't merge in anything else 
-   * WIP ATM for the updated edit-ui
+   * WIP #CustomContext ATM for the updated edit-ui
    */
   complete?: boolean;
+
+  /** WIP #CustomContext not really used yet */
+  blockId?: number;
 }
 
 export function isContextIdentifier(original: unknown): original is ContextIdentifier {
