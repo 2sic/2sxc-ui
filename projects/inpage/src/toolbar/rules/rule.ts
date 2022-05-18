@@ -3,6 +3,7 @@ import { HasLog, Log } from '../../logging';
 import { Dictionary, DictionaryValue, TypeValue } from '../../plumbing';
 import { TemplateConstants } from '../templates';
 import { BuildSteps } from './build-steps';
+import { ProcessedParams } from './rule-params-helper';
 
 /**
  * Contains a rule how to add/modify a toolbar.
@@ -53,8 +54,17 @@ export class BuildRule extends HasLog {
     } = {};
 
     /** ATM unused url-part after the hash - will probably be needed in future */
-    private hash: Dictionary<string> = {};
+    // private hash: Dictionary<string> = {};
 
+    //#endregion
+
+    //#region New #CustomContext
+
+    context: {
+      appId?: number,
+      zoneId?: number,
+      complete?: boolean,
+    } = {};
     //#endregion
 
     constructor(public ruleString: string, parentLog: Log) {
@@ -82,8 +92,13 @@ export class BuildRule extends HasLog {
         if (!parts.key) return cl.done("no key, won't load");
 
         this.loadHeader(parts.key);
-        if (parts.params)  this.loadParamsAndPrefill(parts.params);
-        if (parts.button) this.loadHash(parts.button);
+        if (parts.params) {
+            const processed = this.loadParamsAndPrefill(parts.params);
+            this.params = processed.params;
+            this.context = processed.context;
+        }
+        // ATM seems unused...? hash is already processed before in loadHeader
+        // if (parts.ui) this.hash = this.loadDictionary(parts.ui);
         return cl.done();
     }
 
@@ -149,20 +164,20 @@ export class BuildRule extends HasLog {
         return cl.return(this.ui, 'button rules');
     }
 
-    private loadParamsAndPrefill(rule: string) {
+    private loadParamsAndPrefill(rule: string): ProcessedParams {
         const cl = this.log.call('loadParams', rule);
-        this.params = this.splitParamsDic(rule);
-        cl.data('params', this.params);
-        this.params = RuleParamsHelper.processParams(this.params, this.log);
-        return cl.done();
+        const parms = this.splitParamsDic(rule);
+        cl.data('params', parms);
+        const split = RuleParamsHelper.processParams(parms, this.log);
+        return cl.return(split);
     }
 
-    private loadHash(rule: string) {
-        const cl = this.log.call('loadButton', rule);
-        this.hash = this.splitParamsDic(rule);
-        cl.data('button', this.hash);
-        return cl.done();
-    }
+    // private loadDictionary(original: string): Dictionary<string> {
+    //     const cl = this.log.call('loadHash', original);
+    //     const parts = this.splitParamsDic(original);
+    //     cl.data('button', parts);
+    //     return cl.return(parts);
+    // }
 
     //#region string manipulation helpers
 
@@ -210,14 +225,31 @@ export class BuildRule extends HasLog {
 
 
 function splitUrlSections(str: string): { key: string, params: string, button: string } | undefined {
-    // dev link: https://regex101.com/r/vK4rV7/519
-    // inpsired by https://stackoverflow.com/questions/27745/getting-parts-of-a-url-regex
+  // dev link: https://regex101.com/r/vK4rV7/519
+  // inpsired by https://stackoverflow.com/questions/27745/getting-parts-of-a-url-regex
 
-    const regex = /^([^\/?#]*)?([^?#]*)(\?([^#]*))?(#(.*))?/i;
-    // const str = `+edit&something=other&els=ok?aoeuaoeu=5&aoeuaou=aoeu#but=thi&aouoaeu`;
-    const m = regex.exec(str);
+  const regex = /^([^\/?#]*)?([^?#]*)(\?([^#]*))?(#(.*))?/i;
+  // const str = `+edit&something=other&els=ok?aoeuaoeu=5&aoeuaou=aoeu#but=thi&aouoaeu`;
+  const m = regex.exec(str);
 
-    if (m && m !== null)
-        return { key: m[1], params: m[4], button: m[6]};
-    return undefined;
+  if (m && m !== null)
+    return { key: m[1], params: m[4], button: m[6] };
+  return undefined;
 }
+
+// #CustomContext
+// /**
+//  * Will take a UI definition and extract the context if available
+//  * @param ui original value before split
+//  * @returns 
+//  */
+// function splitUiParts(ui: string): [string, string] {
+//   if (!ui) return [null, null];
+
+//   // If it starts with ## then the original value only had the context
+//   // In this case the first # of the three ### was already removed
+//   if (ui.startsWith('##')) return [null, ui.substring(2)];
+
+//   const parts = ui.split('###');
+//   return [parts[0], parts.length > 1 ? parts[1] : null];
+// }
