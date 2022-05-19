@@ -1,5 +1,4 @@
-import { Entry, LogCall } from '.';
-import { Log as ILog } from '../../sxc-typings/index';
+import { LogEntry, LogCall } from '.';
 
 const keepData = location.search.indexOf("debug=true") !== -1;
 
@@ -8,14 +7,22 @@ const maxNameLen = 6;
 const liveDump = false;
 const maxEntriesReached = 'Maximum amount of entries added to log, will stop adding more';
 
-export class Log implements ILog {
+/**
+ * A log object which will collect log entries for another ojbect
+ * @export
+ * @interface Log
+ */
+export class Log {
 
     /**
-     * all log-entries on this logger
+     * List of all entries added to this log
      */
-    entries = new Array<Entry>();
+    entries = new Array<LogEntry>();
+    /** @internal */
     private depth = 0;
+    /** @internal */
     private callDepths: string[] = [];
+    /** @internal */
     startTime: number;
 
     /**
@@ -28,6 +35,7 @@ export class Log implements ILog {
      * @param string name this logger should use
      * @param Log optional parrent logger to attach to
      * @param string optional initial message to log
+     * @internal
      */
     constructor(name: string, parent?: Log, initialMessage?: string) {
         this.rename(name);
@@ -37,13 +45,18 @@ export class Log implements ILog {
     }
 
     /* if we should live-dump, can be selectively activated */
+    /** @internal */
     liveDump: boolean = liveDump;
+    /** @internal */
     _parentHasLiveDump: boolean = false;
+    /** @internal */
     keepData: boolean = keepData; //Debug.urlState; // C.Debug.urlState;
+    /** @internal */
     _parentHasKeepData: boolean = false;
 
     /**
      * Full identifier of this log-object, with full hierarchy
+     * @internal
      */
     fullIdentifier = (): string =>
         `${(this.parent ? this.parent.fullIdentifier() : '')}${this.identifier()}`
@@ -53,6 +66,7 @@ export class Log implements ILog {
      * usually happens in constructor, but in rare cases
      * it's called manually
      * @param name
+     * @internal
      */
     rename(name: string): void {
         try {
@@ -70,6 +84,7 @@ export class Log implements ILog {
      * link this log to a parent
      * usually happens in constructor, but in rare cases
      * this must be called manually
+     * @internal
      */
     linkLog = (parent: Log): void => {
         this.parent = parent || this.parent; // if new parent isn't defined, don't replace
@@ -80,8 +95,9 @@ export class Log implements ILog {
     }
 
     /**
-     * add a message to the log-list
-     * @param message
+     * Add a simple message to the log
+     * @param {string} message
+     * @memberof Log
      *
      * preferred usage is with string parameter:
      * log.add(`description ${ parameter }`);
@@ -104,21 +120,25 @@ export class Log implements ILog {
         return entry.message;
     }
 
+    /** @internal */
     addData(message: (() => string) | string, data: unknown): void {
         if (this.logData()) this.add(message, data);
     }
 
+    /** @internal */
     logData(): boolean {
         return this.keepData || this._parentHasKeepData;
     }
 
-    _prepareEntry(message: (() => string) | string, data?: unknown): Entry {
+    /** @internal */
+    _prepareEntry(message: (() => string) | string, data?: unknown): LogEntry {
         const msg = this._prepareMessage(message);
         const time = new Date().getTime() - this.startTime;
-        const entry = new Entry(this, msg, this.depth, time, data);
+        const entry = new LogEntry(this, msg, this.depth, time, data);
         return entry;
     }
 
+    /** @internal */
     private _prepareMessage(message: (() => string) | string): string {
         if (message instanceof Function) {
             try {
@@ -130,16 +150,18 @@ export class Log implements ILog {
         return message.toString();
     }
 
-
+    /** @internal */
     call(name: string, callParams?: string, message?: string, data?: {[key:string]: unknown }): LogCall {
         return new LogCall(this, name, callParams, message, data);
     }
 
+    /** @internal */
     _callDepthAdd(name: string): void {
         this.depth++;
         this.callDepths.push(name);
     }
 
+    /** @internal */
     _callDepthRemove(name: string): void {
         this.depth--;
         const last = this.callDepths.pop();
@@ -153,12 +175,14 @@ export class Log implements ILog {
      * @param separator
      * @param start
      * @param end
+     * @internal
      */
-    dump(one: Entry = null, separator = ' - '): void {
+    dump(one: LogEntry = null, separator = ' - '): void {
         if (one) this.dumpOne(0, one, separator);
         else this.dumpList();
     }
 
+    /** @internal */
     dumpList(start: number = 0, length?: number) {
         let index = start;
         this.entries
@@ -166,7 +190,8 @@ export class Log implements ILog {
             .forEach((e) => this.dumpOne(index++, e));
     }
 
-    private dumpOne(index: number, e: Entry, separator = ' - '): void {
+    /** @internal */
+    private dumpOne(index: number, e: LogEntry, separator = ' - '): void {
         const result = (e.result) ? ' =' + e.result : '';
         const line = ('0000' + index).slice(-4) + ' ' + e.source() + separator + '..'.repeat(e.depth) + e.message + result;
         if (e.data) console.log(line, e.data);
@@ -178,8 +203,9 @@ export class Log implements ILog {
      * add an entry-object to this logger
      * this is often called by sub-loggers to add to parent
      * @param entry
+     * @internal
      */
-    _addEntry(entry: Entry): void {
+    _addEntry(entry: LogEntry): void {
         if (this.liveDump) this.dump(entry);
         this.entries.push(entry);
         if (this.parent) this.parent._addEntry(entry);
@@ -188,6 +214,7 @@ export class Log implements ILog {
     /**
      * helper to generate a random 2-char ID
      * @param stringLength
+     * @internal
      */
     private randomString(stringLength: number): string {
         const chars = '0123456789abcdefghiklmnopqrstuvwxyz';
@@ -201,29 +228,34 @@ export class Log implements ILog {
 
     /**
      * parent logger - important if loggers are chained
+     * @internal
      */
     private parent: Log;
 
     /**
      * scope of this logger - to easily see which ones
      * are about the same topic
+     * @internal
      */
     private scope = 'tdo';
 
     /**
-     * name of this logger
+     * The name of this log, for scenarios where multiple loggers are mixed
      */
     public name = 'unknwn';
 
 
     /**
      * Unique 2-character ID of this specific log object
+     * @internal
      */
     private id = (): string => this.idCache || (this.idCache = this.randomString(2));
+    /** @internal */
     private idCache: string;
 
     /**
      * Unique identifier of this log object, with name and ID
+     * @internal
      */
     private identifier = (): string => `${this.scope}${this.name}(${this.id()})`;
 

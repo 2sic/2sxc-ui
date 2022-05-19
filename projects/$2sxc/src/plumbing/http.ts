@@ -1,4 +1,4 @@
-import { Dictionary } from './Dictionary_T';
+import { Dictionary } from '../../../core';
 
 export interface Http {
 
@@ -12,7 +12,7 @@ export interface Http {
      * Get the API-Root path for a specific extension/endpoint
      * @param {string} endpointName
      * @returns {string}
-     * @memberof SxcHttp
+     * @memberof Http
      */
     apiRoot(endpointName: string): string;
 
@@ -22,7 +22,7 @@ export interface Http {
      * @param {string} url
      * @param {string} [endpointName]
      * @returns
-     * @memberof SxcHttp
+     * @memberof Http
      */
     apiUrl(url: string, endpointName?: string): string;
 }

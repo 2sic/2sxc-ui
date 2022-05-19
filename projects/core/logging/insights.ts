@@ -1,4 +1,7 @@
 import { HasLog, Log } from '.';
+import { Window } from '../../$2sxc/src';
+
+declare const window: Window;
 
 type LogList = Array<{ key: string, log: Log}>;
 
@@ -86,4 +89,5 @@ const singleton: InsightsSingleton =
     window.$2sxc && window.$2sxc._insights   // try to load existing
     || new InsightsSingleton();             // otherwise create new
 
+/** @internal */
 export const Insights = singleton;

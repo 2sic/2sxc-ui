@@ -3,11 +3,12 @@ import { UrlParamManager } from '../tools/url-param-manager';
 import { Stats } from '../Stats';
 import { SxcInstanceWithInternals } from '../sxc-instance/sxc-instance-with-internals';
 import { SxcRootInternals } from './sxc-root-internals';
-import { SxcRoot, getRootPartsV2 } from './sxc-root';
-import { Window } from "../_/window";
-import { Debug, Insights, SxcVersion } from '..';
+import { SxcRootExt, getRootPartsV2 } from './sxc-root';
+import { Window } from '../_/window';
+import { Debug } from '..';
+import { Insights, SxcVersion } from '../../../core';
 import { ContextIdentifier, isContextIdentifier, ensureCompleteOrThrow } from './context-identifier';
-import { SxcInstance } from '../sxc-instance/sxc-instance';
+import { SxcInstanceInternal } from '../sxc-instance/sxc-instance';
 
 declare const window: Window;
 
@@ -18,14 +19,14 @@ declare const window: Window;
  * @returns {}
  */
 function FindSxcInstance(id: number | ContextIdentifier | HTMLElement | SxcInstanceWithInternals, cbid?: number): SxcInstanceWithInternals {
-    const $2sxc = window.$2sxc as SxcRoot & SxcRootInternals;
+    const $2sxc = window.$2sxc as SxcRootExt & SxcRootInternals;
     $2sxc.log.add('FindSxcInstance(' + id + ',' + cbid);
     if (!$2sxc._controllers)
         throw new Error('$2sxc not initialized yet');
 
     // Test if it already is such an instance, in which case we just preserve it and return it
     // Used in cases where the $2sxc(something) is just used to ensure it really is this
-    if (SxcInstance.is(id)) return id;
+    if (SxcInstanceInternal.is(id)) return id;
 
     // check if it's a context identifier
     let ctxId: ContextIdentifier = null;
@@ -60,8 +61,9 @@ function FindSxcInstance(id: number | ContextIdentifier | HTMLElement | SxcInsta
 
 /**
  * Build a SXC Controller for the page. Should only ever be executed once
+ * @internal
  */
-export function buildSxcRoot(): SxcRoot & SxcRootInternals {
+export function buildSxcRoot(): SxcRootExt & SxcRootInternals {
     const rootApiV2 = getRootPartsV2();
 
     const urlManager = new UrlParamManager();
@@ -73,7 +75,7 @@ export function buildSxcRoot(): SxcRoot & SxcRootInternals {
     const stats = new Stats();
 
 
-    const addOn: Partial<SxcRoot & SxcRootInternals> = {
+    const addOn: Partial<SxcRootExt & SxcRootInternals> = {
         _controllers: {} as any,
         beta: {},
         _data: {},
@@ -101,7 +103,7 @@ export function buildSxcRoot(): SxcRoot & SxcRootInternals {
         jq: function () { return window.$; },
     };
 
-    const merged = Object.assign(FindSxcInstance, addOn, rootApiV2) as SxcRoot & SxcRootInternals;
+    const merged = Object.assign(FindSxcInstance, addOn, rootApiV2) as SxcRootExt & SxcRootInternals;
     merged.log.add('sxc controller built');
 
     console.log(`$2sxc ${SxcVersion} with insights-logging - see https://r.2sxc.org/insights`)

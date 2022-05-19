@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../../sxc-typings/src",
+    "declaration": true,
+    "removeComments": false,
+    "stripInternal": true,
+    "emitDeclarationOnly": true
+  }
+}

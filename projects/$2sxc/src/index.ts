@@ -7,13 +7,12 @@
     As webpack needs the order to be correct, meaning some depedencies need to be early
 */
 
-// core library stuff, including Logging
-export * from '../../core';
-
 // early things without dependencies, which may be needed by others
 export * from './_/window';
 export * from './tools/total-popup';
 export * from './tools/url-param-manager';
+export * from './constants';
+export * from './Stats';
 
 export * from './environment';
 
@@ -27,3 +26,4 @@ export * from './sxc-root/sxc-root-builder';
 export * from './sxc-root/sxc-root-internals';
 
 export * from './sxc-instance/sxc-instance-manage';
+export * from './plumbing';

@@ -5,7 +5,8 @@
   "scripts": {
     "release": "webpack --mode=production",
     "2sxc-js-prod": "webpack --watch --mode=production",
-    "2sxc-js-dev": "webpack --watch --mode=development"
+    "2sxc-js-dev": "webpack --watch --mode=development",
+    "typings": "cd src && typings.cmd \"..\\..\\sxc-typings\\dist\""
   },
   "repository": {
     "type": "git",
@@ -32,7 +33,6 @@
     "laxbreak": true
   },
   "dependencies": {
-    "@2sic.com/2sxc-typings": "git+https://github.com/2sic/2sxc-typings.git#test",
     "natives": "^1.1.6",
     "whatwg-fetch": "^3.0.0"
   }

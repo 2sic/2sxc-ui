@@ -4,6 +4,7 @@ import { SxcInstancePart } from './sxc-instance-part';
  * This is in charge of sxc.cms on the instance level.
  * ATM it just has the run command.
  * In future, it may also have dedicated command like `layout` etc.
+ * @internal
  */
 export class SxcInstanceCms extends SxcInstancePart {
   /**

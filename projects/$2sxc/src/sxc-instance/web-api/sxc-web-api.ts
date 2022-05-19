@@ -1,77 +1,38 @@
-﻿import * as Public from '../../../../sxc-typings/index';
-import { SxcInstance } from '../sxc-instance';
+﻿import { SxcWebApi } from '../..';
+import { SxcInstanceInternal } from '../sxc-instance';
 import { AjaxPromise } from './ajax-promise';
 import { Environment } from '../../environment';
 import { AjaxSettings } from './ajax-settings';
-import { NoJQ } from '../..';
+import { NoJQ } from '../../../../core';
 
 /**
  * helper API to run ajax / REST calls to the server
  * it will ensure that the headers etc. are set correctly
  * and that urls are rewritten
+ * @internal
  */
-export class SxcWebApi implements Public.SxcWebApi {
+export class SxcWebApiInternal implements SxcWebApi {
     public readonly env: Environment;
-    constructor(private readonly sxc: SxcInstance) {
+    constructor(private readonly sxc: SxcInstanceInternal) {
         this.env = sxc.root.env;
     }
-    /**
-     * returns an http-get promise
-     * @param settingsOrUrl the url to get
-     * @param params jQuery style ajax parameters
-     * @param data jQuery style data for post/put requests
-     * @param preventAutoFail
-     * @returns {Promise} jQuery ajax promise object
-     */
+
     get(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): JQueryPromise<any> {
         return this.request(settingsOrUrl, params, data, preventAutoFail, 'GET');
     }
 
-    /**
-     * returns an http-get promise
-     * @param settingsOrUrl the url to get
-     * @param params jQuery style ajax parameters
-     * @param data jQuery style data for post/put requests
-     * @param preventAutoFail
-     * @returns {Promise} jQuery ajax promise object
-     */
     post(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): JQueryPromise<any> {
         return this.request(settingsOrUrl, params, data, preventAutoFail, 'POST');
     }
 
-    /**
-     * returns an http-get promise
-     * @param settingsOrUrl the url to get
-     * @param params jQuery style ajax parameters
-     * @param data jQuery style data for post/put requests
-     * @param preventAutoFail
-     * @returns {Promise} jQuery ajax promise object
-     */
     delete(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): JQueryPromise<any> {
         return this.request(settingsOrUrl, params, data, preventAutoFail, 'DELETE');
     }
 
-    /**
-     * returns an http-get promise
-     * @param settingsOrUrl the url to get
-     * @param params jQuery style ajax parameters
-     * @param data jQuery style data for post/put requests
-     * @param preventAutoFail
-     * @returns {Promise} jQuery ajax promise object
-     */
     put(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): JQueryPromise<any> {
         return this.request(settingsOrUrl, params, data, preventAutoFail, 'PUT');
     }
 
-    /**
-     * Generic http request
-     * @param settingsOrUrl the url to get
-     * @param params jQuery style ajax parameters
-     * @param data jQuery style data for post/put requests
-     * @param preventAutoFail
-     * @param method the http verb name
-     * @returns {Promise} jQuery ajax promise object
-     */
     request(settings: string | AjaxSettings, params: any, data: any, preventAutoFail: boolean, method: string): JQueryPromise<any> {
 
         // url parameter: auto convert a single value (instead of object of values) to an id=... parameter
@@ -113,19 +74,6 @@ export class SxcWebApi implements Public.SxcWebApi {
         return promise;
     }
 
-    /**
-     * Will retrieve data from the backend using a standard fetch. 
-     * @param url a full url or short-hand like `controller/method?params` `app/auto/api/controller/method?params`. Note that params would also be specified on the url. 
-     * @param data optional POST data
-     * @param method optional method, defaults to `GET` unless it has data, in which case it defaults to `POST`
-     * @returns a Promise containing a Response object, just like a normal fetch would. 
-     * example: webApi.fetchRaw('Rss/Feed');
-     * example: webApi.fetchRaw(webApi.url('Rss/Feed', { id: 47 })); // url params
-     * example: webApi.fetchRaw('Rss/Feed', { id: 47 }); // post params
-     * example: webApi.fetchRaw(webApi.url('Rss/Feed', { id: 47 }), { something: 'this is a test' }); // url & post params
-     * maybe: webApi.fetchRaw({url: 'Rss/Feed', params: { id: 47 }})
-     * maybe: webApi.fetchRaw({url: ..., params: { ...}, body: { ...}, method: 'GET' })
-     */
     fetchRaw(url: string, data?: string | Record<string, any>, method?: string): Promise<Response> {
         const ctxParams = {} as { appId?: number; zoneId?: number; };
         const ctx = this.sxc.ctx;
@@ -165,23 +113,10 @@ export class SxcWebApi implements Public.SxcWebApi {
         return this.fetchJson(url, data, method);
     }
 
-    /**
-     * Will retrieve data from the backend using a standard fetch and give you an object. 
-     * @param url a full url or short-hand like `controller/method?params` `app/auto/api/controller/method?params`. Note that params would also be specified on the url. 
-     * @param data optional POST data
-     * @param method optional method, defaults to `GET` unless it has data, in which case it defaults to `POST`
-     * @returns a Promise containing any object.
-     */
     fetchJson<T = any>(url: string, data?: string | Record<string, any>, method?: string): Promise<T> {
         return this.fetchRaw(url, data, method).then(response => response.json());
     }
 
-    /**
-     * All the headers which are needed in an ajax call for this to work reliably.
-     * Use this if you need to get a list of headers in another system
-     * @param method Optional. If set, will add Accept or Content-Type headers
-     * @returns a Record / Dictionary of headers
-     */
     headers(method?: string): Record<string, string> {
         const headers = this.sxc.root.http.headers(this.sxc.id, this.sxc.cbid, this.sxc.ctx);
         if (!method) {

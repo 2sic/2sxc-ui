@@ -1,7 +1,7 @@
 ﻿import { ButtonConfigLoader, ButtonGroupConfigLoader, CommandConfigLoader, ToolbarConfigLoaderV09, ToolbarConfigLoaderV10, ToolbarWip } from '.';
 import { ToolbarManager } from '..';
 import { ContextComplete } from '../../context/bundles/context-bundle-button';
-import { Entry, HasLog } from '../../logging';
+import { HasLog, LogEntry } from '../../logging';
 import { Toolbar } from '../config';
 import { InPageToolbarConfigVariations, ToolbarInitConfig } from '../initialize/toolbar-init-config';
 import { TemplateEditor, ToolbarTemplate, ToolbarTemplateManager } from '../templates';
@@ -19,7 +19,7 @@ export class ToolbarConfigLoader extends HasLog {
     public templates = ToolbarTemplateManager.singleton();
     public templateEditor: TemplateEditor;
 
-    public logs: Array<{ key: string, entries: Entry[]}>;
+    public logs: Array<{ key: string, entries: LogEntry[]}>;
 
     /** Special constructor that can only be called from the ToolbarManager */
     constructor(_owner: ToolbarManager) {

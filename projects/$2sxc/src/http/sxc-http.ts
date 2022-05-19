@@ -1,20 +1,16 @@
-import * as Public from '../../../sxc-typings';
-import { ApiExtensionPlaceholder, PlatformDnn, PlatformOqtane } from '../constants';
-import { AppApiMarker, ContextIdentifier, HeaderNames, ToSxcName } from '..';
-import { Environment, HasLog } from '..';
+import { ApiExtensionPlaceholder } from '../constants';
+import { AppApiMarker, Dictionary, HasLog, HeaderNames, ToSxcName } from '../../../core';
+import { Http, ContextIdentifier, Environment } from '..';
 
-export class SxcHttp extends HasLog implements Omit<Public.Http, 'log'> {
+/** @internal */
+export class SxcHttp extends HasLog implements Omit<Http, 'log'> {
     constructor(private env: Environment) {
         super('Sxc.Http');
     }
 
-    /**
-     * All the headers which are needed in an ajax call for this to work reliably.
-     * Use this if you need to get a list of headers in another system
-     */
-    headers(id?: number, cbid?: number, ctx?: ContextIdentifier): Public.Dictionary<string> {
+    headers(id?: number, cbid?: number, ctx?: ContextIdentifier): Dictionary<string> {
         const cl = this.log.call('headers', `${id}, ${cbid}`);
-        const fHeaders: Public.Dictionary<string> = {};
+        const fHeaders: Dictionary<string> = {};
         const pageId = this.env.page().toString();
         if (!ctx?._ignoreHeaders) {
             if (id) fHeaders[HeaderNames.ModuleId] = id.toString();
@@ -26,12 +22,6 @@ export class SxcHttp extends HasLog implements Omit<Public.Http, 'log'> {
         return cl.return(fHeaders, `headers(id:${id}, cbid:${cbid})`);
     }
 
-    /**
-     * Get the API-Root path for a specific extension/endpoint
-     * @param {string} endpointName
-     * @returns {string}
-     * @memberof SxcHttp
-     */
     apiRoot(endpointName: string): string {
         const cl = this.log.call('apiRoot');
         var result = this.env.api().replace(ApiExtensionPlaceholder, endpointName);
@@ -52,14 +42,6 @@ export class SxcHttp extends HasLog implements Omit<Public.Http, 'log'> {
         return cl.return(result, `appApiRoot()`);
     }
 
-    /**
-     * Get the URL for a specific web API endpoint
-     * Will ignore urls which clearly already are the full url.
-     * @param {string} url
-     * @param {string} [endpointName]
-     * @returns
-     * @memberof SxcHttp
-     */
     apiUrl(url: string, endpointName?: string)
     {
         const cl = this.log.call('apiUrl');

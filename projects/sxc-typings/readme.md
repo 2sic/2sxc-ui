@@ -15,4 +15,4 @@ Basically anybody developing JavaScript for the CMS DNN together with 2sxc.
 
 `npm install "@2sic.com/2sxc-typings"`
 
-_Note that `@2sic/2sxc-typings` must be in quotes, because it has a dot in the full name_
+_Note that `@2sic.com/2sxc-typings` must be in quotes, because it has a dot in the full name_

@@ -4,6 +4,7 @@
 // But instead be part of the type-package
 // In which case it may also be an enum instead of a const?
 
+/** @internal */
 export const TargetTypes = {
   /** 
    * Undefined Type (0) - included for completeness

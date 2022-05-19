@@ -1,3 +1,4 @@
+/** @internal */
 export class NoJQ {
 
     /** https://api.jquery.com/ready/ */
@@ -144,6 +145,7 @@ export class NoJQ {
     }
 }
 
+/** @internal */
 export class AssetsLoader {
 
     /** Asynchronously runs external and inline scripts in series */

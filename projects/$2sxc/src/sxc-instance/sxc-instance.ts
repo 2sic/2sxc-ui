@@ -1,9 +1,8 @@
-﻿import { ContextIdentifier } from './../sxc-root/context-identifier';
-import * as Public from '../../../sxc-typings/index';
-import { SxcWebApi } from './web-api/sxc-web-api';
-import { ApiUrlRoots, ToSxcName } from '..';
-import { SxcRoot } from '../sxc-root/sxc-root';
-import { HasLog } from '..';
+﻿import { ContextIdentifier } from '../sxc-root/context-identifier';
+import { SxcInstance } from '..';
+import { SxcWebApiInternal } from './web-api/sxc-web-api';
+import { ApiUrlRoots, HasLog, ToSxcName } from '../../../core';
+import { SxcRootExt } from '../sxc-root/sxc-root';
 import { SxcRootInternals } from '../sxc-root/sxc-root-internals';
 import { SxcInstanceManage } from './sxc-instance-manage';
 import { SxcData } from './data/sxc-data';
@@ -14,19 +13,17 @@ import { SxcInstanceCms } from './sxc-instance-cms';
 
 /**
 * The typical sxc-instance object for a specific DNN module or content-block
+* @internal
 */
-export class SxcInstance extends HasLog implements Public.SxcInstance {
+export class SxcInstanceInternal extends HasLog implements SxcInstance {
   private _isSxcInstance = true;
-  /**
-  * helpers for ajax calls
-  */
-  webApi: SxcWebApi;
+  webApi: SxcWebApiInternal;
 
   /**
   * The manage controller for edit/cms actions
   *
   * @type {*}
-  * @memberof SxcInstance
+  * @memberof SxcInstanceInternal
   */
   manage: SxcInstanceManage = null; // initialize correctly later on
 
@@ -36,22 +33,17 @@ export class SxcInstance extends HasLog implements Public.SxcInstance {
   cms = new SxcInstanceCms(this, 'cms');
   
   constructor(
-    /** the sxc-instance ID, which is usually the DNN Module Id */
     public id: number,
-    /** 
-    * content-block ID, which is either the module ID, or the content-block definitiion entity ID
-    * this is an advanced concept you usually don't care about, otherwise you should research it 
-    */
     public cbid: number,
     /** The environment information, important for http-calls */
-    public readonly root: SxcRoot & SxcRootInternals,
+    public readonly root: SxcRootExt & SxcRootInternals,
     /**
     * Custom context information provided by the constructor - will replace auto-context detection
     */
     public ctx?: ContextIdentifier,
   ) {
     super('SxcInstance', null, 'Generating for ' + id + ':' + cbid);
-    this.webApi = new SxcWebApi(this);
+    this.webApi = new SxcWebApiInternal(this);
     
     // add manage property, but not within initializer, because inside the manage-initializer it may reference 2sxc again
     try { // sometimes the manage can't be built, like before installing
@@ -67,8 +59,8 @@ export class SxcInstance extends HasLog implements Public.SxcInstance {
     root._translateInit(this.manage);    // init translate, not really nice, but ok for now
   }
 
-  public static is(thing: unknown): thing is SxcInstance {
-    const maybe = thing as SxcInstance;
+  public static is(thing: unknown): thing is SxcInstanceInternal {
+    const maybe = thing as SxcInstanceInternal;
     return maybe._isSxcInstance;
   }
     
@@ -77,7 +69,7 @@ export class SxcInstance extends HasLog implements Public.SxcInstance {
   *
   * @param {string} contentType
   * @returns
-  * @memberof SxcInstance
+  * @memberof SxcInstanceInternal
   */
   data<T = unknown>(contentType: string) {
     return new SxcData<T>(this, contentType);
@@ -157,10 +149,6 @@ export class SxcInstance extends HasLog implements Public.SxcInstance {
     return result;
   }
     
-  /**
-  * checks if we're currently in edit mode
-  * @returns {boolean}
-  */
   isEditMode(): boolean {
     return (this.manage && this.manage._isEditMode()) === true;
   }

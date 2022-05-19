@@ -1,12 +1,13 @@
-import { SxcInstance } from "..";
+import { SxcInstanceInternal } from '..';
 import { SxcDataQueryBase } from './sxc-data-query-base';
 
 /**
  * Instance Query accessor
+ * @internal
  */
 export class SxcQuery extends SxcDataQueryBase {
 
-  constructor(sxc: SxcInstance, readonly name: string) {
+  constructor(sxc: SxcInstanceInternal, readonly name: string) {
     super(sxc, name, 'Query');
   }
 

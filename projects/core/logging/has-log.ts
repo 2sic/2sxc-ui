@@ -1,6 +1,16 @@
 import { Log } from '.';
-import { HasLog as IHasLog } from '../../sxc-typings/index';
-export abstract class HasLog  implements Omit<IHasLog, 'log'> {
+
+/**
+ * Any object that has an own log object
+ * @export
+ * @interface HasLog
+ */
+export abstract class HasLog {
+  /**
+   * The logger for this object
+   * @type {Log}
+   * @memberof HasLog
+   */
   log: Log;
 
   /**
@@ -9,14 +19,22 @@ export abstract class HasLog  implements Omit<IHasLog, 'log'> {
    * @param logName name to show in the logger
    * @param parentLog parent-logger to attach to
    * @param initialMessage optional start-message to log
+   * @internal
    */
-  constructor(logName: string, private parentLog?: Log, initialMessage?: string) {
+  constructor(
+    logName: string,
+    /** @internal */
+    private parentLog?: Log,
+    initialMessage?: string,
+  ) {
     this.initLogInternal(logName, parentLog, initialMessage);
   }
 
+  /** @internal */
   public initLog = (name: string, parentLog?: Log, initialMessage?: string)
     : void => this.initLogInternal(name, parentLog, initialMessage)
 
+  /** @internal */
   private initLogInternal(name: string, parentLog?: Log, initialMessage?: string): void {
     if (this.log == null)
         // standard & most common case: just create log

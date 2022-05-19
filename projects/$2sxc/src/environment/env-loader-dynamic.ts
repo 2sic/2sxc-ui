@@ -1,5 +1,5 @@
-import * as Public from '../../../sxc-typings/index';
-import { Log } from '..';
+import { JsInfo } from '..';
+import { Log } from '../../../core';
 import { EnvironmentMetaLoader } from './env-loader-meta';
 
 const InputValue = 'value';
@@ -8,6 +8,7 @@ const SelectorInputRvt = `input[name=__RequestVerificationToken]`;
 
 /**
  * Special loader for dynamic pages like Oqtane, where content can change at runtime
+ * @internal
  */
 export class EnvironmentLoaderDynamic {
 
@@ -28,7 +29,7 @@ export class EnvironmentLoaderDynamic {
     this.observer = new MutationObserver((mutationsList: MutationRecord[]) => {
       for(const mut of mutationsList)
         if (mut.type === 'attributes' && mut.attributeName === attribute)
-          this.mainLoader.updateEnv(JSON.parse(this.mainLoader.getMetaContent()) as Public.JsInfo)
+          this.mainLoader.updateEnv(JSON.parse(this.mainLoader.getMetaContent()) as JsInfo)
     });
     this.log.add('start observing meta tag');
     this.observer.observe(this.mainLoader.getJsApiMetaTag(), { attributes: true, childList: false, subtree: false });

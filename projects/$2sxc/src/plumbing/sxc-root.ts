@@ -1,8 +1,8 @@
-import { Environment } from './Environment';
-import { Log } from './Log';
-import { Http } from './Http';
-import { UrlParams } from './UrlParams';
-import { SxcInstance } from './SxcInstance';
+import { Environment } from '../environment';
+import { Log } from '../../../core';
+import { Http } from './http';
+import { UrlParams } from './url-params';
+import { SxcInstance } from './sxc-instance';
 
 /**
  * This is the interface for the main $2sxc object on the window
@@ -22,10 +22,10 @@ export interface SxcRoot {
      */
     sysinfo: {
         /** the version using the ##.##.## syntax */
-        version: string,
+        version: string;
 
         /** a short text description, for people who have no idea what this is */
-        description: string,
+        description: string;
     };
 
     /**
@@ -49,5 +49,5 @@ export interface SxcRoot {
      * @type {UrlParams}
      * @memberof SxcRoot
      */
-    urlParams: UrlParams
+    urlParams: UrlParams;
 }

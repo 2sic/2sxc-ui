@@ -5,12 +5,16 @@
  */
 declare const ROOTVERSION: string;
 
+/** @internal */
 export const ToSxcName = "2sxc";
 
+/** @internal */
 export const SxcVersion = ROOTVERSION;
 
+/** @internal */
 export const SxcApiUrlRoot = 'desktopmodules/2sxc/api/';
 
+/** @internal */
 export const HeaderNames = {
     // 2sxc specific header
     ContentBlockId: "ContentBlockId",
@@ -23,11 +27,14 @@ export const HeaderNames = {
     PageId: "PageId",
 };
 
+/** @internal */
 export const ApiUrlRoots = ['app', 'app-sys', 'app-api', 'app-query', 'app-content', 'eav', 'view', 'dnn'];
+/** @internal */
 export const AppApiMarker = 'app';
 
 // TODO: this should later lead to remapping of old url calls, but it's not in use yet
 // note that these were always 'auto' so `app-content` would need to be come `app/auto/content`
+/** @internal */
 export const AppApiMap = {
     'app-api': 'app/[name]/api',
     'app-query': 'app/[name]/query',
@@ -41,5 +48,6 @@ export const AppApiMap = {
  * This is a marker for an ID which is not defined
  * This is for situations where a 0 or even a negative number
  * could be real numbers, so this number is so big, it should never be a real ID
+ * @internal
  */
 export const NumberNotDefinedHuge = 274200000000;

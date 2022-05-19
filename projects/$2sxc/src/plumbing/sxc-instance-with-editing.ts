@@ -1,4 +1,4 @@
-﻿import { SxcInstance } from './SxcInstance';
+﻿import { SxcInstance } from './sxc-instance';
 
 /**
  * Enhanced sxc instance with additional editing functionality

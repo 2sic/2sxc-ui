@@ -3,6 +3,7 @@
   It's typed here, so that API code is strongly typed, but it's incomplete.
 */
 
+/** @internal */
 export interface SxcInstanceManage {
   /**
    * The context contains information about the Sxc Instance, like module-id, etc.

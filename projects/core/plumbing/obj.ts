@@ -1,6 +1,7 @@
 
 /**
  * Object manipulator helpers
+ * @internal
  */
 export class Obj {
     /**

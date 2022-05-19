@@ -4,7 +4,6 @@
   1. It's still missing some objects not needed in the quick-dialog
 */
 
-import { Dictionary } from '../../sxc-typings';
 
 // missing ATM
 // UserDto
@@ -32,7 +31,7 @@ class AppDto extends WebResourceDto {
 class LanguageDto {
   Primary: string;
   Current: string;
-  All: Dictionary<string>;
+  All: Record<string, string>;
 }
 
 class EnableDto {
