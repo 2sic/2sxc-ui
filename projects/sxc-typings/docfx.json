@@ -1,0 +1,14 @@
+{
+  "build": {
+    "content": [
+      {
+        "files": [
+          "**/*.yml"
+        ],
+        "src": "docsFx",
+        "dest": "api"
+      }
+    ],
+    "dest": "_docFxSite"
+  }
+}

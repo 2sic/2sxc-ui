@@ -6,7 +6,12 @@
     "release": "webpack --mode=production",
     "2sxc-js-prod": "webpack --watch --mode=production",
     "2sxc-js-dev": "webpack --watch --mode=development",
-    "typings": "cd src && typings.cmd \"..\\..\\sxc-typings\\dist\""
+    "typings": "cd src && typings.cmd \"..\\..\\sxc-typings\\dist\"",
+    "// typedoc and docFx versions": "https://github.com/docascode/type2docfx/issues/63",
+    "build-typedoc": "cd src && delete.cmd \"..\\docs\\typedoc\" && cd .. && typedoc --tsconfig ./src/tsconfig.typedoc.json",
+    "build-docFx": "cd src && delete.cmd \"..\\docs\\docFx\" && cd .. && type2docfx ./docs/typedoc/typedoc.json ./docs/docFx",
+    "build-docs": "npm run build-typedoc && npm run build-docFx",
+    "serve-docFx": "cd docs && docfx ./docfx-serve.config.json --serve"
   },
   "repository": {
     "type": "git",
@@ -24,6 +29,8 @@
     "jshint": "^2.12.0",
     "jshint-stylish": "2.1.0",
     "ts-loader": "^7.0.0",
+    "type2docfx": "^0.10.5",
+    "typedoc": "^0.15.8",
     "typescript": "^3.8.3",
     "webpack": "^4.42.1",
     "webpack-cli": "^3.3.11",
