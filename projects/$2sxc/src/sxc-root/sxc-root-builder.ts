@@ -11,6 +11,9 @@ import { ContextIdentifier, isContextIdentifier, ensureCompleteOrThrow } from '.
 import { SxcInstanceInternal } from '../sxc-instance/sxc-instance';
 
 declare const window: Window;
+// TODO: copied from selectors in inpage project. Probably best to move selectors from inpage to core
+const toolbarSelector = `.sc-menu[toolbar],.sc-menu[data-toolbar],[sxc-toolbar]`;
+const sxcDivsSelector = 'div[data-edit-context]';
 
 /**
  * returns a 2sxc-instance of the id or html-tag passed in
@@ -35,6 +38,16 @@ function FindSxcInstance(id: number | ContextIdentifier | HTMLElement | SxcInsta
         ctxId = id;
         // create a fake id, based on zone and app because this is used to identify the object in the cache
         id = id.zoneId * 100000 + id.appId;
+    } else if (id instanceof HTMLElement && id.matches(toolbarSelector) && !id.closest(sxcDivsSelector)) {
+        // for toolbars that are not inside 2sxc modules (e.g. in skin)
+        const toolbarAttribute = id.getAttribute('toolbar');
+        const zoneId = toolbarAttribute.match(/context:zoneId=([^&]*)/)?.[1];
+        const appId = toolbarAttribute.match(/context:zoneId=([^&]*)/)?.[1];
+        ctxId = {
+            zoneId: parseInt(zoneId),
+            appId: parseInt(appId),
+        };
+        return FindSxcInstance(ctxId);
     } else if (typeof id === 'object') {
         // if it's a dom-element, use auto-find
         const idTuple = autoFind(id);

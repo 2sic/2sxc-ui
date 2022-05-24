@@ -11,7 +11,7 @@ import { ToolbarInitConfig } from './toolbar-init-config';
 
 // quick debug - set to false if not needed for production
 const dbg = false;
-const toolbarSelector = `.sc-menu[toolbar],.sc-menu[data-toolbar],[${C.Toolbar.attr.full}]`;
+export const toolbarSelector = `.sc-menu[toolbar],.sc-menu[data-toolbar],[${C.Toolbar.attr.full}]`;
 
 /**
  * This class is responsible for finding toolbar configurations in the doom
@@ -61,6 +61,12 @@ export class ToolbarConfigFinderAndInitializer extends HasLog {
      * @param node
      */
     build(node: HTMLElement): void {
+        // for toolbars that are not inside 2sxc modules (e.g. in skin)
+        if (node.matches(toolbarSelector) && !node.closest(C.Sel.SxcDivs)) {
+            this.loadConfigAndInitialize(node);
+            return;
+        }
+
         // go up the DOM to find the parent which has context-information
         // if we have no contextNode (a parent content block), we can
         // assume the node is outside of a 2sxc module so not interesting
