@@ -55,9 +55,10 @@ export class NgUrlValuesWithoutParams {
     if (ctxAny?.complete === true) {
         this.zoneId = ctx.zoneId;
         this.appId = ctx.appId;
-        this.tid = ctx.pageId ?? -2742;
-        this.mid = ctx.moduleId ?? -2742;
-        this.cbid = ctxAny?.blockId ?? this.mid;
+        if (ctx.pageId != null) this.tid = ctx.pageId;
+        if (ctx.moduleId != null) this.mid = ctx.moduleId;
+        const cbid = ctxAny?.blockId ?? this.mid;
+        if (cbid != null && cbid !== '') this.cbid = cbid;
     } else {
         this.zoneId = ctx?.zoneId ?? context.app.zoneId;
         this.appId = ctx?.appId ?? context.app.id;
