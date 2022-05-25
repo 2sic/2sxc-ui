@@ -40,12 +40,11 @@ function FindSxcInstance(id: number | ContextIdentifier | HTMLElement | SxcInsta
         id = id.zoneId * 100000 + id.appId;
     } else if (id instanceof HTMLElement && id.matches(toolbarSelector) && !id.closest(sxcDivsSelector)) {
         // for toolbars that are not inside 2sxc modules (e.g. in skin)
-        const toolbarAttribute = id.getAttribute('toolbar');
-        const zoneId = toolbarAttribute.match(/context:zoneId=([^&]*)/)?.[1];
-        const appId = toolbarAttribute.match(/context:zoneId=([^&]*)/)?.[1];
+        const contextAttribute = id.getAttribute('sxc-context');
+        const sxcContext: Record<string, any> = JSON.parse(contextAttribute);
         ctxId = {
-            zoneId: parseInt(zoneId),
-            appId: parseInt(appId),
+            zoneId: sxcContext.zoneId,
+            appId: sxcContext.appId,
         };
         return FindSxcInstance(ctxId);
     } else if (typeof id === 'object') {
