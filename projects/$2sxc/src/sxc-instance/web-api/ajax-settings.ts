@@ -1,4 +1,4 @@
-
+/** @internal */
 export interface AjaxSettings extends JQueryAjaxSettings {
     /** Override the endpoint, which is usually '2sxc' */
     endpoint?: string;

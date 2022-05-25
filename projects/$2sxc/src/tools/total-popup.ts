@@ -1,4 +1,4 @@
-﻿
+﻿/** @internal */
 export class TotalPopup {
     frame: any = undefined;
     callback: any = undefined;

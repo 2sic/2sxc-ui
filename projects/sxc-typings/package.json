@@ -1,5 +1,5 @@
 {
-  "version": "11.00.00",
+  "version": "13.11.00",
   "types": "./index.d.ts",
   "scripts": {
     "dry-run": "npm publish --dry-run"
@@ -12,8 +12,7 @@
     "url": "https://github.com/2sic/2sxc-ui/issues"
   },
   "files": [
-    "*.d.ts",
-    "src/*.*"
+    "**/*.d.ts"
   ],
   "description": "Typescript typings to work with core 2sxc objects",
   "homepage": "https://github.com/2sic/2sxc-ui/tree/master/typings#readme",
@@ -32,8 +31,5 @@
     "type": "git",
     "url": "git+https://github.com/2sic/2sxc-ui.git"
   },
-  "main": "",
-  "dependencies": {
-    "@types/jquery": "^3.3.31"
-  }
+  "main": ""
 }

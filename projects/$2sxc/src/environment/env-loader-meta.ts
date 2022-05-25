@@ -1,8 +1,8 @@
-import * as Public from '../../../sxc-typings/index';
+import { JsInfo } from '..';
 import { Environment } from '.';
 import { EnvironmentDnnSfLoader } from './env-loader-dnn-sf';
 import { MetaHeaderJsApi, PlatformOqtane } from '../constants';
-import * as Log from '..';
+import { HasLog, Log } from '../../../core';
 import { EnvironmentLoaderDynamic } from './env-loader-dynamic';
 
 // temp: usually 10, but because Oqtane has some delays, we'll temporarily increase to 100 till we're safe
@@ -22,11 +22,12 @@ function logTest(): boolean
 /**
  * This loads environment information from the meta-header tag.
  * Because of timing issues, it will try multiple times
+ * @internal
  */
-export class EnvironmentMetaLoader extends Log.HasLog {
+export class EnvironmentMetaLoader extends HasLog {
     public retries = 0;
 
-    public log: Log.Log;
+    public log: Log;
 
     private dynamicPageHelper: EnvironmentLoaderDynamic;
 
@@ -52,14 +53,14 @@ export class EnvironmentMetaLoader extends Log.HasLog {
             return cl.done('will retry');
         }
         // Load the settings
-        this.updateEnv(JSON.parse(meta) as Public.JsInfo);
+        this.updateEnv(JSON.parse(meta) as JsInfo);
 
         // monitor setting changes - important for Oqtane
         this.dynamicPageHelper.startMetaTagObserver(MetaProperty);
         cl.done();
     }
 
-    public updateEnv(newJsInfo: Public.JsInfo) {
+    public updateEnv(newJsInfo: JsInfo) {
         this.log.add('meta env info updated');
         this.env.load(newJsInfo, MetaSourceId);
         if(newJsInfo.platform === PlatformOqtane)
@@ -86,7 +87,7 @@ export class EnvironmentMetaLoader extends Log.HasLog {
       this.observer = new MutationObserver((mutationsList: MutationRecord[]) => {
         for(const mut of mutationsList)
           if (mut.type === 'attributes' && mut.attributeName === MetaProperty)
-            this.updateEnv(JSON.parse(this.getMetaContent()) as Public.JsInfo)
+            this.updateEnv(JSON.parse(this.getMetaContent()) as JsInfo)
       });
       this.log.add('start observing meta tag');
       this.observer.observe(this.getJsApiMetaTag(), { attributes: true, childList: false, subtree: false });

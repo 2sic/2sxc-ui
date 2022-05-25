@@ -124,6 +124,11 @@ body.sc-tb-show-all [sxc-toolbar-hover] .sc-menu {
     background-color: #012C4Fad; /* #0088f4ad */;
 }
 
+.sc-menu a.single-field div {
+    background-color: transparent;
+    box-shadow: none;
+}
+
 .sc-menu a div:hover {
   box-shadow: 0 10px 28px rgba(0, 0, 0, 0.25), 0 6px 10px rgba(0, 0, 0, 0.22);
 }
@@ -132,6 +137,21 @@ body.sc-tb-show-all [sxc-toolbar-hover] .sc-menu {
   margin-left: auto;
   margin-right: auto;
   vertical-align: text-bottom;
+}
+
+.sc-menu a div.svg-wrapper {
+  text-align: center;
+}
+
+.sc-menu a div.svg-wrapper svg {
+  transform: scale(0.4);
+  position: relative;
+  top: -9px;
+  left: -9px;
+}
+
+.sc-menu a div.svg-wrapper svg * {
+  fill: white;
 }
 
 /* Because of IE11 issue with cascading class there need to be .sc-menu.group-X on each group declaration */

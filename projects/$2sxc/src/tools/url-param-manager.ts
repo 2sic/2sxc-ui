@@ -1,4 +1,4 @@
-﻿
+﻿/** @internal */
 export class UrlParamManager {
     get(name: string) {
         // warning: this method is duplicated in 2 places - keep them in sync.

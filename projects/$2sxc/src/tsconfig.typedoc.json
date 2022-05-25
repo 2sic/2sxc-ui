@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.typings.json",
+  "typedocOptions": {
+    "entryPoints": [
+      "./src/index.ts"
+    ],
+    "out": "./docs/typedoc",
+    "json": "./docs/typedoc/typedoc.json"
+  }
+}

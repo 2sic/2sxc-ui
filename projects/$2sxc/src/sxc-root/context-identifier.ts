@@ -1,5 +1,6 @@
 /**
  * ContextIdentifier is used to initialize a Sxc object outside of the default context.
+ * @internal
  */
 export class ContextIdentifier {
   /** ZoneId of this Context */
@@ -10,13 +11,25 @@ export class ContextIdentifier {
   pageId?: number;
   /** ModuleId of this Context (optional) */
   moduleId?: number;
+  /** Exclude pageId and moduleId headers in web requests */
+  _ignoreHeaders?: boolean;
+
+  /** Marks the context as complete, so it won't merge in anything else 
+   * WIP #CustomContext ATM for the updated edit-ui
+   */
+  complete?: boolean;
+
+  /** WIP #CustomContext not really used yet */
+  blockId?: number;
 }
 
+/** @internal */
 export function isContextIdentifier(original: unknown): original is ContextIdentifier {
   const origAsContextId = original as ContextIdentifier;
   return origAsContextId.zoneId !== undefined && origAsContextId.appId !== undefined;
 }
 
+/** @internal */
 export function ensureCompleteOrThrow(ctx: ContextIdentifier): ContextIdentifier {
   // if it's fulfills the minimum requirements
   if (ctx.zoneId && ctx.appId) return ctx; 

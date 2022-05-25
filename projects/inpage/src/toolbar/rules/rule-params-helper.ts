@@ -5,26 +5,31 @@ import { DictionaryValue } from '../../plumbing';
 
 const prefillPrefix = 'prefill:';
 const filterPrefix = 'filter:';
+const contextPrefix = 'context:';
+
+export interface ProcessedParams { params: RuleParams; context: DictionaryValue; }
 
 export class RuleParamsHelper {
 
-    static processParams(params: RuleParams, log: Log): RuleParams {
+    static processParams(params: RuleParams, log: Log): ProcessedParams {
         const cl = log.call('processParams');
-        const prefill = RuleParamsHelper.processSubMultiKeys(params, prefillPrefix, log);
+        const prefill = RuleParamsHelper.extractSubKeys(params, prefillPrefix, log);
         if (prefill) params.prefill = prefill;
 
-        const filters = RuleParamsHelper.processSubMultiKeys(params, filterPrefix, log);
+        const filters = RuleParamsHelper.extractSubKeys(params, filterPrefix, log);
         if (filters) params.filters = filters;
+
+        const context = RuleParamsHelper.extractSubKeys(params, contextPrefix, log);
 
         // catch a very common mistake in metadata
         if (params.metadata) {
             delete params.metadata;
-            cl.add('params had additional metadata - invalid, will remove', null, LEO.error);
+            cl.add("params had additional metadata - invalid, will remove. Use 'for' instead", null, LEO.error);
         }
 
         // process metadata
         if (params.for) params.metadata = RuleParamsHelper.processMetadata(params, log);
-        return cl.return(params);
+        return cl.return({ params, context });
     }
 
     private static processMetadata(params: RuleParams, log: Log): MetadataFor {
@@ -69,7 +74,7 @@ export class RuleParamsHelper {
 
 
     /** Do special processing on all prefill:Field=Value rules */
-    private static processSubMultiKeys(params: RuleParams, prefix: string, log: Log): DictionaryValue {
+    private static extractSubKeys(params: RuleParams, prefix: string, log: Log): DictionaryValue {
         const cl = log.call('processSubMultiKeys');
 
         // only load special prefills if we don't already have a prefill

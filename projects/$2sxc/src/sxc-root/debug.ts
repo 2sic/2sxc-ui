@@ -3,6 +3,7 @@ import { UrlParamManager } from '..';
 const urlManager = new UrlParamManager();
 const urlDebugState = urlManager.get('debug') === 'true';
 
+/** @internal */
 export class Debug {
     /**
      * The load-debug state (provided by the url with debug=true)

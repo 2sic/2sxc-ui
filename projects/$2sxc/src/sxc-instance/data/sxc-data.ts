@@ -1,4 +1,4 @@
-import { SxcInstance } from "..";
+import { SxcInstanceInternal } from '..';
 import { SxcDataQueryBase } from './sxc-data-query-base';
 
 const ContentApiRoot = 'app/auto/data';
@@ -7,15 +7,16 @@ const TargetTypeEntity = 4;
 
 /**
 * Instance Data accessor to get (and in future create/update) data items/entities
+* @internal
 */
 export class SxcData<T = unknown> extends SxcDataQueryBase {
   /**
   * Creates an instance of SxcData.
-  * @param {SxcInstance} sxc
+  * @param {SxcInstanceInternal} sxc
   * @param {string} name the content-type name
   * @memberof SxcData
   */
-  constructor(sxc: SxcInstance, readonly name: string) {
+  constructor(sxc: SxcInstanceInternal, readonly name: string) {
     super(sxc, name, 'ContentType');
   }
 
@@ -80,6 +81,7 @@ export class SxcData<T = unknown> extends SxcDataQueryBase {
   }
 }
 
+/** @internal */
 export interface MetadataFor {
   Target: string | number;
   Number?: number;

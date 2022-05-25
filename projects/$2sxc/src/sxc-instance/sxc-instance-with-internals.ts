@@ -1,13 +1,14 @@
 import { SxcRootInternals } from '../sxc-root/sxc-root-internals';
-import { SxcRoot } from '../sxc-root/sxc-root';
-import { SxcInstance } from '.';
+import { SxcRootExt } from '../sxc-root/sxc-root';
+import { SxcInstanceInternal } from '.';
 import { ContextIdentifier } from '../sxc-root/context-identifier';
 
 const warning = 'Warning Obsolete Feature on 2sxc JS: the .data has been obsolete for a long time and is repurposed. \n'
 + 'If you are calling ".data.on(...)" or ".data.sourceUrl" you are running very old code. \n' 
 + 'Guidance to fix this: https://r.2sxc.org/brc-13-id.';
 
-export class SxcInstanceWithInternals extends SxcInstance {
+/** @internal */
+export class SxcInstanceWithInternals extends SxcInstanceInternal {
   source: any = null;
   isLoaded = false;
   lastRefresh: Date = null;
@@ -16,7 +17,7 @@ export class SxcInstanceWithInternals extends SxcInstance {
     public id: number,
     public cbid: number,
     public cacheKey: string,
-    protected $2sxc: SxcRoot & SxcRootInternals,
+    protected $2sxc: SxcRootExt & SxcRootInternals,
     ctx?: ContextIdentifier
     ) {
       super(id, cbid, $2sxc, ctx);

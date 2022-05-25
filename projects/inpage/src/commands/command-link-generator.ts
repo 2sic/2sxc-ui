@@ -1,6 +1,5 @@
 ﻿import { C } from '../constants';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
-import { translate } from '../i18n';
 import { ItemIdentifierGroup, ItemIdentifierSimple, ItemInField, TemplateIdentifier } from '../interfaces/item-identifiers';
 import { $2sxcInPage } from '../interfaces/sxc-controller-in-page';
 import { HasLog, Log } from '../logging';
@@ -35,7 +34,7 @@ export class CommandLinkGenerator extends HasLog {
         cl.data('urlParmas', this.urlParams);
 
         // initialize root url to dialog
-        this.rootUrl = this.getDialogUrl(dialog);
+        this.rootUrl = this.getDialogUrl();
 
         // get isDebug url Parameter
         this.debugUrlParam = window.$2sxc.urlParams.get('debug') ? '&debug=true' : '';
@@ -89,13 +88,9 @@ export class CommandLinkGenerator extends HasLog {
     /**
      * Determine the url to open a dialog, based on the settings which UI version to use
      */
-    private getDialogUrl(dialogName: string): string {
+    private getDialogUrl(): string {
         const context = this.context;
-        // const path = (context.ui.form === 'ng8') // v11 applies to all forms, not just edit: //  && dialogName === 'edit')
-        //     ? C.DialogPaths.ng8
-        //     : C.DialogPaths.ng1;
         return urlClean(`${$2sxcInPage.env.uiRoot()}${C.DialogPaths.ng8}`) + `?sxcver=${context.instance.sxcVersion}`;
-        // old till 11.11.02 return urlClean(`${context.instance.sxcRootUrl}${$2sxcInPage.env.uiRoot()}${C.DialogPaths.ng8}`) + `?sxcver=${context.instance.sxcVersion}`;
     }
 
     private addItem() {
@@ -108,13 +103,15 @@ export class CommandLinkGenerator extends HasLog {
         if (ct) item.ContentTypeName = ct;
 
         // v12.11 - also support cases where the template includes an edition
-        if (params )
+        // 2022-05-18 2dm - disable this, seems like old incomplete code
+        // if (params )
 
         // only add if there was stuff to add
         if (item.EntityId || item.ContentTypeName) {
             console.warn('used the simple item header - test if dialog still works!');
-            // this.items.push(item);
-            this.items.push({ ...item, Title: translate(this.findTranslationKey(this.findPartName(true))) });
+            this.items.push(item);
+            // 2022-05-18 2dm - disable this, seems like old code, title shouldn't be used any more
+            // this.items.push({ ...item, Title: translate(this.findTranslationKey(this.findPartName(true))) });
         }
     }
 
@@ -150,8 +147,7 @@ export class CommandLinkGenerator extends HasLog {
                 Index: index,
                 Part: part.toLocaleLowerCase(),
                 Add: isAdd,
-            },
-            Title: translate(this.findTranslationKey(part)),
+            }
         });
         cl.done();
     }
@@ -188,12 +184,13 @@ export class CommandLinkGenerator extends HasLog {
         return (isContentAndNotHeader ? '' : 'List') + (content ? 'Content' : 'Presentation');
     }
 
-    /**
-     * find the correct i18n key for this part
-     */
-    private findTranslationKey(partName: string): string {
-        return `EditFormTitle.${partName}`;
-    }
+    // 2022-05-18 2dm unused now
+    // /**
+    //  * find the correct i18n key for this part
+    //  */
+    // private findTranslationKey(partName: string): string {
+    //     return `EditFormTitle.${partName}`;
+    // }
 
 }
 

@@ -3,6 +3,11 @@
 // re-used bits of code
 //
 
-export * from './obj';
-export * from './type-value';
-export * from './dictionary-value';
+export * from './environment';
+export * from './http';
+export * from './sxc-instance-with-editing';
+export * from './sxc-instance';
+export * from './sxc-root';
+export * from './url-params';
+export * from './web-api';
+export * from './window';

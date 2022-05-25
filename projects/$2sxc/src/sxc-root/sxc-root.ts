@@ -1,14 +1,15 @@
-import * as Public from '../../../sxc-typings/index';
+import { SxcRoot } from '..';
 import { SxcInstanceWithInternals } from '../sxc-instance/sxc-instance-with-internals';
 import { Environment } from '../environment';
 import { SxcHttp } from '../http/sxc-http';
-import { Log, SxcVersion } from '..';
+import { Log, SxcVersion } from '../../../core';
 
 /**
  * This is the interface for the main $2sxc object on the window
  * This definition only extends the public interface
+ * @internal
  */
-export interface SxcRoot extends Public.SxcRoot {
+export interface SxcRootExt extends SxcRoot {
     /**
      * Get's an SxcInstance
      * @param id number | HTMLElement
@@ -19,20 +20,14 @@ export interface SxcRoot extends Public.SxcRoot {
     (id: number | HTMLElement, cbid?: number): SxcInstanceWithInternals,
 
     /**
-     * Environment information
-     * @type {Environment}
-     */
-    env: Environment;
-
-    /**
      * Http helper for API calls and such
      */
     http: SxcHttp;
 
 }
 
-
-export function getRootPartsV2(): Partial<SxcRoot> {
+/** @internal */
+export function getRootPartsV2(): Partial<SxcRootExt> {
     const log = new Log('$2sxc', null, 'building');
     var env = new Environment();
     return {

@@ -15,7 +15,9 @@ export class Commands extends HasLog {
     return this.singleton().add(name, translateKey, icon, uiOnly, partOfPage, more);
   }
 
-
+  public static addCommand(command: Command): void {
+    return this.singleton().addCommand(command);
+  }
 
   private commandList: Command[] = [];
   list: HashTable<Command> = {}; // hash - table of action definitions, to be used a list()["action - name"]
@@ -33,6 +35,12 @@ export class Commands extends HasLog {
       this.log.add(`add command '${name}'`, cmd);
       return cmd;
   }
+
+  addCommand(command: Command): void {
+    const cmd = this.addDef(command);
+    this.log.add(`add command '${cmd.name}'`, cmd);
+  }
+
 
   private addDef(def: Command): Command {
     if (!this.list[def.name]) {

@@ -14,11 +14,19 @@ function showCopyProgress(e) {
 
 function startCpx(src, target, useWatch) {
   const msgWatch = useWatch ? '-watcher' : '';
+  if (!useWatch) {
+    // Clear destination folders
+    fs.readdir(target, (err, files) => {
+      files.forEach(file => {
+        // delete old files except Default.aspx
+        if (file === 'Default.aspx') return;
+        fs.removeSync(`${target}/${file}`);
+      });
+    });
+  }
   var cpxCommand = useWatch ? cpx.watch : cpx.copy;
   console.log(chalk.blue(`Starting copy${msgWatch} for '${src}' to '${target}'`));
-  cpxCommand(src, target, {
-    clean: true,
-  }).on("copy", showCopyProgress);
+  cpxCommand(src, target).on("copy", showCopyProgress);
 }
 
 
@@ -45,7 +53,7 @@ function waitToRunAllCpx(path, targetAddOn) {
   var runInnerCallback = true;
   const watcher = chokidar.watch(parentPath);
   watcher
-    .on('addDir', path => { 
+    .on('addDir', path => {
         if(!runInnerCallback) return;
         if(debug) console.log(chalk.yellow(`checking '${path}'`));
         // If it's not the entry path we're looking for, just return

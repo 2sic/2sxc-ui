@@ -1,4 +1,4 @@
-import { SxcRoot } from '../../../sxc-typings';
+import { SxcRoot } from '@2sic.com/2sxc-typings';
 import { urlParams } from './core/constants';
 
 declare const $2sxc: SxcRoot;

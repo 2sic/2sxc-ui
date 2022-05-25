@@ -1,4 +1,4 @@
-﻿import { NoJQ, SxcInstanceManage } from '../../../$2sxc/src';
+﻿import { SxcInstanceManage } from '../../../$2sxc/src';
 import { SxcInstanceEngine } from '../commands';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { AttrJsonEditContext } from '../context/html-attribute/edit-context-root';

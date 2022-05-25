@@ -1,4 +1,4 @@
-import { ContextIdentifier, isContextIdentifier, SxcInstance } from '../../../../$2sxc/src';
+import { ContextIdentifier, isContextIdentifier, SxcInstanceInternal } from '../../../../$2sxc/src';
 import { SxcEdit } from '../../interfaces/sxc-instance-editable';
 import { WorkflowStep } from '../../workflow/workflow';
 import { CommandParams } from '../command-params';
@@ -47,7 +47,7 @@ export interface RunParamsWithContext extends RunParams {
    * The context to run in, basically containing module id, etc.
    * We always need the tag OR the context, but never both
    */
-  context?: SxcInstance | SxcEdit | ContextIdentifier;
+  context?: SxcInstanceInternal | SxcEdit | ContextIdentifier;
 }
 
 /**

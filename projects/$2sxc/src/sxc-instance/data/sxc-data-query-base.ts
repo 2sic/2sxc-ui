@@ -1,20 +1,21 @@
-import { SxcInstance } from "..";
+import { SxcInstanceInternal } from '..';
 import { SxcInstancePart } from '../sxc-instance-part';
-import { SxcWebApi } from "../web-api/sxc-web-api";
+import { SxcWebApiInternal } from '../web-api/sxc-web-api';
 
 /**
 * Base class doing common checks
+* @internal
 */
 export class SxcDataQueryBase extends SxcInstancePart {
-  protected readonly webApi: SxcWebApi;
+  protected readonly webApi: SxcWebApiInternal;
   /**
   * Creates an instance of SxcData.
-  * @param {SxcInstance} sxc
+  * @param {SxcInstanceInternal} sxc
   * @param {string} name the content-type name
   * @memberof SxcData
   */
   constructor(
-    sxc: SxcInstance,
+    sxc: SxcInstanceInternal,
     readonly name: string,
     nameInError: string
   ) {

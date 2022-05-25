@@ -1,20 +1,23 @@
-import * as Public from '../../../sxc-typings/index';
+import { JsInfo } from '..';
 import { EnvironmentMetaLoader } from './env-loader-meta';
-import { HasLog, Insights, SxcApiUrlRoot } from '..';
+import { HasLog, Insights, SxcApiUrlRoot } from '../../../core';
 import { AntiForgeryTokenHeaderNameDnn, DnnUiRoot, PlatformDnn } from '../constants';
 
-declare const _jsApi: Public.JsInfo;
+declare const _jsApi: JsInfo;
 
 /**
  * Provides environment information to $2sxc - usually page-id, api-root and stuff like that
  */
-export class Environment extends HasLog implements Public.Environment {
-    private header: Public.JsInfo;
+export class Environment extends HasLog {
+    /** @internal */
+    private header: JsInfo;
     public ready = false;
     public source = '';
 
+    /** @internal */
     public metaLoader: EnvironmentMetaLoader;
 
+    /** @internal */
     constructor() {
         super('Environment', null, 'starting');
         this.log.keepData = true;   // always keep here for clarity
@@ -35,7 +38,7 @@ export class Environment extends HasLog implements Public.Environment {
      * Load a new jsInfo - must be public, as it's used in iframes where jquery is missing
      * @param newJsInfo new info to load
      */
-    public load(newJsInfo: Public.JsInfo, source?: string) {
+    public load(newJsInfo: JsInfo, source?: string) {
         const cl = this.log.call('load');
         if(newJsInfo.root && !newJsInfo.api) {
             cl.add('root provided, api missing, will auto-complete');
@@ -54,50 +57,74 @@ export class Environment extends HasLog implements Public.Environment {
         cl.return(newJsInfo, 'loaded from ' + this.source);
     }
 
+    /** @internal */
     private replacedRvt: string;
+
+    /** @internal */
     public updateRvt(newRvt: string) {
         if(!newRvt) return;
         this.replacedRvt = newRvt;
         this.header.rvt = newRvt;
     }
 
+    /**
+     * The API endpoint url from the environment
+     */
     public api(): string {
         this.ensureReadyOrThrow('api');
         return this.header.api;
     }
 
     // WIP - may return undefined
+    /** @internal */
     public appApi(): string {
         // WIP - must get it to work without 'appApi' but only 'api' to ensure ...
         this.ensureReadyOrThrow('appApi');
         return this.header.appApi;
     }
 
+    /**
+     * The current page ID
+     */
     public page(): number {
         this.ensureReadyOrThrow('page');
         return this.header.page;
     }
 
+    /**
+     * The request verification token header name
+     */
     public rvtHeader(): string {
         this.ensureReadyOrThrow('rvtHeader');
         return this.header.rvtHeader || AntiForgeryTokenHeaderNameDnn;
     }
 
+    /**
+     * The request verification token value
+     */
     public rvt(): string {
         this.ensureReadyOrThrow('rvt');
         return this.header.rvt;
     }
 
+    /**
+     * The uiRoot path
+     * @internal
+     */
     public uiRoot(): string {
         this.ensureReadyOrThrow('uiRoot');
         return this.header.uiRoot || DnnUiRoot;
     }
 
+    /**
+     * The platform code like 'oqt' or 'dnn' in case the JS needs to know the difference
+     */
     public platform(): string {
         this.ensureReadyOrThrow('platform');
         return this.header.platform || PlatformDnn;
     }
 
+    /** @internal */
     private ensureReadyOrThrow(partRequested: string): void {
         if(this.ready) return;
 

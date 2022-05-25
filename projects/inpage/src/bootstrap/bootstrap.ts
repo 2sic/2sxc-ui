@@ -6,6 +6,7 @@ import { HasLog, Insights, Log } from '../logging';
 import { NoJQ } from '../plumbing';
 import { QuickDialog } from '../quick-dialog';
 import * as QuickEditState from '../quick-dialog/state';
+import { toolbarSelector } from '../toolbar';
 import { TagToolbarManager } from '../toolbar/tag-toolbars/tag-toolbar-manager';
 import { ToolbarManager } from '../toolbar/toolbar-manager';
 
@@ -44,7 +45,18 @@ export class BootstrapInPage extends HasLog {
      */
     private initAllInstances(isFirstRun: boolean): void {
         const callLog = this.log.call('initAllInstances');
-        document.querySelectorAll<HTMLElement>(C.Sel.SxcDivs).forEach((e) => {
+        // initialize toolbars that are not inside 2sxc modules (e.g. in skin)
+        const noModuleToolbars = Array.from(document.querySelectorAll<HTMLElement>(toolbarSelector))
+            .filter((e) => !e.closest(C.Sel.SxcDivs));
+
+        this.log.add(`Found ${noModuleToolbars.length} toolbars outside of 2sxc modules`);
+        noModuleToolbars.forEach((e) => {
+            ToolbarManager.singleton().build(e);
+        });
+        // initialize toolbars inside 2sxc modules
+        const modToolbars = document.querySelectorAll<HTMLElement>(C.Sel.SxcDivs);
+        this.log.add(`Found ${modToolbars.length} toolbars inside 2sxc modules`);
+        modToolbars.forEach((e) => {
             this.initInstance(e, isFirstRun);
         });
         if (isFirstRun) this.tryShowTemplatePicker();

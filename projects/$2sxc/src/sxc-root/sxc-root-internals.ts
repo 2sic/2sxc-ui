@@ -1,10 +1,11 @@
 import { SxcInstanceWithInternals } from '../sxc-instance/sxc-instance-with-internals';
 import { TotalPopup } from '../tools/total-popup';
 import { Stats } from '../Stats';
-import { SxcRoot } from './sxc-root';
+import { SxcRootExt } from './sxc-root';
 import { Debug } from '..';
-import { Insights } from '..';
+import { Insights } from '../../../core';
 
+/** @internal */
 export interface SxcRootInternals {
     _controllers: { [id: string]: SxcInstanceWithInternals };
     beta: any;
@@ -29,4 +30,5 @@ export interface SxcRootInternals {
     totalPopup: TotalPopup;
 }
 
-export interface SxcRootWithInternals extends SxcRoot, SxcRootInternals { }
+/** @internal */
+export interface SxcRootWithInternals extends SxcRootExt, SxcRootInternals { }

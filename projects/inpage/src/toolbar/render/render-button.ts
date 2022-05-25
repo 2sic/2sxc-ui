@@ -14,12 +14,12 @@ export class RenderButton extends RenderPart {
 
     render(ctx: ContextComplete, groupIndex: number): HTMLElement {
         const cl = this.log.call('render', `contex: obj, group: ${groupIndex}, btn: ${ctx.button.id}/${ctx.button.command?.name}`);
-        const btn = new ButtonSafe(ctx.button, ctx);
+        const btnSafe = new ButtonSafe(ctx.button, ctx);
 
         // check if we have rules and merge params into the button
         const rule = ctx.toolbar?.settings?._rules?.find(ctx.button.id);
         if (rule) cl.data('rule found, will try to merge params', rule);
-        const params = ButtonCommand.mergeAdditionalParams(btn.action(), rule?.params);
+        const params = ButtonCommand.mergeAdditionalParams(btnSafe.action(), rule?.params);
 
 
         const group = ctx.toolbar?.groups?.[groupIndex];
@@ -27,27 +27,27 @@ export class RenderButton extends RenderPart {
 
         const btnLink = document.createElement('a');
 
-        const disabled = btn.disabled();
+        const disabled = btnSafe.disabled();
 
         // put call as plain JavaScript to preserve even if DOM is serialized
-        if (!disabled) btnLink.setAttribute('onclick', this.generateRunJs(ctx , params));
+        if (!disabled) btnLink.setAttribute('onclick', this.generateRunJs(rule, ctx , params));
 
         // Add various classes
         const classes = (disabled ? ' disabled' : '')
-            + (btn.action() ? ` sc-${btn.action().name}` : '')
+            + (btnSafe.action() ? ` sc-${btnSafe.action().name}` : '')
             + ` in-group-${groupIndex}`
             + (groupName ? ` in-group-${groupName}` : '')
             + ' ' + rule?.ui.class
-            + ' ' + btn.classes()
-            + ' ' + btn.dynamicClasses();
+            + ' ' + btnSafe.classes()
+            + ' ' + btnSafe.dynamicClasses();
         cl.add('classes: ' + classes);
         HtmlTools.addClasses(btnLink, classes);
 
         // set title for button, optionally with i18n
-        this.setTitle(rule, btnLink, btn);
+        this.setTitle(rule, btnLink, btnSafe);
 
         const divTag = document.createElement('div');
-        divTag.appendChild(this.iconTag(btn, rule));
+        divTag.appendChild(this.iconTag(btnSafe, rule));
         btnLink.appendChild(divTag);
 
         // set color - new in 10.27
@@ -87,17 +87,34 @@ export class RenderButton extends RenderPart {
         return callLog.done(color ?? 'no color');
     }
 
-    private generateRunJs(ctx: ContextComplete, params: CommandParams) {
-        return `$2sxc(${ctx.instance.id}, ${ctx.contentBlockReference.id}).manage.run(${JSON.stringify(params)}, event);`;
+    private generateRunJs(rule: BuildRule, ctx: ContextComplete, params: CommandParams) {
+        // 2022-05-18 2dm: #CustomContext New we can override the context
+        let modifyContext = rule?.context;
+        if (!modifyContext || Object.keys(modifyContext).length === 0)
+            modifyContext = undefined;
+        else
+            modifyContext = { ...modifyContext, complete: true };
+        const targetContext = modifyContext ? JSON.stringify(modifyContext) : `${ctx.instance.id}, ${ctx.contentBlockReference.id}`;
+        return `$2sxc(${targetContext}).manage.run(${JSON.stringify(params)}, event);`;
     }
 
     private iconTag(btn: ButtonSafe, rule: BuildRule) {
         const callLog = this.log.call('iconTag');
-        const symbol = document.createElement('i');
         const icon = rule?.ui?.icon || btn.icon();
-        HtmlTools.addClasses(symbol, icon);
-        symbol.setAttribute('aria-hidden', 'true');
-        return callLog.return(symbol, icon);
+        if (icon.startsWith('svg:')) {
+            const base64 = icon.split('svg:')[1];
+            const decoded = atob(base64);
+            const symbol = document.createElement('div');
+            HtmlTools.addClasses(symbol, 'svg-wrapper');
+            symbol.innerHTML = decoded;
+            symbol.setAttribute('aria-hidden', 'true');
+            return callLog.return(symbol, icon);
+        } else {
+            const symbol = document.createElement('i');
+            HtmlTools.addClasses(symbol, icon);
+            symbol.setAttribute('aria-hidden', 'true');
+            return callLog.return(symbol, icon);
+        }
     }
 }
 

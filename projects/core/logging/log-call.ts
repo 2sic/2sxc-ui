@@ -1,8 +1,9 @@
-import { Entry, Log, LogEntryOptions as LEO } from '.';
+import { LogEntry, Log, LogEntryOptions as LEO } from '.';
 
+/** @internal */
 export class LogCall {
     /** The initial entry created - important for later attaching the final result of the call */
-    public initialEntry: Entry;
+    public initialEntry: LogEntry;
 
     constructor(public log: Log, public name: string, callParams?: string, message?: string, data?: {[key:string]: unknown }) {
         this.initialEntry = this.log._prepareEntry(name + '(' + (callParams || '') + ')');

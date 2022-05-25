@@ -1,4 +1,4 @@
-
+/** @internal */
 export enum LogEntryOptions {
     log = 'log',
     warn = 'warn',

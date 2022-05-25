@@ -47,35 +47,38 @@ export class NgUrlValuesWithoutParams {
   readonly rvt: string;
 
   constructor(context: ContextComplete, partOfPage: boolean) {
-    this.zoneId = context.app.zoneId;
-    this.appId = context.app.id;
-    this.tid = context.page.id;
-    this.mid = context.instance.id;
-    this.cbid = context.contentBlockReference.id;
 
-    // 2021-01-19
-    // this.lang = context.app.currentLanguage;
-    // this.langpri = context.app.primaryLanguage;
-    // this.langs = JSON.stringify(context.app.allLanguages);
+    // console.log('2dm - context', context);
+    // #CustomContext
+    const ctx = context.sxc?.ctx;
+    const ctxAny = ctx as any;
+    if (ctxAny?.complete === true) {
+        this.zoneId = ctx.zoneId;
+        this.appId = ctx.appId;
+        if (ctx.pageId != null) this.tid = ctx.pageId;
+        if (ctx.moduleId != null) this.mid = ctx.moduleId;
+        const cbid = ctxAny?.blockId ?? this.mid;
+        if (cbid != null && cbid !== '') this.cbid = cbid;
+    } else {
+        this.zoneId = ctx?.zoneId ?? context.app.zoneId;
+        this.appId = ctx?.appId ?? context.app.id;
+        this.tid = ctx?.pageId ?? context.page.id;
+        this.mid = ctx?.moduleId ?? context.instance.id;
+        this.cbid = ctxAny?.blockId ?? context.contentBlockReference.id;
+    }
 
-    // 2020-11-28 #cleanup11.11 2dm - not used, disabled - keep till Jan 2021, then remove from backend-json and drop these comments
-    // this.portalroot = context.tenant.url;
-    // 2020-12-11 #cleanup11.11 2dm - doesn't seem used, disabled
-    // this.websiteroot = context.instance.sxcRootUrl;
-
-    // New in 11.05.01
     this.api = $2sxc.env.api();
-    // 2021-01-19
-    // this.uiRoot = $2sxc.env.uiRoot();
 
     this.partOfPage = partOfPage;
     if (partOfPage) this.publishing = context.contentBlockReference.publishingMode;
     // todo= probably move the user into the dashboard info
     // 2021-01-19 2dm - should now not be used any more
     // this.user = ContextOfUser.fromContext(context);
+    // TODO: #paramCleanUp - approot is probably not used anymore. verify and remove
     this.approot = context.app.appPath || null; // this is the only value which doesn't have a slash by default. note that the app-root doesn't exist when opening "manage-app"
     if (context?.button?.command?.params?.apps)
         this.apps = context.button.command.params.apps;
+    // TODO: #paramCleanUp - fa is probably not used anymore. verify and remove
     this.fa = !context.app.isContent;
     this.rvth = $2sxc.env.rvtHeader();
     this.rvt = $2sxc.env.rvt();

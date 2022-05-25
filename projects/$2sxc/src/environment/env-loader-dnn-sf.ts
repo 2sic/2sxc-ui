@@ -1,13 +1,14 @@
 import { Environment } from '.';
-import { HasLog, NoJQ, Window } from '..';
-import { JsInfo } from '../../../sxc-typings';
-import { AntiForgeryTokenHeaderNameDnn, DnnUiRoot, PlatformDnn } from '../constants/index';
+import { HasLog, NoJQ } from '../../../core';
+import { Window, JsInfo } from '..';
+import { AntiForgeryTokenHeaderNameDnn, DnnUiRoot, PlatformDnn } from '../constants';
 
 const helpAutoDetect = 'You must either include jQuery on the page or inject the jsApi parameters to prevent auto-detection.';
 declare const window: Window;
 
 /**
  * This helps load environment information from DNN ServicesFramework - it's a fallback in case the other mechanisms fail
+ * @internal
  */
 export class EnvironmentDnnSfLoader extends HasLog {
     constructor(public env: Environment) {
