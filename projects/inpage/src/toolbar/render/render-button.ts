@@ -100,11 +100,21 @@ export class RenderButton extends RenderPart {
 
     private iconTag(btn: ButtonSafe, rule: BuildRule) {
         const callLog = this.log.call('iconTag');
-        const symbol = document.createElement('i');
         const icon = rule?.ui?.icon || btn.icon();
-        HtmlTools.addClasses(symbol, icon);
-        symbol.setAttribute('aria-hidden', 'true');
-        return callLog.return(symbol, icon);
+        if (icon.startsWith('svg:')) {
+            const base64 = icon.split('svg:')[1];
+            const decoded = atob(base64);
+            const symbol = document.createElement('div');
+            HtmlTools.addClasses(symbol, 'svg-wrapper');
+            symbol.innerHTML = decoded;
+            symbol.setAttribute('aria-hidden', 'true');
+            return callLog.return(symbol, icon);
+        } else {
+            const symbol = document.createElement('i');
+            HtmlTools.addClasses(symbol, icon);
+            symbol.setAttribute('aria-hidden', 'true');
+            return callLog.return(symbol, icon);
+        }
     }
 }
 
