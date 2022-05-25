@@ -48,11 +48,15 @@ export class BootstrapInPage extends HasLog {
         // initialize toolbars that are not inside 2sxc modules (e.g. in skin)
         const noModuleToolbars = Array.from(document.querySelectorAll<HTMLElement>(toolbarSelector))
             .filter((e) => !e.closest(C.Sel.SxcDivs));
+
+        this.log.add(`Found ${noModuleToolbars.length} toolbars outside of 2sxc modules`);
         noModuleToolbars.forEach((e) => {
             ToolbarManager.singleton().build(e);
         });
         // initialize toolbars inside 2sxc modules
-        document.querySelectorAll<HTMLElement>(C.Sel.SxcDivs).forEach((e) => {
+        const modToolbars = document.querySelectorAll<HTMLElement>(C.Sel.SxcDivs);
+        this.log.add(`Found ${modToolbars.length} toolbars inside 2sxc modules`);
+        modToolbars.forEach((e) => {
             this.initInstance(e, isFirstRun);
         });
         if (isFirstRun) this.tryShowTemplatePicker();
