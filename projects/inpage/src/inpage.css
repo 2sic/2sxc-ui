@@ -105,7 +105,7 @@ body.sc-tb-show-all [sxc-toolbar-hover] .sc-menu {
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 
   /* Experimental: electric glow */
-  animation: glow 1s ease-in-out infinite alternate;
+  /* animation: glow 1s ease-in-out infinite alternate; */
 }
 
 @keyframes glow {
