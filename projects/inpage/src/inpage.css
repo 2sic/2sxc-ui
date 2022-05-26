@@ -80,11 +80,13 @@ body.sc-tb-show-all [sxc-toolbar-hover] .sc-menu {
 }
 
 /* this one is for buttons which can have a full/empty state */
-.sc-menu li a.empty i {
+.sc-menu li a.empty i,
+.sc-menu li a.empty span.svg-wrapper {
   opacity: 0.4;
 }
 /* this one is for buttons which can be disabled, like publish */
-.sc-menu li a.disabled i {
+.sc-menu li a.disabled i,
+.sc-menu li a.disabled span.svg-wrapper {
   opacity: 0.4;
 }
 
