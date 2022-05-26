@@ -139,18 +139,23 @@ body.sc-tb-show-all [sxc-toolbar-hover] .sc-menu {
   vertical-align: text-bottom;
 }
 
-.sc-menu a div.svg-wrapper {
+.sc-menu a span.svg-wrapper {
   text-align: center;
+  background: transparent;
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+  vertical-align: text-bottom;
 }
 
-.sc-menu a div.svg-wrapper svg {
+.sc-menu a span.svg-wrapper svg {
   transform: scale(0.4);
   position: relative;
-  top: -9px;
-  left: -9px;
+  top: -10px;
+  left: -10px;
 }
 
-.sc-menu a div.svg-wrapper svg * {
+.sc-menu a span.svg-wrapper svg * {
   fill: white;
 }
 
