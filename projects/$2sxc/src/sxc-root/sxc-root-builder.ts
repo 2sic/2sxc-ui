@@ -41,11 +41,7 @@ function FindSxcInstance(id: number | ContextIdentifier | HTMLElement | SxcInsta
     } else if (id instanceof HTMLElement && id.matches(toolbarSelector) && !id.closest(sxcDivsSelector)) {
         // for toolbars that are not inside 2sxc modules (e.g. in skin)
         const contextAttribute = id.getAttribute('sxc-context');
-        const sxcContext: Record<string, any> = JSON.parse(contextAttribute);
-        ctxId = {
-            zoneId: sxcContext.zoneId,
-            appId: sxcContext.appId,
-        };
+        ctxId = JSON.parse(contextAttribute);
         return FindSxcInstance(ctxId);
     } else if (typeof id === 'object') {
         // if it's a dom-element, use auto-find
