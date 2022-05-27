@@ -70,7 +70,7 @@
               <span>{{"TemplatePicker.Install" | translate}}</span>
             </div>
           </div>
-          <div class="tile config" *ngIf="showAdvanced" (click)="run('zone')" [attr.title]="'TemplatePicker.Zone' | translate">
+          <div class="tile config" *ngIf="showAdvanced" (click)="run({action:'zone',dialogTab:'list'})" [attr.title]="'TemplatePicker.Zone' | translate">
             <div class="bg">
               <div class="bg-icon">
                 <mat-icon>apps</mat-icon>

@@ -1,6 +1,7 @@
 ﻿import { QuickDialogContainer } from '.';
 import { IIFrameBridge } from '../../../connect-parts/inpage-quick-dialog';
 import { IQuickDialogConfig } from '../../../connect-parts/inpage-quick-dialog';
+import { CommandParams } from '../commands/command-params';
 import { ContentBlockEditor } from '../contentBlock/content-block-editor';
 import { renderer } from '../contentBlock/render';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
@@ -54,7 +55,7 @@ export class IFrameBridge extends HasLog implements IIFrameBridge {
         QuickDialog.singleton().setVisible(false);
     }
 
-    run(verb: string) {
+    run(verb: string | CommandParams) {
         this.uncachedSxc().manage.run(verb);
     }
 

@@ -208,7 +208,7 @@ export class TemplatePickerComponent implements OnInit {
   //#region basic UI action binding
   cancel(): void { this.bridge.cancel(); }
 
-  run(action: string): void { this.bridge.run(action); }
+  run(action: string | Record<string, any>): void { this.bridge.run(action); }
 
   persistTemplate(template: Template) { this.bridge.setTemplate(template.TemplateId, template.Name, true); }
 
