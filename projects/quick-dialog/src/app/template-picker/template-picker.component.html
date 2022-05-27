@@ -39,7 +39,7 @@
         </ng-template>
 
         <!-- App Selector -->
-        <div *ngIf="!isContent; else contentApp" class="tiles">
+        <div *ngIf="!isContent; else contentApp" class="tiles" [ngClass]="{ 'show-installer': !isBadContextForInstaller && showInstaller }">
 
           <div class="tile"
             [ngClass]="{ active: app?.AppId === a.AppId, blocked: preventTypeSwitch }"
@@ -84,7 +84,7 @@
 
         <!-- Content-Type selection (when not a generic app, but the default content-app) -->
         <ng-template #contentApp>
-          <div class="tiles">
+          <div class="tiles" [ngClass]="{ 'show-installer': !isBadContextForInstaller && showInstaller }">
             <div mat-button class="tile"
               [ngClass]="{ active: contentType ? contentType?.StaticName === c.StaticName : defaultContentType?.StaticName === c.StaticName, blocked: preventTypeSwitch }"
               [attr.title]="(c.Label | translate) + (showDebug ? ' (' + c.StaticName + ')' : '')"
@@ -108,7 +108,7 @@
 
       <!-- template selection after app/content-type selection -->
       <mat-tab *ngIf="isContent ? contentType : app" [label]="('TemplatePicker.ChangeView' | translate) + ' (' + templates.length + ')'">
-        <div class="tiles">
+        <div class="tiles" [ngClass]="{ 'show-installer': !isBadContextForInstaller && showInstaller }">
           <mat-spinner class="templates-spinner" *ngIf="templatesLoading$ | async"></mat-spinner>
           <div class="tile"
             [ngClass]="{ active: template?.TemplateId === t.TemplateId }"
@@ -139,7 +139,7 @@
         </div>
       </mat-tab>
       <!-- Search -->
-      <mat-tab disabled>
+      <mat-tab disabled *ngIf="!(!isBadContextForInstaller && showInstaller)">
         <ng-template mat-tab-label>
           <div class="search-field">
             <input type="text" *ngIf="tabIndex === 0 && !isContent" [(ngModel)]="appFilter">
