@@ -1,9 +1,8 @@
-﻿import { SxcInstanceManage } from '../../../$2sxc/src';
+﻿import { SxcInstance, SxcInstanceManage } from '../../../$2sxc/src';
 import { SxcInstanceEngine } from '../commands';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { AttrJsonEditContext } from '../context/html-attribute/edit-context-root';
 import { ContextOfUser } from '../context/parts/context-user';
-import { SxcEdit } from '../interfaces/sxc-instance-editable';
 import { TypeUnsafe } from '../plumbing';
 import { ToolbarManager } from '../toolbar';
 import { ToolbarSettings } from '../toolbar/config';
@@ -16,7 +15,7 @@ import { ToolbarRenderer } from '../toolbar/render/toolbar-renderer';
 export class EditManager implements SxcInstanceManage {
 
     constructor(
-        private sxc: SxcEdit,
+        private sxc: SxcInstance,
         private editContext: AttrJsonEditContext,
         private userInfo: ContextOfUser,
         private cmdEngine: SxcInstanceEngine,

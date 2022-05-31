@@ -9,6 +9,7 @@
 
 // early things without dependencies, which may be needed by others
 export * from './_/window';
+export * from './data';
 export * from './tools/total-popup';
 export * from './tools/url-param-manager';
 export * from './constants';

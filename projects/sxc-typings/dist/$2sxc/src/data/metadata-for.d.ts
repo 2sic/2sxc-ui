@@ -1,11 +1,12 @@
+import { TargetTypes } from './target-types';
 /**
  * A Metadata-Target identifier to tell an entity that it describes something else
  */
 export interface MetadataFor {
     /**
-     * The target type identifier - TODO @2dm - THIS SHOULD probably be number only
+     * The target type identifier - TODO: @2dm - THIS SHOULD probably be number only
      */
-    Target: string | number;
+    Target: string | TargetTypes;
     /**
      * The number of the target, if it's identified by a number.
      * @type {number}

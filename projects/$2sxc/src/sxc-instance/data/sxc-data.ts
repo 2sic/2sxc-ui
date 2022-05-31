@@ -1,10 +1,9 @@
 import { SxcInstance } from '..';
+import { TargetTypes } from '../../data';
 import { MetadataFor } from '../../data/metadata-for';
 import { SxcDataQueryBase } from './sxc-data-query-base';
 
 const ContentApiRoot = 'app/auto/data';
-
-const TargetTypeEntity = 4;
 
 /**
 * Data Service for an App / Sxc-Instance to get/create data of a specific Content-Type
@@ -73,7 +72,7 @@ export class SxcData<T = unknown> extends SxcDataQueryBase {
     const path = `${ContentApiRoot}/${this.name}`;
     if (metadataFor != null) {
       if (typeof(metadataFor) === 'string')
-        metadataFor = { Target: TargetTypeEntity, Guid: metadataFor } as MetadataFor;
+        metadataFor = { Target: TargetTypes.Entity, Guid: metadataFor } as MetadataFor;
       try {
         values.For = metadataFor;
       } catch { }
