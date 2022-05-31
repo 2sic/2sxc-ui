@@ -1,9 +1,10 @@
 {
-  "version": "14.00.00-beta.2",
+  "version": "14.00.00",
   "types": "./index.d.ts",
   "scripts": {
     "dry-run": "npm publish --dry-run",
-    "publish-beta": "npm publish --tag beta"
+    "publish-beta": "npm publish --tag beta",
+    "publish-prod": "npm publish"
   },
   "author": {
     "name": "2sic Internet Solutions, Switzerland & Liechtenstein",
