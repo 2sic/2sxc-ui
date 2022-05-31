@@ -1,14 +1,11 @@
 ﻿import { TotalPopup } from '../tools/total-popup';
 import { UrlParamManager } from '../tools/url-param-manager';
 import { Stats } from '../Stats';
-import { SxcInstanceWithInternals } from '../sxc-instance/sxc-instance-with-internals';
-import { SxcRootInternals } from './sxc-root-internals';
-import { SxcRootExt, getRootPartsV2 } from './sxc-root';
+import { getRootPartsV2 } from './sxc-root';
 import { Window } from '../_/window';
-import { Debug } from '..';
+import { Debug, SxcInstance, SxcRoot } from '..';
 import { Insights, SxcVersion } from '../../../core';
-import { ContextIdentifier, isContextIdentifier, ensureCompleteOrThrow } from './context-identifier';
-import { SxcInstanceInternal } from '../sxc-instance/sxc-instance';
+import { ContextIdentifier } from './context-identifier';
 
 declare const window: Window;
 // TODO: copied from selectors in inpage project. Probably best to move selectors from inpage to core
@@ -21,20 +18,20 @@ const sxcDivsSelector = 'div[data-edit-context]';
  * @param cbid
  * @returns {}
  */
-function FindSxcInstance(id: number | ContextIdentifier | HTMLElement | SxcInstanceWithInternals, cbid?: number): SxcInstanceWithInternals {
-    const $2sxc = window.$2sxc as SxcRootExt & SxcRootInternals;
+function FindSxcInstance(id: number | ContextIdentifier | HTMLElement | SxcInstance, cbid?: number): SxcInstance {
+    const $2sxc = window.$2sxc as SxcRoot;
     $2sxc.log.add('FindSxcInstance(' + id + ',' + cbid);
     if (!$2sxc._controllers)
         throw new Error('$2sxc not initialized yet');
 
     // Test if it already is such an instance, in which case we just preserve it and return it
     // Used in cases where the $2sxc(something) is just used to ensure it really is this
-    if (SxcInstanceInternal.is(id)) return id;
+    if (SxcInstance.is(id)) return id;
 
     // check if it's a context identifier
     let ctxId: ContextIdentifier = null;
-    if (isContextIdentifier(id)) {
-        id = ensureCompleteOrThrow(id);
+    if (ContextIdentifier.is(id)) {
+        id = ContextIdentifier.ensureCompleteOrThrow(id);
         ctxId = id;
         // create a fake id, based on zone and app because this is used to identify the object in the cache
         id = id.zoneId * 100000 + id.appId;
@@ -64,14 +61,14 @@ function FindSxcInstance(id: number | ContextIdentifier | HTMLElement | SxcInsta
     if (!$2sxc._data[cacheKey]) $2sxc._data[cacheKey] = {};
 
     return ($2sxc._controllers[cacheKey]
-        = new SxcInstanceWithInternals(id, cbid, cacheKey, $2sxc, ctxId));
+        = new SxcInstance(id, cbid, cacheKey, $2sxc, ctxId));
 }
 
 /**
  * Build a SXC Controller for the page. Should only ever be executed once
  * @internal
  */
-export function buildSxcRoot(): SxcRootExt & SxcRootInternals {
+export function buildSxcRoot(): SxcRoot {
     const rootApiV2 = getRootPartsV2();
 
     const urlManager = new UrlParamManager();
@@ -83,7 +80,7 @@ export function buildSxcRoot(): SxcRootExt & SxcRootInternals {
     const stats = new Stats();
 
 
-    const addOn: Partial<SxcRootExt & SxcRootInternals> = {
+    const addOn: Partial<SxcRoot> = {
         _controllers: {} as any,
         beta: {},
         _data: {},
@@ -107,11 +104,9 @@ export function buildSxcRoot(): SxcRootExt & SxcRootInternals {
                 return url;
             },
         },
-        // debugger;
-        jq: function () { return window.$; },
     };
 
-    const merged = Object.assign(FindSxcInstance, addOn, rootApiV2) as SxcRootExt & SxcRootInternals;
+    const merged = Object.assign(FindSxcInstance, addOn, rootApiV2) as SxcRoot;
     merged.log.add('sxc controller built');
 
     console.log(`$2sxc ${SxcVersion} with insights-logging - see https://r.2sxc.org/insights`)

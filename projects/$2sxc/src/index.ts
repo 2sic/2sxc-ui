@@ -23,7 +23,6 @@ export * from './sxc-root/debug';
 export * from './sxc-root/context-identifier';
 export * from './sxc-root/sxc-root';
 export * from './sxc-root/sxc-root-builder';
-export * from './sxc-root/sxc-root-internals';
 
 export * from './sxc-instance/sxc-instance-manage';
 export * from './plumbing';

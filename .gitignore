@@ -6,7 +6,7 @@ node_*/
 docs/preview
 docs/**/*.yml
 
-projects/sxc-typings/dist
+# projects/sxc-typings/dist
 projects/$2sxc/docs/typedoc
 projects/$2sxc/docs/docFx
 projects/$2sxc/docs/_docFxSite

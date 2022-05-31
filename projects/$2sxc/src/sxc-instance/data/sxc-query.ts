@@ -1,13 +1,19 @@
-import { SxcInstanceInternal } from '..';
+import { SxcInstance } from '..';
 import { SxcDataQueryBase } from './sxc-data-query-base';
 
 /**
- * Instance Query accessor
- * @internal
+ * Instance Query Service
  */
 export class SxcQuery extends SxcDataQueryBase {
 
-  constructor(sxc: SxcInstanceInternal, readonly name: string) {
+  /**
+   * Creates an instance of SxcQuery.
+   * @param {SxcInstance} sxc
+   * @param {string} name
+   * @memberof SxcQuery
+   * @internal
+   */
+  constructor(sxc: SxcInstance, readonly name: string) {
     super(sxc, name, 'Query');
   }
 
@@ -65,6 +71,7 @@ export class SxcQuery extends SxcDataQueryBase {
    * @param id optional id as number or string - if not provided, will get all
    * @param params optional parameters - ATM not usefuly but we plan to support more filters etc. 
    * @returns an array with 1 or n entities in the simple JSON format
+   * @internal
    */
   private getInternal<T = unknown>(streams?: string, params?: string | Record<string, any>, data?: string | Record<string, unknown>): Promise<T> {
     let path = "app/auto/query/" + this.name;

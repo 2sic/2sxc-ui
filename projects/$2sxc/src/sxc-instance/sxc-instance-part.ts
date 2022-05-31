@@ -1,4 +1,4 @@
-import { SxcInstanceInternal } from '..';
+import { SxcInstance } from '..';
 
 /**
 * Base class for anything attached to an sxc-instance
@@ -7,11 +7,11 @@ import { SxcInstanceInternal } from '..';
 export class SxcInstancePart {
   /**
   * Creates an instance of SxcData.
-  * @param {SxcInstanceInternal} sxc
+  * @param {SxcInstance} sxc
   * @param {string} partName name of the part
   * @memberof SxcData
   */
-  constructor(public sxc: SxcInstanceInternal, public partName: string) {
+  constructor(public sxc: SxcInstance, public partName: string) {
       
   }
 

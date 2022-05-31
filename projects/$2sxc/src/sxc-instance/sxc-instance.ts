@@ -1,30 +1,30 @@
 ﻿import { ContextIdentifier } from '../sxc-root/context-identifier';
-import { SxcInstance } from '..';
-import { SxcWebApiInternal } from './web-api/sxc-web-api';
+import { SxcWebApi } from './web-api/sxc-web-api';
 import { ApiUrlRoots, HasLog, ToSxcName } from '../../../core';
-import { SxcRootExt } from '../sxc-root/sxc-root';
-import { SxcRootInternals } from '../sxc-root/sxc-root-internals';
 import { SxcInstanceManage } from './sxc-instance-manage';
 import { SxcData } from './data/sxc-data';
 import { SxcQuery } from './data/sxc-query';
 import { SxcInstanceCms } from './sxc-instance-cms';
+import { SxcRoot } from '..';
 
 // const serviceScopes = ['app', 'app-sys', 'app-api', 'app-query', 'app-content', 'eav', 'view', 'dnn'];
 
 /**
 * The typical sxc-instance object for a specific DNN module or content-block
-* @internal
 */
-export class SxcInstanceInternal extends HasLog implements SxcInstance {
+export class SxcInstance extends HasLog {
+  /** @internal */
   private _isSxcInstance = true;
-  webApi: SxcWebApiInternal;
+
+
+  webApi: SxcWebApi;
 
   /**
-  * The manage controller for edit/cms actions
-  *
-  * @type {*}
-  * @memberof SxcInstanceInternal
-  */
+   * manage object which provides access to additional content-management features
+   * it only exists if 2sxc is in edit mode (otherwise the JS are not included for these features)
+   * @memberof SxcInstance
+   * @internal
+   */
   manage: SxcInstanceManage = null; // initialize correctly later on
 
   /**
@@ -32,18 +32,33 @@ export class SxcInstanceInternal extends HasLog implements SxcInstance {
    */
   cms = new SxcInstanceCms(this, 'cms');
   
+  /** @internal */
   constructor(
+    /** the sxc-instance ID, which is usually the DNN Module Id */
     public id: number,
-    public cbid: number,
-    /** The environment information, important for http-calls */
-    public readonly root: SxcRootExt & SxcRootInternals,
     /**
-    * Custom context information provided by the constructor - will replace auto-context detection
-    */
+     * content-block ID, which is either the module ID, or the content-block definition entity ID
+     * this is an advanced concept you usually don't care about, otherwise you should research it
+     */
+    public cbid: number,
+    /** 
+     * the id/key of this instance in the cache for reset
+     * @internal
+     */
+    public cacheKey: string,
+    /** 
+     * The environment information, important for http-calls 
+     * @internal
+     */
+    public readonly root: SxcRoot,
+    /** 
+     * Custom context information provided by the constructor - will replace auto-context detection
+     * @internal
+     */
     public ctx?: ContextIdentifier,
   ) {
     super('SxcInstance', null, 'Generating for ' + id + ':' + cbid);
-    this.webApi = new SxcWebApiInternal(this);
+    this.webApi = new SxcWebApi(this);
     
     // add manage property, but not within initializer, because inside the manage-initializer it may reference 2sxc again
     try { // sometimes the manage can't be built, like before installing
@@ -51,6 +66,9 @@ export class SxcInstanceInternal extends HasLog implements SxcInstance {
     } catch (e) {
       console.error('error in 2sxc - will only log but not throw', e);
     }
+
+    // ensure that data-APIs used incorrectly shows good warnings
+    patchDataWithWarnings(this.data);
     
     // this only works when manage exists (not installing) and translator exists too
     if (root._translateInit && this.manage)
@@ -59,23 +77,34 @@ export class SxcInstanceInternal extends HasLog implements SxcInstance {
     root._translateInit(this.manage);    // init translate, not really nice, but ok for now
   }
 
-  public static is(thing: unknown): thing is SxcInstanceInternal {
-    const maybe = thing as SxcInstanceInternal;
+  /**
+   * TypeGuard for TypeScript to verify this is a SxcInstance
+   * @param thing 
+   * @returns 
+   */
+  public static is(thing: unknown): thing is SxcInstance {
+    const maybe = thing as SxcInstance;
     return maybe._isSxcInstance;
   }
-    
+
   /**
-  * TODO: DOCS
-  *
-  * @param {string} contentType
-  * @returns
-  * @memberof SxcInstanceInternal
-  */
-  data<T = unknown>(contentType: string) {
+   * Get a data service for a specific content-type.
+   *
+   * @param {string} contentType name of the content type which this service will get
+   * @returns SxcData<T>
+   * @memberof SxcInstance
+   */
+  data<T = unknown>(contentType: string) : SxcData<T> {
     return new SxcData<T>(this, contentType);
   }
   
-  query(query: string) {
+  /**
+   * 
+   * @param query 
+   * @returns SxcQuery
+   * @memberof SxcInstance
+   */
+  query(query: string) : SxcQuery {
     return new SxcQuery(this, query);
   }
     
@@ -86,6 +115,7 @@ export class SxcInstanceInternal extends HasLog implements SxcInstance {
   * @deprecated use http.apiUrl instead
   * @param virtualPath
   * @returns mapped path
+  * @internal
   */
   resolveServiceUrl(virtualPath: string) {
     const scope = virtualPath.split('/')[0].toLowerCase();
@@ -98,7 +128,12 @@ export class SxcInstanceInternal extends HasLog implements SxcInstance {
   }
     
     
-  // Show a nice error with more infos around 2sxc
+  /**
+   * Show a nice error with more infos around 2sxc
+   * @param result 
+   * @returns 
+   * @internal
+   */
   showDetailedHttpError(result: any): any {
     if (window.console)
     console.log(result);
@@ -149,8 +184,43 @@ export class SxcInstanceInternal extends HasLog implements SxcInstance {
     return result;
   }
     
+  /**
+   * Test if the current code is in edit-mode and additional javascripts have been loaded to make it work
+   * @returns true if we are in edit-mode
+   */
   isEditMode(): boolean {
-    return (this.manage && this.manage._isEditMode()) === true;
+    return this.manage?._isEditMode() === true;
+  }
+
+  /**
+   * 
+   * @param resetCache 
+   * @returns 
+   * @internal
+   */
+  recreate(resetCache: boolean): SxcInstance {
+    if (resetCache) delete this.root._controllers[this.cacheKey]; // clear cache
+    return this.root(this.id, this.cbid) as any as SxcInstance; // generate new
   }
 }
-    
+
+// Help cach error on call of old code
+// Background: From v3 to v12 data had a unusualy system for retrieving data belonging to the module
+// We believe it's almost never used, but the TimelineJs App always used it, and we believe
+// 2-3 other examples may have as well. 
+// Now in v13 sxc.data is used to get any kind of data,
+// and we want to make sure that old code will show a warning helping people fix this
+// All the old code would have started with sxc.data.on('load', ...) so this is where we give them the error
+// We only do this if it hasn't been done already
+function patchDataWithWarnings(data: any) {
+  if (!(data as any).on) {
+    (data as any).on = () => { throw warning };
+    Object.defineProperty(data, 'sourceUrl', {
+        get: function() { throw warning }
+    });
+  }
+}
+
+const warning = 'Warning Obsolete Feature on 2sxc JS: the .data has been obsolete for a long time and is repurposed. \n'
++ 'If you are calling ".data.on(...)" or ".data.sourceUrl" you are running very old code. \n' 
++ 'Guidance to fix this: https://r.2sxc.org/brc-13-id.';

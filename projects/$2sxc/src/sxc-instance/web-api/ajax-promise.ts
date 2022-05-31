@@ -1,4 +1,4 @@
-import { SxcInstanceInternal, SxcWebApiInternal } from '..';
+import { SxcInstance, SxcWebApi } from '..';
 import { NoJQ } from '../../../../core';
 import { Window } from '../..';
 import { AjaxSettings } from './ajax-settings';
@@ -7,7 +7,7 @@ declare const window: Window;
 
 /** @internal */
 export class AjaxPromise {
-  constructor(private api: SxcWebApiInternal, private sxc: SxcInstanceInternal) {
+  constructor(private api: SxcWebApi, private sxc: SxcInstance) {
   }
 
   /**

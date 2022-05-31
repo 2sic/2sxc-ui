@@ -1,8 +1,8 @@
 import { Environment } from '../environment';
-import { Log } from '../../../core';
-import { Http } from './http';
+import { Insights, Log } from '../../../core';
 import { UrlParams } from './url-params';
-import { SxcInstance } from './sxc-instance';
+import { ContextIdentifier, Debug, Stats, SxcInstance, TotalPopup } from '..';
+import { SxcHttp } from '../http/sxc-http';
 
 /**
  * This is the interface for the main $2sxc object on the window
@@ -14,7 +14,29 @@ export interface SxcRoot {
      * @param cbid number
      * @returns SxcInstance
      */
-    (id: number | HTMLElement, cbid?: number): SxcInstance;
+    (id: number | HTMLElement | ContextIdentifier | SxcInstance, cbid?: number): SxcInstance;
+
+    /** @internal */
+    _controllers: { [id: string]: SxcInstance };
+
+    /** @internal */
+    beta: any;
+
+    /** @internal */
+    _data: any;
+
+    /** @internal */
+    _manage: any;
+
+    /** @internal */
+    _translateInit: any;
+
+    /** @internal */
+    debug: Debug;
+
+    /** @internal */
+    stats: Stats;
+
 
     /**
      * system information, mainly for checking which version of 2sxc is running
@@ -37,12 +59,28 @@ export interface SxcRoot {
     /**
      * Http helper for API calls and such
      */
-    http: Http;
+    http: SxcHttp;
+
+    /** 
+     * The debugging / insights system 
+     */
+    insights: typeof Insights.show;
+
+    /** @internal */
+    _insights: typeof Insights;
+    
 
     /**
      * Internal logger to better see what's happening
      */
     log: Log;
+
+    /** 
+     * Very internal bit, probably will be deprecated 
+     * @internal
+     */
+    parts: any;
+
 
     /**
      * Helper to work with url parameters behind ? or #
@@ -50,4 +88,10 @@ export interface SxcRoot {
      * @memberof SxcRoot
      */
     urlParams: UrlParams;
+
+    /**
+     * A simple helper to create full-screen popups
+     * @internal
+     */
+    totalPopup: TotalPopup;
 }

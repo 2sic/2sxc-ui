@@ -1,4 +1,4 @@
-﻿import { isContextIdentifier, SxcInstanceInternal } from '../../../$2sxc/src';
+﻿import { ContextIdentifier, SxcInstance } from '../../../$2sxc/src';
 import { CmsEngine } from '../commands/';
 import { CommandParams } from '../commands/command-params';
 import { is$sxcRunParams, RunParamsWithContext } from '../commands/engine/run-params';
@@ -44,7 +44,7 @@ export class Cms extends HasLog {
         let innerCall: () => Promise<void>;
         if (is$sxcRunParams(context)) {
             // V1 with Context
-            const contextGiver = (isContextIdentifier(context.context) || SxcInstanceInternal.is(context.context))
+            const contextGiver = (ContextIdentifier.is(context.context) || SxcInstance.is(context.context))
                 ? $2sxcInPage(context.context)
                 : context.tag;
             const realCtx = ContextComplete.findContext(contextGiver);

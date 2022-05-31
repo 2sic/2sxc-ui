@@ -1,4 +1,4 @@
-import { SxcInstanceWithInternals } from '../../../$2sxc/src';
+import { SxcInstance } from '../../../$2sxc/src';
 import { Cms } from '../cms/Cms';
 import { ensureRunParamsInstanceOrError, RunParams } from '../commands/engine/run-params';
 import { C } from '../constants';
@@ -6,7 +6,7 @@ import { AttrJsonEditContext } from '../context/html-attribute';
 import { EditManager } from '../manage/edit-manager';
 
 
-export class SxcEdit extends SxcInstanceWithInternals {
+export class SxcEdit extends SxcInstance {
     manage: EditManager;
 
     /// TODO: CONTINUE HERE, TRY TO GET THE RUN TO USE THE CURRENT 2SXC

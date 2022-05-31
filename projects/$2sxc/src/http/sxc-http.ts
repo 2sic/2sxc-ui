@@ -1,13 +1,17 @@
 import { ApiExtensionPlaceholder } from '../constants';
 import { AppApiMarker, Dictionary, HasLog, HeaderNames, ToSxcName } from '../../../core';
-import { Http, ContextIdentifier, Environment } from '..';
+import { ContextIdentifier, Environment } from '..';
 
 /** @internal */
-export class SxcHttp extends HasLog implements Omit<Http, 'log'> {
+export class SxcHttp extends HasLog {
     constructor(private env: Environment) {
         super('Sxc.Http');
     }
 
+    /**
+     * All the headers which are needed in an ajax call for this to work reliably.
+     * Use this if you need to get a list of headers in another system
+     */
     headers(id?: number, cbid?: number, ctx?: ContextIdentifier): Dictionary<string> {
         const cl = this.log.call('headers', `${id}, ${cbid}`);
         const fHeaders: Dictionary<string> = {};
@@ -22,6 +26,12 @@ export class SxcHttp extends HasLog implements Omit<Http, 'log'> {
         return cl.return(fHeaders, `headers(id:${id}, cbid:${cbid})`);
     }
 
+    /**
+     * Get the API-Root path for a specific extension/endpoint
+     * @param {string} endpointName
+     * @returns {string}
+     * @memberof Http
+     */
     apiRoot(endpointName: string): string {
         const cl = this.log.call('apiRoot');
         var result = this.env.api().replace(ApiExtensionPlaceholder, endpointName);
@@ -34,6 +44,7 @@ export class SxcHttp extends HasLog implements Omit<Http, 'log'> {
      * @param {string} endpointName
      * @returns {string}
      * @memberof SxcHttp
+     * @internal
      */
      appApiRoot(): string {
         const cl = this.log.call('appApiRoot');
@@ -42,6 +53,14 @@ export class SxcHttp extends HasLog implements Omit<Http, 'log'> {
         return cl.return(result, `appApiRoot()`);
     }
 
+    /**
+     * Get the URL for a specific web API endpoint
+     * Will ignore urls which clearly already are the full url.
+     * @param {string} url
+     * @param {string} [endpointName]
+     * @returns
+     * @memberof Http
+     */
     apiUrl(url: string, endpointName?: string)
     {
         const cl = this.log.call('apiUrl');

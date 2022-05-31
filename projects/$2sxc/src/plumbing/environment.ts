@@ -1,6 +1,10 @@
+/**
+ * A context information for the current page, helping the JS talk with the backend
+ */
 export interface JsInfo {
   /** Page ID */
   page: number;
+
   /** Optional API key - optional if set from external, because it's auto derived from root */
   api: string;
 
@@ -13,11 +17,14 @@ export interface JsInfo {
   /** Request verification token header name */
   rvtHeader: string;
 
-  /** Request verification token value*/
+  /** Request verification token value */
   rvt: string;
 
   // 2021-02 2dm - as far as I know it's never used outside of 2sxc
-  /** The root path for the UI */
+  /** 
+   * The root path for the UI 
+   * @internal
+   */
   uiRoot: string;
 
   /** The platform code like 'dnn' or 'oqt' */

@@ -1,9 +1,8 @@
-import { WindowWith$2sxc } from '../plumbing';
-import { SxcRootWithInternals } from '../sxc-root/sxc-root-internals';
+import { SxcRoot, WindowWith$2sxc } from '../plumbing';
 
 /** @internal */
 export interface Window extends WindowWith$2sxc {
-    $2sxc: SxcRootWithInternals;
+    $2sxc: SxcRoot;
     // debugger;
     $: JQueryStatic & DnnJQueryExtensions;
 }
@@ -12,7 +11,7 @@ export interface Window extends WindowWith$2sxc {
 /** @internal */
 declare global {
     interface Window {
-        $2sxc: SxcRootWithInternals;
+        $2sxc: SxcRoot;
     }
 }
 

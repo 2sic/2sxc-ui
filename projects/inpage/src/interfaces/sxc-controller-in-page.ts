@@ -1,4 +1,4 @@
-﻿import { ContextIdentifier, SxcInstanceInternal, SxcInstanceWithInternals, SxcRootWithInternals } from '../../../$2sxc/src/index';
+﻿import { ContextIdentifier, SxcInstance, SxcRoot as SxcRootOriginal } from '../../../$2sxc/src/index';
 import { Cms } from '../cms/Cms';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { Manage } from '../manage/manage';
@@ -11,7 +11,7 @@ import { windowInPage as window } from './window-in-page';
  * $2sxc interface declaration merging for in-page
  */
 // ReSharper disable InconsistentNaming
-export interface SxcRoot extends SxcRootWithInternals {
+export interface SxcRoot extends SxcRootOriginal {
   /**
    * Get's an SxcInstance
    * @param id number | HTMLElement
@@ -19,7 +19,7 @@ export interface SxcRoot extends SxcRootWithInternals {
    * @returns SxcInstance
    */
   // 2021-09-17 spm assume this function doesn't use jquery
-  (id: number | ContextIdentifier | HTMLElement | SxcInstanceInternal | SxcInstanceWithInternals, cbid?: number): SxcEdit;
+  (id: number | ContextIdentifier | HTMLElement | SxcInstance , cbid?: number): SxcEdit;
   // insights: typeof Insights;
   _manage: Manage;
   system: SystemUpgrader;
