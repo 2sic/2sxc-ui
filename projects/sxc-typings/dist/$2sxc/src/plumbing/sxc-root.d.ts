@@ -1,8 +1,8 @@
 import { Environment } from '../environment';
-import { Log } from '../../../core';
-import { Http } from './http';
+import { Insights, Log } from '../../../core';
 import { UrlParams } from './url-params';
-import { SxcInstance } from '..';
+import { ContextIdentifier, SxcInstance } from '..';
+import { SxcHttp } from '../http/sxc-http';
 /**
  * This is the interface for the main $2sxc object on the window
  */
@@ -13,7 +13,7 @@ export interface SxcRoot {
      * @param cbid number
      * @returns SxcInstance
      */
-    (id: number | HTMLElement, cbid?: number): SxcInstance;
+    (id: number | HTMLElement | ContextIdentifier | SxcInstance, cbid?: number): SxcInstance;
     /**
      * system information, mainly for checking which version of 2sxc is running
      * note: it's not always updated reliably, but it helps when debugging
@@ -32,7 +32,11 @@ export interface SxcRoot {
     /**
      * Http helper for API calls and such
      */
-    http: Http;
+    http: SxcHttp;
+    /**
+     * The debugging / insights system
+     */
+    insights: typeof Insights.show;
     /**
      * Internal logger to better see what's happening
      */
