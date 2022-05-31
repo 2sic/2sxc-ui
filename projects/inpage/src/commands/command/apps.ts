@@ -1,10 +1,10 @@
 ﻿import { Commands } from '..';
 
-export const CmdZone = 'zone';
+export const CmdApps = 'apps';
 /**
  * import this module to commands.ts
  */
-Commands.add(CmdZone, 'Zone', 'manage', true, false, {
+Commands.add(CmdApps, 'Zone', 'manage', true, false, {
     showCondition: (context) => {
         return !!context.user.CanAdmin;
     },

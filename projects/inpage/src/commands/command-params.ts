@@ -18,7 +18,6 @@ export interface CommandParams {
     pipelineId?: number;
     filters?: string;
     dialog?: string;
-    dialogTab?: string;
     sortOrder?: number;
     entityId?: number;
 

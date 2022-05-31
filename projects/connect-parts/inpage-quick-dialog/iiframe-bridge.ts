@@ -10,7 +10,7 @@ import { IQuickDialogConfig } from './iquick-dialog-config';
 export interface IIFrameBridge {
   getAdditionalDashboardConfig(): IQuickDialogConfig;
   hide(): void;
-  run(verb: string | Record<string, any>): void;
+  run(verb: string): void;
   showMessage(message: string): void;
   reloadAndReInit(): Promise<IQuickDialogConfig>;
   setTemplate(templateId: number, templateName: string, closeDialog: boolean): Promise<boolean>;
