@@ -5,6 +5,8 @@
       "./src/index.ts"
     ],
     "out": "./docs/typedoc",
-    "json": "./docs/typedoc/typedoc.json"
+    "json": "./docs/typedoc/typedoc.json",
+    "name": "JsApi.InPage",
+    "includeVersion": false
   }
 }

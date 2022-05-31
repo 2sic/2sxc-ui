@@ -1,6 +1,6 @@
 {
   "name": "2sic-2sxc-js-api",
-  "version": "11.03.00",
+  "version": "14.00.00",
   "description": "The $2sxc JS API for 2sxc.org",
   "scripts": {
     "release": "webpack --mode=production",
@@ -8,7 +8,7 @@
     "2sxc-js-dev": "webpack --watch --mode=development",
     "typings": "cd src && typings.cmd \"..\\..\\sxc-typings\\dist\"",
     "// typedoc and docFx versions": "https://github.com/docascode/type2docfx/issues/63",
-    "build-typedoc": "cd src && delete.cmd \"..\\docs\\typedoc\" && cd .. && typedoc --tsconfig ./src/tsconfig.typedoc.json",
+    "build-typedoc": "cd src && delete.cmd \"..\\docs\\typedoc\" && cd .. && typedoc --tsconfig ./src/tsconfig.typedoc.json --excludePrivate --excludeProtected",
     "build-docFx": "cd src && delete.cmd \"..\\docs\\docFx\" && cd .. && type2docfx ./docs/typedoc/typedoc.json ./docs/docFx",
     "build-docs": "npm run build-typedoc && npm run build-docFx",
     "serve-docFx": "cd docs && docfx ./docfx-serve.config.json --serve"
