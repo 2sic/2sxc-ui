@@ -1,17 +1,14 @@
-import { $2sxcGlobal } from '../sxc-root';
+import { SxcGlobal } from '../sxc-root';
 
-/** @internal */
-export interface Window {
-    $2sxc: $2sxcGlobal;
-    // debugger;
-    /** @internal */
-    $: JQueryStatic & DnnJQueryExtensions;
-}
-
-// export interface WindowInternal extends
+/**
+ * export interface WindowInternal extends
+ */
 declare global {
     interface Window {
-        $2sxc: $2sxcGlobal;
+        /**
+         * The global $2sxc object / function to generate Sxc instances
+         */
+        $2sxc: SxcGlobal;
 
         /** @internal */
         $: JQueryStatic & DnnJQueryExtensions;

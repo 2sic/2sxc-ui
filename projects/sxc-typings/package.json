@@ -1,5 +1,5 @@
 {
-  "version": "14.01.00",
+  "version": "14.01.00-beta.0",
   "types": "./index.d.ts",
   "scripts": {
     "generate": "typings.cmd \".\\dist\"",
