@@ -1,4 +1,4 @@
-﻿import { Sxc, $2sxcGlobal } from '..';
+﻿import { Sxc, SxcGlobal } from '..';
 import { ContextIdentifier } from './context-identifier';
 
 declare const window: Window;
@@ -14,7 +14,7 @@ const sxcDivsSelector = 'div[data-edit-context]';
  * @internal
  */
 export function $2sxcGet(id: number | ContextIdentifier | HTMLElement | Sxc, cbid?: number): Sxc {
-    const $2sxc = window.$2sxc as $2sxcGlobal;
+    const $2sxc = window.$2sxc as SxcGlobal;
     $2sxc.log.add('FindSxcInstance(' + id + ',' + cbid);
     if (!$2sxc._controllers)
         throw new Error('$2sxc not initialized yet');

@@ -5,7 +5,7 @@ import { SxcManage } from './sxc-manage';
 import { SxcData } from './data/sxc-data';
 import { SxcQuery } from './data/sxc-query';
 import { SxcCms } from './sxc-cms';
-import { $2sxcGlobal } from '..';
+import { SxcGlobal } from '..';
 
 // const serviceScopes = ['app', 'app-sys', 'app-api', 'app-query', 'app-content', 'eav', 'view', 'dnn'];
 
@@ -50,7 +50,7 @@ export class Sxc extends HasLog {
      * The environment information, important for http-calls 
      * @internal
      */
-    public readonly root: $2sxcGlobal,
+    public readonly root: SxcGlobal,
     /** 
      * Custom context information provided by the constructor - will replace auto-context detection
      * @internal

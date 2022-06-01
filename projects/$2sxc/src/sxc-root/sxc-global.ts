@@ -13,7 +13,7 @@ import { HttpGlobal } from './http-global';
  * The signature is the same as the [get](xref:Api.Js.InPage.SxcRoot.get) function.
  * So `$2sxc(...)` is the same as `$2sxc.get(...)`
  */
-export interface $2sxcGlobal {
+export interface SxcGlobal {
     /**
      * Get an SxcInstance
      * @param id number | HTMLElement | ContextIdentifier | SxcInstance

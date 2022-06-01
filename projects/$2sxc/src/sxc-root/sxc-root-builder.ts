@@ -1,7 +1,7 @@
 ﻿import { TotalPopup } from '../tools/total-popup';
 import { UrlParams } from '../tools/url-params';
 import { Stats } from '../Stats';
-import { Debug, $2sxcGlobal, Environment } from '..';
+import { Debug, SxcGlobal, Environment } from '..';
 import { Insights, Log, SxcVersion } from '../../../core';
 import { $2sxcGet } from './sxc-global_get';
 import { HttpGlobal } from './http-global';
@@ -11,7 +11,7 @@ import { HttpGlobal } from './http-global';
  * Build a SXC Controller for the page. Should only ever be executed once
  * @internal
  */
-export function buildSxcRoot(): $2sxcGlobal {
+export function buildSxcRoot(): SxcGlobal {
     const rootApiV2 = getRootPartsV2();
 
     const urlManager = new UrlParams();
@@ -19,7 +19,7 @@ export function buildSxcRoot(): $2sxcGlobal {
     const stats = new Stats();
 
 
-    const addOn: Partial<$2sxcGlobal> = {
+    const addOn: Partial<SxcGlobal> = {
         get: $2sxcGet,
         _controllers: {} as any,
         beta: {},
@@ -46,7 +46,7 @@ export function buildSxcRoot(): $2sxcGlobal {
         },
     };
 
-    const merged = Object.assign($2sxcGet, addOn, rootApiV2) as $2sxcGlobal;
+    const merged = Object.assign($2sxcGet, addOn, rootApiV2) as SxcGlobal;
     merged.log.add('sxc controller built');
 
     console.log(`$2sxc ${SxcVersion} with insights-logging - see https://r.2sxc.org/insights`)
@@ -55,7 +55,7 @@ export function buildSxcRoot(): $2sxcGlobal {
 }
 
 /** @internal */
-function getRootPartsV2(): Partial<$2sxcGlobal> {
+function getRootPartsV2(): Partial<SxcGlobal> {
     const log = new Log('$2sxc', null, 'building');
     var env = new Environment();
     return {
