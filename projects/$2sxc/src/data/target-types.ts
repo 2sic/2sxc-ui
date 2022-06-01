@@ -2,6 +2,8 @@
  * Metadata Target Types
  * 
  * These are constants to determine what something is assigned to (e.g. it describes an Entity, a file, etc.)
+ * 
+ * Use it for the @see MetadataFor objects
  */
 export enum TargetTypes {
   /** 

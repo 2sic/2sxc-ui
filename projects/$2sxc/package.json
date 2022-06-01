@@ -6,7 +6,7 @@
     "release": "webpack --mode=production",
     "2sxc-js-prod": "webpack --watch --mode=production",
     "2sxc-js-dev": "webpack --watch --mode=development",
-    "typings": "cd src && typings.cmd \"..\\..\\sxc-typings\\dist\"",
+
     "// typedoc and docFx versions": "https://github.com/docascode/type2docfx/issues/63",
     "docs": "npm run docs-1-typedoc && npm run docs-2-docFx",
     "docs-1-typedoc": "cd src && delete.cmd \"..\\docs\\typedoc\" && cd .. && typedoc --tsconfig ./src/tsconfig.typedoc.json",

@@ -2,6 +2,7 @@
   "version": "14.01.00",
   "types": "./index.d.ts",
   "scripts": {
+    "generate": "typings.cmd \".\\dist\"",
     "publish-dry": "npm publish --dry-run",
     "publish-beta": "npm publish --tag beta",
     "publish-prod": "npm publish"
@@ -33,5 +34,8 @@
     "type": "git",
     "url": "git+https://github.com/2sic/2sxc-ui.git"
   },
-  "main": ""
+  "main": "",
+  "devDependencies": {
+    "@types/jquery": "^2.0.33"
+  }
 }

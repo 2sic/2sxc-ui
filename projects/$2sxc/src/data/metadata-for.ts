@@ -1,6 +1,8 @@
 import { TargetTypes } from './target-types';
 /** 
- * A Metadata-Target identifier to tell an entity that it describes something else
+ * A Metadata-Target identifier to tell an entity that it describes something else.
+ * 
+ * Usually used in Sxc instances with the Data service
  */
 export interface MetadataFor {
   /**
