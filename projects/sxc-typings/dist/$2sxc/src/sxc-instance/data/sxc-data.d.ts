@@ -1,9 +1,9 @@
 import { MetadataFor } from '../../data/metadata-for';
-import { SxcDataQueryBase } from './sxc-data-query-base';
+import { SxcDataServiceBase } from './sxc-data-service-base';
 /**
 * Data Service for an App / Sxc-Instance to get/create data of a specific Content-Type
 */
-export declare class SxcData<T = unknown> extends SxcDataQueryBase {
+export declare class SxcData<T = unknown> extends SxcDataServiceBase {
     readonly name: string;
     /**
      * Get all items of this type.

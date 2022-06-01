@@ -1,8 +1,8 @@
-import { SxcDataQueryBase } from './sxc-data-query-base';
+import { SxcDataServiceBase } from './sxc-data-service-base';
 /**
  * Instance Query Service
  */
-export declare class SxcQuery extends SxcDataQueryBase {
+export declare class SxcQuery extends SxcDataServiceBase {
     readonly name: string;
     getAll<T = unknown>(): Promise<T>;
     getAll<T = unknown>(urlParams: string | Record<string, unknown>): Promise<T>;

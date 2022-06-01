@@ -8,7 +8,11 @@ import { AjaxSettings } from './ajax-settings';
 export declare class SxcWebApi {
     private readonly sxc;
     /**
-     * returns an http-get promise using jQuery
+     * **Deprecated**
+     * Please use [fetchJson()](xref:Api.Js.InPage.SxcWebApi.fetchJson)
+     * or [fetchJson()](xref:Api.Js.InPage.SxcWebApi.fetchRaw) instead.
+     *
+     * Returns an http-get promise using jQuery
      * @param settingsOrUrl the url to get
      * @param params jQuery style ajax parameters
      * @param data jQuery style data for post/put requests
@@ -18,7 +22,11 @@ export declare class SxcWebApi {
      */
     get(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): JQueryPromise<any>;
     /**
-     * returns an http-post promise using jQuery
+     * **Deprecated**
+     * Please use [fetchJson()](xref:Api.Js.InPage.SxcWebApi.fetchJson)
+     * or [fetchJson()](xref:Api.Js.InPage.SxcWebApi.fetchRaw) instead.
+     *
+     * Returns an http-post promise using jQuery
      * @param settingsOrUrl the url to get
      * @param params jQuery style ajax parameters
      * @param data jQuery style data for post/put requests
@@ -28,7 +36,11 @@ export declare class SxcWebApi {
      */
     post(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): JQueryPromise<any>;
     /**
-     * returns an http-delete promise using jQuery
+     * **Deprecated**
+     * Please use [fetchJson()](xref:Api.Js.InPage.SxcWebApi.fetchJson)
+     * or [fetchJson()](xref:Api.Js.InPage.SxcWebApi.fetchRaw) instead.
+     *
+     * Returns an http-delete promise using jQuery
      * @param settingsOrUrl the url to talk to
      * @param params jQuery style ajax parameters
      * @param data jQuery style data for post/put requests
@@ -38,7 +50,11 @@ export declare class SxcWebApi {
      */
     delete(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): JQueryPromise<any>;
     /**
-     * returns an http-put promise using jQuery
+     * **Deprecated**
+     * Please use [fetchJson()](xref:Api.Js.InPage.SxcWebApi.fetchJson)
+     * or [fetchJson()](xref:Api.Js.InPage.SxcWebApi.fetchRaw) instead.
+     *
+     * Returns an http-put promise using jQuery
      * @param settingsOrUrl the url to put
      * @param params jQuery style ajax parameters
      * @param data jQuery style data for post/put requests
@@ -48,6 +64,10 @@ export declare class SxcWebApi {
      */
     put(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): JQueryPromise<any>;
     /**
+     * **Deprecated**
+     * Please use [fetchJson()](xref:Api.Js.InPage.SxcWebApi.fetchJson)
+     * or [fetchJson()](xref:Api.Js.InPage.SxcWebApi.fetchRaw) instead.
+     *
      * Generic http request using jQuery
      * @param settingsOrUrl the url to get
      * @param params jQuery style ajax parameters

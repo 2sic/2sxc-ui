@@ -1,8 +1,8 @@
 {
-  "version": "14.00.00",
+  "version": "14.01.00",
   "types": "./index.d.ts",
   "scripts": {
-    "dry-run": "npm publish --dry-run",
+    "publish-dry": "npm publish --dry-run",
     "publish-beta": "npm publish --tag beta",
     "publish-prod": "npm publish"
   },

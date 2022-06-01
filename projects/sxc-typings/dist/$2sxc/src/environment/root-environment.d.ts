@@ -1,4 +1,4 @@
-import { JsInfo } from '..';
+import { EnvironmentSpecs } from '..';
 import { HasLog } from '../../../core';
 /**
  * Provides environment information to $2sxc - usually page-id, api-root and stuff like that
@@ -10,7 +10,7 @@ export declare class Environment extends HasLog {
      * Load a new jsInfo - must be public, as it's used in iframes where jquery is missing
      * @param newJsInfo new info to load
      */
-    load(newJsInfo: JsInfo, source?: string): void;
+    load(newJsInfo: EnvironmentSpecs, source?: string): void;
     /**
      * The API endpoint url from the environment
      */
