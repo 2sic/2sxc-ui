@@ -4,6 +4,7 @@ import { DictionaryValue } from '../plumbing';
 
 /**
  * Command parameters are handed over to a command for execution
+ * @internal
  */
 export interface CommandParams {
     /** The action is used in scenarios where the command name must be included */

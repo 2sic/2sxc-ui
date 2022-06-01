@@ -2,6 +2,7 @@ import { ContextComplete } from '../context/bundles/context-bundle-button';
 
 /**
  * used to build instance config
+ * @internal
  */
 export class InstanceConfig {
   // 2020-11-28 #cleanup11.11 2dm - not used, disabled - keep till Jan 2021, then remove from backend-json and drop these comments

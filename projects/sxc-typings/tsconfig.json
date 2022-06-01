@@ -1,5 +1,5 @@
 {
-  "extends": "../$2sxc/src/tsconfig.json",
+  "extends": "../inpage/tsconfig.json",
   "compilerOptions": {
     "outDir": "../../sxc-typings/dist",
     "declaration": true,

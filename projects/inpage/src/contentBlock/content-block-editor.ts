@@ -9,6 +9,9 @@ const webApiRender = 'cms/block/render';
 const webApiSave = 'cms/block/template';
 //#endregion
 
+/**
+ * @internal
+ */
 export class ContentBlockEditor extends HasLog {
 
     /** Singleton */

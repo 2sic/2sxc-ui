@@ -4,6 +4,7 @@ import { ContextForLists } from './context-for-lists';
 
 /**
  * Module with everything related to positioning the quick-edit in-page editing
+ * @internal
  */
 export class Positioning {
     static positionAndAlign = positionAndAlign;

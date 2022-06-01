@@ -8,6 +8,7 @@ const debug = false;
  *
  * @export
  * @class WorkflowHelper
+ * @internal
  */
 export class WorkflowHelper {
 

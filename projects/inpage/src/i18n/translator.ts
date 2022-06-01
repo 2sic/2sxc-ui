@@ -101,4 +101,7 @@ class TranslatorGlobal extends HasLog {
     }
 }
 
+/**
+ * @internal
+ */
 export const Translator = new TranslatorGlobal();

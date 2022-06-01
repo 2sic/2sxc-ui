@@ -4,7 +4,9 @@ import { TypeWeDontCare } from '../plumbing';
 import { QuickE } from '../quick-edit/quick-e';
 import { SxcRoot } from './sxc-controller-in-page';
 
-// ReSharper disable InconsistentNaming
+/**
+ * @internal
+ */
 export interface WindowInPage extends Window {
   $2sxc: SxcRoot;
   // event: Event;
@@ -15,4 +17,7 @@ export interface WindowInPage extends Window {
 }
 // ReSharper restore InconsistentNaming
 
+/**
+ * @internal
+ */
 export const windowInPage: WindowInPage = window as unknown as WindowInPage;

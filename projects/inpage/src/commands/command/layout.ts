@@ -4,6 +4,9 @@ import { QeSelectors } from '../../quick-edit';
 import { ContextForLists } from '../../quick-edit/context-for-lists';
 import { Commands } from '../commands';
 
+/**
+ * @internal
+ */
 export const CmdLayout = 'layout';
 /**
  * import this module to commands.ts

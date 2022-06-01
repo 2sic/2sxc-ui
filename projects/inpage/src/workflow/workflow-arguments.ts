@@ -7,6 +7,7 @@ import { ContextComplete } from '../context';
  *
  * @export
  * @class WorkflowArguments
+ * @internal
  */
 export class WorkflowArguments {
     constructor(

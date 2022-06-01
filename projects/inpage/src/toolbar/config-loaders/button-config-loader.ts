@@ -4,13 +4,13 @@ import { ToolbarConfigLoader } from '.';
 import { CmdMore, Commands } from '../../commands';
 import { ContextComplete } from '../../context/bundles';
 import { HasLog } from '../../logging';
-// import { InstanceConfig } from '../../manage/instance-config';
 import { DictionaryValue } from '../../plumbing';
 import { Button, Toolbar } from '../config';
 import { ButtonSafe } from '../config/button-safe';
 
 /**
  * This is a system to build button configurations
+ * @internal
  */
 export class ButtonConfigLoader extends HasLog {
 

@@ -8,6 +8,7 @@ const classForAddApp = 'sc-content-block-menu-addapp';
 /**
  * the quick-edit object
  * the quick-insert object
+ * @internal
  */
 export class QuickE extends HasLog {
 

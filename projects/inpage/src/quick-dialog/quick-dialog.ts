@@ -19,6 +19,7 @@ interface IFrameWindow extends Window {
 /**
  * this is a dialog manager which is in charge of all quick-dialogues
  * it always has a reference to the latest dialog created by a.ny module instance
+ * @internal
  */
 export class QuickDialog extends HasLog {
 

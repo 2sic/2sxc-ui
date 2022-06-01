@@ -6,6 +6,7 @@ import { AttrJsonEntity } from '../html-attribute/parts/parameters-entity';
 
 /**
  * information related to the current DNN module, incl.instanceId,
+ * @internal
  */
 export class ContextOfInstance {
     id: number; // instance id (aka moduleId)

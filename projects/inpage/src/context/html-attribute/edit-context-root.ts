@@ -1,5 +1,8 @@
 ﻿import { AttrJsonContentGroup, AttrJsonEnvironment, AttrJsonError, AttrJsonLanguage, AttrJsonUi, AttrJsonUser, ContentBlockReference } from '.';
 
+/**
+ * @internal
+ */
 export class AttrJsonEditContext {
   Environment: AttrJsonEnvironment;
   User: AttrJsonUser;

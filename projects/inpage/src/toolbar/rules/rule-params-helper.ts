@@ -7,8 +7,14 @@ const prefillPrefix = 'prefill:';
 const filterPrefix = 'filter:';
 const contextPrefix = 'context:';
 
+/**
+ * @internal
+ */
 export interface ProcessedParams { params: RuleParams; context: DictionaryValue; }
 
+/**
+ * @internal
+ */
 export class RuleParamsHelper {
 
     static processParams(params: RuleParams, log: Log): ProcessedParams {

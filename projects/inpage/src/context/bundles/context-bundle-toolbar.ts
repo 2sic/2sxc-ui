@@ -4,6 +4,9 @@ import { Button } from '../../toolbar/config/button';
 import { Toolbar } from '../../toolbar/config/toolbar';
 import { AttrJsonEditContext } from '../html-attribute';
 
+/**
+ * @internal
+ */
 export class ContextBundleToolbar extends ContextBundleContent {
     toolbar: Toolbar;
 

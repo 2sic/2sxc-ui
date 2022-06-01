@@ -4,6 +4,7 @@ import { AttrJsonEditContext } from '../html-attribute';
 
 /**
  * this will be information related to the current page
+ * @internal
  */
 export class ContextOfPage {
     id: number;

@@ -1,6 +1,9 @@
 
 // The parts themselves must also be constants
 
+/**
+ * @internal
+ */
 export const ToolbarConstants = {
   attrToMarkInitalized: '2sxc-tagtoolbar',
   attr: {

@@ -16,7 +16,10 @@ const webApiMove = 'cms/list/move';
 const webApiRemove = 'cms/list/Delete';
 //#endregion
 
-/** contains commands to create/move/delete a content-block in an inner-content */
+/**
+ * contains commands to create/move/delete a content-block in an inner-content
+ * @internal
+ */
 export class ModifierContentBlockInstance extends HasLog {
 
     constructor(parent: ModifierContentBlock, private sxcInstance: SxcEdit) {

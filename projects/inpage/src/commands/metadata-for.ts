@@ -4,6 +4,7 @@
  * which will edit/create items and assign them as metadata for something
  * @export
  * @interface MetadataFor
+ * @internal
  */
 export interface MetadataFor {
     /** The key which identifies the target of this metadata item */

@@ -3,6 +3,9 @@ import { CommandParams } from '../../commands/command-params';
 import { Commands } from '../../commands/commands';
 import { DictionaryValue } from '../../plumbing';
 
+/**
+ * @internal
+ */
 export class ButtonCommand {
     readonly command: Command; // reference to action to be run
 

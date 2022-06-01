@@ -8,6 +8,7 @@ import { ToolbarRenderer } from './toolbar-renderer';
  *
  * @export
  * @class RenderPart
+ * @internal
  */
 export class RenderPart extends HasLog {
     constructor(protected parent: ToolbarRenderer, logName: string) {

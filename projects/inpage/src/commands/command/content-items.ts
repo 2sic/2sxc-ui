@@ -1,5 +1,8 @@
 ﻿import { Commands } from '..';
 
+/**
+ * @internal
+ */
 export const CmdContentItems = 'contentitems';
 /**
  * import this module to commands.ts

@@ -6,13 +6,17 @@ import { ContextComplete } from '../../context/bundles/context-bundle-button';
 import { Obj, TypeTbD } from '../../plumbing';
 import { BuildRule } from '../rules';
 
-/** This is the most common call signature on most ButtonConfig properties */
+/**
+ * This is the most common call signature on most ButtonConfig properties
+ * @internal
+ */
 export type ButtonPropGen<T> = (context: ContextComplete) => T;
 
 type ButtonGenOrProp<T> = ButtonPropGen<T> | T;
 
 /**
  * The real button configuration as it's used at runtime
+ * @internal
  */
 export class Button {
     /** The ID is important for tracking this button and applying modifiers */

@@ -1,5 +1,8 @@
 ﻿import { TemplateConstants as TC, ToolbarTemplate } from '.';
 
+/**
+ * @internal
+ */
 // the default / initial buttons in a standard toolbar
 export const ToolbarTemplateDefault: ToolbarTemplate = {
   name: TC.NameDefault,

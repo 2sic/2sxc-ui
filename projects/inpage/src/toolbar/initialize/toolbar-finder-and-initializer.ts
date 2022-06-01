@@ -11,11 +11,15 @@ import { ToolbarInitConfig } from './toolbar-init-config';
 
 // quick debug - set to false if not needed for production
 const dbg = false;
+/**
+ * @internal
+ */
 export const toolbarSelector = `.sc-menu[toolbar],.sc-menu[data-toolbar],[${C.Toolbar.attr.full}]`;
 
 /**
  * This class is responsible for finding toolbar configurations in the doom
  * and then initializing them.
+ * @internal
  */
 export class ToolbarConfigFinderAndInitializer extends HasLog {
 

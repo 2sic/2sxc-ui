@@ -13,6 +13,9 @@ const Attributes = {
   ContentBlockId: 'data-cb-id',
 };
 
+/**
+ * @internal
+ */
 export const C = {
   ContentBlock: ContentBlock,
   DialogPaths: DialogPaths,

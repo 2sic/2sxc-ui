@@ -1,4 +1,6 @@
-
+/**
+ * @internal
+ */
 export enum Operations {
     add = '+',
     remove = '-',

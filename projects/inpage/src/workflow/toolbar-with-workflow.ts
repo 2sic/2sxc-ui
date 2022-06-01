@@ -6,6 +6,7 @@ import { WorkflowManager } from '.';
  * @export
  * @interface ToolbarWithWorkflow
  * @extends {HTMLElement}
+ * @internal
  */
 export interface ToolbarWithWorkflow extends HTMLElement {
     commandWorkflow: WorkflowManager;

@@ -1,7 +1,14 @@
 ﻿import { CmdEditDialog, CmsEngine, Commands } from '..';
 import { SharedLogic } from './shared-logic';
 
+/**
+ * @internal
+ */
 export const CmdNew = 'new';
+
+/**
+ * @internal
+ */
 export const CmdNewMode = 'new';
 
 /**

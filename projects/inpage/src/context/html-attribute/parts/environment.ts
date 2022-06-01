@@ -1,5 +1,8 @@
 ﻿import { AttrJsonEntity } from './parameters-entity';
 
+/**
+ * @internal
+ */
 export class AttrJsonEnvironment {
   // ReSharper disable InconsistentNaming
   WebsiteId: number;

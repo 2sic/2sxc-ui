@@ -1,5 +1,8 @@
 ﻿import { Commands } from '..';
 
+/**
+ * @internal
+ */
 export const CmdTemplateSettings = 'template-settings';
 /**
  * import this module to commands.ts

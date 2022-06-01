@@ -6,7 +6,9 @@ import { BuildRule } from '../rules/rule';
 import { RenderPart } from './render-part-base';
 import { ToolbarRenderer } from './toolbar-renderer';
 
-
+/**
+ * @internal
+ */
 export class RenderButton extends RenderPart {
     constructor(parent: ToolbarRenderer) {
         super(parent, 'Rnd.Button');

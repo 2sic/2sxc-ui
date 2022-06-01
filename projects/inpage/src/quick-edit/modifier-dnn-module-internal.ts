@@ -6,6 +6,7 @@ const dnnSF = (id?: number) => $.dnnSF(id);
 
 /**
  * module specific stuff
+ * @internal
  */
 export class ModifierDnnModuleInternal extends HasLog {
 

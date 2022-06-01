@@ -16,6 +16,7 @@ import { EditManager } from './edit-manager';
  * - getToolbar
  * - run(...)
  * - isEditMode
+ * @internal
  */
 export class Manage {
     /**

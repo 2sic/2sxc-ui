@@ -2,6 +2,9 @@
 import { IDs } from '../../constants/ids';
 import { Commands } from '../commands';
 
+/**
+ * @internal
+ */
 export const CmdMore = 'more';
 /**
  * import this module to commands.ts

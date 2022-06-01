@@ -5,6 +5,7 @@ import { isNothing } from '../../plumbing';
 /**
  * Special helper to read a button configuration
  * and make sure that all properties have the correct fallback values
+ * @internal
  */
 export class ButtonSafe {
     constructor(private button: Button, private context: ContextComplete) {

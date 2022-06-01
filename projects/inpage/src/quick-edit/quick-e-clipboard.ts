@@ -6,6 +6,7 @@ import { ModifierContentBlock } from './modifier-content-block';
 
 /**
  * add a clipboard to the quick edit
+ * @internal
  */
 export class QuickEClipboard extends HasLog {
 

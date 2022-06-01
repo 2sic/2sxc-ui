@@ -1,14 +1,24 @@
 import { WorkflowArguments, WorkflowPhases } from '.';
 import { SpecialCommands } from '../commands';
 
+/**
+ * @internal
+ */
 export type PromiseFactory<T> = (args: T) => Promise<T>;
 
+/**
+ * @internal
+ */
 export type WorkflowPromiseFactory = PromiseFactory<WorkflowArguments>;
 
+/**
+ * @internal
+ */
 export type WorkflowCode = (args: WorkflowArguments) => WorkflowArguments;
 
 /**
  * A workflow step (code-sequence) to run before/after specific events.
+ * @internal
  */
 export interface WorkflowStep {
   /**
@@ -43,6 +53,9 @@ export interface WorkflowStep {
   code: WorkflowCode;
 }
 
+/**
+ * @internal
+ */
 export class WorkflowStepHelper {
   static initDefaults(step: WorkflowStep) {
     step.name = step.name ?? '';

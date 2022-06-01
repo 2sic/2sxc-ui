@@ -1,6 +1,9 @@
 ﻿import { Commands, SharedLogic } from '..';
 import { Actions } from './content-list-actions';
 
+/**
+ * @internal
+ */
 export const CmdMoveDown = 'movedown';
 
 /**

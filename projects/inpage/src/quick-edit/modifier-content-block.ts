@@ -5,6 +5,7 @@ import { ModifierContentBlockInstance } from './modifier-content-block-internal'
 
 /**
  * extend the quick edit with the core commands
+ * @internal
  */
 export class ModifierContentBlock extends ModifierBase {
 

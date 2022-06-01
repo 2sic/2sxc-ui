@@ -6,6 +6,7 @@ import { Button } from '../../config';
 /**
  * Button Definition v1. from old API
  * it is publicly used out of inpage, so take a care to preserve its signature
+ * @internal
  */
 export class InPageButtonJson {
 

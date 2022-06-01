@@ -8,6 +8,7 @@ import { ToolbarInitConfig } from './initialize/toolbar-init-config';
 /**
  * Toolbar manager for the whole page - basically a set of APIs
  * the toolbar manager is an internal helper taking care of toolbars, buttons etc.
+ * @internal
  */
 export class ToolbarManager extends HasLog {
 

@@ -2,6 +2,9 @@
 import { InPageCommandJson, InPageCommandJsonWithTooMuchInfo } from '.';
 import { HasLog } from '../../logging';
 
+/**
+ * @internal
+ */
 export class CommandConfigLoader extends HasLog {
 
     constructor(private toolbar: ToolbarConfigLoader) {

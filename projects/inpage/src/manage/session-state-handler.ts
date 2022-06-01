@@ -3,6 +3,7 @@
 /**
  * This object helps persist / load / reset
  * a setting in the session-state
+ * @internal
  */
 
 // General notes

@@ -14,6 +14,7 @@ const webApiBlockPublish = 'cms/block/publish';
 /**
  * These actions make changes to a content-block - like adding, removing or publishing items in the block
  * @class ActionsCatalog
+ * @internal
  */
 class ContentListActions {
     /**
@@ -80,6 +81,9 @@ class ContentListActions {
     }
 }
 
+/**
+ * @internal
+ */
 export const Actions = new ContentListActions();
 
 /*

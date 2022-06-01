@@ -1,6 +1,9 @@
 ﻿import { Commands } from '..';
 import { $2sxcInPage } from '../../interfaces/sxc-controller-in-page';
 
+/**
+ * @internal
+ */
 export const CmdInsightsServer = 'insights-server';
 
 /**

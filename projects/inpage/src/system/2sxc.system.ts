@@ -4,6 +4,9 @@
 const webApiInstallComplete = 'sys/install/resume';
 //#endregion
 
+/**
+ * @internal
+ */
 export class SystemUpgrader {
     // upgrade command - started when an error contains a link to start this
     finishUpgrade(domElement: HTMLElement): void {

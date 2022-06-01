@@ -2,7 +2,10 @@
 import { Button } from '../toolbar/config';
 import { Command } from './command';
 
-/** Singleton Catalog of all commands */
+/**
+ * Singleton Catalog of all commands 
+ * @internal
+ */
 export class Commands extends HasLog {
 
   /** Singleton */

@@ -1,6 +1,9 @@
 ﻿import { Commands } from '..';
 import { SharedLogic } from './shared-logic';
 
+/**
+ * @internal
+ */
 export const CmdReplace = 'replace';
 /**
  * import this module to commands.ts

@@ -9,6 +9,9 @@ import { ButtonGroup } from '../config';
 import { TemplateConstants as TC } from '../templates/constants';
 import { ToolbarConfigLoader } from './toolbar-config-loader';
 
+/**
+ * @internal
+ */
 export class ButtonGroupConfigLoader extends HasLog {
 
     constructor(private toolbar: ToolbarConfigLoader) {

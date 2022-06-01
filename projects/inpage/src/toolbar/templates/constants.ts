@@ -1,4 +1,6 @@
-
+/**
+ * @internal
+ */
 export const TemplateConstants = {
     NameDefault: 'default',
     NameEmpty: 'empty',

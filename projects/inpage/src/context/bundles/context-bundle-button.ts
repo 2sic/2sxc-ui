@@ -5,6 +5,9 @@ import { WorkflowManager } from '../../workflow';
 import { AttrJsonEditContext } from '../html-attribute';
 import { ContextBundleToolbar } from './context-bundle-toolbar';
 
+/**
+ * @internal
+ */
 export class ContextComplete extends ContextBundleToolbar {
     button?: Button;
 

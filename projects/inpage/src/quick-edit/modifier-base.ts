@@ -3,6 +3,7 @@ import { HasLog } from '../logging';
 
 /**
  * Base class for module / content-block editors
+ * @internal
  */
 export abstract class ModifierBase extends HasLog {
     constructor(name: string) {

@@ -7,6 +7,7 @@ import { ProcessedParams } from './rule-params-helper';
 
 /**
  * Contains a rule how to add/modify a toolbar.
+ * @internal
  */
 export class BuildRule extends HasLog {
     //#region Rule parts

@@ -1,5 +1,8 @@
 ﻿import { Button } from '../toolbar/config/button';
 
+/**
+ * @internal
+ */
 export class Command {
     constructor(public name: string) {
     }

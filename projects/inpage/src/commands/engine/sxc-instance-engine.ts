@@ -7,6 +7,7 @@ import { RunParamsWithContext } from './run-params';
 /**
  * This is an engine on the sxc object.
  * It provides a .run(...) for when the sxc is already known.
+ * @internal
  */
 export class SxcInstanceEngine {
   constructor(private sxc: SxcEdit) {}

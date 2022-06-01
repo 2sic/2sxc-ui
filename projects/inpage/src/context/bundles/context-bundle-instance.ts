@@ -5,7 +5,9 @@ import { ContextOfInstance, ContextOfPage, ContextOfSystem, ContextOfTenant, Con
 import { ContextOfApp } from '../parts/context-app';
 import { ContextOfUi } from '../parts/context-ui';
 
-
+/**
+ * @internal
+ */
 export class ContextBundleInstance {
     sxc: SxcEdit; // instance of sxc object
     instance: ContextOfInstance; // information related to the current DNN module, incl.instanceId, etc.

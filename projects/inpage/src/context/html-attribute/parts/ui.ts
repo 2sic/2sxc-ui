@@ -1,4 +1,7 @@
-﻿export class AttrJsonUi {
+﻿/**
+ * @internal
+ */
+export class AttrJsonUi {
   AutoToolbar: boolean; // toolbar auto-show (Ability to disable auto-toolbar generation within 2sxc content-blocks #1518)
   Form: string; // decide which dialog opens
 }

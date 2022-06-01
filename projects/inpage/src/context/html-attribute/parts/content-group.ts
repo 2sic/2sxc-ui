@@ -1,4 +1,7 @@
-﻿export class AttrJsonContentGroup {
+﻿/**
+ * @internal
+ */
+export class AttrJsonContentGroup {
   // ReSharper disable InconsistentNaming
   IsCreated: boolean;
   IsList: boolean;

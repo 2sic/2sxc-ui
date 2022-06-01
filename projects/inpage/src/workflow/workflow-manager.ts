@@ -10,6 +10,7 @@ import { WorkflowHelper } from './workflow-helper';
  * A workflow manager which will run stuff before / after commands.
  * As of now, it must be attached to a toolbar to take effect.
  * Normally the toolbar with raise a `toolbar-init` event where you can then add steps
+ * @internal
  */
 export class WorkflowManager extends HasLog {
 

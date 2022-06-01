@@ -6,6 +6,9 @@ import { BuildSteps } from './build-steps';
 
 const throwOnError = true;
 
+/**
+ * @internal
+ */
 export class RuleManager extends HasLog {
     /** List of rules which were picked up and will be applied */
     rules: BuildRule[] = [];

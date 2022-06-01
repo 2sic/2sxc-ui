@@ -3,7 +3,14 @@ import { ItemIdentifierSimple } from '../../interfaces/item-identifiers';
 import { CmdEditDialog } from './edit';
 import { CmdNewMode } from './new';
 
+/**
+ * @internal
+ */
 export const CmdMetadata = 'metadata';
+
+/**
+ * @internal
+ */
 export const CmdImage = 'image';
 const MetadataDefaultKeyType = 'string';
 const MetadataDefaultTargetType = 10; // cms-item
@@ -11,6 +18,7 @@ const MetadataDefaultTargetType = 10; // cms-item
  * create a metadata toolbar
  *
  * import this module to commands.ts
+ * @internal
  */
 export const MetadataCommand = Command.build(CmdMetadata, 'Metadata', 'tag', false, false, {
 
@@ -34,6 +42,9 @@ export const MetadataCommand = Command.build(CmdMetadata, 'Metadata', 'tag', fal
     },
 });
 
+/**
+ * @internal
+ */
 export const ImageMetadataCommand = Command.build(CmdImage, 'Image', 'focus', false, false, {
     addParamsToLink: MetadataCommand.buttonDefaults.addParamsToLink,
     dialog: MetadataCommand.buttonDefaults.dialog,

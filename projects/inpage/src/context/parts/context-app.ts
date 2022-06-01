@@ -3,6 +3,7 @@ import { AttrJsonEditContext } from '../html-attribute';
 
 /**
  * this will be about the current app, settings of the app, app - paths, etc.
+ * @internal
  */
 export class ContextOfApp {
     // ContentGroup

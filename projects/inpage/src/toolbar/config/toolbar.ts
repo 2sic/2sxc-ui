@@ -4,6 +4,7 @@ import { DictionaryValue } from '../../plumbing';
 /**
  * Runtime configuration of the toolbar.
  * contains a toolbar config + settings + mny groups
+ * @internal
  */
 export class Toolbar {
     /** Toolbar ID to better identify which toolbar we're looking at - has special long name to never confuse with other IDs */

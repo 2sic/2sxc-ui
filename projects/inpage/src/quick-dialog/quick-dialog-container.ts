@@ -5,6 +5,7 @@ import { QuickDialog } from './quick-dialog';
 /**
  * this is a dialog manager which is in charge of all quick-dialoges
  * it always has a reference to the latest dialog created by a.ny module instance
+ * @internal
  */
 
 const containerClass = 'inpage-frame-wrapper';
@@ -14,6 +15,9 @@ const containerTemplate = `<div class="${containerClass}"><div class="${iframeCl
 const resizeInterval = 200;
 
 
+/**
+ * @internal
+ */
 export class QuickDialogContainer extends HasLog {
 
     constructor(quickDialog: QuickDialog) {

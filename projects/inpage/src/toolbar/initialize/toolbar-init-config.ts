@@ -14,6 +14,7 @@ import { ToolbarTemplate } from '../templates';
  * button (detected by "command"): { command: ""|[], icon: "..", ... }
  * just a command (detected by "action"): { entityId: 17, action: "edit" }
  * array of commands: [{entityId: 17, action: "edit"}, {contentType: "blog", action: "new"}]
+ * @internal
  */
 export type InPageToolbarConfigVariations =
     ToolbarWip
@@ -23,6 +24,7 @@ export type InPageToolbarConfigVariations =
 
 /**
  * The configuration / settings of a toolbar as loaded from the DOM
+ * @internal
  */
 export class ToolbarInitConfig {
     toolbar: InPageToolbarConfigVariations | string[];

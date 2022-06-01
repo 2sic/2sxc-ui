@@ -6,6 +6,7 @@ import { CommandParams } from '../command-params';
 /**
  * Parameters for the Instance cms.run(...) command.
  * New in 13.03
+ * @internal
  */
 export interface RunParams {
   /**

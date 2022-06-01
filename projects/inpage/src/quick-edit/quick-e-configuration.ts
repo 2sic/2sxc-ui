@@ -1,6 +1,7 @@
 /**
  * Configuration of QuickE
  * see also https://docs.2sxc.org/specs/js/quicke.html
+ * @internal
  */
 export namespace QuickEditConfig {
 

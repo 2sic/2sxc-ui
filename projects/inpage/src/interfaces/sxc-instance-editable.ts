@@ -6,6 +6,9 @@ import { AttrJsonEditContext } from '../context/html-attribute';
 import { EditManager } from '../manage/edit-manager';
 
 
+/**
+ * @internal
+ */
 export class SxcEdit extends Sxc {
     manage: EditManager;
 

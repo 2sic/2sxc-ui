@@ -1,7 +1,7 @@
 ﻿/**
  * selectors used all over the in-page-editing, centralized to ensure consistency
+ * @internal
  */
-
 const contentBlockAndModuleSelectors: { [key: string]: CbOrMod } = {
     cb: {
         id: 'cb',
@@ -63,6 +63,9 @@ const contentBlockAndModuleSelectors: { [key: string]: CbOrMod } = {
     },
 };
 
+/**
+ * @internal
+ */
 export const QeSelectors = {
     blocks: contentBlockAndModuleSelectors,
     eitherCbOrMod: '.DnnModule, .sc-content-block',

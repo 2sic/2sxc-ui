@@ -6,6 +6,9 @@ import { Button, Toolbar, ToolbarSettings } from '../config';
 import { ToolbarTemplate, ToolbarTemplateDefault, ToolbarTemplateGroup, ToolbarTemplateSublist } from '../templates';
 
 
+/**
+ * @internal
+ */
 export class ToolbarConfigLoaderV09 extends HasLog {
 
     constructor(private toolbar: ToolbarConfigLoader) {

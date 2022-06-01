@@ -8,6 +8,7 @@ import { HasLog, Log } from '../../logging';
  *
  * @export
  * @class RunParameters
+ * @internal
  */
 export class RunParametersHelper extends HasLog {
     constructor(parentLog?: Log) {

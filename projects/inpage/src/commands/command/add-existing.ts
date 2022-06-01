@@ -2,9 +2,13 @@
 import { ItemIdentifierGroup } from '../../interfaces/item-identifiers';
 import { SharedLogic } from './shared-logic';
 
+/**
+ * @internal
+ */
 export const CmdAddExisting = 'add-existing';
 /**
  * import this module to commands.ts
+ * @internal
  */
 Commands.add(CmdAddExisting, 'AddExisting', 'add-existing', false, true, {
     dialog: (_) => 'replace',

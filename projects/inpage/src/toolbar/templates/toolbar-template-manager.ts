@@ -5,6 +5,7 @@ import { Obj } from '../../plumbing';
 /**
  * The template manager provides toolbar templates to the entire system.
  * It basically keeps a list of predefined templates, and returns the ones needed
+ * @internal
  */
 export class ToolbarTemplateManager extends HasLog {
     /** Singleton */

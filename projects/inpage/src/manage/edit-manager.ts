@@ -11,6 +11,7 @@ import { ToolbarRenderer } from '../toolbar/render/toolbar-renderer';
 
 /**
  * Instance specific edit manager
+ * @internal
  */
 export class EditManager implements SxcManage {
 

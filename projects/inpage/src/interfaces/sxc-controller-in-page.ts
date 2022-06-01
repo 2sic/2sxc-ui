@@ -9,6 +9,7 @@ import { windowInPage as window } from './window-in-page';
 
 /**
  * $2sxc interface declaration merging for in-page
+ * @internal
  */
 // ReSharper disable InconsistentNaming
 export interface SxcRoot extends SxcGlobal {

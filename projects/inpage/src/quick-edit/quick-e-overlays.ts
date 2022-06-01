@@ -2,6 +2,9 @@ import { Positioning, QuickEditConfig } from '.';
 import { C } from '../constants';
 import { NoJQ } from '../plumbing';
 
+/**
+ * @internal
+ */
 export namespace QuickEditOverlay {
   export interface Selection extends HTMLElement {
     toggleOverlay(target: boolean | HTMLElement, buttons?: QuickEditConfig.Buttons): void;

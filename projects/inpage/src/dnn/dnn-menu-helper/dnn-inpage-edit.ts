@@ -6,6 +6,7 @@ import { HasLog, Insights } from '../../logging';
 
 /**
  * Maps actions of the module menu to JS actions - needed because onclick event can't be set (actually, a bug in DNN)
+ * @internal
  */
 export class DnnActionMenu extends HasLog {
     private run: typeof SxcInstanceEngine.prototype.run;

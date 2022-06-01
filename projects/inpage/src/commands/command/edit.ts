@@ -1,6 +1,13 @@
 ﻿import { Commands, SharedLogic } from '..';
 
+/**
+ * @internal
+ */
 export const CmdEdit = 'edit';
+
+/**
+ * @internal
+ */
 export const CmdEditDialog = 'edit';
 
 /**

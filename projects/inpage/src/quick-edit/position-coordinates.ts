@@ -1,4 +1,7 @@
 ﻿
+/**
+ * @internal
+ */
 export class PositionCoordinates {
     public w?: number;
     public yh?: number;

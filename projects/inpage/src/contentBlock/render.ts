@@ -12,6 +12,7 @@ import { ContentBlockEditor } from './content-block-editor';
 /**
  * This is the rendering compontent, responsible to update the page when something changes.
  * Depending on the feature-set it will use ajax or not
+ * @internal
  */
 class RendererGlobal extends HasLog {
 

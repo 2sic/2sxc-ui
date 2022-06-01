@@ -8,6 +8,9 @@ import { IDs } from '../../constants/ids';
 
 const attrIdentifier = 'toolbar-identifier';
 
+/**
+ * @internal
+ */
 export class ToolbarRenderer extends HasLog {
     private readonly groups: RenderButtonGroups;
     public readonly button: RenderButton;

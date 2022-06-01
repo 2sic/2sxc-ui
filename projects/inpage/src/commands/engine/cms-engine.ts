@@ -19,6 +19,7 @@ type CommandPromise<T> = Promise<T|void>;
 
 /**
  * The CMS engine is global, and needs the context to work.
+ * @internal
  */
 export class CmsEngine extends HasLog {
 

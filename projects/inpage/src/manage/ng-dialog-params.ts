@@ -5,6 +5,7 @@ import { $2sxcInPage as $2sxc } from '../interfaces/sxc-controller-in-page';
  * It does not contain the "params" / "items" part
  * @export
  * @class NgUrlValuesWithoutParams
+ * @internal
  */
 export class NgUrlValuesWithoutParams {
   readonly zoneId: number;

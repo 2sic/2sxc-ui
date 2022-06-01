@@ -14,7 +14,7 @@ const scrollTopOffset: number = 80;
 const animationTime: number = 400;
 
 /**
- *
+ * @internal
  */
 // ReSharper disable once InconsistentNaming
 export class IFrameBridge extends HasLog implements IIFrameBridge {

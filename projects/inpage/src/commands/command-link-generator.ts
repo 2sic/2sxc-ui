@@ -10,6 +10,7 @@ import { ButtonSafe } from '../toolbar/config';
 /**
  * This is responsible for taking a context with command and everything
  * then building the link for opening the correct dialogs
+ * @internal
  */
 export class CommandLinkGenerator extends HasLog {
     public items: Array<ItemIdentifierSimple | ItemIdentifierGroup | TemplateIdentifier>;

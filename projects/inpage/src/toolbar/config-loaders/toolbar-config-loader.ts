@@ -9,6 +9,9 @@ import { TemplateEditor, ToolbarTemplate, ToolbarTemplateManager } from '../temp
 // Enable when debugging toolbar creation - will dump all logs to the console
 const liveDumpThis = false;
 
+/**
+ * @internal
+ */
 export class ToolbarConfigLoader extends HasLog {
 
     public toolbarV09: ToolbarConfigLoaderV09;

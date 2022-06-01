@@ -5,6 +5,7 @@ import { ToolbarSettings } from '../config/toolbar-settings';
 /**
  * This describes a template configuration of a toolbar
  * It's meant to provide type-save templates for what buttons are used where
+ * @internal
  */
 export class ToolbarTemplate implements ListWithCursor {
     name: string;

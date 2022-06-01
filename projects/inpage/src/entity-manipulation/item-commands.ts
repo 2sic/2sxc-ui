@@ -3,6 +3,7 @@ import { translate } from '../i18n';
 
 /**
  * this enhances the $2sxc client controller with stuff only needed when logged in
+ * @internal
  */
 
 // #region contentItem Commands

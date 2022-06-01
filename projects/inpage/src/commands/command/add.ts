@@ -2,11 +2,15 @@
 import { Actions } from './content-list-actions';
 import { SharedLogic } from './shared-logic';
 
+/**
+ * @internal
+ */
 export const CmdAdd = 'add';
 /**
  * add brings no dialog, just add an empty item
  *
  * import this module to commands.ts
+ * @internal
  */
 Commands.add(
     CmdAdd,

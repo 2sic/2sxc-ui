@@ -14,6 +14,7 @@ import { ToolbarManager } from '../toolbar/toolbar-manager';
  * This contains everything necessary to bootstrap the edit mode.
  * It must be initialized and started at the end in the x-bootstrap code,
  * to ensure everything is already ready and loaded
+ * @internal
  */
 export class BootstrapInPage extends HasLog {
     constructor() {

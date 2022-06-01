@@ -1,4 +1,7 @@
-﻿export class AttrJsonUser {
+﻿/**
+ * @internal
+ */
+export class AttrJsonUser {
   CanDevelop: boolean;
 
   // new v13

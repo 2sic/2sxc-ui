@@ -1,5 +1,8 @@
 import { TypeTbD } from '../../../plumbing/TypeTbD';
 
+/**
+ * @internal
+ */
 export interface InPageCommandJsonWithTooMuchInfo extends InPageCommandJson {
     entity?: {
         EntityId: number,
@@ -9,6 +12,9 @@ export interface InPageCommandJsonWithTooMuchInfo extends InPageCommandJson {
     };
 }
 
+/**
+ * @internal
+ */
 export class InPageCommandJson  {
     /** List of buttons to show */
     action?: string;

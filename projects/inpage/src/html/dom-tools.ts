@@ -1,6 +1,9 @@
 import { C } from '../constants';
 import { SxcEdit } from '../interfaces/sxc-instance-editable';
 
+/**
+ * @internal
+ */
 export class HtmlTools {
 
     static disable(tag: HTMLElement): void {

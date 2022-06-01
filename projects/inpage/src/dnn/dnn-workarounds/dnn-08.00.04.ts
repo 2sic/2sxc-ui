@@ -10,6 +10,7 @@
 
 /**
  * Fix drag-drop functionality in dnn 08.00.04 - it has an incorrect regex
+ * @internal
  */
 'use strict';
 

@@ -2,6 +2,7 @@
 
 /**
  * ensure that the UI will load the correct assets to enable editing
+ * @internal
  */
 export class ContextOfUi {
     autoToolbar?: boolean; // toolbar auto-show

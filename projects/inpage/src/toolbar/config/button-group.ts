@@ -1,6 +1,9 @@
 ﻿import { Button } from '.';
 import { DictionaryValue, TypeTbD } from '../../plumbing';
 
+/**
+ * @internal
+ */
 export class ButtonGroup {
     /**
      * Group name - for identification
