@@ -16,7 +16,6 @@ export * from './Stats';
 
 export * from './environment';
 
-export * from './sxc-root/$2sxc-http';
 export * from './sxc-instance';
 
 export * from './sxc-root/';

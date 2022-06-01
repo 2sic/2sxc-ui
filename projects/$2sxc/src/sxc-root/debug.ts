@@ -19,6 +19,4 @@ export class Debug {
         this.load = urlDebugState;
         this.uncache = urlManager.get('sxcver');
     }
-
-    static urlState = urlDebugState;
 }

@@ -1,9 +1,10 @@
 ﻿import { TotalPopup } from '../tools/total-popup';
 import { UrlParams } from '../tools/url-params';
 import { Stats } from '../Stats';
-import { Debug, $2sxcGlobal, Environment, SxcHttp } from '..';
+import { Debug, $2sxcGlobal, Environment } from '..';
 import { Insights, Log, SxcVersion } from '../../../core';
-import { $2sxcGet } from './$2sxc-get';
+import { $2sxcGet } from './$2sxc-global-get';
+import { HttpGlobal } from './$2sxc-http';
 
 
 /**
@@ -15,10 +16,6 @@ export function buildSxcRoot(): $2sxcGlobal {
 
     const urlManager = new UrlParams();
     const debug = new Debug();
-    //  {
-    //     load: (urlManager.get('debug') === 'true'),
-    //     uncache: urlManager.get('sxcver'),
-    // };
     const stats = new Stats();
 
 
@@ -67,7 +64,7 @@ function getRootPartsV2(): Partial<$2sxcGlobal> {
             description: 'The 2sxc Controller - read more about it on docs.2sxc.org',
         },
         env: env,
-        http: new SxcHttp(env),
+        http: new HttpGlobal(env),
         log: log,
     };
 }

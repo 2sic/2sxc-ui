@@ -1,6 +1,6 @@
 ﻿/**
  * Helper object to read url params. 
- * Available on $2sxc.urlParams
+ * Available on `$2sxc.urlParams`
  */
 export class UrlParams {
     /**

@@ -2,8 +2,12 @@ import { ApiExtensionPlaceholder } from '../constants';
 import { AppApiMarker, Dictionary, HasLog, HeaderNames, ToSxcName } from '../../../core';
 import { ContextIdentifier, Environment } from '..';
 
-/** @internal */
-export class SxcHttp extends HasLog {
+/**
+ * Global HTTP Service for information and helpers.
+ * Provided on on `$2sxc.http`
+ */
+export class HttpGlobal extends HasLog {
+    /** @internal */
     constructor(private env: Environment) {
         super('Sxc.Http');
     }

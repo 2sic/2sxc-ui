@@ -2,7 +2,7 @@ import { UrlParams } from './../tools';
 import { Environment } from '../environment';
 import { Insights, Log } from '../../../core';
 import { ContextIdentifier, Debug, Stats, Sxc, TotalPopup } from '..';
-import { SxcHttp } from './$2sxc-http';
+import { HttpGlobal } from './$2sxc-http';
 
 /**
  * This is the root global `window.$2sxc` function / object. 
@@ -47,7 +47,9 @@ export interface $2sxcGlobal {
     /** @internal */
     _translateInit: any;
 
-    /** @internal */
+    /**
+     * 2022-06-01 2dm - I believe this is not used, probably remove
+     * @internal */
     debug: Debug;
 
     /** @internal */
@@ -75,12 +77,17 @@ export interface $2sxcGlobal {
     /**
      * Http helper for API calls and such
      */
-    http: SxcHttp;
+    http: HttpGlobal;
 
-    /** 
-     * The debugging / insights system 
+    /**
+     * The debugging / insights system. 
+     * Call the `$2sxc.insights()` without parameters to get instructions what the parameters could be.
+     * @param partName optional name of a part of the system for which we want to see the logs
+     * @param index optional index on that part for which log we want to see
+     * @param start log start index - this is to skip the first few lines if there are too many
+     * @param length amount of lines to show - in some cases will default to 25
      */
-    insights: typeof Insights.show;
+    insights(partName: string, index?: number, start?: number, length?: number): void;
 
     /** @internal */
     _insights: typeof Insights;
@@ -106,7 +113,7 @@ export interface $2sxcGlobal {
     urlParams: UrlParams;
 
     /**
-     * A simple helper to create full-screen popups
+     * A helper to create full-screen popups
      * @internal
      */
     totalPopup: TotalPopup;
