@@ -1,6 +1,9 @@
 ﻿// todo: use Rewire to access internal methods without using export
 // https://stackoverflow.com/questions/14874208/how-to-access-and-test-an-internal-non-exports-function-in-a-node-js-module/30794280
 
+/**
+ * @internal
+ */
 import 'jasmine';
 import { ContextComplete } from '../src/context/bundles/context-bundle-button';
 // import { generateFallbackToolbar } from '../src/toolbar/build-toolbars';
