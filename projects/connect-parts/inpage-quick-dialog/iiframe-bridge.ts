@@ -6,6 +6,7 @@ import { IQuickDialogConfig } from './iquick-dialog-config';
 
 /**
  * Connection object between inpage and quick-edit dialog for messaging back and forth
+ * @internal
  */
 export interface IIFrameBridge {
   getAdditionalDashboardConfig(): IQuickDialogConfig;
