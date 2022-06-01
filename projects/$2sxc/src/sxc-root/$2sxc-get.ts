@@ -1,5 +1,4 @@
-﻿import { Window } from '../_/window';
-import { Sxc, $2sxcGlobal } from '..';
+﻿import { Sxc, $2sxcGlobal } from '..';
 import { ContextIdentifier } from './context-identifier';
 
 declare const window: Window;

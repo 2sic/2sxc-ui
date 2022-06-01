@@ -1,5 +1,4 @@
 import { HasLog, Log } from '.';
-import { Window } from '../../$2sxc/src';
 
 declare const window: Window;
 

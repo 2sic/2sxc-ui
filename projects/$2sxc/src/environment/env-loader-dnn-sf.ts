@@ -1,6 +1,6 @@
 import { Environment } from '.';
 import { HasLog, NoJQ } from '../../../core';
-import { Window, EnvironmentSpecs } from '..';
+import { EnvironmentSpecs } from '..';
 import { AntiForgeryTokenHeaderNameDnn, DnnUiRoot, PlatformDnn } from '../constants';
 
 const helpAutoDetect = 'You must either include jQuery on the page or inject the jsApi parameters to prevent auto-detection.';
