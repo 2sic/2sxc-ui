@@ -1,11 +1,7 @@
-﻿import { Commands } from '..';
+﻿import { CommandNames, Commands } from '..';
 import { Actions } from './content-list-actions';
 import { SharedLogic } from './shared-logic';
 
-/**
- * @internal
- */
-export const CmdAdd = 'add';
 /**
  * add brings no dialog, just add an empty item
  *
@@ -13,7 +9,7 @@ export const CmdAdd = 'add';
  * @internal
  */
 Commands.add(
-    CmdAdd,
+    CommandNames.add,
     'AddDemo',
     'plus-circled',
     false,

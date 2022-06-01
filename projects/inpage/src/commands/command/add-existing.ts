@@ -1,16 +1,12 @@
-﻿import { Commands } from '..';
+﻿import { CommandNames, Commands } from '..';
 import { ItemIdentifierGroup } from '../../interfaces/item-identifiers';
 import { SharedLogic } from './shared-logic';
 
 /**
- * @internal
- */
-export const CmdAddExisting = 'add-existing';
-/**
  * import this module to commands.ts
  * @internal
  */
-Commands.add(CmdAddExisting, 'AddExisting', 'add-existing', false, true, {
+Commands.add(CommandNames.addExisting, 'AddExisting', 'add-existing', false, true, {
     dialog: (_) => 'replace',
 
     showCondition(context) {

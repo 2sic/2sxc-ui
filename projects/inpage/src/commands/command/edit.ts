@@ -1,9 +1,4 @@
-﻿import { Commands, SharedLogic } from '..';
-
-/**
- * @internal
- */
-export const CmdEdit = 'edit';
+﻿import { CommandNames, Commands } from '..';
 
 /**
  * @internal
@@ -15,8 +10,8 @@ export const CmdEditDialog = 'edit';
  *
  * import this module to commands.ts
  */
-Commands.add(CmdEdit, 'Edit', 'pencil', false, true, {
-    addParamsToLink: (ctx) => ({ mode: 'edit' }),
+Commands.add(CommandNames.edit, 'Edit', 'pencil', false, true, {
+    addParamsToLink: (ctx) => ({ mode: CmdEditDialog }),
     showCondition(ctx) {
         // need ID or a "slot", otherwise edit won't work
         const result =
