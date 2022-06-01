@@ -1,16 +1,16 @@
-import { JsInfo } from '..';
+import { EnvironmentSpecs } from '..';
 import { EnvironmentMetaLoader } from './env-loader-meta';
 import { HasLog, Insights, SxcApiUrlRoot } from '../../../core';
 import { AntiForgeryTokenHeaderNameDnn, DnnUiRoot, PlatformDnn } from '../constants';
 
-declare const _jsApi: JsInfo;
+declare const _jsApi: EnvironmentSpecs;
 
 /**
  * Provides environment information to $2sxc - usually page-id, api-root and stuff like that
  */
 export class Environment extends HasLog {
     /** @internal */
-    private header: JsInfo;
+    private header: EnvironmentSpecs;
     public ready = false;
     public source = '';
 
@@ -38,7 +38,7 @@ export class Environment extends HasLog {
      * Load a new jsInfo - must be public, as it's used in iframes where jquery is missing
      * @param newJsInfo new info to load
      */
-    public load(newJsInfo: JsInfo, source?: string) {
+    public load(newJsInfo: EnvironmentSpecs, source?: string) {
         const cl = this.log.call('load');
         if(newJsInfo.root && !newJsInfo.api) {
             cl.add('root provided, api missing, will auto-complete');

@@ -1,5 +1,5 @@
 ﻿import { TotalPopup } from '../tools/total-popup';
-import { UrlParamManager } from '../tools/url-param-manager';
+import { UrlParams } from '../tools/url-param-manager';
 import { Stats } from '../Stats';
 import { Debug, $2sxcGlobal, Environment, SxcHttp } from '..';
 import { Insights, Log, SxcVersion } from '../../../core';
@@ -13,7 +13,7 @@ import { $2sxcGet } from './$2sxc-get';
 export function buildSxcRoot(): $2sxcGlobal {
     const rootApiV2 = getRootPartsV2();
 
-    const urlManager = new UrlParamManager();
+    const urlManager = new UrlParams();
     const debug = new Debug();
     //  {
     //     load: (urlManager.get('debug') === 'true'),

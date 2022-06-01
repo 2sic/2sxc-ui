@@ -10,8 +10,7 @@
 // early things without dependencies, which may be needed by others
 export * from './_/window';
 export * from './data';
-export * from './tools/total-popup';
-export * from './tools/url-param-manager';
+export * from './tools';
 export * from './constants';
 export * from './Stats';
 
@@ -23,4 +22,4 @@ export * from './sxc-instance';
 export * from './sxc-root/';
 
 export * from './sxc-instance/sxc-manage';
-export * from './plumbing';
+

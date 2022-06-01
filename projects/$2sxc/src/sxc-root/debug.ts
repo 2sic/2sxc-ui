@@ -1,7 +1,7 @@
-import { UrlParamManager } from '..';
+import { UrlParams } from '..';
 
-const urlManager = new UrlParamManager();
-const urlDebugState = urlManager.get('debug') === 'true';
+const urlManager = new UrlParams();
+const urlDebugState = urlManager.isDebug() === true;
 
 /** @internal */
 export class Debug {

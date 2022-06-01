@@ -1,5 +1,11 @@
 ﻿/** @internal */
-export class UrlParamManager {
+export class UrlParams {
+    /**
+     * Get a param from the url, no matter if it's behind ? or #
+     * If not found, will return an empty string `''`
+     * @param {string} name
+     * @memberof QueryParams
+     */
     get(name: string) {
         // warning: this method is duplicated in 2 places - keep them in sync.
         // locations are eav and 2sxc4ng
@@ -30,6 +36,12 @@ export class UrlParamManager {
             : decodeURIComponent(strResult.replace(/\+/g, ' '));
     }
 
+    /**
+     * Get a required param from the url, no matter if it's behind ? or #
+     * Will throw an error if not found
+     * @param {string} name
+     * @memberof QueryParams
+     */
     require(name: string) {
         const found = this.get(name);
         if (found === '') {
@@ -40,7 +52,11 @@ export class UrlParamManager {
         return found;
     }
 
-    debug(): boolean {
-        return this.get('debug') === 'true'
+    /**
+     * Checks if debug is enabled in the URL
+     * @returns 
+     */
+    isDebug(): boolean {
+        return this.get('debug')?.toLocaleLowerCase() === 'true'
     }
 }
