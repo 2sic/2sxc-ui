@@ -11,7 +11,8 @@
     "../inpage/src/**/*.ts",
 
     "../$2sxc/src/*.ts",
-    "../$2sxc/src/*.js", "../$2sxc/src/**/*.ts",
+    "../$2sxc/src/*.js", 
+    "../$2sxc/src/**/*.ts",
   ],
   "exclude": [
     "**/test/**/*.ts",
