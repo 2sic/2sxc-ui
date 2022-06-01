@@ -1,10 +1,10 @@
 ﻿import { ContextIdentifier } from '../sxc-root/context-identifier';
 import { SxcWebApi } from './web-api/sxc-web-api';
 import { ApiUrlRoots, HasLog, ToSxcName } from '../../../core';
-import { SxcManage } from './sxc-instance-manage';
-import { SxcData } from './data/sxc-instance-data';
-import { SxcQuery } from './data/sxc-instance-query';
-import { SxcCms } from './sxc-instance-cms';
+import { SxcManage } from './sxc-manage';
+import { SxcData } from './data/sxc-data';
+import { SxcQuery } from './data/sxc-query';
+import { SxcCms } from './sxc-cms';
 import { SxcRoot } from '..';
 
 // const serviceScopes = ['app', 'app-sys', 'app-api', 'app-query', 'app-content', 'eav', 'view', 'dnn'];

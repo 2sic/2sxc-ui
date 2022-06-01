@@ -25,5 +25,5 @@ export * from './sxc-root/context-identifier';
 export * from './sxc-root/sxc-root';
 export * from './sxc-root/sxc-root-builder';
 
-export * from './sxc-instance/sxc-instance-manage';
+export * from './sxc-instance/sxc-manage';
 export * from './plumbing';

@@ -1,7 +1,7 @@
 import { Sxc } from '..';
 import { TargetTypes } from '../../data';
 import { MetadataFor } from '../../data/metadata-for';
-import { SxcDataServiceBase } from './sxc-instance-data-service-base';
+import { SxcDataServiceBase } from './sxc-data-service-base';
 
 const ContentApiRoot = 'app/auto/data';
 

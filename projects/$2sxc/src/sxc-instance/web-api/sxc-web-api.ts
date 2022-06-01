@@ -1,4 +1,4 @@
-﻿import { Sxc } from '../sxc-instance';
+﻿import { Sxc } from '../sxc';
 import { AjaxPromise } from './ajax-promise';
 import { Environment } from '../../environment';
 import { AjaxSettings } from './ajax-settings';

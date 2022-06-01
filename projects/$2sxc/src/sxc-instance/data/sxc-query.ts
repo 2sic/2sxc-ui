@@ -1,5 +1,5 @@
 import { Sxc } from '..';
-import { SxcDataServiceBase } from './sxc-instance-data-service-base';
+import { SxcDataServiceBase } from './sxc-data-service-base';
 
 /**
  * Instance Query Service

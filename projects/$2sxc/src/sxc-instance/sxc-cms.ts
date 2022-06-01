@@ -1,4 +1,4 @@
-import { SxcPart } from './sxc-instance-part';
+import { SxcPart } from './sxc-part';
 
 /**
  * This is in charge of sxc.cms on the instance level.

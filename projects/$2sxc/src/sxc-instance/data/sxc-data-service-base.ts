@@ -1,5 +1,5 @@
 import { Sxc } from '..';
-import { SxcPart } from '../sxc-instance-part';
+import { SxcPart } from '../sxc-part';
 import { SxcWebApi } from '../web-api/sxc-web-api';
 
 /**
