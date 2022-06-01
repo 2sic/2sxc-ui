@@ -6,7 +6,10 @@
     ],
     "out": "./docs/typedoc",
     "json": "./docs/typedoc/typedoc.json",
-    "name": "JsApi.InPage",
-    "includeVersion": false
+    "name": "Api.Js.InPage",
+    "includeVersion": false,
+    "excludePrivate": true,
+    "excludeProtected": true,
+    "excludeExternals": false,
   }
 }

@@ -5,16 +5,32 @@ import { ContextIdentifier, Debug, Stats, SxcInstance, TotalPopup } from '..';
 import { SxcHttp } from '../http/sxc-http';
 
 /**
- * This is the interface for the main $2sxc object on the window
+ * This is the root global `window.$2sxc` function / object. 
+ * 
+ * It is both a function `window.$2sxc(...)` and object `window.$2sxc.insights...`
+ * 
+ * Because of limitations in the documentation, the main function isn't documented.
+ * The signature is the same as the [get](xref:Api.Js.InPage.SxcRoot.get) function.
+ * So `$2sxc(...)` is the same as `$2sxc.get(...)`
  */
 export interface SxcRoot {
     /**
-     * Get's an SxcInstance
-     * @param id number | HTMLElement
+     * Get an SxcInstance
+     * @param id number | HTMLElement | ContextIdentifier | SxcInstance
      * @param cbid number
      * @returns SxcInstance
      */
     (id: number | HTMLElement | ContextIdentifier | SxcInstance, cbid?: number): SxcInstance;
+
+    
+    /**
+     * Get an SxcInstance
+     * @param id number | HTMLElement | ContextIdentifier | SxcInstance
+     * @param cbid number
+     * @returns SxcInstance
+     * @since v14.01
+     */
+    get(id: number | HTMLElement | ContextIdentifier | SxcInstance, cbid?: number): SxcInstance;
 
     /** @internal */
     _controllers: { [id: string]: SxcInstance };

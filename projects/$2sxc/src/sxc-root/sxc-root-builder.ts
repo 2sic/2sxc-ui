@@ -81,6 +81,7 @@ export function buildSxcRoot(): SxcRoot {
 
 
     const addOn: Partial<SxcRoot> = {
+        get: FindSxcInstance,
         _controllers: {} as any,
         beta: {},
         _data: {},
