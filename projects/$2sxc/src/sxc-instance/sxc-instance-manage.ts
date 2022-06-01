@@ -4,7 +4,7 @@
 */
 
 /** @internal */
-export interface SxcInstanceManage {
+export interface SxcManage {
   /**
    * The context contains information about the Sxc Instance, like module-id, etc.
    */

@@ -1,7 +1,7 @@
 import { Environment } from '../environment';
 import { Insights, Log } from '../../../core';
 import { UrlParams } from './url-params';
-import { ContextIdentifier, Debug, Stats, SxcInstance, TotalPopup } from '..';
+import { ContextIdentifier, Debug, Stats, Sxc, TotalPopup } from '..';
 import { SxcHttp } from '../http/sxc-http';
 
 /**
@@ -20,7 +20,7 @@ export interface SxcRoot {
      * @param cbid number
      * @returns SxcInstance
      */
-    (id: number | HTMLElement | ContextIdentifier | SxcInstance, cbid?: number): SxcInstance;
+    (id: number | HTMLElement | ContextIdentifier | Sxc, cbid?: number): Sxc;
 
     
     /**
@@ -30,10 +30,10 @@ export interface SxcRoot {
      * @returns SxcInstance
      * @since v14.01
      */
-    get(id: number | HTMLElement | ContextIdentifier | SxcInstance, cbid?: number): SxcInstance;
+    get(id: number | HTMLElement | ContextIdentifier | Sxc, cbid?: number): Sxc;
 
     /** @internal */
-    _controllers: { [id: string]: SxcInstance };
+    _controllers: { [id: string]: Sxc };
 
     /** @internal */
     beta: any;

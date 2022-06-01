@@ -3,7 +3,7 @@ import { UrlParamManager } from '../tools/url-param-manager';
 import { Stats } from '../Stats';
 import { getRootPartsV2 } from './sxc-root';
 import { Window } from '../_/window';
-import { Debug, SxcInstance, SxcRoot } from '..';
+import { Debug, Sxc, SxcRoot } from '..';
 import { Insights, SxcVersion } from '../../../core';
 import { ContextIdentifier } from './context-identifier';
 
@@ -18,7 +18,7 @@ const sxcDivsSelector = 'div[data-edit-context]';
  * @param cbid
  * @returns {}
  */
-function FindSxcInstance(id: number | ContextIdentifier | HTMLElement | SxcInstance, cbid?: number): SxcInstance {
+function FindSxcInstance(id: number | ContextIdentifier | HTMLElement | Sxc, cbid?: number): Sxc {
     const $2sxc = window.$2sxc as SxcRoot;
     $2sxc.log.add('FindSxcInstance(' + id + ',' + cbid);
     if (!$2sxc._controllers)
@@ -26,7 +26,7 @@ function FindSxcInstance(id: number | ContextIdentifier | HTMLElement | SxcInsta
 
     // Test if it already is such an instance, in which case we just preserve it and return it
     // Used in cases where the $2sxc(something) is just used to ensure it really is this
-    if (SxcInstance.is(id)) return id;
+    if (Sxc.is(id)) return id;
 
     // check if it's a context identifier
     let ctxId: ContextIdentifier = null;
@@ -61,7 +61,7 @@ function FindSxcInstance(id: number | ContextIdentifier | HTMLElement | SxcInsta
     if (!$2sxc._data[cacheKey]) $2sxc._data[cacheKey] = {};
 
     return ($2sxc._controllers[cacheKey]
-        = new SxcInstance(id, cbid, cacheKey, $2sxc, ctxId));
+        = new Sxc(id, cbid, cacheKey, $2sxc, ctxId));
 }
 
 /**

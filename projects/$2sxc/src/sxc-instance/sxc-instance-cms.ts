@@ -1,4 +1,4 @@
-import { SxcInstancePart } from './sxc-instance-part';
+import { SxcPart } from './sxc-instance-part';
 
 /**
  * This is in charge of sxc.cms on the instance level.
@@ -6,7 +6,7 @@ import { SxcInstancePart } from './sxc-instance-part';
  * In future, it may also have dedicated command like `layout` etc.
  * @internal
  */
-export class SxcInstanceCms extends SxcInstancePart {
+export class SxcCms extends SxcPart {
   /**
    * Run a command on this sxc-instance. 
    * Requires the Cms parts to be loaded. 

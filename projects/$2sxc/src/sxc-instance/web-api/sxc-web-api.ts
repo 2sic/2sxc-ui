@@ -1,4 +1,4 @@
-﻿import { SxcInstance } from '../sxc-instance';
+﻿import { Sxc } from '../sxc-instance';
 import { AjaxPromise } from './ajax-promise';
 import { Environment } from '../../environment';
 import { AjaxSettings } from './ajax-settings';
@@ -22,7 +22,7 @@ export class SxcWebApi {
      * @param sxc 
      * @internal
      */
-    constructor(private readonly sxc: SxcInstance) {
+    constructor(private readonly sxc: Sxc) {
         this.env = sxc.root.env;
     }
 

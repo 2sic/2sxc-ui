@@ -1,10 +1,10 @@
 ﻿import { ContextIdentifier } from '../sxc-root/context-identifier';
 import { SxcWebApi } from './web-api/sxc-web-api';
 import { ApiUrlRoots, HasLog, ToSxcName } from '../../../core';
-import { SxcInstanceManage } from './sxc-instance-manage';
-import { SxcData } from './data/sxc-data';
-import { SxcQuery } from './data/sxc-query';
-import { SxcInstanceCms } from './sxc-instance-cms';
+import { SxcManage } from './sxc-instance-manage';
+import { SxcData } from './data/sxc-instance-data';
+import { SxcQuery } from './data/sxc-instance-query';
+import { SxcCms } from './sxc-instance-cms';
 import { SxcRoot } from '..';
 
 // const serviceScopes = ['app', 'app-sys', 'app-api', 'app-query', 'app-content', 'eav', 'view', 'dnn'];
@@ -12,7 +12,7 @@ import { SxcRoot } from '..';
 /**
 * The typical sxc-instance object for a specific DNN module or content-block
 */
-export class SxcInstance extends HasLog {
+export class Sxc extends HasLog {
   /** @internal */
   private _isSxcInstance = true;
 
@@ -25,12 +25,12 @@ export class SxcInstance extends HasLog {
    * @memberof SxcInstance
    * @internal
    */
-  manage: SxcInstanceManage = null; // initialize correctly later on
+  manage: SxcManage = null; // initialize correctly later on
 
   /**
    * CMS operations on this sxc-instance.
    */
-  cms = new SxcInstanceCms(this, 'cms');
+  cms = new SxcCms(this, 'cms');
   
   /** @internal */
   constructor(
@@ -82,8 +82,8 @@ export class SxcInstance extends HasLog {
    * @param thing 
    * @returns 
    */
-  public static is(thing: unknown): thing is SxcInstance {
-    const maybe = thing as SxcInstance;
+  public static is(thing: unknown): thing is Sxc {
+    const maybe = thing as Sxc;
     return maybe._isSxcInstance;
   }
 
@@ -198,9 +198,9 @@ export class SxcInstance extends HasLog {
    * @returns 
    * @internal
    */
-  recreate(resetCache: boolean): SxcInstance {
+  recreate(resetCache: boolean): Sxc {
     if (resetCache) delete this.root._controllers[this.cacheKey]; // clear cache
-    return this.root(this.id, this.cbid) as any as SxcInstance; // generate new
+    return this.root(this.id, this.cbid) as any as Sxc; // generate new
   }
 }
 

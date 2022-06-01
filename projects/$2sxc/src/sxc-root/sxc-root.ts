@@ -1,4 +1,4 @@
-import { SxcInstance, SxcRoot } from '..';
+import { Sxc, SxcRoot } from '..';
 import { Environment } from '../environment';
 import { SxcHttp } from '../http/sxc-http';
 import { Log, SxcVersion } from '../../../core';

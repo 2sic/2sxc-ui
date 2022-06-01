@@ -1,4 +1,4 @@
-﻿import { ContextIdentifier, SxcInstance, SxcRoot as SxcRootOriginal } from '../../../$2sxc/src/index';
+﻿import { ContextIdentifier, Sxc, SxcRoot as SxcRootOriginal } from '../../../$2sxc/src/index';
 import { Cms } from '../cms/Cms';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { Manage } from '../manage/manage';
@@ -13,13 +13,13 @@ import { windowInPage as window } from './window-in-page';
 // ReSharper disable InconsistentNaming
 export interface SxcRoot extends SxcRootOriginal {
   /**
-   * Get's an SxcInstance
+   * Get's an Sxc
    * @param id number | HTMLElement
    * @param cbid number
-   * @returns SxcInstance
+   * @returns Sxc
    */
   // 2021-09-17 spm assume this function doesn't use jquery
-  (id: number | ContextIdentifier | HTMLElement | SxcInstance , cbid?: number): SxcEdit;
+  (id: number | ContextIdentifier | HTMLElement | Sxc , cbid?: number): SxcEdit;
   // insights: typeof Insights;
   _manage: Manage;
   system: SystemUpgrader;

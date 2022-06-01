@@ -1,19 +1,19 @@
-import { SxcInstance } from '..';
-import { SxcDataQueryBase } from './sxc-data-query-base';
+import { Sxc } from '..';
+import { SxcDataServiceBase } from './sxc-instance-data-service-base';
 
 /**
  * Instance Query Service
  */
-export class SxcQuery extends SxcDataQueryBase {
+export class SxcQuery extends SxcDataServiceBase {
 
   /**
    * Creates an instance of SxcQuery.
-   * @param {SxcInstance} sxc
+   * @param {Sxc} sxc
    * @param {string} name
    * @memberof SxcQuery
    * @internal
    */
-  constructor(sxc: SxcInstance, readonly name: string) {
+  constructor(sxc: Sxc, readonly name: string) {
     super(sxc, name, 'Query');
   }
 

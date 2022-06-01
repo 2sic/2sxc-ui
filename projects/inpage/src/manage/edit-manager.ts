@@ -1,4 +1,4 @@
-﻿import { SxcInstance, SxcInstanceManage } from '../../../$2sxc/src';
+﻿import { Sxc, SxcManage } from '../../../$2sxc/src';
 import { SxcInstanceEngine } from '../commands';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { AttrJsonEditContext } from '../context/html-attribute/edit-context-root';
@@ -12,10 +12,10 @@ import { ToolbarRenderer } from '../toolbar/render/toolbar-renderer';
 /**
  * Instance specific edit manager
  */
-export class EditManager implements SxcInstanceManage {
+export class EditManager implements SxcManage {
 
     constructor(
-        private sxc: SxcInstance,
+        private sxc: Sxc,
         private editContext: AttrJsonEditContext,
         private userInfo: ContextOfUser,
         private cmdEngine: SxcInstanceEngine,
