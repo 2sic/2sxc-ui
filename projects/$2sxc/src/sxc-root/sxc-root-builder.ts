@@ -1,5 +1,5 @@
 ﻿import { TotalPopup } from '../tools/total-popup';
-import { UrlParams } from '../tools/url-param-manager';
+import { UrlParams } from '../tools/url-params';
 import { Stats } from '../Stats';
 import { Debug, $2sxcGlobal, Environment, SxcHttp } from '..';
 import { Insights, Log, SxcVersion } from '../../../core';

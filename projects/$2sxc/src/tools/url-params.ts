@@ -1,4 +1,7 @@
-﻿/** @internal */
+﻿/**
+ * Helper object to read url params. 
+ * Available on $2sxc.urlParams
+ */
 export class UrlParams {
     /**
      * Get a param from the url, no matter if it's behind ? or #
