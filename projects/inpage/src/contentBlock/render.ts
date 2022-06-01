@@ -154,7 +154,9 @@ class RendererGlobal extends HasLog {
 }
 
 
-
+/**
+ * @internal
+ */
 export const renderer = new RendererGlobal();
 
 interface ContentBlockReplacement {

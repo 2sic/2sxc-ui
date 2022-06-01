@@ -10,6 +10,10 @@ import { Manage } from './manage/manage';
 import { NoJQ } from './plumbing';
 import { QuickE } from './quick-edit/quick-e';
 import { SystemUpgrader } from './system';
+
+/**
+ * @internal
+ */
 import './toolbar/toolbar-global-enable-shake';
 
 // #1 Note that $2sxc must always exist, the server ensures the load order

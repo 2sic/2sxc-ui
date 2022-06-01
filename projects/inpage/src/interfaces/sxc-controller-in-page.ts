@@ -30,4 +30,8 @@ export interface SxcRoot extends SxcGlobal {
 }
 // ReSharper restore InconsistentNaming
 
+/**
+ * TODO: PROBABLY not used any more
+ * @internal
+ */
 export const $2sxcInPage: SxcRoot = window.$2sxc;

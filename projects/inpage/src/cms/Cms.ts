@@ -9,7 +9,9 @@ import { $2sxcInPage } from '../interfaces/sxc-controller-in-page';
 import { HasLog, Insights, Log } from '../logging';
 
 const logId = 'Cms.Api';
-
+/**
+ * @internal
+ */
 export class Cms extends HasLog {
     /**
      * if true (default) will reset the log everytime something is done

@@ -6,5 +6,8 @@
     "removeComments": false,
     "stripInternal": true,
     "emitDeclarationOnly": true
-  }
+  },
+  "exclude": [
+    "./test/**/*.ts",
+  ]
 }

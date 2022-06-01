@@ -36,6 +36,7 @@ export interface RunParams {
 /**
  * Parameters for the Global cms.run(...) command in Addition to the RunParams
  * New in 12.10
+ * @internal
  */
 export interface RunParamsWithContext extends RunParams {
   /**
@@ -53,6 +54,7 @@ export interface RunParamsWithContext extends RunParams {
 
 /**
  * Checks if the run params are complete, as would be used in the $2sxc.cms.run
+ * @internal
  */
 export function is$sxcRunParams(o: unknown): o is RunParamsWithContext {
   const t = o as RunParamsWithContext;
@@ -62,6 +64,7 @@ export function is$sxcRunParams(o: unknown): o is RunParamsWithContext {
 
 /**
  * Checks if it's at least an instance run param - having at least `action` or `params`
+ * @internal
  */
 export function isRunParamsInstance(maybeRunParams: unknown): maybeRunParams is RunParams {
   const typed = maybeRunParams as RunParams;
@@ -71,6 +74,9 @@ export function isRunParamsInstance(maybeRunParams: unknown): maybeRunParams is 
 const runContextInstanceMinimalRequirements = "'action' and/or 'params'";
 const errPrefix = 'sxc instance run() expects runParams';
 
+/**
+ * @internal
+ */
 export function ensureRunParamsInstanceOrError(runParams: RunParamsWithContext) {
   if (!isRunParamsInstance(runParams))
     throw `${errPrefix} with at least ${runContextInstanceMinimalRequirements}`;
