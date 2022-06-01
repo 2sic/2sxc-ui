@@ -2,7 +2,7 @@ import { UrlParams } from './../tools';
 import { Environment } from '../environment';
 import { Insights, Log } from '../../../core';
 import { ContextIdentifier, Debug, Stats, Sxc, TotalPopup } from '..';
-import { HttpGlobal } from './$2sxc-http';
+import { HttpGlobal } from './http-global';
 
 /**
  * This is the root global `window.$2sxc` function / object. 

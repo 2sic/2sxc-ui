@@ -4,7 +4,7 @@ import { Stats } from '../Stats';
 import { Debug, $2sxcGlobal, Environment } from '..';
 import { Insights, Log, SxcVersion } from '../../../core';
 import { $2sxcGet } from './$2sxc-global-get';
-import { HttpGlobal } from './$2sxc-http';
+import { HttpGlobal } from './http-global';
 
 
 /**
