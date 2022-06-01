@@ -52,8 +52,9 @@ export function $2sxcGet(id: number | ContextIdentifier | HTMLElement | Sxc, cbi
         return $2sxc._controllers[cacheKey];
     }
 
+    // 2022-06-01 2dm disabled, believe this is for the old .data
     // not found, so also init the data-cache in case it's ever needed
-    if (!$2sxc._data[cacheKey]) $2sxc._data[cacheKey] = {};
+    // if (!$2sxc._data[cacheKey]) $2sxc._data[cacheKey] = {};
 
     return ($2sxc._controllers[cacheKey]
         = new Sxc(id, cbid, cacheKey, $2sxc, ctxId));

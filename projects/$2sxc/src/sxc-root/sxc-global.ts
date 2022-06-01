@@ -38,8 +38,8 @@ export interface SxcGlobal {
     /** @internal */
     beta: any;
 
-    /** @internal */
-    _data: any;
+    // 2022-06-01 2dm disabled, believe this is for the old .data
+    // _data: any;
 
     /** @internal */
     _manage: any;
@@ -97,12 +97,6 @@ export interface SxcGlobal {
      * Internal logger to better see what's happening
      */
     log: Log;
-
-    /** 
-     * Very internal bit, probably will be deprecated 
-     * @internal
-     */
-    parts: any;
 
 
     /**
