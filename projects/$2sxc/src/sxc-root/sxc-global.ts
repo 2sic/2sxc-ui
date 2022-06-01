@@ -1,4 +1,4 @@
-import { UrlParams } from './../tools';
+import { UrlParams } from '../tools';
 import { Environment } from '../environment';
 import { Insights, Log } from '../../../core';
 import { ContextIdentifier, Debug, Stats, Sxc, TotalPopup } from '..';
