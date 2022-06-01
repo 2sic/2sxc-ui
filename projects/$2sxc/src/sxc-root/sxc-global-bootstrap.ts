@@ -3,7 +3,7 @@ import { UrlParams } from '../tools/url-params';
 import { Stats } from '../Stats';
 import { Debug, SxcGlobal, Environment } from '..';
 import { Insights, Log, SxcVersion } from '../../../core';
-import { $2sxcGet } from './sxc-global_get';
+import { $2sxcGet } from './sxc-global-get';
 import { HttpGlobal } from './http-global';
 
 
