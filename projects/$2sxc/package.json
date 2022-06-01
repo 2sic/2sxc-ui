@@ -8,9 +8,9 @@
     "2sxc-js-dev": "webpack --watch --mode=development",
     "typings": "cd src && typings.cmd \"..\\..\\sxc-typings\\dist\"",
     "// typedoc and docFx versions": "https://github.com/docascode/type2docfx/issues/63",
-    "build-typedoc": "cd src && delete.cmd \"..\\docs\\typedoc\" && cd .. && typedoc --tsconfig ./src/tsconfig.typedoc.json",
-    "build-docFx": "cd src && delete.cmd \"..\\docs\\docFx\" && cd .. && type2docfx ./docs/typedoc/typedoc.json ./docs/docFx",
-    "build-docs": "npm run build-typedoc && npm run build-docFx",
+    "docs": "npm run docs-1-typedoc && npm run docs-2-docFx",
+    "docs-1-typedoc": "cd src && delete.cmd \"..\\docs\\typedoc\" && cd .. && typedoc --tsconfig ./src/tsconfig.typedoc.json",
+    "docs-2-docFx": "cd src && delete.cmd \"..\\docs\\docFx\" && cd .. && type2docfx ./docs/typedoc/typedoc.json ./docs/docFx",
     "serve-docFx": "cd docs && docfx ./docfx-serve.config.json --serve"
   },
   "repository": {
