@@ -1,6 +1,6 @@
 import { Environment } from '../environment';
 import { Insights, Log } from '../../../core';
-import { UrlParams } from './url-params';
+import { UrlParams } from '../plumbing/url-params';
 import { ContextIdentifier, Debug, Stats, Sxc, TotalPopup } from '..';
 import { SxcHttp } from '../http/sxc-http';
 
@@ -13,7 +13,7 @@ import { SxcHttp } from '../http/sxc-http';
  * The signature is the same as the [get](xref:Api.Js.InPage.SxcRoot.get) function.
  * So `$2sxc(...)` is the same as `$2sxc.get(...)`
  */
-export interface SxcRoot {
+export interface $2sxcGlobal {
     /**
      * Get an SxcInstance
      * @param id number | HTMLElement | ContextIdentifier | SxcInstance

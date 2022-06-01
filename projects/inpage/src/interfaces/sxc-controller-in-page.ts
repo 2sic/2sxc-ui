@@ -1,4 +1,4 @@
-﻿import { ContextIdentifier, Sxc, SxcRoot as SxcRootOriginal } from '../../../$2sxc/src/index';
+﻿import { $2sxcGlobal as SxcRootOriginal, ContextIdentifier, Sxc } from '../../../$2sxc/src/index';
 import { Cms } from '../cms/Cms';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { Manage } from '../manage/manage';
