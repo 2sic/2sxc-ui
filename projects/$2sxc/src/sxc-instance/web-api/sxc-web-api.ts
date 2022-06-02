@@ -28,8 +28,8 @@ export class SxcWebApi {
 
     /**
      * **Deprecated** 
-     * Please use [fetchJson()](xref:Api.Js.InPage.SxcWebApi.fetchJson) 
-     * or [fetchJson()](xref:Api.Js.InPage.SxcWebApi.fetchRaw) instead.
+     * Please use [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchJson) 
+     * or [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchRaw) instead.
      * 
      * Returns an http-get promise using jQuery
      * @param settingsOrUrl the url to get
@@ -45,8 +45,8 @@ export class SxcWebApi {
 
     /**
      * **Deprecated** 
-     * Please use [fetchJson()](xref:Api.Js.InPage.SxcWebApi.fetchJson) 
-     * or [fetchJson()](xref:Api.Js.InPage.SxcWebApi.fetchRaw) instead.
+     * Please use [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchJson) 
+     * or [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchRaw) instead.
      * 
      * Returns an http-post promise using jQuery
      * @param settingsOrUrl the url to get
@@ -62,8 +62,8 @@ export class SxcWebApi {
 
     /**
      * **Deprecated** 
-     * Please use [fetchJson()](xref:Api.Js.InPage.SxcWebApi.fetchJson) 
-     * or [fetchJson()](xref:Api.Js.InPage.SxcWebApi.fetchRaw) instead.
+     * Please use [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchJson) 
+     * or [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchRaw) instead.
      * 
      * Returns an http-delete promise using jQuery
      * @param settingsOrUrl the url to talk to
@@ -79,8 +79,8 @@ export class SxcWebApi {
 
     /**
      * **Deprecated** 
-     * Please use [fetchJson()](xref:Api.Js.InPage.SxcWebApi.fetchJson) 
-     * or [fetchJson()](xref:Api.Js.InPage.SxcWebApi.fetchRaw) instead.
+     * Please use [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchJson) 
+     * or [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchRaw) instead.
      * 
      * Returns an http-put promise using jQuery
      * @param settingsOrUrl the url to put
@@ -96,8 +96,8 @@ export class SxcWebApi {
 
     /**
      * **Deprecated** 
-     * Please use [fetchJson()](xref:Api.Js.InPage.SxcWebApi.fetchJson) 
-     * or [fetchJson()](xref:Api.Js.InPage.SxcWebApi.fetchRaw) instead.
+     * Please use [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchJson) 
+     * or [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchRaw) instead.
      * 
      * Generic http request using jQuery
      * @param settingsOrUrl the url to get

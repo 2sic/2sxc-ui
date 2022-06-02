@@ -6,7 +6,7 @@
     ],
     // don't create out - "out": "./docs/typedoc",
     "json": "./docs/typedoc/typedoc.json",
-    "name": "Api.Js.InPage",
+    "name": "Api.Js.SxcJs",
     "includeVersion": false,
     "excludePrivate": true,
     "excludeProtected": true,

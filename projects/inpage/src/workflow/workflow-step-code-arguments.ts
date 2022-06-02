@@ -3,7 +3,7 @@ import { ContextComplete } from '../context';
 
 
 /**
- * Arguments for [WorkflowStepCode](xref:Api.Js.InPage.WorkflowStepCode).
+ * Arguments for [WorkflowStepCode](xref:Api.Js.SxcJs.WorkflowStepCode).
  * Will be passed to your code and should also be returned by your code.
  * This also allows cancelling further execution.
  * @export
