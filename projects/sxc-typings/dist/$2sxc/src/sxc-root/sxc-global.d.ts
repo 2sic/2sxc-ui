@@ -9,7 +9,7 @@ import { HttpGlobal } from './http-global';
  * It is both a function `window.$2sxc(...)` and object `window.$2sxc.insights...`
  *
  * Because of limitations in the documentation, the main function isn't documented.
- * The signature is the same as the [get](xref:Api.Js.InPage.SxcRoot.get) function.
+ * The signature is the same as the [get](xref:Api.Js.InPage.SxcGlobal.get) function.
  * So `$2sxc(...)` is the same as `$2sxc.get(...)`
  */
 export interface SxcGlobal {

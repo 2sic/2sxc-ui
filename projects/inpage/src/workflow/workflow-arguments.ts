@@ -3,32 +3,43 @@ import { ContextComplete } from '../context';
 
 
 /**
- * Arguments for a workflow. Used when starting it and to determine result / cancelled.
- *
+ * Arguments for workflow code [](xref:Api.Js.InPage.WorkflowCode).
+ * Used when starting it and to determine result / cancelled.
  * @export
  * @class WorkflowArguments
- * @internal
  */
 export class WorkflowArguments {
-    constructor(
-        /** Name this workflow is running for */
-        public command: string,
+  /**
+   * @internal
+   */
+  constructor(
+    /**
+     * Name this workflow is running for
+     */
+    public command: string,
 
-        /** The phase it's in (before, after, etc.) */
-        public phase: WorkflowPhases,
+    /**
+     * The phase it's in (before, after, etc.)
+     */
+    public phase: WorkflowPhases,
 
-        /** Context of the current command / step being run */
-        public context: ContextComplete,
+    /**
+     * Context of the current command / step being run
+     */
+    public context: ContextComplete,
 
-        /**
-         * Result in after-phases of the workflow
-         * BETA - never really tested this
-         */
-        public result: unknown = null,
-        ) {
+    /**
+     * Result in after-phases of the workflow
+     * BETA - never really tested this
+     */
+    public result: unknown = null,
+    ) {
+  }
 
-    }
-
-    /** If the workflow should be cancelled. Can be set by any workflow step. */
-    cancel: boolean = false;
+  /**
+   * If the workflow should be cancelled.
+   * Can be set by any workflow step.
+   * If set to true, following steps / workflows will not run.
+   */
+  cancel: boolean = false;
 }

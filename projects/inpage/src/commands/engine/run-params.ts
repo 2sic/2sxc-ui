@@ -1,6 +1,6 @@
 import { ContextIdentifier, Sxc } from '../../../../$2sxc/src';
 import { SxcEdit } from '../../interfaces/sxc-instance-editable';
-import { WorkflowStep } from '../../workflow/workflow';
+import { WorkflowStep } from '../../workflow';
 import { CommandParams } from '../command-params';
 
 /**
