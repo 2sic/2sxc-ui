@@ -1,6 +1,5 @@
-﻿import { Command, Commands } from '..';
+﻿import { Command, CommandNames, Commands } from '..';
 import { ItemIdentifierSimple } from '../../interfaces/item-identifiers';
-import { CmdEditDialog } from './edit';
 import { CmdNewMode } from './new';
 
 /**
@@ -24,7 +23,7 @@ export const MetadataCommand = Command.build(CmdMetadata, 'Metadata', 'tag', fal
 
     addParamsToLink: (_) => ({ mode: CmdNewMode }),
 
-    dialog: (_) => CmdEditDialog, // don't use "new" (default) but use "edit"
+    dialog: (_) => CommandNames.edit, // don't use "new" (default) but use "edit"
 
     // if it doesn't have data yet, make it less strong
     dynamicClasses: (ctx) => ctx.button.command.params.entityId ? '' : 'empty',

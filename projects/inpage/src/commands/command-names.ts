@@ -30,6 +30,7 @@ export enum CommandNames {
     // 2. Use it in the command - but only for the command, not the icon
     // 3. Test where the old variable is still used - replace that
     // 4. remove the old variable
-    // 5. Add minimal documentation what the command does
+    // 5. change the export * in the index.ts to be an import with the @internal prefix
+    // 5. Add minimal documentation what the command does to this document
     // 6. build to verify nothing breaks (best keep the watcher on)
 }

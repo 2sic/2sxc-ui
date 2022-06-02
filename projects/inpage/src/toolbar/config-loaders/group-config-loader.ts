@@ -69,6 +69,7 @@ export class ButtonGroupConfigLoader extends HasLog {
         const name = Button.splitName(identifier).name;
 
         if (!(Commands.singleton().get(name))) {
+debugger;
             this.log.add(`couldn't find action ${name} - show warning`);
             console.warn('warning: toolbar-button with unknown action-name:', name);
         }
