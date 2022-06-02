@@ -9,8 +9,7 @@ import { WorkflowHelper } from './workflow-helper';
 /**
  * A workflow manager which will run stuff before / after commands.
  * As of now, it must be attached to a toolbar to take effect.
- * Normally the toolbar with raise a `toolbar-init` event where you can then add steps
- * @internal
+ * Normally the toolbar with raise a `toolbar-init` event where you can then add steps.
  */
 export class WorkflowManager extends HasLog {
 
@@ -96,7 +95,9 @@ export class WorkflowManager extends HasLog {
         return promise;
     }
 
-    /** Attach a workflow to a toolbar */
+    /**
+     * Attach a workflow to a toolbar
+     */
     attach(node: HTMLElement, context: ContextComplete) {
         const cl = this.log.call('attach');
         if (!node) return;
@@ -105,6 +106,14 @@ export class WorkflowManager extends HasLog {
         cl.done();
     }
 
+    /**
+     * 
+     * @param currentArgs 
+     * @param prevArgs 
+     * @param nextFactory 
+     * @returns 
+     * @internal
+     */
     private runNextPromiseIfNotCancelled(currentArgs: WorkflowStepCodeArguments | boolean, prevArgs: WorkflowStepCodeArguments, nextFactory: WorkflowStepCode) {
         // determine cancel based on either a boolean result or a real WorkflowArguments with cancel.
         const cancel = WorkflowHelper.isCancelled(currentArgs);

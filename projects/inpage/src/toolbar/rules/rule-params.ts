@@ -1,10 +1,10 @@
 import { MetadataFor } from '../../commands';
-import { Dictionary, DictionaryValue } from '../../plumbing';
+import { DictionaryValue } from '../../plumbing';
 
 /**
  * @internal
  */
-export type RuleParams = Dictionary<string> & {
+export type RuleParams = Record<string, string> & {
     /** Speciall prefill-list used for any kind of new-action/operation with prefill */
     contentType?: string;
     entityId?: string | number;

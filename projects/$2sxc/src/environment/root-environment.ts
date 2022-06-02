@@ -35,7 +35,8 @@ export class Environment extends HasLog {
     }
 
     /**
-     * Load a new jsInfo - must be public, as it's used in iframes where jquery is missing
+     * Manually load a new EnvironmentSpecs in cases where the page cannot provide them. 
+     * This is only used in scenarios outside of Dnn / Oqtane, you will usually not need this. 
      * @param newJsInfo new info to load
      */
     public load(newJsInfo: EnvironmentSpecs, source?: string) {
@@ -84,7 +85,7 @@ export class Environment extends HasLog {
     }
 
     /**
-     * The current page ID
+     * The current page ID - often needed in API calls
      */
     public page(): number {
         this.ensureReadyOrThrow('page');
@@ -92,7 +93,7 @@ export class Environment extends HasLog {
     }
 
     /**
-     * The request verification token header name
+     * The request verification token header name for internal WebAPI calls
      */
     public rvtHeader(): string {
         this.ensureReadyOrThrow('rvtHeader');
@@ -100,7 +101,7 @@ export class Environment extends HasLog {
     }
 
     /**
-     * The request verification token value
+     * The request-verification token for internal WebAPI calls
      */
     public rvt(): string {
         this.ensureReadyOrThrow('rvt');
