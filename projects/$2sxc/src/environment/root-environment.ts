@@ -37,16 +37,17 @@ export class Environment extends HasLog {
     /**
      * Manually load a new EnvironmentSpecs in cases where the page cannot provide them. 
      * This is only used in scenarios outside of Dnn / Oqtane, you will usually not need this. 
-     * @param newJsInfo new info to load
+     * @param envSpecs new info to load
+     * @param source _optional_ name where the data came from
      */
-    public load(newJsInfo: EnvironmentSpecs, source?: string) {
+    public load(envSpecs: EnvironmentSpecs, source?: string) {
         const cl = this.log.call('load');
-        if(newJsInfo.root && !newJsInfo.api) {
+        if(envSpecs.root && !envSpecs.api) {
             cl.add('root provided, api missing, will auto-complete');
-            const addSlash = (newJsInfo.root.endsWith('/') ? '' : '/');
-            newJsInfo.api = `${newJsInfo.root}${addSlash}${SxcApiUrlRoot}`;
+            const addSlash = (envSpecs.root.endsWith('/') ? '' : '/');
+            envSpecs.api = `${envSpecs.root}${addSlash}${SxcApiUrlRoot}`;
         }
-        this.header = newJsInfo;
+        this.header = envSpecs;
 
         // in some cases the UpdateRvt may already have been called before
         // in which case it's probably more relevant
@@ -55,7 +56,7 @@ export class Environment extends HasLog {
 
         this.ready = true;
         this.source = source || 'external/unknown' + (this.replacedRvt ? '+rvt': '');
-        cl.return(newJsInfo, 'loaded from ' + this.source);
+        cl.return(envSpecs, 'loaded from ' + this.source);
     }
 
     /** @internal */
