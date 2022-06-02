@@ -1,5 +1,4 @@
 ﻿import { Commands } from '..';
-import { $2sxcInPage } from '../../interfaces/sxc-controller-in-page';
 
 /**
  * @internal
@@ -14,7 +13,7 @@ Commands.add(CmdInsightsServer, 'Insights', 'speed', true, false, {
     code(context, event) {
         return new Promise((resolve, reject) => {
             console.log('context', context);
-            const path = $2sxcInPage.http.apiUrl('sys/insights/logs');
+            const path = window.$2sxc.http.apiUrl('sys/insights/logs');
             window.open(path, '_blank');
             return resolve();
         });

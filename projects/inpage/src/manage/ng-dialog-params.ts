@@ -1,5 +1,4 @@
 ﻿import { ContextComplete } from '../context/bundles/context-bundle-button';
-import { $2sxcInPage as $2sxc } from '../interfaces/sxc-controller-in-page';
 /**
  * This is for building/serializing the main url params when opening a dialog.
  * It does not contain the "params" / "items" part
@@ -49,7 +48,7 @@ export class NgUrlValuesWithoutParams {
 
   constructor(context: ContextComplete, partOfPage: boolean) {
 
-    // console.log('2dm - context', context);
+    const $2sxc = window.$2sxc;
     // #CustomContext
     const ctx = context.sxc?.ctx;
     const ctxAny = ctx as any;

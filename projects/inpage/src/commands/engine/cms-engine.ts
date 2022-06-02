@@ -2,7 +2,6 @@
 import { renderer } from '../../contentBlock/render';
 import { ContextComplete } from '../../context/bundles/context-bundle-button';
 import { ContextBundleInstance } from '../../context/bundles/context-bundle-instance';
-import { $2sxcInPage as $2sxc } from '../../interfaces/sxc-controller-in-page';
 import { HasLog, Insights, Log } from '../../logging';
 import { QuickDialog } from '../../quick-dialog/quick-dialog';
 import { Button, ButtonSafe } from '../../toolbar/config';
@@ -180,7 +179,7 @@ export class CmsEngine extends HasLog {
                     resolve(context as unknown as T);
                     window.open(link);
                 } else {
-                    $2sxc.totalPopup.open(link, completePromise);
+                    window.$2sxc.totalPopup.open(link, completePromise);
                 }
             }
         });

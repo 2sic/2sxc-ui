@@ -16,7 +16,7 @@ import { HttpGlobal } from './http-global';
 export interface SxcGlobal {
     /**
      * Get an SxcInstance
-     * @param id number | HTMLElement | ContextIdentifier | SxcInstance
+     * @param id number: moduleId | HTMLElement: tag in the page | SxcInstance: an existing sxc - will just be returned | ContextIdentifier: an identifier in complex scenarios without a moduleId/context
      * @param cbid number
      * @returns SxcInstance
      */

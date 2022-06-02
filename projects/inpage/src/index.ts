@@ -3,8 +3,7 @@ import { Cms } from './cms/Cms';
 import { ContextComplete } from './context/bundles/context-bundle-button';
 import { DnnActionMenu } from './dnn';
 import { translate, Translator } from './i18n';
-import { $2sxcInPage as $2sxc } from './interfaces/sxc-controller-in-page';
-import { windowInPage as window } from './interfaces/window-in-page';
+import { SxcRoot } from './interfaces/sxc-controller-in-page';
 import { EditManager } from './manage/edit-manager';
 import { Manage } from './manage/manage';
 import { NoJQ } from './plumbing';
@@ -17,6 +16,7 @@ import { SystemUpgrader } from './system';
 import './toolbar/toolbar-global-enable-shake';
 
 // #1 Note that $2sxc must always exist, the server ensures the load order
+const $2sxc = window.$2sxc as SxcRoot;
 
 // #2 Now attach initialization helpers and global objects, so that $2sxc always has these
 $2sxc.context = ContextComplete.findContext; // primary API to get the context
@@ -34,7 +34,7 @@ function loadInpage() {
     QuickE.singleton().start();
 
     /** this enhances the $2sxc client controller with stuff only needed when logged in */
-    if (!window.$2sxc.system) window.$2sxc.system = new SystemUpgrader();
+    if (!$2sxc.system) $2sxc.system = new SystemUpgrader();
 
     /** Connect DNN action mapper to this module instance */
     window.$2sxcActionMenuMapper = (moduleId: number) => {

@@ -4,8 +4,6 @@ import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { Manage } from '../manage/manage';
 import { SystemUpgrader } from '../system/2sxc.system';
 import { SxcEdit } from './sxc-instance-editable';
-import { windowInPage as window } from './window-in-page';
-
 
 /**
  * $2sxc interface declaration merging for in-page
@@ -30,8 +28,3 @@ export interface SxcRoot extends SxcGlobal {
 }
 // ReSharper restore InconsistentNaming
 
-/**
- * TODO: PROBABLY not used any more
- * @internal
- */
-export const $2sxcInPage: SxcRoot = window.$2sxc;

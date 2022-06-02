@@ -1,7 +1,6 @@
 import { CmdLayout } from '../commands/command/layout';
 import { C } from '../constants';
 import { SxcEdit } from '../interfaces/sxc-instance-editable';
-import { windowInPage as window } from '../interfaces/window-in-page';
 import { HasLog, Insights, Log } from '../logging';
 import { NoJQ } from '../plumbing';
 import { QuickDialog } from '../quick-dialog';

@@ -24,7 +24,6 @@ export class ContextComplete extends ContextBundleToolbar {
      * @param cbid
      */
     static findContext(tagOrSxc: SxcEdit | HTMLElement | number, cbid?: number): ContextComplete {
-        // 2021-09-17 spm assume this function doesn't use jquery
         let sxc: SxcEdit;
         let containerTag: HTMLElement = null;
 

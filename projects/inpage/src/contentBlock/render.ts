@@ -3,7 +3,6 @@ import { C } from '../constants';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { HtmlTools } from '../html/dom-tools';
 import { SxcEdit } from '../interfaces/sxc-instance-editable';
-import { windowInPage as window } from '../interfaces/window-in-page';
 import { AssetsLoader, HasLog, Insights, NoJQ } from '../logging';
 import { QuickE } from '../quick-edit/quick-e';
 import { WorkflowArguments, WorkflowHelper, WorkflowPhases } from '../workflow';

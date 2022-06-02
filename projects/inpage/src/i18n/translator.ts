@@ -5,7 +5,6 @@ import locI18next from 'loc-i18next';
 import { primaryLanguage, translations, translationsPath } from '.';
 import { IDs } from '../constants/ids';
 import { ContextComplete } from '../context/bundles';
-import { $2sxcInPage } from '../interfaces/sxc-controller-in-page';
 import { SxcEdit } from '../interfaces/sxc-instance-editable';
 import { HasLog, Insights, urlClean } from '../logging';
 import { EditManager } from '../manage/edit-manager';
@@ -41,7 +40,7 @@ class TranslatorGlobal extends HasLog {
         const context = manage._context || this.tryToFindAContext();
 
         cl.add('will initialize');
-        const realRootPath = $2sxcInPage.env.uiRoot();
+        const realRootPath = window.$2sxc.env.uiRoot();
         this.i18n
             .use(XHR)
             .init({

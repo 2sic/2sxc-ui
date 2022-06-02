@@ -1,5 +1,4 @@
-﻿import { $2sxcInPage } from '../../interfaces/sxc-controller-in-page';
-import { SxcEdit } from '../../interfaces/sxc-instance-editable';
+﻿import { SxcEdit } from '../../interfaces/sxc-instance-editable';
 import { AttrJsonEditContext } from '../html-attribute';
 
 /**
@@ -19,6 +18,6 @@ export class ContextOfPage {
         }
 
         // catch cases where it wasn't provided
-        this.id = this.id ?? sxc?.ctx?.pageId ?? $2sxcInPage.env.page() ?? -2742;
+        this.id = this.id ?? sxc?.ctx?.pageId ?? window.$2sxc.env.page() ?? -2742;
     }
 }

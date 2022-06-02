@@ -1,7 +1,6 @@
 ﻿import { IDialogFrameElement, IIFrameBridge } from '.';
 import { C } from '../constants';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
-import { $2sxcInPage } from '../interfaces/sxc-controller-in-page';
 import { HasLog, Insights } from '../logging';
 import { IFrameBridge } from './iframe-bridge';
 import { QuickDialogContainer } from './quick-dialog-container';
@@ -161,7 +160,7 @@ export class QuickDialog extends HasLog {
         try {
             const devMode = localStorage.getItem('devMode');
             if (devMode && !!devMode)
-                return url.replace($2sxcInPage.env.uiRoot() + 'dist/ng/ui.html', 'http://localhost:4200');
+                return url.replace(window.$2sxc.env.uiRoot() + 'dist/ng/ui.html', 'http://localhost:4200');
         } catch (e) {
             // ignore
         }

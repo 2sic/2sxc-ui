@@ -2,22 +2,17 @@
 import { DnnActionMenu } from '../dnn/dnn-menu-helper/dnn-inpage-edit';
 import { TypeWeDontCare } from '../plumbing';
 import { QuickE } from '../quick-edit/quick-e';
-import { SxcRoot } from './sxc-controller-in-page';
 
 /**
+ * Update Window object with global 2sxc objects / Dnn objects
+ * Internal only, as it's not supposed to be on the public API
  * @internal
  */
-export interface WindowInPage extends Window {
-  $2sxc: SxcRoot;
-  // event: Event;
-  dnn_tabVersioningEnabled: boolean;
-  dnn: TypeWeDontCare;
-  $quickE: QuickE ;
-  $2sxcActionMenuMapper: (moduleId: number) => DnnActionMenu;
+declare global {
+  interface Window {
+    dnn_tabVersioningEnabled: boolean;
+    dnn: TypeWeDontCare;
+    $quickE: QuickE ;
+    $2sxcActionMenuMapper: (moduleId: number) => DnnActionMenu;
+  }
 }
-// ReSharper restore InconsistentNaming
-
-/**
- * @internal
- */
-export const windowInPage: WindowInPage = window as unknown as WindowInPage;

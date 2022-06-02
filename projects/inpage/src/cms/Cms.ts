@@ -5,7 +5,7 @@ import { is$sxcRunParams, RunParamsWithContext } from '../commands/engine/run-pa
 import { C } from '../constants';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { ContextBundleInstance } from '../context/bundles/context-bundle-instance';
-import { $2sxcInPage } from '../interfaces/sxc-controller-in-page';
+import { SxcRoot } from '../interfaces/sxc-controller-in-page';
 import { HasLog, Insights, Log } from '../logging';
 
 const logId = 'Cms.Api';
@@ -47,7 +47,7 @@ export class Cms extends HasLog {
         if (is$sxcRunParams(context)) {
             // V1 with Context
             const contextGiver = (ContextIdentifier.is(context.context) || Sxc.is(context.context))
-                ? $2sxcInPage(context.context)
+                ? (window.$2sxc as SxcRoot)(context.context)
                 : context.tag;
             const realCtx = ContextComplete.findContext(contextGiver);
             context.params = { action: context.action, ...context.params };

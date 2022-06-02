@@ -2,7 +2,7 @@
 import { HasLog, NoJQ } from '../logging';
 
 // Important - for DNN it still uses #jquery
-const dnnSF = (id?: number) => $.dnnSF(id);
+const dnnSF = (id?: number) => window.$.dnnSF(id);
 
 /**
  * module specific stuff

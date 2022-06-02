@@ -1,7 +1,6 @@
 ﻿import { C } from '../constants';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { ItemIdentifierGroup, ItemIdentifierSimple, ItemInField, TemplateIdentifier } from '../interfaces/item-identifiers';
-import { $2sxcInPage } from '../interfaces/sxc-controller-in-page';
 import { HasLog, Log } from '../logging';
 import { NgUrlValuesWithoutParams } from '../manage/ng-dialog-params';
 import { DictionaryValue, NoJQ, TypeUnsafe, urlClean } from '../plumbing';
@@ -91,7 +90,7 @@ export class CommandLinkGenerator extends HasLog {
      */
     private getDialogUrl(): string {
         const context = this.context;
-        return urlClean(`${$2sxcInPage.env.uiRoot()}${C.DialogPaths.ng8}`) + `?sxcver=${context.instance.sxcVersion}`;
+        return urlClean(`${window.$2sxc.env.uiRoot()}${C.DialogPaths.ng8}`) + `?sxcver=${context.instance.sxcVersion}`;
     }
 
     private addItem() {
