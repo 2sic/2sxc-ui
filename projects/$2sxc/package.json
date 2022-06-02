@@ -5,7 +5,7 @@
   "scripts": {
     "release": "webpack --mode=production",
     "2sxc-js-prod": "webpack --watch --mode=production",
-    "2sxc-js-dev": "webpack --watch --mode=development",
+    "2sxc-js-dev": "webpack --watch --mode=development"
   },
   "repository": {
     "type": "git",

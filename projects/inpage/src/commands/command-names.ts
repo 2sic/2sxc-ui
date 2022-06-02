@@ -24,4 +24,12 @@ export enum CommandNames {
      * In scenarios where we have a list of items and it's currently showing the demo, this will have the same effect as `add`
      */
     edit = 'edit',
+
+    // TODO: @2mh / 2dar - Move all the verbs here
+    // 1. Create the variable using camelCase
+    // 2. Use it in the command - but only for the command, not the icon
+    // 3. Test where the old variable is still used - replace that
+    // 4. remove the old variable
+    // 5. Add minimal documentation what the command does
+    // 6. build to verify nothing breaks (best keep the watcher on)
 }
