@@ -1,9 +1,9 @@
-import { WorkflowStep, WorkflowPhases, WorkflowArguments, WorkflowStepHelper } from '.';
+import { WorkflowStep, WorkflowPhases, WorkflowStepCodeArguments, WorkflowStepHelper } from '.';
 import { SpecialCommands } from '../commands';
 import { ContextComplete } from '../context';
 import { HasLog, Insights, Log } from '../logging';
 import { ToolbarWithWorkflow } from './toolbar-with-workflow';
-import { WorkflowCode } from './workflow';
+import { WorkflowStepCode } from './workflow';
 import { WorkflowHelper } from './workflow-helper';
 
 /**
@@ -51,9 +51,9 @@ export class WorkflowManager extends HasLog {
 
     /**
      * Run a workflow.
-     * @returns {Promise<WorkflowArguments>} This will let you chain what happens. The arguments contain a status if it should be cancelled.
+     * @returns {Promise<WorkflowStepCodeArguments>} This will let you chain what happens. The arguments contain a status if it should be cancelled.
      */
-    run(wfArgs: WorkflowArguments): Promise<WorkflowArguments> {
+    run(wfArgs: WorkflowStepCodeArguments): Promise<WorkflowStepCodeArguments> {
         const cl = this.log.call('run', `'${wfArgs.command}' for '${wfArgs.phase}'`);
 
         // if this is just a temporary / dummy workflow manager, just return a success-promise
@@ -77,7 +77,7 @@ export class WorkflowManager extends HasLog {
         }
 
         // run in sequence but cancel at any time if necessary
-        const promise = new Promise<WorkflowArguments>((resolve, reject) => {
+        const promise = new Promise<WorkflowStepCodeArguments>((resolve, reject) => {
             let promiseChain = Promise.resolve(wfArgs);
             // let previousArgs = wfArgs;
             // let interruptChain = false;
@@ -103,7 +103,7 @@ export class WorkflowManager extends HasLog {
         cl.done();
     }
 
-    private runNextPromiseIfNotCancelled(currentArgs: WorkflowArguments | boolean, prevArgs: WorkflowArguments, nextFactory: WorkflowCode) {
+    private runNextPromiseIfNotCancelled(currentArgs: WorkflowStepCodeArguments | boolean, prevArgs: WorkflowStepCodeArguments, nextFactory: WorkflowStepCode) {
         // determine cancel based on either a boolean result or a real WorkflowArguments with cancel.
         const cancel = WorkflowHelper.isCancelled(currentArgs);
         // make sure we have real arguments no matter what came in - assuming we have prevArgs
@@ -115,6 +115,6 @@ export class WorkflowManager extends HasLog {
 
 }
 
-function emptyWorkflow(wfArgs: WorkflowArguments) {
-    return Promise.resolve<WorkflowArguments>(wfArgs);
+function emptyWorkflow(wfArgs: WorkflowStepCodeArguments) {
+    return Promise.resolve<WorkflowStepCodeArguments>(wfArgs);
 }

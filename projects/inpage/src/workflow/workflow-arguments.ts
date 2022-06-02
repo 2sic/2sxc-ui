@@ -3,12 +3,12 @@ import { ContextComplete } from '../context';
 
 
 /**
- * Arguments for workflow code [](xref:Api.Js.InPage.WorkflowCode).
- * Used when starting it and to determine result / cancelled.
+ * Arguments for [WorkflowStepCode](xref:Api.Js.InPage.WorkflowStepCode).
+ * Will be passed to your code and should also be returned by your code.
+ * This also allows cancelling further execution.
  * @export
- * @class WorkflowArguments
  */
-export class WorkflowArguments {
+export class WorkflowStepCodeArguments {
   /**
    * @internal
    */

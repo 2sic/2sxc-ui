@@ -1,4 +1,4 @@
-import { WorkflowCode, WorkflowPhases } from '.';
+import { WorkflowPhases, WorkflowStepCode } from '.';
 import { SpecialCommands } from '../commands';
 
 /**
@@ -35,7 +35,7 @@ export interface WorkflowStep {
    * So it's a function that will return a promise.
    * Required.
    */
-  code: WorkflowCode;
+  code: WorkflowStepCode;
 }
 
 /**
