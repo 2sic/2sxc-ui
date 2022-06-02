@@ -1,4 +1,4 @@
-import { WorkflowStep, WorkflowPhases, WorkflowStepCodeArguments, WorkflowStepHelper } from '.';
+import { WorkflowPhases, WorkflowStep, WorkflowStepCodeArguments, WorkflowStepHelper } from '.';
 import { SpecialCommands } from '../commands';
 import { ContextComplete } from '../context';
 import { HasLog, Insights, Log } from '../logging';
@@ -35,6 +35,7 @@ export class WorkflowManager extends HasLog {
 
     /**
      * Add a single workflow step to this manager
+     * @internal
      */
     private addOne(step: WorkflowStep) {
         step = WorkflowStepHelper.initDefaults(step);
@@ -51,6 +52,7 @@ export class WorkflowManager extends HasLog {
 
     /**
      * Run a workflow.
+     * @internal
      * @returns {Promise<WorkflowStepCodeArguments>} This will let you chain what happens. The arguments contain a status if it should be cancelled.
      */
     run(wfArgs: WorkflowStepCodeArguments): Promise<WorkflowStepCodeArguments> {

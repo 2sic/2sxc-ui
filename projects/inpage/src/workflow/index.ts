@@ -1,6 +1,6 @@
 
 export * from './workflow-manager';
-export * from './workflow-arguments';
+export * from './workflow-step-code-arguments';
 export * from './workflow-phases';
 export * from './workflow-step';
 export * from './workflow';
