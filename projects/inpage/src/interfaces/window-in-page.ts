@@ -1,5 +1,4 @@
-﻿// import { Window as sxcWindow } from '../../../$2sxc/src/index';
-import { DnnActionMenu } from '../dnn/dnn-menu-helper/dnn-inpage-edit';
+﻿import { DnnActionMenu } from '../dnn/dnn-menu-helper/dnn-inpage-edit';
 import { TypeWeDontCare } from '../plumbing';
 import { QuickE } from '../quick-edit/quick-e';
 

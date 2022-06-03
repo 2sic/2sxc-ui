@@ -144,7 +144,7 @@ export class QuickDialog extends HasLog {
         const cl = this.log.call('setUrlToQuickDialog', url);
         // change default url-schema from the primary angular-app to the quick-dialog
         url = url
-            .replace(C.DialogPaths.ng8, C.DialogPaths.quickDialog);
+            .replace(C.DialogPaths.eavUi, C.DialogPaths.quickDialog);
         url = this.changePathToLocalhostForDev(url);
         return cl.return(url);
     }

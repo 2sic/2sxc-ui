@@ -14,7 +14,6 @@ import { ButtonSafe } from '../toolbar/config';
 export class CommandLinkGenerator extends HasLog {
     public items: Array<ItemIdentifierSimple | ItemIdentifierGroup | TemplateIdentifier>;
     public readonly urlParams: UrlItemParams;
-    private readonly rootUrl: string;
     private readonly debugUrlParam: string;
 
     constructor(public readonly context: ContextComplete, parentLog: Log) {
@@ -32,9 +31,6 @@ export class CommandLinkGenerator extends HasLog {
         // note: this corrects how the variable to name the dialog changed in the history of 2sxc from action to dialog
         this.urlParams = { ...{ dialog: dialog || command.name }, ...this.urlParams };
         cl.data('urlParmas', this.urlParams);
-
-        // initialize root url to dialog
-        this.rootUrl = this.getDialogUrl();
 
         // get isDebug url Parameter
         this.debugUrlParam = window.$2sxc.urlParams.get('debug') ? '&debug=true' : '';
@@ -82,15 +78,17 @@ export class CommandLinkGenerator extends HasLog {
         const partOfPage = button.partOfPage();
         const ngDialogParams = new NgUrlValuesWithoutParams(context, partOfPage);
 
-        return `${this.rootUrl}#${NoJQ.param(ngDialogParams).replace(/%2F/g, '/')}&${NoJQ.param(urlItems)}${this.debugUrlParam}`;
+        // initialize root url to dialog
+        const rootUrl = this.getDialogUrl(context);
+        return `${rootUrl}#${NoJQ.param(ngDialogParams).replace(/%2F/g, '/')}&${NoJQ.param(urlItems)}${this.debugUrlParam}`;
     }
 
     /**
      * Determine the url to open a dialog, based on the settings which UI version to use
      */
-    private getDialogUrl(): string {
-        const context = this.context;
-        return urlClean(`${window.$2sxc.env.uiRoot()}${C.DialogPaths.ng8}`) + `?sxcver=${context.instance.sxcVersion}`;
+    private getDialogUrl(context: ContextComplete): string {
+        const env = window.$2sxc.env;
+        return urlClean(`${env.uiRoot()}${C.DialogPaths.eavUi}`) + `?pageId=${env.page()}&sxcver=${context.instance.sxcVersion}`;
     }
 
     private addItem() {
