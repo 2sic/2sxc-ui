@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
   <head>
-    <meta name="_jsApi-temp" content="" />
+    <meta name="_jsApi-temp" content="">
     <script>
       // Ensure that 2sxc.api.min is always reloaded to prevent caching of old code
       // If last digit is a 0, then we're missing a real build number, so use a random one to ensure cache breaking
@@ -16,6 +16,7 @@
     </script>
 
     <script>
+      // TODO: 2022-06 - THIS CAN BE removed as soon as Oqtane also has the _jsApi parameters
       // This must be a new script tag, so that the previously dynamic-script tag has already been run
       // Tell 2sxc all the parameters it needs to work properly
       $2sxc.env.load({
