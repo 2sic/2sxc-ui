@@ -1,7 +1,10 @@
 <!doctype html>
 <html>
   <head>
-    <meta name="_jsApi-temp" content="">
+    <!-- This meta-tag will be pre-filled by the backend before delivery to the browser -->
+    <meta name="_jsApi" content="">
+
+    <meta name="temp" content="@sxcver">
     <script>
       // Ensure that 2sxc.api.min is always reloaded to prevent caching of old code
       // If last digit is a 0, then we're missing a real build number, so use a random one to ensure cache breaking
@@ -13,6 +16,8 @@
       var cacheBreak = vParts.join('.');
       document.write('<base href="' + window.location.pathname + '">');
       document.write('<script src="../../js/2sxc.api.min.js?cacheBreak=' + cacheBreak + '"></scr' + 'ipt>');
+
+      // TODO: THIS ENTIRE block can be removed and replaced using ...2sxc.api.min.js?cacheBreak=@sxcver as soon as Oqtane also does the replace
     </script>
 
     <script>
