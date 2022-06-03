@@ -92,7 +92,7 @@ export class Button {
 
 
     /** Detect if this is a Button */
-    static is(thing: TypeTbD): thing is Button {
+    static is(thing: unknown): thing is Button {
         return (thing as Button).command !== undefined;
     }
 

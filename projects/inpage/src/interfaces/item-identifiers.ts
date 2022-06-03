@@ -6,9 +6,7 @@ import { DictionaryValue } from '../plumbing';
  * @internal
  */
 export interface ItemIdentifierShared {
-  // experimental in 10.27 - also allow entity-id in group-id
   EntityId?: number;
-  Title?: string;
   Prefill?: DictionaryValue;
 }
 
@@ -20,6 +18,15 @@ export interface ItemIdentifierSimple extends ItemIdentifierShared {
   EntityId: number;
   ContentTypeName?: string;
   Metadata?: MetadataFor;
+}
+
+/**
+ * Simple identifier, which is id/type-name
+ * @internal
+ */
+export interface ItemIdentifierCopy extends ItemIdentifierShared {
+  DuplicateEntity: number;
+  ContentTypeName?: string;
 }
 
 /**

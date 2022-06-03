@@ -1,6 +1,6 @@
 ﻿import { C } from '../constants';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
-import { ItemIdentifierGroup, ItemIdentifierSimple, ItemInField, TemplateIdentifier } from '../interfaces/item-identifiers';
+import { ItemIdentifierCopy, ItemIdentifierGroup, ItemIdentifierSimple, ItemInField, TemplateIdentifier } from '../interfaces/item-identifiers';
 import { HasLog, Log } from '../logging';
 import { NgUrlValuesWithoutParams } from '../manage/ng-dialog-params';
 import { DictionaryValue, NoJQ, TypeUnsafe, urlClean } from '../plumbing';
@@ -12,7 +12,7 @@ import { ButtonSafe } from '../toolbar/config';
  * @internal
  */
 export class CommandLinkGenerator extends HasLog {
-    public items: Array<ItemIdentifierSimple | ItemIdentifierGroup | TemplateIdentifier>;
+    public items: Array<ItemIdentifierSimple | ItemIdentifierCopy | ItemIdentifierGroup | TemplateIdentifier>;
     public readonly urlParams: UrlItemParams;
     private readonly debugUrlParam: string;
 

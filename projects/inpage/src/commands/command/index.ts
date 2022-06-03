@@ -3,18 +3,18 @@
 // tslint:disable: align
 
 // Already migrated to form which gets the documentation right
+/** @internal */ export * from './shared-logic';
 /** @internal */ import './add';
 /** @internal */ import './add-existing';
 /** @internal */ import './app-import';
 
+/** @internal */ import './copy';
 
 /** @internal */ import './edit';
 
 
 
 // To Migrate TODO: @2mh/2dar
-/** @internal */ export * from './shared-logic';
-
 /** @internal */ export * from './app-resources';
 /** @internal */ export * from './app-settings';
 /** @internal */ export * from './app';

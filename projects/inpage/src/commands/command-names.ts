@@ -19,6 +19,15 @@ export enum CommandNames {
      */
     appImport = 'app-import',
 
+
+    /**
+     * `copy` command will open the edit-dialog for the current item in copy-mode, so when saving it will be a new item
+     *
+     * To work, it also needs `contentTypeName`
+     * WIP v14.02
+     */
+    copy = 'copy',
+
     /**
      * `edit` command will open the edit-dialog for the current item.
      * In scenarios where we have a list of items and it's currently showing the demo, this will have the same effect as `add`
