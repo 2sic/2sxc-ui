@@ -143,27 +143,7 @@ export class QuickDialog extends HasLog {
     private setUrlToQuickDialog(url: string): string {
         const cl = this.log.call('setUrlToQuickDialog', url);
         // change default url-schema from the primary angular-app to the quick-dialog
-        url = url
-            .replace(C.DialogPaths.eavUi, C.DialogPaths.quickDialog);
-        url = this.changePathToLocalhostForDev(url);
-        return cl.return(url);
-    }
-
-
-    /**
-     * special debug-code when running on local ng-serve
-     * this is only activated if the developer manually sets a value in the localStorage
-     * @param url
-     */
-    private changePathToLocalhostForDev(url: string): string {
-        const cl = this.log.call('changePathToLocalhostForDev', url);
-        try {
-            const devMode = localStorage.getItem('devMode');
-            if (devMode && !!devMode)
-                return url.replace(window.$2sxc.env.uiRoot() + 'dist/ng/ui.html', 'http://localhost:4200');
-        } catch (e) {
-            // ignore
-        }
+        url = url.replace(C.DialogPaths.eavUi, C.DialogPaths.quickDialog);
         return cl.return(url);
     }
 }

@@ -5,10 +5,10 @@
   "license": "MIT",
   "scripts": {
     "dev-angular": "ng build --watch",
-    "dev-dist": "node ../webpack/distribute2.js ./dist/ng /dist/ng -w",
-    "dev": "concurrently \"ng build --configuration development --watch\" \"node ../webpack/distribute2.js ./dist/ng /dist/ng -w\"",
-    "release": "set NODE_ENV=production && ng build --configuration production && node ../webpack/distribute2.js ./dist/ng /dist/ng",
-    "release-watch": "set NODE_ENV=production && concurrently \"ng build --configuration production --watch\"  \"node ../webpack/distribute2.js ./dist/ng /dist/ng -w\""
+    "dev-dist": "node ../webpack/distribute2.js ./dist/quickDialog /dist/quickDialog -w",
+    "dev": "concurrently \"ng build --configuration development --watch\" \"node ../webpack/distribute2.js ./dist/quickDialog /dist/quickDialog -w\"",
+    "release": "set NODE_ENV=production && ng build --configuration production && node ../webpack/distribute2.js ./dist/quickDialog /dist/quickDialog",
+    "release-watch": "set NODE_ENV=production && concurrently \"ng build --configuration production --watch\"  \"node ../webpack/distribute2.js ./dist/quickDialog /dist/quickDialog -w\""
   },
   "private": true,
   "dependencies": {

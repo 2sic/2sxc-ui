@@ -23,8 +23,8 @@
                 "plugins": "append"
               }
             },
-            "outputPath": "dist/ng",
-            "index": "src/ui.html",
+            "outputPath": "dist/quickDialog",
+            "index": "src/index-raw.html",
             "main": "src/main.ts",
             "tsConfig": "src/tsconfig.app.json",
             "polyfills": "src/polyfills.ts",
@@ -101,7 +101,7 @@
             ],
             "assets": [
               "src/assets",
-              "src/ui.html",
+              "src/index-raw.html",
               "src/favicon.ico"
             ]
           }
