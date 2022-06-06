@@ -4,33 +4,15 @@
     <!-- This meta-tag will be pre-filled by the backend before delivery to the browser -->
     <meta name="_jsApi" content="">
 
-    <meta name="temp" content="@sxcver">
-    <script>
-      // Ensure that 2sxc.api.min is always reloaded to prevent caching of old code
-      // If last digit is a 0, then we're missing a real build number, so use a random one to ensure cache breaking
-      // fix https://github.com/2sic/2sxc/issues/2216
-      var vBuild = window.location.search;
-      var vParts = vBuild.substr(vBuild.indexOf("=") + 1).split('.');
-      for (var vi = 0; vi < vParts.length; vi++) vParts[vi] = Number(vParts[vi]);
-      if (vParts[3] === 0) vParts[3] = Math.floor(Math.random() * 100000);
-      var cacheBreak = vParts.join('.');
-      document.write('<base href="' + window.location.pathname + '">');
-      document.write('<script src="../../js/2sxc.api.min.js?cacheBreak=' + cacheBreak + '"></scr' + 'ipt>');
+    <!-- Load the $2sxc script; the @... below will be replaced by the backend for cache-breaking -->
+    <script src="../../js/2sxc.api.min.js?cacheBreak=@sxcver"></script>
 
-      // TODO: THIS ENTIRE block can be removed and replaced using ...2sxc.api.min.js?cacheBreak=@sxcver as soon as Oqtane also does the replace
+    <!-- the base tag is required for Angular to work properly -->
+    <script>
+      document.write('<base href="' + window.location.pathname + '">');
     </script>
 
     <script>
-      // TODO: 2022-06 - THIS CAN BE removed as soon as Oqtane also has the _jsApi parameters
-      // This must be a new script tag, so that the previously dynamic-script tag has already been run
-      // Tell 2sxc all the parameters it needs to work properly
-      $2sxc.env.load({
-        page: $2sxc.urlParams.require('tid'),
-        rvtHeader: $2sxc.urlParams.require('rvth'),
-        rvt: $2sxc.urlParams.require('rvt'),
-        api: $2sxc.urlParams.require('api'),
-      });
-
       // send message to the angular-observable to restart the app
       window.reboot = function () {
         // if called too early, the bootController doesn't exist yet
