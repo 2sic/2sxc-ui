@@ -59,27 +59,6 @@
             </div>
           </div>
 
-          <!-- install and manage buttons -->
-          <div class="tile config" *ngIf="showAdvanced" (click)="run('app-import')" [attr.title]="'TemplatePicker.Install' | translate">
-            <div class="bg">
-              <div class="bg-icon">
-                <mat-icon>get_app</mat-icon>
-              </div>
-            </div>
-            <div class="title show">
-              <span>{{"TemplatePicker.Install" | translate}}</span>
-            </div>
-          </div>
-          <div class="tile config" *ngIf="showAdvanced" (click)="run('apps')" [attr.title]="'TemplatePicker.Zone' | translate">
-            <div class="bg">
-              <div class="bg-icon">
-                <mat-icon>apps</mat-icon>
-              </div>
-            </div>
-            <div class="title show">
-              <span>{{"TemplatePicker.Zone" | translate}}</span>
-            </div>
-          </div>
         </div>
 
         <!-- Content-Type selection (when not a generic app, but the default content-app) -->
@@ -138,14 +117,25 @@
           </div>
         </div>
       </mat-tab>
-      <!-- Search -->
+
       <mat-tab disabled *ngIf="!(!isBadContextForInstaller && showInstaller)">
         <ng-template mat-tab-label>
+          <!-- search -->
           <div class="search-field">
             <input type="text" *ngIf="tabIndex === 0 && !isContent" [(ngModel)]="appFilter">
             <input type="text" *ngIf="tabIndex === 0 && isContent" [(ngModel)]="contentTypeFilter">
             <input type="text" *ngIf="tabIndex === 1" [(ngModel)]="templateFilter">
           </div>
+
+          <!-- install and manage buttons -->
+          <button mat-button class="config-btn" *ngIf="!isContent && showAdvanced" (click)="run('app-import')" [attr.title]="'TemplatePicker.Install' | translate">
+            <mat-icon>get_app</mat-icon>
+            {{"TemplatePicker.Install" | translate}}
+          </button>
+          <button mat-button class="config-btn" *ngIf="!isContent && showAdvanced" (click)="run('apps')" [attr.title]="'TemplatePicker.Zone' | translate">
+            <mat-icon>apps</mat-icon>
+            {{"TemplatePicker.Zone" | translate}}
+          </button>
         </ng-template>
       </mat-tab>
     </mat-tab-group>

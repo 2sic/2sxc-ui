@@ -230,6 +230,13 @@
             content: "search";
         }
     }
+    .config-btn {
+        float: initial !important;
+        background: initial !important;
+        .mat-icon {
+            color: #00275388;
+        }
+    }
 }
 
 ::ng-deep mat-tab-group {
