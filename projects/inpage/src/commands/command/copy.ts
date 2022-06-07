@@ -5,7 +5,7 @@
  *
  * import this module to commands.ts
  */
-Commands.add(CommandNames.copy, 'Copy', 'code', false, true, {
+Commands.add(CommandNames.copy, 'Copy', 'copy', false, true, {
   dialog: (_) => CommandNames.edit,
 
   showCondition(ctx) {
