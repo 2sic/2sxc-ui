@@ -1,7 +1,7 @@
 import { RuleParams } from '.';
 import { MetadataFor } from '../../commands';
 import { Log, LogEntryOptions as LEO } from '../../logging';
-import { DictionaryValue } from '../../plumbing';
+import { DictionaryValue, TypeValue } from '../../plumbing';
 
 const prefillPrefix = 'prefill:';
 const filterPrefix = 'filter:';
@@ -10,7 +10,7 @@ const contextPrefix = 'context:';
 /**
  * @internal
  */
-export interface ProcessedParams { params: RuleParams; context: DictionaryValue; }
+export interface ProcessedParams { params: RuleParams; context: Record<string, TypeValue>; }
 
 /**
  * @internal
@@ -80,7 +80,7 @@ export class RuleParamsHelper {
 
 
     /** Do special processing on all prefill:Field=Value rules */
-    private static extractSubKeys(params: RuleParams, prefix: string, log: Log): DictionaryValue {
+    private static extractSubKeys(params: RuleParams, prefix: string, log: Log): Record<string, TypeValue> {
         const cl = log.call('processSubMultiKeys');
 
         // only load special prefills if we don't already have a prefill
@@ -92,22 +92,39 @@ export class RuleParamsHelper {
         const prefixLen = prefix.length;
         const list: DictionaryValue = {};
         keys.forEach((k) => {
-            let value: any = params[k];
+            let value: unknown = params[k];
             // 2020-04-02 prefill is a bit flaky - this should fix the common issues
             // fix boolean true must be "true"
             if (value === true || value === false) value = value.toString();
-            else {
-                // try to detect list of guids
-                if (prefix === prefillPrefix)
-                    value = RuleParamsHelper.convertGuidListToArrayOrKeepOriginal(value);
-            }
-            list[k.substring(prefixLen)] = value;
+            // filter:[] is a special case - it's an array of IDs
+            else if (prefix === filterPrefix) value = RuleParamsHelper.filterValues(value as string);
+            // prefill: try to detect list of guids
+            else if (prefix === prefillPrefix) value = RuleParamsHelper.prefillValues(value as string);
+
+            list[k.substring(prefixLen)] = value as TypeValue;
             delete params[k];
         });
         return cl.return(list, 'got list of multi-keys');
     }
 
-    private static convertGuidListToArrayOrKeepOriginal(value: string): string | string[] {
+    private static filterValues(value: string): string | Array<unknown> {
+        if (typeof value === 'string' && value.length > 0 && value[0] === '[' && value[value.length - 1] === ']') {
+            try {
+                const array = JSON.parse(value) as Array<unknown>;
+                return array;
+            } catch {
+                console.warn(`filter:[] value is not a valid JSON array: ${value}`);
+            }
+        }
+        return value;
+    }
+
+    /**
+     * Process Prefill values - basically check if it's an array of GUIDs and convert to that
+     * @param value 
+     * @returns 
+     */
+    private static prefillValues(value: string): string | string[] {
         // must be string
         if (!value || typeof value !== 'string') return value;
         // must have a comma to become an array

@@ -1,5 +1,5 @@
 import { MetadataFor } from '../../commands';
-import { DictionaryValue } from '../../plumbing';
+import { DictionaryValue, TypeValue } from '../../plumbing';
 
 /**
  * @internal
@@ -9,9 +9,9 @@ export type RuleParams = Record<string, string> & {
     contentType?: string;
     entityId?: string | number;
 
-    prefill?: DictionaryValue;
+    prefill?: Record<string, TypeValue>;
 
-    filters?: DictionaryValue;
+    filters?: Record<string, TypeValue | Array<unknown>>;
 
     /** this is how the metadata-param comes in - as a 'for=someId' - this node will be removed afterwards */
     for?: string;
