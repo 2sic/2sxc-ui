@@ -9,7 +9,7 @@ import { TypeTbD } from '../../plumbing';
 export class ToolbarTemplateGroup implements ListWithCursor {
     name: string = TemplateConstants.GroupUnknown;
     buttons: string = '';
-    defaults?: HashTable<string> = {};
+    defaults?: Record<string, string> = {};
     _insertCursor?: 0;
 
     static is(thing: TypeTbD): thing is ToolbarTemplateGroup {

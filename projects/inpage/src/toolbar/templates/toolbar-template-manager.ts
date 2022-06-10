@@ -17,7 +17,7 @@ export class ToolbarTemplateManager extends HasLog {
     configTemplateList: ToolbarTemplate[] = [];
 
     /** hash - table of templates, to be used a list()['template - name'] */
-    list: HashTable<ToolbarTemplate> = {};
+    list: Record<string, ToolbarTemplate> = {};
 
     constructor() {
         super('Tlb.TmpMan', null, 'build');
