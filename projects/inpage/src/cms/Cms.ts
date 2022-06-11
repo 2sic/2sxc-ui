@@ -1,12 +1,11 @@
 ﻿import { ContextIdentifier, Sxc } from '../../../$2sxc/src';
 import { CmsEngine } from '../commands/';
-import { CommandParams } from '../../../$2sxc/src/cms/command-params';
+import { CommandParams, RunParamsWithContext } from '../../../$2sxc/src/cms';
 import { C } from '../constants';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { ContextBundleInstance } from '../context/bundles/context-bundle-instance';
 import { SxcRoot } from '../interfaces/sxc-controller-in-page';
 import { HasLog, Insights, Log } from '../logging';
-import { RunParamsWithContext } from './run-params';
 import { RunParamsHelpers } from './run-params-helpers';
 
 const logId = 'Cms.Api';

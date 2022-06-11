@@ -1,6 +1,6 @@
 ﻿import { Sxc } from '../../../$2sxc/src';
+import { RunParams } from '../../../$2sxc/src/cms';
 import { Cms } from '../cms/Cms';
-import { RunParams } from '../cms/run-params';
 import { RunParamsHelpers } from '../cms/run-params-helpers';
 import { SxcInstanceEngine } from '../commands';
 import { ContextComplete } from '../context';
@@ -40,6 +40,7 @@ export class Manage {
                 RunParamsHelpers.ensureRunParamsInstanceOrError(runParams);
                 return new Cms().run({ ...runParams, context: sxc });
             };
+            sxc.run = sxc.cms.run;
 
             // Init to handle special errors
             // 2022-05-02 2dm disabled, don't think we need it any more

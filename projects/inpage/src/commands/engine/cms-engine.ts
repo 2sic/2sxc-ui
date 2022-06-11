@@ -1,4 +1,4 @@
-﻿import { RunParams } from '../../cms/run-params';
+﻿import { RunParams } from '../../../../$2sxc/src/cms';
 import { RunParamsHelpers } from '../../cms/run-params-helpers';
 import { ContentBlockEditor } from '../../contentBlock/content-block-editor';
 import { renderer } from '../../contentBlock/render';
@@ -12,7 +12,7 @@ import { InPageButtonJson } from '../../toolbar/config-loaders/config-formats/in
 import { WorkflowHelper, WorkflowPhases, WorkflowStepCodeArguments } from '../../workflow';
 import { WorkflowManager } from '../../workflow/workflow-manager';
 import { CommandLinkGenerator } from '../command-link-generator';
-import { CommandParams } from '../../../../$2sxc/src/cms/command-params';
+import { CommandParams } from '../../../../$2sxc/src/cms';
 import { WorkflowStep } from '../../workflow/workflow-step';
 
 type CommandPromise<T> = Promise<T|void>;

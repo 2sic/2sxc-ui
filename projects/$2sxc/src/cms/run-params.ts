@@ -1,5 +1,5 @@
-import { ContextIdentifier, Sxc } from '../../../$2sxc/src';
-import { CommandParams } from '../../../$2sxc/src/cms/command-params';
+import { ContextIdentifier, Sxc } from '..';
+import { CommandParams } from './command-params';
 
 /**
  * Parameters for the Instance cms.run(...) command.

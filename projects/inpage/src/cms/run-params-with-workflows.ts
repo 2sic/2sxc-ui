@@ -1,5 +1,5 @@
+import { RunParams } from '../../../$2sxc/src/cms';
 import { WorkflowStep } from '../workflow';
-import { RunParams } from './run-params';
 
 /**
  * Special internal interface to give workflows a more specific type
