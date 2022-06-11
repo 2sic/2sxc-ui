@@ -5,7 +5,7 @@ import { SxcManage } from './sxc-manage';
 import { SxcData } from './data/sxc-data';
 import { SxcQuery } from './data/sxc-query';
 import { SxcGlobal } from '..';
-import { SxcTestNamespace } from './sxc-cms';
+import { SxcCms } from './sxc-cms';
 
 // const serviceScopes = ['app', 'app-sys', 'app-api', 'app-query', 'app-content', 'eav', 'view', 'dnn'];
 
@@ -31,7 +31,7 @@ export class Sxc extends HasLog {
    * CMS operations on this sxc-instance, such as opening the edit dialog etc.
    * @internal
    */
-  cms = new SxcTestNamespace.SxcCms(this, 'cms');
+  cms = new SxcCms(this, 'cms');
   
   /** @internal */
   constructor(
