@@ -1,5 +1,5 @@
 import { RuleParams } from '.';
-import { MetadataFor } from '../../commands';
+import { MetadataFor } from '../../../../$2sxc/src/cms';
 import { Log, LogEntryOptions as LEO } from '../../logging';
 import { TypeValue } from '../../plumbing';
 

@@ -1,6 +1,6 @@
-﻿import { C } from '../constants';
+﻿import { ItemIdentifierCopy, ItemIdentifierGroup, ItemIdentifierSimple, ItemInField, TemplateIdentifier } from '../../../$2sxc/src/cms';
+import { C } from '../constants';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
-import { ItemIdentifierCopy, ItemIdentifierGroup, ItemIdentifierSimple, ItemInField, TemplateIdentifier } from '../interfaces/item-identifiers';
 import { HasLog, Log } from '../logging';
 import { NgUrlValuesWithoutParams } from '../manage/ng-dialog-params';
 import { NoJQ, TypeUnsafe, TypeValue, urlClean } from '../plumbing';

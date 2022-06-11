@@ -1,4 +1,4 @@
-import { MetadataFor } from '../../commands';
+import { MetadataFor } from '../../../../$2sxc/src/cms';
 import { TypeValue } from '../../plumbing';
 
 /**

@@ -1,5 +1,5 @@
 ﻿import { CommandNames, Commands } from '..';
-import { ItemIdentifierGroup } from '../../interfaces/item-identifiers';
+import { ItemIdentifierGroup } from '../../../../$2sxc/src/cms';
 import { SharedLogic } from './shared-logic';
 
 /**

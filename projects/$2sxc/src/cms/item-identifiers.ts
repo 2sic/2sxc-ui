@@ -1,5 +1,5 @@
-import { MetadataFor } from '../commands';
-import { TypeValue } from '../plumbing';
+import { MetadataFor } from '.';
+import { TypeValue } from '../../../core/plumbing';
 
 /**
  * Shared properties of all item identifiers

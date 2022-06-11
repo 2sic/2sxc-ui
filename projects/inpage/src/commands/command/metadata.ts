@@ -1,5 +1,5 @@
 ﻿import { Command, CommandNames, Commands } from '..';
-import { ItemIdentifierSimple } from '../../interfaces/item-identifiers';
+import { ItemIdentifierSimple } from '../../../../$2sxc/src/cms';
 import { CmdNewMode } from './new';
 
 /**

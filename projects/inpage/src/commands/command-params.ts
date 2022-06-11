@@ -1,5 +1,4 @@
-﻿import { MetadataFor } from '.';
-import { ItemIdentifierGroup, ItemIdentifierSimple } from '../interfaces/item-identifiers';
+﻿import { ItemIdentifierGroup, ItemIdentifierSimple, MetadataFor } from '../../../$2sxc/src/cms';
 import { TypeValue } from '../plumbing';
 
 /**
