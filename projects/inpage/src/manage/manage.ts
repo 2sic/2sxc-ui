@@ -1,7 +1,8 @@
 ﻿import { Sxc } from '../../../$2sxc/src';
+import { RunParams } from '../../../$2sxc/src/cms/run-params';
 import { Cms } from '../cms/Cms';
 import { SxcInstanceEngine } from '../commands';
-import { ensureRunParamsInstanceOrError, RunParams } from '../commands/engine/run-params';
+import { ensureRunParamsInstanceOrError } from '../commands/engine/run-params';
 import { ContextComplete } from '../context';
 import { ContextOfUser } from '../context';
 import { SxcTools } from '../sxc/sxc-tools';

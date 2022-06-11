@@ -1,4 +1,5 @@
-﻿import { ContentBlockEditor } from '../../contentBlock/content-block-editor';
+﻿import { RunParams } from '../../../../$2sxc/src/cms/run-params';
+import { ContentBlockEditor } from '../../contentBlock/content-block-editor';
 import { renderer } from '../../contentBlock/render';
 import { ContextComplete } from '../../context/bundles/context-bundle-button';
 import { ContextBundleInstance } from '../../context/bundles/context-bundle-instance';
@@ -7,12 +8,11 @@ import { QuickDialog } from '../../quick-dialog/quick-dialog';
 import { Button, ButtonSafe } from '../../toolbar/config';
 import { ButtonCommand } from '../../toolbar/config';
 import { InPageButtonJson } from '../../toolbar/config-loaders/config-formats/in-page-button';
-import { WorkflowStepCodeArguments, WorkflowHelper, WorkflowPhases } from '../../workflow';
+import { WorkflowHelper, WorkflowPhases, WorkflowStepCodeArguments } from '../../workflow';
 import { WorkflowManager } from '../../workflow/workflow-manager';
 import { CommandLinkGenerator } from '../command-link-generator';
 import { CommandParams } from '../command-params';
 import { RunParametersHelper } from './run-parameters';
-import { RunParams } from './run-params';
 
 type CommandPromise<T> = Promise<T|void>;
 
