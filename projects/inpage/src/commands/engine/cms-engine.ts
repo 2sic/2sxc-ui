@@ -11,8 +11,8 @@ import { WorkflowHelper, WorkflowPhases, WorkflowStepCodeArguments } from '../..
 import { WorkflowManager } from '../../workflow/workflow-manager';
 import { CommandLinkGenerator } from '../command-link-generator';
 import { CommandParams } from '../command-params';
-import { RunParametersHelper } from './run-parameters';
-import { RunParams } from './run-params';
+import { RunParametersHelper } from '../../cms/run-params-helpers';
+import { RunParams } from '../../cms/run-params';
 
 type CommandPromise<T> = Promise<T|void>;
 

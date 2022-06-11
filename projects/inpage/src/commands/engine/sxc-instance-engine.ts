@@ -1,8 +1,8 @@
 ﻿import { Sxc } from '../../../../$2sxc/src';
 import { Cms } from '../../cms/Cms';
+import { RunParamsWithContext } from '../../cms/run-params';
 import { ContextComplete } from '../../context/bundles/context-bundle-button';
 import { CommandParams } from '../command-params';
-import { RunParamsWithContext } from './run-params';
 
 /**
  * This is an engine on the sxc object.

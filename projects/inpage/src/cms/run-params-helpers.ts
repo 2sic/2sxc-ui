@@ -1,5 +1,5 @@
-import { CommandParams, Commands } from '..';
-import { HasLog, Log } from '../../logging';
+import { CommandParams, Commands } from '../commands';
+import { HasLog, Log } from '../logging';
 
 /**
  * Helper class to process parameters given to the Cms.Run statement

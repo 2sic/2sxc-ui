@@ -4,8 +4,9 @@ import { ApiUrlRoots, HasLog, ToSxcName } from '../../../core';
 import { SxcManage } from './sxc-manage';
 import { SxcData } from './data/sxc-data';
 import { SxcQuery } from './data/sxc-query';
-import { SxcCms } from './sxc-cms';
 import { SxcGlobal } from '..';
+import { SxcCms } from './sxc-cms';
+// import { RunParams } from '../../../inpage/src/cms/run-params';
 
 // const serviceScopes = ['app', 'app-sys', 'app-api', 'app-query', 'app-content', 'eav', 'view', 'dnn'];
 
@@ -27,6 +28,15 @@ export class Sxc extends HasLog {
    */
   manage: SxcManage = null; // initialize correctly later on
 
+//   /**
+//    * 
+//    * @param runParams 
+//    * @internal
+//    */
+//   run<T>(runParams: RunParams): Promise<void | T> {
+//     throw new Error('run() on Sxc instance only works if 2sxc is in edit mode');
+//   }
+  
   /**
    * CMS operations on this sxc-instance.
    */

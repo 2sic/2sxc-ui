@@ -1,7 +1,7 @@
 ﻿import { ContextIdentifier, Sxc } from '../../../$2sxc/src';
 import { CmsEngine } from '../commands/';
 import { CommandParams } from '../commands/command-params';
-import { is$sxcRunParams, RunParamsWithContext } from '../commands/engine/run-params';
+import { is$sxcRunParams, RunParamsWithContext } from './run-params';
 import { C } from '../constants';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { ContextBundleInstance } from '../context/bundles/context-bundle-instance';

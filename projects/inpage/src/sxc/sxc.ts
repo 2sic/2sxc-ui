@@ -1,6 +1,6 @@
 import { Sxc } from '../../../$2sxc/src/sxc-instance/sxc';
 import { Cms } from '../cms/Cms';
-import { ensureRunParamsInstanceOrError, RunParams } from '../commands/engine/run-params';
+import { ensureRunParamsInstanceOrError, RunParams } from '../cms/run-params';
 
 export { Sxc } from '../../../$2sxc/src';
 

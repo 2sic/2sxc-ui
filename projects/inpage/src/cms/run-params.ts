@@ -1,6 +1,6 @@
-import { ContextIdentifier, Sxc } from '../../../../$2sxc/src';
-import { WorkflowStep } from '../../workflow';
-import { CommandParams } from '../command-params';
+import { ContextIdentifier, Sxc } from '../../../$2sxc/src';
+import { CommandParams } from '../commands/command-params';
+import { WorkflowStep } from '../workflow';
 
 /**
  * Parameters for the Instance cms.run(...) command.
