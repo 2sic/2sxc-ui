@@ -5,8 +5,7 @@ import { SxcManage } from './sxc-manage';
 import { SxcData } from './data/sxc-data';
 import { SxcQuery } from './data/sxc-query';
 import { SxcGlobal } from '..';
-import { SxcCms } from './sxc-cms';
-import { RunParams } from '../cms';
+import { SxcTestNamespace } from './sxc-cms';
 
 // const serviceScopes = ['app', 'app-sys', 'app-api', 'app-query', 'app-content', 'eav', 'view', 'dnn'];
 
@@ -29,18 +28,10 @@ export class Sxc extends HasLog {
   manage: SxcManage = null; // initialize correctly later on
 
   /**
-   * 
-   * @param runParams 
+   * CMS operations on this sxc-instance, such as opening the edit dialog etc.
    * @internal
    */
-  run<T>(runParams: RunParams): Promise<void | T> {
-    throw new Error('run() on Sxc instance only works if 2sxc is in edit mode');
-  }
-  
-  /**
-   * CMS operations on this sxc-instance.
-   */
-  cms = new SxcCms(this, 'cms');
+  cms = new SxcTestNamespace.SxcCms(this, 'cms');
   
   /** @internal */
   constructor(

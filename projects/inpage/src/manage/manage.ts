@@ -36,11 +36,12 @@ export class Manage {
 
             const editManager = new EditManager(myContext.sxc, editContext, userInfo, cmdEngine, myContext);
             sxc.manage = editManager;
+
+            // add code for the cms.run command, which doesn't exist until editing is enabled
             sxc.cms.run = <T>(runParams: RunParams): Promise<void | T> => {
                 RunParamsHelpers.ensureRunParamsInstanceOrError(runParams);
                 return new Cms().run({ ...runParams, context: sxc });
             };
-            sxc.run = sxc.cms.run;
 
             // Init to handle special errors
             // 2022-05-02 2dm disabled, don't think we need it any more
