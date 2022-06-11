@@ -1,7 +1,7 @@
 ﻿import { ButtonCommand } from '.';
 import { CommandCode } from '../../commands/command-code';
 import { CommandLinkGenerator } from '../../commands/command-link-generator';
-import { CommandParams } from '../../commands/command-params';
+import { CommandParams } from '../../../../$2sxc/src/cms/command-params';
 import { ContextComplete } from '../../context/bundles/context-bundle-button';
 import { Obj, TypeTbD } from '../../plumbing';
 import { BuildRule } from '../rules';

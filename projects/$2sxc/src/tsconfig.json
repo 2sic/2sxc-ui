@@ -16,7 +16,7 @@
   },
   "include": [
     "./*.ts",
-    "./*.js", "**/*.ts",
+    "./*.js", "**/*.ts", "../../inpage/src/commands/command/workflow-commands.ts",
   ],
   "exclude": [
     "node_modules",

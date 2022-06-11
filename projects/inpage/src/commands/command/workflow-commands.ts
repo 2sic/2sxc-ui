@@ -1,7 +1,7 @@
 /**
  * @internal
  */
-export const SpecialCommands = {
+export const WorkflowCommands = {
     /** Special command: 'all' is a catch-all for workflows that should run on every command */
     all: 'all',
 

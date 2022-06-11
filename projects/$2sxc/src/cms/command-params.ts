@@ -1,5 +1,5 @@
-﻿import { ItemIdentifierGroup, ItemIdentifierSimple, MetadataFor } from '../../../$2sxc/src/cms';
-import { TypeValue } from '../plumbing';
+﻿import { ItemIdentifierGroup, ItemIdentifierSimple, MetadataFor } from '.';
+import { TypeValue } from '../../../inpage/src/plumbing';
 
 /**
  * Command parameters are handed over to a command for execution

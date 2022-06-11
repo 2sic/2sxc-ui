@@ -1,5 +1,5 @@
 import { WorkflowPhases, WorkflowStep, WorkflowStepCodeArguments, WorkflowStepHelper } from '.';
-import { SpecialCommands } from '../commands';
+import { WorkflowCommands } from '../commands';
 import { ContextComplete } from '../context';
 import { HasLog, Insights, Log } from '../logging';
 import { ToolbarWithWorkflow } from './toolbar-with-workflow';
@@ -66,7 +66,7 @@ export class WorkflowManager extends HasLog {
         // Find all steps to run
         const stepsForCommand = this.steps
             // only those of this command or all
-            .filter((s) => s.command === wfArgs.command || s.command === SpecialCommands.all)
+            .filter((s) => s.command === wfArgs.command || s.command === WorkflowCommands.all)
             .filter((s) => s.phase === wfArgs.phase || s.phase === WorkflowPhases.all)
             // only those having real code
             .filter((s) => s.code)

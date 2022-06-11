@@ -1,4 +1,4 @@
-﻿import { SpecialCommands } from '../commands';
+﻿import { WorkflowCommands } from '../commands';
 import { C } from '../constants';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { HtmlTools } from '../html/dom-tools';
@@ -42,7 +42,7 @@ class RendererGlobal extends HasLog {
 
         // get workflow engine or a dummy engine
         const wf = context.commandWorkflow ?? WorkflowHelper.getDummyManager();
-        const promiseChain = wf.run(new WorkflowStepCodeArguments(SpecialCommands.refresh, WorkflowPhases.before, context));
+        const promiseChain = wf.run(new WorkflowStepCodeArguments(WorkflowCommands.refresh, WorkflowPhases.before, context));
 
         // 2021-02-21 2dm New in 11.12 enable toolbar to not reload in a SPA scenario
         const finalPromise = promiseChain.then((wfArgs) => {

@@ -1,5 +1,5 @@
 import { ContextIdentifier, Sxc } from '../../../$2sxc/src';
-import { CommandParams } from '../commands/command-params';
+import { CommandParams } from '../../../$2sxc/src/cms/command-params';
 import { WorkflowStep } from '../workflow';
 
 /**

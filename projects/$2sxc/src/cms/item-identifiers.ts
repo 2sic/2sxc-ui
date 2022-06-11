@@ -1,5 +1,5 @@
 import { MetadataFor } from '.';
-import { TypeValue } from '../../../core/plumbing';
+import { TypeValue } from '../../../inpage/src/plumbing';
 
 /**
  * Shared properties of all item identifiers

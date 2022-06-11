@@ -42,4 +42,4 @@
 /** @internal */ export * from './zone';
 
 // Workflow
-/** @internal */ export * from './special-commands';
+/** @internal */ export * from './workflow-commands';

@@ -1,5 +1,5 @@
 import { InPageButtonGroupJson } from '..';
-import { CommandParams } from '../../../commands/command-params';
+import { CommandParams } from '../../../../../$2sxc/src/cms/command-params';
 import { TypeValue } from '../../../plumbing';
 import { ButtonGroup, ToolbarSettings } from '../../config';
 import { ToolbarTemplateGroup } from '../../templates/toolbar-template-group';

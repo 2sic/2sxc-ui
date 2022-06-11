@@ -1,5 +1,5 @@
 ﻿import { InPageCommandJson } from '..';
-import { CommandParams } from '../../../commands/command-params';
+import { CommandParams } from '../../../../../$2sxc/src/cms/command-params';
 import { TypeTbD, TypeUnsafe } from '../../../plumbing';
 import { Button } from '../../config';
 

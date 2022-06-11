@@ -1,5 +1,5 @@
 ﻿import { Command } from '../../commands/command';
-import { CommandParams } from '../../commands/command-params';
+import { CommandParams } from '../../../../$2sxc/src/cms/command-params';
 import { Commands } from '../../commands/commands';
 import { TypeValue } from '../../plumbing';
 

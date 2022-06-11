@@ -12,7 +12,7 @@ import { InPageButtonJson } from '../../toolbar/config-loaders/config-formats/in
 import { WorkflowHelper, WorkflowPhases, WorkflowStepCodeArguments } from '../../workflow';
 import { WorkflowManager } from '../../workflow/workflow-manager';
 import { CommandLinkGenerator } from '../command-link-generator';
-import { CommandParams } from '../command-params';
+import { CommandParams } from '../../../../$2sxc/src/cms/command-params';
 
 type CommandPromise<T> = Promise<T|void>;
 
