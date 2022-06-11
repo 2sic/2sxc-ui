@@ -83,8 +83,7 @@ export class Sxc extends HasLog {
    * @returns 
    */
   public static is(thing: unknown): thing is Sxc {
-    const maybe = thing as Sxc;
-    return maybe._isSxcInstance;
+    return (thing as Sxc)._isSxcInstance;
   }
 
   /**

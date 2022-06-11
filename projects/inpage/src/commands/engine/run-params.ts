@@ -58,7 +58,7 @@ export interface RunParamsWithContext extends RunParams {
  */
 export function is$sxcRunParams(o: unknown): o is RunParamsWithContext {
   const t = o as RunParamsWithContext;
-  return (t.tag != null || (t.context != null && (ContextIdentifier.is(t.context) || SxcEdit.is(t.context)))) &&
+  return (t.tag != null || (t.context != null && (ContextIdentifier.is(t.context) || Sxc.is(t.context)))) &&
     isRunParamsInstance(t);
 }
 

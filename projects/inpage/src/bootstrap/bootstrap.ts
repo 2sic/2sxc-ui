@@ -1,10 +1,12 @@
+import { Sxc } from '../../../$2sxc/src';
 import { CmdLayout } from '../commands/command/layout';
 import { C } from '../constants';
-import { SxcEdit } from '../interfaces/sxc-instance-editable';
 import { HasLog, Insights, Log } from '../logging';
+import { EditManager } from '../manage/edit-manager';
 import { NoJQ } from '../plumbing';
 import { QuickDialog } from '../quick-dialog';
 import * as QuickEditState from '../quick-dialog/state';
+import { SxcTools } from '../sxc/sxc-tools';
 import { toolbarSelector } from '../toolbar';
 import { TagToolbarManager } from '../toolbar/tag-toolbars/tag-toolbar-manager';
 import { ToolbarManager } from '../toolbar/toolbar-manager';
@@ -127,7 +129,7 @@ export class BootstrapInPage extends HasLog {
      */
     private tryShowTemplatePicker(): boolean {
         const cl = this.log.call('tryShowTemplatePicker');
-        let sxc: SxcEdit;
+        let sxc: Sxc;
         // first check if we should show one according to the state-settings
         const openDialogId = QuickEditState.cbId.get();
         if (openDialogId) {
@@ -138,8 +140,8 @@ export class BootstrapInPage extends HasLog {
                 // we must be sure that we use the right id a.nyhow
                 if (openDialogId < 0) {
                     const instanceId = Number(found[0].attributes.getNamedItem(C.AttrNames.InstanceId).value);
-                    sxc = SxcEdit.get(instanceId, openDialogId);
-                } else sxc = SxcEdit.get(openDialogId);
+                    sxc = window.$2sxc(instanceId, openDialogId);
+                } else sxc = window.$2sxc(openDialogId);
             }
         }
 
@@ -159,11 +161,11 @@ export class BootstrapInPage extends HasLog {
 
             // show the template picker of this module
             const module = Array.from(uninitializedModules).find((e) => e.parentElement.matches(C.Sel.SxcDivs))?.parentElement;
-            sxc = SxcEdit.get(module);
+            sxc = window.$2sxc(module);
         }
 
         if (sxc) {
-            sxc.manage.run(CmdLayout);
+            (sxc.manage as EditManager).run(CmdLayout);
             this.openedTemplatePickerOnce = true;
         }
         return cl.return(true, 'tryShowTemplatePicker() done');
@@ -178,11 +180,11 @@ export class BootstrapInPage extends HasLog {
         if (this.initializedInstances.find((m) => m === module)) return;
         this.initializedInstances.push(module);
 
-        let sxc = SxcEdit.get(module);
+        let sxc = window.$2sxc(module);
 
         // check if the sxc must be re-created. This is necessary when modules are dynamically changed
         // because the configuration may change, and that is cached otherwise, resulting in toolbars with wrong config
-        if (!isFirstRun) sxc = sxc.recreate(true) as SxcEdit;
+        if (!isFirstRun) sxc = sxc.recreate(true) as Sxc;
 
         // check if we must show the glasses
         // this must always run because it can be added ajax-style
@@ -198,14 +200,14 @@ export class BootstrapInPage extends HasLog {
     }
 
 
-    private showGlassesButtonIfUninitialized(sxci: SxcEdit): boolean {
+    private showGlassesButtonIfUninitialized(sxci: Sxc): boolean {
         const callLog = this.log.call('showGlassesButtonIfUninitialized');
         // already initialized
         if (this.isInitialized(sxci))
             return callLog.return(false, 'is initialized');
 
         // already has a glasses button
-        const tag = SxcEdit.getTag(sxci);
+        const tag = SxcTools.getTag(sxci);
         if (tag.querySelectorAll<HTMLElement>(`.${C.ClsNames.UnInitialized}`).length !== 0)
             return callLog.return(false, 'already has button');
 
@@ -216,19 +218,16 @@ export class BootstrapInPage extends HasLog {
             '</div>',
         )[0];
 
-        btn.addEventListener('click', () => sxci.manage.run(CmdLayout));
+        btn.addEventListener('click', () => (sxci.manage as EditManager).run(CmdLayout));
 
         tag.append(btn);
         return callLog.return(true, 'ok');
     }
 
 
-    isInitialized(sxci: SxcEdit): boolean {
-        const cg =
-            sxci &&
-            sxci.manage &&
-            sxci.manage._editContext &&
-            sxci.manage._editContext.contentBlock;
+    isInitialized(sxci: Sxc): boolean {
+        const manage = sxci?.manage as EditManager;
+        const cg = manage?._editContext?.contentBlock;
         return cg && cg.TemplateId !== 0;
     }
 }

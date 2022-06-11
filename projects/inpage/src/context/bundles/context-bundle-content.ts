@@ -1,5 +1,5 @@
 ﻿import { ContextBundleInstance, ContextOfContentBlock, ContextOfItem } from '..';
-import { SxcEdit } from '../../interfaces/sxc-instance-editable';
+import { Sxc } from '../../../../$2sxc/src';
 import { AttrJsonEditContext } from '../html-attribute';
 import { ContentBlockReference } from '../html-attribute/parts/content-block';
 
@@ -16,7 +16,7 @@ export class ContextBundleContent extends ContextBundleInstance {
   /** The content-block itself with specs like is-app, etc. */
   contentBlock: ContextOfContentBlock;
 
-  constructor(editCtx: AttrJsonEditContext, sxc: SxcEdit) {
+  constructor(editCtx: AttrJsonEditContext, sxc: Sxc) {
     super(editCtx, sxc);
 
     // information about the current item

@@ -1,5 +1,4 @@
-﻿import { SxcEdit } from '../interfaces/sxc-instance-editable';
-
+﻿
 //#region WebApi Endpoints used: 2sxc
 const webApiInstallComplete = 'sys/install/resume';
 //#endregion
@@ -10,7 +9,7 @@ const webApiInstallComplete = 'sys/install/resume';
 export class SystemUpgrader {
     // upgrade command - started when an error contains a link to start this
     finishUpgrade(domElement: HTMLElement): void {
-        const mc = SxcEdit.get(domElement);
+        const mc = window.$2sxc(domElement);
         mc.webApi.fetchRaw(webApiInstallComplete)
             .then(() => {
                 alert('Upgrade ok, restarting the CMS and reloading...');

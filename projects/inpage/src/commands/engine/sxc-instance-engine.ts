@@ -1,6 +1,6 @@
-﻿import { Cms } from '../../cms/Cms';
+﻿import { Sxc } from '../../../../$2sxc/src';
+import { Cms } from '../../cms/Cms';
 import { ContextComplete } from '../../context/bundles/context-bundle-button';
-import { SxcEdit } from '../../interfaces/sxc-instance-editable';
 import { CommandParams } from '../command-params';
 import { RunParamsWithContext } from './run-params';
 
@@ -10,7 +10,7 @@ import { RunParamsWithContext } from './run-params';
  * @internal
  */
 export class SxcInstanceEngine {
-  constructor(private sxc: SxcEdit) {}
+  constructor(private sxc: Sxc) {}
 
   run<T>(
     nameOrSettings: string | CommandParams,

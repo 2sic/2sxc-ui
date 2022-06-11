@@ -5,9 +5,9 @@ import locI18next from 'loc-i18next';
 import { primaryLanguage, translations, translationsPath } from '.';
 import { IDs } from '../constants/ids';
 import { ContextComplete } from '../context/bundles';
-import { SxcEdit } from '../interfaces/sxc-instance-editable';
 import { HasLog, Insights, urlClean } from '../logging';
 import { EditManager } from '../manage/edit-manager';
+import { SxcTools } from '../sxc/sxc-tools';
 
 let localize: any;
 // let initialized: boolean = false;
@@ -62,9 +62,9 @@ class TranslatorGlobal extends HasLog {
         // trying to get context...
         const htmlElementOrId = document.querySelector<HTMLElement>('div[data-cb-id]');
         this.initialized = true; // the next SxcEdit.get will call _translate so we must set true to prevent loops
-        const sxc = SxcEdit.get(htmlElementOrId);
+        const sxc = window.$2sxc(htmlElementOrId);
         this.initialized = false; // for real, it is not initialized...
-        const editContext = SxcEdit.getEditContext(sxc);
+        const editContext = SxcTools.getEditContext(sxc);
         const context = new ContextComplete(editContext, sxc);
         context.sxc = sxc;
         return cl.return(context);

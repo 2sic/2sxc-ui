@@ -2,10 +2,10 @@
 import { C } from '../constants';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { HtmlTools } from '../html/dom-tools';
-import { SxcEdit } from '../interfaces/sxc-instance-editable';
 import { AssetsLoader, HasLog, Insights, NoJQ } from '../logging';
 import { QuickE } from '../quick-edit/quick-e';
-import { WorkflowStepCodeArguments, WorkflowHelper, WorkflowPhases } from '../workflow';
+import { SxcTools } from '../sxc/sxc-tools';
+import { WorkflowHelper, WorkflowPhases, WorkflowStepCodeArguments } from '../workflow';
 import { ContentBlockEditor } from './content-block-editor';
 
 /**
@@ -27,7 +27,7 @@ class RendererGlobal extends HasLog {
      * @returns {} nothing
      */
     showMessage(context: ContextComplete, newContent: string): void {
-        SxcEdit.getTag(context.sxc).innerHTML = newContent;
+        SxcTools.getTag(context.sxc).innerHTML = newContent;
     }
 
 
@@ -127,7 +127,7 @@ class RendererGlobal extends HasLog {
                 NoJQ.append(document.head, newHead, false);
                 // Must disable toolbar before we attach to DOM
                 if (justPreview) HtmlTools.disable(newDom);
-                NoJQ.replaceWith(SxcEdit.getTag(context.sxc), newDom, false);
+                NoJQ.replaceWith(SxcTools.getTag(context.sxc), newDom, false);
 
                 // run scripts manually to ensure proper timing
                 const scripts = [
@@ -140,7 +140,7 @@ class RendererGlobal extends HasLog {
 
                 // Must disable toolbar before we attach to DOM
                 if (justPreview) HtmlTools.disable(newDom);
-                NoJQ.replaceWith(SxcEdit.getTag(context.sxc), newDom, true);
+                NoJQ.replaceWith(SxcTools.getTag(context.sxc), newDom, true);
             }
 
             // reset the cache, so the sxc-object is refreshed

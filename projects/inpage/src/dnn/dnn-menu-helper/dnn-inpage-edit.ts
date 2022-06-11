@@ -1,7 +1,8 @@
-﻿import { SxcInstanceEngine } from '../../commands';
+﻿import { Sxc } from '../../../../$2sxc/src';
+import { SxcInstanceEngine } from '../../commands';
 import { CmdLayout } from '../../commands/command/layout';
-import { SxcEdit } from '../../interfaces/sxc-instance-editable';
 import { HasLog, Insights } from '../../logging';
+import { EditManager } from '../../manage/edit-manager';
 
 
 /**
@@ -10,13 +11,13 @@ import { HasLog, Insights } from '../../logging';
  */
 export class DnnActionMenu extends HasLog {
     private run: typeof SxcInstanceEngine.prototype.run;
-    private sxc: SxcEdit;
+    private sxc: Sxc;
 
     constructor(moduleId: number) {
         super('Dnn.Menu', null, `modId: ${moduleId}`);
         Insights.add('dnn-menu', `mod: ${moduleId}`, this.log);
-        this.sxc = SxcEdit.get(moduleId);
-        this.run = this.sxc.manage.run;
+        this.sxc = window.$2sxc(moduleId);
+        this.run = (this.sxc.manage as EditManager).run;
     }
 
     changeLayoutOrContent = () => { this.run(CmdLayout); };

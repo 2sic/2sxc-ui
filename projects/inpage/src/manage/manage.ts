@@ -1,9 +1,10 @@
-﻿import { Cms } from '../cms/Cms';
+﻿import { Sxc } from '../../../$2sxc/src';
+import { Cms } from '../cms/Cms';
 import { SxcInstanceEngine } from '../commands';
 import { ensureRunParamsInstanceOrError, RunParams } from '../commands/engine/run-params';
 import { ContextComplete } from '../context';
 import { ContextOfUser } from '../context';
-import { SxcEdit } from '../interfaces/sxc-instance-editable';
+import { SxcTools } from '../sxc/sxc-tools';
 import { ToolbarManager } from '../toolbar';
 import { EditManager } from './edit-manager';
 
@@ -24,10 +25,10 @@ export class Manage {
      * we must keep signature of initInstance in sync with the 2sxc.api.js
      * @param sxc
      */
-    initInstance(sxc: SxcEdit) {
+    initInstance(sxc: Sxc) {
         try {
             const myContext = ContextComplete.findContext(sxc);
-            const editContext = SxcEdit.getEditContext(myContext.sxc);
+            const editContext = SxcTools.getEditContext(myContext.sxc);
 
             const userInfo = ContextOfUser.fromContext(myContext);
             const cmdEngine = new SxcInstanceEngine(myContext.sxc);
