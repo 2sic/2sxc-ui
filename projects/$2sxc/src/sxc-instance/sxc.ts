@@ -6,7 +6,7 @@ import { SxcData } from './data/sxc-data';
 import { SxcQuery } from './data/sxc-query';
 import { SxcGlobal } from '..';
 import { SxcCms } from './sxc-cms';
-// import { RunParams } from '../../../inpage/src/cms/run-params';
+// import { RunParams as test } from '../../../inpage/src/cms/run-params';
 
 // const serviceScopes = ['app', 'app-sys', 'app-api', 'app-query', 'app-content', 'eav', 'view', 'dnn'];
 

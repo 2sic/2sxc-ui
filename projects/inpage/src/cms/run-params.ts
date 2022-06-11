@@ -49,35 +49,3 @@ export interface RunParamsWithContext extends RunParams {
    */
   context?: Sxc | ContextIdentifier;
 }
-
-/**
- * Checks if the run params are complete, as would be used in the $2sxc.cms.run
- * @internal
- */
-export function is$sxcRunParams(o: unknown): o is RunParamsWithContext {
-  const t = o as RunParamsWithContext;
-  return (t.tag != null || (t.context != null && (ContextIdentifier.is(t.context) || Sxc.is(t.context)))) &&
-    isRunParamsInstance(t);
-}
-
-/**
- * Checks if it's at least an instance run param - having at least `action` or `params`
- * @internal
- */
-export function isRunParamsInstance(maybeRunParams: unknown): maybeRunParams is RunParams {
-  const typed = maybeRunParams as RunParams;
-  return (typed.action != null || typed.params != null);
-}
-
-const runContextInstanceMinimalRequirements = "'action' and/or 'params'";
-const errPrefix = 'sxc instance run() expects runParams';
-
-/**
- * @internal
- */
-export function ensureRunParamsInstanceOrError(runParams: RunParamsWithContext) {
-  if (!isRunParamsInstance(runParams))
-    throw `${errPrefix} with at least ${runContextInstanceMinimalRequirements}`;
-  if (runParams.context)
-    throw `${errPrefix} without 'context' since it already provides the context`;
-}

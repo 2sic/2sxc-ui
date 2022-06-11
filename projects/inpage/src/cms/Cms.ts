@@ -1,12 +1,13 @@
 ﻿import { ContextIdentifier, Sxc } from '../../../$2sxc/src';
 import { CmsEngine } from '../commands/';
 import { CommandParams } from '../commands/command-params';
-import { is$sxcRunParams, RunParamsWithContext } from './run-params';
 import { C } from '../constants';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { ContextBundleInstance } from '../context/bundles/context-bundle-instance';
 import { SxcRoot } from '../interfaces/sxc-controller-in-page';
 import { HasLog, Insights, Log } from '../logging';
+import { RunParamsWithContext } from './run-params';
+import { RunParamsHelpers } from './run-params-helpers';
 
 const logId = 'Cms.Api';
 /**
@@ -44,7 +45,7 @@ export class Cms extends HasLog {
 
         // Figure out inner-call based on if context is new RunParams or not (in that case it should be a tag or a full context)
         let innerCall: () => Promise<void>;
-        if (is$sxcRunParams(context)) {
+        if (RunParamsHelpers.is$sxcRunParams(context)) {
             // V1 with Context
             const contextGiver = (ContextIdentifier.is(context.context) || Sxc.is(context.context))
                 ? (window.$2sxc as SxcRoot)(context.context)

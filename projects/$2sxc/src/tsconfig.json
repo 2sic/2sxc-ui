@@ -19,6 +19,7 @@
     "./*.js", "**/*.ts",
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "../../inpage/node_modules/**"
   ]
 }

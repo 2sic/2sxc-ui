@@ -1,4 +1,6 @@
-﻿import { ContentBlockEditor } from '../../contentBlock/content-block-editor';
+﻿import { RunParams } from '../../cms/run-params';
+import { RunParamsHelpers } from '../../cms/run-params-helpers';
+import { ContentBlockEditor } from '../../contentBlock/content-block-editor';
 import { renderer } from '../../contentBlock/render';
 import { ContextComplete } from '../../context/bundles/context-bundle-button';
 import { ContextBundleInstance } from '../../context/bundles/context-bundle-instance';
@@ -11,8 +13,6 @@ import { WorkflowHelper, WorkflowPhases, WorkflowStepCodeArguments } from '../..
 import { WorkflowManager } from '../../workflow/workflow-manager';
 import { CommandLinkGenerator } from '../command-link-generator';
 import { CommandParams } from '../command-params';
-import { RunParametersHelper } from '../../cms/run-params-helpers';
-import { RunParams } from '../../cms/run-params';
 
 type CommandPromise<T> = Promise<T|void>;
 
@@ -22,11 +22,11 @@ type CommandPromise<T> = Promise<T|void>;
  */
 export class CmsEngine extends HasLog {
 
-    private runParamsHelper: RunParametersHelper;
+    private runParamsHelper: RunParamsHelpers;
 
     constructor(parentLog?: Log) {
         super('Cmd.Exec', parentLog, 'start');
-        this.runParamsHelper = new RunParametersHelper(this.log);
+        this.runParamsHelper = new RunParamsHelpers(this.log);
     }
 
     detectParamsAndRun<T>(

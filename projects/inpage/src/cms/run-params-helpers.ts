@@ -1,5 +1,8 @@
+import { Sxc } from '../../../$2sxc/src/sxc-instance/sxc';
+import { ContextIdentifier } from '../../../$2sxc/src/sxc-root/context-identifier';
 import { CommandParams, Commands } from '../commands';
 import { HasLog, Log } from '../logging';
+import { RunParams, RunParamsWithContext } from './run-params';
 
 /**
  * Helper class to process parameters given to the Cms.Run statement
@@ -10,7 +13,7 @@ import { HasLog, Log } from '../logging';
  * @class RunParameters
  * @internal
  */
-export class RunParametersHelper extends HasLog {
+export class RunParamsHelpers extends HasLog {
     constructor(parentLog?: Log) {
         super('Cmd.RunPrm', parentLog, 'start');
     }
@@ -48,4 +51,38 @@ export class RunParametersHelper extends HasLog {
         return cl.return({...defaults, ...params} as CommandParams);
     }
 
+
+    // ----- Static Helpers -----
+    /**
+     * Checks if the run params are complete, as would be used in the $2sxc.cms.run
+     * @internal
+     */
+    static is$sxcRunParams(o: unknown): o is RunParamsWithContext {
+        const t = o as RunParamsWithContext;
+        return (t.tag != null || (t.context != null && (ContextIdentifier.is(t.context) || Sxc.is(t.context)))) &&
+        RunParamsHelpers.isRunParamsInstance(t);
+    }
+
+    /**
+     * Checks if it's at least an instance run param - having at least `action` or `params`
+     * @internal
+     */
+    private static isRunParamsInstance(maybeRunParams: unknown): maybeRunParams is RunParams {
+        const typed = maybeRunParams as RunParams;
+        return (typed.action != null || typed.params != null);
+    }
+
+    /**
+     * @internal
+     */
+    static ensureRunParamsInstanceOrError(runParams: RunParamsWithContext) {
+        if (!RunParamsHelpers.isRunParamsInstance(runParams))
+        throw `${errPrefix} with at least ${runContextInstanceMinimalRequirements}`;
+        if (runParams.context)
+        throw `${errPrefix} without 'context' since it already provides the context`;
+    }
 }
+
+
+const runContextInstanceMinimalRequirements = "'action' and/or 'params'";
+const errPrefix = 'sxc instance run() expects runParams';
