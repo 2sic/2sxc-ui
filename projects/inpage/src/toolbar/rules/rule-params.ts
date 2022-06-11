@@ -1,5 +1,5 @@
 import { MetadataFor } from '../../commands';
-import { DictionaryValue, TypeValue } from '../../plumbing';
+import { TypeValue } from '../../plumbing';
 
 /**
  * @internal

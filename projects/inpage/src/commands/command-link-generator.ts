@@ -3,7 +3,7 @@ import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { ItemIdentifierCopy, ItemIdentifierGroup, ItemIdentifierSimple, ItemInField, TemplateIdentifier } from '../interfaces/item-identifiers';
 import { HasLog, Log } from '../logging';
 import { NgUrlValuesWithoutParams } from '../manage/ng-dialog-params';
-import { DictionaryValue, NoJQ, TypeUnsafe, urlClean } from '../plumbing';
+import { NoJQ, TypeUnsafe, TypeValue, urlClean } from '../plumbing';
 import { ButtonSafe } from '../toolbar/config';
 
 /**
@@ -193,7 +193,7 @@ export class CommandLinkGenerator extends HasLog {
 }
 
 interface UrlItemParams {
-    prefill?: DictionaryValue;
+    prefill?: Record<string, TypeValue>;
     items?: string;
     contentTypeName?: string;
     filters?: string;

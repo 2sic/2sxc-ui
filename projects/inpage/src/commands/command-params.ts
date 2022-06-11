@@ -1,6 +1,6 @@
 ﻿import { MetadataFor } from '.';
 import { ItemIdentifierGroup, ItemIdentifierSimple } from '../interfaces/item-identifiers';
-import { DictionaryValue } from '../plumbing';
+import { TypeValue } from '../plumbing';
 
 /**
  * Command parameters are handed over to a command for execution
@@ -34,7 +34,7 @@ export interface CommandParams {
     metadata?: MetadataFor;
 
     isPublished?: boolean;
-    prefill?: DictionaryValue;
+    prefill?: Record<string, TypeValue>;
 
     /** Custom Code in the previous V9 standard */
     customCode?: string;

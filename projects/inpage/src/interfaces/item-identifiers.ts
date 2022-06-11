@@ -1,5 +1,5 @@
 import { MetadataFor } from '../commands';
-import { DictionaryValue } from '../plumbing';
+import { TypeValue } from '../plumbing';
 
 /**
  * Shared properties of all item identifiers
@@ -7,7 +7,7 @@ import { DictionaryValue } from '../plumbing';
  */
 export interface ItemIdentifierShared {
   EntityId?: number;
-  Prefill?: DictionaryValue;
+  Prefill?: Record<string, TypeValue>;
 }
 
 /**

@@ -1,5 +1,5 @@
 ﻿import { Button } from '.';
-import { DictionaryValue, TypeTbD } from '../../plumbing';
+import { TypeTbD, TypeValue } from '../../plumbing';
 
 /**
  * @internal
@@ -11,7 +11,7 @@ export class ButtonGroup {
      */
     name?: string;
 
-    defaults: DictionaryValue = {};
+    defaults: Record<string, TypeValue> = {};
 
     constructor(public buttons: Button[]) {
         // adds these to the items

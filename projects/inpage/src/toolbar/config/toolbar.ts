@@ -1,5 +1,5 @@
 ﻿import { ButtonGroup, ToolbarSettings } from '.';
-import { DictionaryValue } from '../../plumbing';
+import { TypeValue } from '../../plumbing';
 
 /**
  * Runtime configuration of the toolbar.
@@ -17,13 +17,13 @@ export class Toolbar {
     settings: ToolbarSettings;
 
     /** Params for the commands, like EntityId, Content - Type - Name */
-    params: DictionaryValue;
+    params: Record<string, TypeValue>;
 
     /** show more debug info */
     debug?: boolean = false;
 
     /**  the button defaults like icon, etc. */
-    defaults: DictionaryValue;
+    defaults: Record<string, TypeValue>;
 
     constructor() {
         this.identifier = Toolbar.createIdentifier();

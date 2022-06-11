@@ -1,6 +1,6 @@
 import { InPageButtonGroupJson } from '..';
 import { CommandParams } from '../../../commands/command-params';
-import { DictionaryValue } from '../../../plumbing';
+import { TypeValue } from '../../../plumbing';
 import { ButtonGroup, ToolbarSettings } from '../../config';
 import { ToolbarTemplateGroup } from '../../templates/toolbar-template-group';
 
@@ -27,12 +27,12 @@ export interface ToolbarWip {
     settings: ToolbarSettings;
 
     /** Params for the commands, like EntityId, Content - Type - Name */
-    params: DictionaryValue | CommandParams;
+    params: Record<string, TypeValue> | CommandParams;
 
     /** show more debug info */
     debug?: boolean;
 
     /**  the button defaults like icon, etc. */
-    defaults: DictionaryValue;
+    defaults: Record<string, TypeValue>;
 
 }

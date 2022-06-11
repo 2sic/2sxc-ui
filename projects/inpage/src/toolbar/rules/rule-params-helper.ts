@@ -1,7 +1,7 @@
 import { RuleParams } from '.';
 import { MetadataFor } from '../../commands';
 import { Log, LogEntryOptions as LEO } from '../../logging';
-import { DictionaryValue, TypeValue } from '../../plumbing';
+import { TypeValue } from '../../plumbing';
 
 const prefillPrefix = 'prefill:';
 const filterPrefix = 'filter:';
@@ -90,7 +90,7 @@ export class RuleParamsHelper {
         if (!keys || keys.length === 0) return cl.return(undefined, `no speciall '${prefix}' keys`);
 
         const prefixLen = prefix.length;
-        const list: DictionaryValue = {};
+        const list: Record<string, TypeValue> = {};
         keys.forEach((k) => {
             let value: unknown = params[k];
             // 2020-04-02 prefill is a bit flaky - this should fix the common issues

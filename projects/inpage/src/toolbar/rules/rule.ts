@@ -1,6 +1,6 @@
 import { Operations as Operators, RuleConstants as RC, RuleParams, RuleParamsHelper } from '.';
 import { HasLog, Log } from '../../logging';
-import { DictionaryValue, TypeValue } from '../../plumbing';
+import { TypeValue } from '../../plumbing';
 import { TemplateConstants } from '../templates';
 import { BuildSteps } from './build-steps';
 import { ProcessedParams } from './rule-params-helper';
@@ -160,7 +160,7 @@ export class BuildRule extends HasLog {
         // #4 icon is automatically kept
         // #5 show override
         if (typeof parts.show === 'string')
-            (parts as DictionaryValue).show = parts.show === 'true';
+            (parts as Record<string, TypeValue>).show = parts.show === 'true';
         this.ui = parts;
         return cl.return(this.ui, 'button rules');
     }

@@ -3,7 +3,7 @@ import { InPageButtonJson, InPageCommandJson } from '.';
 import { ButtonGroupWip } from '.';
 import { CmdMore, CommandParams, Commands } from '../../commands';
 import { HasLog } from '../../logging';
-import { DictionaryValue } from '../../plumbing';
+import { TypeValue } from '../../plumbing';
 import { Button, ButtonCommand, Toolbar, ToolbarSettings } from '../config';
 import { ButtonGroup } from '../config';
 import { TemplateConstants as TC } from '../templates/constants';
@@ -58,11 +58,11 @@ export class ButtonGroupConfigLoader extends HasLog {
      *          I'm not sure why though.
      */
     convertToButton(btn: InPageButtonJson,
-                    sharedParams: CommandParams | DictionaryValue,
-                    sharedDefaults: DictionaryValue,
+                    sharedParams: CommandParams | Record<string, TypeValue>,
+                    sharedDefaults: Record<string, TypeValue>,
                     // fullToolbar: ToolbarWip,
                     // group: ButtonGroupWip
-                    groupDefaults: DictionaryValue,
+                    groupDefaults: Record<string, TypeValue>,
                     ): Button {
         let btnCommand = (btn as unknown as { command: CommandParams; }).command;
         const identifier = btnCommand.action;

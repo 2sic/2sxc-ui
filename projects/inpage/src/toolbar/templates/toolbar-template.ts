@@ -1,5 +1,5 @@
 ﻿import { ListWithCursor, ToolbarTemplateGroup } from '.';
-import { DictionaryValue, TypeTbD } from '../../plumbing';
+import { TypeTbD, TypeValue } from '../../plumbing';
 import { ToolbarSettings } from '../config/toolbar-settings';
 
 /**
@@ -10,8 +10,8 @@ import { ToolbarSettings } from '../config/toolbar-settings';
 export class ToolbarTemplate implements ListWithCursor {
     name: string;
     groups: ToolbarTemplateGroup[] = [];
-    defaults?: DictionaryValue = {};
-    params?: DictionaryValue = {};
+    defaults?: Record<string, TypeValue> = {};
+    params?: Record<string, TypeValue> = {};
     settings?: Partial<ToolbarSettings> = {};
     debug?: boolean;
     _isToolbarTemplate: true;
