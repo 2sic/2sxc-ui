@@ -1,5 +1,4 @@
-﻿import { RunParams } from '../../../../$2sxc/src/cms/run-params';
-import { ContentBlockEditor } from '../../contentBlock/content-block-editor';
+﻿import { ContentBlockEditor } from '../../contentBlock/content-block-editor';
 import { renderer } from '../../contentBlock/render';
 import { ContextComplete } from '../../context/bundles/context-bundle-button';
 import { ContextBundleInstance } from '../../context/bundles/context-bundle-instance';
@@ -13,6 +12,7 @@ import { WorkflowManager } from '../../workflow/workflow-manager';
 import { CommandLinkGenerator } from '../command-link-generator';
 import { CommandParams } from '../command-params';
 import { RunParametersHelper } from './run-parameters';
+import { RunParams } from './run-params';
 
 type CommandPromise<T> = Promise<T|void>;
 

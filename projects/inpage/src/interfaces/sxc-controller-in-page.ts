@@ -3,7 +3,6 @@ import { Cms } from '../cms/Cms';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { Manage } from '../manage/manage';
 import { SystemUpgrader } from '../system/2sxc.system';
-import { SxcEdit } from './sxc-instance-editable';
 
 /**
  * $2sxc interface declaration merging for in-page
@@ -18,7 +17,7 @@ export interface SxcRoot extends SxcGlobal {
    * @returns Sxc
    */
   // 2021-09-17 spm assume this function doesn't use jquery
-  (id: number | ContextIdentifier | HTMLElement | Sxc , cbid?: number): SxcEdit;
+  (id: number | ContextIdentifier | HTMLElement | Sxc , cbid?: number): Sxc;
   // insights: typeof Insights;
   _manage: Manage;
   system: SystemUpgrader;
