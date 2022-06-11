@@ -13,6 +13,7 @@ import { WorkflowHelper, WorkflowPhases, WorkflowStepCodeArguments } from '../..
 import { WorkflowManager } from '../../workflow/workflow-manager';
 import { CommandLinkGenerator } from '../command-link-generator';
 import { CommandParams } from '../../../../$2sxc/src/cms/command-params';
+import { WorkflowStep } from '../../workflow/workflow-step';
 
 type CommandPromise<T> = Promise<T|void>;
 
@@ -98,7 +99,7 @@ export class CmsEngine extends HasLog {
         let wf: WorkflowManager;
         if (wipParamsWithWorkflow?.workflows) {
             wf = new WorkflowManager(this.log);
-            wf.add(wipParamsWithWorkflow.workflows);
+            wf.add(wipParamsWithWorkflow.workflows as WorkflowStep | WorkflowStep[]);
         } else
             wf = WorkflowHelper.getWorkflow(origEvent?.target as HTMLElement);
 

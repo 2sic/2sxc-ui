@@ -1,6 +1,5 @@
 import { ContextIdentifier, Sxc } from '../../../$2sxc/src';
 import { CommandParams } from '../../../$2sxc/src/cms/command-params';
-import { WorkflowStep } from '../workflow';
 
 /**
  * Parameters for the Instance cms.run(...) command.
@@ -26,9 +25,10 @@ export interface RunParams {
   event?: MouseEvent;
 
   /**
-   * Workflows work the same way as with a toolbar, except that they are added here and not registered on init
+   * Workflows work the same way as with a toolbar, except that they are added here and not registered on init.
+   * Because of limitations in automatic documentation, the type here is set to `unknown` but it's actually `WorkflowStep` | `WorkflowStep[]`
    */
-  workflows?: WorkflowStep | WorkflowStep[];
+  workflows?: unknown;
 }
 
 /**
