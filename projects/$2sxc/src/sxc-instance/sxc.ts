@@ -7,8 +7,6 @@ import { SxcQuery } from './data/sxc-query';
 import { SxcGlobal } from '..';
 import { SxcCms } from './sxc-cms';
 
-// const serviceScopes = ['app', 'app-sys', 'app-api', 'app-query', 'app-content', 'eav', 'view', 'dnn'];
-
 /**
 * The typical sxc-instance object for a specific DNN module or content-block
 */
@@ -17,6 +15,13 @@ export class Sxc extends HasLog {
   private _isSxcInstance = true;
 
 
+  /**
+   * Web API calls for this instance.
+   * This is the pure call APIs system. 
+   * To get data or queries, best use the data or query services.
+   * @type {SxcWebApi}
+   * @memberof Sxc
+   */
   webApi: SxcWebApi;
 
   /**
@@ -29,7 +34,6 @@ export class Sxc extends HasLog {
 
   /**
    * CMS operations on this sxc-instance, such as opening the edit dialog etc.
-   * @internal
    */
   cms = new SxcCms(this, 'cms');
   
