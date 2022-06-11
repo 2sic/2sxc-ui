@@ -8,21 +8,18 @@ import { HttpGlobal } from './http-global';
  *
  * It is both a function `window.$2sxc(...)` and object `window.$2sxc.insights...`
  *
- * Because of limitations in the documentation, the main function isn't documented.
- * The signature is the same as the [get](xref:Api.Js.SxcJs.SxcGlobal.get) function.
- * So `$2sxc(...)` is the same as `$2sxc.get(...)`
  */
 export interface SxcGlobal {
     /**
      * Get an SxcInstance
-     * @param id number | HTMLElement | ContextIdentifier | SxcInstance
+     * @param id number: moduleId | HTMLElement: tag in the page | Sxc: an existing sxc - will just be returned | ContextIdentifier: an identifier in complex scenarios without a moduleId/context
      * @param cbid number
      * @returns SxcInstance
      */
     (id: number | HTMLElement | ContextIdentifier | Sxc, cbid?: number): Sxc;
     /**
      * Get an SxcInstance
-     * @param id number | HTMLElement | ContextIdentifier | SxcInstance
+     * @param id number: moduleId | HTMLElement: tag in the page | Sxc: an existing sxc - will just be returned | ContextIdentifier: an identifier in complex scenarios without a moduleId/context
      * @param cbid number
      * @returns SxcInstance
      * @since v14.01
