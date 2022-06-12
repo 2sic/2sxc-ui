@@ -37,7 +37,7 @@ class TranslatorGlobal extends HasLog {
         const cl = this.log.call('initManager');
         if (this.initialized) return cl.done('already initialized');
 
-        const context = manage._context || this.tryToFindAContext();
+        const context = manage.context || this.tryToFindAContext();
 
         cl.add('will initialize');
         const realRootPath = window.$2sxc.env.uiRoot();

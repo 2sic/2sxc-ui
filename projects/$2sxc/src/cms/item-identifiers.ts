@@ -1,11 +1,14 @@
-import { MetadataFor } from '.';
+import { MetadataForBasic } from '.';
 import { TypeValue } from '../../../inpage/src/plumbing';
+
+// NOTE: THESE ITEM IDENTIFIERS SHOULD PROBABLY ALWAYS REMAIN INTERNAL
+// As we need the flexibility to change them, without breaking public APIs
 
 /**
  * Shared properties of all item identifiers
  * @internal
  */
-export interface ItemIdentifierShared {
+interface ItemIdentifierShared {
   EntityId?: number;
   Prefill?: Record<string, TypeValue>;
 }
@@ -14,15 +17,17 @@ export interface ItemIdentifierShared {
  * Simple identifier, which is id/type-name
  * @internal
  */
-export interface ItemIdentifierSimple extends ItemIdentifierShared {
+export interface ItemIdentifierSimple {
   EntityId: number;
   ContentTypeName?: string;
-  Metadata?: MetadataFor;
+  Metadata?: MetadataForBasic;
+  Prefill?: Record<string, TypeValue>;
 }
 
 /**
  * Simple identifier, which is id/type-name
  * @internal
+ * WAIT with publishing, we'll probably change the duplicate-entity to a bool instead of an id
  */
 export interface ItemIdentifierCopy extends ItemIdentifierShared {
   DuplicateEntity: number;
@@ -32,11 +37,20 @@ export interface ItemIdentifierCopy extends ItemIdentifierShared {
 /**
  * Group identifier
  * @internal
+ * TODO: KEEP INTERNAL, PROBABLY RENAME "Part" to "Field" or something in the whole chain
+ * TODO: MAY BE replaced completely with ItemIdentifierInField, as it has the same purpose
  */
-export interface ItemInGroup {
+export interface ItemIdentifierParent {
+  /** The parent entity GUID - in these cases usually the ContentBlock */
   Guid: string;
-  Index: number;
+
+  /** The part of the parent it's in, kind of the "Field" - should be renamed to Field ASAP */
   Part?: string;
+
+  /** The index position within that field/part */
+  Index: number;
+
+  /** Whether to add the item - alternative is just to leave it, if it already existed */
   Add: boolean;
 }
 
@@ -44,9 +58,9 @@ export interface ItemInGroup {
  * Experimental in 10.27
  * @internal
  */
-export interface ItemInField extends ItemIdentifierSimple {
-  Field?: string;
+export interface ItemIdentifierInField extends ItemIdentifierSimple {
   Parent?: string;
+  Field?: string;
   Add?: boolean;
 }
 
@@ -54,7 +68,10 @@ export interface ItemInField extends ItemIdentifierSimple {
  * Template Identifier for telling the code-editor about this template
  * @internal
  */
-export interface TemplateIdentifier extends ItemIdentifierShared {
+export interface TemplateIdentifier {
+  /** The entity Id of the View-configuration which points to the template file */
+  EntityId: number;
+
   /** The template edition (kind of a path) - to ensure code-editor can find the right one */
   Edition?: string;
 
@@ -67,5 +84,6 @@ export interface TemplateIdentifier extends ItemIdentifierShared {
  * @internal
  */
 export interface ItemIdentifierGroup extends ItemIdentifierShared {
-  Group: ItemInGroup;
+  Group: ItemIdentifierParent;
 }
+

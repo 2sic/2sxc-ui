@@ -1,8 +1,7 @@
-﻿import { Sxc, SxcManage } from '../../../$2sxc/src';
+﻿import { SxcManage } from '../../../$2sxc/src';
 import { SxcInstanceEngine } from '../commands';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { AttrJsonEditContext } from '../context/html-attribute/edit-context-root';
-import { ContextOfUser } from '../context/parts/context-user';
 import { TypeUnsafe } from '../plumbing';
 import { ToolbarManager } from '../toolbar';
 import { ToolbarSettings } from '../toolbar/config';
@@ -16,9 +15,7 @@ import { ToolbarRenderer } from '../toolbar/render/toolbar-renderer';
 export class EditManager implements SxcManage {
 
     constructor(
-        private sxc: Sxc,
-        private editContext: AttrJsonEditContext,
-        private userInfo: ContextOfUser,
+        public editContext: AttrJsonEditContext,
         private cmdEngine: SxcInstanceEngine,
         public context: ContextComplete,
     ) {
@@ -65,27 +62,10 @@ export class EditManager implements SxcManage {
 
     //#endregion official, public properties - everything below this can change
 
-    _context = this.context;
-
     /**
      * internal method to find out if it's in edit-mode
      */
     _isEditMode = () => this.editContext.Environment.IsEditable ?? false;
-
-    /**
-     * used for various dialogues
-     */
-    _reloadWithAjax = this.context.app.supportsAjax;
-
-    /** metadata necessary to know what/how to edit */
-    _editContext = this.editContext;
-
-    /** used to handle the commands for this content-block */
-    _commands = this.cmdEngine;
-
-    _user = this.userInfo;
-
-
 
     /**
      * change config by replacing the guid, and refreshing dependent sub-objects

@@ -1,5 +1,5 @@
 import { RuleParams } from '.';
-import { MetadataFor } from '../../../../$2sxc/src/cms';
+import { MetadataForBasic } from '../../../../$2sxc/src/cms';
 import { Log, LogEntryOptions as LEO } from '../../logging';
 import { TypeValue } from '../../plumbing';
 
@@ -38,7 +38,7 @@ export class RuleParamsHelper {
         return cl.return({ params, context });
     }
 
-    private static processMetadata(params: RuleParams, log: Log): MetadataFor {
+    private static processMetadata(params: RuleParams, log: Log): MetadataForBasic {
         const cl = log.call('processMetadata');
 
         // get the for-target and if exists, delete from params

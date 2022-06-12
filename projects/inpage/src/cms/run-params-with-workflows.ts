@@ -3,6 +3,7 @@ import { WorkflowStep } from '../workflow';
 
 /**
  * Special internal interface to give workflows a more specific type
+ * @internal
  */
 export interface RunParamsWithWorkflows extends RunParams {
     /**

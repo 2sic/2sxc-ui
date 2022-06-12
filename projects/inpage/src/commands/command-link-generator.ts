@@ -1,4 +1,4 @@
-﻿import { ItemIdentifierCopy, ItemIdentifierGroup, ItemIdentifierSimple, ItemInField, TemplateIdentifier } from '../../../$2sxc/src/cms';
+﻿import { ItemIdentifierCopy, ItemIdentifierGroup, ItemIdentifierSimple, ItemIdentifierInField, TemplateIdentifier } from '../../../$2sxc/src/cms';
 import { C } from '../constants';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { HasLog, Log } from '../logging';
@@ -69,7 +69,7 @@ export class CommandLinkGenerator extends HasLog {
         // when doing new, there may be a prefill in the link to initialize the new item
         if (params.prefill)
             for (let i = 0; i < this.items.length; i++)
-                this.items[i].Prefill = params.prefill;
+                (this.items[i] as ItemIdentifierSimple).Prefill = params.prefill;
 
         delete urlItems.prefill; // added 2020-03-11, seemed strange that it's not removed
         urlItems.items = JSON.stringify(this.items); // Serialize/json-ify the complex items-list
@@ -171,7 +171,7 @@ export class CommandLinkGenerator extends HasLog {
                 Parent: groupId,
                 Add: isAdd,
                 Index: index,
-            } as ItemInField));
+            } as ItemIdentifierInField));
     }
 
     /**

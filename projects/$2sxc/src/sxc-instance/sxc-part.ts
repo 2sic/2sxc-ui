@@ -10,9 +10,13 @@ export class SxcPart {
   * @param {Sxc} sxc
   * @param {string} partName name of the part
   * @memberof SxcData
+  * @internal
   */
-  constructor(public sxc: Sxc, public partName: string) {
-      
+  constructor(
+    /** @internal */
+    public sxc: Sxc, 
+    /** @internal */
+    public partName: string) {      
   }
 
 }

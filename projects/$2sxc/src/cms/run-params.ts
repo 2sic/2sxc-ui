@@ -32,9 +32,9 @@ export interface RunParams {
 }
 
 /**
- * Parameters for the Global cms.run(...) command in Addition to the RunParams
+ * Parameters for the Global cms.run(...) command in Addition to the RunParams.
+ * It provides context to the run-params such as a Sxc instance or a tag which it started on.
  * New in 12.10
- * @internal
  */
 export interface RunParamsWithContext extends RunParams {
   /**

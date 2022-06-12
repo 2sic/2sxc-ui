@@ -19,7 +19,7 @@ export class SxcInstanceEngine {
   ): Promise<void | T> {
     // Capture cases where this is called using the new/modern params, which is a mistake
     if ((nameOrSettings as RunParamsWithContext).context || (nameOrSettings as RunParamsWithContext).workflows)
-      throw "You are calling '.manage.run(...)' with a parameter 'context'. You should probably be calling the new '.cms.run(...)' instead.";
+      throw "You are calling '.manage.run(...)' with a parameter 'context' or workflows. You should probably be calling the new '.cms.run(...)' instead.";
     const cntx = ContextComplete.findContext(this.sxc);
     return new Cms().run(cntx, nameOrSettings, eventOrSettings, event);
   }

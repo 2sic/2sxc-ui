@@ -3,5 +3,5 @@
         "dist": true
     },
     "editor.tabSize": 2,
-    "editor.detectIndentation": true
+    "editor.detectIndentation": false
 }

@@ -4,7 +4,6 @@ import { Cms } from '../cms/Cms';
 import { RunParamsHelpers } from '../cms/run-params-helpers';
 import { SxcInstanceEngine } from '../commands';
 import { ContextComplete } from '../context';
-import { ContextOfUser } from '../context';
 import { SxcTools } from '../sxc/sxc-tools';
 import { ToolbarManager } from '../toolbar';
 import { EditManager } from './edit-manager';
@@ -31,10 +30,9 @@ export class Manage {
             const myContext = ContextComplete.findContext(sxc);
             const editContext = SxcTools.getEditContext(myContext.sxc);
 
-            const userInfo = ContextOfUser.fromContext(myContext);
             const cmdEngine = new SxcInstanceEngine(myContext.sxc);
 
-            const editManager = new EditManager(myContext.sxc, editContext, userInfo, cmdEngine, myContext);
+            const editManager = new EditManager(editContext, cmdEngine, myContext);
             sxc.manage = editManager;
 
             // add code for the cms.run command, which doesn't exist until editing is enabled

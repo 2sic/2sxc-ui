@@ -227,7 +227,7 @@ export class BootstrapInPage extends HasLog {
 
     isInitialized(sxci: Sxc): boolean {
         const manage = sxci?.manage as EditManager;
-        const cg = manage?._editContext?.contentBlock;
+        const cg = manage?.editContext?.contentBlock;
         return cg && cg.TemplateId !== 0;
     }
 }
