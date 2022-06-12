@@ -1,7 +1,7 @@
-﻿import { ContextIdentifier, Sxc, SxcGlobal } from '../../../$2sxc/src/index';
+﻿import { SxcGlobal } from '../../../$2sxc/src/index';
 import { Cms } from '../cms/Cms';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
-import { Manage } from '../manage/manage';
+import { SxcGlobalManage } from '../manage/sxc-global-manage';
 import { SystemUpgrader } from '../system/2sxc.system';
 
 /**
@@ -10,16 +10,7 @@ import { SystemUpgrader } from '../system/2sxc.system';
  */
 // ReSharper disable InconsistentNaming
 export interface SxcRoot extends SxcGlobal {
-  /**
-   * Get's an Sxc
-   * @param id number | HTMLElement
-   * @param cbid number
-   * @returns Sxc
-   */
-  // 2021-09-17 spm assume this function doesn't use jquery
-  (id: number | ContextIdentifier | HTMLElement | Sxc , cbid?: number): Sxc;
-  // insights: typeof Insights;
-  _manage: Manage;
+  _manage: SxcGlobalManage;
   system: SystemUpgrader;
   translate(key: string): string;
   context: typeof ContextComplete.findContext;

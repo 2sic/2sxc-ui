@@ -19,9 +19,9 @@ import { EditManager } from './edit-manager';
  * - isEditMode
  * @internal
  */
-export class Manage {
+export class SxcGlobalManage {
     /**
-     * Init the manager object
+     * Init the manage-object on a just-created sxc-instance
      * we must keep signature of initInstance in sync with the 2sxc.api.js
      * @param sxc
      */
