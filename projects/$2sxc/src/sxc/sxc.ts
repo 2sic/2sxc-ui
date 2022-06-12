@@ -1,4 +1,4 @@
-﻿import { ContextIdentifier } from '../sxc-root/context-identifier';
+﻿import { ContextIdentifier } from '../sxc-global/context-identifier';
 import { SxcWebApi } from './web-api/sxc-web-api';
 import { ApiUrlRoots, HasLog, ToSxcName } from '../../../core';
 import { SxcManage } from './sxc-manage';

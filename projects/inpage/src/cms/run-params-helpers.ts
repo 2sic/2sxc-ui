@@ -1,5 +1,5 @@
-import { Sxc } from '../../../$2sxc/src/sxc-instance/sxc';
-import { ContextIdentifier } from '../../../$2sxc/src/sxc-root/context-identifier';
+import { Sxc } from '../../../$2sxc/src/';
+import { ContextIdentifier } from '../../../$2sxc/src/sxc-global/context-identifier';
 import { CommandParams, Commands } from '../commands';
 import { HasLog, Log } from '../logging';
 import { RunParams, RunParamsWithContext } from '../../../$2sxc/src/cms';

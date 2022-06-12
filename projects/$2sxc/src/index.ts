@@ -16,9 +16,7 @@ export * from './Stats';
 
 export * from './environment';
 
-export * from './sxc-instance';
+export * from './sxc';
 
-export * from './sxc-root/';
-
-export * from './sxc-instance/sxc-manage';
+export * from './sxc-global';
 
