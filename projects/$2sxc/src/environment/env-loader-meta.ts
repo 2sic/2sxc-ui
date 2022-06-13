@@ -1,5 +1,5 @@
 import { EnvironmentSpecs } from '..';
-import { Environment } from '.';
+import { SxcGlobalEnvironment } from '.';
 import { EnvironmentDnnSfLoader } from './env-loader-dnn-sf';
 import { MetaHeaderJsApi, PlatformOqtane } from '../constants';
 import { HasLog, Log } from '../../../core';
@@ -31,7 +31,7 @@ export class EnvironmentMetaLoader extends HasLog {
 
     private dynamicPageHelper: EnvironmentLoaderDynamic;
 
-    constructor(public env: Environment) {
+    constructor(public env: SxcGlobalEnvironment) {
         super('Env.MetaLd', logTest ? env.log : env.log);
         this.dynamicPageHelper = new EnvironmentLoaderDynamic(this);
     }

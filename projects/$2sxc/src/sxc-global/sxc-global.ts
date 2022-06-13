@@ -1,5 +1,5 @@
 import { UrlParams } from '../tools';
-import { Environment } from '../environment';
+import { SxcGlobalEnvironment } from '../environment';
 import { Insights, Log } from '../../../core';
 import { ContextIdentifier, Debug, Stats, Sxc, TotalPopup } from '..';
 import { HttpGlobal } from './http-global';
@@ -115,9 +115,9 @@ export interface SxcGlobal {
 
     /**
      * Environment information
-     * @type {Environment}
+     * @type {SxcGlobalEnvironment}
      */
-    env: Environment;
+    env: SxcGlobalEnvironment;
 
     /**
      * Http helper for API calls and such

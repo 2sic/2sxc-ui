@@ -5,17 +5,17 @@
  */
 export enum WorkflowPhases {
   /**
-   * Run at every phase - before and after
+   * Run at every phase - before and after events/commands
    */
   all = 'all',
 
   /**
-   * Run before the event
+   * Run before a specific event / command
    */
   before = 'before',
 
   /**
-   * Run after the event
+   * Run after a specific event / command
    */
   after = 'after',
 }

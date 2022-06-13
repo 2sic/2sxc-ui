@@ -1,6 +1,6 @@
 ﻿import { Sxc } from '../sxc';
 import { AjaxPromise } from './ajax-promise';
-import { Environment } from '../../environment';
+import { SxcGlobalEnvironment } from '../../environment';
 import { AjaxSettings } from './ajax-settings';
 import { NoJQ } from '../../../../core';
 import { SxcWebApiDeprecated } from './sxc-web-api-deprecated';
@@ -12,11 +12,11 @@ import { SxcWebApiDeprecated } from './sxc-web-api-deprecated';
  */
 export class SxcWebApi implements SxcWebApiDeprecated {
     /**
-     * @type {Environment}
+     * @type {SxcGlobalEnvironment}
      * @memberof SxcWebApi
      * @internal
      */
-    public readonly env: Environment;
+    public readonly env: SxcGlobalEnvironment;
 
     /**
      * 

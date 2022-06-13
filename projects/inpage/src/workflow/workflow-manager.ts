@@ -7,15 +7,21 @@ import { WorkflowStepCode } from './workflow';
 import { WorkflowHelper } from './workflow-helper';
 
 /**
- * A workflow manager which will run stuff before / after commands.
- * As of now, it must be attached to a toolbar to take effect.
+ * A workflow manager _of a Toolbar_ which will run stuff before / after commands.
+ * When toolbars are created, they will add a Manager and then raise an event for in-page code to add workflow steps. 
  * Normally the toolbar with raise a `toolbar-init` event where you can then add steps.
  */
 export class WorkflowManager extends HasLog {
 
-    /** The workflow steps registered here */
+    /** 
+     * The workflow steps registered on this toolbar
+     * @internal
+     */
     steps: WorkflowStep[] = [];
 
+    /**
+     * @internal
+     */
     constructor(parentLog: Log, private isDummy = false) {
         super('Cmd.Wrkflw', parentLog, 'constructor');
     }
@@ -96,7 +102,10 @@ export class WorkflowManager extends HasLog {
     }
 
     /**
-     * Attach a workflow to a toolbar
+     * Attach a workflow to a toolbar.
+     * Will be used at start to hook this manager to the toolbar.
+     * Then the init-event will be called to allow adding steps.
+     * @internal
      */
     attach(node: HTMLElement, context: ContextComplete) {
         const cl = this.log.call('attach');

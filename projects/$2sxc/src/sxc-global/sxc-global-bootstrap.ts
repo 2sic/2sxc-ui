@@ -1,7 +1,7 @@
 ﻿import { TotalPopup } from '../tools/total-popup';
 import { UrlParams } from '../tools/url-params';
 import { Stats } from '../Stats';
-import { Debug, SxcGlobal, Environment } from '..';
+import { Debug, SxcGlobal, SxcGlobalEnvironment } from '..';
 import { Insights, Log, SxcVersion } from '../../../core';
 import { $2sxcGet } from './sxc-global-get';
 import { HttpGlobal } from './http-global';
@@ -60,7 +60,7 @@ export function buildSxcRoot(): SxcGlobal {
 /** @internal */
 function getRootPartsV2(): Partial<SxcGlobal> {
     const log = new Log('$2sxc', null, 'building');
-    var env = new Environment();
+    var env = new SxcGlobalEnvironment();
     return {
         sysinfo: {
             version: SxcVersion,

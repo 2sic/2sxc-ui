@@ -1,4 +1,4 @@
-import { Environment } from '.';
+import { SxcGlobalEnvironment } from '.';
 import { HasLog, NoJQ } from '../../../core';
 import { EnvironmentSpecs } from '..';
 import { AntiForgeryTokenHeaderNameDnn, DnnUiRoot, PlatformDnn } from '../constants';
@@ -11,7 +11,7 @@ declare const window: Window;
  * @internal
  */
 export class EnvironmentDnnSfLoader extends HasLog {
-    constructor(public env: Environment) {
+    constructor(public env: SxcGlobalEnvironment) {
         super('Env.DnnLdr', env.log);
     }
 
