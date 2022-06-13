@@ -85,7 +85,7 @@ export class Sxc extends HasLog {
   /**
    * TypeGuard for TypeScript to verify this is a SxcInstance
    * @param thing 
-   * @returns 
+   * @internal
    */
   public static is(thing: unknown): thing is Sxc {
     return (thing as Sxc)._isSxcInstance;
