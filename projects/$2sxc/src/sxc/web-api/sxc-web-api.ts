@@ -3,13 +3,14 @@ import { AjaxPromise } from './ajax-promise';
 import { Environment } from '../../environment';
 import { AjaxSettings } from './ajax-settings';
 import { NoJQ } from '../../../../core';
+import { SxcWebApiDeprecated } from './sxc-web-api-deprecated';
 
 /**
  * helper API to run ajax / REST calls to the server
  * it will ensure that the headers etc. are set correctly
  * and that urls are rewritten
  */
-export class SxcWebApi {
+export class SxcWebApi implements SxcWebApiDeprecated {
     /**
      * @type {Environment}
      * @memberof SxcWebApi
@@ -27,88 +28,47 @@ export class SxcWebApi {
     }
 
     /**
-     * **Deprecated** 
-     * Please use [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchJson) 
-     * or [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchRaw) instead.
-     * 
-     * Returns an http-get promise using jQuery
-     * @param settingsOrUrl the url to get
-     * @param params jQuery style ajax parameters
-     * @param data jQuery style data for post/put requests
-     * @param preventAutoFail
-     * @returns jQuery ajax promise object
+     * **Deprecated** - docs in the separate interface
      * @deprecated use fetchJson instead
+     * @internal
      */
     get(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): JQueryPromise<any> {
         return this.request(settingsOrUrl, params, data, preventAutoFail, 'GET');
     }
 
     /**
-     * **Deprecated** 
-     * Please use [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchJson) 
-     * or [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchRaw) instead.
-     * 
-     * Returns an http-post promise using jQuery
-     * @param settingsOrUrl the url to get
-     * @param params jQuery style ajax parameters
-     * @param data jQuery style data for post/put requests
-     * @param preventAutoFail
-     * @returns jQuery ajax promise object
+     * **Deprecated** - docs in the separate interface
      * @deprecated use fetchJson instead
+     * @internal
      */
     post(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): JQueryPromise<any> {
         return this.request(settingsOrUrl, params, data, preventAutoFail, 'POST');
     }
 
     /**
-     * **Deprecated** 
-     * Please use [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchJson) 
-     * or [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchRaw) instead.
-     * 
-     * Returns an http-delete promise using jQuery
-     * @param settingsOrUrl the url to talk to
-     * @param params jQuery style ajax parameters
-     * @param data jQuery style data for post/put requests
-     * @param preventAutoFail
-     * @returns jQuery ajax promise object
+     * **Deprecated** - docs in the separate interface
      * @deprecated use fetchJson instead
+     * @internal
      */
     delete(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): JQueryPromise<any> {
         return this.request(settingsOrUrl, params, data, preventAutoFail, 'DELETE');
     }
 
     /**
-     * **Deprecated** 
-     * Please use [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchJson) 
-     * or [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchRaw) instead.
-     * 
-     * Returns an http-put promise using jQuery
-     * @param settingsOrUrl the url to put
-     * @param params jQuery style ajax parameters
-     * @param data jQuery style data for post/put requests
-     * @param preventAutoFail
-     * @returns jQuery ajax promise object
+     * **Deprecated** - docs in the separate interface
      * @deprecated use fetchJson instead
+     * @internal
      */
-    put(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): JQueryPromise<any> {
+     put(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): JQueryPromise<any> {
         return this.request(settingsOrUrl, params, data, preventAutoFail, 'PUT');
     }
 
     /**
-     * **Deprecated** 
-     * Please use [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchJson) 
-     * or [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchRaw) instead.
-     * 
-     * Generic http request using jQuery
-     * @param settingsOrUrl the url to get
-     * @param params jQuery style ajax parameters
-     * @param data jQuery style data for post/put requests
-     * @param preventAutoFail
-     * @param method the http verb name
-     * @returns jQuery ajax promise object
+     * **Deprecated** - docs in the separate interface
      * @deprecated use fetchJson instead
+     * @internal
      */
-    request(settings: string | AjaxSettings, params: any, data: any, preventAutoFail: boolean, method: string): JQueryPromise<any> {
+     request(settings: string | AjaxSettings, params: any, data: any, preventAutoFail: boolean, method: string): JQueryPromise<any> {
 
         // url parameter: auto convert a single value (instead of object of values) to an id=... parameter
         // tslint:disable-next-line:curly
