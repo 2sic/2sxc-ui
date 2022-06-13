@@ -1,7 +1,7 @@
 import { C } from '../../constants';
 import { ContextBundleToolbar } from '../../context/bundles/context-bundle-toolbar';
 import { HtmlTools } from '../../html/dom-tools';
-import { HasLog, Insights } from '../../logging';
+import { HasLog, Insights } from '../../core';
 import { RenderButton } from './render-button';
 import { RenderButtonGroups } from './render-groups';
 import { IDs } from '../../constants/ids';

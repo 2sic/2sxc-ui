@@ -1,5 +1,5 @@
 import { ListWithCursor, ToolbarTemplate, ToolbarTemplateGroup } from '.';
-import { HasLog } from '../../logging';
+import { HasLog } from '../../core';
 import { ToolbarConfigLoader } from '../config-loaders';
 import { TemplateConstants as TC } from './constants';
 

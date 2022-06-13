@@ -1,7 +1,7 @@
 import { WorkflowPhases, WorkflowStep, WorkflowStepCodeArguments, WorkflowStepHelper } from '.';
 import { WorkflowCommands } from '../commands';
 import { ContextComplete } from '../context';
-import { HasLog, Insights, Log } from '../logging';
+import { HasLog, Insights, Log } from '../core';
 import { ToolbarWithWorkflow } from './toolbar-with-workflow';
 import { WorkflowStepCode } from './workflow';
 import { WorkflowHelper } from './workflow-helper';

@@ -1,4 +1,4 @@
-﻿import { HasLog, Insights } from '../logging';
+﻿import { HasLog, Insights } from '../core';
 import { Button } from '../toolbar/config';
 import { Command } from './command';
 

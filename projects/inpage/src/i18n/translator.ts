@@ -5,7 +5,7 @@ import locI18next from 'loc-i18next';
 import { primaryLanguage, translations, translationsPath } from '.';
 import { IDs } from '../constants/ids';
 import { ContextComplete } from '../context/bundles';
-import { HasLog, Insights, urlClean } from '../logging';
+import { HasLog, Insights, urlClean } from '../core';
 import { EditManager } from '../manage/edit-manager';
 import { SxcTools } from '../sxc/sxc-tools';
 

@@ -1,7 +1,7 @@
 ﻿import { ModifierContentBlock } from '.';
 import { Sxc } from '../../../$2sxc/src';
 import { ContentListActionParams } from '../commands';
-import { HasLog, NoJQ } from '../logging';
+import { HasLog, NoJQ } from '../core';
 import { ToolbarManager } from '../toolbar/toolbar-manager';
 
 // note: this import must be at the end of the list, for reasons unknown

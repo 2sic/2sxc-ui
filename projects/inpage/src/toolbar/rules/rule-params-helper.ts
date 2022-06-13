@@ -1,6 +1,6 @@
 import { RuleParams } from '.';
 import { MetadataForBasic } from '../../../../$2sxc/src/cms';
-import { Log, LogEntryOptions as LEO } from '../../logging';
+import { Log, LogEntryOptions as LEO } from '../../core';
 import { TypeValue } from '../../plumbing';
 
 const prefillPrefix = 'prefill:';

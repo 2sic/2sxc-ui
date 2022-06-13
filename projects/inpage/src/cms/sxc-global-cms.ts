@@ -4,7 +4,7 @@ import { CommandParams, RunParamsWithContext } from '../../../$2sxc/src/cms';
 import { C } from '../constants';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { ContextBundleInstance } from '../context/bundles/context-bundle-instance';
-import { HasLog, Insights, Log } from '../logging';
+import { HasLog, Insights, Log } from '../core';
 import { RunParamsHelpers } from './run-params-helpers';
 
 const logId = 'Cms.Api';

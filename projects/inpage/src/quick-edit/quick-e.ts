@@ -1,5 +1,5 @@
 ﻿import { ModifierContentBlock, ModifierDnnModule, PositionCoordinates, Positioning, QeSelectors, QuickEditConfig, QuickEditOverlay } from '.';
-import { HasLog, Insights, NoJQ } from '../logging';
+import { HasLog, Insights, NoJQ } from '../core';
 
 const configAttr: string = 'quick-edit-config';
 const classForAddContent = 'sc-content-block-menu-addcontent';

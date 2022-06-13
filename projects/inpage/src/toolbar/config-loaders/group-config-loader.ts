@@ -2,7 +2,7 @@
 import { InPageButtonJson, InPageCommandJson } from '.';
 import { ButtonGroupWip } from '.';
 import { CmdMore, CommandParams, Commands } from '../../commands';
-import { HasLog } from '../../logging';
+import { HasLog } from '../../core';
 import { TypeValue } from '../../plumbing';
 import { Button, ButtonCommand, Toolbar, ToolbarSettings } from '../config';
 import { ButtonGroup } from '../config';

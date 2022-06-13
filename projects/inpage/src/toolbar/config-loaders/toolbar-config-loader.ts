@@ -1,7 +1,7 @@
 ﻿import { ButtonConfigLoader, ButtonGroupConfigLoader, CommandConfigLoader, ToolbarConfigLoaderV09, ToolbarConfigLoaderV10, ToolbarWip } from '.';
 import { ToolbarManager } from '..';
 import { ContextComplete } from '../../context/bundles/context-bundle-button';
-import { HasLog, LogEntry } from '../../logging';
+import { HasLog, LogEntry } from '../../core';
 import { Toolbar } from '../config';
 import { InPageToolbarConfigVariations, ToolbarInitConfig } from '../initialize/toolbar-init-config';
 import { TemplateEditor, ToolbarTemplate, ToolbarTemplateManager } from '../templates';

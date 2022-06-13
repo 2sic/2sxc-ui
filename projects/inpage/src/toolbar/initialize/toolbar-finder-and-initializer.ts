@@ -1,7 +1,7 @@
 ﻿import { C } from '../../constants/index';
 import { ContextComplete } from '../../context/bundles/context-bundle-button';
 import { Translator } from '../../i18n/translator';
-import { HasLog } from '../../logging';
+import { HasLog } from '../../core';
 import { ToolbarWhenNoToolbarProvided } from '../config';
 import { ToolbarRenderer } from '../render/toolbar-renderer';
 import { TagToolbar } from '../tag-toolbars/tag-toolbar';

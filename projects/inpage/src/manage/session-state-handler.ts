@@ -1,4 +1,4 @@
-﻿import { HasLog, Insights } from '../logging';
+﻿import { HasLog, Insights } from '../core';
 
 /**
  * This object helps persist / load / reset

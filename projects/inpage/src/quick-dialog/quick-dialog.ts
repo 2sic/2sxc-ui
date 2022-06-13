@@ -1,7 +1,7 @@
 ﻿import { IDialogFrameElement, IIFrameBridge } from '.';
 import { C } from '../constants';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
-import { HasLog, Insights } from '../logging';
+import { HasLog, Insights } from '../core';
 import { IFrameBridge } from './iframe-bridge';
 import { QuickDialogContainer } from './quick-dialog-container';
 import * as QuickEditState from './state';

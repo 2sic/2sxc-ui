@@ -1,5 +1,5 @@
 import { Operations as Operators, RuleConstants as RC, RuleParams, RuleParamsHelper } from '.';
-import { HasLog, Log } from '../../logging';
+import { HasLog, Log } from '../../core';
 import { TypeValue } from '../../plumbing';
 import { TemplateConstants } from '../templates';
 import { BuildSteps } from './build-steps';

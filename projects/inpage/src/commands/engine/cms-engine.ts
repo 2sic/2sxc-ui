@@ -4,7 +4,7 @@ import { ContentBlockEditor } from '../../contentBlock/content-block-editor';
 import { renderer } from '../../contentBlock/render';
 import { ContextComplete } from '../../context/bundles/context-bundle-button';
 import { ContextBundleInstance } from '../../context/bundles/context-bundle-instance';
-import { HasLog, Insights, Log } from '../../logging';
+import { HasLog, Insights, Log } from '../../core';
 import { QuickDialog } from '../../quick-dialog/quick-dialog';
 import { Button, ButtonSafe } from '../../toolbar/config';
 import { ButtonCommand } from '../../toolbar/config';

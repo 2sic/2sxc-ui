@@ -5,7 +5,7 @@ import { IQuickDialogConfig } from '../../../connect-parts/inpage-quick-dialog';
 import { ContentBlockEditor } from '../contentBlock/content-block-editor';
 import { renderer } from '../contentBlock/render';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
-import { HasLog, NoJQ } from '../logging';
+import { HasLog, NoJQ } from '../core';
 import { EditManager } from '../manage/edit-manager';
 import { TypeUnsafe } from '../plumbing/TypeTbD';
 import { SxcTools } from '../sxc/sxc-tools';

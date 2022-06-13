@@ -5,7 +5,7 @@ import { ContextIdentifier, SxcGlobalEnvironment } from '..';
 /**
  * Global HTTP Service for information and helpers on `$2sxc.http`
  */
-export class HttpGlobal extends HasLog {
+export class SxcGlobalHttp extends HasLog {
     /** @internal */
     constructor(private env: SxcGlobalEnvironment) {
         super('Sxc.Http');

@@ -1,6 +1,6 @@
 ﻿import { Sxc } from '../../../../$2sxc/src';
 import { CmdLayout } from '../../commands/command/layout';
-import { HasLog, Insights } from '../../logging';
+import { HasLog, Insights } from '../../core';
 import { EditManager } from '../../manage/edit-manager';
 
 

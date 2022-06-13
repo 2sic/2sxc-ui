@@ -1,6 +1,6 @@
 import { Operations as OP } from '.';
 import { BuildRule } from '.';
-import { HasLog } from '../../logging';
+import { HasLog } from '../../core';
 import { ToolbarConfigLoader } from '../config-loaders';
 import { BuildSteps } from './build-steps';
 

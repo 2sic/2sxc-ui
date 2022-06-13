@@ -2,7 +2,7 @@
 import { C } from '../constants';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { HtmlTools } from '../html/dom-tools';
-import { AssetsLoader, HasLog, Insights, NoJQ } from '../logging';
+import { AssetsLoader, HasLog, Insights, NoJQ } from '../core';
 import { QuickE } from '../quick-edit/quick-e';
 import { SxcTools } from '../sxc/sxc-tools';
 import { WorkflowHelper, WorkflowPhases, WorkflowStepCodeArguments } from '../workflow';

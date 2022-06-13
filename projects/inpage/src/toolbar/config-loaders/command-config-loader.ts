@@ -1,6 +1,6 @@
 ﻿import { ToolbarConfigLoader } from '.';
 import { InPageCommandJson, InPageCommandJsonWithTooMuchInfo } from '.';
-import { HasLog } from '../../logging';
+import { HasLog } from '../../core';
 
 /**
  * @internal

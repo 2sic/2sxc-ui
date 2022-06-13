@@ -1,5 +1,5 @@
 ﻿import { ModifierDnnModule, QuickE, QuickEClipboard } from '.';
-import { HasLog, NoJQ } from '../logging';
+import { HasLog, NoJQ } from '../core';
 
 // Important - for DNN it still uses #jquery
 const dnnSF = (id?: number) => window.$.dnnSF(id);

@@ -1,5 +1,5 @@
 import { Selection } from '.';
-import { HasLog } from '../logging';
+import { HasLog } from '../core';
 
 /**
  * Base class for module / content-block editors

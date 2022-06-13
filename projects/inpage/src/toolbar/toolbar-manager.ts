@@ -1,6 +1,6 @@
 ﻿import { ToolbarConfigFinderAndInitializer } from '.';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
-import { HasLog, Insights } from '../logging';
+import { HasLog, Insights } from '../core';
 import { ToolbarConfigLoader } from './config-loaders/toolbar-config-loader';
 import { Toolbar } from './config/toolbar';
 import { ToolbarInitConfig } from './initialize/toolbar-init-config';

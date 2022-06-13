@@ -1,5 +1,5 @@
 ﻿import { IDialogFrameElement, IFrameBridge } from '.';
-import { HasLog, NoJQ } from '../logging/';
+import { HasLog, NoJQ } from '../core';
 import { QuickDialog } from './quick-dialog';
 
 /**

@@ -1,4 +1,4 @@
-import { HasLog } from '../../logging';
+import { HasLog } from '../../core';
 import { ToolbarRenderer } from './toolbar-renderer';
 
 /**

@@ -1,7 +1,7 @@
 ﻿import { C } from '../constants/index';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { HtmlTools } from '../html/dom-tools';
-import { HasLog, Insights } from '../logging';
+import { HasLog, Insights } from '../core';
 import { renderer } from './render';
 
 //#region WebApi Endpoints used: 2sxc

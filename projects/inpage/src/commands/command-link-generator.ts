@@ -1,7 +1,7 @@
 ﻿import { ItemIdentifierCopy, ItemIdentifierGroup, ItemIdentifierSimple, ItemIdentifierInField, TemplateIdentifier } from '../../../$2sxc/src/cms';
 import { C } from '../constants';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
-import { HasLog, Log } from '../logging';
+import { HasLog, Log } from '../core';
 import { NgUrlValuesWithoutParams } from '../manage/ng-dialog-params';
 import { NoJQ, TypeUnsafe, TypeValue, urlClean } from '../plumbing';
 import { ButtonSafe } from '../toolbar/config';

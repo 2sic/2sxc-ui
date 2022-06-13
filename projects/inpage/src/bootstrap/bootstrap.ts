@@ -1,7 +1,7 @@
 import { Sxc } from '../../../$2sxc/src';
 import { CmdLayout } from '../commands/command/layout';
 import { C } from '../constants';
-import { HasLog, Insights, Log } from '../logging';
+import { HasLog, Insights, Log } from '../core';
 import { EditManager } from '../manage/edit-manager';
 import { NoJQ } from '../plumbing';
 import { QuickDialog } from '../quick-dialog';

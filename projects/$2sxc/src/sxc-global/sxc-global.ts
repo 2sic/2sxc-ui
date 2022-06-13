@@ -1,8 +1,8 @@
 import { UrlParams } from '../tools';
 import { SxcGlobalEnvironment } from '../environment';
 import { Insights, Log } from '../../../core';
-import { ContextIdentifier, Debug, Stats, Sxc, TotalPopup } from '..';
-import { HttpGlobal } from './http-global';
+import { ContextIdentifier, SxcGlobalDebug, Stats, Sxc, TotalPopup } from '..';
+import { SxcGlobalHttp } from './sxc-global-http';
 import { SxcGlobalManage } from './sxc-global-manage';
 
 /**
@@ -95,7 +95,7 @@ export interface SxcGlobal {
     /**
      * 2022-06-01 2dm - I believe this is not used, probably remove
      * @internal */
-    debug: Debug;
+    debug: SxcGlobalDebug;
 
     /** @internal */
     stats: Stats;
@@ -122,7 +122,7 @@ export interface SxcGlobal {
     /**
      * Http helper for API calls and such
      */
-    http: HttpGlobal;
+    http: SxcGlobalHttp;
 
     /**
      * The debugging / insights system. 

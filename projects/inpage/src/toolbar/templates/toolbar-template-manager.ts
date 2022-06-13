@@ -1,5 +1,5 @@
 ﻿import { ToolbarTemplate, ToolbarTemplateDefault, ToolbarTemplateEmpty, ToolbarTemplateSublist } from '.';
-import { HasLog, Insights } from '../../logging';
+import { HasLog, Insights } from '../../core';
 import { Obj } from '../../plumbing';
 
 /**

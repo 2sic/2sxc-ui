@@ -3,7 +3,7 @@ import { InPageButtonJson } from '.';
 import { ToolbarConfigLoader } from '.';
 import { CmdMore, Commands } from '../../commands';
 import { ContextComplete } from '../../context/bundles';
-import { HasLog } from '../../logging';
+import { HasLog } from '../../core';
 import { TypeValue } from '../../plumbing';
 import { Button, Toolbar } from '../config';
 import { ButtonSafe } from '../config/button-safe';

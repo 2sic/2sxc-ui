@@ -4,7 +4,7 @@ const urlManager = new UrlParams();
 const urlDebugState = urlManager.isDebug() === true;
 
 /** @internal */
-export class Debug {
+export class SxcGlobalDebug {
     /**
      * The load-debug state (provided by the url with debug=true)
      */
