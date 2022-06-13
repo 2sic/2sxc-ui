@@ -1,9 +1,9 @@
 ﻿import { BootstrapInPage } from './bootstrap/bootstrap';
-import { Cms } from './cms/Cms';
+import { SxcGlobalCms } from './cms/sxc-global-cms';
 import { ContextComplete } from './context/bundles/context-bundle-button';
 import { DnnActionMenu } from './dnn';
 import { translate, Translator } from './i18n';
-import { SxcRoot } from './interfaces/sxc-controller-in-page';
+import { SxcGlobalWithCms } from './sxc/sxc-global-with-cms';
 import { EditManager } from './manage/edit-manager';
 import { SxcGlobalManage } from './manage/sxc-global-manage';
 import { NoJQ } from './plumbing';
@@ -14,9 +14,10 @@ import { SystemUpgrader } from './system';
  * @internal
  */
 import './toolbar/toolbar-global-enable-shake';
+import { SxcGlobal } from '../../$2sxc/src/sxc-global/sxc-global';
 
 // #1 Note that $2sxc must always exist, the server ensures the load order
-const $2sxc = window.$2sxc as SxcRoot;
+const $2sxc = window.$2sxc as SxcGlobal & SxcGlobalWithCms;
 
 // #2 Now attach initialization helpers and global objects, so that $2sxc always has these
 $2sxc.context = ContextComplete.findContext; // primary API to get the context
@@ -24,7 +25,7 @@ $2sxc._translateInit = (manage: EditManager) => Translator.initManager(manage); 
 $2sxc.translate = translate;    // provide an official translate API for 2sxc
 $2sxc._manage = new SxcGlobalManage();   // used out of this project in ToSic.Sxc.Instance and 2sxc.api.js
 window.$quickE = QuickE.singleton();        // note: not sure if this is needed as a global object...
-$2sxc.cms = new Cms();
+$2sxc.cms = new SxcGlobalCms();
 
 // #3 Initialize all objects as needed
 function loadInpage() {

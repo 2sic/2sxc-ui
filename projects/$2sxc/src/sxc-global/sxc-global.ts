@@ -3,12 +3,14 @@ import { Environment } from '../environment';
 import { Insights, Log } from '../../../core';
 import { ContextIdentifier, Debug, Stats, Sxc, TotalPopup } from '..';
 import { HttpGlobal } from './http-global';
+import { SxcGlobalManage } from './sxc-global-manage';
 
 /**
  * This is the root global `window.$2sxc` function / object. 
  * 
  * It is both a function `window.$2sxc(...)` and object `window.$2sxc.insights...`
  * 
+ * If the page feature `2sxc.JsCms` is enabled, the `window.$2sxc` will also be a [SxcGlobalWithCms](xref:Api.Js.SxcJs.SxcGlobalWithCms)
  */
 // **Documentation notes**
 // Because of limitations in the documentation, the main function isn't documented here as it wouldn't show in docFx
@@ -24,7 +26,7 @@ export interface SxcGlobal {
 
     
     /**
-     * Get an SxcInstance
+     * Get an SxcInstance. Using `$2sxc.get(...)` is the same as using `$2sxc(...)`
      * @param id number: moduleId | HTMLElement: tag in the page | Sxc: an existing sxc - will just be returned | ContextIdentifier: an identifier in complex scenarios without a moduleId/context
      * @param cbid number
      * @returns SxcInstance
@@ -42,7 +44,7 @@ export interface SxcGlobal {
     // _data: any;
 
     /** @internal */
-    _manage: any;
+    _manage: SxcGlobalManage;
 
     /** @internal */
     _translateInit: any;

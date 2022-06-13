@@ -1,5 +1,4 @@
 import { ListWithCursor, TemplateConstants } from '.';
-import { TypeTbD } from '../../plumbing';
 
 /**
  * This describes a button group in a toolbar template.
@@ -12,7 +11,7 @@ export class ToolbarTemplateGroup implements ListWithCursor {
     defaults?: Record<string, string> = {};
     _insertCursor?: 0;
 
-    static is(thing: TypeTbD): thing is ToolbarTemplateGroup {
+    static is(thing: unknown): thing is ToolbarTemplateGroup {
         return (thing as ToolbarTemplateGroup).buttons !== undefined;
     }
 }

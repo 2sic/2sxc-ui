@@ -1,5 +1,4 @@
 ﻿import { Sxc } from '../../../../$2sxc/src';
-import { SxcInstanceEngine } from '../../commands';
 import { CmdLayout } from '../../commands/command/layout';
 import { HasLog, Insights } from '../../logging';
 import { EditManager } from '../../manage/edit-manager';
@@ -10,7 +9,7 @@ import { EditManager } from '../../manage/edit-manager';
  * @internal
  */
 export class DnnActionMenu extends HasLog {
-    private run: typeof SxcInstanceEngine.prototype.run;
+    private run: typeof EditManager.prototype.run;
     private sxc: Sxc;
 
     constructor(moduleId: number) {

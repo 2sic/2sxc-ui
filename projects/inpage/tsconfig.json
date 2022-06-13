@@ -28,7 +28,7 @@
     "./src/**/*.ts",
     "./test/**/*.ts",
     "./typings/**/*.ts"
-  ],
+, "src/cms/sxc-global-cms.ts"  ],
   "exclude": [
     "_reports",
     "bin",

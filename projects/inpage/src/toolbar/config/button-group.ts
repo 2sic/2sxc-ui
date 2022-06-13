@@ -1,5 +1,5 @@
 ﻿import { Button } from '.';
-import { TypeTbD, TypeValue } from '../../plumbing';
+import { TypeValue } from '../../plumbing';
 
 /**
  * @internal
@@ -19,12 +19,12 @@ export class ButtonGroup {
     }
 
     /** Detect if this is a ButtonGroup */
-    static is(thing: TypeTbD): thing is ButtonGroup {
+    static is(thing: unknown): thing is ButtonGroup {
         return (thing as ButtonGroup).buttons !== undefined;
     }
 
     /** Detect if this is a ButtonGroup */
-    static isArray(thing: TypeTbD[]): thing is ButtonGroup[] {
+    static isArray(thing: unknown[]): thing is ButtonGroup[] {
         return thing.length && (thing[0] as ButtonGroup).buttons !== undefined;
     }
 }

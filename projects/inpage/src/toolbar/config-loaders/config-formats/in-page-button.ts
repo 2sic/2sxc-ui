@@ -50,7 +50,7 @@ export class InPageButtonJson {
         return thing.command !== undefined || thing.action !== undefined;
     }
 
-    static isArray(thing: TypeTbD[]): thing is InPageButtonJson[] {
+    static isArray(thing: unknown[]): thing is InPageButtonJson[] {
         return thing.length > 0 && InPageButtonJson.is(thing[0]);
     }
 
@@ -100,7 +100,7 @@ export class InPageButtonJson {
 }
 
 
-function evalPropOrFun(propOrFunction: TypeTbD): TypeUnsafe {
+function evalPropOrFun(propOrFunction: unknown): TypeUnsafe {
     if (propOrFunction === undefined || propOrFunction === null) return false;
     if (typeof (propOrFunction) === 'function') return propOrFunction;
     return () => propOrFunction;

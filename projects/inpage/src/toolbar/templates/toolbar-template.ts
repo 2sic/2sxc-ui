@@ -1,5 +1,5 @@
 ﻿import { ListWithCursor, ToolbarTemplateGroup } from '.';
-import { TypeTbD, TypeValue } from '../../plumbing';
+import { TypeValue } from '../../plumbing';
 import { ToolbarSettings } from '../config/toolbar-settings';
 
 /**
@@ -17,11 +17,11 @@ export class ToolbarTemplate implements ListWithCursor {
     _isToolbarTemplate: true;
     _insertCursor?: 0;
 
-    static is(thing: TypeTbD): thing is ToolbarTemplate {
+    static is(thing: unknown): thing is ToolbarTemplate {
         return (thing as ToolbarTemplate)._isToolbarTemplate;
     }
 
-    static hasGroups(thing: TypeTbD): thing is ToolbarTemplate {
+    static hasGroups(thing: unknown): thing is ToolbarTemplate {
         return Array.isArray((thing as ToolbarTemplate).groups);
     }
 

@@ -1,5 +1,7 @@
 ﻿import { SxcManage } from '../../../$2sxc/src';
-import { SxcInstanceEngine } from '../commands';
+import { RunParamsWithContext } from '../../../$2sxc/src/cms';
+import { SxcGlobalCms } from '../cms/sxc-global-cms';
+import { CommandParams } from '../commands';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { AttrJsonEditContext } from '../context/html-attribute/edit-context-root';
 import { TypeUnsafe } from '../plumbing';
@@ -16,7 +18,7 @@ export class EditManager implements SxcManage {
 
     constructor(
         public editContext: AttrJsonEditContext,
-        private cmdEngine: SxcInstanceEngine,
+        // _cmdEngine: SxcInstanceEngine,
         public context: ContextComplete,
     ) {
     }
@@ -27,8 +29,17 @@ export class EditManager implements SxcManage {
      * run a command - command used in toolbars and custom buttons
      * it is publicly used out of inpage, so take a care to preserve function signature
      */
-    run = this.cmdEngine.run;
-
+    run<T>(
+      nameOrSettings: string | CommandParams,
+      eventOrSettings?: CommandParams | MouseEvent,
+      event?: MouseEvent,
+    ): Promise<void | T> {
+      // Capture cases where this is called using the new/modern params, which is a mistake
+      if ((nameOrSettings as RunParamsWithContext).context || (nameOrSettings as RunParamsWithContext).workflows)
+        throw "You are calling '.manage.run(...)' with a parameter 'context' or workflows. You should probably be calling the new '.cms.run(...)' instead.";
+      const cntx = ContextComplete.findContext(this.context.sxc);
+      return new SxcGlobalCms().runInternal(cntx, nameOrSettings, eventOrSettings, event);
+    }
     /**
      * Generate a button (an <a>-tag) for one specific toolbar-action.
      * @param {InPageButtonJson} actDef - settings, an object containing the spec for the expected button

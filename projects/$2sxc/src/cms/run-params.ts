@@ -2,7 +2,7 @@ import { ContextIdentifier, Sxc } from '..';
 import { CommandParams } from './command-params';
 
 /**
- * Parameters for the Instance cms.run(...) command.
+ * Parameters for the Instance sxc.cms.run(...) command.
  * New in 13.03
  */
 export interface RunParams {
@@ -32,7 +32,7 @@ export interface RunParams {
 }
 
 /**
- * Parameters for the Global cms.run(...) command in Addition to the RunParams.
+ * Parameters for the **Global** $2sxc.cms.run(...) command in Addition to the [RunParams](xref:Api.Js.SxcJs.RunParams).
  * It provides context to the run-params such as a Sxc instance or a tag which it started on.
  * New in 12.10
  */

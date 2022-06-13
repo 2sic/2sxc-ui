@@ -35,7 +35,7 @@ export class Sxc extends HasLog {
   /**
    * CMS operations on this sxc-instance, such as opening the edit dialog etc.
    */
-  cms = new SxcCms(this, 'cms');
+  cms: SxcCms = new SxcCms(this);
   
   /** @internal */
   constructor(

@@ -1,5 +1,4 @@
 ﻿import { Sxc } from '../../../../$2sxc/src';
-import { TypeTbD } from '../../plumbing';
 import { AttrJsonEditContext } from '../html-attribute';
 import { ContextOfInstance, ContextOfPage, ContextOfSystem, ContextOfTenant, ContextOfUser } from '../parts';
 import { ContextOfApp } from '../parts/context-app';
@@ -44,7 +43,7 @@ export class ContextBundleInstance {
 
     }
 
-    static is(thing: TypeTbD): thing is ContextBundleInstance {
+    static is(thing: unknown): thing is ContextBundleInstance {
         const maybeButton = thing as ContextBundleInstance;
         return maybeButton.sxc !== undefined && maybeButton.instance !== undefined;
     }

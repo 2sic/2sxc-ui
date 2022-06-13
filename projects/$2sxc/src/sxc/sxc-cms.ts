@@ -1,5 +1,6 @@
 import { SxcPart } from './sxc-part';
 import { RunParams } from '../cms/run-params';
+import { Sxc } from '.';
 
 /**
  * This is in charge of sxc.cms on the instance level.
@@ -7,6 +8,12 @@ import { RunParams } from '../cms/run-params';
  * In future, it may also have dedicated command like `layout` etc.
  */
 export class SxcCms extends SxcPart {
+
+  /** @internal */
+  constructor(sxc: Sxc) {
+    super(sxc, "cms");
+  }
+
   /**
    * Run a command on this sxc-instance. 
    * Requires edit mode to be on, which would enable the edit-JS parts.
