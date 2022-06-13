@@ -17,22 +17,65 @@ import { SxcGlobalManage } from './sxc-global-manage';
 // So additional information is in the docs-project
 export interface SxcGlobal {
     /**
-     * Get an SxcInstance
+     * Get an Sxc Instance
      * @param id number: moduleId | HTMLElement: tag in the page | Sxc: an existing sxc - will just be returned | ContextIdentifier: an identifier in complex scenarios without a moduleId/context
      * @param cbid number
      * @returns SxcInstance
      */
     (id: number | HTMLElement | ContextIdentifier | Sxc, cbid?: number): Sxc;
 
-    
     /**
-     * Get an SxcInstance. Using `$2sxc.get(...)` is the same as using `$2sxc(...)`
-     * @param id number: moduleId | HTMLElement: tag in the page | Sxc: an existing sxc - will just be returned | ContextIdentifier: an identifier in complex scenarios without a moduleId/context
-     * @param cbid number
+     * Get an Sxc Instance using the moduleId. 
+     * Using `$2sxc.get(...)` is the same as using `$2sxc(...)`
+     * @param moduleId number: moduleId
      * @returns SxcInstance
      * @since v14.01
      */
-    get(id: number | HTMLElement | ContextIdentifier | Sxc, cbid?: number): Sxc;
+    get(moduleId: number): Sxc;
+
+    /**
+     * Get an Sxc Instance using the moduleId and contentBlockId. 
+     * Using `$2sxc.get(...)` is the same as using `$2sxc(...)`
+     * @param moduleId number: moduleId
+     * @param contentBlockId number: content-block ID
+     * @returns Sxc
+     * @since v14.01
+     */
+    get(moduleId: number, contentBlockId: number): Sxc;
+
+    /**
+     * Get an Sxc Instance using a tag / `HtmlElement`. Using `$2sxc.get(...)` is the same as using `$2sxc(...)`
+     * @param tag HTMLElement: tag in the page
+     * @returns Sxc
+     * @since v14.01
+     */
+    get(tag: HTMLElement): Sxc;
+
+    /**
+     * Get an Sxc Instance using a full context-identifier (advanced). Using `$2sxc.get(...)` is the same as using `$2sxc(...)`
+     * @param context ContextIdentifier: full context identifier
+     * @returns Sxc
+     * @since v14.01
+     */
+    get(context: ContextIdentifier): Sxc;
+
+    /**
+     * Get an Sxc Instance passing in an existing Sxc - just for cases where you're not sure what you aready have. Using `$2sxc.get(...)` is the same as using `$2sxc(...)`
+     * @param sxc Sxc: an existing sxc - will just be returned
+     * @returns Sxc - the same Sxc as the one which was passed in
+     * @since v14.01
+     */
+    get(sxc: Sxc): Sxc;
+
+
+    // /**
+    //  * Get an Sxc Instance. Using `$2sxc.get(...)` is the same as using `$2sxc(...)`
+    //  * @param id number: moduleId | HTMLElement: tag in the page | Sxc: an existing sxc - will just be returned | ContextIdentifier: an identifier in complex scenarios without a moduleId/context
+    //  * @param cbid number
+    //  * @returns Sxc
+    //  * @since v14.01
+    //  */
+    // get(id: number | HTMLElement | ContextIdentifier | Sxc, cbid?: number): Sxc;
 
     /** @internal */
     _controllers: { [id: string]: Sxc };

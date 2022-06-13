@@ -39,8 +39,8 @@ export class SxcGlobalCms extends HasLog {
 
 
   /**
-   * Run a command within a specific context.
-   * @param runParams The complete run params context - either an HTML tag which determines a module/instance, or an Sxc instance
+   * Run a command within a specific context - mostly for internal use.
+   * @param runParams The complete run params with a context
    * @returns A promise which triggers when the command has completed.
    */
   run<T>(runParams: RunParamsWithContext): Promise<void | T>;
