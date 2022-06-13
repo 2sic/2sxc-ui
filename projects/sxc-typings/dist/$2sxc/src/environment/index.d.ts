@@ -1,2 +1,2 @@
 export * from './environment-specs';
-export * from './root-environment';
+export * from './sxc-global-environment';

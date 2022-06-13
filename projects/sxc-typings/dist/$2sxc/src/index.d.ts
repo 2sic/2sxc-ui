@@ -4,6 +4,5 @@ export * from './tools';
 export * from './constants';
 export * from './Stats';
 export * from './environment';
-export * from './sxc-instance';
-export * from './sxc-root/';
-export * from './sxc-instance/sxc-manage';
+export * from './sxc';
+export * from './sxc-global';
