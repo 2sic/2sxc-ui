@@ -50,7 +50,7 @@ export class Log {
     /** @internal */
     _parentHasLiveDump: boolean = false;
     /** @internal */
-    keepData: boolean = keepData; //Debug.urlState; // C.Debug.urlState;
+    keepData: boolean = keepData;
     /** @internal */
     _parentHasKeepData: boolean = false;
 

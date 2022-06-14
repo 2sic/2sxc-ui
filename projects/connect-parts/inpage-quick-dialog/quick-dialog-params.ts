@@ -1,5 +1,8 @@
 
-/** These are all the url params the UI needs to function */
+/**
+ * These are all the url params the UI needs to function
+ * @internal
+ */
 export const urlParams = {
   // These are used in UI.html, but we keep them here so we have a full list documented
   pageId: 'tid',

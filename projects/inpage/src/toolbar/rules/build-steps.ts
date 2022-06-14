@@ -1,4 +1,6 @@
-
+/**
+ * @internal
+ */
 export enum BuildSteps {
     toolbar = 'toolbar',
     group = 'group',

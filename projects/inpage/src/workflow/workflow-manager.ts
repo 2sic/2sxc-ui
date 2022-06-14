@@ -1,21 +1,27 @@
-import { WorkflowStep, WorkflowPhases, WorkflowArguments, WorkflowStepHelper } from '.';
-import { SpecialCommands } from '../commands';
+import { WorkflowPhases, WorkflowStep, WorkflowStepCodeArguments, WorkflowStepHelper } from '.';
+import { WorkflowCommands } from '../commands';
 import { ContextComplete } from '../context';
-import { HasLog, Insights, Log } from '../logging';
+import { HasLog, Insights, Log } from '../core';
 import { ToolbarWithWorkflow } from './toolbar-with-workflow';
-import { WorkflowCode } from './workflow';
+import { WorkflowStepCode } from './workflow';
 import { WorkflowHelper } from './workflow-helper';
 
 /**
- * A workflow manager which will run stuff before / after commands.
- * As of now, it must be attached to a toolbar to take effect.
- * Normally the toolbar with raise a `toolbar-init` event where you can then add steps
+ * A workflow manager _of a Toolbar_ which will run stuff before / after commands.
+ * When toolbars are created, they will add a Manager and then raise an event for in-page code to add workflow steps. 
+ * Normally the toolbar with raise a `toolbar-init` event where you can then add steps.
  */
 export class WorkflowManager extends HasLog {
 
-    /** The workflow steps registered here */
+    /** 
+     * The workflow steps registered on this toolbar
+     * @internal
+     */
     steps: WorkflowStep[] = [];
 
+    /**
+     * @internal
+     */
     constructor(parentLog: Log, private isDummy = false) {
         super('Cmd.Wrkflw', parentLog, 'constructor');
     }
@@ -34,6 +40,7 @@ export class WorkflowManager extends HasLog {
 
     /**
      * Add a single workflow step to this manager
+     * @internal
      */
     private addOne(step: WorkflowStep) {
         step = WorkflowStepHelper.initDefaults(step);
@@ -50,9 +57,10 @@ export class WorkflowManager extends HasLog {
 
     /**
      * Run a workflow.
-     * @returns {Promise<WorkflowArguments>} This will let you chain what happens. The arguments contain a status if it should be cancelled.
+     * @internal
+     * @returns {Promise<WorkflowStepCodeArguments>} This will let you chain what happens. The arguments contain a status if it should be cancelled.
      */
-    run(wfArgs: WorkflowArguments): Promise<WorkflowArguments> {
+    run(wfArgs: WorkflowStepCodeArguments): Promise<WorkflowStepCodeArguments> {
         const cl = this.log.call('run', `'${wfArgs.command}' for '${wfArgs.phase}'`);
 
         // if this is just a temporary / dummy workflow manager, just return a success-promise
@@ -64,7 +72,7 @@ export class WorkflowManager extends HasLog {
         // Find all steps to run
         const stepsForCommand = this.steps
             // only those of this command or all
-            .filter((s) => s.command === wfArgs.command || s.command === SpecialCommands.all)
+            .filter((s) => s.command === wfArgs.command || s.command === WorkflowCommands.all)
             .filter((s) => s.phase === wfArgs.phase || s.phase === WorkflowPhases.all)
             // only those having real code
             .filter((s) => s.code)
@@ -76,7 +84,7 @@ export class WorkflowManager extends HasLog {
         }
 
         // run in sequence but cancel at any time if necessary
-        const promise = new Promise<WorkflowArguments>((resolve, reject) => {
+        const promise = new Promise<WorkflowStepCodeArguments>((resolve, reject) => {
             let promiseChain = Promise.resolve(wfArgs);
             // let previousArgs = wfArgs;
             // let interruptChain = false;
@@ -93,7 +101,12 @@ export class WorkflowManager extends HasLog {
         return promise;
     }
 
-    /** Attach a workflow to a toolbar */
+    /**
+     * Attach a workflow to a toolbar.
+     * Will be used at start to hook this manager to the toolbar.
+     * Then the init-event will be called to allow adding steps.
+     * @internal
+     */
     attach(node: HTMLElement, context: ContextComplete) {
         const cl = this.log.call('attach');
         if (!node) return;
@@ -102,7 +115,15 @@ export class WorkflowManager extends HasLog {
         cl.done();
     }
 
-    private runNextPromiseIfNotCancelled(currentArgs: WorkflowArguments | boolean, prevArgs: WorkflowArguments, nextFactory: WorkflowCode) {
+    /**
+     * 
+     * @param currentArgs 
+     * @param prevArgs 
+     * @param nextFactory 
+     * @returns 
+     * @internal
+     */
+    private runNextPromiseIfNotCancelled(currentArgs: WorkflowStepCodeArguments | boolean, prevArgs: WorkflowStepCodeArguments, nextFactory: WorkflowStepCode) {
         // determine cancel based on either a boolean result or a real WorkflowArguments with cancel.
         const cancel = WorkflowHelper.isCancelled(currentArgs);
         // make sure we have real arguments no matter what came in - assuming we have prevArgs
@@ -114,6 +135,6 @@ export class WorkflowManager extends HasLog {
 
 }
 
-function emptyWorkflow(wfArgs: WorkflowArguments) {
-    return Promise.resolve<WorkflowArguments>(wfArgs);
+function emptyWorkflow(wfArgs: WorkflowStepCodeArguments) {
+    return Promise.resolve<WorkflowStepCodeArguments>(wfArgs);
 }

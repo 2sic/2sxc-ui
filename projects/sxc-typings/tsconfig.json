@@ -1,0 +1,20 @@
+{
+  "extends": "../inpage/tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../../sxc-typings/dist",
+    "declaration": true,
+    "removeComments": false,
+    "stripInternal": true,
+    "emitDeclarationOnly": true
+  },
+  "include": [
+    "../inpage/src/**/*.ts",
+
+    "../$2sxc/src/*.ts",
+    "../$2sxc/src/*.js", 
+    "../$2sxc/src/**/*.ts",
+  ],
+  "exclude": [
+    "**/test/**/*.ts",
+  ]
+}

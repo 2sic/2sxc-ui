@@ -1,18 +1,22 @@
 ﻿import { ButtonCommand } from '.';
 import { CommandCode } from '../../commands/command-code';
 import { CommandLinkGenerator } from '../../commands/command-link-generator';
-import { CommandParams } from '../../commands/command-params';
+import { CommandParams } from '../../../../$2sxc/src/cms/command-params';
 import { ContextComplete } from '../../context/bundles/context-bundle-button';
 import { Obj, TypeTbD } from '../../plumbing';
 import { BuildRule } from '../rules';
 
-/** This is the most common call signature on most ButtonConfig properties */
+/**
+ * This is the most common call signature on most ButtonConfig properties
+ * @internal
+ */
 export type ButtonPropGen<T> = (context: ContextComplete) => T;
 
 type ButtonGenOrProp<T> = ButtonPropGen<T> | T;
 
 /**
  * The real button configuration as it's used at runtime
+ * @internal
  */
 export class Button {
     /** The ID is important for tracking this button and applying modifiers */
@@ -88,7 +92,7 @@ export class Button {
 
 
     /** Detect if this is a Button */
-    static is(thing: TypeTbD): thing is Button {
+    static is(thing: unknown): thing is Button {
         return (thing as Button).command !== undefined;
     }
 

@@ -2,6 +2,9 @@
 import { translate } from '../../i18n';
 import { Actions } from './content-list-actions';
 
+/**
+ * @internal
+ */
 export const CmdPublish = 'publish';
 
 /**

@@ -1,17 +1,17 @@
-﻿import { SpecialCommands } from '../commands';
+﻿import { WorkflowCommands } from '../commands';
 import { C } from '../constants';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { HtmlTools } from '../html/dom-tools';
-import { SxcEdit } from '../interfaces/sxc-instance-editable';
-import { windowInPage as window } from '../interfaces/window-in-page';
-import { AssetsLoader, HasLog, Insights, NoJQ } from '../logging';
+import { AssetsLoader, HasLog, Insights, NoJQ } from '../core';
 import { QuickE } from '../quick-edit/quick-e';
-import { WorkflowArguments, WorkflowHelper, WorkflowPhases } from '../workflow';
+import { SxcTools } from '../sxc/sxc-tools';
+import { WorkflowHelper, WorkflowPhases, WorkflowStepCodeArguments } from '../workflow';
 import { ContentBlockEditor } from './content-block-editor';
 
 /**
  * This is the rendering compontent, responsible to update the page when something changes.
  * Depending on the feature-set it will use ajax or not
+ * @internal
  */
 class RendererGlobal extends HasLog {
 
@@ -27,7 +27,7 @@ class RendererGlobal extends HasLog {
      * @returns {} nothing
      */
     showMessage(context: ContextComplete, newContent: string): void {
-        SxcEdit.getTag(context.sxc).innerHTML = newContent;
+        SxcTools.getTag(context.sxc).innerHTML = newContent;
     }
 
 
@@ -42,7 +42,7 @@ class RendererGlobal extends HasLog {
 
         // get workflow engine or a dummy engine
         const wf = context.commandWorkflow ?? WorkflowHelper.getDummyManager();
-        const promiseChain = wf.run(new WorkflowArguments(SpecialCommands.refresh, WorkflowPhases.before, context));
+        const promiseChain = wf.run(new WorkflowStepCodeArguments(WorkflowCommands.refresh, WorkflowPhases.before, context));
 
         // 2021-02-21 2dm New in 11.12 enable toolbar to not reload in a SPA scenario
         const finalPromise = promiseChain.then((wfArgs) => {
@@ -127,7 +127,7 @@ class RendererGlobal extends HasLog {
                 NoJQ.append(document.head, newHead, false);
                 // Must disable toolbar before we attach to DOM
                 if (justPreview) HtmlTools.disable(newDom);
-                NoJQ.replaceWith(SxcEdit.getTag(context.sxc), newDom, false);
+                NoJQ.replaceWith(SxcTools.getTag(context.sxc), newDom, false);
 
                 // run scripts manually to ensure proper timing
                 const scripts = [
@@ -140,7 +140,7 @@ class RendererGlobal extends HasLog {
 
                 // Must disable toolbar before we attach to DOM
                 if (justPreview) HtmlTools.disable(newDom);
-                NoJQ.replaceWith(SxcEdit.getTag(context.sxc), newDom, true);
+                NoJQ.replaceWith(SxcTools.getTag(context.sxc), newDom, true);
             }
 
             // reset the cache, so the sxc-object is refreshed
@@ -153,7 +153,9 @@ class RendererGlobal extends HasLog {
 }
 
 
-
+/**
+ * @internal
+ */
 export const renderer = new RendererGlobal();
 
 interface ContentBlockReplacement {

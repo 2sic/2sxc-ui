@@ -1,16 +1,20 @@
-﻿import { SxcEdit } from '../../interfaces/sxc-instance-editable';
+﻿import { Sxc } from '../../../../$2sxc/src';
 import { Obj } from '../../plumbing';
+import { SxcTools } from '../../sxc/sxc-tools';
 import { Button } from '../../toolbar/config/button';
 import { WorkflowManager } from '../../workflow';
 import { AttrJsonEditContext } from '../html-attribute';
 import { ContextBundleToolbar } from './context-bundle-toolbar';
 
+/**
+ * @internal
+ */
 export class ContextComplete extends ContextBundleToolbar {
     button?: Button;
 
     commandWorkflow?: WorkflowManager;
 
-    constructor(editCtx: AttrJsonEditContext, sxc?: SxcEdit) {
+    constructor(editCtx: AttrJsonEditContext, sxc?: Sxc) {
         super(editCtx, sxc);
         // note that the button will not be filled here, as it will be filled somewhere else
     }
@@ -20,18 +24,17 @@ export class ContextComplete extends ContextBundleToolbar {
      * @param htmlElement or Id (moduleId)
      * @param cbid
      */
-    static findContext(tagOrSxc: SxcEdit | HTMLElement | number, cbid?: number): ContextComplete {
-        // 2021-09-17 spm assume this function doesn't use jquery
-        let sxc: SxcEdit;
+    static findContext(tagOrSxc: Sxc | HTMLElement | number, cbid?: number): ContextComplete {
+        let sxc: Sxc;
         let containerTag: HTMLElement = null;
 
-        if (SxcEdit.is(tagOrSxc)) { // it is SxcInstance
+        if (Sxc.is(tagOrSxc)) { // it is SxcInstance
             sxc = tagOrSxc;
         } else if (typeof tagOrSxc === 'number') { // it is number
-            sxc = SxcEdit.get(tagOrSxc, cbid);
+            sxc = window.$2sxc(tagOrSxc, cbid);
         } else { // it is HTMLElement
-            sxc = SxcEdit.get(tagOrSxc);
-            containerTag = SxcEdit.getContainerTag(tagOrSxc);
+            sxc = window.$2sxc(tagOrSxc);
+            containerTag = SxcTools.getContainerTag(tagOrSxc);
         }
 
         const contextOfButton = ContextComplete.getContextInstance(sxc, containerTag);
@@ -51,7 +54,7 @@ export class ContextComplete extends ContextBundleToolbar {
         // make a copy
         const copyOfContext = Obj.DeepClone(contextOfButton); // JSON.parse(JSON.stringify(contextOfButton));
         // bring sxc back to context
-        contextOfButton.sxc = SxcEdit.get(htmlElementOrId) as SxcEdit;
+        contextOfButton.sxc = window.$2sxc(htmlElementOrId) as Sxc;
         return copyOfContext;
     }
 
@@ -60,8 +63,8 @@ export class ContextComplete extends ContextBundleToolbar {
      * @param sxc
      * @param htmlElement
      */
-    static getContextInstance(sxc: SxcEdit, htmlElement?: HTMLElement): ContextComplete {
-        const editContext = SxcEdit.getEditContext(sxc, htmlElement);
+    static getContextInstance(sxc: Sxc, htmlElement?: HTMLElement): ContextComplete {
+        const editContext = SxcTools.getEditContext(sxc, htmlElement);
         return new ContextComplete(editContext, sxc);
     }
 

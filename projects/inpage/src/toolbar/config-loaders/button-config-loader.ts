@@ -3,14 +3,14 @@ import { InPageButtonJson } from '.';
 import { ToolbarConfigLoader } from '.';
 import { CmdMore, Commands } from '../../commands';
 import { ContextComplete } from '../../context/bundles';
-import { HasLog } from '../../logging';
-// import { InstanceConfig } from '../../manage/instance-config';
-import { DictionaryValue } from '../../plumbing';
+import { HasLog } from '../../core';
+import { TypeValue } from '../../plumbing';
 import { Button, Toolbar } from '../config';
 import { ButtonSafe } from '../config/button-safe';
 
 /**
  * This is a system to build button configurations
+ * @internal
  */
 export class ButtonConfigLoader extends HasLog {
 
@@ -105,8 +105,8 @@ export class ButtonConfigLoader extends HasLog {
      * @param actions
      */
     addDefaultBtnSettings(btn: Button,
-                          groupDefaults: DictionaryValue | null,
-                          tlbDefaults: DictionaryValue | null | undefined,
+                          groupDefaults: Record<string, TypeValue> | null,
+                          tlbDefaults: Record<string, TypeValue> | null | undefined,
                           actions: Commands) {
         const cl = this.log.call('addDefaultBtnSettings', '', `for ${() => btn.command.name}`);
         for (let d = 0; d < btnProperties.length; d++)
@@ -163,11 +163,11 @@ const btnProperties = [
  * @param propName
  */
 function fallbackBtnSetting(btn: Button,
-                            groupDefaults: DictionaryValue | null,
-                            toolbarDefaults: DictionaryValue | null | undefined,
+                            groupDefaults: Record<string, TypeValue> | null,
+                            toolbarDefaults: Record<string, TypeValue> | null | undefined,
                             actions: Commands,
                             propName: string) {
-    const target = btn as unknown as DictionaryValue;
+    const target = btn as unknown as Record<string, TypeValue>;
 
     // skip it property is already set
     if (target[propName])
@@ -184,7 +184,7 @@ function fallbackBtnSetting(btn: Button,
     if (btn.command && btn.command.name) {
         const a = actions.get(btn.command.name);
         if (a && a.buttonDefaults) {
-            const c = a.buttonDefaults as DictionaryValue;
+            const c = a.buttonDefaults as Record<string, TypeValue>;
             if (c[propName])
                 return target[propName] = c[propName];
         }

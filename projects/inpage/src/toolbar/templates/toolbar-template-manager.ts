@@ -1,10 +1,11 @@
 ﻿import { ToolbarTemplate, ToolbarTemplateDefault, ToolbarTemplateEmpty, ToolbarTemplateSublist } from '.';
-import { HasLog, Insights } from '../../logging';
+import { HasLog, Insights } from '../../core';
 import { Obj } from '../../plumbing';
 
 /**
  * The template manager provides toolbar templates to the entire system.
  * It basically keeps a list of predefined templates, and returns the ones needed
+ * @internal
  */
 export class ToolbarTemplateManager extends HasLog {
     /** Singleton */
@@ -16,7 +17,7 @@ export class ToolbarTemplateManager extends HasLog {
     configTemplateList: ToolbarTemplate[] = [];
 
     /** hash - table of templates, to be used a list()['template - name'] */
-    list: HashTable<ToolbarTemplate> = {};
+    list: Record<string, ToolbarTemplate> = {};
 
     constructor() {
         super('Tlb.TmpMan', null, 'build');

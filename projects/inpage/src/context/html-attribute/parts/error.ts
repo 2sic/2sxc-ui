@@ -1,3 +1,6 @@
-﻿export class AttrJsonError {
+﻿/**
+ * @internal
+ */
+export class AttrJsonError {
   type: string;
 }

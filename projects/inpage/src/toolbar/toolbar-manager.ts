@@ -1,6 +1,6 @@
 ﻿import { ToolbarConfigFinderAndInitializer } from '.';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
-import { HasLog, Insights } from '../logging';
+import { HasLog, Insights } from '../core';
 import { ToolbarConfigLoader } from './config-loaders/toolbar-config-loader';
 import { Toolbar } from './config/toolbar';
 import { ToolbarInitConfig } from './initialize/toolbar-init-config';
@@ -8,6 +8,7 @@ import { ToolbarInitConfig } from './initialize/toolbar-init-config';
 /**
  * Toolbar manager for the whole page - basically a set of APIs
  * the toolbar manager is an internal helper taking care of toolbars, buttons etc.
+ * @internal
  */
 export class ToolbarManager extends HasLog {
 

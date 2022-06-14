@@ -1,4 +1,4 @@
-import { JsInfo } from '..';
+import { EnvironmentSpecs } from '..';
 import { Log } from '../../../core';
 import { EnvironmentMetaLoader } from './env-loader-meta';
 
@@ -29,7 +29,7 @@ export class EnvironmentLoaderDynamic {
     this.observer = new MutationObserver((mutationsList: MutationRecord[]) => {
       for(const mut of mutationsList)
         if (mut.type === 'attributes' && mut.attributeName === attribute)
-          this.mainLoader.updateEnv(JSON.parse(this.mainLoader.getMetaContent()) as JsInfo)
+          this.mainLoader.updateEnv(JSON.parse(this.mainLoader.getMetaContent()) as EnvironmentSpecs)
     });
     this.log.add('start observing meta tag');
     this.observer.observe(this.mainLoader.getJsApiMetaTag(), { attributes: true, childList: false, subtree: false });

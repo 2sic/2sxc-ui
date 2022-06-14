@@ -9,21 +9,14 @@
 
 // early things without dependencies, which may be needed by others
 export * from './_/window';
-export * from './tools/total-popup';
-export * from './tools/url-param-manager';
+export * from './data';
+export * from './tools';
 export * from './constants';
 export * from './Stats';
 
 export * from './environment';
 
-export * from './http/sxc-http';
-export * from './sxc-instance';
+export * from './sxc';
 
-export * from './sxc-root/debug';
-export * from './sxc-root/context-identifier';
-export * from './sxc-root/sxc-root';
-export * from './sxc-root/sxc-root-builder';
-export * from './sxc-root/sxc-root-internals';
+export * from './sxc-global';
 
-export * from './sxc-instance/sxc-instance-manage';
-export * from './plumbing';

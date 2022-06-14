@@ -5,10 +5,10 @@
   "license": "MIT",
   "scripts": {
     "dev-angular": "ng build --watch",
-    "dev-dist": "node ../webpack/distribute2.js ./dist/ng /dist/ng -w",
-    "dev": "concurrently \"ng build --configuration development --watch\" \"node ../webpack/distribute2.js ./dist/ng /dist/ng -w\"",
-    "release": "set NODE_ENV=production && ng build --configuration production && node ../webpack/distribute2.js ./dist/ng /dist/ng",
-    "release-watch": "set NODE_ENV=production && concurrently \"ng build --configuration production --watch\"  \"node ../webpack/distribute2.js ./dist/ng /dist/ng -w\""
+    "dev-dist": "node ../webpack/distribute2.js ./dist/quickDialog /dist/quickDialog -w",
+    "dev": "concurrently \"ng build --configuration development --watch\" \"node ../webpack/distribute2.js ./dist/quickDialog /dist/quickDialog -w\"",
+    "release": "set NODE_ENV=production && ng build --configuration production && node ../webpack/distribute2.js ./dist/quickDialog /dist/quickDialog",
+    "release-watch": "set NODE_ENV=production && concurrently \"ng build --configuration production --watch\"  \"node ../webpack/distribute2.js ./dist/quickDialog /dist/quickDialog -w\""
   },
   "private": true,
   "dependencies": {
@@ -29,8 +29,8 @@
     "core-js": "3.6.4",
     "hoek": "^6.1.3",
     "ngx-build-plus": "^13.0.1",
-    "node-sass": "^4.14.1",
     "rxjs": "6.6.0",
+    "sass": "^1.52.3",
     "tslib": "^1.10.0",
     "zone.js": "~0.11.4"
   },

@@ -1,6 +1,9 @@
 ﻿import { Commands } from '..';
 import { contentItems } from '../../entity-manipulation/item-commands';
 
+/**
+ * @internal
+ */
 export const CmdDelete = 'delete';
 /**
  * import this module to commands.ts

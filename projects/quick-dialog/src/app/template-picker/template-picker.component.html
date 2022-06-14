@@ -39,7 +39,7 @@
         </ng-template>
 
         <!-- App Selector -->
-        <div *ngIf="!isContent; else contentApp" class="tiles">
+        <div *ngIf="!isContent; else contentApp" class="tiles" [ngClass]="{ 'show-installer': !isBadContextForInstaller && showInstaller }">
 
           <div class="tile"
             [ngClass]="{ active: app?.AppId === a.AppId, blocked: preventTypeSwitch }"
@@ -59,32 +59,11 @@
             </div>
           </div>
 
-          <!-- install and manage buttons -->
-          <div class="tile config" *ngIf="showAdvanced" (click)="run('app-import')" [attr.title]="'TemplatePicker.Install' | translate">
-            <div class="bg">
-              <div class="bg-icon">
-                <mat-icon>get_app</mat-icon>
-              </div>
-            </div>
-            <div class="title show">
-              <span>{{"TemplatePicker.Install" | translate}}</span>
-            </div>
-          </div>
-          <div class="tile config" *ngIf="showAdvanced" (click)="run('zone')" [attr.title]="'TemplatePicker.Zone' | translate">
-            <div class="bg">
-              <div class="bg-icon">
-                <mat-icon>apps</mat-icon>
-              </div>
-            </div>
-            <div class="title show">
-              <span>{{"TemplatePicker.Zone" | translate}}</span>
-            </div>
-          </div>
         </div>
 
         <!-- Content-Type selection (when not a generic app, but the default content-app) -->
         <ng-template #contentApp>
-          <div class="tiles">
+          <div class="tiles" [ngClass]="{ 'show-installer': !isBadContextForInstaller && showInstaller }">
             <div mat-button class="tile"
               [ngClass]="{ active: contentType ? contentType?.StaticName === c.StaticName : defaultContentType?.StaticName === c.StaticName, blocked: preventTypeSwitch }"
               [attr.title]="(c.Label | translate) + (showDebug ? ' (' + c.StaticName + ')' : '')"
@@ -108,7 +87,7 @@
 
       <!-- template selection after app/content-type selection -->
       <mat-tab *ngIf="isContent ? contentType : app" [label]="('TemplatePicker.ChangeView' | translate) + ' (' + templates.length + ')'">
-        <div class="tiles">
+        <div class="tiles" [ngClass]="{ 'show-installer': !isBadContextForInstaller && showInstaller }">
           <mat-spinner class="templates-spinner" *ngIf="templatesLoading$ | async"></mat-spinner>
           <div class="tile"
             [ngClass]="{ active: template?.TemplateId === t.TemplateId }"
@@ -138,14 +117,25 @@
           </div>
         </div>
       </mat-tab>
-      <!-- Search -->
-      <mat-tab disabled>
+
+      <mat-tab disabled *ngIf="!(!isBadContextForInstaller && showInstaller)">
         <ng-template mat-tab-label>
+          <!-- search -->
           <div class="search-field">
             <input type="text" *ngIf="tabIndex === 0 && !isContent" [(ngModel)]="appFilter">
             <input type="text" *ngIf="tabIndex === 0 && isContent" [(ngModel)]="contentTypeFilter">
             <input type="text" *ngIf="tabIndex === 1" [(ngModel)]="templateFilter">
           </div>
+
+          <!-- install and manage buttons -->
+          <button mat-button class="config-btn" *ngIf="!isContent && showAdvanced" (click)="run('app-import')" [attr.title]="'TemplatePicker.Install' | translate">
+            <mat-icon>get_app</mat-icon>
+            {{"TemplatePicker.Install" | translate}}
+          </button>
+          <button mat-button class="config-btn" *ngIf="!isContent && showAdvanced" (click)="run('apps')" [attr.title]="'TemplatePicker.Zone' | translate">
+            <mat-icon>apps</mat-icon>
+            {{"TemplatePicker.Zone" | translate}}
+          </button>
         </ng-template>
       </mat-tab>
     </mat-tab-group>

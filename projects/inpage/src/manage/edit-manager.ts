@@ -1,9 +1,9 @@
-﻿import { SxcInstanceManage } from '../../../$2sxc/src';
-import { SxcInstanceEngine } from '../commands';
+﻿import { SxcManage } from '../../../$2sxc/src';
+import { RunParamsWithContext } from '../../../$2sxc/src/cms';
+import { SxcGlobalCms } from '../cms/sxc-global-cms';
+import { CommandParams } from '../commands';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { AttrJsonEditContext } from '../context/html-attribute/edit-context-root';
-import { ContextOfUser } from '../context/parts/context-user';
-import { SxcEdit } from '../interfaces/sxc-instance-editable';
 import { TypeUnsafe } from '../plumbing';
 import { ToolbarManager } from '../toolbar';
 import { ToolbarSettings } from '../toolbar/config';
@@ -12,14 +12,13 @@ import { ToolbarRenderer } from '../toolbar/render/toolbar-renderer';
 
 /**
  * Instance specific edit manager
+ * @internal
  */
-export class EditManager implements SxcInstanceManage {
+export class EditManager implements SxcManage {
 
     constructor(
-        private sxc: SxcEdit,
-        private editContext: AttrJsonEditContext,
-        private userInfo: ContextOfUser,
-        private cmdEngine: SxcInstanceEngine,
+        public editContext: AttrJsonEditContext,
+        // _cmdEngine: SxcInstanceEngine,
         public context: ContextComplete,
     ) {
     }
@@ -30,8 +29,17 @@ export class EditManager implements SxcInstanceManage {
      * run a command - command used in toolbars and custom buttons
      * it is publicly used out of inpage, so take a care to preserve function signature
      */
-    run = this.cmdEngine.run;
-
+    run<T>(
+      nameOrSettings: string | CommandParams,
+      eventOrSettings?: CommandParams | MouseEvent,
+      event?: MouseEvent,
+    ): Promise<void | T> {
+      // Capture cases where this is called using the new/modern params, which is a mistake
+      if ((nameOrSettings as RunParamsWithContext).context || (nameOrSettings as RunParamsWithContext).workflows)
+        throw "You are calling '.manage.run(...)' with a parameter 'context' or workflows. You should probably be calling the new '.cms.run(...)' instead.";
+      const cntx = ContextComplete.findContext(this.context.sxc);
+      return new SxcGlobalCms().runInternal(cntx, nameOrSettings, eventOrSettings, event);
+    }
     /**
      * Generate a button (an <a>-tag) for one specific toolbar-action.
      * @param {InPageButtonJson} actDef - settings, an object containing the spec for the expected button
@@ -65,27 +73,10 @@ export class EditManager implements SxcInstanceManage {
 
     //#endregion official, public properties - everything below this can change
 
-    _context = this.context;
-
     /**
      * internal method to find out if it's in edit-mode
      */
     _isEditMode = () => this.editContext.Environment.IsEditable ?? false;
-
-    /**
-     * used for various dialogues
-     */
-    _reloadWithAjax = this.context.app.supportsAjax;
-
-    /** metadata necessary to know what/how to edit */
-    _editContext = this.editContext;
-
-    /** used to handle the commands for this content-block */
-    _commands = this.cmdEngine;
-
-    _user = this.userInfo;
-
-
 
     /**
      * change config by replacing the guid, and refreshing dependent sub-objects
@@ -95,36 +86,4 @@ export class EditManager implements SxcInstanceManage {
         this.editContext.contentBlock.Guid = newGuid;
     }
 
-    // /**
-    //  * init this object
-    //  */
-    // init(): void {
-    //     // const tag = SxcEdit.getTag(this.sxc);
-    //     // enhance UI in case there are known errors / issues
-    //     // const isErrorState = this.editContext && this.editContext.error && this.editContext.error.type;
-    //     // 2022-05-02 2dm - not sure if this is actually needed any more... 
-    //     // it only handled a single error
-    //     // if (isErrorState)
-    //     //     handleErrors(this.editContext.error.type, tag);
-    // }
-
-
 }
-
-
-// /**
-//  * private: show error when the app-data hasn't been installed yet for this imported-module
-//  */
-// function handleErrors(errType: string, cbTag: HTMLElement): void {
-//     const errWrapper = NoJQ.domFromString('<div class="dnnFormMessage dnnFormWarning sc-element"></div>')[0];
-//     let msg = '';
-//     const toolbar = NoJQ.domFromString('<ul class="sc-menu"></ul>')[0];
-//     if (errType === 'DataIsMissing') {
-//         msg =
-//             'Error: System.Exception: Data is missing - usually when a site is copied but the content / apps have not been imported yet - check 2sxc.org/help?tag=export-import';
-//         toolbar.setAttribute('data-toolbar', '[{\"action\": \"zone\"}, {\"action\": \"more\"}]');
-//     }
-//     errWrapper.append(msg);
-//     errWrapper.append(toolbar);
-//     cbTag.append(errWrapper);
-// }

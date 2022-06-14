@@ -1,8 +1,7 @@
 ﻿import { IDialogFrameElement, IIFrameBridge } from '.';
 import { C } from '../constants';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
-import { $2sxcInPage } from '../interfaces/sxc-controller-in-page';
-import { HasLog, Insights } from '../logging';
+import { HasLog, Insights } from '../core';
 import { IFrameBridge } from './iframe-bridge';
 import { QuickDialogContainer } from './quick-dialog-container';
 import * as QuickEditState from './state';
@@ -19,6 +18,7 @@ interface IFrameWindow extends Window {
 /**
  * this is a dialog manager which is in charge of all quick-dialogues
  * it always has a reference to the latest dialog created by a.ny module instance
+ * @internal
  */
 export class QuickDialog extends HasLog {
 
@@ -143,27 +143,7 @@ export class QuickDialog extends HasLog {
     private setUrlToQuickDialog(url: string): string {
         const cl = this.log.call('setUrlToQuickDialog', url);
         // change default url-schema from the primary angular-app to the quick-dialog
-        url = url
-            .replace(C.DialogPaths.ng8, C.DialogPaths.quickDialog);
-        url = this.changePathToLocalhostForDev(url);
-        return cl.return(url);
-    }
-
-
-    /**
-     * special debug-code when running on local ng-serve
-     * this is only activated if the developer manually sets a value in the localStorage
-     * @param url
-     */
-    private changePathToLocalhostForDev(url: string): string {
-        const cl = this.log.call('changePathToLocalhostForDev', url);
-        try {
-            const devMode = localStorage.getItem('devMode');
-            if (devMode && !!devMode)
-                return url.replace($2sxcInPage.env.uiRoot() + 'dist/ng/ui.html', 'http://localhost:4200');
-        } catch (e) {
-            // ignore
-        }
+        url = url.replace(C.DialogPaths.eavUi, C.DialogPaths.quickDialog);
         return cl.return(url);
     }
 }

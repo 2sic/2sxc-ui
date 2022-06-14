@@ -1,10 +1,11 @@
 ﻿import { ModifierBase, QeSelectors, QuickE, QuickEClipboard, Selection } from '.';
-import { SxcEdit } from '../interfaces/sxc-instance-editable';
+import { SxcTools } from '../sxc/sxc-tools';
 import { ContextForLists } from './context-for-lists';
 import { ModifierContentBlockInstance } from './modifier-content-block-internal';
 
 /**
  * extend the quick edit with the core commands
+ * @internal
  */
 export class ModifierContentBlock extends ModifierBase {
 
@@ -13,7 +14,7 @@ export class ModifierContentBlock extends ModifierBase {
     }
 
     getInstanceModifier(tag: HTMLElement) {
-        const sxc = SxcEdit.get(tag);
+        const sxc = window.$2sxc(tag);
         return new ModifierContentBlockInstance(this, sxc);
     }
 
@@ -48,7 +49,7 @@ export class ModifierContentBlock extends ModifierBase {
      * find the real index of a block tag as it may not match the DOM index
      */
     findListIndex(tag: HTMLElement, fallback: number): number {
-        const editContext = SxcEdit.getEditContextOfTag(tag);
+        const editContext = SxcTools.getEditContextOfTag(tag);
         const listIndex = editContext?.contentBlockReference?.parentIndex ?? fallback;
         return listIndex;
     }

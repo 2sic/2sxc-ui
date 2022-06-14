@@ -1,21 +1,22 @@
-﻿import { SxcInstanceEngine } from '../../commands';
+﻿import { Sxc } from '../../../../$2sxc/src';
 import { CmdLayout } from '../../commands/command/layout';
-import { SxcEdit } from '../../interfaces/sxc-instance-editable';
-import { HasLog, Insights } from '../../logging';
+import { HasLog, Insights } from '../../core';
+import { EditManager } from '../../manage/edit-manager';
 
 
 /**
  * Maps actions of the module menu to JS actions - needed because onclick event can't be set (actually, a bug in DNN)
+ * @internal
  */
 export class DnnActionMenu extends HasLog {
-    private run: typeof SxcInstanceEngine.prototype.run;
-    private sxc: SxcEdit;
+    private run: typeof EditManager.prototype.run;
+    private sxc: Sxc;
 
     constructor(moduleId: number) {
         super('Dnn.Menu', null, `modId: ${moduleId}`);
         Insights.add('dnn-menu', `mod: ${moduleId}`, this.log);
-        this.sxc = SxcEdit.get(moduleId);
-        this.run = this.sxc.manage.run;
+        this.sxc = window.$2sxc(moduleId);
+        this.run = (this.sxc.manage as EditManager).run;
     }
 
     changeLayoutOrContent = () => { this.run(CmdLayout); };

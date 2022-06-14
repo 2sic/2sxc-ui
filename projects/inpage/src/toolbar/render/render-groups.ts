@@ -3,6 +3,9 @@ import { ButtonGroup } from '../config';
 import { RenderPart } from './render-part-base';
 import { ToolbarRenderer } from './toolbar-renderer';
 
+/**
+ * @internal
+ */
 export class RenderButtonGroups extends RenderPart {
     constructor(parent: ToolbarRenderer) {
         super(parent, 'Rnd.Groups');

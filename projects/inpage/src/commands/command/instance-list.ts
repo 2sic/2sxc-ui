@@ -1,5 +1,8 @@
 ﻿import { Commands, SharedLogic } from '..';
 
+/**
+ * @internal
+ */
 export const CmdInstanceList = 'instance-list';
 /**
  * import this module to commands.ts

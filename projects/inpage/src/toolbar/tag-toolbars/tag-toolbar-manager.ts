@@ -5,6 +5,7 @@ import { NoJQ } from '../../plumbing';
  * These have certain shared aspects, like:
  * - a numbering scheme to keep them apart
  * - a mouse tracker to keep track of the position as the toolbar follows the scroll
+ * @internal
  */
 export class TagToolbarManager {
     /** Mark Dom-Notes with the ID which Tag-Toolbar they want on mouse-over */

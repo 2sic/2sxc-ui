@@ -1,6 +1,9 @@
 ﻿import { ModifierBase, ModifierDnnModuleInternal, QeSelectors, QuickE, QuickEClipboard, Selection } from '.';
 import { NoJQ } from '../plumbing';
 
+/**
+ * @internal
+ */
 export class ModifierDnnModule extends ModifierBase {
 
     private modInternal: ModifierDnnModuleInternal;

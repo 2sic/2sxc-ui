@@ -1,8 +1,9 @@
-﻿import { HasLog, Insights } from '../logging';
+﻿import { HasLog, Insights } from '../core';
 
 /**
  * This object helps persist / load / reset
  * a setting in the session-state
+ * @internal
  */
 
 // General notes

@@ -1,4 +1,7 @@
-﻿export enum DialogPaths {
-    quickDialog = 'dist/ng/', // quick-dialog
-    ng8 = 'dist/ng-edit/', // Angular
+﻿/**
+ * @internal
+ */
+export enum DialogPaths {
+    quickDialog = 'dist/quickDialog/', // quick-dialog
+    eavUi = 'dist/ng-edit/', // Angular
 }

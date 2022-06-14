@@ -1,18 +1,17 @@
-import { WindowWith$2sxc } from '../plumbing';
-import { SxcRootWithInternals } from '../sxc-root/sxc-root-internals';
+import { SxcGlobal } from '../sxc-root';
 
-/** @internal */
-export interface Window extends WindowWith$2sxc {
-    $2sxc: SxcRootWithInternals;
-    // debugger;
-    $: JQueryStatic & DnnJQueryExtensions;
-}
-
-// export interface WindowInternal extends
-/** @internal */
+/**
+ * export interface WindowInternal extends
+ */
 declare global {
     interface Window {
-        $2sxc: SxcRootWithInternals;
+        /**
+         * The global $2sxc object / function to generate Sxc instances
+         */
+        $2sxc: SxcGlobal;
+
+        /** @internal */
+        $: JQueryStatic & DnnJQueryExtensions;
     }
 }
 

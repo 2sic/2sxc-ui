@@ -1,10 +1,13 @@
-import { Positioning, QuickEditConfig } from '.';
+import { Positioning, QuickEditConfigButtons } from '.';
 import { C } from '../constants';
 import { NoJQ } from '../plumbing';
 
+/**
+ * @internal
+ */
 export namespace QuickEditOverlay {
   export interface Selection extends HTMLElement {
-    toggleOverlay(target: boolean | HTMLElement, buttons?: QuickEditConfig.Buttons): void;
+    toggleOverlay(target: boolean | HTMLElement, buttons?: QuickEditConfigButtons): void;
     target: HTMLElement;
   }
 
@@ -14,9 +17,9 @@ export namespace QuickEditOverlay {
     _parentNode: HTMLElement;
   }
 
-  export function setButtonActivationClasses(buttons: QuickEditConfig.Buttons, linkTags: HTMLElement[]) {
+  export function setButtonActivationClasses(buttons: QuickEditConfigButtons, linkTags: HTMLElement[]) {
     // remove any previously set classes for these
-    for (const [k, v] of Object.entries(QuickEditConfig.DefaultButtons))
+    for (const [k, v] of Object.entries(new QuickEditConfigButtons()))
       linkTags.forEach((l) => {
         l.classList.remove(`enable-${k}`, `disable-${k}`);
       });
@@ -44,7 +47,7 @@ export namespace QuickEditOverlay {
 
 
 /** Expand the selectedOverlay with the necessary toggle function */
-QuickEditOverlay.selectedOverlay.toggleOverlay = (target: boolean | HTMLElement, buttons?: QuickEditConfig.Buttons) => {
+QuickEditOverlay.selectedOverlay.toggleOverlay = (target: boolean | HTMLElement, buttons?: QuickEditConfigButtons) => {
   if (!target) {
     QuickEditOverlay.selectedOverlay.style.display = 'none';
   } else {

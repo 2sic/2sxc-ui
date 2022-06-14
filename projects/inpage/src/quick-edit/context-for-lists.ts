@@ -1,5 +1,8 @@
 import { QeSelectors } from '.';
 
+/**
+ * @internal
+ */
 export class ContextForLists {
     parent: string | number;
 

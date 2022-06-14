@@ -1,12 +1,13 @@
 import { Operations as Operators, RuleConstants as RC, RuleParams, RuleParamsHelper } from '.';
-import { HasLog, Log } from '../../logging';
-import { Dictionary, DictionaryValue, TypeValue } from '../../plumbing';
+import { HasLog, Log } from '../../core';
+import { TypeValue } from '../../plumbing';
 import { TemplateConstants } from '../templates';
 import { BuildSteps } from './build-steps';
 import { ProcessedParams } from './rule-params-helper';
 
 /**
  * Contains a rule how to add/modify a toolbar.
+ * @internal
  */
 export class BuildRule extends HasLog {
     //#region Rule parts
@@ -159,7 +160,7 @@ export class BuildRule extends HasLog {
         // #4 icon is automatically kept
         // #5 show override
         if (typeof parts.show === 'string')
-            (parts as DictionaryValue).show = parts.show === 'true';
+            (parts as Record<string, TypeValue>).show = parts.show === 'true';
         this.ui = parts;
         return cl.return(this.ui, 'button rules');
     }
@@ -181,14 +182,14 @@ export class BuildRule extends HasLog {
 
     //#region string manipulation helpers
 
-    private dicToArray(original: string[][]): Dictionary<string> {
+    private dicToArray(original: string[][]): Record<string, string> {
         return original.reduce((map, obj) => {
             map[obj[0]] = obj[1];
             return map;
-        }, {} as Dictionary<string>);
+        }, {} as Record<string, string>);
     }
 
-    private splitParamsDic(original: string): Dictionary<string> {
+    private splitParamsDic(original: string): Record<string, string> {
         return this.dicToArray(this.splitParamsArray(original));
     }
 

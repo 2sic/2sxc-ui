@@ -1,13 +1,14 @@
-﻿import { SxcEdit } from '../../interfaces/sxc-instance-editable';
-import { TypeTbD } from '../../plumbing';
+﻿import { Sxc } from '../../../../$2sxc/src';
 import { AttrJsonEditContext } from '../html-attribute';
 import { ContextOfInstance, ContextOfPage, ContextOfSystem, ContextOfTenant, ContextOfUser } from '../parts';
 import { ContextOfApp } from '../parts/context-app';
 import { ContextOfUi } from '../parts/context-ui';
 
-
+/**
+ * @internal
+ */
 export class ContextBundleInstance {
-    sxc: SxcEdit; // instance of sxc object
+    sxc: Sxc; // instance of sxc object
     instance: ContextOfInstance; // information related to the current DNN module, incl.instanceId, etc.
     app: ContextOfApp; // this will be about the current app, settings of the app, app - paths, etc.
     ui: ContextOfUi; // ensure that the UI will load the correct assets to enable editing
@@ -18,7 +19,7 @@ export class ContextBundleInstance {
 
     _isContext = true;
 
-    constructor(editCtx: AttrJsonEditContext, sxc: SxcEdit) {
+    constructor(editCtx: AttrJsonEditContext, sxc: Sxc) {
         // this will be about the current app, settings of the app, app - paths, etc.
         this.app = new ContextOfApp(editCtx, sxc);
 
@@ -42,7 +43,7 @@ export class ContextBundleInstance {
 
     }
 
-    static is(thing: TypeTbD): thing is ContextBundleInstance {
+    static is(thing: unknown): thing is ContextBundleInstance {
         const maybeButton = thing as ContextBundleInstance;
         return maybeButton.sxc !== undefined && maybeButton.instance !== undefined;
     }

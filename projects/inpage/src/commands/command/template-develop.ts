@@ -1,6 +1,9 @@
 ﻿import { Commands } from '..';
-import { TemplateIdentifier } from '../../interfaces/item-identifiers';
+import { TemplateIdentifier } from '../../../../$2sxc/src/cms';
 
+/**
+ * @internal
+ */
 export const CmdTemplateDevelop = 'template-develop';
 
 /**

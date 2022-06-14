@@ -2,6 +2,7 @@ import { WorkflowManager } from '../workflow';
 
 /**
  * Event arguments for toolbar events.
+ * @internal
  */
 export interface ToolbarEventArguments {
     /**

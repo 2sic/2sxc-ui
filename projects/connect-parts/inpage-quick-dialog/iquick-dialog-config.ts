@@ -1,5 +1,6 @@
 ﻿/**
  * configuration for quick-dialog, so it can adjust the UI
+ * @internal
  */
 export interface IQuickDialogConfig {
   appId: number;

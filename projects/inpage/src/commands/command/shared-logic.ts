@@ -3,6 +3,7 @@ import { ContextComplete } from '../../context';
 /**
  * Shared logic like for deciding if we show list buttons
  * here
+ * @internal
  */
 export class SharedLogic {
     static isPartOfBlockList(context: ContextComplete) {

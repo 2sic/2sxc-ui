@@ -10,6 +10,7 @@ import { ToolbarLifecycle } from '../toolbar-lifecycle';
  * Internally the toolbar Dom-Elements are hidden at the bottom of the page.
  * This object is responsible for creating them,
  * and making sure that hover-events etc. cause the right toolbar to show up.
+ * @internal
  */
 export class TagToolbar {
     private toolbarElement = null as HTMLElement;

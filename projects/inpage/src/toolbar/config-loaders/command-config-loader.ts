@@ -1,7 +1,10 @@
 ﻿import { ToolbarConfigLoader } from '.';
 import { InPageCommandJson, InPageCommandJsonWithTooMuchInfo } from '.';
-import { HasLog } from '../../logging';
+import { HasLog } from '../../core';
 
+/**
+ * @internal
+ */
 export class CommandConfigLoader extends HasLog {
 
     constructor(private toolbar: ToolbarConfigLoader) {

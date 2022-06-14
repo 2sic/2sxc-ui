@@ -1,32 +1,33 @@
-﻿import { ContentBlockEditor } from '../../contentBlock/content-block-editor';
+﻿import { RunParams } from '../../../../$2sxc/src/cms';
+import { RunParamsHelpers } from '../../cms/run-params-helpers';
+import { ContentBlockEditor } from '../../contentBlock/content-block-editor';
 import { renderer } from '../../contentBlock/render';
 import { ContextComplete } from '../../context/bundles/context-bundle-button';
 import { ContextBundleInstance } from '../../context/bundles/context-bundle-instance';
-import { $2sxcInPage as $2sxc } from '../../interfaces/sxc-controller-in-page';
-import { HasLog, Insights, Log } from '../../logging';
+import { HasLog, Insights, Log } from '../../core';
 import { QuickDialog } from '../../quick-dialog/quick-dialog';
 import { Button, ButtonSafe } from '../../toolbar/config';
 import { ButtonCommand } from '../../toolbar/config';
 import { InPageButtonJson } from '../../toolbar/config-loaders/config-formats/in-page-button';
-import { WorkflowArguments, WorkflowHelper, WorkflowPhases } from '../../workflow';
+import { WorkflowHelper, WorkflowPhases, WorkflowStepCodeArguments } from '../../workflow';
 import { WorkflowManager } from '../../workflow/workflow-manager';
 import { CommandLinkGenerator } from '../command-link-generator';
-import { CommandParams } from '../command-params';
-import { RunParametersHelper } from './run-parameters';
-import { RunParams } from './run-params';
+import { CommandParams } from '../../../../$2sxc/src/cms';
+import { WorkflowStep } from '../../workflow/workflow-step';
 
 type CommandPromise<T> = Promise<T|void>;
 
 /**
  * The CMS engine is global, and needs the context to work.
+ * @internal
  */
 export class CmsEngine extends HasLog {
 
-    private runParamsHelper: RunParametersHelper;
+    private runParamsHelper: RunParamsHelpers;
 
     constructor(parentLog?: Log) {
         super('Cmd.Exec', parentLog, 'start');
-        this.runParamsHelper = new RunParametersHelper(this.log);
+        this.runParamsHelper = new RunParamsHelpers(this.log);
     }
 
     detectParamsAndRun<T>(
@@ -98,13 +99,13 @@ export class CmsEngine extends HasLog {
         let wf: WorkflowManager;
         if (wipParamsWithWorkflow?.workflows) {
             wf = new WorkflowManager(this.log);
-            wf.add(wipParamsWithWorkflow.workflows);
+            wf.add(wipParamsWithWorkflow.workflows as WorkflowStep | WorkflowStep[]);
         } else
             wf = WorkflowHelper.getWorkflow(origEvent?.target as HTMLElement);
 
         // Attach to context, so it's available after running the command
         context.commandWorkflow = wf;
-        const wrapperPromise = wf.run(new WorkflowArguments(name, WorkflowPhases.before, context));
+        const wrapperPromise = wf.run(new WorkflowStepCodeArguments(name, WorkflowPhases.before, context));
 
         // In case we don't have special code, use generic code
         let commandPromise = button.code;
@@ -133,7 +134,7 @@ export class CmsEngine extends HasLog {
 
         // Attach post-command workflow
         const promiseWithAfterEffects = finalPromise.then((result) => {
-            return wf.run(new WorkflowArguments(name, WorkflowPhases.after, null, result))
+            return wf.run(new WorkflowStepCodeArguments(name, WorkflowPhases.after, null, result))
                 .then(() => result);
         });
 
@@ -179,7 +180,7 @@ export class CmsEngine extends HasLog {
                     resolve(context as unknown as T);
                     window.open(link);
                 } else {
-                    $2sxc.totalPopup.open(link, completePromise);
+                    window.$2sxc.totalPopup.open(link, completePromise);
                 }
             }
         });

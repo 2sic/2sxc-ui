@@ -1,11 +1,12 @@
 ﻿import { InPageCommandJson } from '..';
-import { CommandParams } from '../../../commands/command-params';
+import { CommandParams } from '../../../../../$2sxc/src/cms/command-params';
 import { TypeTbD, TypeUnsafe } from '../../../plumbing';
 import { Button } from '../../config';
 
 /**
  * Button Definition v1. from old API
  * it is publicly used out of inpage, so take a care to preserve its signature
+ * @internal
  */
 export class InPageButtonJson {
 
@@ -49,7 +50,7 @@ export class InPageButtonJson {
         return thing.command !== undefined || thing.action !== undefined;
     }
 
-    static isArray(thing: TypeTbD[]): thing is InPageButtonJson[] {
+    static isArray(thing: unknown[]): thing is InPageButtonJson[] {
         return thing.length > 0 && InPageButtonJson.is(thing[0]);
     }
 
@@ -99,7 +100,7 @@ export class InPageButtonJson {
 }
 
 
-function evalPropOrFun(propOrFunction: TypeTbD): TypeUnsafe {
+function evalPropOrFun(propOrFunction: unknown): TypeUnsafe {
     if (propOrFunction === undefined || propOrFunction === null) return false;
     if (typeof (propOrFunction) === 'function') return propOrFunction;
     return () => propOrFunction;

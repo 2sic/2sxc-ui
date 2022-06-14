@@ -4,6 +4,7 @@ import { IDs } from '../../../constants/ids';
 /**
  * This contains a pointer to a content-block. The data is always provided by the server,
  * so this class is never really instantiated.
+ * @internal
  */
 export class ContentBlockReference {
   /** How changes are published - draft required/optional */

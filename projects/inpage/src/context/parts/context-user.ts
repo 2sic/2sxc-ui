@@ -6,6 +6,7 @@ import { AttrJsonEditContext, AttrJsonUser } from '../html-attribute';
  * ~~note that the properties are also used in url-params and ajax calls, so don't rename~~
  * 2022-02-23 2dm - renamed to upper case now, assume it shouldn't have a side effect because
  * it shouldn't be used in ajax calls, since the dialogs get the settings from the backend
+ * @internal
  */
 export class ContextOfUser extends AttrJsonUser {
 

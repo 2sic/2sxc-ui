@@ -1,11 +1,14 @@
 import { InPageButtonGroupJson, InPageButtonJson, InPageCommandJson, ToolbarConfigLoader, ToolbarWip } from '.';
 import { InPageToolbarConfigVariations, ToolbarInitConfig } from '..';
 import { ContextComplete } from '../../context';
-import { HasLog } from '../../logging';
+import { HasLog } from '../../core';
 import { Button, Toolbar, ToolbarSettings } from '../config';
 import { ToolbarTemplate, ToolbarTemplateDefault, ToolbarTemplateGroup, ToolbarTemplateSublist } from '../templates';
 
 
+/**
+ * @internal
+ */
 export class ToolbarConfigLoaderV09 extends HasLog {
 
     constructor(private toolbar: ToolbarConfigLoader) {

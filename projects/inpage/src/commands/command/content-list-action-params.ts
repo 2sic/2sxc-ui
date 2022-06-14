@@ -1,5 +1,6 @@
 ﻿/**
  * params for getAndReload WebAPI
+ * @internal
  */
 export class ContentListActionParams {
   id?: number;

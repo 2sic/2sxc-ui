@@ -1,12 +1,14 @@
 ﻿import { QuickDialogContainer } from '.';
+import { Sxc } from '../../../$2sxc/src';
 import { IIFrameBridge } from '../../../connect-parts/inpage-quick-dialog';
 import { IQuickDialogConfig } from '../../../connect-parts/inpage-quick-dialog';
 import { ContentBlockEditor } from '../contentBlock/content-block-editor';
 import { renderer } from '../contentBlock/render';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
-import { SxcEdit } from '../interfaces/sxc-instance-editable';
-import { HasLog, NoJQ } from '../logging';
+import { HasLog, NoJQ } from '../core';
+import { EditManager } from '../manage/edit-manager';
 import { TypeUnsafe } from '../plumbing/TypeTbD';
+import { SxcTools } from '../sxc/sxc-tools';
 import { QuickDialog } from './quick-dialog';
 import { QuickDialogConfig } from './quick-dialog-config';
 
@@ -14,7 +16,7 @@ const scrollTopOffset: number = 80;
 const animationTime: number = 400;
 
 /**
- *
+ * @internal
  */
 // ReSharper disable once InconsistentNaming
 export class IFrameBridge extends HasLog implements IIFrameBridge {
@@ -27,7 +29,7 @@ export class IFrameBridge extends HasLog implements IIFrameBridge {
     private dialogName: string;
 
     /** internal object to keep track of the sxc-instance */
-    private instanceSxc: SxcEdit;
+    private instanceSxc: Sxc;
 
     /** The html-tag of the current module */
     private tagModule: HTMLElement;
@@ -35,9 +37,9 @@ export class IFrameBridge extends HasLog implements IIFrameBridge {
     /**
      * get the sxc-object of this iframe
      */
-    private uncachedSxc(): SxcEdit {
+    private uncachedSxc(): Sxc {
         if (!this.instanceSxc) throw "can't find sxc-instance of IFrame, probably it wasn't initialized yet";
-        return this.instanceSxc.recreate(true) as TypeUnsafe as SxcEdit;
+        return this.instanceSxc.recreate(true) as TypeUnsafe as Sxc;
     }
 
     getContext(): ContextComplete {
@@ -55,7 +57,7 @@ export class IFrameBridge extends HasLog implements IIFrameBridge {
     }
 
     run(verb: string) {
-        this.uncachedSxc().manage.run(verb);
+        (this.uncachedSxc().manage as EditManager).run(verb);
     }
 
     cancel(): void { QuickDialog.singleton().cancel(this); }
@@ -108,13 +110,13 @@ export class IFrameBridge extends HasLog implements IIFrameBridge {
     /**
      * prepare the bridge with the info of the current instance
      */
-    setup(sxc: SxcEdit, dialogName: string): void {
+    setup(sxc: Sxc, dialogName: string): void {
         const cl = this.log.call('setup');
         cl.data('rewire with sxc: ', sxc);
 
         this.changed = false;
         this.instanceSxc = sxc;
-        this.tagModule = SxcEdit.getTag(sxc).parentElement;
+        this.tagModule = SxcTools.getTag(sxc).parentElement;
         this.sxcCacheKey = sxc.cacheKey;
         if (dialogName) this.dialogName = dialogName;
         cl.done();

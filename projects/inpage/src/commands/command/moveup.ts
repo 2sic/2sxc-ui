@@ -2,6 +2,9 @@
 import { Actions } from './content-list-actions';
 import { SharedLogic } from './shared-logic';
 
+/**
+ * @internal
+ */
 export const CmdMoveUp = 'moveup';
 /**
  * import this module to commands.ts

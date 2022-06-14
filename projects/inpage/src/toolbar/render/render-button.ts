@@ -6,7 +6,9 @@ import { BuildRule } from '../rules/rule';
 import { RenderPart } from './render-part-base';
 import { ToolbarRenderer } from './toolbar-renderer';
 
-
+/**
+ * @internal
+ */
 export class RenderButton extends RenderPart {
     constructor(parent: ToolbarRenderer) {
         super(parent, 'Rnd.Button');
@@ -104,7 +106,7 @@ export class RenderButton extends RenderPart {
         if (icon.startsWith('svg:')) {
             const base64 = icon.split('svg:')[1];
             const decoded = atob(base64);
-            const symbol = document.createElement('div');
+            const symbol = document.createElement('span');
             HtmlTools.addClasses(symbol, 'svg-wrapper');
             symbol.innerHTML = decoded;
             symbol.setAttribute('aria-hidden', 'true');

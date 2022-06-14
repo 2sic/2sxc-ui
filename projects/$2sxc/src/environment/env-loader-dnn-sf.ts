@@ -1,6 +1,6 @@
-import { Environment } from '.';
+import { SxcGlobalEnvironment } from '.';
 import { HasLog, NoJQ } from '../../../core';
-import { Window, JsInfo } from '..';
+import { EnvironmentSpecs } from '..';
 import { AntiForgeryTokenHeaderNameDnn, DnnUiRoot, PlatformDnn } from '../constants';
 
 const helpAutoDetect = 'You must either include jQuery on the page or inject the jsApi parameters to prevent auto-detection.';
@@ -11,7 +11,7 @@ declare const window: Window;
  * @internal
  */
 export class EnvironmentDnnSfLoader extends HasLog {
-    constructor(public env: Environment) {
+    constructor(public env: SxcGlobalEnvironment) {
         super('Env.DnnLdr', env.log);
     }
 
@@ -42,7 +42,7 @@ export class EnvironmentDnnSfLoader extends HasLog {
         }
         const dnnSf = sf(0);
         var apiRoot = dnnSf.getServiceRoot('2sxc');
-        var sfJsInfo: JsInfo = {
+        var sfJsInfo: EnvironmentSpecs = {
             page: dnnSf.getTabId(),
             root: 'unknown',
             api: apiRoot,

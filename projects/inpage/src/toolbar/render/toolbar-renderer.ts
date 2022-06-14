@@ -1,13 +1,16 @@
 import { C } from '../../constants';
 import { ContextBundleToolbar } from '../../context/bundles/context-bundle-toolbar';
 import { HtmlTools } from '../../html/dom-tools';
-import { HasLog, Insights } from '../../logging';
+import { HasLog, Insights } from '../../core';
 import { RenderButton } from './render-button';
 import { RenderButtonGroups } from './render-groups';
 import { IDs } from '../../constants/ids';
 
 const attrIdentifier = 'toolbar-identifier';
 
+/**
+ * @internal
+ */
 export class ToolbarRenderer extends HasLog {
     private readonly groups: RenderButtonGroups;
     public readonly button: RenderButton;

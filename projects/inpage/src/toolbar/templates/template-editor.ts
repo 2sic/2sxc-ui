@@ -1,11 +1,12 @@
 import { ListWithCursor, ToolbarTemplate, ToolbarTemplateGroup } from '.';
-import { HasLog } from '../../logging';
+import { HasLog } from '../../core';
 import { ToolbarConfigLoader } from '../config-loaders';
 import { TemplateConstants as TC } from './constants';
 
 /**
  * This object is used to change the structure of a toolbar template.
  * It's only purpose is to assist in the new V10 format for quickly making toolbars.
+ * @internal
  */
 export class TemplateEditor extends HasLog {
     constructor(public toolbar: ToolbarConfigLoader) {

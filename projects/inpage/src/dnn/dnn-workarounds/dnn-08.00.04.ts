@@ -10,14 +10,15 @@
 
 /**
  * Fix drag-drop functionality in dnn 08.00.04 - it has an incorrect regex
+ * @internal
  */
 'use strict';
 
 (() => {
   if (window.$ == null) return;
 
-  const fn = $.fn.attr;
-  $.fn.attr = function() {
+  const fn = window.$.fn.attr;
+  window.$.fn.attr = function() {
     const val = fn.apply(this, arguments);
     if (arguments[0] !== 'class' || typeof val !== 'string' || val.search('DnnModule-2sxc ') === -1) return val;
     return val.replace('DnnModule-2sxc ', '') + ' DnnModule-2sxc';

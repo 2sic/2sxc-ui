@@ -1,14 +1,17 @@
-﻿import { Commands } from '..';
-import { CmdEditDialog } from './edit';
+﻿import { CommandNames, Commands } from '..';
 
+/**
+ * @internal
+ */
 export const CmdAppSettings = 'app-settings';
 
 /**
  * import this module to commands.ts
+ * @internal
  */
 Commands.add(CmdAppSettings, 'AppSettings', 'sliders', true, false, {
 
-    dialog: () => CmdEditDialog,
+    dialog: () => CommandNames.edit,
 
     disabled: (context) => context.app.settingsId === null,
 

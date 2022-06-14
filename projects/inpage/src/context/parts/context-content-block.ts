@@ -2,6 +2,7 @@
 
 /**
  * information related to the current contentBlock, incl
+ * @internal
  */
 export class ContextOfContentBlock {
   // ContentGroup

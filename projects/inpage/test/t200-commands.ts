@@ -1,4 +1,7 @@
-﻿import 'jasmine';
+﻿/**
+ * @internal
+ */
+import 'jasmine';
 import { Command } from '../src/commands/command';
 import { Actions } from '../src/commands/command/content-list-actions';
 import { Commands as Commands } from '../src/commands/commands';

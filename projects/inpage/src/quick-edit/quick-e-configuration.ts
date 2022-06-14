@@ -1,51 +1,92 @@
-/**
- * Configuration of QuickE
- * see also https://docs.2sxc.org/specs/js/quicke.html
+
+export const QuickEditConfigEnableAuto: string = 'auto';
+
+/** 
+ * Buttons on a quick-edit toolbar
  */
-export namespace QuickEditConfig {
+// Note: It's actually used as an interface, but we made it a class so the docs can show the default being true on all values
+export class QuickEditConfigButtons {
+  /** 
+   * Enable the button to "Add Content"
+   */
+  addContent?: boolean = true;
 
-  /** Buttons on a quick-edit toolbar */
-  export interface Buttons {
-    addContent: boolean;
-    addApp: boolean;
-    select: boolean;
-    paste: boolean;
-    delete: boolean;
-    move: boolean;
-  }
+  /** 
+   * Enable the button to "add App" 
+   */
+  addApp?: boolean = true;
 
-  export const DefaultButtons: Buttons = {
-    addApp: true,
-    addContent: true,
-    select: true,
-    paste: true,
-    delete: true,
-    move: true,
-  };
+  /** 
+   * Enable the button "Select" 
+   */
+  select?: boolean = true;
 
-  export function getNewDefaultConfig() {
+  /** 
+   * Enable the button "Paste" 
+   */
+  paste?: boolean = true;
+
+  /** 
+   * Enable the button "Delete" 
+   */
+  delete?: boolean = true;
+
+  /** 
+   * Enable the button "Move" 
+   */
+  move?: boolean = true;
+}
+
+/** 
+ * Quick Edit Configuration which has an `enable` and specific button configurations
+ */
+export class QuickEditConfig {
+  /**
+   * Determine whether this section is enabled.
+   */
+  // Important: write 'auto', don't use constant, because of generated docs
+  enable?: boolean | 'auto' = 'auto';
+
+  /**
+   * Optional detailed configuration of the buttons.
+   */
+  buttons?: QuickEditConfigButtons;
+}
+
+/** 
+ * Quick Edit - Full configuration at root, with `enable` and rules for `modules` and `innerBlocks`
+ */
+export class QuickEditConfigRoot extends QuickEditConfig {
+  /**
+   * The buttons configuration on the root.
+   * Will be used for the `modules` and `innerBlocks` if not specified there.
+   * Note that if not specified, will always default to true for all buttons.
+   */
+  buttons?: QuickEditConfigButtons;
+
+  /**
+   * Optional configuration for the Inner Content Blocks.
+   */
+  innerBlocks?: QuickEditConfig;
+
+  /**
+   * Optional configuration for the Modules.
+   */
+  modules?: QuickEditConfig;
+
+  /**
+   * @internal
+   */
+  static getDefault(): QuickEditConfigRoot {
     return {
       enable: true,
-      buttons: QuickEditConfig.DefaultButtons,
+      buttons: new QuickEditConfigButtons(),
       innerBlocks: {
-        enable: null, // default: auto-detect
+        enable: QuickEditConfigEnableAuto,
       },
       modules: {
-        enable: null, // default: auto-detect
+        enable: QuickEditConfigEnableAuto,
       },
-    } as QuickEditConfig.FullConfig;
-  }
-  
-
-  /** Configuration set used in the root and in each sub-node (innerblocks/modules) */
-  interface ConfigSet {
-    enable: boolean | string | null;
-    buttons?: Buttons;
-  }
-
-  /** Full configuration set */
-  export interface FullConfig extends ConfigSet {
-    innerBlocks: ConfigSet;
-    modules: ConfigSet;
+    } as QuickEditConfigRoot;
   }
 }

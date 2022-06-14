@@ -1,14 +1,18 @@
+import { Sxc } from '../../../$2sxc/src';
 import { C } from '../constants';
-import { SxcEdit } from '../interfaces/sxc-instance-editable';
+import { SxcTools } from '../sxc/sxc-tools';
 
+/**
+ * @internal
+ */
 export class HtmlTools {
 
     static disable(tag: HTMLElement): void {
         tag.setAttribute(C.Toolbar.attr.disable, 'true');
     }
 
-    static isDisabled(sxc: SxcEdit): boolean {
-        const tag = SxcEdit.getTag(sxc);
+    static isDisabled(sxc: Sxc): boolean {
+        const tag = SxcTools.getTag(sxc);
         return !!tag.getAttribute(C.Toolbar.attr.disable);
     }
 

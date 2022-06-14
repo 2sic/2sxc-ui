@@ -1,5 +1,8 @@
 ﻿import { Commands } from '..';
 
+/**
+ * @internal
+ */
 export const CmdTemplateQuery = 'template-query';
 /**
  * import this module to commands.ts

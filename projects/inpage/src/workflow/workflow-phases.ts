@@ -4,7 +4,18 @@
  * @enum {number}
  */
 export enum WorkflowPhases {
-    all = 'all',
-    before = 'before',
-    after = 'after',
+  /**
+   * Run at every phase - before and after events/commands
+   */
+  all = 'all',
+
+  /**
+   * Run before a specific event / command
+   */
+  before = 'before',
+
+  /**
+   * Run after a specific event / command
+   */
+  after = 'after',
 }

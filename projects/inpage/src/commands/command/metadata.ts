@@ -1,9 +1,15 @@
-﻿import { Command, Commands } from '..';
-import { ItemIdentifierSimple } from '../../interfaces/item-identifiers';
-import { CmdEditDialog } from './edit';
+﻿import { Command, CommandNames, Commands } from '..';
+import { ItemIdentifierSimple } from '../../../../$2sxc/src/cms';
 import { CmdNewMode } from './new';
 
+/**
+ * @internal
+ */
 export const CmdMetadata = 'metadata';
+
+/**
+ * @internal
+ */
 export const CmdImage = 'image';
 const MetadataDefaultKeyType = 'string';
 const MetadataDefaultTargetType = 10; // cms-item
@@ -11,12 +17,13 @@ const MetadataDefaultTargetType = 10; // cms-item
  * create a metadata toolbar
  *
  * import this module to commands.ts
+ * @internal
  */
 export const MetadataCommand = Command.build(CmdMetadata, 'Metadata', 'tag', false, false, {
 
     addParamsToLink: (_) => ({ mode: CmdNewMode }),
 
-    dialog: (_) => CmdEditDialog, // don't use "new" (default) but use "edit"
+    dialog: (_) => CommandNames.edit, // don't use "new" (default) but use "edit"
 
     // if it doesn't have data yet, make it less strong
     dynamicClasses: (ctx) => ctx.button.command.params.entityId ? '' : 'empty',
@@ -34,6 +41,9 @@ export const MetadataCommand = Command.build(CmdMetadata, 'Metadata', 'tag', fal
     },
 });
 
+/**
+ * @internal
+ */
 export const ImageMetadataCommand = Command.build(CmdImage, 'Image', 'focus', false, false, {
     addParamsToLink: MetadataCommand.buttonDefaults.addParamsToLink,
     dialog: MetadataCommand.buttonDefaults.dialog,

@@ -1,5 +1,5 @@
-import { JsInfo } from '..';
-import { Environment } from '.';
+import { EnvironmentSpecs } from '..';
+import { SxcGlobalEnvironment } from '.';
 import { EnvironmentDnnSfLoader } from './env-loader-dnn-sf';
 import { MetaHeaderJsApi, PlatformOqtane } from '../constants';
 import { HasLog, Log } from '../../../core';
@@ -31,7 +31,7 @@ export class EnvironmentMetaLoader extends HasLog {
 
     private dynamicPageHelper: EnvironmentLoaderDynamic;
 
-    constructor(public env: Environment) {
+    constructor(public env: SxcGlobalEnvironment) {
         super('Env.MetaLd', logTest ? env.log : env.log);
         this.dynamicPageHelper = new EnvironmentLoaderDynamic(this);
     }
@@ -53,14 +53,14 @@ export class EnvironmentMetaLoader extends HasLog {
             return cl.done('will retry');
         }
         // Load the settings
-        this.updateEnv(JSON.parse(meta) as JsInfo);
+        this.updateEnv(JSON.parse(meta) as EnvironmentSpecs);
 
         // monitor setting changes - important for Oqtane
         this.dynamicPageHelper.startMetaTagObserver(MetaProperty);
         cl.done();
     }
 
-    public updateEnv(newJsInfo: JsInfo) {
+    public updateEnv(newJsInfo: EnvironmentSpecs) {
         this.log.add('meta env info updated');
         this.env.load(newJsInfo, MetaSourceId);
         if(newJsInfo.platform === PlatformOqtane)
@@ -87,7 +87,7 @@ export class EnvironmentMetaLoader extends HasLog {
       this.observer = new MutationObserver((mutationsList: MutationRecord[]) => {
         for(const mut of mutationsList)
           if (mut.type === 'attributes' && mut.attributeName === MetaProperty)
-            this.updateEnv(JSON.parse(this.getMetaContent()) as JsInfo)
+            this.updateEnv(JSON.parse(this.getMetaContent()) as EnvironmentSpecs)
       });
       this.log.add('start observing meta tag');
       this.observer.observe(this.getJsApiMetaTag(), { attributes: true, childList: false, subtree: false });

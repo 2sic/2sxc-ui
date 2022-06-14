@@ -1,7 +1,14 @@
-﻿import { CmdEditDialog, CmsEngine, Commands } from '..';
+﻿import { CmsEngine, CommandNames, Commands } from '..';
 import { SharedLogic } from './shared-logic';
 
+/**
+ * @internal
+ */
 export const CmdNew = 'new';
+
+/**
+ * @internal
+ */
 export const CmdNewMode = 'new';
 
 /**
@@ -15,7 +22,7 @@ export const CmdNewMode = 'new';
 Commands.add(CmdNew, 'New', 'plus', false, true, {
     addParamsToLink: (_) => ({ mode: CmdNewMode }),
 
-    dialog: (_) => CmdEditDialog, // don't use "new" (default) but use "edit"
+    dialog: (_) => CommandNames.edit, // don't use "new" (default) but use "edit"
 
     showCondition(context) {
         // don't provide new if type unknown or on the header-item

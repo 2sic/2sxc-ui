@@ -1,12 +1,15 @@
 import { ToolbarConfigLoader, InPageCommandJson } from '.';
 import { ToolbarInitConfig } from '..';
 import { ContextComplete } from '../../context';
-import { HasLog } from '../../logging';
+import { HasLog } from '../../core';
 import { Toolbar, ToolbarSettings } from '../config';
 import { BuildSteps, RuleManager } from '../rules';
 import { ToolbarTemplate, ToolbarTemplateDefault, ToolbarTemplateSublist } from '../templates';
 import { ToolbarWip } from './config-formats/toolbar-wip';
 
+/**
+ * @internal
+ */
 export class ToolbarConfigLoaderV10 extends HasLog {
 
     public rules: RuleManager;

@@ -1,8 +1,11 @@
-﻿import { HasLog, Insights } from '../logging';
+﻿import { HasLog, Insights } from '../core';
 import { Button } from '../toolbar/config';
 import { Command } from './command';
 
-/** Singleton Catalog of all commands */
+/**
+ * Singleton Catalog of all commands
+ * @internal
+ */
 export class Commands extends HasLog {
 
   /** Singleton */
@@ -20,7 +23,7 @@ export class Commands extends HasLog {
   }
 
   private commandList: Command[] = [];
-  list: HashTable<Command> = {}; // hash - table of action definitions, to be used a list()["action - name"]
+  list: Record<string, Command> = {}; // hash - table of action definitions, to be used a list()["action - name"]
 
   private constructor() {
       super('Cmd.Catlog');

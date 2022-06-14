@@ -1,6 +1,9 @@
 ﻿import { IQuickDialogConfig } from '../../../connect-parts/inpage-quick-dialog';
 import { ContextComplete } from '../context';
 
+/**
+ * @internal
+ */
 export class QuickDialogConfig implements IQuickDialogConfig {
     appId: number;
     /**

@@ -34,8 +34,10 @@
             .tiles {
                 white-space: nowrap;
                 overflow-x: auto;
-                height: 132px;
-                overflow-y: hidden;
+                &:not(.show-installer) {
+                  height: 132px;
+                  overflow-y: hidden;
+                }
                 .tile {
                     box-sizing: border-box;
                     background: #fff;
@@ -226,6 +228,13 @@
             padding: 2px;
             font-family: "Material Icons";
             content: "search";
+        }
+    }
+    .config-btn {
+        float: initial !important;
+        background: initial !important;
+        .mat-icon {
+            color: #00275388;
         }
     }
 }

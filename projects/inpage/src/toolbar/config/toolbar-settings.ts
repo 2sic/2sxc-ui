@@ -7,21 +7,40 @@ type TypeAutoAddMore = null | 'start' | 'end' | true; //  [true: used to be righ
 const hoverDefault = 'right';
 type TypeHover = 'left' | 'right' | 'none';
 
+/**
+ * @internal
+ */
 export const TOOLBAR_SHOW_ALWAYS = 'always';
+/**
+ * @internal
+ */
 export const TOOLBAR_SHOW_HOVER = 'hover';
 type TypeShow = typeof TOOLBAR_SHOW_ALWAYS | typeof TOOLBAR_SHOW_HOVER;
 
 const followDefault = 'default';
+/**
+ * @internal
+ */
 export const TOOLBAR_FOLLOW_INITIAL = 'initial';
+/**
+ * @internal
+ */
 export const TOOLBAR_FOLLOW_ALWAYS = 'always';
+/**
+ * @internal
+ */
 export const TOOLBAR_FOLLOW_SCROLL = 'scroll';
 
+/**
+ * @internal
+ */
 export type TypeFollow = 'default' | 'none' | typeof TOOLBAR_FOLLOW_INITIAL | typeof TOOLBAR_FOLLOW_ALWAYS | typeof TOOLBAR_FOLLOW_SCROLL;
 
 
 
 /**
  * Toolbar behavior settings like float, etc.
+ * @internal
  */
 export class ToolbarSettings {
     /** Automatically add the '...' more button to the toolbar */
@@ -97,6 +116,9 @@ export class ToolbarSettings {
 
 
 // TODO: this is in the wrong place, shouldn't be in settings
+/**
+ * @internal
+ */
 export const ToolbarWhenNoToolbarProvided = {
   toolbar: {} as ToolbarTemplate,
   settings: ToolbarSettings.getForEmpty(),

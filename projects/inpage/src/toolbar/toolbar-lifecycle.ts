@@ -3,6 +3,9 @@ import { C } from '../constants';
 import { ContextComplete } from '../context';
 import { WorkflowManager } from '../workflow';
 
+/**
+ * @internal
+ */
 export class ToolbarLifecycle {
 
     /**

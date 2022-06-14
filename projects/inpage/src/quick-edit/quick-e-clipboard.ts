@@ -1,11 +1,12 @@
 ﻿import { ModifierBase, ModifierDnnModule, QeSelectors, QuickE, Selection } from '.';
 import { C } from '../constants';
-import { HasLog, Insights, NoJQ } from '../logging';
+import { HasLog, Insights, NoJQ } from '../core';
 import { ContextForLists } from './context-for-lists';
 import { ModifierContentBlock } from './modifier-content-block';
 
 /**
  * add a clipboard to the quick edit
+ * @internal
  */
 export class QuickEClipboard extends HasLog {
 

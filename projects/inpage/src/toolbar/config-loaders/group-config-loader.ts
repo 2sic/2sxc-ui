@@ -2,13 +2,16 @@
 import { InPageButtonJson, InPageCommandJson } from '.';
 import { ButtonGroupWip } from '.';
 import { CmdMore, CommandParams, Commands } from '../../commands';
-import { HasLog } from '../../logging';
-import { DictionaryValue } from '../../plumbing';
+import { HasLog } from '../../core';
+import { TypeValue } from '../../plumbing';
 import { Button, ButtonCommand, Toolbar, ToolbarSettings } from '../config';
 import { ButtonGroup } from '../config';
 import { TemplateConstants as TC } from '../templates/constants';
 import { ToolbarConfigLoader } from './toolbar-config-loader';
 
+/**
+ * @internal
+ */
 export class ButtonGroupConfigLoader extends HasLog {
 
     constructor(private toolbar: ToolbarConfigLoader) {
@@ -55,17 +58,18 @@ export class ButtonGroupConfigLoader extends HasLog {
      *          I'm not sure why though.
      */
     convertToButton(btn: InPageButtonJson,
-                    sharedParams: CommandParams | DictionaryValue,
-                    sharedDefaults: DictionaryValue,
+                    sharedParams: CommandParams | Record<string, TypeValue>,
+                    sharedDefaults: Record<string, TypeValue>,
                     // fullToolbar: ToolbarWip,
                     // group: ButtonGroupWip
-                    groupDefaults: DictionaryValue,
+                    groupDefaults: Record<string, TypeValue>,
                     ): Button {
         let btnCommand = (btn as unknown as { command: CommandParams; }).command;
         const identifier = btnCommand.action;
         const name = Button.splitName(identifier).name;
 
         if (!(Commands.singleton().get(name))) {
+debugger;
             this.log.add(`couldn't find action ${name} - show warning`);
             console.warn('warning: toolbar-button with unknown action-name:', name);
         }

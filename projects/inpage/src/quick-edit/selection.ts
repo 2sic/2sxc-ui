@@ -1,4 +1,7 @@
-﻿export class Selection {
+﻿/**
+ * @internal
+ */
+export class Selection {
     /** The parent is either "dnn" or a module information */
     parent: string | number;
 

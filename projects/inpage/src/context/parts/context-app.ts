@@ -1,8 +1,9 @@
-﻿import { SxcEdit } from '../../interfaces/sxc-instance-editable';
+﻿import { Sxc } from '../../../../$2sxc/src';
 import { AttrJsonEditContext } from '../html-attribute';
 
 /**
  * this will be about the current app, settings of the app, app - paths, etc.
+ * @internal
  */
 export class ContextOfApp {
     // ContentGroup
@@ -25,7 +26,7 @@ export class ContextOfApp {
     primaryLanguage: string;
     allLanguages: string[] | null;
 
-    constructor(editCtx: AttrJsonEditContext, sxc: SxcEdit) {
+    constructor(editCtx: AttrJsonEditContext, sxc: Sxc) {
         // Initialize Content-Group App information
         if (editCtx.contentBlock) {
             this.id = editCtx.contentBlock.AppId;

@@ -1,5 +1,8 @@
 ﻿import { Commands } from '../commands';
 
+/**
+ * @internal
+ */
 export const CmdCustom = 'custom';
 const ctxName = 'context';
 const evtName = 'event';
@@ -8,6 +11,7 @@ const errNoCode = "Trying to run Custom-Code action, but no 'customCode' (v9) or
 
 /**
  * import this module to commands.ts
+ * @internal
  */
 Commands.add(CmdCustom, 'Custom', 'bomb', true, false, {
     code(context, event) {

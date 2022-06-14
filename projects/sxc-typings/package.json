@@ -1,8 +1,11 @@
 {
-  "version": "13.11.00",
+  "version": "14.02.00",
   "types": "./index.d.ts",
   "scripts": {
-    "dry-run": "npm publish --dry-run"
+    "generate": "typings.cmd \".\\dist\"",
+    "publish-dry": "npm publish --dry-run",
+    "publish-beta": "npm publish --tag beta",
+    "publish-prod": "npm publish"
   },
   "author": {
     "name": "2sic Internet Solutions, Switzerland & Liechtenstein",
@@ -31,5 +34,8 @@
     "type": "git",
     "url": "git+https://github.com/2sic/2sxc-ui.git"
   },
-  "main": ""
+  "main": "",
+  "devDependencies": {
+    "@types/jquery": "^2.0.33"
+  }
 }

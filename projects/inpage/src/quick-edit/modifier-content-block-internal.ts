@@ -1,8 +1,9 @@
 ﻿import { ModifierContentBlock } from '.';
+import { Sxc } from '../../../$2sxc/src';
 import { ContentListActionParams } from '../commands';
-import { SxcEdit } from '../interfaces/sxc-instance-editable';
-import { HasLog, NoJQ } from '../logging';
+import { HasLog, NoJQ } from '../core';
 import { ToolbarManager } from '../toolbar/toolbar-manager';
+
 // note: this import must be at the end of the list, for reasons unknown
 // otherwise you get an error at runtime, something about constructors
 // Object prototype may only be an Object or null: undefined
@@ -10,16 +11,20 @@ import { ToolbarManager } from '../toolbar/toolbar-manager';
 // tslint:disable-next-line: ordered-imports
 import { translate } from '../i18n';
 
+
 //#region WebApi Endpoints used: 2sxc
 const webApiNew = 'cms/block/block';
 const webApiMove = 'cms/list/move';
 const webApiRemove = 'cms/list/Delete';
 //#endregion
 
-/** contains commands to create/move/delete a content-block in an inner-content */
+/**
+ * contains commands to create/move/delete a content-block in an inner-content
+ * @internal
+ */
 export class ModifierContentBlockInstance extends HasLog {
 
-    constructor(parent: ModifierContentBlock, private sxcInstance: SxcEdit) {
+    constructor(parent: ModifierContentBlock, private sxcInstance: Sxc) {
         super('QE.MdCbIn', parent.log);
     }
 
@@ -68,7 +73,7 @@ export class ModifierContentBlockInstance extends HasLog {
                     container.prepend(newTag);
 
                 // ReSharper disable once UnusedLocals
-                const sxcNew = SxcEdit.get(newTag);
+                const sxcNew = window.$2sxc(newTag);
                 ToolbarManager.singleton().buildModule(newTag);
             });
         return Promise.resolve(promise);

@@ -1,5 +1,6 @@
-﻿import { ModifierContentBlock, ModifierDnnModule, PositionCoordinates, Positioning, QeSelectors, QuickEditConfig, QuickEditOverlay } from '.';
-import { HasLog, Insights, NoJQ } from '../logging';
+﻿import { ModifierContentBlock, ModifierDnnModule, PositionCoordinates, Positioning, QeSelectors, QuickEditOverlay } from '.';
+import { HasLog, Insights, NoJQ } from '../core';
+import { QuickEditConfigEnableAuto, QuickEditConfigRoot } from './quick-e-configuration';
 
 const configAttr: string = 'quick-edit-config';
 const classForAddContent = 'sc-content-block-menu-addcontent';
@@ -8,6 +9,7 @@ const classForAddApp = 'sc-content-block-menu-addapp';
 /**
  * the quick-edit object
  * the quick-insert object
+ * @internal
  */
 export class QuickE extends HasLog {
 
@@ -40,7 +42,7 @@ export class QuickE extends HasLog {
     });
 
     //
-    config = QuickEditConfig.getNewDefaultConfig();
+    config = QuickEditConfigRoot.getDefault();
 
     bodyOffset: PositionCoordinates;
 
@@ -94,12 +96,12 @@ export class QuickE extends HasLog {
         if (configs.length > 0) {
             cl.add('found configs', configs);
             // go through reverse list, as the last is the most important...
-            let finalConfig = {} as QuickEditConfig.FullConfig;
+            let finalConfig = {} as QuickEditConfigRoot;
             for (let c = configs.length; c >= 0; c--) {
                 // 2021-09-17 spm either the loop is wrong and we should only get configs[0] or we should be gettings configs[c]
                 confJ = configs[0].getAttribute(configAttr);
                 try {
-                    const confO = JSON.parse(confJ) as Partial<QuickEditConfig.FullConfig>;
+                    const confO = JSON.parse(confJ) as Partial<QuickEditConfigRoot>;
                     cl.data('additional config', confO);
                     finalConfig = { ...finalConfig, ...confO };
                     cl.data('merged config', finalConfig);
@@ -108,7 +110,7 @@ export class QuickE extends HasLog {
                     console.warn('had trouble with json', e);
                 }
             }
-            const defConfig = QuickEditConfig.getNewDefaultConfig();
+            const defConfig = QuickEditConfigRoot.getDefault();
             this.config = { ...defConfig, ...finalConfig, buttons: { ...defConfig.buttons, ...finalConfig.buttons } };
         } else
             cl.add('no configs found, will use exiting');
@@ -135,10 +137,10 @@ export class QuickE extends HasLog {
         const hasInnerCBs = (innerCBs.length > 0);
         cl.add(`has Content Blocks: ${hasInnerCBs}`, innerCBs);
         // if it has inner-content, then it's probably a details page, where quickly adding modules would be a problem, so for now, disable modules in this case
-        if (conf.modules.enable === null || conf.modules.enable === 'auto')
+        if (conf.modules.enable === null || conf.modules.enable === QuickEditConfigEnableAuto)
             conf.modules.enable = !hasInnerCBs;
         // for now, ContentBlocks are only enabled if they exist on the page
-        if (conf.innerBlocks.enable === null || conf.innerBlocks.enable === 'auto')
+        if (conf.innerBlocks.enable === null || conf.innerBlocks.enable === QuickEditConfigEnableAuto)
             conf.innerBlocks.enable = hasInnerCBs;
         cl.add(`module.enable: ${conf.modules.enable}`);
         cl.add(`innerBlocks.enable: ${conf.innerBlocks.enable}`);

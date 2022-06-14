@@ -1,4 +1,6 @@
-
+/**
+ * @internal
+ */
 export const IDs = {
   // classes
   cls: {

@@ -1,11 +1,12 @@
-﻿import { SxcVersion } from '../../../../core';
+﻿import { Sxc } from '../../../../$2sxc/src';
+import { SxcVersion } from '../../../../core';
 import { C } from '../../constants';
-import { SxcEdit } from '../../interfaces/sxc-instance-editable';
 import { AttrJsonEditContext } from '../html-attribute';
 import { AttrJsonEntity } from '../html-attribute/parts/parameters-entity';
 
 /**
  * information related to the current DNN module, incl.instanceId,
+ * @internal
  */
 export class ContextOfInstance {
     id: number; // instance id (aka moduleId)
@@ -16,7 +17,7 @@ export class ContextOfInstance {
     parameters: AttrJsonEntity[] | null = null;
     sxcRootUrl: string = '';
 
-    constructor(editCtx: AttrJsonEditContext, sxc: SxcEdit) {
+    constructor(editCtx: AttrJsonEditContext, sxc: Sxc) {
         if (editCtx.Environment) {
             this.id = editCtx.Environment.InstanceId;
             this.isEditable = editCtx.Environment.IsEditable ?? false;

@@ -2,6 +2,9 @@
 import { translate } from '../../i18n';
 import { Actions } from './content-list-actions';
 
+/**
+ * @internal
+ */
 export const CmdRemove = 'remove';
 /**
  * remove an item from the placeholder (usually for lists)

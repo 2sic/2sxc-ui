@@ -1,20 +1,19 @@
-﻿import { C } from '../constants';
+﻿import { ItemIdentifierCopy, ItemIdentifierGroup, ItemIdentifierSimple, ItemIdentifierInField, TemplateIdentifier } from '../../../$2sxc/src/cms';
+import { C } from '../constants';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
-import { ItemIdentifierGroup, ItemIdentifierSimple, ItemInField, TemplateIdentifier } from '../interfaces/item-identifiers';
-import { $2sxcInPage } from '../interfaces/sxc-controller-in-page';
-import { HasLog, Log } from '../logging';
+import { HasLog, Log } from '../core';
 import { NgUrlValuesWithoutParams } from '../manage/ng-dialog-params';
-import { DictionaryValue, NoJQ, TypeUnsafe, urlClean } from '../plumbing';
+import { NoJQ, TypeUnsafe, TypeValue, urlClean } from '../plumbing';
 import { ButtonSafe } from '../toolbar/config';
 
 /**
  * This is responsible for taking a context with command and everything
  * then building the link for opening the correct dialogs
+ * @internal
  */
 export class CommandLinkGenerator extends HasLog {
-    public items: Array<ItemIdentifierSimple | ItemIdentifierGroup | TemplateIdentifier>;
+    public items: Array<ItemIdentifierSimple | ItemIdentifierCopy | ItemIdentifierGroup | TemplateIdentifier>;
     public readonly urlParams: UrlItemParams;
-    private readonly rootUrl: string;
     private readonly debugUrlParam: string;
 
     constructor(public readonly context: ContextComplete, parentLog: Log) {
@@ -32,9 +31,6 @@ export class CommandLinkGenerator extends HasLog {
         // note: this corrects how the variable to name the dialog changed in the history of 2sxc from action to dialog
         this.urlParams = { ...{ dialog: dialog || command.name }, ...this.urlParams };
         cl.data('urlParmas', this.urlParams);
-
-        // initialize root url to dialog
-        this.rootUrl = this.getDialogUrl();
 
         // get isDebug url Parameter
         this.debugUrlParam = window.$2sxc.urlParams.get('debug') ? '&debug=true' : '';
@@ -73,7 +69,7 @@ export class CommandLinkGenerator extends HasLog {
         // when doing new, there may be a prefill in the link to initialize the new item
         if (params.prefill)
             for (let i = 0; i < this.items.length; i++)
-                this.items[i].Prefill = params.prefill;
+                (this.items[i] as ItemIdentifierSimple).Prefill = params.prefill;
 
         delete urlItems.prefill; // added 2020-03-11, seemed strange that it's not removed
         urlItems.items = JSON.stringify(this.items); // Serialize/json-ify the complex items-list
@@ -82,15 +78,17 @@ export class CommandLinkGenerator extends HasLog {
         const partOfPage = button.partOfPage();
         const ngDialogParams = new NgUrlValuesWithoutParams(context, partOfPage);
 
-        return `${this.rootUrl}#${NoJQ.param(ngDialogParams).replace(/%2F/g, '/')}&${NoJQ.param(urlItems)}${this.debugUrlParam}`;
+        // initialize root url to dialog
+        const rootUrl = this.getDialogUrl(context);
+        return `${rootUrl}#${NoJQ.param(ngDialogParams).replace(/%2F/g, '/')}&${NoJQ.param(urlItems)}${this.debugUrlParam}`;
     }
 
     /**
      * Determine the url to open a dialog, based on the settings which UI version to use
      */
-    private getDialogUrl(): string {
-        const context = this.context;
-        return urlClean(`${$2sxcInPage.env.uiRoot()}${C.DialogPaths.ng8}`) + `?sxcver=${context.instance.sxcVersion}`;
+    private getDialogUrl(context: ContextComplete): string {
+        const env = window.$2sxc.env;
+        return urlClean(`${env.uiRoot()}${C.DialogPaths.eavUi}`) + `?pageId=${env.page()}&sxcver=${context.instance.sxcVersion}`;
     }
 
     private addItem() {
@@ -173,7 +171,7 @@ export class CommandLinkGenerator extends HasLog {
                 Parent: groupId,
                 Add: isAdd,
                 Index: index,
-            } as ItemInField));
+            } as ItemIdentifierInField));
     }
 
     /**
@@ -195,7 +193,7 @@ export class CommandLinkGenerator extends HasLog {
 }
 
 interface UrlItemParams {
-    prefill?: DictionaryValue;
+    prefill?: Record<string, TypeValue>;
     items?: string;
     contentTypeName?: string;
     filters?: string;

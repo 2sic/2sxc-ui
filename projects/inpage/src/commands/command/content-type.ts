@@ -1,8 +1,12 @@
 ﻿import { Commands } from '..';
 
+/**
+ * @internal
+ */
 export const CmdContentType = 'contenttype';
 /**
  * import this module to commands.ts
+ * @internal
  */
 Commands.add(CmdContentType, 'ContentType', 'fields', true, false, {
     addParamsToLink: (context) => ({
