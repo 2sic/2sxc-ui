@@ -7,9 +7,6 @@
     <!-- optional headers - must be added before 2sxc is loaded -->
     <!--@customheaders-->
 
-    <!-- Load the $2sxc script; the @... below will be replaced by the backend for cache-breaking -->
-    <script src="../../js/2sxc.api.min.js?cacheBreak=@sxcver"></script>
-
     <!-- the base tag is required for Angular to work properly -->
     <base href="@base">
 
@@ -31,6 +28,8 @@
 
   <body>
     <!--@custombody-->
+    <!-- Load the $2sxc script - after the custom-body; the @... below will be replaced by the backend for cache-breaking -->
+    <script src="../../js/2sxc.api.min.js?cacheBreak=@sxcver"></script>
     <app-root></app-root>
   </body>
 </html>
