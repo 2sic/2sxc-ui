@@ -1,8 +1,7 @@
-﻿import { CmsEngine, CommandNames } from '..';
+﻿import { CmsEngine, CommandNames, Commands } from '..';
 import { QeSelectors } from '../../quick-edit';
 import { ContextForLists } from '../../quick-edit/context-for-lists';
 import { SxcTools } from '../../sxc/sxc-tools';
-import { Commands } from '../commands';
 
 /**
  * import this module to commands.ts

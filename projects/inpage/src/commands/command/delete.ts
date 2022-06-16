@@ -1,4 +1,4 @@
-﻿import { Commands, CommandNames } from '..';
+﻿import { CommandNames, Commands } from '..';
 import { contentItems } from '../../entity-manipulation/item-commands';
 
 /**

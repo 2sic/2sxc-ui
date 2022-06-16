@@ -1,5 +1,4 @@
-﻿import { CommandNames } from './../command-names';
-import { Commands } from '..';
+﻿import { CommandNames, Commands } from '..';
 
 /**
  * import this module to commands.ts

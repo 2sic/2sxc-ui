@@ -1,5 +1,4 @@
-﻿import { CommandNames } from '../command-names';
-import { Commands } from '../commands';
+﻿import { CommandNames, Commands } from '..';
 
 /**
  * @internal

@@ -1,5 +1,4 @@
-﻿import { CommandNames } from './../command-names';
-import { Commands, SharedLogic } from '..';
+﻿import { CommandNames, Commands, SharedLogic } from '..';
 import { translate } from '../../i18n';
 import { Actions } from './content-list-actions';
 

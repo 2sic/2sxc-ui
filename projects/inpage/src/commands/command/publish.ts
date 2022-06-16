@@ -1,6 +1,5 @@
 ﻿import { Actions } from './content-list-actions';
-import { CommandNames } from './../command-names';
-import { Commands } from '..';
+import { CommandNames, Commands } from '..';
 import { translate } from '../../i18n';
 
 /**

@@ -1,7 +1,6 @@
-﻿import { C } from '../../constants';
+﻿import { CommandNames, Commands } from '..';
+import { C } from '../../constants';
 import { IDs } from '../../constants/ids';
-import { CommandNames } from '../command-names';
-import { Commands } from '../commands';
 
 
 /**
