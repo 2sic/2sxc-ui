@@ -26,7 +26,7 @@ export class UrlParams {
         // if nothing found, try normal URL because DNN places parameters in /key/value notation
         if (results === null) {
             // Otherwise try parts of the URL
-            const matches = window.location.pathname.match(new RegExp('/' + name + '/([^/]+)', 'i'));
+            const matches = location.pathname.match(new RegExp('/' + name + '/([^/]+)', 'i'));
 
             // Check if we found anything, if we do find it, we must reverse the
             // results so we get the "last" one in case there are multiple hits
@@ -35,7 +35,7 @@ export class UrlParams {
         } else
             strResult = results[1];
 
-        return strResult === null || strResult === undefined
+        return strResult == null
             ? ''
             : decodeURIComponent(strResult.replace(/\+/g, ' '));
     }
