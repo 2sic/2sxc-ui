@@ -1,15 +1,13 @@
-﻿import { Commands } from '../commands';
+﻿import { CommandNames } from '../command-names';
+import { Commands } from '../commands';
 import { Actions } from './content-list-actions';
 import { SharedLogic } from './shared-logic';
 
 /**
+ * import this module to commands.ts
  * @internal
  */
-export const CmdMoveUp = 'moveup';
-/**
- * import this module to commands.ts
- */
-Commands.add(CmdMoveUp, 'MoveUp', 'move-up', false, true, {
+Commands.add(CommandNames.moveUp, 'MoveUp', 'move-up', false, true, {
     showCondition(context) {
         return !!(SharedLogic.isList(context) &&
             context.button.command.params.sortOrder !== 0

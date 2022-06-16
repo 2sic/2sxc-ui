@@ -1,15 +1,11 @@
-﻿import { Commands, SharedLogic } from '..';
+﻿import { Commands, SharedLogic, CommandNames } from '..';
 import { Actions } from './content-list-actions';
 
 /**
+ * import this module to commands.ts
  * @internal
  */
-export const CmdMoveDown = 'movedown';
-
-/**
- * import this module to commands.ts
- */
-Commands.add(CmdMoveDown, 'MoveDown', 'move-down', false, true, {
+Commands.add(CommandNames.moveDown, 'MoveDown', 'move-down', false, true, {
     // TODO: do not display if is last item in list
     showCondition: (context) => SharedLogic.isList(context),
     code(context) {

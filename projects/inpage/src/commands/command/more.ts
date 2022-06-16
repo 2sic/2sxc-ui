@@ -1,15 +1,14 @@
 ﻿import { C } from '../../constants';
 import { IDs } from '../../constants/ids';
+import { CommandNames } from '../command-names';
 import { Commands } from '../commands';
 
-/**
- * @internal
- */
-export const CmdMore = 'more';
+
 /**
  * import this module to commands.ts
+ * @internal
  */
-Commands.add(CmdMore, 'MoreActions', 'options btn-mode', true, false, {
+Commands.add(CommandNames.more, 'MoreActions', 'options btn-mode', true, false, {
     code(context, event) {
         return new Promise((resolve, reject) => {
             const btn2 = event.target as HTMLElement;

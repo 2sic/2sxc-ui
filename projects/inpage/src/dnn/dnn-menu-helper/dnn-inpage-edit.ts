@@ -1,5 +1,5 @@
 ﻿import { Sxc } from '../../../../$2sxc/src';
-import { CmdLayout } from '../../commands/command/layout';
+import { CommandNames } from '../../commands';
 import { HasLog, Insights } from '../../core';
 import { EditManager } from '../../manage/edit-manager';
 
@@ -19,7 +19,7 @@ export class DnnActionMenu extends HasLog {
         this.run = (this.sxc.manage as EditManager).run;
     }
 
-    changeLayoutOrContent = () => { this.run(CmdLayout); };
+    changeLayoutOrContent = () => { this.run(CommandNames.layout); };
 
     // 2020-04-21 2dm disabled this, as it doesn't make sense to have this in the DNN menu - since add can be used in each position
     // addItem = () => { this.run('new', { useModuleList: true, sortOrder: 0 }); };

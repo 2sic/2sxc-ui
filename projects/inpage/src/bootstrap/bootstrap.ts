@@ -1,5 +1,5 @@
 import { Sxc } from '../../../$2sxc/src';
-import { CmdLayout } from '../commands/command/layout';
+import { CommandNames } from '../commands';
 import { C } from '../constants';
 import { HasLog, Insights, Log } from '../core';
 import { EditManager } from '../manage/edit-manager';
@@ -165,7 +165,7 @@ export class BootstrapInPage extends HasLog {
         }
 
         if (sxc) {
-            (sxc.manage as EditManager).run(CmdLayout);
+            (sxc.manage as EditManager).run(CommandNames.layout);
             this.openedTemplatePickerOnce = true;
         }
         return cl.return(true, 'tryShowTemplatePicker() done');
@@ -218,7 +218,7 @@ export class BootstrapInPage extends HasLog {
             '</div>',
         )[0];
 
-        btn.addEventListener('click', () => (sxci.manage as EditManager).run(CmdLayout));
+        btn.addEventListener('click', () => (sxci.manage as EditManager).run(CommandNames.layout));
 
         tag.append(btn);
         return callLog.return(true, 'ok');

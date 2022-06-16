@@ -1,4 +1,4 @@
-import { SxcGlobal } from '../sxc-root';
+import { SxcGlobal } from '../sxc-global';
 
 /**
  * export interface WindowInternal extends

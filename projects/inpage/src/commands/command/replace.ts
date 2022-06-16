@@ -1,14 +1,11 @@
-﻿import { Commands } from '..';
+﻿import { Commands, CommandNames } from '..';
 import { SharedLogic } from './shared-logic';
 
 /**
+ * import this module to commands.ts
  * @internal
  */
-export const CmdReplace = 'replace';
-/**
- * import this module to commands.ts
- */
-Commands.add(CmdReplace, 'Replace', 'replace', false, true, {
+Commands.add(CommandNames.replace, 'Replace', 'replace', false, true, {
 
     showCondition(context) {
         return SharedLogic.isReferencedItem(context);

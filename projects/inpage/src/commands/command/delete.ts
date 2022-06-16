@@ -1,14 +1,11 @@
-﻿import { Commands } from '..';
+﻿import { Commands, CommandNames } from '..';
 import { contentItems } from '../../entity-manipulation/item-commands';
 
 /**
+ * import this module to commands.ts
  * @internal
  */
-export const CmdDelete = 'delete';
-/**
- * import this module to commands.ts
- */
-Commands.add(CmdDelete, 'Delete', 'cancel', true, false, {
+Commands.add(CommandNames.delete, 'Delete', 'cancel', true, false, {
     // disabled: true,
     showCondition(context) {
         const p = context.button.command.params;

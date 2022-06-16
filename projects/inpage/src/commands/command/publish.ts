@@ -1,18 +1,15 @@
-﻿import { Commands } from '..';
+﻿import { Actions } from './content-list-actions';
+import { CommandNames } from './../command-names';
+import { Commands } from '..';
 import { translate } from '../../i18n';
-import { Actions } from './content-list-actions';
-
-/**
- * @internal
- */
-export const CmdPublish = 'publish';
 
 /**
  * todo: shouldn't be available if changes are not allowed
  *
  * import this module to commands.ts
+ * @internal
  */
-Commands.add(CmdPublish, 'Unpublished', 'eye-off', false, false, {
+Commands.add(CommandNames.publish, 'Unpublished', 'eye-off', false, false, {
     showCondition(context) {
         return context.button.command.params.isPublished === false;
     },

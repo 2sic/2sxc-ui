@@ -1,14 +1,10 @@
-﻿import { Commands } from '..';
+﻿import { Commands, CommandNames } from '..';
 
-/**
- * @internal
- */
-export const CmdContentType = 'contenttype';
 /**
  * import this module to commands.ts
  * @internal
  */
-Commands.add(CmdContentType, 'ContentType', 'fields', true, false, {
+Commands.add(CommandNames.contentType, 'ContentType', 'fields', true, false, {
     addParamsToLink: (context) => ({
         // added in 10.27 to help with the new edit ui
         contentType: context.button.command.params.contentType

@@ -1,13 +1,11 @@
-﻿import { Commands } from '..';
+﻿import { CommandNames } from './../command-names';
+import { Commands } from '..';
 
 /**
+ * import this module to commands.ts
  * @internal
  */
-export const CmdTemplateSettings = 'template-settings';
-/**
- * import this module to commands.ts
- */
-Commands.add(CmdTemplateSettings, 'TemplateSettings', 'sliders', true, false, {
+Commands.add(CommandNames.templateSettings, 'TemplateSettings', 'sliders', true, false, {
     dialog: (_) => 'edit',
 
     showCondition: (ctx) => !!ctx.user.CanDevelop && !ctx.app.isContent,

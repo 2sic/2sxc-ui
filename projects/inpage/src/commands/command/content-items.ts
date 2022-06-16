@@ -1,13 +1,10 @@
-﻿import { Commands } from '..';
+﻿import { Commands, CommandNames } from '..';
 
 /**
+ * import this module to commands.ts
  * @internal
  */
-export const CmdContentItems = 'contentitems';
-/**
- * import this module to commands.ts
- */
-Commands.add(CmdContentItems, 'ContentItems', 'table', true, false, {
+Commands.add(CommandNames.contentItems, 'ContentItems', 'table', true, false, {
     addParamsToLink: (context) => {
         const typeName = context.button.command.params.contentType
             || context.contentBlock.contentTypeId;

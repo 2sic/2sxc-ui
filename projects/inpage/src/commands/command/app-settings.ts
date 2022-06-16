@@ -1,15 +1,10 @@
 ﻿import { CommandNames, Commands } from '..';
 
 /**
- * @internal
- */
-export const CmdAppSettings = 'app-settings';
-
-/**
  * import this module to commands.ts
  * @internal
  */
-Commands.add(CmdAppSettings, 'AppSettings', 'sliders', true, false, {
+Commands.add(CommandNames.appSettings, 'AppSettings', 'sliders', true, false, {
 
     dialog: () => CommandNames.edit,
 

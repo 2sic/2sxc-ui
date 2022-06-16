@@ -4,6 +4,7 @@
  * open an edit-item dialog
  *
  * import this module to commands.ts
+ * @internal
  */
 Commands.add(CommandNames.copy, 'Copy', 'copy', false, true, {
   dialog: (_) => CommandNames.edit,

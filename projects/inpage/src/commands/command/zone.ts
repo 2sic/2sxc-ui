@@ -1,13 +1,11 @@
-﻿import { Commands } from '..';
+﻿import { CommandNames } from './../command-names';
+import { Commands } from '..';
 
 /**
+ * import this module to commands.ts
  * @internal
  */
-export const CmdZone = 'zone';
-/**
- * import this module to commands.ts
- */
-Commands.add(CmdZone, 'Zone', 'manage', true, false, {
+Commands.add(CommandNames.zone, 'Zone', 'manage', true, false, {
     showCondition: (context) => {
         return !!context.user.CanAdmin;
     },

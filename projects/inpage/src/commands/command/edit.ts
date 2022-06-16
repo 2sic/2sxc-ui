@@ -4,6 +4,7 @@
  * open an edit-item dialog
  *
  * import this module to commands.ts
+ * @internal
  */
 Commands.add(CommandNames.edit, 'Edit', 'pencil', false, true, {
     addParamsToLink: (ctx) => ({ mode: CommandNames.edit }),

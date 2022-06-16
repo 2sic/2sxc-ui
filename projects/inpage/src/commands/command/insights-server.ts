@@ -1,14 +1,10 @@
-﻿import { Commands } from '..';
-
-/**
- * @internal
- */
-export const CmdInsightsServer = 'insights-server';
+﻿import { Commands, CommandNames } from '..';
 
 /**
  * import this module to commands.ts
+ * @internal
  */
-Commands.add(CmdInsightsServer, 'Insights', 'speed', true, false, {
+Commands.add(CommandNames.insightsServer, 'Insights', 'speed', true, false, {
     showCondition: (context) => context.user.CanDevelop,
     code(context, event) {
         return new Promise((resolve, reject) => {

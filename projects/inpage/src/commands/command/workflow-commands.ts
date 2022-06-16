@@ -7,5 +7,4 @@ export const WorkflowCommands = {
 
     /** Special Command: 'refresh' is usually run inside other commands after execution */
     refresh: 'refresh',
-
 };

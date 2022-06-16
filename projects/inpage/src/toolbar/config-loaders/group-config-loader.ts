@@ -1,7 +1,8 @@
-﻿import { ToolbarWip } from '.';
+﻿import { CommandNames } from './../../commands/command-names';
+import { ToolbarWip } from '.';
 import { InPageButtonJson, InPageCommandJson } from '.';
 import { ButtonGroupWip } from '.';
-import { CmdMore, CommandParams, Commands } from '../../commands';
+import { CommandParams, Commands } from '../../commands';
 import { HasLog } from '../../core';
 import { TypeValue } from '../../plumbing';
 import { Button, ButtonCommand, Toolbar, ToolbarSettings } from '../config';
@@ -162,7 +163,7 @@ debugger;
         const cl = this.log.call('addMoreButtons');
         const addMore = settings.autoAddMore;
         if (addMore) {
-            const moreButton = this.toolbar.button.btnConfigStructure(CmdMore, {});
+            const moreButton = this.toolbar.button.btnConfigStructure(CommandNames.more, {});
             if ((addMore === 'end') || (addMore.toString() === 'right')) { // fallback for older v1 setting
                 this.log.add('will add a more "..." button to end');
                 list.push(moreButton);
@@ -183,7 +184,7 @@ debugger;
         if (toolbar.groups.length !== 1) return cl.done('not just 1 group');
         cl.add('exactly one group found, will remove more');
         const buttons = toolbar.groups[0].buttons;
-        const index = buttons.findIndex((b) => b.command?.name === CmdMore);
+        const index = buttons.findIndex((b) => b.command?.name === CommandNames.more);
         if (index === -1) return cl.done("no 'more' button found");
         buttons.splice(index, 1);
         cl.done('more removed');

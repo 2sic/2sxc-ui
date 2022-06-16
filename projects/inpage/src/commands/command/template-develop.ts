@@ -1,15 +1,12 @@
-﻿import { Commands } from '..';
+﻿import { CommandNames } from './../command-names';
+import { Commands } from '..';
 import { TemplateIdentifier } from '../../../../$2sxc/src/cms';
 
 /**
+ * import this module to commands.ts
  * @internal
  */
-export const CmdTemplateDevelop = 'template-develop';
-
-/**
- * import this module to commands.ts
- */
-Commands.add(CmdTemplateDevelop, 'Develop', 'code', true, false, {
+Commands.add(CommandNames.templateDevelop, 'Develop', 'code', true, false, {
   newWindow: (_) => true,
   dialog: (_) => 'develop',
 

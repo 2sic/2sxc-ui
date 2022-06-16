@@ -1,13 +1,10 @@
-﻿import { Commands, SharedLogic } from '..';
+﻿import { Commands, SharedLogic, CommandNames } from '..';
 
 /**
+ * import this module to commands.ts
  * @internal
  */
-export const CmdInstanceList = 'instance-list';
-/**
- * import this module to commands.ts
- */
-Commands.add(CmdInstanceList, 'Sort', 'list-numbered', false, true, {
+Commands.add(CommandNames.instanceList, 'Sort', 'list-numbered', false, true, {
     showCondition: (context) => SharedLogic.isList(context),
 
     configureLinkGenerator: (context, linkGenerator) => {

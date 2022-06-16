@@ -1,17 +1,14 @@
-﻿import { CmsEngine } from '..';
+﻿import { CmsEngine, CommandNames } from '..';
 import { QeSelectors } from '../../quick-edit';
 import { ContextForLists } from '../../quick-edit/context-for-lists';
 import { SxcTools } from '../../sxc/sxc-tools';
 import { Commands } from '../commands';
 
 /**
+ * import this module to commands.ts
  * @internal
  */
-export const CmdLayout = 'layout';
-/**
- * import this module to commands.ts
- */
-Commands.add(CmdLayout, 'ChangeLayout', 'glasses', true, true, {
+Commands.add(CommandNames.layout, 'ChangeLayout', 'glasses', true, true, {
 
     inlineWindow: (_) => true,
 

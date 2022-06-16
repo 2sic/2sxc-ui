@@ -1,17 +1,15 @@
-﻿import { Commands, SharedLogic } from '..';
+﻿import { CommandNames } from './../command-names';
+import { Commands, SharedLogic } from '..';
 import { translate } from '../../i18n';
 import { Actions } from './content-list-actions';
 
 /**
- * @internal
- */
-export const CmdRemove = 'remove';
-/**
  * remove an item from the placeholder (usually for lists)
  *
  * import this module to commands.ts
+ * @internal
  */
-Commands.add(CmdRemove, 'Remove', 'minus-circled', false, true, {
+Commands.add(CommandNames.remove, 'Remove', 'minus-circled', false, true, {
     showCondition: (context) => SharedLogic.isList(context),
     code(context) {
         return new Promise((resolve, reject) => {
