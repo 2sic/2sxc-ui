@@ -1,4 +1,5 @@
-﻿/**
+﻿import { ToolUrlObjects } from './obj2url';
+/**
  * Helper object to read url params. 
  * Available on `$2sxc.urlParams`
  */
@@ -61,5 +62,27 @@ export class UrlParams {
      */
     isDebug(): boolean {
         return this.get('debug')?.toLocaleLowerCase() === 'true'
+    }
+
+    /**
+     * Convert an object to be used in a URL.
+     * Uses a custom, brief syntax which can change at any time. 
+     * So to unwrap, always use the toObj method.
+     * @param obj 
+     * @returns 
+     * @internal
+     */
+    toUrl(obj: any): string {
+      return new ToolUrlObjects().toUrl(obj, true);
+    }
+
+    /**
+     * Convert a url which was created by toUrl back to an object.
+     * @param url 
+     * @returns
+     * @internal
+     */
+    toObj(url: string): unknown {
+      return new ToolUrlObjects().toObj(url, true);
     }
 }

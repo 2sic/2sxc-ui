@@ -1,3 +1,4 @@
+import { ToolUrlObjects } from './tools/obj2url';
 /* 
     This is just a type-index entry point.
     The purpose is that other 2sxc projects in this repo can access all the types
@@ -20,3 +21,4 @@ export * from './sxc';
 
 export * from './sxc-global';
 
+(window as any).beta = new ToolUrlObjects();
