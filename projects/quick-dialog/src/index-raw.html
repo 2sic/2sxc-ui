@@ -1,16 +1,14 @@
 <!doctype html>
 <html>
   <head>
-    <!-- This meta-tag will be pre-filled by the backend before delivery to the browser -->
-    <meta name="_jsApi" content="">
+    <!-- the base tag, required by Angular - from backend -->
+    <base href="@base">
 
-    <!-- Load the $2sxc script; the @... below will be replaced by the backend for cache-breaking -->
-    <script src="../../js/2sxc.api.min.js?cacheBreak=@sxcver"></script>
+    <!-- This will be pre-filled by the backend -->
+    <meta name="_jsApi" content="@jsapi">
 
-    <!-- the base tag is required for Angular to work properly -->
-    <script>
-      document.write('<base href="' + window.location.pathname + '">');
-    </script>
+    <!-- optional headers - must be added before 2sxc is loaded -->
+    <!--@customheaders-->
 
     <script>
       // send message to the angular-observable to restart the app
@@ -29,6 +27,9 @@
   </head>
 
   <body>
+    <!--@custombody-->
+    <!-- Load the $2sxc script - after the custom-body; the @... below will be replaced by the backend for cache-breaking -->
+    <script src="../../js/2sxc.api.min.js?cacheBreak=@sxcver"></script>
     <app-root></app-root>
   </body>
 </html>
