@@ -4,7 +4,7 @@
  * import this module to commands.ts
  * @internal
  */
-Commands.add(CommandNames.appImport, 'AppResources', 'translate', true, false, {
+Commands.add(CommandNames.appResources, 'AppResources', 'translate', true, false, {
     dialog: (_) => CommandNames.edit,
 
     disabled: (context) => context.app.resourcesId === null,

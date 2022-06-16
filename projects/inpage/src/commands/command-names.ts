@@ -138,6 +138,7 @@ export enum CommandNames {
 
     /**
      * `new` command sets new mode used in parameters
+     * @internal - must move, this shouldn't be here as it's not a command!
      */
     newMode = 'new',
 
@@ -161,7 +162,7 @@ export enum CommandNames {
     /**
      * `template-develop` will open the template-editor dialog in a new window. (note: in older versions was called "develop")
      */
-    templateDevelop = 'replace',
+    templateDevelop = 'template-develop',
 
     /**
      * `template-query` will open the pipeline/query-designer in a new window. It's invisible on content, and disabled if no pipeline is configured
