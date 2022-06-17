@@ -10,7 +10,7 @@ import { Button, ButtonSafe } from '../../toolbar/config';
 import { ButtonCommand } from '../../toolbar/config';
 import { InPageButtonJson } from '../../toolbar/config-loaders/config-formats/in-page-button';
 import { WorkflowHelper, WorkflowPhases, WorkflowStepCodeArguments } from '../../workflow';
-import { ToolbarWorkflowManager } from '../../workflow/workflow-manager';
+import { ToolbarWorkflowManager } from '../../workflow/toolbar-workflow-manager';
 import { CommandLinkGenerator } from '../command-link-generator';
 import { CommandParams } from '../../../../$2sxc/src/cms';
 import { WorkflowStep } from '../../workflow/workflow-step';

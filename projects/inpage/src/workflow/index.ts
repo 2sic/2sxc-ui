@@ -1,5 +1,5 @@
 
-export * from './workflow-manager';
+export * from './toolbar-workflow-manager';
 export * from './workflow-step-code-arguments';
 export * from './workflow-phases';
 export * from './workflow-step';
