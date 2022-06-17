@@ -1,3 +1,11 @@
+// Documentation notes
+//
+// You cannot use @see in the docs, it doesn't work with docFx
+// Instead, always use [text](xref:Api.Js.SxcJs.CommandNames)
+// or similar
+//
+// End documentation notes
+
 
 /**
  * Names of commands known to 2sxc CMS - for use in toolbars and calling commands directly from code
@@ -62,9 +70,7 @@ export enum CommandNames {
      * <br> 🔘
      * Will use the settings of the current template to open.
      * It is only shown to elevated admins.
-     * <br>
-     * Parameters
-     * contentType (optional) - name of data-type to manage/open
+     * <br> 📩 [Parameters](xref:Api.Js.SxcJs.CommandContentItemsParams)
      */
     contentItems = 'contentitems',
 
@@ -73,14 +79,14 @@ export enum CommandNames {
      * <br> 🔘
      * On a toolbar it will use the content-type of the current item.
      * <br> 🔐 Toolbar shows this automatically to elevated admins.
+     * <br> 📩 [Parameters](xref:Api.Js.SxcJs.CommandContentTypeParams)
      */
     contentType = 'contenttype',
 
     /**
      * `copy` command will open the edit-dialog for the current item in copy-mode, so when saving it will be a new item.
-     *
-     * To work, it also needs `contentType` ...Name?
-     * ⚠️ WIP v14.02
+     * <br> 📩 [Parameters](xref:Api.Js.SxcJs.CommandCopyParams)
+     * <br> 🆕 in v14.03
      */
     copy = 'copy',
 

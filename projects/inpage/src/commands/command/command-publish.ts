@@ -1,6 +1,6 @@
-﻿import { Actions } from './content-list-actions';
-import { CommandNames, Commands } from '..';
+﻿import { CommandNames, Commands } from '..';
 import { translate } from '../../i18n';
+import { Actions } from './content-list-actions';
 
 /**
  * todo: shouldn't be available if changes are not allowed

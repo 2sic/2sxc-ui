@@ -1,4 +1,5 @@
 ﻿import { CommandNames, Commands } from '..';
+import { CommandContentTypeParams, createContentTypeParams } from './command-content-type';
 
 /**
  * open an edit-item dialog
@@ -14,18 +15,23 @@ Commands.add(CommandNames.copy, 'Copy', 'copy', false, true, {
     return !!ctx.button.command.params.entityId;
   },
 
-  // TODO: MAKE IT DISABLED IF DATA IS MISSING
-  // disabled(context) {
-  //     return !context.instance.allowPublish;
-  // },
-
   configureLinkGenerator: (ctx, linkGenerator) => {
-    // console.warn('debug link generator, ', ctx);
-    // console.warn('items, ', linkGenerator.items);
     const originalId = ctx.button.command.params.entityId;
-    const typeName = ctx.button.command.params.contentTypeName;
-    if (!typeName) throw new Error("can't copy: missing contentTypeName");
+    // TODO: DROP USE OF contentTypeName as soon as we fixed the events-app
+    const typeName = createContentTypeParams(ctx).contentType;
+    if (!typeName) throw new Error("can't copy: missing contentType");
     linkGenerator.items = [{ DuplicateEntity: originalId, ContentTypeName: typeName }];
-    // console.warn('items, ', linkGenerator.items);
   },
 });
+
+/**
+ * Parameters used for the command `copy`
+ * <br>
+ * ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)
+ */
+export interface CommandCopyParams extends CommandContentTypeParams {
+  /**
+   * Entity to copy, required or the button won't even appear.
+   */
+  entityId: number;
+}

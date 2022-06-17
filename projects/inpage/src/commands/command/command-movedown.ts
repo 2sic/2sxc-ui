@@ -1,4 +1,4 @@
-﻿import { Commands, SharedLogic, CommandNames } from '..';
+﻿import { CommandNames, Commands, SharedLogic } from '..';
 import { Actions } from './content-list-actions';
 
 /**
