@@ -8,8 +8,9 @@ import { CommandParams } from './command-params';
 export interface RunParams {
   /**
    * The action to perform.
-   * Required if you don't have params which themselves have the action
+   * Required.
    */
+  // ATM actually required if you don't have params which themselves have the action, but we plan to change that it's always on this
   action?: string;
 
   /**
