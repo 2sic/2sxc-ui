@@ -39,6 +39,7 @@ function loadInpage() {
 
 NoJQ.ready(loadInpage);
 
+// Apply Dnn Bugfixes
 import './dnn/index';
 
 // Tell Webpack to load CSS
