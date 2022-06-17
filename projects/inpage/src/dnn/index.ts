@@ -1,2 +1,2 @@
-// tslint:disable-next-line: no-var-requires
+// Apply DNN Bugfixes
 import './dnn-08.00.04';

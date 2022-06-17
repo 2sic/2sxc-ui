@@ -39,6 +39,8 @@ function loadInpage() {
 
 NoJQ.ready(loadInpage);
 
+import './dnn/index';
+
 // Tell Webpack to load CSS
 const cssEdit = require('./inpage.css');
 const cssIcons = require('../icons/inpage-icons-codes.css');
