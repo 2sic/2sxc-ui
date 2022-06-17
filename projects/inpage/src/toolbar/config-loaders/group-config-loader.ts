@@ -60,8 +60,6 @@ export class ButtonGroupConfigLoader extends HasLog {
     convertToButton(btn: InPageButtonJson,
                     sharedParams: CommandParams | Record<string, TypeValue>,
                     sharedDefaults: Record<string, TypeValue>,
-                    // fullToolbar: ToolbarWip,
-                    // group: ButtonGroupWip
                     groupDefaults: Record<string, TypeValue>,
                     ): Button {
         let btnCommand = (btn as unknown as { command: CommandParams; }).command;

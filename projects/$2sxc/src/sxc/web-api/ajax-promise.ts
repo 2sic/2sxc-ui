@@ -51,14 +51,6 @@ export class AjaxPromise {
     // 2020-03-13 stop adding 2sxc endpoint-name, it's already happening in apiUrl so with this it happens 2x
     // var endpoint = settings.endpoint || ToSxcName;
     var base = this.sxc.root.http.apiUrl(url, settings.endpoint);
-    // let base = (settings.url)
-    //   ? this.sxc.root.http.apiUrl(settings.url) // this.sxc.resolveServiceUrl(settings.url)  // use url -> TODO: change this to use the new root.http.apiUrl
-    //   : env.apiRoot('2sxc')               // use controller/action
-    //     + 'app/auto/api/' + settings.controller + '/' + settings.action;
-
-    // if(settings.endpoint)
-    //     base = base.replace(env.apiRoot('2sxc'), 
-    //         env.apiRoot(settings.endpoint));
 
     return base + (!settings.params ? '' : ('?' + NoJQ.param(settings.params)));
   }
