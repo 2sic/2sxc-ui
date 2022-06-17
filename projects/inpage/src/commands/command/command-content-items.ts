@@ -28,7 +28,9 @@ Commands.add(CommandNames.contentItems, 'ContentItems', 'table', true, false, {
 });
 
 /**
- * Parameters used for the command `contentitems`
+ * Parameters used for the command `contentitems`.
+ * <br>
+ * The content-type name determines what items will be managed.
  * <br>
  * ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)
  */

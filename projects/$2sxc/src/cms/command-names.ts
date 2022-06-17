@@ -17,28 +17,28 @@ export enum CommandNames {
      * <br>💡
      * This is similar to `new` but also adds the item to the existing list of items shown on the page.
      * <br> 🪜 Only appears on toolbars of items which are in a list.
+     * <br> 📩 [Parameters](xref:Api.Js.SxcJs.CommandAddParams)
      */
     add = 'add',
 
     /**
      * `add-existing` command opens a dialog allowing the user to select an existing item to add to a **list of items**.
      * <br> The new item is placed after the item the (+) was clicked on.
-     * <br> 🔘
      * <br> 🪜 Only appears on toolbars of items which are in a list.
+     * <br> 📩 [Parameters](xref:Api.Js.SxcJs.CommandAddExistingParams)
+     * <br> 🆕 in v11.01
      */
     addExisting = 'add-existing',
 
     /**
      * `app` will open the app-admin dialog
-     * <br> 🔘
      * <br> 🔐 Toolbar shows this automatically to elevated admins.
      */
     app = 'app',
 
     /**
      * `app-import` command will open the dialog to import an App.
-     * <br> 🔘
-     * This is not available on the toolbar.
+     * <br> 🔘 This is not available on the toolbar.
      */
     appImport = 'app-import',
 
@@ -176,14 +176,10 @@ export enum CommandNames {
 
     /**
      * `new` command opens the edit-dialog for a new content-item.
-     * contentType
-     *
-     * Then it needs either the ID...:
-     * entityId
-     *
-     * ...or it needs the position within the list:
-     * useModuleList: true
-     * sortOrder: [number] (important so it knows the position
+     * <br>
+     * It will only create an item, not add it to a list. 
+     * For that you would need to use `add`
+     * <br> 📩 [Parameters](xref:Api.Js.SxcJs.CommandContentTypeParams)
      */
     new = 'new',
 
@@ -195,7 +191,7 @@ export enum CommandNames {
 
     /**
      * `publish` command tells the system to update a content-items status to published. If there was a published and a draft before, the draft will replace the previous item
-     * <br> 🔘
+     * <br> 🔘 Appears automatically if the item is in draft mode.
      * Only appears on the toolbar if the item is not published.
      */
     publish = 'publish',
@@ -239,3 +235,9 @@ export enum CommandNames {
      */
     zone = 'zone',
 }
+
+
+// Experimental
+// Goal is to probably split the command names
+// and then make a new CommandNames which merges all the previous ones
+// type All = CommandNames | CommandNamesEdit;
