@@ -1,8 +1,7 @@
-﻿import { CommandNames } from './../../commands/command-names';
-import { ToolbarWip } from '.';
+﻿import { ToolbarWip } from '.';
 import { InPageButtonJson, InPageCommandJson } from '.';
 import { ButtonGroupWip } from '.';
-import { CommandParams, Commands } from '../../commands';
+import { CommandNames, CommandParams, Commands } from '../../commands';
 import { HasLog } from '../../core';
 import { TypeValue } from '../../plumbing';
 import { Button, ButtonCommand, Toolbar, ToolbarSettings } from '../config';

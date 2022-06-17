@@ -1,5 +1,4 @@
-﻿import { CommandNames } from './../../commands/command-names';
-import { InPageCommandJson } from '.';
+﻿import { InPageCommandJson } from '.';
 import { InPageButtonJson } from '.';
 import { ToolbarConfigLoader } from '.';
 import { Commands } from '../../commands';
@@ -8,6 +7,7 @@ import { HasLog } from '../../core';
 import { TypeValue } from '../../plumbing';
 import { Button, Toolbar } from '../config';
 import { ButtonSafe } from '../config/button-safe';
+import { CommandNames } from './../../commands/';
 
 /**
  * This is a system to build button configurations
@@ -40,7 +40,7 @@ export class ButtonConfigLoader extends HasLog {
         // if it's a command w/action, wrap into command + trim
         if (InPageCommandJson.hasActions(original)) {
             cl.add('action found, will move down to .command', original);
-            if (original.action) original.action = original.action.trim();
+            if (original.action) original.action = original.action.trim() as CommandNames;
             return cl.return({
                 command: original,
                 _expanded: true,
@@ -54,7 +54,7 @@ export class ButtonConfigLoader extends HasLog {
         const wrapLog = this.log.call('getFromName', name);
         return wrapLog.return({
             command: {
-                action: name.trim(),
+                action: name.trim() as CommandNames,
                 params: params,
             },
             _expanded: true,

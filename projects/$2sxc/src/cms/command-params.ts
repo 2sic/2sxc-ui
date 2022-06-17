@@ -1,4 +1,4 @@
-﻿import { ItemIdentifierGroup, ItemIdentifierSimple, MetadataForBasic } from '.';
+﻿import { CommandNames, ItemIdentifierGroup, ItemIdentifierSimple, MetadataForBasic } from '.';
 import { TypeValue } from '../../../inpage/src/plumbing';
 
 /**
@@ -7,7 +7,7 @@ import { TypeValue } from '../../../inpage/src/plumbing';
  */
 export interface CommandParams {
     /** The action is used in scenarios where the command name must be included */
-    action?: string;
+    action?: CommandNames;
     items?: Array<ItemIdentifierSimple | ItemIdentifierGroup>;
     mode?: string;
 

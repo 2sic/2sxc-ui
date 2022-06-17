@@ -1,10 +1,9 @@
 ﻿import { ButtonCommand } from '.';
+import { CommandNames, CommandParams } from '../../commands';
 import { CommandCode } from '../../commands/command-code';
 import { CommandLinkGenerator } from '../../commands/command-link-generator';
-import { CommandParams } from '../../../../$2sxc/src/cms/command-params';
 import { ContextComplete } from '../../context/bundles/context-bundle-button';
 import { Obj, TypeTbD } from '../../plumbing';
-import { BuildRule } from '../rules';
 
 /**
  * This is the most common call signature on most ButtonConfig properties
@@ -39,9 +38,9 @@ export class Button {
             Obj.TypeSafeAssign(this, command.command.buttonDefaults);
     }
 
-    static splitName(identifier: string): { id: string, name: string} {
+    static splitName(identifier: string): { id: string, name: CommandNames } {
         const parts = identifier.split('=');
-        return { id: parts[0], name: parts[1] || identifier};
+        return { id: parts[0], name: (parts[1] || identifier) as CommandNames};
     }
 
     /** Configure the link generator before it creates the link */
