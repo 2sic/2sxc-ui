@@ -4,68 +4,101 @@
  */
 export enum CommandNames {
     /**
-     * `add` command open a `new` dialog to add a new item to a list of items
-     * Note that this is similar to `new` but still not the same
+     * `add` command opens a `new` dialog to create and add a new item to a **list of items**.
+     * <br> The new item is placed after the item the (+) was clicked on.
+     * <br>💡
+     * This is similar to `new` but also adds the item to the existing list of items shown on the page.
+     * <br> 🪜 Only appears on toolbars of items which are in a list.
      */
     add = 'add',
 
     /**
-     * `add-existing` command to open a dialog allowing the user to select something to add to a list of items
+     * `add-existing` command opens a dialog allowing the user to select an existing item to add to a **list of items**.
+     * <br> The new item is placed after the item the (+) was clicked on.
+     * <br> 🔘
+     * <br> 🪜 Only appears on toolbars of items which are in a list.
      */
     addExisting = 'add-existing',
 
     /**
-     * `app-import` command will open the dialog to import an App
-     */
-    appImport = 'app-import',
-
-    /**
-     * `app-resources` will open the edit for app-resources (multi-language texts, labels etc.). It's disabled if the app doesn't have resource-values to configure
-     */
-    appResources = 'app-resources',
-
-    /**
-     * `app-settings` will open the edit dialog for the app-settings. It's disabled if the app doesn't have setting-values to configure
-     */
-    appSettings = 'app-settings',
-
-    /**
      * `app` will open the app-admin dialog
+     * <br> 🔘
+     * <br> 🔐 Toolbar shows this automatically to elevated admins.
      */
     app = 'app',
 
     /**
-     * `apps` will open the manage all apps dialog
+     * `app-import` command will open the dialog to import an App.
+     * <br> 🔘
+     * This is not available on the toolbar.
+     */
+    appImport = 'app-import',
+
+    /**
+     * `app-resources` will open the edit dialog for app-resources (multi-language texts, labels etc.).
+     * <br> 🔘
+     * It's disabled on the toolbar if the app doesn't have resource-values to configure.
+     * <br> 🔐 Toolbar shows this automatically to elevated admins.
+     */
+    appResources = 'app-resources',
+
+    /**
+     * `app-settings` will open the edit dialog for the app-settings.
+     * <br> 🔘
+     * It's disabled on the toolbar if the app doesn't have setting-values to configure
+     * <br> 🔐 Toolbar shows this automatically to elevated admins.
+     */
+    appSettings = 'app-settings',
+
+    /**
+     * `apps` will open the manage all apps dialog.
+     * <br> 🔘
+     * <br> 🔐 Toolbar shows this automatically to elevated admins.
      */
     apps = 'apps',
 
     /**
-     * `contentitems` will open the dialog to manage content-items for the current template. Will use the settings of the current template to open.
-     *  contentType (optional) - name of data-type to manage/open
+     * `contentitems` will open the list to manage all items of a specific content-type.
+     * <br> 🔘
+     * Will use the settings of the current template to open.
+     * It is only shown to elevated admins.
+     * <br>
+     * Parameters
+     * contentType (optional) - name of data-type to manage/open
      */
     contentItems = 'contentitems',
 
     /**
-     * `contenttype` will open the dialog to view or change the current content-type, meaning you can change what fields it has, their types etc
+     * `contenttype` will open the dialog to view or modify fields of a content-type.
+     * <br> 🔘
+     * On a toolbar it will use the content-type of the current item.
+     * <br> 🔐 Toolbar shows this automatically to elevated admins.
      */
     contentType = 'contenttype',
 
     /**
-     * `copy` command will open the edit-dialog for the current item in copy-mode, so when saving it will be a new item
+     * `copy` command will open the edit-dialog for the current item in copy-mode, so when saving it will be a new item.
      *
-     * To work, it also needs `contentTypeName`
-     * WIP v14.02
+     * To work, it also needs `contentType` ...Name?
+     * ⚠️ WIP v14.02
      */
     copy = 'copy',
 
     /**
-     * `custom` will execute custom javascript
-     * customCode - some JS like "alert('hello');"
+     * `custom` will execute custom javascript.
+     * <br> 🔘
+     * This is mainly for toolbars, to add buttons with custom code.
      */
     custom = 'custom',
 
     /**
-     * `delete` will delete (not just remove) a content-item. Needs:
+     * `delete` will delete (not just remove) a content-item.
+     * <br>
+     * 💡 This is similar to `remove` but really deletes the data from the DB.
+     * <br> 🔘
+     * It only appears if the toolbar explicitly asks for it.
+     * <br>
+     * Needs:
      * entityId
      * entityGuid
      * entityTitle
@@ -73,36 +106,44 @@ export enum CommandNames {
     delete = 'delete',
 
     /**
-     * `edit` command will open the edit-dialog for the current item.
-     * In scenarios where we have a list of items and it's currently showing the demo, this will have the same effect as `add`
+     * `edit` command will open an edit-dialog.
+     * <br>
+     * In scenarios where the page is currently showing a demo item, this will have the same effect as `add`
      */
     edit = 'edit',
 
     /**
+     * `image` command will open the edit-dialog for the metadata of the current image
+     * @internal - may be removed soon
+     */
+     image = 'image',
+
+    /**
      * `insights-server` command will open the insights logs page
+     * <br> 🔘
+     * <br> 🔐 Toolbar shows this automatically to elevated admins.
      */
     insightsServer = 'insights-server',
 
     /**
-     * `instance-list` command will open a dialog to manually re-order items in a list. (note: in older versions was called "sort"
+     * `instance-list` command will open a dialog to manually re-order **items in a list**.
+     * <br> 🪜 Only appears on toolbars of items which are in a list.
      */
     instanceList = 'instance-list',
 
     /**
      * `layout` command will open the in-page dialog to change the layout of the current content.
+     * <br>
      * [no parameters needed]
      */
     layout = 'layout',
 
     /**
-     * `metadata` command will open the edit-dialog for the current metadata item
+     * `metadata` command will open the edit-dialog for the current metadata item.
+     * <br> 🔘
+     * It only appears if the toolbar explicitly asks for it.
      */
     metadata = 'metadata',
-
-    /**
-     * `image` command will open the edit-dialog for the metadata of the current image
-     */
-    image = 'image',
 
     /**
      * `more` command create a "…" button which flips through the menu-buttons of toolbars
@@ -110,16 +151,20 @@ export enum CommandNames {
     more = 'more',
 
     /**
-     * `movedown` command moves a content-item down one position in the list
+     * `movedown` command moves a content-item down one position in a **list of items**.
      * useModuleList: true (required to be true for it to work)
      * sortOrder: [number] (important so it knows the position)
+     * ⚠️ do not use this yet, we plan to change the parameters
+     * <br> 🪜 Only appears on toolbars of items which are in a list.
      */
     moveDown = 'movedown',
 
     /**
-     * `moveup` command moves a content-item up one position in the list
+     * `moveup` command moves a content-item up one position in a **list of items**.
      * useModuleList: true (required to be true for it to work)
      * sortOrder: [number] (important so it knows the position)
+     * ⚠️ do not use this yet, we plan to change the parameters
+     * <br> 🪜 Only appears on toolbars of items which are in a list.
      */
     moveUp = 'moveup',
 
@@ -144,6 +189,8 @@ export enum CommandNames {
 
     /**
      * `publish` command tells the system to update a content-items status to published. If there was a published and a draft before, the draft will replace the previous item
+     * <br> 🔘
+     * Only appears on the toolbar if the item is not published.
      */
     publish = 'publish',
 
@@ -151,6 +198,7 @@ export enum CommandNames {
      * `remove` command removes an item from a list of items.
      * useModuleList: true (required to be true for it to work)
      * sortOrder: [number] (important so it knows the position)
+     * <br> 🪜 Only appears on toolbars of items which are in a list.
      */
     remove = 'remove',
 
@@ -160,22 +208,28 @@ export enum CommandNames {
     replace = 'replace',
 
     /**
-     * `template-develop` will open the template-editor dialog in a new window. (note: in older versions was called "develop")
+     * `template-develop` will open the template-editor dialog in a new window.
+     * <br> 🔐 Toolbar shows this automatically to elevated admins.
      */
     templateDevelop = 'template-develop',
 
     /**
-     * `template-query` will open the pipeline/query-designer in a new window. It's invisible on content, and disabled if no pipeline is configured
+     * `template-query` will open the pipeline/query-designer in a new window.
+     * <br> 🔘It's not available on the simple Content App, only on full Apps.
+     * It is disabled if no query is configured. 
+     * <br> 🔐 Toolbar shows this automatically to elevated admins.
      */
     templateQuery = 'template-query',
 
     /**
      * `template-settings` will change settings on the template currently used
+     * <br> 🔐 Toolbar shows this automatically to elevated admins.
      */
     templateSettings = 'template-settings',
 
     /**
-     * `zone` will open the manage all apps dialog
+     * `zone` will open the system dialog for this zone/site.
+     * <br> 🔐 Toolbar shows this automatically to elevated admins.
      */
     zone = 'zone',
 }
