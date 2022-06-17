@@ -1,6 +1,6 @@
-import { ToolbarWithWorkflow, WorkflowStepCodeArguments, WorkflowManager } from '.';
+import { ToolbarWithWorkflow, WorkflowStepCodeArguments, ToolbarWorkflowManager } from '.';
 
-let dummyWorkflowManager: WorkflowManager;
+let dummyWorkflowManager: ToolbarWorkflowManager;
 const debug = false;
 
 /**
@@ -16,7 +16,7 @@ export class WorkflowHelper {
      * Find the command workflow on a toolbar (or return null).
      * Will go upwards in the DOM to find the toolbar node which has the configuration stored
      */
-    static getWorkflow(node: HTMLElement): WorkflowManager {
+    static getWorkflow(node: HTMLElement): ToolbarWorkflowManager {
         if (!node) return WorkflowHelper.getDummyManager();
 
         if (debug) console.log('try to find command workflow on ', node);
@@ -36,11 +36,11 @@ export class WorkflowHelper {
      * Get a dummy workflow manager
      *
      * @static
-     * @returns {WorkflowManager}
+     * @returns {ToolbarWorkflowManager}
      * @memberof WorkflowHelper
      */
-    static getDummyManager(): WorkflowManager {
-        if (!dummyWorkflowManager) dummyWorkflowManager = new WorkflowManager(null, true);
+    static getDummyManager(): ToolbarWorkflowManager {
+        if (!dummyWorkflowManager) dummyWorkflowManager = new ToolbarWorkflowManager(null, true);
         return dummyWorkflowManager;
     }
 

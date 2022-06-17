@@ -1,4 +1,4 @@
-import { WorkflowManager } from '../workflow';
+import { ToolbarWorkflowManager } from '../workflow';
 
 /**
  * Event arguments for toolbar events.
@@ -18,5 +18,5 @@ export interface ToolbarEventArguments {
 
     identifier: string;
 
-    workflow: WorkflowManager;
+    workflow: ToolbarWorkflowManager;
 }

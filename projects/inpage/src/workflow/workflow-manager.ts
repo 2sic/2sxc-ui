@@ -8,10 +8,10 @@ import { WorkflowHelper } from './workflow-helper';
 
 /**
  * A workflow manager _of a Toolbar_ which will run stuff before / after commands.
- * When toolbars are created, they will add a Manager and then raise an event for in-page code to add workflow steps. 
+ * When toolbars are created, they will add a Manager and then raise an event for in-page code to add workflow steps.
  * Normally the toolbar with raise a `toolbar-init` event where you can then add steps.
  */
-export class WorkflowManager extends HasLog {
+export class ToolbarWorkflowManager extends HasLog {
 
     /** 
      * The workflow steps registered on this toolbar
@@ -27,7 +27,7 @@ export class WorkflowManager extends HasLog {
     }
 
     /**
-     * Add one or many steps to the workflow
+     * Register one or many [workflow-steps](xref:Api.Js.SxcJs.WorkflowStep) to the toolbar, to use if toolbar commands are executed.
      */
     // @publicApi("Used publicly on the Workflow-object in toolbar-init")
     add(steps: WorkflowStep | WorkflowStep[]) {

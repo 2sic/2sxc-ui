@@ -10,7 +10,7 @@ import { Button, ButtonSafe } from '../../toolbar/config';
 import { ButtonCommand } from '../../toolbar/config';
 import { InPageButtonJson } from '../../toolbar/config-loaders/config-formats/in-page-button';
 import { WorkflowHelper, WorkflowPhases, WorkflowStepCodeArguments } from '../../workflow';
-import { WorkflowManager } from '../../workflow/workflow-manager';
+import { ToolbarWorkflowManager } from '../../workflow/workflow-manager';
 import { CommandLinkGenerator } from '../command-link-generator';
 import { CommandParams } from '../../../../$2sxc/src/cms';
 import { WorkflowStep } from '../../workflow/workflow-step';
@@ -96,9 +96,9 @@ export class CmsEngine extends HasLog {
         // note: in cases where the click comes from elsewhere (like from the quick-dialog) there is no event
 
         // New in 12.10 - Workflow can be provided by run-call
-        let wf: WorkflowManager;
+        let wf: ToolbarWorkflowManager;
         if (wipParamsWithWorkflow?.workflows) {
-            wf = new WorkflowManager(this.log);
+            wf = new ToolbarWorkflowManager(this.log);
             wf.add(wipParamsWithWorkflow.workflows as WorkflowStep | WorkflowStep[]);
         } else
             wf = WorkflowHelper.getWorkflow(origEvent?.target as HTMLElement);

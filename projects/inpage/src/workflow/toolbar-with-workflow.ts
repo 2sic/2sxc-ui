@@ -1,4 +1,4 @@
-import { WorkflowManager } from '.';
+import { ToolbarWorkflowManager } from '.';
 
 /**
  * Simple interface to extend a HtmlElement with Workflow Manager
@@ -9,5 +9,5 @@ import { WorkflowManager } from '.';
  * @internal
  */
 export interface ToolbarWithWorkflow extends HTMLElement {
-    commandWorkflow: WorkflowManager;
+    commandWorkflow: ToolbarWorkflowManager;
 }

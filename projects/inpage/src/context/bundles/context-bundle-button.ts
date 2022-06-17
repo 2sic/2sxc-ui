@@ -2,7 +2,7 @@
 import { Obj } from '../../plumbing';
 import { SxcTools } from '../../sxc/sxc-tools';
 import { Button } from '../../toolbar/config/button';
-import { WorkflowManager } from '../../workflow';
+import { ToolbarWorkflowManager } from '../../workflow';
 import { AttrJsonEditContext } from '../html-attribute';
 import { ContextBundleToolbar } from './context-bundle-toolbar';
 
@@ -12,7 +12,7 @@ import { ContextBundleToolbar } from './context-bundle-toolbar';
 export class ContextComplete extends ContextBundleToolbar {
     button?: Button;
 
-    commandWorkflow?: WorkflowManager;
+    commandWorkflow?: ToolbarWorkflowManager;
 
     constructor(editCtx: AttrJsonEditContext, sxc?: Sxc) {
         super(editCtx, sxc);
