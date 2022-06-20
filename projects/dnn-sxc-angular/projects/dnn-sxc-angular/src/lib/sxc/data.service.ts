@@ -1,7 +1,7 @@
+import { MetadataFor } from '@2sic.com/2sxc-typings';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { routeContent } from '../contants';
-import { MetadataFor } from '../../../../../../$2sxc/src/data/metadata-for'
 
 /**
  * A helper to access data from 2sxc

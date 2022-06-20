@@ -4,5 +4,5 @@
   "lib": {
     "entryFile": "src/public-api.ts"
   },
-  "whitelistedNonPeerDependencies": ["@2sic.com/2sxc-typings"]
+  "allowedNonPeerDependencies": ["@2sic.com/2sxc-typings"]
 }
