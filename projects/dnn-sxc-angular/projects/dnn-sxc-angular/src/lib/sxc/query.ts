@@ -4,6 +4,8 @@ import { map } from 'rxjs/operators';
 import { getHttpParams } from '../../utils/params';
 import { routeQuery } from '../contants';
 
+// TODO: @2mh RENAME TO SxcQueryService
+
 /**
  * Query object for getting typed data.
  * @export

@@ -23,7 +23,6 @@ declare let __webpack_public_path__: any;
  *
  * Note: some properties like moduleId are probably not actually in use any more and will probably be empty
  *
- * @export
  * @class Context
  * @implements {ContextInfo}
  */

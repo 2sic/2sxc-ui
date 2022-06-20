@@ -2,7 +2,7 @@ import { HttpParams } from '@angular/common/http';
 
 export type UrlParams = HttpParams | string | Record<string, unknown | undefined>;
 
-
+/** @internal */
 export function getHttpParams(params: UrlParams): HttpParams {
   return typeof(params) !== 'string'
   ? params as HttpParams

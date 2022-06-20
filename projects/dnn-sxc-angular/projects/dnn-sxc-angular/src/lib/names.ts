@@ -1,3 +1,6 @@
+/**
+ * @internal
+ */
 export const appTag = {
   edition: 'edition',
   apiEdition: 'api-edition',

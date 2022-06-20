@@ -23,6 +23,7 @@ import { NgModule, Optional, SkipSelf } from '@angular/core';
   ]
 })
 
+// TODO: @2mh RENAME TO SxcRootModule
 
 export class DnnSxcRootModule {
 

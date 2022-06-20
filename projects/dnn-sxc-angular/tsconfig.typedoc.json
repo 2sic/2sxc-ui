@@ -11,5 +11,10 @@
     "excludePrivate": true,
     "excludeProtected": true,
     "excludeExternals": false,
-  }
+  },
+  "exclude": [
+    "src/test.ts",
+    "**/*.spec.ts",
+    "**/node_modules/**",
+  ]
 }

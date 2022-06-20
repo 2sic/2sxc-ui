@@ -1,5 +1,5 @@
-export * from './api';
-export * from './data';
-export * from './sxc-app';
-export * from './query';
-export * from './metadata-for';
+/** @internal */ export * from './api';
+/** @internal */ export * from './data';
+/** @internal */ export * from './sxc-app';
+/** @internal */ export * from './query';
+/** @internal */ export * from './metadata-for';

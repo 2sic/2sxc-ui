@@ -3,6 +3,8 @@ import { Observable } from 'rxjs';
 import { routeContent } from '../contants';
 import { MetaDataFor } from './metadata-for';
 
+// TODO: @2mh RENAME TO SxcDataService
+
 /**
  * A helper to access data from 2sxc
  *

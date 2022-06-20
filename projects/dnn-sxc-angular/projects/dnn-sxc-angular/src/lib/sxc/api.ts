@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 import { getHttpParams, UrlParams } from '../../utils/params';
 import { routeApi } from '../contants';
 
+// TODO: @2mh RENAME TO SxcApiService
 
 /**
  * Quickly call WebApis on the current App

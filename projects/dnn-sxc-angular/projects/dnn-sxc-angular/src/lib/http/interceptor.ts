@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { apiRouteName, routeApi, routeRoot } from '../contants';
 import { Context } from '../context/context.service';
 
+// TODO: @2mh RENAME TO SxcHttpInterceptor
 @Injectable()
 export class Interceptor implements HttpInterceptor {
   constructor(private context: Context) { }
