@@ -1,1 +1,1 @@
-export * from './dnn-menu-helper/dnn-inpage-edit';
+import './dnn-08.00.04';

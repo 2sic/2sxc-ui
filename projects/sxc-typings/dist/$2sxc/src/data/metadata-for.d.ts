@@ -1,4 +1,4 @@
-import { TargetTypes } from './target-types';
+import { MetadataTargetTypes } from './target-types';
 /**
  * A Metadata-Target identifier to tell an entity that it describes something else.
  *
@@ -12,7 +12,7 @@ export interface MetadataFor {
      * The target type identifier
      * - TODO: @2dm - THIS SHOULD probably be number only
      */
-    Target: string | TargetTypes;
+    Target: string | MetadataTargetTypes;
     /**
      * The number of the target, if it's identified by a number.
      * @type {number}

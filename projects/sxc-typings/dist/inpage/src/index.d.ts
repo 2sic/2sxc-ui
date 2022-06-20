@@ -1,1 +1,1 @@
-export {};
+import './dnn/index';

@@ -5,7 +5,7 @@
  *
  * Use it for the @see MetadataFor objects
  */
-export declare enum TargetTypes {
+export declare enum MetadataTargetTypes {
     /**
      * Undefined Type (0) - included for completeness.
      * Not usually used, actually None (1) is the default
