@@ -1,3 +1,5 @@
+import { MetadataTargetTypes } from '../data';
+
 /**
  * Parameters on `metadata` for commands which have a metadata-target. 
  */
@@ -15,5 +17,5 @@ export interface CommandParamsMetadata {
     /**
      * The target type, will default to 10 = CMS-Item
      */
-    targetType?: number;
+    targetType?: MetadataTargetTypes;
 }
