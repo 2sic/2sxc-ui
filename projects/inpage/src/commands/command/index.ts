@@ -32,7 +32,7 @@
 /** @internal */ import './command-template-settings';
 /** @internal */ import './command-zone';
 
-
+/** @internal */ export * from './command-params-entity';
 /** @internal */ export * from './content-list-action-params';
 /** @internal */ export * from './content-list-actions';
 

@@ -1,5 +1,6 @@
 ﻿import { CommandNames, Commands } from '..';
 import { CommandContentTypeParams, createContentTypeParams } from './command-content-type';
+import { CommandParamsEntityById } from './command-params-entity';
 
 /**
  * open an edit-item dialog
@@ -17,7 +18,6 @@ Commands.add(CommandNames.copy, 'Copy', 'copy', false, true, {
 
   configureLinkGenerator: (ctx, linkGenerator) => {
     const originalId = ctx.button.command.params.entityId;
-    // TODO: DROP USE OF contentTypeName as soon as we fixed the events-app
     const typeName = createContentTypeParams(ctx).contentType;
     if (!typeName) throw new Error("can't copy: missing contentType");
     linkGenerator.items = [{ DuplicateEntity: originalId, ContentTypeName: typeName }];
@@ -25,13 +25,10 @@ Commands.add(CommandNames.copy, 'Copy', 'copy', false, true, {
 });
 
 /**
- * Parameters used for the command `copy`
+ * Parameters used for the command `copy`.
+ * Will copy the entity on `entityId`.
  * <br>
  * ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)
  */
-export interface CommandCopyParams extends CommandContentTypeParams {
-  /**
-   * Entity to copy, required or the button won't even appear.
-   */
-  entityId: number;
+export interface CommandCopyParams extends CommandContentTypeParams, CommandParamsEntityById {
 }

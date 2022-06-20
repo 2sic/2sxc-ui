@@ -18,28 +18,3 @@ Commands.add(CommandNames.remove, 'Remove', 'minus-circled', false, true, {
         });
     },
 });
-
-
-
-/**
- * Parameters used for the command `moveup` and `movedown`.
- * <br>
- * ⚠️ do not use parameters in custom code, we plan to change the signature.
- * <br>
- * ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)
- */
- export interface CommandMoveParams {
-  /**
-   * Determins the position where a new item will be added to.
-   * <br>
-   * ⚠️ This parameter will change soon, don't use it in code. 
-   */
-  sortOrder: number;
-
-  /**
-   * Must be true, to work on the module list. 
-   * <br>
-   * ⚠️ This parameter will change soon, don't use it in code. 
-   */
-  useModuleList: true;
-}

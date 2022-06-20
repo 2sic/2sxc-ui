@@ -1,5 +1,4 @@
 ﻿import { CommandNames, Commands } from '..';
-import { CommandMoveParams } from './command-movedown';
 import { SharedLogic } from './shared-logic';
 
 /**
@@ -26,14 +25,3 @@ Commands.add(CommandNames.replace, 'Replace', 'replace', false, true, {
         }}];
     },
 });
-
-
-/**
- * Parameters used for the command `replace`.
- * <br>
- * ⚠️ do not use parameters in custom code, we plan to change the signature.
- * <br>
- * ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)
- */
-export interface CommandReplaceParams extends CommandMoveParams {
-}

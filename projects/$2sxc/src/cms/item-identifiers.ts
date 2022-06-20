@@ -1,4 +1,4 @@
-import { MetadataForBasic } from '.';
+import { CommandParamsMetadata } from '.';
 import { TypeValue } from '../../../inpage/src/plumbing';
 
 // NOTE: THESE ITEM IDENTIFIERS SHOULD PROBABLY ALWAYS REMAIN INTERNAL
@@ -20,7 +20,7 @@ interface ItemIdentifierShared {
 export interface ItemIdentifierSimple {
   EntityId: number;
   ContentTypeName?: string;
-  Metadata?: MetadataForBasic;
+  Metadata?: CommandParamsMetadata;
   Prefill?: Record<string, TypeValue>;
 }
 

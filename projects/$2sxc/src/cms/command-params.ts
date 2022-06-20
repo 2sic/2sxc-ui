@@ -1,4 +1,4 @@
-﻿import { CommandNames, ItemIdentifierGroup, ItemIdentifierSimple, MetadataForBasic } from '.';
+﻿import { CommandNames, ItemIdentifierGroup, ItemIdentifierSimple, CommandParamsMetadata } from '.';
 import { TypeValue } from '../../../inpage/src/plumbing';
 
 /**
@@ -30,7 +30,7 @@ export interface CommandParams {
     title?: string;
 
     useModuleList?: boolean;
-    metadata?: MetadataForBasic;
+    metadata?: CommandParamsMetadata;
 
     isPublished?: boolean;
     prefill?: Record<string, TypeValue>;
