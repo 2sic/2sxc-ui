@@ -5,10 +5,10 @@ import { HasLog } from '../core';
  * When toolbars are created, they will add a Manager and then raise an event for in-page code to add workflow steps.
  * Normally the toolbar with raise a `toolbar-init` event where you can then add steps.
  */
-export declare class WorkflowManager extends HasLog {
+export declare class ToolbarWorkflowManager extends HasLog {
     private isDummy;
     /**
-     * Add one or many steps to the workflow
+     * Register one or many [workflow-steps](xref:Api.Js.SxcJs.WorkflowStep) to the toolbar, to use if toolbar commands are executed.
      */
     add(steps: WorkflowStep | WorkflowStep[]): void;
 }
