@@ -1,9 +1,10 @@
-export const apiRouteName = 'api';
-export const contentRouteName = 'content';
-export const queryRouteName = 'query';
 
-export const routeRoot = 'app/auto/';
+/** @internal */ export const apiRouteName = 'api';
+/** @internal */ export const contentRouteName = 'content';
+/** @internal */ export const queryRouteName = 'query';
 
-export const routeApi = `${routeRoot}${apiRouteName}`;
-export const routeQuery = `${routeRoot}${queryRouteName}`;
-export const routeContent = `${routeRoot}${contentRouteName}`;
+/** @internal */ export const routeRoot = 'app/auto/';
+
+/** @internal */ export const routeApi = `${routeRoot}${apiRouteName}`;
+/** @internal */ export const routeQuery = `${routeRoot}${queryRouteName}`;
+/** @internal */ export const routeContent = `${routeRoot}${contentRouteName}`;

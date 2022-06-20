@@ -1,13 +1,26 @@
 import { ElementRef } from '@angular/core';
 
+/**
+ * Special service to inject in the root of the app.
+ * Allows you to pass configuration on the app-tag in HTML to configure the application.
+ * @internal
+ */
 export class AppTagService {
-    constructor(
-        private el: ElementRef
+  constructor(
+    /**
+     * The app-tag on the HTML page.
+     */
+    private appElement: ElementRef
     ) {
-    }
-    
-    public getAttribute(attribute: string): string {
-        // todo: after upgrading to NG8, probably use el.GetAttribute
-        return this.el.nativeElement.getAttribute(attribute);
-    }
+  }
+
+  /**
+   * Get the value of an attribute on the main app-tag
+   * @param attributeName
+   * @returns
+   */
+  public getAttribute(attributeName: string): string {
+    // todo: after upgrading to NG8, probably use el.GetAttribute
+    return this.appElement.nativeElement.getAttribute(attributeName);
+  }
 }

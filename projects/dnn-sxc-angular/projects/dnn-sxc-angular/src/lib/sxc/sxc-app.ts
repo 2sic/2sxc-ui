@@ -5,7 +5,8 @@ import { Injectable } from '@angular/core';
 import { Query } from './query';
 
 /**
- * 2sxc data provider
+ * 2sxc App Instance Object
+ * <br>
  * gives you access to content and query streams using the content$ and query$ commands
  * you can also use the content and query managers, but these are currently not so useful.
  *

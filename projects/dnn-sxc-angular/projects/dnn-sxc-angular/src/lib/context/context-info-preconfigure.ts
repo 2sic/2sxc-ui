@@ -7,6 +7,7 @@ import { ContextInfo} from './context-info'
  * The context in which the current app is running.
  * Important to interact with the server
  * or with the DNN around it.
+ * @internal
  */
 export interface ContextInfoPreconfigure extends ContextInfo {
 

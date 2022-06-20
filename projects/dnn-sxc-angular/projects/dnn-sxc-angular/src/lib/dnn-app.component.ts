@@ -1,6 +1,8 @@
 import { Context } from './context/context.service';
 import { ElementRef } from '@angular/core';
 
+// TODO: @2mh RENAME TO SxcAppComponent
+
 /**
  * A root app component which initializes the context-providers once the app is loaded
  * This is the earliest moment we can access the ElementRef, because before that
