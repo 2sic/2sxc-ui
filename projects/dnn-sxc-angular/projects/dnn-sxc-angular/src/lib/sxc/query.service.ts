@@ -4,15 +4,13 @@ import { map } from 'rxjs/operators';
 import { getHttpParams, UrlParams } from '../../utils/params';
 import { routeQuery } from '../contants';
 
-// TODO: @2mh RENAME TO SxcQueryService
-
 /**
  * Query object for getting typed data.
  * @export
- * @class Query
+ * @class SxcQueryService
  * @template T type (usually an interface) of the data coming back
  */
-export class Query<T> {
+export class SxcQueryService<T> {
   constructor(
     private http: HttpClient,
     private name: string

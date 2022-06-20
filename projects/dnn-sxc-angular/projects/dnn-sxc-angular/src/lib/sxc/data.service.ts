@@ -3,15 +3,13 @@ import { Observable } from 'rxjs';
 import { routeContent } from '../contants';
 import { MetadataFor } from '../../../../../../$2sxc/src/data/metadata-for'
 
-// TODO: @2mh RENAME TO SxcDataService
-
 /**
  * A helper to access data from 2sxc
  *
- * @class Data
+ * @class SxcDataService
  * @template T Type which the system will return
  */
-export class Data<T> {
+export class SxcDataService<T> {
   constructor(
     private http: HttpClient,
     private contentType: string,

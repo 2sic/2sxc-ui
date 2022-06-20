@@ -1,13 +1,13 @@
 import { Context } from './context/context.service';
 import { SxcApp } from './sxc/sxc-app';
-import { DnnInterceptor } from './http/dnn.interceptor';
+import { SxcHttpInterceptorProvider } from './http/sxc.interceptor-provider';
 import { NgModule, Optional, SkipSelf } from '@angular/core';
 
 /**
  * The Root module which must be included in the application root.
  * It ensures that context etc. is singleton across the entire application
  * @export
- * @class DnnSxcRootModule
+ * @class SxcRootModule
  */
 @NgModule({
   imports: [
@@ -19,18 +19,16 @@ import { NgModule, Optional, SkipSelf } from '@angular/core';
   providers: [
     SxcApp,
     Context,
-    DnnInterceptor,
+    SxcHttpInterceptorProvider,
   ]
 })
 
-// TODO: @2mh RENAME TO SxcRootModule
-
-export class DnnSxcRootModule {
+export class SxcRootModule {
 
   // This constructor is a special helper to prevent use in sub-modules
   // https://angular.io/guide/singleton-services#prevent-reimport-of-the-greetingmodule
-  constructor(@Optional() @SkipSelf() parentModule?: DnnSxcRootModule) {
+  constructor(@Optional() @SkipSelf() parentModule?: SxcRootModule) {
     if (parentModule)
-      throw new Error('DnnSxcRootModule is already loaded. Import it in the root AppModule only');
+      throw new Error('SxcRootModule is already loaded. Import it in the root AppModule only');
   }
 }

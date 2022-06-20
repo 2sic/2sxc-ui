@@ -1,16 +1,14 @@
 import { Context } from './context/context.service';
 import { ElementRef } from '@angular/core';
 
-// TODO: @2mh RENAME TO SxcAppComponent
-
 /**
  * A root app component which initializes the context-providers once the app is loaded
  * This is the earliest moment we can access the ElementRef, because before that
  * it's not attached to the DOM, so auto-detect wouldn't work.
  * @export
- * @class DnnAppComponent
+ * @class SxcAppComponent
  */
-export class DnnAppComponent {
+export class SxcAppComponent {
   /**
    *
    * @param element the angular ElementRef - required to auto-detect moduleId and more
