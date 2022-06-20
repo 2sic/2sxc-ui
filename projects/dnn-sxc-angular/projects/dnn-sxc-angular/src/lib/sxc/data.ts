@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { routeContent } from '../contants';
-import { MetaDataFor } from './metadata-for';
+import { MetadataFor } from '../../../../../../$2sxc/src/data/metadata-for'
 
 /**
  * A helper to access data from 2sxc
@@ -39,12 +39,12 @@ export class Data<T> {
   /**
    * Create new item as metadata for something
    */
-  create(item: T | any, metadataFor: MetaDataFor): Observable<T>;
+  create(item: T | any, metadataFor: MetadataFor): Observable<T>;
 
   /**
    * Internal implementation of create
    */
-  create(item: T | any, metadataFor?: MetaDataFor): Observable<T> {
+  create(item: T | any, metadataFor?: MetadataFor): Observable<T> {
     const url = `${routeContent}/${this.contentType}`;
     item = (metadataFor != null ? { ...item, For: metadataFor } : item);
     return this.http.post<T>(url, item);

@@ -1,4 +1,4 @@
-import { SxcInstance, SxcRoot } from "@2sic.com/2sxc-typings";
+import { Sxc, SxcGlobal } from "@2sic.com/2sxc-typings";
 
 // These are the parameters which make up the current context / state of this app.
 // It's mainly needed to ensure that the Http Service is correctly set up.
@@ -13,12 +13,12 @@ export interface ContextInfo {
   /**
    * The $2sxc root object which is globally accessible through window.$2sxc
    */
-  $2sxc: SxcRoot;
+  $2sxc: SxcGlobal;
 
   /**
    * the helper sxc-object to communicate with the server
    */
-  sxc: SxcInstance;
+  sxc: Sxc;
 
   /**
    * If false, does not append any custom headers to DNN requests
