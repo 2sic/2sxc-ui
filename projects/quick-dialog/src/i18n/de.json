@@ -13,7 +13,7 @@
     "Catalog": "App Katalog durchsuchen",
 
     "App": "App Konfigurieren",
-    "Zone": "Apps verwalten"
+    "Zone": "Alle Apps"
 
   }
 }
