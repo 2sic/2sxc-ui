@@ -23,12 +23,11 @@ export class DnnAppComponent {
     // auto-config to pick up tab-id, module id, etc.
     context.autoConfigure(element);
     // prevent asp.net submit action caused by enter-keys inside our app
-    if(!enableDefaultSubmit){
-      element.nativeElement.addEventListener('keydown', function(e: any) {
-        if(e.target.tagName.toLowerCase() == "input" && e.keyCode==13)
-          e.preventDefault();
-      });
-
-    }
+    if (!enableDefaultSubmit)
+      element.nativeElement.addEventListener('keydown', (e: any) => {
+          if (e.target.tagName.toLowerCase() === 'input' && e.keyCode === 13)
+            e.preventDefault();
+        }
+      );
   }
 }

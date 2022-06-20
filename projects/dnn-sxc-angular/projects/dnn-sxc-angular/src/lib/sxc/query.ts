@@ -1,6 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { getHttpParams } from '../../utils/params';
 import { routeQuery } from '../contants';
 
 /**
@@ -16,44 +17,88 @@ export class Query<T> {
   ) { }
 
   readonly streamParamKey = 'stream';
-  readonly defaultStreamName = 'Default';
-  readonly allStreams = `*`;
 
   /**
-   * will retrieve a 2sxc query
-   * remember to set the permissions on the query, so it can be accessed by the group you want
+   * Get an object with all the streams, each containing an array of all the data in that stream
    */
-  get(params?: HttpParams, streams?: string | string[]): Observable<T> {
-    if (streams === undefined) streams = [this.defaultStreamName];
+  getAll(): Observable<T>;
 
-    if (typeof streams === 'string') {
-      // the backend has trouble with `*` and it will take time to fix
-      // so if it's *, just assume it's empty
-      if(streams === this.allStreams) streams = '';
-      streams = streams.split(',');
-    }
+  /**
+   * Get an object with all the streams, each containing an array of all the data in that stream
+   * with url-parameters as HttpParams or string
+   */
+  getAll(params: HttpParams | string): Observable<T>;
 
-    if (streams) params = this.setStreamParam(params, streams);
+  /**
+   * Get an object with all the streams, each containing an array of all the data in that stream
+   * with url-parameters as HttpParams or string using post data
+   */
+  getAll(params: HttpParams | string, data: T): Observable<T>;
 
+  /**
+   * Internal implementation of getAll
+   */
+  getAll(params?: HttpParams | string, data?: T): Observable<T> {
     const url = `${routeQuery}/${this.name}`;
-    let observable = this.http.get<any>(url, { params });
+    const streamParams: HttpParams = getHttpParams(params);
 
-    // If only one stream is requested, directly return the stream in the returned observable
-    if (streams && streams.length === 1 && streams[0].length && streams[0] !== this.allStreams)
-      return observable.pipe(map(queryResult => queryResult[streams[0]]))
-    else
-      return observable;
+    if (data) return this.http.post<T>(url, data, { params: streamParams });
+    return this.http.get<T>(url, { params: streamParams });
   }
 
   /**
-   * Returns either the existing or a new HttpParams object, with the stream parameter appended.
-   * @param params the HttpParams which might be undefined or null
-   * @param streams the array of streams which will be appended to the HttpParams object
+   * Get an object with the specified stream, containing an array of all the data in that stream
    */
-  private setStreamParam(params: HttpParams, streams: string[]): HttpParams {
-    params = params || new HttpParams();
-    params = params.set(this.streamParamKey, streams.join(','));
-    return params;
+  getStream(stream: string): Observable<T>;
+
+  /**
+   * Get an object with the specified stream, containing an array of all the data in that stream
+   * with url-parameters as HttpParams or string
+   */
+  getStream(stream: string, params: HttpParams | string): Observable<T>;
+
+  /**
+   * Get an object with the specified stream, containing an array of all the data in that stream
+   * with url-parameters as HttpParams or string using post data
+   */
+  getStream(stream: string, params: HttpParams | string, data: T): Observable<T>;
+
+  /**
+   * Internal implementation of getStream
+   */
+  getStream(stream: string, params?: HttpParams | string, data?: T): Observable<T> {
+    const url = `${routeQuery}/${this.name}?${this.streamParamKey}=${stream}`;
+    const streamParams: HttpParams = getHttpParams(params);
+
+    if (data) return this.http.post<T>(url, data, { params: streamParams }).pipe(map(res => res[stream]));
+    return this.http.get<T>(url, { params: streamParams }).pipe(map(res => res[stream]));
   }
 
+  /**
+   * Get an object with the specified streams, each containing an array of all the data in that stream
+   */
+  getStreams(streams: string[]): Observable<T>;
+
+  /**
+   * Get an object with the specified streams, each containing an array of all the data in that stream
+   * with url-parameters as HttpParams or string
+   */
+  getStreams(streams: string[], params: HttpParams | string): Observable<T>;
+
+  /**
+   * Get an object with the specified streams, each containing an array of all the data in that stream
+   * with url-parameters as HttpParams or string using post data
+   */
+  getStreams(streams: string[], params: HttpParams | string, data: T): Observable<T>;
+
+  /**
+   * Internal implementation of getStreams
+   */
+  getStreams(streams: string[], params?: HttpParams | string, data?: T): Observable<T> {
+    const url = `${routeQuery}/${this.name}?${this.streamParamKey}=${streams.join(',')}`;
+    const streamParams: HttpParams = getHttpParams(params);
+
+    if (data) return this.http.post<T>(url, data, { params: streamParams });
+    return this.http.get<T>(url, { params: streamParams });
+  }
 }

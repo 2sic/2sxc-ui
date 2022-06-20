@@ -1,5 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { getHttpParams } from '../../utils/params';
 import { routeApi } from '../contants';
 
 /**
@@ -15,18 +16,41 @@ export class Api {
   ) {  }
 
   /**
-   * Do a GET request a 2sxc api controller method
+   * Get the request URL of the api
    */
-  get<T>(method: string, params?: HttpParams): Observable<T> {
-    const url = `${routeApi}/${this.controller}/${method}`;
-    return this.http.get<T>(url, { params });
+  url(method: string): string {
+    return `${routeApi}/${this.controller}/${method}`;
   }
 
   /**
-   * Do a POST request to a 2sxc api controller method
+   * Do a GET request to the specified 2sxc api controller
    */
-  post<T>(method: string, body: any, params?: HttpParams): Observable<T> {
-    const url = `${routeApi}/${this.controller}/${method}`;
-    return this.http.post<T>(url, body, { params });
+  get<T>(method: string, params: HttpParams | string): Observable<T> {
+    const requestParams: HttpParams = getHttpParams(params);
+    return this.http.get<T>(this.url(method), { params: requestParams });
+  }
+
+  /**
+   * Do a POST request to the specified 2sxc api controller
+   */
+  post<T>(method: string, params: HttpParams | string, body: T): Observable<T> {
+    const requestParams: HttpParams = getHttpParams(params);
+    return this.http.post<T>(this.url(method), body, { params: requestParams });
+  }
+
+  /**
+   * Do a PUT request to the specified 2sxc api controller
+   */
+  put<T>(method: string, params: HttpParams | string, body: T): Observable<T> {
+    const requestParams: HttpParams = getHttpParams(params);
+    return this.http.put<T>(this.url(method), body, { params: requestParams });
+  }
+
+  /**
+   * Do a DELETE request to the specified 2sxc api controller
+   */
+  delete<T>(method: string, params: HttpParams | string): Observable<T> {
+    const requestParams: HttpParams = getHttpParams(params);
+    return this.http.put<T>(this.url(method), { params: requestParams });
   }
 }
