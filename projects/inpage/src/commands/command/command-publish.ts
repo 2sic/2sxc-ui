@@ -9,36 +9,36 @@ import { Actions } from './content-list-actions';
  * @internal
  */
 Commands.add(CommandNames.publish, 'Unpublished', 'eye-off', false, false, {
-    showCondition(context) {
-        return context.button.command.params.isPublished === false;
-    },
-    disabled(context) {
-        return !context.instance.allowPublish;
-    },
-    code(context, event): Promise<void> {
-        return new Promise((resolve, reject) => {
-            if (context.button.command.params.isPublished) {
-                alert(translate('Toolbar.AlreadyPublished'));
-                return resolve();
-            }
+  showCondition(context) {
+      return context.button.command.params.isPublished === false;
+  },
+  disabled(context) {
+      return !context.instance.allowPublish;
+  },
+  code(context, event): Promise<void> {
+    return new Promise((resolve, reject) => {
+      if (context.button.command.params.isPublished) {
+        alert(translate('Toolbar.AlreadyPublished'));
+        return resolve();
+      }
 
-            // if we have an entity-id, publish based on that
-            if (context.button.command.params.entityId) {
-                return Actions.publishId(
-                    context,
-                    context.button.command.params.entityId,
-                );
-            }
+      // if we have an entity-id, publish based on that
+      if (context.button.command.params.entityId) {
+        return Actions.publishId(
+          context,
+          context.button.command.params.entityId,
+        );
+      }
 
-            const part: string =
-                context.button.command.params.sortOrder === -1
-                    ? 'listcontent'
-                    : 'content';
-            const index =
-                context.button.command.params.sortOrder === -1
-                    ? 0
-                    : context.button.command.params.sortOrder;
-            return Actions.publish(context, part, index);
-        });
-    },
+      const part: string =
+        context.button.command.params.sortOrder === -1
+          ? 'listcontent'
+          : 'content';
+      const index =
+        context.button.command.params.sortOrder === -1
+          ? 0
+          : context.button.command.params.sortOrder;
+      return Actions.publish(context, part, index);
+    });
+  },
 });

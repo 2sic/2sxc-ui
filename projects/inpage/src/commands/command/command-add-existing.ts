@@ -1,7 +1,6 @@
 ﻿import { CommandNames, Commands } from '..';
 import { ItemIdentifierGroup } from '../../../../$2sxc/src/cms';
 import { CommandAddParams } from './command-add';
-import { CommandContentTypeParams } from './command-content-type';
 import { SharedLogic } from './shared-logic';
 
 /**

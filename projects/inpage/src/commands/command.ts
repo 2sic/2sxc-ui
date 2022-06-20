@@ -10,8 +10,21 @@ export class Command {
     /** the defaults are important for new buttons that just know this command */
     buttonDefaults: Partial<Button>;
 
-    protected merge(icon: string, translateKey: string, uiOnly: boolean, partOfPage: boolean, more: Partial<Button>): void {
-        this.buttonDefaults = {
+    /**
+     * 
+     * @param icon 
+     * @param translateKey 
+     * @param uiOnly 
+     * @param partOfPage 
+     * @param more 
+     * @internal
+     */
+    mergeDefaults(translateKey: string, icon: string, uiOnly: boolean, partOfPage: boolean, more: Partial<Button>): void {
+      if (typeof (partOfPage) !== 'boolean')
+        throw 'partOfPage in commands not provided, order will be wrong!';
+
+
+      this.buttonDefaults = {
             icon: (_) => `icon-sxc-${icon}`,
             title: (_) => `Toolbar.${translateKey}`,
             uiActionOnly: (_) => uiOnly,
@@ -20,6 +33,17 @@ export class Command {
         };
     }
 
+    /**
+     * 
+     * @param name 
+     * @param translateKey 
+     * @param icon 
+     * @param uiOnly 
+     * @param partOfPage 
+     * @param more 
+     * @returns 
+     * @internal
+     */
     static build(name: string,
                  translateKey: string,
                  icon: string,
@@ -28,13 +52,10 @@ export class Command {
                  more: Partial<Button>,
                  ): Command {
 
-        if (typeof (partOfPage) !== 'boolean')
-            throw 'partOfPage in commands not provided, order will be wrong!';
-
         const commandDefinition = new Command(name);
 
         // Toolbar API v2
-        commandDefinition.merge(icon, translateKey, uiOnly, partOfPage, more);
+        commandDefinition.mergeDefaults(translateKey, icon, uiOnly, partOfPage, more);
 
         return commandDefinition;
     }

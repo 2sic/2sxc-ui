@@ -1,4 +1,5 @@
 ﻿import { TemplateConstants as TC, ToolbarTemplate } from '.';
+import { CommandNames as CN } from '../../commands';
 
 /**
  * @internal
@@ -9,22 +10,27 @@ export const ToolbarTemplateDefault: ToolbarTemplate = {
   groups: [
     {
       name: TC.GroupDefault,
-      buttons: 'edit,new,metadata,publish,layout',
+      buttons: [CN.edit, CN.new, CN.metadata, CN.publish, CN.layout].join(','),
+      // 'edit,new,metadata,publish,layout',
     }, {
       name: TC.GroupList,
-      buttons: 'add,add-existing,replace,remove,moveup,movedown,instance-list',
+      buttons: [CN.add, CN.addExisting, CN.replace, CN.remove, CN.moveUp, CN.moveDown, CN.instanceList].join(','),
+      // 'add,add-existing,replace,remove,moveup,movedown,instance-list',
     }, {
       name: TC.GroupEditAdvanced,
-      buttons: 'delete',
+      buttons: [CN.delete].join(','),
+      // 'delete',
     }, {
       name: TC.GroupView,
-      buttons: 'template-develop,template-settings,contentitems,template-query,contenttype',
+      buttons: [CN.templateDevelop, CN.templateSettings, CN.contentItems, CN.templateQuery, CN.contentType].join(','),
+      // 'template-develop,template-settings,contentitems,template-query,contenttype',
       defaults: {
         classes: 'group-pro',
       },
     }, {
       name: TC.GroupApp,
-      buttons: 'app,app-settings,app-resources,zone,insights-server',
+      buttons: [CN.app, CN.appSettings, CN.appResources, CN.zone, CN.insightsServer].join(','),
+      // 'app,app-settings,app-resources,zone,insights-server',
       defaults: {
         classes: 'group-pro',
       },
