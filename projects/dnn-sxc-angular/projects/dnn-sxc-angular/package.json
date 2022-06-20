@@ -6,6 +6,7 @@
     "url": "https://github.com/2sic/2sxc-ui/issues"
   },
   "dependencies": {
+    "//todo:": "@2mh - get latest 14.x types, sync code",
     "@2sic.com/2sxc-typings": ">=11.0.0",
     "tslib": "^2.0.0"
   },
