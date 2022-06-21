@@ -17,67 +17,67 @@ const webApiBlockPublish = 'cms/block/publish';
  * @internal
  */
 class ContentListActions {
-    /**
-     * add an item to the list at this position
-     * @param {ContextComplete} context
-     * @param {number} index
-     */
-    addItem<T>(context: ContextComplete, index: number) {
-        return doAndReload<T>(context, webApiAdd, { index }, 'post');
-    }
+  /**
+   * add an item to the list at this position
+   * @param {ContextComplete} context
+   * @param {number} index
+   */
+  addItem<T>(context: ContextComplete, index: number) {
+    return doAndReload<T>(context, webApiAdd, { index }, 'post');
+  }
 
-    /**
-     * remove an item from a list, then reload
-     * @param {ContextComplete} context
-     * @param {number} sortOrder
-     */
-    removeFromList(context: ContextComplete) {
-        const params = context.button.command.params;
-        return doAndReload<void>(context, webApiRemoveFromList, {
-            index: params.sortOrder,
-            parent: params.parent,
-            fields: params.fields,
-        }, 'delete');
-    }
+  /**
+   * remove an item from a list, then reload
+   * @param {ContextComplete} context
+   * @param {number} sortOrder
+   */
+  removeFromList(context: ContextComplete) {
+    const params = context.button.command.params;
+    return doAndReload<void>(context, webApiRemoveFromList, {
+      index: params.sortOrder,
+      parent: params.parent,
+      fields: params.fields,
+    }, 'delete');
+  }
 
-    /**
-     * change the order of an item in a list, then reload
-     * @param {ContextComplete} context
-     * @param {number} index
-     * @param {number} toIndex
-     */
-    changeOrder(context: ContextComplete, index: number, toIndex: number) {
-        const params = context.button.command.params;
-        return doAndReload<void>(context, webApiReorder, {
-            parent: params.parent,
-            fields: params.fields,
-            index,
-            toIndex,
-        }, 'post');
-    }
+  /**
+   * change the order of an item in a list, then reload
+   * @param {ContextComplete} context
+   * @param {number} index
+   * @param {number} toIndex
+   */
+  changeOrder(context: ContextComplete, index: number, toIndex: number) {
+    const params = context.button.command.params;
+    return doAndReload<void>(context, webApiReorder, {
+      parent: params.parent,
+      fields: params.fields,
+      index,
+      toIndex,
+    }, 'post');
+  }
 
-    /**
-     * set a content-item in this block to published, then reload
-     * @param {ContextComplete} context
-     * @param {string} part
-     * @param {number} index
-     */
-    publish(context: ContextComplete, part: string, index: number) {
-        return doAndReload<void>(context, webApiBlockPublish, {
-            part,
-            index,
-        }, 'post');
-    }
+  /**
+   * set a content-item in this block to published, then reload
+   * @param {ContextComplete} context
+   * @param {string} part
+   * @param {number} index
+   */
+  publish(context: ContextComplete, part: string, index: number) {
+    return doAndReload<void>(context, webApiBlockPublish, {
+      part,
+      index,
+    }, 'post');
+  }
 
-    /**
-     * publish an item using it's ID
-     * @param {ContextComplete} context
-     * @param {number} entityId
-     */
-    publishId(context: ContextComplete, entityId: number) {
-        return doAndReload<void>(context, webApiItemPublish,
-            { id: entityId },
-            'post');
+  /**
+   * publish an item using it's ID
+   * @param {ContextComplete} context
+   * @param {number} entityId
+   */
+  publishId(context: ContextComplete, entityId: number) {
+    return doAndReload<void>(context, webApiItemPublish,
+      { id: entityId },
+      'post');
     }
 }
 
@@ -105,18 +105,18 @@ export const Actions = new ContentListActions();
  * @returns {void | T}
  */
 function doAndReload<T>(
-    context: ContextComplete,
-    url: string,
-    params: ContentListActionParams,
-    verb: 'get' | 'post' | 'delete' = 'get',
-    postData: TypeUnsafe = {},
+  context: ContextComplete,
+  url: string,
+  params: ContentListActionParams,
+  verb: 'get' | 'post' | 'delete' = 'get',
+  postData: TypeUnsafe = {},
 ): Promise<void | T> {
-    return (verb === 'post'
-        ? context.sxc.webApi.fetchRaw(context.sxc.webApi.url(url, params), postData, 'POST')
-        : verb === 'delete'
-            ? context.sxc.webApi.fetchRaw(context.sxc.webApi.url(url, params), undefined, 'DELETE')
-            : context.sxc.webApi.fetchJson(context.sxc.webApi.url(url, params)))
-        .then(() => {
-            renderer.reloadAndReInitialize(context);
-        });
+  return (verb === 'post'
+    ? context.sxc.webApi.fetchRaw(context.sxc.webApi.url(url, params), postData, 'POST')
+    : verb === 'delete'
+      ? context.sxc.webApi.fetchRaw(context.sxc.webApi.url(url, params), undefined, 'DELETE')
+      : context.sxc.webApi.fetchJson(context.sxc.webApi.url(url, params)))
+    .then(() => {
+      renderer.reloadAndReInitialize(context);
+    });
 }

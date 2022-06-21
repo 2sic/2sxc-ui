@@ -5,11 +5,11 @@
  * @internal
  */
 Commands.add(CommandNames.templateSettings, 'TemplateSettings', 'sliders', true, false, {
-    dialog: (_) => 'edit',
+  dialog: (_) => 'edit',
 
-    showCondition: (ctx) => !!ctx.user.CanDevelop && !ctx.app.isContent,
+  showCondition: (ctx) => !!ctx.user.CanDevelop && !ctx.app.isContent,
 
-    configureLinkGenerator: (ctx, linkGen) => {
-        linkGen.items = [{ EntityId: ctx.contentBlock.templateId }];
-    },
+  configureLinkGenerator: (ctx, linkGen) => {
+    linkGen.items = [{ EntityId: ctx.contentBlock.templateId }];
+  },
 });

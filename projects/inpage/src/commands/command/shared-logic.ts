@@ -6,10 +6,10 @@ import { ContextComplete } from '../../context';
  * @internal
  */
 export class SharedLogic {
-    static isPartOfBlockList(context: ContextComplete) {
-        return !!(context.contentBlock.isList &&
-            context.button.command.params.useModuleList &&
-            context.button.command.params.sortOrder !== -1);    // -1 is the header item
+  static isPartOfBlockList(context: ContextComplete) {
+    return !!(context.contentBlock.isList &&
+      context.button.command.params.useModuleList &&
+      context.button.command.params.sortOrder !== -1);    // -1 is the header item
     }
 
     /**
@@ -18,19 +18,19 @@ export class SharedLogic {
      * a non-list (single item only)
      */
     static isBlockReference(context: ContextComplete) {
-        return !!context.button.command.params.useModuleList;    // -1 is the header item
+      return !!context.button.command.params.useModuleList;    // -1 is the header item
     }
 
     static isFieldList(context: ContextComplete) {
-        const params = context.button?.command.params;
-        return !!(params?.fields && params?.parent);
+      const params = context.button?.command.params;
+      return !!(params?.fields && params?.parent);
     }
 
     static isList(context: ContextComplete) {
-        return this.isPartOfBlockList(context) || this.isFieldList(context);
+      return this.isPartOfBlockList(context) || this.isFieldList(context);
     }
 
     static isReferencedItem(context: ContextComplete) {
-        return this.isBlockReference(context) || this.isFieldList(context);
+      return this.isBlockReference(context) || this.isFieldList(context);
     }
 }

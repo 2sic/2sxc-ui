@@ -10,17 +10,17 @@ import { SharedLogic } from './shared-logic';
  * @internal
  */
 Commands.add(
-    CommandNames.add,
-    'AddDemo',
-    'plus-circled',
-    false,
-    true,
-    {
-        showCondition: (context) => SharedLogic.isList(context),
-        code(context) {
-            return Actions.addItem(context, context.button.command.params.sortOrder + 1);
-        },
+  CommandNames.add,
+  'AddDemo',
+  'plus-circled',
+  false,
+  true,
+  {
+    showCondition: (context) => SharedLogic.isList(context),
+    code(context) {
+      return Actions.addItem(context, context.button.command.params.sortOrder + 1);
     },
+  },
 );
 
 /**

@@ -6,7 +6,7 @@
  */
  export interface CommandParamsEntityById {
   /**
-   * ID of item to edit. 
+   * ID of item to edit.
    */
   entityId: number;
 }
@@ -18,12 +18,12 @@
  */
  export interface CommandParamsEntityInContentBlock {
   /**
-   * Determins the position of the item in the list that will be edited. 
+   * Determins the position of the item in the list that will be edited.
    */
   sortOrder: number;
 
   /**
-   * Must be true, to work on the module list. 
+   * Must be true, to work on the module list.
    */
   useModuleList: true;
 }
@@ -35,7 +35,7 @@
  */
  export interface CommandParamsEntityInList {
   /**
-   * Determins the position of the item in the list that will be edited. 
+   * Determins the position of the item in the list that will be edited.
    */
   sortOrder: number;
 
@@ -57,6 +57,7 @@
  * <br>
  * ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)
  */
+// tslint:disable-next-line: align
 export interface CommandParamsEntity extends CommandParamsEntityById, CommandParamsEntityInContentBlock {
 
 }

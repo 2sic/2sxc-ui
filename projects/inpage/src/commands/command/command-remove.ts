@@ -9,12 +9,12 @@ import { Actions } from './content-list-actions';
  * @internal
  */
 Commands.add(CommandNames.remove, 'Remove', 'minus-circled', false, true, {
-    showCondition: (context) => SharedLogic.isList(context),
-    code(context) {
-        return new Promise((resolve, reject) => {
-            if (confirm(translate('Toolbar.ConfirmRemove')))
-                return Actions.removeFromList(context);
-            return resolve();
-        });
-    },
+  showCondition: (context) => SharedLogic.isList(context),
+  code(context) {
+    return new Promise((resolve, reject) => {
+      if (confirm(translate('Toolbar.ConfirmRemove')))
+      return Actions.removeFromList(context);
+      return resolve();
+    });
+  },
 });

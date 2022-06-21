@@ -5,19 +5,19 @@
  * @internal
  */
 Commands.add(CommandNames.appResources, 'AppResources', 'translate', true, false, {
-    dialog: (_) => CommandNames.edit,
+  dialog: (_) => CommandNames.edit,
 
-    disabled: (context) => context.app.resourcesId === null,
+  disabled: (context) => context.app.resourcesId === null,
 
-    title: (context) => `Toolbar.AppResources${context.app.resourcesId === null ? 'Disabled' : ''}`,
+  title: (context) => `Toolbar.AppResources${context.app.resourcesId === null ? 'Disabled' : ''}`,
 
-    // only if resources exist or are 0 (to be created)...
-    showCondition: (context) => !!context.user.CanAdmin,
+  // only if resources exist or are 0 (to be created)...
+  showCondition: (context) => !!context.user.CanAdmin,
 
-    configureLinkGenerator: (context, linkGenerator) => {
-        linkGenerator.items = [{ EntityId: context.app.resourcesId }];
-    },
+  configureLinkGenerator: (context, linkGenerator) => {
+    linkGenerator.items = [{ EntityId: context.app.resourcesId }];
+  },
 
-    // if it doesn't have a query, make the button faded
-    dynamicClasses: (context) => context.app.resourcesId !== null ? '' : 'empty',
+  // if it doesn't have a query, make the button faded
+  dynamicClasses: (context) => context.app.resourcesId !== null ? '' : 'empty',
 });
