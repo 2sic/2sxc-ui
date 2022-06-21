@@ -1,5 +1,12 @@
-﻿import { ItemIdentifierGroup, ItemIdentifierSimple, MetadataForBasic } from '.';
+﻿import { CommandNames, ItemIdentifierGroup, ItemIdentifierSimple, CommandParamsMetadata } from '.';
 import { TypeValue } from '../../../inpage/src/plumbing';
+
+/**
+ * Stub interface for typescript definitions to because of export.
+ * Real implementation is more complex but not published. 
+ */
+export interface CommandParams {
+}
 
 /**
  * Command parameters are handed over to a command for execution
@@ -7,7 +14,7 @@ import { TypeValue } from '../../../inpage/src/plumbing';
  */
 export interface CommandParams {
     /** The action is used in scenarios where the command name must be included */
-    action?: string;
+    action?: CommandNames;
     items?: Array<ItemIdentifierSimple | ItemIdentifierGroup>;
     mode?: string;
 
@@ -30,7 +37,7 @@ export interface CommandParams {
     title?: string;
 
     useModuleList?: boolean;
-    metadata?: MetadataForBasic;
+    metadata?: CommandParamsMetadata;
 
     isPublished?: boolean;
     prefill?: Record<string, TypeValue>;
@@ -53,3 +60,6 @@ export interface CommandParams {
     /** for template edit dialog */
     isshared?: boolean;
 }
+
+
+// export CommandParams as CommandParams;

@@ -1,5 +1,5 @@
 import { Sxc } from '..';
-import { TargetTypes } from '../../data';
+import { MetadataTargetTypes } from '../../data';
 import { MetadataFor } from '../../data/metadata-for';
 import { SxcDataServiceBase } from './sxc-data-service-base';
 
@@ -72,7 +72,7 @@ export class SxcData<T = unknown> extends SxcDataServiceBase {
     const path = `${ContentApiRoot}/${this.name}`;
     if (metadataFor != null) {
       if (typeof(metadataFor) === 'string')
-        metadataFor = { Target: TargetTypes.Entity, Guid: metadataFor } as MetadataFor;
+        metadataFor = { Target: MetadataTargetTypes.Entity, Guid: metadataFor } as MetadataFor;
       try {
         values.For = metadataFor;
       } catch { }

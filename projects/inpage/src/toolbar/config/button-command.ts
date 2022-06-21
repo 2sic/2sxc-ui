@@ -1,6 +1,4 @@
-﻿import { Command } from '../../commands/command';
-import { CommandParams } from '../../../../$2sxc/src/cms/command-params';
-import { Commands } from '../../commands/commands';
+﻿import { Command, CommandNames, CommandParams, Commands } from '../../commands';
 import { TypeValue } from '../../plumbing';
 
 /**
@@ -11,7 +9,7 @@ export class ButtonCommand {
 
     // customCode: string;
 
-    constructor(public name: string, contentType?: string, public params?: CommandParams) {
+    constructor(public name: CommandNames, contentType?: string, public params?: CommandParams) {
         if (!params) this.params = {};
         if (contentType) this.params.contentType = contentType;
         this.command = Commands.singleton().get(name); // activate command for this

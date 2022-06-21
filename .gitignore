@@ -11,3 +11,6 @@ projects/$2sxc/docs/typedoc
 projects/$2sxc/docs/docFx
 projects/$2sxc/docs/_docFxSite
 projects/$2sxc/docs/obj
+
+# Sub-Projects dist - to make sure results don't appear in search
+projects/quick-dialog/dist

@@ -1,10 +1,13 @@
-﻿import { ItemIdentifierCopy, ItemIdentifierGroup, ItemIdentifierSimple, ItemIdentifierInField, TemplateIdentifier } from '../../../$2sxc/src/cms';
+﻿import { ItemIdentifierCopy, ItemIdentifierGroup, ItemIdentifierInField, ItemIdentifierSimple, TemplateIdentifier } from '../../../$2sxc/src/cms';
 import { C } from '../constants';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { HasLog, Log } from '../core';
 import { NgUrlValuesWithoutParams } from '../manage/ng-dialog-params';
 import { NoJQ, TypeUnsafe, TypeValue, urlClean } from '../plumbing';
 import { ButtonSafe } from '../toolbar/config';
+
+// 2022-06-16 2dm experimental
+const urlMode2 = false;
 
 /**
  * This is responsible for taking a context with command and everything
@@ -80,7 +83,17 @@ export class CommandLinkGenerator extends HasLog {
 
         // initialize root url to dialog
         const rootUrl = this.getDialogUrl(context);
-        return `${rootUrl}#${NoJQ.param(ngDialogParams).replace(/%2F/g, '/')}&${NoJQ.param(urlItems)}${this.debugUrlParam}`;
+
+        let items2 = '';
+        if (urlMode2 && this.items) {
+          try {
+            items2 = '&' + window.$2sxc.urlParams.toUrl({ i2: this.items } );
+            console.log('items2', items2);
+          } catch (e) { /* ignore */ }
+        }
+
+        return `${rootUrl}#${NoJQ.param(ngDialogParams).replace(/%2F/g, '/')}&${NoJQ.param(urlItems)}${this.debugUrlParam}`
+          + items2;
     }
 
     /**

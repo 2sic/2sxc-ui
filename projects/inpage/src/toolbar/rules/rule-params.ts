@@ -1,4 +1,4 @@
-import { MetadataForBasic } from '../../../../$2sxc/src/cms';
+import { CommandParamsMetadata } from '../../../../$2sxc/src/cms';
 import { TypeValue } from '../../plumbing';
 
 /**
@@ -17,5 +17,5 @@ export type RuleParams = Record<string, string> & {
     for?: string;
 
     /** This is the metadata node as it will be used as a real parameter */
-    metadata?: MetadataForBasic;
+    metadata?: CommandParamsMetadata;
 };

@@ -48,6 +48,10 @@ export class EnvironmentLoaderDynamic {
     });
     this.log.add('start observing Rvt Input');
     const hiddenField = document.querySelector(SelectorInputRvt);
+    if (hiddenField == null) {
+      console.error(`Can't find Oqtane RVT field with selector ${SelectorInputRvt}\n` +`So we cannot watch it for changes.\n` +`This will probably cause the $2sxc to fail.`);
+      return;
+    }
     this.loadRvtFromHiddenInput(hiddenField as HTMLInputElement);
     this.inputRvtObserver.observe(hiddenField, { attributes: true, childList: false, subtree: false });
   }

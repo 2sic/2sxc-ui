@@ -2,7 +2,6 @@ import { WorkflowPhases, WorkflowStepCode } from '.';
 
 /**
  * A workflow step (code-sequence) to run before/after specific events.
- * @internal
  */
 export interface WorkflowStep {
   /**

@@ -52,10 +52,10 @@ By default **dnn-sxc-angular** will pick up all the values on the page automatic
 
 #### Method 2: Set values on initialization
 
-Once installed correctly, the context is autoloaded when the `AppComponent` which inherits `DnnAppComponent` does the `super(...)` call - like this:
+Once installed correctly, the context is autoloaded when the `AppComponent` which inherits `SxcAppComponent` does the `super(...)` call - like this:
 
 ```javascript
-export class AppComponent extends DnnAppComponent {
+export class AppComponent extends SxcAppComponent {
   constructor(el: ElementRef, context: Context) {
     super(el, context);
   }
@@ -65,7 +65,7 @@ export class AppComponent extends DnnAppComponent {
 If you want to provide alternate configurations, you can do this here, by changing the `super` call. Here's an example (you can do more, check the code):
 
 ```javascript
-export class AppComponent extends DnnAppComponent {
+export class AppComponent extends SxcAppComponent {
   constructor(el: ElementRef, context: Context) {
     super(el, context.preConfigure({moduleId: 42}));
   }
@@ -75,10 +75,10 @@ export class AppComponent extends DnnAppComponent {
 
 ### Using 2sxc Content-Items, Queries and APIs
 
-This package is fully documented with intellisense. Once configured it ensures that all HTTP requests in angular include DNN headers. It also contains a `Data` and `Api` object, which provides 3 observable streams
+This package is fully documented with intellisense. Once configured it ensures that all HTTP requests in angular include DNN headers. It also contains a `SxcData` and `Api` object, which provides 3 observable streams
 
-* `data.content$<T>(contentTypeName)`
-* `data.query$<T>(queryName)`
+* `SxcData.data$<T>(contentTypeName)`
+* `SxcData.query$<T>(queryName)`
 * `api.get$<T>(apiNameAndParams)`
 * `api.post$<T>(apiNameAndParams)`
 * plus various overloads

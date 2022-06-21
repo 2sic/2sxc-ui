@@ -1,4 +1,5 @@
 import { ContextIdentifier, Sxc } from '..';
+import { CommandNames } from './command-names';
 import { CommandParams } from './command-params';
 
 /**
@@ -8,9 +9,10 @@ import { CommandParams } from './command-params';
 export interface RunParams {
   /**
    * The action to perform.
-   * Required if you don't have params which themselves have the action
+   * Required.
    */
-  action?: string;
+  // ATM actually required if you don't have params which themselves have the action, but we plan to change that it's always on this
+  action?: CommandNames;
 
   /**
    * The command params, like contentType, entityId etc.

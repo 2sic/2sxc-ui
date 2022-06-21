@@ -1,8 +1,6 @@
 ﻿import { Sxc, SxcGlobalManage as ISxcGlobalManage } from '../../../$2sxc/src';
-import { RunParams } from '../../../$2sxc/src/cms';
-import { SxcGlobalCms } from '../cms/sxc-global-cms';
-import { RunParamsHelpers } from '../cms/run-params-helpers';
 import { ContextComplete } from '../context';
+import { SxcCmsReal } from '../sxc/sxc-cms-real';
 import { SxcTools } from '../sxc/sxc-tools';
 import { ToolbarManager } from '../toolbar';
 import { EditManager } from './edit-manager';
@@ -27,23 +25,12 @@ export class SxcGlobalManage implements ISxcGlobalManage {
   initInstance(sxc: Sxc) {
     try {
       const myContext = ContextComplete.findContext(sxc);
-      const editContext = SxcTools.getEditContext(myContext.sxc);
+      const editContext = SxcTools.getEditContext(sxc);
 
-      // const cmdEngine = new SxcInstanceEngine(myContext.sxc);
-
-      const editManager = new EditManager(editContext, /* cmdEngine, */ myContext);
-      sxc.manage = editManager;
+      sxc.manage = new EditManager(editContext, myContext);
 
       // add code for the cms.run command, which doesn't exist until editing is enabled
-      sxc.cms.run = <T>(runParams: RunParams): Promise<void | T> => {
-          RunParamsHelpers.ensureRunParamsInstanceOrError(runParams);
-          return new SxcGlobalCms().run({ ...runParams, context: sxc });
-      };
-
-      // Init to handle special errors
-      // 2022-05-02 2dm disabled, don't think we need it any more
-      // editManager.init();
-      return editManager;
+      sxc.cms = new SxcCmsReal(sxc);
     } catch (e) {
       console.error('error in 2sxc - will log but not throw', e);
     }

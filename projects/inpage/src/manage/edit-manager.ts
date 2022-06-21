@@ -18,7 +18,6 @@ export class EditManager implements SxcManage {
 
     constructor(
         public editContext: AttrJsonEditContext,
-        // _cmdEngine: SxcInstanceEngine,
         public context: ContextComplete,
     ) {
     }

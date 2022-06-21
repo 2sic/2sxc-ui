@@ -1,3 +1,4 @@
+import { CommandNames } from '../../../commands';
 import { TypeTbD } from '../../../plumbing/TypeTbD';
 
 /**
@@ -17,7 +18,7 @@ export interface InPageCommandJsonWithTooMuchInfo extends InPageCommandJson {
  */
 export class InPageCommandJson  {
     /** List of buttons to show */
-    action?: string;
+    action?: CommandNames;
 
     /** The entity id to edit */
     entityId?: number;

@@ -1,5 +1,4 @@
-﻿import { DnnActionMenu } from '../dnn/dnn-menu-helper/dnn-inpage-edit';
-import { TypeWeDontCare } from '../plumbing';
+﻿import { TypeWeDontCare } from '../plumbing';
 import { QuickE } from '../quick-edit/quick-e';
 
 /**
@@ -12,6 +11,5 @@ declare global {
     dnn_tabVersioningEnabled: boolean;
     dnn: TypeWeDontCare;
     $quickE: QuickE ;
-    $2sxcActionMenuMapper: (moduleId: number) => DnnActionMenu;
   }
 }

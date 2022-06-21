@@ -1,0 +1,20 @@
+{
+  "extends": "./tsconfig.json",
+  "typedocOptions": {
+    "entryPoints": [
+      "./src/index.ts"
+    ],
+    // don't create out - "out": "./docs/typedoc",
+    "json": "./docs/typedoc/typedoc.json",
+    "name": "Api.Js.DnnSxcAngular",
+    "includeVersion": false,
+    "excludePrivate": true,
+    "excludeProtected": true,
+    "excludeExternals": true,
+  },
+  "exclude": [
+    "src/test.ts",
+    "**/*.spec.ts",
+    "**/node_modules/**",
+  ]
+}

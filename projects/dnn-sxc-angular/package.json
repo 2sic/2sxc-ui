@@ -2,7 +2,7 @@
   "name": "dnn-sxc-angular-workspace",
   "version": "0.0.0",
   "scripts": {
-    "build": "ng build --prod",
+    "build": "ng build --configuration production",
     "dsa-copy:dist": "cpx \"dist/dnn-sxc-angular/{,**/}*.**.*\" \"../../../app-dnn-sxc-angular-dev/node_modules/@2sic.com/dnn-sxc-angular\" -w",
     "dsa-copy:2dm": "cpx \"dist/dnn-sxc-angular/{,**/}*.**.*\" \"../../../app-Directory/node_modules/@2sic.com/dnn-sxc-angular\" -w -v",
     "dsa-copy:template-ng11": "cpx \"dist/dnn-sxc-angular/{,**/}*.*\" \"/Projects/2sxc/app-template-angular/ng/node_modules/@2sic.com/dnn-sxc-angular\" -v",
@@ -12,24 +12,24 @@
   },
   "private": true,
   "dependencies": {
-    "@angular/animations": "~11.2.1",
-    "@angular/common": "~11.2.1",
-    "@angular/compiler": "~11.2.1",
-    "@angular/core": "~11.2.1",
-    "@angular/forms": "~11.2.1",
-    "@angular/platform-browser": "~11.2.1",
-    "@angular/platform-browser-dynamic": "~11.2.1",
-    "@angular/router": "~11.2.1",
-    "rxjs": "~6.6.3",
-    "tslib": "^2.0.0",
-    "zone.js": "~0.10.2",
-    "@2sic.com/2sxc-typings": "^10.24.4"
+    "@angular/animations": "^13.0.0",
+    "@angular/common": "^13.0.0",
+    "@angular/compiler": "^13.0.0",
+    "@angular/core": "^13.0.0",
+    "@angular/forms": "^13.0.0",
+    "@angular/platform-browser": "^13.0.0",
+    "@angular/platform-browser-dynamic": "^13.0.0",
+    "@angular/router": "^13.0.0",
+    "rxjs": "~6.6.0",
+    "tslib": "^2.1.0",
+    "zone.js": "~0.11.6"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "~0.1102.1",
-    "@angular/cli": "~11.2.1",
-    "@angular/compiler-cli": "~11.2.1",
-    "@angular/language-service": "~11.2.1",
+    "@2sic.com/2sxc-typings": "^14.2.1",
+    "@angular-devkit/build-angular": "^13.0.0",
+    "@angular/cli": "^13.0.0",
+    "@angular/compiler-cli": "^13.0.0",
+    "@angular/language-service": "^13.0.0",
     "@types/jasmine": "~3.6.0",
     "@types/jasminewd2": "~2.0.3",
     "@types/node": "^12.11.1",
@@ -42,10 +42,10 @@
     "karma-coverage-istanbul-reporter": "~3.0.2",
     "karma-jasmine": "~4.0.0",
     "karma-jasmine-html-reporter": "^1.5.0",
-    "ng-packagr": "^11.0.0",
+    "ng-packagr": "^13.0.0",
     "protractor": "~7.0.0",
     "ts-node": "~8.3.0",
     "tslint": "~6.1.0",
-    "typescript": "~4.1.5"
+    "typescript": "^4.4.2"
   }
 }

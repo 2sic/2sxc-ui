@@ -25,7 +25,7 @@ describe('Commands test suite', function() {
       if (!(first instanceof Command)) return false;
       if (!(second instanceof Command)) return false;
       if (first.name !== second.name) return false;
-      // if (first.buttonConfig.action !== second.buttonConfig.action) return false;
+      // if (first.buttonConfig.name !== second.buttonConfig.name) return false;
     //   if (first.buttonConfig.icon(this.context) !== second.buttonConfig.icon(this.context)) return false;
       if (first.buttonDefaults.title(this.context) !== second.buttonDefaults.title(this.context)) return false;
       if (first.buttonDefaults.uiActionOnly(this.context) !== second.buttonDefaults.uiActionOnly(this.context)) return false;

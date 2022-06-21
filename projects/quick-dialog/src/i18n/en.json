@@ -13,6 +13,6 @@
 		"Catalog": "browse app catalog",
 
 		"App": "configure app",
-		"Zone": "manage all apps"
+		"Zone": "all apps"
   }
 }

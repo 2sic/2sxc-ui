@@ -1807,7 +1807,7 @@
 		},
 		{
 			"id": 8,
-			"name": "DnnAppComponent",
+			"name": "SxcAppComponent",
 			"kind": 128,
 			"kindString": "Class",
 			"flags": {},
@@ -1830,7 +1830,7 @@
 					"signatures": [
 						{
 							"id": 10,
-							"name": "new DnnAppComponent",
+							"name": "new SxcAppComponent",
 							"kind": 16384,
 							"kindString": "Constructor signature",
 							"flags": {},
@@ -1891,7 +1891,7 @@
 							"type": {
 								"type": "reference",
 								"id": 8,
-								"name": "DnnAppComponent"
+								"name": "SxcAppComponent"
 							}
 						}
 					]
@@ -1916,7 +1916,7 @@
 		},
 		{
 			"id": 1,
-			"name": "DnnSxcRootModule",
+			"name": "SxcRootModule",
 			"kind": 128,
 			"kindString": "Class",
 			"flags": {},
@@ -1937,7 +1937,7 @@
 						"name": "NgModule"
 					},
 					"arguments": {
-						"obj": "{\r\n  imports: [\r\n    // Note: it's extremely important that HttpClientModule is _not_ imported\r\n    // anywhere. Otherwise it will break sub-modules\r\n    // because it will create a new HttpClientModule which won't have the interceptor\r\n    // HttpClientModule,\r\n  ],\r\n  providers: [\r\n    Data,\r\n    Context,\r\n    DnnInterceptor,\r\n  ]\r\n}"
+						"obj": "{\r\n  imports: [\r\n    // Note: it's extremely important that HttpClientModule is _not_ imported\r\n    // anywhere. Otherwise it will break sub-modules\r\n    // because it will create a new HttpClientModule which won't have the interceptor\r\n    // HttpClientModule,\r\n  ],\r\n  providers: [\r\n    Data,\r\n    Context,\r\n    SxcHttpInterceptorProvider,\r\n  ]\r\n}"
 					}
 				}
 			],
@@ -1951,7 +1951,7 @@
 					"signatures": [
 						{
 							"id": 3,
-							"name": "new DnnSxcRootModule",
+							"name": "new SxcRootModule",
 							"kind": 16384,
 							"kindString": "Constructor signature",
 							"flags": {},
@@ -1985,14 +1985,14 @@
 									"type": {
 										"type": "reference",
 										"id": 1,
-										"name": "DnnSxcRootModule"
+										"name": "SxcRootModule"
 									}
 								}
 							],
 							"type": {
 								"type": "reference",
 								"id": 1,
-								"name": "DnnSxcRootModule"
+								"name": "SxcRootModule"
 							}
 						}
 					]
@@ -3390,7 +3390,7 @@
 		},
 		{
 			"id": 14,
-			"name": "DnnInterceptor",
+			"name": "SxcHttpInterceptorProvider",
 			"kind": 32,
 			"kindString": "Variable",
 			"flags": {

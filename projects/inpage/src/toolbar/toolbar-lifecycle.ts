@@ -1,7 +1,7 @@
 import { ToolbarEventArguments } from '.';
 import { C } from '../constants';
 import { ContextComplete } from '../context';
-import { WorkflowManager } from '../workflow';
+import { ToolbarWorkflowManager } from '../workflow';
 
 /**
  * @internal
@@ -18,7 +18,7 @@ export class ToolbarLifecycle {
      * @memberof ToolbarLifecycle
      */
     static raiseToolbarInitEvent(toolbarElement: HTMLElement, anchoredElement: HTMLElement, context: ContextComplete) {
-        const commandWorkflow = new WorkflowManager(null);
+        const commandWorkflow = new ToolbarWorkflowManager(null);
         commandWorkflow.attach(toolbarElement, context);
 
         const event = new CustomEvent(C.Toolbar.eventNames.onInit, {

@@ -1,12 +1,13 @@
 ﻿import { InPageCommandJson } from '.';
 import { InPageButtonJson } from '.';
 import { ToolbarConfigLoader } from '.';
-import { CmdMore, Commands } from '../../commands';
+import { Commands } from '../../commands';
 import { ContextComplete } from '../../context/bundles';
 import { HasLog } from '../../core';
 import { TypeValue } from '../../plumbing';
 import { Button, Toolbar } from '../config';
 import { ButtonSafe } from '../config/button-safe';
+import { CommandNames } from './../../commands/';
 
 /**
  * This is a system to build button configurations
@@ -39,7 +40,7 @@ export class ButtonConfigLoader extends HasLog {
         // if it's a command w/action, wrap into command + trim
         if (InPageCommandJson.hasActions(original)) {
             cl.add('action found, will move down to .command', original);
-            if (original.action) original.action = original.action.trim();
+            if (original.action) original.action = original.action.trim() as CommandNames;
             return cl.return({
                 command: original,
                 _expanded: true,
@@ -53,7 +54,7 @@ export class ButtonConfigLoader extends HasLog {
         const wrapLog = this.log.call('getFromName', name);
         return wrapLog.return({
             command: {
-                action: name.trim(),
+                action: name.trim() as CommandNames,
                 params: params,
             },
             _expanded: true,
@@ -87,7 +88,7 @@ export class ButtonConfigLoader extends HasLog {
             // disableButtons(context, btns/*, config */);
 
             // remove the group, if no buttons left, or only "more"
-            if (btns.length === 0 || (btns.length === 1 && btns[0].command.name === CmdMore)) {
+            if (btns.length === 0 || (btns.length === 1 && btns[0].command.name === CommandNames.more)) {
                 wrapLog.add('found no more buttons except for the "more" - will remove that group');
                 btnGroups.splice(g--, 1); // remove, and decrement counter
             }

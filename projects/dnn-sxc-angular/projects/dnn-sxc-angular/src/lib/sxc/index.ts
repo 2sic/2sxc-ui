@@ -1,5 +1,4 @@
-export * from './api';
-export * from './content';
-export * from './data';
-export * from './query';
-export * from './query-construction';
+/** @internal */ export * from './api.service';
+/** @internal */ export * from './data.service';
+/** @internal */ export * from './sxc-app';
+/** @internal */ export * from './query.service';

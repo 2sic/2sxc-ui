@@ -1,20 +1,19 @@
-﻿import { BootstrapInPage } from './bootstrap/bootstrap';
+﻿import { SxcGlobal } from '../../$2sxc/src/sxc-global/sxc-global';
+import { BootstrapInPage } from './bootstrap/bootstrap';
 import { SxcGlobalCms } from './cms/sxc-global-cms';
 import { ContextComplete } from './context/bundles/context-bundle-button';
-import { DnnActionMenu } from './dnn';
 import { translate, Translator } from './i18n';
-import { SxcGlobalWithCms } from './sxc/sxc-global-with-cms';
 import { EditManager } from './manage/edit-manager';
 import { SxcGlobalManage } from './manage/sxc-global-manage';
 import { NoJQ } from './plumbing';
 import { QuickE } from './quick-edit/quick-e';
+import { SxcGlobalWithCms } from './sxc/sxc-global-with-cms';
 import { SystemUpgrader } from './system';
 
 /**
  * @internal
  */
 import './toolbar/toolbar-global-enable-shake';
-import { SxcGlobal } from '../../$2sxc/src/sxc-global/sxc-global';
 
 // #1 Note that $2sxc must always exist, the server ensures the load order
 const $2sxc = window.$2sxc as SxcGlobal & SxcGlobalWithCms;
@@ -36,14 +35,12 @@ function loadInpage() {
 
     /** this enhances the $2sxc client controller with stuff only needed when logged in */
     if (!$2sxc.system) $2sxc.system = new SystemUpgrader();
-
-    /** Connect DNN action mapper to this module instance */
-    window.$2sxcActionMenuMapper = (moduleId: number) => {
-        return new DnnActionMenu(moduleId);
-    };
 }
 
 NoJQ.ready(loadInpage);
+
+// Apply Dnn Bugfixes
+import './dnn/index';
 
 // Tell Webpack to load CSS
 const cssEdit = require('./inpage.css');
