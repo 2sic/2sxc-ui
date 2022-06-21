@@ -1,11 +1,11 @@
-import { WindowWith$2sxc, SxcRoot, SxcInstance } from '@2sic.com/2sxc-typings';
+import { Sxc, SxcGlobal } from '@2sic.com/2sxc-typings';
 import { ElementRef, Injectable } from '@angular/core';
 import { appTag } from '../names';
 import { ContextInfo } from './context-info';
 import { AppTagService } from './apptag.service'
 import { ContextInfoPreconfigure } from './context-info-preconfigure'
 
-declare const window: WindowWith$2sxc;
+declare const window: Window;
 
 const runtimeDefaults: Partial<ContextInfo> = {
     addHttpHeaders: true
@@ -32,10 +32,10 @@ declare let __webpack_public_path__: any;
 })
 export class Context implements ContextInfo {
   /** The global $2sxc object */
-  $2sxc: SxcRoot;
+  $2sxc: SxcGlobal;
 
   /** The current module-instance 2sxc-controller */
-  sxc: SxcInstance;
+  sxc: Sxc;
 
   /** Setting if it should add HTTP headers. Default is true. You may want to change this if you have an own interceptor.  */
   addHttpHeaders: boolean;

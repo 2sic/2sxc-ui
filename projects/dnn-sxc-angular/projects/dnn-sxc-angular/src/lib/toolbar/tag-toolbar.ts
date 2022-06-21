@@ -31,7 +31,7 @@ export class SxcTagToolbarDirective implements OnInit {
   }
 
   ngOnInit() {
-    if (!this.context?.sxc?.isEditMode()) return;
+    if (!(this.context?.sxc as any).isEditMode()) return;
     const node = this.element.nativeElement;
     this.preventRefreshIfListenerConfigured();
     node.setAttribute("sxc-toolbar", JSON.stringify(this.sxcToolbar || {}));
