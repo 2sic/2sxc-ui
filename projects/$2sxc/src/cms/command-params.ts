@@ -2,6 +2,13 @@
 import { TypeValue } from '../../../inpage/src/plumbing';
 
 /**
+ * Stub interface for typescript definitions to because of export.
+ * Real implementation is more complex but not published. 
+ */
+export interface CommandParams {
+}
+
+/**
  * Command parameters are handed over to a command for execution
  * @internal
  */
@@ -53,3 +60,6 @@ export interface CommandParams {
     /** for template edit dialog */
     isshared?: boolean;
 }
+
+
+// export CommandParams as CommandParams;

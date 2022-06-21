@@ -7,7 +7,7 @@ import { CommandContentTypeParams } from './command-content-type';
  * Will do either one of these:
  * - if it has an `entityId`, will just open `edit` for that Entity
  * - if it has no `entityId`, will open `new` for the current `contentType`
- * and assign to the target specified by TODO:
+ * and assign to the target specified by `metadata`:
  * <br>
  * ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)
  */
