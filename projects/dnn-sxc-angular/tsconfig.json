@@ -27,6 +27,7 @@
   },
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,
+    "skipLibCheck": true,
     "strictInjectionParameters": true
   },
   "typedocOptions": {
