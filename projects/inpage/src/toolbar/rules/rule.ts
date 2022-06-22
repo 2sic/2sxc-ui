@@ -1,6 +1,7 @@
 import { Operations as Operators, RuleConstants as RC, RuleParams, RuleParamsHelper } from '.';
 import { HasLog, Log } from '../../core';
 import { TypeValue } from '../../plumbing';
+import { ToolbarButtonSettings, ToolbarSettings } from '../config';
 import { TemplateConstants } from '../templates';
 import { BuildSteps } from './build-steps';
 import { ProcessedParams } from './rule-params-helper';
@@ -44,15 +45,7 @@ export class BuildRule extends HasLog {
      * Button Rules - determines what a button should do / not do
      * Note: can also be Partial<ToolbarSettings>
      */
-    ui: {
-        icon?: string,
-        class?: string,
-        color?: string,
-        show?: boolean,
-        code?: string,
-        title?: string,
-        [key: string]: TypeValue,
-    } = {};
+    ui: ToolbarButtonSettings & Partial<ToolbarSettings> = {};
 
     /** ATM unused url-part after the hash - will probably be needed in future */
     // private hash: Dictionary<string> = {};
