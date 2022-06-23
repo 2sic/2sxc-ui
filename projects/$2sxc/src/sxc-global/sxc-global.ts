@@ -141,6 +141,7 @@ export interface SxcGlobal {
 
     /**
      * Internal logger to better see what's happening
+     * @internal
      */
     log: Log;
 

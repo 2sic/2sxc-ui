@@ -106,6 +106,7 @@ export interface SxcGlobal {
     _insights: typeof Insights;
     /**
      * Internal logger to better see what's happening
+     * @internal
      */
     log: Log;
     /**

@@ -3,6 +3,7 @@ import { LogEntry, LogCall } from '.';
  * A log object which will collect log entries for another ojbect
  * @export
  * @interface Log
+ * @internal
  */
 export declare class Log {
     /**

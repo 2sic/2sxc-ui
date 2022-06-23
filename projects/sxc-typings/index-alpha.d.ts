@@ -342,66 +342,7 @@ export declare abstract class HasLog {
 
 /* Excluded from this release type: ItemIdentifierSimple */
 
-/**
- * A log object which will collect log entries for another ojbect
- * @export
- * @interface Log
- */
-export declare class Log {
-    /**
-     * List of all entries added to this log
-     */
-    entries: LogEntry[];
-    /* Excluded from this release type: depth */
-    /* Excluded from this release type: callDepths */
-    /* Excluded from this release type: startTime */
-    /**
-     * Maximum amount of entries to add - to prevent memory hoging
-     */
-    maxEntries: number;
-    /* Excluded from this release type: __constructor */
-    /* Excluded from this release type: liveDump */
-    /* Excluded from this release type: _parentHasLiveDump */
-    /* Excluded from this release type: keepData */
-    /* Excluded from this release type: _parentHasKeepData */
-    /* Excluded from this release type: fullIdentifier */
-    /* Excluded from this release type: rename */
-    /* Excluded from this release type: linkLog */
-    /**
-     * Add a simple message to the log
-     * @param {string} message
-     * @memberof Log
-     *
-     * preferred usage is with string parameter:
-     * log.add(`description ${ parameter }`);
-     *
-     * in case that we experience error with normal string parameter, we can use arrow function to enclose parameter like this () => parameter
-     * but use it very rarely, because there is certainly a performance implication!
-     * log.add(`description ${() => parameter}`);
-     */
-    add(message: (() => string) | string, data?: unknown): string;
-    /* Excluded from this release type: addData */
-    /* Excluded from this release type: logData */
-    /* Excluded from this release type: _prepareEntry */
-    /* Excluded from this release type: _prepareMessage */
-    /* Excluded from this release type: call */
-    /* Excluded from this release type: _callDepthAdd */
-    /* Excluded from this release type: _callDepthRemove */
-    /* Excluded from this release type: dump */
-    /* Excluded from this release type: dumpList */
-    /* Excluded from this release type: dumpOne */
-    /* Excluded from this release type: _addEntry */
-    /* Excluded from this release type: randomString */
-    /* Excluded from this release type: parent */
-    /* Excluded from this release type: scope */
-    /**
-     * The name of this log, for scenarios where multiple loggers are mixed
-     */
-    name: string;
-    /* Excluded from this release type: id */
-    /* Excluded from this release type: idCache */
-    /* Excluded from this release type: identifier */
-}
+/* Excluded from this release type: Log */
 
 /* Excluded from this release type: LogCall */
 
@@ -843,10 +784,7 @@ export declare interface SxcGlobal {
      */
     insights(partName: string, index?: number, start?: number, length?: number): void;
     /* Excluded from this release type: _insights */
-    /**
-     * Internal logger to better see what's happening
-     */
-    log: Log;
+    /* Excluded from this release type: log */
     /**
      * Helper to work with url parameters behind ? or #
      * @type {UrlParams}
@@ -1015,11 +953,31 @@ export declare class SxcWebApi implements SxcWebApiDeprecated {
     private readonly sxc;
     /* Excluded from this release type: env */
     /* Excluded from this release type: __constructor */
-    /* Excluded from this release type: get */
-    /* Excluded from this release type: post */
-    /* Excluded from this release type: delete */
-    /* Excluded from this release type: put */
-    /* Excluded from this release type: request */
+    /**
+     * **Deprecated** - docs in the separate interface
+     * @deprecated use fetchJson instead
+     */
+    get(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): any;
+    /**
+     * **Deprecated** - docs in the separate interface
+     * @deprecated use fetchJson instead
+     */
+    post(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): any;
+    /**
+     * **Deprecated** - docs in the separate interface
+     * @deprecated use fetchJson instead
+     */
+    delete(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): any;
+    /**
+     * **Deprecated** - docs in the separate interface
+     * @deprecated use fetchJson instead
+     */
+    put(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): any;
+    /**
+     * **Deprecated** - docs in the separate interface
+     * @deprecated use fetchJson instead
+     */
+    request(settings: string | AjaxSettings, params: any, data: any, preventAutoFail: boolean, method: string): any;
     /**
      * Will retrieve data from the backend using a standard fetch.
      * @param url a full url or short-hand like `controller/method?params` `app/auto/api/controller/method?params`. Note that params would also be specified on the url.

@@ -25,31 +25,26 @@ export declare class SxcWebApi implements SxcWebApiDeprecated {
     /**
      * **Deprecated** - docs in the separate interface
      * @deprecated use fetchJson instead
-     * @internal
      */
     get(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): any;
     /**
      * **Deprecated** - docs in the separate interface
      * @deprecated use fetchJson instead
-     * @internal
      */
     post(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): any;
     /**
      * **Deprecated** - docs in the separate interface
      * @deprecated use fetchJson instead
-     * @internal
      */
     delete(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): any;
     /**
      * **Deprecated** - docs in the separate interface
      * @deprecated use fetchJson instead
-     * @internal
      */
     put(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): any;
     /**
      * **Deprecated** - docs in the separate interface
      * @deprecated use fetchJson instead
-     * @internal
      */
     request(settings: string | AjaxSettings, params: any, data: any, preventAutoFail: boolean, method: string): any;
     /**

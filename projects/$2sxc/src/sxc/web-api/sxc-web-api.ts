@@ -31,7 +31,6 @@ export class SxcWebApi implements SxcWebApiDeprecated {
     /**
      * **Deprecated** - docs in the separate interface
      * @deprecated use fetchJson instead
-     * @internal
      */
     get(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): any {
         return this.request(settingsOrUrl, params, data, preventAutoFail, 'GET');
@@ -40,7 +39,6 @@ export class SxcWebApi implements SxcWebApiDeprecated {
     /**
      * **Deprecated** - docs in the separate interface
      * @deprecated use fetchJson instead
-     * @internal
      */
     post(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): any {
         return this.request(settingsOrUrl, params, data, preventAutoFail, 'POST');
@@ -49,7 +47,6 @@ export class SxcWebApi implements SxcWebApiDeprecated {
     /**
      * **Deprecated** - docs in the separate interface
      * @deprecated use fetchJson instead
-     * @internal
      */
     delete(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): any {
         return this.request(settingsOrUrl, params, data, preventAutoFail, 'DELETE');
@@ -58,7 +55,6 @@ export class SxcWebApi implements SxcWebApiDeprecated {
     /**
      * **Deprecated** - docs in the separate interface
      * @deprecated use fetchJson instead
-     * @internal
      */
      put(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): any {
         return this.request(settingsOrUrl, params, data, preventAutoFail, 'PUT');
@@ -67,7 +63,6 @@ export class SxcWebApi implements SxcWebApiDeprecated {
     /**
      * **Deprecated** - docs in the separate interface
      * @deprecated use fetchJson instead
-     * @internal
      */
      request(settings: string | AjaxSettings, params: any, data: any, preventAutoFail: boolean, method: string): any {
 
