@@ -2,14 +2,14 @@ import { HasLog, Log } from '.';
 
 declare const window: Window;
 
-type LogList = Array<{ key: string, log: Log}>;
+export type LogList = Array<{ key: string, log: Log}>;
 
 const msgIntro = 'This is the $2sxc JS Insights - see https://r.2sxc.org/insights \n'
     + 'Add ?debug=true to the url to log more data. \n'
     + 'Copy/paste code lines below to see details. \n'
     + '----------------------------------------------------------------------\n';
 
-class InsightsSingleton extends HasLog {
+export class InsightsSingleton extends HasLog {
 
     constructor() {
         super('Sys.Insght');
@@ -76,7 +76,7 @@ class InsightsSingleton extends HasLog {
 }
 
 // tslint:disable-next-line: max-classes-per-file
-class InsightsLogSet {
+export class InsightsLogSet {
     logs: LogList = [];
     constructor(public name: string) {}
 }

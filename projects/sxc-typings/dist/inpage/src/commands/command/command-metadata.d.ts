@@ -1,6 +1,17 @@
-import { CommandParamsEntityById } from '..';
+import { Command, CommandParamsEntityById } from '..';
 import { CommandParamsMetadata } from '../../../../$2sxc/src/cms';
 import { CommandContentTypeParams } from './command-content-type';
+/**
+ * create a metadata toolbar
+ *
+ * import this module to commands.ts
+ * @internal
+ */
+export declare const MetadataCommand: Command;
+/**
+ * @internal
+ */
+export declare const ImageMetadataCommand: Command;
 /**
  * Parameters used for the command `metadata`.
  * <br>

@@ -1,8 +1,9 @@
 import { UrlParams } from '../tools';
 import { SxcGlobalEnvironment } from '../environment';
-import { Log } from '../../../core';
-import { ContextIdentifier, Sxc } from '..';
+import { Insights, Log } from '../../../core';
+import { ContextIdentifier, SxcGlobalDebug, Stats, Sxc, TotalPopup } from '..';
 import { SxcGlobalHttp } from './sxc-global-http';
+import { SxcGlobalManage } from './sxc-global-manage';
 /**
  * This is the root global `window.$2sxc` function / object.
  *
@@ -56,6 +57,22 @@ export interface SxcGlobal {
      * @since v14.01
      */
     get(sxc: Sxc): Sxc;
+    /** @internal */
+    _controllers: {
+        [id: string]: Sxc;
+    };
+    /** @internal */
+    beta: any;
+    /** @internal */
+    _manage: SxcGlobalManage;
+    /** @internal */
+    _translateInit: any;
+    /**
+     * 2022-06-01 2dm - I believe this is not used, probably remove
+     * @internal */
+    debug: SxcGlobalDebug;
+    /** @internal */
+    stats: Stats;
     /**
      * system information, mainly for checking which version of 2sxc is running
      * note: it's not always updated reliably, but it helps when debugging
@@ -84,6 +101,8 @@ export interface SxcGlobal {
      * @param length amount of lines to show - in some cases will default to 25
      */
     insights(partName: string, index?: number, start?: number, length?: number): void;
+    /** @internal */
+    _insights: typeof Insights;
     /**
      * Internal logger to better see what's happening
      */
@@ -94,4 +113,9 @@ export interface SxcGlobal {
      * @memberof SxcRoot
      */
     urlParams: UrlParams;
+    /**
+     * A helper to create full-screen popups
+     * @internal
+     */
+    totalPopup: TotalPopup;
 }

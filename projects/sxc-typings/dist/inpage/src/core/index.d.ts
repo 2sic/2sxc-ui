@@ -1,1 +1,4 @@
-export {};
+/**
+ * @internal
+ */
+export * from '../../../core';

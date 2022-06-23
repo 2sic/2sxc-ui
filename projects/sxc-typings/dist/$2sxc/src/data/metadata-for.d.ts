@@ -31,4 +31,8 @@ export interface MetadataFor {
      * @memberof MetadataFor
      */
     Guid?: string;
+    /**
+     * @internal
+     */
+    Singleton?: boolean;
 }

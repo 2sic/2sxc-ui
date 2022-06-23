@@ -1,4 +1,5 @@
 import { CommandParams, RunParamsWithContext } from '../../../$2sxc/src/cms';
+import { ContextBundleInstance } from '../context/bundles/context-bundle-instance';
 import { HasLog } from '../core';
 /**
  * Global Content-Management System on the $2sxc.cms.
@@ -6,6 +7,19 @@ import { HasLog } from '../core';
  * It is only available if the page is in edit mode / the page feature `2sxc.JsCms` has been activated.
  */
 export declare class SxcGlobalCms extends HasLog {
+    /**
+     * @internal
+     */
+    autoDump: boolean;
+    /**
+     * @internal
+     */
+    constructor();
+    /**
+     * reset / clear the log
+     * @internal
+     */
+    resetLog(): void;
     /**
      * Run a command within a specific context - mostly for internal use.
      * @param runParams The complete run params with a context
@@ -37,4 +51,19 @@ export declare class SxcGlobalCms extends HasLog {
      * @returns A promise which triggers when the command has completed.
      */
     run<T>(tag: HTMLElement, commandParams: CommandParams, event?: MouseEvent): Promise<void | T>;
+    /**
+     * Run a command within a specific context.
+     * @param context The context - either an HTML tag which determines a module/instance, or an Sxc instance
+     * @param nameOrSettings
+     * @param eventOrSettings
+     * @param event Optional mouse-event which allows the command to do some optimizations for that case - like a mouse-click
+     * @returns A promise which triggers when the command has completed.
+     * @internal
+     */
+    runInternal<T>(context: ContextBundleInstance | HTMLElement | RunParamsWithContext, nameOrSettings?: string | CommandParams, eventOrSettings?: CommandParams | MouseEvent, event?: MouseEvent): Promise<void | T>;
+    /**
+     * reset/clear the log if alwaysResetLog is true
+     * @internal
+     */
+    private do;
 }

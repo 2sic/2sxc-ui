@@ -4,7 +4,6 @@
     "outDir": "../../sxc-typings/dist",
     "declaration": true,
     "removeComments": false,
-    "stripInternal": true,
     "emitDeclarationOnly": true
   },
   "include": [

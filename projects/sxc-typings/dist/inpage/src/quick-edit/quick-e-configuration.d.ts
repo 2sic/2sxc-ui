@@ -59,4 +59,8 @@ export declare class QuickEditConfigRoot extends QuickEditConfig {
      * Optional configuration for the Modules.
      */
     modules?: QuickEditConfig;
+    /**
+     * @internal
+     */
+    static getDefault(): QuickEditConfigRoot;
 }

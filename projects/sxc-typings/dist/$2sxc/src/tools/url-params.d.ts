@@ -22,4 +22,20 @@ export declare class UrlParams {
      * @returns
      */
     isDebug(): boolean;
+    /**
+     * Convert an object to be used in a URL.
+     * Uses a custom, brief syntax which can change at any time.
+     * So to unwrap, always use the toObj method.
+     * @param obj
+     * @returns
+     * @internal
+     */
+    toUrl(obj: any): string;
+    /**
+     * Convert a url which was created by toUrl back to an object.
+     * @param url
+     * @returns
+     * @internal
+     */
+    toObj(url: string): unknown;
 }
