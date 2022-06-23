@@ -248,7 +248,24 @@ export declare enum CommandNames {
 
 /* Excluded from this release type: CommandParams */
 
-/* Excluded from this release type: CommandParamsMetadata */
+/**
+ * Parameters on `metadata` for commands which have a metadata-target.
+ * @public
+ */
+export declare interface CommandParamsMetadata {
+    /**
+     * The key which identifies the target of this metadata item
+     */
+    key: string;
+    /**
+     * the key type, will default to 'string'
+     */
+    keyType?: string;
+    /**
+     * The target type, will default to 10 = CMS-Item
+     */
+    targetType?: MetadataTargetTypes;
+}
 
 /**
  * ContextIdentifier is used to initialize a Sxc object outside of the default context.
@@ -326,7 +343,11 @@ export declare abstract class HasLog {
 
 /* Excluded from this release type: Insights */
 
-/* Excluded from this release type: InsightsLogSet */
+declare class InsightsLogSet {
+    name: string;
+    logs: LogList;
+    constructor(name: string);
+}
 
 /* Excluded from this release type: InsightsSingleton */
 
@@ -342,15 +363,97 @@ export declare abstract class HasLog {
 
 /* Excluded from this release type: ItemIdentifierSimple */
 
-/* Excluded from this release type: Log */
+/**
+ * A log object which will collect log entries for another ojbect
+ * @export
+ * @interface Log
+ * @public
+ */
+export declare class Log {
+    /**
+     * List of all entries added to this log
+     */
+    entries: LogEntry[];
+    /* Excluded from this release type: depth */
+    /* Excluded from this release type: callDepths */
+    /* Excluded from this release type: startTime */
+    /**
+     * Maximum amount of entries to add - to prevent memory hoging
+     */
+    maxEntries: number;
+    /* Excluded from this release type: __constructor */
+    /* Excluded from this release type: liveDump */
+    /* Excluded from this release type: _parentHasLiveDump */
+    /* Excluded from this release type: keepData */
+    /* Excluded from this release type: _parentHasKeepData */
+    /* Excluded from this release type: fullIdentifier */
+    /* Excluded from this release type: rename */
+    /* Excluded from this release type: linkLog */
+    /**
+     * Add a simple message to the log
+     * @param {string} message
+     * @memberof Log
+     *
+     * preferred usage is with string parameter:
+     * log.add(`description ${ parameter }`);
+     *
+     * in case that we experience error with normal string parameter, we can use arrow function to enclose parameter like this () => parameter
+     * but use it very rarely, because there is certainly a performance implication!
+     * log.add(`description ${() => parameter}`);
+     */
+    add(message: (() => string) | string, data?: unknown): string;
+    /* Excluded from this release type: addData */
+    /* Excluded from this release type: logData */
+    /* Excluded from this release type: _prepareEntry */
+    /* Excluded from this release type: _prepareMessage */
+    /* Excluded from this release type: call */
+    /* Excluded from this release type: _callDepthAdd */
+    /* Excluded from this release type: _callDepthRemove */
+    /* Excluded from this release type: dump */
+    /* Excluded from this release type: dumpList */
+    /* Excluded from this release type: dumpOne */
+    /* Excluded from this release type: _addEntry */
+    /* Excluded from this release type: randomString */
+    /* Excluded from this release type: parent */
+    /* Excluded from this release type: scope */
+    /**
+     * The name of this log, for scenarios where multiple loggers are mixed
+     */
+    name: string;
+    /* Excluded from this release type: id */
+    /* Excluded from this release type: idCache */
+    /* Excluded from this release type: identifier */
+}
 
 /* Excluded from this release type: LogCall */
 
-/* Excluded from this release type: LogEntry */
+/**
+ * A log entry item
+ * @export
+ * @interface LogEntry
+ * @public
+ */
+export declare class LogEntry {
+    /* Excluded from this release type: log */
+    message: string;
+    /* Excluded from this release type: depth */
+    /** A timestamp for this entry to better see sequences of things happening */
+    time: number;
+    /* Excluded from this release type: result */
+    /* Excluded from this release type: data */
+    /* Excluded from this release type: data */
+    /* Excluded from this release type: _data */
+    /* Excluded from this release type: source */
+    /* Excluded from this release type: __constructor */
+}
 
 /* Excluded from this release type: LogEntryOptions */
 
-/* Excluded from this release type: LogList */
+/** @public */
+declare type LogList = Array<{
+    key: string;
+    log: Log;
+}>;
 
 /**
  * A Metadata-Target identifier to tell an entity that it describes something else.

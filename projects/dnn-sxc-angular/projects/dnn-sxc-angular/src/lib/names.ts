@@ -1,5 +1,5 @@
 /**
- * @internal
+ *
  */
 export const appTag = {
   edition: 'edition',

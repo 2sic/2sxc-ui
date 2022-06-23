@@ -3,7 +3,7 @@ import { ElementRef } from '@angular/core';
 /**
  * Special service to inject in the root of the app.
  * Allows you to pass configuration on the app-tag in HTML to configure the application.
- * @internal
+ *
  */
 export class AppTagService {
   constructor(

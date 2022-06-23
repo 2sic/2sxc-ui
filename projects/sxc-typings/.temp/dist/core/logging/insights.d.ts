@@ -1,11 +1,11 @@
 import { HasLog, Log } from '.';
-/** @internal */
-export declare type LogList = Array<{
+/** @public */
+declare type LogList = Array<{
     key: string;
     log: Log;
 }>;
 /** @internal */
-export declare class InsightsSingleton extends HasLog {
+declare class InsightsSingleton extends HasLog {
     constructor();
     history: {
         [key: string]: InsightsLogSet;
@@ -13,11 +13,11 @@ export declare class InsightsSingleton extends HasLog {
     add(setName: string, logName: string, log: Log): void;
     show(partName: string, index?: number, start?: number, length?: number): void;
 }
-/** @internal */
-export declare class InsightsLogSet {
+declare class InsightsLogSet {
     name: string;
     logs: LogList;
     constructor(name: string);
 }
 /** @internal */
 export declare const Insights: InsightsSingleton;
+export {};

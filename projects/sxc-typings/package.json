@@ -3,7 +3,7 @@
   "version": "14.02.02",
   "types": "./index.d.ts",
   "scripts": {
-    "generate": "typings.cmd \".\\dist\"",
+    "generate": "typings.cmd \".\\.temp\\dist\"",
     "publish-dry": "npm publish --dry-run",
     "publish-beta": "npm publish --tag beta",
     "publish-prod": "npm publish",

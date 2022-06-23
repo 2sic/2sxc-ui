@@ -1,7 +1,7 @@
 import { MetadataTargetTypes } from '../data';
 /**
  * Parameters on `metadata` for commands which have a metadata-target.
- * @internal
+ * @public
  */
 export interface CommandParamsMetadata {
     /**

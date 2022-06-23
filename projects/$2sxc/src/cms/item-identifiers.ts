@@ -8,7 +8,7 @@ import { TypeValue } from '../../../inpage/src/plumbing';
  * Shared properties of all item identifiers
  * @internal
  */
-export interface ItemIdentifierShared {
+interface ItemIdentifierShared {
   EntityId?: number;
   Prefill?: Record<string, TypeValue>;
 }

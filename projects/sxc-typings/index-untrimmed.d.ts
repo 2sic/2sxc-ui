@@ -335,7 +335,7 @@ export declare interface CommandParams {
 
 /**
  * Parameters on `metadata` for commands which have a metadata-target.
- * @internal
+ * @public
  */
 export declare interface CommandParamsMetadata {
     /**
@@ -507,15 +507,14 @@ export declare const HeaderNames: {
 /** @internal */
 export declare const Insights: InsightsSingleton;
 
-/** @internal */
-export declare class InsightsLogSet {
+declare class InsightsLogSet {
     name: string;
     logs: LogList;
     constructor(name: string);
 }
 
 /** @internal */
-export declare class InsightsSingleton extends HasLog {
+declare class InsightsSingleton extends HasLog {
     constructor();
     history: {
         [key: string]: InsightsLogSet;
@@ -573,7 +572,7 @@ export declare interface ItemIdentifierParent {
  * Shared properties of all item identifiers
  * @internal
  */
-export declare interface ItemIdentifierShared {
+declare interface ItemIdentifierShared {
     EntityId?: number;
     Prefill?: Record<string, TypeValue>;
 }
@@ -593,7 +592,7 @@ export declare interface ItemIdentifierSimple {
  * A log object which will collect log entries for another ojbect
  * @export
  * @interface Log
- * @internal
+ * @public
  */
 export declare class Log {
     /**
@@ -752,7 +751,7 @@ export declare class LogCall {
  * A log entry item
  * @export
  * @interface LogEntry
- * @internal
+ * @public
  */
 export declare class LogEntry {
     /** @internal */
@@ -796,8 +795,8 @@ export declare enum LogEntryOptions {
     throw = "throw"
 }
 
-/** @internal */
-export declare type LogList = Array<{
+/** @public */
+declare type LogList = Array<{
     key: string;
     log: Log;
 }>;

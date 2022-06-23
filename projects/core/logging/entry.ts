@@ -5,7 +5,7 @@ import { Log } from '.';
  * A log entry item
  * @export
  * @interface LogEntry
- * @internal
+ * @public
  */
 export class LogEntry {
 
