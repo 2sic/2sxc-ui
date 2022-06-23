@@ -21,7 +21,8 @@
     "lib": [
       "es2015.promise",
       "es5",
-      "dom"
+      "dom",
+      "ES2021.String",
     ]
   },
   "include": [
