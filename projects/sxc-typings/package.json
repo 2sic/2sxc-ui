@@ -17,7 +17,7 @@
     "url": "https://github.com/2sic/2sxc-ui/issues"
   },
   "files": [
-    "**/*.d.ts"
+    "index-public.d.ts"
   ],
   "description": "Typescript typings to work with core 2sxc objects",
   "homepage": "https://github.com/2sic/2sxc-ui/tree/master/typings#readme",
