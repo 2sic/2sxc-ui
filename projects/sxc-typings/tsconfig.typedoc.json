@@ -1,15 +1,34 @@
 {
-  "extends": "./tsconfig.json",
+  // "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./dist2",
+    "declaration": true,
+    "removeComments": false,
+    "emitDeclarationOnly": true
+  },
+  "include": [
+    "./index-public.d.ts"
+  ],
+  // "include": [
+  //   "../inpage/src/**/*.ts",
+
+  //   "../$2sxc/src/*.ts",
+  //   "../$2sxc/src/*.js", 
+  //   "../$2sxc/src/**/*.ts",
+  // ],
+  // "exclude": [
+  //   "**/test/**/*.ts",
+  // ],
   "typedocOptions": {
     "entryPoints": [
-      "./src/index.ts"
+      "./index-public.d.ts"
     ],
     // don't create out - "out": "./docs/typedoc",
     "json": "./docs/typedoc/typedoc.json",
     "name": "Api.Js.SxcJs",
     "includeVersion": false,
-    "excludePrivate": true,
-    "excludeProtected": true,
-    "excludeExternals": false,
+    // "excludePrivate": true,
+    // "excludeProtected": true,
+    // "excludeExternals": false,
   }
 }
