@@ -177,8 +177,6 @@ function customEncode(value: any) {
  */
 function restoreValue(value: string) {
   // if explicitly marked string, unwrap and return string
-console.log('value', value);
-
   if (value?.length > 0 && value[0] === innerStringPrefix)
     return restoreString(value.slice(1));
   if (bools.includes(value))
