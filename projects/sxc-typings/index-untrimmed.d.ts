@@ -1,5 +1,3 @@
-/// <reference types="jquery" />
-
 /** @internal */
 export declare class AjaxPromise {
     private api;
@@ -11,7 +9,7 @@ export declare class AjaxPromise {
      * @returns {JQueryPromise<any>}
      * @memberof AjaxPromise
      */
-    makePromise(settings: AjaxSettings): JQueryPromise<any>;
+    makePromise(settings: AjaxSettings): any;
     /**
      * Generate the correct WebApi url
      * @param settings the settings as they would be in jQuery
@@ -19,8 +17,8 @@ export declare class AjaxPromise {
     private getActionUrl;
 }
 
-/** @internal */
-export declare interface AjaxSettings extends JQueryAjaxSettings {
+/** @public */
+export declare interface AjaxSettings {
     /** Override the endpoint, which is usually '2sxc' */
     endpoint?: string;
     /** Controller name, for controller/action calls */
@@ -1674,31 +1672,31 @@ export declare class SxcWebApi implements SxcWebApiDeprecated {
      * @deprecated use fetchJson instead
      * @internal
      */
-    get(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): JQueryPromise<any>;
+    get(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): any;
     /**
      * **Deprecated** - docs in the separate interface
      * @deprecated use fetchJson instead
      * @internal
      */
-    post(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): JQueryPromise<any>;
+    post(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): any;
     /**
      * **Deprecated** - docs in the separate interface
      * @deprecated use fetchJson instead
      * @internal
      */
-    delete(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): JQueryPromise<any>;
+    delete(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): any;
     /**
      * **Deprecated** - docs in the separate interface
      * @deprecated use fetchJson instead
      * @internal
      */
-    put(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): JQueryPromise<any>;
+    put(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): any;
     /**
      * **Deprecated** - docs in the separate interface
      * @deprecated use fetchJson instead
      * @internal
      */
-    request(settings: string | AjaxSettings, params: any, data: any, preventAutoFail: boolean, method: string): JQueryPromise<any>;
+    request(settings: string | AjaxSettings, params: any, data: any, preventAutoFail: boolean, method: string): any;
     /**
      * Will retrieve data from the backend using a standard fetch.
      * @param url a full url or short-hand like `controller/method?params` `app/auto/api/controller/method?params`. Note that params would also be specified on the url.
@@ -1762,7 +1760,7 @@ export declare interface SxcWebApiDeprecated {
      * @returns jQuery ajax promise object
      * @deprecated use fetchJson instead
      */
-    get(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): JQueryPromise<any>;
+    get(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): any;
     /**
      * **Deprecated**
      * Please use [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchJson)
@@ -1776,7 +1774,7 @@ export declare interface SxcWebApiDeprecated {
      * @returns jQuery ajax promise object
      * @deprecated use fetchJson instead
      */
-    post(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): JQueryPromise<any>;
+    post(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): any;
     /**
      * **Deprecated**
      * Please use [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchJson)
@@ -1790,7 +1788,7 @@ export declare interface SxcWebApiDeprecated {
      * @returns jQuery ajax promise object
      * @deprecated use fetchJson instead
      */
-    delete(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): JQueryPromise<any>;
+    delete(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): any;
     /**
      * **Deprecated**
      * Please use [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchJson)
@@ -1804,7 +1802,7 @@ export declare interface SxcWebApiDeprecated {
      * @returns jQuery ajax promise object
      * @deprecated use fetchJson instead
      */
-    put(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): JQueryPromise<any>;
+    put(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): any;
     /**
      * **Deprecated**
      * Please use [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchJson)
@@ -1819,7 +1817,7 @@ export declare interface SxcWebApiDeprecated {
      * @returns jQuery ajax promise object
      * @deprecated use fetchJson instead
      */
-    request(settings: string | AjaxSettings, params: any, data: any, preventAutoFail: boolean, method: string): JQueryPromise<any>;
+    request(settings: string | AjaxSettings, params: any, data: any, preventAutoFail: boolean, method: string): any;
 }
 
 /**

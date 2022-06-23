@@ -1,4 +1,3 @@
-/// <reference types="jquery" />
 import { AjaxSettings } from './ajax-settings';
 /**
  * **Deprecated**
@@ -20,7 +19,7 @@ export interface SxcWebApiDeprecated {
      * @returns jQuery ajax promise object
      * @deprecated use fetchJson instead
      */
-    get(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): JQueryPromise<any>;
+    get(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): any;
     /**
      * **Deprecated**
      * Please use [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchJson)
@@ -34,7 +33,7 @@ export interface SxcWebApiDeprecated {
      * @returns jQuery ajax promise object
      * @deprecated use fetchJson instead
      */
-    post(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): JQueryPromise<any>;
+    post(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): any;
     /**
      * **Deprecated**
      * Please use [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchJson)
@@ -48,7 +47,7 @@ export interface SxcWebApiDeprecated {
      * @returns jQuery ajax promise object
      * @deprecated use fetchJson instead
      */
-    delete(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): JQueryPromise<any>;
+    delete(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): any;
     /**
      * **Deprecated**
      * Please use [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchJson)
@@ -62,7 +61,7 @@ export interface SxcWebApiDeprecated {
      * @returns jQuery ajax promise object
      * @deprecated use fetchJson instead
      */
-    put(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): JQueryPromise<any>;
+    put(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): any;
     /**
      * **Deprecated**
      * Please use [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchJson)
@@ -77,5 +76,5 @@ export interface SxcWebApiDeprecated {
      * @returns jQuery ajax promise object
      * @deprecated use fetchJson instead
      */
-    request(settings: string | AjaxSettings, params: any, data: any, preventAutoFail: boolean, method: string): JQueryPromise<any>;
+    request(settings: string | AjaxSettings, params: any, data: any, preventAutoFail: boolean, method: string): any;
 }

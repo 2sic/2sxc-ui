@@ -1,4 +1,3 @@
-/// <reference types="jquery" />
 import { Sxc } from '../sxc';
 import { SxcGlobalEnvironment } from '../../environment';
 import { AjaxSettings } from './ajax-settings';
@@ -28,31 +27,31 @@ export declare class SxcWebApi implements SxcWebApiDeprecated {
      * @deprecated use fetchJson instead
      * @internal
      */
-    get(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): JQueryPromise<any>;
+    get(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): any;
     /**
      * **Deprecated** - docs in the separate interface
      * @deprecated use fetchJson instead
      * @internal
      */
-    post(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): JQueryPromise<any>;
+    post(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): any;
     /**
      * **Deprecated** - docs in the separate interface
      * @deprecated use fetchJson instead
      * @internal
      */
-    delete(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): JQueryPromise<any>;
+    delete(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): any;
     /**
      * **Deprecated** - docs in the separate interface
      * @deprecated use fetchJson instead
      * @internal
      */
-    put(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): JQueryPromise<any>;
+    put(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): any;
     /**
      * **Deprecated** - docs in the separate interface
      * @deprecated use fetchJson instead
      * @internal
      */
-    request(settings: string | AjaxSettings, params: any, data: any, preventAutoFail: boolean, method: string): JQueryPromise<any>;
+    request(settings: string | AjaxSettings, params: any, data: any, preventAutoFail: boolean, method: string): any;
     /**
      * Will retrieve data from the backend using a standard fetch.
      * @param url a full url or short-hand like `controller/method?params` `app/auto/api/controller/method?params`. Note that params would also be specified on the url.

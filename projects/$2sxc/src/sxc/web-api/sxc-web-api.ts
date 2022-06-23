@@ -33,7 +33,7 @@ export class SxcWebApi implements SxcWebApiDeprecated {
      * @deprecated use fetchJson instead
      * @internal
      */
-    get(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): JQueryPromise<any> {
+    get(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): any {
         return this.request(settingsOrUrl, params, data, preventAutoFail, 'GET');
     }
 
@@ -42,7 +42,7 @@ export class SxcWebApi implements SxcWebApiDeprecated {
      * @deprecated use fetchJson instead
      * @internal
      */
-    post(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): JQueryPromise<any> {
+    post(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): any {
         return this.request(settingsOrUrl, params, data, preventAutoFail, 'POST');
     }
 
@@ -51,7 +51,7 @@ export class SxcWebApi implements SxcWebApiDeprecated {
      * @deprecated use fetchJson instead
      * @internal
      */
-    delete(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): JQueryPromise<any> {
+    delete(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): any {
         return this.request(settingsOrUrl, params, data, preventAutoFail, 'DELETE');
     }
 
@@ -60,7 +60,7 @@ export class SxcWebApi implements SxcWebApiDeprecated {
      * @deprecated use fetchJson instead
      * @internal
      */
-     put(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): JQueryPromise<any> {
+     put(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): any {
         return this.request(settingsOrUrl, params, data, preventAutoFail, 'PUT');
     }
 
@@ -69,7 +69,7 @@ export class SxcWebApi implements SxcWebApiDeprecated {
      * @deprecated use fetchJson instead
      * @internal
      */
-     request(settings: string | AjaxSettings, params: any, data: any, preventAutoFail: boolean, method: string): JQueryPromise<any> {
+     request(settings: string | AjaxSettings, params: any, data: any, preventAutoFail: boolean, method: string): any {
 
         // url parameter: auto convert a single value (instead of object of values) to an id=... parameter
         // tslint:disable-next-line:curly
@@ -92,7 +92,7 @@ export class SxcWebApi implements SxcWebApiDeprecated {
                 data,
                 url: controllerAction.length > 2 ? settings : null,
                 preventAutoFail,
-            };
+            } as any;
         }
 
         const defaults = {

@@ -1,6 +1,5 @@
-/// <reference types="jquery" />
-/** @internal */
-export interface AjaxSettings extends JQueryAjaxSettings {
+/** @public */
+export interface AjaxSettings {
     /** Override the endpoint, which is usually '2sxc' */
     endpoint?: string;
     /** Controller name, for controller/action calls */
