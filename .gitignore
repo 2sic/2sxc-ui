@@ -15,4 +15,4 @@ projects/$2sxc/docs/obj
 # Sub-Projects dist - to make sure results don't appear in search
 projects/quick-dialog/dist
 
-projects/sxc-typings/parts
+projects/sxc-typings/parts/dist
