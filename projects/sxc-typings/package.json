@@ -6,7 +6,8 @@
     "generate": "typings.cmd \".\\dist\"",
     "publish-dry": "npm publish --dry-run",
     "publish-beta": "npm publish --tag beta",
-    "publish-prod": "npm publish"
+    "publish-prod": "npm publish",
+    "api-extractor": "api-extractor run --local --verbose"
   },
   "author": {
     "name": "2sic Internet Solutions, Switzerland & Liechtenstein",
@@ -37,6 +38,7 @@
   },
   "main": "",
   "devDependencies": {
+    "@microsoft/api-extractor": "^7.25.2",
     "@types/jquery": "^2.0.33"
   }
 }

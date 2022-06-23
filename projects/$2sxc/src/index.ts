@@ -17,6 +17,7 @@ export * from './Stats';
 
 export * from './environment';
 
+export * from './cms';
 export * from './sxc';
 
 export * from './sxc-global';

@@ -14,6 +14,11 @@ export interface EnvironmentSpecs {
     rvtHeader: string;
     /** Request verification token value */
     rvt: string;
+    /**
+     * The root path for the UI
+     * @internal
+     */
+    uiRoot: string;
     /** The platform code like 'dnn' or 'oqt' */
     platform: string;
 }

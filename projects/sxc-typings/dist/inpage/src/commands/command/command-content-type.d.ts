@@ -1,3 +1,4 @@
+import { ContextComplete } from '../../context';
 /**
  * Parameters used for the command `contenttype`.
  * <br>
@@ -11,3 +12,7 @@ export interface CommandContentTypeParams {
      */
     contentType: string;
 }
+/**
+ * @internal
+ */
+export declare function createContentTypeParams(context: ContextComplete): CommandContentTypeParams;

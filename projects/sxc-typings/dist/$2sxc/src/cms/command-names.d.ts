@@ -103,6 +103,11 @@ export declare enum CommandNames {
      */
     edit = "edit",
     /**
+     * `image` opens the edit-dialog for the metadata of the current image
+     * @internal - may be removed soon
+     */
+    image = "image",
+    /**
      * `insights-server` opens the insights logs page
      * <br> 🔐 Toolbar shows this automatically to elevated admins.
      * <br> 📩 No params required.
@@ -161,6 +166,11 @@ export declare enum CommandNames {
      * (auto-detected from context)
      */
     new = "new",
+    /**
+     * `new` sets new mode used in parameters
+     * @internal - must move, this shouldn't be here as it's not a command!
+     */
+    newMode = "new",
     /**
      * `publish` tells the system to update a content-items status to published. If there was a published and a draft before, the draft will replace the previous item
      * <br> 🔘 Appears automatically if the item is in draft mode / not published.

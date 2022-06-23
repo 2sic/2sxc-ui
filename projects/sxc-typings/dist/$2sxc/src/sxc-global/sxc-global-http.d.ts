@@ -1,10 +1,12 @@
 import { HasLog } from '../../../core';
-import { ContextIdentifier } from '..';
+import { ContextIdentifier, SxcGlobalEnvironment } from '..';
 /**
  * Global HTTP Service for information and helpers on `$2sxc.http`
  */
 export declare class SxcGlobalHttp extends HasLog {
     private env;
+    /** @internal */
+    constructor(env: SxcGlobalEnvironment);
     /**
      * All the headers which are needed in an ajax call.
      * @returns Dictionary / Record of headers
@@ -33,6 +35,23 @@ export declare class SxcGlobalHttp extends HasLog {
      * @returns Dictionary / Record of headers
      */
     headers(id: number, cbid: number, ctx: ContextIdentifier): Record<string, string>;
+    /**
+     * Get the API-Root path for a specific extension/endpoint
+     * @param endpointName
+     * @returns {string}
+     * @memberof Http
+     * @internal Not relevant for 2sxc, only used if calling platform endpoints
+     */
+    apiRoot(endpointName: string): string;
+    /**
+     * Get the API-Root path for Apps
+     * new in v12
+     * @param {string} endpointName
+     * @returns {string}
+     * @memberof SxcHttp
+     * @internal
+     */
+    appApiRoot(): string;
     /**
      * Convert short urls like `app/auto/api/Posts/All` to the full URL needed.
      * Will ignore urls which clearly already are the full url.

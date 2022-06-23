@@ -1,9 +1,18 @@
+import { Sxc } from '..';
 import { SxcDataServiceBase } from './sxc-data-service-base';
 /**
  * Instance Query Service
  */
 export declare class SxcQuery extends SxcDataServiceBase {
     readonly name: string;
+    /**
+     * Creates an instance of SxcQuery.
+     * @param {Sxc} sxc
+     * @param {string} name
+     * @memberof SxcQuery
+     * @internal
+     */
+    constructor(sxc: Sxc, name: string);
     getAll<T = unknown>(): Promise<T>;
     getAll<T = unknown>(urlParams: string | Record<string, unknown>): Promise<T>;
     getAll<T = unknown>(urlParams: string | Record<string, unknown>, data: string | Record<string, unknown>): Promise<T>;
@@ -21,4 +30,12 @@ export declare class SxcQuery extends SxcDataServiceBase {
     getStreams<T = unknown>(streams: string): Promise<T>;
     getStreams<T = unknown>(streams: string, urlParams: string | Record<string, unknown>): Promise<T>;
     getStreams<T = unknown>(streams: string, urlParams: string | Record<string, unknown>, data: string | Record<string, unknown>): Promise<T>;
+    /**
+     * Get all or one data entity from the backend
+     * @param id optional id as number or string - if not provided, will get all
+     * @param params optional parameters - ATM not usefuly but we plan to support more filters etc.
+     * @returns an array with 1 or n entities in the simple JSON format
+     * @internal
+     */
+    private getInternal;
 }

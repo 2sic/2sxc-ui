@@ -1,3 +1,7 @@
+/// <reference types="jquery" />
+import { Sxc } from '../sxc';
+import { SxcGlobalEnvironment } from '../../environment';
+import { AjaxSettings } from './ajax-settings';
 import { SxcWebApiDeprecated } from './sxc-web-api-deprecated';
 /**
  * helper API to run ajax / REST calls to the server
@@ -6,6 +10,48 @@ import { SxcWebApiDeprecated } from './sxc-web-api-deprecated';
  */
 export declare class SxcWebApi implements SxcWebApiDeprecated {
     private readonly sxc;
+    /**
+     * @type {SxcGlobalEnvironment}
+     * @memberof SxcWebApi
+     * @internal
+     */
+    readonly env: SxcGlobalEnvironment;
+    /**
+     *
+     * @param sxc
+     * @internal
+     */
+    constructor(sxc: Sxc);
+    /**
+     * **Deprecated** - docs in the separate interface
+     * @deprecated use fetchJson instead
+     * @internal
+     */
+    get(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): JQueryPromise<any>;
+    /**
+     * **Deprecated** - docs in the separate interface
+     * @deprecated use fetchJson instead
+     * @internal
+     */
+    post(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): JQueryPromise<any>;
+    /**
+     * **Deprecated** - docs in the separate interface
+     * @deprecated use fetchJson instead
+     * @internal
+     */
+    delete(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): JQueryPromise<any>;
+    /**
+     * **Deprecated** - docs in the separate interface
+     * @deprecated use fetchJson instead
+     * @internal
+     */
+    put(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): JQueryPromise<any>;
+    /**
+     * **Deprecated** - docs in the separate interface
+     * @deprecated use fetchJson instead
+     * @internal
+     */
+    request(settings: string | AjaxSettings, params: any, data: any, preventAutoFail: boolean, method: string): JQueryPromise<any>;
     /**
      * Will retrieve data from the backend using a standard fetch.
      * @param url a full url or short-hand like `controller/method?params` `app/auto/api/controller/method?params`. Note that params would also be specified on the url.
@@ -20,6 +66,8 @@ export declare class SxcWebApi implements SxcWebApiDeprecated {
      * maybe: webApi.fetchRaw({url: ..., params: { ...}, body: { ...}, method: 'GET' })
      */
     fetchRaw(url: string, data?: string | Record<string, any>, method?: string): Promise<Response>;
+    /** @internal */
+    fetch(url: string, data?: string | Record<string, any>, method?: string): Promise<Response>;
     /**
      * Will retrieve data from the backend using a standard fetch and give you an object.
      * @param url a full url or short-hand like `controller/method?params` `app/auto/api/controller/method?params`. Note that params would also be specified on the url.
