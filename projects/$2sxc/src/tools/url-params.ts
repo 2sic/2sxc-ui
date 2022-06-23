@@ -2,6 +2,7 @@
 /**
  * Helper object to read url params. 
  * Available on `$2sxc.urlParams`
+ * @public
  */
 export class UrlParams {
     /**

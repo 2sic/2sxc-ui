@@ -20,6 +20,7 @@
 
 /**
  * Names of commands known to 2sxc CMS - for use in toolbars and calling commands directly from code
+ * @public
  */
 export declare enum CommandNames {
     /**
@@ -238,26 +239,11 @@ export declare enum CommandNames {
 
 /* Excluded from this release type: CommandParams */
 
-/**
- * Parameters on `metadata` for commands which have a metadata-target.
- */
-export declare interface CommandParamsMetadata {
-    /**
-     * The key which identifies the target of this metadata item
-     */
-    key: string;
-    /**
-     * the key type, will default to 'string'
-     */
-    keyType?: string;
-    /**
-     * The target type, will default to 10 = CMS-Item
-     */
-    targetType?: MetadataTargetTypes;
-}
+/* Excluded from this release type: CommandParamsMetadata */
 
 /**
  * ContextIdentifier is used to initialize a Sxc object outside of the default context.
+ * @public
  */
 export declare class ContextIdentifier {
     /**
@@ -293,6 +279,7 @@ export declare class ContextIdentifier {
 
 /**
  * A context information for the current page, helping the JS talk with the backend
+ * @public
  */
 export declare interface EnvironmentSpecs {
     /** Page ID */
@@ -316,6 +303,7 @@ export declare interface EnvironmentSpecs {
  * Any object that has an own log object
  * @export
  * @interface HasLog
+ * @public
  */
 export declare abstract class HasLog {
     /* Excluded from this release type: parentLog */
@@ -329,20 +317,9 @@ export declare abstract class HasLog {
 
 /* Excluded from this release type: Insights */
 
-export declare class InsightsLogSet {
-    name: string;
-    logs: LogList;
-    constructor(name: string);
-}
+/* Excluded from this release type: InsightsLogSet */
 
-export declare class InsightsSingleton extends HasLog {
-    constructor();
-    history: {
-        [key: string]: InsightsLogSet;
-    };
-    add(setName: string, logName: string, log: Log): void;
-    show(partName: string, index?: number, start?: number, length?: number): void;
-}
+/* Excluded from this release type: InsightsSingleton */
 
 /* Excluded from this release type: ItemIdentifierCopy */
 
@@ -419,31 +396,11 @@ export declare class Log {
 
 /* Excluded from this release type: LogCall */
 
-/**
- * A log entry item
- * @export
- * @interface LogEntry
- */
-export declare class LogEntry {
-    /* Excluded from this release type: log */
-    message: string;
-    /* Excluded from this release type: depth */
-    /** A timestamp for this entry to better see sequences of things happening */
-    time: number;
-    /* Excluded from this release type: result */
-    /* Excluded from this release type: data */
-    /* Excluded from this release type: data */
-    /* Excluded from this release type: _data */
-    /* Excluded from this release type: source */
-    /* Excluded from this release type: __constructor */
-}
+/* Excluded from this release type: LogEntry */
 
 /* Excluded from this release type: LogEntryOptions */
 
-export declare type LogList = Array<{
-    key: string;
-    log: Log;
-}>;
+/* Excluded from this release type: LogList */
 
 /**
  * A Metadata-Target identifier to tell an entity that it describes something else.
@@ -452,6 +409,7 @@ export declare type LogList = Array<{
  *
  * Warning: There is another MetadataFor type and they are not fully consistent.
  * This is historical and not easy to correct, but we're working on it.
+ * @public
  */
 export declare interface MetadataFor {
     /**
@@ -486,6 +444,7 @@ export declare interface MetadataFor {
  * These are constants to determine what something is assigned to (e.g. it describes an Entity, a file, etc.)
  *
  * Use it for the @see MetadataFor objects
+ * @public
  */
 export declare enum MetadataTargetTypes {
     /**
@@ -635,6 +594,7 @@ export declare interface RunParams {
  * Parameters for the **Global** $2sxc.cms.run(...) command in Addition to the [RunParams](xref:Api.Js.SxcJs.RunParams).
  * It provides context to the run-params such as a Sxc instance or a tag which it started on.
  * New in 12.10
+ * @public
  */
 export declare interface RunParamsWithContext extends RunParams {
     /**
@@ -653,6 +613,7 @@ export declare interface RunParamsWithContext extends RunParams {
 
 /**
  * The typical sxc-instance object for a specific DNN module or content-block
+ * @public
  */
 export declare class Sxc extends HasLog {
     /** the sxc-instance ID, which is usually the DNN Module Id */
@@ -712,6 +673,7 @@ export declare class Sxc extends HasLog {
  * This is in charge of sxc.cms on the instance level.
  * ATM it just has the run command.
  * In future, it may also have dedicated command like `layout` etc.
+ * @public
  */
 export declare class SxcCms extends SxcPart {
     /* Excluded from this release type: __constructor */
@@ -726,6 +688,7 @@ export declare class SxcCms extends SxcPart {
 
 /**
  * Data Service for an App / Sxc-Instance to get/create data of a specific Content-Type
+ * @public
  */
 export declare class SxcData<T = unknown> extends SxcDataServiceBase {
     readonly name: string;
@@ -766,7 +729,21 @@ export declare class SxcData<T = unknown> extends SxcDataServiceBase {
     delete(guid: string): Promise<null>;
 }
 
-/* Excluded from this release type: SxcDataServiceBase */
+/**
+ * Base class doing common checks
+ * @public
+ */
+export declare class SxcDataServiceBase extends SxcPart {
+    readonly name: string;
+    protected readonly webApi: SxcWebApi;
+    /**
+     * Creates an instance of SxcData.
+     * @param {Sxc} sxc
+     * @param {string} name the content-type name
+     * @memberof SxcData
+     */
+    constructor(sxc: Sxc, name: string, nameInError: string);
+}
 
 /**
  * This is the root global `window.$2sxc` function / object.
@@ -774,6 +751,7 @@ export declare class SxcData<T = unknown> extends SxcDataServiceBase {
  * It is both a function `window.$2sxc(...)` and object `window.$2sxc.insights...`
  *
  * If the page feature `2sxc.JsCms` is enabled, the `window.$2sxc` will also be a [SxcGlobalWithCms](xref:Api.Js.SxcJs.SxcGlobalWithCms)
+ * @public
  */
 export declare interface SxcGlobal {
     /**
@@ -873,6 +851,7 @@ export declare interface SxcGlobal {
 
 /**
  * Provides environment information to $2sxc - usually page-id, api-root and stuff like that
+ * @public
  */
 export declare class SxcGlobalEnvironment extends HasLog {
     /* Excluded from this release type: header */
@@ -922,6 +901,7 @@ export declare class SxcGlobalEnvironment extends HasLog {
 
 /**
  * Global HTTP Service for information and helpers on `$2sxc.http`
+ * @public
  */
 export declare class SxcGlobalHttp extends HasLog {
     private env;
@@ -977,10 +957,19 @@ export declare class SxcGlobalHttp extends HasLog {
 
 /* Excluded from this release type: SxcManage */
 
-/* Excluded from this release type: SxcPart */
+/**
+ * Base class for anything attached to an sxc-instance
+ * @public
+ */
+export declare class SxcPart {
+    /* Excluded from this release type: sxc */
+    /* Excluded from this release type: partName */
+    /* Excluded from this release type: __constructor */
+}
 
 /**
  * Instance Query Service
+ * @public
  */
 export declare class SxcQuery extends SxcDataServiceBase {
     readonly name: string;
@@ -1011,6 +1000,7 @@ export declare class SxcQuery extends SxcDataServiceBase {
  * helper API to run ajax / REST calls to the server
  * it will ensure that the headers etc. are set correctly
  * and that urls are rewritten
+ * @public
  */
 export declare class SxcWebApi implements SxcWebApiDeprecated {
     private readonly sxc;
@@ -1156,6 +1146,7 @@ export declare type TypeValue = boolean | string | number | Date;
 /**
  * Helper object to read url params.
  * Available on `$2sxc.urlParams`
+ * @public
  */
 export declare class UrlParams {
     /**

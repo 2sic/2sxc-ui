@@ -2,7 +2,7 @@ import { Sxc } from '..';
 
 /**
 * Base class for anything attached to an sxc-instance
-* @internal
+* @public
 */
 export class SxcPart {
   /**

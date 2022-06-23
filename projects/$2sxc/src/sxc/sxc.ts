@@ -9,6 +9,7 @@ import { SxcCms } from './sxc-cms';
 
 /**
 * The typical sxc-instance object for a specific DNN module or content-block
+* @public
 */
 export class Sxc extends HasLog {
   /** @internal */

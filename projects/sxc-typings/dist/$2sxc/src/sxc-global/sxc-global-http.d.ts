@@ -2,6 +2,7 @@ import { HasLog } from '../../../core';
 import { ContextIdentifier, SxcGlobalEnvironment } from '..';
 /**
  * Global HTTP Service for information and helpers on `$2sxc.http`
+ * @public
  */
 export declare class SxcGlobalHttp extends HasLog {
     private env;

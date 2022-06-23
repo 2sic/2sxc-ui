@@ -3,7 +3,7 @@ import { SxcPart } from '../sxc-part';
 import { SxcWebApi } from '../web-api/sxc-web-api';
 /**
 * Base class doing common checks
-* @internal
+* @public
 */
 export declare class SxcDataServiceBase extends SxcPart {
     readonly name: string;

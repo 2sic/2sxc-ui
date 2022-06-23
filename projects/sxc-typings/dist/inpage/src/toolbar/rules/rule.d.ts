@@ -1,6 +1,6 @@
 import { Operations as Operators, RuleParams } from '.';
 import { HasLog, Log } from '../../core';
-import { TypeValue } from '../../plumbing';
+import { ToolbarButtonSettings, ToolbarSettings } from '../config';
 import { BuildSteps } from './build-steps';
 /**
  * Contains a rule how to add/modify a toolbar.
@@ -28,15 +28,7 @@ export declare class BuildRule extends HasLog {
      * Button Rules - determines what a button should do / not do
      * Note: can also be Partial<ToolbarSettings>
      */
-    ui: {
-        icon?: string;
-        class?: string;
-        color?: string;
-        show?: boolean;
-        code?: string;
-        title?: string;
-        [key: string]: TypeValue;
-    };
+    ui: ToolbarButtonSettings & Partial<ToolbarSettings>;
     /** ATM unused url-part after the hash - will probably be needed in future */
     context: {
         appId?: number;

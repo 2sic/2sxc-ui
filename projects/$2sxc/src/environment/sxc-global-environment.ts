@@ -7,6 +7,7 @@ declare const _jsApi: EnvironmentSpecs;
 
 /**
  * Provides environment information to $2sxc - usually page-id, api-root and stuff like that
+ * @public
  */
 export class SxcGlobalEnvironment extends HasLog {
     /** @internal */

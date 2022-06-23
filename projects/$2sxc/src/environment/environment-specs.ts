@@ -1,5 +1,6 @@
 /**
  * A context information for the current page, helping the JS talk with the backend
+ * @public
  */
 export interface EnvironmentSpecs {
   /** Page ID */

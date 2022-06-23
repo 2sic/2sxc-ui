@@ -3,6 +3,7 @@ import { MetadataFor } from '../../data/metadata-for';
 import { SxcDataServiceBase } from './sxc-data-service-base';
 /**
 * Data Service for an App / Sxc-Instance to get/create data of a specific Content-Type
+* @public
 */
 export declare class SxcData<T = unknown> extends SxcDataServiceBase {
     readonly name: string;

@@ -3,6 +3,7 @@ import { Log } from '.';
  * A log entry item
  * @export
  * @interface LogEntry
+ * @internal
  */
 export declare class LogEntry {
     /** @internal */

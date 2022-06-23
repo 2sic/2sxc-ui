@@ -3,6 +3,7 @@ import { Log } from '.';
  * Any object that has an own log object
  * @export
  * @interface HasLog
+ * @public
  */
 export declare abstract class HasLog {
     /** @internal */

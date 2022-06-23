@@ -4,7 +4,7 @@ import { SxcWebApi } from '../web-api/sxc-web-api';
 
 /**
 * Base class doing common checks
-* @internal
+* @public
 */
 export class SxcDataServiceBase extends SxcPart {
   protected readonly webApi: SxcWebApi;

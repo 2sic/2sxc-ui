@@ -9,6 +9,7 @@ import { SxcWebApiDeprecated } from './sxc-web-api-deprecated';
  * helper API to run ajax / REST calls to the server
  * it will ensure that the headers etc. are set correctly
  * and that urls are rewritten
+ * @public
  */
 export class SxcWebApi implements SxcWebApiDeprecated {
     /**

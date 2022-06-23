@@ -2,6 +2,7 @@ import { Sxc } from '..';
 import { SxcDataServiceBase } from './sxc-data-service-base';
 /**
  * Instance Query Service
+ * @public
  */
 export declare class SxcQuery extends SxcDataServiceBase {
     readonly name: string;

@@ -11,6 +11,9 @@ export declare type RuleParams = Record<string, string> & {
     filters?: Record<string, TypeValue | Array<unknown>>;
     /** this is how the metadata-param comes in - as a 'for=someId' - this node will be removed afterwards */
     for?: string;
-    /** This is the metadata node as it will be used as a real parameter */
+    /**
+     * This is the metadata node as it will be used as a real parameter
+     * @internal
+     */
     metadata?: CommandParamsMetadata;
 };

@@ -1,5 +1,6 @@
 /**
  * ContextIdentifier is used to initialize a Sxc object outside of the default context.
+ * @public
  */
 export declare class ContextIdentifier {
     /**

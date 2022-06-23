@@ -1,5 +1,6 @@
 /**
  * Names of commands known to 2sxc CMS - for use in toolbars and calling commands directly from code
+ * @public
  */
 export declare enum CommandNames {
     /**

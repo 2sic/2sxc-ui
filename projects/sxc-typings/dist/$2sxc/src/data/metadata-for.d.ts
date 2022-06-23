@@ -6,6 +6,7 @@ import { MetadataTargetTypes } from './target-types';
  *
  * Warning: There is another MetadataFor type and they are not fully consistent.
  * This is historical and not easy to correct, but we're working on it.
+ * @public
  */
 export interface MetadataFor {
     /**

@@ -71,6 +71,7 @@ export declare function buildSxcRoot(): SxcGlobal;
 
 /**
  * Names of commands known to 2sxc CMS - for use in toolbars and calling commands directly from code
+ * @public
  */
 export declare enum CommandNames {
     /**
@@ -336,6 +337,7 @@ export declare interface CommandParams {
 
 /**
  * Parameters on `metadata` for commands which have a metadata-target.
+ * @internal
  */
 export declare interface CommandParamsMetadata {
     /**
@@ -354,6 +356,7 @@ export declare interface CommandParamsMetadata {
 
 /**
  * ContextIdentifier is used to initialize a Sxc object outside of the default context.
+ * @public
  */
 export declare class ContextIdentifier {
     /**
@@ -438,6 +441,7 @@ export declare class EnvironmentMetaLoader extends HasLog {
 
 /**
  * A context information for the current page, helping the JS talk with the backend
+ * @public
  */
 export declare interface EnvironmentSpecs {
     /** Page ID */
@@ -465,6 +469,7 @@ export declare interface EnvironmentSpecs {
  * Any object that has an own log object
  * @export
  * @interface HasLog
+ * @public
  */
 export declare abstract class HasLog {
     /** @internal */
@@ -504,12 +509,14 @@ export declare const HeaderNames: {
 /** @internal */
 export declare const Insights: InsightsSingleton;
 
+/** @internal */
 export declare class InsightsLogSet {
     name: string;
     logs: LogList;
     constructor(name: string);
 }
 
+/** @internal */
 export declare class InsightsSingleton extends HasLog {
     constructor();
     history: {
@@ -746,6 +753,7 @@ export declare class LogCall {
  * A log entry item
  * @export
  * @interface LogEntry
+ * @internal
  */
 export declare class LogEntry {
     /** @internal */
@@ -789,6 +797,7 @@ export declare enum LogEntryOptions {
     throw = "throw"
 }
 
+/** @internal */
 export declare type LogList = Array<{
     key: string;
     log: Log;
@@ -801,6 +810,7 @@ export declare type LogList = Array<{
  *
  * Warning: There is another MetadataFor type and they are not fully consistent.
  * This is historical and not easy to correct, but we're working on it.
+ * @public
  */
 export declare interface MetadataFor {
     /**
@@ -838,6 +848,7 @@ export declare interface MetadataFor {
  * These are constants to determine what something is assigned to (e.g. it describes an Entity, a file, etc.)
  *
  * Use it for the @see MetadataFor objects
+ * @public
  */
 export declare enum MetadataTargetTypes {
     /**
@@ -1044,6 +1055,7 @@ export declare interface RunParams {
  * Parameters for the **Global** $2sxc.cms.run(...) command in Addition to the [RunParams](xref:Api.Js.SxcJs.RunParams).
  * It provides context to the run-params such as a Sxc instance or a tag which it started on.
  * New in 12.10
+ * @public
  */
 export declare interface RunParamsWithContext extends RunParams {
     /**
@@ -1065,6 +1077,7 @@ export declare class Stats {
 
 /**
  * The typical sxc-instance object for a specific DNN module or content-block
+ * @public
  */
 export declare class Sxc extends HasLog {
     /** the sxc-instance ID, which is usually the DNN Module Id */
@@ -1192,6 +1205,7 @@ export declare const SxcApiUrlRoot = "desktopmodules/2sxc/api/";
  * This is in charge of sxc.cms on the instance level.
  * ATM it just has the run command.
  * In future, it may also have dedicated command like `layout` etc.
+ * @public
  */
 export declare class SxcCms extends SxcPart {
     /** @internal */
@@ -1207,6 +1221,7 @@ export declare class SxcCms extends SxcPart {
 
 /**
  * Data Service for an App / Sxc-Instance to get/create data of a specific Content-Type
+ * @public
  */
 export declare class SxcData<T = unknown> extends SxcDataServiceBase {
     readonly name: string;
@@ -1266,7 +1281,7 @@ export declare class SxcData<T = unknown> extends SxcDataServiceBase {
 
 /**
  * Base class doing common checks
- * @internal
+ * @public
  */
 export declare class SxcDataServiceBase extends SxcPart {
     readonly name: string;
@@ -1286,6 +1301,7 @@ export declare class SxcDataServiceBase extends SxcPart {
  * It is both a function `window.$2sxc(...)` and object `window.$2sxc.insights...`
  *
  * If the page feature `2sxc.JsCms` is enabled, the `window.$2sxc` will also be a [SxcGlobalWithCms](xref:Api.Js.SxcJs.SxcGlobalWithCms)
+ * @public
  */
 export declare interface SxcGlobal {
     /**
@@ -1411,6 +1427,7 @@ export declare class SxcGlobalDebug {
 
 /**
  * Provides environment information to $2sxc - usually page-id, api-root and stuff like that
+ * @public
  */
 export declare class SxcGlobalEnvironment extends HasLog {
     /** @internal */
@@ -1471,6 +1488,7 @@ export declare class SxcGlobalEnvironment extends HasLog {
 
 /**
  * Global HTTP Service for information and helpers on `$2sxc.http`
+ * @public
  */
 export declare class SxcGlobalHttp extends HasLog {
     private env;
@@ -1566,7 +1584,7 @@ export declare interface SxcManage {
 
 /**
  * Base class for anything attached to an sxc-instance
- * @internal
+ * @public
  */
 export declare class SxcPart {
     /** @internal */
@@ -1589,6 +1607,7 @@ export declare class SxcPart {
 
 /**
  * Instance Query Service
+ * @public
  */
 export declare class SxcQuery extends SxcDataServiceBase {
     readonly name: string;
@@ -1634,6 +1653,7 @@ export declare const SxcVersion: string;
  * helper API to run ajax / REST calls to the server
  * it will ensure that the headers etc. are set correctly
  * and that urls are rewritten
+ * @public
  */
 export declare class SxcWebApi implements SxcWebApiDeprecated {
     private readonly sxc;
@@ -1835,6 +1855,7 @@ export declare function urlClean(original: string): string;
 /**
  * Helper object to read url params.
  * Available on `$2sxc.urlParams`
+ * @public
  */
 export declare class UrlParams {
     /**

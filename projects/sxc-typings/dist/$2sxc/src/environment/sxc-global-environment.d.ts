@@ -3,6 +3,7 @@ import { EnvironmentMetaLoader } from './env-loader-meta';
 import { HasLog } from '../../../core';
 /**
  * Provides environment information to $2sxc - usually page-id, api-root and stuff like that
+ * @public
  */
 export declare class SxcGlobalEnvironment extends HasLog {
     /** @internal */
