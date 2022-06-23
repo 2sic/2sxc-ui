@@ -1,0 +1,77 @@
+### YamlMime:TSType
+name: AjaxSettings
+uid: '@2sic.com/2sxc-typings!AjaxSettings:interface'
+package: '@2sic.com/2sxc-typings!'
+fullName: AjaxSettings
+summary: ''
+remarks: ''
+example: []
+isPreview: false
+isDeprecated: false
+type: interface
+properties:
+  - name: action
+    uid: '@2sic.com/2sxc-typings!AjaxSettings#action:member'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: action
+    summary: 'action name, for controller/action calls'
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'action?: string;'
+      return:
+        type: string
+  - name: controller
+    uid: '@2sic.com/2sxc-typings!AjaxSettings#controller:member'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: controller
+    summary: 'Controller name, for controller/action calls'
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'controller?: string;'
+      return:
+        type: string
+  - name: endpoint
+    uid: '@2sic.com/2sxc-typings!AjaxSettings#endpoint:member'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: endpoint
+    summary: 'Override the endpoint, which is usually ''2sxc'''
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'endpoint?: string;'
+      return:
+        type: string
+  - name: params
+    uid: '@2sic.com/2sxc-typings!AjaxSettings#params:member'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: params
+    summary: The params to be used in the url for the request
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'params?: any;'
+      return:
+        type: any
+  - name: preventAutoFail
+    uid: '@2sic.com/2sxc-typings!AjaxSettings#preventAutoFail:member'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: preventAutoFail
+    summary: ''
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'preventAutoFail?: boolean;'
+      return:
+        type: boolean

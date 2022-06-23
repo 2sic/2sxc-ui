@@ -1,0 +1,261 @@
+### YamlMime:TSType
+name: SxcWebApi
+uid: '@2sic.com/2sxc-typings!SxcWebApi:class'
+package: '@2sic.com/2sxc-typings!'
+fullName: SxcWebApi
+summary: >-
+  helper API to run ajax / REST calls to the server it will ensure that the headers etc. are set correctly and that urls
+  are rewritten
+remarks: >-
+  The constructor for this class is marked as internal. Third-party code should not call the constructor directly or
+  create subclasses that extend the `SxcWebApi` class.
+example: []
+isPreview: false
+isDeprecated: false
+type: class
+methods:
+  - name: 'delete(settingsOrUrl, params, data, preventAutoFail)'
+    uid: '@2sic.com/2sxc-typings!SxcWebApi#delete:member(1)'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: 'delete(settingsOrUrl, params, data, preventAutoFail)'
+    summary: \*\*Deprecated\*\* - docs in the separate interface
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: true
+    customDeprecatedMessage: use fetchJson instead
+    syntax:
+      content: 'delete(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): any;'
+      parameters:
+        - id: settingsOrUrl
+          description: ''
+          type: 'string | <xref uid="@2sic.com/2sxc-typings!AjaxSettings:interface" />'
+        - id: params
+          description: ''
+          type: any
+        - id: data
+          description: ''
+          type: any
+        - id: preventAutoFail
+          description: ''
+          type: boolean
+      return:
+        type: any
+        description: ''
+  - name: 'fetchJson(url, data, method)'
+    uid: '@2sic.com/2sxc-typings!SxcWebApi#fetchJson:member(1)'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: 'fetchJson(url, data, method)'
+    summary: Will retrieve data from the backend using a standard fetch and give you an object.
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'fetchJson<T = any>(url: string, data?: string | Record<string, any>, method?: string): Promise<T>;'
+      parameters:
+        - id: url
+          description: >-
+            a full url or short-hand like `controller/method?params` `app/auto/api/controller/method?params`<!-- -->.
+            Note that params would also be specified on the url.
+          type: string
+        - id: data
+          description: optional POST data
+          type: 'string | Record&lt;string, any&gt;'
+        - id: method
+          description: 'optional method, defaults to `GET` unless it has data, in which case it defaults to `POST`'
+          type: string
+      return:
+        type: Promise&lt;T&gt;
+        description: a Promise containing any object.
+  - name: 'fetchRaw(url, data, method)'
+    uid: '@2sic.com/2sxc-typings!SxcWebApi#fetchRaw:member(1)'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: 'fetchRaw(url, data, method)'
+    summary: Will retrieve data from the backend using a standard fetch.
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'fetchRaw(url: string, data?: string | Record<string, any>, method?: string): Promise<Response>;'
+      parameters:
+        - id: url
+          description: >-
+            a full url or short-hand like `controller/method?params` `app/auto/api/controller/method?params`<!-- -->.
+            Note that params would also be specified on the url.
+          type: string
+        - id: data
+          description: optional POST data
+          type: 'string | Record&lt;string, any&gt;'
+        - id: method
+          description: 'optional method, defaults to `GET` unless it has data, in which case it defaults to `POST`'
+          type: string
+      return:
+        type: Promise&lt;Response&gt;
+        description: >-
+          a Promise containing a Response object, just like a normal fetch would. example: webApi.fetchRaw('Rss/Feed');
+          example: webApi.fetchRaw(webApi.url('Rss/Feed', { id: 47 }<!-- -->)); // url params example:
+          webApi.fetchRaw('Rss/Feed', { id: 47 }<!-- -->); // post params example:
+          webApi.fetchRaw(webApi.url('Rss/Feed', { id: 47 }<!-- -->), { something: 'this is a test' }<!-- -->); // url
+          &amp; post params maybe: webApi.fetchRaw(<!-- -->{<!-- -->url: 'Rss/Feed', params: { id: 47 }<!-- -->}<!--
+          -->) maybe: webApi.fetchRaw(<!-- -->{<!-- -->url: ..., params: { ...<!-- -->}<!-- -->, body: { ...<!--
+          -->}<!-- -->, method: 'GET' }<!-- -->)
+  - name: 'get(settingsOrUrl, params, data, preventAutoFail)'
+    uid: '@2sic.com/2sxc-typings!SxcWebApi#get:member(1)'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: 'get(settingsOrUrl, params, data, preventAutoFail)'
+    summary: \*\*Deprecated\*\* - docs in the separate interface
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: true
+    customDeprecatedMessage: use fetchJson instead
+    syntax:
+      content: 'get(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): any;'
+      parameters:
+        - id: settingsOrUrl
+          description: ''
+          type: 'string | <xref uid="@2sic.com/2sxc-typings!AjaxSettings:interface" />'
+        - id: params
+          description: ''
+          type: any
+        - id: data
+          description: ''
+          type: any
+        - id: preventAutoFail
+          description: ''
+          type: boolean
+      return:
+        type: any
+        description: ''
+  - name: headers(method)
+    uid: '@2sic.com/2sxc-typings!SxcWebApi#headers:member(1)'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: headers(method)
+    summary: >-
+      All the headers which are needed in an ajax call for this to work reliably. Use this if you need to get a list of
+      headers in another system
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'headers(method?: string): Record<string, string>;'
+      parameters:
+        - id: method
+          description: ''
+          type: string
+      return:
+        type: 'Record&lt;string, string&gt;'
+        description: ''
+  - name: 'post(settingsOrUrl, params, data, preventAutoFail)'
+    uid: '@2sic.com/2sxc-typings!SxcWebApi#post:member(1)'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: 'post(settingsOrUrl, params, data, preventAutoFail)'
+    summary: \*\*Deprecated\*\* - docs in the separate interface
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: true
+    customDeprecatedMessage: use fetchJson instead
+    syntax:
+      content: 'post(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): any;'
+      parameters:
+        - id: settingsOrUrl
+          description: ''
+          type: 'string | <xref uid="@2sic.com/2sxc-typings!AjaxSettings:interface" />'
+        - id: params
+          description: ''
+          type: any
+        - id: data
+          description: ''
+          type: any
+        - id: preventAutoFail
+          description: ''
+          type: boolean
+      return:
+        type: any
+        description: ''
+  - name: 'put(settingsOrUrl, params, data, preventAutoFail)'
+    uid: '@2sic.com/2sxc-typings!SxcWebApi#put:member(1)'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: 'put(settingsOrUrl, params, data, preventAutoFail)'
+    summary: \*\*Deprecated\*\* - docs in the separate interface
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: true
+    customDeprecatedMessage: use fetchJson instead
+    syntax:
+      content: 'put(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): any;'
+      parameters:
+        - id: settingsOrUrl
+          description: ''
+          type: 'string | <xref uid="@2sic.com/2sxc-typings!AjaxSettings:interface" />'
+        - id: params
+          description: ''
+          type: any
+        - id: data
+          description: ''
+          type: any
+        - id: preventAutoFail
+          description: ''
+          type: boolean
+      return:
+        type: any
+        description: ''
+  - name: 'request(settings, params, data, preventAutoFail, method)'
+    uid: '@2sic.com/2sxc-typings!SxcWebApi#request:member(1)'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: 'request(settings, params, data, preventAutoFail, method)'
+    summary: \*\*Deprecated\*\* - docs in the separate interface
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: true
+    customDeprecatedMessage: use fetchJson instead
+    syntax:
+      content: 'request(settings: string | AjaxSettings, params: any, data: any, preventAutoFail: boolean, method: string): any;'
+      parameters:
+        - id: settings
+          description: ''
+          type: 'string | <xref uid="@2sic.com/2sxc-typings!AjaxSettings:interface" />'
+        - id: params
+          description: ''
+          type: any
+        - id: data
+          description: ''
+          type: any
+        - id: preventAutoFail
+          description: ''
+          type: boolean
+        - id: method
+          description: ''
+          type: string
+      return:
+        type: any
+        description: ''
+  - name: 'url(url, params)'
+    uid: '@2sic.com/2sxc-typings!SxcWebApi#url:member(1)'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: 'url(url, params)'
+    summary: ''
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'url(url: string, params?: string | Record<string, any>): string;'
+      parameters:
+        - id: url
+          description: >-
+            A short, medium or long url. Short like `controller/method`<!-- -->, medium like
+            `app/auto/api/controller/method` long like \`<!-- -->https://xyz. In all cases it can also have ?params etc.
+          type: string
+        - id: params
+          description: 'Optional parameters as string or object, will be added to url-params.'
+          type: 'string | Record&lt;string, any&gt;'
+      return:
+        type: string
+        description: 'In the cases of a short/medium url, it will auto-expand to have the full url as needed for an API call.'

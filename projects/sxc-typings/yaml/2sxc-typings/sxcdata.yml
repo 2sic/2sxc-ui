@@ -1,0 +1,157 @@
+### YamlMime:TSType
+name: SxcData
+uid: '@2sic.com/2sxc-typings!SxcData:class'
+package: '@2sic.com/2sxc-typings!'
+fullName: SxcData
+summary: Data Service for an App / Sxc-Instance to get/create data of a specific Content-Type
+remarks: >-
+  The constructor for this class is marked as internal. Third-party code should not call the constructor directly or
+  create subclasses that extend the `SxcData` class.
+example: []
+isPreview: false
+isDeprecated: false
+type: class
+properties:
+  - name: name
+    uid: '@2sic.com/2sxc-typings!SxcData#name:member'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: name
+    summary: ''
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'readonly name: string;'
+      return:
+        type: string
+methods:
+  - name: create(values)
+    uid: '@2sic.com/2sxc-typings!SxcData#create:member(1)'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: create(values)
+    summary: Create a new entity with the values supplied
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'create(values: Record<string, unknown>): Promise<Record<string, unknown>>;'
+      parameters:
+        - id: values
+          description: a simple object containing the values to create
+          type: 'Record&lt;string, unknown&gt;'
+      return:
+        type: 'Promise&lt;Record&lt;string, unknown&gt;&gt;'
+        description: ''
+  - name: 'create(values, metadataFor)'
+    uid: '@2sic.com/2sxc-typings!SxcData#create:member(2)'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: 'create(values, metadataFor)'
+    summary: Create a new entity with the values supplied and also a metadata-for reference
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'create(values: Record<string, unknown>, metadataFor: MetadataFor | string): Promise<Record<string, unknown>>;'
+      parameters:
+        - id: values
+          description: a simple object containing the values to create
+          type: 'Record&lt;string, unknown&gt;'
+        - id: metadataFor
+          description: ''
+          type: '<xref uid="@2sic.com/2sxc-typings!MetadataFor:interface" /> | string'
+      return:
+        type: 'Promise&lt;Record&lt;string, unknown&gt;&gt;'
+        description: ''
+  - name: delete(id)
+    uid: '@2sic.com/2sxc-typings!SxcData#delete:member(1)'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: delete(id)
+    summary: Delete an entity
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'delete(id: number): Promise<null>;'
+      parameters:
+        - id: id
+          description: id of the item to delete
+          type: number
+      return:
+        type: Promise&lt;null&gt;
+        description: ''
+  - name: delete(guid)
+    uid: '@2sic.com/2sxc-typings!SxcData#delete:member(2)'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: delete(guid)
+    summary: Delete an entity
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'delete(guid: string): Promise<null>;'
+      parameters:
+        - id: guid
+          description: GUID of the item to delete
+          type: string
+      return:
+        type: Promise&lt;null&gt;
+        description: ''
+  - name: getAll()
+    uid: '@2sic.com/2sxc-typings!SxcData#getAll:member(1)'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: getAll()
+    summary: Get all items of this type.
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'getAll(): Promise<T[]>;'
+      return:
+        type: 'Promise&lt;T[]&gt;'
+        description: ''
+  - name: getOne(id)
+    uid: '@2sic.com/2sxc-typings!SxcData#getOne:member(1)'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: getOne(id)
+    summary: Get the specific item with the ID. It will return null if not found
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'getOne(id: number): Promise<T> | null;'
+      parameters:
+        - id: id
+          description: ''
+          type: number
+      return:
+        type: Promise&lt;T&gt; | null
+        description: ''
+  - name: 'update(id, values)'
+    uid: '@2sic.com/2sxc-typings!SxcData#update:member(1)'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: 'update(id, values)'
+    summary: Update an existing entity with the values supplied
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'update(id: number, values: Record<string, unknown>): Promise<Record<string, unknown>>;'
+      parameters:
+        - id: id
+          description: ''
+          type: number
+        - id: values
+          description: ''
+          type: 'Record&lt;string, unknown&gt;'
+      return:
+        type: 'Promise&lt;Record&lt;string, unknown&gt;&gt;'
+        description: ''
+extends: '<xref uid="@2sic.com/2sxc-typings!SxcDataServiceBase:class" />'

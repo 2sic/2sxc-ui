@@ -1,0 +1,158 @@
+### YamlMime:TSEnum
+name: MetadataTargetTypes
+uid: '@2sic.com/2sxc-typings!MetadataTargetTypes:enum'
+package: '@2sic.com/2sxc-typings!'
+fullName: MetadataTargetTypes
+summary: |-
+  Metadata Target Types
+
+  These are constants to determine what something is assigned to (e.g. it describes an Entity, a file, etc.)
+
+  Use it for the
+remarks: ''
+example: []
+isPreview: false
+isDeprecated: false
+fields:
+  - name: App
+    uid: '@2sic.com/2sxc-typings!MetadataTargetTypes.App:member'
+    package: '@2sic.com/2sxc-typings!'
+    summary: >-
+      App metadata (3). Used to give Apps additional properties. Remarks = The key should always be an int ID of the
+      App.
+    value: '3'
+  - name: Attribute
+    uid: '@2sic.com/2sxc-typings!MetadataTargetTypes.Attribute:member'
+    package: '@2sic.com/2sxc-typings!'
+    summary: >-
+      Metadata of attributes / fields (2). This is used to store configuration like the field label, amount-of-rows,
+      etc. Remarks = The key is always a number (int) pointing to the Attribute ID in the DB.
+    value: '2'
+  - name: CmsItem
+    uid: '@2sic.com/2sxc-typings!MetadataTargetTypes.CmsItem:member'
+    package: '@2sic.com/2sxc-typings!'
+    summary: >-
+      Item / Object of the Platform, like a File or Folder etc. (10) Remarks = \* The key is usually a string to further
+      specify what it's describing, like "file:72" \* The text equivalent is CmsObject
+    value: '10'
+  - name: ContentType
+    uid: '@2sic.com/2sxc-typings!MetadataTargetTypes.ContentType:member'
+    package: '@2sic.com/2sxc-typings!'
+    summary: Metadata of a content-type / data-schema (5). Used to give it a description etc.
+    value: '5'
+  - name: Custom
+    uid: '@2sic.com/2sxc-typings!MetadataTargetTypes.Custom:member'
+    package: '@2sic.com/2sxc-typings!'
+    summary: >-
+      Custom target (90). This is what you should use for basic apps which have a custom target that's none of the other
+      defaults.
+    value: '90'
+  - name: Custom1
+    uid: '@2sic.com/2sxc-typings!MetadataTargetTypes.Custom1:member'
+    package: '@2sic.com/2sxc-typings!'
+    summary: 'Custom target (91). Use this for basic apps which need multiple different custom targets (advanced, rare use case)'
+    value: '91'
+  - name: Custom2
+    uid: '@2sic.com/2sxc-typings!MetadataTargetTypes.Custom2:member'
+    package: '@2sic.com/2sxc-typings!'
+    summary: 'Custom target (92). Use this for basic apps which need multiple different custom targets (advanced, rare use case)'
+    value: '92'
+  - name: Custom3
+    uid: '@2sic.com/2sxc-typings!MetadataTargetTypes.Custom3:member'
+    package: '@2sic.com/2sxc-typings!'
+    summary: 'Custom target (93). Use this for basic apps which need multiple different custom targets (advanced, rare use case)'
+    value: '93'
+  - name: Custom4
+    uid: '@2sic.com/2sxc-typings!MetadataTargetTypes.Custom4:member'
+    package: '@2sic.com/2sxc-typings!'
+    summary: 'Custom target (94). Use this for basic apps which need multiple different custom targets (advanced, rare use case)'
+    value: '94'
+  - name: Custom5
+    uid: '@2sic.com/2sxc-typings!MetadataTargetTypes.Custom5:member'
+    package: '@2sic.com/2sxc-typings!'
+    summary: 'Custom target (95). Use this for basic apps which need multiple different custom targets (advanced, rare use case)'
+    value: '95'
+  - name: Custom6
+    uid: '@2sic.com/2sxc-typings!MetadataTargetTypes.Custom6:member'
+    package: '@2sic.com/2sxc-typings!'
+    summary: 'Custom target (96). Use this for basic apps which need multiple different custom targets (advanced, rare use case)'
+    value: '96'
+  - name: Custom7
+    uid: '@2sic.com/2sxc-typings!MetadataTargetTypes.Custom7:member'
+    package: '@2sic.com/2sxc-typings!'
+    summary: 'Custom target (97). Use this for basic apps which need multiple different custom targets (advanced, rare use case)'
+    value: '97'
+  - name: Custom8
+    uid: '@2sic.com/2sxc-typings!MetadataTargetTypes.Custom8:member'
+    package: '@2sic.com/2sxc-typings!'
+    summary: 'Custom target (98). Use this for basic apps which need multiple different custom targets (advanced, rare use case)'
+    value: '98'
+  - name: Custom9
+    uid: '@2sic.com/2sxc-typings!MetadataTargetTypes.Custom9:member'
+    package: '@2sic.com/2sxc-typings!'
+    summary: 'Custom target (99). Use this for basic apps which need multiple different custom targets (advanced, rare use case)'
+    value: '99'
+  - name: Entity
+    uid: '@2sic.com/2sxc-typings!MetadataTargetTypes.Entity:member'
+    package: '@2sic.com/2sxc-typings!'
+    summary: >-
+      Metadata of entities / data-items (4). This lets us enhance entities with additional information. Remarks = The
+      Key should always be a GUID
+    value: '4'
+  - name: Module
+    uid: '@2sic.com/2sxc-typings!MetadataTargetTypes.Module:member'
+    package: '@2sic.com/2sxc-typings!'
+    summary: A Module - like a module containing some content (16) Remarks = New in v13</remarks>
+    value: '16'
+  - name: ModuleVariant
+    uid: '@2sic.com/2sxc-typings!MetadataTargetTypes.ModuleVariant:member'
+    package: '@2sic.com/2sxc-typings!'
+    summary: A Module - like a module containing some content (17) Remarks = New in v13 / beta</remarks>
+    value: '17'
+  - name: None
+    uid: '@2sic.com/2sxc-typings!MetadataTargetTypes.None:member'
+    package: '@2sic.com/2sxc-typings!'
+    summary: Things that are not used as Metadata (1). This is the default for most Entities.
+    value: '1'
+  - name: Page
+    uid: '@2sic.com/2sxc-typings!MetadataTargetTypes.Page:member'
+    package: '@2sic.com/2sxc-typings!'
+    summary: A Page - like the current page (14) Remarks = New in v13</remarks>
+    value: '14'
+  - name: PageVariant
+    uid: '@2sic.com/2sxc-typings!MetadataTargetTypes.PageVariant:member'
+    package: '@2sic.com/2sxc-typings!'
+    summary: A Page - like the current page (15) Remarks = New in v13 / beta</remarks>
+    value: '15'
+  - name: Site
+    uid: '@2sic.com/2sxc-typings!MetadataTargetTypes.Site:member'
+    package: '@2sic.com/2sxc-typings!'
+    summary: A Site - like the current site (12) Remarks = New in v13</remarks>
+    value: '12'
+  - name: SiteVariant
+    uid: '@2sic.com/2sxc-typings!MetadataTargetTypes.SiteVariant:member'
+    package: '@2sic.com/2sxc-typings!'
+    summary: A Site - like the current site (13) Remarks = New in v13 / beta</remarks>
+    value: '13'
+  - name: System
+    uid: '@2sic.com/2sxc-typings!MetadataTargetTypes.System:member'
+    package: '@2sic.com/2sxc-typings!'
+    summary: >-
+      The entire system / platform - so Metadata for the current Dnn/Oqtane installation (11). Remarks = This is not in
+      use as of now, just added for completeness sakes. New in v13
+    value: '11'
+  - name: Undefined
+    uid: '@2sic.com/2sxc-typings!MetadataTargetTypes.Undefined:member'
+    package: '@2sic.com/2sxc-typings!'
+    summary: 'Undefined Type (0) - included for completeness. Not usually used, actually None (1) is the default'
+    value: '0'
+  - name: User
+    uid: '@2sic.com/2sxc-typings!MetadataTargetTypes.User:member'
+    package: '@2sic.com/2sxc-typings!'
+    summary: A User - like the admin-user (18) Remarks = New in v13</remarks>
+    value: '18'
+  - name: Zone
+    uid: '@2sic.com/2sxc-typings!MetadataTargetTypes.Zone:member'
+    package: '@2sic.com/2sxc-typings!'
+    summary: 'Zone metadata (6) - used to give a Zone additional information. Only used in very special cases, best not use.'
+    value: '6'

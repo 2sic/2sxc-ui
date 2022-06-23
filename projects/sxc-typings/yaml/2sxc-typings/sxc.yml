@@ -1,0 +1,122 @@
+### YamlMime:TSType
+name: Sxc
+uid: '@2sic.com/2sxc-typings!Sxc:class'
+package: '@2sic.com/2sxc-typings!'
+fullName: Sxc
+summary: The typical sxc-instance object for a specific DNN module or content-block
+remarks: >-
+  The constructor for this class is marked as internal. Third-party code should not call the constructor directly or
+  create subclasses that extend the `Sxc` class.
+example: []
+isPreview: false
+isDeprecated: false
+type: class
+properties:
+  - name: cbid
+    uid: '@2sic.com/2sxc-typings!Sxc#cbid:member'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: cbid
+    summary: >-
+      content-block ID, which is either the module ID, or the content-block definition entity ID this is an advanced
+      concept you usually don't care about, otherwise you should research it
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'cbid: number;'
+      return:
+        type: number
+  - name: cms
+    uid: '@2sic.com/2sxc-typings!Sxc#cms:member'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: cms
+    summary: 'CMS operations on this sxc-instance, such as opening the edit dialog etc.'
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'cms: SxcCms;'
+      return:
+        type: '<xref uid="@2sic.com/2sxc-typings!SxcCms:class" />'
+  - name: id
+    uid: '@2sic.com/2sxc-typings!Sxc#id:member'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: id
+    summary: 'the sxc-instance ID, which is usually the DNN Module Id'
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'id: number;'
+      return:
+        type: number
+  - name: webApi
+    uid: '@2sic.com/2sxc-typings!Sxc#webApi:member'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: webApi
+    summary: >-
+      Web API calls for this instance. This is the pure call APIs system. To get data or queries, best use the data or
+      query services.  {<!-- -->SxcWebApi<!-- -->}  Sxc
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'webApi: SxcWebApi;'
+      return:
+        type: '<xref uid="@2sic.com/2sxc-typings!SxcWebApi:class" />'
+methods:
+  - name: data(contentType)
+    uid: '@2sic.com/2sxc-typings!Sxc#data:member(1)'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: data(contentType)
+    summary: Get a data service for a specific content-type.
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'data<T = unknown>(contentType: string): SxcData<T>;'
+      parameters:
+        - id: contentType
+          description: name of the content type which this service will get
+          type: string
+      return:
+        type: '<xref uid="@2sic.com/2sxc-typings!SxcData:class" />&lt;T&gt;'
+        description: SxcData<T>  SxcInstance
+  - name: isEditMode()
+    uid: '@2sic.com/2sxc-typings!Sxc#isEditMode:member(1)'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: isEditMode()
+    summary: Test if the current code is in edit-mode and additional javascripts have been loaded to make it work
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'isEditMode(): boolean;'
+      return:
+        type: boolean
+        description: true if we are in edit-mode
+  - name: query(query)
+    uid: '@2sic.com/2sxc-typings!Sxc#query:member(1)'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: query(query)
+    summary: ''
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'query(query: string): SxcQuery;'
+      parameters:
+        - id: query
+          description: ''
+          type: string
+      return:
+        type: '<xref uid="@2sic.com/2sxc-typings!SxcQuery:class" />'
+        description: SxcQuery  SxcInstance
+extends: '<xref uid="@2sic.com/2sxc-typings!HasLog:class" />'

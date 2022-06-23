@@ -1,0 +1,219 @@
+### YamlMime:TSType
+name: SxcQuery
+uid: '@2sic.com/2sxc-typings!SxcQuery:class'
+package: '@2sic.com/2sxc-typings!'
+fullName: SxcQuery
+summary: Instance Query Service
+remarks: >-
+  The constructor for this class is marked as internal. Third-party code should not call the constructor directly or
+  create subclasses that extend the `SxcQuery` class.
+example: []
+isPreview: false
+isDeprecated: false
+type: class
+properties:
+  - name: name
+    uid: '@2sic.com/2sxc-typings!SxcQuery#name:member'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: name
+    summary: ''
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'readonly name: string;'
+      return:
+        type: string
+methods:
+  - name: getAll()
+    uid: '@2sic.com/2sxc-typings!SxcQuery#getAll:member(1)'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: getAll()
+    summary: ''
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'getAll<T = unknown>(): Promise<T>;'
+      return:
+        type: Promise&lt;T&gt;
+        description: ''
+  - name: getAll(urlParams)
+    uid: '@2sic.com/2sxc-typings!SxcQuery#getAll:member(2)'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: getAll(urlParams)
+    summary: ''
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'getAll<T = unknown>(urlParams: string | Record<string, unknown>): Promise<T>;'
+      parameters:
+        - id: urlParams
+          description: ''
+          type: 'string | Record&lt;string, unknown&gt;'
+      return:
+        type: Promise&lt;T&gt;
+        description: ''
+  - name: 'getAll(urlParams, data)'
+    uid: '@2sic.com/2sxc-typings!SxcQuery#getAll:member(3)'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: 'getAll(urlParams, data)'
+    summary: ''
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: >-
+        getAll<T = unknown>(urlParams: string | Record<string, unknown>, data: string | Record<string, unknown>):
+        Promise<T>;
+      parameters:
+        - id: urlParams
+          description: ''
+          type: 'string | Record&lt;string, unknown&gt;'
+        - id: data
+          description: ''
+          type: 'string | Record&lt;string, unknown&gt;'
+      return:
+        type: Promise&lt;T&gt;
+        description: ''
+  - name: getStream(stream)
+    uid: '@2sic.com/2sxc-typings!SxcQuery#getStream:member(1)'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: getStream(stream)
+    summary: |-
+      Get just one stream, returning an array of items in that stream
+
+       T
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'getStream<T = unknown>(stream: string): Promise<T[]>;'
+      parameters:
+        - id: stream
+          description: ''
+          type: string
+      return:
+        type: 'Promise&lt;T[]&gt;'
+        description: >-
+          {<!-- -->Promise<!-- -->&lt;<!-- -->T\[\]<!-- -->&gt;<!-- -->} containing an array of items - or empty if
+          stream not found or nothing returned  SxcQuery
+  - name: 'getStream(stream, urlParams)'
+    uid: '@2sic.com/2sxc-typings!SxcQuery#getStream:member(2)'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: 'getStream(stream, urlParams)'
+    summary: ''
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'getStream<T = unknown>(stream: string, urlParams: string | Record<string, unknown>): Promise<T[]>;'
+      parameters:
+        - id: stream
+          description: ''
+          type: string
+        - id: urlParams
+          description: ''
+          type: 'string | Record&lt;string, unknown&gt;'
+      return:
+        type: 'Promise&lt;T[]&gt;'
+        description: ''
+  - name: 'getStream(stream, urlParams, data)'
+    uid: '@2sic.com/2sxc-typings!SxcQuery#getStream:member(3)'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: 'getStream(stream, urlParams, data)'
+    summary: ''
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: >-
+        getStream<T = unknown>(stream: string, urlParams: string | Record<string, unknown>, data: string |
+        Record<string, unknown>): Promise<T[]>;
+      parameters:
+        - id: stream
+          description: ''
+          type: string
+        - id: urlParams
+          description: ''
+          type: 'string | Record&lt;string, unknown&gt;'
+        - id: data
+          description: ''
+          type: 'string | Record&lt;string, unknown&gt;'
+      return:
+        type: 'Promise&lt;T[]&gt;'
+        description: ''
+  - name: getStreams(streams)
+    uid: '@2sic.com/2sxc-typings!SxcQuery#getStreams:member(1)'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: getStreams(streams)
+    summary: ''
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'getStreams<T = unknown>(streams: string): Promise<T>;'
+      parameters:
+        - id: streams
+          description: ''
+          type: string
+      return:
+        type: Promise&lt;T&gt;
+        description: ''
+  - name: 'getStreams(streams, urlParams)'
+    uid: '@2sic.com/2sxc-typings!SxcQuery#getStreams:member(2)'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: 'getStreams(streams, urlParams)'
+    summary: ''
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'getStreams<T = unknown>(streams: string, urlParams: string | Record<string, unknown>): Promise<T>;'
+      parameters:
+        - id: streams
+          description: ''
+          type: string
+        - id: urlParams
+          description: ''
+          type: 'string | Record&lt;string, unknown&gt;'
+      return:
+        type: Promise&lt;T&gt;
+        description: ''
+  - name: 'getStreams(streams, urlParams, data)'
+    uid: '@2sic.com/2sxc-typings!SxcQuery#getStreams:member(3)'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: 'getStreams(streams, urlParams, data)'
+    summary: ''
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: >-
+        getStreams<T = unknown>(streams: string, urlParams: string | Record<string, unknown>, data: string |
+        Record<string, unknown>): Promise<T>;
+      parameters:
+        - id: streams
+          description: ''
+          type: string
+        - id: urlParams
+          description: ''
+          type: 'string | Record&lt;string, unknown&gt;'
+        - id: data
+          description: ''
+          type: 'string | Record&lt;string, unknown&gt;'
+      return:
+        type: Promise&lt;T&gt;
+        description: ''
+extends: '<xref uid="@2sic.com/2sxc-typings!SxcDataServiceBase:class" />'

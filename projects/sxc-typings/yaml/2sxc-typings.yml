@@ -1,0 +1,34 @@
+### YamlMime:TSPackage
+uid: '@2sic.com/2sxc-typings!'
+name: '@2sic.com/2sxc-typings'
+type: package
+summary: ''
+interfaces:
+  - '@2sic.com/2sxc-typings!AjaxSettings:interface'
+  - '@2sic.com/2sxc-typings!CommandParamsMetadata:interface'
+  - '@2sic.com/2sxc-typings!EnvironmentSpecs:interface'
+  - '@2sic.com/2sxc-typings!MetadataFor:interface'
+  - '@2sic.com/2sxc-typings!RunParams:interface'
+  - '@2sic.com/2sxc-typings!RunParamsWithContext:interface'
+  - '@2sic.com/2sxc-typings!SxcGlobal:interface'
+  - '@2sic.com/2sxc-typings!SxcWebApiDeprecated:interface'
+enums:
+  - '@2sic.com/2sxc-typings!CommandNames:enum'
+  - '@2sic.com/2sxc-typings!MetadataTargetTypes:enum'
+classes:
+  - '@2sic.com/2sxc-typings!ContextIdentifier:class'
+  - '@2sic.com/2sxc-typings!HasLog:class'
+  - '@2sic.com/2sxc-typings!Log:class'
+  - '@2sic.com/2sxc-typings!LogEntry:class'
+  - '@2sic.com/2sxc-typings!Sxc:class'
+  - '@2sic.com/2sxc-typings!SxcCms:class'
+  - '@2sic.com/2sxc-typings!SxcData:class'
+  - '@2sic.com/2sxc-typings!SxcDataServiceBase:class'
+  - '@2sic.com/2sxc-typings!SxcGlobalEnvironment:class'
+  - '@2sic.com/2sxc-typings!SxcGlobalHttp:class'
+  - '@2sic.com/2sxc-typings!SxcPart:class'
+  - '@2sic.com/2sxc-typings!SxcQuery:class'
+  - '@2sic.com/2sxc-typings!SxcWebApi:class'
+  - '@2sic.com/2sxc-typings!UrlParams:class'
+typeAliases:
+  - '@2sic.com/2sxc-typings!TypeValue:type'

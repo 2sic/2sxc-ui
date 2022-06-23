@@ -7,7 +7,8 @@
     "publish-dry": "npm publish --dry-run",
     "publish-beta": "npm publish --tag beta",
     "publish-prod": "npm publish",
-    "api-extractor": "api-extractor run --local --verbose"
+    "api-extractor": "api-extractor run --local --verbose",
+    "api-documentor": "api-documenter yaml"
   },
   "author": {
     "name": "2sic Internet Solutions, Switzerland & Liechtenstein",
@@ -38,6 +39,8 @@
   },
   "main": "",
   "devDependencies": {
+    "@microsoft/api-documenter": "^7.17.19",
     "@microsoft/api-extractor": "^7.25.2"
-  }
+  },
+  "dependencies": {}
 }

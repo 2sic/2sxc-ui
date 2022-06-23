@@ -1,0 +1,40 @@
+### YamlMime:TSType
+name: LogEntry
+uid: '@2sic.com/2sxc-typings!LogEntry:class'
+package: '@2sic.com/2sxc-typings!'
+fullName: LogEntry
+summary: A log entry item   LogEntry
+remarks: >-
+  The constructor for this class is marked as internal. Third-party code should not call the constructor directly or
+  create subclasses that extend the `LogEntry` class.
+example: []
+isPreview: false
+isDeprecated: false
+type: class
+properties:
+  - name: message
+    uid: '@2sic.com/2sxc-typings!LogEntry#message:member'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: message
+    summary: ''
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'message: string;'
+      return:
+        type: string
+  - name: time
+    uid: '@2sic.com/2sxc-typings!LogEntry#time:member'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: time
+    summary: A timestamp for this entry to better see sequences of things happening
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'time: number;'
+      return:
+        type: number

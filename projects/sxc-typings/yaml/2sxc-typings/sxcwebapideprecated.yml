@@ -1,0 +1,182 @@
+### YamlMime:TSType
+name: SxcWebApiDeprecated
+uid: '@2sic.com/2sxc-typings!SxcWebApiDeprecated:interface'
+package: '@2sic.com/2sxc-typings!'
+fullName: SxcWebApiDeprecated
+summary: >-
+  \*\*Deprecated\*\* Old APIs on sxc.webApi. They only exist if jQuery is included on the page, and we highly discourage
+  their use.
+remarks: ''
+example: []
+isPreview: false
+isDeprecated: false
+type: interface
+methods:
+  - name: 'delete(settingsOrUrl, params, data, preventAutoFail)'
+    uid: '@2sic.com/2sxc-typings!SxcWebApiDeprecated#delete:member(1)'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: 'delete(settingsOrUrl, params, data, preventAutoFail)'
+    summary: >-
+      \*\*Deprecated\*\* Please use \[fetchJson()\](xref:Api.Js.SxcJs.SxcWebApi.fetchJson) or
+      \[fetchJson()\](xref:Api.Js.SxcJs.SxcWebApi.fetchRaw) instead.
+
+
+      Returns an http-delete promise using jQuery
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: true
+    customDeprecatedMessage: use fetchJson instead
+    syntax:
+      content: 'delete(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): any;'
+      parameters:
+        - id: settingsOrUrl
+          description: the url to talk to
+          type: 'string | <xref uid="@2sic.com/2sxc-typings!AjaxSettings:interface" />'
+        - id: params
+          description: jQuery style ajax parameters
+          type: any
+        - id: data
+          description: jQuery style data for post/put requests
+          type: any
+        - id: preventAutoFail
+          description: ''
+          type: boolean
+      return:
+        type: any
+        description: jQuery ajax promise object
+  - name: 'get(settingsOrUrl, params, data, preventAutoFail)'
+    uid: '@2sic.com/2sxc-typings!SxcWebApiDeprecated#get:member(1)'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: 'get(settingsOrUrl, params, data, preventAutoFail)'
+    summary: >-
+      \*\*Deprecated\*\* Please use \[fetchJson()\](xref:Api.Js.SxcJs.SxcWebApi.fetchJson) or
+      \[fetchJson()\](xref:Api.Js.SxcJs.SxcWebApi.fetchRaw) instead.
+
+
+      Returns an http-get promise using jQuery
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: true
+    customDeprecatedMessage: use fetchJson instead
+    syntax:
+      content: 'get(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): any;'
+      parameters:
+        - id: settingsOrUrl
+          description: the url to get
+          type: 'string | <xref uid="@2sic.com/2sxc-typings!AjaxSettings:interface" />'
+        - id: params
+          description: jQuery style ajax parameters
+          type: any
+        - id: data
+          description: jQuery style data for post/put requests
+          type: any
+        - id: preventAutoFail
+          description: ''
+          type: boolean
+      return:
+        type: any
+        description: jQuery ajax promise object
+  - name: 'post(settingsOrUrl, params, data, preventAutoFail)'
+    uid: '@2sic.com/2sxc-typings!SxcWebApiDeprecated#post:member(1)'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: 'post(settingsOrUrl, params, data, preventAutoFail)'
+    summary: >-
+      \*\*Deprecated\*\* Please use \[fetchJson()\](xref:Api.Js.SxcJs.SxcWebApi.fetchJson) or
+      \[fetchJson()\](xref:Api.Js.SxcJs.SxcWebApi.fetchRaw) instead.
+
+
+      Returns an http-post promise using jQuery
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: true
+    customDeprecatedMessage: use fetchJson instead
+    syntax:
+      content: 'post(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): any;'
+      parameters:
+        - id: settingsOrUrl
+          description: the url to get
+          type: 'string | <xref uid="@2sic.com/2sxc-typings!AjaxSettings:interface" />'
+        - id: params
+          description: jQuery style ajax parameters
+          type: any
+        - id: data
+          description: jQuery style data for post/put requests
+          type: any
+        - id: preventAutoFail
+          description: ''
+          type: boolean
+      return:
+        type: any
+        description: jQuery ajax promise object
+  - name: 'put(settingsOrUrl, params, data, preventAutoFail)'
+    uid: '@2sic.com/2sxc-typings!SxcWebApiDeprecated#put:member(1)'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: 'put(settingsOrUrl, params, data, preventAutoFail)'
+    summary: >-
+      \*\*Deprecated\*\* Please use \[fetchJson()\](xref:Api.Js.SxcJs.SxcWebApi.fetchJson) or
+      \[fetchJson()\](xref:Api.Js.SxcJs.SxcWebApi.fetchRaw) instead.
+
+
+      Returns an http-put promise using jQuery
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: true
+    customDeprecatedMessage: use fetchJson instead
+    syntax:
+      content: 'put(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): any;'
+      parameters:
+        - id: settingsOrUrl
+          description: the url to put
+          type: 'string | <xref uid="@2sic.com/2sxc-typings!AjaxSettings:interface" />'
+        - id: params
+          description: jQuery style ajax parameters
+          type: any
+        - id: data
+          description: jQuery style data for post/put requests
+          type: any
+        - id: preventAutoFail
+          description: ''
+          type: boolean
+      return:
+        type: any
+        description: jQuery ajax promise object
+  - name: 'request(settings, params, data, preventAutoFail, method)'
+    uid: '@2sic.com/2sxc-typings!SxcWebApiDeprecated#request:member(1)'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: 'request(settings, params, data, preventAutoFail, method)'
+    summary: >-
+      \*\*Deprecated\*\* Please use \[fetchJson()\](xref:Api.Js.SxcJs.SxcWebApi.fetchJson) or
+      \[fetchJson()\](xref:Api.Js.SxcJs.SxcWebApi.fetchRaw) instead.
+
+
+      Generic http request using jQuery
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: true
+    customDeprecatedMessage: use fetchJson instead
+    syntax:
+      content: 'request(settings: string | AjaxSettings, params: any, data: any, preventAutoFail: boolean, method: string): any;'
+      parameters:
+        - id: settings
+          description: ''
+          type: 'string | <xref uid="@2sic.com/2sxc-typings!AjaxSettings:interface" />'
+        - id: params
+          description: jQuery style ajax parameters
+          type: any
+        - id: data
+          description: jQuery style data for post/put requests
+          type: any
+        - id: preventAutoFail
+          description: ''
+          type: boolean
+        - id: method
+          description: the http verb name
+          type: string
+      return:
+        type: any
+        description: jQuery ajax promise object

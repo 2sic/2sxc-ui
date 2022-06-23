@@ -1,0 +1,211 @@
+### YamlMime:TSType
+name: SxcGlobal
+uid: '@2sic.com/2sxc-typings!SxcGlobal:interface'
+package: '@2sic.com/2sxc-typings!'
+fullName: SxcGlobal
+summary: >-
+  This is the root global `window.$2sxc` function / object.
+
+
+  It is both a function `window.$2sxc(...)` and object `window.$2sxc.insights...`
+
+
+  If the page feature `2sxc.JsCms` is enabled, the `window.$2sxc` will also be a
+  \[SxcGlobalWithCms\](xref:Api.Js.SxcJs.SxcGlobalWithCms)
+remarks: ''
+example: []
+isPreview: false
+isDeprecated: false
+type: interface
+properties:
+  - name: env
+    uid: '@2sic.com/2sxc-typings!SxcGlobal#env:member'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: env
+    summary: 'Environment information  {<!-- -->SxcGlobalEnvironment<!-- -->}'
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'env: SxcGlobalEnvironment;'
+      return:
+        type: '<xref uid="@2sic.com/2sxc-typings!SxcGlobalEnvironment:class" />'
+  - name: http
+    uid: '@2sic.com/2sxc-typings!SxcGlobal#http:member'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: http
+    summary: Http helper for API calls and such
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'http: SxcGlobalHttp;'
+      return:
+        type: '<xref uid="@2sic.com/2sxc-typings!SxcGlobalHttp:class" />'
+  - name: sysinfo
+    uid: '@2sic.com/2sxc-typings!SxcGlobal#sysinfo:member'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: sysinfo
+    summary: >-
+      system information, mainly for checking which version of 2sxc is running note: it's not always updated reliably,
+      but it helps when debugging
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: |-
+        sysinfo: {
+                version: string;
+                description: string;
+            };
+      return:
+        type: |-
+          {
+                  version: string;
+                  description: string;
+              }
+  - name: urlParams
+    uid: '@2sic.com/2sxc-typings!SxcGlobal#urlParams:member'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: urlParams
+    summary: 'Helper to work with url parameters behind ? or \#  {<!-- -->UrlParams<!-- -->}  SxcRoot'
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'urlParams: UrlParams;'
+      return:
+        type: '<xref uid="@2sic.com/2sxc-typings!UrlParams:class" />'
+methods:
+  - name: get(moduleId)
+    uid: '@2sic.com/2sxc-typings!SxcGlobal#get:member(1)'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: get(moduleId)
+    summary: Get an Sxc Instance using the moduleId. Using `$2sxc.get(...)` is the same as using `$2sxc(...)`
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'get(moduleId: number): Sxc;'
+      parameters:
+        - id: moduleId
+          description: 'number: moduleId'
+          type: number
+      return:
+        type: '<xref uid="@2sic.com/2sxc-typings!Sxc:class" />'
+        description: SxcInstance  v14.01
+  - name: 'get(moduleId, contentBlockId)'
+    uid: '@2sic.com/2sxc-typings!SxcGlobal#get:member(2)'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: 'get(moduleId, contentBlockId)'
+    summary: >-
+      Get an Sxc Instance using the moduleId and contentBlockId. Using `$2sxc.get(...)` is the same as using
+      `$2sxc(...)`
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'get(moduleId: number, contentBlockId: number): Sxc;'
+      parameters:
+        - id: moduleId
+          description: 'number: moduleId'
+          type: number
+        - id: contentBlockId
+          description: 'number: content-block ID'
+          type: number
+      return:
+        type: '<xref uid="@2sic.com/2sxc-typings!Sxc:class" />'
+        description: Sxc  v14.01
+  - name: get(tag)
+    uid: '@2sic.com/2sxc-typings!SxcGlobal#get:member(3)'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: get(tag)
+    summary: Get an Sxc Instance using a tag / `HtmlElement`<!-- -->. Using `$2sxc.get(...)` is the same as using `$2sxc(...)`
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'get(tag: HTMLElement): Sxc;'
+      parameters:
+        - id: tag
+          description: 'HTMLElement: tag in the page'
+          type: HTMLElement
+      return:
+        type: '<xref uid="@2sic.com/2sxc-typings!Sxc:class" />'
+        description: Sxc  v14.01
+  - name: get(context)
+    uid: '@2sic.com/2sxc-typings!SxcGlobal#get:member(4)'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: get(context)
+    summary: >-
+      Get an Sxc Instance using a full context-identifier (advanced). Using `$2sxc.get(...)` is the same as using
+      `$2sxc(...)`
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'get(context: ContextIdentifier): Sxc;'
+      parameters:
+        - id: context
+          description: 'ContextIdentifier: full context identifier'
+          type: '<xref uid="@2sic.com/2sxc-typings!ContextIdentifier:class" />'
+      return:
+        type: '<xref uid="@2sic.com/2sxc-typings!Sxc:class" />'
+        description: Sxc  v14.01
+  - name: get(sxc)
+    uid: '@2sic.com/2sxc-typings!SxcGlobal#get:member(5)'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: get(sxc)
+    summary: >-
+      Get an Sxc Instance passing in an existing Sxc - just for cases where you're not sure what you aready have. Using
+      `$2sxc.get(...)` is the same as using `$2sxc(...)`
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'get(sxc: Sxc): Sxc;'
+      parameters:
+        - id: sxc
+          description: 'Sxc: an existing sxc - will just be returned'
+          type: '<xref uid="@2sic.com/2sxc-typings!Sxc:class" />'
+      return:
+        type: '<xref uid="@2sic.com/2sxc-typings!Sxc:class" />'
+        description: Sxc - the same Sxc as the one which was passed in  v14.01
+  - name: 'insights(partName, index, start, length)'
+    uid: '@2sic.com/2sxc-typings!SxcGlobal#insights:member(1)'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: 'insights(partName, index, start, length)'
+    summary: >-
+      The debugging / insights system. Call the `$2sxc.insights()` without parameters to get instructions what the
+      parameters could be.
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'insights(partName: string, index?: number, start?: number, length?: number): void;'
+      parameters:
+        - id: partName
+          description: optional name of a part of the system for which we want to see the logs
+          type: string
+        - id: index
+          description: optional index on that part for which log we want to see
+          type: number
+        - id: start
+          description: log start index - this is to skip the first few lines if there are too many
+          type: number
+        - id: length
+          description: amount of lines to show - in some cases will default to 25
+          type: number
+      return:
+        type: void
+        description: ''
