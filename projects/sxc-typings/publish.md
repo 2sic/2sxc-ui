@@ -15,6 +15,11 @@ We're explaining how to do 2 things
 1. probably do some dry-runs or beta releases
 1. Then finally publish
 
+## WIP
+
+* `npm install -g @microsoft/api-documenter`
+* https://api-extractor.com/pages/setup/generating_docs/
+
 ### How it Works
 
 Basically there are a few things necessary to work

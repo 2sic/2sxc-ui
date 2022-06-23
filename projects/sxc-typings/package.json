@@ -1,7 +1,7 @@
 {
   "// notes": "The version is used in the final NPM. For beta releases, use pattern '14.02.0-beta.0'",
-  "version": "14.02.02",
-  "types": "./index-public.d.ts",
+  "version": "14.02.02-beta.0",
+  "types": "./index.d.ts",
   "scripts": {
     "generate": "typings.cmd \".\\parts\\dist\"",
     "publish-dry": "npm publish --dry-run",
