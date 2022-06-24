@@ -1,4 +1,5 @@
-﻿import { renderer } from '../../contentBlock/render';
+﻿import { CmdParHlp } from '..';
+import { renderer } from '../../contentBlock/render';
 import { ContextComplete } from '../../context/bundles/context-bundle-button';
 import { TypeUnsafe } from '../../plumbing/TypeTbD';
 import { ContentListActionParams } from './content-list-action-params';
@@ -33,7 +34,7 @@ class ContentListActions {
   removeFromList(context: ContextComplete) {
     const params = context.button.command.params;
     return doAndReload<void>(context, webApiRemoveFromList, {
-      index: params.sortOrder,
+      index: CmdParHlp.getIndex(params), //params.sortOrder,
       parent: params.parent,
       fields: params.fields,
     }, 'delete');

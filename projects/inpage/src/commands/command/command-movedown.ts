@@ -1,4 +1,4 @@
-﻿import { CommandNames, Commands, SharedLogic } from '..';
+﻿import { CmdParHlp, CommandNames, Commands, SharedLogic } from '..';
 import { Actions } from './content-list-actions';
 
 /**
@@ -10,10 +10,7 @@ Commands.add(CommandNames.moveDown, 'MoveDown', 'move-down', false, true, {
   showCondition: (context) => SharedLogic.isList(context),
   code(context) {
     // TODO: make sure index is never greater than the amount of items
-    return Actions.changeOrder(
-      context,
-      context.button.command.params.sortOrder,
-      context.button.command.params.sortOrder + 1,
-      );
-    },
+    const i = CmdParHlp.getIndex(context);
+    return Actions.changeOrder(context, i, i + 1);
+  },
 });

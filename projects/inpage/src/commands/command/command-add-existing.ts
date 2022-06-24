@@ -1,4 +1,4 @@
-﻿import { CommandNames, Commands } from '..';
+﻿import { CmdParHlp, CommandNames, Commands } from '..';
 import { ItemIdentifierGroup } from '../../../../$2sxc/src/cms';
 import { SharedLogic } from './shared-logic';
 
@@ -19,7 +19,7 @@ Commands.add(CommandNames.addExisting, 'AddExisting', 'add-existing', false, tru
       linkGenerator.items = [{ Group: {
         Guid: params.parent,
         Part: params.fields,
-        Index: params.sortOrder + 1,
+        Index: CmdParHlp.getIndex(params) /* params.sortOrder */ + 1,
         Add: true,
       }}];
     } else if (SharedLogic.isPartOfBlockList(context)) {

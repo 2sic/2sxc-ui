@@ -1,4 +1,5 @@
 ﻿import { CommandNames, Commands, SharedLogic } from '..';
+import { CmdParHlp } from '../cmd-par-hlp';
 
 /**
  * import this module to commands.ts
@@ -14,7 +15,7 @@ Commands.add(CommandNames.instanceList, 'Sort', 'list-numbered', false, true, {
     linkGenerator.items = [{ Group: {
       Guid: params.parent,
       Part: params.fields,
-      Index: params.sortOrder,
+      Index: CmdParHlp.getIndex(params), // params.sortOrder,
       Add: false,
     }}];
   },

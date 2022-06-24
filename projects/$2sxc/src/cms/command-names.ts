@@ -13,10 +13,11 @@
  */
 export enum CommandNames {
     /**
-     * `add` opens a `new` dialog to create and add a new item to a **list of items**.
+     * `add` adds another demo-item to a **list of items**.
+     * It does not open the edit-dialog.
      * <br> The new item is placed after the item the (+) was clicked on.
      * <br>💡
-     * This is similar to `new` but also adds the item to the existing list of items shown on the page.
+     * This is different than new, which opens a dialog to add something. 
      * <br> 🪜 Only appears on toolbars of items which are in a list.
      * <br> 📩 [Parameters](xref:Api.Js.SxcJs.CommandAddParams)
      */
@@ -189,10 +190,11 @@ export enum CommandNames {
     moveUp = 'moveup',
 
     /**
-     * `new` opens the edit-dialog for a new content-item.
+     * `new` opens the edit-dialog to create a new item/entity.
      * <br>
-     * It will only create an item, not add it to a list. 
-     * For that you would need to use `add`
+     * If the previous item is in a list, it will add it to that list _after_ the previous item with the toolbar. 
+     * Otherwise it just creates it and the visualization will differ depending on the App.
+     * <br> 🪜 It works differently for lists - in which case it also adds it to the list. 
      * <br> 📩 [Parameters](xref:Api.Js.SxcJs.CommandContentTypeParams)
      * (auto-detected from context)
      */

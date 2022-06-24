@@ -30,6 +30,10 @@ export interface CommandParams {
     dialog?: string;
     /** @internal */
     sortOrder?: number;
+
+    /** @internal - should replace sortOrder */
+    index?: number;
+
     /** @internal */
     entityId?: number;
 
@@ -94,6 +98,3 @@ export interface CommandParams {
      */
     isshared?: boolean;
 }
-
-
-// export CommandParams as CommandParams;

@@ -11,6 +11,9 @@ import { ContextBundleToolbar } from './context-bundle-toolbar';
  */
 export class ContextComplete extends ContextBundleToolbar {
   /** @internal */
+  private _isCtxComplete = true;
+
+  /** @internal */
   button?: Button;
 
   /** @internal */
@@ -74,4 +77,7 @@ export class ContextComplete extends ContextBundleToolbar {
     return new ContextComplete(editContext, sxc);
   }
 
+  static is(thing: unknown): thing is ContextComplete {
+    return (thing as ContextComplete)._isCtxComplete;
+  }
 }
