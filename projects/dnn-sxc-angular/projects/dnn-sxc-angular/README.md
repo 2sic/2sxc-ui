@@ -1,6 +1,13 @@
-<img src="https://raw.githubusercontent.com/2sic/2sxc-ui/develop/projects/dnn-sxc-angular/assets/logo-dark.png" width="300px" align="right">
+<img src="https://raw.githubusercontent.com/2sic/2sxc-ui/develop/projects/sxc-angular/assets/logo-dark.png" width="300px" align="right">
 
 # dnn-sxc-angular - Connecting Angular to DNN and/or 2sxc
+
+> **End of Life**
+>
+> Important: This is end of life.
+> It is replaced by [sxc-angular](https://www.npmjs.com/package/@2sic.com/sxc-angular)
+> which is for Angular 13+ and supports Dnn and Oqtane.
+
 
 This is a connector for angular 6-11+ ([git](https://github.com/angular/angular) | [web](https://angular.io/)) for developers using
 
