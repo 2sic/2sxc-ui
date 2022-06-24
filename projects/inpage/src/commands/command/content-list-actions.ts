@@ -28,13 +28,11 @@ class ContentListActions {
 
   /**
    * remove an item from a list, then reload
-   * @param {ContextComplete} context
-   * @param {number} sortOrder
    */
   removeFromList(context: ContextComplete) {
     const params = context.button.command.params;
     return doAndReload<void>(context, webApiRemoveFromList, {
-      index: CmdParHlp.getIndex(params), //params.sortOrder,
+      index: CmdParHlp.getIndex(params),
       parent: params.parent,
       fields: params.fields,
     }, 'delete');
@@ -42,9 +40,6 @@ class ContentListActions {
 
   /**
    * change the order of an item in a list, then reload
-   * @param {ContextComplete} context
-   * @param {number} index
-   * @param {number} toIndex
    */
   changeOrder(context: ContextComplete, index: number, toIndex: number) {
     const params = context.button.command.params;

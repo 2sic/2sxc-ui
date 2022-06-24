@@ -195,8 +195,8 @@ export enum CommandNames {
      * If the previous item is in a list, it will add it to that list _after_ the previous item with the toolbar. 
      * Otherwise it just creates it and the visualization will differ depending on the App.
      * <br> 🪜 It works differently for lists - in which case it also adds it to the list. 
-     * <br> 📩 [Parameters](xref:Api.Js.SxcJs.CommandContentTypeParams)
-     * (auto-detected from context)
+     * <br> 📩 [Parameters](xref:Api.Js.SxcJs.CommandNewParams)
+     * (usually auto-detected from context)
      */
     new = 'new',
 

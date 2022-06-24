@@ -132,7 +132,7 @@ describe('Commands test suite', function() {
       this.partOfPage = true;
       const more: Partial<Button> = {
         showCondition(context) {
-          return (context.contentBlock.isList) && (context.button.command.params.useModuleList) && (CmdParHlp.getIndex(context) !== -1); // (context.button.command.params.sortOrder !== -1);
+          return (context.contentBlock.isList) && (context.button.command.params.useModuleList) && (CmdParHlp.getIndex(context) !== -1);
         },
         code(context) {
           return Actions.addItem(context, CmdParHlp.getIndex(context) + 1);

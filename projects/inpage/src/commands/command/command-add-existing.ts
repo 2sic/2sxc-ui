@@ -19,7 +19,7 @@ Commands.add(CommandNames.addExisting, 'AddExisting', 'add-existing', false, tru
       linkGenerator.items = [{ Group: {
         Guid: params.parent,
         Part: params.fields,
-        Index: CmdParHlp.getIndex(params) /* params.sortOrder */ + 1,
+        Index: CmdParHlp.getIndex(params) + 1,
         Add: true,
       }}];
     } else if (SharedLogic.isPartOfBlockList(context)) {

@@ -24,7 +24,7 @@ Commands.add(CommandNames.new, 'New', 'plus', false, true, {
   code(context, event) {
     const params = context.button.command.params;
     // todo - should refactor this to be a toolbarManager.contentBlock command
-    params.sortOrder = CmdParHlp.getIndex(params) /* params.sortOrder */ + 1;
+    params.index = CmdParHlp.getIndex(params) + 1;
 
     // if we have an EntityId, this means that it picked up id/guid from the current item,
     // so we must reset both EntityId and EntityGuid

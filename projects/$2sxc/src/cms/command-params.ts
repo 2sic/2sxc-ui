@@ -28,10 +28,18 @@ export interface CommandParams {
     filters?: string;
     /** @internal */
     dialog?: string;
-    /** @internal */
+
+    /** 
+     * @internal 
+     * @obsolete but probably still in use
+     */
     sortOrder?: number;
 
-    /** @internal - should replace sortOrder */
+    /** 
+     * Position in a list (content-block or field of another entity)
+     * index was added in v14.04 to replace the `sortOrder` which had a confusing name. 
+     * @internal
+     */
     index?: number;
 
     /** @internal */

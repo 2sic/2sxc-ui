@@ -20,7 +20,7 @@ Commands.add(CommandNames.replace, 'Replace', 'replace', false, true, {
     linkGenerator.items = [{ Group: {
       Guid: params.parent,
       Part: params.fields,
-      Index: CmdParHlp.getIndex(params), // params.sortOrder,
+      Index: CmdParHlp.getIndex(params),
       Add: false,
     }}];
   },

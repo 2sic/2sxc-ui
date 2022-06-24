@@ -15,7 +15,7 @@ Commands.add(CommandNames.instanceList, 'Sort', 'list-numbered', false, true, {
     linkGenerator.items = [{ Group: {
       Guid: params.parent,
       Part: params.fields,
-      Index: CmdParHlp.getIndex(params), // params.sortOrder,
+      Index: CmdParHlp.getIndex(params),
       Add: false,
     }}];
   },

@@ -18,7 +18,7 @@ Commands.add(
   {
     showCondition: (context) => SharedLogic.isList(context),
     code(context) {
-      return Actions.addItem(context, CmdParHlp.getIndex(context) /* context.button.command.params.sortOrder */ + 1);
+      return Actions.addItem(context, CmdParHlp.getIndex(context) + 1);
     },
   },
 );

@@ -173,7 +173,7 @@ export class CommandLinkGenerator extends HasLog {
      */
     private addItemInList() {
         const params = this.context.button.command.params;
-        const index = CmdParHlp.getIndex(params); // params.sortOrder;
+        const index = CmdParHlp.getIndex(params);
         const isAdd = this.context.button.command.name === 'new';
         const groupId = params.parent;
 
@@ -193,7 +193,7 @@ export class CommandLinkGenerator extends HasLog {
      * find the part name for both the API to give the right item (when using groups) and for i18n
      */
     private findPartName(content: boolean): string {
-        const isContentAndNotHeader = (CmdParHlp.getIndex(this.context) !== -1); // (this.context.button.command.params.sortOrder !== -1);
+        const isContentAndNotHeader = (CmdParHlp.getIndex(this.context) !== -1);
         return (isContentAndNotHeader ? '' : 'List') + (content ? 'Content' : 'Presentation');
     }
 

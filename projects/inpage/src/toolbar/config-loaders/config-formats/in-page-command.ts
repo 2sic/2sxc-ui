@@ -1,5 +1,4 @@
 import { CommandNames } from '../../../commands';
-import { TypeTbD } from '../../../plumbing/TypeTbD';
 
 /**
  * @internal
@@ -40,12 +39,12 @@ export class InPageCommandJson  {
     /** Experimental for 10.30 */
     fields?: string;
 
-    static hasActions(thing: TypeTbD): thing is InPageCommandJson {
+    static hasActions(thing: unknown): thing is InPageCommandJson {
         // check two common signatures - command and action
         return typeof(thing as InPageCommandJson).action === 'string';
     }
 
-    static hasModify(thing: TypeTbD): thing is InPageCommandJson {
+    static hasModify(thing: unknown): thing is InPageCommandJson {
         // check two common signatures - command and action
         return !!(thing as InPageCommandJson).modify;
     }

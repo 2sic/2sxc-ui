@@ -70,33 +70,10 @@ export class InPageButtonJson {
         if (oldFormat.newWindow) config.newWindow = evalPropOrFun(oldFormat.newWindow);
         if (oldFormat.partOfPage) config.partOfPage = evalPropOrFun(oldFormat.partOfPage);
         if (oldFormat.title) config.title = evalPropOrFun(oldFormat.title);
-        // if (oldFormat.dynamicClasses) config.dynamicClasses = evalPropOrFun(oldFormat.dynamicClasses);
-        // if (oldFormat.showCondition) config.showCondition = evalPropOrFun(oldFormat.showCondition);
 
         return config;
     }
 
-    //#region these are properties 2dm found but think they are never used. Keeping them till ca. May 2020
-
-    // dynamicClasses(settings) can be used to dynamically build classes depending on the situation
-    // 2020-03-27 2dm disabled this - doesn't make much sense in the in-page configuration
-    // dynamicClasses?(settings: CommandParams): string;
-
-    // showCondition - used to dynamically choose if this button should be shown or not
-    // 2020-03-27 2dm disabled this - doesn't make much sense in the in-page configuration
-    // showCondition?(settings: CommandParams): boolean;
-
-    // 2020-03-27 2dm disabled, seems very unused
-    // name?: string;
-
-    // entity support (vertical compatibility for pre 2sxc v9.x)
-    // entity?: number;
-    // useModuleList?: boolean;
-    // entityId?: number;
-    // sortOrder?: number;
-
-    // params?: CommandParams;
-    //#endregion
 }
 
 

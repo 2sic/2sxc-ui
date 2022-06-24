@@ -40,4 +40,4 @@
 /** @internal */ export * from './workflow-commands';
 
 // Params
-/** @internal */ export * from './command-all-params';
+/** @internal */ export * from './command-params-all';

@@ -1,5 +1,6 @@
 import { CommandParamsMetadata } from '../../../../$2sxc/src/cms';
-import { CommandParamsEntityById } from './command-params-entity';
+import { TypeValue } from '../../plumbing';
+import { CommandParamsEntityById, CommandParamsEntityInContentBlock, CommandParamsEntityInList } from './command-params-entity';
 
 
 /**
@@ -20,23 +21,26 @@ export interface CommandContentTypeParams {
 /**
  * Parameters used for the command `add`.
  * <br>
- * The contentType name determines what items will be created.
+ * The `contentType` determines what items will be created, the `index` where.
+ * Depending on your use case, you will need to use the
+ * [](xref:Api.Js.SxcJs.CommandParamsEntityInList) or [](xref:Api.Js.SxcJs.CommandParamsEntityInContentBlock) parameters as well.
  * <br>
  * ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)
  * @public
  */
-export interface CommandAddParams extends CommandContentTypeParams {
-  /**
-   * Determins the position where a new item will be added to.
-   */
-  sortOrder: number;
+export interface CommandAddParams extends
+  CommandContentTypeParams,
+  Pick<CommandParamsEntityInList, 'index'>,
+  Partial<Omit<CommandParamsEntityInList, 'index'>>,
+  Partial<Omit<CommandParamsEntityInContentBlock, 'index'>> {
 }
-
 
 /**
  * Parameters used for the command `add-existing`.
  * <br>
  * The contentType name determines what items will be shown in the dialog.
+ * Depending on your use case, you will need to use the
+ * [](xref:Api.Js.SxcJs.CommandParamsEntityInList) or [](xref:Api.Js.SxcJs.CommandParamsEntityInContentBlock) parameters as well.
  * <br>
  * ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)
  * @public
@@ -155,10 +159,19 @@ export interface CommandMetadataParams extends CommandContentTypeParams, Command
  * <br>
  * The ContentType name determines what kind of item will be created.
  * <br>
+ * Can also contain `prefill` to add values to the new item.
+ * <br>
+ * Can also contain list-information, in which case it's added to that list.
+ * Depending on your use case, you will need to use the
+ * [](xref:Api.Js.SxcJs.CommandParamsEntityInList) or [](xref:Api.Js.SxcJs.CommandParamsEntityInContentBlock) parameters as well.
+ * <br>
  * ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)
  * @public
  */
 // tslint:disable-next-line: no-empty-interface
-export interface CommandNewParams extends CommandContentTypeParams {
-
+export interface CommandNewParams extends CommandContentTypeParams, Partial<CommandParamsEntityInList>, Partial<CommandParamsEntityInContentBlock> {
+  /**
+   * Optional values to prefill in the new-form
+   */
+  prefill?: Record<string, boolean | string | number>;
 }

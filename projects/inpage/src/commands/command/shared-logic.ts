@@ -10,7 +10,7 @@ export class SharedLogic {
   static isPartOfBlockList(context: ContextComplete) {
     return !!(context.contentBlock.isList &&
       context.button.command.params.useModuleList &&
-      CmdParHlp.getIndex(context) /* context.button.command.params.sortOrder */ !== -1);    // -1 is the header item
+      CmdParHlp.getIndex(context) !== -1);    // -1 is the header item
     }
 
     /**

@@ -30,16 +30,10 @@ export class ModifierContentBlockInstance extends HasLog {
 
     /**
      * create content block
-     * @param parentId
-     * @param fieldName
-     * @param index
-     * @param appName
-     * @param container
-     * @param newGuid
      */
     create(
         parentId: number,
-        fieldName: string,
+        field: string,
         index: number,
         appName: string,
         container: HTMLElement,
@@ -55,7 +49,7 @@ export class ModifierContentBlockInstance extends HasLog {
 
         const params = {
             parentId: parentId,
-            field: fieldName,
+            field,
             sortOrder: index,
             app: appName,
             guid: newGuid,

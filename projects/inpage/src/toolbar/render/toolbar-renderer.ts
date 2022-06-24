@@ -1,10 +1,9 @@
-import { C } from '../../constants';
+import { IDs } from '../../constants/ids';
 import { ContextBundleToolbar } from '../../context/bundles/context-bundle-toolbar';
-import { HtmlTools } from '../../html/dom-tools';
 import { HasLog, Insights } from '../../core';
+import { HtmlTools } from '../../html/dom-tools';
 import { RenderButton } from './render-button';
 import { RenderButtonGroups } from './render-groups';
-import { IDs } from '../../constants/ids';
 
 const attrIdentifier = 'toolbar-identifier';
 
