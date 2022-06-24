@@ -6,7 +6,7 @@
     "url": "https://github.com/2sic/2sxc-ui/issues"
   },
   "dependencies": {
-    "@2sic.com/2sxc-typings": "^14.2.0",
+    "@2sic.com/2sxc-typings": "^14.2.2-beta.4",
     "tslib": "^2.0.0"
   },
   "peerDependencies": {
