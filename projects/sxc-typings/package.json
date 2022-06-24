@@ -1,6 +1,6 @@
 {
   "// notes": "The version is used in the final NPM. For beta releases, use pattern '14.02.0-beta.0'",
-  "version": "14.02.02-beta.4",
+  "version": "14.02.03",
   "types": "./index-public.d.ts",
   "scripts": {
     "generate": "typings.cmd \".\\parts\\dist\"",
