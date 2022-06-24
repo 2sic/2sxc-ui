@@ -1,11 +1,11 @@
 {
-  "name": "dnn-sxc-angular-workspace",
+  "name": "sxc-angular-workspace",
   "version": "0.0.0",
   "scripts": {
     "build": "ng build --configuration production",
-    "dsa-copy:dist": "cpx \"dist/dnn-sxc-angular/{,**/}*.**.*\" \"../../../app-dnn-sxc-angular-dev/node_modules/@2sic.com/dnn-sxc-angular\" -w",
-    "dsa-copy:2dm": "cpx \"dist/dnn-sxc-angular/{,**/}*.**.*\" \"../../../app-Directory/node_modules/@2sic.com/dnn-sxc-angular\" -w -v",
-    "dsa-copy:template-ng11": "cpx \"dist/dnn-sxc-angular/{,**/}*.*\" \"/Projects/2sxc/app-template-angular/ng/node_modules/@2sic.com/dnn-sxc-angular\" -v",
+    "dsa-copy:dist": "cpx \"dist/sxc-angular/{,**/}*.**.*\" \"../../../app-dnn-sxc-angular-dev/node_modules/@2sic.com/dnn-sxc-angular\" -w",
+    "dsa-copy:2dm": "cpx \"dist/sxc-angular/{,**/}*.**.*\" \"../../../app-Directory/node_modules/@2sic.com/dnn-sxc-angular\" -w -v",
+    "dsa-copy:template-ng11": "cpx \"dist/sxc-angular/{,**/}*.*\" \"/Projects/2sxc/app-template-angular/ng/node_modules/@2sic.com/dnn-sxc-angular\" -v",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"

@@ -1,20 +1,23 @@
-<img src="https://raw.githubusercontent.com/2sic/2sxc-ui/develop/projects/dnn-sxc-angular/assets/logo-dark.png" width="300px" align="right">
+<img src="https://raw.githubusercontent.com/2sic/2sxc-ui/develop/projects/sxc-angular/assets/logo-dark.png" width="300px" align="right">
 
-# dnn-sxc-angular - Connecting Angular to DNN and/or 2sxc
+# sxc-angular
 
-This is a connector for angular 6-11+ ([git](https://github.com/angular/angular) | [web](https://angular.io/)) for developers using
+> Connecting 2sxc, Angular with Dnn/Oqtane
 
-1. the open source platform DNN 7-9+ ([git](https://github.com/dnnsoftware/Dnn.Platform) | [web](http://dnnsoftware.com/)) 
-1. and/or the open source CMS 2sxc 10-11+ ([git](https://github.com/2sic/2sxc/) | [web](https://2sxc.org/)) 
+This is a connector for angular 13+ ([git](https://github.com/angular/angular) | [web](https://angular.io/)) for developers using
+
+1. the open source CMS Meta-Module 2sxc 14+ ([git](https://github.com/2sic/2sxc/) | [web](https://2sxc.org/)) 
+1. either the open source platform DNN 9.6.1+ ([git](https://github.com/dnnsoftware/Dnn.Platform) | [web](https://www.dnnsoftware.com/)) 
+1. ...or the open source platform Oqtane 3.1+ ([git](https://github.com/oqtane/oqtane.framework) | [web](https://www.oqtane.org/)) 
 
 This connector...
 
-1. allows you to develop from local while running with hot-reload on a DNN, even on the production site
-1. automatically provides all important dnn-parameters (module ID, security token, etc.) to angular
+1. allows you to develop from local while running with hot-reload on a Dnn/Oqtane, even on the production site
+1. automatically provides all important server-headers (module ID, security token, etc.) to angular
 1. adds an Http Interceptor for the HttpClient which automatically applies these parameters to all requests
-1. gives you quick commands like `data.query$` to get data with little effort from the server
-1. prevents the enter-key from causing DNN form submits (optional, you can override this)
-1. enables content-editing toolbars to work directly in Angular views
+1. gives you quick commands like `query(...)` to get data with little effort from the server
+1. prevents the enter-key from causing form submits (optional, you can override this)
+1. enables content-editing **toolbars** to work directly in Angular views
 
 It uses **observables** to make it happen, thereby avoiding timing / async problems common in this scenario. 
 
@@ -22,10 +25,10 @@ It uses **observables** to make it happen, thereby avoiding timing / async probl
 
 Best watch the [introduction video](https://docs.2sxc.org/js-code/angular/index.html) and read the general docs.
 
-## Setup & Discover Dnn-Sxc-Angular
+## Setup & Discover Sxc-Angular
 
-It's published on [npm](https://www.npmjs.com/package/@2sic.com/dnn-sxc-angular), so the most common way is to get it using npm with 
-`npm i "@2sic.com/dnn-sxc-angular" --save`. But we recommend that you follow the quick-start guide.
+It's published on [npm](https://www.npmjs.com/package/@2sic.com/sxc-angular), so the most common way is to get it using npm with 
+`npm i "@2sic.com/sxc-angular" --save`. But we recommend that you follow the quick-start guide.
 
 1. Start discovery using the [tutorial app](https://2sxc.org/en/apps/app/tutorial-and-template-app-for-angular-11) - ideally using the [getting started recipe](https://azing.org/2sxc/r/oCmPBI3p)
 1. If you've already mastered the basics and wish to build your own, you can
@@ -34,19 +37,23 @@ It's published on [npm](https://www.npmjs.com/package/@2sic.com/dnn-sxc-angular)
 
 ## How To Use
 
-### Using WebAPIs inside DNN
+### Use WebAPIs
 
-This will now work automatically, because all headers etc. are now automatically added by the system. So just use your normal http-requests and everything works like magic 😊
+This will now work automatically, because all headers etc. are now automatically added by the system. 
+So just use your normal http-requests and everything works like magic 😊
 
 ### Configuring Alternate Context / Startup Configuration
 
-By default **dnn-sxc-angular** will pick up all the values on the page automatically by asking `$2sxc` for the initial values. Yet there are some things that `$2sxc` doesn't know, or why you may want to override. 
+By default **sxc-angular** will pick up all the values on the page automatically by asking `$2sxc` for the initial values. 
+Yet there are some things that `$2sxc` doesn't know, or why you may want to override. 
 
 #### Method 1: Attributes on the Angular app-root Tag
 
-**dnn-sxc-angular** will check for some properties on the `<app-root>` tag to see if it should do something special. If not found, it will default to the most common value. 
+**sxc-angular** will check for some properties on the `<app-root>` tag to see if it should do something special. 
+If not found, it will default to the most common value. 
 
-* `edition` would tell angular that it's running in an app-edition where multiple editions exist. So it would use `live` etc. for it base path. Default is empty/not set.
+* `edition` would tell angular that it's running in an app-edition where multiple editions exist. 
+  So it would use `live` etc. for it base path. Default is empty/not set.
 * `api-edition` is important to access another edition of the API. default is empty/not set
 * `angular-path` (new in 11.01)
 
@@ -62,7 +69,8 @@ export class AppComponent extends SxcAppComponent {
 }
 ```
 
-If you want to provide alternate configurations, you can do this here, by changing the `super` call. Here's an example (you can do more, check the code):
+If you want to provide alternate configurations, you can do this here, by changing the `super` call. 
+Here's an example (you can do more, check the code):
 
 ```javascript
 export class AppComponent extends SxcAppComponent {
@@ -75,15 +83,19 @@ export class AppComponent extends SxcAppComponent {
 
 ### Using 2sxc Content-Items, Queries and APIs
 
-This package is fully documented with intellisense. Once configured it ensures that all HTTP requests in angular include DNN headers. It also contains a `SxcData` and `Api` object, which provides 3 observable streams
+This package is fully documented with intellisense. 
+Once configured it ensures that all HTTP requests in angular include system headers (like RVT in Dnn/Oqtane). 
+It also contains a `SxcData` and `Api` object, which provides 3 observable streams
 
-* `SxcData.data$<T>(contentTypeName)`
-* `SxcData.query$<T>(queryName)`
-* `api.get$<T>(apiNameAndParams)`
-* `api.post$<T>(apiNameAndParams)`
+* `SxcApp.data<T>(contentTypeName)`
+* `SxcApp.query<T>(queryName)`
+* `SxcApp.api(controller).get<T>(apiNameAndParams)`
+* `SxcApp.api.post<T>(apiNameAndParams)`
 * plus various overloads
 
-To use them, best check out the [tutorial app](https://2sxc.org/en/apps/app/tutorial-and-template-app-for-angular-11) or simply work through TypeScript intelisense - we documented all the commands. 
+To use them, best check out the [tutorial app](https://2sxc.org/en/apps/app/tutorial-and-template-app-for-angular-11).
+
+> Best to just use TypeScript intelisense - we documented all the commands. 
 
 
 ## History
@@ -94,8 +106,9 @@ To use them, best check out the [tutorial app](https://2sxc.org/en/apps/app/tuto
 1. 2020 Improved Hot-Reloading
 1. 2021-02 Added tag-toolbar attribute and created refresh callback so the page doesn't reload (_requires 2sxc 11.12_)
 1. 2021-02-26 v.11.01 - added new attribute `angular-path` to use as base for lazy loading
+1. 2022-06-24 released v14 and changed from `dnn-sxc-angular` to `sxc-angular` as it's now for Dnn and Oqtane
 
-## Todo (status 2021-02)
+## Todo (status 2022-06)
 
 These are things the 2sxc developers plan on enhancing
 

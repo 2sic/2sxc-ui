@@ -3,41 +3,41 @@
   "cli": {
     "analytics": false
   },
-  "version": 1, 
+  "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "dnn-sxc-angular": {
+    "sxc-angular": {
       "projectType": "library",
-      "root": "projects/dnn-sxc-angular",
-      "sourceRoot": "projects/dnn-sxc-angular/src",
+      "root": "projects/sxc-angular",
+      "sourceRoot": "projects/sxc-angular/src",
       "prefix": "lib",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
-            "tsConfig": "projects/dnn-sxc-angular/tsconfig.lib.json",
-            "project": "projects/dnn-sxc-angular/ng-package.json"
+            "tsConfig": "projects/sxc-angular/tsconfig.lib.json",
+            "project": "projects/sxc-angular/ng-package.json"
           },
           "configurations": {
             "production": {
-              "tsConfig": "projects/dnn-sxc-angular/tsconfig.lib.prod.json"
+              "tsConfig": "projects/sxc-angular/tsconfig.lib.prod.json"
             }
           }
         },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "projects/dnn-sxc-angular/src/test.ts",
-            "tsConfig": "projects/dnn-sxc-angular/tsconfig.spec.json",
-            "karmaConfig": "projects/dnn-sxc-angular/karma.conf.js"
+            "main": "projects/sxc-angular/src/test.ts",
+            "tsConfig": "projects/sxc-angular/tsconfig.spec.json",
+            "karmaConfig": "projects/sxc-angular/karma.conf.js"
           }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "projects/dnn-sxc-angular/tsconfig.lib.json",
-              "projects/dnn-sxc-angular/tsconfig.spec.json"
+              "projects/sxc-angular/tsconfig.lib.json",
+              "projects/sxc-angular/tsconfig.spec.json"
             ],
             "exclude": [
               "**/node_modules/**"
@@ -46,5 +46,5 @@
         }
       }
     }},
-  "defaultProject": "dnn-sxc-angular"
+  "defaultProject": "sxc-angular"
 }

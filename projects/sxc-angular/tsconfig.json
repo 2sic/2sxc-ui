@@ -19,9 +19,9 @@
       "dom"
     ],
     "paths": {
-      "dnn-sxc-angular": [
-        "dist/dnn-sxc-angular/dnn-sxc-angular",
-        "dist/dnn-sxc-angular"
+      "sxc-angular": [
+        "dist/sxc-angular/sxc-angular",
+        "dist/sxc-angular"
       ]
     }
   },
@@ -30,11 +30,11 @@
     "strictInjectionParameters": true
   },
   "typedocOptions": {
-    "name": "dnn-sxc-angular",
-    "entryPoints": ["./projects/dnn-sxc-angular/index.ts"],
-    "out": "../../docs/preview/dnn-sxc-angular",
+    "name": "sxc-angular",
+    "entryPoints": ["./projects/sxc-angular/index.ts"],
+    "out": "../../docs/preview/sxc-angular",
     "exclude": ["**/node_modules/**", "node_modules/**", "**/dist/**"],
     "excludeExternals": true,
-    "json": "../../docs/dnn-sxc-angular.json"
+    "json": "../../docs/sxc-angular.json"
   }
 }

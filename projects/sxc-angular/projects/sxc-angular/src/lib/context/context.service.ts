@@ -73,7 +73,7 @@ export class Context implements ContextInfo {
 
         constructorCount++;
         if (constructorCount > 1) {
-          console.warn('The Context object of dnn-sxc-angular was created more than once. This is unexpected, and will probably lead to problems with the api calls.')
+          console.warn('The Context object of sxc-angular was created more than once. This is unexpected, and will probably lead to problems with the api calls.')
         }
     }
 
@@ -86,7 +86,7 @@ export class Context implements ContextInfo {
         const compareVersions = requiredVersion.reduce((acc, _, i) => acc != 0 ? acc : Math.sign(version[i] - requiredVersion[i]), 0);
 
         if(compareVersions < 0) {
-            throw new Error(`Installed 2sxc version is ${version.join('.')} but ${requiredVersion.join('.')} is required for dnn-sxc-angular.`);
+            throw new Error(`Installed 2sxc version is ${version.join('.')} but ${requiredVersion.join('.')} is required for sxc-angular.`);
         }
     }
 
@@ -149,7 +149,7 @@ export class Context implements ContextInfo {
 
     /**
      * Get context information like module-id from the app-root tag
-     * new in Dnn-Sxc-Angular 8
+     * new in Sxc-Angular 8
      */
     private getContextFromAppTag() : Partial<ContextInfo> {
 
