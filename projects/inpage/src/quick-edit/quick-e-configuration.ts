@@ -1,44 +1,46 @@
 
 export const QuickEditConfigEnableAuto: string = 'auto';
 
-/** 
+/**
  * Buttons on a quick-edit toolbar
+ * @public
  */
 // Note: It's actually used as an interface, but we made it a class so the docs can show the default being true on all values
 export class QuickEditConfigButtons {
-  /** 
+  /**
    * Enable the button to "Add Content"
    */
   addContent?: boolean = true;
 
-  /** 
-   * Enable the button to "add App" 
+  /**
+   * Enable the button to "add App"
    */
   addApp?: boolean = true;
 
-  /** 
-   * Enable the button "Select" 
+  /**
+   * Enable the button "Select"
    */
   select?: boolean = true;
 
-  /** 
-   * Enable the button "Paste" 
+  /**
+   * Enable the button "Paste"
    */
   paste?: boolean = true;
 
-  /** 
-   * Enable the button "Delete" 
+  /**
+   * Enable the button "Delete"
    */
   delete?: boolean = true;
 
-  /** 
-   * Enable the button "Move" 
+  /**
+   * Enable the button "Move"
    */
   move?: boolean = true;
 }
 
-/** 
+/**
  * Quick Edit Configuration which has an `enable` and specific button configurations
+ * @public
  */
 export class QuickEditConfig {
   /**
@@ -53,8 +55,9 @@ export class QuickEditConfig {
   buttons?: QuickEditConfigButtons;
 }
 
-/** 
+/**
  * Quick Edit - Full configuration at root, with `enable` and rules for `modules` and `innerBlocks`
+ * @public
  */
 export class QuickEditConfigRoot extends QuickEditConfig {
   /**

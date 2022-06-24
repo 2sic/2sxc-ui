@@ -1,6 +1,5 @@
-﻿import { Command, CommandNames, CommandParamsEntityById, Commands } from '..';
-import { CommandParamsMetadata, ItemIdentifierSimple } from '../../../../$2sxc/src/cms';
-import { CommandContentTypeParams } from './command-content-type';
+﻿import { Command, CommandNames, Commands } from '..';
+import { ItemIdentifierSimple } from '../../../../$2sxc/src/cms';
 
 const MetadataDefaultKeyType = 'string';
 const MetadataDefaultTargetType = 10; // cms-item
@@ -47,20 +46,3 @@ export const ImageMetadataCommand = Command.build(CommandNames.image, 'Image', '
 Commands.addCommand(MetadataCommand);
 Commands.addCommand(ImageMetadataCommand);
 
-
-/**
- * Parameters used for the command `metadata`.
- * <br>
- * Will do either one of these:
- * - if it has an `entityId`, will just open `edit` for that Entity
- * - if it has no `entityId`, will open `new` for the current `contentType`
- * and assign to the target specified by `metadata`:
- * <br>
- * ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)
- */
-export interface CommandMetadataParams extends CommandContentTypeParams, CommandParamsEntityById {
-  /**
-   * Target to assign the metadata to.
-   */
-  metadata: CommandParamsMetadata;
-}

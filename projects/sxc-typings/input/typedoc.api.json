@@ -172,25 +172,173 @@
       "members": [
         {
           "kind": "Interface",
-          "canonicalReference": "@2sic.com/2sxc-typings!AjaxSettings:interface",
-          "docComment": "/**\n * @public\n */\n",
+          "canonicalReference": "@2sic.com/2sxc-typings!CommandAddExistingParams:interface",
+          "docComment": "/**\n * Parameters used for the command `add-existing`. <br> The contentType name determines what items will be shown in the dialog. <br> ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)\n *\n * @public\n */\n",
           "excerptTokens": [
             {
               "kind": "Content",
-              "text": "export interface AjaxSettings "
+              "text": "export interface CommandAddExistingParams extends "
+            },
+            {
+              "kind": "Reference",
+              "text": "CommandAddParams",
+              "canonicalReference": "@2sic.com/2sxc-typings!CommandAddParams:interface"
+            },
+            {
+              "kind": "Content",
+              "text": " "
             }
           ],
           "releaseTag": "Public",
-          "name": "AjaxSettings",
+          "name": "CommandAddExistingParams",
+          "members": [],
+          "extendsTokenRanges": [
+            {
+              "startIndex": 1,
+              "endIndex": 2
+            }
+          ]
+        },
+        {
+          "kind": "Interface",
+          "canonicalReference": "@2sic.com/2sxc-typings!CommandAddParams:interface",
+          "docComment": "/**\n * Parameters used for the command `add`. <br> The contentType name determines what items will be created. <br> ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)\n *\n * @public\n */\n",
+          "excerptTokens": [
+            {
+              "kind": "Content",
+              "text": "export interface CommandAddParams extends "
+            },
+            {
+              "kind": "Reference",
+              "text": "CommandContentTypeParams",
+              "canonicalReference": "@2sic.com/2sxc-typings!CommandContentTypeParams:interface"
+            },
+            {
+              "kind": "Content",
+              "text": " "
+            }
+          ],
+          "releaseTag": "Public",
+          "name": "CommandAddParams",
           "members": [
             {
               "kind": "PropertySignature",
-              "canonicalReference": "@2sic.com/2sxc-typings!AjaxSettings#action:member",
-              "docComment": "/**\n * action name, for controller/action calls\n */\n",
+              "canonicalReference": "@2sic.com/2sxc-typings!CommandAddParams#sortOrder:member",
+              "docComment": "/**\n * Determins the position where a new item will be added to.\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
-                  "text": "action?: "
+                  "text": "sortOrder: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "number"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isReadonly": false,
+              "isOptional": false,
+              "releaseTag": "Public",
+              "name": "sortOrder",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              }
+            }
+          ],
+          "extendsTokenRanges": [
+            {
+              "startIndex": 1,
+              "endIndex": 2
+            }
+          ]
+        },
+        {
+          "kind": "Interface",
+          "canonicalReference": "@2sic.com/2sxc-typings!CommandContentItemsParams:interface",
+          "docComment": "/**\n * Parameters used for the command `contentitems`. <br> The content-type name determines what items will be managed. <br> ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)\n *\n * @public\n */\n",
+          "excerptTokens": [
+            {
+              "kind": "Content",
+              "text": "export interface CommandContentItemsParams extends "
+            },
+            {
+              "kind": "Reference",
+              "text": "CommandContentTypeParams",
+              "canonicalReference": "@2sic.com/2sxc-typings!CommandContentTypeParams:interface"
+            },
+            {
+              "kind": "Content",
+              "text": " "
+            }
+          ],
+          "releaseTag": "Public",
+          "name": "CommandContentItemsParams",
+          "members": [
+            {
+              "kind": "PropertySignature",
+              "canonicalReference": "@2sic.com/2sxc-typings!CommandContentItemsParams#filters:member",
+              "docComment": "/**\n * Filters to apply to the list of items. <br> Each property targets a field. The value is a string, number or array for filtering EntityIds or EntityGuids\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "filters?: "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "Record",
+                  "canonicalReference": "!Record:type"
+                },
+                {
+                  "kind": "Content",
+                  "text": "<string, string | number | string[] | number[]>"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isReadonly": false,
+              "isOptional": true,
+              "releaseTag": "Public",
+              "name": "filters",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 3
+              }
+            }
+          ],
+          "extendsTokenRanges": [
+            {
+              "startIndex": 1,
+              "endIndex": 2
+            }
+          ]
+        },
+        {
+          "kind": "Interface",
+          "canonicalReference": "@2sic.com/2sxc-typings!CommandContentTypeParams:interface",
+          "docComment": "/**\n * Parameters used for the command `contenttype`. <br> The content-type name determines what items will be loaded to manage the fields. <br> ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)\n *\n * @public\n */\n",
+          "excerptTokens": [
+            {
+              "kind": "Content",
+              "text": "export interface CommandContentTypeParams "
+            }
+          ],
+          "releaseTag": "Public",
+          "name": "CommandContentTypeParams",
+          "members": [
+            {
+              "kind": "PropertySignature",
+              "canonicalReference": "@2sic.com/2sxc-typings!CommandContentTypeParams#contentType:member",
+              "docComment": "/**\n * The content-type name\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "contentType: "
                 },
                 {
                   "kind": "Content",
@@ -202,117 +350,9 @@
                 }
               ],
               "isReadonly": false,
-              "isOptional": true,
+              "isOptional": false,
               "releaseTag": "Public",
-              "name": "action",
-              "propertyTypeTokenRange": {
-                "startIndex": 1,
-                "endIndex": 2
-              }
-            },
-            {
-              "kind": "PropertySignature",
-              "canonicalReference": "@2sic.com/2sxc-typings!AjaxSettings#controller:member",
-              "docComment": "/**\n * Controller name, for controller/action calls\n */\n",
-              "excerptTokens": [
-                {
-                  "kind": "Content",
-                  "text": "controller?: "
-                },
-                {
-                  "kind": "Content",
-                  "text": "string"
-                },
-                {
-                  "kind": "Content",
-                  "text": ";"
-                }
-              ],
-              "isReadonly": false,
-              "isOptional": true,
-              "releaseTag": "Public",
-              "name": "controller",
-              "propertyTypeTokenRange": {
-                "startIndex": 1,
-                "endIndex": 2
-              }
-            },
-            {
-              "kind": "PropertySignature",
-              "canonicalReference": "@2sic.com/2sxc-typings!AjaxSettings#endpoint:member",
-              "docComment": "/**\n * Override the endpoint, which is usually '2sxc'\n */\n",
-              "excerptTokens": [
-                {
-                  "kind": "Content",
-                  "text": "endpoint?: "
-                },
-                {
-                  "kind": "Content",
-                  "text": "string"
-                },
-                {
-                  "kind": "Content",
-                  "text": ";"
-                }
-              ],
-              "isReadonly": false,
-              "isOptional": true,
-              "releaseTag": "Public",
-              "name": "endpoint",
-              "propertyTypeTokenRange": {
-                "startIndex": 1,
-                "endIndex": 2
-              }
-            },
-            {
-              "kind": "PropertySignature",
-              "canonicalReference": "@2sic.com/2sxc-typings!AjaxSettings#params:member",
-              "docComment": "/**\n * The params to be used in the url for the request\n */\n",
-              "excerptTokens": [
-                {
-                  "kind": "Content",
-                  "text": "params?: "
-                },
-                {
-                  "kind": "Content",
-                  "text": "any"
-                },
-                {
-                  "kind": "Content",
-                  "text": ";"
-                }
-              ],
-              "isReadonly": false,
-              "isOptional": true,
-              "releaseTag": "Public",
-              "name": "params",
-              "propertyTypeTokenRange": {
-                "startIndex": 1,
-                "endIndex": 2
-              }
-            },
-            {
-              "kind": "PropertySignature",
-              "canonicalReference": "@2sic.com/2sxc-typings!AjaxSettings#preventAutoFail:member",
-              "docComment": "",
-              "excerptTokens": [
-                {
-                  "kind": "Content",
-                  "text": "preventAutoFail?: "
-                },
-                {
-                  "kind": "Content",
-                  "text": "boolean"
-                },
-                {
-                  "kind": "Content",
-                  "text": ";"
-                }
-              ],
-              "isReadonly": false,
-              "isOptional": true,
-              "releaseTag": "Public",
-              "name": "preventAutoFail",
+              "name": "contentType",
               "propertyTypeTokenRange": {
                 "startIndex": 1,
                 "endIndex": 2
@@ -320,6 +360,286 @@
             }
           ],
           "extendsTokenRanges": []
+        },
+        {
+          "kind": "Interface",
+          "canonicalReference": "@2sic.com/2sxc-typings!CommandCopyParams:interface",
+          "docComment": "/**\n * Parameters used for the command `copy`. Will copy the entity on `entityId`. <br> ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)\n *\n * @public\n */\n",
+          "excerptTokens": [
+            {
+              "kind": "Content",
+              "text": "export interface CommandCopyParams extends "
+            },
+            {
+              "kind": "Reference",
+              "text": "CommandContentTypeParams",
+              "canonicalReference": "@2sic.com/2sxc-typings!CommandContentTypeParams:interface"
+            },
+            {
+              "kind": "Content",
+              "text": ", "
+            },
+            {
+              "kind": "Reference",
+              "text": "CommandParamsEntityById",
+              "canonicalReference": "@2sic.com/2sxc-typings!CommandParamsEntityById:interface"
+            },
+            {
+              "kind": "Content",
+              "text": " "
+            }
+          ],
+          "releaseTag": "Public",
+          "name": "CommandCopyParams",
+          "members": [],
+          "extendsTokenRanges": [
+            {
+              "startIndex": 1,
+              "endIndex": 2
+            },
+            {
+              "startIndex": 3,
+              "endIndex": 4
+            }
+          ]
+        },
+        {
+          "kind": "Interface",
+          "canonicalReference": "@2sic.com/2sxc-typings!CommandCustomParams:interface",
+          "docComment": "/**\n * Parameters used for the command `custom` on toolbars. <br> ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)\n *\n * @public\n */\n",
+          "excerptTokens": [
+            {
+              "kind": "Content",
+              "text": "export interface CommandCustomParams "
+            }
+          ],
+          "releaseTag": "Public",
+          "name": "CommandCustomParams",
+          "members": [
+            {
+              "kind": "PropertySignature",
+              "canonicalReference": "@2sic.com/2sxc-typings!CommandCustomParams#call:member",
+              "docComment": "/**\n * Name of the function to call - must be available in the context. This is usually as a function window. Example: <br> If `call` is `sayHello` you need a `window.sayHello(context, event)`.\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "call: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "string"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isReadonly": false,
+              "isOptional": false,
+              "releaseTag": "Public",
+              "name": "call",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              }
+            },
+            {
+              "kind": "PropertySignature",
+              "canonicalReference": "@2sic.com/2sxc-typings!CommandCustomParams#customCode:member",
+              "docComment": "/**\n * **OBSOLETE - avoid using** <br> JavaScript as string containing the code to execute. This is the old V9 - it contains a function, not a name  @obsolete\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "customCode: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "string"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isReadonly": false,
+              "isOptional": false,
+              "releaseTag": "Public",
+              "name": "customCode",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              }
+            }
+          ],
+          "extendsTokenRanges": []
+        },
+        {
+          "kind": "Interface",
+          "canonicalReference": "@2sic.com/2sxc-typings!CommandDeleteParams:interface",
+          "docComment": "/**\n * Parameters used for the command `delete`. <br> ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)\n *\n * @public\n */\n",
+          "excerptTokens": [
+            {
+              "kind": "Content",
+              "text": "export interface CommandDeleteParams "
+            }
+          ],
+          "releaseTag": "Public",
+          "name": "CommandDeleteParams",
+          "members": [
+            {
+              "kind": "PropertySignature",
+              "canonicalReference": "@2sic.com/2sxc-typings!CommandDeleteParams#entityGuid:member",
+              "docComment": "/**\n * Guid of item to delete, usually detected from context.\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "entityGuid: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "string"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isReadonly": false,
+              "isOptional": false,
+              "releaseTag": "Public",
+              "name": "entityGuid",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              }
+            },
+            {
+              "kind": "PropertySignature",
+              "canonicalReference": "@2sic.com/2sxc-typings!CommandDeleteParams#entityId:member",
+              "docComment": "/**\n * ID of item to delete, usually detected from context.\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "entityId: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "number"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isReadonly": false,
+              "isOptional": false,
+              "releaseTag": "Public",
+              "name": "entityId",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              }
+            },
+            {
+              "kind": "PropertySignature",
+              "canonicalReference": "@2sic.com/2sxc-typings!CommandDeleteParams#entityTitle:member",
+              "docComment": "/**\n * Title of item to delete, usually detected from context. This is important to show the \"Are you sure?\" dialog.\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "entityTitle: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "string"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isReadonly": false,
+              "isOptional": false,
+              "releaseTag": "Public",
+              "name": "entityTitle",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              }
+            }
+          ],
+          "extendsTokenRanges": []
+        },
+        {
+          "kind": "Interface",
+          "canonicalReference": "@2sic.com/2sxc-typings!CommandMetadataParams:interface",
+          "docComment": "/**\n * Parameters used for the command `metadata`. <br> Will do either one of these: - if it has an `entityId`, will just open `edit` for that Entity - if it has no `entityId`, will open `new` for the current `contentType` and assign to the target specified by `metadata`: <br> ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)\n *\n * @public\n */\n",
+          "excerptTokens": [
+            {
+              "kind": "Content",
+              "text": "export interface CommandMetadataParams extends "
+            },
+            {
+              "kind": "Reference",
+              "text": "CommandContentTypeParams",
+              "canonicalReference": "@2sic.com/2sxc-typings!CommandContentTypeParams:interface"
+            },
+            {
+              "kind": "Content",
+              "text": ", "
+            },
+            {
+              "kind": "Reference",
+              "text": "CommandParamsEntityById",
+              "canonicalReference": "@2sic.com/2sxc-typings!CommandParamsEntityById:interface"
+            },
+            {
+              "kind": "Content",
+              "text": " "
+            }
+          ],
+          "releaseTag": "Public",
+          "name": "CommandMetadataParams",
+          "members": [
+            {
+              "kind": "PropertySignature",
+              "canonicalReference": "@2sic.com/2sxc-typings!CommandMetadataParams#metadata:member",
+              "docComment": "/**\n * Target to assign the metadata to.\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "metadata: "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "CommandParamsMetadata",
+                  "canonicalReference": "@2sic.com/2sxc-typings!CommandParamsMetadata:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isReadonly": false,
+              "isOptional": false,
+              "releaseTag": "Public",
+              "name": "metadata",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              }
+            }
+          ],
+          "extendsTokenRanges": [
+            {
+              "startIndex": 1,
+              "endIndex": 2
+            },
+            {
+              "startIndex": 3,
+              "endIndex": 4
+            }
+          ]
         },
         {
           "kind": "Enum",
@@ -923,6 +1243,358 @@
               }
             }
           ]
+        },
+        {
+          "kind": "Interface",
+          "canonicalReference": "@2sic.com/2sxc-typings!CommandNewParams:interface",
+          "docComment": "/**\n * Parameters used for the command `new` <br> The ContentType name determines what kind of item will be created. <br> ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)\n *\n * @public\n */\n",
+          "excerptTokens": [
+            {
+              "kind": "Content",
+              "text": "export interface CommandNewParams extends "
+            },
+            {
+              "kind": "Reference",
+              "text": "CommandContentTypeParams",
+              "canonicalReference": "@2sic.com/2sxc-typings!CommandContentTypeParams:interface"
+            },
+            {
+              "kind": "Content",
+              "text": " "
+            }
+          ],
+          "releaseTag": "Public",
+          "name": "CommandNewParams",
+          "members": [],
+          "extendsTokenRanges": [
+            {
+              "startIndex": 1,
+              "endIndex": 2
+            }
+          ]
+        },
+        {
+          "kind": "Interface",
+          "canonicalReference": "@2sic.com/2sxc-typings!CommandParams:interface",
+          "docComment": "/**\n * Command parameters are handed over to a command for execution\n *\n * @public\n */\n",
+          "excerptTokens": [
+            {
+              "kind": "Content",
+              "text": "export interface CommandParams "
+            }
+          ],
+          "releaseTag": "Public",
+          "name": "CommandParams",
+          "members": [
+            {
+              "kind": "PropertySignature",
+              "canonicalReference": "@2sic.com/2sxc-typings!CommandParams#action:member",
+              "docComment": "/**\n * The action is used in scenarios where the command name must be included\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "action?: "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "CommandNames",
+                  "canonicalReference": "@2sic.com/2sxc-typings!CommandNames:enum"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isReadonly": false,
+              "isOptional": true,
+              "releaseTag": "Public",
+              "name": "action",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              }
+            },
+            {
+              "kind": "PropertySignature",
+              "canonicalReference": "@2sic.com/2sxc-typings!CommandParams#isshared:member",
+              "docComment": "/**\n * for template edit dialog  @intenal\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "isshared?: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "boolean"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isReadonly": false,
+              "isOptional": true,
+              "releaseTag": "Public",
+              "name": "isshared",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              }
+            }
+          ],
+          "extendsTokenRanges": []
+        },
+        {
+          "kind": "Interface",
+          "canonicalReference": "@2sic.com/2sxc-typings!CommandParamsEntity:interface",
+          "docComment": "/**\n * Parameters used for commands which need an entity ID or a list-reference. <br> ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)\n */\n",
+          "excerptTokens": [
+            {
+              "kind": "Content",
+              "text": "export interface CommandParamsEntity extends "
+            },
+            {
+              "kind": "Reference",
+              "text": "CommandParamsEntityById",
+              "canonicalReference": "@2sic.com/2sxc-typings!CommandParamsEntityById:interface"
+            },
+            {
+              "kind": "Content",
+              "text": ", "
+            },
+            {
+              "kind": "Reference",
+              "text": "CommandParamsEntityInContentBlock",
+              "canonicalReference": "@2sic.com/2sxc-typings!CommandParamsEntityInContentBlock:interface"
+            },
+            {
+              "kind": "Content",
+              "text": " "
+            }
+          ],
+          "releaseTag": "Public",
+          "name": "CommandParamsEntity",
+          "members": [],
+          "extendsTokenRanges": [
+            {
+              "startIndex": 1,
+              "endIndex": 2
+            },
+            {
+              "startIndex": 3,
+              "endIndex": 4
+            }
+          ]
+        },
+        {
+          "kind": "Interface",
+          "canonicalReference": "@2sic.com/2sxc-typings!CommandParamsEntityById:interface",
+          "docComment": "/**\n * Parameters used for commands which address a specificy entity. <br> ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)\n */\n",
+          "excerptTokens": [
+            {
+              "kind": "Content",
+              "text": "export interface CommandParamsEntityById "
+            }
+          ],
+          "releaseTag": "Public",
+          "name": "CommandParamsEntityById",
+          "members": [
+            {
+              "kind": "PropertySignature",
+              "canonicalReference": "@2sic.com/2sxc-typings!CommandParamsEntityById#entityId:member",
+              "docComment": "/**\n * ID of item to edit.\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "entityId: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "number"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isReadonly": false,
+              "isOptional": false,
+              "releaseTag": "Public",
+              "name": "entityId",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              }
+            }
+          ],
+          "extendsTokenRanges": []
+        },
+        {
+          "kind": "Interface",
+          "canonicalReference": "@2sic.com/2sxc-typings!CommandParamsEntityInContentBlock:interface",
+          "docComment": "/**\n * Parameters used for command which expect an item from a list of a ContentBlock. <br> ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)\n */\n",
+          "excerptTokens": [
+            {
+              "kind": "Content",
+              "text": "export interface CommandParamsEntityInContentBlock "
+            }
+          ],
+          "releaseTag": "Public",
+          "name": "CommandParamsEntityInContentBlock",
+          "members": [
+            {
+              "kind": "PropertySignature",
+              "canonicalReference": "@2sic.com/2sxc-typings!CommandParamsEntityInContentBlock#sortOrder:member",
+              "docComment": "/**\n * Determins the position of the item in the list that will be edited.\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "sortOrder: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "number"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isReadonly": false,
+              "isOptional": false,
+              "releaseTag": "Public",
+              "name": "sortOrder",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              }
+            },
+            {
+              "kind": "PropertySignature",
+              "canonicalReference": "@2sic.com/2sxc-typings!CommandParamsEntityInContentBlock#useModuleList:member",
+              "docComment": "/**\n * Must be true, to work on the module list.\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "useModuleList: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "true"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isReadonly": false,
+              "isOptional": false,
+              "releaseTag": "Public",
+              "name": "useModuleList",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              }
+            }
+          ],
+          "extendsTokenRanges": []
+        },
+        {
+          "kind": "Interface",
+          "canonicalReference": "@2sic.com/2sxc-typings!CommandParamsEntityInList:interface",
+          "docComment": "/**\n * Parameters used for command which expect an item in a list (field) of a parent. <br> ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)\n */\n",
+          "excerptTokens": [
+            {
+              "kind": "Content",
+              "text": "export interface CommandParamsEntityInList "
+            }
+          ],
+          "releaseTag": "Public",
+          "name": "CommandParamsEntityInList",
+          "members": [
+            {
+              "kind": "PropertySignature",
+              "canonicalReference": "@2sic.com/2sxc-typings!CommandParamsEntityInList#fields:member",
+              "docComment": "/**\n * Parent Entity field(s) name(s).\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "fields: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "string"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isReadonly": false,
+              "isOptional": false,
+              "releaseTag": "Public",
+              "name": "fields",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              }
+            },
+            {
+              "kind": "PropertySignature",
+              "canonicalReference": "@2sic.com/2sxc-typings!CommandParamsEntityInList#parent:member",
+              "docComment": "/**\n * Parent entity GUID.\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "parent: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "string"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isReadonly": false,
+              "isOptional": false,
+              "releaseTag": "Public",
+              "name": "parent",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              }
+            },
+            {
+              "kind": "PropertySignature",
+              "canonicalReference": "@2sic.com/2sxc-typings!CommandParamsEntityInList#sortOrder:member",
+              "docComment": "/**\n * Determins the position of the item in the list that will be edited.\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "sortOrder: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "number"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isReadonly": false,
+              "isOptional": false,
+              "releaseTag": "Public",
+              "name": "sortOrder",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              }
+            }
+          ],
+          "extendsTokenRanges": []
         },
         {
           "kind": "Interface",
@@ -2310,6 +2982,412 @@
           ]
         },
         {
+          "kind": "Class",
+          "canonicalReference": "@2sic.com/2sxc-typings!QuickEditConfig:class",
+          "docComment": "/**\n * Quick Edit Configuration which has an `enable` and specific button configurations\n *\n * @public\n */\n",
+          "excerptTokens": [
+            {
+              "kind": "Content",
+              "text": "export declare class QuickEditConfig "
+            }
+          ],
+          "releaseTag": "Public",
+          "name": "QuickEditConfig",
+          "members": [
+            {
+              "kind": "Property",
+              "canonicalReference": "@2sic.com/2sxc-typings!QuickEditConfig#buttons:member",
+              "docComment": "/**\n * Optional detailed configuration of the buttons.\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "buttons?: "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "QuickEditConfigButtons",
+                  "canonicalReference": "@2sic.com/2sxc-typings!QuickEditConfigButtons:class"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isReadonly": false,
+              "isOptional": true,
+              "releaseTag": "Public",
+              "name": "buttons",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              },
+              "isStatic": false,
+              "isProtected": false
+            },
+            {
+              "kind": "Property",
+              "canonicalReference": "@2sic.com/2sxc-typings!QuickEditConfig#enable:member",
+              "docComment": "/**\n * Determine whether this section is enabled.\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "enable?: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "boolean | 'auto'"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isReadonly": false,
+              "isOptional": true,
+              "releaseTag": "Public",
+              "name": "enable",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              },
+              "isStatic": false,
+              "isProtected": false
+            }
+          ],
+          "implementsTokenRanges": []
+        },
+        {
+          "kind": "Class",
+          "canonicalReference": "@2sic.com/2sxc-typings!QuickEditConfigButtons:class",
+          "docComment": "/**\n * Buttons on a quick-edit toolbar\n *\n * @public\n */\n",
+          "excerptTokens": [
+            {
+              "kind": "Content",
+              "text": "export declare class QuickEditConfigButtons "
+            }
+          ],
+          "releaseTag": "Public",
+          "name": "QuickEditConfigButtons",
+          "members": [
+            {
+              "kind": "Property",
+              "canonicalReference": "@2sic.com/2sxc-typings!QuickEditConfigButtons#addApp:member",
+              "docComment": "/**\n * Enable the button to \"add App\"\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "addApp?: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "boolean"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isReadonly": false,
+              "isOptional": true,
+              "releaseTag": "Public",
+              "name": "addApp",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              },
+              "isStatic": false,
+              "isProtected": false
+            },
+            {
+              "kind": "Property",
+              "canonicalReference": "@2sic.com/2sxc-typings!QuickEditConfigButtons#addContent:member",
+              "docComment": "/**\n * Enable the button to \"Add Content\"\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "addContent?: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "boolean"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isReadonly": false,
+              "isOptional": true,
+              "releaseTag": "Public",
+              "name": "addContent",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              },
+              "isStatic": false,
+              "isProtected": false
+            },
+            {
+              "kind": "Property",
+              "canonicalReference": "@2sic.com/2sxc-typings!QuickEditConfigButtons#delete:member",
+              "docComment": "/**\n * Enable the button \"Delete\"\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "delete?: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "boolean"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isReadonly": false,
+              "isOptional": true,
+              "releaseTag": "Public",
+              "name": "delete",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              },
+              "isStatic": false,
+              "isProtected": false
+            },
+            {
+              "kind": "Property",
+              "canonicalReference": "@2sic.com/2sxc-typings!QuickEditConfigButtons#move:member",
+              "docComment": "/**\n * Enable the button \"Move\"\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "move?: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "boolean"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isReadonly": false,
+              "isOptional": true,
+              "releaseTag": "Public",
+              "name": "move",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              },
+              "isStatic": false,
+              "isProtected": false
+            },
+            {
+              "kind": "Property",
+              "canonicalReference": "@2sic.com/2sxc-typings!QuickEditConfigButtons#paste:member",
+              "docComment": "/**\n * Enable the button \"Paste\"\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "paste?: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "boolean"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isReadonly": false,
+              "isOptional": true,
+              "releaseTag": "Public",
+              "name": "paste",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              },
+              "isStatic": false,
+              "isProtected": false
+            },
+            {
+              "kind": "Property",
+              "canonicalReference": "@2sic.com/2sxc-typings!QuickEditConfigButtons#select:member",
+              "docComment": "/**\n * Enable the button \"Select\"\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "select?: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "boolean"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isReadonly": false,
+              "isOptional": true,
+              "releaseTag": "Public",
+              "name": "select",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              },
+              "isStatic": false,
+              "isProtected": false
+            }
+          ],
+          "implementsTokenRanges": []
+        },
+        {
+          "kind": "Variable",
+          "canonicalReference": "@2sic.com/2sxc-typings!QuickEditConfigEnableAuto:var",
+          "docComment": "",
+          "excerptTokens": [
+            {
+              "kind": "Content",
+              "text": "QuickEditConfigEnableAuto: "
+            },
+            {
+              "kind": "Content",
+              "text": "string"
+            }
+          ],
+          "isReadonly": true,
+          "releaseTag": "Public",
+          "name": "QuickEditConfigEnableAuto",
+          "variableTypeTokenRange": {
+            "startIndex": 1,
+            "endIndex": 2
+          }
+        },
+        {
+          "kind": "Class",
+          "canonicalReference": "@2sic.com/2sxc-typings!QuickEditConfigRoot:class",
+          "docComment": "/**\n * Quick Edit - Full configuration at root, with `enable` and rules for `modules` and `innerBlocks`\n *\n * @public\n */\n",
+          "excerptTokens": [
+            {
+              "kind": "Content",
+              "text": "export declare class QuickEditConfigRoot extends "
+            },
+            {
+              "kind": "Reference",
+              "text": "QuickEditConfig",
+              "canonicalReference": "@2sic.com/2sxc-typings!QuickEditConfig:class"
+            },
+            {
+              "kind": "Content",
+              "text": " "
+            }
+          ],
+          "releaseTag": "Public",
+          "name": "QuickEditConfigRoot",
+          "members": [
+            {
+              "kind": "Property",
+              "canonicalReference": "@2sic.com/2sxc-typings!QuickEditConfigRoot#buttons:member",
+              "docComment": "/**\n * The buttons configuration on the root. Will be used for the `modules` and `innerBlocks` if not specified there. Note that if not specified, will always default to true for all buttons.\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "buttons?: "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "QuickEditConfigButtons",
+                  "canonicalReference": "@2sic.com/2sxc-typings!QuickEditConfigButtons:class"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isReadonly": false,
+              "isOptional": true,
+              "releaseTag": "Public",
+              "name": "buttons",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              },
+              "isStatic": false,
+              "isProtected": false
+            },
+            {
+              "kind": "Property",
+              "canonicalReference": "@2sic.com/2sxc-typings!QuickEditConfigRoot#innerBlocks:member",
+              "docComment": "/**\n * Optional configuration for the Inner Content Blocks.\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "innerBlocks?: "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "QuickEditConfig",
+                  "canonicalReference": "@2sic.com/2sxc-typings!QuickEditConfig:class"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isReadonly": false,
+              "isOptional": true,
+              "releaseTag": "Public",
+              "name": "innerBlocks",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              },
+              "isStatic": false,
+              "isProtected": false
+            },
+            {
+              "kind": "Property",
+              "canonicalReference": "@2sic.com/2sxc-typings!QuickEditConfigRoot#modules:member",
+              "docComment": "/**\n * Optional configuration for the Modules.\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "modules?: "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "QuickEditConfig",
+                  "canonicalReference": "@2sic.com/2sxc-typings!QuickEditConfig:class"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isReadonly": false,
+              "isOptional": true,
+              "releaseTag": "Public",
+              "name": "modules",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              },
+              "isStatic": false,
+              "isProtected": false
+            }
+          ],
+          "extendsTokenRange": {
+            "startIndex": 1,
+            "endIndex": 2
+          },
+          "implementsTokenRanges": []
+        },
+        {
           "kind": "Interface",
           "canonicalReference": "@2sic.com/2sxc-typings!RunParams:interface",
           "docComment": "/**\n * Parameters for the Instance sxc.cms.run(...) command. New in 13.03\n */\n",
@@ -3404,11 +4482,11 @@
         {
           "kind": "Class",
           "canonicalReference": "@2sic.com/2sxc-typings!SxcDataServiceBase:class",
-          "docComment": "/**\n * Base class doing common checks\n *\n * @public\n */\n",
+          "docComment": "/**\n * Base class doing common checks. This is internal and not important, but we can't keep it out of the docs.\n *\n * @remarks\n *\n * The constructor for this class is marked as internal. Third-party code should not call the constructor directly or create subclasses that extend the `SxcDataServiceBase` class.\n *\n * @public\n */\n",
           "excerptTokens": [
             {
               "kind": "Content",
-              "text": "export declare class SxcDataServiceBase extends "
+              "text": "export declare abstract class SxcDataServiceBase extends "
             },
             {
               "kind": "Reference",
@@ -3423,71 +4501,6 @@
           "releaseTag": "Public",
           "name": "SxcDataServiceBase",
           "members": [
-            {
-              "kind": "Constructor",
-              "canonicalReference": "@2sic.com/2sxc-typings!SxcDataServiceBase:constructor(1)",
-              "docComment": "/**\n * Creates an instance of SxcData.\n *\n * @param sxc - \n *\n * @param name - the content-type name  @memberof SxcData\n */\n",
-              "excerptTokens": [
-                {
-                  "kind": "Content",
-                  "text": "constructor(sxc: "
-                },
-                {
-                  "kind": "Reference",
-                  "text": "Sxc",
-                  "canonicalReference": "@2sic.com/2sxc-typings!Sxc:class"
-                },
-                {
-                  "kind": "Content",
-                  "text": ", name: "
-                },
-                {
-                  "kind": "Content",
-                  "text": "string"
-                },
-                {
-                  "kind": "Content",
-                  "text": ", nameInError: "
-                },
-                {
-                  "kind": "Content",
-                  "text": "string"
-                },
-                {
-                  "kind": "Content",
-                  "text": ");"
-                }
-              ],
-              "releaseTag": "Public",
-              "isProtected": false,
-              "overloadIndex": 1,
-              "parameters": [
-                {
-                  "parameterName": "sxc",
-                  "parameterTypeTokenRange": {
-                    "startIndex": 1,
-                    "endIndex": 2
-                  },
-                  "isOptional": false
-                },
-                {
-                  "parameterName": "name",
-                  "parameterTypeTokenRange": {
-                    "startIndex": 3,
-                    "endIndex": 4
-                  },
-                  "isOptional": false
-                },
-                {
-                  "parameterName": "nameInError",
-                  "parameterTypeTokenRange": {
-                    "startIndex": 5,
-                    "endIndex": 6
-                  },
-                  "isOptional": false
-                }
-              ]
-            },
             {
               "kind": "Property",
               "canonicalReference": "@2sic.com/2sxc-typings!SxcDataServiceBase#name:member",
@@ -4105,6 +5118,416 @@
             }
           ],
           "extendsTokenRanges": []
+        },
+        {
+          "kind": "Class",
+          "canonicalReference": "@2sic.com/2sxc-typings!SxcGlobalCms:class",
+          "docComment": "/**\n * Global Content-Management System on the $2sxc.cms.\n *\n * It is only available if the page is in edit mode / the page feature `2sxc.JsCms` has been activated.\n *\n * @remarks\n *\n * The constructor for this class is marked as internal. Third-party code should not call the constructor directly or create subclasses that extend the `SxcGlobalCms` class.\n *\n * @public\n */\n",
+          "excerptTokens": [
+            {
+              "kind": "Content",
+              "text": "export declare class SxcGlobalCms extends "
+            },
+            {
+              "kind": "Reference",
+              "text": "HasLog",
+              "canonicalReference": "@2sic.com/2sxc-typings!HasLog:class"
+            },
+            {
+              "kind": "Content",
+              "text": " "
+            }
+          ],
+          "releaseTag": "Public",
+          "name": "SxcGlobalCms",
+          "members": [
+            {
+              "kind": "Method",
+              "canonicalReference": "@2sic.com/2sxc-typings!SxcGlobalCms#run:member(1)",
+              "docComment": "/**\n * Run a command within a specific context - mostly for internal use.\n *\n * @param runParams - The complete run params with a context\n *\n * @returns A promise which triggers when the command has completed.\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "run<T>(runParams: "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "RunParamsWithContext",
+                  "canonicalReference": "@2sic.com/2sxc-typings!RunParamsWithContext:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": "): "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "Promise",
+                  "canonicalReference": "!Promise:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": "<void | T>"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "typeParameters": [
+                {
+                  "typeParameterName": "T",
+                  "constraintTokenRange": {
+                    "startIndex": 0,
+                    "endIndex": 0
+                  },
+                  "defaultTypeTokenRange": {
+                    "startIndex": 0,
+                    "endIndex": 0
+                  }
+                }
+              ],
+              "isStatic": false,
+              "returnTypeTokenRange": {
+                "startIndex": 3,
+                "endIndex": 5
+              },
+              "releaseTag": "Public",
+              "isProtected": false,
+              "overloadIndex": 1,
+              "parameters": [
+                {
+                  "parameterName": "runParams",
+                  "parameterTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  },
+                  "isOptional": false
+                }
+              ],
+              "isOptional": false,
+              "name": "run"
+            },
+            {
+              "kind": "Method",
+              "canonicalReference": "@2sic.com/2sxc-typings!SxcGlobalCms#run:member(2)",
+              "docComment": "/**\n * Run a command within a specific context.\n *\n * @param tag - The context providing tag - an HTML tag inside a module/content-block\n *\n * @param action - command-name (action)\n *\n * @param event - Optional mouse-event which allows the command to do some optimizations for that case - like a mouse-click\n *\n * @returns A promise which triggers when the command has completed.\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "run<T>(tag: "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "HTMLElement",
+                  "canonicalReference": "!HTMLElement:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": ", action: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "string"
+                },
+                {
+                  "kind": "Content",
+                  "text": ", event?: "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "MouseEvent",
+                  "canonicalReference": "!MouseEvent:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": "): "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "Promise",
+                  "canonicalReference": "!Promise:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": "<void | T>"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "typeParameters": [
+                {
+                  "typeParameterName": "T",
+                  "constraintTokenRange": {
+                    "startIndex": 0,
+                    "endIndex": 0
+                  },
+                  "defaultTypeTokenRange": {
+                    "startIndex": 0,
+                    "endIndex": 0
+                  }
+                }
+              ],
+              "isStatic": false,
+              "returnTypeTokenRange": {
+                "startIndex": 7,
+                "endIndex": 9
+              },
+              "releaseTag": "Public",
+              "isProtected": false,
+              "overloadIndex": 2,
+              "parameters": [
+                {
+                  "parameterName": "tag",
+                  "parameterTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  },
+                  "isOptional": false
+                },
+                {
+                  "parameterName": "action",
+                  "parameterTypeTokenRange": {
+                    "startIndex": 3,
+                    "endIndex": 4
+                  },
+                  "isOptional": false
+                },
+                {
+                  "parameterName": "event",
+                  "parameterTypeTokenRange": {
+                    "startIndex": 5,
+                    "endIndex": 6
+                  },
+                  "isOptional": true
+                }
+              ],
+              "isOptional": false,
+              "name": "run"
+            },
+            {
+              "kind": "Method",
+              "canonicalReference": "@2sic.com/2sxc-typings!SxcGlobalCms#run:member(3)",
+              "docComment": "/**\n * Run a command within a specific context.\n *\n * @param tag - The context providing tag - an HTML tag inside a module/content-block\n *\n * @param action - command-name (action)\n *\n * @param params - an object containing the the command-params\n *\n * @param event - Optional mouse-event which allows the command to do some optimizations for that case - like a mouse-click\n *\n * @returns A promise which triggers when the command has completed.\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "run<T>(tag: "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "HTMLElement",
+                  "canonicalReference": "!HTMLElement:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": ", action: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "string"
+                },
+                {
+                  "kind": "Content",
+                  "text": ", params?: "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "CommandParams",
+                  "canonicalReference": "@2sic.com/2sxc-typings!CommandParams:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": ", event?: "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "MouseEvent",
+                  "canonicalReference": "!MouseEvent:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": "): "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "Promise",
+                  "canonicalReference": "!Promise:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": "<void | T>"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "typeParameters": [
+                {
+                  "typeParameterName": "T",
+                  "constraintTokenRange": {
+                    "startIndex": 0,
+                    "endIndex": 0
+                  },
+                  "defaultTypeTokenRange": {
+                    "startIndex": 0,
+                    "endIndex": 0
+                  }
+                }
+              ],
+              "isStatic": false,
+              "returnTypeTokenRange": {
+                "startIndex": 9,
+                "endIndex": 11
+              },
+              "releaseTag": "Public",
+              "isProtected": false,
+              "overloadIndex": 3,
+              "parameters": [
+                {
+                  "parameterName": "tag",
+                  "parameterTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  },
+                  "isOptional": false
+                },
+                {
+                  "parameterName": "action",
+                  "parameterTypeTokenRange": {
+                    "startIndex": 3,
+                    "endIndex": 4
+                  },
+                  "isOptional": false
+                },
+                {
+                  "parameterName": "params",
+                  "parameterTypeTokenRange": {
+                    "startIndex": 5,
+                    "endIndex": 6
+                  },
+                  "isOptional": true
+                },
+                {
+                  "parameterName": "event",
+                  "parameterTypeTokenRange": {
+                    "startIndex": 7,
+                    "endIndex": 8
+                  },
+                  "isOptional": true
+                }
+              ],
+              "isOptional": false,
+              "name": "run"
+            },
+            {
+              "kind": "Method",
+              "canonicalReference": "@2sic.com/2sxc-typings!SxcGlobalCms#run:member(4)",
+              "docComment": "/**\n * Run a command within a specific context.\n *\n * @param tag - The context providing tag - an HTML tag inside a module/content-block\n *\n * @param commandParams - an object containing the the command-params as well as the command-name (action)\n *\n * @param event - Optional mouse-event which allows the command to do some optimizations for that case - like a mouse-click\n *\n * @returns A promise which triggers when the command has completed.\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "run<T>(tag: "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "HTMLElement",
+                  "canonicalReference": "!HTMLElement:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": ", commandParams: "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "CommandParams",
+                  "canonicalReference": "@2sic.com/2sxc-typings!CommandParams:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": ", event?: "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "MouseEvent",
+                  "canonicalReference": "!MouseEvent:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": "): "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "Promise",
+                  "canonicalReference": "!Promise:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": "<void | T>"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "typeParameters": [
+                {
+                  "typeParameterName": "T",
+                  "constraintTokenRange": {
+                    "startIndex": 0,
+                    "endIndex": 0
+                  },
+                  "defaultTypeTokenRange": {
+                    "startIndex": 0,
+                    "endIndex": 0
+                  }
+                }
+              ],
+              "isStatic": false,
+              "returnTypeTokenRange": {
+                "startIndex": 7,
+                "endIndex": 9
+              },
+              "releaseTag": "Public",
+              "isProtected": false,
+              "overloadIndex": 4,
+              "parameters": [
+                {
+                  "parameterName": "tag",
+                  "parameterTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  },
+                  "isOptional": false
+                },
+                {
+                  "parameterName": "commandParams",
+                  "parameterTypeTokenRange": {
+                    "startIndex": 3,
+                    "endIndex": 4
+                  },
+                  "isOptional": false
+                },
+                {
+                  "parameterName": "event",
+                  "parameterTypeTokenRange": {
+                    "startIndex": 5,
+                    "endIndex": 6
+                  },
+                  "isOptional": true
+                }
+              ],
+              "isOptional": false,
+              "name": "run"
+            }
+          ],
+          "extendsTokenRange": {
+            "startIndex": 1,
+            "endIndex": 2
+          },
+          "implementsTokenRanges": []
         },
         {
           "kind": "Class",
@@ -4787,13 +6210,102 @@
           "implementsTokenRanges": []
         },
         {
-          "kind": "Class",
-          "canonicalReference": "@2sic.com/2sxc-typings!SxcPart:class",
-          "docComment": "/**\n * Base class for anything attached to an sxc-instance\n *\n * @remarks\n *\n * The constructor for this class is marked as internal. Third-party code should not call the constructor directly or create subclasses that extend the `SxcPart` class.\n *\n * @public\n */\n",
+          "kind": "Interface",
+          "canonicalReference": "@2sic.com/2sxc-typings!SxcGlobalWithCms:interface",
+          "docComment": "/**\n * $2sxc global interface _extending_ the `SxcGlobal` when the page feature `JsCms` is enabled.\n *\n * If the page feature `2sxc.JsCms` is not enabled, the `window.$2sxc` will be a [SxcGlobal](xref:Api.Js.SxcJs.SxcGlobal)\n *\n * @public\n */\n",
           "excerptTokens": [
             {
               "kind": "Content",
-              "text": "export declare class SxcPart "
+              "text": "export interface SxcGlobalWithCms "
+            }
+          ],
+          "releaseTag": "Public",
+          "name": "SxcGlobalWithCms",
+          "members": [
+            {
+              "kind": "PropertySignature",
+              "canonicalReference": "@2sic.com/2sxc-typings!SxcGlobalWithCms#cms:member",
+              "docComment": "/**\n * Content Management features on the $2sxc\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "cms: "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "SxcGlobalCms",
+                  "canonicalReference": "@2sic.com/2sxc-typings!SxcGlobalCms:class"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isReadonly": false,
+              "isOptional": false,
+              "releaseTag": "Public",
+              "name": "cms",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              }
+            },
+            {
+              "kind": "MethodSignature",
+              "canonicalReference": "@2sic.com/2sxc-typings!SxcGlobalWithCms#translate:member(1)",
+              "docComment": "/**\n * Will retrieve a resource in the current language. Mainly used for toolbars etc. to support localization.\n *\n * Only available when edit mode is on meaning the page feature JsCms is enabled\n *\n * @param key - the key of the resource to translate\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "translate(key: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "string"
+                },
+                {
+                  "kind": "Content",
+                  "text": "): "
+                },
+                {
+                  "kind": "Content",
+                  "text": "string"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isOptional": false,
+              "returnTypeTokenRange": {
+                "startIndex": 3,
+                "endIndex": 4
+              },
+              "releaseTag": "Public",
+              "overloadIndex": 1,
+              "parameters": [
+                {
+                  "parameterName": "key",
+                  "parameterTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  },
+                  "isOptional": false
+                }
+              ],
+              "name": "translate"
+            }
+          ],
+          "extendsTokenRanges": []
+        },
+        {
+          "kind": "Class",
+          "canonicalReference": "@2sic.com/2sxc-typings!SxcPart:class",
+          "docComment": "/**\n * Base class for anything attached to an sxc-instance. This is internal and not important, but we can't keep it out of the docs.\n *\n * @remarks\n *\n * The constructor for this class is marked as internal. Third-party code should not call the constructor directly or create subclasses that extend the `SxcPart` class.\n *\n * @public\n */\n",
+          "excerptTokens": [
+            {
+              "kind": "Content",
+              "text": "export declare abstract class SxcPart "
             }
           ],
           "releaseTag": "Public",
@@ -5365,7 +6877,7 @@
             {
               "kind": "Method",
               "canonicalReference": "@2sic.com/2sxc-typings!SxcQuery#getStreams:member(1)",
-              "docComment": "",
+              "docComment": "/**\n * Get a query but only the mentioned streams. This will reduce the amount of data retrieved on queries that have many streams.  @template T The schema/interfaces of what will be returned\n *\n * @returns {Promise<T>} Promise containing a object with stream-names and items in the streams.\n *\n * @public\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -5438,7 +6950,7 @@
             {
               "kind": "Method",
               "canonicalReference": "@2sic.com/2sxc-typings!SxcQuery#getStreams:member(2)",
-              "docComment": "",
+              "docComment": "/**\n * Get a query but only the mentioned streams. This will reduce the amount of data retrieved on queries that have many streams.  @template T The schema/interfaces of what will be returned\n *\n * @param streams - name of streams to get, comma separated\n *\n * @param urlParams - additional parameters for the URL, either as a string or as a object\n *\n * @returns {Promise<T>} Promise containing a object with stream-names and items in the streams.\n *\n * @public\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -5536,7 +7048,7 @@
             {
               "kind": "Method",
               "canonicalReference": "@2sic.com/2sxc-typings!SxcQuery#getStreams:member(3)",
-              "docComment": "",
+              "docComment": "/**\n * Get a query but only the mentioned streams. This will reduce the amount of data retrieved on queries that have many streams.  @template T The schema/interfaces of what will be returned\n *\n * @param streams - name of streams to get, comma separated\n *\n * @param urlParams - additional parameters for the URL, either as a string or as a object\n *\n * @param data - data to include in case of a POST call - if this is provided, it will use a post\n *\n * @returns {Promise<T>} Promise containing a object with stream-names and items in the streams.\n *\n * @public\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -5703,8 +7215,8 @@
             },
             {
               "kind": "Reference",
-              "text": "SxcWebApiDeprecated",
-              "canonicalReference": "@2sic.com/2sxc-typings!SxcWebApiDeprecated:interface"
+              "text": "ZzzSxcWebApiDeprecated",
+              "canonicalReference": "@2sic.com/2sxc-typings!ZzzSxcWebApiDeprecated:interface"
             },
             {
               "kind": "Content",
@@ -5729,8 +7241,8 @@
                 },
                 {
                   "kind": "Reference",
-                  "text": "AjaxSettings",
-                  "canonicalReference": "@2sic.com/2sxc-typings!AjaxSettings:interface"
+                  "text": "ZzzAjaxSettingsDeprecated",
+                  "canonicalReference": "@2sic.com/2sxc-typings!ZzzAjaxSettingsDeprecated:interface"
                 },
                 {
                   "kind": "Content",
@@ -6045,8 +7557,8 @@
                 },
                 {
                   "kind": "Reference",
-                  "text": "AjaxSettings",
-                  "canonicalReference": "@2sic.com/2sxc-typings!AjaxSettings:interface"
+                  "text": "ZzzAjaxSettingsDeprecated",
+                  "canonicalReference": "@2sic.com/2sxc-typings!ZzzAjaxSettingsDeprecated:interface"
                 },
                 {
                   "kind": "Content",
@@ -6197,8 +7709,8 @@
                 },
                 {
                   "kind": "Reference",
-                  "text": "AjaxSettings",
-                  "canonicalReference": "@2sic.com/2sxc-typings!AjaxSettings:interface"
+                  "text": "ZzzAjaxSettingsDeprecated",
+                  "canonicalReference": "@2sic.com/2sxc-typings!ZzzAjaxSettingsDeprecated:interface"
                 },
                 {
                   "kind": "Content",
@@ -6297,8 +7809,8 @@
                 },
                 {
                   "kind": "Reference",
-                  "text": "AjaxSettings",
-                  "canonicalReference": "@2sic.com/2sxc-typings!AjaxSettings:interface"
+                  "text": "ZzzAjaxSettingsDeprecated",
+                  "canonicalReference": "@2sic.com/2sxc-typings!ZzzAjaxSettingsDeprecated:interface"
                 },
                 {
                   "kind": "Content",
@@ -6397,8 +7909,8 @@
                 },
                 {
                   "kind": "Reference",
-                  "text": "AjaxSettings",
-                  "canonicalReference": "@2sic.com/2sxc-typings!AjaxSettings:interface"
+                  "text": "ZzzAjaxSettingsDeprecated",
+                  "canonicalReference": "@2sic.com/2sxc-typings!ZzzAjaxSettingsDeprecated:interface"
                 },
                 {
                   "kind": "Content",
@@ -6579,59 +8091,53 @@
           ]
         },
         {
-          "kind": "Interface",
-          "canonicalReference": "@2sic.com/2sxc-typings!SxcWebApiDeprecated:interface",
-          "docComment": "/**\n * **Deprecated** Old APIs on sxc.webApi. They only exist if jQuery is included on the page, and we highly discourage their use.\n *\n * @deprecated\n */\n",
+          "kind": "Class",
+          "canonicalReference": "@2sic.com/2sxc-typings!ToolbarWorkflowManager:class",
+          "docComment": "/**\n * A workflow manager _of a Toolbar_ which will run stuff before / after commands. When toolbars are created, they will add a Manager and then raise an event for in-page code to add workflow steps. Normally the toolbar with raise a `toolbar-init` event where you can then add steps.\n *\n * @remarks\n *\n * The constructor for this class is marked as internal. Third-party code should not call the constructor directly or create subclasses that extend the `ToolbarWorkflowManager` class.\n */\n",
           "excerptTokens": [
             {
               "kind": "Content",
-              "text": "export interface SxcWebApiDeprecated "
+              "text": "export declare class ToolbarWorkflowManager extends "
+            },
+            {
+              "kind": "Reference",
+              "text": "HasLog",
+              "canonicalReference": "@2sic.com/2sxc-typings!HasLog:class"
+            },
+            {
+              "kind": "Content",
+              "text": " "
             }
           ],
           "releaseTag": "Public",
-          "name": "SxcWebApiDeprecated",
+          "name": "ToolbarWorkflowManager",
           "members": [
             {
-              "kind": "MethodSignature",
-              "canonicalReference": "@2sic.com/2sxc-typings!SxcWebApiDeprecated#delete:member(1)",
-              "docComment": "/**\n * **Deprecated** Please use [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchJson) or [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchRaw) instead.\n *\n * Returns an http-delete promise using jQuery\n *\n * @deprecated\n *\n * use fetchJson instead\n *\n * @param settingsOrUrl - the url to talk to\n *\n * @param params - jQuery style ajax parameters\n *\n * @param data - jQuery style data for post/put requests\n *\n * @param preventAutoFail - \n *\n * @returns jQuery ajax promise object\n */\n",
+              "kind": "Method",
+              "canonicalReference": "@2sic.com/2sxc-typings!ToolbarWorkflowManager#add:member(1)",
+              "docComment": "/**\n * Register one or many [workflow-steps](xref:Api.Js.SxcJs.WorkflowStep) to the toolbar, to use if toolbar commands are executed.\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
-                  "text": "delete(settingsOrUrl: "
-                },
-                {
-                  "kind": "Content",
-                  "text": "string | "
+                  "text": "add(steps: "
                 },
                 {
                   "kind": "Reference",
-                  "text": "AjaxSettings",
-                  "canonicalReference": "@2sic.com/2sxc-typings!AjaxSettings:interface"
+                  "text": "WorkflowStep",
+                  "canonicalReference": "@2sic.com/2sxc-typings!WorkflowStep:interface"
                 },
                 {
                   "kind": "Content",
-                  "text": ", params?: "
+                  "text": " | "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "WorkflowStep",
+                  "canonicalReference": "@2sic.com/2sxc-typings!WorkflowStep:interface"
                 },
                 {
                   "kind": "Content",
-                  "text": "any"
-                },
-                {
-                  "kind": "Content",
-                  "text": ", data?: "
-                },
-                {
-                  "kind": "Content",
-                  "text": "any"
-                },
-                {
-                  "kind": "Content",
-                  "text": ", preventAutoFail?: "
-                },
-                {
-                  "kind": "Content",
-                  "text": "boolean"
+                  "text": "[]"
                 },
                 {
                   "kind": "Content",
@@ -6639,466 +8145,40 @@
                 },
                 {
                   "kind": "Content",
-                  "text": "any"
+                  "text": "void"
                 },
                 {
                   "kind": "Content",
                   "text": ";"
                 }
               ],
-              "isOptional": false,
+              "isStatic": false,
               "returnTypeTokenRange": {
-                "startIndex": 10,
-                "endIndex": 11
+                "startIndex": 6,
+                "endIndex": 7
               },
               "releaseTag": "Public",
+              "isProtected": false,
               "overloadIndex": 1,
               "parameters": [
                 {
-                  "parameterName": "settingsOrUrl",
+                  "parameterName": "steps",
                   "parameterTypeTokenRange": {
                     "startIndex": 1,
-                    "endIndex": 3
-                  },
-                  "isOptional": false
-                },
-                {
-                  "parameterName": "params",
-                  "parameterTypeTokenRange": {
-                    "startIndex": 4,
                     "endIndex": 5
                   },
-                  "isOptional": true
-                },
-                {
-                  "parameterName": "data",
-                  "parameterTypeTokenRange": {
-                    "startIndex": 6,
-                    "endIndex": 7
-                  },
-                  "isOptional": true
-                },
-                {
-                  "parameterName": "preventAutoFail",
-                  "parameterTypeTokenRange": {
-                    "startIndex": 8,
-                    "endIndex": 9
-                  },
-                  "isOptional": true
-                }
-              ],
-              "name": "delete"
-            },
-            {
-              "kind": "MethodSignature",
-              "canonicalReference": "@2sic.com/2sxc-typings!SxcWebApiDeprecated#get:member(1)",
-              "docComment": "/**\n * **Deprecated** Please use [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchJson) or [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchRaw) instead.\n *\n * Returns an http-get promise using jQuery\n *\n * @deprecated\n *\n * use fetchJson instead\n *\n * @param settingsOrUrl - the url to get\n *\n * @param params - jQuery style ajax parameters\n *\n * @param data - jQuery style data for post/put requests\n *\n * @param preventAutoFail - \n *\n * @returns jQuery ajax promise object\n */\n",
-              "excerptTokens": [
-                {
-                  "kind": "Content",
-                  "text": "get(settingsOrUrl: "
-                },
-                {
-                  "kind": "Content",
-                  "text": "string | "
-                },
-                {
-                  "kind": "Reference",
-                  "text": "AjaxSettings",
-                  "canonicalReference": "@2sic.com/2sxc-typings!AjaxSettings:interface"
-                },
-                {
-                  "kind": "Content",
-                  "text": ", params?: "
-                },
-                {
-                  "kind": "Content",
-                  "text": "any"
-                },
-                {
-                  "kind": "Content",
-                  "text": ", data?: "
-                },
-                {
-                  "kind": "Content",
-                  "text": "any"
-                },
-                {
-                  "kind": "Content",
-                  "text": ", preventAutoFail?: "
-                },
-                {
-                  "kind": "Content",
-                  "text": "boolean"
-                },
-                {
-                  "kind": "Content",
-                  "text": "): "
-                },
-                {
-                  "kind": "Content",
-                  "text": "any"
-                },
-                {
-                  "kind": "Content",
-                  "text": ";"
+                  "isOptional": false
                 }
               ],
               "isOptional": false,
-              "returnTypeTokenRange": {
-                "startIndex": 10,
-                "endIndex": 11
-              },
-              "releaseTag": "Public",
-              "overloadIndex": 1,
-              "parameters": [
-                {
-                  "parameterName": "settingsOrUrl",
-                  "parameterTypeTokenRange": {
-                    "startIndex": 1,
-                    "endIndex": 3
-                  },
-                  "isOptional": false
-                },
-                {
-                  "parameterName": "params",
-                  "parameterTypeTokenRange": {
-                    "startIndex": 4,
-                    "endIndex": 5
-                  },
-                  "isOptional": true
-                },
-                {
-                  "parameterName": "data",
-                  "parameterTypeTokenRange": {
-                    "startIndex": 6,
-                    "endIndex": 7
-                  },
-                  "isOptional": true
-                },
-                {
-                  "parameterName": "preventAutoFail",
-                  "parameterTypeTokenRange": {
-                    "startIndex": 8,
-                    "endIndex": 9
-                  },
-                  "isOptional": true
-                }
-              ],
-              "name": "get"
-            },
-            {
-              "kind": "MethodSignature",
-              "canonicalReference": "@2sic.com/2sxc-typings!SxcWebApiDeprecated#post:member(1)",
-              "docComment": "/**\n * **Deprecated** Please use [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchJson) or [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchRaw) instead.\n *\n * Returns an http-post promise using jQuery\n *\n * @deprecated\n *\n * use fetchJson instead\n *\n * @param settingsOrUrl - the url to get\n *\n * @param params - jQuery style ajax parameters\n *\n * @param data - jQuery style data for post/put requests\n *\n * @param preventAutoFail - \n *\n * @returns jQuery ajax promise object\n */\n",
-              "excerptTokens": [
-                {
-                  "kind": "Content",
-                  "text": "post(settingsOrUrl: "
-                },
-                {
-                  "kind": "Content",
-                  "text": "string | "
-                },
-                {
-                  "kind": "Reference",
-                  "text": "AjaxSettings",
-                  "canonicalReference": "@2sic.com/2sxc-typings!AjaxSettings:interface"
-                },
-                {
-                  "kind": "Content",
-                  "text": ", params?: "
-                },
-                {
-                  "kind": "Content",
-                  "text": "any"
-                },
-                {
-                  "kind": "Content",
-                  "text": ", data?: "
-                },
-                {
-                  "kind": "Content",
-                  "text": "any"
-                },
-                {
-                  "kind": "Content",
-                  "text": ", preventAutoFail?: "
-                },
-                {
-                  "kind": "Content",
-                  "text": "boolean"
-                },
-                {
-                  "kind": "Content",
-                  "text": "): "
-                },
-                {
-                  "kind": "Content",
-                  "text": "any"
-                },
-                {
-                  "kind": "Content",
-                  "text": ";"
-                }
-              ],
-              "isOptional": false,
-              "returnTypeTokenRange": {
-                "startIndex": 10,
-                "endIndex": 11
-              },
-              "releaseTag": "Public",
-              "overloadIndex": 1,
-              "parameters": [
-                {
-                  "parameterName": "settingsOrUrl",
-                  "parameterTypeTokenRange": {
-                    "startIndex": 1,
-                    "endIndex": 3
-                  },
-                  "isOptional": false
-                },
-                {
-                  "parameterName": "params",
-                  "parameterTypeTokenRange": {
-                    "startIndex": 4,
-                    "endIndex": 5
-                  },
-                  "isOptional": true
-                },
-                {
-                  "parameterName": "data",
-                  "parameterTypeTokenRange": {
-                    "startIndex": 6,
-                    "endIndex": 7
-                  },
-                  "isOptional": true
-                },
-                {
-                  "parameterName": "preventAutoFail",
-                  "parameterTypeTokenRange": {
-                    "startIndex": 8,
-                    "endIndex": 9
-                  },
-                  "isOptional": true
-                }
-              ],
-              "name": "post"
-            },
-            {
-              "kind": "MethodSignature",
-              "canonicalReference": "@2sic.com/2sxc-typings!SxcWebApiDeprecated#put:member(1)",
-              "docComment": "/**\n * **Deprecated** Please use [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchJson) or [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchRaw) instead.\n *\n * Returns an http-put promise using jQuery\n *\n * @deprecated\n *\n * use fetchJson instead\n *\n * @param settingsOrUrl - the url to put\n *\n * @param params - jQuery style ajax parameters\n *\n * @param data - jQuery style data for post/put requests\n *\n * @param preventAutoFail - \n *\n * @returns jQuery ajax promise object\n */\n",
-              "excerptTokens": [
-                {
-                  "kind": "Content",
-                  "text": "put(settingsOrUrl: "
-                },
-                {
-                  "kind": "Content",
-                  "text": "string | "
-                },
-                {
-                  "kind": "Reference",
-                  "text": "AjaxSettings",
-                  "canonicalReference": "@2sic.com/2sxc-typings!AjaxSettings:interface"
-                },
-                {
-                  "kind": "Content",
-                  "text": ", params?: "
-                },
-                {
-                  "kind": "Content",
-                  "text": "any"
-                },
-                {
-                  "kind": "Content",
-                  "text": ", data?: "
-                },
-                {
-                  "kind": "Content",
-                  "text": "any"
-                },
-                {
-                  "kind": "Content",
-                  "text": ", preventAutoFail?: "
-                },
-                {
-                  "kind": "Content",
-                  "text": "boolean"
-                },
-                {
-                  "kind": "Content",
-                  "text": "): "
-                },
-                {
-                  "kind": "Content",
-                  "text": "any"
-                },
-                {
-                  "kind": "Content",
-                  "text": ";"
-                }
-              ],
-              "isOptional": false,
-              "returnTypeTokenRange": {
-                "startIndex": 10,
-                "endIndex": 11
-              },
-              "releaseTag": "Public",
-              "overloadIndex": 1,
-              "parameters": [
-                {
-                  "parameterName": "settingsOrUrl",
-                  "parameterTypeTokenRange": {
-                    "startIndex": 1,
-                    "endIndex": 3
-                  },
-                  "isOptional": false
-                },
-                {
-                  "parameterName": "params",
-                  "parameterTypeTokenRange": {
-                    "startIndex": 4,
-                    "endIndex": 5
-                  },
-                  "isOptional": true
-                },
-                {
-                  "parameterName": "data",
-                  "parameterTypeTokenRange": {
-                    "startIndex": 6,
-                    "endIndex": 7
-                  },
-                  "isOptional": true
-                },
-                {
-                  "parameterName": "preventAutoFail",
-                  "parameterTypeTokenRange": {
-                    "startIndex": 8,
-                    "endIndex": 9
-                  },
-                  "isOptional": true
-                }
-              ],
-              "name": "put"
-            },
-            {
-              "kind": "MethodSignature",
-              "canonicalReference": "@2sic.com/2sxc-typings!SxcWebApiDeprecated#request:member(1)",
-              "docComment": "/**\n * **Deprecated** Please use [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchJson) or [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchRaw) instead.\n *\n * Generic http request using jQuery\n *\n * @deprecated\n *\n * use fetchJson instead\n *\n * @param settingsOrUrl - the url to get\n *\n * @param params - jQuery style ajax parameters\n *\n * @param data - jQuery style data for post/put requests\n *\n * @param preventAutoFail - \n *\n * @param method - the http verb name\n *\n * @returns jQuery ajax promise object\n */\n",
-              "excerptTokens": [
-                {
-                  "kind": "Content",
-                  "text": "request(settings: "
-                },
-                {
-                  "kind": "Content",
-                  "text": "string | "
-                },
-                {
-                  "kind": "Reference",
-                  "text": "AjaxSettings",
-                  "canonicalReference": "@2sic.com/2sxc-typings!AjaxSettings:interface"
-                },
-                {
-                  "kind": "Content",
-                  "text": ", params: "
-                },
-                {
-                  "kind": "Content",
-                  "text": "any"
-                },
-                {
-                  "kind": "Content",
-                  "text": ", data: "
-                },
-                {
-                  "kind": "Content",
-                  "text": "any"
-                },
-                {
-                  "kind": "Content",
-                  "text": ", preventAutoFail: "
-                },
-                {
-                  "kind": "Content",
-                  "text": "boolean"
-                },
-                {
-                  "kind": "Content",
-                  "text": ", method: "
-                },
-                {
-                  "kind": "Content",
-                  "text": "string"
-                },
-                {
-                  "kind": "Content",
-                  "text": "): "
-                },
-                {
-                  "kind": "Content",
-                  "text": "any"
-                },
-                {
-                  "kind": "Content",
-                  "text": ";"
-                }
-              ],
-              "isOptional": false,
-              "returnTypeTokenRange": {
-                "startIndex": 12,
-                "endIndex": 13
-              },
-              "releaseTag": "Public",
-              "overloadIndex": 1,
-              "parameters": [
-                {
-                  "parameterName": "settings",
-                  "parameterTypeTokenRange": {
-                    "startIndex": 1,
-                    "endIndex": 3
-                  },
-                  "isOptional": false
-                },
-                {
-                  "parameterName": "params",
-                  "parameterTypeTokenRange": {
-                    "startIndex": 4,
-                    "endIndex": 5
-                  },
-                  "isOptional": false
-                },
-                {
-                  "parameterName": "data",
-                  "parameterTypeTokenRange": {
-                    "startIndex": 6,
-                    "endIndex": 7
-                  },
-                  "isOptional": false
-                },
-                {
-                  "parameterName": "preventAutoFail",
-                  "parameterTypeTokenRange": {
-                    "startIndex": 8,
-                    "endIndex": 9
-                  },
-                  "isOptional": false
-                },
-                {
-                  "parameterName": "method",
-                  "parameterTypeTokenRange": {
-                    "startIndex": 10,
-                    "endIndex": 11
-                  },
-                  "isOptional": false
-                }
-              ],
-              "name": "request"
+              "name": "add"
             }
           ],
-          "extendsTokenRanges": []
+          "extendsTokenRange": {
+            "startIndex": 1,
+            "endIndex": 2
+          },
+          "implementsTokenRanges": []
         },
         {
           "kind": "TypeAlias",
@@ -7269,6 +8349,1058 @@
             }
           ],
           "implementsTokenRanges": []
+        },
+        {
+          "kind": "Enum",
+          "canonicalReference": "@2sic.com/2sxc-typings!WorkflowPhases:enum",
+          "docComment": "/**\n * Phases / events of a specific workflow.  @export  @enum {number}\n */\n",
+          "excerptTokens": [
+            {
+              "kind": "Content",
+              "text": "export declare enum WorkflowPhases "
+            }
+          ],
+          "releaseTag": "Public",
+          "name": "WorkflowPhases",
+          "members": [
+            {
+              "kind": "EnumMember",
+              "canonicalReference": "@2sic.com/2sxc-typings!WorkflowPhases.after:member",
+              "docComment": "/**\n * Run after a specific event / command\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "after = "
+                },
+                {
+                  "kind": "Content",
+                  "text": "\"after\""
+                }
+              ],
+              "releaseTag": "Public",
+              "name": "after",
+              "initializerTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              }
+            },
+            {
+              "kind": "EnumMember",
+              "canonicalReference": "@2sic.com/2sxc-typings!WorkflowPhases.all:member",
+              "docComment": "/**\n * Run at every phase - before and after events/commands\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "all = "
+                },
+                {
+                  "kind": "Content",
+                  "text": "\"all\""
+                }
+              ],
+              "releaseTag": "Public",
+              "name": "all",
+              "initializerTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              }
+            },
+            {
+              "kind": "EnumMember",
+              "canonicalReference": "@2sic.com/2sxc-typings!WorkflowPhases.before:member",
+              "docComment": "/**\n * Run before a specific event / command\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "before = "
+                },
+                {
+                  "kind": "Content",
+                  "text": "\"before\""
+                }
+              ],
+              "releaseTag": "Public",
+              "name": "before",
+              "initializerTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              }
+            }
+          ]
+        },
+        {
+          "kind": "Interface",
+          "canonicalReference": "@2sic.com/2sxc-typings!WorkflowStep:interface",
+          "docComment": "/**\n * A workflow step (code-sequence) to run before/after specific events.\n *\n * @public\n */\n",
+          "excerptTokens": [
+            {
+              "kind": "Content",
+              "text": "export interface WorkflowStep "
+            }
+          ],
+          "releaseTag": "Public",
+          "name": "WorkflowStep",
+          "members": [
+            {
+              "kind": "PropertySignature",
+              "canonicalReference": "@2sic.com/2sxc-typings!WorkflowStep#code:member",
+              "docComment": "/**\n * The code which is run, must be a promise-factory. So it's a function that will return a promise. Required.\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "code: "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "WorkflowStepCode",
+                  "canonicalReference": "@2sic.com/2sxc-typings!WorkflowStepCode:type"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isReadonly": false,
+              "isOptional": false,
+              "releaseTag": "Public",
+              "name": "code",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              }
+            },
+            {
+              "kind": "PropertySignature",
+              "canonicalReference": "@2sic.com/2sxc-typings!WorkflowStep#command:member",
+              "docComment": "/**\n * The action this step is for, can be 'any', 'edit', etc. Will be 'all' by default\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "command: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "string"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isReadonly": false,
+              "isOptional": false,
+              "releaseTag": "Public",
+              "name": "command",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              }
+            },
+            {
+              "kind": "PropertySignature",
+              "canonicalReference": "@2sic.com/2sxc-typings!WorkflowStep#name:member",
+              "docComment": "/**\n * The name of this step, in case it needs to be replaced or somehow controlled Will be empty by default\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "name?: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "string"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isReadonly": false,
+              "isOptional": true,
+              "releaseTag": "Public",
+              "name": "name",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              }
+            },
+            {
+              "kind": "PropertySignature",
+              "canonicalReference": "@2sic.com/2sxc-typings!WorkflowStep#phase:member",
+              "docComment": "/**\n * Action-phase being run, like 'all', 'before', 'after' will be 'before' by default\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "phase?: "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "WorkflowPhases",
+                  "canonicalReference": "@2sic.com/2sxc-typings!WorkflowPhases:enum"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isReadonly": false,
+              "isOptional": true,
+              "releaseTag": "Public",
+              "name": "phase",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              }
+            },
+            {
+              "kind": "PropertySignature",
+              "canonicalReference": "@2sic.com/2sxc-typings!WorkflowStep#priority:member",
+              "docComment": "/**\n * Execution priority, higher comes first Will be 1 by default.\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "priority?: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "number"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isReadonly": false,
+              "isOptional": true,
+              "releaseTag": "Public",
+              "name": "priority",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              }
+            }
+          ],
+          "extendsTokenRanges": []
+        },
+        {
+          "kind": "TypeAlias",
+          "canonicalReference": "@2sic.com/2sxc-typings!WorkflowStepCode:type",
+          "docComment": "/**\n * Signature of your code which is used in workflows. Basically it's just a function receiving [](xref:Api.Js.SxcJs.WorkflowStepCodeArguments)\n *\n * Doc Notes: it must be internal, as docFx cannot process types, so it's documented there\n *\n * @public\n */\n",
+          "excerptTokens": [
+            {
+              "kind": "Content",
+              "text": "export declare type WorkflowStepCode = "
+            },
+            {
+              "kind": "Content",
+              "text": "(args: "
+            },
+            {
+              "kind": "Reference",
+              "text": "WorkflowStepCodeArguments",
+              "canonicalReference": "@2sic.com/2sxc-typings!WorkflowStepCodeArguments:class"
+            },
+            {
+              "kind": "Content",
+              "text": ") => "
+            },
+            {
+              "kind": "Reference",
+              "text": "WorkflowStepCodeArguments",
+              "canonicalReference": "@2sic.com/2sxc-typings!WorkflowStepCodeArguments:class"
+            },
+            {
+              "kind": "Content",
+              "text": ";"
+            }
+          ],
+          "releaseTag": "Public",
+          "name": "WorkflowStepCode",
+          "typeTokenRange": {
+            "startIndex": 1,
+            "endIndex": 5
+          }
+        },
+        {
+          "kind": "Class",
+          "canonicalReference": "@2sic.com/2sxc-typings!WorkflowStepCodeArguments:class",
+          "docComment": "/**\n * Arguments for [WorkflowStepCode](xref:Api.Js.SxcJs.WorkflowStepCode). Will be passed to your code and should also be returned by your code. This also allows cancelling further execution.  @export\n *\n * @remarks\n *\n * The constructor for this class is marked as internal. Third-party code should not call the constructor directly or create subclasses that extend the `WorkflowStepCodeArguments` class.\n */\n",
+          "excerptTokens": [
+            {
+              "kind": "Content",
+              "text": "export declare class WorkflowStepCodeArguments "
+            }
+          ],
+          "releaseTag": "Public",
+          "name": "WorkflowStepCodeArguments",
+          "members": [
+            {
+              "kind": "Property",
+              "canonicalReference": "@2sic.com/2sxc-typings!WorkflowStepCodeArguments#cancel:member",
+              "docComment": "/**\n * If the workflow should be cancelled. Can be set by any workflow step. If set to true, following steps / workflows will not run.\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "cancel: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "boolean"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isReadonly": false,
+              "isOptional": false,
+              "releaseTag": "Public",
+              "name": "cancel",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              },
+              "isStatic": false,
+              "isProtected": false
+            },
+            {
+              "kind": "Property",
+              "canonicalReference": "@2sic.com/2sxc-typings!WorkflowStepCodeArguments#command:member",
+              "docComment": "/**\n * Name this workflow is running for\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "command: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "string"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isReadonly": false,
+              "isOptional": false,
+              "releaseTag": "Public",
+              "name": "command",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              },
+              "isStatic": false,
+              "isProtected": false
+            },
+            {
+              "kind": "Property",
+              "canonicalReference": "@2sic.com/2sxc-typings!WorkflowStepCodeArguments#context:member",
+              "docComment": "/**\n * Context of the current command / step being run\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "context: "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "ContextComplete",
+                  "canonicalReference": "@2sic.com/2sxc-typings!ContextComplete:class"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isReadonly": false,
+              "isOptional": false,
+              "releaseTag": "Public",
+              "name": "context",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              },
+              "isStatic": false,
+              "isProtected": false
+            },
+            {
+              "kind": "Property",
+              "canonicalReference": "@2sic.com/2sxc-typings!WorkflowStepCodeArguments#phase:member",
+              "docComment": "/**\n * The phase it's in (before, after, etc.)\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "phase: "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "WorkflowPhases",
+                  "canonicalReference": "@2sic.com/2sxc-typings!WorkflowPhases:enum"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isReadonly": false,
+              "isOptional": false,
+              "releaseTag": "Public",
+              "name": "phase",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              },
+              "isStatic": false,
+              "isProtected": false
+            },
+            {
+              "kind": "Property",
+              "canonicalReference": "@2sic.com/2sxc-typings!WorkflowStepCodeArguments#result:member",
+              "docComment": "/**\n * Result in after-phases of the workflow BETA - never really tested this\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "result: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "unknown"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isReadonly": false,
+              "isOptional": false,
+              "releaseTag": "Public",
+              "name": "result",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              },
+              "isStatic": false,
+              "isProtected": false
+            }
+          ],
+          "implementsTokenRanges": []
+        },
+        {
+          "kind": "Interface",
+          "canonicalReference": "@2sic.com/2sxc-typings!ZzzAjaxSettingsDeprecated:interface",
+          "docComment": "/**\n * Deprecated parameters for old jQuery AJAX calls. Shouldn't be used any more.\n *\n * @deprecated\n *\n * @public\n */\n",
+          "excerptTokens": [
+            {
+              "kind": "Content",
+              "text": "export interface ZzzAjaxSettingsDeprecated "
+            }
+          ],
+          "releaseTag": "Public",
+          "name": "ZzzAjaxSettingsDeprecated",
+          "members": [
+            {
+              "kind": "PropertySignature",
+              "canonicalReference": "@2sic.com/2sxc-typings!ZzzAjaxSettingsDeprecated#action:member",
+              "docComment": "/**\n * action name, for controller/action calls\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "action?: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "string"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isReadonly": false,
+              "isOptional": true,
+              "releaseTag": "Public",
+              "name": "action",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              }
+            },
+            {
+              "kind": "PropertySignature",
+              "canonicalReference": "@2sic.com/2sxc-typings!ZzzAjaxSettingsDeprecated#controller:member",
+              "docComment": "/**\n * Controller name, for controller/action calls\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "controller?: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "string"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isReadonly": false,
+              "isOptional": true,
+              "releaseTag": "Public",
+              "name": "controller",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              }
+            },
+            {
+              "kind": "PropertySignature",
+              "canonicalReference": "@2sic.com/2sxc-typings!ZzzAjaxSettingsDeprecated#params:member",
+              "docComment": "/**\n * The params to be used in the url for the request\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "params?: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "any"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isReadonly": false,
+              "isOptional": true,
+              "releaseTag": "Public",
+              "name": "params",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              }
+            }
+          ],
+          "extendsTokenRanges": []
+        },
+        {
+          "kind": "Interface",
+          "canonicalReference": "@2sic.com/2sxc-typings!ZzzSxcWebApiDeprecated:interface",
+          "docComment": "/**\n * **Deprecated** Old APIs on sxc.webApi. They only exist if jQuery is included on the page, and we highly discourage their use.\n *\n * @deprecated\n */\n",
+          "excerptTokens": [
+            {
+              "kind": "Content",
+              "text": "export interface ZzzSxcWebApiDeprecated "
+            }
+          ],
+          "releaseTag": "Public",
+          "name": "ZzzSxcWebApiDeprecated",
+          "members": [
+            {
+              "kind": "MethodSignature",
+              "canonicalReference": "@2sic.com/2sxc-typings!ZzzSxcWebApiDeprecated#delete:member(1)",
+              "docComment": "/**\n * **Deprecated** Please use [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchJson) or [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchRaw) instead.\n *\n * Returns an http-delete promise using jQuery\n *\n * @deprecated\n *\n * use fetchJson instead\n *\n * @param settingsOrUrl - the url to talk to\n *\n * @param params - jQuery style ajax parameters\n *\n * @param data - jQuery style data for post/put requests\n *\n * @param preventAutoFail - \n *\n * @returns jQuery ajax promise object\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "delete(settingsOrUrl: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "string | "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "ZzzAjaxSettingsDeprecated",
+                  "canonicalReference": "@2sic.com/2sxc-typings!ZzzAjaxSettingsDeprecated:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": ", params?: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "any"
+                },
+                {
+                  "kind": "Content",
+                  "text": ", data?: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "any"
+                },
+                {
+                  "kind": "Content",
+                  "text": ", preventAutoFail?: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "boolean"
+                },
+                {
+                  "kind": "Content",
+                  "text": "): "
+                },
+                {
+                  "kind": "Content",
+                  "text": "any"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isOptional": false,
+              "returnTypeTokenRange": {
+                "startIndex": 10,
+                "endIndex": 11
+              },
+              "releaseTag": "Public",
+              "overloadIndex": 1,
+              "parameters": [
+                {
+                  "parameterName": "settingsOrUrl",
+                  "parameterTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 3
+                  },
+                  "isOptional": false
+                },
+                {
+                  "parameterName": "params",
+                  "parameterTypeTokenRange": {
+                    "startIndex": 4,
+                    "endIndex": 5
+                  },
+                  "isOptional": true
+                },
+                {
+                  "parameterName": "data",
+                  "parameterTypeTokenRange": {
+                    "startIndex": 6,
+                    "endIndex": 7
+                  },
+                  "isOptional": true
+                },
+                {
+                  "parameterName": "preventAutoFail",
+                  "parameterTypeTokenRange": {
+                    "startIndex": 8,
+                    "endIndex": 9
+                  },
+                  "isOptional": true
+                }
+              ],
+              "name": "delete"
+            },
+            {
+              "kind": "MethodSignature",
+              "canonicalReference": "@2sic.com/2sxc-typings!ZzzSxcWebApiDeprecated#get:member(1)",
+              "docComment": "/**\n * **Deprecated** Please use [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchJson) or [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchRaw) instead.\n *\n * Returns an http-get promise using jQuery\n *\n * @deprecated\n *\n * use fetchJson instead\n *\n * @param settingsOrUrl - the url to get\n *\n * @param params - jQuery style ajax parameters\n *\n * @param data - jQuery style data for post/put requests\n *\n * @param preventAutoFail - \n *\n * @returns jQuery ajax promise object\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "get(settingsOrUrl: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "string | "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "ZzzAjaxSettingsDeprecated",
+                  "canonicalReference": "@2sic.com/2sxc-typings!ZzzAjaxSettingsDeprecated:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": ", params?: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "any"
+                },
+                {
+                  "kind": "Content",
+                  "text": ", data?: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "any"
+                },
+                {
+                  "kind": "Content",
+                  "text": ", preventAutoFail?: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "boolean"
+                },
+                {
+                  "kind": "Content",
+                  "text": "): "
+                },
+                {
+                  "kind": "Content",
+                  "text": "any"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isOptional": false,
+              "returnTypeTokenRange": {
+                "startIndex": 10,
+                "endIndex": 11
+              },
+              "releaseTag": "Public",
+              "overloadIndex": 1,
+              "parameters": [
+                {
+                  "parameterName": "settingsOrUrl",
+                  "parameterTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 3
+                  },
+                  "isOptional": false
+                },
+                {
+                  "parameterName": "params",
+                  "parameterTypeTokenRange": {
+                    "startIndex": 4,
+                    "endIndex": 5
+                  },
+                  "isOptional": true
+                },
+                {
+                  "parameterName": "data",
+                  "parameterTypeTokenRange": {
+                    "startIndex": 6,
+                    "endIndex": 7
+                  },
+                  "isOptional": true
+                },
+                {
+                  "parameterName": "preventAutoFail",
+                  "parameterTypeTokenRange": {
+                    "startIndex": 8,
+                    "endIndex": 9
+                  },
+                  "isOptional": true
+                }
+              ],
+              "name": "get"
+            },
+            {
+              "kind": "MethodSignature",
+              "canonicalReference": "@2sic.com/2sxc-typings!ZzzSxcWebApiDeprecated#post:member(1)",
+              "docComment": "/**\n * **Deprecated** Please use [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchJson) or [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchRaw) instead.\n *\n * Returns an http-post promise using jQuery\n *\n * @deprecated\n *\n * use fetchJson instead\n *\n * @param settingsOrUrl - the url to get\n *\n * @param params - jQuery style ajax parameters\n *\n * @param data - jQuery style data for post/put requests\n *\n * @param preventAutoFail - \n *\n * @returns jQuery ajax promise object\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "post(settingsOrUrl: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "string | "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "ZzzAjaxSettingsDeprecated",
+                  "canonicalReference": "@2sic.com/2sxc-typings!ZzzAjaxSettingsDeprecated:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": ", params?: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "any"
+                },
+                {
+                  "kind": "Content",
+                  "text": ", data?: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "any"
+                },
+                {
+                  "kind": "Content",
+                  "text": ", preventAutoFail?: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "boolean"
+                },
+                {
+                  "kind": "Content",
+                  "text": "): "
+                },
+                {
+                  "kind": "Content",
+                  "text": "any"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isOptional": false,
+              "returnTypeTokenRange": {
+                "startIndex": 10,
+                "endIndex": 11
+              },
+              "releaseTag": "Public",
+              "overloadIndex": 1,
+              "parameters": [
+                {
+                  "parameterName": "settingsOrUrl",
+                  "parameterTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 3
+                  },
+                  "isOptional": false
+                },
+                {
+                  "parameterName": "params",
+                  "parameterTypeTokenRange": {
+                    "startIndex": 4,
+                    "endIndex": 5
+                  },
+                  "isOptional": true
+                },
+                {
+                  "parameterName": "data",
+                  "parameterTypeTokenRange": {
+                    "startIndex": 6,
+                    "endIndex": 7
+                  },
+                  "isOptional": true
+                },
+                {
+                  "parameterName": "preventAutoFail",
+                  "parameterTypeTokenRange": {
+                    "startIndex": 8,
+                    "endIndex": 9
+                  },
+                  "isOptional": true
+                }
+              ],
+              "name": "post"
+            },
+            {
+              "kind": "MethodSignature",
+              "canonicalReference": "@2sic.com/2sxc-typings!ZzzSxcWebApiDeprecated#put:member(1)",
+              "docComment": "/**\n * **Deprecated** Please use [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchJson) or [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchRaw) instead.\n *\n * Returns an http-put promise using jQuery\n *\n * @deprecated\n *\n * use fetchJson instead\n *\n * @param settingsOrUrl - the url to put\n *\n * @param params - jQuery style ajax parameters\n *\n * @param data - jQuery style data for post/put requests\n *\n * @param preventAutoFail - \n *\n * @returns jQuery ajax promise object\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "put(settingsOrUrl: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "string | "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "ZzzAjaxSettingsDeprecated",
+                  "canonicalReference": "@2sic.com/2sxc-typings!ZzzAjaxSettingsDeprecated:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": ", params?: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "any"
+                },
+                {
+                  "kind": "Content",
+                  "text": ", data?: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "any"
+                },
+                {
+                  "kind": "Content",
+                  "text": ", preventAutoFail?: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "boolean"
+                },
+                {
+                  "kind": "Content",
+                  "text": "): "
+                },
+                {
+                  "kind": "Content",
+                  "text": "any"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isOptional": false,
+              "returnTypeTokenRange": {
+                "startIndex": 10,
+                "endIndex": 11
+              },
+              "releaseTag": "Public",
+              "overloadIndex": 1,
+              "parameters": [
+                {
+                  "parameterName": "settingsOrUrl",
+                  "parameterTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 3
+                  },
+                  "isOptional": false
+                },
+                {
+                  "parameterName": "params",
+                  "parameterTypeTokenRange": {
+                    "startIndex": 4,
+                    "endIndex": 5
+                  },
+                  "isOptional": true
+                },
+                {
+                  "parameterName": "data",
+                  "parameterTypeTokenRange": {
+                    "startIndex": 6,
+                    "endIndex": 7
+                  },
+                  "isOptional": true
+                },
+                {
+                  "parameterName": "preventAutoFail",
+                  "parameterTypeTokenRange": {
+                    "startIndex": 8,
+                    "endIndex": 9
+                  },
+                  "isOptional": true
+                }
+              ],
+              "name": "put"
+            },
+            {
+              "kind": "MethodSignature",
+              "canonicalReference": "@2sic.com/2sxc-typings!ZzzSxcWebApiDeprecated#request:member(1)",
+              "docComment": "/**\n * **Deprecated** Please use [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchJson) or [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchRaw) instead.\n *\n * Generic http request using jQuery\n *\n * @deprecated\n *\n * use fetchJson instead\n *\n * @param settingsOrUrl - the url to get\n *\n * @param params - jQuery style ajax parameters\n *\n * @param data - jQuery style data for post/put requests\n *\n * @param preventAutoFail - \n *\n * @param method - the http verb name\n *\n * @returns jQuery ajax promise object\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "request(settings: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "string | "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "ZzzAjaxSettingsDeprecated",
+                  "canonicalReference": "@2sic.com/2sxc-typings!ZzzAjaxSettingsDeprecated:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": ", params: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "any"
+                },
+                {
+                  "kind": "Content",
+                  "text": ", data: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "any"
+                },
+                {
+                  "kind": "Content",
+                  "text": ", preventAutoFail: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "boolean"
+                },
+                {
+                  "kind": "Content",
+                  "text": ", method: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "string"
+                },
+                {
+                  "kind": "Content",
+                  "text": "): "
+                },
+                {
+                  "kind": "Content",
+                  "text": "any"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isOptional": false,
+              "returnTypeTokenRange": {
+                "startIndex": 12,
+                "endIndex": 13
+              },
+              "releaseTag": "Public",
+              "overloadIndex": 1,
+              "parameters": [
+                {
+                  "parameterName": "settings",
+                  "parameterTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 3
+                  },
+                  "isOptional": false
+                },
+                {
+                  "parameterName": "params",
+                  "parameterTypeTokenRange": {
+                    "startIndex": 4,
+                    "endIndex": 5
+                  },
+                  "isOptional": false
+                },
+                {
+                  "parameterName": "data",
+                  "parameterTypeTokenRange": {
+                    "startIndex": 6,
+                    "endIndex": 7
+                  },
+                  "isOptional": false
+                },
+                {
+                  "parameterName": "preventAutoFail",
+                  "parameterTypeTokenRange": {
+                    "startIndex": 8,
+                    "endIndex": 9
+                  },
+                  "isOptional": false
+                },
+                {
+                  "parameterName": "method",
+                  "parameterTypeTokenRange": {
+                    "startIndex": 10,
+                    "endIndex": 11
+                  },
+                  "isOptional": false
+                }
+              ],
+              "name": "request"
+            }
+          ],
+          "extendsTokenRanges": []
         }
       ]
     }

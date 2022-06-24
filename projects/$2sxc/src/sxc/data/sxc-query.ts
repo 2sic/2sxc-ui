@@ -52,16 +52,44 @@ export class SxcQuery extends SxcDataServiceBase {
     })
   }
 
+  /**
+   * Get a query but only the mentioned streams.
+   * This will reduce the amount of data retrieved on queries that have many streams. 
+   * @template T The schema/interfaces of what will be returned
+   * @returns {Promise<T>} Promise containing a object with stream-names and items in the streams.
+   * @public
+   */
   getStreams<T = unknown>(streams: string): Promise<T>;
+  /**
+   * Get a query but only the mentioned streams.
+   * This will reduce the amount of data retrieved on queries that have many streams. 
+   * @template T The schema/interfaces of what will be returned
+   * @param {string} streams name of streams to get, comma separated
+   * @param urlParams additional parameters for the URL, either as a string or as a object
+   * @returns {Promise<T>} Promise containing a object with stream-names and items in the streams.
+   * @public
+   */
   getStreams<T = unknown>(streams: string, urlParams: string | Record<string, unknown>): Promise<T>;
+  /**
+   * Get a query but only the mentioned streams.
+   * This will reduce the amount of data retrieved on queries that have many streams. 
+   * @template T The schema/interfaces of what will be returned
+   * @param {string} streams name of streams to get, comma separated
+   * @param urlParams additional parameters for the URL, either as a string or as a object
+   * @param data data to include in case of a POST call - if this is provided, it will use a post
+   * @returns {Promise<T>} Promise containing a object with stream-names and items in the streams.
+   * @public
+   */
   getStreams<T = unknown>(streams: string, urlParams: string | Record<string, unknown>, data: string | Record<string, unknown>): Promise<T>;
   /**
-   * Get a query but only the selected streams.
+   * Get a query but only the mentioned streams.
+   * This will reduce the amount of data retrieved on queries that have many streams. 
    *
-   * @template T
-   * @param {string} streams
-   * @returns {Promise<T>} containing a object with stream-names and items in the streams.
-   * @memberof SxcQuery
+   * @template T The schema/interfaces of what will be returned
+   * @param {string} streams name of streams to get, comma separated
+   * @param urlParams additional parameters for the URL, either as a string or as a object
+   * @param data data to include in case of a POST call - if this is provided, it will use a post
+   * @returns {Promise<T>} Promise containing a object with stream-names and items in the streams.
    */
   getStreams<T = unknown>(streams: string, urlParams?: string | Record<string, unknown>, data?: string | Record<string, unknown>): Promise<T> {
     return this.getInternal<T>(streams, urlParams, data);

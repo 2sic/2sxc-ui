@@ -1,8 +1,6 @@
 import { Sxc, SxcWebApi } from '..';
 import { NoJQ } from '../../../../core';
-import { AjaxSettings } from './ajax-settings';
-
-declare const window: Window;
+import { ZzzAjaxSettingsDeprecated } from './ajax-settings';
 
 /** @internal */
 export class AjaxPromise {
@@ -11,11 +9,11 @@ export class AjaxPromise {
 
   /**
    * Make a jQuery style promise request
-   * @param {AjaxSettings} settings
+   * @param {ZzzAjaxSettingsDeprecated} settings
    * @returns {JQueryPromise<any>}
    * @memberof AjaxPromise
    */
-  public makePromise(settings: AjaxSettings): any {
+  public makePromise(settings: ZzzAjaxSettingsDeprecated): any {
     var headers = this.api.headers();
     // debugger;
     if (window.$ == null) {
@@ -46,7 +44,7 @@ export class AjaxPromise {
    * Generate the correct WebApi url
    * @param settings the settings as they would be in jQuery
    */
-  private getActionUrl(settings: AjaxSettings): string {
+  private getActionUrl(settings: ZzzAjaxSettingsDeprecated): string {
     var url = (settings as any).url || 'app/auto/api/' + settings.controller + '/' + settings.action;
     // 2020-03-13 stop adding 2sxc endpoint-name, it's already happening in apiUrl so with this it happens 2x
     // var endpoint = settings.endpoint || ToSxcName;

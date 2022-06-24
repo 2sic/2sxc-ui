@@ -1,6 +1,5 @@
 ﻿import { CommandNames, Commands } from '..';
-import { CommandContentTypeParams, createContentTypeParams } from './command-content-type';
-import { CommandParamsEntityById } from './command-params-entity';
+import { createContentTypeParams } from './command-content-type';
 
 /**
  * open an edit-item dialog
@@ -23,12 +22,3 @@ Commands.add(CommandNames.copy, 'Copy', 'copy', false, true, {
     linkGenerator.items = [{ DuplicateEntity: originalId, ContentTypeName: typeName }];
   },
 });
-
-/**
- * Parameters used for the command `copy`.
- * Will copy the entity on `entityId`.
- * <br>
- * ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)
- */
-export interface CommandCopyParams extends CommandContentTypeParams, CommandParamsEntityById {
-}

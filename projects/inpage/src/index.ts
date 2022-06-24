@@ -10,6 +10,14 @@ import { QuickE } from './quick-edit/quick-e';
 import { SxcGlobalWithCms } from './sxc/sxc-global-with-cms';
 import { SystemUpgrader } from './system';
 
+// Exports for Docs
+export * from './commands';
+export * from './cms';
+export * from './quick-edit';
+export * from './sxc';
+export * from './workflow';
+
+
 /**
  * @internal
  */

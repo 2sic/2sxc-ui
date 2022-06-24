@@ -1,71 +1,218 @@
-/** @internal */
-export declare class AjaxPromise {
-    private api;
-    private sxc;
-    constructor(api: SxcWebApi, sxc: Sxc);
+/* Excluded from this release type: Actions */
+
+/* Excluded from this release type: AjaxPromise */
+
+/* Excluded from this release type: AntiForgeryTokenHeaderNameDnn */
+
+/* Excluded from this release type: ApiExtensionPlaceholder */
+
+/* Excluded from this release type: ApiUrlRoots */
+
+/* Excluded from this release type: AppApiMap */
+
+/* Excluded from this release type: AppApiMarker */
+
+/* Excluded from this release type: AssetsLoader */
+
+/* Excluded from this release type: AttrJsonContentGroup */
+
+/* Excluded from this release type: AttrJsonEditContext */
+
+/* Excluded from this release type: AttrJsonEntity */
+
+/* Excluded from this release type: AttrJsonEnvironment */
+
+/* Excluded from this release type: AttrJsonError */
+
+/* Excluded from this release type: AttrJsonLanguage */
+
+/* Excluded from this release type: AttrJsonUi */
+
+/* Excluded from this release type: AttrJsonUser */
+
+/* Excluded from this release type: BuildRule */
+
+/* Excluded from this release type: BuildSteps */
+
+/* Excluded from this release type: buildSxcRoot */
+
+/* Excluded from this release type: Button */
+
+/* Excluded from this release type: ButtonCommand */
+
+/* Excluded from this release type: ButtonConfigLoader */
+
+declare type ButtonGenOrProp<T> = ButtonPropGen<T> | T;
+
+/* Excluded from this release type: ButtonGroup */
+
+/* Excluded from this release type: ButtonGroupConfigLoader */
+
+/* Excluded from this release type: ButtonGroupsWip */
+
+/* Excluded from this release type: ButtonGroupWip */
+
+/**
+ * This is the most common call signature on most ButtonConfig properties
+ * @public
+ */
+declare type ButtonPropGen<T> = (context: ContextComplete) => T;
+
+/**
+ * Structure for constants in the selectors, to guarantee we got everything
+ */
+declare interface CbOrMod {
+    id: string;
+    class: string;
+    selector: string;
+    findAllLists: () => HTMLElement[];
+    findClosestList: (element: HTMLElement) => HTMLElement;
+    context: string;
+    singleItem?: string;
+}
+
+/* Excluded from this release type: CmsEngine */
+
+/* Excluded from this release type: Command */
+
+/**
+ * Parameters used for the command `add-existing`.
+ * <br>
+ * The contentType name determines what items will be shown in the dialog.
+ * <br>
+ * ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)
+ * @public
+ */
+export declare interface CommandAddExistingParams extends CommandAddParams {
+}
+
+/**
+ * Parameters used for the command `add`.
+ * <br>
+ * The contentType name determines what items will be created.
+ * <br>
+ * ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)
+ * @public
+ */
+export declare interface CommandAddParams extends CommandContentTypeParams {
     /**
-     * Make a jQuery style promise request
-     * @param {AjaxSettings} settings
-     * @returns {JQueryPromise<any>}
-     * @memberof AjaxPromise
+     * Determins the position where a new item will be added to.
      */
-    makePromise(settings: AjaxSettings): any;
+    sortOrder: number;
+}
+
+/* Excluded from this release type: CommandCode */
+
+/* Excluded from this release type: CommandConfigLoader */
+
+/**
+ * Parameters used for the command `contentitems`.
+ * <br>
+ * The content-type name determines what items will be managed.
+ * <br>
+ * ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)
+ * @public
+ */
+export declare interface CommandContentItemsParams extends CommandContentTypeParams {
     /**
-     * Generate the correct WebApi url
-     * @param settings the settings as they would be in jQuery
+     * Filters to apply to the list of items.
+     * <br>
+     * Each property targets a field.
+     * The value is a string, number or array for filtering EntityIds or EntityGuids
      */
-    private getActionUrl;
-}
-
-/** @public */
-export declare interface AjaxSettings {
-    /** Override the endpoint, which is usually '2sxc' */
-    endpoint?: string;
-    /** Controller name, for controller/action calls */
-    controller?: string;
-    /** action name, for controller/action calls */
-    action?: string;
-    /** The params to be used in the url for the request */
-    params?: any;
-    preventAutoFail?: boolean;
+    filters?: Record<string, string | number | string[] | number[]>;
 }
 
 /**
- * The fallback AntiForgery token header name (as in Dnn)
- * @internal
+ * Parameters used for the command `contenttype`.
+ * <br>
+ * The content-type name determines what items will be loaded to manage the fields.
+ * <br>
+ * ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)
+ * @public
  */
-export declare const AntiForgeryTokenHeaderNameDnn = "RequestVerificationToken";
-
-/**
- * This is a placeholder in the settings, which must be replaced with "2sxc" or another term for other dnn extensions
- * @internal
- */
-export declare const ApiExtensionPlaceholder = "e.x.t";
-
-/** @internal */
-export declare const ApiUrlRoots: string[];
-
-/** @internal */
-export declare const AppApiMap: {
-    'app-api': string;
-    'app-query': string;
-    'app-content': string;
-};
-
-/** @internal */
-export declare const AppApiMarker = "app";
-
-/** @internal */
-export declare class AssetsLoader {
-    /** Asynchronously runs external and inline scripts in series */
-    static runScripts(scripts: HTMLScriptElement[], callback: () => void): void;
+export declare interface CommandContentTypeParams {
+    /**
+     * The content-type name
+     */
+    contentType: string;
 }
 
 /**
- * Build a SXC Controller for the page. Should only ever be executed once
- * @internal
+ * Parameters used for the command `copy`.
+ * Will copy the entity on `entityId`.
+ * <br>
+ * ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)
+ * @public
  */
-export declare function buildSxcRoot(): SxcGlobal;
+export declare interface CommandCopyParams extends CommandContentTypeParams, CommandParamsEntityById {
+}
+
+/**
+ * Parameters used for the command `custom` on toolbars.
+ * <br>
+ * ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)
+ * @public
+ */
+export declare interface CommandCustomParams {
+    /**
+     * Name of the function to call - must be available in the context.
+     * This is usually as a function window. Example:
+     * <br>
+     * If `call` is `sayHello` you need a `window.sayHello(context, event)`.
+     */
+    call: string;
+    /**
+     * **OBSOLETE - avoid using**
+     * <br>
+     * JavaScript as string containing the code to execute.
+     * This is the old V9 - it contains a function, not a name
+     * @obsolete
+     */
+    customCode: string;
+}
+
+/**
+ * Parameters used for the command `delete`.
+ * <br>
+ * ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)
+ * @public
+ */
+export declare interface CommandDeleteParams {
+    /**
+     * ID of item to delete, usually detected from context.
+     */
+    entityId: number;
+    /**
+     * Guid of item to delete, usually detected from context.
+     */
+    entityGuid: string;
+    /**
+     * Title of item to delete, usually detected from context.
+     * This is important to show the "Are you sure?" dialog.
+     */
+    entityTitle: string;
+}
+
+/* Excluded from this release type: CommandLinkGenerator */
+
+/**
+ * Parameters used for the command `metadata`.
+ * <br>
+ * Will do either one of these:
+ * - if it has an `entityId`, will just open `edit` for that Entity
+ * - if it has no `entityId`, will open `new` for the current `contentType`
+ * and assign to the target specified by `metadata`:
+ * <br>
+ * ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)
+ * @public
+ */
+export declare interface CommandMetadataParams extends CommandContentTypeParams, CommandParamsEntityById {
+    /**
+     * Target to assign the metadata to.
+     */
+    metadata: CommandParamsMetadata;
+}
 
 /**
  * Names of commands known to 2sxc CMS - for use in toolbars and calling commands directly from code
@@ -172,11 +319,7 @@ export declare enum CommandNames {
      * (auto-detected from context)
      */
     edit = "edit",
-    /**
-     * `image` opens the edit-dialog for the metadata of the current image
-     * @internal - may be removed soon
-     */
-    image = "image",
+    /* Excluded from this release type: image */
     /**
      * `insights-server` opens the insights logs page
      * <br> 🔐 Toolbar shows this automatically to elevated admins.
@@ -236,11 +379,7 @@ export declare enum CommandNames {
      * (auto-detected from context)
      */
     new = "new",
-    /**
-     * `new` sets new mode used in parameters
-     * @internal - must move, this shouldn't be here as it's not a command!
-     */
-    newMode = "new",
+    /* Excluded from this release type: newMode */
     /**
      * `publish` tells the system to update a content-items status to published. If there was a published and a draft before, the draft will replace the previous item
      * <br> 🔘 Appears automatically if the item is in draft mode / not published.
@@ -295,42 +434,107 @@ export declare enum CommandNames {
 }
 
 /**
+ * Parameters used for the command `new`
+ * <br>
+ * The ContentType name determines what kind of item will be created.
+ * <br>
+ * ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)
+ * @public
+ */
+export declare interface CommandNewParams extends CommandContentTypeParams {
+}
+
+/**
  * Command parameters are handed over to a command for execution
- * @internal
+ * @public
  */
 export declare interface CommandParams {
-    /** The action is used in scenarios where the command name must be included */
+    /**
+     * The action is used in scenarios where the command name must be included
+     */
     action?: CommandNames;
-    items?: Array<ItemIdentifierSimple | ItemIdentifierGroup>;
-    mode?: string;
-    contentType?: string;
-    contentTypeName?: string;
-    pipelineId?: number;
-    filters?: string;
-    dialog?: string;
-    sortOrder?: number;
-    entityId?: number;
-    /** The guid - for people creating custom toolbars before 10.27 or automatically added since 10.27 */
-    entityGuid?: string;
-    /** The manually added title from before 10.27 - automatically enabled the delete-button */
-    entityTitle?: string;
-    title?: string;
-    useModuleList?: boolean;
-    metadata?: CommandParamsMetadata;
-    isPublished?: boolean;
-    prefill?: Record<string, TypeValue>;
-    /** Custom Code in the previous V9 standard */
-    customCode?: string;
-    /** Custom Code function name only in the new V10.27 standard */
-    call?: string;
-    /** New in 10.27 - list of apps for the quick dialog */
-    apps?: string;
-    /** Experimental in 10.27 */
-    parent?: string;
-    /** Experimental in 10.27 */
-    fields?: string;
-    /** for template edit dialog */
+    /* Excluded from this release type: items */
+    /* Excluded from this release type: mode */
+    /* Excluded from this release type: contentType */
+    /* Excluded from this release type: contentTypeName */
+    /* Excluded from this release type: pipelineId */
+    /* Excluded from this release type: filters */
+    /* Excluded from this release type: dialog */
+    /* Excluded from this release type: sortOrder */
+    /* Excluded from this release type: entityId */
+    /* Excluded from this release type: entityGuid */
+    /* Excluded from this release type: entityTitle */
+    /* Excluded from this release type: title */
+    /* Excluded from this release type: useModuleList */
+    /* Excluded from this release type: metadata */
+    /* Excluded from this release type: isPublished */
+    /* Excluded from this release type: prefill */
+    /* Excluded from this release type: customCode */
+    /* Excluded from this release type: call */
+    /* Excluded from this release type: apps */
+    /* Excluded from this release type: parent */
+    /* Excluded from this release type: fields */
+    /**
+     * for template edit dialog
+     * @intenal
+     */
     isshared?: boolean;
+}
+
+/**
+ * Parameters used for commands which need an entity ID or a list-reference.
+ * <br>
+ * ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)
+ */
+export declare interface CommandParamsEntity extends CommandParamsEntityById, CommandParamsEntityInContentBlock {
+}
+
+/**
+ * Parameters used for commands which address a specificy entity.
+ * <br>
+ * ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)
+ */
+export declare interface CommandParamsEntityById {
+    /**
+     * ID of item to edit.
+     */
+    entityId: number;
+}
+
+/**
+ * Parameters used for command which expect an item from a list of a ContentBlock.
+ * <br>
+ * ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)
+ */
+export declare interface CommandParamsEntityInContentBlock {
+    /**
+     * Determins the position of the item in the list that will be edited.
+     */
+    sortOrder: number;
+    /**
+     * Must be true, to work on the module list.
+     */
+    useModuleList: true;
+}
+
+/**
+ * Parameters used for command which expect an item in a list (field) of a parent.
+ * <br>
+ * ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)
+ */
+export declare interface CommandParamsEntityInList {
+    /**
+     * Determins the position of the item in the list that will be edited.
+     */
+    sortOrder: number;
+    /**
+     * Parent entity GUID.
+     */
+    parent: string;
+    /**
+     * Parent Entity field(s) name(s).
+     */
+    fields: string;
 }
 
 /**
@@ -350,6 +554,69 @@ export declare interface CommandParamsMetadata {
      * The target type, will default to 10 = CMS-Item
      */
     targetType?: MetadataTargetTypes;
+}
+
+declare type CommandPromise<T> = Promise<T | void>;
+
+/* Excluded from this release type: Commands */
+
+/* Excluded from this release type: ContentBlockReference */
+
+/* Excluded from this release type: ContentListActionParams */
+
+/* Excluded from this release type: ContentListActions */
+
+/**
+ * @public
+ */
+declare class ContextBundleContent extends ContextBundleInstance {
+    /* Excluded from this release type: item */
+    /* Excluded from this release type: contentBlockReference */
+    /* Excluded from this release type: contentBlock */
+    /* Excluded from this release type: __constructor */
+}
+
+/**
+ * @public
+ */
+declare class ContextBundleInstance {
+    /**
+     * instance of sxc object
+     * @type {Sxc}
+     * @memberof ContextBundleInstance
+     */
+    sxc: Sxc;
+    /* Excluded from this release type: instance */
+    /* Excluded from this release type: app */
+    /* Excluded from this release type: ui */
+    /* Excluded from this release type: page */
+    /* Excluded from this release type: system */
+    /* Excluded from this release type: tenant */
+    /* Excluded from this release type: user */
+    _isContext: boolean;
+    /* Excluded from this release type: __constructor */
+    /* Excluded from this release type: is */
+}
+
+/**
+ * @public
+ */
+declare class ContextBundleToolbar extends ContextBundleContent {
+    /* Excluded from this release type: toolbar */
+    /* Excluded from this release type: __constructor */
+    /* Excluded from this release type: forButton */
+}
+
+/**
+ * @public
+ */
+declare class ContextComplete extends ContextBundleToolbar {
+    /* Excluded from this release type: button */
+    /* Excluded from this release type: commandWorkflow */
+    /* Excluded from this release type: __constructor */
+    /* Excluded from this release type: findContext */
+    /* Excluded from this release type: contextCopy */
+    /* Excluded from this release type: getContextInstance */
 }
 
 /**
@@ -377,65 +644,34 @@ export declare class ContextIdentifier {
      * @optional
      */
     moduleId?: number;
-    /**
-     * Exclude pageId and moduleId headers in web requests
-     * @internal
-     */
-    _ignoreHeaders?: boolean;
-    /**
-     * Marks the context as complete, so it won't merge in anything else
-     * WIP #CustomContext ATM for the updated edit-ui
-     * @internal
-     */
-    complete?: boolean;
-    /**
-     * WIP #CustomContext not really used yet
-     * @internal
-     */
-    blockId?: number;
-    /**
-     * Type Guard to determine if an object is a ContextIdentifier
-     * @param original
-     * @returns
-     * @internal
-     */
-    static is(original: unknown): original is ContextIdentifier;
-    /**
-     * Internal
-     * @param ctx
-     * @internal
-     */
-    static ensureCompleteOrThrow(ctx: ContextIdentifier): ContextIdentifier;
+    /* Excluded from this release type: _ignoreHeaders */
+    /* Excluded from this release type: complete */
+    /* Excluded from this release type: blockId */
+    /* Excluded from this release type: is */
+    /* Excluded from this release type: ensureCompleteOrThrow */
 }
 
-/**
- * The fallback path to the UI
- * @internal
- */
-export declare const DnnUiRoot = "/desktopmodules/tosic_sexycontent/";
+/* Excluded from this release type: ContextOfApp */
 
-/**
- * This loads environment information from the meta-header tag.
- * Because of timing issues, it will try multiple times
- * @internal
- */
-export declare class EnvironmentMetaLoader extends HasLog {
-    env: SxcGlobalEnvironment;
-    retries: number;
-    log: Log;
-    private dynamicPageHelper;
-    constructor(env: SxcGlobalEnvironment);
-    loadMetaFromHeader(forceFallback?: boolean): void;
-    updateEnv(newJsInfo: EnvironmentSpecs): void;
-    getMetaContent(): string;
-    getJsApiMetaTag(): Element;
-    /**
-     * Watch for changes in our special meta header, to update the variables.
-     * Important for Oqtane, which changes the page on the fly without reloading.
-     */
-    startMetaTagObserver(): void;
-    private observer;
-}
+/* Excluded from this release type: ContextOfContentBlock */
+
+/* Excluded from this release type: ContextOfInstance */
+
+/* Excluded from this release type: ContextOfItem */
+
+/* Excluded from this release type: ContextOfPage */
+
+/* Excluded from this release type: ContextOfSystem */
+
+/* Excluded from this release type: ContextOfTenant */
+
+/* Excluded from this release type: ContextOfUi */
+
+/* Excluded from this release type: ContextOfUser */
+
+/* Excluded from this release type: DnnUiRoot */
+
+/* Excluded from this release type: EnvironmentMetaLoader */
 
 /**
  * A context information for the current page, helping the JS talk with the backend
@@ -454,11 +690,7 @@ export declare interface EnvironmentSpecs {
     rvtHeader: string;
     /** Request verification token value */
     rvt: string;
-    /**
-     * The root path for the UI
-     * @internal
-     */
-    uiRoot: string;
+    /* Excluded from this release type: uiRoot */
     /** The platform code like 'dnn' or 'oqt' */
     platform: string;
 }
@@ -470,42 +702,26 @@ export declare interface EnvironmentSpecs {
  * @public
  */
 export declare abstract class HasLog {
-    /** @internal */
-    private parentLog?;
-    /**
-     * The logger for this object
-     * @type {Log}
-     * @memberof HasLog
-     * @internal usually not relevant and could make docs confusing
-     */
-    log: Log;
-    /**
-     * initialize the logger
-     * ideally it has a parent-logger to attach to
-     * @param logName name to show in the logger
-     * @param parentLog parent-logger to attach to
-     * @param initialMessage optional start-message to log
-     * @internal
-     */
-    constructor(logName: string, 
-    /** @internal */
-    parentLog?: Log, initialMessage?: string);
-    /** @internal */
-    initLog: (name: string, parentLog?: Log, initialMessage?: string) => void;
-    /** @internal */
-    private initLogInternal;
+    /* Excluded from this release type: parentLog */
+    /* Excluded from this release type: log */
+    /* Excluded from this release type: __constructor */
+    /* Excluded from this release type: initLog */
+    /* Excluded from this release type: initLogInternal */
 }
 
-/** @internal */
-export declare const HeaderNames: {
-    ContentBlockId: string;
-    ModuleId: string;
-    TabId: string;
-    PageId: string;
-};
+/* Excluded from this release type: HeaderNames */
 
-/** @internal */
-export declare const Insights: InsightsSingleton;
+/* Excluded from this release type: InPageButtonGroupJson */
+
+/* Excluded from this release type: InPageButtonJson */
+
+/* Excluded from this release type: InPageCommandJson */
+
+/* Excluded from this release type: InPageCommandJsonWithTooMuchInfo */
+
+/* Excluded from this release type: InPageToolbarConfigVariations */
+
+/* Excluded from this release type: Insights */
 
 declare class InsightsLogSet {
     name: string;
@@ -513,80 +729,21 @@ declare class InsightsLogSet {
     constructor(name: string);
 }
 
-/** @internal */
-declare class InsightsSingleton extends HasLog {
-    constructor();
-    history: {
-        [key: string]: InsightsLogSet;
-    };
-    add(setName: string, logName: string, log: Log): void;
-    show(partName: string, index?: number, start?: number, length?: number): void;
-}
+/* Excluded from this release type: InsightsSingleton */
 
-/**
- * Simple identifier, which is id/type-name
- * @internal
- * WAIT with publishing, we'll probably change the duplicate-entity to a bool instead of an id
- */
-export declare interface ItemIdentifierCopy extends ItemIdentifierShared {
-    DuplicateEntity: number;
-    ContentTypeName?: string;
-}
+/* Excluded from this release type: ItemIdentifierCopy */
 
-/**
- * Complex identifier using a group
- * @internal
- */
-export declare interface ItemIdentifierGroup extends ItemIdentifierShared {
-    Group: ItemIdentifierParent;
-}
+/* Excluded from this release type: ItemIdentifierGroup */
 
-/**
- * Experimental in 10.27
- * @internal
- */
-export declare interface ItemIdentifierInField extends ItemIdentifierSimple {
-    Parent?: string;
-    Field?: string;
-    Add?: boolean;
-}
+/* Excluded from this release type: ItemIdentifierInField */
 
-/**
- * Group identifier
- * @internal
- * TODO: KEEP INTERNAL, PROBABLY RENAME "Part" to "Field" or something in the whole chain
- * TODO: MAY BE replaced completely with ItemIdentifierInField, as it has the same purpose
- */
-export declare interface ItemIdentifierParent {
-    /** The parent entity GUID - in these cases usually the ContentBlock */
-    Guid: string;
-    /** The part of the parent it's in, kind of the "Field" - should be renamed to Field ASAP */
-    Part?: string;
-    /** The index position within that field/part */
-    Index: number;
-    /** Whether to add the item - alternative is just to leave it, if it already existed */
-    Add: boolean;
-}
+/* Excluded from this release type: ItemIdentifierParent */
 
-/**
- * Shared properties of all item identifiers
- * @internal
- */
-declare interface ItemIdentifierShared {
-    EntityId?: number;
-    Prefill?: Record<string, TypeValue>;
-}
+/* Excluded from this release type: ItemIdentifierShared */
 
-/**
- * Simple identifier, which is id/type-name
- * @internal
- */
-export declare interface ItemIdentifierSimple {
-    EntityId: number;
-    ContentTypeName?: string;
-    Metadata?: CommandParamsMetadata;
-    Prefill?: Record<string, TypeValue>;
-}
+/* Excluded from this release type: ItemIdentifierSimple */
+
+/* Excluded from this release type: ListWithCursor */
 
 /**
  * A log object which will collect log entries for another ojbect
@@ -599,52 +756,21 @@ export declare class Log {
      * List of all entries added to this log
      */
     entries: LogEntry[];
-    /** @internal */
-    private depth;
-    /** @internal */
-    private callDepths;
-    /** @internal */
-    startTime: number;
+    /* Excluded from this release type: depth */
+    /* Excluded from this release type: callDepths */
+    /* Excluded from this release type: startTime */
     /**
      * Maximum amount of entries to add - to prevent memory hoging
      */
     maxEntries: number;
-    /**
-     * Create a logger and optionally attach it to a parent logger
-     * @param string name this logger should use
-     * @param Log optional parrent logger to attach to
-     * @param string optional initial message to log
-     * @internal
-     */
-    constructor(name: string, parent?: Log, initialMessage?: string);
-    /** @internal */
-    liveDump: boolean;
-    /** @internal */
-    _parentHasLiveDump: boolean;
-    /** @internal */
-    keepData: boolean;
-    /** @internal */
-    _parentHasKeepData: boolean;
-    /**
-     * Full identifier of this log-object, with full hierarchy
-     * @internal
-     */
-    fullIdentifier: () => string;
-    /**
-     * give this logger a new name
-     * usually happens in constructor, but in rare cases
-     * it's called manually
-     * @param name
-     * @internal
-     */
-    rename(name: string): void;
-    /**
-     * link this log to a parent
-     * usually happens in constructor, but in rare cases
-     * this must be called manually
-     * @internal
-     */
-    linkLog: (parent: Log) => void;
+    /* Excluded from this release type: __constructor */
+    /* Excluded from this release type: liveDump */
+    /* Excluded from this release type: _parentHasLiveDump */
+    /* Excluded from this release type: keepData */
+    /* Excluded from this release type: _parentHasKeepData */
+    /* Excluded from this release type: fullIdentifier */
+    /* Excluded from this release type: rename */
+    /* Excluded from this release type: linkLog */
     /**
      * Add a simple message to the log
      * @param {string} message
@@ -658,94 +784,30 @@ export declare class Log {
      * log.add(`description ${() => parameter}`);
      */
     add(message: (() => string) | string, data?: unknown): string;
-    /** @internal */
-    addData(message: (() => string) | string, data: unknown): void;
-    /** @internal */
-    logData(): boolean;
-    /** @internal */
-    _prepareEntry(message: (() => string) | string, data?: unknown): LogEntry;
-    /** @internal */
-    private _prepareMessage;
-    /** @internal */
-    call(name: string, callParams?: string, message?: string, data?: {
-        [key: string]: unknown;
-    }): LogCall;
-    /** @internal */
-    _callDepthAdd(name: string): void;
-    /** @internal */
-    _callDepthRemove(name: string): void;
-    /**
-     * helper to create a text-output of the log info
-     * @param separator
-     * @param start
-     * @param end
-     * @internal
-     */
-    dump(one?: LogEntry, separator?: string): void;
-    /** @internal */
-    dumpList(start?: number, length?: number): void;
-    /** @internal */
-    private dumpOne;
-    /**
-     * add an entry-object to this logger
-     * this is often called by sub-loggers to add to parent
-     * @param entry
-     * @internal
-     */
-    _addEntry(entry: LogEntry): void;
-    /**
-     * helper to generate a random 2-char ID
-     * @param stringLength
-     * @internal
-     */
-    private randomString;
-    /**
-     * parent logger - important if loggers are chained
-     * @internal
-     */
-    private parent;
-    /**
-     * scope of this logger - to easily see which ones
-     * are about the same topic
-     * @internal
-     */
-    private scope;
+    /* Excluded from this release type: addData */
+    /* Excluded from this release type: logData */
+    /* Excluded from this release type: _prepareEntry */
+    /* Excluded from this release type: _prepareMessage */
+    /* Excluded from this release type: call */
+    /* Excluded from this release type: _callDepthAdd */
+    /* Excluded from this release type: _callDepthRemove */
+    /* Excluded from this release type: dump */
+    /* Excluded from this release type: dumpList */
+    /* Excluded from this release type: dumpOne */
+    /* Excluded from this release type: _addEntry */
+    /* Excluded from this release type: randomString */
+    /* Excluded from this release type: parent */
+    /* Excluded from this release type: scope */
     /**
      * The name of this log, for scenarios where multiple loggers are mixed
      */
     name: string;
-    /**
-     * Unique 2-character ID of this specific log object
-     * @internal
-     */
-    private id;
-    /** @internal */
-    private idCache;
-    /**
-     * Unique identifier of this log object, with name and ID
-     * @internal
-     */
-    private identifier;
+    /* Excluded from this release type: id */
+    /* Excluded from this release type: idCache */
+    /* Excluded from this release type: identifier */
 }
 
-/** @internal */
-export declare class LogCall {
-    log: Log;
-    name: string;
-    /** The initial entry created - important for later attaching the final result of the call */
-    initialEntry: LogEntry;
-    constructor(log: Log, name: string, callParams?: string, message?: string, data?: {
-        [key: string]: unknown;
-    });
-    private lastMessage;
-    add(message: string, data?: unknown, behavior?: LogEntryOptions): void;
-    onlyAddIfNew(message: string, behavior?: LogEntryOptions): void;
-    /** Add data - but only if data logging is enabled */
-    data(message: string, data: unknown): void;
-    done(message?: string, behavior?: LogEntryOptions): void;
-    return<T>(result: T, message?: string, behavior?: LogEntryOptions): T;
-    private processExtraBehavior;
-}
+/* Excluded from this release type: LogCall */
 
 /**
  * A log entry item
@@ -754,46 +816,20 @@ export declare class LogCall {
  * @public
  */
 export declare class LogEntry {
-    /** @internal */
-    private log;
+    /* Excluded from this release type: log */
     message: string;
-    /** @internal */
-    depth: number;
+    /* Excluded from this release type: depth */
     /** A timestamp for this entry to better see sequences of things happening */
     time: number;
-    /**
-     * The result of an operation - treated differently in the output
-     * @internal
-     */
-    result: string;
-    /**
-     * Data which is logged - if data-logging is enabled
-     * @internal
-     */
-    get data(): unknown;
-    /** @internal */
-    set data(data: unknown);
-    /** @internal */
-    private _data?;
-    /** @internal */
-    source: () => string;
-    /** @internal */
-    constructor(
-    /** @internal */
-    log: Log, message: string, 
-    /** @internal */
-    depth: number, 
-    /** A timestamp for this entry to better see sequences of things happening */
-    time: number, data?: unknown);
+    /* Excluded from this release type: result */
+    /* Excluded from this release type: data */
+    /* Excluded from this release type: data */
+    /* Excluded from this release type: _data */
+    /* Excluded from this release type: source */
+    /* Excluded from this release type: __constructor */
 }
 
-/** @internal */
-export declare enum LogEntryOptions {
-    log = "log",
-    warn = "warn",
-    error = "error",
-    throw = "throw"
-}
+/* Excluded from this release type: LogEntryOptions */
 
 /** @public */
 declare type LogList = Array<{
@@ -834,10 +870,7 @@ export declare interface MetadataFor {
      * @memberof MetadataFor
      */
     Guid?: string;
-    /**
-     * @internal
-     */
-    Singleton?: boolean;
+    /* Excluded from this release type: Singleton */
 }
 
 /**
@@ -957,69 +990,121 @@ export declare enum MetadataTargetTypes {
     Custom9 = 99
 }
 
-/**
- * The special header meta tag containing settings for 2sxc
- * @internal
- */
-export declare const MetaHeaderJsApi = "_jsApi";
+/* Excluded from this release type: MetaHeaderJsApi */
 
-/** @internal */
-export declare class NoJQ {
-    /** https://api.jquery.com/ready/ */
-    static ready(callback: () => void): void;
-    /** https://api.jquery.com/jquery.param/ */
-    static param(obj: any): string;
-    /** Build DOM elements from string */
-    static domFromString(string: string): HTMLElement[];
-    /** https://api.jquery.com/offset/ */
-    static offset(element: HTMLElement): {
-        left: number;
-        top: number;
-    };
-    /** https://api.jquery.com/width/ */
-    static width(element: HTMLElement): number;
-    /** https://api.jquery.com/height/ */
-    static height(element: HTMLElement): number;
-    /** https://api.jquery.com/outerWidth/ */
-    static outerWidth(element: HTMLElement): number;
-    /** https://api.jquery.com/empty/ */
-    static empty(element: HTMLElement): void;
-    /** https://api.jquery.com/replacewith/ */
-    static replaceWith(toBeReplaced: HTMLElement, newElement: HTMLElement, runScripts: boolean): void;
-    /** https://api.jquery.com/append/ */
-    static append(parent: HTMLElement, newElements: HTMLElement[], runScripts: boolean): void;
-}
+/* Excluded from this release type: ModifierBase */
 
-/**
- * This is a marker for an ID which is not defined
- * This is for situations where a 0 or even a negative number
- * could be real numbers, so this number is so big, it should never be a real ID
- * @internal
- */
-export declare const NumberNotDefinedHuge = 274200000000;
+/* Excluded from this release type: ModifierContentBlock */
+
+/* Excluded from this release type: ModifierContentBlockInstance */
+
+/* Excluded from this release type: ModifierDnnModule */
+
+/* Excluded from this release type: ModifierDnnModuleInternal */
+
+/* Excluded from this release type: NoJQ */
+
+/* Excluded from this release type: NumberNotDefinedHuge */
+
+/* Excluded from this release type: Obj */
+
+/* Excluded from this release type: Operations */
+
+/* Excluded from this release type: PlatformDnn */
+
+/* Excluded from this release type: PlatformOqtane */
+
+/* Excluded from this release type: positionAndAlign */
+
+/* Excluded from this release type: PositionCoordinates */
+
+/* Excluded from this release type: Positioning */
+
+/* Excluded from this release type: PromiseFactory */
+
+/* Excluded from this release type: QeSelectors */
+
+/* Excluded from this release type: QuickE */
+
+/* Excluded from this release type: QuickEClipboard */
 
 /**
- * Object manipulator helpers
- * @internal
+ * Quick Edit Configuration which has an `enable` and specific button configurations
+ * @public
  */
-export declare class Obj {
+export declare class QuickEditConfig {
     /**
-     * This is the same as Object.assign, but type-safe.
-     * Use it as a replacetment for Object.Assign(this, ... ) in constructors
+     * Determine whether this section is enabled.
      */
-    static TypeSafeAssign<T, K extends keyof T>(...args: T[]): void;
-    static DeepClone<T>(original: T, ignoreCircular?: boolean): T;
+    enable?: boolean | 'auto';
+    /**
+     * Optional detailed configuration of the buttons.
+     */
+    buttons?: QuickEditConfigButtons;
 }
 
 /**
- * @internal
+ * Buttons on a quick-edit toolbar
+ * @public
  */
-export declare const PlatformDnn = "dnn";
+export declare class QuickEditConfigButtons {
+    /**
+     * Enable the button to "Add Content"
+     */
+    addContent?: boolean;
+    /**
+     * Enable the button to "add App"
+     */
+    addApp?: boolean;
+    /**
+     * Enable the button "Select"
+     */
+    select?: boolean;
+    /**
+     * Enable the button "Paste"
+     */
+    paste?: boolean;
+    /**
+     * Enable the button "Delete"
+     */
+    delete?: boolean;
+    /**
+     * Enable the button "Move"
+     */
+    move?: boolean;
+}
+
+export declare const QuickEditConfigEnableAuto: string;
 
 /**
- * @internal
+ * Quick Edit - Full configuration at root, with `enable` and rules for `modules` and `innerBlocks`
+ * @public
  */
-export declare const PlatformOqtane = "oqtane";
+export declare class QuickEditConfigRoot extends QuickEditConfig {
+    /**
+     * The buttons configuration on the root.
+     * Will be used for the `modules` and `innerBlocks` if not specified there.
+     * Note that if not specified, will always default to true for all buttons.
+     */
+    buttons?: QuickEditConfigButtons;
+    /**
+     * Optional configuration for the Inner Content Blocks.
+     */
+    innerBlocks?: QuickEditConfig;
+    /**
+     * Optional configuration for the Modules.
+     */
+    modules?: QuickEditConfig;
+    /* Excluded from this release type: getDefault */
+}
+
+/* Excluded from this release type: QuickEditOverlay */
+
+/* Excluded from this release type: refresh */
+
+/* Excluded from this release type: RuleManager */
+
+/* Excluded from this release type: RuleParams */
 
 /**
  * Parameters for the Instance sxc.cms.run(...) command.
@@ -1031,12 +1116,7 @@ export declare interface RunParams {
      * Required.
      */
     action?: CommandNames;
-    /**
-     * The command params, like contentType, entityId etc.
-     * Optional for many actions, but can themselves also contain the property `action`, in which case action can be ommited.
-     * @internal
-     */
-    params?: CommandParams;
+    /* Excluded from this release type: params */
     /**
      * The event which triggered this command - sometimes useful internally further use.
      * Optional in most cases, but in some cases it will improve the behavior of the code.
@@ -1048,6 +1128,8 @@ export declare interface RunParams {
      */
     workflows?: unknown;
 }
+
+/* Excluded from this release type: RunParamsHelpers */
 
 /**
  * Parameters for the **Global** $2sxc.cms.run(...) command in Addition to the [RunParams](xref:Api.Js.SxcJs.RunParams).
@@ -1068,10 +1150,13 @@ export declare interface RunParamsWithContext extends RunParams {
     context?: Sxc | ContextIdentifier;
 }
 
-/** @internal */
-export declare class Stats {
-    watchDomChanges: number;
-}
+/* Excluded from this release type: RunParamsWithWorkflows */
+
+/* Excluded from this release type: Selection_2 */
+
+/* Excluded from this release type: SharedLogic */
+
+/* Excluded from this release type: Stats */
 
 /**
  * The typical sxc-instance object for a specific DNN module or content-block
@@ -1085,23 +1170,10 @@ export declare class Sxc extends HasLog {
      * this is an advanced concept you usually don't care about, otherwise you should research it
      */
     cbid: number;
-    /**
-     * the id/key of this instance in the cache for reset
-     * @internal
-     */
-    cacheKey: string;
-    /**
-     * The environment information, important for http-calls
-     * @internal
-     */
-    readonly root: SxcGlobal;
-    /**
-     * Custom context information provided by the constructor - will replace auto-context detection
-     * @internal
-     */
-    ctx?: ContextIdentifier;
-    /** @internal */
-    private _isSxcInstance;
+    /* Excluded from this release type: cacheKey */
+    /* Excluded from this release type: root */
+    /* Excluded from this release type: ctx */
+    /* Excluded from this release type: _isSxcInstance */
     /**
      * Web API calls for this instance.
      * This is the pure call APIs system.
@@ -1110,47 +1182,13 @@ export declare class Sxc extends HasLog {
      * @memberof Sxc
      */
     webApi: SxcWebApi;
-    /**
-     * manage object which provides access to additional content-management features
-     * it only exists if 2sxc is in edit mode (otherwise the JS are not included for these features)
-     * @memberof SxcInstance
-     * @internal
-     */
-    manage: SxcManage;
+    /* Excluded from this release type: manage */
     /**
      * CMS operations on this sxc-instance, such as opening the edit dialog etc.
      */
     cms: SxcCms;
-    /** @internal */
-    constructor(
-    /** the sxc-instance ID, which is usually the DNN Module Id */
-    id: number, 
-    /**
-     * content-block ID, which is either the module ID, or the content-block definition entity ID
-     * this is an advanced concept you usually don't care about, otherwise you should research it
-     */
-    cbid: number, 
-    /**
-     * the id/key of this instance in the cache for reset
-     * @internal
-     */
-    cacheKey: string, 
-    /**
-     * The environment information, important for http-calls
-     * @internal
-     */
-    root: SxcGlobal, 
-    /**
-     * Custom context information provided by the constructor - will replace auto-context detection
-     * @internal
-     */
-    ctx?: ContextIdentifier);
-    /**
-     * TypeGuard for TypeScript to verify this is a SxcInstance
-     * @param thing
-     * @internal
-     */
-    static is(thing: unknown): thing is Sxc;
+    /* Excluded from this release type: __constructor */
+    /* Excluded from this release type: is */
     /**
      * Get a data service for a specific content-type.
      *
@@ -1166,38 +1204,17 @@ export declare class Sxc extends HasLog {
      * @memberof SxcInstance
      */
     query(query: string): SxcQuery;
-    /**
-     * converts a short api-call path like "/app/Blog/query/xyz" to the DNN full path
-     * which varies from installation to installation like "/desktopmodules/api/2sxc/app/..."
-     * @deprecated use http.apiUrl instead
-     * @param virtualPath
-     * @returns mapped path
-     * @internal
-     */
-    resolveServiceUrl(virtualPath: string): string;
-    /**
-     * Show a nice error with more infos around 2sxc
-     * @param result
-     * @returns
-     * @internal
-     */
-    showDetailedHttpError(result: any): any;
+    /* Excluded from this release type: resolveServiceUrl */
+    /* Excluded from this release type: showDetailedHttpError */
     /**
      * Test if the current code is in edit-mode and additional javascripts have been loaded to make it work
      * @returns true if we are in edit-mode
      */
     isEditMode(): boolean;
-    /**
-     *
-     * @param resetCache
-     * @returns
-     * @internal
-     */
-    recreate(resetCache: boolean): Sxc;
+    /* Excluded from this release type: recreate */
 }
 
-/** @internal */
-export declare const SxcApiUrlRoot = "desktopmodules/2sxc/api/";
+/* Excluded from this release type: SxcApiUrlRoot */
 
 /**
  * This is in charge of sxc.cms on the instance level.
@@ -1206,8 +1223,7 @@ export declare const SxcApiUrlRoot = "desktopmodules/2sxc/api/";
  * @public
  */
 export declare class SxcCms extends SxcPart {
-    /** @internal */
-    constructor(sxc: Sxc);
+    /* Excluded from this release type: __constructor */
     /**
      * Run a command on this sxc-instance.
      * Requires edit mode to be on, which would enable the edit-JS parts.
@@ -1217,20 +1233,15 @@ export declare class SxcCms extends SxcPart {
     run<T>(runParams: RunParams): Promise<void | T>;
 }
 
+/* Excluded from this release type: SxcCmsReal */
+
 /**
  * Data Service for an App / Sxc-Instance to get/create data of a specific Content-Type
  * @public
  */
 export declare class SxcData<T = unknown> extends SxcDataServiceBase {
     readonly name: string;
-    /**
-     * Creates an instance of SxcData.
-     * @param {Sxc} sxc
-     * @param {string} name the content-type name
-     * @memberof SxcData
-     * @internal
-     */
-    constructor(sxc: Sxc, name: string);
+    /* Excluded from this release type: __constructor */
     /**
      * Get all items of this type.
      */
@@ -1239,18 +1250,8 @@ export declare class SxcData<T = unknown> extends SxcDataServiceBase {
      * Get the specific item with the ID. It will return null if not found
      */
     getOne(id: number): Promise<T> | null;
-    /** Future
-     *  @internal
-     */
-    private getMany;
-    /**
-     * Get all or one data entity from the backend
-     * @param id optional id as number or string - if not provided, will get all
-     * @param params optional parameters - ATM not usefuly but we plan to support more filters etc.
-     * @returns an array with 1 or n entities in the simple JSON format
-     * @internal
-     */
-    private getInternal;
+    /* Excluded from this release type: getMany */
+    /* Excluded from this release type: getInternal */
     /**
      * Create a new entity with the values supplied
      * @param values a simple object containing the values to create
@@ -1278,19 +1279,14 @@ export declare class SxcData<T = unknown> extends SxcDataServiceBase {
 }
 
 /**
- * Base class doing common checks
+ * Base class doing common checks.
+ * This is internal and not important, but we can't keep it out of the docs.
  * @public
  */
-export declare class SxcDataServiceBase extends SxcPart {
+export declare abstract class SxcDataServiceBase extends SxcPart {
     readonly name: string;
     protected readonly webApi: SxcWebApi;
-    /**
-     * Creates an instance of SxcData.
-     * @param {Sxc} sxc
-     * @param {string} name the content-type name
-     * @memberof SxcData
-     */
-    constructor(sxc: Sxc, name: string, nameInError: string);
+    /* Excluded from this release type: __constructor */
 }
 
 /**
@@ -1347,22 +1343,12 @@ export declare interface SxcGlobal {
      * @since v14.01
      */
     get(sxc: Sxc): Sxc;
-    /** @internal */
-    _controllers: {
-        [id: string]: Sxc;
-    };
-    /** @internal */
-    beta: any;
-    /** @internal */
-    _manage: SxcGlobalManage;
-    /** @internal */
-    _translateInit: any;
-    /**
-     * 2022-06-01 2dm - I believe this is not used, probably remove
-     * @internal */
-    debug: SxcGlobalDebug;
-    /** @internal */
-    stats: Stats;
+    /* Excluded from this release type: _controllers */
+    /* Excluded from this release type: beta */
+    /* Excluded from this release type: _manage */
+    /* Excluded from this release type: _translateInit */
+    /* Excluded from this release type: debug */
+    /* Excluded from this release type: stats */
     /**
      * system information, mainly for checking which version of 2sxc is running
      * note: it's not always updated reliably, but it helps when debugging
@@ -1391,46 +1377,70 @@ export declare interface SxcGlobal {
      * @param length amount of lines to show - in some cases will default to 25
      */
     insights(partName: string, index?: number, start?: number, length?: number): void;
-    /** @internal */
-    _insights: typeof Insights;
-    /**
-     * Internal logger to better see what's happening
-     * @internal
-     */
-    log: Log;
+    /* Excluded from this release type: _insights */
+    /* Excluded from this release type: log */
     /**
      * Helper to work with url parameters behind ? or #
      * @type {UrlParams}
      * @memberof SxcRoot
      */
     urlParams: UrlParams;
-    /**
-     * A helper to create full-screen popups
-     * @internal
-     */
-    totalPopup: TotalPopup;
+    /* Excluded from this release type: totalPopup */
 }
 
-/** @internal */
-export declare class SxcGlobalDebug {
+/**
+ * Global Content-Management System on the $2sxc.cms.
+ *
+ * It is only available if the page is in edit mode / the page feature `2sxc.JsCms` has been activated.
+ * @public
+ */
+export declare class SxcGlobalCms extends HasLog {
+    /* Excluded from this release type: autoDump */
+    /* Excluded from this release type: __constructor */
+    /* Excluded from this release type: resetLog */
     /**
-     * The load-debug state (provided by the url with debug=true)
+     * Run a command within a specific context - mostly for internal use.
+     * @param runParams The complete run params with a context
+     * @returns A promise which triggers when the command has completed.
      */
-    load: boolean;
+    run<T>(runParams: RunParamsWithContext): Promise<void | T>;
     /**
-     * Cache breaker string, contans the version number of 2sxc if one is provided with sxcver=...
+     * Run a command within a specific context.
+     * @param tag The context providing tag - an HTML tag inside a module/content-block
+     * @param action command-name (action)
+     * @param event Optional mouse-event which allows the command to do some optimizations for that case - like a mouse-click
+     * @returns A promise which triggers when the command has completed.
      */
-    uncache: string;
-    constructor();
+    run<T>(tag: HTMLElement, action: string, event?: MouseEvent): Promise<void | T>;
+    /**
+     * Run a command within a specific context.
+     * @param tag The context providing tag - an HTML tag inside a module/content-block
+     * @param action command-name (action)
+     * @param params an object containing the the command-params
+     * @param event Optional mouse-event which allows the command to do some optimizations for that case - like a mouse-click
+     * @returns A promise which triggers when the command has completed.
+     */
+    run<T>(tag: HTMLElement, action: string, params?: CommandParams, event?: MouseEvent): Promise<void | T>;
+    /**
+     * Run a command within a specific context.
+     * @param tag The context providing tag - an HTML tag inside a module/content-block
+     * @param commandParams an object containing the the command-params as well as the command-name (action)
+     * @param event Optional mouse-event which allows the command to do some optimizations for that case - like a mouse-click
+     * @returns A promise which triggers when the command has completed.
+     */
+    run<T>(tag: HTMLElement, commandParams: CommandParams, event?: MouseEvent): Promise<void | T>;
+    /* Excluded from this release type: runInternal */
+    /* Excluded from this release type: do */
 }
+
+/* Excluded from this release type: SxcGlobalDebug */
 
 /**
  * Provides environment information to $2sxc - usually page-id, api-root and stuff like that
  * @public
  */
 export declare class SxcGlobalEnvironment extends HasLog {
-    /** @internal */
-    private header;
+    /* Excluded from this release type: header */
     /**
      * Flag to determine if the environment information is available.
      */
@@ -1439,10 +1449,8 @@ export declare class SxcGlobalEnvironment extends HasLog {
      * Where the environment information came from.
      */
     source: string;
-    /** @internal */
-    metaLoader: EnvironmentMetaLoader;
-    /** @internal */
-    constructor();
+    /* Excluded from this release type: metaLoader */
+    /* Excluded from this release type: __constructor */
     /**
      * Manually load a new EnvironmentSpecs in cases where the page cannot provide them.
      * This is only used in scenarios outside of Dnn / Oqtane, you will usually not need this.
@@ -1450,16 +1458,13 @@ export declare class SxcGlobalEnvironment extends HasLog {
      * @param source _optional_ name where the data came from
      */
     load(envSpecs: EnvironmentSpecs, source?: string): void;
-    /** @internal */
-    private replacedRvt;
-    /** @internal */
-    updateRvt(newRvt: string): void;
+    /* Excluded from this release type: replacedRvt */
+    /* Excluded from this release type: updateRvt */
     /**
      * The API endpoint url from the environment
      */
     api(): string;
-    /** @internal */
-    appApi(): string;
+    /* Excluded from this release type: appApi */
     /**
      * The current page ID - often needed in API calls
      */
@@ -1472,17 +1477,12 @@ export declare class SxcGlobalEnvironment extends HasLog {
      * The request-verification token for internal WebAPI calls
      */
     rvt(): string;
-    /**
-     * The uiRoot path
-     * @internal
-     */
-    uiRoot(): string;
+    /* Excluded from this release type: uiRoot */
     /**
      * The platform code like 'oqt' or 'dnn' in case the JS needs to know the difference
      */
     platform(): string;
-    /** @internal */
-    private ensureReadyOrThrow;
+    /* Excluded from this release type: ensureReadyOrThrow */
 }
 
 /**
@@ -1491,8 +1491,7 @@ export declare class SxcGlobalEnvironment extends HasLog {
  */
 export declare class SxcGlobalHttp extends HasLog {
     private env;
-    /** @internal */
-    constructor(env: SxcGlobalEnvironment);
+    /* Excluded from this release type: __constructor */
     /**
      * All the headers which are needed in an ajax call.
      * @returns Dictionary / Record of headers
@@ -1521,23 +1520,8 @@ export declare class SxcGlobalHttp extends HasLog {
      * @returns Dictionary / Record of headers
      */
     headers(id: number, cbid: number, ctx: ContextIdentifier): Record<string, string>;
-    /**
-     * Get the API-Root path for a specific extension/endpoint
-     * @param endpointName
-     * @returns {string}
-     * @memberof Http
-     * @internal Not relevant for 2sxc, only used if calling platform endpoints
-     */
-    apiRoot(endpointName: string): string;
-    /**
-     * Get the API-Root path for Apps
-     * new in v12
-     * @param {string} endpointName
-     * @returns {string}
-     * @memberof SxcHttp
-     * @internal
-     */
-    appApiRoot(): string;
+    /* Excluded from this release type: apiRoot */
+    /* Excluded from this release type: appApiRoot */
     /**
      * Convert short urls like `app/auto/api/Posts/All` to the full URL needed.
      * Will ignore urls which clearly already are the full url.
@@ -1555,53 +1539,42 @@ export declare class SxcGlobalHttp extends HasLog {
     apiUrl(url: string, endpointName: string): string;
 }
 
-/**
- * @internal
- */
-export declare interface SxcGlobalManage {
-    /**
-     * Init the manage-object on a just-created sxc-instance
-     * we must keep signature of initInstance in sync with the 2sxc.api.js
-     * @param sxc
-     */
-    initInstance(sxc: Sxc): void;
-    _toolbarManager: any;
-}
-
-/** @internal */
-export declare interface SxcManage {
-    /**
-     * The context contains information about the Sxc Instance, like module-id, etc.
-     */
-    context: any;
-    /**
-     * This checks / reports whether the API is in edit mode.
-     * Used to enabled/disable various features
-     */
-    _isEditMode(): boolean;
-}
+/* Excluded from this release type: SxcGlobalManage */
 
 /**
- * Base class for anything attached to an sxc-instance
+ * $2sxc global interface _extending_ the `SxcGlobal` when the page feature `JsCms` is enabled.
+ *
+ * If the page feature `2sxc.JsCms` is not enabled, the `window.$2sxc` will be a [SxcGlobal](xref:Api.Js.SxcJs.SxcGlobal)
  * @public
  */
-export declare class SxcPart {
-    /** @internal */
-    sxc: Sxc;
-    /** @internal */
-    partName: string;
+export declare interface SxcGlobalWithCms {
+    /* Excluded from this release type: system */
     /**
-     * Creates an instance of SxcData.
-     * @param {Sxc} sxc
-     * @param {string} partName name of the part
-     * @memberof SxcData
-     * @internal
+     * Will retrieve a resource in the current language.
+     * Mainly used for toolbars etc. to support localization.
+     *
+     * Only available when edit mode is on meaning the page feature JsCms is enabled
+     * @param key the key of the resource to translate
      */
-    constructor(
-    /** @internal */
-    sxc: Sxc, 
-    /** @internal */
-    partName: string);
+    translate(key: string): string;
+    /* Excluded from this release type: context */
+    /**
+     * Content Management features on the $2sxc
+     */
+    cms: SxcGlobalCms;
+}
+
+/* Excluded from this release type: SxcManage */
+
+/**
+ * Base class for anything attached to an sxc-instance.
+ * This is internal and not important, but we can't keep it out of the docs.
+ * @public
+ */
+export declare abstract class SxcPart {
+    /* Excluded from this release type: sxc */
+    /* Excluded from this release type: partName */
+    /* Excluded from this release type: __constructor */
 }
 
 /**
@@ -1610,14 +1583,7 @@ export declare class SxcPart {
  */
 export declare class SxcQuery extends SxcDataServiceBase {
     readonly name: string;
-    /**
-     * Creates an instance of SxcQuery.
-     * @param {Sxc} sxc
-     * @param {string} name
-     * @memberof SxcQuery
-     * @internal
-     */
-    constructor(sxc: Sxc, name: string);
+    /* Excluded from this release type: __constructor */
     getAll<T = unknown>(): Promise<T>;
     getAll<T = unknown>(urlParams: string | Record<string, unknown>): Promise<T>;
     getAll<T = unknown>(urlParams: string | Record<string, unknown>, data: string | Record<string, unknown>): Promise<T>;
@@ -1632,21 +1598,41 @@ export declare class SxcQuery extends SxcDataServiceBase {
     getStream<T = unknown>(stream: string): Promise<T[]>;
     getStream<T = unknown>(stream: string, urlParams: string | Record<string, unknown>): Promise<T[]>;
     getStream<T = unknown>(stream: string, urlParams: string | Record<string, unknown>, data: string | Record<string, unknown>): Promise<T[]>;
-    getStreams<T = unknown>(streams: string): Promise<T>;
-    getStreams<T = unknown>(streams: string, urlParams: string | Record<string, unknown>): Promise<T>;
-    getStreams<T = unknown>(streams: string, urlParams: string | Record<string, unknown>, data: string | Record<string, unknown>): Promise<T>;
     /**
-     * Get all or one data entity from the backend
-     * @param id optional id as number or string - if not provided, will get all
-     * @param params optional parameters - ATM not usefuly but we plan to support more filters etc.
-     * @returns an array with 1 or n entities in the simple JSON format
-     * @internal
+     * Get a query but only the mentioned streams.
+     * This will reduce the amount of data retrieved on queries that have many streams.
+     * @template T The schema/interfaces of what will be returned
+     * @returns {Promise<T>} Promise containing a object with stream-names and items in the streams.
+     * @public
      */
-    private getInternal;
+    getStreams<T = unknown>(streams: string): Promise<T>;
+    /**
+     * Get a query but only the mentioned streams.
+     * This will reduce the amount of data retrieved on queries that have many streams.
+     * @template T The schema/interfaces of what will be returned
+     * @param {string} streams name of streams to get, comma separated
+     * @param urlParams additional parameters for the URL, either as a string or as a object
+     * @returns {Promise<T>} Promise containing a object with stream-names and items in the streams.
+     * @public
+     */
+    getStreams<T = unknown>(streams: string, urlParams: string | Record<string, unknown>): Promise<T>;
+    /**
+     * Get a query but only the mentioned streams.
+     * This will reduce the amount of data retrieved on queries that have many streams.
+     * @template T The schema/interfaces of what will be returned
+     * @param {string} streams name of streams to get, comma separated
+     * @param urlParams additional parameters for the URL, either as a string or as a object
+     * @param data data to include in case of a POST call - if this is provided, it will use a post
+     * @returns {Promise<T>} Promise containing a object with stream-names and items in the streams.
+     * @public
+     */
+    getStreams<T = unknown>(streams: string, urlParams: string | Record<string, unknown>, data: string | Record<string, unknown>): Promise<T>;
+    /* Excluded from this release type: getInternal */
 }
 
-/** @internal */
-export declare const SxcVersion: string;
+/* Excluded from this release type: SxcTools */
+
+/* Excluded from this release type: SxcVersion */
 
 /**
  * helper API to run ajax / REST calls to the server
@@ -1654,45 +1640,35 @@ export declare const SxcVersion: string;
  * and that urls are rewritten
  * @public
  */
-export declare class SxcWebApi implements SxcWebApiDeprecated {
+export declare class SxcWebApi implements ZzzSxcWebApiDeprecated {
     private readonly sxc;
-    /**
-     * @type {SxcGlobalEnvironment}
-     * @memberof SxcWebApi
-     * @internal
-     */
-    readonly env: SxcGlobalEnvironment;
-    /**
-     *
-     * @param sxc
-     * @internal
-     */
-    constructor(sxc: Sxc);
+    /* Excluded from this release type: env */
+    /* Excluded from this release type: __constructor */
     /**
      * **Deprecated** - docs in the separate interface
      * @deprecated use fetchJson instead
      */
-    get(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): any;
+    get(settingsOrUrl: string | ZzzAjaxSettingsDeprecated, params?: any, data?: any, preventAutoFail?: boolean): any;
     /**
      * **Deprecated** - docs in the separate interface
      * @deprecated use fetchJson instead
      */
-    post(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): any;
+    post(settingsOrUrl: string | ZzzAjaxSettingsDeprecated, params?: any, data?: any, preventAutoFail?: boolean): any;
     /**
      * **Deprecated** - docs in the separate interface
      * @deprecated use fetchJson instead
      */
-    delete(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): any;
+    delete(settingsOrUrl: string | ZzzAjaxSettingsDeprecated, params?: any, data?: any, preventAutoFail?: boolean): any;
     /**
      * **Deprecated** - docs in the separate interface
      * @deprecated use fetchJson instead
      */
-    put(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): any;
+    put(settingsOrUrl: string | ZzzAjaxSettingsDeprecated, params?: any, data?: any, preventAutoFail?: boolean): any;
     /**
      * **Deprecated** - docs in the separate interface
      * @deprecated use fetchJson instead
      */
-    request(settings: string | AjaxSettings, params: any, data: any, preventAutoFail: boolean, method: string): any;
+    request(settings: string | ZzzAjaxSettingsDeprecated, params: any, data: any, preventAutoFail: boolean, method: string): any;
     /**
      * Will retrieve data from the backend using a standard fetch.
      * @param url a full url or short-hand like `controller/method?params` `app/auto/api/controller/method?params`. Note that params would also be specified on the url.
@@ -1707,8 +1683,7 @@ export declare class SxcWebApi implements SxcWebApiDeprecated {
      * maybe: webApi.fetchRaw({url: ..., params: { ...}, body: { ...}, method: 'GET' })
      */
     fetchRaw(url: string, data?: string | Record<string, any>, method?: string): Promise<Response>;
-    /** @internal */
-    fetch(url: string, data?: string | Record<string, any>, method?: string): Promise<Response>;
+    /* Excluded from this release type: fetch */
     /**
      * Will retrieve data from the backend using a standard fetch and give you an object.
      * @param url a full url or short-hand like `controller/method?params` `app/auto/api/controller/method?params`. Note that params would also be specified on the url.
@@ -1736,115 +1711,91 @@ export declare class SxcWebApi implements SxcWebApiDeprecated {
     url(url: string, params?: string | Record<string, any>): string;
 }
 
-/**
- * **Deprecated**
- * Old APIs on sxc.webApi.
- * They only exist if jQuery is included on the page, and we highly discourage their use.
- * @deprecated
- */
-export declare interface SxcWebApiDeprecated {
-    /**
-     * **Deprecated**
-     * Please use [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchJson)
-     * or [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchRaw) instead.
-     *
-     * Returns an http-get promise using jQuery
-     * @param settingsOrUrl the url to get
-     * @param params jQuery style ajax parameters
-     * @param data jQuery style data for post/put requests
-     * @param preventAutoFail
-     * @returns jQuery ajax promise object
-     * @deprecated use fetchJson instead
-     */
-    get(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): any;
-    /**
-     * **Deprecated**
-     * Please use [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchJson)
-     * or [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchRaw) instead.
-     *
-     * Returns an http-post promise using jQuery
-     * @param settingsOrUrl the url to get
-     * @param params jQuery style ajax parameters
-     * @param data jQuery style data for post/put requests
-     * @param preventAutoFail
-     * @returns jQuery ajax promise object
-     * @deprecated use fetchJson instead
-     */
-    post(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): any;
-    /**
-     * **Deprecated**
-     * Please use [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchJson)
-     * or [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchRaw) instead.
-     *
-     * Returns an http-delete promise using jQuery
-     * @param settingsOrUrl the url to talk to
-     * @param params jQuery style ajax parameters
-     * @param data jQuery style data for post/put requests
-     * @param preventAutoFail
-     * @returns jQuery ajax promise object
-     * @deprecated use fetchJson instead
-     */
-    delete(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): any;
-    /**
-     * **Deprecated**
-     * Please use [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchJson)
-     * or [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchRaw) instead.
-     *
-     * Returns an http-put promise using jQuery
-     * @param settingsOrUrl the url to put
-     * @param params jQuery style ajax parameters
-     * @param data jQuery style data for post/put requests
-     * @param preventAutoFail
-     * @returns jQuery ajax promise object
-     * @deprecated use fetchJson instead
-     */
-    put(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): any;
-    /**
-     * **Deprecated**
-     * Please use [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchJson)
-     * or [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchRaw) instead.
-     *
-     * Generic http request using jQuery
-     * @param settingsOrUrl the url to get
-     * @param params jQuery style ajax parameters
-     * @param data jQuery style data for post/put requests
-     * @param preventAutoFail
-     * @param method the http verb name
-     * @returns jQuery ajax promise object
-     * @deprecated use fetchJson instead
-     */
-    request(settings: string | AjaxSettings, params: any, data: any, preventAutoFail: boolean, method: string): any;
-}
+/* Excluded from this release type: SystemUpgrader */
+
+/* Excluded from this release type: TemplateEditor */
+
+/* Excluded from this release type: TemplateIdentifier */
+
+/* Excluded from this release type: Toolbar */
+
+/* Excluded from this release type: TOOLBAR_FOLLOW_ALWAYS */
+
+/* Excluded from this release type: TOOLBAR_FOLLOW_INITIAL */
+
+/* Excluded from this release type: TOOLBAR_FOLLOW_SCROLL */
+
+/* Excluded from this release type: TOOLBAR_SHOW_ALWAYS */
+
+/* Excluded from this release type: TOOLBAR_SHOW_HOVER */
+
+/* Excluded from this release type: ToolbarButtonSettings */
+
+/* Excluded from this release type: ToolbarConfigLoader */
+
+/* Excluded from this release type: ToolbarConfigLoaderV09 */
+
+/* Excluded from this release type: ToolbarConfigLoaderV10 */
+
+/* Excluded from this release type: ToolbarInitConfig */
+
+/* Excluded from this release type: ToolbarManager */
+
+/* Excluded from this release type: ToolbarSettings */
+
+/* Excluded from this release type: ToolbarTemplate */
+
+/* Excluded from this release type: ToolbarTemplateGroup */
+
+/* Excluded from this release type: ToolbarTemplateManager */
+
+/* Excluded from this release type: ToolbarWip */
+
+/* Excluded from this release type: ToolbarWithWorkflow */
 
 /**
- * Template Identifier for telling the code-editor about this template
- * @internal
+ * A workflow manager _of a Toolbar_ which will run stuff before / after commands.
+ * When toolbars are created, they will add a Manager and then raise an event for in-page code to add workflow steps.
+ * Normally the toolbar with raise a `toolbar-init` event where you can then add steps.
  */
-export declare interface TemplateIdentifier {
-    /** The entity Id of the View-configuration which points to the template file */
-    EntityId: number;
-    /** The template edition (kind of a path) - to ensure code-editor can find the right one */
-    Edition?: string;
-    /** The template path */
-    Path?: string;
+export declare class ToolbarWorkflowManager extends HasLog {
+    private isDummy;
+    /* Excluded from this release type: steps */
+    /* Excluded from this release type: __constructor */
+    /**
+     * Register one or many [workflow-steps](xref:Api.Js.SxcJs.WorkflowStep) to the toolbar, to use if toolbar commands are executed.
+     */
+    add(steps: WorkflowStep | WorkflowStep[]): void;
+    /* Excluded from this release type: addOne */
+    /* Excluded from this release type: run */
+    /* Excluded from this release type: attach */
+    /* Excluded from this release type: runNextPromiseIfNotCancelled */
 }
 
-/** @internal */
-export declare const ToSxcName = "2sxc";
+/* Excluded from this release type: ToSxcName */
 
-/** @internal */
-export declare class TotalPopup {
-    frame: any;
-    callback: any;
-    open(url: string, callback: () => void): void;
-    close(): void;
-    closeThis(): void;
-}
+/* Excluded from this release type: TotalPopup */
+
+declare type TypeAutoAddMore = null | 'start' | 'end' | true;
+
+/* Excluded from this release type: TypeFollow */
+
+declare type TypeHover = 'left' | 'right' | 'none';
+
+/* Excluded from this release type: TypeShow */
+
+/* Excluded from this release type: TypeTbD */
 
 export declare type TypeValue = boolean | string | number | Date;
 
-/** @internal */
-export declare function urlClean(original: string): string;
+/* Excluded from this release type: urlClean */
+
+declare interface UrlItemParams {
+    prefill?: Record<string, TypeValue>;
+    items?: string;
+    contentTypeName?: string;
+    filters?: string;
+}
 
 /**
  * Helper object to read url params.
@@ -1871,22 +1822,213 @@ export declare class UrlParams {
      * @returns
      */
     isDebug(): boolean;
+    /* Excluded from this release type: toUrl */
+    /* Excluded from this release type: toObj */
+}
+
+/* Excluded from this release type: WorkflowCommands */
+
+/* Excluded from this release type: WorkflowHelper */
+
+/**
+ * Phases / events of a specific workflow.
+ * @export
+ * @enum {number}
+ */
+export declare enum WorkflowPhases {
     /**
-     * Convert an object to be used in a URL.
-     * Uses a custom, brief syntax which can change at any time.
-     * So to unwrap, always use the toObj method.
-     * @param obj
-     * @returns
-     * @internal
+     * Run at every phase - before and after events/commands
      */
-    toUrl(obj: any): string;
+    all = "all",
     /**
-     * Convert a url which was created by toUrl back to an object.
-     * @param url
-     * @returns
-     * @internal
+     * Run before a specific event / command
      */
-    toObj(url: string): unknown;
+    before = "before",
+    /**
+     * Run after a specific event / command
+     */
+    after = "after"
+}
+
+/* Excluded from this release type: WorkflowPromiseFactory */
+
+/**
+ * A workflow step (code-sequence) to run before/after specific events.
+ * @public
+ */
+export declare interface WorkflowStep {
+    /**
+     * The name of this step, in case it needs to be replaced or somehow controlled
+     * Will be empty by default
+     */
+    name?: string;
+    /**
+     * The action this step is for, can be 'any', 'edit', etc.
+     * Will be 'all' by default
+     */
+    command: string;
+    /**
+     * Action-phase being run, like 'all', 'before', 'after'
+     * will be 'before' by default
+     */
+    phase?: WorkflowPhases;
+    /**
+     * Execution priority, higher comes first
+     * Will be 1 by default.
+     */
+    priority?: number;
+    /**
+     * The code which is run, must be a promise-factory.
+     * So it's a function that will return a promise.
+     * Required.
+     */
+    code: WorkflowStepCode;
+}
+
+/**
+ * Signature of your code which is used in workflows.
+ * Basically it's just a function receiving [](xref:Api.Js.SxcJs.WorkflowStepCodeArguments)
+ * @public
+ * Doc Notes: it must be internal, as docFx cannot process types, so it's documented there
+ */
+export declare type WorkflowStepCode = (args: WorkflowStepCodeArguments) => WorkflowStepCodeArguments;
+
+/**
+ * Arguments for [WorkflowStepCode](xref:Api.Js.SxcJs.WorkflowStepCode).
+ * Will be passed to your code and should also be returned by your code.
+ * This also allows cancelling further execution.
+ * @export
+ */
+export declare class WorkflowStepCodeArguments {
+    /**
+     * Name this workflow is running for
+     */
+    command: string;
+    /**
+     * The phase it's in (before, after, etc.)
+     */
+    phase: WorkflowPhases;
+    /**
+     * Context of the current command / step being run
+     */
+    context: ContextComplete;
+    /**
+     * Result in after-phases of the workflow
+     * BETA - never really tested this
+     */
+    result: unknown;
+    /* Excluded from this release type: __constructor */
+    /**
+     * If the workflow should be cancelled.
+     * Can be set by any workflow step.
+     * If set to true, following steps / workflows will not run.
+     */
+    cancel: boolean;
+}
+
+/* Excluded from this release type: WorkflowStepHelper */
+
+/**
+ * Deprecated parameters for old jQuery AJAX calls.
+ * Shouldn't be used any more.
+ * @public
+ * @deprecated
+ */
+export declare interface ZzzAjaxSettingsDeprecated {
+    /* Excluded from this release type: endpoint */
+    /**
+     * Controller name, for controller/action calls
+     */
+    controller?: string;
+    /**
+     * action name, for controller/action calls
+     */
+    action?: string;
+    /**
+     * The params to be used in the url for the request
+     */
+    params?: any;
+    /* Excluded from this release type: preventAutoFail */
+}
+
+/**
+ * **Deprecated**
+ * Old APIs on sxc.webApi.
+ * They only exist if jQuery is included on the page, and we highly discourage their use.
+ * @deprecated
+ */
+export declare interface ZzzSxcWebApiDeprecated {
+    /**
+     * **Deprecated**
+     * Please use [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchJson)
+     * or [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchRaw) instead.
+     *
+     * Returns an http-get promise using jQuery
+     * @param settingsOrUrl the url to get
+     * @param params jQuery style ajax parameters
+     * @param data jQuery style data for post/put requests
+     * @param preventAutoFail
+     * @returns jQuery ajax promise object
+     * @deprecated use fetchJson instead
+     */
+    get(settingsOrUrl: string | ZzzAjaxSettingsDeprecated, params?: any, data?: any, preventAutoFail?: boolean): any;
+    /**
+     * **Deprecated**
+     * Please use [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchJson)
+     * or [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchRaw) instead.
+     *
+     * Returns an http-post promise using jQuery
+     * @param settingsOrUrl the url to get
+     * @param params jQuery style ajax parameters
+     * @param data jQuery style data for post/put requests
+     * @param preventAutoFail
+     * @returns jQuery ajax promise object
+     * @deprecated use fetchJson instead
+     */
+    post(settingsOrUrl: string | ZzzAjaxSettingsDeprecated, params?: any, data?: any, preventAutoFail?: boolean): any;
+    /**
+     * **Deprecated**
+     * Please use [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchJson)
+     * or [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchRaw) instead.
+     *
+     * Returns an http-delete promise using jQuery
+     * @param settingsOrUrl the url to talk to
+     * @param params jQuery style ajax parameters
+     * @param data jQuery style data for post/put requests
+     * @param preventAutoFail
+     * @returns jQuery ajax promise object
+     * @deprecated use fetchJson instead
+     */
+    delete(settingsOrUrl: string | ZzzAjaxSettingsDeprecated, params?: any, data?: any, preventAutoFail?: boolean): any;
+    /**
+     * **Deprecated**
+     * Please use [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchJson)
+     * or [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchRaw) instead.
+     *
+     * Returns an http-put promise using jQuery
+     * @param settingsOrUrl the url to put
+     * @param params jQuery style ajax parameters
+     * @param data jQuery style data for post/put requests
+     * @param preventAutoFail
+     * @returns jQuery ajax promise object
+     * @deprecated use fetchJson instead
+     */
+    put(settingsOrUrl: string | ZzzAjaxSettingsDeprecated, params?: any, data?: any, preventAutoFail?: boolean): any;
+    /**
+     * **Deprecated**
+     * Please use [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchJson)
+     * or [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchRaw) instead.
+     *
+     * Generic http request using jQuery
+     * @param settingsOrUrl the url to get
+     * @param params jQuery style ajax parameters
+     * @param data jQuery style data for post/put requests
+     * @param preventAutoFail
+     * @param method the http verb name
+     * @returns jQuery ajax promise object
+     * @deprecated use fetchJson instead
+     */
+    request(settings: string | ZzzAjaxSettingsDeprecated, params: any, data: any, preventAutoFail: boolean, method: string): any;
 }
 
 export { }

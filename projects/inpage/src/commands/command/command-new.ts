@@ -1,5 +1,4 @@
 ﻿import { CmsEngine, CommandNames, Commands } from '..';
-import { CommandContentTypeParams } from './command-content-type';
 import { SharedLogic } from './shared-logic';
 
 /**
@@ -44,15 +43,3 @@ Commands.add(CommandNames.new, 'New', 'plus', false, true, {
     return CmsEngine.openDialog(context, event);
   },
 });
-
-/**
- * Parameters used for the command `new`
- * <br>
- * The ContentType name determines what kind of item will be created.
- * <br>
- * ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)
- */
-// tslint:disable-next-line: no-empty-interface
-export interface CommandNewParams extends CommandContentTypeParams {
-
-}

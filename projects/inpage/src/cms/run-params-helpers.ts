@@ -1,8 +1,8 @@
 import { Sxc } from '../../../$2sxc/src/';
+import { RunParams, RunParamsWithContext } from '../../../$2sxc/src/cms';
 import { ContextIdentifier } from '../../../$2sxc/src/sxc-global/context-identifier';
 import { CommandParams, Commands } from '../commands';
 import { HasLog, Log } from '../core';
-import { RunParams, RunParamsWithContext } from '../../../$2sxc/src/cms';
 
 /**
  * Helper class to process parameters given to the Cms.Run statement

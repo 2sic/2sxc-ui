@@ -1,17 +1,6 @@
-/* Excluded from this release type: AjaxPromise */
+/* Excluded from this release type: Actions */
 
-/** @public */
-export declare interface AjaxSettings {
-    /** Override the endpoint, which is usually '2sxc' */
-    endpoint?: string;
-    /** Controller name, for controller/action calls */
-    controller?: string;
-    /** action name, for controller/action calls */
-    action?: string;
-    /** The params to be used in the url for the request */
-    params?: any;
-    preventAutoFail?: boolean;
-}
+/* Excluded from this release type: AjaxPromise */
 
 /* Excluded from this release type: AntiForgeryTokenHeaderNameDnn */
 
@@ -25,7 +14,205 @@ export declare interface AjaxSettings {
 
 /* Excluded from this release type: AssetsLoader */
 
+/* Excluded from this release type: AttrJsonContentGroup */
+
+/* Excluded from this release type: AttrJsonEditContext */
+
+/* Excluded from this release type: AttrJsonEntity */
+
+/* Excluded from this release type: AttrJsonEnvironment */
+
+/* Excluded from this release type: AttrJsonError */
+
+/* Excluded from this release type: AttrJsonLanguage */
+
+/* Excluded from this release type: AttrJsonUi */
+
+/* Excluded from this release type: AttrJsonUser */
+
+/* Excluded from this release type: BuildRule */
+
+/* Excluded from this release type: BuildSteps */
+
 /* Excluded from this release type: buildSxcRoot */
+
+/* Excluded from this release type: Button */
+
+/* Excluded from this release type: ButtonCommand */
+
+/* Excluded from this release type: ButtonConfigLoader */
+
+declare type ButtonGenOrProp<T> = ButtonPropGen<T> | T;
+
+/* Excluded from this release type: ButtonGroup */
+
+/* Excluded from this release type: ButtonGroupConfigLoader */
+
+/* Excluded from this release type: ButtonGroupsWip */
+
+/* Excluded from this release type: ButtonGroupWip */
+
+/**
+ * This is the most common call signature on most ButtonConfig properties
+ * @public
+ */
+declare type ButtonPropGen<T> = (context: ContextComplete) => T;
+
+/**
+ * Structure for constants in the selectors, to guarantee we got everything
+ */
+declare interface CbOrMod {
+    id: string;
+    class: string;
+    selector: string;
+    findAllLists: () => HTMLElement[];
+    findClosestList: (element: HTMLElement) => HTMLElement;
+    context: string;
+    singleItem?: string;
+}
+
+/* Excluded from this release type: CmsEngine */
+
+/* Excluded from this release type: Command */
+
+/**
+ * Parameters used for the command `add-existing`.
+ * <br>
+ * The contentType name determines what items will be shown in the dialog.
+ * <br>
+ * ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)
+ * @public
+ */
+export declare interface CommandAddExistingParams extends CommandAddParams {
+}
+
+/**
+ * Parameters used for the command `add`.
+ * <br>
+ * The contentType name determines what items will be created.
+ * <br>
+ * ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)
+ * @public
+ */
+export declare interface CommandAddParams extends CommandContentTypeParams {
+    /**
+     * Determins the position where a new item will be added to.
+     */
+    sortOrder: number;
+}
+
+/* Excluded from this release type: CommandCode */
+
+/* Excluded from this release type: CommandConfigLoader */
+
+/**
+ * Parameters used for the command `contentitems`.
+ * <br>
+ * The content-type name determines what items will be managed.
+ * <br>
+ * ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)
+ * @public
+ */
+export declare interface CommandContentItemsParams extends CommandContentTypeParams {
+    /**
+     * Filters to apply to the list of items.
+     * <br>
+     * Each property targets a field.
+     * The value is a string, number or array for filtering EntityIds or EntityGuids
+     */
+    filters?: Record<string, string | number | string[] | number[]>;
+}
+
+/**
+ * Parameters used for the command `contenttype`.
+ * <br>
+ * The content-type name determines what items will be loaded to manage the fields.
+ * <br>
+ * ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)
+ * @public
+ */
+export declare interface CommandContentTypeParams {
+    /**
+     * The content-type name
+     */
+    contentType: string;
+}
+
+/**
+ * Parameters used for the command `copy`.
+ * Will copy the entity on `entityId`.
+ * <br>
+ * ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)
+ * @public
+ */
+export declare interface CommandCopyParams extends CommandContentTypeParams, CommandParamsEntityById {
+}
+
+/**
+ * Parameters used for the command `custom` on toolbars.
+ * <br>
+ * ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)
+ * @public
+ */
+export declare interface CommandCustomParams {
+    /**
+     * Name of the function to call - must be available in the context.
+     * This is usually as a function window. Example:
+     * <br>
+     * If `call` is `sayHello` you need a `window.sayHello(context, event)`.
+     */
+    call: string;
+    /**
+     * **OBSOLETE - avoid using**
+     * <br>
+     * JavaScript as string containing the code to execute.
+     * This is the old V9 - it contains a function, not a name
+     * @obsolete
+     */
+    customCode: string;
+}
+
+/**
+ * Parameters used for the command `delete`.
+ * <br>
+ * ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)
+ * @public
+ */
+export declare interface CommandDeleteParams {
+    /**
+     * ID of item to delete, usually detected from context.
+     */
+    entityId: number;
+    /**
+     * Guid of item to delete, usually detected from context.
+     */
+    entityGuid: string;
+    /**
+     * Title of item to delete, usually detected from context.
+     * This is important to show the "Are you sure?" dialog.
+     */
+    entityTitle: string;
+}
+
+/* Excluded from this release type: CommandLinkGenerator */
+
+/**
+ * Parameters used for the command `metadata`.
+ * <br>
+ * Will do either one of these:
+ * - if it has an `entityId`, will just open `edit` for that Entity
+ * - if it has no `entityId`, will open `new` for the current `contentType`
+ * and assign to the target specified by `metadata`:
+ * <br>
+ * ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)
+ * @public
+ */
+export declare interface CommandMetadataParams extends CommandContentTypeParams, CommandParamsEntityById {
+    /**
+     * Target to assign the metadata to.
+     */
+    metadata: CommandParamsMetadata;
+}
 
 /**
  * Names of commands known to 2sxc CMS - for use in toolbars and calling commands directly from code
@@ -246,7 +433,109 @@ export declare enum CommandNames {
     zone = "zone"
 }
 
-/* Excluded from this release type: CommandParams */
+/**
+ * Parameters used for the command `new`
+ * <br>
+ * The ContentType name determines what kind of item will be created.
+ * <br>
+ * ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)
+ * @public
+ */
+export declare interface CommandNewParams extends CommandContentTypeParams {
+}
+
+/**
+ * Command parameters are handed over to a command for execution
+ * @public
+ */
+export declare interface CommandParams {
+    /**
+     * The action is used in scenarios where the command name must be included
+     */
+    action?: CommandNames;
+    /* Excluded from this release type: items */
+    /* Excluded from this release type: mode */
+    /* Excluded from this release type: contentType */
+    /* Excluded from this release type: contentTypeName */
+    /* Excluded from this release type: pipelineId */
+    /* Excluded from this release type: filters */
+    /* Excluded from this release type: dialog */
+    /* Excluded from this release type: sortOrder */
+    /* Excluded from this release type: entityId */
+    /* Excluded from this release type: entityGuid */
+    /* Excluded from this release type: entityTitle */
+    /* Excluded from this release type: title */
+    /* Excluded from this release type: useModuleList */
+    /* Excluded from this release type: metadata */
+    /* Excluded from this release type: isPublished */
+    /* Excluded from this release type: prefill */
+    /* Excluded from this release type: customCode */
+    /* Excluded from this release type: call */
+    /* Excluded from this release type: apps */
+    /* Excluded from this release type: parent */
+    /* Excluded from this release type: fields */
+    /**
+     * for template edit dialog
+     * @intenal
+     */
+    isshared?: boolean;
+}
+
+/**
+ * Parameters used for commands which need an entity ID or a list-reference.
+ * <br>
+ * ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)
+ */
+export declare interface CommandParamsEntity extends CommandParamsEntityById, CommandParamsEntityInContentBlock {
+}
+
+/**
+ * Parameters used for commands which address a specificy entity.
+ * <br>
+ * ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)
+ */
+export declare interface CommandParamsEntityById {
+    /**
+     * ID of item to edit.
+     */
+    entityId: number;
+}
+
+/**
+ * Parameters used for command which expect an item from a list of a ContentBlock.
+ * <br>
+ * ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)
+ */
+export declare interface CommandParamsEntityInContentBlock {
+    /**
+     * Determins the position of the item in the list that will be edited.
+     */
+    sortOrder: number;
+    /**
+     * Must be true, to work on the module list.
+     */
+    useModuleList: true;
+}
+
+/**
+ * Parameters used for command which expect an item in a list (field) of a parent.
+ * <br>
+ * ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)
+ */
+export declare interface CommandParamsEntityInList {
+    /**
+     * Determins the position of the item in the list that will be edited.
+     */
+    sortOrder: number;
+    /**
+     * Parent entity GUID.
+     */
+    parent: string;
+    /**
+     * Parent Entity field(s) name(s).
+     */
+    fields: string;
+}
 
 /**
  * Parameters on `metadata` for commands which have a metadata-target.
@@ -265,6 +554,69 @@ export declare interface CommandParamsMetadata {
      * The target type, will default to 10 = CMS-Item
      */
     targetType?: MetadataTargetTypes;
+}
+
+declare type CommandPromise<T> = Promise<T | void>;
+
+/* Excluded from this release type: Commands */
+
+/* Excluded from this release type: ContentBlockReference */
+
+/* Excluded from this release type: ContentListActionParams */
+
+/* Excluded from this release type: ContentListActions */
+
+/**
+ * @public
+ */
+declare class ContextBundleContent extends ContextBundleInstance {
+    /* Excluded from this release type: item */
+    /* Excluded from this release type: contentBlockReference */
+    /* Excluded from this release type: contentBlock */
+    /* Excluded from this release type: __constructor */
+}
+
+/**
+ * @public
+ */
+declare class ContextBundleInstance {
+    /**
+     * instance of sxc object
+     * @type {Sxc}
+     * @memberof ContextBundleInstance
+     */
+    sxc: Sxc;
+    /* Excluded from this release type: instance */
+    /* Excluded from this release type: app */
+    /* Excluded from this release type: ui */
+    /* Excluded from this release type: page */
+    /* Excluded from this release type: system */
+    /* Excluded from this release type: tenant */
+    /* Excluded from this release type: user */
+    _isContext: boolean;
+    /* Excluded from this release type: __constructor */
+    /* Excluded from this release type: is */
+}
+
+/**
+ * @public
+ */
+declare class ContextBundleToolbar extends ContextBundleContent {
+    /* Excluded from this release type: toolbar */
+    /* Excluded from this release type: __constructor */
+    /* Excluded from this release type: forButton */
+}
+
+/**
+ * @public
+ */
+declare class ContextComplete extends ContextBundleToolbar {
+    /* Excluded from this release type: button */
+    /* Excluded from this release type: commandWorkflow */
+    /* Excluded from this release type: __constructor */
+    /* Excluded from this release type: findContext */
+    /* Excluded from this release type: contextCopy */
+    /* Excluded from this release type: getContextInstance */
 }
 
 /**
@@ -298,6 +650,24 @@ export declare class ContextIdentifier {
     /* Excluded from this release type: is */
     /* Excluded from this release type: ensureCompleteOrThrow */
 }
+
+/* Excluded from this release type: ContextOfApp */
+
+/* Excluded from this release type: ContextOfContentBlock */
+
+/* Excluded from this release type: ContextOfInstance */
+
+/* Excluded from this release type: ContextOfItem */
+
+/* Excluded from this release type: ContextOfPage */
+
+/* Excluded from this release type: ContextOfSystem */
+
+/* Excluded from this release type: ContextOfTenant */
+
+/* Excluded from this release type: ContextOfUi */
+
+/* Excluded from this release type: ContextOfUser */
 
 /* Excluded from this release type: DnnUiRoot */
 
@@ -341,6 +711,16 @@ export declare abstract class HasLog {
 
 /* Excluded from this release type: HeaderNames */
 
+/* Excluded from this release type: InPageButtonGroupJson */
+
+/* Excluded from this release type: InPageButtonJson */
+
+/* Excluded from this release type: InPageCommandJson */
+
+/* Excluded from this release type: InPageCommandJsonWithTooMuchInfo */
+
+/* Excluded from this release type: InPageToolbarConfigVariations */
+
 /* Excluded from this release type: Insights */
 
 declare class InsightsLogSet {
@@ -362,6 +742,8 @@ declare class InsightsLogSet {
 /* Excluded from this release type: ItemIdentifierShared */
 
 /* Excluded from this release type: ItemIdentifierSimple */
+
+/* Excluded from this release type: ListWithCursor */
 
 /**
  * A log object which will collect log entries for another ojbect
@@ -610,15 +992,119 @@ export declare enum MetadataTargetTypes {
 
 /* Excluded from this release type: MetaHeaderJsApi */
 
+/* Excluded from this release type: ModifierBase */
+
+/* Excluded from this release type: ModifierContentBlock */
+
+/* Excluded from this release type: ModifierContentBlockInstance */
+
+/* Excluded from this release type: ModifierDnnModule */
+
+/* Excluded from this release type: ModifierDnnModuleInternal */
+
 /* Excluded from this release type: NoJQ */
 
 /* Excluded from this release type: NumberNotDefinedHuge */
 
 /* Excluded from this release type: Obj */
 
+/* Excluded from this release type: Operations */
+
 /* Excluded from this release type: PlatformDnn */
 
 /* Excluded from this release type: PlatformOqtane */
+
+/* Excluded from this release type: positionAndAlign */
+
+/* Excluded from this release type: PositionCoordinates */
+
+/* Excluded from this release type: Positioning */
+
+/* Excluded from this release type: PromiseFactory */
+
+/* Excluded from this release type: QeSelectors */
+
+/* Excluded from this release type: QuickE */
+
+/* Excluded from this release type: QuickEClipboard */
+
+/**
+ * Quick Edit Configuration which has an `enable` and specific button configurations
+ * @public
+ */
+export declare class QuickEditConfig {
+    /**
+     * Determine whether this section is enabled.
+     */
+    enable?: boolean | 'auto';
+    /**
+     * Optional detailed configuration of the buttons.
+     */
+    buttons?: QuickEditConfigButtons;
+}
+
+/**
+ * Buttons on a quick-edit toolbar
+ * @public
+ */
+export declare class QuickEditConfigButtons {
+    /**
+     * Enable the button to "Add Content"
+     */
+    addContent?: boolean;
+    /**
+     * Enable the button to "add App"
+     */
+    addApp?: boolean;
+    /**
+     * Enable the button "Select"
+     */
+    select?: boolean;
+    /**
+     * Enable the button "Paste"
+     */
+    paste?: boolean;
+    /**
+     * Enable the button "Delete"
+     */
+    delete?: boolean;
+    /**
+     * Enable the button "Move"
+     */
+    move?: boolean;
+}
+
+export declare const QuickEditConfigEnableAuto: string;
+
+/**
+ * Quick Edit - Full configuration at root, with `enable` and rules for `modules` and `innerBlocks`
+ * @public
+ */
+export declare class QuickEditConfigRoot extends QuickEditConfig {
+    /**
+     * The buttons configuration on the root.
+     * Will be used for the `modules` and `innerBlocks` if not specified there.
+     * Note that if not specified, will always default to true for all buttons.
+     */
+    buttons?: QuickEditConfigButtons;
+    /**
+     * Optional configuration for the Inner Content Blocks.
+     */
+    innerBlocks?: QuickEditConfig;
+    /**
+     * Optional configuration for the Modules.
+     */
+    modules?: QuickEditConfig;
+    /* Excluded from this release type: getDefault */
+}
+
+/* Excluded from this release type: QuickEditOverlay */
+
+/* Excluded from this release type: refresh */
+
+/* Excluded from this release type: RuleManager */
+
+/* Excluded from this release type: RuleParams */
 
 /**
  * Parameters for the Instance sxc.cms.run(...) command.
@@ -643,6 +1129,8 @@ export declare interface RunParams {
     workflows?: unknown;
 }
 
+/* Excluded from this release type: RunParamsHelpers */
+
 /**
  * Parameters for the **Global** $2sxc.cms.run(...) command in Addition to the [RunParams](xref:Api.Js.SxcJs.RunParams).
  * It provides context to the run-params such as a Sxc instance or a tag which it started on.
@@ -661,6 +1149,12 @@ export declare interface RunParamsWithContext extends RunParams {
      */
     context?: Sxc | ContextIdentifier;
 }
+
+/* Excluded from this release type: RunParamsWithWorkflows */
+
+/* Excluded from this release type: Selection_2 */
+
+/* Excluded from this release type: SharedLogic */
 
 /* Excluded from this release type: Stats */
 
@@ -739,6 +1233,8 @@ export declare class SxcCms extends SxcPart {
     run<T>(runParams: RunParams): Promise<void | T>;
 }
 
+/* Excluded from this release type: SxcCmsReal */
+
 /**
  * Data Service for an App / Sxc-Instance to get/create data of a specific Content-Type
  * @public
@@ -783,19 +1279,14 @@ export declare class SxcData<T = unknown> extends SxcDataServiceBase {
 }
 
 /**
- * Base class doing common checks
+ * Base class doing common checks.
+ * This is internal and not important, but we can't keep it out of the docs.
  * @public
  */
-export declare class SxcDataServiceBase extends SxcPart {
+export declare abstract class SxcDataServiceBase extends SxcPart {
     readonly name: string;
     protected readonly webApi: SxcWebApi;
-    /**
-     * Creates an instance of SxcData.
-     * @param {Sxc} sxc
-     * @param {string} name the content-type name
-     * @memberof SxcData
-     */
-    constructor(sxc: Sxc, name: string, nameInError: string);
+    /* Excluded from this release type: __constructor */
 }
 
 /**
@@ -895,6 +1386,51 @@ export declare interface SxcGlobal {
      */
     urlParams: UrlParams;
     /* Excluded from this release type: totalPopup */
+}
+
+/**
+ * Global Content-Management System on the $2sxc.cms.
+ *
+ * It is only available if the page is in edit mode / the page feature `2sxc.JsCms` has been activated.
+ * @public
+ */
+export declare class SxcGlobalCms extends HasLog {
+    /* Excluded from this release type: autoDump */
+    /* Excluded from this release type: __constructor */
+    /* Excluded from this release type: resetLog */
+    /**
+     * Run a command within a specific context - mostly for internal use.
+     * @param runParams The complete run params with a context
+     * @returns A promise which triggers when the command has completed.
+     */
+    run<T>(runParams: RunParamsWithContext): Promise<void | T>;
+    /**
+     * Run a command within a specific context.
+     * @param tag The context providing tag - an HTML tag inside a module/content-block
+     * @param action command-name (action)
+     * @param event Optional mouse-event which allows the command to do some optimizations for that case - like a mouse-click
+     * @returns A promise which triggers when the command has completed.
+     */
+    run<T>(tag: HTMLElement, action: string, event?: MouseEvent): Promise<void | T>;
+    /**
+     * Run a command within a specific context.
+     * @param tag The context providing tag - an HTML tag inside a module/content-block
+     * @param action command-name (action)
+     * @param params an object containing the the command-params
+     * @param event Optional mouse-event which allows the command to do some optimizations for that case - like a mouse-click
+     * @returns A promise which triggers when the command has completed.
+     */
+    run<T>(tag: HTMLElement, action: string, params?: CommandParams, event?: MouseEvent): Promise<void | T>;
+    /**
+     * Run a command within a specific context.
+     * @param tag The context providing tag - an HTML tag inside a module/content-block
+     * @param commandParams an object containing the the command-params as well as the command-name (action)
+     * @param event Optional mouse-event which allows the command to do some optimizations for that case - like a mouse-click
+     * @returns A promise which triggers when the command has completed.
+     */
+    run<T>(tag: HTMLElement, commandParams: CommandParams, event?: MouseEvent): Promise<void | T>;
+    /* Excluded from this release type: runInternal */
+    /* Excluded from this release type: do */
 }
 
 /* Excluded from this release type: SxcGlobalDebug */
@@ -1005,13 +1541,37 @@ export declare class SxcGlobalHttp extends HasLog {
 
 /* Excluded from this release type: SxcGlobalManage */
 
+/**
+ * $2sxc global interface _extending_ the `SxcGlobal` when the page feature `JsCms` is enabled.
+ *
+ * If the page feature `2sxc.JsCms` is not enabled, the `window.$2sxc` will be a [SxcGlobal](xref:Api.Js.SxcJs.SxcGlobal)
+ * @public
+ */
+export declare interface SxcGlobalWithCms {
+    /* Excluded from this release type: system */
+    /**
+     * Will retrieve a resource in the current language.
+     * Mainly used for toolbars etc. to support localization.
+     *
+     * Only available when edit mode is on meaning the page feature JsCms is enabled
+     * @param key the key of the resource to translate
+     */
+    translate(key: string): string;
+    /* Excluded from this release type: context */
+    /**
+     * Content Management features on the $2sxc
+     */
+    cms: SxcGlobalCms;
+}
+
 /* Excluded from this release type: SxcManage */
 
 /**
- * Base class for anything attached to an sxc-instance
+ * Base class for anything attached to an sxc-instance.
+ * This is internal and not important, but we can't keep it out of the docs.
  * @public
  */
-export declare class SxcPart {
+export declare abstract class SxcPart {
     /* Excluded from this release type: sxc */
     /* Excluded from this release type: partName */
     /* Excluded from this release type: __constructor */
@@ -1038,11 +1598,39 @@ export declare class SxcQuery extends SxcDataServiceBase {
     getStream<T = unknown>(stream: string): Promise<T[]>;
     getStream<T = unknown>(stream: string, urlParams: string | Record<string, unknown>): Promise<T[]>;
     getStream<T = unknown>(stream: string, urlParams: string | Record<string, unknown>, data: string | Record<string, unknown>): Promise<T[]>;
+    /**
+     * Get a query but only the mentioned streams.
+     * This will reduce the amount of data retrieved on queries that have many streams.
+     * @template T The schema/interfaces of what will be returned
+     * @returns {Promise<T>} Promise containing a object with stream-names and items in the streams.
+     * @public
+     */
     getStreams<T = unknown>(streams: string): Promise<T>;
+    /**
+     * Get a query but only the mentioned streams.
+     * This will reduce the amount of data retrieved on queries that have many streams.
+     * @template T The schema/interfaces of what will be returned
+     * @param {string} streams name of streams to get, comma separated
+     * @param urlParams additional parameters for the URL, either as a string or as a object
+     * @returns {Promise<T>} Promise containing a object with stream-names and items in the streams.
+     * @public
+     */
     getStreams<T = unknown>(streams: string, urlParams: string | Record<string, unknown>): Promise<T>;
+    /**
+     * Get a query but only the mentioned streams.
+     * This will reduce the amount of data retrieved on queries that have many streams.
+     * @template T The schema/interfaces of what will be returned
+     * @param {string} streams name of streams to get, comma separated
+     * @param urlParams additional parameters for the URL, either as a string or as a object
+     * @param data data to include in case of a POST call - if this is provided, it will use a post
+     * @returns {Promise<T>} Promise containing a object with stream-names and items in the streams.
+     * @public
+     */
     getStreams<T = unknown>(streams: string, urlParams: string | Record<string, unknown>, data: string | Record<string, unknown>): Promise<T>;
     /* Excluded from this release type: getInternal */
 }
+
+/* Excluded from this release type: SxcTools */
 
 /* Excluded from this release type: SxcVersion */
 
@@ -1052,7 +1640,7 @@ export declare class SxcQuery extends SxcDataServiceBase {
  * and that urls are rewritten
  * @public
  */
-export declare class SxcWebApi implements SxcWebApiDeprecated {
+export declare class SxcWebApi implements ZzzSxcWebApiDeprecated {
     private readonly sxc;
     /* Excluded from this release type: env */
     /* Excluded from this release type: __constructor */
@@ -1060,27 +1648,27 @@ export declare class SxcWebApi implements SxcWebApiDeprecated {
      * **Deprecated** - docs in the separate interface
      * @deprecated use fetchJson instead
      */
-    get(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): any;
+    get(settingsOrUrl: string | ZzzAjaxSettingsDeprecated, params?: any, data?: any, preventAutoFail?: boolean): any;
     /**
      * **Deprecated** - docs in the separate interface
      * @deprecated use fetchJson instead
      */
-    post(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): any;
+    post(settingsOrUrl: string | ZzzAjaxSettingsDeprecated, params?: any, data?: any, preventAutoFail?: boolean): any;
     /**
      * **Deprecated** - docs in the separate interface
      * @deprecated use fetchJson instead
      */
-    delete(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): any;
+    delete(settingsOrUrl: string | ZzzAjaxSettingsDeprecated, params?: any, data?: any, preventAutoFail?: boolean): any;
     /**
      * **Deprecated** - docs in the separate interface
      * @deprecated use fetchJson instead
      */
-    put(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): any;
+    put(settingsOrUrl: string | ZzzAjaxSettingsDeprecated, params?: any, data?: any, preventAutoFail?: boolean): any;
     /**
      * **Deprecated** - docs in the separate interface
      * @deprecated use fetchJson instead
      */
-    request(settings: string | AjaxSettings, params: any, data: any, preventAutoFail: boolean, method: string): any;
+    request(settings: string | ZzzAjaxSettingsDeprecated, params: any, data: any, preventAutoFail: boolean, method: string): any;
     /**
      * Will retrieve data from the backend using a standard fetch.
      * @param url a full url or short-hand like `controller/method?params` `app/auto/api/controller/method?params`. Note that params would also be specified on the url.
@@ -1123,95 +1711,91 @@ export declare class SxcWebApi implements SxcWebApiDeprecated {
     url(url: string, params?: string | Record<string, any>): string;
 }
 
-/**
- * **Deprecated**
- * Old APIs on sxc.webApi.
- * They only exist if jQuery is included on the page, and we highly discourage their use.
- * @deprecated
- */
-export declare interface SxcWebApiDeprecated {
-    /**
-     * **Deprecated**
-     * Please use [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchJson)
-     * or [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchRaw) instead.
-     *
-     * Returns an http-get promise using jQuery
-     * @param settingsOrUrl the url to get
-     * @param params jQuery style ajax parameters
-     * @param data jQuery style data for post/put requests
-     * @param preventAutoFail
-     * @returns jQuery ajax promise object
-     * @deprecated use fetchJson instead
-     */
-    get(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): any;
-    /**
-     * **Deprecated**
-     * Please use [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchJson)
-     * or [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchRaw) instead.
-     *
-     * Returns an http-post promise using jQuery
-     * @param settingsOrUrl the url to get
-     * @param params jQuery style ajax parameters
-     * @param data jQuery style data for post/put requests
-     * @param preventAutoFail
-     * @returns jQuery ajax promise object
-     * @deprecated use fetchJson instead
-     */
-    post(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): any;
-    /**
-     * **Deprecated**
-     * Please use [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchJson)
-     * or [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchRaw) instead.
-     *
-     * Returns an http-delete promise using jQuery
-     * @param settingsOrUrl the url to talk to
-     * @param params jQuery style ajax parameters
-     * @param data jQuery style data for post/put requests
-     * @param preventAutoFail
-     * @returns jQuery ajax promise object
-     * @deprecated use fetchJson instead
-     */
-    delete(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): any;
-    /**
-     * **Deprecated**
-     * Please use [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchJson)
-     * or [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchRaw) instead.
-     *
-     * Returns an http-put promise using jQuery
-     * @param settingsOrUrl the url to put
-     * @param params jQuery style ajax parameters
-     * @param data jQuery style data for post/put requests
-     * @param preventAutoFail
-     * @returns jQuery ajax promise object
-     * @deprecated use fetchJson instead
-     */
-    put(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): any;
-    /**
-     * **Deprecated**
-     * Please use [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchJson)
-     * or [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchRaw) instead.
-     *
-     * Generic http request using jQuery
-     * @param settingsOrUrl the url to get
-     * @param params jQuery style ajax parameters
-     * @param data jQuery style data for post/put requests
-     * @param preventAutoFail
-     * @param method the http verb name
-     * @returns jQuery ajax promise object
-     * @deprecated use fetchJson instead
-     */
-    request(settings: string | AjaxSettings, params: any, data: any, preventAutoFail: boolean, method: string): any;
-}
+/* Excluded from this release type: SystemUpgrader */
+
+/* Excluded from this release type: TemplateEditor */
 
 /* Excluded from this release type: TemplateIdentifier */
+
+/* Excluded from this release type: Toolbar */
+
+/* Excluded from this release type: TOOLBAR_FOLLOW_ALWAYS */
+
+/* Excluded from this release type: TOOLBAR_FOLLOW_INITIAL */
+
+/* Excluded from this release type: TOOLBAR_FOLLOW_SCROLL */
+
+/* Excluded from this release type: TOOLBAR_SHOW_ALWAYS */
+
+/* Excluded from this release type: TOOLBAR_SHOW_HOVER */
+
+/* Excluded from this release type: ToolbarButtonSettings */
+
+/* Excluded from this release type: ToolbarConfigLoader */
+
+/* Excluded from this release type: ToolbarConfigLoaderV09 */
+
+/* Excluded from this release type: ToolbarConfigLoaderV10 */
+
+/* Excluded from this release type: ToolbarInitConfig */
+
+/* Excluded from this release type: ToolbarManager */
+
+/* Excluded from this release type: ToolbarSettings */
+
+/* Excluded from this release type: ToolbarTemplate */
+
+/* Excluded from this release type: ToolbarTemplateGroup */
+
+/* Excluded from this release type: ToolbarTemplateManager */
+
+/* Excluded from this release type: ToolbarWip */
+
+/* Excluded from this release type: ToolbarWithWorkflow */
+
+/**
+ * A workflow manager _of a Toolbar_ which will run stuff before / after commands.
+ * When toolbars are created, they will add a Manager and then raise an event for in-page code to add workflow steps.
+ * Normally the toolbar with raise a `toolbar-init` event where you can then add steps.
+ */
+export declare class ToolbarWorkflowManager extends HasLog {
+    private isDummy;
+    /* Excluded from this release type: steps */
+    /* Excluded from this release type: __constructor */
+    /**
+     * Register one or many [workflow-steps](xref:Api.Js.SxcJs.WorkflowStep) to the toolbar, to use if toolbar commands are executed.
+     */
+    add(steps: WorkflowStep | WorkflowStep[]): void;
+    /* Excluded from this release type: addOne */
+    /* Excluded from this release type: run */
+    /* Excluded from this release type: attach */
+    /* Excluded from this release type: runNextPromiseIfNotCancelled */
+}
 
 /* Excluded from this release type: ToSxcName */
 
 /* Excluded from this release type: TotalPopup */
 
+declare type TypeAutoAddMore = null | 'start' | 'end' | true;
+
+/* Excluded from this release type: TypeFollow */
+
+declare type TypeHover = 'left' | 'right' | 'none';
+
+/* Excluded from this release type: TypeShow */
+
+/* Excluded from this release type: TypeTbD */
+
 export declare type TypeValue = boolean | string | number | Date;
 
 /* Excluded from this release type: urlClean */
+
+declare interface UrlItemParams {
+    prefill?: Record<string, TypeValue>;
+    items?: string;
+    contentTypeName?: string;
+    filters?: string;
+}
 
 /**
  * Helper object to read url params.
@@ -1240,6 +1824,211 @@ export declare class UrlParams {
     isDebug(): boolean;
     /* Excluded from this release type: toUrl */
     /* Excluded from this release type: toObj */
+}
+
+/* Excluded from this release type: WorkflowCommands */
+
+/* Excluded from this release type: WorkflowHelper */
+
+/**
+ * Phases / events of a specific workflow.
+ * @export
+ * @enum {number}
+ */
+export declare enum WorkflowPhases {
+    /**
+     * Run at every phase - before and after events/commands
+     */
+    all = "all",
+    /**
+     * Run before a specific event / command
+     */
+    before = "before",
+    /**
+     * Run after a specific event / command
+     */
+    after = "after"
+}
+
+/* Excluded from this release type: WorkflowPromiseFactory */
+
+/**
+ * A workflow step (code-sequence) to run before/after specific events.
+ * @public
+ */
+export declare interface WorkflowStep {
+    /**
+     * The name of this step, in case it needs to be replaced or somehow controlled
+     * Will be empty by default
+     */
+    name?: string;
+    /**
+     * The action this step is for, can be 'any', 'edit', etc.
+     * Will be 'all' by default
+     */
+    command: string;
+    /**
+     * Action-phase being run, like 'all', 'before', 'after'
+     * will be 'before' by default
+     */
+    phase?: WorkflowPhases;
+    /**
+     * Execution priority, higher comes first
+     * Will be 1 by default.
+     */
+    priority?: number;
+    /**
+     * The code which is run, must be a promise-factory.
+     * So it's a function that will return a promise.
+     * Required.
+     */
+    code: WorkflowStepCode;
+}
+
+/**
+ * Signature of your code which is used in workflows.
+ * Basically it's just a function receiving [](xref:Api.Js.SxcJs.WorkflowStepCodeArguments)
+ * @public
+ * Doc Notes: it must be internal, as docFx cannot process types, so it's documented there
+ */
+export declare type WorkflowStepCode = (args: WorkflowStepCodeArguments) => WorkflowStepCodeArguments;
+
+/**
+ * Arguments for [WorkflowStepCode](xref:Api.Js.SxcJs.WorkflowStepCode).
+ * Will be passed to your code and should also be returned by your code.
+ * This also allows cancelling further execution.
+ * @export
+ */
+export declare class WorkflowStepCodeArguments {
+    /**
+     * Name this workflow is running for
+     */
+    command: string;
+    /**
+     * The phase it's in (before, after, etc.)
+     */
+    phase: WorkflowPhases;
+    /**
+     * Context of the current command / step being run
+     */
+    context: ContextComplete;
+    /**
+     * Result in after-phases of the workflow
+     * BETA - never really tested this
+     */
+    result: unknown;
+    /* Excluded from this release type: __constructor */
+    /**
+     * If the workflow should be cancelled.
+     * Can be set by any workflow step.
+     * If set to true, following steps / workflows will not run.
+     */
+    cancel: boolean;
+}
+
+/* Excluded from this release type: WorkflowStepHelper */
+
+/**
+ * Deprecated parameters for old jQuery AJAX calls.
+ * Shouldn't be used any more.
+ * @public
+ * @deprecated
+ */
+export declare interface ZzzAjaxSettingsDeprecated {
+    /* Excluded from this release type: endpoint */
+    /**
+     * Controller name, for controller/action calls
+     */
+    controller?: string;
+    /**
+     * action name, for controller/action calls
+     */
+    action?: string;
+    /**
+     * The params to be used in the url for the request
+     */
+    params?: any;
+    /* Excluded from this release type: preventAutoFail */
+}
+
+/**
+ * **Deprecated**
+ * Old APIs on sxc.webApi.
+ * They only exist if jQuery is included on the page, and we highly discourage their use.
+ * @deprecated
+ */
+export declare interface ZzzSxcWebApiDeprecated {
+    /**
+     * **Deprecated**
+     * Please use [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchJson)
+     * or [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchRaw) instead.
+     *
+     * Returns an http-get promise using jQuery
+     * @param settingsOrUrl the url to get
+     * @param params jQuery style ajax parameters
+     * @param data jQuery style data for post/put requests
+     * @param preventAutoFail
+     * @returns jQuery ajax promise object
+     * @deprecated use fetchJson instead
+     */
+    get(settingsOrUrl: string | ZzzAjaxSettingsDeprecated, params?: any, data?: any, preventAutoFail?: boolean): any;
+    /**
+     * **Deprecated**
+     * Please use [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchJson)
+     * or [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchRaw) instead.
+     *
+     * Returns an http-post promise using jQuery
+     * @param settingsOrUrl the url to get
+     * @param params jQuery style ajax parameters
+     * @param data jQuery style data for post/put requests
+     * @param preventAutoFail
+     * @returns jQuery ajax promise object
+     * @deprecated use fetchJson instead
+     */
+    post(settingsOrUrl: string | ZzzAjaxSettingsDeprecated, params?: any, data?: any, preventAutoFail?: boolean): any;
+    /**
+     * **Deprecated**
+     * Please use [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchJson)
+     * or [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchRaw) instead.
+     *
+     * Returns an http-delete promise using jQuery
+     * @param settingsOrUrl the url to talk to
+     * @param params jQuery style ajax parameters
+     * @param data jQuery style data for post/put requests
+     * @param preventAutoFail
+     * @returns jQuery ajax promise object
+     * @deprecated use fetchJson instead
+     */
+    delete(settingsOrUrl: string | ZzzAjaxSettingsDeprecated, params?: any, data?: any, preventAutoFail?: boolean): any;
+    /**
+     * **Deprecated**
+     * Please use [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchJson)
+     * or [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchRaw) instead.
+     *
+     * Returns an http-put promise using jQuery
+     * @param settingsOrUrl the url to put
+     * @param params jQuery style ajax parameters
+     * @param data jQuery style data for post/put requests
+     * @param preventAutoFail
+     * @returns jQuery ajax promise object
+     * @deprecated use fetchJson instead
+     */
+    put(settingsOrUrl: string | ZzzAjaxSettingsDeprecated, params?: any, data?: any, preventAutoFail?: boolean): any;
+    /**
+     * **Deprecated**
+     * Please use [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchJson)
+     * or [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchRaw) instead.
+     *
+     * Generic http request using jQuery
+     * @param settingsOrUrl the url to get
+     * @param params jQuery style ajax parameters
+     * @param data jQuery style data for post/put requests
+     * @param preventAutoFail
+     * @param method the http verb name
+     * @returns jQuery ajax promise object
+     * @deprecated use fetchJson instead
+     */
+    request(settings: string | ZzzAjaxSettingsDeprecated, params: any, data: any, preventAutoFail: boolean, method: string): any;
 }
 
 export { }

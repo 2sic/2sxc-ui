@@ -7,3 +7,5 @@
 export * from './parts/dist/$2sxc/src';
 
 export * from './parts/dist/core';
+
+export * from './parts/dist/inpage/src';

@@ -15,6 +15,10 @@ export const TOOLBAR_SHOW_ALWAYS = 'always';
  * @internal
  */
 export const TOOLBAR_SHOW_HOVER = 'hover';
+
+/**
+ * @internal
+ */
 type TypeShow = typeof TOOLBAR_SHOW_ALWAYS | typeof TOOLBAR_SHOW_HOVER;
 
 const followDefault = 'default';

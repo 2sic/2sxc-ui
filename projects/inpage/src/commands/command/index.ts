@@ -38,3 +38,6 @@
 
 // Workflow
 /** @internal */ export * from './workflow-commands';
+
+// Params
+/** @internal */ export * from './command-all-params';

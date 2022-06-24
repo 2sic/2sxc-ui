@@ -1,9 +1,9 @@
 ﻿import { Sxc } from '../sxc';
 import { AjaxPromise } from './ajax-promise';
 import { SxcGlobalEnvironment } from '../../environment';
-import { AjaxSettings } from './ajax-settings';
+import { ZzzAjaxSettingsDeprecated } from './ajax-settings';
 import { NoJQ } from '../../../../core';
-import { SxcWebApiDeprecated } from './sxc-web-api-deprecated';
+import { ZzzSxcWebApiDeprecated } from './sxc-web-api-deprecated';
 
 /**
  * helper API to run ajax / REST calls to the server
@@ -11,7 +11,7 @@ import { SxcWebApiDeprecated } from './sxc-web-api-deprecated';
  * and that urls are rewritten
  * @public
  */
-export class SxcWebApi implements SxcWebApiDeprecated {
+export class SxcWebApi implements ZzzSxcWebApiDeprecated {
     /**
      * @type {SxcGlobalEnvironment}
      * @memberof SxcWebApi
@@ -32,7 +32,7 @@ export class SxcWebApi implements SxcWebApiDeprecated {
      * **Deprecated** - docs in the separate interface
      * @deprecated use fetchJson instead
      */
-    get(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): any {
+    get(settingsOrUrl: string | ZzzAjaxSettingsDeprecated, params?: any, data?: any, preventAutoFail?: boolean): any {
         return this.request(settingsOrUrl, params, data, preventAutoFail, 'GET');
     }
 
@@ -40,7 +40,7 @@ export class SxcWebApi implements SxcWebApiDeprecated {
      * **Deprecated** - docs in the separate interface
      * @deprecated use fetchJson instead
      */
-    post(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): any {
+    post(settingsOrUrl: string | ZzzAjaxSettingsDeprecated, params?: any, data?: any, preventAutoFail?: boolean): any {
         return this.request(settingsOrUrl, params, data, preventAutoFail, 'POST');
     }
 
@@ -48,7 +48,7 @@ export class SxcWebApi implements SxcWebApiDeprecated {
      * **Deprecated** - docs in the separate interface
      * @deprecated use fetchJson instead
      */
-    delete(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): any {
+    delete(settingsOrUrl: string | ZzzAjaxSettingsDeprecated, params?: any, data?: any, preventAutoFail?: boolean): any {
         return this.request(settingsOrUrl, params, data, preventAutoFail, 'DELETE');
     }
 
@@ -56,7 +56,7 @@ export class SxcWebApi implements SxcWebApiDeprecated {
      * **Deprecated** - docs in the separate interface
      * @deprecated use fetchJson instead
      */
-     put(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): any {
+     put(settingsOrUrl: string | ZzzAjaxSettingsDeprecated, params?: any, data?: any, preventAutoFail?: boolean): any {
         return this.request(settingsOrUrl, params, data, preventAutoFail, 'PUT');
     }
 
@@ -64,7 +64,7 @@ export class SxcWebApi implements SxcWebApiDeprecated {
      * **Deprecated** - docs in the separate interface
      * @deprecated use fetchJson instead
      */
-     request(settings: string | AjaxSettings, params: any, data: any, preventAutoFail: boolean, method: string): any {
+     request(settings: string | ZzzAjaxSettingsDeprecated, params: any, data: any, preventAutoFail: boolean, method: string): any {
 
         // url parameter: auto convert a single value (instead of object of values) to an id=... parameter
         // tslint:disable-next-line:curly
@@ -100,7 +100,7 @@ export class SxcWebApi implements SxcWebApiDeprecated {
 
         settings = Object.assign({}, defaults, settings);
 
-        const promise = http.makePromise(settings as AjaxSettings);
+        const promise = http.makePromise(settings as ZzzAjaxSettingsDeprecated);
 
         return promise;
     }

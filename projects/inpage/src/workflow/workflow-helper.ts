@@ -1,4 +1,4 @@
-import { ToolbarWithWorkflow, WorkflowStepCodeArguments, ToolbarWorkflowManager } from '.';
+import { ToolbarWithWorkflow, ToolbarWorkflowManager, WorkflowStepCodeArguments } from '.';
 
 let dummyWorkflowManager: ToolbarWorkflowManager;
 const debug = false;
@@ -6,7 +6,6 @@ const debug = false;
 /**
  * Various helpers to get a workflow or determine result state
  *
- * @export
  * @class WorkflowHelper
  * @internal
  */
