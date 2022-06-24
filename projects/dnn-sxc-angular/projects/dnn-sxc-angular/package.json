@@ -1,12 +1,12 @@
 {
-  "name": "@2sic.com/dnn-sxc-angular",
-  "version": "11.01.02-beta.2",
+  "name": "@2sic.com/sxc-angular",
+  "version": "14.02.00-beta.0",
   "author": "2sic.com - daniel mettler (iJungleboy)",
   "bugs": {
     "url": "https://github.com/2sic/2sxc-ui/issues"
   },
   "dependencies": {
-    "@2sic.com/2sxc-typings": "^14.2.2-beta.4",
+    "@2sic.com/2sxc-typings": "^14.2.3",
     "tslib": "^2.0.0"
   },
   "peerDependencies": {
@@ -15,11 +15,14 @@
     "@angular/platform-browser": ">=13.0.0",
     "rxjs": ">=6.6.0"
   },
-  "homepage": "https://github.com/2sic/2sxc-ui/tree/master/projects/dnn-sxc-angular#readme",
+  "homepage": "https://github.com/2sic/2sxc-ui/tree/master/projects/sxc-angular#readme",
   "license": "MIT",
-  "readme": "Connect DNN / DotNetNuke and 2sxc to Angular 6-11 and probably newer as well",
+  "readme": "Connect DNN / DotNetNuke / Oqtane and 2sxc to Angular 13+ and probably newer as well",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/2sic/2sxc-ui.git"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

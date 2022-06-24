@@ -3,13 +3,13 @@ import { WorkflowCommands } from '../commands';
 import { ContextComplete } from '../context';
 import { HasLog, Insights, Log } from '../core';
 import { ToolbarWithWorkflow } from './toolbar-with-workflow';
-import { WorkflowStepCode } from './workflow';
 import { WorkflowHelper } from './workflow-helper';
 
 /**
  * A workflow manager _of a Toolbar_ which will run stuff before / after commands.
  * When toolbars are created, they will add a Manager and then raise an event for in-page code to add workflow steps.
  * Normally the toolbar with raise a `toolbar-init` event where you can then add steps.
+ * @public
  */
 export class ToolbarWorkflowManager extends HasLog {
 
@@ -58,7 +58,7 @@ export class ToolbarWorkflowManager extends HasLog {
   /**
    * Run a workflow.
    * @internal
-   * @returns {Promise<WorkflowStepCodeArguments>} This will let you chain what happens. The arguments contain a status if it should be cancelled.
+   * @returns This will let you chain what happens. The arguments contain a status if it should be cancelled.
    */
   run(wfArgs: WorkflowStepCodeArguments): Promise<WorkflowStepCodeArguments> {
     const cl = this.log.call('run', `'${wfArgs.command}' for '${wfArgs.phase}'`);
@@ -117,13 +117,9 @@ export class ToolbarWorkflowManager extends HasLog {
 
   /**
    *
-   * @param currentArgs
-   * @param prevArgs
-   * @param nextFactory
-   * @returns
    * @internal
    */
-  private runNextPromiseIfNotCancelled(currentArgs: WorkflowStepCodeArguments | boolean, prevArgs: WorkflowStepCodeArguments, nextFactory: WorkflowStepCode) {
+  private runNextPromiseIfNotCancelled(currentArgs: WorkflowStepCodeArguments | boolean, prevArgs: WorkflowStepCodeArguments, nextFactory: WorkflowStep['code']) {
     // determine cancel based on either a boolean result or a real WorkflowArguments with cancel.
     const cancel = WorkflowHelper.isCancelled(currentArgs);
     // make sure we have real arguments no matter what came in - assuming we have prevArgs

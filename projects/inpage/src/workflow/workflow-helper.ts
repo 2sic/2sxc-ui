@@ -5,8 +5,6 @@ const debug = false;
 
 /**
  * Various helpers to get a workflow or determine result state
- *
- * @class WorkflowHelper
  * @internal
  */
 export class WorkflowHelper {
@@ -34,9 +32,8 @@ export class WorkflowHelper {
     /**
      * Get a dummy workflow manager
      *
-     * @static
-     * @returns {ToolbarWorkflowManager}
-     * @memberof WorkflowHelper
+     * @returns the manager
+     * @internal
      */
     static getDummyManager(): ToolbarWorkflowManager {
         if (!dummyWorkflowManager) dummyWorkflowManager = new ToolbarWorkflowManager(null, true);
@@ -46,10 +43,8 @@ export class WorkflowHelper {
     /**
      * Determine if a workflow has been cancelled
      *
-     * @static
-     * @param {(WorkflowStepCodeArguments | boolean)} currentArgs
-     * @returns {boolean}
-     * @memberof WorkflowHelper
+     * @returns is cancelled
+     * @internal
      */
     static isCancelled(currentArgs: WorkflowStepCodeArguments | boolean): boolean {
         const cancel = this._isCancelled(currentArgs);
@@ -57,6 +52,11 @@ export class WorkflowHelper {
         return cancel;
     }
 
+    /**
+     *
+     * @returns
+     * @internal
+     */
     private static _isCancelled(currentArgs: WorkflowStepCodeArguments | boolean): boolean {
         // promise forgot to return anything, no cancel
         if (currentArgs == null) return false;

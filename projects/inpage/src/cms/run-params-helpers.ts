@@ -9,8 +9,6 @@ import { HasLog, Log } from '../core';
  * Important because certain params may sometimes be full objects, and sometimes just a name.
  * In addition, even if we have more than the name, we must ensure that defaults are also included
  *
- * @export
- * @class RunParameters
  * @internal
  */
 export class RunParamsHelpers extends HasLog {

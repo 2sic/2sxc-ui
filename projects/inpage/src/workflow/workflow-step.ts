@@ -1,4 +1,4 @@
-import { WorkflowPhases, WorkflowStepCode } from '.';
+import { WorkflowPhases, WorkflowStepCodeArguments } from '.';
 
 /**
  * A workflow step (code-sequence) to run before/after specific events.
@@ -33,6 +33,7 @@ export interface WorkflowStep {
    * The code which is run, must be a promise-factory.
    * So it's a function that will return a promise.
    * Required.
+   * See [](xref:Api.Js.SxcJs.WorkflowStepCode)
    */
-  code: WorkflowStepCode;
+  code: (args: WorkflowStepCodeArguments) => WorkflowStepCodeArguments;
 }

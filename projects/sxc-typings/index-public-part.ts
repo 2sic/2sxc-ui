@@ -1757,6 +1757,7 @@ export declare class SxcWebApi implements ZzzSxcWebApiDeprecated {
  * A workflow manager _of a Toolbar_ which will run stuff before / after commands.
  * When toolbars are created, they will add a Manager and then raise an event for in-page code to add workflow steps.
  * Normally the toolbar with raise a `toolbar-init` event where you can then add steps.
+ * @public
  */
 export declare class ToolbarWorkflowManager extends HasLog {
     private isDummy;
@@ -1832,8 +1833,6 @@ export declare class UrlParams {
 
 /**
  * Phases / events of a specific workflow.
- * @export
- * @enum {number}
  */
 export declare enum WorkflowPhases {
     /**
@@ -1881,23 +1880,18 @@ export declare interface WorkflowStep {
      * The code which is run, must be a promise-factory.
      * So it's a function that will return a promise.
      * Required.
+     * See [](xref:Api.Js.SxcJs.WorkflowStepCode)
      */
-    code: WorkflowStepCode;
+    code: (args: WorkflowStepCodeArguments) => WorkflowStepCodeArguments;
 }
 
-/**
- * Signature of your code which is used in workflows.
- * Basically it's just a function receiving [](xref:Api.Js.SxcJs.WorkflowStepCodeArguments)
- * @public
- * Doc Notes: it must be internal, as docFx cannot process types, so it's documented there
- */
-export declare type WorkflowStepCode = (args: WorkflowStepCodeArguments) => WorkflowStepCodeArguments;
+/* Excluded from this release type: WorkflowStepCode */
 
 /**
  * Arguments for [WorkflowStepCode](xref:Api.Js.SxcJs.WorkflowStepCode).
  * Will be passed to your code and should also be returned by your code.
  * This also allows cancelling further execution.
- * @export
+ * @public
  */
 export declare class WorkflowStepCodeArguments {
     /**

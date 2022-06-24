@@ -1096,7 +1096,6 @@ export declare class ContentListActionParams {
 
 /**
  * These actions make changes to a content-block - like adding, removing or publishing items in the block
- * @class ActionsCatalog
  * @internal
  */
 declare class ContentListActions {
@@ -1581,11 +1580,11 @@ declare interface InPageCommandJsonWithTooMuchInfo extends InPageCommandJson {
 /**
  * take various common input format and convert it to a full toolbar-structure definition
  * can handle the following input formats (the param unstructuredConfig):
- * complete tree (detected by "groups): { groups: [ {}, {}], name: ..., defaults: {...} }
- * group of buttons (detected by "buttons): { buttons: "..." | [], name: ..., ... }
- * list of buttons (detected by IsArray with action): [ { action: "..." | []}, { action: ""|[]} ]
- * button (detected by "command"): { command: ""|[], icon: "..", ... }
- * just a command (detected by "action"): { entityId: 17, action: "edit" }
+ * complete tree (detected by "groups): \{ groups: [ \{\}, \{\}], name: ..., defaults: \{...\} \}
+ * group of buttons (detected by "buttons): \{ buttons: "..." | [], name: ..., ... \}
+ * list of buttons (detected by IsArray with action): [ \{ action: "..." | []\}, \{ action: ""|[]\} ]
+ * button (detected by "command"): \{ command: ""|[], icon: "..", ... \}
+ * just a command (detected by "action"): \{ entityId: 17, action: "edit" \}
  * array of commands: [{entityId: 17, action: "edit"}, {contentType: "blog", action: "new"}]
  * @internal
  */
@@ -2555,8 +2554,6 @@ export declare interface RunParams {
  * Important because certain params may sometimes be full objects, and sometimes just a name.
  * In addition, even if we have more than the name, we must ensure that defaults are also included
  *
- * @export
- * @class RunParameters
  * @internal
  */
 export declare class RunParamsHelpers extends HasLog {
@@ -3675,7 +3672,7 @@ declare class ToolbarInitConfig {
     /**
      * Load the toolbar configuration from the sxc-toolbar attribute OR the old schema
      * @param tag
-     * @return a configuration object or null in case of an error
+     * @returns a configuration object or null in case of an error
      */
     static loadFromTag(tag: HTMLElement): ToolbarInitConfig;
 }
@@ -3824,9 +3821,6 @@ declare interface ToolbarWip {
 /**
  * Simple interface to extend a HtmlElement with Workflow Manager
  *
- * @export
- * @interface ToolbarWithWorkflow
- * @extends {HTMLElement}
  * @internal
  */
 export declare interface ToolbarWithWorkflow extends HTMLElement {
@@ -3837,6 +3831,7 @@ export declare interface ToolbarWithWorkflow extends HTMLElement {
  * A workflow manager _of a Toolbar_ which will run stuff before / after commands.
  * When toolbars are created, they will add a Manager and then raise an event for in-page code to add workflow steps.
  * Normally the toolbar with raise a `toolbar-init` event where you can then add steps.
+ * @public
  */
 export declare class ToolbarWorkflowManager extends HasLog {
     private isDummy;
@@ -3861,7 +3856,7 @@ export declare class ToolbarWorkflowManager extends HasLog {
     /**
      * Run a workflow.
      * @internal
-     * @returns {Promise<WorkflowStepCodeArguments>} This will let you chain what happens. The arguments contain a status if it should be cancelled.
+     * @returns This will let you chain what happens. The arguments contain a status if it should be cancelled.
      */
     run(wfArgs: WorkflowStepCodeArguments): Promise<WorkflowStepCodeArguments>;
     /**
@@ -3873,10 +3868,6 @@ export declare class ToolbarWorkflowManager extends HasLog {
     attach(node: HTMLElement, context: ContextComplete): void;
     /**
      *
-     * @param currentArgs
-     * @param prevArgs
-     * @param nextFactory
-     * @returns
      * @internal
      */
     private runNextPromiseIfNotCancelled;
@@ -3981,8 +3972,6 @@ export declare const WorkflowCommands: {
 
 /**
  * Various helpers to get a workflow or determine result state
- *
- * @class WorkflowHelper
  * @internal
  */
 export declare class WorkflowHelper {
@@ -3994,27 +3983,27 @@ export declare class WorkflowHelper {
     /**
      * Get a dummy workflow manager
      *
-     * @static
-     * @returns {ToolbarWorkflowManager}
-     * @memberof WorkflowHelper
+     * @returns the manager
+     * @internal
      */
     static getDummyManager(): ToolbarWorkflowManager;
     /**
      * Determine if a workflow has been cancelled
      *
-     * @static
-     * @param {(WorkflowStepCodeArguments | boolean)} currentArgs
-     * @returns {boolean}
-     * @memberof WorkflowHelper
+     * @returns is cancelled
+     * @internal
      */
     static isCancelled(currentArgs: WorkflowStepCodeArguments | boolean): boolean;
+    /**
+     *
+     * @returns
+     * @internal
+     */
     private static _isCancelled;
 }
 
 /**
  * Phases / events of a specific workflow.
- * @export
- * @enum {number}
  */
 export declare enum WorkflowPhases {
     /**
@@ -4065,14 +4054,15 @@ export declare interface WorkflowStep {
      * The code which is run, must be a promise-factory.
      * So it's a function that will return a promise.
      * Required.
+     * See [](xref:Api.Js.SxcJs.WorkflowStepCode)
      */
-    code: WorkflowStepCode;
+    code: (args: WorkflowStepCodeArguments) => WorkflowStepCodeArguments;
 }
 
 /**
  * Signature of your code which is used in workflows.
  * Basically it's just a function receiving [](xref:Api.Js.SxcJs.WorkflowStepCodeArguments)
- * @public
+ * @internal
  * Doc Notes: it must be internal, as docFx cannot process types, so it's documented there
  */
 export declare type WorkflowStepCode = (args: WorkflowStepCodeArguments) => WorkflowStepCodeArguments;
@@ -4081,7 +4071,7 @@ export declare type WorkflowStepCode = (args: WorkflowStepCodeArguments) => Work
  * Arguments for [WorkflowStepCode](xref:Api.Js.SxcJs.WorkflowStepCode).
  * Will be passed to your code and should also be returned by your code.
  * This also allows cancelling further execution.
- * @export
+ * @public
  */
 export declare class WorkflowStepCodeArguments {
     /**
