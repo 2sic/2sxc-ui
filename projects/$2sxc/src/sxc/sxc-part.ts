@@ -8,9 +8,8 @@ import { Sxc } from '..';
 export abstract class SxcPart {
   /**
   * Creates an instance of SxcData.
-  * @param {Sxc} sxc
-  * @param {string} partName name of the part
-  * @memberof SxcData
+  * @param sxc: sxc
+  * @param partName: name of the part
   * @internal
   */
   constructor(

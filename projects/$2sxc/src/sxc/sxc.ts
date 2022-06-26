@@ -20,15 +20,12 @@ export class Sxc extends HasLog {
    * Web API calls for this instance.
    * This is the pure call APIs system. 
    * To get data or queries, best use the data or query services.
-   * @type {SxcWebApi}
-   * @memberof Sxc
    */
   webApi: SxcWebApi;
 
   /**
    * manage object which provides access to additional content-management features
    * it only exists if 2sxc is in edit mode (otherwise the JS are not included for these features)
-   * @memberof SxcInstance
    * @internal
    */
   manage: SxcManage = null; // initialize correctly later on
@@ -95,9 +92,7 @@ export class Sxc extends HasLog {
   /**
    * Get a data service for a specific content-type.
    *
-   * @param {string} contentType name of the content type which this service will get
-   * @returns SxcData<T>
-   * @memberof SxcInstance
+   * @param contentType: name of the content type which this service will get
    */
   data<T = unknown>(contentType: string) : SxcData<T> {
     return new SxcData<T>(this, contentType);
@@ -106,8 +101,6 @@ export class Sxc extends HasLog {
   /**
    * 
    * @param query 
-   * @returns SxcQuery
-   * @memberof SxcInstance
    */
   query(query: string) : SxcQuery {
     return new SxcQuery(this, query);

@@ -23,7 +23,7 @@ class RendererGlobal extends HasLog {
     /**
      * Show a message where the content of a module should be - usually as placeholder till something else happens
      * @param {ContextComplete} context
-     * @param {string} newContent
+     * @param newContent
      * @returns {} nothing
      */
     showMessage(context: ContextComplete, newContent: string): void {
@@ -102,7 +102,7 @@ class RendererGlobal extends HasLog {
      * ajax update/replace the content of the content-block
      * optionally also initialize the toolbar (if not just preview)
      * @param {ContextComplete} context
-     * @param {string} newContent
+     * @param newContent
      * @param {boolean} justPreview
      */
     private replaceContentBlock(context: ContextComplete, newContent: string, justPreview: boolean): void {

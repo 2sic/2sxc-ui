@@ -10,8 +10,6 @@ import { ContextOfUi } from '../parts/context-ui';
 export class ContextBundleInstance {
   /**
    * instance of sxc object
-   * @type {Sxc}
-   * @memberof ContextBundleInstance
    */
   sxc: Sxc;
 

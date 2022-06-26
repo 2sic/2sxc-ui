@@ -13,8 +13,6 @@ import { ZzzSxcWebApiDeprecated } from './sxc-web-api-deprecated';
  */
 export class SxcWebApi implements ZzzSxcWebApiDeprecated {
     /**
-     * @type {SxcGlobalEnvironment}
-     * @memberof SxcWebApi
      * @internal
      */
     public readonly env: SxcGlobalEnvironment;

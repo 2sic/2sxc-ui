@@ -53,9 +53,6 @@ class ContentListActions {
 
   /**
    * set a content-item in this block to published, then reload
-   * @param {ContextComplete} context
-   * @param {string} part
-   * @param {number} index
    */
   publish(context: ContextComplete, part: string, index: number) {
     return doAndReload<void>(context, webApiBlockPublish, {
@@ -66,8 +63,6 @@ class ContentListActions {
 
   /**
    * publish an item using it's ID
-   * @param {ContextComplete} context
-   * @param {number} entityId
    */
   publishId(context: ContextComplete, entityId: number) {
     return doAndReload<void>(context, webApiItemPublish,
@@ -94,10 +89,6 @@ export const Actions = new ContentListActions();
 
 /**
  * internal helper, to do something and reload the content block
- * @param {ContextComplete} context
- * @param {string} url
- * @param {ContentListActionParams} params
- * @returns {void | T}
  */
 function doAndReload<T>(
   context: ContextComplete,

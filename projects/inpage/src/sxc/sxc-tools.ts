@@ -15,9 +15,6 @@ export class SxcTools {
 
     /**
      * get edit-context info of html element or sxc-object
-     * @param {SxcEdit} sxc
-     * @param {HTMLElement} htmlElement
-     * @return {AttrJsonEditContext} edit context info
      */
     static getEditContext(sxc: Sxc, htmlElement?: HTMLElement): AttrJsonEditContext {
         const editContextTag: HTMLElement = (htmlElement)
@@ -28,7 +25,7 @@ export class SxcTools {
 
     /**
      * get the edit-context object (a json object) of the current tag/sxc-instance
-     * @return {AttrJsonEditContext} edit-context object
+     * @returns edit-context object
      */
     static getEditContextOfTag(htmlTag: HTMLElement | undefined): AttrJsonEditContext {
         const attr = htmlTag?.getAttribute(C.AttrNames.Context);
@@ -38,7 +35,6 @@ export class SxcTools {
 
     /**
      * get nearest html tag of the sxc instance with data-edit-context
-     * @param htmlTag
      */
     static getContainerTag(htmlTag: HTMLElement): HTMLElement {
         return htmlTag.closest<HTMLElement>(C.Sel.SxcDivs);
@@ -46,8 +42,7 @@ export class SxcTools {
 
     /**
      * get a html tag of the sxc instance
-     * @param {SxcEdit} sxci
-     * @return {HTMLElement} - resulting html
+     * @returns resulting html
      */
     static getTag(sxci: Sxc): HTMLElement {
         return document.querySelector<HTMLElement>(`div[${C.AttrNames.ContentBlockId}='${sxci.cbid}']`);

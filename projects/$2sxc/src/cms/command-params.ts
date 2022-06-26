@@ -31,7 +31,7 @@ export interface CommandParams {
 
     /** 
      * @internal 
-     * @obsolete but probably still in use
+     * @deprecated but probably still in use
      */
     sortOrder?: number;
 
@@ -102,7 +102,7 @@ export interface CommandParams {
 
     /**
      * for template edit dialog 
-     * @intenal
+     * @internal
      */
     isshared?: boolean;
 }

@@ -11,9 +11,8 @@ export abstract class SxcDataServiceBase extends SxcPart {
   protected readonly webApi: SxcWebApi;
   /**
   * Creates an instance of SxcData.
-  * @param {Sxc} sxc
-  * @param {string} name the content-type name
-  * @memberof SxcData
+  * @param sxc: 
+  * @param name: the content-type name
   * @internal
   */
   constructor(

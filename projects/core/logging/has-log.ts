@@ -9,8 +9,6 @@ import { Log } from '.';
 export abstract class HasLog {
   /**
    * The logger for this object
-   * @type {Log}
-   * @memberof HasLog
    * @internal usually not relevant and could make docs confusing
    */
   log: Log;

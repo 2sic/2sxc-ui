@@ -13,7 +13,7 @@ import { ToolbarTemplate } from '../templates';
  * list of buttons (detected by IsArray with action): [ \{ action: "..." | []\}, \{ action: ""|[]\} ]
  * button (detected by "command"): \{ command: ""|[], icon: "..", ... \}
  * just a command (detected by "action"): \{ entityId: 17, action: "edit" \}
- * array of commands: [{entityId: 17, action: "edit"}, {contentType: "blog", action: "new"}]
+ * array of commands: [\{entityId: 17, action: "edit"\}, \{contentType: "blog", action: "new"\}]
  * @internal
  */
 export type InPageToolbarConfigVariations =

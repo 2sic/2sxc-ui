@@ -12,11 +12,6 @@ export class Command {
 
     /**
      * 
-     * @param icon 
-     * @param translateKey 
-     * @param uiOnly 
-     * @param partOfPage 
-     * @param more 
      * @internal
      */
     mergeDefaults(translateKey: string, icon: string, uiOnly: boolean, partOfPage: boolean, more: Partial<Button>): void {
@@ -35,12 +30,6 @@ export class Command {
 
     /**
      * 
-     * @param name 
-     * @param translateKey 
-     * @param icon 
-     * @param uiOnly 
-     * @param partOfPage 
-     * @param more 
      * @returns 
      * @internal
      */

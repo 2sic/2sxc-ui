@@ -9,9 +9,8 @@ export class AjaxPromise {
 
   /**
    * Make a jQuery style promise request
-   * @param {ZzzAjaxSettingsDeprecated} settings
-   * @returns {JQueryPromise<any>}
-   * @memberof AjaxPromise
+   * @param settings: settings
+   * @returns JQueryPromise<any>
    */
   public makePromise(settings: ZzzAjaxSettingsDeprecated): any {
     var headers = this.api.headers();

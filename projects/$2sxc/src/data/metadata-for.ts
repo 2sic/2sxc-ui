@@ -17,22 +17,16 @@ export interface MetadataFor {
 
   /**
    * The number of the target, if it's identified by a number.
-   * @type {number}
-   * @memberof MetadataFor
    */
   Number?: number;
 
   /**
    * The string-id of the target, if it's identified by a string.
-   * @type {string}
-   * @memberof MetadataFor
    */
   String?: string;
 
   /**
    * The GUID of the target, if it's identified by a GUID.
-   * @type {string}
-   * @memberof MetadataFor
    */
   Guid?: string;
 

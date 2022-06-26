@@ -55,8 +55,6 @@ export interface ContextInfo {
    * Location for the angular files
    *
    * New in v11.01
-   * @type {string}
-   * @memberof ContextInfo
    */
   angularPath?: string;
 }

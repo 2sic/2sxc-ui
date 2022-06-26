@@ -61,7 +61,7 @@ export class ToolbarSettings {
 
   /**
    * Old term, keep for compatibility. Please use `.class` instead
-   * @obsolete
+   * @deprecated
    */
   classes: string = '';
 

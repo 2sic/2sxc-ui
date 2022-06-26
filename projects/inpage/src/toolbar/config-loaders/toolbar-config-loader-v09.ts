@@ -66,12 +66,12 @@ export class ToolbarConfigLoaderV09 extends HasLog {
     /**
      * take various common input format and convert it to a full toolbar-structure definition
      * can handle the following input formats (the param unstructuredConfig):
-     * complete tree (detected by "groups): { groups: [ {}, {}], name: ..., defaults: {...} }
-     * group of buttons (detected by "buttons): { buttons: "..." | [], name: ..., ... }
-     * list of buttons (detected by IsArray with action): [ { action: "..." | []}, { action: ""|[]} ]
-     * button (detected by "command"): { command: ""|[], icon: "..", ... }
-     * just a command (detected by "action"): { entityId: 17, action: "edit" }
-     * array of commands: [{entityId: 17, action: "edit"}, {contentType: "blog", action: "new"}]
+     * complete tree (detected by "groups): \{ groups: [ \{\}, \{\}], name: ..., defaults: \{...\} \}
+     * group of buttons (detected by "buttons): \{ buttons: "..." | [], name: ..., ... \}
+     * list of buttons (detected by IsArray with action): [ \{ action: "..." | []\}, \{ action: ""|[]\} ]
+     * button (detected by "command"): \{ command: ""|[], icon: "..", ... \}
+     * just a command (detected by "action"): \{ entityId: 17, action: "edit" \}
+     * array of commands: [\{entityId: 17, action: "edit"\}, \{contentType: "blog", action: "new"\}]
      */
     public buildFullDefinition(
         toolbarContext: ContextComplete,
@@ -102,8 +102,6 @@ export class ToolbarConfigLoaderV09 extends HasLog {
      * - groups containing buttons[], but buttons could still be very flat
      * - defaults, already officially formatted
      * - params, officially formatted
-     * @param unstructuredConfig
-     * @param toolbarSettings
      */
     private ensureDefinitionTree(unstructuredConfig: InPageToolbarConfigVariations, toolbarSettings: ToolbarSettings): ToolbarWip {
         const wrapLog = this.log.call('ensureDefinitionTree');
@@ -125,7 +123,7 @@ export class ToolbarConfigLoaderV09 extends HasLog {
 
 
 
-    private findGroups(unstructuredConfig: InPageToolbarConfigVariations): InPageButtonGroupJson[] { // ButtonGroupsWip {
+    private findGroups(unstructuredConfig: InPageToolbarConfigVariations): InPageButtonGroupJson[] {
         const cl = this.log.call('findGroups');
         cl.data('initial', unstructuredConfig);
 
@@ -133,7 +131,7 @@ export class ToolbarConfigLoaderV09 extends HasLog {
         if (!unstructuredConfig || unstructuredConfig === {})
             return cl.return([], 'case 0: empty object, use []');
 
-        const arrGroups: InPageButtonGroupJson[] = []; // Array<InPageButtonJson | ButtonGroup>;
+        const arrGroups: InPageButtonGroupJson[] = [];
 
         // ensure that the groups are all correct
         cl.add('will detect what initial structure was given');
@@ -146,7 +144,7 @@ export class ToolbarConfigLoaderV09 extends HasLog {
             if (Button.isArray(unstructuredConfig))
                 return cl.return([{ buttons: unstructuredConfig }], '2b: array of groups');
             if (InPageButtonJson.is(unstructuredConfig[0]))
-                return cl.return([{ buttons: unstructuredConfig as InPageButtonJson[]}], // Array<InPageButtonJson | ButtonGroup>;
+                return cl.return([{ buttons: unstructuredConfig as InPageButtonJson[]}],
                     '2b: is list of buttons, return 1 group');
             console.warn('error detecting groups in this toolbar');
             return cl.return([], "2x: error, it's array but can't detect type, use []");
@@ -163,21 +161,6 @@ export class ToolbarConfigLoaderV09 extends HasLog {
         // we either have groups already, or we'll return blank
         if (ToolbarTemplate.hasGroups(unstructuredConfig))
             return cl.return(unstructuredConfig.groups, '4: found groups');
-        // else
-        //     return cl.return([], 'no groups, return []');
-
-        // ensure that arrays of actions or buttons are re-mapped to the right structure node
-        // if (!arrGroups || !(arrGroups as any).length) {
-        //     return cl.return([], 'not array or has no items, return empty array');
-        // } else
-        //     cl.add('its an object or array, use that');
-
-        // if (ButtonGroup.isArray(arrGroups)) {
-        //     return cl.return(arrGroups, 'detected buttons on first item, assume button-group, moving into .groups');
-        // } else if (InPageButtonJson.isArray(arrGroups)) {
-        //     return cl.return([{ buttons:  arrGroups } as InPageButtonGroupJson],
-        //         'detected command or action on first item, assume buttons, move into .groups[buttons] ');
-        // }
 
         cl.add('can\'t detect what this is - show warning');
         console.warn("toolbar tried to build toolbar but couldn't detect type of this:", arrGroups);

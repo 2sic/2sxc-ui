@@ -23,7 +23,6 @@ export class TagToolbar {
      * @param {HTMLElement} hoverTag
      * @param {ContextComplete} context
      * @param {typeof Translator} [translator] special translator, only included because otherwise WebPack causes circular references
-     * @memberof TagToolbar
      */
     constructor(private readonly hoverTag: HTMLElement, private readonly context: ContextComplete, private translator?: typeof Translator) {
         this.follow = context.toolbar.settings.follow;

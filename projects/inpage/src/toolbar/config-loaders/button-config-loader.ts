@@ -66,10 +66,6 @@ export class ButtonConfigLoader extends HasLog {
 
     /**
      * remove buttons which are not valid based on add condition
-     * @param {ContextComplete} context
-     * @param {Toolbar} full
-     * @param {InstanceConfig} config
-     * @memberof ButtonConfigurationBuilder
      */
     removeDisableButtons(context: ContextComplete, full: Toolbar,
         // #CodeChange#2020-03-22#InstanceConfig - believe this is completely unused; remove in June
@@ -100,10 +96,6 @@ export class ButtonConfigLoader extends HasLog {
 
     /**
      * enhance button-object with default icons, etc.
-     * @param btn
-     * @param group
-     * @param fullToolbarConfig
-     * @param actions
      */
     addDefaultBtnSettings(btn: Button,
                           groupDefaults: Record<string, TypeValue> | null,

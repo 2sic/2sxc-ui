@@ -148,8 +148,6 @@ export interface SxcGlobal {
 
     /**
      * Helper to work with url parameters behind ? or #
-     * @type {UrlParams}
-     * @memberof SxcRoot
      */
     urlParams: UrlParams;
 

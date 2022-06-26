@@ -8,8 +8,7 @@ export class UrlParams {
     /**
      * Get a param from the url, no matter if it's behind ? or #
      * If not found, will return an empty string `''`
-     * @param {string} name
-     * @memberof QueryParams
+     * @param name
      */
     get(name: string) {
         // warning: this method is duplicated in 2 places - keep them in sync.
@@ -44,8 +43,7 @@ export class UrlParams {
     /**
      * Get a required param from the url, no matter if it's behind ? or #
      * Will throw an error if not found
-     * @param {string} name
-     * @memberof QueryParams
+     * @param name
      */
     require(name: string) {
         const found = this.get(name);

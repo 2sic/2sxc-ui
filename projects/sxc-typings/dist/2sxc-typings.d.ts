@@ -10,9 +10,8 @@ export declare class AjaxPromise {
     constructor(api: SxcWebApi, sxc: Sxc);
     /**
      * Make a jQuery style promise request
-     * @param {ZzzAjaxSettingsDeprecated} settings
-     * @returns {JQueryPromise<any>}
-     * @memberof AjaxPromise
+     * @param settings: settings
+     * @returns JQueryPromise<any>
      */
     makePromise(settings: ZzzAjaxSettingsDeprecated): any;
     /**
@@ -290,18 +289,10 @@ declare class ButtonConfigLoader extends HasLog {
     btnConfigStructure(name: string, params: {}): InPageButtonJson;
     /**
      * remove buttons which are not valid based on add condition
-     * @param {ContextComplete} context
-     * @param {Toolbar} full
-     * @param {InstanceConfig} config
-     * @memberof ButtonConfigurationBuilder
      */
     removeDisableButtons(context: ContextComplete, full: Toolbar): void;
     /**
      * enhance button-object with default icons, etc.
-     * @param btn
-     * @param group
-     * @param fullToolbarConfig
-     * @param actions
      */
     addDefaultBtnSettings(btn: Button, groupDefaults: Record<string, TypeValue> | null, tlbDefaults: Record<string, TypeValue> | null | undefined, actions: Commands): void;
     private removeUnfitButtons;
@@ -431,22 +422,11 @@ export declare class Command {
     buttonDefaults: Partial<Button>;
     /**
      *
-     * @param icon
-     * @param translateKey
-     * @param uiOnly
-     * @param partOfPage
-     * @param more
      * @internal
      */
     mergeDefaults(translateKey: string, icon: string, uiOnly: boolean, partOfPage: boolean, more: Partial<Button>): void;
     /**
      *
-     * @param name
-     * @param translateKey
-     * @param icon
-     * @param uiOnly
-     * @param partOfPage
-     * @param more
      * @returns
      * @internal
      */
@@ -561,7 +541,7 @@ export declare interface CommandCustomParams {
      * <br>
      * JavaScript as string containing the code to execute.
      * This is the old V9 - it contains a function, not a name
-     * @obsolete
+     * @deprecated
      */
     customCode: string;
 }
@@ -926,7 +906,7 @@ export declare interface CommandParams {
     dialog?: string;
     /**
      * @internal
-     * @obsolete but probably still in use
+     * @deprecated but probably still in use
      */
     sortOrder?: number;
     /**
@@ -984,7 +964,7 @@ export declare interface CommandParams {
     fields?: string;
     /**
      * for template edit dialog
-     * @intenal
+     * @internal
      */
     isshared?: boolean;
 }
@@ -1149,15 +1129,10 @@ declare class ContentListActions {
     changeOrder(context: ContextComplete, index: number, toIndex: number): Promise<void>;
     /**
      * set a content-item in this block to published, then reload
-     * @param {ContextComplete} context
-     * @param {string} part
-     * @param {number} index
      */
     publish(context: ContextComplete, part: string, index: number): Promise<void>;
     /**
      * publish an item using it's ID
-     * @param {ContextComplete} context
-     * @param {number} entityId
      */
     publishId(context: ContextComplete, entityId: number): Promise<void>;
 }
@@ -1191,8 +1166,6 @@ declare class ContextBundleContent extends ContextBundleInstance {
 declare class ContextBundleInstance {
     /**
      * instance of sxc object
-     * @type {Sxc}
-     * @memberof ContextBundleInstance
      */
     sxc: Sxc;
     /** @internal */
@@ -1242,15 +1215,11 @@ declare class ContextComplete extends ContextBundleToolbar {
     constructor(editCtx: AttrJsonEditContext, sxc?: Sxc);
     /**
      * Primary API to get the context (context is cached)
-     * @param htmlElement or Id (moduleId)
-     * @param cbid
      * @internal
      */
     static findContext(tagOrSxc: Sxc | HTMLElement | number, cbid?: number): ContextComplete;
     /**
      * Create copy of context, so it can be modified before use
-     * @param htmlElement or Id (moduleId)
-     * @param cbid
      * @internal
      */
     static contextCopy(htmlElementOrId: HTMLElement | number, cbid?: number): ContextComplete;
@@ -1261,6 +1230,9 @@ declare class ContextComplete extends ContextBundleToolbar {
      * @internal
      */
     static getContextInstance(sxc: Sxc, htmlElement?: HTMLElement): ContextComplete;
+    /**
+     * @internal
+     */
     static is(thing: unknown): thing is ContextComplete;
 }
 
@@ -1499,8 +1471,6 @@ export declare abstract class HasLog {
     private parentLog?;
     /**
      * The logger for this object
-     * @type {Log}
-     * @memberof HasLog
      * @internal usually not relevant and could make docs confusing
      */
     log: Log;
@@ -1617,7 +1587,7 @@ declare interface InPageCommandJsonWithTooMuchInfo extends InPageCommandJson {
  * list of buttons (detected by IsArray with action): [ \{ action: "..." | []\}, \{ action: ""|[]\} ]
  * button (detected by "command"): \{ command: ""|[], icon: "..", ... \}
  * just a command (detected by "action"): \{ entityId: 17, action: "edit" \}
- * array of commands: [{entityId: 17, action: "edit"}, {contentType: "blog", action: "new"}]
+ * array of commands: [\{entityId: 17, action: "edit"\}, \{contentType: "blog", action: "new"\}]
  * @internal
  */
 declare type InPageToolbarConfigVariations = ToolbarWip | InPageButtonJson | InPageCommandJson | ToolbarTemplate;
@@ -1775,8 +1745,7 @@ export declare class Log {
     linkLog: (parent: Log) => void;
     /**
      * Add a simple message to the log
-     * @param {string} message
-     * @memberof Log
+     * @param message
      *
      * preferred usage is with string parameter:
      * log.add(`description ${ parameter }`);
@@ -1946,20 +1915,14 @@ export declare interface MetadataFor {
     Target: string | MetadataTargetTypes;
     /**
      * The number of the target, if it's identified by a number.
-     * @type {number}
-     * @memberof MetadataFor
      */
     Number?: number;
     /**
      * The string-id of the target, if it's identified by a string.
-     * @type {string}
-     * @memberof MetadataFor
      */
     String?: string;
     /**
      * The GUID of the target, if it's identified by a GUID.
-     * @type {string}
-     * @memberof MetadataFor
      */
     Guid?: string;
     /**
@@ -2138,7 +2101,8 @@ declare class ModifierContentBlockInstance extends HasLog {
     /**
      * create content block
      */
-    create(parentId: number, field: string, index: number, appName: string, container: HTMLElement, newGuid: string): Promise<void>;
+    create(parentId: number, field: string, index: number, app: string, // app name
+    container: HTMLElement, guid: string): Promise<void>;
     /**
      * move content block
      * @param parentId
@@ -2498,7 +2462,6 @@ export declare namespace QuickEditOverlay {
 
 /**
  * Refresh positioning / visibility of the quick-insert bar
- * @param e
  * @internal
  */
 declare function refresh(e: MouseEvent): void;
@@ -2715,14 +2678,11 @@ export declare class Sxc extends HasLog {
      * Web API calls for this instance.
      * This is the pure call APIs system.
      * To get data or queries, best use the data or query services.
-     * @type {SxcWebApi}
-     * @memberof Sxc
      */
     webApi: SxcWebApi;
     /**
      * manage object which provides access to additional content-management features
      * it only exists if 2sxc is in edit mode (otherwise the JS are not included for these features)
-     * @memberof SxcInstance
      * @internal
      */
     manage: SxcManage;
@@ -2763,16 +2723,12 @@ export declare class Sxc extends HasLog {
     /**
      * Get a data service for a specific content-type.
      *
-     * @param {string} contentType name of the content type which this service will get
-     * @returns SxcData<T>
-     * @memberof SxcInstance
+     * @param contentType name of the content type which this service will get
      */
     data<T = unknown>(contentType: string): SxcData<T>;
     /**
      *
      * @param query
-     * @returns SxcQuery
-     * @memberof SxcInstance
      */
     query(query: string): SxcQuery;
     /**
@@ -2852,9 +2808,8 @@ export declare class SxcData<T = unknown> extends SxcDataServiceBase {
     readonly name: string;
     /**
      * Creates an instance of SxcData.
-     * @param {Sxc} sxc
-     * @param {string} name the content-type name
-     * @memberof SxcData
+     * @param sxc:
+     * @param name: the content-type name
      * @internal
      */
     constructor(sxc: Sxc, name: string);
@@ -2914,9 +2869,8 @@ export declare abstract class SxcDataServiceBase extends SxcPart {
     protected readonly webApi: SxcWebApi;
     /**
      * Creates an instance of SxcData.
-     * @param {Sxc} sxc
-     * @param {string} name the content-type name
-     * @memberof SxcData
+     * @param sxc:
+     * @param name: the content-type name
      * @internal
      */
     constructor(sxc: Sxc, name: string, nameInError: string);
@@ -3029,8 +2983,6 @@ export declare interface SxcGlobal {
     log: Log;
     /**
      * Helper to work with url parameters behind ? or #
-     * @type {UrlParams}
-     * @memberof SxcRoot
      */
     urlParams: UrlParams;
     /**
@@ -3220,18 +3172,13 @@ export declare class SxcGlobalHttp extends HasLog {
     headers(id: number, cbid: number, ctx: ContextIdentifier): Record<string, string>;
     /**
      * Get the API-Root path for a specific extension/endpoint
-     * @param endpointName
-     * @returns {string}
-     * @memberof Http
+     * @returns
      * @internal Not relevant for 2sxc, only used if calling platform endpoints
      */
     apiRoot(endpointName: string): string;
     /**
      * Get the API-Root path for Apps
      * new in v12
-     * @param {string} endpointName
-     * @returns {string}
-     * @memberof SxcHttp
      * @internal
      */
     appApiRoot(): string;
@@ -3320,9 +3267,8 @@ export declare abstract class SxcPart {
     partName: string;
     /**
      * Creates an instance of SxcData.
-     * @param {Sxc} sxc
-     * @param {string} partName name of the part
-     * @memberof SxcData
+     * @param sxc: sxc
+     * @param partName: name of the part
      * @internal
      */
     constructor(
@@ -3340,9 +3286,6 @@ export declare class SxcQuery extends SxcDataServiceBase {
     readonly name: string;
     /**
      * Creates an instance of SxcQuery.
-     * @param {Sxc} sxc
-     * @param {string} name
-     * @memberof SxcQuery
      * @internal
      */
     constructor(sxc: Sxc, name: string);
@@ -3353,9 +3296,8 @@ export declare class SxcQuery extends SxcDataServiceBase {
      * Get just one stream, returning an array of items in that stream
      *
      * @template T
-     * @param {string} stream
+     * @param stream
      * @returns {Promise<T[]>} containing an array of items - or empty if stream not found or nothing returned
-     * @memberof SxcQuery
      */
     getStream<T = unknown>(stream: string): Promise<T[]>;
     getStream<T = unknown>(stream: string, urlParams: string | Record<string, unknown>): Promise<T[]>;
@@ -3372,7 +3314,7 @@ export declare class SxcQuery extends SxcDataServiceBase {
      * Get a query but only the mentioned streams.
      * This will reduce the amount of data retrieved on queries that have many streams.
      * @template T The schema/interfaces of what will be returned
-     * @param {string} streams name of streams to get, comma separated
+     * @param streams name of streams to get, comma separated
      * @param urlParams additional parameters for the URL, either as a string or as a object
      * @returns {Promise<T>} Promise containing a object with stream-names and items in the streams.
      * @public
@@ -3382,7 +3324,7 @@ export declare class SxcQuery extends SxcDataServiceBase {
      * Get a query but only the mentioned streams.
      * This will reduce the amount of data retrieved on queries that have many streams.
      * @template T The schema/interfaces of what will be returned
-     * @param {string} streams name of streams to get, comma separated
+     * @param streams name of streams to get, comma separated
      * @param urlParams additional parameters for the URL, either as a string or as a object
      * @param data data to include in case of a POST call - if this is provided, it will use a post
      * @returns {Promise<T>} Promise containing a object with stream-names and items in the streams.
@@ -3406,25 +3348,20 @@ export declare class SxcTools {
     static get(module: number | HTMLElement, cbid?: number): Sxc;
     /**
      * get edit-context info of html element or sxc-object
-     * @param {SxcEdit} sxc
-     * @param {HTMLElement} htmlElement
-     * @return {AttrJsonEditContext} edit context info
      */
     static getEditContext(sxc: Sxc, htmlElement?: HTMLElement): AttrJsonEditContext;
     /**
      * get the edit-context object (a json object) of the current tag/sxc-instance
-     * @return {AttrJsonEditContext} edit-context object
+     * @returns edit-context object
      */
     static getEditContextOfTag(htmlTag: HTMLElement | undefined): AttrJsonEditContext;
     /**
      * get nearest html tag of the sxc instance with data-edit-context
-     * @param htmlTag
      */
     static getContainerTag(htmlTag: HTMLElement): HTMLElement;
     /**
      * get a html tag of the sxc instance
-     * @param {SxcEdit} sxci
-     * @return {HTMLElement} - resulting html
+     * @returns resulting html
      */
     static getTag(sxci: Sxc): HTMLElement;
 }
@@ -3441,8 +3378,6 @@ export declare const SxcVersion: string;
 export declare class SxcWebApi implements ZzzSxcWebApiDeprecated {
     private readonly sxc;
     /**
-     * @type {SxcGlobalEnvironment}
-     * @memberof SxcWebApi
      * @internal
      */
     readonly env: SxcGlobalEnvironment;
@@ -3655,12 +3590,12 @@ declare class ToolbarConfigLoaderV09 extends HasLog {
     /**
      * take various common input format and convert it to a full toolbar-structure definition
      * can handle the following input formats (the param unstructuredConfig):
-     * complete tree (detected by "groups): { groups: [ {}, {}], name: ..., defaults: {...} }
-     * group of buttons (detected by "buttons): { buttons: "..." | [], name: ..., ... }
-     * list of buttons (detected by IsArray with action): [ { action: "..." | []}, { action: ""|[]} ]
-     * button (detected by "command"): { command: ""|[], icon: "..", ... }
-     * just a command (detected by "action"): { entityId: 17, action: "edit" }
-     * array of commands: [{entityId: 17, action: "edit"}, {contentType: "blog", action: "new"}]
+     * complete tree (detected by "groups): \{ groups: [ \{\}, \{\}], name: ..., defaults: \{...\} \}
+     * group of buttons (detected by "buttons): \{ buttons: "..." | [], name: ..., ... \}
+     * list of buttons (detected by IsArray with action): [ \{ action: "..." | []\}, \{ action: ""|[]\} ]
+     * button (detected by "command"): \{ command: ""|[], icon: "..", ... \}
+     * just a command (detected by "action"): \{ entityId: 17, action: "edit" \}
+     * array of commands: [\{entityId: 17, action: "edit"\}, \{contentType: "blog", action: "new"\}]
      */
     buildFullDefinition(toolbarContext: ContextComplete, unstructuredConfig: InPageToolbarConfigVariations, toolbarSettings: ToolbarSettings): Toolbar;
     /**
@@ -3671,8 +3606,6 @@ declare class ToolbarConfigLoaderV09 extends HasLog {
      * - groups containing buttons[], but buttons could still be very flat
      * - defaults, already officially formatted
      * - params, officially formatted
-     * @param unstructuredConfig
-     * @param toolbarSettings
      */
     private ensureDefinitionTree;
     private findGroups;
@@ -3736,7 +3669,7 @@ declare class ToolbarSettings {
     follow: TypeFollow;
     /**
      * Old term, keep for compatibility. Please use `.class` instead
-     * @obsolete
+     * @deprecated
      */
     classes: string;
     /**
@@ -3952,15 +3885,13 @@ export declare class UrlParams {
     /**
      * Get a param from the url, no matter if it's behind ? or #
      * If not found, will return an empty string `''`
-     * @param {string} name
-     * @memberof QueryParams
+     * @param name
      */
     get(name: string): string;
     /**
      * Get a required param from the url, no matter if it's behind ? or #
      * Will throw an error if not found
-     * @param {string} name
-     * @memberof QueryParams
+     * @param name
      */
     require(name: string): string;
     /**

@@ -102,7 +102,7 @@ export interface CommandCustomParams {
    * <br>
    * JavaScript as string containing the code to execute.
    * This is the old V9 - it contains a function, not a name
-   * @obsolete
+   * @deprecated
    */
   customCode: string;
 }

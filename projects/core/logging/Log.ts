@@ -97,8 +97,7 @@ export class Log {
 
     /**
      * Add a simple message to the log
-     * @param {string} message
-     * @memberof Log
+     * @param message
      *
      * preferred usage is with string parameter:
      * log.add(`description ${ parameter }`);

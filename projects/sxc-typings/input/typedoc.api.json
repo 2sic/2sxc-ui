@@ -510,7 +510,7 @@
             {
               "kind": "PropertySignature",
               "canonicalReference": "@2sic.com/2sxc-typings!CommandCustomParams#customCode:member",
-              "docComment": "/**\n * **OBSOLETE - avoid using** <br> JavaScript as string containing the code to execute. This is the old V9 - it contains a function, not a name  @obsolete\n */\n",
+              "docComment": "/**\n * **OBSOLETE - avoid using** <br> JavaScript as string containing the code to execute. This is the old V9 - it contains a function, not a name\n *\n * @deprecated\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -1458,33 +1458,6 @@
                 "startIndex": 1,
                 "endIndex": 2
               }
-            },
-            {
-              "kind": "PropertySignature",
-              "canonicalReference": "@2sic.com/2sxc-typings!CommandParams#isshared:member",
-              "docComment": "/**\n * for template edit dialog  @intenal\n */\n",
-              "excerptTokens": [
-                {
-                  "kind": "Content",
-                  "text": "isshared?: "
-                },
-                {
-                  "kind": "Content",
-                  "text": "boolean"
-                },
-                {
-                  "kind": "Content",
-                  "text": ";"
-                }
-              ],
-              "isReadonly": false,
-              "isOptional": true,
-              "releaseTag": "Public",
-              "name": "isshared",
-              "propertyTypeTokenRange": {
-                "startIndex": 1,
-                "endIndex": 2
-              }
             }
           ],
           "extendsTokenRanges": []
@@ -2220,7 +2193,7 @@
             {
               "kind": "Method",
               "canonicalReference": "@2sic.com/2sxc-typings!Log#add:member(1)",
-              "docComment": "/**\n * Add a simple message to the log\n *\n * @param message -  @memberof Log\n *\n * preferred usage is with string parameter: log.add(`description ${ parameter }`);\n *\n * in case that we experience error with normal string parameter, we can use arrow function to enclose parameter like this () => parameter but use it very rarely, because there is certainly a performance implication! log.add(`description ${() => parameter}`);\n */\n",
+              "docComment": "/**\n * Add a simple message to the log\n *\n * @param message - preferred usage is with string parameter: log.add(`description ${ parameter }`);\n *\n * in case that we experience error with normal string parameter, we can use arrow function to enclose parameter like this () => parameter but use it very rarely, because there is certainly a performance implication! log.add(`description ${() => parameter}`);\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -2465,7 +2438,7 @@
             {
               "kind": "PropertySignature",
               "canonicalReference": "@2sic.com/2sxc-typings!MetadataFor#Guid:member",
-              "docComment": "/**\n * The GUID of the target, if it's identified by a GUID.  @type {string}  @memberof MetadataFor\n */\n",
+              "docComment": "/**\n * The GUID of the target, if it's identified by a GUID.\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -2492,7 +2465,7 @@
             {
               "kind": "PropertySignature",
               "canonicalReference": "@2sic.com/2sxc-typings!MetadataFor#Number:member",
-              "docComment": "/**\n * The number of the target, if it's identified by a number.  @type {number}  @memberof MetadataFor\n */\n",
+              "docComment": "/**\n * The number of the target, if it's identified by a number.\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -2519,7 +2492,7 @@
             {
               "kind": "PropertySignature",
               "canonicalReference": "@2sic.com/2sxc-typings!MetadataFor#String:member",
-              "docComment": "/**\n * The string-id of the target, if it's identified by a string.  @type {string}  @memberof MetadataFor\n */\n",
+              "docComment": "/**\n * The string-id of the target, if it's identified by a string.\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -3823,7 +3796,7 @@
             {
               "kind": "Method",
               "canonicalReference": "@2sic.com/2sxc-typings!Sxc#data:member(1)",
-              "docComment": "/**\n * Get a data service for a specific content-type.\n *\n * @param contentType - name of the content type which this service will get\n *\n * @returns SxcData<T>  @memberof SxcInstance\n */\n",
+              "docComment": "/**\n * Get a data service for a specific content-type.\n *\n * @param contentType - name of the content type which this service will get\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -3955,7 +3928,7 @@
             {
               "kind": "Method",
               "canonicalReference": "@2sic.com/2sxc-typings!Sxc#query:member(1)",
-              "docComment": "/**\n * @param query - \n *\n * @returns SxcQuery  @memberof SxcInstance\n */\n",
+              "docComment": "/**\n * @param query - \n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -4003,7 +3976,7 @@
             {
               "kind": "Property",
               "canonicalReference": "@2sic.com/2sxc-typings!Sxc#webApi:member",
-              "docComment": "/**\n * Web API calls for this instance. This is the pure call APIs system. To get data or queries, best use the data or query services.  @type {SxcWebApi}  @memberof Sxc\n */\n",
+              "docComment": "/**\n * Web API calls for this instance. This is the pure call APIs system. To get data or queries, best use the data or query services.\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -5249,7 +5222,7 @@
             {
               "kind": "PropertySignature",
               "canonicalReference": "@2sic.com/2sxc-typings!SxcGlobal#urlParams:member",
-              "docComment": "/**\n * Helper to work with url parameters behind ? or #  @type {UrlParams}  @memberof SxcRoot\n */\n",
+              "docComment": "/**\n * Helper to work with url parameters behind ? or #\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -6741,7 +6714,7 @@
             {
               "kind": "Method",
               "canonicalReference": "@2sic.com/2sxc-typings!SxcQuery#getStream:member(1)",
-              "docComment": "/**\n * Get just one stream, returning an array of items in that stream\n *\n * @template T\n *\n * @param stream - \n *\n * @returns {Promise<T[]>} containing an array of items - or empty if stream not found or nothing returned  @memberof SxcQuery\n */\n",
+              "docComment": "/**\n * Get just one stream, returning an array of items in that stream\n *\n * @template T\n *\n * @param stream - \n *\n * @returns {Promise<T[]>} containing an array of items - or empty if stream not found or nothing returned\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -8384,7 +8357,7 @@
             {
               "kind": "Method",
               "canonicalReference": "@2sic.com/2sxc-typings!UrlParams#get:member(1)",
-              "docComment": "/**\n * Get a param from the url, no matter if it's behind ? or # If not found, will return an empty string `''`\n *\n * @param name -  @memberof QueryParams\n */\n",
+              "docComment": "/**\n * Get a param from the url, no matter if it's behind ? or # If not found, will return an empty string `''`\n *\n * @param name - \n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -8461,7 +8434,7 @@
             {
               "kind": "Method",
               "canonicalReference": "@2sic.com/2sxc-typings!UrlParams#require:member(1)",
-              "docComment": "/**\n * Get a required param from the url, no matter if it's behind ? or # Will throw an error if not found\n *\n * @param name -  @memberof QueryParams\n */\n",
+              "docComment": "/**\n * Get a required param from the url, no matter if it's behind ? or # Will throw an error if not found\n *\n * @param name - \n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",

@@ -27,8 +27,6 @@ export class ContextComplete extends ContextBundleToolbar {
 
   /**
    * Primary API to get the context (context is cached)
-   * @param htmlElement or Id (moduleId)
-   * @param cbid
    * @internal
    */
   static findContext(tagOrSxc: Sxc | HTMLElement | number, cbid?: number): ContextComplete {
@@ -51,8 +49,6 @@ export class ContextComplete extends ContextBundleToolbar {
 
   /**
    * Create copy of context, so it can be modified before use
-   * @param htmlElement or Id (moduleId)
-   * @param cbid
    * @internal
    */
   static contextCopy(htmlElementOrId: HTMLElement | number, cbid?: number): ContextComplete {
@@ -60,7 +56,7 @@ export class ContextComplete extends ContextBundleToolbar {
     // set sxc to null because of cyclic reference, so we can serialize it
     contextOfButton.sxc = null;
     // make a copy
-    const copyOfContext = Obj.DeepClone(contextOfButton); // JSON.parse(JSON.stringify(contextOfButton));
+    const copyOfContext = Obj.DeepClone(contextOfButton);
     // bring sxc back to context
     contextOfButton.sxc = window.$2sxc(htmlElementOrId) as Sxc;
     return copyOfContext;
@@ -77,6 +73,9 @@ export class ContextComplete extends ContextBundleToolbar {
     return new ContextComplete(editContext, sxc);
   }
 
+  /**
+   * @internal
+   */
   static is(thing: unknown): thing is ContextComplete {
     return (thing as ContextComplete)._isCtxComplete;
   }

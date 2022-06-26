@@ -124,7 +124,7 @@ export class IFrameBridge extends HasLog implements IIFrameBridge {
 
     /**
      * check if the dialog is showing for the current sxc-instance
-     * @param {string} dialogName - name of dialog
+     * @param dialogName - name of dialog
      * @returns {boolean} true if it's currently showing for this sxc-instance
      */
     isConfiguredFor(instanceId: string, dialogName: string): boolean {

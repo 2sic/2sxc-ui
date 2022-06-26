@@ -169,7 +169,7 @@ export declare interface CommandCustomParams {
      * <br>
      * JavaScript as string containing the code to execute.
      * This is the old V9 - it contains a function, not a name
-     * @obsolete
+     * @deprecated
      */
     customCode: string;
 }
@@ -489,11 +489,7 @@ export declare interface CommandParams {
     /* Excluded from this release type: apps */
     /* Excluded from this release type: parent */
     /* Excluded from this release type: fields */
-    /**
-     * for template edit dialog
-     * @intenal
-     */
-    isshared?: boolean;
+    /* Excluded from this release type: isshared */
 }
 
 /**
@@ -603,8 +599,6 @@ declare class ContextBundleContent extends ContextBundleInstance {
 declare class ContextBundleInstance {
     /**
      * instance of sxc object
-     * @type {Sxc}
-     * @memberof ContextBundleInstance
      */
     sxc: Sxc;
     /* Excluded from this release type: instance */
@@ -639,7 +633,7 @@ declare class ContextComplete extends ContextBundleToolbar {
     /* Excluded from this release type: findContext */
     /* Excluded from this release type: contextCopy */
     /* Excluded from this release type: getContextInstance */
-    static is(thing: unknown): thing is ContextComplete;
+    /* Excluded from this release type: is */
 }
 
 /**
@@ -796,8 +790,7 @@ export declare class Log {
     /* Excluded from this release type: linkLog */
     /**
      * Add a simple message to the log
-     * @param {string} message
-     * @memberof Log
+     * @param message
      *
      * preferred usage is with string parameter:
      * log.add(`description ${ parameter }`);
@@ -877,20 +870,14 @@ export declare interface MetadataFor {
     Target: string | MetadataTargetTypes;
     /**
      * The number of the target, if it's identified by a number.
-     * @type {number}
-     * @memberof MetadataFor
      */
     Number?: number;
     /**
      * The string-id of the target, if it's identified by a string.
-     * @type {string}
-     * @memberof MetadataFor
      */
     String?: string;
     /**
      * The GUID of the target, if it's identified by a GUID.
-     * @type {string}
-     * @memberof MetadataFor
      */
     Guid?: string;
     /* Excluded from this release type: Singleton */
@@ -1201,8 +1188,6 @@ export declare class Sxc extends HasLog {
      * Web API calls for this instance.
      * This is the pure call APIs system.
      * To get data or queries, best use the data or query services.
-     * @type {SxcWebApi}
-     * @memberof Sxc
      */
     webApi: SxcWebApi;
     /* Excluded from this release type: manage */
@@ -1215,16 +1200,12 @@ export declare class Sxc extends HasLog {
     /**
      * Get a data service for a specific content-type.
      *
-     * @param {string} contentType name of the content type which this service will get
-     * @returns SxcData<T>
-     * @memberof SxcInstance
+     * @param contentType name of the content type which this service will get
      */
     data<T = unknown>(contentType: string): SxcData<T>;
     /**
      *
      * @param query
-     * @returns SxcQuery
-     * @memberof SxcInstance
      */
     query(query: string): SxcQuery;
     /* Excluded from this release type: resolveServiceUrl */
@@ -1404,8 +1385,6 @@ export declare interface SxcGlobal {
     /* Excluded from this release type: log */
     /**
      * Helper to work with url parameters behind ? or #
-     * @type {UrlParams}
-     * @memberof SxcRoot
      */
     urlParams: UrlParams;
     /* Excluded from this release type: totalPopup */
@@ -1614,9 +1593,8 @@ export declare class SxcQuery extends SxcDataServiceBase {
      * Get just one stream, returning an array of items in that stream
      *
      * @template T
-     * @param {string} stream
+     * @param stream
      * @returns {Promise<T[]>} containing an array of items - or empty if stream not found or nothing returned
-     * @memberof SxcQuery
      */
     getStream<T = unknown>(stream: string): Promise<T[]>;
     getStream<T = unknown>(stream: string, urlParams: string | Record<string, unknown>): Promise<T[]>;
@@ -1633,7 +1611,7 @@ export declare class SxcQuery extends SxcDataServiceBase {
      * Get a query but only the mentioned streams.
      * This will reduce the amount of data retrieved on queries that have many streams.
      * @template T The schema/interfaces of what will be returned
-     * @param {string} streams name of streams to get, comma separated
+     * @param streams name of streams to get, comma separated
      * @param urlParams additional parameters for the URL, either as a string or as a object
      * @returns {Promise<T>} Promise containing a object with stream-names and items in the streams.
      * @public
@@ -1643,7 +1621,7 @@ export declare class SxcQuery extends SxcDataServiceBase {
      * Get a query but only the mentioned streams.
      * This will reduce the amount of data retrieved on queries that have many streams.
      * @template T The schema/interfaces of what will be returned
-     * @param {string} streams name of streams to get, comma separated
+     * @param streams name of streams to get, comma separated
      * @param urlParams additional parameters for the URL, either as a string or as a object
      * @param data data to include in case of a POST call - if this is provided, it will use a post
      * @returns {Promise<T>} Promise containing a object with stream-names and items in the streams.
@@ -1830,15 +1808,13 @@ export declare class UrlParams {
     /**
      * Get a param from the url, no matter if it's behind ? or #
      * If not found, will return an empty string `''`
-     * @param {string} name
-     * @memberof QueryParams
+     * @param name
      */
     get(name: string): string;
     /**
      * Get a required param from the url, no matter if it's behind ? or #
      * Will throw an error if not found
-     * @param {string} name
-     * @memberof QueryParams
+     * @param name
      */
     require(name: string): string;
     /**

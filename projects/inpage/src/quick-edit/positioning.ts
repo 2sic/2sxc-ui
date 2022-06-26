@@ -91,7 +91,6 @@ function positionAndAlign(element: HTMLElement, coords: PositionCoordinates) {
 
 /**
  * Refresh positioning / visibility of the quick-insert bar
- * @param e
  * @internal
  */
 function refresh(e: MouseEvent) {
@@ -172,8 +171,6 @@ function provideCorrectAddButtons(tag: HTMLElement) {
 
 /**
  * Return the nearest element to the mouse cursor from elements
- * @param elements
- * @param position
  */
 function findNearest(elements: HTMLElement[], position: PositionCoordinates): PositionCoordinates {
     const maxDistance: number = 30; // Defines the maximal distance of the cursor when the menu is displayed

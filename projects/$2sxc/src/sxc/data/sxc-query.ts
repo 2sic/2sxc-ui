@@ -9,9 +9,6 @@ export class SxcQuery extends SxcDataServiceBase {
 
   /**
    * Creates an instance of SxcQuery.
-   * @param {Sxc} sxc
-   * @param {string} name
-   * @memberof SxcQuery
    * @internal
    */
   constructor(sxc: Sxc, readonly name: string) {
@@ -26,7 +23,6 @@ export class SxcQuery extends SxcDataServiceBase {
    *
    * @template T
    * @returns {Promise<T>} containing a object with stream-names and items in the streams.
-   * @memberof SxcQuery
    */
   getAll<T = unknown>(urlParams?: string | Record<string, unknown>, data?: string | Record<string, unknown>): Promise<T> {
     return this.getInternal<T>(undefined, urlParams, data);
@@ -36,9 +32,8 @@ export class SxcQuery extends SxcDataServiceBase {
    * Get just one stream, returning an array of items in that stream
    *
    * @template T
-   * @param {string} stream
+   * @param stream
    * @returns {Promise<T[]>} containing an array of items - or empty if stream not found or nothing returned
-   * @memberof SxcQuery
    */
   getStream<T = unknown>(stream: string): Promise<T[]>;
   getStream<T = unknown>(stream: string, urlParams: string | Record<string, unknown>): Promise<T[]>;
@@ -64,7 +59,7 @@ export class SxcQuery extends SxcDataServiceBase {
    * Get a query but only the mentioned streams.
    * This will reduce the amount of data retrieved on queries that have many streams. 
    * @template T The schema/interfaces of what will be returned
-   * @param {string} streams name of streams to get, comma separated
+   * @param streams name of streams to get, comma separated
    * @param urlParams additional parameters for the URL, either as a string or as a object
    * @returns {Promise<T>} Promise containing a object with stream-names and items in the streams.
    * @public
@@ -74,7 +69,7 @@ export class SxcQuery extends SxcDataServiceBase {
    * Get a query but only the mentioned streams.
    * This will reduce the amount of data retrieved on queries that have many streams. 
    * @template T The schema/interfaces of what will be returned
-   * @param {string} streams name of streams to get, comma separated
+   * @param streams name of streams to get, comma separated
    * @param urlParams additional parameters for the URL, either as a string or as a object
    * @param data data to include in case of a POST call - if this is provided, it will use a post
    * @returns {Promise<T>} Promise containing a object with stream-names and items in the streams.
@@ -86,7 +81,7 @@ export class SxcQuery extends SxcDataServiceBase {
    * This will reduce the amount of data retrieved on queries that have many streams. 
    *
    * @template T The schema/interfaces of what will be returned
-   * @param {string} streams name of streams to get, comma separated
+   * @param streams name of streams to get, comma separated
    * @param urlParams additional parameters for the URL, either as a string or as a object
    * @param data data to include in case of a POST call - if this is provided, it will use a post
    * @returns {Promise<T>} Promise containing a object with stream-names and items in the streams.
