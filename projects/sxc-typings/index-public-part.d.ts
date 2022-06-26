@@ -1200,7 +1200,7 @@ export declare class Sxc extends HasLog {
     /**
      * Get a data service for a specific content-type.
      *
-     * @param contentType name of the content type which this service will get
+     * @param contentType: name of the content type which this service will get
      */
     data<T = unknown>(contentType: string): SxcData<T>;
     /**

@@ -3796,7 +3796,7 @@
             {
               "kind": "Method",
               "canonicalReference": "@2sic.com/2sxc-typings!Sxc#data:member(1)",
-              "docComment": "/**\n * Get a data service for a specific content-type.\n *\n * @param contentType - name of the content type which this service will get\n */\n",
+              "docComment": "/**\n * Get a data service for a specific content-type.\n *\n * @param contentType - : name of the content type which this service will get\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
