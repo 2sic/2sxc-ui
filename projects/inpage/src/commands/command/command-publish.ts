@@ -16,20 +16,17 @@ Commands.add(CommandNames.publish, 'Unpublished', 'eye-off', false, false, {
     return !context.instance.allowPublish || context.button.command.params.isPublished !== false;
   },
   code(context, event): Promise<void> {
-    debugger;
+    const params = context.button.command.params;
     return new Promise((resolve, reject) => {
-      if (context.button.command.params.isPublished) {
+      if (params.isPublished) {
         alert(translate('Toolbar.AlreadyPublished'));
         return resolve();
       }
 
       // if we have an entity-id, publish based on that
-      if (context.button.command.params.entityId) {
-        return Actions.publishId(
-          context,
-          context.button.command.params.entityId,
-        );
-      }
+      if (params.entityId)
+        return Actions.publishId(context, params.entityId);
+
       const i = CmdParHlp.getIndex(context);
       const part: string = i === -1 ? 'listcontent' : 'content';
       const index = i === -1 ? 0 : i;
