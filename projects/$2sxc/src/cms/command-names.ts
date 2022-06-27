@@ -75,12 +75,12 @@ export enum CommandNames {
     apps = 'apps',
 
     /**
-     * `contentitems` opens the list to manage all items of a specific content-type.
+     * `data` opens the list to manage all items of a specific content-type.
      * <br> 🔘 Will use the settings of the current template to open.
      * It is only shown to elevated admins.
      * <br> 📩 [Parameters](xref:Api.Js.SxcJs.CommandContentItemsParams)
      */
-    contentItems = 'contentitems',
+    data = 'data',
 
     /**
      * `contenttype` opens the dialog to view or modify fields of a content-type.

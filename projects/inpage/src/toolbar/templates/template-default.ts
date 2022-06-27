@@ -22,7 +22,7 @@ export const ToolbarTemplateDefault: ToolbarTemplate = {
       // 'delete',
     }, {
       name: TC.GroupView,
-      buttons: [CN.templateEdit, CN.viewEdit, CN.contentItems, CN.queryEdit, CN.contentType].join(','),
+      buttons: [CN.templateEdit, CN.viewEdit, CN.data, CN.queryEdit, CN.contentType].join(','),
       // 'template-develop,template-settings,contentitems,template-query,contenttype',
       defaults: {
         classes: 'group-pro',
