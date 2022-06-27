@@ -59,7 +59,7 @@ export class RuleManager extends HasLog {
     getParams = () => this.getSystemRule(BuildSteps.params) || this.getToolbar();
 
     getToolbar = () => this.getSystemRule(BuildSteps.toolbar);
-    getAdd = () => this.filter((br) => br.operator === OP.add);
+    getAdd = () => this.filter((br) => br.operator === OP.add || br.operator == OP.addAuto);
     getRemoveGroups = () => this.filter((br) => br.operator === OP.remove && br.step === BuildSteps.group);
 
     /** Find a system rule (marked with '$') */

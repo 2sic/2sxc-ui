@@ -74,8 +74,9 @@ export class BuildRule extends HasLog {
     overrideShow(): boolean | undefined {
         if (this.operator === Operators.remove) return false;
         if (this.operator === Operators.add) return true;
-        if (this.operator === Operators.modify && this?.ui?.show !== undefined)
-            return this.ui.show;
+        if (this.operator === Operators.addAuto) return undefined;
+        if (this.operator === Operators.modify)
+            return this.ui?.show; // can be true/false/undefined
         return undefined;
     }
 
@@ -122,7 +123,7 @@ export class BuildRule extends HasLog {
         // for system and %-change operations the id should be the name of the standard button
         // ...but if it's an add-operation, we must keep the IDs appart because various
         // properties are set at a much later time
-        this.id = (this.operator === Operators.add)
+        this.id = (this.operator === Operators.add || this.operator === Operators.addAuto)
             ? 'rndId' + Math.floor(Math.random() * 99999)
             : key;
 

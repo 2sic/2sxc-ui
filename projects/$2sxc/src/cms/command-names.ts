@@ -116,7 +116,8 @@ export enum CommandNames {
     /**
      * `edit` opens an edit-dialog.
      * <br>
-     * In scenarios where the page is currently showing a demo item, this will have the same effect as `add`
+     * In scenarios where the page is currently showing a _demo item_, this will have the same effect as `add`.
+     * So instead of editing the _demo item_ it would trigger a dialog to add a new item. 
      * <br> 🔘 Only appears if `entityId` is known or item is in a list.
      * <br> 📩 Parameters either one of these: 
      * [Id](xref:Api.Js.SxcJs.CommandParamsEntityById),
