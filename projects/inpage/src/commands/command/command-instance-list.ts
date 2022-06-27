@@ -5,7 +5,7 @@ import { CmdParHlp } from '../cmd-par-hlp';
  * import this module to commands.ts
  * @internal
  */
-Commands.add(CommandNames.instanceList, 'Sort', 'list-numbered', false, true, {
+Commands.add(CommandNames.list, 'Sort', 'list-numbered', false, true, {
   showCondition: (context) => SharedLogic.isList(context),
 
   configureLinkGenerator: (context, linkGenerator) => {

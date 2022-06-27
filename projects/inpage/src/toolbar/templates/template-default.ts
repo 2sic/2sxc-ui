@@ -14,7 +14,7 @@ export const ToolbarTemplateDefault: ToolbarTemplate = {
       // 'edit,new,metadata,publish,layout',
     }, {
       name: TC.GroupList,
-      buttons: [CN.add, CN.addExisting, CN.replace, CN.remove, CN.moveUp, CN.moveDown, CN.instanceList].join(','),
+      buttons: [CN.add, CN.addExisting, CN.replace, CN.remove, CN.moveUp, CN.moveDown, CN.list].join(','),
       // 'add,add-existing,replace,remove,moveup,movedown,instance-list',
     }, {
       name: TC.GroupEditAdvanced,
@@ -22,14 +22,14 @@ export const ToolbarTemplateDefault: ToolbarTemplate = {
       // 'delete',
     }, {
       name: TC.GroupView,
-      buttons: [CN.templateDevelop, CN.templateSettings, CN.contentItems, CN.templateQuery, CN.contentType].join(','),
+      buttons: [CN.templateEdit, CN.viewEdit, CN.contentItems, CN.queryEdit, CN.contentType].join(','),
       // 'template-develop,template-settings,contentitems,template-query,contenttype',
       defaults: {
         classes: 'group-pro',
       },
     }, {
       name: TC.GroupApp,
-      buttons: [CN.app, CN.appSettings, CN.appResources, CN.zone, CN.insightsServer].join(','),
+      buttons: [CN.app, CN.appSettings, CN.appResources, CN.system, CN.insights].join(','),
       // 'app,app-settings,app-resources,zone,insights-server',
       defaults: {
         classes: 'group-pro',

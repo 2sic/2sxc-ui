@@ -1,10 +1,13 @@
-﻿import { CommandNames, Commands } from '..';
+﻿import { Command, CommandNames, Commands } from '..';
+
+const oldName = 'insights-server';
 
 /**
  * import this module to commands.ts
  * @internal
  */
-Commands.add(CommandNames.insightsServer, 'Insights', 'speed', true, false, {
+ const cmd = Command.build(CommandNames.insights, 'Insights', 'speed', true, false, {
+  dialog: (_) => oldName,
   showCondition: (context) => context.user.CanDevelop,
   code(context, event) {
     return new Promise((resolve, reject) => {
@@ -15,3 +18,6 @@ Commands.add(CommandNames.insightsServer, 'Insights', 'speed', true, false, {
     });
   },
 });
+
+Commands.addCommand(cmd);
+Commands.addCommand(Command.clone(cmd, oldName));

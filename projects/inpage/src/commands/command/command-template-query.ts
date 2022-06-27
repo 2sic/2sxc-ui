@@ -4,7 +4,7 @@
  * import this module to commands.ts
  * @internal
  */
-Commands.add(CommandNames.templateQuery, 'QueryEdit', 'filter', true, false, {
+Commands.add(CommandNames.queryEdit, 'QueryEdit', 'filter', true, false, {
   dialog: (_) => 'pipeline-designer',
 
   addParamsToLink: (ctx) => ({ pipelineId: ctx.contentBlock.queryId }),

@@ -134,19 +134,20 @@ export enum CommandNames {
     image = 'image',
 
     /**
-     * `insights-server` opens the insights logs page
+     * `insights` opens the insights logs page
      * <br> 🔐 Toolbar shows this automatically to elevated admins.
      * <br> 📩 No params required.
      */
-    insightsServer = 'insights-server',
+    insights = 'insights',
 
+    // TODO: RENAME
     /**
      * `instance-list` opens a dialog to manually re-order **items in a list**.
      * <br> 🪜 Only appears on toolbars of items which are in a list.
      * <br> 📩 No params required,
      * (auto-detected from context)
      */
-    instanceList = 'instance-list',
+    list = 'instance-list',
 
     /**
      * `layout` opens the in-page dialog to change the layout of the current content.
@@ -233,14 +234,16 @@ export enum CommandNames {
      */
     replace = 'replace',
 
+    // TODO: RENAME
     /**
      * `template-develop` opens the template-editor dialog in a new window.
      * <br> 🔐 Toolbar shows this automatically to elevated admins.
      * <br> 📩 No params required,
      * (auto-detected from context)
      */
-    templateDevelop = 'template-develop',
+    templateEdit = 'template-develop',
 
+    // TODO: RENAME
     /**
      * `template-query` opens the pipeline/query-designer in a new window.
      * <br> 🔘 It's not available on the simple Content App, only on full Apps.
@@ -249,21 +252,22 @@ export enum CommandNames {
      * <br> 📩 No params required,
      * (auto-detected from context)
      */
-    templateQuery = 'template-query',
+    queryEdit = 'template-query',
 
+    // TODO: RENAME
     /**
      * `template-settings` will change settings on the template currently used
      * <br> 🔐 Toolbar shows this automatically to elevated admins.
      */
-    templateSettings = 'template-settings',
+    viewEdit = 'template-settings',
 
     /**
-     * `zone` opens the system dialog for this zone/site.
+     * `system` opens the system dialog for this zone/site.
      * <br> 🔐 Toolbar shows this automatically to elevated admins.
      * <br> 📩 No params required,
      * (auto-detected from context)
      */
-    zone = 'zone',
+    system = 'system',
 }
 
 

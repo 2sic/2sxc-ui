@@ -4,7 +4,7 @@
  * import this module to commands.ts
  * @internal
  */
-Commands.add(CommandNames.templateSettings, 'TemplateSettings', 'sliders', true, false, {
+Commands.add(CommandNames.viewEdit, 'TemplateSettings', 'sliders', true, false, {
   dialog: (_) => 'edit',
 
   showCondition: (ctx) => !!ctx.user.CanDevelop && !ctx.app.isContent,

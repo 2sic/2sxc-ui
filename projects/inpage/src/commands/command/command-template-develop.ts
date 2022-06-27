@@ -5,7 +5,7 @@ import { TemplateIdentifier } from '../../../../$2sxc/src/cms';
  * import this module to commands.ts
  * @internal
  */
-Commands.add(CommandNames.templateDevelop, 'Develop', 'code', true, false, {
+Commands.add(CommandNames.templateEdit, 'Develop', 'code', true, false, {
   newWindow: (_) => true,
   dialog: (_) => 'develop',
 
