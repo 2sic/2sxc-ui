@@ -16,7 +16,7 @@
 /** @internal */ import './command-custom';
 /** @internal */ import './command-delete';
 /** @internal */ import './command-edit';
-/** @internal */ import './command-insights-server';
+/** @internal */ import './command-insights';
 /** @internal */ import './command-instance-list';
 /** @internal */ import './command-layout';
 /** @internal */ import './command-metadata';
@@ -30,7 +30,7 @@
 /** @internal */ import './command-template-develop';
 /** @internal */ import './command-template-query';
 /** @internal */ import './command-template-settings';
-/** @internal */ import './command-zone';
+/** @internal */ import './command-system';
 
 /** @internal */ export * from './command-params-entity';
 /** @internal */ export * from './content-list-action-params';
