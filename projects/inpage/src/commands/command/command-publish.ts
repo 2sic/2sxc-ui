@@ -10,12 +10,13 @@ import { Actions } from './content-list-actions';
  */
 Commands.add(CommandNames.publish, 'Unpublished', 'eye-off', false, false, {
   showCondition(context) {
-      return context.button.command.params.isPublished === false;
+    return context.button.command.params.isPublished === false;
   },
   disabled(context) {
-      return !context.instance.allowPublish;
+    return !context.instance.allowPublish || context.button.command.params.isPublished !== false;
   },
   code(context, event): Promise<void> {
+    debugger;
     return new Promise((resolve, reject) => {
       if (context.button.command.params.isPublished) {
         alert(translate('Toolbar.AlreadyPublished'));
