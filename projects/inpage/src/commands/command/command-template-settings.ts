@@ -1,10 +1,10 @@
-﻿import { CommandNames, Commands } from '..';
+﻿import { Command, CommandNames, Commands } from '..';
 
 /**
  * import this module to commands.ts
  * @internal
  */
-Commands.add(CommandNames.view, 'TemplateSettings', 'sliders', true, false, {
+const cmd = Command.build(CommandNames.view, 'TemplateSettings', 'sliders', true, false, {
   dialog: (_) => 'edit',
 
   showCondition: (ctx) => !!ctx.user.CanDevelop && !ctx.app.isContent,
@@ -13,3 +13,6 @@ Commands.add(CommandNames.view, 'TemplateSettings', 'sliders', true, false, {
     linkGen.items = [{ EntityId: ctx.contentBlock.templateId }];
   },
 });
+
+Commands.addCommand(cmd);
+Commands.addCommand(Command.clone(cmd, CommandNames.view_old_templateSettings));

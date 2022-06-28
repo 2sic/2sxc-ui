@@ -1,11 +1,11 @@
-﻿import { CommandNames, Commands } from '..';
+﻿import { Command, CommandNames, Commands } from '..';
 import { TemplateIdentifier } from '../../../../$2sxc/src/cms';
 
 /**
  * import this module to commands.ts
  * @internal
  */
-Commands.add(CommandNames.template, 'Develop', 'code', true, false, {
+const cmd = Command.build(CommandNames.template, 'Develop', 'code', true, false, {
   newWindow: (_) => true,
   dialog: (_) => 'develop',
 
@@ -22,3 +22,6 @@ Commands.add(CommandNames.template, 'Develop', 'code', true, false, {
   addParamsToLink: (ctx) => ({ isshared: ctx.contentBlock.TemplateIsShared }),
 
 });
+
+Commands.addCommand(cmd);
+Commands.addCommand(Command.clone(cmd, CommandNames.template_old_develop));

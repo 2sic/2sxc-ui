@@ -1,10 +1,10 @@
-﻿import { CommandNames, Commands } from '..';
+﻿import { Command, CommandNames, Commands } from '..';
 
 /**
  * import this module to commands.ts
  * @internal
  */
-Commands.add(CommandNames.query, 'QueryEdit', 'filter', true, false, {
+const cmd = Command.build(CommandNames.query, 'QueryEdit', 'filter', true, false, {
   dialog: (_) => 'pipeline-designer',
 
   addParamsToLink: (ctx) => ({ pipelineId: ctx.contentBlock.queryId }),
@@ -20,3 +20,7 @@ Commands.add(CommandNames.query, 'QueryEdit', 'filter', true, false, {
   // if it doesn't have a query, make it less strong
   dynamicClasses: (ctx) => ctx.contentBlock.queryId ? '' : 'empty',
 });
+
+
+Commands.addCommand(cmd);
+Commands.addCommand(Command.clone(cmd, CommandNames.query_old_templateQuery));
