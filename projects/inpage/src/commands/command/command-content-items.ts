@@ -1,14 +1,12 @@
 ﻿import { Command, CommandNames, Commands } from '..';
 import { createContentTypeParams } from './command-content-type';
 
-const oldName = 'contentitems';
-
 /**
  * import this module to commands.ts
  * @internal
  */
 const cmd = Command.build(CommandNames.data, 'ContentItems', 'table', true, false, {
-  dialog: (_) => oldName,
+  dialog: (_) => CommandNames.data_old_contentItems,
 
   addParamsToLink: createContentTypeParams,
 
@@ -31,4 +29,4 @@ const cmd = Command.build(CommandNames.data, 'ContentItems', 'table', true, fals
 });
 
 Commands.addCommand(cmd);
-Commands.addCommand(Command.clone(cmd, oldName));
+Commands.addCommand(Command.clone(cmd, CommandNames.data_old_contentItems));

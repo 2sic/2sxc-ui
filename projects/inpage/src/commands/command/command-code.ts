@@ -8,8 +8,6 @@ const evtName = 'event';
 
 const errNoCode = "Trying to run Custom-Code action, but no 'call' (v10+, recommended) or 'customCode' (v9, old) found to run - see console for debug info.";
 
-const oldName = 'custom';
-
 /**
  * import this module to commands.ts
  * @internal
@@ -44,4 +42,4 @@ const cmd = Command.build(CommandNames.code, 'Custom', 'bomb', true, false, {
 
 
 Commands.addCommand(cmd);
-Commands.addCommand(Command.clone(cmd, oldName));
+Commands.addCommand(Command.clone(cmd, CommandNames.code_old_custom));

@@ -1,5 +1,4 @@
 import { CommandParamsMetadata } from '../../../../$2sxc/src/cms';
-import { TypeValue } from '../../plumbing';
 import { CommandParamsEntityById, CommandParamsEntityInContentBlock, CommandParamsEntityInList } from './command-params-entity';
 
 
@@ -59,7 +58,7 @@ export interface CommandAddExistingParams extends CommandAddParams {
  * ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)
  * @public
  */
-export interface CommandContentItemsParams extends CommandContentTypeParams {
+export interface CommandDataParams extends CommandContentTypeParams {
   /**
    * Filters to apply to the list of items.
    * <br>
@@ -67,6 +66,7 @@ export interface CommandContentItemsParams extends CommandContentTypeParams {
    * The value is a string, number or array for filtering EntityIds or EntityGuids
    */
   filters?: Record<string, string | number | string[] | number[]>;
+  // TODO: TRY TO RENAME TO filter (without s) as this is how we use it elsewhere
 }
 
 
@@ -88,7 +88,7 @@ export interface CommandCopyParams extends CommandContentTypeParams, CommandPara
  * ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)
  * @public
  */
-export interface CommandCustomParams {
+export interface CommandCodeParams {
   /**
    * Name of the function to call - must be available in the context.
    * This is usually as a function window. Example:

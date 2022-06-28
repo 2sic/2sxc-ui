@@ -78,17 +78,30 @@ export enum CommandNames {
      * `data` opens the list to manage all items of a specific content-type.
      * <br> 🔘 Will use the settings of the current template to open.
      * It is only shown to elevated admins.
-     * <br> 📩 [Parameters](xref:Api.Js.SxcJs.CommandContentItemsParams)
+     * <br> 📩 [Parameters](xref:Api.Js.SxcJs.CommandDataParams)
      */
     data = 'data',
 
     /**
-     * `contenttype` opens the dialog to view or modify fields of a content-type.
+     * old name
+     * @internal
+     */
+    data_old_contentItems = 'contentitems',
+
+    /**
+     * `fields` opens the dialog to view or modify fields of a content-type.
      * <br> 🔘 On a toolbar it will use the content-type of the current item.
      * <br> 🔐 Toolbar shows this automatically to elevated admins.
-     * <br> 📩 [Parameters](xref:Api.Js.SxcJs.CommandContentTypeParams)
+     * <br> 📩 [Parameters](xref:Api.Js.SxcJs.CommandFieldsParams)
      */
-    contentType = 'contenttype',
+    fields = 'fields',
+
+    /**
+     * old name
+     * @internal
+     */
+    fields_old_contenttype = 'contenttype',
+
 
     /**
      * `copy` opens the edit-dialog for the current item in copy-mode, so when saving it will be a new item.
@@ -103,6 +116,12 @@ export enum CommandNames {
      * <br> 📩 [Parameters](xref:Api.Js.SxcJs.CommandCustomParams)
      */
     code = 'code',
+
+    /**
+     * old name
+     * @internal
+     */
+    code_old_custom = 'custom',
 
     /**
      * `delete` will delete (not just remove) a content-item.
@@ -139,6 +158,12 @@ export enum CommandNames {
      * <br> 📩 No params required.
      */
     insights = 'insights',
+
+    /**
+     * old name
+     * @internal
+     */
+    insights_old_server = 'insights-server',
 
     // TODO: RENAME
     /**
@@ -268,6 +293,12 @@ export enum CommandNames {
      * (auto-detected from context)
      */
     system = 'system',
+
+    /**
+     * old name
+     * @internal
+     */
+    system_old_zone = 'zone',
 }
 
 
