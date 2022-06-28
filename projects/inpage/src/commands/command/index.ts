@@ -10,14 +10,14 @@
 /** @internal */ import './command-app-resources';
 /** @internal */ import './command-app-settings';
 /** @internal */ import './command-apps';
-/** @internal */ import './command-content-items';
+/** @internal */ import './command-data';
 /** @internal */ import './command-content-type';
 /** @internal */ import './command-copy';
 /** @internal */ import './command-code';
 /** @internal */ import './command-delete';
 /** @internal */ import './command-edit';
 /** @internal */ import './command-insights';
-/** @internal */ import './command-instance-list';
+/** @internal */ import './command-list';
 /** @internal */ import './command-layout';
 /** @internal */ import './command-metadata';
 /** @internal */ import './command-more';
@@ -27,9 +27,9 @@
 /** @internal */ import './command-publish';
 /** @internal */ import './command-remove';
 /** @internal */ import './command-replace';
-/** @internal */ import './command-template-develop';
-/** @internal */ import './command-template-query';
-/** @internal */ import './command-template-settings';
+/** @internal */ import './command-template';
+/** @internal */ import './command-query';
+/** @internal */ import './command-view';
 /** @internal */ import './command-system';
 
 /** @internal */ export * from './command-params-entity';
