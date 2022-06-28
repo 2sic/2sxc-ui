@@ -92,7 +92,7 @@ export enum CommandNames {
      * `fields` opens the dialog to view or modify fields of a content-type.
      * <br> 🔘 On a toolbar it will use the content-type of the current item.
      * <br> 🔐 Toolbar shows this automatically to elevated admins.
-     * <br> 📩 [Parameters](xref:Api.Js.SxcJs.CommandFieldsParams)
+     * <br> 📩 [Parameters](xref:Api.Js.SxcJs.CommandContentTypeParams)
      */
     fields = 'fields',
 

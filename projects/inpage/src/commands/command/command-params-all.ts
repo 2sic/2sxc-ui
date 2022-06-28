@@ -51,7 +51,7 @@ export interface CommandAddExistingParams extends CommandAddParams {
 
 
 /**
- * Parameters used for the command `contentitems`.
+ * Parameters used for the command `data`.
  * <br>
  * The content-type name determines what items will be managed.
  * <br>
@@ -83,7 +83,7 @@ export interface CommandCopyParams extends CommandContentTypeParams, CommandPara
 
 
 /**
- * Parameters used for the command `custom` on toolbars.
+ * Parameters used for the command `code` on toolbars.
  * <br>
  * ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)
  * @public

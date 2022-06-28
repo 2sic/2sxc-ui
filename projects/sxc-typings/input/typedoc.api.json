@@ -322,43 +322,29 @@
         },
         {
           "kind": "Interface",
-          "canonicalReference": "@2sic.com/2sxc-typings!CommandContentItemsParams:interface",
-          "docComment": "/**\n * Parameters used for the command `contentitems`. <br> The content-type name determines what items will be managed. <br> ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)\n *\n * @public\n */\n",
+          "canonicalReference": "@2sic.com/2sxc-typings!CommandCodeParams:interface",
+          "docComment": "/**\n * Parameters used for the command `code` on toolbars. <br> ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)\n *\n * @public\n */\n",
           "excerptTokens": [
             {
               "kind": "Content",
-              "text": "export interface CommandContentItemsParams extends "
-            },
-            {
-              "kind": "Reference",
-              "text": "CommandContentTypeParams",
-              "canonicalReference": "@2sic.com/2sxc-typings!CommandContentTypeParams:interface"
-            },
-            {
-              "kind": "Content",
-              "text": " "
+              "text": "export interface CommandCodeParams "
             }
           ],
           "releaseTag": "Public",
-          "name": "CommandContentItemsParams",
+          "name": "CommandCodeParams",
           "members": [
             {
               "kind": "PropertySignature",
-              "canonicalReference": "@2sic.com/2sxc-typings!CommandContentItemsParams#filters:member",
-              "docComment": "/**\n * Filters to apply to the list of items. <br> Each property targets a field. The value is a string, number or array for filtering EntityIds or EntityGuids\n */\n",
+              "canonicalReference": "@2sic.com/2sxc-typings!CommandCodeParams#call:member",
+              "docComment": "/**\n * Name of the function to call - must be available in the context. This is usually as a function window. Example: <br> If `call` is `sayHello` you need a `window.sayHello(context, event)`.\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
-                  "text": "filters?: "
-                },
-                {
-                  "kind": "Reference",
-                  "text": "Record",
-                  "canonicalReference": "!Record:type"
+                  "text": "call: "
                 },
                 {
                   "kind": "Content",
-                  "text": "<string, string | number | string[] | number[]>"
+                  "text": "string"
                 },
                 {
                   "kind": "Content",
@@ -366,21 +352,43 @@
                 }
               ],
               "isReadonly": false,
-              "isOptional": true,
+              "isOptional": false,
               "releaseTag": "Public",
-              "name": "filters",
+              "name": "call",
               "propertyTypeTokenRange": {
                 "startIndex": 1,
-                "endIndex": 3
+                "endIndex": 2
+              }
+            },
+            {
+              "kind": "PropertySignature",
+              "canonicalReference": "@2sic.com/2sxc-typings!CommandCodeParams#customCode:member",
+              "docComment": "/**\n * **OBSOLETE - avoid using** <br> JavaScript as string containing the code to execute. This is the old V9 - it contains a function, not a name\n *\n * @deprecated\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "customCode: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "string"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isReadonly": false,
+              "isOptional": false,
+              "releaseTag": "Public",
+              "name": "customCode",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
               }
             }
           ],
-          "extendsTokenRanges": [
-            {
-              "startIndex": 1,
-              "endIndex": 2
-            }
-          ]
+          "extendsTokenRanges": []
         },
         {
           "kind": "Interface",
@@ -469,29 +477,43 @@
         },
         {
           "kind": "Interface",
-          "canonicalReference": "@2sic.com/2sxc-typings!CommandCustomParams:interface",
-          "docComment": "/**\n * Parameters used for the command `custom` on toolbars. <br> ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)\n *\n * @public\n */\n",
+          "canonicalReference": "@2sic.com/2sxc-typings!CommandDataParams:interface",
+          "docComment": "/**\n * Parameters used for the command `data`. <br> The content-type name determines what items will be managed. <br> ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)\n *\n * @public\n */\n",
           "excerptTokens": [
             {
               "kind": "Content",
-              "text": "export interface CommandCustomParams "
+              "text": "export interface CommandDataParams extends "
+            },
+            {
+              "kind": "Reference",
+              "text": "CommandContentTypeParams",
+              "canonicalReference": "@2sic.com/2sxc-typings!CommandContentTypeParams:interface"
+            },
+            {
+              "kind": "Content",
+              "text": " "
             }
           ],
           "releaseTag": "Public",
-          "name": "CommandCustomParams",
+          "name": "CommandDataParams",
           "members": [
             {
               "kind": "PropertySignature",
-              "canonicalReference": "@2sic.com/2sxc-typings!CommandCustomParams#call:member",
-              "docComment": "/**\n * Name of the function to call - must be available in the context. This is usually as a function window. Example: <br> If `call` is `sayHello` you need a `window.sayHello(context, event)`.\n */\n",
+              "canonicalReference": "@2sic.com/2sxc-typings!CommandDataParams#filters:member",
+              "docComment": "/**\n * Filters to apply to the list of items. <br> Each property targets a field. The value is a string, number or array for filtering EntityIds or EntityGuids\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
-                  "text": "call: "
+                  "text": "filters?: "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "Record",
+                  "canonicalReference": "!Record:type"
                 },
                 {
                   "kind": "Content",
-                  "text": "string"
+                  "text": "<string, string | number | string[] | number[]>"
                 },
                 {
                   "kind": "Content",
@@ -499,43 +521,21 @@
                 }
               ],
               "isReadonly": false,
-              "isOptional": false,
+              "isOptional": true,
               "releaseTag": "Public",
-              "name": "call",
+              "name": "filters",
               "propertyTypeTokenRange": {
                 "startIndex": 1,
-                "endIndex": 2
-              }
-            },
-            {
-              "kind": "PropertySignature",
-              "canonicalReference": "@2sic.com/2sxc-typings!CommandCustomParams#customCode:member",
-              "docComment": "/**\n * **OBSOLETE - avoid using** <br> JavaScript as string containing the code to execute. This is the old V9 - it contains a function, not a name\n *\n * @deprecated\n */\n",
-              "excerptTokens": [
-                {
-                  "kind": "Content",
-                  "text": "customCode: "
-                },
-                {
-                  "kind": "Content",
-                  "text": "string"
-                },
-                {
-                  "kind": "Content",
-                  "text": ";"
-                }
-              ],
-              "isReadonly": false,
-              "isOptional": false,
-              "releaseTag": "Public",
-              "name": "customCode",
-              "propertyTypeTokenRange": {
-                "startIndex": 1,
-                "endIndex": 2
+                "endIndex": 3
               }
             }
           ],
-          "extendsTokenRanges": []
+          "extendsTokenRanges": [
+            {
+              "startIndex": 1,
+              "endIndex": 2
+            }
+          ]
         },
         {
           "kind": "Interface",
@@ -867,41 +867,20 @@
             },
             {
               "kind": "EnumMember",
-              "canonicalReference": "@2sic.com/2sxc-typings!CommandNames.contentItems:member",
-              "docComment": "/**\n * `contentitems` opens the list to manage all items of a specific content-type. <br> 🔘 Will use the settings of the current template to open. It is only shown to elevated admins. <br> 📩 [Parameters](xref:Api.Js.SxcJs.CommandContentItemsParams)\n */\n",
+              "canonicalReference": "@2sic.com/2sxc-typings!CommandNames.code:member",
+              "docComment": "/**\n * `code` will execute custom javascript. <br> 🔘 This is mainly for toolbars, to add buttons with custom code. <br> 📩 [Parameters](xref:Api.Js.SxcJs.CommandCustomParams)\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
-                  "text": "contentItems = "
+                  "text": "code = "
                 },
                 {
                   "kind": "Content",
-                  "text": "\"contentitems\""
+                  "text": "\"code\""
                 }
               ],
               "releaseTag": "Public",
-              "name": "contentItems",
-              "initializerTokenRange": {
-                "startIndex": 1,
-                "endIndex": 2
-              }
-            },
-            {
-              "kind": "EnumMember",
-              "canonicalReference": "@2sic.com/2sxc-typings!CommandNames.contentType:member",
-              "docComment": "/**\n * `contenttype` opens the dialog to view or modify fields of a content-type. <br> 🔘 On a toolbar it will use the content-type of the current item. <br> 🔐 Toolbar shows this automatically to elevated admins. <br> 📩 [Parameters](xref:Api.Js.SxcJs.CommandContentTypeParams)\n */\n",
-              "excerptTokens": [
-                {
-                  "kind": "Content",
-                  "text": "contentType = "
-                },
-                {
-                  "kind": "Content",
-                  "text": "\"contenttype\""
-                }
-              ],
-              "releaseTag": "Public",
-              "name": "contentType",
+              "name": "code",
               "initializerTokenRange": {
                 "startIndex": 1,
                 "endIndex": 2
@@ -930,20 +909,20 @@
             },
             {
               "kind": "EnumMember",
-              "canonicalReference": "@2sic.com/2sxc-typings!CommandNames.custom:member",
-              "docComment": "/**\n * `custom` will execute custom javascript. <br> 🔘 This is mainly for toolbars, to add buttons with custom code. <br> 📩 [Parameters](xref:Api.Js.SxcJs.CommandCustomParams)\n */\n",
+              "canonicalReference": "@2sic.com/2sxc-typings!CommandNames.data:member",
+              "docComment": "/**\n * `data` opens the list to manage all items of a specific content-type. <br> 🔘 Will use the settings of the current template to open. It is only shown to elevated admins. <br> 📩 [Parameters](xref:Api.Js.SxcJs.CommandDataParams)\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
-                  "text": "custom = "
+                  "text": "data = "
                 },
                 {
                   "kind": "Content",
-                  "text": "\"custom\""
+                  "text": "\"data\""
                 }
               ],
               "releaseTag": "Public",
-              "name": "custom",
+              "name": "data",
               "initializerTokenRange": {
                 "startIndex": 1,
                 "endIndex": 2
@@ -973,7 +952,7 @@
             {
               "kind": "EnumMember",
               "canonicalReference": "@2sic.com/2sxc-typings!CommandNames.edit:member",
-              "docComment": "/**\n * `edit` opens an edit-dialog. <br> In scenarios where the page is currently showing a demo item, this will have the same effect as `add` <br> 🔘 Only appears if `entityId` is known or item is in a list. <br> 📩 Parameters either one of these: [Id](xref:Api.Js.SxcJs.CommandParamsEntityById), [In Block](xref:Api.Js.SxcJs.CommandParamsEntityInContentBlock), [In List](xref:Api.Js.SxcJs.CommandParamsEntityInList) (auto-detected from context)\n */\n",
+              "docComment": "/**\n * `edit` opens an edit-dialog. <br> In scenarios where the page is currently showing a _demo item_, this will have the same effect as `add`. So instead of editing the _demo item_ it would trigger a dialog to add a new item. <br> 🔘 Only appears if `entityId` is known or item is in a list. <br> 📩 Parameters either one of these: [Id](xref:Api.Js.SxcJs.CommandParamsEntityById), [In Block](xref:Api.Js.SxcJs.CommandParamsEntityInContentBlock), [In List](xref:Api.Js.SxcJs.CommandParamsEntityInList) (auto-detected from context)\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -993,20 +972,20 @@
             },
             {
               "kind": "EnumMember",
-              "canonicalReference": "@2sic.com/2sxc-typings!CommandNames.insightsServer:member",
-              "docComment": "/**\n * `insights-server` opens the insights logs page <br> 🔐 Toolbar shows this automatically to elevated admins. <br> 📩 No params required.\n */\n",
+              "canonicalReference": "@2sic.com/2sxc-typings!CommandNames.fields:member",
+              "docComment": "/**\n * `fields` opens the dialog to view or modify fields of a content-type. <br> 🔘 On a toolbar it will use the content-type of the current item. <br> 🔐 Toolbar shows this automatically to elevated admins. <br> 📩 [Parameters](xref:Api.Js.SxcJs.CommandContentTypeParams)\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
-                  "text": "insightsServer = "
+                  "text": "fields = "
                 },
                 {
                   "kind": "Content",
-                  "text": "\"insights-server\""
+                  "text": "\"fields\""
                 }
               ],
               "releaseTag": "Public",
-              "name": "insightsServer",
+              "name": "fields",
               "initializerTokenRange": {
                 "startIndex": 1,
                 "endIndex": 2
@@ -1014,20 +993,20 @@
             },
             {
               "kind": "EnumMember",
-              "canonicalReference": "@2sic.com/2sxc-typings!CommandNames.instanceList:member",
-              "docComment": "/**\n * `instance-list` opens a dialog to manually re-order **items in a list**. <br> 🪜 Only appears on toolbars of items which are in a list. <br> 📩 No params required, (auto-detected from context)\n */\n",
+              "canonicalReference": "@2sic.com/2sxc-typings!CommandNames.insights:member",
+              "docComment": "/**\n * `insights` opens the insights logs page <br> 🔐 Toolbar shows this automatically to elevated admins. <br> 📩 No params required.\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
-                  "text": "instanceList = "
+                  "text": "insights = "
                 },
                 {
                   "kind": "Content",
-                  "text": "\"instance-list\""
+                  "text": "\"insights\""
                 }
               ],
               "releaseTag": "Public",
-              "name": "instanceList",
+              "name": "insights",
               "initializerTokenRange": {
                 "startIndex": 1,
                 "endIndex": 2
@@ -1049,6 +1028,27 @@
               ],
               "releaseTag": "Public",
               "name": "layout",
+              "initializerTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              }
+            },
+            {
+              "kind": "EnumMember",
+              "canonicalReference": "@2sic.com/2sxc-typings!CommandNames.list:member",
+              "docComment": "/**\n * `instance-list` opens a dialog to manually re-order **items in a list**. <br> 🪜 Only appears on toolbars of items which are in a list. <br> 📩 No params required, (auto-detected from context)\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "list = "
+                },
+                {
+                  "kind": "Content",
+                  "text": "\"instance-list\""
+                }
+              ],
+              "releaseTag": "Public",
+              "name": "list",
               "initializerTokenRange": {
                 "startIndex": 1,
                 "endIndex": 2
@@ -1182,6 +1182,27 @@
             },
             {
               "kind": "EnumMember",
+              "canonicalReference": "@2sic.com/2sxc-typings!CommandNames.query:member",
+              "docComment": "/**\n * `template-query` opens the pipeline/query-designer in a new window. <br> 🔘 It's not available on the simple Content App, only on full Apps. It is disabled if no query is configured. <br> 🔐 Toolbar shows this automatically to elevated admins. <br> 📩 No params required, (auto-detected from context)\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "query = "
+                },
+                {
+                  "kind": "Content",
+                  "text": "\"template-query\""
+                }
+              ],
+              "releaseTag": "Public",
+              "name": "query",
+              "initializerTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              }
+            },
+            {
+              "kind": "EnumMember",
               "canonicalReference": "@2sic.com/2sxc-typings!CommandNames.remove:member",
               "docComment": "/**\n * `remove` removes an item from a list of items. <br> 🪜 Only appears on toolbars of items which are in a list. <br> 📩 [Parameters](xref:Api.Js.SxcJs.CommandParamsEntityInList) (auto-detected from context)\n */\n",
               "excerptTokens": [
@@ -1224,12 +1245,33 @@
             },
             {
               "kind": "EnumMember",
-              "canonicalReference": "@2sic.com/2sxc-typings!CommandNames.templateDevelop:member",
+              "canonicalReference": "@2sic.com/2sxc-typings!CommandNames.system:member",
+              "docComment": "/**\n * `system` opens the system dialog for this zone/site. <br> 🔐 Toolbar shows this automatically to elevated admins. <br> 📩 No params required, (auto-detected from context)\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "system = "
+                },
+                {
+                  "kind": "Content",
+                  "text": "\"system\""
+                }
+              ],
+              "releaseTag": "Public",
+              "name": "system",
+              "initializerTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              }
+            },
+            {
+              "kind": "EnumMember",
+              "canonicalReference": "@2sic.com/2sxc-typings!CommandNames.template:member",
               "docComment": "/**\n * `template-develop` opens the template-editor dialog in a new window. <br> 🔐 Toolbar shows this automatically to elevated admins. <br> 📩 No params required, (auto-detected from context)\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
-                  "text": "templateDevelop = "
+                  "text": "template = "
                 },
                 {
                   "kind": "Content",
@@ -1237,7 +1279,7 @@
                 }
               ],
               "releaseTag": "Public",
-              "name": "templateDevelop",
+              "name": "template",
               "initializerTokenRange": {
                 "startIndex": 1,
                 "endIndex": 2
@@ -1245,33 +1287,12 @@
             },
             {
               "kind": "EnumMember",
-              "canonicalReference": "@2sic.com/2sxc-typings!CommandNames.templateQuery:member",
-              "docComment": "/**\n * `template-query` opens the pipeline/query-designer in a new window. <br> 🔘 It's not available on the simple Content App, only on full Apps. It is disabled if no query is configured. <br> 🔐 Toolbar shows this automatically to elevated admins. <br> 📩 No params required, (auto-detected from context)\n */\n",
-              "excerptTokens": [
-                {
-                  "kind": "Content",
-                  "text": "templateQuery = "
-                },
-                {
-                  "kind": "Content",
-                  "text": "\"template-query\""
-                }
-              ],
-              "releaseTag": "Public",
-              "name": "templateQuery",
-              "initializerTokenRange": {
-                "startIndex": 1,
-                "endIndex": 2
-              }
-            },
-            {
-              "kind": "EnumMember",
-              "canonicalReference": "@2sic.com/2sxc-typings!CommandNames.templateSettings:member",
+              "canonicalReference": "@2sic.com/2sxc-typings!CommandNames.view:member",
               "docComment": "/**\n * `template-settings` will change settings on the template currently used <br> 🔐 Toolbar shows this automatically to elevated admins.\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
-                  "text": "templateSettings = "
+                  "text": "view = "
                 },
                 {
                   "kind": "Content",
@@ -1279,28 +1300,7 @@
                 }
               ],
               "releaseTag": "Public",
-              "name": "templateSettings",
-              "initializerTokenRange": {
-                "startIndex": 1,
-                "endIndex": 2
-              }
-            },
-            {
-              "kind": "EnumMember",
-              "canonicalReference": "@2sic.com/2sxc-typings!CommandNames.zone:member",
-              "docComment": "/**\n * `zone` opens the system dialog for this zone/site. <br> 🔐 Toolbar shows this automatically to elevated admins. <br> 📩 No params required, (auto-detected from context)\n */\n",
-              "excerptTokens": [
-                {
-                  "kind": "Content",
-                  "text": "zone = "
-                },
-                {
-                  "kind": "Content",
-                  "text": "\"zone\""
-                }
-              ],
-              "releaseTag": "Public",
-              "name": "zone",
+              "name": "view",
               "initializerTokenRange": {
                 "startIndex": 1,
                 "endIndex": 2

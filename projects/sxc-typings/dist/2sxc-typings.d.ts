@@ -431,6 +431,10 @@ export declare class Command {
      * @internal
      */
     static build(name: string, translateKey: string, icon: string, uiOnly: boolean, partOfPage: boolean, more: Partial<Button>): Command;
+    /**
+     * @internal
+     */
+    static clone(command: Command, name: string): Command;
 }
 
 /**
@@ -465,6 +469,30 @@ export declare interface CommandAddParams extends CommandContentTypeParams, Pick
 export declare type CommandCode = <T>(context: ContextComplete, event: MouseEvent) => Promise<void | T>;
 
 /**
+ * Parameters used for the command `code` on toolbars.
+ * <br>
+ * ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)
+ * @public
+ */
+export declare interface CommandCodeParams {
+    /**
+     * Name of the function to call - must be available in the context.
+     * This is usually as a function window. Example:
+     * <br>
+     * If `call` is `sayHello` you need a `window.sayHello(context, event)`.
+     */
+    call: string;
+    /**
+     * **OBSOLETE - avoid using**
+     * <br>
+     * JavaScript as string containing the code to execute.
+     * This is the old V9 - it contains a function, not a name
+     * @deprecated
+     */
+    customCode: string;
+}
+
+/**
  * @internal
  */
 declare class CommandConfigLoader extends HasLog {
@@ -477,24 +505,6 @@ declare class CommandConfigLoader extends HasLog {
      * @param actDef
      */
     updateToV9(actDef: InPageCommandJsonWithTooMuchInfo): InPageCommandJson;
-}
-
-/**
- * Parameters used for the command `contentitems`.
- * <br>
- * The content-type name determines what items will be managed.
- * <br>
- * ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)
- * @public
- */
-export declare interface CommandContentItemsParams extends CommandContentTypeParams {
-    /**
-     * Filters to apply to the list of items.
-     * <br>
-     * Each property targets a field.
-     * The value is a string, number or array for filtering EntityIds or EntityGuids
-     */
-    filters?: Record<string, string | number | string[] | number[]>;
 }
 
 /**
@@ -523,27 +533,21 @@ export declare interface CommandCopyParams extends CommandContentTypeParams, Com
 }
 
 /**
- * Parameters used for the command `custom` on toolbars.
+ * Parameters used for the command `data`.
+ * <br>
+ * The content-type name determines what items will be managed.
  * <br>
  * ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)
  * @public
  */
-export declare interface CommandCustomParams {
+export declare interface CommandDataParams extends CommandContentTypeParams {
     /**
-     * Name of the function to call - must be available in the context.
-     * This is usually as a function window. Example:
+     * Filters to apply to the list of items.
      * <br>
-     * If `call` is `sayHello` you need a `window.sayHello(context, event)`.
+     * Each property targets a field.
+     * The value is a string, number or array for filtering EntityIds or EntityGuids
      */
-    call: string;
-    /**
-     * **OBSOLETE - avoid using**
-     * <br>
-     * JavaScript as string containing the code to execute.
-     * This is the old V9 - it contains a function, not a name
-     * @deprecated
-     */
-    customCode: string;
+    filters?: Record<string, string | number | string[] | number[]>;
 }
 
 /**
@@ -692,19 +696,29 @@ export declare enum CommandNames {
      */
     apps = "apps",
     /**
-     * `contentitems` opens the list to manage all items of a specific content-type.
+     * `data` opens the list to manage all items of a specific content-type.
      * <br> 🔘 Will use the settings of the current template to open.
      * It is only shown to elevated admins.
-     * <br> 📩 [Parameters](xref:Api.Js.SxcJs.CommandContentItemsParams)
+     * <br> 📩 [Parameters](xref:Api.Js.SxcJs.CommandDataParams)
      */
-    contentItems = "contentitems",
+    data = "data",
     /**
-     * `contenttype` opens the dialog to view or modify fields of a content-type.
+     * old name
+     * @internal
+     */
+    data_old_contentItems = "contentitems",
+    /**
+     * `fields` opens the dialog to view or modify fields of a content-type.
      * <br> 🔘 On a toolbar it will use the content-type of the current item.
      * <br> 🔐 Toolbar shows this automatically to elevated admins.
      * <br> 📩 [Parameters](xref:Api.Js.SxcJs.CommandContentTypeParams)
      */
-    contentType = "contenttype",
+    fields = "fields",
+    /**
+     * old name
+     * @internal
+     */
+    fields_old_contenttype = "contenttype",
     /**
      * `copy` opens the edit-dialog for the current item in copy-mode, so when saving it will be a new item.
      * <br> 📩 [Parameters](xref:Api.Js.SxcJs.CommandCopyParams)
@@ -712,11 +726,16 @@ export declare enum CommandNames {
      */
     copy = "copy",
     /**
-     * `custom` will execute custom javascript.
+     * `code` will execute custom javascript.
      * <br> 🔘 This is mainly for toolbars, to add buttons with custom code.
      * <br> 📩 [Parameters](xref:Api.Js.SxcJs.CommandCustomParams)
      */
-    custom = "custom",
+    code = "code",
+    /**
+     * old name
+     * @internal
+     */
+    code_old_custom = "custom",
     /**
      * `delete` will delete (not just remove) a content-item.
      * <br> 💡 This is similar to `remove` but really deletes the data from the DB.
@@ -728,7 +747,8 @@ export declare enum CommandNames {
     /**
      * `edit` opens an edit-dialog.
      * <br>
-     * In scenarios where the page is currently showing a demo item, this will have the same effect as `add`
+     * In scenarios where the page is currently showing a _demo item_, this will have the same effect as `add`.
+     * So instead of editing the _demo item_ it would trigger a dialog to add a new item.
      * <br> 🔘 Only appears if `entityId` is known or item is in a list.
      * <br> 📩 Parameters either one of these:
      * [Id](xref:Api.Js.SxcJs.CommandParamsEntityById),
@@ -743,18 +763,28 @@ export declare enum CommandNames {
      */
     image = "image",
     /**
-     * `insights-server` opens the insights logs page
+     * `insights` opens the insights logs page
      * <br> 🔐 Toolbar shows this automatically to elevated admins.
      * <br> 📩 No params required.
      */
-    insightsServer = "insights-server",
+    insights = "insights",
+    /**
+     * old name
+     * @internal
+     */
+    insights_old_server = "insights-server",
     /**
      * `instance-list` opens a dialog to manually re-order **items in a list**.
      * <br> 🪜 Only appears on toolbars of items which are in a list.
      * <br> 📩 No params required,
      * (auto-detected from context)
      */
-    instanceList = "instance-list",
+    list = "instance-list",
+    /**
+     * old name
+     * @internal
+     */
+    list_old_instanceList = "instance-list",
     /**
      * `layout` opens the in-page dialog to change the layout of the current content.
      * <br> 📩 No params required,
@@ -836,7 +866,12 @@ export declare enum CommandNames {
      * <br> 📩 No params required,
      * (auto-detected from context)
      */
-    templateDevelop = "template-develop",
+    template = "template-develop",
+    /**
+     * old name
+     * @internal
+     */
+    template_old_develop = "template-develop",
     /**
      * `template-query` opens the pipeline/query-designer in a new window.
      * <br> 🔘 It's not available on the simple Content App, only on full Apps.
@@ -845,19 +880,34 @@ export declare enum CommandNames {
      * <br> 📩 No params required,
      * (auto-detected from context)
      */
-    templateQuery = "template-query",
+    query = "template-query",
+    /**
+     * old name
+     * @internal
+     */
+    query_old_templateQuery = "template-query",
     /**
      * `template-settings` will change settings on the template currently used
      * <br> 🔐 Toolbar shows this automatically to elevated admins.
      */
-    templateSettings = "template-settings",
+    view = "template-settings",
     /**
-     * `zone` opens the system dialog for this zone/site.
+     * old name
+     * @internal
+     */
+    view_old_templateSettings = "template-settings",
+    /**
+     * `system` opens the system dialog for this zone/site.
      * <br> 🔐 Toolbar shows this automatically to elevated admins.
      * <br> 📩 No params required,
      * (auto-detected from context)
      */
-    zone = "zone"
+    system = "system",
+    /**
+     * old name
+     * @internal
+     */
+    system_old_zone = "zone"
 }
 
 /**
@@ -2212,10 +2262,10 @@ export declare class Obj {
  */
 declare enum Operations {
     add = "+",
+    addAuto = "\u00B1",
     remove = "-",
     system = "$",
-    modify = "%",
-    comment = "/"
+    modify = "%"
 }
 
 /**
