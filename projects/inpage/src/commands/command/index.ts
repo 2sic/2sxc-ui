@@ -14,6 +14,7 @@
 /** @internal */ import './command-content-type';
 /** @internal */ import './command-copy';
 /** @internal */ import './command-code';
+/** @internal */ import './old-command-custom';
 /** @internal */ import './command-delete';
 /** @internal */ import './command-edit';
 /** @internal */ import './command-insights';

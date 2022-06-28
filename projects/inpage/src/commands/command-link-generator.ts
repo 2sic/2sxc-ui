@@ -89,7 +89,7 @@ export class CommandLinkGenerator extends HasLog {
         if (urlMode2 && this.items) {
           try {
             items2 = '&' + window.$2sxc.urlParams.toUrl({ i2: this.items } );
-            console.log('items2', items2);
+            // console.log('items2', items2);
           } catch (e) { /* ignore */ }
         }
 

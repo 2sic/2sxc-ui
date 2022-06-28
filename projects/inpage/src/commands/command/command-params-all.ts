@@ -83,12 +83,12 @@ export interface CommandCopyParams extends CommandContentTypeParams, CommandPara
 
 
 /**
- * Parameters used for the command `code` on toolbars.
+ * Parameters used for the _old_ command `custom` on toolbars.
  * <br>
  * ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)
- * @public
+ * @internal - keep for reference, but don't communicate
  */
-export interface CommandCodeParams {
+export interface CommandCustomParams {
   /**
    * Name of the function to call - must be available in the context.
    * This is usually as a function window. Example:
@@ -107,6 +107,21 @@ export interface CommandCodeParams {
   customCode: string;
 }
 
+/**
+ * Parameters used for the command `code` on toolbars (new in v14.4).
+ * <br>
+ * ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)
+ * @public
+ */
+export interface CommandCodeParams {
+  /**
+   * Name of the function to call - must be available in the context.
+   * This is usually as a function window. Example:
+   * <br>
+   * If `call` is `sayHello` you need a `window.sayHello(params, context, event)`.
+   */
+  call: string;
+}
 
 
 /**

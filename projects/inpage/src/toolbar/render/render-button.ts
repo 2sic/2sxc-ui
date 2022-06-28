@@ -1,4 +1,4 @@
-﻿import { CommandParams } from '../../commands';
+﻿import { CommandNames, CommandParams } from '../../commands';
 import { ContextComplete } from '../../context/bundles/context-bundle-button';
 import { HtmlTools } from '../../html/dom-tools';
 import { ButtonCommand, ButtonSafe } from '../config';
@@ -97,6 +97,13 @@ export class RenderButton extends RenderPart {
         else
             modifyContext = { ...modifyContext, complete: true };
         const targetContext = modifyContext ? JSON.stringify(modifyContext) : `${ctx.instance.id}, ${ctx.contentBlockReference.id}`;
+
+        // 2022-06-28 experimental trying to move to cms.run
+        if (params?.action === CommandNames.code) {
+          const { action, ...cleanParams } = params;
+          const newP = { action: params.action, params: cleanParams };
+          return `$2sxc(${targetContext}).cms.run(${JSON.stringify(newP)}, event);`;
+        }
         return `$2sxc(${targetContext}).manage.run(${JSON.stringify(params)}, event);`;
     }
 
