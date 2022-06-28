@@ -175,6 +175,13 @@ export enum CommandNames {
     list = 'instance-list',
 
     /**
+     * old name
+     * @internal
+     */
+    list_old_instanceList = 'instance-list',
+
+
+    /**
      * `layout` opens the in-page dialog to change the layout of the current content.
      * <br> 📩 No params required,
      * (auto-detected from context)
@@ -266,7 +273,14 @@ export enum CommandNames {
      * <br> 📩 No params required,
      * (auto-detected from context)
      */
-    templateEdit = 'template-develop',
+    template = 'template-develop',
+
+    /**
+     * old name
+     * @internal
+     */
+    template_old_develop = 'template-develop',
+
 
     // TODO: RENAME
     /**
@@ -277,14 +291,26 @@ export enum CommandNames {
      * <br> 📩 No params required,
      * (auto-detected from context)
      */
-    queryEdit = 'template-query',
+    query = 'template-query',
 
+    /**
+     * old name
+     * @internal
+     */
+    query_old_templateQuery = 'template-query',
+    
     // TODO: RENAME
     /**
      * `template-settings` will change settings on the template currently used
      * <br> 🔐 Toolbar shows this automatically to elevated admins.
      */
-    viewEdit = 'template-settings',
+    view = 'template-settings',
+
+    /**
+     * old name
+     * @internal
+     */
+    view_old_templateSettings = 'template-settings',
 
     /**
      * `system` opens the system dialog for this zone/site.
