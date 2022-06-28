@@ -7,9 +7,9 @@ const oldName = 'contentitems';
  * import this module to commands.ts
  * @internal
  */
- const cmd = Command.build(CommandNames.data, 'ContentItems', 'table', true, false, {
+const cmd = Command.build(CommandNames.data, 'ContentItems', 'table', true, false, {
   dialog: (_) => oldName,
-  
+
   addParamsToLink: createContentTypeParams,
 
   // only show to admin-users and in cases where we know the content-type

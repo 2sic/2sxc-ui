@@ -98,11 +98,11 @@ export enum CommandNames {
     copy = 'copy',
 
     /**
-     * `custom` will execute custom javascript.
+     * `code` will execute custom javascript.
      * <br> 🔘 This is mainly for toolbars, to add buttons with custom code.
      * <br> 📩 [Parameters](xref:Api.Js.SxcJs.CommandCustomParams)
      */
-    custom = 'custom',
+    code = 'code',
 
     /**
      * `delete` will delete (not just remove) a content-item.

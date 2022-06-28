@@ -1,4 +1,4 @@
-﻿import { CommandNames, Commands } from '..';
+﻿import { Command, CommandNames, Commands } from '..';
 
 /**
  * @internal
@@ -8,11 +8,13 @@ const evtName = 'event';
 
 const errNoCode = "Trying to run Custom-Code action, but no 'call' (v10+, recommended) or 'customCode' (v9, old) found to run - see console for debug info.";
 
+const oldName = 'custom';
+
 /**
  * import this module to commands.ts
  * @internal
  */
-Commands.add(CommandNames.custom, 'Custom', 'bomb', true, false, {
+const cmd = Command.build(CommandNames.code, 'Custom', 'bomb', true, false, {
   code(context, event) {
     return new Promise((resolve, reject) => {
       const actPar = context.button.command.params;
@@ -39,3 +41,7 @@ Commands.add(CommandNames.custom, 'Custom', 'bomb', true, false, {
     });
   },
 });
+
+
+Commands.addCommand(cmd);
+Commands.addCommand(Command.clone(cmd, oldName));

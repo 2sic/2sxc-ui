@@ -13,7 +13,7 @@
 /** @internal */ import './command-content-items';
 /** @internal */ import './command-content-type';
 /** @internal */ import './command-copy';
-/** @internal */ import './command-custom';
+/** @internal */ import './command-code';
 /** @internal */ import './command-delete';
 /** @internal */ import './command-edit';
 /** @internal */ import './command-insights';
