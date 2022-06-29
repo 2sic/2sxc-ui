@@ -1,12 +1,14 @@
 {
   "// notes": "The version is used in the final NPM. For beta releases, use pattern '14.02.0-beta.0'",
-  "version": "14.02.01",
-  "types": "./index.d.ts",
+  "version": "14.07.00",
+  "types": "./index-public.d.ts",
   "scripts": {
-    "generate": "typings.cmd \".\\dist\"",
+    "generate": "typings.cmd \".\\parts\\dist\"",
     "publish-dry": "npm publish --dry-run",
     "publish-beta": "npm publish --tag beta",
-    "publish-prod": "npm publish"
+    "publish-prod": "npm publish",
+    "api-extractor": "api-extractor run --local --verbose",
+    "api-documentor": "api-documenter yaml"
   },
   "author": {
     "name": "2sic Internet Solutions, Switzerland & Liechtenstein",
@@ -16,7 +18,7 @@
     "url": "https://github.com/2sic/2sxc-ui/issues"
   },
   "files": [
-    "**/*.d.ts"
+    "index-public*.d.ts"
   ],
   "description": "Typescript typings to work with core 2sxc objects",
   "homepage": "https://github.com/2sic/2sxc-ui/tree/master/typings#readme",
@@ -37,6 +39,8 @@
   },
   "main": "",
   "devDependencies": {
-    "@types/jquery": "^2.0.33"
+    "@microsoft/api-documenter": "^7.17.19",
+    "@microsoft/api-extractor": "^7.25.2",
+    "typedoc": "^0.15.8"
   }
 }

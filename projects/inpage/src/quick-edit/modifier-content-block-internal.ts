@@ -30,20 +30,14 @@ export class ModifierContentBlockInstance extends HasLog {
 
     /**
      * create content block
-     * @param parentId
-     * @param fieldName
-     * @param index
-     * @param appName
-     * @param container
-     * @param newGuid
      */
     create(
         parentId: number,
-        fieldName: string,
+        field: string,
         index: number,
-        appName: string,
+        app: string, // app name
         container: HTMLElement,
-        newGuid: string,
+        guid: string, // guid of new item
     ): Promise<void> {
         // the wrapper, into which this will be placed and the list of pre-existing blocks
         if (!container) {
@@ -53,13 +47,7 @@ export class ModifierContentBlockInstance extends HasLog {
         const cblockList = container.querySelectorAll<HTMLElement>('div.sc-content-block');
         if (index > cblockList.length) index = cblockList.length; // make sure index is never greater than the amount of items
 
-        const params = {
-            parentId: parentId,
-            field: fieldName,
-            sortOrder: index,
-            app: appName,
-            guid: newGuid,
-        };
+        const params = { parentId, field, index, app, guid };
 
         const promise = this.sxcInstance.webApi
             .fetchJson(this.sxcInstance.webApi.url(webApiNew, params), undefined, 'POST')

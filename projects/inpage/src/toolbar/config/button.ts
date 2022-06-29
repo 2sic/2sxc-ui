@@ -7,7 +7,7 @@ import { Obj, TypeTbD } from '../../plumbing';
 
 /**
  * This is the most common call signature on most ButtonConfig properties
- * @internal
+ * @public
  */
 export type ButtonPropGen<T> = (context: ContextComplete) => T;
 

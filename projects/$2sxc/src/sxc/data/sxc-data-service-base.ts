@@ -3,16 +3,17 @@ import { SxcPart } from '../sxc-part';
 import { SxcWebApi } from '../web-api/sxc-web-api';
 
 /**
-* Base class doing common checks
-* @internal
-*/
-export class SxcDataServiceBase extends SxcPart {
+ * Base class doing common checks.
+ * This is internal and not important, but we can't keep it out of the docs. 
+ * @public
+ */
+export abstract class SxcDataServiceBase extends SxcPart {
   protected readonly webApi: SxcWebApi;
   /**
   * Creates an instance of SxcData.
-  * @param {Sxc} sxc
-  * @param {string} name the content-type name
-  * @memberof SxcData
+  * @param sxc: 
+  * @param name: the content-type name
+  * @internal
   */
   constructor(
     sxc: Sxc,

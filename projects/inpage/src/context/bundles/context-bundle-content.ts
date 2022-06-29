@@ -4,18 +4,28 @@ import { AttrJsonEditContext } from '../html-attribute';
 import { ContentBlockReference } from '../html-attribute/parts/content-block';
 
 /**
- * @internal
+ * @public
  */
 export class ContextBundleContent extends ContextBundleInstance {
-  /** information about the current item */
+  /**
+   * information about the current item
+   * @internal
+   */
   item: ContextOfItem;
 
-  /** Reference to a Content-Block */
+  /**
+   * Reference to a Content-Block
+   * @internal
+   */
   contentBlockReference: ContentBlockReference;
 
-  /** The content-block itself with specs like is-app, etc. */
+  /**
+   * The content-block itself with specs like is-app, etc.
+   * @internal
+   */
   contentBlock: ContextOfContentBlock;
 
+  /** @internal */
   constructor(editCtx: AttrJsonEditContext, sxc: Sxc) {
     super(editCtx, sxc);
 

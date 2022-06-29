@@ -1,0 +1,62 @@
+### YamlMime:TSType
+name: UrlParams
+uid: '@2sic.com/2sxc-typings!UrlParams:class'
+package: '@2sic.com/2sxc-typings!'
+fullName: UrlParams
+summary: Helper object to read url params. Available on `$2sxc.urlParams`
+remarks: ''
+example: []
+isPreview: false
+isDeprecated: false
+type: class
+methods:
+  - name: get(name)
+    uid: '@2sic.com/2sxc-typings!UrlParams#get:member(1)'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: get(name)
+    summary: 'Get a param from the url, no matter if it''s behind ? or \# If not found, will return an empty string `''''`'
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'get(name: string): string;'
+      parameters:
+        - id: name
+          description: QueryParams
+          type: string
+      return:
+        type: string
+        description: ''
+  - name: isDebug()
+    uid: '@2sic.com/2sxc-typings!UrlParams#isDebug:member(1)'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: isDebug()
+    summary: Checks if debug is enabled in the URL
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'isDebug(): boolean;'
+      return:
+        type: boolean
+        description: ''
+  - name: require(name)
+    uid: '@2sic.com/2sxc-typings!UrlParams#require:member(1)'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: require(name)
+    summary: 'Get a required param from the url, no matter if it''s behind ? or \# Will throw an error if not found'
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'require(name: string): string;'
+      parameters:
+        - id: name
+          description: QueryParams
+          type: string
+      return:
+        type: string
+        description: ''

@@ -4,12 +4,11 @@ import { Log } from '.';
  * Any object that has an own log object
  * @export
  * @interface HasLog
+ * @public
  */
 export abstract class HasLog {
   /**
    * The logger for this object
-   * @type {Log}
-   * @memberof HasLog
    * @internal usually not relevant and could make docs confusing
    */
   log: Log;

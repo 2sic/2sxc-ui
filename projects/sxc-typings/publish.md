@@ -10,9 +10,15 @@ We're explaining how to do 2 things
 ## 1. How to publish the Types @2sic.sxc-typings to NPM
 
 1. First generate the latest typings, by running the `generate` npm script
+1. Trim the latest typings, by running the `api-extractor` npm script
 1. Then update the version number in this package here
 1. probably do some dry-runs or beta releases
 1. Then finally publish
+
+## WIP
+
+* `npm install -g @microsoft/api-documenter`
+* https://api-extractor.com/pages/setup/generating_docs/
 
 ### How it Works
 

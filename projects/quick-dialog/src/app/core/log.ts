@@ -2,6 +2,7 @@ import { Constants } from './constants';
 import { DebugConfig } from 'app/debug-config';
 
 
+/** @public */
 export class Log {
   /** global state to determine if logging to console should be done or not */
   public static forceLogToConsole = false;

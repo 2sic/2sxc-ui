@@ -1,0 +1,64 @@
+### YamlMime:TSType
+name: ContextIdentifier
+uid: '@2sic.com/2sxc-typings!ContextIdentifier:class'
+package: '@2sic.com/2sxc-typings!'
+fullName: ContextIdentifier
+summary: ContextIdentifier is used to initialize a Sxc object outside of the default context.
+remarks: ''
+example: []
+isPreview: false
+isDeprecated: false
+type: class
+properties:
+  - name: appId
+    uid: '@2sic.com/2sxc-typings!ContextIdentifier#appId:member'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: appId
+    summary: AppId of this Context  appId
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'appId: number;'
+      return:
+        type: number
+  - name: moduleId
+    uid: '@2sic.com/2sxc-typings!ContextIdentifier#moduleId:member'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: moduleId
+    summary: ModuleId of this Context (optional)
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'moduleId?: number;'
+      return:
+        type: number
+  - name: pageId
+    uid: '@2sic.com/2sxc-typings!ContextIdentifier#pageId:member'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: pageId
+    summary: PageId of this Context (optional)
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'pageId?: number;'
+      return:
+        type: number
+  - name: zoneId
+    uid: '@2sic.com/2sxc-typings!ContextIdentifier#zoneId:member'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: zoneId
+    summary: ZoneId of this Context  zoneId
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'zoneId: number;'
+      return:
+        type: number

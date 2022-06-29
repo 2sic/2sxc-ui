@@ -1,0 +1,57 @@
+items:
+  - name: SharePoint Framework reference
+    href: ~/overview/sharepoint.md
+    items:
+      - name: 2sxc-typings
+        uid: '@2sic.com/2sxc-typings!'
+        items:
+          - name: AjaxSettings
+            uid: '@2sic.com/2sxc-typings!AjaxSettings:interface'
+          - name: CommandNames
+            uid: '@2sic.com/2sxc-typings!CommandNames:enum'
+          - name: CommandParamsMetadata
+            uid: '@2sic.com/2sxc-typings!CommandParamsMetadata:interface'
+          - name: ContextIdentifier
+            uid: '@2sic.com/2sxc-typings!ContextIdentifier:class'
+          - name: EnvironmentSpecs
+            uid: '@2sic.com/2sxc-typings!EnvironmentSpecs:interface'
+          - name: HasLog
+            uid: '@2sic.com/2sxc-typings!HasLog:class'
+          - name: Log
+            uid: '@2sic.com/2sxc-typings!Log:class'
+          - name: LogEntry
+            uid: '@2sic.com/2sxc-typings!LogEntry:class'
+          - name: MetadataFor
+            uid: '@2sic.com/2sxc-typings!MetadataFor:interface'
+          - name: MetadataTargetTypes
+            uid: '@2sic.com/2sxc-typings!MetadataTargetTypes:enum'
+          - name: RunParams
+            uid: '@2sic.com/2sxc-typings!RunParams:interface'
+          - name: RunParamsWithContext
+            uid: '@2sic.com/2sxc-typings!RunParamsWithContext:interface'
+          - name: Sxc
+            uid: '@2sic.com/2sxc-typings!Sxc:class'
+          - name: SxcCms
+            uid: '@2sic.com/2sxc-typings!SxcCms:class'
+          - name: SxcData
+            uid: '@2sic.com/2sxc-typings!SxcData:class'
+          - name: SxcDataServiceBase
+            uid: '@2sic.com/2sxc-typings!SxcDataServiceBase:class'
+          - name: SxcGlobal
+            uid: '@2sic.com/2sxc-typings!SxcGlobal:interface'
+          - name: SxcGlobalEnvironment
+            uid: '@2sic.com/2sxc-typings!SxcGlobalEnvironment:class'
+          - name: SxcGlobalHttp
+            uid: '@2sic.com/2sxc-typings!SxcGlobalHttp:class'
+          - name: SxcPart
+            uid: '@2sic.com/2sxc-typings!SxcPart:class'
+          - name: SxcQuery
+            uid: '@2sic.com/2sxc-typings!SxcQuery:class'
+          - name: SxcWebApi
+            uid: '@2sic.com/2sxc-typings!SxcWebApi:class'
+          - name: SxcWebApiDeprecated
+            uid: '@2sic.com/2sxc-typings!SxcWebApiDeprecated:interface'
+          - name: TypeValue
+            uid: '@2sic.com/2sxc-typings!TypeValue:type'
+          - name: UrlParams
+            uid: '@2sic.com/2sxc-typings!UrlParams:class'

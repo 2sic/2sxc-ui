@@ -16,6 +16,9 @@ export type RuleParams = Record<string, string> & {
     /** this is how the metadata-param comes in - as a 'for=someId' - this node will be removed afterwards */
     for?: string;
 
-    /** This is the metadata node as it will be used as a real parameter */
+    /** 
+     * This is the metadata node as it will be used as a real parameter
+     * @internal
+     */
     metadata?: CommandParamsMetadata;
 };

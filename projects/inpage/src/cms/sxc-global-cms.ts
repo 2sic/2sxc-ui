@@ -1,6 +1,6 @@
 ﻿import { ContextIdentifier, Sxc } from '../../../$2sxc/src';
-import { CmsEngine } from '../commands';
 import { CommandParams, RunParamsWithContext } from '../../../$2sxc/src/cms';
+import { CmsEngine } from '../commands';
 import { C } from '../constants';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { ContextBundleInstance } from '../context/bundles/context-bundle-instance';
@@ -10,11 +10,12 @@ import { RunParamsHelpers } from './run-params-helpers';
 const logId = 'Cms.Api';
 
 /**
- * Global Content-Management System on the $2sxc.cms. 
- * 
+ * Global Content-Management System on the $2sxc.cms.
+ *
  * It is only available if the page is in edit mode / the page feature `2sxc.JsCms` has been activated.
+ * @public
  */
-// Note that it can be used standalone, not just on $2sxc, as it doesn't directly rely on that. 
+// Note that it can be used standalone, not just on $2sxc, as it doesn't directly rely on that.
 export class SxcGlobalCms extends HasLog {
   /**
    * @internal
@@ -90,8 +91,8 @@ export class SxcGlobalCms extends HasLog {
   /**
    * Run a command within a specific context.
    * @param context The context - either an HTML tag which determines a module/instance, or an Sxc instance
-   * @param nameOrSettings 
-   * @param eventOrSettings 
+   * @param nameOrSettings
+   * @param eventOrSettings
    * @param event Optional mouse-event which allows the command to do some optimizations for that case - like a mouse-click
    * @returns A promise which triggers when the command has completed.
    * @internal

@@ -1,6 +1,6 @@
 ﻿import { CmsEngine, CommandNames, Commands } from '..';
-import { CommandContentTypeParams } from './command-content-type';
 import { SharedLogic } from './shared-logic';
+import { CmdParHlp } from '../cmd-par-hlp';
 
 /**
  * 'new' is a dialog to add something, and will not add if cancelled
@@ -24,7 +24,7 @@ Commands.add(CommandNames.new, 'New', 'plus', false, true, {
   code(context, event) {
     const params = context.button.command.params;
     // todo - should refactor this to be a toolbarManager.contentBlock command
-    params.sortOrder = params.sortOrder + 1;
+    params.index = CmdParHlp.getIndex(params) + 1;
 
     // if we have an EntityId, this means that it picked up id/guid from the current item,
     // so we must reset both EntityId and EntityGuid
@@ -44,15 +44,3 @@ Commands.add(CommandNames.new, 'New', 'plus', false, true, {
     return CmsEngine.openDialog(context, event);
   },
 });
-
-/**
- * Parameters used for the command `new`
- * <br>
- * The ContentType name determines what kind of item will be created.
- * <br>
- * ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)
- */
-// tslint:disable-next-line: no-empty-interface
-export interface CommandNewParams extends CommandContentTypeParams {
-
-}

@@ -1,0 +1,103 @@
+### YamlMime:TSType
+name: EnvironmentSpecs
+uid: '@2sic.com/2sxc-typings!EnvironmentSpecs:interface'
+package: '@2sic.com/2sxc-typings!'
+fullName: EnvironmentSpecs
+summary: 'A context information for the current page, helping the JS talk with the backend'
+remarks: ''
+example: []
+isPreview: false
+isDeprecated: false
+type: interface
+properties:
+  - name: api
+    uid: '@2sic.com/2sxc-typings!EnvironmentSpecs#api:member'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: api
+    summary: 'Optional API key - optional if set from external, because it''s auto derived from root'
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'api: string;'
+      return:
+        type: string
+  - name: appApi
+    uid: '@2sic.com/2sxc-typings!EnvironmentSpecs#appApi:member'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: appApi
+    summary: Optional App API Root - required because in Oqtane we'll have a different root for appAPIs
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'appApi: string;'
+      return:
+        type: string
+  - name: page
+    uid: '@2sic.com/2sxc-typings!EnvironmentSpecs#page:member'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: page
+    summary: Page ID
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'page: number;'
+      return:
+        type: number
+  - name: platform
+    uid: '@2sic.com/2sxc-typings!EnvironmentSpecs#platform:member'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: platform
+    summary: The platform code like 'dnn' or 'oqt'
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'platform: string;'
+      return:
+        type: string
+  - name: root
+    uid: '@2sic.com/2sxc-typings!EnvironmentSpecs#root:member'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: root
+    summary: Portal root path - used for various things incl. the API root
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'root: string;'
+      return:
+        type: string
+  - name: rvt
+    uid: '@2sic.com/2sxc-typings!EnvironmentSpecs#rvt:member'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: rvt
+    summary: Request verification token value
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'rvt: string;'
+      return:
+        type: string
+  - name: rvtHeader
+    uid: '@2sic.com/2sxc-typings!EnvironmentSpecs#rvtHeader:member'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: rvtHeader
+    summary: Request verification token header name
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'rvtHeader: string;'
+      return:
+        type: string

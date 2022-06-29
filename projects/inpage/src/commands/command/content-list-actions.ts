@@ -1,4 +1,5 @@
-﻿import { renderer } from '../../contentBlock/render';
+﻿import { CmdParHlp } from '..';
+import { renderer } from '../../contentBlock/render';
 import { ContextComplete } from '../../context/bundles/context-bundle-button';
 import { TypeUnsafe } from '../../plumbing/TypeTbD';
 import { ContentListActionParams } from './content-list-action-params';
@@ -13,7 +14,6 @@ const webApiBlockPublish = 'cms/block/publish';
 
 /**
  * These actions make changes to a content-block - like adding, removing or publishing items in the block
- * @class ActionsCatalog
  * @internal
  */
 class ContentListActions {
@@ -28,13 +28,11 @@ class ContentListActions {
 
   /**
    * remove an item from a list, then reload
-   * @param {ContextComplete} context
-   * @param {number} sortOrder
    */
   removeFromList(context: ContextComplete) {
     const params = context.button.command.params;
     return doAndReload<void>(context, webApiRemoveFromList, {
-      index: params.sortOrder,
+      index: CmdParHlp.getIndex(params),
       parent: params.parent,
       fields: params.fields,
     }, 'delete');
@@ -42,9 +40,6 @@ class ContentListActions {
 
   /**
    * change the order of an item in a list, then reload
-   * @param {ContextComplete} context
-   * @param {number} index
-   * @param {number} toIndex
    */
   changeOrder(context: ContextComplete, index: number, toIndex: number) {
     const params = context.button.command.params;
@@ -58,9 +53,6 @@ class ContentListActions {
 
   /**
    * set a content-item in this block to published, then reload
-   * @param {ContextComplete} context
-   * @param {string} part
-   * @param {number} index
    */
   publish(context: ContextComplete, part: string, index: number) {
     return doAndReload<void>(context, webApiBlockPublish, {
@@ -71,8 +63,6 @@ class ContentListActions {
 
   /**
    * publish an item using it's ID
-   * @param {ContextComplete} context
-   * @param {number} entityId
    */
   publishId(context: ContextComplete, entityId: number) {
     return doAndReload<void>(context, webApiItemPublish,
@@ -99,10 +89,6 @@ export const Actions = new ContentListActions();
 
 /**
  * internal helper, to do something and reload the content block
- * @param {ContextComplete} context
- * @param {string} url
- * @param {ContentListActionParams} params
- * @returns {void | T}
  */
 function doAndReload<T>(
   context: ContextComplete,

@@ -1,0 +1,37 @@
+### YamlMime:TSType
+name: SxcCms
+uid: '@2sic.com/2sxc-typings!SxcCms:class'
+package: '@2sic.com/2sxc-typings!'
+fullName: SxcCms
+summary: >-
+  This is in charge of sxc.cms on the instance level. ATM it just has the run command. In future, it may also have
+  dedicated command like `layout` etc.
+remarks: >-
+  The constructor for this class is marked as internal. Third-party code should not call the constructor directly or
+  create subclasses that extend the `SxcCms` class.
+example: []
+isPreview: false
+isDeprecated: false
+type: class
+methods:
+  - name: run(runParams)
+    uid: '@2sic.com/2sxc-typings!SxcCms#run:member(1)'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: run(runParams)
+    summary: >-
+      Run a command on this sxc-instance. Requires edit mode to be on, which would enable the edit-JS parts. To use,
+      remember to activate `2sxc.JsCms` on the page
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'run<T>(runParams: RunParams): Promise<void | T>;'
+      parameters:
+        - id: runParams
+          description: real type is actually RunParams
+          type: '<xref uid="@2sic.com/2sxc-typings!RunParams:interface" />'
+      return:
+        type: Promise&lt;void | T&gt;
+        description: ''
+extends: '<xref uid="@2sic.com/2sxc-typings!SxcPart:class" />'

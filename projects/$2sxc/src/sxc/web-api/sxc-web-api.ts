@@ -1,19 +1,18 @@
 ﻿import { Sxc } from '../sxc';
 import { AjaxPromise } from './ajax-promise';
 import { SxcGlobalEnvironment } from '../../environment';
-import { AjaxSettings } from './ajax-settings';
+import { ZzzAjaxSettingsDeprecated } from './ajax-settings';
 import { NoJQ } from '../../../../core';
-import { SxcWebApiDeprecated } from './sxc-web-api-deprecated';
+import { ZzzSxcWebApiDeprecated } from './sxc-web-api-deprecated';
 
 /**
  * helper API to run ajax / REST calls to the server
  * it will ensure that the headers etc. are set correctly
  * and that urls are rewritten
+ * @public
  */
-export class SxcWebApi implements SxcWebApiDeprecated {
+export class SxcWebApi implements ZzzSxcWebApiDeprecated {
     /**
-     * @type {SxcGlobalEnvironment}
-     * @memberof SxcWebApi
      * @internal
      */
     public readonly env: SxcGlobalEnvironment;
@@ -30,45 +29,40 @@ export class SxcWebApi implements SxcWebApiDeprecated {
     /**
      * **Deprecated** - docs in the separate interface
      * @deprecated use fetchJson instead
-     * @internal
      */
-    get(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): JQueryPromise<any> {
+    get(settingsOrUrl: string | ZzzAjaxSettingsDeprecated, params?: any, data?: any, preventAutoFail?: boolean): any {
         return this.request(settingsOrUrl, params, data, preventAutoFail, 'GET');
     }
 
     /**
      * **Deprecated** - docs in the separate interface
      * @deprecated use fetchJson instead
-     * @internal
      */
-    post(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): JQueryPromise<any> {
+    post(settingsOrUrl: string | ZzzAjaxSettingsDeprecated, params?: any, data?: any, preventAutoFail?: boolean): any {
         return this.request(settingsOrUrl, params, data, preventAutoFail, 'POST');
     }
 
     /**
      * **Deprecated** - docs in the separate interface
      * @deprecated use fetchJson instead
-     * @internal
      */
-    delete(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): JQueryPromise<any> {
+    delete(settingsOrUrl: string | ZzzAjaxSettingsDeprecated, params?: any, data?: any, preventAutoFail?: boolean): any {
         return this.request(settingsOrUrl, params, data, preventAutoFail, 'DELETE');
     }
 
     /**
      * **Deprecated** - docs in the separate interface
      * @deprecated use fetchJson instead
-     * @internal
      */
-     put(settingsOrUrl: string | AjaxSettings, params?: any, data?: any, preventAutoFail?: boolean): JQueryPromise<any> {
+     put(settingsOrUrl: string | ZzzAjaxSettingsDeprecated, params?: any, data?: any, preventAutoFail?: boolean): any {
         return this.request(settingsOrUrl, params, data, preventAutoFail, 'PUT');
     }
 
     /**
      * **Deprecated** - docs in the separate interface
      * @deprecated use fetchJson instead
-     * @internal
      */
-     request(settings: string | AjaxSettings, params: any, data: any, preventAutoFail: boolean, method: string): JQueryPromise<any> {
+     request(settings: string | ZzzAjaxSettingsDeprecated, params: any, data: any, preventAutoFail: boolean, method: string): any {
 
         // url parameter: auto convert a single value (instead of object of values) to an id=... parameter
         // tslint:disable-next-line:curly
@@ -91,7 +85,7 @@ export class SxcWebApi implements SxcWebApiDeprecated {
                 data,
                 url: controllerAction.length > 2 ? settings : null,
                 preventAutoFail,
-            };
+            } as any;
         }
 
         const defaults = {
@@ -104,7 +98,7 @@ export class SxcWebApi implements SxcWebApiDeprecated {
 
         settings = Object.assign({}, defaults, settings);
 
-        const promise = http.makePromise(settings as AjaxSettings);
+        const promise = http.makePromise(settings as ZzzAjaxSettingsDeprecated);
 
         return promise;
     }

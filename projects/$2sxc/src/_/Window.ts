@@ -2,6 +2,7 @@ import { SxcGlobal } from '../sxc-global';
 
 /**
  * export interface WindowInternal extends
+ * @public
  */
 declare global {
     interface Window {
@@ -11,7 +12,7 @@ declare global {
         $2sxc: SxcGlobal;
 
         /** @internal */
-        $: JQueryStatic & DnnJQueryExtensions;
+        $: any & DnnJQueryExtensions;
     }
 }
 

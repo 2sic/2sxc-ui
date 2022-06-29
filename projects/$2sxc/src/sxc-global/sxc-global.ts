@@ -11,6 +11,7 @@ import { SxcGlobalManage } from './sxc-global-manage';
  * It is both a function `window.$2sxc(...)` and object `window.$2sxc.insights...`
  * 
  * If the page feature `2sxc.JsCms` is enabled, the `window.$2sxc` will also be a [SxcGlobalWithCms](xref:Api.Js.SxcJs.SxcGlobalWithCms)
+ * @public
  */
 // **Documentation notes**
 // Because of limitations in the documentation, the main function isn't documented here as it wouldn't show in docFx
@@ -140,14 +141,13 @@ export interface SxcGlobal {
 
     /**
      * Internal logger to better see what's happening
+     * @internal
      */
     log: Log;
 
 
     /**
      * Helper to work with url parameters behind ? or #
-     * @type {UrlParams}
-     * @memberof SxcRoot
      */
     urlParams: UrlParams;
 

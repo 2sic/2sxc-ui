@@ -1,8 +1,6 @@
 import { Sxc, SxcWebApi } from '..';
 import { NoJQ } from '../../../../core';
-import { AjaxSettings } from './ajax-settings';
-
-declare const window: Window;
+import { ZzzAjaxSettingsDeprecated } from './ajax-settings';
 
 /** @internal */
 export class AjaxPromise {
@@ -11,11 +9,10 @@ export class AjaxPromise {
 
   /**
    * Make a jQuery style promise request
-   * @param {AjaxSettings} settings
-   * @returns {JQueryPromise<any>}
-   * @memberof AjaxPromise
+   * @param settings: settings
+   * @returns JQueryPromise<any>
    */
-  public makePromise(settings: AjaxSettings): JQueryPromise<any> {
+  public makePromise(settings: ZzzAjaxSettingsDeprecated): any {
     var headers = this.api.headers();
     // debugger;
     if (window.$ == null) {
@@ -23,17 +20,17 @@ export class AjaxPromise {
     }
     const promise = window.$.ajax({
       async: true,
-      dataType: settings.dataType || 'json', // default is json if not specified
-      data: JSON.stringify(settings.data),
+      dataType: (settings as any).dataType || 'json', // default is json if not specified
+      data: JSON.stringify((settings as any).data),
       contentType: 'application/json',
-      type: settings.method,
+      type: (settings as any).method,
       url: this.getActionUrl(settings),
-      beforeSend(xhr: JQueryXHR) {
+      beforeSend(xhr: any) {
         for (var key in headers)
           if (headers.hasOwnProperty(key))
             xhr.setRequestHeader(key, headers[key]);
       },
-    }) as JQueryPromise<any>;
+    }) as any;
 
     if (!settings.preventAutoFail)
       promise.fail(this.sxc.showDetailedHttpError);
@@ -46,8 +43,8 @@ export class AjaxPromise {
    * Generate the correct WebApi url
    * @param settings the settings as they would be in jQuery
    */
-  private getActionUrl(settings: AjaxSettings): string {
-    var url = settings.url || 'app/auto/api/' + settings.controller + '/' + settings.action;
+  private getActionUrl(settings: ZzzAjaxSettingsDeprecated): string {
+    var url = (settings as any).url || 'app/auto/api/' + settings.controller + '/' + settings.action;
     // 2020-03-13 stop adding 2sxc endpoint-name, it's already happening in apiUrl so with this it happens 2x
     // var endpoint = settings.endpoint || ToSxcName;
     var base = this.sxc.root.http.apiUrl(url, settings.endpoint);

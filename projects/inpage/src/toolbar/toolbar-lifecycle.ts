@@ -15,7 +15,6 @@ export class ToolbarLifecycle {
      * @param {HTMLElement} toolbarElement The toolbar HTML DOM passed into the event
      * @param {HTMLElement} anchoredElement The DOM element which had the @Edit.TagToolbar(...) - on which the event will be raised
      * @param {ContextComplete} context The toolbar context
-     * @memberof ToolbarLifecycle
      */
     static raiseToolbarInitEvent(toolbarElement: HTMLElement, anchoredElement: HTMLElement, context: ContextComplete) {
         const commandWorkflow = new ToolbarWorkflowManager(null);

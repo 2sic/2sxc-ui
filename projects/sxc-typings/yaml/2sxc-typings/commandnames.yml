@@ -1,0 +1,151 @@
+### YamlMime:TSEnum
+name: CommandNames
+uid: '@2sic.com/2sxc-typings!CommandNames:enum'
+package: '@2sic.com/2sxc-typings!'
+fullName: CommandNames
+summary: Names of commands known to 2sxc CMS - for use in toolbars and calling commands directly from code
+remarks: ''
+example: []
+isPreview: false
+isDeprecated: false
+fields:
+  - name: add
+    uid: '@2sic.com/2sxc-typings!CommandNames.add:member'
+    package: '@2sic.com/2sxc-typings!'
+    summary: "`add` opens a `new` dialog to create and add a new item to a \\*\\*list of items\\*\\*. <br> The new item is placed after the item the (+) was clicked on. <br>\U0001F4A1 This is similar to `new` but also adds the item to the existing list of items shown on the page. <br> \U0001FA9C Only appears on toolbars of items which are in a list. <br> \U0001F4E9 \\[Parameters\\](xref:Api.Js.SxcJs.CommandAddParams)"
+    value: '"add"'
+  - name: addExisting
+    uid: '@2sic.com/2sxc-typings!CommandNames.addExisting:member'
+    package: '@2sic.com/2sxc-typings!'
+    summary: "`add-existing` opens a dialog allowing the user to select an existing item to add to a \\*\\*list of items\\*\\*. <br> The new item is placed after the item the (+) was clicked on. <br> \U0001FA9C Only appears on toolbars of items which are in a list. <br> \U0001F4E9 \\[Parameters\\](xref:Api.Js.SxcJs.CommandAddExistingParams) <br> \U0001F195 in v11.01"
+    value: '"add-existing"'
+  - name: app
+    uid: '@2sic.com/2sxc-typings!CommandNames.app:member'
+    package: '@2sic.com/2sxc-typings!'
+    summary: "`app` opens the app-admin dialog <br> \U0001F510 Toolbar shows this automatically to elevated admins. <br> \U0001F4E9 No params required, (auto-detected from context)"
+    value: '"app"'
+  - name: appImport
+    uid: '@2sic.com/2sxc-typings!CommandNames.appImport:member'
+    package: '@2sic.com/2sxc-typings!'
+    summary: "`app-import` opens the dialog to import an App. <br> \U0001F518 This is not available on the toolbar. <br> \U0001F4E9 No params required, (auto-detected from context)"
+    value: '"app-import"'
+  - name: appResources
+    uid: '@2sic.com/2sxc-typings!CommandNames.appResources:member'
+    package: '@2sic.com/2sxc-typings!'
+    summary: "`app-resources` opens the edit dialog for app-resources (multi-language texts, labels etc.). <br> \U0001F518 It's disabled on the toolbar if the app doesn't have resource-values to configure. <br> \U0001F510 Toolbar shows this automatically to elevated admins. <br> \U0001F4E9 No params required, (auto-detected from context)"
+    value: '"app-resources"'
+  - name: apps
+    uid: '@2sic.com/2sxc-typings!CommandNames.apps:member'
+    package: '@2sic.com/2sxc-typings!'
+    summary: "`apps` opens the manage all apps dialog. <br> \U0001F510 Toolbar shows this automatically to elevated admins. <br> \U0001F4E9 No params required, (auto-detected based on toolbar)"
+    value: '"apps"'
+  - name: appSettings
+    uid: '@2sic.com/2sxc-typings!CommandNames.appSettings:member'
+    package: '@2sic.com/2sxc-typings!'
+    summary: "`app-settings` opens the edit dialog for the app-settings. <br> \U0001F518 It's disabled on the toolbar if the app doesn't have setting-values to configure <br> \U0001F510 Toolbar shows this automatically to elevated admins. <br> \U0001F4E9 No params required, (auto-detected from context)"
+    value: '"app-settings"'
+  - name: contentItems
+    uid: '@2sic.com/2sxc-typings!CommandNames.contentItems:member'
+    package: '@2sic.com/2sxc-typings!'
+    summary: "`contentitems` opens the list to manage all items of a specific content-type. <br> \U0001F518 Will use the settings of the current template to open. It is only shown to elevated admins. <br> \U0001F4E9 \\[Parameters\\](xref:Api.Js.SxcJs.CommandContentItemsParams)"
+    value: '"contentitems"'
+  - name: contentType
+    uid: '@2sic.com/2sxc-typings!CommandNames.contentType:member'
+    package: '@2sic.com/2sxc-typings!'
+    summary: "`contenttype` opens the dialog to view or modify fields of a content-type. <br> \U0001F518 On a toolbar it will use the content-type of the current item. <br> \U0001F510 Toolbar shows this automatically to elevated admins. <br> \U0001F4E9 \\[Parameters\\](xref:Api.Js.SxcJs.CommandContentTypeParams)"
+    value: '"contenttype"'
+  - name: copy
+    uid: '@2sic.com/2sxc-typings!CommandNames.copy:member'
+    package: '@2sic.com/2sxc-typings!'
+    summary: "`copy` opens the edit-dialog for the current item in copy-mode, so when saving it will be a new item. <br> \U0001F4E9 \\[Parameters\\](xref:Api.Js.SxcJs.CommandCopyParams) <br> \U0001F195 in v14.03"
+    value: '"copy"'
+  - name: custom
+    uid: '@2sic.com/2sxc-typings!CommandNames.custom:member'
+    package: '@2sic.com/2sxc-typings!'
+    summary: "`custom` will execute custom javascript. <br> \U0001F518 This is mainly for toolbars, to add buttons with custom code. <br> \U0001F4E9 \\[Parameters\\](xref:Api.Js.SxcJs.CommandCustomParams)"
+    value: '"custom"'
+  - name: delete
+    uid: '@2sic.com/2sxc-typings!CommandNames.delete:member'
+    package: '@2sic.com/2sxc-typings!'
+    summary: "`delete` will delete (not just remove) a content-item. <br> \U0001F4A1 This is similar to `remove` but really deletes the data from the DB. <br> \U0001F518 It only appears if the toolbar explicitly asks for it. <br> \U0001F4E9 \\[Parameters\\](xref:Api.Js.SxcJs.CommandDeleteParams) (auto-detected from context)"
+    value: '"delete"'
+  - name: edit
+    uid: '@2sic.com/2sxc-typings!CommandNames.edit:member'
+    package: '@2sic.com/2sxc-typings!'
+    summary: "`edit` opens an edit-dialog. <br> In scenarios where the page is currently showing a demo item, this will have the same effect as `add` <br> \U0001F518 Only appears if `entityId` is known or item is in a list. <br> \U0001F4E9 Parameters either one of these: \\[Id\\](xref:Api.Js.SxcJs.CommandParamsEntityById), \\[In Block\\](xref:Api.Js.SxcJs.CommandParamsEntityInContentBlock), \\[In List\\](xref:Api.Js.SxcJs.CommandParamsEntityInList) (auto-detected from context)"
+    value: '"edit"'
+  - name: insightsServer
+    uid: '@2sic.com/2sxc-typings!CommandNames.insightsServer:member'
+    package: '@2sic.com/2sxc-typings!'
+    summary: "`insights-server` opens the insights logs page <br> \U0001F510 Toolbar shows this automatically to elevated admins. <br> \U0001F4E9 No params required."
+    value: '"insights-server"'
+  - name: instanceList
+    uid: '@2sic.com/2sxc-typings!CommandNames.instanceList:member'
+    package: '@2sic.com/2sxc-typings!'
+    summary: "`instance-list` opens a dialog to manually re-order \\*\\*items in a list\\*\\*. <br> \U0001FA9C Only appears on toolbars of items which are in a list. <br> \U0001F4E9 No params required, (auto-detected from context)"
+    value: '"instance-list"'
+  - name: layout
+    uid: '@2sic.com/2sxc-typings!CommandNames.layout:member'
+    package: '@2sic.com/2sxc-typings!'
+    summary: "`layout` opens the in-page dialog to change the layout of the current content. <br> \U0001F4E9 No params required, (auto-detected from context)"
+    value: '"layout"'
+  - name: metadata
+    uid: '@2sic.com/2sxc-typings!CommandNames.metadata:member'
+    package: '@2sic.com/2sxc-typings!'
+    summary: "`metadata` opens the edit-dialog for the current metadata item. <br> \U0001F518 It only appears if the toolbar explicitly asks for it. <br> \U0001F4E9 \\[Parameters\\](xref:Api.Js.SxcJs.CommandMetadataParams)"
+    value: '"metadata"'
+  - name: more
+    uid: '@2sic.com/2sxc-typings!CommandNames.more:member'
+    package: '@2sic.com/2sxc-typings!'
+    summary: "`more` create a \"…\" (ellipsis) button which flips through the button groups of toolbars <br> \U0001F518 It only appears if the toolbar has `more`<!-- -->=`auto` and has multiple groups. <br> \U0001F4E9 No params required, (auto-detected based on toolbar)"
+    value: '"more"'
+  - name: moveDown
+    uid: '@2sic.com/2sxc-typings!CommandNames.moveDown:member'
+    package: '@2sic.com/2sxc-typings!'
+    summary: "`movedown` moves a content-item down one position in a \\*\\*list of items\\*\\*. <br> \U0001FA9C Only appears on toolbars of items which are in a list. <br> \U0001F4E9 Parameters either one of these: \\[In Block\\](xref:Api.Js.SxcJs.CommandParamsEntityInContentBlock), \\[In List\\](xref:Api.Js.SxcJs.CommandParamsEntityInList) (auto-detected from context)"
+    value: '"movedown"'
+  - name: moveUp
+    uid: '@2sic.com/2sxc-typings!CommandNames.moveUp:member'
+    package: '@2sic.com/2sxc-typings!'
+    summary: "`moveup` moves a content-item up one position in a \\*\\*list of items\\*\\*. <br> \U0001FA9C Only appears on toolbars of items which are in a list. <br> \U0001F4E9 Parameters either one of these: \\[In Block\\](xref:Api.Js.SxcJs.CommandParamsEntityInContentBlock), \\[In List\\](xref:Api.Js.SxcJs.CommandParamsEntityInList) (auto-detected from context)"
+    value: '"moveup"'
+  - name: new
+    uid: '@2sic.com/2sxc-typings!CommandNames.new:member'
+    package: '@2sic.com/2sxc-typings!'
+    summary: "`new` opens the edit-dialog for a new content-item. <br> It will only create an item, not add it to a list. For that you would need to use `add` <br> \U0001F4E9 \\[Parameters\\](xref:Api.Js.SxcJs.CommandContentTypeParams) (auto-detected from context)"
+    value: '"new"'
+  - name: publish
+    uid: '@2sic.com/2sxc-typings!CommandNames.publish:member'
+    package: '@2sic.com/2sxc-typings!'
+    summary: "`publish` tells the system to update a content-items status to published. If there was a published and a draft before, the draft will replace the previous item <br> \U0001F518 Appears automatically if the item is in draft mode / not published. <br> \U0001F4E9 Parameters either one of these: \\[Id\\](xref:Api.Js.SxcJs.CommandParamsEntityById), \\[In Block\\](xref:Api.Js.SxcJs.CommandParamsEntityInContentBlock), \\[In List\\](xref:Api.Js.SxcJs.CommandParamsEntityInList) (auto-detected from context)"
+    value: '"publish"'
+  - name: remove
+    uid: '@2sic.com/2sxc-typings!CommandNames.remove:member'
+    package: '@2sic.com/2sxc-typings!'
+    summary: "`remove` removes an item from a list of items. <br> \U0001FA9C Only appears on toolbars of items which are in a list. <br> \U0001F4E9 \\[Parameters\\](xref:Api.Js.SxcJs.CommandParamsEntityInList) (auto-detected from context)"
+    value: '"remove"'
+  - name: replace
+    uid: '@2sic.com/2sxc-typings!CommandNames.replace:member'
+    package: '@2sic.com/2sxc-typings!'
+    summary: "`replace` opens the dialog to assign a different content-item in this slot on module-assigned content items <br> \U0001F4E9 \\[Parameters\\](xref:Api.Js.SxcJs.CommandParamsEntityInList) (auto-detected from context)"
+    value: '"replace"'
+  - name: templateDevelop
+    uid: '@2sic.com/2sxc-typings!CommandNames.templateDevelop:member'
+    package: '@2sic.com/2sxc-typings!'
+    summary: "`template-develop` opens the template-editor dialog in a new window. <br> \U0001F510 Toolbar shows this automatically to elevated admins. <br> \U0001F4E9 No params required, (auto-detected from context)"
+    value: '"template-develop"'
+  - name: templateQuery
+    uid: '@2sic.com/2sxc-typings!CommandNames.templateQuery:member'
+    package: '@2sic.com/2sxc-typings!'
+    summary: "`template-query` opens the pipeline/query-designer in a new window. <br> \U0001F518 It's not available on the simple Content App, only on full Apps. It is disabled if no query is configured. <br> \U0001F510 Toolbar shows this automatically to elevated admins. <br> \U0001F4E9 No params required, (auto-detected from context)"
+    value: '"template-query"'
+  - name: templateSettings
+    uid: '@2sic.com/2sxc-typings!CommandNames.templateSettings:member'
+    package: '@2sic.com/2sxc-typings!'
+    summary: "`template-settings` will change settings on the template currently used <br> \U0001F510 Toolbar shows this automatically to elevated admins."
+    value: '"template-settings"'
+  - name: zone
+    uid: '@2sic.com/2sxc-typings!CommandNames.zone:member'
+    package: '@2sic.com/2sxc-typings!'
+    summary: "`zone` opens the system dialog for this zone/site. <br> \U0001F510 Toolbar shows this automatically to elevated admins. <br> \U0001F4E9 No params required, (auto-detected from context)"
+    value: '"zone"'

@@ -2,8 +2,6 @@
 /**
  * This is for building/serializing the main url params when opening a dialog.
  * It does not contain the "params" / "items" part
- * @export
- * @class NgUrlValuesWithoutParams
  * @internal
  */
 export class NgUrlValuesWithoutParams {

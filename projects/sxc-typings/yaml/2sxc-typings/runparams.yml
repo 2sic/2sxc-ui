@@ -1,0 +1,56 @@
+### YamlMime:TSType
+name: RunParams
+uid: '@2sic.com/2sxc-typings!RunParams:interface'
+package: '@2sic.com/2sxc-typings!'
+fullName: RunParams
+summary: Parameters for the Instance sxc.cms.run(...) command. New in 13.03
+remarks: ''
+example: []
+isPreview: false
+isDeprecated: false
+type: interface
+properties:
+  - name: action
+    uid: '@2sic.com/2sxc-typings!RunParams#action:member'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: action
+    summary: The action to perform. Required.
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'action?: CommandNames;'
+      return:
+        type: '<xref uid="@2sic.com/2sxc-typings!CommandNames:enum" />'
+  - name: event
+    uid: '@2sic.com/2sxc-typings!RunParams#event:member'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: event
+    summary: >-
+      The event which triggered this command - sometimes useful internally further use. Optional in most cases, but in
+      some cases it will improve the behavior of the code.
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'event?: MouseEvent;'
+      return:
+        type: MouseEvent
+  - name: workflows
+    uid: '@2sic.com/2sxc-typings!RunParams#workflows:member'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: workflows
+    summary: >-
+      Workflows work the same way as with a toolbar, except that they are added here and not registered on init. Because
+      of limitations in automatic documentation, the type here is set to `unknown` but it's actually `WorkflowStep` \|
+      `WorkflowStep[]`
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'workflows?: unknown;'
+      return:
+        type: unknown

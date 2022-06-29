@@ -11,6 +11,7 @@ const maxEntriesReached = 'Maximum amount of entries added to log, will stop add
  * A log object which will collect log entries for another ojbect
  * @export
  * @interface Log
+ * @public
  */
 export class Log {
 
@@ -96,8 +97,7 @@ export class Log {
 
     /**
      * Add a simple message to the log
-     * @param {string} message
-     * @memberof Log
+     * @param message
      *
      * preferred usage is with string parameter:
      * log.add(`description ${ parameter }`);

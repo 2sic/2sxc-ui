@@ -1,6 +1,5 @@
-﻿import { CommandNames, Commands } from '..';
+﻿import { CmdParHlp, CommandNames, Commands } from '..';
 import { ItemIdentifierGroup } from '../../../../$2sxc/src/cms';
-import { CommandAddParams } from './command-add';
 import { SharedLogic } from './shared-logic';
 
 /**
@@ -20,7 +19,7 @@ Commands.add(CommandNames.addExisting, 'AddExisting', 'add-existing', false, tru
       linkGenerator.items = [{ Group: {
         Guid: params.parent,
         Part: params.fields,
-        Index: params.sortOrder + 1,
+        Index: CmdParHlp.getIndex(params) + 1,
         Add: true,
       }}];
     } else if (SharedLogic.isPartOfBlockList(context)) {
@@ -31,14 +30,3 @@ Commands.add(CommandNames.addExisting, 'AddExisting', 'add-existing', false, tru
     }
   },
 });
-
-/**
- * Parameters used for the command `add-existing`.
- * <br>
- * The contentType name determines what items will be shown in the dialog.
- * <br>
- * ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)
- */
-// tslint:disable-next-line: no-empty-interface
-export interface CommandAddExistingParams extends CommandAddParams {
-}

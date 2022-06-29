@@ -30,10 +30,9 @@ export class ToolbarConfigLoaderV10 extends HasLog {
         // We should use the `ui` parameter, as it's UI rules, but because previously
         // it used the `params` - we must support both :(
         const settingRule = this.rules.getSettings();
-        let settingsUiRule = settingRule?.ui as unknown as Partial<ToolbarSettings>;
+        let settingsUiRule = settingRule?.ui as Partial<ToolbarSettings>;
         if (Object.keys(settingsUiRule || {}).length === 0)
             settingsUiRule = settingRule?.params as Partial<ToolbarSettings>;
-        // settingsUiRule = { ...settingRule?.params, ...settingRule?.ui } as unknown as Partial<ToolbarSettings>;
         const settings = new ToolbarSettings(settingsUiRule);
 
         // #2 load either the default toolbar or the one specified

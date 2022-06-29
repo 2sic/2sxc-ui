@@ -1,4 +1,5 @@
-﻿import { ItemIdentifierCopy, ItemIdentifierGroup, ItemIdentifierInField, ItemIdentifierSimple, TemplateIdentifier } from '../../../$2sxc/src/cms';
+﻿import { CmdParHlp } from '.';
+import { ItemIdentifierCopy, ItemIdentifierGroup, ItemIdentifierInField, ItemIdentifierSimple, TemplateIdentifier } from '../../../$2sxc/src/cms';
 import { C } from '../constants';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { HasLog, Log } from '../core';
@@ -88,7 +89,7 @@ export class CommandLinkGenerator extends HasLog {
         if (urlMode2 && this.items) {
           try {
             items2 = '&' + window.$2sxc.urlParams.toUrl({ i2: this.items } );
-            console.log('items2', items2);
+            // console.log('items2', items2);
           } catch (e) { /* ignore */ }
         }
 
@@ -133,9 +134,10 @@ export class CommandLinkGenerator extends HasLog {
      */
     private addContentGroupItems(withPresentation: boolean) {
         const cl = this.log.call('addContentGroupItems', `${withPresentation}`);
-        const params = this.context.button.command.params;
-        const isContentAndNotHeader = (params.sortOrder !== -1);
-        const index = isContentAndNotHeader ? params.sortOrder : 0;
+        // const params = this.context.button.command.params;
+        const i = CmdParHlp.getIndex(this.context);
+        const isContentAndNotHeader = (i !== -1);
+        const index = isContentAndNotHeader ? i : 0;
         const isAdd = this.context.button.command.name === 'new';
         const groupId = this.context.contentBlock.contentGroupId;
 
@@ -171,7 +173,7 @@ export class CommandLinkGenerator extends HasLog {
      */
     private addItemInList() {
         const params = this.context.button.command.params;
-        const index = params.sortOrder;
+        const index = CmdParHlp.getIndex(params);
         const isAdd = this.context.button.command.name === 'new';
         const groupId = params.parent;
 
@@ -191,7 +193,7 @@ export class CommandLinkGenerator extends HasLog {
      * find the part name for both the API to give the right item (when using groups) and for i18n
      */
     private findPartName(content: boolean): string {
-        const isContentAndNotHeader = (this.context.button.command.params.sortOrder !== -1);
+        const isContentAndNotHeader = (CmdParHlp.getIndex(this.context) !== -1);
         return (isContentAndNotHeader ? '' : 'List') + (content ? 'Content' : 'Presentation');
     }
 

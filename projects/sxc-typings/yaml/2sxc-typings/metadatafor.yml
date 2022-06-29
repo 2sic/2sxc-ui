@@ -1,0 +1,72 @@
+### YamlMime:TSType
+name: MetadataFor
+uid: '@2sic.com/2sxc-typings!MetadataFor:interface'
+package: '@2sic.com/2sxc-typings!'
+fullName: MetadataFor
+summary: >-
+  A Metadata-Target identifier to tell an entity that it describes something else.
+
+
+  Usually used in Sxc instances with the \[Data Service\](xref:Api.Js.SxcJs.SxcData)
+
+
+  Warning: There is another MetadataFor type and they are not fully consistent. This is historical and not easy to
+  correct, but we're working on it.
+remarks: ''
+example: []
+isPreview: false
+isDeprecated: false
+type: interface
+properties:
+  - name: Guid
+    uid: '@2sic.com/2sxc-typings!MetadataFor#Guid:member'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: Guid
+    summary: 'The GUID of the target, if it''s identified by a GUID.  {<!-- -->string<!-- -->}  MetadataFor'
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'Guid?: string;'
+      return:
+        type: string
+  - name: Number
+    uid: '@2sic.com/2sxc-typings!MetadataFor#Number:member'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: Number
+    summary: 'The number of the target, if it''s identified by a number.  {<!-- -->number<!-- -->}  MetadataFor'
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'Number?: number;'
+      return:
+        type: number
+  - name: String
+    uid: '@2sic.com/2sxc-typings!MetadataFor#String:member'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: String
+    summary: 'The string-id of the target, if it''s identified by a string.  {<!-- -->string<!-- -->}  MetadataFor'
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'String?: string;'
+      return:
+        type: string
+  - name: Target
+    uid: '@2sic.com/2sxc-typings!MetadataFor#Target:member'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: Target
+    summary: 'The target type identifier - TODO: @<!-- -->2dm - THIS SHOULD probably be number only'
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'Target: string | MetadataTargetTypes;'
+      return:
+        type: 'string | <xref uid="@2sic.com/2sxc-typings!MetadataTargetTypes:enum" />'

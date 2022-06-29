@@ -28,7 +28,7 @@ export class QuickDialogContainer extends HasLog {
     private resizeWatcher: number = null;
     /**
      * get the current container
-     * @returns {element} html element of the div
+     * @returns html element of the div
      */
     getOrCreate(): HTMLElement {
         const container = document.querySelector<HTMLElement>(`.${containerClass}`);
@@ -37,7 +37,7 @@ export class QuickDialogContainer extends HasLog {
 
     /**
      * build the container in the dom w/iframe for re-use
-     * @return {HTMLElement} dom-object
+     * @returns dom-object
      */
     private buildContainerAndIFrame(): HTMLElement {
         const callLog = this.log.call('buildContainerAndIFrame');
@@ -54,8 +54,8 @@ export class QuickDialogContainer extends HasLog {
 
     /**
      * find the iframe which hosts the dialog
-     * @param {html} [container] - html-container
-     * @returns {html} iframe object
+     * @param container: - html-container
+     * @returns iframe object
      */
     getIFrame(container?: HTMLElement): IDialogFrameElement {
         if (!container) container = this.getOrCreate();
@@ -64,7 +64,6 @@ export class QuickDialogContainer extends HasLog {
 
     /**
      * set container css for size
-     * @param {boolean} fullScreen
      */
     setSize(fullScreen: boolean): void {
         const cl = this.log.call('setSize');

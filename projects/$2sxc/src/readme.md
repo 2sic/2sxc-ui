@@ -2,7 +2,7 @@
 
 ## TypeScript Information
 The code here is written in TypeScript but is available _globally_ on `window.$2sxc`. 
-To use it typed in your TypeScript, please don't reference these files, but use the npm package [@2sic.com/2sxc-typings](https://www.npmjs.com/package/@2sic.com/dnn-sxc-angular).
+To use it typed in your TypeScript, please don't reference these files, but use the npm package [@2sic.com/2sxc-typings](https://www.npmjs.com/package/@2sic.com/sxc-angular).
 
 
 

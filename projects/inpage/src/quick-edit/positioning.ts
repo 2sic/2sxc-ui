@@ -78,6 +78,7 @@ let lastCall: Date;
 
 /**
  * position, align and show a menu linked to another item
+ * @internal
  */
 function positionAndAlign(element: HTMLElement, coords: PositionCoordinates) {
     const quickE = QuickE.singleton();
@@ -90,7 +91,7 @@ function positionAndAlign(element: HTMLElement, coords: PositionCoordinates) {
 
 /**
  * Refresh positioning / visibility of the quick-insert bar
- * @param e
+ * @internal
  */
 function refresh(e: MouseEvent) {
     const highlightClass: string = 'sc-cb-highlight-for-insert';
@@ -170,8 +171,6 @@ function provideCorrectAddButtons(tag: HTMLElement) {
 
 /**
  * Return the nearest element to the mouse cursor from elements
- * @param elements
- * @param position
  */
 function findNearest(elements: HTMLElement[], position: PositionCoordinates): PositionCoordinates {
     const maxDistance: number = 30; // Defines the maximal distance of the cursor when the menu is displayed

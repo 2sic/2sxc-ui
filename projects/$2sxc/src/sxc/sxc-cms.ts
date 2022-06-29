@@ -6,6 +6,7 @@ import { Sxc } from '.';
  * This is in charge of sxc.cms on the instance level.
  * ATM it just has the run command.
  * In future, it may also have dedicated command like `layout` etc.
+ * @public
  */
 export class SxcCms extends SxcPart {
 

@@ -2,64 +2,107 @@
 import { TypeValue } from '../../../inpage/src/plumbing';
 
 /**
- * Stub interface for typescript definitions to because of export.
- * Real implementation is more complex but not published. 
- */
-export interface CommandParams {
-}
-
-/**
  * Command parameters are handed over to a command for execution
- * @internal
+ * @public
  */
 export interface CommandParams {
-    /** The action is used in scenarios where the command name must be included */
+    /** 
+     * The action is used in scenarios where the command name must be included
+     */
     action?: CommandNames;
+
+    /** @internal */
     items?: Array<ItemIdentifierSimple | ItemIdentifierGroup>;
+    /** @internal */
     mode?: string;
 
     // both contentType and contentTypeName were used historically, so both variations may exist in Razor templaets
+    /** @internal */
     contentType?: string;
+    /** @internal */
     contentTypeName?: string;
 
+    /** @internal */
     pipelineId?: number;
+    /** @internal */
     filters?: string;
+    /** @internal */
     dialog?: string;
+
+    /** 
+     * @internal 
+     * @deprecated but probably still in use
+     */
     sortOrder?: number;
+
+    /** 
+     * Position in a list (content-block or field of another entity)
+     * index was added in v14.04 to replace the `sortOrder` which had a confusing name. 
+     * @internal
+     */
+    index?: number;
+
+    /** @internal */
     entityId?: number;
 
-    /** The guid - for people creating custom toolbars before 10.27 or automatically added since 10.27 */
+    /**
+     * The guid - for people creating custom toolbars before 10.27 or automatically added since 10.27 
+     * @internal
+     */
     entityGuid?: string;
 
-    /** The manually added title from before 10.27 - automatically enabled the delete-button */
+    /**
+     * The manually added title from before 10.27 - automatically enabled the delete-button
+     * @internal
+     */
     entityTitle?: string;
 
+    /** @internal */
     title?: string;
 
+    /** @internal */
     useModuleList?: boolean;
+    /** @internal */
     metadata?: CommandParamsMetadata;
 
+    /** @internal */
     isPublished?: boolean;
+    /** @internal */
     prefill?: Record<string, TypeValue>;
 
-    /** Custom Code in the previous V9 standard */
+    /**
+     * Custom Code in the previous V9 standard
+     * @internal
+     */
     customCode?: string;
 
-    /** Custom Code function name only in the new V10.27 standard */
+    /**
+     * Custom Code function name only in the new V10.27 standard
+     * @internal
+     */
     call?: string;
 
 
-    /** New in 10.27 - list of apps for the quick dialog */
+    /**
+     * New in 10.27 - list of apps for the quick dialog
+     * @internal
+     */
     apps?: string;
 
-    /** Experimental in 10.27 */
+    /**
+     * Experimental in 10.27
+     * @internal
+     */
     parent?: string;
-    /** Experimental in 10.27 */
+    /**
+     * Experimental in 10.27
+     * @internal
+     */
     fields?: string;
 
-    /** for template edit dialog */
+    /**
+     * for template edit dialog 
+     * @internal
+     */
     isshared?: boolean;
 }
-
-
-// export CommandParams as CommandParams;

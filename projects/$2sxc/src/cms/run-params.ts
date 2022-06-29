@@ -17,6 +17,7 @@ export interface RunParams {
   /**
    * The command params, like contentType, entityId etc.
    * Optional for many actions, but can themselves also contain the property `action`, in which case action can be ommited.
+   * @internal
    */
   params?: CommandParams;
 
@@ -37,6 +38,7 @@ export interface RunParams {
  * Parameters for the **Global** $2sxc.cms.run(...) command in Addition to the [RunParams](xref:Api.Js.SxcJs.RunParams).
  * It provides context to the run-params such as a Sxc instance or a tag which it started on.
  * New in 12.10
+ * @public
  */
 export interface RunParamsWithContext extends RunParams {
   /**

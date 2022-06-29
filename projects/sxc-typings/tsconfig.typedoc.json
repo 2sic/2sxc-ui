@@ -1,15 +1,24 @@
 {
   "extends": "./tsconfig.json",
+
+  "include": [
+    "./index-docs.ts",
+    "./index-public-part.ts"
+  ],
+
+
+
+
   "typedocOptions": {
-    "entryPoints": [
-      "./src/index.ts"
-    ],
+    // "entryPoints": [
+    //   "./index-docs.d.ts"
+    // ],
     // don't create out - "out": "./docs/typedoc",
     "json": "./docs/typedoc/typedoc.json",
     "name": "Api.Js.SxcJs",
     "includeVersion": false,
     "excludePrivate": true,
     "excludeProtected": true,
-    "excludeExternals": false,
+    "excludeExternals": true,
   }
 }

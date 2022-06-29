@@ -59,10 +59,10 @@ export class QuickDialog extends HasLog {
     /**
      * show / reset the current iframe to use new url and callback
      * @param {ContextComplete} context object
-     * @param {string} url - url to show
+     * @param url - url to show
      * @param {function()} closeCallback - callback event
      * @param {boolean} isFullscreen - if it should open full screen
-     * @param {string} [dialogName] - optional name of dialog, to check if it's already open
+     * @param [dialogName] - optional name of dialog, to check if it's already open
      * @returns {Promise<boolean>}
      */
     showOrToggleFromToolbar(
@@ -137,7 +137,7 @@ export class QuickDialog extends HasLog {
     /**
      * rewrite the url to fit the quick-dialog situation
      * optionally with a live-compiled version from ng-serve
-     * @param {string} url - original url pointing to the default dialog
+     * @param url - original url pointing to the default dialog
      * @returns {string} new url pointing to quick dialog
      */
     private setUrlToQuickDialog(url: string): string {

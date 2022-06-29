@@ -1,0 +1,11 @@
+### YamlMime:TSTypeAlias
+name: TypeValue
+uid: '@2sic.com/2sxc-typings!TypeValue:type'
+package: '@2sic.com/2sxc-typings!'
+fullName: TypeValue
+summary: ''
+remarks: ''
+example: []
+isPreview: false
+isDeprecated: false
+syntax: export declare type TypeValue = boolean | string | number | Date;

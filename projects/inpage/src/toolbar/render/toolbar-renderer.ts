@@ -1,10 +1,10 @@
-import { C } from '../../constants';
+import { CmdParHlp } from '../../commands/cmd-par-hlp';
+import { IDs } from '../../constants/ids';
 import { ContextBundleToolbar } from '../../context/bundles/context-bundle-toolbar';
-import { HtmlTools } from '../../html/dom-tools';
 import { HasLog, Insights } from '../../core';
+import { HtmlTools } from '../../html/dom-tools';
 import { RenderButton } from './render-button';
 import { RenderButtonGroups } from './render-groups';
-import { IDs } from '../../constants/ids';
 
 const attrIdentifier = 'toolbar-identifier';
 
@@ -51,7 +51,7 @@ export class ToolbarRenderer extends HasLog {
         const settings = context.toolbar.settings;
         tlbTag.classList.add(`sc-tb-hover-${settings.hover}`);
         tlbTag.classList.add(`sc-tb-show-${settings.show}`);
-        if (context.toolbar.params.sortOrder === -1)
+        if (CmdParHlp.getIndex(context.toolbar.params) === -1)
             tlbTag.classList.add('listContent');
         if (context.toolbar.params.fields)
             tlbTag.classList.add('sc-sublist');

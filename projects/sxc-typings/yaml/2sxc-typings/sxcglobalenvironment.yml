@@ -1,0 +1,135 @@
+### YamlMime:TSType
+name: SxcGlobalEnvironment
+uid: '@2sic.com/2sxc-typings!SxcGlobalEnvironment:class'
+package: '@2sic.com/2sxc-typings!'
+fullName: SxcGlobalEnvironment
+summary: 'Provides environment information to $2sxc - usually page-id, api-root and stuff like that'
+remarks: >-
+  The constructor for this class is marked as internal. Third-party code should not call the constructor directly or
+  create subclasses that extend the `SxcGlobalEnvironment` class.
+example: []
+isPreview: false
+isDeprecated: false
+type: class
+properties:
+  - name: ready
+    uid: '@2sic.com/2sxc-typings!SxcGlobalEnvironment#ready:member'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: ready
+    summary: Flag to determine if the environment information is available.
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'ready: boolean;'
+      return:
+        type: boolean
+  - name: source
+    uid: '@2sic.com/2sxc-typings!SxcGlobalEnvironment#source:member'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: source
+    summary: Where the environment information came from.
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'source: string;'
+      return:
+        type: string
+methods:
+  - name: api()
+    uid: '@2sic.com/2sxc-typings!SxcGlobalEnvironment#api:member(1)'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: api()
+    summary: The API endpoint url from the environment
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'api(): string;'
+      return:
+        type: string
+        description: ''
+  - name: 'load(envSpecs, source)'
+    uid: '@2sic.com/2sxc-typings!SxcGlobalEnvironment#load:member(1)'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: 'load(envSpecs, source)'
+    summary: >-
+      Manually load a new EnvironmentSpecs in cases where the page cannot provide them. This is only used in scenarios
+      outside of Dnn / Oqtane, you will usually not need this.
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'load(envSpecs: EnvironmentSpecs, source?: string): void;'
+      parameters:
+        - id: envSpecs
+          description: new info to load
+          type: '<xref uid="@2sic.com/2sxc-typings!EnvironmentSpecs:interface" />'
+        - id: source
+          description: \_optional\_ name where the data came from
+          type: string
+      return:
+        type: void
+        description: ''
+  - name: page()
+    uid: '@2sic.com/2sxc-typings!SxcGlobalEnvironment#page:member(1)'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: page()
+    summary: The current page ID - often needed in API calls
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'page(): number;'
+      return:
+        type: number
+        description: ''
+  - name: platform()
+    uid: '@2sic.com/2sxc-typings!SxcGlobalEnvironment#platform:member(1)'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: platform()
+    summary: The platform code like 'oqt' or 'dnn' in case the JS needs to know the difference
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'platform(): string;'
+      return:
+        type: string
+        description: ''
+  - name: rvt()
+    uid: '@2sic.com/2sxc-typings!SxcGlobalEnvironment#rvt:member(1)'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: rvt()
+    summary: The request-verification token for internal WebAPI calls
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'rvt(): string;'
+      return:
+        type: string
+        description: ''
+  - name: rvtHeader()
+    uid: '@2sic.com/2sxc-typings!SxcGlobalEnvironment#rvtHeader:member(1)'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: rvtHeader()
+    summary: The request verification token header name for internal WebAPI calls
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'rvtHeader(): string;'
+      return:
+        type: string
+        description: ''
+extends: '<xref uid="@2sic.com/2sxc-typings!HasLog:class" />'

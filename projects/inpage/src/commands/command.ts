@@ -12,11 +12,6 @@ export class Command {
 
     /**
      * 
-     * @param icon 
-     * @param translateKey 
-     * @param uiOnly 
-     * @param partOfPage 
-     * @param more 
      * @internal
      */
     mergeDefaults(translateKey: string, icon: string, uiOnly: boolean, partOfPage: boolean, more: Partial<Button>): void {
@@ -35,12 +30,6 @@ export class Command {
 
     /**
      * 
-     * @param name 
-     * @param translateKey 
-     * @param icon 
-     * @param uiOnly 
-     * @param partOfPage 
-     * @param more 
      * @returns 
      * @internal
      */
@@ -52,11 +41,20 @@ export class Command {
                  more: Partial<Button>,
                  ): Command {
 
-        const commandDefinition = new Command(name);
+        const cmd = new Command(name);
 
         // Toolbar API v2
-        commandDefinition.mergeDefaults(translateKey, icon, uiOnly, partOfPage, more);
+        cmd.mergeDefaults(translateKey, icon, uiOnly, partOfPage, more);
 
-        return commandDefinition;
+        return cmd;
+    }
+
+    /**
+     * @internal
+     */
+    static clone(command: Command, name: string) {
+      const clone = new Command(name);
+      clone.buttonDefaults = command.buttonDefaults;
+      return clone;
     }
 }

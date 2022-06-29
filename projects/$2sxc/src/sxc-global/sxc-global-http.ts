@@ -4,6 +4,7 @@ import { ContextIdentifier, SxcGlobalEnvironment } from '..';
 
 /**
  * Global HTTP Service for information and helpers on `$2sxc.http`
+ * @public
  */
 export class SxcGlobalHttp extends HasLog {
     /** @internal */
@@ -68,9 +69,7 @@ export class SxcGlobalHttp extends HasLog {
 
     /**
      * Get the API-Root path for a specific extension/endpoint
-     * @param endpointName 
-     * @returns {string}
-     * @memberof Http
+     * @returns
      * @internal Not relevant for 2sxc, only used if calling platform endpoints
      */
     apiRoot(endpointName: string): string {
@@ -82,9 +81,6 @@ export class SxcGlobalHttp extends HasLog {
     /**
      * Get the API-Root path for Apps
      * new in v12
-     * @param {string} endpointName
-     * @returns {string}
-     * @memberof SxcHttp
      * @internal
      */
      appApiRoot(): string {

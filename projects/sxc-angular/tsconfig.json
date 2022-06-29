@@ -1,0 +1,40 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "baseUrl": "./",
+    "outDir": "./dist/out-tsc",
+    "sourceMap": true,
+    "declaration": false,
+    "downlevelIteration": true,
+    "experimentalDecorators": true,
+    "module": "es2020",
+    "moduleResolution": "node",
+    "importHelpers": true,
+    "target": "es2015",
+    "typeRoots": [
+      "node_modules/@types"
+    ],
+    "lib": [
+      "es2018",
+      "dom"
+    ],
+    "paths": {
+      "sxc-angular": [
+        "dist/sxc-angular/sxc-angular",
+        "dist/sxc-angular"
+      ]
+    }
+  },
+  "angularCompilerOptions": {
+    "fullTemplateTypeCheck": true,
+    "strictInjectionParameters": true
+  },
+  "typedocOptions": {
+    "name": "sxc-angular",
+    "entryPoints": ["./projects/sxc-angular/index.ts"],
+    "out": "../../docs/preview/sxc-angular",
+    "exclude": ["**/node_modules/**", "node_modules/**", "**/dist/**"],
+    "excludeExternals": true,
+    "json": "../../docs/sxc-angular.json"
+  }
+}

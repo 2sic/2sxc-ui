@@ -1,0 +1,61 @@
+### YamlMime:TSType
+name: SxcDataServiceBase
+uid: '@2sic.com/2sxc-typings!SxcDataServiceBase:class'
+package: '@2sic.com/2sxc-typings!'
+fullName: SxcDataServiceBase
+summary: Base class doing common checks
+remarks: ''
+example: []
+isPreview: false
+isDeprecated: false
+type: class
+constructors:
+  - name: '(constructor)(sxc, name, nameInError)'
+    uid: '@2sic.com/2sxc-typings!SxcDataServiceBase:constructor(1)'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: '(constructor)(sxc, name, nameInError)'
+    summary: Creates an instance of SxcData.
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'constructor(sxc: Sxc, name: string, nameInError: string);'
+      parameters:
+        - id: sxc
+          description: ''
+          type: '<xref uid="@2sic.com/2sxc-typings!Sxc:class" />'
+        - id: name
+          description: the content-type name  SxcData
+          type: string
+        - id: nameInError
+          description: ''
+          type: string
+properties:
+  - name: name
+    uid: '@2sic.com/2sxc-typings!SxcDataServiceBase#name:member'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: name
+    summary: ''
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'readonly name: string;'
+      return:
+        type: string
+  - name: webApi
+    uid: '@2sic.com/2sxc-typings!SxcDataServiceBase#webApi:member'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: webApi
+    summary: ''
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'protected readonly webApi: SxcWebApi;'
+      return:
+        type: '<xref uid="@2sic.com/2sxc-typings!SxcWebApi:class" />'
+extends: '<xref uid="@2sic.com/2sxc-typings!SxcPart:class" />'

@@ -7,13 +7,13 @@ const ContentApiRoot = 'app/auto/data';
 
 /**
 * Data Service for an App / Sxc-Instance to get/create data of a specific Content-Type
+* @public
 */
 export class SxcData<T = unknown> extends SxcDataServiceBase {
   /**
   * Creates an instance of SxcData.
-  * @param {Sxc} sxc
-  * @param {string} name the content-type name
-  * @memberof SxcData
+  * @param sxc:
+  * @param name: the content-type name
   * @internal
   */
   constructor(sxc: Sxc, readonly name: string) {

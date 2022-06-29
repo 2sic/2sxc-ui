@@ -1,4 +1,4 @@
-﻿import { CommandNames, Commands } from '..';
+﻿import { CmdParHlp, CommandNames, Commands } from '..';
 import { Actions } from './content-list-actions';
 import { SharedLogic } from './shared-logic';
 
@@ -8,15 +8,10 @@ import { SharedLogic } from './shared-logic';
  */
 Commands.add(CommandNames.moveUp, 'MoveUp', 'move-up', false, true, {
   showCondition(context) {
-    return !!(SharedLogic.isList(context) &&
-    context.button.command.params.sortOrder !== 0
-    );
+    return !!(SharedLogic.isList(context) && CmdParHlp.getIndex(context) !== 0);
   },
   code(context) {
-    return Actions.changeOrder(
-      context,
-      context.button.command.params.sortOrder,
-      Math.max(context.button.command.params.sortOrder - 1, 0),
-      );
-    },
+    const i = CmdParHlp.getIndex(context);
+    return Actions.changeOrder(context, i, Math.max(i - 1, 0));
+  },
 });

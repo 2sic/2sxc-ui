@@ -1,0 +1,137 @@
+### YamlMime:TSType
+name: SxcGlobalHttp
+uid: '@2sic.com/2sxc-typings!SxcGlobalHttp:class'
+package: '@2sic.com/2sxc-typings!'
+fullName: SxcGlobalHttp
+summary: Global HTTP Service for information and helpers on `$2sxc.http`
+remarks: >-
+  The constructor for this class is marked as internal. Third-party code should not call the constructor directly or
+  create subclasses that extend the `SxcGlobalHttp` class.
+example: []
+isPreview: false
+isDeprecated: false
+type: class
+methods:
+  - name: apiUrl(url)
+    uid: '@2sic.com/2sxc-typings!SxcGlobalHttp#apiUrl:member(1)'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: apiUrl(url)
+    summary: >-
+      Convert short urls like `app/auto/api/Posts/All` to the full URL needed. Will ignore urls which clearly already
+      are the full url.
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'apiUrl(url: string): string;'
+      parameters:
+        - id: url
+          description: short URL like `app/auto/api/Posts/All`
+          type: string
+      return:
+        type: string
+        description: 'the converted, long url with the full endpoint'
+  - name: 'apiUrl(url, endpointName)'
+    uid: '@2sic.com/2sxc-typings!SxcGlobalHttp#apiUrl:member(2)'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: 'apiUrl(url, endpointName)'
+    summary: >-
+      Convert short urls like `app/auto/api/Posts/All` to the full URL needed. Will ignore urls which clearly already
+      are the full url.
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'apiUrl(url: string, endpointName: string): string;'
+      parameters:
+        - id: url
+          description: short URL like `app/auto/api/Posts/All`
+          type: string
+        - id: endpointName
+          description: \_optional\_ endpoint name if accessing a different exotic endpoint
+          type: string
+      return:
+        type: string
+        description: 'the converted, long url with the full endpoint'
+  - name: headers()
+    uid: '@2sic.com/2sxc-typings!SxcGlobalHttp#headers:member(1)'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: headers()
+    summary: All the headers which are needed in an ajax call.
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'headers(): Record<string, string>;'
+      return:
+        type: 'Record&lt;string, string&gt;'
+        description: Dictionary / Record of headers
+  - name: headers(id)
+    uid: '@2sic.com/2sxc-typings!SxcGlobalHttp#headers:member(2)'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: headers(id)
+    summary: All the headers which are needed in an ajax call - within a module context.
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'headers(id: number): Record<string, string>;'
+      parameters:
+        - id: id
+          description: \_optional\_ module ID
+          type: number
+      return:
+        type: 'Record&lt;string, string&gt;'
+        description: Dictionary / Record of headers
+  - name: 'headers(id, cbid)'
+    uid: '@2sic.com/2sxc-typings!SxcGlobalHttp#headers:member(3)'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: 'headers(id, cbid)'
+    summary: All the headers which are needed in an ajax call - within a module and content-block context.
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'headers(id: number, cbid: number): Record<string, string>;'
+      parameters:
+        - id: id
+          description: \_optional\_ module ID
+          type: number
+        - id: cbid
+          description: \_optional\_ content block ID
+          type: number
+      return:
+        type: 'Record&lt;string, string&gt;'
+        description: Dictionary / Record of headers
+  - name: 'headers(id, cbid, ctx)'
+    uid: '@2sic.com/2sxc-typings!SxcGlobalHttp#headers:member(4)'
+    package: '@2sic.com/2sxc-typings!'
+    fullName: 'headers(id, cbid, ctx)'
+    summary: >-
+      All the headers which are needed in an ajax call. Uses a module and content-block context (but these could also be
+      null) and a full context identifier for advanced operations.
+    remarks: ''
+    example: []
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'headers(id: number, cbid: number, ctx: ContextIdentifier): Record<string, string>;'
+      parameters:
+        - id: id
+          description: \_optional\_ module ID
+          type: number
+        - id: cbid
+          description: \_optional\_ content block ID
+          type: number
+        - id: ctx
+          description: \_optional\_ context information to include in the header
+          type: '<xref uid="@2sic.com/2sxc-typings!ContextIdentifier:class" />'
+      return:
+        type: 'Record&lt;string, string&gt;'
+        description: Dictionary / Record of headers
+extends: '<xref uid="@2sic.com/2sxc-typings!HasLog:class" />'

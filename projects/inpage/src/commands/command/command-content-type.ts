@@ -1,11 +1,13 @@
-﻿import { CommandNames, Commands } from '..';
+﻿import { Command, CommandContentTypeParams, CommandNames, Commands } from '..';
 import { ContextComplete } from '../../context';
 
 /**
  * import this module to commands.ts
  * @internal
  */
-Commands.add(CommandNames.contentType, 'ContentType', 'fields', true, false, {
+const cmd = Command.build(CommandNames.fields, 'ContentType', 'fields', true, false, {
+  dialog: (_) => CommandNames.fields_old_contenttype,
+
   addParamsToLink: createContentTypeParams,
 
   // only show to admin-users and in cases where we know the content-type
@@ -14,20 +16,9 @@ Commands.add(CommandNames.contentType, 'ContentType', 'fields', true, false, {
   },
 });
 
+Commands.addCommand(cmd);
+Commands.addCommand(Command.clone(cmd, CommandNames.fields_old_contenttype));
 
-/**
- * Parameters used for the command `contenttype`.
- * <br>
- * The content-type name determines what items will be loaded to manage the fields.
- * <br>
- * ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)
- */
-export interface CommandContentTypeParams {
-  /**
-   * The content-type name
-   */
-  contentType: string;
-}
 
 /**
  * @internal
