@@ -39,7 +39,8 @@ export class RenderButton extends RenderPart {
             + (btnSafe.action() ? ` sc-${btnSafe.action().name}` : '')
             + ` in-group-${groupIndex}`
             + (groupName ? ` in-group-${groupName}` : '')
-            + ' ' + rule?.ui.class
+            + ' ' + (rule?.ui.class ?? '')
+            + ' ' + (rule?.ui.classes ?? '')
             + ' ' + btnSafe.classes()
             + ' ' + btnSafe.dynamicClasses();
         cl.add('classes: ' + classes);
