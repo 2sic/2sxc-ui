@@ -1,10 +1,10 @@
+import { CmdParHlp } from '../../commands/cmd-par-hlp';
 import { IDs } from '../../constants/ids';
 import { ContextBundleToolbar } from '../../context/bundles/context-bundle-toolbar';
 import { HasLog, Insights } from '../../core';
 import { HtmlTools } from '../../html/dom-tools';
 import { RenderButton } from './render-button';
 import { RenderButtonGroups } from './render-groups';
-import { CmdParHlp } from '../../commands/cmd-par-hlp';
 
 const attrIdentifier = 'toolbar-identifier';
 
