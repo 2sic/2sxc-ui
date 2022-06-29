@@ -841,7 +841,7 @@
             {
               "kind": "EnumMember",
               "canonicalReference": "@2sic.com/2sxc-typings!CommandNames.code:member",
-              "docComment": "/**\n * `code` will execute custom javascript. <br> 🔘 This is mainly for toolbars, to add buttons with custom code. <br> 📩 [Parameters](xref:Api.Js.SxcJs.CommandCustomParams)\n */\n",
+              "docComment": "/**\n * `code` will execute custom javascript. <br> 🔘 This is mainly for toolbars, to add buttons with custom code. <br> 📩 [Parameters](xref:Api.Js.SxcJs.CommandCodeParams)\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",

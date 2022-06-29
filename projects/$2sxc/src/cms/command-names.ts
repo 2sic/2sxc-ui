@@ -113,7 +113,7 @@ export enum CommandNames {
     /**
      * `code` will execute custom javascript.
      * <br> 🔘 This is mainly for toolbars, to add buttons with custom code.
-     * <br> 📩 [Parameters](xref:Api.Js.SxcJs.CommandCustomParams)
+     * <br> 📩 [Parameters](xref:Api.Js.SxcJs.CommandCodeParams)
      */
     code = 'code',
 
