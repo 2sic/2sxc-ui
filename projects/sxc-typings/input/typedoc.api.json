@@ -323,7 +323,7 @@
         {
           "kind": "Interface",
           "canonicalReference": "@2sic.com/2sxc-typings!CommandCodeParams:interface",
-          "docComment": "/**\n * Parameters used for the command `code` on toolbars. <br> ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)\n *\n * @public\n */\n",
+          "docComment": "/**\n * Parameters used for the command `code` on toolbars (new in v14.4). <br> ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)\n *\n * @public\n */\n",
           "excerptTokens": [
             {
               "kind": "Content",
@@ -336,7 +336,7 @@
             {
               "kind": "PropertySignature",
               "canonicalReference": "@2sic.com/2sxc-typings!CommandCodeParams#call:member",
-              "docComment": "/**\n * Name of the function to call - must be available in the context. This is usually as a function window. Example: <br> If `call` is `sayHello` you need a `window.sayHello(context, event)`.\n */\n",
+              "docComment": "/**\n * Name of the function to call - must be available in the context. This is usually as a function window. Example: <br> If `call` is `sayHello` you need a `window.sayHello(params, context, event)`.\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -355,33 +355,6 @@
               "isOptional": false,
               "releaseTag": "Public",
               "name": "call",
-              "propertyTypeTokenRange": {
-                "startIndex": 1,
-                "endIndex": 2
-              }
-            },
-            {
-              "kind": "PropertySignature",
-              "canonicalReference": "@2sic.com/2sxc-typings!CommandCodeParams#customCode:member",
-              "docComment": "/**\n * **OBSOLETE - avoid using** <br> JavaScript as string containing the code to execute. This is the old V9 - it contains a function, not a name\n *\n * @deprecated\n */\n",
-              "excerptTokens": [
-                {
-                  "kind": "Content",
-                  "text": "customCode: "
-                },
-                {
-                  "kind": "Content",
-                  "text": "string"
-                },
-                {
-                  "kind": "Content",
-                  "text": ";"
-                }
-              ],
-              "isReadonly": false,
-              "isOptional": false,
-              "releaseTag": "Public",
-              "name": "customCode",
               "propertyTypeTokenRange": {
                 "startIndex": 1,
                 "endIndex": 2
@@ -1044,7 +1017,7 @@
                 },
                 {
                   "kind": "Content",
-                  "text": "\"instance-list\""
+                  "text": "\"list\""
                 }
               ],
               "releaseTag": "Public",
@@ -1191,7 +1164,7 @@
                 },
                 {
                   "kind": "Content",
-                  "text": "\"template-query\""
+                  "text": "\"query\""
                 }
               ],
               "releaseTag": "Public",
@@ -1275,7 +1248,7 @@
                 },
                 {
                   "kind": "Content",
-                  "text": "\"template-develop\""
+                  "text": "\"template\""
                 }
               ],
               "releaseTag": "Public",
@@ -1296,7 +1269,7 @@
                 },
                 {
                   "kind": "Content",
-                  "text": "\"template-settings\""
+                  "text": "\"view\""
                 }
               ],
               "releaseTag": "Public",

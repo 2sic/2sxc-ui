@@ -106,7 +106,7 @@ export declare interface CommandAddParams extends CommandContentTypeParams, Pick
 /* Excluded from this release type: CommandCode */
 
 /**
- * Parameters used for the command `code` on toolbars.
+ * Parameters used for the command `code` on toolbars (new in v14.4).
  * <br>
  * ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)
  * @public
@@ -116,17 +116,9 @@ export declare interface CommandCodeParams {
      * Name of the function to call - must be available in the context.
      * This is usually as a function window. Example:
      * <br>
-     * If `call` is `sayHello` you need a `window.sayHello(context, event)`.
+     * If `call` is `sayHello` you need a `window.sayHello(params, context, event)`.
      */
     call: string;
-    /**
-     * **OBSOLETE - avoid using**
-     * <br>
-     * JavaScript as string containing the code to execute.
-     * This is the old V9 - it contains a function, not a name
-     * @deprecated
-     */
-    customCode: string;
 }
 
 /* Excluded from this release type: CommandConfigLoader */
@@ -155,6 +147,8 @@ export declare interface CommandContentTypeParams {
  */
 export declare interface CommandCopyParams extends CommandContentTypeParams, CommandParamsEntityById {
 }
+
+/* Excluded from this release type: CommandCustomParams */
 
 /**
  * Parameters used for the command `data`.
@@ -340,7 +334,7 @@ export declare enum CommandNames {
      * <br> 📩 No params required,
      * (auto-detected from context)
      */
-    list = "instance-list",
+    list = "list",
     /* Excluded from this release type: list_old_instanceList */
     /**
      * `layout` opens the in-page dialog to change the layout of the current content.
@@ -419,7 +413,7 @@ export declare enum CommandNames {
      * <br> 📩 No params required,
      * (auto-detected from context)
      */
-    template = "template-develop",
+    template = "template",
     /* Excluded from this release type: template_old_develop */
     /**
      * `template-query` opens the pipeline/query-designer in a new window.
@@ -429,13 +423,13 @@ export declare enum CommandNames {
      * <br> 📩 No params required,
      * (auto-detected from context)
      */
-    query = "template-query",
+    query = "query",
     /* Excluded from this release type: query_old_templateQuery */
     /**
      * `template-settings` will change settings on the template currently used
      * <br> 🔐 Toolbar shows this automatically to elevated admins.
      */
-    view = "template-settings",
+    view = "view",
     /* Excluded from this release type: view_old_templateSettings */
     /**
      * `system` opens the system dialog for this zone/site.
