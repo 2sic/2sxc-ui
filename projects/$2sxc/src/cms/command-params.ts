@@ -8,6 +8,7 @@ import { TypeValue } from '../../../inpage/src/plumbing';
 export interface CommandParams {
     /** 
      * The action is used in scenarios where the command name must be included
+     * @internal - wait with publishing this, it shouldn't actually be here. we may need to create another type which includes it
      */
     action?: CommandNames;
 
