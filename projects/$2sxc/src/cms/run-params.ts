@@ -17,7 +17,6 @@ export interface RunParams {
   /**
    * The command params, like contentType, entityId etc.
    * Optional for many actions.
-   * @internal
    */
   params?: CommandParams;
 

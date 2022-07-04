@@ -26,7 +26,7 @@ export class InPageCommandJson  {
     contentType?: string;
 
     /** determines that we should use a module list */
-    useModuleList?: boolean;
+    useModuleList?: true;
 
     /** index in the list */
     sortOrder?: number;

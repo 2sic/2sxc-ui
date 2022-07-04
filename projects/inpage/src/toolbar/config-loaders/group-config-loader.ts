@@ -1,6 +1,7 @@
 ﻿import { ToolbarWip } from '.';
 import { InPageButtonJson, InPageCommandJson } from '.';
 import { ButtonGroupWip } from '.';
+import { RunParams } from '../../../../$2sxc/src/cms';
 import { CommandNames, CommandParams, Commands } from '../../commands';
 import { HasLog } from '../../core';
 import { TypeValue } from '../../plumbing';
@@ -72,8 +73,7 @@ export class ButtonGroupConfigLoader extends HasLog {
         }
 
         // first check if we already got params in the object - then we will use those, otherwise the main object
-        const realParams = (btnCommand as ButtonCommand).params
-            || InPageCommandJson.noAction(btnCommand);
+        const realParams = (btnCommand as RunParams).params || InPageCommandJson.noAction(btnCommand);
 
         const contentType = realParams.contentType;
 

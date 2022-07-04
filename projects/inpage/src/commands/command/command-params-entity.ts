@@ -21,6 +21,7 @@
  export interface CommandParamsEntityInContentBlock {
   /**
    * Determins the position of the item in the list.
+   * index was added in v14.04 to replace the `sortOrder` which had a confusing name.
    */
   index: number;
 
