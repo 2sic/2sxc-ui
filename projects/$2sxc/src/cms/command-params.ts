@@ -1,6 +1,5 @@
 ﻿import { CommandNames, ItemIdentifierGroup, ItemIdentifierSimple, CommandParamsMetadata } from '.';
 import { TypeValue } from '../../../inpage/src/plumbing';
-import { CommandParamsEntityById, CommandParamsEntity } from '../../../inpage/src/commands/command/command-params-entity';
 
 /**
  * Command parameters are handed over to a command for execution.
@@ -123,7 +122,7 @@ export interface CommandParams extends Record<string, unknown>
      * The purpose of this varies by [Command](xref:Api.Js.SxcJs.CommandNames).
      * @public
      */
-    prefill?: Record<string, TypeValue>;
+    prefill?: Record<string, boolean | string | number | Date>;
 
     /**
      * Custom Code in the previous V9 standard

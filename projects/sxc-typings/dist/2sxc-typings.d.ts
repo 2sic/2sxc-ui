@@ -1050,7 +1050,7 @@ export declare interface CommandParams extends Record<string, unknown> {
      * The purpose of this varies by [Command](xref:Api.Js.SxcJs.CommandNames).
      * @public
      */
-    prefill?: Record<string, TypeValue>;
+    prefill?: Record<string, boolean | string | number | Date>;
     /**
      * Custom Code in the previous V9 standard
      * @internal

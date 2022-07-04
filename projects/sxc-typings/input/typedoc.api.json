@@ -1700,12 +1700,12 @@
                 },
                 {
                   "kind": "Content",
-                  "text": "<string, "
+                  "text": "<string, boolean | string | number | "
                 },
                 {
                   "kind": "Reference",
-                  "text": "TypeValue",
-                  "canonicalReference": "@2sic.com/2sxc-typings!TypeValue:type"
+                  "text": "Date",
+                  "canonicalReference": "!Date:interface"
                 },
                 {
                   "kind": "Content",
