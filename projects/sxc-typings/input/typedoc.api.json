@@ -685,7 +685,7 @@
           "excerptTokens": [
             {
               "kind": "Content",
-              "text": "export declare enum CommandNames "
+              "text": "export declare const enum CommandNames "
             }
           ],
           "releaseTag": "Public",
@@ -841,7 +841,7 @@
             {
               "kind": "EnumMember",
               "canonicalReference": "@2sic.com/2sxc-typings!CommandNames.code:member",
-              "docComment": "/**\n * `code` will execute custom javascript. <br> 🔘 This is mainly for toolbars, to add buttons with custom code. <br> 📩 [Parameters](xref:Api.Js.SxcJs.CommandCodeParams)\n */\n",
+              "docComment": "/**\n * `code` will execute custom javascript. <br> 🔘 This is mainly for toolbars, to add buttons with custom code. <br> 📩 [Parameters](xref:Api.Js.SxcJs.CommandCodeParams) <br> _this used to be called `custom` and had a different setup_\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",

@@ -1,4 +1,4 @@
-import { Sxc, SxcGlobal } from "@2sic.com/2sxc-typings";
+import { Sxc, SxcGlobal } from '@2sic.com/2sxc-typings';
 
 // These are the parameters which make up the current context / state of this app.
 // It's mainly needed to ensure that the Http Service is correctly set up.
@@ -27,7 +27,7 @@ export interface ContextInfo {
 
   /**
    * Replace app name in path; replaces /app/auto/
-  */
+   */
   appNameInPath: string;
 
   /**

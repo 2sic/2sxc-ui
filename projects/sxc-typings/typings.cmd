@@ -14,6 +14,6 @@ call api-extractor run --local --verbose
 @Echo 4. Create the .ts files from the .d.ts because this is what is used by docFx
 @REM can't copy this, as the reference to the file would be off with a ".d" instead of the ts
 @REM copy index-public.d.ts index-docs.ts
-copy index-public-part.d.ts index-public-part.ts
+copy index-public.d.ts docs-public.ts
 
 @REM return 0

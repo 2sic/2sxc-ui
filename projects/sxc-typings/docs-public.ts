@@ -214,7 +214,7 @@ export declare interface CommandMetadataParams extends CommandContentTypeParams,
  * Names of commands known to 2sxc CMS - for use in toolbars and calling commands directly from code
  * @public
  */
-export declare enum CommandNames {
+export declare const enum CommandNames {
     /**
      * `add` adds another demo-item to a **list of items**.
      * It does not open the edit-dialog.
@@ -296,6 +296,7 @@ export declare enum CommandNames {
      * `code` will execute custom javascript.
      * <br> 🔘 This is mainly for toolbars, to add buttons with custom code.
      * <br> 📩 [Parameters](xref:Api.Js.SxcJs.CommandCodeParams)
+     * <br> _this used to be called `custom` and had a different setup_
      */
     code = "code",
     /* Excluded from this release type: code_old_custom */

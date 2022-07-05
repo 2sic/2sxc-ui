@@ -11,7 +11,8 @@
  * Names of commands known to 2sxc CMS - for use in toolbars and calling commands directly from code
  * @public
  */
-export enum CommandNames {
+// IMPORTANT: this must be a `const enum`, otherwise it won't work in d.ts files
+export const enum CommandNames {
     /**
      * `add` adds another demo-item to a **list of items**.
      * It does not open the edit-dialog.
@@ -114,6 +115,7 @@ export enum CommandNames {
      * `code` will execute custom javascript.
      * <br> 🔘 This is mainly for toolbars, to add buttons with custom code.
      * <br> 📩 [Parameters](xref:Api.Js.SxcJs.CommandCodeParams)
+     * <br> _this used to be called `custom` and had a different setup_
      */
     code = 'code',
 

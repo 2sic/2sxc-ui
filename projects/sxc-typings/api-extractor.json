@@ -45,7 +45,7 @@
    *
    * SUPPORTED TOKENS: <projectFolder>, <packageName>, <unscopedPackageName>
    */
-  "mainEntryPointFilePath": "./index.d.ts",
+  "mainEntryPointFilePath": "./api-extractor-index.d.ts",
 
   /**
    * A list of NPM package names whose exports should be treated as part of this package.
@@ -233,7 +233,7 @@
      * SUPPORTED TOKENS: <projectFolder>, <packageName>, <unscopedPackageName>
      * DEFAULT VALUE: ""
      */
-    "publicTrimmedFilePath": "./index-public-part.d.ts",
+    "publicTrimmedFilePath": "./index-public.d.ts",
 
     /**
      * When a declaration is trimmed, by default it will be replaced by a code comment such as
