@@ -21,5 +21,3 @@ export * from './cms';
 export * from './sxc';
 
 export * from './sxc-global';
-
-(window as any).beta = new ToolUrlObjects();
