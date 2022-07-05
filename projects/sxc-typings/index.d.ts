@@ -8,7 +8,7 @@ import { SxcGlobal } from './index-public';
 export * from "./index-public";
 
 /**
- * Make sure the code knows that $2sxc exists on window
+ * Make sure the code knows that $2sxc exists on window and globally
  */
 declare global {
   interface Window {
@@ -17,9 +17,14 @@ declare global {
      */
     $2sxc: SxcGlobal;
   }
+
+  /**
+   * The global $2sxc object / function to generate Sxc instances
+   */
+  const $2sxc: SxcGlobal;
 }
 
 /**
  * The global $2sxc object / function to generate Sxc instances
  */
-declare const $2sxc: SxcGlobal;
+ export declare const $2sxc: SxcGlobal;
