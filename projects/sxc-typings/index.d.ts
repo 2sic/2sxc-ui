@@ -23,8 +23,3 @@ declare global {
    */
   const $2sxc: SxcGlobal;
 }
-
-/**
- * The global $2sxc object / function to generate Sxc instances
- */
- export declare const $2sxc: SxcGlobal;
