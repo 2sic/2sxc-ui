@@ -1,4 +1,5 @@
 ﻿import { RunParams } from '../../../../$2sxc/src/cms';
+import { CommandParams } from '../../../../$2sxc/src/cms';
 import { RunParamsHelpers } from '../../cms/run-params-helpers';
 import { ContentBlockEditor } from '../../contentBlock/content-block-editor';
 import { renderer } from '../../contentBlock/render';
@@ -11,9 +12,8 @@ import { ButtonCommand } from '../../toolbar/config';
 import { InPageButtonJson } from '../../toolbar/config-loaders/config-formats/in-page-button';
 import { WorkflowHelper, WorkflowPhases, WorkflowStepCodeArguments } from '../../workflow';
 import { ToolbarWorkflowManager } from '../../workflow/toolbar-workflow-manager';
-import { CommandLinkGenerator } from '../command-link-generator';
-import { CommandParams } from '../../../../$2sxc/src/cms';
 import { WorkflowStep } from '../../workflow/workflow-step';
+import { CommandLinkGenerator } from '../command-link-generator';
 
 type CommandPromise<T> = Promise<T|void>;
 
@@ -75,12 +75,14 @@ export class CmsEngine extends HasLog {
 
         const origEvent = event;
         const name = cmdParams.action;
-        const contentType = cmdParams.contentType;
-        cl.add(`run command '${name}' for type ${contentType}`);
+        // 2dm 2022-07-05 #badContentTypeExtractAndRefill - we seem to extract it, just to put it back on the ButtonCommand
+        // const contentType = cmdParams.contentType;
+        // cl.add(`run command '${name}' for type ${contentType}`);
+        cl.add(`run command '${name}'`);
 
         // Toolbar API v2
-        const command = new ButtonCommand(name, contentType, cmdParams);
-        const newButtonConfig = new Button(command, command.name);
+        const btnCommand = new ButtonCommand(name, /* contentType, */ cmdParams);
+        const newButtonConfig = new Button(btnCommand, btnCommand.name);
 
         // merge conf & settings, but settings has higher priority
         const button: Button = {
@@ -124,8 +126,7 @@ export class CmsEngine extends HasLog {
         } else {
             // if more than just a UI-action, then it needs to be sure the content-group is created first
             cl.add('command might change data, wrap in pre-flight to ensure content-block');
-            finalPromise = wrapperPromise.then(
-                (wfArgs) => WorkflowHelper.isCancelled(wfArgs)
+            finalPromise = wrapperPromise.then((wfArgs) => WorkflowHelper.isCancelled(wfArgs)
                     ? Promise.resolve<T>(null)
                     : ContentBlockEditor.singleton()
                         .prepareToAddContent(context, cmdParams.useModuleList)

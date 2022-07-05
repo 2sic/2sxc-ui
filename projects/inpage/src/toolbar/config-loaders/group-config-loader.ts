@@ -75,7 +75,8 @@ export class ButtonGroupConfigLoader extends HasLog {
         // first check if we already got params in the object - then we will use those, otherwise the main object
         const realParams = (btnCommand as RunParams).params || InPageCommandJson.noAction(btnCommand);
 
-        const contentType = realParams.contentType;
+        // 2dm 2022-07-05 #badContentTypeExtractAndRefill - we seem to extract it, just to put it back on the ButtonCommand
+        // const contentType = realParams.contentType;
 
         // if the button belongs to a content-item, move the specs up to the item into the settings-object
         btnCommand = this.toolbar.command.updateToV9(btnCommand);
@@ -83,7 +84,7 @@ export class ButtonGroupConfigLoader extends HasLog {
         // parameters adapter from v1 to v2
         const params = { ...realParams, ...sharedParams };
         // Toolbar API v2
-        const command = new ButtonCommand(name, contentType, params);
+        const command = new ButtonCommand(name, /* contentType, */ params);
         let newButtonConfig = new Button(command, identifier);
 
         // settings adapter from v1 to v2
