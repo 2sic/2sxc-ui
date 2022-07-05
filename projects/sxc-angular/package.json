@@ -6,6 +6,8 @@
     "dsa-copy:dist": "cpx \"dist/sxc-angular/{,**/}*.**.*\" \"../../../app-dnn-sxc-angular-dev/node_modules/@2sic.com/dnn-sxc-angular\" -w",
     "dsa-copy:2dm": "cpx \"dist/sxc-angular/{,**/}*.**.*\" \"../../../app-Directory/node_modules/@2sic.com/dnn-sxc-angular\" -w -v",
     "dsa-copy:template-ng11": "cpx \"dist/sxc-angular/{,**/}*.*\" \"/Projects/2sxc/app-template-angular/ng/node_modules/@2sic.com/dnn-sxc-angular\" -v",
+    "pub-dry": "cd dist/sxc-angular && npm publish --dry-run",
+    "pub": "cd dist/sxc-angular && npm publish",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
@@ -25,7 +27,7 @@
     "zone.js": "~0.11.6"
   },
   "devDependencies": {
-    "@2sic.com/2sxc-typings": "^14.2.3",
+    "@2sic.com/2sxc-typings": "^14.7.1",
     "@angular-devkit/build-angular": "^13.0.0",
     "@angular/cli": "^13.0.0",
     "@angular/compiler-cli": "^13.0.0",

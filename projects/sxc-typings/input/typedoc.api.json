@@ -685,7 +685,7 @@
           "excerptTokens": [
             {
               "kind": "Content",
-              "text": "export declare enum CommandNames "
+              "text": "export declare const enum CommandNames "
             }
           ],
           "releaseTag": "Public",
@@ -841,7 +841,7 @@
             {
               "kind": "EnumMember",
               "canonicalReference": "@2sic.com/2sxc-typings!CommandNames.code:member",
-              "docComment": "/**\n * `code` will execute custom javascript. <br> 🔘 This is mainly for toolbars, to add buttons with custom code. <br> 📩 [Parameters](xref:Api.Js.SxcJs.CommandCodeParams)\n */\n",
+              "docComment": "/**\n * `code` will execute custom javascript. <br> 🔘 This is mainly for toolbars, to add buttons with custom code. <br> 📩 [Parameters](xref:Api.Js.SxcJs.CommandCodeParams) <br> _this used to be called `custom` and had a different setup_\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -1394,11 +1394,20 @@
         {
           "kind": "Interface",
           "canonicalReference": "@2sic.com/2sxc-typings!CommandParams:interface",
-          "docComment": "/**\n * Command parameters are handed over to a command for execution\n *\n * @public\n */\n",
+          "docComment": "/**\n * Command parameters are handed over to a command for execution. It contains all possible combinations of parameters that can be used in a command.\n *\n * We will try to improve how this is documented, but ATM it just has all parameters, even though you may need none, or just a few.\n *\n * _Note: For your specific commands, you can also pass other parameters._\n *\n * **Important for the docs**\n *\n * Most properties are actually not visible (you will get them in the types though). So actually you will usually create one of these: * [](xref:Api.Js.SxcJs.CommandParamsEntityById) * [](xref:Api.Js.SxcJs.CommandParamsEntityInContentBlock) * [](xref:Api.Js.SxcJs.CommandParamsEntityInList) * [](xref:Api.Js.SxcJs.CommandAddParams) * [](xref:Api.Js.SxcJs.CommandAddExistingParams) * [](xref:Api.Js.SxcJs.CommandDataParams) * [](xref:Api.Js.SxcJs.CommandCopyParams) * [](xref:Api.Js.SxcJs.CommandCodeParams) * [](xref:Api.Js.SxcJs.CommandDeleteParams) * [](xref:Api.Js.SxcJs.CommandMetadataParams) * [](xref:Api.Js.SxcJs.CommandNewParams)\n *\n * Because of this, most of the properties below are NOT documented, as their purpose can change depending on the command used.\n *\n * @public\n */\n",
           "excerptTokens": [
             {
               "kind": "Content",
-              "text": "export interface CommandParams "
+              "text": "export interface CommandParams extends "
+            },
+            {
+              "kind": "Reference",
+              "text": "Record",
+              "canonicalReference": "!Record:type"
+            },
+            {
+              "kind": "Content",
+              "text": "<string, unknown> "
             }
           ],
           "releaseTag": "Public",
@@ -1406,17 +1415,16 @@
           "members": [
             {
               "kind": "PropertySignature",
-              "canonicalReference": "@2sic.com/2sxc-typings!CommandParams#action:member",
-              "docComment": "/**\n * The action is used in scenarios where the command name must be included\n */\n",
+              "canonicalReference": "@2sic.com/2sxc-typings!CommandParams#call:member",
+              "docComment": "/**\n * The purpose of this varies by [Command](xref:Api.Js.SxcJs.CommandNames).\n *\n * @public\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
-                  "text": "action?: "
+                  "text": "call?: "
                 },
                 {
-                  "kind": "Reference",
-                  "text": "CommandNames",
-                  "canonicalReference": "@2sic.com/2sxc-typings!CommandNames:enum"
+                  "kind": "Content",
+                  "text": "string"
                 },
                 {
                   "kind": "Content",
@@ -1426,14 +1434,358 @@
               "isReadonly": false,
               "isOptional": true,
               "releaseTag": "Public",
-              "name": "action",
+              "name": "call",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              }
+            },
+            {
+              "kind": "PropertySignature",
+              "canonicalReference": "@2sic.com/2sxc-typings!CommandParams#contentType:member",
+              "docComment": "/**\n * The purpose of this varies by [Command](xref:Api.Js.SxcJs.CommandNames).\n *\n * @public\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "contentType?: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "string"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isReadonly": false,
+              "isOptional": true,
+              "releaseTag": "Public",
+              "name": "contentType",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              }
+            },
+            {
+              "kind": "PropertySignature",
+              "canonicalReference": "@2sic.com/2sxc-typings!CommandParams#entityGuid:member",
+              "docComment": "/**\n * The purpose of this varies by [Command](xref:Api.Js.SxcJs.CommandNames).\n *\n * @public\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "entityGuid?: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "string"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isReadonly": false,
+              "isOptional": true,
+              "releaseTag": "Public",
+              "name": "entityGuid",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              }
+            },
+            {
+              "kind": "PropertySignature",
+              "canonicalReference": "@2sic.com/2sxc-typings!CommandParams#entityId:member",
+              "docComment": "/**\n * The purpose of this varies by [Command](xref:Api.Js.SxcJs.CommandNames).\n *\n * @public\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "entityId?: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "number"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isReadonly": false,
+              "isOptional": true,
+              "releaseTag": "Public",
+              "name": "entityId",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              }
+            },
+            {
+              "kind": "PropertySignature",
+              "canonicalReference": "@2sic.com/2sxc-typings!CommandParams#entityTitle:member",
+              "docComment": "/**\n * The purpose of this varies by [Command](xref:Api.Js.SxcJs.CommandNames).\n *\n * @public\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "entityTitle?: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "string"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isReadonly": false,
+              "isOptional": true,
+              "releaseTag": "Public",
+              "name": "entityTitle",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              }
+            },
+            {
+              "kind": "PropertySignature",
+              "canonicalReference": "@2sic.com/2sxc-typings!CommandParams#fields:member",
+              "docComment": "/**\n * The purpose of this varies by [Command](xref:Api.Js.SxcJs.CommandNames).\n *\n * @public\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "fields?: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "string"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isReadonly": false,
+              "isOptional": true,
+              "releaseTag": "Public",
+              "name": "fields",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              }
+            },
+            {
+              "kind": "PropertySignature",
+              "canonicalReference": "@2sic.com/2sxc-typings!CommandParams#filters:member",
+              "docComment": "/**\n * The purpose of this varies by [Command](xref:Api.Js.SxcJs.CommandNames).\n *\n * @public\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "filters?: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "string"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isReadonly": false,
+              "isOptional": true,
+              "releaseTag": "Public",
+              "name": "filters",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              }
+            },
+            {
+              "kind": "PropertySignature",
+              "canonicalReference": "@2sic.com/2sxc-typings!CommandParams#index:member",
+              "docComment": "/**\n * The purpose of this varies by [Command](xref:Api.Js.SxcJs.CommandNames).\n *\n * @public\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "index?: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "number"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isReadonly": false,
+              "isOptional": true,
+              "releaseTag": "Public",
+              "name": "index",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              }
+            },
+            {
+              "kind": "PropertySignature",
+              "canonicalReference": "@2sic.com/2sxc-typings!CommandParams#metadata:member",
+              "docComment": "/**\n * The purpose of this varies by [Command](xref:Api.Js.SxcJs.CommandNames).\n *\n * @public\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "metadata?: "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "CommandParamsMetadata",
+                  "canonicalReference": "@2sic.com/2sxc-typings!CommandParamsMetadata:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isReadonly": false,
+              "isOptional": true,
+              "releaseTag": "Public",
+              "name": "metadata",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              }
+            },
+            {
+              "kind": "PropertySignature",
+              "canonicalReference": "@2sic.com/2sxc-typings!CommandParams#parent:member",
+              "docComment": "/**\n * The purpose of this varies by [Command](xref:Api.Js.SxcJs.CommandNames).\n *\n * @public\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "parent?: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "string"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isReadonly": false,
+              "isOptional": true,
+              "releaseTag": "Public",
+              "name": "parent",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              }
+            },
+            {
+              "kind": "PropertySignature",
+              "canonicalReference": "@2sic.com/2sxc-typings!CommandParams#prefill:member",
+              "docComment": "/**\n * The purpose of this varies by [Command](xref:Api.Js.SxcJs.CommandNames).\n *\n * @public\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "prefill?: "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "Record",
+                  "canonicalReference": "!Record:type"
+                },
+                {
+                  "kind": "Content",
+                  "text": "<string, boolean | string | number | "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "Date",
+                  "canonicalReference": "!Date:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": ">"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isReadonly": false,
+              "isOptional": true,
+              "releaseTag": "Public",
+              "name": "prefill",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 5
+              }
+            },
+            {
+              "kind": "PropertySignature",
+              "canonicalReference": "@2sic.com/2sxc-typings!CommandParams#title:member",
+              "docComment": "/**\n * The purpose of this varies by [Command](xref:Api.Js.SxcJs.CommandNames).\n *\n * @public\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "title?: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "string"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isReadonly": false,
+              "isOptional": true,
+              "releaseTag": "Public",
+              "name": "title",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              }
+            },
+            {
+              "kind": "PropertySignature",
+              "canonicalReference": "@2sic.com/2sxc-typings!CommandParams#useModuleList:member",
+              "docComment": "/**\n * The purpose of this varies by [Command](xref:Api.Js.SxcJs.CommandNames).\n *\n * @public\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "useModuleList?: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "true"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isReadonly": false,
+              "isOptional": true,
+              "releaseTag": "Public",
+              "name": "useModuleList",
               "propertyTypeTokenRange": {
                 "startIndex": 1,
                 "endIndex": 2
               }
             }
           ],
-          "extendsTokenRanges": []
+          "extendsTokenRanges": [
+            {
+              "startIndex": 1,
+              "endIndex": 2
+            }
+          ]
         },
         {
           "kind": "Interface",
@@ -1549,7 +1901,7 @@
             {
               "kind": "PropertySignature",
               "canonicalReference": "@2sic.com/2sxc-typings!CommandParamsEntityInContentBlock#index:member",
-              "docComment": "/**\n * Determins the position of the item in the list.\n */\n",
+              "docComment": "/**\n * Determins the position of the item in the list. index was added in v14.04 to replace the `sortOrder` which had a confusing name.\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -3555,6 +3907,34 @@
               "isOptional": true,
               "releaseTag": "Public",
               "name": "event",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              }
+            },
+            {
+              "kind": "PropertySignature",
+              "canonicalReference": "@2sic.com/2sxc-typings!RunParams#params:member",
+              "docComment": "/**\n * The command params, like contentType, entityId etc. Optional for many actions.\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "params?: "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "CommandParams",
+                  "canonicalReference": "@2sic.com/2sxc-typings!CommandParams:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isReadonly": false,
+              "isOptional": true,
+              "releaseTag": "Public",
+              "name": "params",
               "propertyTypeTokenRange": {
                 "startIndex": 1,
                 "endIndex": 2

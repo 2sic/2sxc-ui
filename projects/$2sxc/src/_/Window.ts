@@ -5,15 +5,20 @@ import { SxcGlobal } from '../sxc-global';
  * @public
  */
 declare global {
-    interface Window {
-        /**
-         * The global $2sxc object / function to generate Sxc instances
-         */
-        $2sxc: SxcGlobal;
+  interface Window {
+      /**
+       * The global $2sxc object / function to generate Sxc instances
+       */
+      $2sxc: SxcGlobal;
 
-        /** @internal */
-        $: any & DnnJQueryExtensions;
-    }
+      /** @internal */
+      $: any & DnnJQueryExtensions;
+  }
+
+  /**
+   * The global $2sxc object / function to generate Sxc instances
+   */
+  const $2sxc: SxcGlobal;
 }
 
 /** @internal */

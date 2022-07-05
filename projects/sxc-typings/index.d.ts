@@ -1,11 +1,25 @@
-// type definitions for 2sxc
-// project: 2sxc typings
-// definitions by: Daniel Mettler, 2sic <https://2sxc.org/>
+/*
+  Special custom d.ts file
+  this has the definition of the augmented window object, because the api exporter doesn't support this.
+*/
 
-// This file must be manually maintained, it's used by the api-extractor to start
+import { SxcGlobal } from './index-public';
 
-export * from './parts/dist/$2sxc/src';
+export * from "./index-public";
 
-export * from './parts/dist/core';
+/**
+ * Make sure the code knows that $2sxc exists on window and globally
+ */
+declare global {
+  interface Window {
+    /**
+     * The global $2sxc object / function to generate Sxc instances
+     */
+    $2sxc: SxcGlobal;
+  }
 
-export * from './parts/dist/inpage/src';
+  /**
+   * The global $2sxc object / function to generate Sxc instances
+   */
+  const $2sxc: SxcGlobal;
+}

@@ -1,5 +1,6 @@
 ﻿import { ToolbarConfigLoader } from '.';
-import { InPageCommandJson, InPageCommandJsonWithTooMuchInfo } from '.';
+import { InPageCommandJsonWithTooMuchInfo } from '.';
+import { CommandParams } from '../../../../$2sxc/src/cms';
 import { HasLog } from '../../core';
 
 /**
@@ -16,23 +17,24 @@ export class CommandConfigLoader extends HasLog {
      * because the target item could be specified directly, or in a complex internal object called entity
      * @param actDef
      */
-    updateToV9(actDef: InPageCommandJsonWithTooMuchInfo): InPageCommandJson {
+    updateToV9(actDef: InPageCommandJsonWithTooMuchInfo): CommandParams {
 
         // doesn't have the pre-V9 properties, so we're fine
         if (!actDef.entity || !actDef.entity._2sxcEditInformation)
-            return actDef as InPageCommandJson;
+            return actDef as CommandParams;
 
         const editInfo = actDef.entity._2sxcEditInformation;
 
         // move up sortOrder property and set useModuleList
-        actDef.useModuleList = (editInfo.sortOrder !== undefined); // has sort-order, so use list
+        if (editInfo.sortOrder !== undefined)
+          actDef.useModuleList = true; // has sort-order, so use list
         if (editInfo.sortOrder !== undefined)  actDef.sortOrder = editInfo.sortOrder;
 
         // move up entityId and clean-up the old 'entity' property
         if (actDef.entity.EntityId !== undefined) actDef.entityId = actDef.entity.EntityId;
         delete actDef.entity;
 
-        return actDef;
+        return actDef as unknown as CommandParams;
     }
 
 }

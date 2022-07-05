@@ -214,7 +214,7 @@ export declare interface CommandMetadataParams extends CommandContentTypeParams,
  * Names of commands known to 2sxc CMS - for use in toolbars and calling commands directly from code
  * @public
  */
-export declare enum CommandNames {
+export declare const enum CommandNames {
     /**
      * `add` adds another demo-item to a **list of items**.
      * It does not open the edit-dialog.
@@ -296,6 +296,7 @@ export declare enum CommandNames {
      * `code` will execute custom javascript.
      * <br> 🔘 This is mainly for toolbars, to add buttons with custom code.
      * <br> 📩 [Parameters](xref:Api.Js.SxcJs.CommandCodeParams)
+     * <br> _this used to be called `custom` and had a different setup_
      */
     code = "code",
     /* Excluded from this release type: code_old_custom */
@@ -463,36 +464,109 @@ export declare interface CommandNewParams extends CommandContentTypeParams, Part
 }
 
 /**
- * Command parameters are handed over to a command for execution
+ * Command parameters are handed over to a command for execution.
+ * It contains all possible combinations of parameters that can be used in a command.
+ *
+ * We will try to improve how this is documented, but ATM it just has all parameters,
+ * even though you may need none, or just a few.
+ *
+ * _Note: For your specific commands, you can also pass other parameters._
+ *
+ * **Important for the docs**
+ *
+ * Most properties are actually not visible (you will get them in the types though).
+ * So actually you will usually create one of these:
+ * * [](xref:Api.Js.SxcJs.CommandParamsEntityById)
+ * * [](xref:Api.Js.SxcJs.CommandParamsEntityInContentBlock)
+ * * [](xref:Api.Js.SxcJs.CommandParamsEntityInList)
+ * * [](xref:Api.Js.SxcJs.CommandAddParams)
+ * * [](xref:Api.Js.SxcJs.CommandAddExistingParams)
+ * * [](xref:Api.Js.SxcJs.CommandDataParams)
+ * * [](xref:Api.Js.SxcJs.CommandCopyParams)
+ * * [](xref:Api.Js.SxcJs.CommandCodeParams)
+ * * [](xref:Api.Js.SxcJs.CommandDeleteParams)
+ * * [](xref:Api.Js.SxcJs.CommandMetadataParams)
+ * * [](xref:Api.Js.SxcJs.CommandNewParams)
+ *
+ * Because of this, most of the properties below are NOT documented, as their purpose can change depending on the command used.
  * @public
  */
-export declare interface CommandParams {
-    /**
-     * The action is used in scenarios where the command name must be included
-     */
-    action?: CommandNames;
+export declare interface CommandParams extends Record<string, unknown> {
+    /* Excluded from this release type: action */
     /* Excluded from this release type: items */
     /* Excluded from this release type: mode */
-    /* Excluded from this release type: contentType */
+    /**
+     * The purpose of this varies by [Command](xref:Api.Js.SxcJs.CommandNames).
+     * @public
+     */
+    contentType?: string;
     /* Excluded from this release type: contentTypeName */
     /* Excluded from this release type: pipelineId */
-    /* Excluded from this release type: filters */
+    /**
+     * The purpose of this varies by [Command](xref:Api.Js.SxcJs.CommandNames).
+     * @public
+     */
+    filters?: string;
     /* Excluded from this release type: dialog */
     /* Excluded from this release type: sortOrder */
-    /* Excluded from this release type: index */
-    /* Excluded from this release type: entityId */
-    /* Excluded from this release type: entityGuid */
-    /* Excluded from this release type: entityTitle */
-    /* Excluded from this release type: title */
-    /* Excluded from this release type: useModuleList */
-    /* Excluded from this release type: metadata */
+    /**
+     * The purpose of this varies by [Command](xref:Api.Js.SxcJs.CommandNames).
+     * @public
+     */
+    index?: number;
+    /**
+     * The purpose of this varies by [Command](xref:Api.Js.SxcJs.CommandNames).
+     * @public
+     */
+    entityId?: number;
+    /**
+     * The purpose of this varies by [Command](xref:Api.Js.SxcJs.CommandNames).
+     * @public
+     */
+    entityGuid?: string;
+    /**
+     * The purpose of this varies by [Command](xref:Api.Js.SxcJs.CommandNames).
+     * @public
+     */
+    entityTitle?: string;
+    /**
+     * The purpose of this varies by [Command](xref:Api.Js.SxcJs.CommandNames).
+     * @public
+     */
+    title?: string;
+    /**
+     * The purpose of this varies by [Command](xref:Api.Js.SxcJs.CommandNames).
+     * @public
+     */
+    useModuleList?: true;
+    /**
+     * The purpose of this varies by [Command](xref:Api.Js.SxcJs.CommandNames).
+     * @public
+     */
+    metadata?: CommandParamsMetadata;
     /* Excluded from this release type: isPublished */
-    /* Excluded from this release type: prefill */
+    /**
+     * The purpose of this varies by [Command](xref:Api.Js.SxcJs.CommandNames).
+     * @public
+     */
+    prefill?: Record<string, boolean | string | number | Date>;
     /* Excluded from this release type: customCode */
-    /* Excluded from this release type: call */
+    /**
+     * The purpose of this varies by [Command](xref:Api.Js.SxcJs.CommandNames).
+     * @public
+     */
+    call?: string;
     /* Excluded from this release type: apps */
-    /* Excluded from this release type: parent */
-    /* Excluded from this release type: fields */
+    /**
+     * The purpose of this varies by [Command](xref:Api.Js.SxcJs.CommandNames).
+     * @public
+     */
+    parent?: string;
+    /**
+     * The purpose of this varies by [Command](xref:Api.Js.SxcJs.CommandNames).
+     * @public
+     */
+    fields?: string;
     /* Excluded from this release type: isshared */
 }
 
@@ -527,6 +601,7 @@ export declare interface CommandParamsEntityById {
 export declare interface CommandParamsEntityInContentBlock {
     /**
      * Determins the position of the item in the list.
+     * index was added in v14.04 to replace the `sortOrder` which had a confusing name.
      */
     index: number;
     /**
@@ -1130,7 +1205,11 @@ export declare interface RunParams {
      * Required.
      */
     action?: CommandNames;
-    /* Excluded from this release type: params */
+    /**
+     * The command params, like contentType, entityId etc.
+     * Optional for many actions.
+     */
+    params?: CommandParams;
     /**
      * The event which triggered this command - sometimes useful internally further use.
      * Optional in most cases, but in some cases it will improve the behavior of the code.

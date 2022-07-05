@@ -1,6 +1,6 @@
-# 2sxc TypeScript Typings
+# 2sxc TypeScript Types / Typings
 
-This are the public typings for NPM, which should help you write type-safe code when working with the core 2sxc JavaScript APIs.
+This are the public types for NPM, which should help you write type-safe code when working with the core 2sxc JavaScript APIs.
 
 Use this for your DNN/2sxc TypeScript and to create Angular, React, Vue etc. adaptors. 
 

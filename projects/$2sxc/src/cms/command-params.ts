@@ -2,73 +2,127 @@
 import { TypeValue } from '../../../inpage/src/plumbing';
 
 /**
- * Command parameters are handed over to a command for execution
+ * Command parameters are handed over to a command for execution.
+ * It contains all possible combinations of parameters that can be used in a command. 
+ * 
+ * We will try to improve how this is documented, but ATM it just has all parameters, 
+ * even though you may need none, or just a few. 
+ * 
+ * _Note: For your specific commands, you can also pass other parameters._
+ * 
+ * **Important for the docs**
+ * 
+ * Most properties are actually not visible (you will get them in the types though).
+ * So actually you will usually create one of these:
+ * * [](xref:Api.Js.SxcJs.CommandParamsEntityById)
+ * * [](xref:Api.Js.SxcJs.CommandParamsEntityInContentBlock)
+ * * [](xref:Api.Js.SxcJs.CommandParamsEntityInList)
+ * * [](xref:Api.Js.SxcJs.CommandAddParams)
+ * * [](xref:Api.Js.SxcJs.CommandAddExistingParams)
+ * * [](xref:Api.Js.SxcJs.CommandDataParams)
+ * * [](xref:Api.Js.SxcJs.CommandCopyParams)
+ * * [](xref:Api.Js.SxcJs.CommandCodeParams)
+ * * [](xref:Api.Js.SxcJs.CommandDeleteParams)
+ * * [](xref:Api.Js.SxcJs.CommandMetadataParams)
+ * * [](xref:Api.Js.SxcJs.CommandNewParams)
+ * 
+ * Because of this, most of the properties below are NOT documented, as their purpose can change depending on the command used. 
  * @public
  */
-export interface CommandParams {
+export interface CommandParams extends Record<string, unknown>
+  // We cannot extend from the real parameters, because this won't make it into the documentation
+  // extends Partial<CommandParamsEntityById>, Partial<CommandParamsEntity>
+  {
     /** 
      * The action is used in scenarios where the command name must be included
+     * @internal - wait with publishing this, it shouldn't actually be here. we may need to create another type which includes it
      */
     action?: CommandNames;
 
     /** @internal */
     items?: Array<ItemIdentifierSimple | ItemIdentifierGroup>;
-    /** @internal */
+
+    /** 
+     * Special change of dialogs, for example to change the edit-dialog into a new-dialog. 
+     * @internal - not sure how this matches / replaces dialog, probably internal only
+     */
     mode?: string;
 
     // both contentType and contentTypeName were used historically, so both variations may exist in Razor templaets
-    /** @internal */
+    /** 
+     * The purpose of this varies by [Command](xref:Api.Js.SxcJs.CommandNames).
+     * @public
+     */
     contentType?: string;
-    /** @internal */
+    /** @internal old */
     contentTypeName?: string;
 
     /** @internal */
     pipelineId?: number;
-    /** @internal */
+    /** 
+     * The purpose of this varies by [Command](xref:Api.Js.SxcJs.CommandNames).
+     * @public
+     */
     filters?: string;
     /** @internal */
     dialog?: string;
 
     /** 
      * @internal 
-     * @deprecated but probably still in use
+     * @deprecated but still in use
      */
     sortOrder?: number;
 
     /** 
-     * Position in a list (content-block or field of another entity)
-     * index was added in v14.04 to replace the `sortOrder` which had a confusing name. 
-     * @internal
+     * The purpose of this varies by [Command](xref:Api.Js.SxcJs.CommandNames).
+     * @public
      */
     index?: number;
 
-    /** @internal */
+    /** 
+     * The purpose of this varies by [Command](xref:Api.Js.SxcJs.CommandNames).
+     * @public
+     */
     entityId?: number;
 
-    /**
-     * The guid - for people creating custom toolbars before 10.27 or automatically added since 10.27 
-     * @internal
+    /** 
+     * The purpose of this varies by [Command](xref:Api.Js.SxcJs.CommandNames).
+     * @public
      */
     entityGuid?: string;
 
-    /**
-     * The manually added title from before 10.27 - automatically enabled the delete-button
-     * @internal
+    /** 
+     * The purpose of this varies by [Command](xref:Api.Js.SxcJs.CommandNames).
+     * @public
      */
     entityTitle?: string;
 
-    /** @internal */
+    /** 
+     * The purpose of this varies by [Command](xref:Api.Js.SxcJs.CommandNames).
+     * @public
+     */
     title?: string;
 
-    /** @internal */
-    useModuleList?: boolean;
-    /** @internal */
+    /** 
+     * The purpose of this varies by [Command](xref:Api.Js.SxcJs.CommandNames).
+     * @public
+     */
+    useModuleList?: true;
+
+    /** 
+     * The purpose of this varies by [Command](xref:Api.Js.SxcJs.CommandNames).
+     * @public
+     */
     metadata?: CommandParamsMetadata;
 
     /** @internal */
     isPublished?: boolean;
-    /** @internal */
-    prefill?: Record<string, TypeValue>;
+
+    /** 
+     * The purpose of this varies by [Command](xref:Api.Js.SxcJs.CommandNames).
+     * @public
+     */
+    prefill?: Record<string, boolean | string | number | Date>;
 
     /**
      * Custom Code in the previous V9 standard
@@ -76,9 +130,9 @@ export interface CommandParams {
      */
     customCode?: string;
 
-    /**
-     * Custom Code function name only in the new V10.27 standard
-     * @internal
+    /** 
+     * The purpose of this varies by [Command](xref:Api.Js.SxcJs.CommandNames).
+     * @public
      */
     call?: string;
 
@@ -89,14 +143,14 @@ export interface CommandParams {
      */
     apps?: string;
 
-    /**
-     * Experimental in 10.27
-     * @internal
+    /** 
+     * The purpose of this varies by [Command](xref:Api.Js.SxcJs.CommandNames).
+     * @public
      */
     parent?: string;
-    /**
-     * Experimental in 10.27
-     * @internal
+    /** 
+     * The purpose of this varies by [Command](xref:Api.Js.SxcJs.CommandNames).
+     * @public
      */
     fields?: string;
 

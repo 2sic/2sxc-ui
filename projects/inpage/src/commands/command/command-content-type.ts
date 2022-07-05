@@ -1,4 +1,4 @@
-﻿import { Command, CommandContentTypeParams, CommandNames, Commands } from '..';
+﻿import { Command, CommandContentTypeParams, CommandNames, CommandParams, Commands } from '..';
 import { ContextComplete } from '../../context';
 
 /**
@@ -23,7 +23,7 @@ Commands.addCommand(Command.clone(cmd, CommandNames.fields_old_contenttype));
 /**
  * @internal
  */
-export function createContentTypeParams(context: ContextComplete) {
+export function createContentTypeParams(context: ContextComplete): { contentType: string } {
   const result: CommandContentTypeParams = {
     contentType: context.button.command.params.contentType
     || context.contentBlock.contentTypeId,

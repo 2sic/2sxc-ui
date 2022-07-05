@@ -16,8 +16,7 @@ export interface RunParams {
 
   /**
    * The command params, like contentType, entityId etc.
-   * Optional for many actions, but can themselves also contain the property `action`, in which case action can be ommited.
-   * @internal
+   * Optional for many actions.
    */
   params?: CommandParams;
 
