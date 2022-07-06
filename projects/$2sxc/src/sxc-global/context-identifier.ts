@@ -71,4 +71,13 @@ export class ContextIdentifier {
     throw msg;
   }
   
+  /**
+   * Create a string-id to identify in a cache. 
+   * @param ctx 
+   * @returns 
+   */
+  static toCacheKey(ctx: ContextIdentifier): string {
+    this.ensureCompleteOrThrow(ctx);
+    return `${ctx.zoneId}/${ctx.appId}/${ctx.pageId}/${ctx.moduleId}/${ctx.blockId}`;
+  }
 }
