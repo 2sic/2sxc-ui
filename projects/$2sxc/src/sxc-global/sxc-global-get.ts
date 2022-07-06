@@ -31,10 +31,14 @@ export function $2sxcGet(id: number | ContextIdentifier | HTMLElement | Sxc, cbi
         id = ctx.moduleId ?? ctx.zoneId * 100000 + ctx.appId;
     } else if (id instanceof HTMLElement && id.matches(toolbarSelector) && !id.closest(sxcDivsSelector)) {
         // for toolbars that are not inside 2sxc modules (e.g. in skin)
-        const contextAttribute = id.getAttribute('sxc-context');
-        var ctxFromAttribute = JSON.parse(contextAttribute);
-        return $2sxcGet(ctxFromAttribute);
-    } else if (typeof id === 'object') {
+        const contextAttr = 'sxc-context';
+        const contextAttribute = id.getAttribute(contextAttr);
+        var ctxTlbAttribute = JSON.parse(contextAttribute);
+        if (ctxTlbAttribute == null) throw new Error(`Toolbar outside of module without ${contextAttr} attribute found.`);
+        return $2sxcGet(ctxTlbAttribute);
+    } 
+    // HTMLElement or anything else, try to auto-find...
+    if (typeof id === 'object') {
         // if it's a dom-element, use auto-find
         const idTuple = autoFind(id);
         id = idTuple[0];
@@ -56,6 +60,7 @@ export function $2sxcGet(id: number | ContextIdentifier | HTMLElement | Sxc, cbi
 }
 
 function autoFind(domElement: HTMLElement): [number, number] {
+debugger;
     const containerTag = domElement.closest('.sc-content-block');
     if (!containerTag) return null;
     const iid = containerTag.getAttribute('data-cb-instance');
