@@ -24,18 +24,21 @@ export function $2sxcGet(id: number | ContextIdentifier | HTMLElement | Sxc, cbi
     if (Sxc.is(id)) return id;
 
     // check if it's a context identifier
-    let ctxId: ContextIdentifier = null;
+    let ctx: ContextIdentifier = null;
     if (ContextIdentifier.is(id)) {
-        id = ContextIdentifier.ensureCompleteOrThrow(id);
-        ctxId = id;
-        // create a fake id, based on zone and app because this is used to identify the object in the cache
-        id = id.zoneId * 100000 + id.appId;
+        ctx = ContextIdentifier.ensureCompleteOrThrow(id);
+        // get moduleId or create fake, based on zone and app because this is used to identify the object in the cache
+        id = ctx.moduleId ?? ctx.zoneId * 100000 + ctx.appId;
     } else if (id instanceof HTMLElement && id.matches(toolbarSelector) && !id.closest(sxcDivsSelector)) {
         // for toolbars that are not inside 2sxc modules (e.g. in skin)
-        const contextAttribute = id.getAttribute('sxc-context');
-        ctxId = JSON.parse(contextAttribute);
-        return $2sxcGet(ctxId);
-    } else if (typeof id === 'object') {
+        const contextAttr = 'sxc-context';
+        const contextAttribute = id.getAttribute(contextAttr);
+        var ctxTlbAttribute = JSON.parse(contextAttribute);
+        if (ctxTlbAttribute == null) throw new Error(`Toolbar outside of module without ${contextAttr} attribute found.`);
+        return $2sxcGet(ctxTlbAttribute);
+    } 
+    // HTMLElement or anything else, try to auto-find...
+    if (typeof id === 'object') {
         // if it's a dom-element, use auto-find
         const idTuple = autoFind(id);
         id = idTuple[0];
@@ -44,7 +47,7 @@ export function $2sxcGet(id: number | ContextIdentifier | HTMLElement | Sxc, cbi
 
     // if content-block is unknown, use id of module, and create an ID in the cache
     if (!cbid) cbid = id;
-    const cacheKey = id + ':' + cbid;
+    const cacheKey = ctx != null ? ContextIdentifier.toCacheKey(ctx) : id + ':' + cbid;
 
     // either get the cached controller from previous calls, or create a new one
     if ($2sxc._controllers[cacheKey]) {
@@ -52,15 +55,12 @@ export function $2sxcGet(id: number | ContextIdentifier | HTMLElement | Sxc, cbi
         return $2sxc._controllers[cacheKey];
     }
 
-    // 2022-06-01 2dm disabled, believe this is for the old .data
-    // not found, so also init the data-cache in case it's ever needed
-    // if (!$2sxc._data[cacheKey]) $2sxc._data[cacheKey] = {};
-
     return ($2sxc._controllers[cacheKey]
-        = new Sxc(id, cbid, cacheKey, $2sxc, ctxId));
+        = new Sxc(id, cbid, cacheKey, $2sxc, ctx));
 }
 
 function autoFind(domElement: HTMLElement): [number, number] {
+debugger;
     const containerTag = domElement.closest('.sc-content-block');
     if (!containerTag) return null;
     const iid = containerTag.getAttribute('data-cb-instance');
