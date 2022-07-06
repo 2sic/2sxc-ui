@@ -56,7 +56,11 @@ export class SxcGlobalHttp extends HasLog {
     headers(id?: number, cbid?: number, ctx?: ContextIdentifier): Record<string, string> {
         const cl = this.log.call('headers', `${id}, ${cbid}`);
         const fHeaders: Record<string, string> = {};
-        const pageId = this.env.page().toString();
+        const pageId = (ctx?.pageId ?? this.env.page()).toString();
+        id = ctx?.moduleId ?? id;
+        cbid = ctx?.blockId ?? cbid;
+
+        // TODO: THE #_ignoreHeaders is only used in edit-ui, and should be changed to somehow say use-in-URL
         if (!ctx?._ignoreHeaders) {
             if (id) fHeaders[HeaderNames.ModuleId] = id.toString();
             if (cbid) fHeaders[HeaderNames.ContentBlockId] = cbid.toString();
