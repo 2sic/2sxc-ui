@@ -1,12 +1,12 @@
 {
   "name": "@2sic.com/sxc-angular",
-  "version": "14.07.00",
+  "version": "14.07.01",
   "author": "2sic.com - daniel mettler (iJungleboy)",
   "bugs": {
     "url": "https://github.com/2sic/2sxc-ui/issues"
   },
   "dependencies": {
-    "@2sic.com/2sxc-typings": "^14.2.3",
+    "@2sic.com/2sxc-typings": "^14.7.3",
     "tslib": "^2.0.0"
   },
   "peerDependencies": {
