@@ -52,6 +52,12 @@ export class TemplatePickerComponent implements OnInit {
   /** Indicates whether the installer can be shown in this dialog or not */
   isBadContextForInstaller = false;
 
+  /** Indicates whether the search bar will be shown in this dialog or not */
+  showSearchBar = true;
+
+  /** Indicates whether the install apps and all apps buttons will be shown in this dialog or not */
+  showInstallAndAllAppsButtons = true;
+
   /** The communication-object to the parent */
   private bridge: IIFrameBridge;
 
@@ -155,6 +161,8 @@ export class TemplatePickerComponent implements OnInit {
           this.showInstaller = this.isContent
             ? templates.length === 0
             : apps.filter(a => a.AppId !== cAppActionImport).length === 0;
+          this.showSearchBar = !(!this.isBadContextForInstaller && this.showInstaller);
+          this.showInstallAndAllAppsButtons = !(this.isContent && !(!this.isBadContextForInstaller && this.showInstaller)) && this.showAdvanced;
         }))
       .subscribe();
 
