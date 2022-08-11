@@ -102,7 +102,9 @@ export class CommandLinkGenerator extends HasLog {
      */
     private getDialogUrl(context: ContextComplete): string {
         const env = window.$2sxc.env;
-        return urlClean(`${env.uiRoot()}${C.DialogPaths.eavUi}`) + `?pageId=${env.page()}&sxcver=${context.instance.sxcVersion}`;
+        let customParams = env.dialogQuery();
+        if (customParams && !customParams.startsWith('&')) customParams = '&' + customParams;
+        return urlClean(`${env.uiRoot()}${C.DialogPaths.eavUi}`) + `?pageId=${env.page()}&sxcver=${context.instance.sxcVersion}${customParams}`;
     }
 
     private addItem() {
