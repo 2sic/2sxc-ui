@@ -108,21 +108,21 @@
         </div>
       </mat-tab>
 
-      <mat-tab disabled *ngIf="!(!isBadContextForInstaller && showInstaller)">
+      <mat-tab disabled>
         <ng-template mat-tab-label>
           <!-- search -->
-          <div class="search-field">
+          <div class="search-field" *ngIf="showSearchBar">
             <input type="text" *ngIf="tabIndex === 0 && !isContent" [(ngModel)]="appFilter">
             <input type="text" *ngIf="tabIndex === 0 && isContent" [(ngModel)]="contentTypeFilter">
             <input type="text" *ngIf="tabIndex === 1" [(ngModel)]="templateFilter">
           </div>
 
           <!-- install and manage buttons -->
-          <button mat-button class="config-btn" *ngIf="!isContent && showAdvanced" (click)="run('app-import')" [attr.title]="'TemplatePicker.Install' | translate">
+          <button mat-button class="config-btn" *ngIf="showInstallAndAllAppsButtons" (click)="run('app-import')" [attr.title]="'TemplatePicker.Install' | translate">
             <mat-icon>get_app</mat-icon>
             {{"TemplatePicker.Install" | translate}}
           </button>
-          <button mat-button class="config-btn" *ngIf="!isContent && showAdvanced" (click)="run('apps')" [attr.title]="'TemplatePicker.Zone' | translate">
+          <button mat-button class="config-btn" *ngIf="showInstallAndAllAppsButtons" (click)="run('apps')" [attr.title]="'TemplatePicker.Zone' | translate">
             <mat-icon>apps</mat-icon>
             {{"TemplatePicker.Zone" | translate}}
           </button>
