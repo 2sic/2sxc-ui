@@ -1,6 +1,6 @@
 {
   "// notes": "The version is used in the final NPM. For beta releases, use pattern '14.02.0-beta.0'",
-  "version": "14.08.00",
+  "version": "14.07.05",
   "main": "./index.d.ts",
   "types": "./index.d.ts",
   "scripts": {
