@@ -106,7 +106,6 @@ export class TemplatePickerComponent implements OnInit {
 
     this.boot(dashInfo);
     this.debugObservables();
-console.log('2dm - starting quick-dialog 2');
   }
 
   ngOnInit(): void {
