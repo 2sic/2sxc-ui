@@ -122,7 +122,6 @@ export class CommandLinkGenerator extends HasLog {
 
         // only add if there was stuff to add
         if (item.EntityId || item.ContentTypeName) {
-            console.warn('used the simple item header - test if dialog still works!');
             this.items.push(item);
             // 2022-05-18 2dm - disable this, seems like old code, title shouldn't be used any more
             // this.items.push({ ...item, Title: translate(this.findTranslationKey(this.findPartName(true))) });
