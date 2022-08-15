@@ -191,7 +191,11 @@ export class BuildRule extends HasLog {
         if (!original) return [];
         const split1 = original.split('&');
         const split2 = split1.map((p) => {
-            const keyValues = p.split('=');
+            var i = p.indexOf('=');
+            if (i < 0) i = p.length;
+            const keyValues = [p.slice(0,i), p.slice(i+1)];
+            // 2022-08-15 2dm before - would have lost cases where '=' occurs in the value a few times
+            // const keyValues = p.split('=');
             const key = keyValues[0];
             let val: any = keyValues[1];
             // disabled, don't see a use case for this
@@ -202,11 +206,17 @@ export class BuildRule extends HasLog {
             // fix url encoding
             if (val?.indexOf('%') > -1) val = decodeURIComponent(val);
             // fix C# typed true/false or string representations
-            if (val === 'True' || val === 'true') return [key, true]; // val = true;
-            if (val === 'False' || val === 'false') return [key, false]; // val = false;
+            if (val === 'True' || val === 'true') return [key, true];
+            if (val === 'False' || val === 'false') return [key, false];
 
-            // cast numbers to numbers
-            val = isNaN(+val) ? val : Number(val);
+            // cast numbers to proper number objects
+            if (!isNaN(+val)) return [key, Number(val)];
+
+            // revert base64 encoding
+            if (typeof(val) === 'string' && val.startsWith('base64:')) {
+              const afterPrefix = val.split('base64:')[1];
+              return [key, atob(afterPrefix)];
+            }
             return [key, val];
         });
         return split2;

@@ -111,12 +111,13 @@ export class RenderButton extends RenderPart {
     private iconTag(btn: ButtonSafe, rule: BuildRule) {
         const callLog = this.log.call('iconTag');
         const icon = rule?.ui?.icon || btn.icon();
-        if (icon.startsWith('svg:')) {
-            const base64 = icon.split('svg:')[1];
-            const decoded = atob(base64);
+        if (/*icon.startsWith('svg:') || */ icon.indexOf('<svg') > -1) {
+            // const afterPrefix = icon;
+            // The xml could be base64 encoded (old syntax)
+            // const svgXml = afterPrefix.indexOf('<svg') > -1 ? afterPrefix : atob(afterPrefix);
             const symbol = document.createElement('span');
             HtmlTools.addClasses(symbol, 'svg-wrapper');
-            symbol.innerHTML = decoded;
+            symbol.innerHTML = icon;
             symbol.setAttribute('aria-hidden', 'true');
             return callLog.return(symbol, icon);
         } else {
