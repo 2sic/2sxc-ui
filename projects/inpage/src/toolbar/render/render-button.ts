@@ -5,6 +5,7 @@ import { ButtonCommand, ButtonSafe } from '../config';
 import { BuildRule } from '../rules/rule';
 import { RenderPart } from './render-part-base';
 import { ToolbarRenderer } from './toolbar-renderer';
+import { ToolbarConstants } from '../../constants/toolbar';
 
 /**
  * @internal
@@ -115,8 +116,8 @@ export class RenderButton extends RenderPart {
             // const afterPrefix = icon;
             // The xml could be base64 encoded (old syntax)
             // const svgXml = afterPrefix.indexOf('<svg') > -1 ? afterPrefix : atob(afterPrefix);
-            const symbol = document.createElement('span');
-            HtmlTools.addClasses(symbol, 'svg-wrapper');
+            const symbol = document.createElement(ToolbarConstants.svgWrapElement);
+            HtmlTools.addClasses(symbol, ToolbarConstants.svgWrapClass);
             symbol.innerHTML = icon;
             symbol.setAttribute('aria-hidden', 'true');
             return callLog.return(symbol, icon);

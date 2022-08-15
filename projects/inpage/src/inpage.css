@@ -151,10 +151,16 @@ body.sc-tb-show-all [sxc-toolbar-hover] .sc-menu {
 }
 
 .sc-menu a span.svg-wrapper svg {
-  transform: scale(0.4);
+  /* transform: scale(0.4);
   position: relative;
   top: -10px;
-  left: -10px;
+  left: -10px; */
+
+  position: relative;
+  top: 3px;
+  left: 0px;
+  width: 16px;
+  height: 16px;
 }
 
 .sc-menu a span.svg-wrapper svg * {

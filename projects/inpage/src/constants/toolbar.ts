@@ -20,4 +20,6 @@ export const ToolbarConstants = {
   eventNames: {
     onInit: 'toolbar-init',
   },
+  svgWrapElement: 'span',
+  svgWrapClass: 'svg-wrapper',
 };
