@@ -191,7 +191,7 @@ export class BuildRule extends HasLog {
         if (!original) return [];
         const split1 = original.split('&');
         const split2 = split1.map((p) => {
-            var i = p.indexOf('=');
+            let i = p.indexOf('=');
             if (i < 0) i = p.length;
             const keyValues = [p.slice(0,i), p.slice(i+1)];
             // 2022-08-15 2dm before - would have lost cases where '=' occurs in the value a few times
@@ -217,6 +217,12 @@ export class BuildRule extends HasLog {
               const afterPrefix = val.split('base64:')[1];
               return [key, atob(afterPrefix)];
             }
+
+            if (typeof(val) === 'string' && val.startsWith('json64:')) {
+              const afterPrefix = val.split('json64:')[1];
+              return [key, JSON.parse(atob(afterPrefix))];
+            }
+
             return [key, val];
         });
         return split2;
