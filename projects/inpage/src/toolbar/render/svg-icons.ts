@@ -27,11 +27,9 @@ export function monitorSvgIconsInToolbar() {
 
 
 function setSvgViewBox(svg: any)  {
+  // Skip if it already has a viewBox
   const previous = svg.getAttribute(viewBoxAttribute);
-  if (previous) {
-    console.log('prev', previous);
-    return;
-  }
+  if (previous) return;
 
   // do whatever
   const { xMin, xMax, yMin, yMax } = [...(svg).children].reduce((acc, el) => {
