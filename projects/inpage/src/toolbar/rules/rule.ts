@@ -130,12 +130,17 @@ export class BuildRule extends HasLog {
         // command name defaults to name, can be reset by load-headers
         // assumes key is something like "group=myGroup" or just "edit"
         this.name = parts?.[0]?.[1] || key;
-        if (parts.length > 1) this.loadHeaderParts(parts.slice(1));
+        if (parts.length > 1) this.leadHeaderAndUi(key, parts.slice(1));
 
         return cl.done();
     }
 
-    private loadHeaderParts(rest: string[][]) {
+    /**
+     * Load the header
+     * @param forKey the key being loaded, to handle special case settings/toolbar
+     * @param rest the parameters to process
+     */
+    private leadHeaderAndUi(forKey: string, rest: string[][]) {
         const cl = this.log.call('loadHeaderParts');
         if (!rest.length) return cl.done('nothing to load');
         const parts = this.dicToArray(rest);
@@ -152,7 +157,8 @@ export class BuildRule extends HasLog {
         if (parts.pos != null) this.pos = Number(parts.pos);
 
         // #4 icon is automatically kept
-        // #5 show override
+        // #5 show override of buttons (on buttons, must convert to bool)
+        if (forKey !== BuildSteps.settings && forKey !== BuildSteps.toolbar)
         if (typeof parts.show === 'string')
             (parts as Record<string, TypeValue>).show = parts.show === 'true';
         this.ui = parts;

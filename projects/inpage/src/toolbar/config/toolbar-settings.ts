@@ -115,10 +115,10 @@ export class ToolbarSettings {
     return partialSettings;
   }
 
-  static getDefaults = () => new ToolbarSettings({ autoAddMore: TLB_MORE_AUTO, hover: TLB_HOV_RIGHT, show: 'hover', follow: 'default' });
+  static getDefaults = () => new ToolbarSettings({ autoAddMore: TLB_MORE_AUTO, hover: TLB_HOV_RIGHT, show: TLB_SHOW_HOVER, follow: 'default' });
 
   /** Setup for situations where an empty toolbar is needed, without any data or configuration */
-  static getForEmpty = () => new ToolbarSettings({ autoAddMore: TLB_MORE_AUTO, hover: TLB_HOV_LEFT, show: 'hover', follow: 'default' });
+  static getForEmpty = () => new ToolbarSettings({ autoAddMore: TLB_MORE_AUTO, hover: TLB_HOV_LEFT, show: TLB_SHOW_HOVER, follow: 'default' });
 
   /**
    * figure out best code to determine where to put it.
