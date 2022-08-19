@@ -33,10 +33,6 @@ export const ToolbarTemplateDefault: ToolbarTemplate = {
   ],
   defaults: {},
   params: {},
-  settings: {
-    autoAddMore: 'end',
-    // these are defaults, don't set again
-    // hover: "right",
-  },
+  settings: {},
   _isToolbarTemplate: true,
 };

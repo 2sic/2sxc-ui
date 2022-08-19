@@ -3,13 +3,15 @@ import { RuleManager } from '../rules/rule-manager';
 import { ToolbarTemplate } from '../templates';
 
 /** @internal */
-export const TLB_MORE_AUTO = 'auto';
-/** @internal */
 export const TLB_MORE_END = 'end';
 /** @internal */
 export const TLB_MORE_START = 'start';
 /** @internal */
-type TypeAutoAddMore = null | typeof TLB_MORE_AUTO | typeof TLB_MORE_END | typeof TLB_MORE_START;
+export const TLB_MORE_AUTO = 'auto';  // Note: added in 14.07.05
+/** @internal */
+export const TLB_MORE_NEVER = 'never';  // Note: added in 14.07.05
+/** @internal */
+type TypeAutoAddMore = null | typeof TLB_MORE_AUTO | typeof TLB_MORE_END | typeof TLB_MORE_START | typeof TLB_MORE_NEVER;
 const TLB_MORE_OLD_TRUE = true;       //  [true: used to be right/start]
 const TLB_MORE_OLD_RIGHT = 'right';   // fallback for older v1 setting
 
@@ -116,7 +118,7 @@ export class ToolbarSettings {
   static getDefaults = () => new ToolbarSettings({ autoAddMore: TLB_MORE_AUTO, hover: TLB_HOV_RIGHT, show: 'hover', follow: 'default' });
 
   /** Setup for situations where an empty toolbar is needed, without any data or configuration */
-  static getForEmpty = () => new ToolbarSettings({ autoAddMore: TLB_MORE_START, hover: TLB_HOV_LEFT, show: 'hover', follow: 'default' });
+  static getForEmpty = () => new ToolbarSettings({ autoAddMore: TLB_MORE_AUTO, hover: TLB_HOV_LEFT, show: 'hover', follow: 'default' });
 
   /**
    * figure out best code to determine where to put it.
@@ -133,7 +135,7 @@ export class ToolbarSettings {
       return settings?.hover === TLB_HOV_LEFT ? TLB_MORE_START : TLB_MORE_END;
 
     // Standard values today, just return them
-    if (result === TLB_MORE_END || result === TLB_MORE_START)
+    if (result === TLB_MORE_END || result === TLB_MORE_START || result === TLB_MORE_NEVER)
       return result;
 
     // Check old values which may still be in use

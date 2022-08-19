@@ -8,7 +8,7 @@ import { TypeValue } from '../../plumbing';
 import { Button, ButtonCommand, Toolbar, ToolbarSettings } from '../config';
 import { ButtonGroup } from '../config';
 import { TemplateConstants as TC } from '../templates/constants';
-import { TLB_MORE_END } from './../config/toolbar-settings';
+import { TLB_MORE_END, TLB_MORE_NEVER } from './../config/toolbar-settings';
 import { ToolbarConfigLoader } from './toolbar-config-loader';
 
 /**
@@ -160,7 +160,7 @@ export class ButtonGroupConfigLoader extends HasLog {
     private addMoreButton(settings: ToolbarSettings, list: InPageButtonJson[]): void {
         const cl = this.log.call('addMoreButtons');
         const addMore = ToolbarSettings.bestAddMorePos(settings);
-        if (addMore) {
+        if (addMore && addMore !== TLB_MORE_NEVER) {
             this.log.add(`will add a more "..." button to ${addMore}`);
             const moreButton = this.toolbar.button.btnConfigStructure(CommandNames.more, {});
             if (addMore === TLB_MORE_END)

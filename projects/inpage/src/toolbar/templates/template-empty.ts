@@ -14,8 +14,6 @@ export const ToolbarTemplateEmpty: ToolbarTemplate = {
   ],
   defaults: {},
   params: {},
-  settings: {
-    autoAddMore: 'end',
-  },
+  settings: {},
   _isToolbarTemplate: true,
 };
