@@ -2,7 +2,7 @@
 import { ContextComplete } from '../../context/bundles/context-bundle-button';
 import { Translator } from '../../i18n';
 import { NoJQ } from '../../plumbing';
-import { TOOLBAR_FOLLOW_ALWAYS, TOOLBAR_FOLLOW_INITIAL, TOOLBAR_FOLLOW_SCROLL, TOOLBAR_SHOW_ALWAYS, TypeFollow } from '../config/toolbar-settings';
+import { TLB_FOLLOW_ALWAYS, TLB_FOLLOW_INITIAL, TLB_FOLLOW_SCROLL, TLB_SHOW_ALWAYS, TypeFollow } from '../config/toolbar-settings';
 import { ToolbarLifecycle } from '../toolbar-lifecycle';
 
 /**
@@ -26,7 +26,7 @@ export class TagToolbar {
      */
     constructor(private readonly hoverTag: HTMLElement, private readonly context: ContextComplete, private translator?: typeof Translator) {
         this.follow = context.toolbar.settings.follow;
-        this.alwaysShow = context.toolbar.settings.show === TOOLBAR_SHOW_ALWAYS;
+        this.alwaysShow = context.toolbar.settings.show === TLB_SHOW_ALWAYS;
         // Ensure toolbar gets visible when hovering
         this.addMouseEvents(hoverTag);
         if (this.alwaysShow) this.showPermanently();
@@ -112,9 +112,9 @@ export class TagToolbar {
         // new: only do this on initial=true && follow != 'none' or not-initial
         // start by setting default-top
         position.top = position.tagOffset.top + tagToolbarPadding - position.bodyOffset.top;
-        const trackMouse = (this.follow === TOOLBAR_FOLLOW_ALWAYS)
-            || (this.follow === TOOLBAR_FOLLOW_INITIAL && initial)
-            || (this.follow === TOOLBAR_FOLLOW_SCROLL && position.tagScrollOffset !== 0);
+        const trackMouse = (this.follow === TLB_FOLLOW_ALWAYS)
+            || (this.follow === TLB_FOLLOW_INITIAL && initial)
+            || (this.follow === TLB_FOLLOW_SCROLL && position.tagScrollOffset !== 0);
         if (trackMouse)
             position.top = position.mousePos.y + position.win.scrollY - position.bodyOffset.top - toolbarHeight / 2;
 
@@ -171,10 +171,10 @@ export class TagToolbar {
     /** Enable scroll watcher & remember */
     private activateScrollWatcher() {
         if (this.watcherActive) return;
-        const trackOngoing = this.follow === TOOLBAR_FOLLOW_SCROLL || this.follow === TOOLBAR_FOLLOW_ALWAYS;
+        const trackOngoing = this.follow === TLB_FOLLOW_SCROLL || this.follow === TLB_FOLLOW_ALWAYS;
         if (!trackOngoing) return;
         window.addEventListener('scroll', this.updateFn);
-        if (this.follow === TOOLBAR_FOLLOW_ALWAYS) window.addEventListener('mousemove', this.updateFn);
+        if (this.follow === TLB_FOLLOW_ALWAYS) window.addEventListener('mousemove', this.updateFn);
         this.watcherActive = true;
     }
 

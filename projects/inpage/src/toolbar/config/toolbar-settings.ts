@@ -2,43 +2,42 @@
 import { RuleManager } from '../rules/rule-manager';
 import { ToolbarTemplate } from '../templates';
 
-const autoAddMoreDefault = 'end';
-type TypeAutoAddMore = null | 'start' | 'end' | true; //  [true: used to be right/start]
-const hoverDefault = 'right';
-type TypeHover = 'left' | 'right' | 'none';
+/** @internal */
+export const TLB_MORE_AUTO = 'auto';
+/** @internal */
+export const TLB_MORE_END = 'end';
+/** @internal */
+export const TLB_MORE_START = 'start';
+/** @internal */
+type TypeAutoAddMore = null | typeof TLB_MORE_AUTO | typeof TLB_MORE_END | typeof TLB_MORE_START;
+const TLB_MORE_OLD_TRUE = true;       //  [true: used to be right/start]
+const TLB_MORE_OLD_RIGHT = 'right';   // fallback for older v1 setting
 
-/**
- * @internal
- */
-export const TOOLBAR_SHOW_ALWAYS = 'always';
-/**
- * @internal
- */
-export const TOOLBAR_SHOW_HOVER = 'hover';
+/** @internal */
+export const TLB_HOV_RIGHT = 'right';
+/** @internal */
+export const TLB_HOV_LEFT = 'left';
+/** @internal */
+export const TLB_HOV_NONE = 'none'; // unclear if this is ever used?
+/** @internal */
+type TypeHover = typeof TLB_HOV_LEFT | typeof TLB_HOV_RIGHT | 'none';
 
-/**
- * @internal
- */
-type TypeShow = typeof TOOLBAR_SHOW_ALWAYS | typeof TOOLBAR_SHOW_HOVER;
+/** @internal */
+export const TLB_SHOW_ALWAYS = 'always';
+/** @internal */
+export const TLB_SHOW_HOVER = 'hover';
+/** @internal */
+type TypeShow = typeof TLB_SHOW_ALWAYS | typeof TLB_SHOW_HOVER;
 
 const followDefault = 'default';
-/**
- * @internal
- */
-export const TOOLBAR_FOLLOW_INITIAL = 'initial';
-/**
- * @internal
- */
-export const TOOLBAR_FOLLOW_ALWAYS = 'always';
-/**
- * @internal
- */
-export const TOOLBAR_FOLLOW_SCROLL = 'scroll';
-
-/**
- * @internal
- */
-export type TypeFollow = 'default' | 'none' | typeof TOOLBAR_FOLLOW_INITIAL | typeof TOOLBAR_FOLLOW_ALWAYS | typeof TOOLBAR_FOLLOW_SCROLL;
+/** @internal */
+export const TLB_FOLLOW_INITIAL = 'initial';
+/** @internal */
+export const TLB_FOLLOW_ALWAYS = 'always';
+/** @internal */
+export const TLB_FOLLOW_SCROLL = 'scroll';
+/** @internal */
+export type TypeFollow = 'default' | 'none' | typeof TLB_FOLLOW_INITIAL | typeof TLB_FOLLOW_ALWAYS | typeof TLB_FOLLOW_SCROLL;
 
 
 
@@ -48,13 +47,13 @@ export type TypeFollow = 'default' | 'none' | typeof TOOLBAR_FOLLOW_INITIAL | ty
  */
 export class ToolbarSettings {
   /** Automatically add the '...' more button to the toolbar */
-  autoAddMore: TypeAutoAddMore = autoAddMoreDefault;
+  autoAddMore: TypeAutoAddMore = TLB_MORE_AUTO;
 
   /** Hover placement of the toolbar */
-  hover: TypeHover = hoverDefault;
+  hover: TypeHover = TLB_HOV_RIGHT;
 
   /** Show behavior (always, hover, ...) */
-  show: TypeShow = TOOLBAR_SHOW_HOVER;
+  show: TypeShow = TLB_SHOW_HOVER;
 
   /** Follow behavior - if the toolbar should scroll with the page or remain where it was hovered */
   follow: TypeFollow = followDefault;
@@ -114,10 +113,36 @@ export class ToolbarSettings {
     return partialSettings;
   }
 
-  static getDefaults = () => new ToolbarSettings({ autoAddMore: 'end', hover: 'right', show: 'hover', follow: 'default' });
+  static getDefaults = () => new ToolbarSettings({ autoAddMore: TLB_MORE_AUTO, hover: TLB_HOV_RIGHT, show: 'hover', follow: 'default' });
 
   /** Setup for situations where an empty toolbar is needed, without any data or configuration */
-  static getForEmpty = () => new ToolbarSettings({ autoAddMore: 'start', hover: 'left', show: 'hover', follow: 'default' });
+  static getForEmpty = () => new ToolbarSettings({ autoAddMore: TLB_MORE_START, hover: TLB_HOV_LEFT, show: 'hover', follow: 'default' });
+
+  /**
+   * figure out best code to determine where to put it.
+   * Important to neutralize historically different param names,
+   * and to auto-detect if hover is left.
+   * @param settings
+   * @returns
+   */
+  static bestAddMorePos(settings: ToolbarSettings) {
+    const result: TypeAutoAddMore = settings?.autoAddMore ?? TLB_MORE_AUTO;
+
+    // On Auto try to detect based on hover position
+    if (result === TLB_MORE_AUTO)
+      return settings?.hover === TLB_HOV_LEFT ? TLB_MORE_START : TLB_MORE_END;
+
+    // Standard values today, just return them
+    if (result === TLB_MORE_END || result === TLB_MORE_START)
+      return result;
+
+    // Check old values which may still be in use
+    if (result as string === TLB_MORE_OLD_RIGHT || result as boolean === TLB_MORE_OLD_TRUE)
+      return TLB_MORE_END;
+
+    // If it's anything else we don't know, just return it. It could be a custom class name, though this is not supported.
+    return result;
+  }
 }
 
 
