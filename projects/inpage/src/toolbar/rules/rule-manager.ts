@@ -62,7 +62,9 @@ export class RuleManager extends HasLog {
       // Params must be merged BEFORE adding the main toolbar rule
       // because actually settings shouldn't have params, but historically it was used
       // But toolbar-rule params are never for the settings
-      const params = Object.assign({}, ...all.map((a) => a?.params));
+      // Because this params-mistake was only made when only 1 settings was allowed
+      // We will only use one setting
+      const params = Object.assign({}, ...all.slice(0, 1).map((a) => a?.params));
 
       const tlbPart = this.getToolbar();
       if (tlbPart) all.unshift(tlbPart); // add to start, so it's the lowest priority
