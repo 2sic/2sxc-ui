@@ -11,7 +11,7 @@ export class SxcGlobalDebug {
     load: boolean;
 
     /**
-     * Cache breaker string, contans the version number of 2sxc if one is provided with sxcver=...
+     * Cache breaker string, contains the version number of 2sxc if one is provided with sxcver=...
      */
     uncache: string;
 
