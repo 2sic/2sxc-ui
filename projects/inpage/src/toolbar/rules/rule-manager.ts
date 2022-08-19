@@ -70,7 +70,9 @@ export class RuleManager extends HasLog {
 
       return { ui, params };
     }
-    getSettingsOld = () => this.getSystemRule(BuildSteps.settings) || this.getToolbar();
+    // before v14.07.05 it was this:
+    // remove Q4 2022 if everything is ok
+    // getSettingsOld = () => this.getSystemRule(BuildSteps.settings) || this.getToolbar();
 
     /**
      * The params for the command - if not found, will use the toolbar params.
