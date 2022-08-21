@@ -5,7 +5,6 @@ import { ButtonCommand, ButtonSafe } from '../config';
 import { BuildRule } from '../rules/rule';
 import { RenderPart } from './render-part-base';
 import { ToolbarRenderer } from './toolbar-renderer';
-import { ToolbarConstants } from '../../constants/toolbar';
 
 /**
  * @internal
@@ -110,23 +109,21 @@ export class RenderButton extends RenderPart {
     }
 
     private iconTag(btn: ButtonSafe, rule: BuildRule) {
-        const callLog = this.log.call('iconTag');
-        const icon = rule?.ui?.icon || btn.icon();
-        if (/*icon.startsWith('svg:') || */ icon.indexOf('<svg') > -1) {
-            // const afterPrefix = icon;
-            // The xml could be base64 encoded (old syntax)
-            // const svgXml = afterPrefix.indexOf('<svg') > -1 ? afterPrefix : atob(afterPrefix);
-            const symbol = document.createElement(ToolbarConstants.svgWrapElement);
-            HtmlTools.addClasses(symbol, ToolbarConstants.svgWrapClass);
-            symbol.innerHTML = icon;
-            symbol.setAttribute('aria-hidden', 'true');
-            return callLog.return(symbol, icon);
-        } else {
-            const symbol = document.createElement('i');
-            HtmlTools.addClasses(symbol, icon);
-            symbol.setAttribute('aria-hidden', 'true');
-            return callLog.return(symbol, icon);
-        }
+      const callLog = this.log.call('iconTag');
+      const icon = rule?.ui?.icon || btn.icon();
+      if (icon.indexOf('<svg') > -1) {
+        // Temporary dom element
+        const symbol = document.createElement('template');
+        symbol.innerHTML = icon;
+        // Note: It would be tempting to set the viewBox here, but it's not possible
+        // because we cannot calculate the size before rendering
+        return callLog.return(symbol.content.firstChild, icon);
+      } else {
+        const symbol = document.createElement('i');
+        HtmlTools.addClasses(symbol, icon);
+        symbol.setAttribute('aria-hidden', 'true');
+        return callLog.return(symbol, icon);
+      }
     }
 }
 

@@ -1,4 +1,4 @@
-import { ToolbarConstants } from '../../constants/toolbar';
+import { IDs } from '../../constants/ids';
 
 const viewBoxAttribute = 'viewBox';
 
@@ -10,8 +10,10 @@ export function monitorSvgIconsInToolbar() {
   const observer = new MutationObserver((m) => {
     // Once a change has been made, It's easiest to just find unprocessed SVGs in the document
     // ...inside the svg-wrapper span
-    const svgs = document.querySelectorAll(`${ToolbarConstants.svgWrapElement}.${ToolbarConstants.svgWrapClass} svg:not([${viewBoxAttribute}])`);
+    // const svgs = document.querySelectorAll(`${IDs.sel.scMenu} svg:not([${viewBoxAttribute}])`);
+    const svgs = document.querySelectorAll(`${IDs.sel.scMenu} svg:not([${viewBoxAttribute}])`);
 
+    // console.log('2dm svgs', svgs);
     svgs.forEach((svg) => {
       setSvgViewBox(svg);
     });
@@ -31,7 +33,7 @@ function setSvgViewBox(svg: any)  {
   const previous = svg.getAttribute(viewBoxAttribute);
   if (previous) return;
 
-  // do whatever
+  // calculate max size of all elements in the SVG
   const { xMin, xMax, yMin, yMax } = [...(svg).children].reduce((acc, el) => {
     const { x, y, width, height } = el.getBBox();
     if (!acc.xMin || x < acc.xMin) acc.xMin = x;
