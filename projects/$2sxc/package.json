@@ -18,7 +18,6 @@
   },
   "homepage": "https://github.com/2sic/2sxc-ui",
   "devDependencies": {
-    "@types/jquery": "^2.0.33",
     "ts-loader": "^7.0.0",
     "typescript": "^4.7.4",
     "webpack": "^4.42.1",
