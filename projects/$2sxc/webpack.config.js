@@ -1,7 +1,6 @@
 ﻿const webpack = require('webpack');
 const webpackHelpers = require('../webpack/webpack-helpers.js');
 
-const dnnTarget = webpackHelpers.DnnTargetFolder + 'js';
 const assetsTarget = webpackHelpers.AssetsTarget + 'js';
 
 const configuration = {
@@ -28,7 +27,7 @@ const configuration = {
     plugins: [
         webpackHelpers.CreateDefinePlugin(webpack),
         // after build, copy the files from the project assets
-        webpackHelpers.createCopyAfterBuildPlugin(assetsTarget, /* dnnTarget */ webpackHelpers.TargetsWithoutAssets, 'js'),
+        webpackHelpers.createCopyAfterBuildPlugin(assetsTarget, webpackHelpers.TargetsWithoutAssets, 'js'),
     ]
 };
 

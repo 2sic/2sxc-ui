@@ -24,7 +24,6 @@
     "jshint-stylish": "2.1.0",
     "ts-loader": "^7.0.0",
     "type2docfx": "^0.10.5",
-    "typedoc": "^0.15.8",
     "typescript": "^4.7.4",
     "webpack": "^4.42.1",
     "webpack-cli": "^3.3.11",
