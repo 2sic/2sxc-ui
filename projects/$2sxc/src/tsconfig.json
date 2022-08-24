@@ -13,6 +13,9 @@
     "moduleResolution": "node",
     "outDir": "compiled",
     //"module":  "amd"
+    "types": [
+      "jasmine"
+    ],
   },
   "include": [
     "./*.ts",
