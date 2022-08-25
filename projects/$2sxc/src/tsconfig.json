@@ -1,28 +1,6 @@
 {
-  "compileOnSave": true,
+  "extends": "../tsconfig.json",
   "compilerOptions": {
-    //"outFile": "2sxc.api.js",
-    "noImplicitAny": true,
-    //"noEmitOnError": true,
-    "removeComments": true,
-    "sourceMap": true,
-    "inlineSources": true,
-    "target": "es5",
-    "lib": ["es2015", "es2016", "es2017", "ES2021.String", "dom"],
-    "module":"es2015",
-    "moduleResolution": "node",
-    "outDir": "compiled",
-    //"module":  "amd"
-    "types": [
-      "jasmine"
-    ],
-  },
-  "include": [
-    "./*.ts",
-    "./*.js", "**/*.ts", "../../inpage/src/commands/command/workflow-commands.ts",
-  ],
-  "exclude": [
-    "node_modules",
-    "../../inpage/node_modules/**"
-  ]
+    "module":"es2015", // moved from parent tsconfig.json because it breaks npm test
+  }
 }
