@@ -36,7 +36,13 @@
               "src/styles.css",
               "src/theme.scss"
             ],
-            "scripts": []
+            "scripts": [],
+            "optimization": false,
+              "sourceMap": true,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": true,
+              "buildOptimizer": false
           },
           "configurations": {
             "production": {
@@ -57,14 +63,7 @@
               "deleteOutputPath": true
             },
             "development": {
-              "optimization": false,
-              "sourceMap": true,
-              "namedChunks": false,
-              "extractLicenses": true,
-              "vendorChunk": true,
-              "buildOptimizer": false
-            },
-            "defaultConfiguration": "development"
+            }
           }
         },
         "serve": {
