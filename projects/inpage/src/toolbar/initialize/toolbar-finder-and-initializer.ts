@@ -36,10 +36,8 @@ export class ToolbarConfigFinderAndInitializer extends HasLog {
      * @param parentTag
      * @param optionalId
      */
-    buildDnnModule(parentTag: HTMLElement/*, optionalId?: number*/): void {
+    buildDnnModule(parentTag: HTMLElement): void {
         const cl = this.log.call('buildDnnModule');
-        // 2021-09-17 optionalId is probably never used
-        // parentTag = parentTag ?? document.querySelector<HTMLElement>('.DnnModule-' + optionalId);
 
         // if something says the toolbars are disabled, then skip
         if (parentTag.getAttribute(C.Toolbar.attr.disable)) return cl.done('disabled');
