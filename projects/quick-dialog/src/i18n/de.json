@@ -9,11 +9,15 @@
     "Cancel": "Abbrechen",
     "Close": "Schliessen",
 
-    "Install": "Apps installieren",
+    "Install": "App installieren",
+    "Install.Details": "weitere Apps installieren",
+
     "Catalog": "App Katalog durchsuchen",
 
-    "App": "App Konfigurieren",
-    "Zone": "Alle Apps"
+    "App": "Admin",
+    "App.Details": "dieses App administrieren",
+    "Zone": "Alle Apps",
+    "Zone.Details": "verwalte alle Apps und Systemeinstellungen"
 
   }
 }
