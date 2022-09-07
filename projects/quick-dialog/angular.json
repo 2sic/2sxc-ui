@@ -36,7 +36,7 @@
               "src/styles.css",
               "src/theme.scss"
             ],
-            "scripts": []
+            "scripts": [],
           },
           "configurations": {
             "production": {
@@ -63,8 +63,7 @@
               "extractLicenses": true,
               "vendorChunk": true,
               "buildOptimizer": false
-            },
-            "defaultConfiguration": "development"
+            }
           }
         },
         "serve": {
@@ -124,7 +123,6 @@
       }
     }
   },
-  "defaultProject": "ui-a4",
   "schematics": {
     "@schematics/angular:component": {
       "prefix": "app",
