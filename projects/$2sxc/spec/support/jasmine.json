@@ -12,6 +12,9 @@
     "**/*[sS]pec.ts",
     "**/*.[sS]pec.ts"
   ],
+  "helpers": [
+    "helpers/**/*.js"
+  ],
   "env": {
     "stopSpecOnExpectationFailure": false,
     "random": false
