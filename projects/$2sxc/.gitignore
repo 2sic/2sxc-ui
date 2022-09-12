@@ -1,0 +1,5 @@
+spec-browser-compiled
+dist
+!dist/mock.js
+!dist/jquery.js
+!dist/jasmine-jquery.js

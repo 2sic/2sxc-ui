@@ -1,0 +1,24 @@
+{
+  "srcDir": "dist",
+  "srcFiles": [
+    "jquery.js",
+    "jasmine-jquery.js",
+    "mock.js",
+    "2sxc.api.js"
+  ],
+  "specDir": "spec-browser-compiled",
+  "specFiles": [
+    "**/*.[sS]pec.js"
+  ],
+  "helpers": [
+    "helpers/**/*.js"
+  ],
+  "env": {
+    "stopSpecOnExpectationFailure": false,
+    "stopOnSpecFailure": false,
+    "random": false
+  },
+  "browser": {
+    "name": "chrome"
+  }
+}
