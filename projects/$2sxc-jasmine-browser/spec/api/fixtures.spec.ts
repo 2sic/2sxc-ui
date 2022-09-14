@@ -1,4 +1,4 @@
-import { Sxc } from '../../node_modules/@2sic.com/2sxc-typings/index';
+import { Sxc } from '../../../sxc-typings/index';
 
 describe('2sxc.api html fixtures', () => {
 
