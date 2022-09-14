@@ -1,9 +1,6 @@
 spec-browser-compiled
-dist
-!dist/mock.js
-!dist/jquery.js
-!dist/jasmine-jquery.js
-js/mock.js
 spec/*.js
 src/*.js
+src/js/**/*.*
+!src/assets/*.*
 **/*.mjs

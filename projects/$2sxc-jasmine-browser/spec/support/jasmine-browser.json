@@ -1,10 +1,10 @@
 {
   "srcDir": "src",
   "srcFiles": [
-    "js/jquery.js",
-    "js/jasmine-jquery.js",
+    "lib/jquery.js",
+    "lib/jasmine-jquery.js",
     "mock.js",
-    "2sxc.api.js"
+    "js/2sxc.api.min.js"
   ],
   "specDir": "spec",
   "specFiles": [
