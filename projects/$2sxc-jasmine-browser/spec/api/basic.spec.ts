@@ -1,17 +1,21 @@
+import { Sxc } from "../../../sxc-typings/index";
+
 describe("2sxc.api suite", function () {
-  var sxc = $2sxc(42);
-  console.log("sxc", sxc);
+  let sxc: Sxc;
 
   it("isEditMode() is false", function () {
-   expect(sxc.isEditMode()).toBe(false);
+    sxc = $2sxc(1)
+    expect(sxc.isEditMode()).toBe(false);
   });
 
-  it("id is 42", function () {
+  it("with moduleId=42 => id is 42", function () {
+    sxc = $2sxc(42)
     expect(sxc.id).toBe(42);
   });
 
-  it("cbid is 42", function () {
-    expect(sxc.cbid).toBe(42);
+  it("with moduleId=111 and contentBlockId =24 => cbid is 24", function () {
+    sxc = $2sxc(111, 24)
+    expect(sxc.cbid).toBe(24);
   });
 
   // xit("root.sysinfo.version is 'test'", function () {
