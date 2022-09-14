@@ -1,0 +1,25 @@
+{
+  "srcDir": "src",
+  "srcFiles": [
+    "js/jquery.js",
+    "js/jasmine-jquery.js",
+    "mock.js",
+    "2sxc.api.js"
+  ],
+  "specDir": "spec",
+  "specFiles": [
+    "**/*.[sS]pec.js",
+    "**/*.[sS]pec.mjs"
+  ],
+  "helpers": [
+    "helpers/**/*.js"
+  ],
+  "env": {
+    "stopSpecOnExpectationFailure": false,
+    "stopOnSpecFailure": false,
+    "random": false
+  },
+  "browser": {
+    "name": "firefox"
+  }
+}
