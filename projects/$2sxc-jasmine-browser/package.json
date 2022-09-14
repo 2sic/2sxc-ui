@@ -5,11 +5,9 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev": "tsc -w",
-    "build": "npx webpack --config=webpack.config.js",
     "test": "jasmine-browser-runner runSpecs",
-    "test:watch": "concurrently -k \"tsc -w\" \"npm run js2mjs:watch\" \"jasmine-browser-runner\" \"npm run test:browse\"",
-    "test:browse": "open-cli http://localhost:8888 --wait",
+    "test:watch": "concurrently -k \"tsc -w\" \"npm run js2mjs:watch\" \"jasmine-browser-runner\"",
+    "test:browse": "open-cli http://localhost:8888 --wait -- chrome",
     "js2mjs:watch": "nodemon -e js --watch spec --exec \"npm run js2mjs:run\"",
     "js2mjs:run": "renamer --force --find /\\.js$/ --replace .mjs --path-element ext \"spec/!(support)**/*.*\" -v"
   },
