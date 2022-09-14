@@ -6,13 +6,12 @@
     "mock.js",
     "js/2sxc.api.min.js"
   ],
-  "specDir": "spec",
+  "specDir": ".",
   "specFiles": [
-    "**/*.[sS]pec.js",
-    "**/*.[sS]pec.mjs"
+    "spec/**/*.[sS]pec.?(m)js"
   ],
   "helpers": [
-    "helpers/**/*.js"
+    "spec/helpers/**/*.?(m)js"
   ],
   "env": {
     "stopSpecOnExpectationFailure": false,
