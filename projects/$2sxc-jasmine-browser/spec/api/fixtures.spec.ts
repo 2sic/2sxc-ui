@@ -5,7 +5,7 @@ describe('2sxc.api html fixtures', () => {
   var fixture: JQuery;
   var sxc: Sxc;
 
-  describe('2sxc.api simple html fixtures', () => {
+  describe('2sxc.api initialize a Sxc object with simple html fixtures', () => {
 
     beforeEach(function () {
       fixture = $("<div class='sc-content-block'  data-cb-instance='123' data-cb-id='345'>mock</div>");
@@ -27,7 +27,7 @@ describe('2sxc.api html fixtures', () => {
 
 
 
-  describe('2sxc.api data-edit-context html fixtures', () => {
+  describe('2sxc.api initialize a Sxc object with data-edit-context html fixtures', () => {
 
     beforeEach(function () {
       fixture = $(`<div class='sc-content-block'
