@@ -1,6 +1,6 @@
 import { Sxc } from "../../../sxc-typings/index";
 
-describe("2sxc.api suite", function () {
+describe("2sxc.api basic initialize a Sxc object", function () {
   let sxc: Sxc;
 
   it("isEditMode() is false", function () {
@@ -8,12 +8,12 @@ describe("2sxc.api suite", function () {
     expect(sxc.isEditMode()).toBe(false);
   });
 
-  it("initialize a Sxc object with moduleId=42 => id is 42", function () {
+  it("with moduleId=42 => id is 42", function () {
     sxc = $2sxc(42)
     expect(sxc.id).toBe(42);
   });
 
-  it("initialize a Sxc object with moduleId=111 and contentBlockId=24 => cbid is 24", function () {
+  it("with moduleId=111 and contentBlockId=24 => cbid is 24", function () {
     sxc = $2sxc(111, 24)
     expect(sxc.cbid).toBe(24);
   });
