@@ -103,7 +103,7 @@
   "include": [
     "./src/**/*.ts",
     "./spec/**/*.ts",
-    "./helper/**/*.ts"
+    "./spec/helper/**/*.ts"
   ],
   // "exclude": [
   //   "node_modules",
