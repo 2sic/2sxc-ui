@@ -36,7 +36,7 @@
               "src/styles.css",
               "src/theme.scss"
             ],
-            "scripts": [],
+            "scripts": []
           },
           "configurations": {
             "production": {
@@ -64,7 +64,8 @@
               "vendorChunk": true,
               "buildOptimizer": false
             }
-          }
+          },
+          "defaultConfiguration": "development"
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
