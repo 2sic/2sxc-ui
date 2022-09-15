@@ -75,6 +75,7 @@ export class ContextIdentifier {
    * Create a string-id to identify in a cache. 
    * @param ctx 
    * @returns 
+   * @internal
    */
   static toCacheKey(ctx: ContextIdentifier): string {
     this.ensureCompleteOrThrow(ctx);

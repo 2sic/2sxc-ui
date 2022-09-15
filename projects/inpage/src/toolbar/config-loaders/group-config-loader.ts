@@ -8,6 +8,7 @@ import { TypeValue } from '../../plumbing';
 import { Button, ButtonCommand, Toolbar, ToolbarSettings } from '../config';
 import { ButtonGroup } from '../config';
 import { TemplateConstants as TC } from '../templates/constants';
+import { TLB_MORE_END, TLB_MORE_NEVER } from './../config/toolbar-settings';
 import { ToolbarConfigLoader } from './toolbar-config-loader';
 
 /**
@@ -158,16 +159,14 @@ export class ButtonGroupConfigLoader extends HasLog {
     /** Add the "more" button at the end or beginning */
     private addMoreButton(settings: ToolbarSettings, list: InPageButtonJson[]): void {
         const cl = this.log.call('addMoreButtons');
-        const addMore = settings.autoAddMore;
-        if (addMore) {
+        const addMore = ToolbarSettings.bestAddMorePos(settings);
+        if (addMore && addMore !== TLB_MORE_NEVER) {
+            this.log.add(`will add a more "..." button to ${addMore}`);
             const moreButton = this.toolbar.button.btnConfigStructure(CommandNames.more, {});
-            if ((addMore === 'end') || (addMore.toString() === 'right')) { // fallback for older v1 setting
-                this.log.add('will add a more "..." button to end');
+            if (addMore === TLB_MORE_END)
                 list.push(moreButton);
-            } else {
-                this.log.add('will add a more "..." button to start');
+            else
                 list.unshift(moreButton);
-            }
         } else this.log.add('will not add more "..." button');
         cl.return(list);
     }

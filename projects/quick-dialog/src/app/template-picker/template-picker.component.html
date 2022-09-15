@@ -3,7 +3,7 @@
 
   <!-- debug info section -->
   <div *ngIf="showDebug">
-    <h4>Debug 2sxc 11 / ng 11</h4>
+    <h4>Debug 2sxc 14 Quick Dialog</h4>
     <ul>
       <li>Types: {{ types?.length }}, current: {{contentType?.StaticName}}, default: {{defaultContentType?.Label}}</li>
       <li>Apps: {{ (apps$ | async)?.length }}, current: {{app?.AppId }} </li>
@@ -39,7 +39,7 @@
         </ng-template>
 
         <!-- App Selector -->
-        <div *ngIf="!isContent; else contentApp" class="tiles" [ngClass]="{ 'show-installer': !isBadContextForInstaller && showInstaller }">
+        <div *ngIf="!isContent; else contentApp" class="tiles" [ngClass]="{ 'show-installer': installerShow }">
 
           <div class="tile"
             [ngClass]="{ active: app?.AppId === a.AppId, blocked: preventTypeSwitch }"
@@ -63,7 +63,7 @@
 
         <!-- Content-Type selection (when not a generic app, but the default content-app) -->
         <ng-template #contentApp>
-          <div class="tiles" [ngClass]="{ 'show-installer': !isBadContextForInstaller && showInstaller }">
+          <div class="tiles" [ngClass]="{ 'show-installer': installerShow }">
             <div mat-button class="tile"
               [ngClass]="{ active: contentType ? contentType?.StaticName === c.StaticName : defaultContentType?.StaticName === c.StaticName, blocked: preventTypeSwitch }"
               [attr.title]="(c.Label | translate) + (showDebug ? ' (' + c.StaticName + ')' : '')"
@@ -87,7 +87,7 @@
 
       <!-- template selection after app/content-type selection -->
       <mat-tab *ngIf="isContent ? contentType : app" [label]="('TemplatePicker.ChangeView' | translate) + ' (' + templates.length + ')'">
-        <div class="tiles" [ngClass]="{ 'show-installer': !isBadContextForInstaller && showInstaller }">
+        <div class="tiles" [ngClass]="{ 'show-installer': installerShow }">
           <mat-spinner class="templates-spinner" *ngIf="templatesLoading$ | async"></mat-spinner>
           <div class="tile"
             [ngClass]="{ active: template?.TemplateId === t.TemplateId }"
@@ -108,29 +108,46 @@
         </div>
       </mat-tab>
 
-      <mat-tab disabled *ngIf="!(!isBadContextForInstaller && showInstaller)">
+      <mat-tab disabled>
         <ng-template mat-tab-label>
           <!-- search -->
-          <div class="search-field">
+          <div class="search-field" *ngIf="showSearchBar">
             <input type="text" *ngIf="tabIndex === 0 && !isContent" [(ngModel)]="appFilter">
             <input type="text" *ngIf="tabIndex === 0 && isContent" [(ngModel)]="contentTypeFilter">
             <input type="text" *ngIf="tabIndex === 1" [(ngModel)]="templateFilter">
           </div>
 
           <!-- install and manage buttons -->
-          <button mat-button class="config-btn" *ngIf="!isContent && showAdvanced" (click)="run('app-import')" [attr.title]="'TemplatePicker.Install' | translate">
+          <button mat-button class="config-btn" *ngIf="tabIndex === 0 && showInstallAndAllApps" (click)="run('app-import')" [attr.title]="'TemplatePicker.Install.Details' | translate">
             <mat-icon>get_app</mat-icon>
             {{"TemplatePicker.Install" | translate}}
           </button>
-          <button mat-button class="config-btn" *ngIf="!isContent && showAdvanced" (click)="run('apps')" [attr.title]="'TemplatePicker.Zone' | translate">
+          <button mat-button class="config-btn" *ngIf="tabIndex === 0 && showInstallAndAllApps" (click)="run('apps')" [attr.title]="'TemplatePicker.Zone.Details' | translate">
             <mat-icon>apps</mat-icon>
             {{"TemplatePicker.Zone" | translate}}
+          </button>
+          <button mat-button class="config-btn" *ngIf="showAdminApp && (isContent || tabIndex == 1)" (click)="run('app')" [attr.title]="'TemplatePicker.App.Details' | translate">
+            <mat-icon>settings</mat-icon>
+            {{"TemplatePicker.App" | translate}}
           </button>
         </ng-template>
       </mat-tab>
     </mat-tab-group>
 
-    <span class="no-install-allowed" *ngIf="isBadContextForInstaller && showInstaller">No {{isContent ? 'Content Apps' : 'Apps'}} installed yet. Please persue the installation by creating a new {{isContent ? 'Content' : 'App'}} in the root of your website.</span>
-    <app-installer *ngIf="!isBadContextForInstaller && showInstaller" [isContentApp]="isContent"></app-installer>
+    <span class="no-install-allowed" *ngIf="installerNeeded && !installerShow">
+      No {{isContent ? 'Content App' : 'Apps'}} installed yet.
+      You should see the installer here but we cannot show it.
+      <ng-container *ngIf="isInnerContent">
+        <br>
+        You cannot use the installer from inner-content.
+        Please install Apps first by adding a {{isContent ? 'Content' : 'App'}} Module on a page.
+      </ng-container>
+      <ng-container *ngIf="!isInnerContent">
+        <br>
+        You don't have super-user permissions.
+        Please try again with a super-user login.
+      </ng-container>
+    </span>
+    <app-installer *ngIf="installerShow" [isContentApp]="isContent"></app-installer>
   </div>
 </div>

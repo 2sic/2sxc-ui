@@ -10,7 +10,6 @@ import { Template } from 'app/template-picker/template';
 import { combineLatest, merge, Observable, timer } from 'rxjs';
 import { filter, map, skipUntil, startWith } from 'rxjs/operators';
 import { BackendSettings } from '../core/backend-settings';
-import { cAppActionImport } from './constants';
 import { CurrentDataService } from './current-data.service';
 import { ContentTypesProcessor } from './data/content-types-processor.service';
 import { PickerService } from './picker.service';
@@ -34,10 +33,13 @@ export class TemplatePickerComponent implements OnInit {
   isContent: boolean;
 
   /** show advanced features (admin/host only) */
-  showAdvanced = false;
+  private showAdvanced = false;
 
-  /** show the installer */
-  showInstaller = false;
+  /** Needs the installer */
+  installerNeeded = false;
+
+  /** Show the Installer */
+  installerShow = false;
 
   /** Stream to indicate ready, for loading-indicator */
   ready$: Observable<boolean>;
@@ -49,8 +51,20 @@ export class TemplatePickerComponent implements OnInit {
   /** Indicate if the user is allowed to change content-types or not */
   preventTypeSwitch: boolean;
 
-  /** Indicates whether the installer can be shown in this dialog or not */
-  isBadContextForInstaller = false;
+  /** Indicates whether the installer can be shown in this dialog or not. True if inner-content. */
+  isInnerContent = false;
+
+  /** Indicates whether the search bar will be shown in this dialog or not */
+  showSearchBar = false;
+
+  /**
+   * Indicates whether the install apps and all apps buttons will be shown in this dialog or not
+   * only on empty-content or all apps in admin-mode
+   */
+  showInstallAndAllApps = false;
+
+  /** Show the admin-this-app button */
+  showAdminApp = false;
 
   /** The communication-object to the parent */
   private bridge: IIFrameBridge;
@@ -152,9 +166,14 @@ export class TemplatePickerComponent implements OnInit {
       .pipe(
         map(([templates, _, apps, _2]) => {
           log.add('apps/templates loaded, will check if we should show installer');
-          this.showInstaller = this.isContent
+          // Installer is needed on content without templates, or apps without any apps
+          this.installerNeeded = this.isContent
             ? templates.length === 0
-            : apps.filter(a => a.AppId !== cAppActionImport).length === 0;
+            : apps.length === 0;
+          this.installerShow = this.showAdvanced && this.installerNeeded && !this.isInnerContent;
+          this.showSearchBar = !this.installerNeeded;
+          this.showInstallAndAllApps = this.showAdvanced && (this.installerShow || !this.isContent);
+          this.showAdminApp = this.showAdvanced && !this.installerNeeded;
         }))
       .subscribe();
 
@@ -198,7 +217,7 @@ export class TemplatePickerComponent implements OnInit {
 
   private initValuesFromBridge(config: IQuickDialogConfig): void {
     this.preventTypeSwitch = config.hasContent;
-    this.isBadContextForInstaller = config.isInnerContent;
+    this.isInnerContent = config.isInnerContent;
     this.isContent = config.isContent;
     this.supportsAjax = this.isContent || config.supportsAjax;
     this.preventAppSwich = config.hasContent;

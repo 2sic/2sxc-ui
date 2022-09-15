@@ -1,7 +1,7 @@
-import { SxcRoot } from '@2sic.com/2sxc-typings';
+import { SxcGlobal } from '@2sic.com/2sxc-typings';
 import { urlParams } from './core/constants';
 
-declare const $2sxc: SxcRoot;
+declare const $2sxc: SxcGlobal;
 
 export class Config {
   static appId = () => parseInt(get(urlParams.appId));

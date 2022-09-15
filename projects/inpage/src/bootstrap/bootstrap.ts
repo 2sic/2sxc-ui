@@ -8,6 +8,7 @@ import { QuickDialog } from '../quick-dialog';
 import * as QuickEditState from '../quick-dialog/state';
 import { SxcTools } from '../sxc/sxc-tools';
 import { toolbarSelector } from '../toolbar';
+import { monitorSvgIconsInToolbar } from '../toolbar/render/svg-icons';
 import { TagToolbarManager } from '../toolbar/tag-toolbars/tag-toolbar-manager';
 import { ToolbarManager } from '../toolbar/toolbar-manager';
 
@@ -37,6 +38,9 @@ export class BootstrapInPage extends HasLog {
 
         // start observing the body for configured mutations
         this.watchDomChanges();
+
+        // start watching the body for toolbar mutations (SVGs)
+        monitorSvgIconsInToolbar();
         callLog.return('done');
     }
 

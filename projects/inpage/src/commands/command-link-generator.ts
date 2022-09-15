@@ -102,7 +102,9 @@ export class CommandLinkGenerator extends HasLog {
      */
     private getDialogUrl(context: ContextComplete): string {
         const env = window.$2sxc.env;
-        return urlClean(`${env.uiRoot()}${C.DialogPaths.eavUi}`) + `?pageId=${env.page()}&sxcver=${context.instance.sxcVersion}`;
+        let customParams = env.dialogQuery();
+        if (customParams && !customParams.startsWith('&')) customParams = '&' + customParams;
+        return urlClean(`${env.uiRoot()}${C.DialogPaths.eavUi}`) + `?pageId=${env.page()}&sxcver=${context.instance.sxcVersion}${customParams}`;
     }
 
     private addItem() {
@@ -120,7 +122,6 @@ export class CommandLinkGenerator extends HasLog {
 
         // only add if there was stuff to add
         if (item.EntityId || item.ContentTypeName) {
-            console.warn('used the simple item header - test if dialog still works!');
             this.items.push(item);
             // 2022-05-18 2dm - disable this, seems like old code, title shouldn't be used any more
             // this.items.push({ ...item, Title: translate(this.findTranslationKey(this.findPartName(true))) });

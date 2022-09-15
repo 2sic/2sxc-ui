@@ -81,12 +81,12 @@ body.sc-tb-show-all [sxc-toolbar-hover] .sc-menu {
 
 /* this one is for buttons which can have a full/empty state */
 .sc-menu li a.empty i,
-.sc-menu li a.empty span.svg-wrapper {
+.sc-menu li a.empty svg {
   opacity: 0.4;
 }
 /* this one is for buttons which can be disabled, like publish */
-.sc-menu li a.disabled i,
-.sc-menu li a.disabled span.svg-wrapper {
+.sc-menu li a.disabled i
+/* , .sc-menu li a.disabled */ {
   opacity: 0.4;
 }
 
@@ -97,7 +97,7 @@ body.sc-tb-show-all [sxc-toolbar-hover] .sc-menu {
   background-color: #002753; /* #012C4F; */ /* #0088f4; */
   border-style: solid;
   box-sizing: content-box;
-  -webkit-border-radius: 20px;
+  /* -webkit-border-radius: 20px; */
   -moz-border-radius: 20px;
   border-radius: 20px;
   color: #fff;
@@ -106,8 +106,10 @@ body.sc-tb-show-all [sxc-toolbar-hover] .sc-menu {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 
-  /* Experimental: electric glow */
-  /* animation: glow 1s ease-in-out infinite alternate; */
+  /* Rules to position content SVG which are not ::before icons */
+  align-items: center;
+  justify-content: center;
+  display: flex;
 }
 
 @keyframes glow {
@@ -127,8 +129,8 @@ body.sc-tb-show-all [sxc-toolbar-hover] .sc-menu {
 }
 
 .sc-menu a.single-field div {
-    background-color: transparent;
-    box-shadow: none;
+  background-color: #222;
+  mix-blend-mode: difference;
 }
 
 .sc-menu a div:hover {
@@ -141,25 +143,19 @@ body.sc-tb-show-all [sxc-toolbar-hover] .sc-menu {
   vertical-align: text-bottom;
 }
 
-.sc-menu a span.svg-wrapper {
-  text-align: center;
-  background: transparent;
-  display: inline-block;
-  width: 100%;
-  height: 100%;
-  vertical-align: text-bottom;
-}
-
-.sc-menu a span.svg-wrapper svg {
-  transform: scale(0.4);
+/* All Menu SVG rules */
+.sc-menu a div svg {
   position: relative;
-  top: -10px;
-  left: -10px;
+  width: 18px;
+  height: 18px;
 }
 
-.sc-menu a span.svg-wrapper svg * {
+/* Make all SVG fills white, which didn't explicitly say they have a fill (like fill=none) */
+.sc-menu a div svg *:not([fill]) {
   fill: white;
 }
+
+/* end SVG rules */
 
 /* Because of IE11 issue with cascading class there need to be .sc-menu.group-X on each group declaration */
 /* hide all links by default */
@@ -205,6 +201,7 @@ body.sc-tb-show-all [sxc-toolbar-hover] .sc-menu {
   background-color: #ff0000;
 }
 
+/* 2022-08-21 2dm - not sure what this rule is for*/
 .sc-menu span.disabled {
   color: #aaa;
 }

@@ -109,22 +109,21 @@ export class RenderButton extends RenderPart {
     }
 
     private iconTag(btn: ButtonSafe, rule: BuildRule) {
-        const callLog = this.log.call('iconTag');
-        const icon = rule?.ui?.icon || btn.icon();
-        if (icon.startsWith('svg:')) {
-            const base64 = icon.split('svg:')[1];
-            const decoded = atob(base64);
-            const symbol = document.createElement('span');
-            HtmlTools.addClasses(symbol, 'svg-wrapper');
-            symbol.innerHTML = decoded;
-            symbol.setAttribute('aria-hidden', 'true');
-            return callLog.return(symbol, icon);
-        } else {
-            const symbol = document.createElement('i');
-            HtmlTools.addClasses(symbol, icon);
-            symbol.setAttribute('aria-hidden', 'true');
-            return callLog.return(symbol, icon);
-        }
+      const callLog = this.log.call('iconTag');
+      const icon = rule?.ui?.icon || btn.icon();
+      if (icon.indexOf('<svg') > -1) {
+        // Temporary dom element
+        const symbol = document.createElement('template');
+        symbol.innerHTML = icon;
+        // Note: It would be tempting to set the viewBox here, but it's not possible
+        // because we cannot calculate the size before rendering
+        return callLog.return(symbol.content.firstChild, icon);
+      } else {
+        const symbol = document.createElement('i');
+        HtmlTools.addClasses(symbol, icon);
+        symbol.setAttribute('aria-hidden', 'true');
+        return callLog.return(symbol, icon);
+      }
     }
 }
 

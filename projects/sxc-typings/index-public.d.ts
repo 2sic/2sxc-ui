@@ -745,6 +745,7 @@ export declare class ContextIdentifier {
     /* Excluded from this release type: blockId */
     /* Excluded from this release type: is */
     /* Excluded from this release type: ensureCompleteOrThrow */
+    /* Excluded from this release type: toCacheKey */
 }
 
 /* Excluded from this release type: ContextOfApp */
@@ -789,6 +790,7 @@ export declare interface EnvironmentSpecs {
     /* Excluded from this release type: uiRoot */
     /** The platform code like 'dnn' or 'oqt' */
     platform: string;
+    /* Excluded from this release type: dialogQuery */
 }
 
 /**
@@ -1567,6 +1569,7 @@ export declare class SxcGlobalEnvironment extends HasLog {
      * The platform code like 'oqt' or 'dnn' in case the JS needs to know the difference
      */
     platform(): string;
+    /* Excluded from this release type: dialogQuery */
     /* Excluded from this release type: ensureReadyOrThrow */
 }
 
@@ -1801,17 +1804,29 @@ export declare class SxcWebApi implements ZzzSxcWebApiDeprecated {
 
 /* Excluded from this release type: TemplateIdentifier */
 
+/* Excluded from this release type: TLB_FOLLOW_ALWAYS */
+
+/* Excluded from this release type: TLB_FOLLOW_INITIAL */
+
+/* Excluded from this release type: TLB_FOLLOW_SCROLL */
+
+/* Excluded from this release type: TLB_HOV_LEFT */
+
+/* Excluded from this release type: TLB_HOV_RIGHT */
+
+/* Excluded from this release type: TLB_MORE_AUTO */
+
+/* Excluded from this release type: TLB_MORE_END */
+
+/* Excluded from this release type: TLB_MORE_NEVER */
+
+/* Excluded from this release type: TLB_MORE_START */
+
+/* Excluded from this release type: TLB_SHOW_ALWAYS */
+
+/* Excluded from this release type: TLB_SHOW_HOVER */
+
 /* Excluded from this release type: Toolbar */
-
-/* Excluded from this release type: TOOLBAR_FOLLOW_ALWAYS */
-
-/* Excluded from this release type: TOOLBAR_FOLLOW_INITIAL */
-
-/* Excluded from this release type: TOOLBAR_FOLLOW_SCROLL */
-
-/* Excluded from this release type: TOOLBAR_SHOW_ALWAYS */
-
-/* Excluded from this release type: TOOLBAR_SHOW_HOVER */
 
 /* Excluded from this release type: ToolbarButtonSettings */
 
@@ -1861,11 +1876,11 @@ export declare class ToolbarWorkflowManager extends HasLog {
 
 /* Excluded from this release type: TotalPopup */
 
-declare type TypeAutoAddMore = null | 'start' | 'end' | true;
+/* Excluded from this release type: TypeAutoAddMore */
 
 /* Excluded from this release type: TypeFollow */
 
-declare type TypeHover = 'left' | 'right' | 'none';
+/* Excluded from this release type: TypeHover */
 
 /* Excluded from this release type: TypeShow */
 

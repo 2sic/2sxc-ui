@@ -30,4 +30,11 @@ export interface EnvironmentSpecs {
 
   /** The platform code like 'dnn' or 'oqt' */
   platform: string;
+
+  /**
+   * Additional URL params for the dialog
+   * added in v14.08
+   * @internal
+   */
+  dialogQuery?: string;
 }

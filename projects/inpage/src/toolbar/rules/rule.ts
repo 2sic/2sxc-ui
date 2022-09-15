@@ -130,12 +130,17 @@ export class BuildRule extends HasLog {
         // command name defaults to name, can be reset by load-headers
         // assumes key is something like "group=myGroup" or just "edit"
         this.name = parts?.[0]?.[1] || key;
-        if (parts.length > 1) this.loadHeaderParts(parts.slice(1));
+        if (parts.length > 1) this.leadHeaderAndUi(key, parts.slice(1));
 
         return cl.done();
     }
 
-    private loadHeaderParts(rest: string[][]) {
+    /**
+     * Load the header
+     * @param forKey the key being loaded, to handle special case settings/toolbar
+     * @param rest the parameters to process
+     */
+    private leadHeaderAndUi(forKey: string, rest: string[][]) {
         const cl = this.log.call('loadHeaderParts');
         if (!rest.length) return cl.done('nothing to load');
         const parts = this.dicToArray(rest);
@@ -152,7 +157,8 @@ export class BuildRule extends HasLog {
         if (parts.pos != null) this.pos = Number(parts.pos);
 
         // #4 icon is automatically kept
-        // #5 show override
+        // #5 show override of buttons (on buttons, must convert to bool)
+        if (forKey !== BuildSteps.settings && forKey !== BuildSteps.toolbar)
         if (typeof parts.show === 'string')
             (parts as Record<string, TypeValue>).show = parts.show === 'true';
         this.ui = parts;
@@ -191,7 +197,11 @@ export class BuildRule extends HasLog {
         if (!original) return [];
         const split1 = original.split('&');
         const split2 = split1.map((p) => {
-            const keyValues = p.split('=');
+            let i = p.indexOf('=');
+            if (i < 0) i = p.length;
+            const keyValues = [p.slice(0,i), p.slice(i+1)];
+            // 2022-08-15 2dm before - would have lost cases where '=' occurs in the value a few times
+            // const keyValues = p.split('=');
             const key = keyValues[0];
             let val: any = keyValues[1];
             // disabled, don't see a use case for this
@@ -202,11 +212,23 @@ export class BuildRule extends HasLog {
             // fix url encoding
             if (val?.indexOf('%') > -1) val = decodeURIComponent(val);
             // fix C# typed true/false or string representations
-            if (val === 'True' || val === 'true') return [key, true]; // val = true;
-            if (val === 'False' || val === 'false') return [key, false]; // val = false;
+            if (val === 'True' || val === 'true') return [key, true];
+            if (val === 'False' || val === 'false') return [key, false];
 
-            // cast numbers to numbers
-            val = isNaN(+val) ? val : Number(val);
+            // cast numbers to proper number objects
+            if (!isNaN(+val)) return [key, Number(val)];
+
+            // revert base64 encoding
+            if (typeof(val) === 'string' && val.startsWith('base64:')) {
+              const afterPrefix = val.split('base64:')[1];
+              return [key, atob(afterPrefix)];
+            }
+
+            if (typeof(val) === 'string' && val.startsWith('json64:')) {
+              const afterPrefix = val.split('json64:')[1];
+              return [key, JSON.parse(atob(afterPrefix))];
+            }
+
             return [key, val];
         });
         return split2;

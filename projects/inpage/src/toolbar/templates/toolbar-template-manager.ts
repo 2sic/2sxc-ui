@@ -24,8 +24,6 @@ export class ToolbarTemplateManager extends HasLog {
         Insights.add('system', 'toolbar-template-manager', this.log);
         this.add(ToolbarTemplateEmpty);
         this.add(ToolbarTemplateDefault);
-        // CodeChange #2020-03-20#TemplateToolbarLeftUnused - if no side-effects, delete in June
-        // this.add('left', ToolbarTemplateLeft);
         this.add(ToolbarTemplateSublist);
     }
 

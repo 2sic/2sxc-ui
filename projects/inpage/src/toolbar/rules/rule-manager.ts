@@ -52,19 +52,48 @@ export class RuleManager extends HasLog {
     filter(criteria: (x: BuildRule) => boolean): BuildRule[] { return this.rules.filter(criteria); }
 
 
-    /** the settings are usually retrieved on settings, but you can also put them behind the toolbar */
-    getSettings = () => this.getSystemRule(BuildSteps.settings) || this.getToolbar();
+    /**
+     * The settings are usually retrieved on settings,
+     * but you can also put them behind the toolbar.
+     * But mixing both won't work ATM by design.
+     */
+    getSettings() {
+      const all = this.getSystemRuleS(BuildSteps.settings) || [];
+      // Params must be merged BEFORE adding the main toolbar rule
+      // because actually settings shouldn't have params, but historically it was used
+      // But toolbar-rule params are never for the settings
+      // Because this params-mistake was only made when only 1 settings was allowed
+      // We will only use one setting
+      const params = Object.assign({}, ...all.slice(0, 1).map((a) => a?.params));
 
-    /** the params for the command - if not found, will use the toolbar params */
+      const tlbPart = this.getToolbar();
+      if (tlbPart) all.unshift(tlbPart); // add to start, so it's the lowest priority
+      const ui = Object.assign({}, ...all.map((a) => a?.ui));
+
+      return { ui, params };
+    }
+    // before v14.07.05 it was this:
+    // remove Q4 2022 if everything is ok
+    // getSettingsOld = () => this.getSystemRule(BuildSteps.settings) || this.getToolbar();
+
+    /**
+     * The params for the command - if not found, will use the toolbar params.
+     * But it's either or, mixing won't work by design ATM.
+     */
     getParams = () => this.getSystemRule(BuildSteps.params) || this.getToolbar();
 
     getToolbar = () => this.getSystemRule(BuildSteps.toolbar);
-    getAdd = () => this.filter((br) => br.operator === OP.add || br.operator == OP.addAuto);
+    getAdd = () => this.filter((br) => br.operator === OP.add || br.operator === OP.addAuto);
     getRemoveGroups = () => this.filter((br) => br.operator === OP.remove && br.step === BuildSteps.group);
 
     /** Find a system rule (marked with '$') */
     private getSystemRule(name: BuildSteps): BuildRule | undefined {
         return this.rules.find((r) => r.operator === OP.system && r.step === name);
+    }
+
+    /** Find a system rule (marked with '$') */
+    private getSystemRuleS(name: BuildSteps): BuildRule[] | undefined {
+        return this.rules.filter((r) => r.operator === OP.system && r.step === name);
     }
 
 }

@@ -128,7 +128,7 @@ export class ToolbarConfigLoaderV09 extends HasLog {
         cl.data('initial', unstructuredConfig);
 
         // case 0: nothing in the config
-        if (!unstructuredConfig || unstructuredConfig === {})
+        if (!unstructuredConfig || (Object.getOwnPropertyNames(unstructuredConfig).length === 0))
             return cl.return([], 'case 0: empty object, use []');
 
         const arrGroups: InPageButtonGroupJson[] = [];
@@ -153,7 +153,7 @@ export class ToolbarConfigLoaderV09 extends HasLog {
         // Case 3: not an array
         cl.add('Case 3: not array');
         if (InPageButtonJson.is(unstructuredConfig)) {
-            return cl.return([ { buttons: [unstructuredConfig] }], 
+            return cl.return([ { buttons: [unstructuredConfig] }],
                 'Case 3a: not array, but has action/buttons properties, will wrap config into array');
         }
 

@@ -60,7 +60,6 @@ export function $2sxcGet(id: number | ContextIdentifier | HTMLElement | Sxc, cbi
 }
 
 function autoFind(domElement: HTMLElement): [number, number] {
-debugger;
     const containerTag = domElement.closest('.sc-content-block');
     if (!containerTag) return null;
     const iid = containerTag.getAttribute('data-cb-instance');

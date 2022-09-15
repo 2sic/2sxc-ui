@@ -1,0 +1,9 @@
+spec-browser-compiled
+spec/*.js
+src/*.js
+src/js/**/*.*
+!src/assets/*.*
+**/*.mjs
+
+
+src/dist

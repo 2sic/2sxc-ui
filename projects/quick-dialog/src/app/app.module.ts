@@ -3,7 +3,7 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { DnnInterceptor } from '@2sic.com/dnn-sxc-angular';
+import { SxcHttpInterceptorProvider } from '@2sic.com/sxc-angular';
 import { AppComponent } from './app.component';
 import { TemplatePickerModule } from 'app/template-picker/template-picker.module';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
@@ -36,7 +36,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     }),
     MaterialModule, // must be after BrowserModule
   ],
-  providers: [DnnInterceptor],
+  providers: [SxcHttpInterceptorProvider],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
