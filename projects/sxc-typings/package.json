@@ -42,6 +42,6 @@
   "devDependencies": {
     "@microsoft/api-documenter": "^7.17.19",
     "@microsoft/api-extractor": "^7.25.2",
-    "typedoc": "^0.15.8"
+    "typedoc": "^0.23.14"
   }
 }
