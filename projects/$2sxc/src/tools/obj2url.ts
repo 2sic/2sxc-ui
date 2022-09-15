@@ -31,7 +31,7 @@ export class ToolUrlObjects {
     if (Array.isArray(obj)) throw new Error("only objects can be toUrl(), arrays don't work. Put the array in an object property.");
     var result = this
       .toUrlRecursive(obj, null, 0, encode)
-      .filter(x => x != null && x.length > 0);      
+      .filter(x => x != null && x.length > 0);
     const urlParam = result.join(separator);
     return urlParam ? separator + urlParam : '';
   }
@@ -48,15 +48,15 @@ export class ToolUrlObjects {
   /**
    * Converts an object to a compact notation with dots.
    * Recursive, as it needs to also handle sub-objects
-   * @param obj 
-   * @param key 
+   * @param obj
+   * @param key
    * @param depth
-   * @returns 
+   * @returns
    */
   private toUrlRecursive(obj: any, key: string, depth: number, encode: boolean): string[] {
     if (obj == null) return [];
     const prefix = depth > 0 ? dot.repeat(depth) : '';
-    if (typeof obj !== 'object') 
+    if (typeof obj !== 'object')
       return [`${prefix}${key}=${encode ? customEncode(obj) : obj}`];
 
     const subItem: string[][] = Object.keys(obj)
@@ -74,7 +74,7 @@ export class ToolUrlObjects {
 
   public back(val: string, decode: boolean): Record<string, any> {
     if (!val || val.length === 0) return [];
-    
+
     const parts = val
       .replaceAll(equals + stringPrefix, equals + innerStringPrefix) // prot. string prefix
       .replaceAll(sepEsc, restoreSep)                  // Protect escaped separators
@@ -103,7 +103,7 @@ export class ToolUrlObjects {
         stack.push(subKey);
         pair[0] = stack.join(dot);
       }
-      result[pair[0]] = pair.length > 1 
+      result[pair[0]] = pair.length > 1
         ? (decode ? restoreValue(decodeURIComponent(pair[1])) : pair[1])
         : null;
     }
@@ -140,8 +140,8 @@ function unflatStringsToObj(data: Record<string, any>): any {
 
 
 // https://stackoverflow.com/questions/175739/how-can-i-check-if-a-string-is-a-valid-number
-function isNumeric(str: string) {
-  if (typeof str != "string") return false // we only process strings!  
+export function isNumeric(str: string) {
+  if (typeof str != "string") return false // we only process strings!
   return !isNaN(str as any) && // use type coercion to parse the _entirety_ of the string (`parseFloat` alone does not do this)...
          !isNaN(parseFloat(str)) // ...and ensure strings of whitespace fail
 }
@@ -159,7 +159,7 @@ function customEncode(value: any) {
     if (specialValues.includes(value) || isNumeric(value as any))
       mark = true;
       // return `${innerStringPrefix}${value}`;
-  
+
     // Mark any characters which look like the encoding chars
     value = value
       .replaceAll(separator, sepEsc)
@@ -172,7 +172,7 @@ function customEncode(value: any) {
 }
 
 /**
- * Restore a value to the real type. 
+ * Restore a value to the real type.
  * Explicitly marked strings will not be re-typed
  */
 function restoreValue(value: string) {
