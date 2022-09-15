@@ -14,9 +14,13 @@ var devAssets = process.env.Dev2sxcAssets;
 if(!devAssets) throw "Problem: environment variable 'Dev2sxcAssets' doesn't exist. It should point to the assets source folder in your 2sxc environment";
 const targetAssets = (devAssets + '\\').replace('//', '/').replace('\\\\', '\\')
 
+// needed for $2sxc-jasmine-browser
+var sxcTest = 'C:\\Projects\\2sxc\\2sxc-ui\\projects\\$2sxc-jasmine-browser\\src\\';
+
 console.log('Will build to these targets: \n'
     + "* Dnn:  " + targetDnn + "\n"
-    + '* 2sxc: ' + devAssets + '\n\n'
+    + '* 2sxc: ' + devAssets + '\n'
+    + '* $2sxc tests: ' + sxcTest + '\n\n'
 );
 
 function CreateDefinePlugin(webpack) {
@@ -103,10 +107,9 @@ module.exports.Version = rootVersion;
 module.exports.DnnTargetFolder = targetDnn;
 module.exports.AssetsTarget = targetAssets;
 module.exports.createCopyAfterBuildPlugin = createCopyAfterBuildPlugin;
-
 // new 2020-10-30 for multi-targets
 var targets = [targetDnn, targetAssets];
-var targetsWithoutAssets = [targetDnn];
+var targetsWithoutAssets = [targetDnn, sxcTest];
 if(targetOqt) {
     targets.push(targetOqt);
     targetsWithoutAssets.push(targetOqt);
