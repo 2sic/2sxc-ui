@@ -1,5 +1,14 @@
 {
   "typescript.tsdk": "node_modules\\typescript\\lib",
   "editor.tabSize": 2,
-  "editor.detectIndentation": false
+  "editor.detectIndentation": false,
+
+  "jasmineExplorer.jasminePath": "node_modules/jasmine",
+
+  "jasmineExplorer.nodeArgv": [ "-r", "ts-node/register" ],
+
+  "testExplorer.codeLens": true,
+
+  "testExplorer.gutterDecoration": true,
+  
 }
