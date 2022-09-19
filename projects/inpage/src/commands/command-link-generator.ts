@@ -156,11 +156,16 @@ export class CommandLinkGenerator extends HasLog {
     private addContentGroupItem(guid: string, index: number, part: string, isAdd: boolean) {
         const cl = this.log.call('addContentGroupItem', `${guid}, ${index}, ${part}, ${isAdd}`);
         this.items.push({
+            // #cleanUpDuplicateGroupHeaders
+            Add: isAdd,
+            Index: index,
+            Parent: guid,
+            Field: part.toLocaleLowerCase(),
             Group: {
                 Guid: guid,
-                Index: index,
+                // Index: index,
                 Part: part.toLocaleLowerCase(),
-                Add: isAdd,
+                // Add: isAdd,
             }
         });
         cl.done();

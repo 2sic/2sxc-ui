@@ -48,10 +48,12 @@ export interface ItemIdentifierParent {
   Part?: string;
 
   /** The index position within that field/part */
-  Index: number;
+  // #cleanUpDuplicateGroupHeaders
+  // Index: number;
 
   /** Whether to add the item - alternative is just to leave it, if it already existed */
-  Add: boolean;
+  // #cleanUpDuplicateGroupHeaders
+  // Add: boolean;
 }
 
 /**
@@ -85,5 +87,15 @@ export interface TemplateIdentifier {
  */
 export interface ItemIdentifierGroup extends ItemIdentifierShared {
   Group: ItemIdentifierParent;
+
+  // #cleanUpDuplicateGroupHeaders - moving to here from group
+  /** Whether to add the item - alternative is just to leave it, if it already existed */
+  Add: boolean;
+
+  /** The index position within that field/part */
+  Index: number;
+
+  Parent: string;
+  Field: string;
 }
 

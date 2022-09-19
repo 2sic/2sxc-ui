@@ -17,11 +17,17 @@ Commands.add(CommandNames.replace, 'Replace', 'replace', false, true, {
 
     // fieldList - redefine the items
     const params = context.button.command.params;
-    linkGenerator.items = [{ Group: {
-      Guid: params.parent,
-      Part: params.fields,
-      Index: CmdParHlp.getIndex(params),
+    linkGenerator.items = [{
+      // #cleanUpDuplicateGroupHeaders
       Add: false,
-    }}];
+      Index: CmdParHlp.getIndex(params),
+      Parent: params.parent,
+      Field: params.fields,
+      Group: {
+        Guid: params.parent,
+        Part: params.fields,
+        // Index: CmdParHlp.getIndex(params),
+        // Add: false,
+      }}];
   },
 });

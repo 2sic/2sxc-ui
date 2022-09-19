@@ -16,16 +16,25 @@ Commands.add(CommandNames.addExisting, 'AddExisting', 'add-existing', false, tru
   configureLinkGenerator: (context, linkGenerator) => {
     if (SharedLogic.isFieldList(context)) {
       const params = context.button.command.params;
-      linkGenerator.items = [{ Group: {
-        Guid: params.parent,
-        Part: params.fields,
-        Index: CmdParHlp.getIndex(params) + 1,
+      linkGenerator.items = [{
+        // #cleanUpDuplicateGroupHeaders
         Add: true,
-      }}];
+        Index: CmdParHlp.getIndex(params) + 1,
+        Parent: params.parent,
+        Field: params.fields,
+        Group: {
+          Guid: params.parent,
+          Part: params.fields,
+          // Index: CmdParHlp.getIndex(params) + 1,
+          // Add: true,
+        }}];
     } else if (SharedLogic.isPartOfBlockList(context)) {
       const topItem = linkGenerator.items[0] as ItemIdentifierGroup;
-      topItem.Group.Add = true;
-      topItem.Group.Index++;
+      // #cleanUpDuplicateGroupHeaders
+      topItem.Add = true;
+      // topItem.Group.Add = true;
+      topItem.Index++;
+      // topItem.Group.Index++;
       linkGenerator.items = [topItem];
     }
   },
