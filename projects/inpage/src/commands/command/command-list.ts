@@ -15,17 +15,11 @@ const cmd = Command.build(CommandNames.list, 'Sort', 'list-numbered', false, tru
 
     const params = context.button.command.params;
     linkGenerator.items = [{
-      // #cleanUpDuplicateGroupHeaders
       Add: false,
       Index: CmdParHlp.getIndex(params),
       Parent: params.parent,
       Field: params.fields,
-      Group: {
-        Guid: params.parent,
-        Part: params.fields,
-        // Index: CmdParHlp.getIndex(params),
-        // Add: false,
-      }}];
+    }];
   },
 });
 

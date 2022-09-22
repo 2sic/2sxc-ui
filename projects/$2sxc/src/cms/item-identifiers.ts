@@ -35,38 +35,6 @@ export interface ItemIdentifierCopy extends ItemIdentifierShared {
 }
 
 /**
- * Group identifier
- * @internal
- * TODO: KEEP INTERNAL, PROBABLY RENAME "Part" to "Field" or something in the whole chain
- * TODO: MAY BE replaced completely with ItemIdentifierInField, as it has the same purpose
- */
-export interface ItemIdentifierParent {
-  /** The parent entity GUID - in these cases usually the ContentBlock */
-  Guid: string;
-
-  /** The part of the parent it's in, kind of the "Field" - should be renamed to Field ASAP */
-  Part?: string;
-
-  /** The index position within that field/part */
-  // #cleanUpDuplicateGroupHeaders
-  // Index: number;
-
-  /** Whether to add the item - alternative is just to leave it, if it already existed */
-  // #cleanUpDuplicateGroupHeaders
-  // Add: boolean;
-}
-
-/**
- * Experimental in 10.27
- * @internal
- */
-export interface ItemIdentifierInField extends ItemIdentifierSimple {
-  Parent?: string;
-  Field?: string;
-  Add?: boolean;
-}
-
-/**
  * Template Identifier for telling the code-editor about this template
  * @internal
  */
@@ -85,10 +53,7 @@ export interface TemplateIdentifier {
  * Complex identifier using a group
  * @internal
  */
-export interface ItemIdentifierGroup extends ItemIdentifierShared {
-  Group: ItemIdentifierParent;
-
-  // #cleanUpDuplicateGroupHeaders - moving to here from group
+export interface ItemIdentifierInList extends ItemIdentifierShared {
   /** Whether to add the item - alternative is just to leave it, if it already existed */
   Add: boolean;
 
