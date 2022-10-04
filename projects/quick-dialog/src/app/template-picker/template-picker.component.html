@@ -9,7 +9,8 @@
       <li>Apps: {{ (apps$ | async)?.length }}, current: {{app?.AppId }} </li>
       <li>Templates: {{templates?.length}}, current: {{template?.TemplateId}}</li>
       <li>Config: isContent='{{isContent}}' Ready: {{ready}} </li>
-      <li>Tab to show: '{{tabIndex}}' / preventTypeSwitch '{{preventTypeSwitch}}' / preventAppSwitch '{{preventAppSwich}}'</li>
+      <li>Tab to show: '{{tabIndex}}' / preventTypeSwitch '{{preventTypeSwitch}}' / preventAppSwitch '{{preventAppSwitch}}'</li>
+      <li>installerNeeded: {{installerNeeded}}, isInnerContent: {{isInnerContent}}, installerShow: {{installerShow}}, showInstallAndAllApps: {{showInstallAndAllApps}}</li>
     </ul>
   </div>
 
