@@ -1,5 +1,4 @@
-﻿import { CommandNames, ItemIdentifierGroup, ItemIdentifierSimple, CommandParamsMetadata } from '.';
-import { TypeValue } from '../../../inpage/src/plumbing';
+﻿import { CommandNames, ItemIdentifierInList, ItemIdentifierSimple, CommandParamsMetadata } from '.';
 
 /**
  * Command parameters are handed over to a command for execution.
@@ -40,7 +39,7 @@ export interface CommandParams extends Record<string, unknown>
     action?: CommandNames;
 
     /** @internal */
-    items?: Array<ItemIdentifierSimple | ItemIdentifierGroup>;
+    items?: Array<ItemIdentifierSimple | ItemIdentifierInList>;
 
     /** 
      * Special change of dialogs, for example to change the edit-dialog into a new-dialog. 

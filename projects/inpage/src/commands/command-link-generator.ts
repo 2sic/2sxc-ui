@@ -1,5 +1,5 @@
 ﻿import { CmdParHlp } from '.';
-import { ItemIdentifierCopy, ItemIdentifierGroup, ItemIdentifierInField, ItemIdentifierSimple, TemplateIdentifier } from '../../../$2sxc/src/cms';
+import { ItemIdentifierCopy, ItemIdentifierInList, ItemIdentifierSimple, TemplateIdentifier } from '../../../$2sxc/src/cms';
 import { C } from '../constants';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { HasLog, Log } from '../core';
@@ -16,7 +16,7 @@ const urlMode2 = false;
  * @internal
  */
 export class CommandLinkGenerator extends HasLog {
-    public items: Array<ItemIdentifierSimple | ItemIdentifierCopy | ItemIdentifierGroup | TemplateIdentifier>;
+    public items: (ItemIdentifierSimple | ItemIdentifierCopy | ItemIdentifierInList | TemplateIdentifier)[];
     public readonly urlParams: UrlItemParams;
     private readonly debugUrlParam: string;
 
@@ -156,12 +156,10 @@ export class CommandLinkGenerator extends HasLog {
     private addContentGroupItem(guid: string, index: number, part: string, isAdd: boolean) {
         const cl = this.log.call('addContentGroupItem', `${guid}, ${index}, ${part}, ${isAdd}`);
         this.items.push({
-            Group: {
-                Guid: guid,
-                Index: index,
-                Part: part.toLocaleLowerCase(),
-                Add: isAdd,
-            }
+            Add: isAdd,
+            Index: index,
+            Parent: guid,
+            Field: part.toLocaleLowerCase(),
         });
         cl.done();
     }
@@ -187,7 +185,7 @@ export class CommandLinkGenerator extends HasLog {
                 Parent: groupId,
                 Add: isAdd,
                 Index: index,
-            } as ItemIdentifierInField));
+            } as ItemIdentifierInList));
     }
 
     /**

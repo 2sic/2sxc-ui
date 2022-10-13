@@ -12,7 +12,9 @@ export class BackendSettings {
 
   appId = new BehaviorSubject<number>(0);
 
-  data: Observable<ContextDto>
+  data: Observable<ContextDto>;
+
+  showAdvanced$: Observable<boolean>;
 
   constructor(http: HttpClient) {
     this.data = this.appId.pipe(
@@ -21,6 +23,8 @@ export class BackendSettings {
       map(bundle => bundle.Context),
       share()
     );
+
+    this.showAdvanced$ = this.data.pipe(map(settings => settings.Enable?.CodeEditor ?? false));
   }
 
   setApp(id: number) {

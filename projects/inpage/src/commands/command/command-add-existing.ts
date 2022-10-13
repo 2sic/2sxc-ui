@@ -1,5 +1,5 @@
 ﻿import { CmdParHlp, CommandNames, Commands } from '..';
-import { ItemIdentifierGroup } from '../../../../$2sxc/src/cms';
+import { ItemIdentifierInList } from '../../../../$2sxc/src/cms';
 import { SharedLogic } from './shared-logic';
 
 /**
@@ -16,16 +16,16 @@ Commands.add(CommandNames.addExisting, 'AddExisting', 'add-existing', false, tru
   configureLinkGenerator: (context, linkGenerator) => {
     if (SharedLogic.isFieldList(context)) {
       const params = context.button.command.params;
-      linkGenerator.items = [{ Group: {
-        Guid: params.parent,
-        Part: params.fields,
-        Index: CmdParHlp.getIndex(params) + 1,
+      linkGenerator.items = [{
         Add: true,
-      }}];
+        Index: CmdParHlp.getIndex(params) + 1,
+        Parent: params.parent,
+        Field: params.fields,
+      }];
     } else if (SharedLogic.isPartOfBlockList(context)) {
-      const topItem = linkGenerator.items[0] as ItemIdentifierGroup;
-      topItem.Group.Add = true;
-      topItem.Group.Index++;
+      const topItem = linkGenerator.items[0] as ItemIdentifierInList;
+      topItem.Add = true;
+      topItem.Index++;
       linkGenerator.items = [topItem];
     }
   },

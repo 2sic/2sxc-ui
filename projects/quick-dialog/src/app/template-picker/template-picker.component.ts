@@ -13,8 +13,11 @@ import { BackendSettings } from '../core/backend-settings';
 import { CurrentDataService } from './current-data.service';
 import { ContentTypesProcessor } from './data/content-types-processor.service';
 import { PickerService } from './picker.service';
+import { nameofFactory } from '../core/nameof';
 
 const log = parentLog.subLog('picker', DebugConfig.picker.enabled);
+
+const nameofTPC = nameofFactory<TemplatePickerComponent>();
 
 @Component({
   selector: 'app-template-picker',
@@ -31,9 +34,6 @@ export class TemplatePickerComponent implements OnInit {
 
   /** is in the main content-app or a generic app */
   isContent: boolean;
-
-  /** show advanced features (admin/host only) */
-  private showAdvanced = false;
 
   /** Needs the installer */
   installerNeeded = false;
@@ -75,7 +75,7 @@ export class TemplatePickerComponent implements OnInit {
   /** Ajax-support changes how saving/changing is handled */
   private supportsAjax: boolean;
 
-  preventAppSwich = false;
+  preventAppSwitch = false;
 
   public showDebug = DebugConfig.picker.showDebugPanel;
 
@@ -119,10 +119,6 @@ export class TemplatePickerComponent implements OnInit {
 
     // Make sure we have the latest backend settings
     this.backendSettings.setApp(dashInfo.appId);
-    this.backendSettings.data.subscribe(settings => {
-      this.showAdvanced = settings.Enable?.CodeEditor ?? false;
-    });
-
     // start data-loading
     this.api.initLoading(!dashInfo.isContent);
 
@@ -159,21 +155,33 @@ export class TemplatePickerComponent implements OnInit {
       .subscribe(_ => this.switchTab());
 
     // once the data is known, check if installer is needed
-    combineLatest([this.api.templates$,
+    combineLatest([
+      this.api.templates$,
       this.api.contentTypes$,
       this.api.apps$,
-      this.api.ready$.pipe(filter(r => !!r))])
+      this.api.ready$.pipe(filter(r => !!r)),
+      this.backendSettings.showAdvanced$
+    ])
       .pipe(
-        map(([templates, _, apps, _2]) => {
+        map(([templates, _, apps, _2, showAdv]) => {
           log.add('apps/templates loaded, will check if we should show installer');
           // Installer is needed on content without templates, or apps without any apps
           this.installerNeeded = this.isContent
             ? templates.length === 0
             : apps.length === 0;
-          this.installerShow = this.showAdvanced && this.installerNeeded && !this.isInnerContent;
+          this.installerShow = showAdv && this.installerNeeded && !this.isInnerContent;
           this.showSearchBar = !this.installerNeeded;
-          this.showInstallAndAllApps = this.showAdvanced && (this.installerShow || !this.isContent);
-          this.showAdminApp = this.showAdvanced && !this.installerNeeded;
+          this.showInstallAndAllApps = showAdv && (this.installerShow || !this.isContent);
+          this.showAdminApp = showAdv && !this.installerNeeded;
+
+          log.add('Debug Relevant Properties', {
+            installerNeeded: this.installerNeeded,
+            showAdv: showAdv,
+            isInnerContent: this.isInnerContent,
+            installerShow: this.installerShow,
+          });
+
+          // if (this.showDebug) console.log('initObservables...combineLatest(...)', this);
         }))
       .subscribe();
 
@@ -216,11 +224,12 @@ export class TemplatePickerComponent implements OnInit {
 
 
   private initValuesFromBridge(config: IQuickDialogConfig): void {
+    if (this.showDebug) console.log(`initValuesFromBridge(config)`, config);
     this.preventTypeSwitch = config.hasContent;
     this.isInnerContent = config.isInnerContent;
     this.isContent = config.isContent;
     this.supportsAjax = this.isContent || config.supportsAjax;
-    this.preventAppSwich = config.hasContent;
+    this.preventAppSwitch = config.hasContent;
     this.showCancel = config.templateId != null;
   }
 
@@ -280,8 +289,8 @@ export class TemplatePickerComponent implements OnInit {
     // ajax-support can change as apps are changed; for ajax, maybe both the previous and new must support it
     // or just new? still WIP
     const ajax = newApp.SupportsAjaxReload;
-    log.add(`changing app to ${newApp.AppId}; prevent-switch: ${this.preventAppSwich} use-ajax:${ajax}`);
-    if (this.preventAppSwich) return;
+    log.add(`changing app to ${newApp.AppId}; prevent-switch: ${this.preventAppSwitch} use-ajax:${ajax}`);
+    if (this.preventAppSwitch) return;
 
 
     this.loading$.next(true);
