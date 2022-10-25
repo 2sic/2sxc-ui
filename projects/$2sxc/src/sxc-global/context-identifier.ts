@@ -31,7 +31,15 @@ export class ContextIdentifier {
    * Exclude pageId and moduleId headers in web requests
    * @internal
    */
-  _ignoreHeaders?: boolean;
+  _noContextInHttpHeaders?: boolean;
+
+  /**
+   * Auto add the appid= and zoneid= to the url if not yet set
+   *
+   * @type {boolean}
+   * @memberof ContextIdentifier
+   */
+  _autoAppIdsInUrl?: boolean;
 
   /**
    * Marks the context as complete, so it won't merge in anything else 

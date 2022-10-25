@@ -61,7 +61,7 @@ export class SxcGlobalHttp extends HasLog {
         cbid = ctx?.blockId ?? cbid;
 
         // TODO: THE #_ignoreHeaders is only used in edit-ui, and should be changed to somehow say use-in-URL
-        if (!ctx?._ignoreHeaders) {
+        if (!ctx?._noContextInHttpHeaders) {
             if (id) fHeaders[HeaderNames.ModuleId] = id.toString();
             if (cbid) fHeaders[HeaderNames.ContentBlockId] = cbid.toString();
             fHeaders[HeaderNames.TabId] = pageId;
