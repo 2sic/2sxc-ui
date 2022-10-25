@@ -28,16 +28,16 @@ export class ContextIdentifier {
   moduleId?: number;
 
   /**
-   * Exclude pageId and moduleId headers in web requests
+   * Exclude pageId and moduleId headers in web requests.
+   * Internal - only used in edit-ui formulas. Any other use must be documented here.
    * @internal
    */
   _noContextInHttpHeaders?: boolean;
 
   /**
    * Auto add the appid= and zoneid= to the url if not yet set
-   *
-   * @type {boolean}
-   * @memberof ContextIdentifier
+   * Internal - only used in edit-ui formulas. Any other use must be documented here.
+   * @internal
    */
   _autoAppIdsInUrl?: boolean;
 
