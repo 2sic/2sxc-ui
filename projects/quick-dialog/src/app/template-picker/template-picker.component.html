@@ -70,7 +70,7 @@
               [attr.title]="(c.Label | translate) + (showDebug ? ' (' + c.StaticName + ')' : '')"
               (click)="selectContentType(contentType, c)"
               (dblclick)="switchTab()"
-              *ngFor="let c of types | filterByPropertyValue:'Label':contentTypeFilter"
+              *ngFor="let c of types | filterByPropertyValue:'Label':contentTypeFilter | filterByBoolProperty:'IsHidden':false"
             >
               <div class="bg">
                 <img *ngIf="c.Thumbnail !== null && c.Thumbnail !== ''" class="bg-img" [attr.src]="c.Thumbnail + '?w=176&h=176'">
