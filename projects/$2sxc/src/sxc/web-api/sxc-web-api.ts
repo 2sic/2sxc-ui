@@ -120,10 +120,10 @@ export class SxcWebApi implements ZzzSxcWebApiDeprecated {
         const ctxParams = {} as { appId?: number; zoneId?: number; };
         const ctx = this.sxc.ctx;
         const urlLower = url.toLocaleLowerCase();
-        // TODO: THE #_ignoreHeaders is only used in edit-ui, and should be changed to somehow say use-in-URL
-        if (ctx?._ignoreHeaders && urlLower.includes('app/auto/')) {
+        // Note: #_autoAppIdsInUrl is only used in edit-ui formulas
+        if (ctx?._autoAppIdsInUrl && urlLower.includes('app/auto/')) {
             if (ctx?.appId && !urlLower.includes('appid=')) ctxParams.appId = ctx.appId;
-            if (ctx?.zoneId && !urlLower.includes('zoneId=')) ctxParams.zoneId = ctx.zoneId;
+            if (ctx?.zoneId && !urlLower.includes('zoneid=')) ctxParams.zoneId = ctx.zoneId;
         }
         url = this.url(url, ctxParams);
         method = method || (data ? 'POST' : 'GET');
