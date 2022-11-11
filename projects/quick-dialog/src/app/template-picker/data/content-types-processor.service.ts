@@ -37,10 +37,10 @@ export class ContentTypesProcessor {
     // console.log('2dm current T', currentTemplate?.TemplateId);
     // console.log('2dm currentType Static', currentType?.StaticName);
     contentTypes
-      .filter(c => // 2022-11-04 2dm disabled, think it's never used (currentTemplate?.TemplateId === c.TemplateId && c.TemplateId !== undefined)
-        // ||
-        (c.StaticName === currentType?.StaticName && c.StaticName !== undefined)
-      )
+      // 2022-11-04 2dm disabled, think it's never used
+      // 2022-11-11 trying to fix another issue....
+      // .filter(c => (currentTemplate?.TemplateId === c.TemplateId) || (c.StaticName === currentType?.StaticName))
+      .filter(c => (c.StaticName === currentType?.StaticName && c.StaticName !== undefined))
       .forEach(c => c.IsHidden = false);
     // console.log('2dm after', contentTypes);
     return contentTypes;

@@ -31,7 +31,7 @@
     </div>
 
     <!-- tabs -->
-    <mat-tab-group [(selectedIndex)]="tabIndex">
+    <mat-tab-group [selectedIndex]="tabIndex">
       <mat-tab>
         <ng-template mat-tab-label>
           {{(isContent
@@ -87,8 +87,11 @@
       </mat-tab>
 
       <!-- template selection after app/content-type selection -->
-      <mat-tab *ngIf="isContent ? contentType : app" [label]="('TemplatePicker.ChangeView' | translate) + ' (' + templates.length + ')'">
-        <div class="tiles" [ngClass]="{ 'show-installer': installerShow }">
+      <mat-tab [label]="('TemplatePicker.ChangeView' | translate) + ' (' + templates.length + ')'">
+        <div *ngIf="!(isContent ? contentType : app)">
+          &nbsp; &nbsp; &nbsp; {{ ("TemplatePicker.ViewNeeds" + (isContent ? "ContentType" : "App" )) | translate }}
+        </div>
+        <div *ngIf="isContent ? contentType : app" class="tiles" [ngClass]="{ 'show-installer': installerShow }">
           <mat-spinner class="templates-spinner" *ngIf="templatesLoading$ | async"></mat-spinner>
           <div class="tile"
             [ngClass]="{ active: template?.TemplateId === t.TemplateId }"
