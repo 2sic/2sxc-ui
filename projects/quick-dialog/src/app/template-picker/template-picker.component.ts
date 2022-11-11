@@ -49,7 +49,6 @@ export class TemplatePickerComponent implements OnInit {
 
   /** Tab-id, when we set it, the tab switches */
   tabIndex = 0;
-  tab$ = new BehaviorSubject<number>(0);
 
   /** Indicate if the user is allowed to change content-types or not */
   preventTypeSwitch: boolean;
@@ -109,6 +108,7 @@ export class TemplatePickerComponent implements OnInit {
 
     this.boot(dashInfo);
     if (debug) this.debugObservables();
+    console.log('2dm - CONSTRUCTOR');
   }
 
   ngOnInit(): void {
@@ -133,10 +133,12 @@ export class TemplatePickerComponent implements OnInit {
   }
 
   private debugObservables() {
+    console.log('debugObservables');
+    // this.tab$.subscribe(t => log.add(`tab changed to ${t}`));
+
     if (!DebugConfig.picker.streams) return;
     this.loading$.subscribe(l => log.add(`quick-dialog loading$:${l}`));
     this.ready$.subscribe(r => log.add(`quick-dialog ready$:${r}`));
-    this.tab$.subscribe(t => log.add(`tab changed to ${t}`));
   }
 
   /**
@@ -292,12 +294,11 @@ export class TemplatePickerComponent implements OnInit {
     const msg = `switchTab(${message})`;
     log.add(msg);
     this.tabIndex = 1;
-    this.tab$.next(1);
+    this.cdRef.detectChanges();
     // repeat after delay because of a bug in the tabs-updating (unclear why...)
-    timer(100).toPromise().then(_ => {
-      this.tab$.next(1);
-      return this.tabIndex = 1;
-    });
+    // timer(100).toPromise().then(_ => {
+    //   return this.tabIndex = 1;
+    // });
   }
 
 
