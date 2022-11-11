@@ -33,9 +33,9 @@ export class ContentTypesProcessor {
    * Ensure current content-type is visible, just in case it's configured as hidden
    */
   private unhideSelectedType(contentTypes: ContentType[], currentType: ContentType, currentTemplate: Template): ContentType[] {
-    console.log('2dm before', JSON.parse(JSON.stringify(contentTypes)));
-    console.log('2dm current T', currentTemplate?.TemplateId);
-    console.log('2dm currentType Static', currentType?.StaticName);
+    // console.log('2dm before', JSON.parse(JSON.stringify(contentTypes)));
+    // console.log('2dm current T', currentTemplate?.TemplateId);
+    // console.log('2dm currentType Static', currentType?.StaticName);
     contentTypes
       // 2022-11-04 2dm disabled, think it's never used
       // 2022-11-11 trying to fix another issue....

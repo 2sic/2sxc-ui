@@ -1,4 +1,3 @@
-
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { App } from 'app/core/app';
 import { BehaviorObservable } from 'app/core/behavior-observable';
@@ -19,7 +18,7 @@ const log = parentLog.subLog('picker', DebugConfig.picker.enabled);
 
 const nameofTPC = nameofFactory<TemplatePickerComponent>();
 
-const debug = true;
+const debug = false;
 
 @Component({
   selector: 'app-template-picker',
