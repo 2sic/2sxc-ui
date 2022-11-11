@@ -7,8 +7,8 @@ import { DebugConfig } from 'app/debug-config';
 import { IDialogFrameElement, IIFrameBridge, IQuickDialogConfig } from 'app/interfaces/shared';
 import { ContentType } from 'app/template-picker/content-type';
 import { Template } from 'app/template-picker/template';
-import { combineLatest, merge, Observable, timer } from 'rxjs';
-import { filter, map, skipUntil, startWith } from 'rxjs/operators';
+import { combineLatest, merge, Observable, timer, BehaviorSubject } from 'rxjs';
+import { filter, map, skipUntil, startWith, share } from 'rxjs/operators';
 import { BackendSettings } from '../core/backend-settings';
 import { CurrentDataService } from './current-data.service';
 import { ContentTypesProcessor } from './data/content-types-processor.service';
@@ -18,6 +18,8 @@ import { nameofFactory } from '../core/nameof';
 const log = parentLog.subLog('picker', DebugConfig.picker.enabled);
 
 const nameofTPC = nameofFactory<TemplatePickerComponent>();
+
+const debug = true;
 
 @Component({
   selector: 'app-template-picker',
@@ -47,6 +49,7 @@ export class TemplatePickerComponent implements OnInit {
 
   /** Tab-id, when we set it, the tab switches */
   tabIndex = 0;
+  tab$ = new BehaviorSubject<number>(0);
 
   /** Indicate if the user is allowed to change content-types or not */
   preventTypeSwitch: boolean;
@@ -105,7 +108,7 @@ export class TemplatePickerComponent implements OnInit {
     const dashInfo = this.bridge.getAdditionalDashboardConfig();
 
     this.boot(dashInfo);
-    this.debugObservables();
+    if (debug) this.debugObservables();
   }
 
   ngOnInit(): void {
@@ -131,28 +134,36 @@ export class TemplatePickerComponent implements OnInit {
 
   private debugObservables() {
     if (!DebugConfig.picker.streams) return;
-    this.loading$.subscribe(l => log.add(`loading$:${l}`));
-    this.ready$.subscribe(r => log.add(`ready$:${r}`));
+    this.loading$.subscribe(l => log.add(`quick-dialog loading$:${l}`));
+    this.ready$.subscribe(r => log.add(`quick-dialog ready$:${r}`));
+    this.tab$.subscribe(t => log.add(`tab changed to ${t}`));
   }
 
   /**
    * wire up observables for this component
    */
+  private observablesAlreadyInitialized = false;
   private initObservables(initDone$: Observable<boolean>): void {
+    if (this.observablesAlreadyInitialized) return;
+    this.observablesAlreadyInitialized = true;
+
     const initTrue$ = initDone$.pipe(filter(t => !!t));
 
     // wire up basic observables
-    this.ready$ = combineLatest([this.api.ready$, this.loading$])
-      .pipe(map(([r, l]) => r && !l));
+    this.ready$ = combineLatest([this.api.ready$, this.loading$]).pipe(
+      map(([ready, loading]) => ready && !loading),
+      share()
+    );
 
     // all apps are the same as provided by the api
     this.apps$ = this.api.apps$;
 
     // if the content-type or app is set, switch tabs (ignore null/empty states)
-    const typeOrAppReady = merge(this.state.type$, this.state.app$)
-      .pipe(filter(t => !!t));
-    combineLatest([typeOrAppReady, initTrue$])
-      .subscribe(_ => this.switchTab());
+    const typeOrAppReady = merge(this.state.type$, this.state.app$).pipe(
+      filter(t => !!t),
+      share()
+    );
+    combineLatest([typeOrAppReady, initTrue$]).subscribe(_ => this.switchTab('type/app ready and init-true'));
 
     // once the data is known, check if installer is needed
     combineLatest([
@@ -161,8 +172,7 @@ export class TemplatePickerComponent implements OnInit {
       this.api.apps$,
       this.api.ready$.pipe(filter(r => !!r)),
       this.backendSettings.showAdvanced$
-    ])
-      .pipe(
+    ]).pipe(
         map(([templates, _, apps, _2, showAdv]) => {
           log.add('apps/templates loaded, will check if we should show installer');
           // Installer is needed on content without templates, or apps without any apps
@@ -245,7 +255,7 @@ export class TemplatePickerComponent implements OnInit {
    */
   selectApp(before: App, after: App): void {
     if (before && before.AppId === after.AppId) {
-      this.switchTab();
+      this.switchTab('select app');
     } else {
       this.updateApp(after);
       this.templateFilter = '';
@@ -257,7 +267,7 @@ export class TemplatePickerComponent implements OnInit {
    */
   selectContentType(before: ContentType, after: ContentType): void {
     if (before && before.StaticName === after.StaticName) {
-      this.switchTab();
+      this.switchTab('select template');
     } else {
       this.setContentType(after);
       this.templateFilter = '';
@@ -278,10 +288,16 @@ export class TemplatePickerComponent implements OnInit {
     this.state.activateType(contentType);
   }
 
-  switchTab() {
-    log.add('switchTab()');
-    // must delay change because of a bug in the tabs-updating
-    timer(100).toPromise().then(_ => this.tabIndex = 1);
+  switchTab(message: string) {
+    const msg = `switchTab(${message})`;
+    log.add(msg);
+    this.tabIndex = 1;
+    this.tab$.next(1);
+    // repeat after delay because of a bug in the tabs-updating (unclear why...)
+    timer(100).toPromise().then(_ => {
+      this.tab$.next(1);
+      return this.tabIndex = 1;
+    });
   }
 
 

@@ -11,7 +11,7 @@ export class ContentType {
     //  * 2022-11-04 2dm - doesn't seem to be added in the UI either, so skip / remove this ???
     //  * 2022-11-04 2dm disabled, think it's never used
     //  */
-    // TemplateId: number;
+    TemplateId: number;
     IsDefault = false;
 }
 

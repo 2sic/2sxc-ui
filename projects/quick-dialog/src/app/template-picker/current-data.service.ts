@@ -57,39 +57,50 @@ export class CurrentDataService {
     // app-stream should contain selected app, once the ID is known - or null
     this.app$ = combineLatest([
       this.api.apps$,
-      this.appId$]).pipe(map(([apps, appId]) => apps.find(a => a.AppId === appId)));
+      this.appId$
+    ]).pipe(map(([apps, appId]) => apps.find(a => a.AppId === appId)));
 
     // current type should be either the initial type, or a manually selected type
-    const initialType$ = combineLatest([this.initialTypeId$, this.api.contentTypes$])
-      .pipe(map(([typeId, all]) => ContentTypesProcessor.findContentTypesById(all, typeId)));
+    const initialType$ = combineLatest([
+      this.initialTypeId$,
+      this.api.contentTypes$
+    ]).pipe(map(([typeId, all]) => ContentTypesProcessor.findContentTypesById(all, typeId)));
+
     this.type$ = merge(initialType$, this.selectedType$).pipe(
       startWith(null as ContentType),
-      share());
+      share()
+    );
 
     // the templates-list is always filtered by the currently selected type
-    this.templates$ = combineLatest([this.api.templates$, this.type$])
-      .pipe(map(([all, current]) => this.findTemplatesForTypeOrAll(all, current)))
-      .pipe(startWith(new Array<Template>()));
+    this.templates$ = combineLatest([
+      this.api.templates$,
+      this.type$
+    ]).pipe(
+      map(([all, current]) => this.findTemplatesForTypeOrAll(all, current)),
+      startWith(new Array<Template>())
+    );
 
     // the current template is either the last selected, or auto-selected when conditions change
     const initialTemplate$ = combineLatest([
       this.initialTemplateId$,
-      this.api.templates$])
-      .pipe(
+      this.api.templates$
+    ]).pipe(
         map(([id, templates]) => templates.find(t => t.TemplateId === id)),
         filter(t => t != null), // only allow new values which are not null, to guarantee later template$ updates don't affect this
         startWith(null as Template),
-        share());
+        share()
+      );
 
     const selected$ = merge(initialTemplate$, this.selectedTemplate$.pipe(filter(t => t !== null)));
     this.template$ = combineLatest([
       selected$,
       this.templates$,
       this.type$,
-      this.app$]).pipe(
-        map(([selected, templates, type, app]) => TemplateProcessor.pickSelected(selected, templates, type, app)),
-        startWith(null as Template),
-        share(),
+      this.app$
+    ]).pipe(
+      map(([selected, templates, type, app]) => TemplateProcessor.pickSelected(selected, templates, type, app)),
+      startWith(null as Template),
+      share(),
       );
 
     // construct list of relevant types for the UI
@@ -97,8 +108,11 @@ export class CurrentDataService {
       this.api.contentTypes$,
       this.type$,
       this.api.templates$,
-      this.template$])
-      .pipe(map(([types, type, templates, template]) => this.ctProcessor.buildList(types, type, templates, template)));
+      this.template$
+    ]).pipe(
+      map(([types, type, templates, template]) => this.ctProcessor.buildList(types, type, templates, template)),
+      share()
+    );
   }
 
   init(config: IQuickDialogConfig): Observable<boolean> {
@@ -120,8 +134,11 @@ export class CurrentDataService {
       startWith(!config.templateId)
     );
 
-    const loadAll$ = combineLatest([appReady$, templReady$, typeReady$])
-      .pipe(map(set => set[0] && set[1] && set[2]));
+    const loadAll$ = combineLatest([
+      appReady$,
+      templReady$,
+      typeReady$
+    ]).pipe(map(set => set[0] && set[1] && set[2]));
 
     this.initLogging(appReady$, typeReady$, templReady$, loadAll$);
 

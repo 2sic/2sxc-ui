@@ -58,6 +58,7 @@
             },
             "development": {
               "optimization": false,
+              "outputHashing": "none",
               "sourceMap": true,
               "namedChunks": false,
               "extractLicenses": true,
