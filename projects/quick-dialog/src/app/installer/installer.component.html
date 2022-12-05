@@ -3,5 +3,14 @@
   <span>Installing {{ currentPackage?.displayName }}..</span>
 </div>
 <div *ngIf="ready">
-  <iframe class="fr-getting-started" id="frGettingStarted" [src]="remoteInstallerUrl" width="100%" height="300px"></iframe>
+  <iframe #installerWindow class="fr-getting-started" id="frGettingStarted" [src]="remoteInstallerUrl" width="100%" height="300px"></iframe>
+</div>
+<div *ngIf="showDebug">
+  Debug:
+  <button type="button" (click)="sendMessage('test')">Send Test message</button>
+  -
+  Simulate Install: {{devSimulateInstall}}
+  <button type="button" (click)="toggleSimulate()">toggle</button>
+  - 
+  <button type="button" (click)="sendMessage('specs')">Send 'specs' message</button>
 </div>

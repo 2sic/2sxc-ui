@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { GettingStartedService } from 'app/installer/getting-started.service';
+import { AppInstallSettingsService } from 'app/installer/getting-started.service';
 import { PickerService } from 'app/template-picker/picker.service';
 import { CurrentDataService } from 'app/template-picker/current-data.service';
 
@@ -12,7 +12,7 @@ import { CurrentDataService } from 'app/template-picker/current-data.service';
   ],
   declarations: [],
   providers: [
-    GettingStartedService,
+    AppInstallSettingsService,
     PickerService,
     CurrentDataService,
   ]
