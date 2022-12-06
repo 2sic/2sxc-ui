@@ -110,7 +110,7 @@ export class InstallerComponent implements OnInit {
           },
         };
         const specsJson = JSON.stringify(specsMsg);
-        winFrame.contentWindow.postMessage(specsJson);
+        winFrame.contentWindow.postMessage(specsJson, '*');
         console.log('debug: just sent specs message:' + specsJson, specsMsg, winFrame);
       }),
     ).subscribe());
