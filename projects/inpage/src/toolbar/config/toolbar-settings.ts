@@ -3,6 +3,11 @@ import { RuleManager } from '../rules/rule-manager';
 import { ToolbarTemplate } from '../templates';
 
 /** @internal */
+export const TlbHoverPrefix = 'sc-tb-hover-';
+/** @internal */
+export const TlbShowPrefix = 'sc-tb-show-';
+
+/** @internal */
 export const TLB_MORE_END = 'end';
 /** @internal */
 export const TLB_MORE_START = 'start';
@@ -22,7 +27,15 @@ export const TLB_HOV_LEFT = 'left';
 /** @internal */
 export const TLB_HOV_NONE = 'none'; // unclear if this is ever used?
 /** @internal */
-type TypeHover = typeof TLB_HOV_LEFT | typeof TLB_HOV_RIGHT | 'none';
+type TypeHoverH = typeof TLB_HOV_LEFT | typeof TLB_HOV_RIGHT | 'none';
+
+/** @internal */
+export const TLB_HOV_TOP = 'top'; // not in use ATM / default
+/** @internal */
+export const TLB_HOV_MID = 'middle';
+/** @internal */
+export const TLB_HOV_BOT = 'bottom'; // not in use ATM / not implemented
+type TypeHoverV = typeof TLB_HOV_MID | typeof TLB_HOV_TOP | typeof TLB_HOV_BOT | 'none';
 
 /** @internal */
 export const TLB_SHOW_ALWAYS = 'always';
@@ -51,8 +64,12 @@ export class ToolbarSettings {
   /** Automatically add the '...' more button to the toolbar */
   autoAddMore: TypeAutoAddMore = TLB_MORE_AUTO;
 
-  /** Hover placement of the toolbar */
-  hover: TypeHover = TLB_HOV_RIGHT;
+  /**
+   * Hover placement of the toolbar
+   * Note: originally it was just left | right | default etc.
+   * In v15 we augmented this to allow right-middle, left-middle etc. for image toolbars
+   */
+  hover: TypeHoverH = TLB_HOV_RIGHT;
 
   /** Show behavior (always, hover, ...) */
   show: TypeShow = TLB_SHOW_HOVER;
@@ -132,7 +149,7 @@ export class ToolbarSettings {
 
     // On Auto try to detect based on hover position
     if (result === TLB_MORE_AUTO)
-      return settings?.hover === TLB_HOV_LEFT ? TLB_MORE_START : TLB_MORE_END;
+      return settings?.hover?.startsWith(TLB_HOV_LEFT) /* === TLB_HOV_LEFT */ ? TLB_MORE_START : TLB_MORE_END;
 
     // Standard values today, just return them
     if (result === TLB_MORE_END || result === TLB_MORE_START || result === TLB_MORE_NEVER)

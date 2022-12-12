@@ -51,7 +51,7 @@ export class TagToolbarManager {
      * This can be necessary if the module was replaced by ajax,
      * leaving behind un-attached TagToolbars.
      */
-    static CleanupOrphanedToolbars() {
+    static cleanupOrphanedToolbars() {
         const tagToolbars = document.querySelectorAll<HTMLElement>(`[${TagToolbarManager.TagToolbarForAttr}]`);
         tagToolbars.forEach((e) => {
             const id = e.getAttribute(TagToolbarManager.TagToolbarForAttr);

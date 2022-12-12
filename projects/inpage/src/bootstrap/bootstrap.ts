@@ -111,7 +111,7 @@ export class BootstrapInPage extends HasLog {
             });
 
             // Clean up orphan tags if nodes have been added
-            if (processed) TagToolbarManager.CleanupOrphanedToolbars();
+            if (processed) TagToolbarManager.cleanupOrphanedToolbars();
         });
 
         observer.observe(document.body, {

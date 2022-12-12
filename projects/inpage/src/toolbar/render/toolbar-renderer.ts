@@ -1,8 +1,10 @@
+import { TlbShowPrefix } from './../config/toolbar-settings';
 import { CmdParHlp } from '../../commands/cmd-par-hlp';
 import { IDs } from '../../constants/ids';
 import { ContextBundleToolbar } from '../../context/bundles/context-bundle-toolbar';
 import { HasLog, Insights } from '../../core';
 import { HtmlTools } from '../../html/dom-tools';
+import { TlbHoverPrefix } from '../config';
 import { RenderButton } from './render-button';
 import { RenderButtonGroups } from './render-groups';
 
@@ -27,7 +29,7 @@ export class ToolbarRenderer extends HasLog {
      * AFAIK it's only used in external scripts through older APIs, and never called directly.
      */
     render(): string {
-        const cl = this.log.call('generate');
+        const cl = this.log.call('render');
         return cl.return(this.generate().outerHTML);
     }
 
@@ -49,8 +51,9 @@ export class ToolbarRenderer extends HasLog {
 
         // add behaviour classes
         const settings = context.toolbar.settings;
-        tlbTag.classList.add(`sc-tb-hover-${settings.hover}`);
-        tlbTag.classList.add(`sc-tb-show-${settings.show}`);
+        const hover = settings.hover?.split('-'); // in case it has two values, like right-middle
+        hover?.forEach(h => tlbTag.classList.add(`${TlbHoverPrefix}${h}`));
+        tlbTag.classList.add(`${TlbShowPrefix}${settings.show}`);
         if (CmdParHlp.getIndex(context.toolbar.params) === -1)
             tlbTag.classList.add('listContent');
         if (context.toolbar.params.fields)

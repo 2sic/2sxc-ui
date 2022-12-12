@@ -2,8 +2,12 @@
 import { ContextComplete } from '../../context/bundles/context-bundle-button';
 import { Translator } from '../../i18n';
 import { NoJQ } from '../../plumbing';
-import { TLB_FOLLOW_ALWAYS, TLB_FOLLOW_INITIAL, TLB_FOLLOW_SCROLL, TLB_SHOW_ALWAYS, TypeFollow } from '../config/toolbar-settings';
+import { TLB_FOLLOW_ALWAYS, TLB_FOLLOW_INITIAL, TLB_FOLLOW_SCROLL, TLB_SHOW_ALWAYS, TypeFollow, TLB_HOV_RIGHT, TLB_HOV_MID, TlbHoverPrefix } from '../config/toolbar-settings';
 import { ToolbarLifecycle } from '../toolbar-lifecycle';
+
+const TagToolbarPadding = 4;
+const TagToolbarPaddingRight = 0;
+const ToolbarHeight = 20;
 
 /**
  * This is the modern toolbar which is attached to a tag from whic it hovers.
@@ -96,13 +100,15 @@ export class TagToolbar {
             bodyOffset: TagToolbarManager.getBodyScrollOffset(),
             tagScrollOffset: 0,
             tagOffset: NoJQ.offset(this.hoverTag),
-            tagWidth: NoJQ.outerWidth(this.hoverTag),
+            tagWidth: this.hoverTag.offsetWidth,
+            tagHeight: this.hoverTag.offsetHeight,
             mousePos: TagToolbarManager.mousePosition,
             win: {
                 scrollY: window.scrollY,
                 width: document.documentElement.clientWidth,
             },
-            padding: tagToolbarPadding,
+            padding: TagToolbarPadding,
+            // tag: this.hoverTag, // just for debugging
         };
 
         // If we scrolled down, the toolbar might not be visible - calculate offset
@@ -111,22 +117,30 @@ export class TagToolbar {
         // Update top coordinates
         // new: only do this on initial=true && follow != 'none' or not-initial
         // start by setting default-top
-        position.top = position.tagOffset.top + tagToolbarPadding - position.bodyOffset.top;
+        position.top = position.tagOffset.top + TagToolbarPadding - position.bodyOffset.top;
         const trackMouse = (this.follow === TLB_FOLLOW_ALWAYS)
-            || (this.follow === TLB_FOLLOW_INITIAL && initial)
-            || (this.follow === TLB_FOLLOW_SCROLL && position.tagScrollOffset !== 0);
+          || (this.follow === TLB_FOLLOW_INITIAL && initial)
+          || (this.follow === TLB_FOLLOW_SCROLL && position.tagScrollOffset !== 0);
+
+        const tagClasses = this.toolbarElement.classList;
         if (trackMouse)
-            position.top = position.mousePos.y + position.win.scrollY - position.bodyOffset.top - toolbarHeight / 2;
+          position.top = position.mousePos.y + position.win.scrollY - position.bodyOffset.top - (ToolbarHeight / 2);
+        else
+          if (tagClasses.contains(TlbHoverPrefix + TLB_HOV_MID))
+            position.top = position.top + (position.tagHeight / 2) - ToolbarHeight;
 
         // Update left / right coordinates
-        if (this.toolbarElement.classList.contains('sc-tb-hover-right'))
-            position.right = position.win.width - position.tagOffset.left - position.tagWidth + tagToolbarPaddingRight - position.bodyOffset.left;
+        if (tagClasses.contains(TlbHoverPrefix + TLB_HOV_RIGHT))
+          position.right = position.win.width - position.tagOffset.left - position.tagWidth + TagToolbarPaddingRight - position.bodyOffset.left;
         else
-            position.left = position.tagOffset.left + tagToolbarPadding + position.bodyOffset.left;
+          position.left = position.tagOffset.left + TagToolbarPadding + position.bodyOffset.left;
 
-        this.toolbarElement.style.top = typeof position.top === 'number' ? `${position.top}px` : position.top;
-        this.toolbarElement.style.left = typeof position.left === 'number' ? `${position.left}px` : position.left;
-        this.toolbarElement.style.right = typeof position.right === 'number' ? `${position.right}px` : position.right;
+
+
+        const tlbStyle = this.toolbarElement.style;
+        tlbStyle.top = typeof position.top === 'number' ? `${position.top}px` : position.top;
+        tlbStyle.left = typeof position.left === 'number' ? `${position.left}px` : position.left;
+        tlbStyle.right = typeof position.right === 'number' ? `${position.right}px` : position.right;
     }
 
 
@@ -189,6 +203,3 @@ export class TagToolbar {
 
 }
 
-const tagToolbarPadding = 4;
-const tagToolbarPaddingRight = 0;
-const toolbarHeight = 20;
