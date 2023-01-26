@@ -9,7 +9,8 @@
     "snippets": "cd projects/code-editor-snippets && npm run gulp  && cd ../..",
     "quickdialog": "cd projects/quick-dialog && npm run release && cd ../..",
     "doc-dnn-sxc-angular": "cd projects/dnn-sxc-angular/ && typedoc --tsconfig projects/dnn-sxc-angular && cd ../..",
-    "turn-on": "robocopy projects/turnOn/dist/ %Dev2sxcAssets%/dist/turnOn && robocopy projects/turnOn/dist/ %Dev2sxcDnnRoot%/DesktopModules/ToSIC_SexyContent/dist/turnOn"
+    "turn-on": "robocopy projects/turnOn/dist/ %Dev2sxcAssets%/dist/turnOn && robocopy projects/turnOn/dist/ %Dev2sxcDnnRoot%/DesktopModules/ToSIC_SexyContent/dist/turnOn",
+    "cms-wysiwyg": "robocopy projects/cms/dist/ %Dev2sxcAssets%/dist/cms && robocopy projects/cms/dist/ %Dev2sxcDnnRoot%/DesktopModules/ToSIC_SexyContent/dist/cms"
   },
   "repository": {
     "type": "git",
