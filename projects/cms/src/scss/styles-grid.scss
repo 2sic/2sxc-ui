@@ -1,0 +1,82 @@
+$grid-gutter-width: 30px;
+
+// Only used to show normal usecase
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+}
+p {
+  margin-bottom:15px;
+}
+div {
+  background-color: lightgreen;
+  max-width: 1200px;
+  display: block;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  margin: 0 auto;
+  margin-top: 10px;
+  overflow: hidden;
+}
+h2,
+h3 {
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+// @2dm END normal usecase delete all in this comment for productivity view
+
+
+div.wysiwyg {
+  display: grid;
+  gap: $grid-gutter-width;
+
+  &.wysiwyg-1of2 {
+    grid-template-columns: 1fr 1fr;
+  }
+  &.wysiwyg-1of3 {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+  &.wysiwyg-2of3 {
+    grid-template-columns: 2fr 1fr;
+  }
+  &.wysiwyg-3of2 {
+    grid-template-columns: 1fr 2fr;
+  }
+  &.wysiwyg-1of4 {
+    grid-template-columns: 1fr 3fr;
+  }
+  &.wysiwyg-4of1 {
+    grid-template-columns: 3fr 1fr;
+  }
+  &.wysiwyg-3of4 {
+    grid-template-columns: 3fr 1fr;
+  }
+  &.wysiwyg-4of4 {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+  }
+
+  img {
+    width: 100%;
+    height: auto; 
+  }
+}
+hr.wysiwyg-division {
+  display: block;
+  width: 100%;
+  height: 0;
+  border-width: 0px!important;
+}
+
+img.wysiwyg-middle {
+  float: left;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+
+
+
+
