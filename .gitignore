@@ -18,3 +18,5 @@ projects/quick-dialog/dist
 projects/sxc-typings/parts/dist
 
 projects/sxc-docs
+
+.temp_cache
