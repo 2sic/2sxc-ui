@@ -3,14 +3,15 @@
   "version": "15.03.00",
   "description": "2sxc UI - the JS UI of 2sxc",
   "scripts": {
-    "release-all": "npm run js2sxc && npm run inpage && npm run snippets && npm run quickdialog && npm run turn-on && npm run cms-wysiwyg",
+    "release-all": "npm run js2sxc && npm run inpage && npm run snippets && npm run quickdialog && npm run turn-on && && npm run cms && npm run cms-dist",
     "js2sxc": "cd projects/$2sxc && npm run release && cd ../..",
     "inpage": "cd projects/inpage && npm run release && cd ../..",
     "snippets": "cd projects/code-editor-snippets && npm run gulp  && cd ../..",
     "quickdialog": "cd projects/quick-dialog && npm run release && cd ../..",
+    "cms": "cd projects/cms && npm run release && cd ../..",
     "doc-dnn-sxc-angular": "cd projects/dnn-sxc-angular/ && typedoc --tsconfig projects/dnn-sxc-angular && cd ../..",
     "turn-on": "robocopy projects/turnOn/dist/ %Dev2sxcAssets%/dist/turnOn && robocopy projects/turnOn/dist/ %Dev2sxcDnnRoot%/DesktopModules/ToSIC_SexyContent/dist/turnOn",
-    "cms-wysiwyg": "robocopy projects/cms/dist/ %Dev2sxcAssets%/dist/cms && robocopy projects/cms/dist/ %Dev2sxcDnnRoot%/DesktopModules/ToSIC_SexyContent/dist/cms"
+    "cms-dist": "robocopy projects/cms/dist/ %Dev2sxcAssets%/dist/cms && robocopy projects/cms/dist/ %Dev2sxcDnnRoot%/DesktopModules/ToSIC_SexyContent/dist/cms"
   },
   "repository": {
     "type": "git",

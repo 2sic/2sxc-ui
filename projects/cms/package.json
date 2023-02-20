@@ -4,8 +4,8 @@
   "description": "Files to include in the page if advanced content / cms features are used.",
   "main": "index.js",
   "scripts": {
-    "build-watch": "webpack --env watch",
-    "build": "webpack"
+    "build": "webpack --env watch",
+    "release": "webpack"
   },
   "author": "",
   "license": "MIT",
