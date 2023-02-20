@@ -4,7 +4,8 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 module.exports = (env) => {
   return {
     entry: {
-      wysiwyg: [`./src/scss/wysiwyg.scss`]
+      wysiwyg: [`./src/scss/wysiwyg.scss`],
+      'wysiwyg-debug': [`./src/scss/wysiwyg-debug.scss`],
     },
     output: {
       path: path.resolve(__dirname, `dist`)
