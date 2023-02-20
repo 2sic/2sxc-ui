@@ -3,7 +3,7 @@
   "version": "15.03.00",
   "description": "2sxc UI - the JS UI of 2sxc",
   "scripts": {
-    "release-all": "npm run js2sxc && npm run inpage && npm run snippets && npm run quickdialog && npm run turn-on && && npm run cms && npm run cms-dist",
+    "release-all": "npm run js2sxc && npm run inpage && npm run snippets && npm run quickdialog && npm run turn-on && npm run cms && npm run cms-dist",
     "js2sxc": "cd projects/$2sxc && npm run release && cd ../..",
     "inpage": "cd projects/inpage && npm run release && cd ../..",
     "snippets": "cd projects/code-editor-snippets && npm run gulp  && cd ../..",
