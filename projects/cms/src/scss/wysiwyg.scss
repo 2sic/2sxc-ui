@@ -16,12 +16,12 @@
 //   - wysiwyg-left
 //   - wysiwyg-middle (experimental, not final)
 // - hr will have things like
-//   - wysiwyg-division
-//   - wysiwyg-height-0
-//   - wysiwyg-height-s
-//   - wysiwyg-height-m
-//   - wysiwyg-height-l
-//   - wysiwyg-height-xl
+//   - wysiwyg-splitter
+//   - wysiwyg-spacer-0
+//   - wysiwyg-spacer-s
+//   - wysiwyg-spacer-m
+//   - wysiwyg-spacer-l
+//   - wysiwyg-spacer-xl
 
 $grid-gutter-width: 30px;
 
@@ -74,37 +74,46 @@ $grid-gutter-width: 30px;
     
   }
 
-  hr.wysiwyg-division {
+  hr.wysiwyg-splitter {
     display: block;
     width: 100%;
     height: 0;
     border-width: 0px!important;
   
-    &.wysiwyg-height-0 {
-      height:0px;
+    &.wysiwyg-spacer-0 {
+      // normally 0, but this is so it can be selected in the wysiwyg
+      height: 2px;
+      // height: 0;
     }
-    &.wysiwyg-height-s {
-      height: $grid-gutter-width;
+    &.wysiwyg-spacer-s {
+      background-image: $background;
+      height: $grid-gutter-width/2;
+      // @media screen and (max-width: 768px) {
+      //   height: $grid-gutter-width/2;
+      // }  
+    }
+    &.wysiwyg-spacer-m {
+      background-image: $background;
+      // height: $grid-gutter-width*1.5;
+      height: $grid-gutter-width*1;
       @media screen and (max-width: 768px) {
-        height: $grid-gutter-width/2;
-      }
-  
-    }
-    &.wysiwyg-height-m {
-      height: $grid-gutter-width*1.5;
-      @media screen and (max-width: 768px) {
-        height: $grid-gutter-width;
+        // height: $grid-gutter-width;
+        height: $grid-gutter-width*.75;
       }
     }
-    &.wysiwyg-height-l {
+    &.wysiwyg-spacer-l {
+      background-image: $background;
       height: $grid-gutter-width*2;
       @media screen and (max-width: 768px) {
         height: $grid-gutter-width*1.25;
       }
     }
-    &.wysiwyg-height-xl {
-      height: $grid-gutter-width*2.5;
+    &.wysiwyg-spacer-xl {
+      background-image: $background;
+      // height: $grid-gutter-width*2.5;
+      height: $grid-gutter-width*3;
       @media screen and (max-width: 768px) {
+        // height: $grid-gutter-width*1.75;
         height: $grid-gutter-width*1.75;
       }
     }
