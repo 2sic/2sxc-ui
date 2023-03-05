@@ -15,6 +15,8 @@ export class ButtonSafe {
 
     classes = () => this.button.classes || '';
 
+    color = () => getVal (this.button.color, this.context, undefined);
+
     /** The dialog name - should default to the name */
     dialog = () => getVal (this.button.dialog, this.context, this.button.command.name);
 

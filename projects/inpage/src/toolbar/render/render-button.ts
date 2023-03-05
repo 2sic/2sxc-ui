@@ -54,7 +54,7 @@ export class RenderButton extends RenderPart {
         btnLink.appendChild(divTag);
 
         // set color - new in 10.27
-        this.processColorRules(rule, ctx, divTag);
+        this.processColorRules(btnSafe, rule, ctx, divTag);
 
         return cl.return(btnLink);
     }
@@ -75,9 +75,9 @@ export class RenderButton extends RenderPart {
         callLog.done();
     }
 
-    private processColorRules(rule: BuildRule, ctx: ContextComplete, divTag: HTMLDivElement) {
+    private processColorRules(btn: ButtonSafe, rule: BuildRule, ctx: ContextComplete, divTag: HTMLDivElement) {
         const callLog = this.log.call('processColorRules');
-        let color = rule?.ui?.color || ctx.toolbar.settings.color;
+        let color = rule?.ui?.color ?? btn.color() ?? ctx.toolbar.settings.color;
 
         // catch edge case where the color is something like 808080 - which is treated as a number
         if (color && typeof color === 'number') color = (color as number).toString();

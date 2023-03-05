@@ -1,4 +1,4 @@
-﻿import { CommandNames, Commands } from '..';
+﻿import { CommandNames, Commands, tlbI18nPrefix } from '..';
 
 /**
  * import this module to commands.ts
@@ -9,7 +9,7 @@ Commands.add(CommandNames.appResources, 'AppResources', 'translate', true, false
 
   disabled: (context) => context.app.resourcesId === null,
 
-  title: (context) => `Toolbar.AppResources${context.app.resourcesId === null ? 'Disabled' : ''}`,
+  title: (context) => `${tlbI18nPrefix}AppResources${context.app.resourcesId === null ? 'Disabled' : ''}`,
 
   // only if resources exist or are 0 (to be created)...
   showCondition: (context) => !!context.user.CanAdmin,

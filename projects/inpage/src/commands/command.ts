@@ -1,5 +1,8 @@
 ﻿import { Button } from '../toolbar/config/button';
 
+export const iconPrefix = 'icon-sxc-';
+export const tlbI18nPrefix = 'Toolbar.';
+
 /**
  * @internal
  */
@@ -20,10 +23,11 @@ export class Command {
 
 
       this.buttonDefaults = {
-            icon: (_) => `icon-sxc-${icon}`,
-            title: (_) => `Toolbar.${translateKey}`,
+            icon: (_) => `${iconPrefix}${icon}`,
+            title: (_) => `${tlbI18nPrefix}${translateKey}`,
             uiActionOnly: (_) => uiOnly,
             partOfPage: (_) => partOfPage,
+            color: (_) => undefined,
             ...more,
         };
     }

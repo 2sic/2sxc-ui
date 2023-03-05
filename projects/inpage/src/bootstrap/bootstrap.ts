@@ -1,5 +1,5 @@
 import { Sxc } from '../../../$2sxc/src';
-import { CommandNames } from '../commands';
+import { CommandNames, iconPrefix } from '../commands';
 import { C } from '../constants';
 import { HasLog, Insights, Log } from '../core';
 import { EditManager } from '../manage/edit-manager';
@@ -218,7 +218,7 @@ export class BootstrapInPage extends HasLog {
         // note: title is added on mouseover, as the translation isn't ready at page-load
         const btn = NoJQ.domFromString(
             `<div class="${C.ClsNames.UnInitialized}" onmouseover="this.title = $2sxc.translate(this.title)" title="InPage.NewElement">` +
-            '<div class="icon-sxc-glasses"></div>' +
+            `<div class="${iconPrefix}glasses"></div>` +
             '</div>',
         )[0];
 
