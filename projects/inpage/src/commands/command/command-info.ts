@@ -1,16 +1,8 @@
 ﻿import tippy from 'tippy.js';
-// import 'tippy.js/themes/light.css';
 import { CommandNames, Commands } from '..';
 import { iconPrefix, tlbI18nPrefix } from '../command';
 
 const noMessage = 'no message specified';
-
-
-// todo
-// - mode - naming etc.
-// - color by code
-// - icon by code
-// - clearer tooltip api
 
 const modes = {
   info: 'info',
@@ -18,7 +10,7 @@ const modes = {
   help: 'help',
   link: 'link',
 }
-const i18n = {
+const i18nKeys = {
   info: 'Info',
   warning: 'Warning',
   help: 'Help',
@@ -37,43 +29,33 @@ const colors = {
  */
 Commands.add(CommandNames.info, 'Info', 'info', true, false, {
 
-  // inlineWindow: (_) => true,
   icon: (ctx) => iconPrefix + (ctx.button.command.params?.mode ?? 'info'),
 
-  title: (ctx) => tlbI18nPrefix + (i18n[ctx.button.command.params?.mode as keyof typeof i18n ?? 'info'] ?? 'Info'),
+  title: (ctx) => tlbI18nPrefix + (i18nKeys[ctx.button.command.params?.mode as keyof typeof i18nKeys ?? 'info'] ?? 'Info'),
 
   color: (ctx) => colors[ctx.button.command.params?.mode as keyof typeof colors ?? 'info'],
 
   code(context, event) {
-    const params = context.button.command.params; 
+    const params = context.button.command.params;
 
-    const message = params?.message;
-    if (!message) {
-      alert(noMessage);
-      return Promise.resolve();
-    }
-    
-    if (!params?.link) {
-      console.log('user clicked on info button, but nothing will happen, because no link was specified in the params');
-      return Promise.resolve();
-    }
-    window.open(params?.link as string, '_blank');
-
-
-    alert('info!' + message);
-    console.log(context.ui, context, context.button);
+    if (params?.link)
+      window.open(params?.link as string, '_blank');
+    else
+      console.log('info-button clicked, but nothing will happen, because no link was specified in the params. This may be expected/ok.');
 
     return Promise.resolve();
   },
 
   tippy: (ctx, tag) => {
-    console.log('tippy', tag, ctx);
+    const params = ctx.button.command.params;
     tippy(tag, {
-      content: 'this is a test',
+      content: params?.message as string ?? noMessage,
       theme: 'light',
       arrow: true,
-      trigger: 'click',
-      interactive: true,
+      // activate these to debug the styling in F12
+      // trigger: 'click',
+      // hideOnClick: false,
+      // interactive: true,
     });
     return undefined;
   }

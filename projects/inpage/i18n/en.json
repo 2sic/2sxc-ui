@@ -16,7 +16,7 @@
     "Develop": "edit template",
     "Edit": "edit",
     "Help": "help",
-    "Info": "info",
+    "Info": "information",
     "Insights": "insights and logs",
     "ItemHistory": "history",
     "Image": "image settings",
@@ -34,6 +34,7 @@
     "Sort": "sort / manage list",
     "TemplateSettings": "view settings",
     "Unpublished": "unpublished",
+    "Warning": "warning",
     "Zone": "manage apps"
   },
   "Delete": {
