@@ -1,10 +1,7 @@
-﻿import tippy from 'tippy.js';
-import { CommandNames, Commands } from '..';
+﻿import { CommandNames, Commands } from '..';
 import { ContextComplete } from '../../context';
 import { TypeNoteMode } from '../../toolbar/config';
 import { iconPrefix, tlbI18nPrefix } from '../command';
-
-const noMessage = 'no message specified';
 
 const i18nKeys: Record<TypeNoteMode, string> = {
   info: 'Info',
@@ -41,20 +38,4 @@ Commands.add(CommandNames.info, 'Info', 'info', true, false, {
 
     return Promise.resolve();
   },
-
-  tippy: (ctx, tag) => {
-    const ui = ContextComplete.getRule(ctx)?.ui;
-    tippy(tag, {
-      content: ui?.note as string ?? noMessage,
-      theme: 'light',
-      arrow: true,
-      delay: [null, 500], // delay hide by 500ms
-      // activate these to debug the styling in F12
-      // trigger: 'click',
-      // hideOnClick: false,
-      // interactive: true,
-    });
-    return undefined;
-  }
-
 });

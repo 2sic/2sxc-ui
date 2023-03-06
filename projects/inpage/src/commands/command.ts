@@ -1,4 +1,6 @@
-﻿import { Button } from '../toolbar/config/button';
+﻿import tippy from 'tippy.js';
+import { ContextComplete } from '../context/bundles/context-bundle-button';
+import { Button } from '../toolbar/config/button';
 
 export const iconPrefix = 'icon-sxc-';
 export const tlbI18nPrefix = 'Toolbar.';
@@ -28,7 +30,23 @@ export class Command {
             uiActionOnly: () => uiOnly,
             partOfPage: () => partOfPage,
             color: () => undefined,
-            tippy: () => undefined,
+            tippy: (ctx, tag) => {
+              const ui = ContextComplete.getRule(ctx)?.ui;
+              const note = ui?.note as string;
+              if (!note)
+                return undefined;
+              tippy(tag, {
+                content: ui?.note as string,
+                theme: 'light',
+                arrow: true,
+                delay: [null, 500], // delay hide by 500ms
+                // activate these to debug the styling in F12
+                // trigger: 'click',
+                // hideOnClick: false,
+                // interactive: true,
+              });
+              return undefined;
+            },
             ...more,
         };
     }
