@@ -70,6 +70,10 @@ Commands.add(CommandNames.info, 'Info', 'info', true, false, {
     console.log('tippy', tag, ctx);
     tippy(tag, {
       content: 'this is a test',
+      theme: 'light',
+      arrow: true,
+      trigger: 'click',
+      interactive: true,
     });
     return undefined;
   }

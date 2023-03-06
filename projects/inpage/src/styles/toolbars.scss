@@ -1,14 +1,8 @@
-﻿/*
+/*
     These are all the styles that end up going in-page
     They should all have the prefix sc (short for sxc) to ensure that they never conflict with other styles in the page
 */
 
-/* enable DNNEmptyPane for Quick-Edit */
-.DNNEmptyPane {
-  /*width: auto;*/
-  disablednote: 'temporary disabled as it has side-effects';
-  special-instructions: 'read more on 2sxc.org/help?tag=quick-edit';
-}
 
 /* note: maybe there's a better way without changing the positioning of the main element... */
 *[sxc-toolbar-hover] {
@@ -220,44 +214,3 @@ body.sc-tb-show-all [sxc-toolbar-hover] .sc-menu {
   transform: rotate(135deg);
 }
 
-/****** Prevent scrolling when sxc popup is open */
-.sxc-popup-open {
-  overflow: hidden;
-}
-
-/* The font icons we use for the inpage buttons */
-/* only use the WOFF, as all modern browsers support that */
-@font-face {
-  font-family: 'inpage-icons';
-  src: url('../icons/inpage-icons.woff') format('woff');
-  font-weight: normal;
-  font-style: normal;
-}
-
-[class^='icon-sxc-']:before,
-[class*=' icon-sxc-']:before {
-  font-family: 'inpage-icons';
-  font-style: normal;
-  font-weight: normal;
-  speak: none;
-
-  display: inline-block;
-  text-decoration: inherit;
-  width: 1em;
-  /* margin-right: 0.3em; */
-  text-align: center;
-
-  /* For safety - reset parent styles, that can break glyph codes*/
-  font-variant: normal;
-  text-transform: none;
-
-  /* fix buttons height, for twitter bootstrap */
-  line-height: 28px;
-
-  /* you can be more comfortable with increased icons size */
-  font-size: 125%;
-
-  /* Font smoothing. That was taken from TWBS */
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}

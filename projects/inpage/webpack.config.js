@@ -47,7 +47,20 @@ const configuration = {
         exclude: /node_modules/,
         use: [
           { loader: MiniCssExtractPlugin.loader },
-          { loader: 'css-loader', options: { sourceMap: true } }
+          { loader: 'css-loader', options: { sourceMap: true } },
+        ]
+      },
+      {
+        test: /\.s[ac]ss$/i,
+        include: [/src/, /icons/],
+        exclude: /node_modules/,
+        use: [
+          { loader: MiniCssExtractPlugin.loader },
+          // "style-loader",
+          // { loader: MiniCssExtractPlugin.loader },
+          // { loader: 'css-loader', options: { sourceMap: true } },
+          "css-loader",
+          "sass-loader",
         ]
       },
       {
