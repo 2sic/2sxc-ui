@@ -12,6 +12,7 @@ export interface Note {
   type?: TypeNoteMode;
   note?: string;
   link?: string;
+  allowHtml?: boolean;
 }
 
 /**

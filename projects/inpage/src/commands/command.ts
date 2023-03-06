@@ -39,7 +39,8 @@ export class Command {
                 content: note?.note,
                 theme: 'light',
                 arrow: true,
-                delay: [null, null], // delay hide by 500ms
+                delay: [null, null],
+                allowHTML: note?.allowHtml ?? false,
                 // activate these to debug the styling in F12
                 // trigger: 'click',
                 // hideOnClick: false,
