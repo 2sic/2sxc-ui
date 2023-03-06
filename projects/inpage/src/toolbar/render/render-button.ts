@@ -56,6 +56,9 @@ export class RenderButton extends RenderPart {
         // set color - new in 10.27
         this.processColorRules(btnSafe, rule, ctx, divTag);
 
+        // add tippy new 15.04
+        btnSafe.tippy(ctx, btnLink);
+
         return cl.return(btnLink);
     }
 

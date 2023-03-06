@@ -28,6 +28,7 @@ export class Command {
             uiActionOnly: (_) => uiOnly,
             partOfPage: (_) => partOfPage,
             color: (_) => undefined,
+            tippy: (_) => undefined,
             ...more,
         };
     }

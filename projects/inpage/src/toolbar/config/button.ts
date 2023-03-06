@@ -79,8 +79,17 @@ export class Button {
     /** The code to run for this button - if empty, will default to open a dialog */
     code?: CommandCode;
 
-    /** The color which could be supplied per button - new for `info` v15.04 */
+    /**
+     * The color which could be supplied per button - new for `info`
+     * New v15.04
+     */
     color: ButtonPropGen<string | undefined>;
+
+    /**
+     * The tippy which could be supplied per button - new for `info`
+     * v15.04
+     */
+    tippy: (context: ContextComplete, tag: HTMLElement) => void;
 
     /**
      * Additional parameters which are used to RUN the command.

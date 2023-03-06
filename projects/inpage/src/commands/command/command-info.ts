@@ -1,4 +1,6 @@
-﻿import { CommandNames, Commands } from '..';
+﻿import tippy from 'tippy.js';
+// import 'tippy.js/themes/light.css';
+import { CommandNames, Commands } from '..';
 import { iconPrefix, tlbI18nPrefix } from '../command';
 
 const noMessage = 'no message specified';
@@ -63,4 +65,13 @@ Commands.add(CommandNames.info, 'Info', 'info', true, false, {
 
     return Promise.resolve();
   },
+
+  tippy: (ctx, tag) => {
+    console.log('tippy', tag, ctx);
+    tippy(tag, {
+      content: 'this is a test',
+    });
+    return undefined;
+  }
+
 });

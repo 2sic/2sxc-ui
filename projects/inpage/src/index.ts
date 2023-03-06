@@ -53,4 +53,5 @@ import './dnn/index';
 // Tell Webpack to load CSS
 const cssEdit = require('./inpage.css');
 const cssIcons = require('../icons/inpage-icons-codes.css');
-
+// TODO: need Romans help
+// const tippy = require('tippy.js/themes/light.css');
