@@ -1,16 +1,12 @@
 ﻿import tippy from 'tippy.js';
 import { CommandNames, Commands } from '..';
+import { ContextComplete } from '../../context';
+import { TypeNoteMode } from '../../toolbar/config';
 import { iconPrefix, tlbI18nPrefix } from '../command';
 
 const noMessage = 'no message specified';
 
-const modes = {
-  info: 'info',
-  warning: 'warning',
-  help: 'help',
-  link: 'link',
-}
-const i18nKeys = {
+const i18nKeys: Record<TypeNoteMode, string> = {
   info: 'Info',
   warning: 'Warning',
   help: 'Help',
@@ -29,11 +25,11 @@ const colors = {
  */
 Commands.add(CommandNames.info, 'Info', 'info', true, false, {
 
-  icon: (ctx) => iconPrefix + (ctx.button.command.params?.mode ?? 'info'),
+  icon: (ctx) => iconPrefix + (ContextComplete.getRule(ctx)?.ui?.noteType ?? 'info'),
 
-  title: (ctx) => tlbI18nPrefix + (i18nKeys[ctx.button.command.params?.mode as keyof typeof i18nKeys ?? 'info'] ?? 'Info'),
+  title: (ctx) => tlbI18nPrefix + (i18nKeys[ContextComplete.getRule(ctx)?.ui?.noteType as TypeNoteMode ?? 'info'] ?? 'Info'),
 
-  color: (ctx) => colors[ctx.button.command.params?.mode as keyof typeof colors ?? 'info'],
+  color: (ctx) => colors[ContextComplete.getRule(ctx)?.ui?.noteType as keyof typeof colors ?? 'info'],
 
   code(context, event) {
     const params = context.button.command.params;
@@ -47,11 +43,12 @@ Commands.add(CommandNames.info, 'Info', 'info', true, false, {
   },
 
   tippy: (ctx, tag) => {
-    const params = ctx.button.command.params;
+    const ui = ContextComplete.getRule(ctx)?.ui;
     tippy(tag, {
-      content: params?.message as string ?? noMessage,
+      content: ui?.note as string ?? noMessage,
       theme: 'light',
       arrow: true,
+      delay: [null, 500], // delay hide by 500ms
       // activate these to debug the styling in F12
       // trigger: 'click',
       // hideOnClick: false,

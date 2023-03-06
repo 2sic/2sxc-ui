@@ -19,7 +19,7 @@ export class RenderButton extends RenderPart {
         const btnSafe = new ButtonSafe(ctx.button, ctx);
 
         // check if we have rules and merge params into the button
-        const rule = ctx.toolbar?.settings?._rules?.find(ctx.button.id);
+        const rule = ContextComplete.getRule(ctx);
         if (rule) cl.data('rule found, will try to merge params', rule);
         const params = ButtonCommand.mergeAdditionalParams(btnSafe.action(), rule?.params);
 

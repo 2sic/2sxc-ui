@@ -23,12 +23,12 @@ export class Command {
 
 
       this.buttonDefaults = {
-            icon: (_) => `${iconPrefix}${icon}`,
-            title: (_) => `${tlbI18nPrefix}${translateKey}`,
-            uiActionOnly: (_) => uiOnly,
-            partOfPage: (_) => partOfPage,
-            color: (_) => undefined,
-            tippy: (_) => undefined,
+            icon: () => `${iconPrefix}${icon}`,
+            title: () => `${tlbI18nPrefix}${translateKey}`,
+            uiActionOnly: () => uiOnly,
+            partOfPage: () => partOfPage,
+            color: () => undefined,
+            tippy: () => undefined,
             ...more,
         };
     }

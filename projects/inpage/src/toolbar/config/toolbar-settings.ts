@@ -54,8 +54,6 @@ export const TLB_FOLLOW_SCROLL = 'scroll';
 /** @internal */
 export type TypeFollow = 'default' | 'none' | typeof TLB_FOLLOW_INITIAL | typeof TLB_FOLLOW_ALWAYS | typeof TLB_FOLLOW_SCROLL;
 
-
-
 /**
  * Toolbar behavior settings like float, etc.
  * @internal

@@ -16,6 +16,13 @@ export class ContextComplete extends ContextBundleToolbar {
   /** @internal */
   button?: Button;
 
+  /** @internal
+   * must be implemented as static, because the final object is actually just an interface and created from values.
+   */
+  static getRule(ctx: ContextComplete) {
+    return ctx.toolbar?.settings?._rules?.find(ctx.button.id);
+  }
+
   /** @internal */
   commandWorkflow?: ToolbarWorkflowManager;
 
