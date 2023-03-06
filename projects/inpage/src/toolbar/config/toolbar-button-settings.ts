@@ -8,6 +8,15 @@ export type TypeNoteMode = 'info' | 'warning' | 'help' | 'link' | undefined;
 /**
  * @internal
  */
+export interface Note {
+  type?: TypeNoteMode;
+  note?: string;
+  link?: string;
+}
+
+/**
+ * @internal
+ */
 export interface ToolbarButtonSettings {
   icon?: string;
   class?: string;
@@ -16,11 +25,11 @@ export interface ToolbarButtonSettings {
   code?: string;
   title?: string;
   /** WIP 15.04 */
-  note?: string;
+  note?: Note;
 
   /** WIP 15.04 */
   noteType?: TypeNoteMode;
 
 
-  [key: string]: TypeValue;
+  [key: string]: TypeValue | Note;
 }
