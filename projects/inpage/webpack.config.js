@@ -3,6 +3,7 @@ const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const webpack = require('webpack');
 const webpackHelpers = require('../webpack/webpack-helpers.js');
 const CopyPlugin = require('copy-webpack-plugin');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 const bundleName = "inpage";
 // const dnnTarget = webpackHelpers.DnnTargetFolder + '/dist/' + bundleName;
@@ -33,6 +34,10 @@ const configuration = {
       ],
     }),
     webpackHelpers.createCopyAfterBuildPlugin(assetsTarget, webpackHelpers.TargetsWithoutAssets, '/dist/' + bundleName),
+    new BundleAnalyzerPlugin({
+      // disable this to get stats and optimize
+      analyzerMode: 'disabled',
+    }),
   ],
   module: {
     rules: [
@@ -57,7 +62,6 @@ const configuration = {
         use: [
           { loader: MiniCssExtractPlugin.loader },
           // "style-loader",
-          // { loader: MiniCssExtractPlugin.loader },
           // { loader: 'css-loader', options: { sourceMap: true } },
           "css-loader",
           "sass-loader",
