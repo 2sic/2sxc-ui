@@ -17,7 +17,6 @@ export class Command {
     buttonDefaults: Partial<Button>;
 
     /**
-     * 
      * @internal
      */
     mergeDefaults(translateKey: string, icon: string, uiOnly: boolean, partOfPage: boolean, more: Partial<Button>): void {
@@ -33,11 +32,11 @@ export class Command {
             color: () => undefined,
             tippy: (ctx, tag) => {
               const ui = ContextComplete.getRule(ctx)?.ui;
-              const note = (ui?.note as Note)?.note;
-              if (!note)
+              const note = (ui?.note as Note);
+              if (!note?.note)
                 return undefined;
               tippy(tag, {
-                content: note,
+                content: note?.note,
                 theme: 'light',
                 arrow: true,
                 delay: [null, null], // delay hide by 500ms

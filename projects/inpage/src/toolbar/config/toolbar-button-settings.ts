@@ -24,12 +24,9 @@ export interface ToolbarButtonSettings {
   show?: boolean;
   code?: string;
   title?: string;
+
   /** WIP 15.04 */
   note?: Note;
-
-  /** WIP 15.04 */
-  noteType?: TypeNoteMode;
-
 
   [key: string]: TypeValue | Note;
 }

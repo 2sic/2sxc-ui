@@ -19,9 +19,6 @@ const colors = {
 function getNote(ctx: ContextComplete): Note {
   const note = ContextComplete.getRule(ctx)?.ui?.note;
   if (!note) return { type: 'info', note: null };
-  // if (typeof note === 'string')
-  //   return { note: note, type: 'info' };
-  // if (typeof note === 'object') 
   return { type: 'info', ...note };
 }
 
