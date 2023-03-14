@@ -1,0 +1,87 @@
+
+// Only inside a container (div, span, etc.) which has the class `wysiwyg`
+.wysiwyg-container {
+
+  img {
+    width: 100%;
+    height: auto;
+    &.wysiwyg-100,
+    &.wysiwyg-50,
+    &.wysiwyg-33,
+    &.wysiwyg-66,
+    &.wysiwyg-75,
+    &.wysiwyg-25 {
+      margin-bottom:$gutter/2;
+    }
+    &.wysiwyg-100 {
+      width: 100%;
+    }
+    &.wysiwyg-50 {
+      width: calc(50% - ($gutter / 2));
+    }
+    &.wysiwyg-33 {
+      // This is the correct formula
+      // 1. take 100% and remove 2 gutters
+      // 2. divide by 3 - that's the width of an image without gutter
+      // 3. add half a gutter to the width of the image
+      // width: calc((100% - ($gutter * 2)) / 3 + $gutter/2);
+      // The shorthand of the above formula
+      width: calc(33.3% - ($gutter / 6));
+      &.wysiwyg-middle {
+        // This is the correct formula - below the shortened version
+        // width: calc((100% - ($gutter * 2)) / 3 + $gutter);
+        width: calc(33.3% + ($gutter / 3));
+      }
+    }
+    &.wysiwyg-66 {
+      width: calc((100% - ($gutter * 2)) / 3 * 2 + ($gutter / 2 * 3));
+    }
+    &.wysiwyg-25 {
+      // This is the correct formula - below the shortened version
+      // width: calc((100% - ($gutter * 3)) / 4 + $gutter/2);
+      width: calc(25% - ($gutter / 4));
+      &.wysiwyg-middle {
+        // This is the correct formula - below the shortened version
+        // width: calc((100% - ($gutter * 3)) / 4 + $gutter);
+        width: calc(25% + ($gutter / 4));
+      }
+
+    }
+    &.wysiwyg-75 {
+      width: calc((100% - ($gutter * 3)) / 4 * 3 + ($gutter / 2 * 5));
+      // width: calc(75% - (#{$gutter} * 3 / 4));
+    }
+
+
+
+    // @media screen and (max-width: 768px) {
+    //   &.wysiwyg-50, &.wysiwyg-33, &.wysiwyg-66, &.wysiwyg-75, &.wysiwyg-25 {
+    //     width: 100%;
+    //     // float:none!important;
+    //     padding-right: 0;
+    //     padding-left: 0;
+    //   }
+    // }
+
+    // experimental, not final
+    &.wysiwyg-middle {
+      float: left;
+      padding-left: $gutter/2;
+      padding-right: $gutter/2;
+    }
+    
+  }
+}
+
+@container wysiwyg-container (min-width: #{$container-breakpoint-sm}) {
+  .wysiwyg-container img:not(.wysiwyg-100) {
+    &.wysiwyg-right {
+      float: right;
+      padding-left:$gutter/2;
+    }
+    &.wysiwyg-left {
+      float: left;
+      padding-right:$gutter/2;
+    }
+  }
+}
