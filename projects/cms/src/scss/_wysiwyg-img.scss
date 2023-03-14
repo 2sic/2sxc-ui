@@ -16,6 +16,27 @@
     &.wysiwyg-100 {
       width: 100%;
     }
+  }
+}
+
+@container wysiwyg-container (min-width: #{$container-breakpoint-sm}) {
+  .wysiwyg-container img:not(.wysiwyg-100) {
+    &.wysiwyg-right {
+      float: right;
+      padding-left:$gutter/2;
+    }
+    &.wysiwyg-left {
+      float: left;
+      padding-right:$gutter/2;
+    }
+
+    // experimental, not final
+    &.wysiwyg-middle {
+      float: left;
+      padding-left: $gutter/2;
+      padding-right: $gutter/2;
+    }
+    
     &.wysiwyg-50 {
       width: calc(50% - ($gutter / 2));
     }
@@ -51,37 +72,11 @@
       width: calc((100% - ($gutter * 3)) / 4 * 3 + ($gutter / 2 * 5));
       // width: calc(75% - (#{$gutter} * 3 / 4));
     }
-
-
-
-    // @media screen and (max-width: 768px) {
-    //   &.wysiwyg-50, &.wysiwyg-33, &.wysiwyg-66, &.wysiwyg-75, &.wysiwyg-25 {
-    //     width: 100%;
-    //     // float:none!important;
-    //     padding-right: 0;
-    //     padding-left: 0;
-    //   }
-    // }
-
-    // experimental, not final
-    &.wysiwyg-middle {
-      float: left;
-      padding-left: $gutter/2;
-      padding-right: $gutter/2;
-    }
-    
   }
 }
 
-@container wysiwyg-container (min-width: #{$container-breakpoint-sm}) {
-  .wysiwyg-container img:not(.wysiwyg-100) {
-    &.wysiwyg-right {
-      float: right;
-      padding-left:$gutter/2;
-    }
-    &.wysiwyg-left {
-      float: left;
-      padding-right:$gutter/2;
-    }
+@container wysiwyg-container (max-width: #{$container-breakpoint-sm}) {
+  .wysiwyg-container img {
+    width: 100%;
   }
 }
