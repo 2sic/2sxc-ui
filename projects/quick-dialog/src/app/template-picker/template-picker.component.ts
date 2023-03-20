@@ -107,7 +107,6 @@ export class TemplatePickerComponent implements OnInit {
 
     this.boot(dashInfo);
     if (debug) this.debugObservables();
-    console.log('2dm - CONSTRUCTOR');
   }
 
   ngOnInit(): void {
