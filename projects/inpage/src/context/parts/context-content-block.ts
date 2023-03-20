@@ -33,7 +33,7 @@ export class ContextOfContentBlock {
     this.templateId = cb.TemplateId;
     this.templatePath = cb.TemplatePath;
     this.TemplateIsShared = cb.TemplateIsShared;
-    this.edition = cb.Edition;
+    this.edition = cb.Edition ?? null;
     this.contentTypeId = cb.ContentTypeName;
     this.contentGroupId = cb.Guid;
   }
