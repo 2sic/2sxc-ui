@@ -15,8 +15,11 @@
     "Delete": "Eintrag löschen",
     "Develop": "Vorlage bearbeiten",
     "Edit": "bearbeiten",
+    "Help": "Hilfe",
+    "Info": "Information",
     "ItemHistory": "Versionen",
     "Image": "Bildeinstellungen",
+    "Link": "link",
     "Metadata": "Metadaten / Beschreibung",
     "MoreActions": "weitere Aktionen",
     "MoveDown": "nach unten verschieben",
@@ -30,6 +33,7 @@
     "Sort": "Liste sortieren",
     "TemplateSettings": "Ansichts-Einstellungen",
     "Unpublished": "unveröffentlicht",
+    "Warning": "Warnung",
     "Zone": "apps verwalten"
   },
   "Delete": {

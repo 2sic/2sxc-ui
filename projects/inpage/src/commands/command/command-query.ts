@@ -1,4 +1,4 @@
-﻿import { Command, CommandNames, Commands } from '..';
+﻿import { Command, CommandNames, Commands, tlbI18nPrefix } from '..';
 
 /**
  * import this module to commands.ts
@@ -13,7 +13,7 @@ const cmd = Command.build(CommandNames.query, 'QueryEdit', 'filter', true, false
 
   disabled: (ctx) => ctx.app.settingsId === null || !ctx.contentBlock.queryId,
 
-  title: (ctx) => `Toolbar.QueryEdit${ctx.contentBlock.queryId === null ? 'Disabled' : ''}`,
+  title: (ctx) => `${tlbI18nPrefix}QueryEdit${ctx.contentBlock.queryId === null ? 'Disabled' : ''}`,
 
   showCondition: (ctx) => !!ctx.user.CanDevelop && !ctx.app.isContent,
 

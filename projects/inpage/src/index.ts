@@ -50,7 +50,5 @@ NoJQ.ready(loadInpage);
 // Apply Dnn Bugfixes
 import './dnn/index';
 
-// Tell Webpack to load CSS
-const cssEdit = require('./inpage.css');
-const cssIcons = require('../icons/inpage-icons-codes.css');
 
+import './styles/index.scss';

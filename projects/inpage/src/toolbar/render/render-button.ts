@@ -19,7 +19,7 @@ export class RenderButton extends RenderPart {
         const btnSafe = new ButtonSafe(ctx.button, ctx);
 
         // check if we have rules and merge params into the button
-        const rule = ctx.toolbar?.settings?._rules?.find(ctx.button.id);
+        const rule = ContextComplete.getRule(ctx);
         if (rule) cl.data('rule found, will try to merge params', rule);
         const params = ButtonCommand.mergeAdditionalParams(btnSafe.action(), rule?.params);
 
@@ -54,7 +54,10 @@ export class RenderButton extends RenderPart {
         btnLink.appendChild(divTag);
 
         // set color - new in 10.27
-        this.processColorRules(rule, ctx, divTag);
+        this.processColorRules(btnSafe, rule, ctx, divTag);
+
+        // add tippy new 15.04
+        btnSafe.tippy(ctx, btnLink);
 
         return cl.return(btnLink);
     }
@@ -75,9 +78,9 @@ export class RenderButton extends RenderPart {
         callLog.done();
     }
 
-    private processColorRules(rule: BuildRule, ctx: ContextComplete, divTag: HTMLDivElement) {
+    private processColorRules(btn: ButtonSafe, rule: BuildRule, ctx: ContextComplete, divTag: HTMLDivElement) {
         const callLog = this.log.call('processColorRules');
-        let color = rule?.ui?.color || ctx.toolbar.settings.color;
+        let color = rule?.ui?.color ?? btn.color() ?? ctx.toolbar.settings.color;
 
         // catch edge case where the color is something like 808080 - which is treated as a number
         if (color && typeof color === 'number') color = (color as number).toString();

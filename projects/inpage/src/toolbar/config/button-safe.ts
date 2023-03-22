@@ -15,13 +15,19 @@ export class ButtonSafe {
 
     classes = () => this.button.classes || '';
 
+    /**
+     * New v15.04 for `info`
+     * @returns the color of the button, or undefined if not set
+     */
+    color = () => getVal (this.button.color, this.context, undefined);
+
     /** The dialog name - should default to the name */
     dialog = () => getVal (this.button.dialog, this.context, this.button.command.name);
 
     /** Determines if the button should be disabled */
     disabled = () => getVal (this.button.disabled, this.context, false);
 
-    /** Dynamicaly determine classes - must always be a function */
+    /** Dynamically determine classes - must always be a function */
     dynamicClasses = () => getVal (this.button.dynamicClasses, this.context, '');
 
     /** Check if full-screen, always a function */
@@ -47,6 +53,7 @@ export class ButtonSafe {
     /** Method which determines if it should be shown or not */
     showCondition = () => getVal (this.button.showCondition, this.context, true);
 
+    tippy = (context: ContextComplete, tag: HTMLElement) => this.button.tippy?.(context, tag);
 
     /** The title of this button which will usually be i18n keys */
     title = () => getVal (this.button.title, this.context, 'unknown-title');

@@ -3,6 +3,21 @@ import { TypeValue } from '../../core';
 /**
  * @internal
  */
+export type TypeNoteMode = 'info' | 'warning' | 'help' | 'link' | undefined;
+
+/**
+ * @internal
+ */
+export interface Note {
+  type?: TypeNoteMode;
+  note?: string;
+  link?: string;
+  allowHtml?: boolean;
+}
+
+/**
+ * @internal
+ */
 export interface ToolbarButtonSettings {
   icon?: string;
   class?: string;
@@ -10,5 +25,9 @@ export interface ToolbarButtonSettings {
   show?: boolean;
   code?: string;
   title?: string;
-  [key: string]: TypeValue;
+
+  /** WIP 15.04 */
+  note?: Note;
+
+  [key: string]: TypeValue | Note;
 }

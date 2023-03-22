@@ -149,10 +149,27 @@ export const enum CommandNames {
     edit = 'edit',
 
     /**
+     * `help` shows a button with a question mark and a tooltip with some info.
+     * <br>
+     * When clicked it opens a link.
+     * <br> 📩 Parameters either one of these: TODO
+     * @internal - still WIP v15.04
+     * TODO: AS IT'S basically identical with link, we should reconsider this...?
+     */
+    help = 'help',
+
+    /**
      * `image` opens the edit-dialog for the metadata of the current image
      * @internal - may be removed soon
      */
     image = 'image',
+
+    /**
+     * `info` shows a button with a info icon, with optional tooltip and an alert with some info.
+     * <br> 📩 Parameters either one of these: TODO
+     * @internal - still WIP v15.04
+     */
+    info = 'info',
 
     /**
      * `insights` opens the insights logs page
@@ -166,6 +183,14 @@ export const enum CommandNames {
      * @internal
      */
     insights_old_server = 'insights-server',
+
+    /**
+     * `link` shows a button with a link icon, with optional tooltip.
+     * When clicked it opens a link.
+     * <br> 📩 Parameters either one of these: TODO
+     * @internal - still WIP v15.04
+     */
+    link = 'link',
 
     /**
      * `instance-list` opens a dialog to manually re-order **items in a list**.

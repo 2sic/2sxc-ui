@@ -79,6 +79,7 @@ export class ContentBlockEditor extends HasLog {
             lang: context.app.currentLanguage,
             cbid: context.contentBlockReference.id,
             originalparameters: JSON.stringify(context.instance.parameters),
+            edition: context.contentBlock.edition,
         };
         cl.data('params', params);
         const promise = context.sxc.webApi.fetchRaw(context.sxc.webApi.url(webApiRender, params))
@@ -144,5 +145,5 @@ interface WebApiParams {
     newTemplateChooserState?: boolean;
     zoneId?: number;
     appId?: number;
-    v2?: boolean;
+    edition?: string;
 }

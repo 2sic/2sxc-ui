@@ -4,6 +4,7 @@
 .icon-sxc-minus:before { content: '\e802'; } /* '' */
 .icon-sxc-move:before { content: '\e803'; } /* '' */
 .icon-sxc-options-old:before { content: '\e804'; } /* '' */
+.icon-sxc-link:before { content: '\e805'; } /* '' */
 .icon-sxc-ok:before { content: '\e806'; } /* '' */
 .icon-sxc-fields:before { content: '\e807'; } /* '' */
 .icon-sxc-filter-1:before { content: '\e808'; } /* '' */
@@ -15,6 +16,8 @@
 .icon-sxc-table:before { content: '\e80e'; } /* '' */
 .icon-sxc-tag:before { content: '\e80f'; } /* '' */
 .icon-sxc-translate:before { content: '\e810'; } /* '' */
+.icon-sxc-info:before { content: '\e811'; } /* '' */
+.icon-sxc-warning:before { content: '\e812'; } /* '' */
 .icon-sxc-plus:before { content: '\e813'; } /* '' */
 .icon-sxc-move-down:before { content: '\e815'; } /* '' */
 .icon-sxc-move-up:before { content: '\e816'; } /* '' */
@@ -36,3 +39,4 @@
 .icon-sxc-add-existing:before { content: '\ec2d'; } /* '' */
 .icon-sxc-filter:before { content: '\ec2e'; } /* '' */
 .icon-sxc-options:before { content: '\eddd'; } /* '' */
+.icon-sxc-help:before { content: '\f128'; } /* '' */

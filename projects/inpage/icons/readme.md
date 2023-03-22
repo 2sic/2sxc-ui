@@ -4,14 +4,14 @@ Icons used in the UI of 2sxc
 
 ## Icon tooling & Update Process
 
-We use [fontello](http://www.fontello.com) to build the icon library. To update the library, this is the process:
+We use [fontello](https://fontello.com) to build the icon library. To update the library, this is the process:
 
 1. go to fontello
-1. unzip the config.json and upload to fontello
+1. upload the previous zip to fontello (drag & drop unto the page)
 1. make your changes
-1. download resulting zip and copy all the files into this icons folder
+1. download resulting zip and copy it into this icons folder
 1. take the .woff from the zip and put it into this folder
-1. tage the `inpage-icons-codes.css` and put it into this folder
+1. take the `inpage-icons-codes.css` and put it into this folder
 
 ## Build / Release Process
 

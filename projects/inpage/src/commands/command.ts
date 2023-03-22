@@ -1,4 +1,10 @@
-﻿import { Button } from '../toolbar/config/button';
+﻿import tippy from 'tippy.js';
+import { ContextComplete } from '../context/bundles/context-bundle-button';
+import { Button } from '../toolbar/config/button';
+import { Note } from '../toolbar/config/toolbar-button-settings';
+
+export const iconPrefix = 'icon-sxc-';
+export const tlbI18nPrefix = 'Toolbar.';
 
 /**
  * @internal
@@ -11,7 +17,6 @@ export class Command {
     buttonDefaults: Partial<Button>;
 
     /**
-     * 
      * @internal
      */
     mergeDefaults(translateKey: string, icon: string, uiOnly: boolean, partOfPage: boolean, more: Partial<Button>): void {
@@ -20,10 +25,29 @@ export class Command {
 
 
       this.buttonDefaults = {
-            icon: (_) => `icon-sxc-${icon}`,
-            title: (_) => `Toolbar.${translateKey}`,
-            uiActionOnly: (_) => uiOnly,
-            partOfPage: (_) => partOfPage,
+            icon: () => `${iconPrefix}${icon}`,
+            title: () => `${tlbI18nPrefix}${translateKey}`,
+            uiActionOnly: () => uiOnly,
+            partOfPage: () => partOfPage,
+            color: () => undefined,
+            tippy: (ctx, tag) => {
+              const ui = ContextComplete.getRule(ctx)?.ui;
+              const note = (ui?.note as Note);
+              if (!note?.note)
+                return undefined;
+              tippy(tag, {
+                content: note?.note,
+                theme: 'light',
+                arrow: true,
+                delay: [null, null],
+                allowHTML: note?.allowHtml ?? false,
+                // activate these to debug the styling in F12
+                // trigger: 'click',
+                // hideOnClick: false,
+                // interactive: true,
+              });
+              return undefined;
+            },
             ...more,
         };
     }

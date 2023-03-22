@@ -15,9 +15,12 @@
     "Delete": "delete item",
     "Develop": "edit template",
     "Edit": "edit",
+    "Help": "help",
+    "Info": "information",
     "Insights": "insights and logs",
     "ItemHistory": "history",
     "Image": "image settings",
+    "Link": "link",
     "Metadata": "metadata / descriptions",
     "MoreActions": "more actions",
     "MoveDown": "move down",
@@ -31,6 +34,7 @@
     "Sort": "sort / manage list",
     "TemplateSettings": "view settings",
     "Unpublished": "unpublished",
+    "Warning": "warning",
     "Zone": "manage apps"
   },
   "Delete": {
