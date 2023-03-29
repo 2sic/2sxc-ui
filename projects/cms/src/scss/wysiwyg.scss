@@ -40,6 +40,7 @@ $container-breakpoint-lg: 992px;
 $debug-pattern-color: #00275327;
 $debug-pattern-bg-color: #ffffff;
 $debug-background: repeating-linear-gradient(135deg, $debug-pattern-color 0, $debug-pattern-color 1px, $debug-pattern-bg-color 0, $debug-pattern-bg-color 50%);
+$debug-background-img: repeating-linear-gradient(135deg, $debug-pattern-color 0, $debug-pattern-color 1px, $debug-pattern-bg-color 0, $debug-pattern-bg-color 7px);
 
 .wysiwyg-container {
   // container-type: inline-size;

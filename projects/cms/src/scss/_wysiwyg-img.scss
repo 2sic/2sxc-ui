@@ -44,102 +44,16 @@ $half-gutter: $gutter/2;
 // - remove 'middle'? - in wysiwyg, css and more
 // - responsive behavior
 
+$main-tag: 'picture';
+$sub-tag: 'img';
+
 @container wysiwyg-container (min-width: #{$container-breakpoint-sm}) {
   .wysiwyg-container {
 
-    
-    // Experimental with Picture
-    picture.wysiwyg-left {
-      // Second and last wysiwyg-33
-      &.wysiwyg-33 {
-        + picture.wysiwyg-33.wysiwyg-left {
-          + picture.wysiwyg-33.wysiwyg-right img,
-          + picture.wysiwyg-33.wysiwyg-left img {
-            width: $width33-last;
-            padding-right: 0;
-            padding-left: 0;
-          }
-        }
-        + picture.wysiwyg-66.wysiwyg-right img,
-        + picture.wysiwyg-66.wysiwyg-left img {
-          width: $width66-last;
-          padding-right: 0;
-          padding-left: 0;
-        }
-      }
-
-      &.wysiwyg-66 {
-        + picture.wysiwyg-33.wysiwyg-right img,
-        + picture.wysiwyg-33.wysiwyg-left img {
-          width: $width33-last;
-          padding-right: 0;
-          padding-left: 0;
-        }
-      }
-
-      // Second+ and last wysiwyg-25
-      &.wysiwyg-25 {
-        // Second/third pic are 25%
-        + picture.wysiwyg-25.wysiwyg-left {
-          // fourth pic is 25%
-          + picture.wysiwyg-25.wysiwyg-left + picture.wysiwyg-25.wysiwyg-right img,
-          + picture.wysiwyg-25.wysiwyg-left + picture.wysiwyg-25.wysiwyg-left img {
-            width: $width25-last;
-            padding-right: 0;
-          }
-          // third pic is 50%
-          + picture.wysiwyg-50.wysiwyg-right img,
-          + picture.wysiwyg-50.wysiwyg-left img {
-            width: $width50-last;
-            padding-right: 0;
-            border: 1px solid rgb(198, 226, 43);
-          }
-        }
-        // Second pic is 50%
-        + picture.wysiwyg-50.wysiwyg-left {
-          img {
-            width: $width50-wg;
-          }
-          + picture.wysiwyg-25.wysiwyg-right img,
-          + picture.wysiwyg-25.wysiwyg-left img {
-            width: $width25-last;
-            padding-right: 0;
-          }
-        }
-        + picture.wysiwyg-75.wysiwyg-right img,
-        + picture.wysiwyg-75.wysiwyg-left img {
-          width: $width75-last;
-          padding-right: 0;
-          padding-left: 0;
-        }
-      }
-
-      &.wysiwyg-50 {
-        + picture.wysiwyg-50.wysiwyg-right img,
-        + picture.wysiwyg-50.wysiwyg-left img {
-          width: $width50-last;
-          padding-right: 0;
-          padding-left: 0;
-        }
-        + picture.wysiwyg-25.wysiwyg-left + picture.wysiwyg-25.wysiwyg-right img,
-        + picture.wysiwyg-25.wysiwyg-left + picture.wysiwyg-25.wysiwyg-left img {
-          width: $width25-last;
-          padding-right: 0;
-        }
-      }
-
-      &.wysiwyg-75 {
-        + picture.wysiwyg-25.wysiwyg-right img,
-        + picture.wysiwyg-25.wysiwyg-left img {
-          width: $width25-last;
-          padding-right: 0;
-          padding-left: 0;
-        }
-      }
-    }
-
-
-
+    // This section is identical in the 2sxc-ui/cms and eav-ui as of 2023-03-23 v15.05
+    // It comes first, because rules below should have higher precedence
+    // In 2sxc-ui/cms this would work by default, because the selector also has 'picture' which is a longer selector
+    // but in eav-ui the selector is of similar strength, so it must come first to have lower priority
     img:not(.wysiwyg-100) {
       &.wysiwyg-right {
         float: right;
@@ -177,6 +91,108 @@ $half-gutter: $gutter/2;
         width: $width75-wg;
       }
     }
+
+    
+    // Experimental with Picture
+    #{$main-tag}.wysiwyg-left {
+
+      // Second and last wysiwyg-33, or final wysiwyg-66 (after an initial wysiwyg-33)
+      // This section is identical in the 2sxc-ui/cms and eav-ui as of 2023-03-23 v15.05
+      &.wysiwyg-33 {
+        + #{$main-tag}.wysiwyg-33.wysiwyg-left {
+          + #{$main-tag}.wysiwyg-33.wysiwyg-right #{$sub-tag},
+          + #{$main-tag}.wysiwyg-33.wysiwyg-left #{$sub-tag} {
+            width: $width33-last;
+            padding-right: 0;
+            padding-left: 0;
+          }
+        }
+        + #{$main-tag}.wysiwyg-66.wysiwyg-right #{$sub-tag},
+        + #{$main-tag}.wysiwyg-66.wysiwyg-left #{$sub-tag} {
+          width: $width66-last;
+          padding-right: 0;
+          padding-left: 0;
+        }
+      }
+
+      // Last wysiwyg-33 after an initial wysiwyg-66
+      // This section is identical in the 2sxc-ui/cms and eav-ui as of 2023-03-23 v15.05
+      &.wysiwyg-66 {
+        + #{$main-tag}.wysiwyg-33.wysiwyg-right #{$sub-tag},
+        + #{$main-tag}.wysiwyg-33.wysiwyg-left #{$sub-tag} {
+          width: $width33-last;
+          padding-right: 0;
+          padding-left: 0;
+        }
+      }
+
+      // Second+ and last wysiwyg-25, or 50, or 75 after an initial wysiwyg-25
+      // This section is identical in the 2sxc-ui/cms and eav-ui as of 2023-03-23 v15.05
+      // Except for the one line which is especially marked
+      &.wysiwyg-25 {
+        // Second/third pic are 25%
+        + #{$main-tag}.wysiwyg-25.wysiwyg-left {
+          // fourth pic is 25%
+          + #{$main-tag}.wysiwyg-25.wysiwyg-left + #{$main-tag}.wysiwyg-25.wysiwyg-right #{$sub-tag},
+          + #{$main-tag}.wysiwyg-25.wysiwyg-left + #{$main-tag}.wysiwyg-25.wysiwyg-left #{$sub-tag} {
+            width: $width25-last;
+            padding-right: 0;
+          }
+          // third pic is 50%
+          + #{$main-tag}.wysiwyg-50.wysiwyg-right #{$sub-tag},
+          + #{$main-tag}.wysiwyg-50.wysiwyg-left #{$sub-tag} {
+            width: $width50-last;
+            padding-right: 0;
+          }
+        }
+        // Second pic is 50% after a 25% pic
+        // The first rule is by itself, to ensure the img has the right width
+        // Otherwise the code would be different in 2sxc-ui/cms and eav-ui
+        + #{$main-tag}.wysiwyg-50.wysiwyg-left #{$sub-tag} {
+          width: $width50-wg;
+        }
+        // Third pic after 25% and 50%
+        + #{$main-tag}.wysiwyg-50.wysiwyg-left {
+          + #{$main-tag}.wysiwyg-25.wysiwyg-right #{$sub-tag},
+          + #{$main-tag}.wysiwyg-25.wysiwyg-left #{$sub-tag} {
+            width: $width25-last;
+            padding-right: 0;
+          }
+        }
+        + #{$main-tag}.wysiwyg-75.wysiwyg-right #{$sub-tag},
+        + #{$main-tag}.wysiwyg-75.wysiwyg-left #{$sub-tag} {
+          width: $width75-last;
+          padding-right: 0;
+          padding-left: 0;
+        }
+      }
+
+      // This section is identical in the 2sxc-ui/cms and eav-ui as of 2023-03-23 v15.05
+      &.wysiwyg-50 {
+        + #{$main-tag}.wysiwyg-50.wysiwyg-right #{$sub-tag},
+        + #{$main-tag}.wysiwyg-50.wysiwyg-left #{$sub-tag} {
+          width: $width50-last;
+          padding-right: 0;
+          padding-left: 0;
+        }
+        + #{$main-tag}.wysiwyg-25.wysiwyg-left + #{$main-tag}.wysiwyg-25.wysiwyg-right #{$sub-tag},
+        + #{$main-tag}.wysiwyg-25.wysiwyg-left + #{$main-tag}.wysiwyg-25.wysiwyg-left #{$sub-tag} {
+          width: $width25-last;
+          padding-right: 0;
+        }
+      }
+
+      &.wysiwyg-75 {
+        + #{$main-tag}.wysiwyg-25.wysiwyg-right #{$sub-tag},
+        + #{$main-tag}.wysiwyg-25.wysiwyg-left #{$sub-tag} {
+          width: $width25-last;
+          padding-right: 0;
+          padding-left: 0;
+        }
+      }
+    }
+
+
   }
 }
 
