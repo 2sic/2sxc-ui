@@ -19,6 +19,7 @@ const colors = {
 function getNote(ctx: ContextComplete): Note {
   const note = ContextComplete.getRule(ctx)?.ui?.note;
   if (!note) return { type: 'info', note: null };
+  note.type = note.type ?? 'info';  // type can be null, in which case a simple spread operator would not set the default value
   return { type: 'info', ...note };
 }
 
