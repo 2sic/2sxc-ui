@@ -9,9 +9,15 @@ export type TypeNoteMode = 'info' | 'warning' | 'help' | 'link' | undefined;
  * @internal
  */
 export interface Note {
-  type?: TypeNoteMode;
+  /** The note itself, as text. ATM no HTML support. */
   note?: string;
+  /** The type is mainly for the icon ATM. */
+  type?: TypeNoteMode;
+  /** The link - not yet used */
   link?: string;
+  /** background color */
+  background?: string;
+  /** allowHtml - ATM not used */
   allowHtml?: boolean;
 }
 
