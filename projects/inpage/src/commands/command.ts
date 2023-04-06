@@ -23,7 +23,6 @@ export class Command {
       if (typeof (partOfPage) !== 'boolean')
         throw 'partOfPage in commands not provided, order will be wrong!';
 
-
       this.buttonDefaults = {
             icon: () => `${iconPrefix}${icon}`,
             title: () => `${tlbI18nPrefix}${translateKey}`,
@@ -41,10 +40,17 @@ export class Command {
                 arrow: true,
                 delay: [null, null],
                 allowHTML: note?.allowHtml ?? false,
+                
                 // activate these to debug the styling in F12
                 // trigger: 'click',
                 // hideOnClick: false,
                 // interactive: true,
+                onMount: (instance) => {
+                  if (!note?.background) return;
+                  const content = instance.popper.querySelector('.tippy-content') as HTMLElement;
+                  // console.log('popper', content);
+                  content.style.backgroundColor = note.background;
+                }
               });
               return undefined;
             },
