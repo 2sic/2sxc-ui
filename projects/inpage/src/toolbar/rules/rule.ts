@@ -154,7 +154,12 @@ export class BuildRule extends HasLog {
         }
         // #3 position can be number or -number to indicate from other side
         // Note that JS preserves -0, which is kind of unique
-        if (parts.pos != null) this.pos = Number(parts.pos);
+        if (parts.pos != null)
+        {
+          this.pos = Number(parts.pos);
+          // v15.09 2023-04-06 get rid of -0 (legacy) because it causes trouble with simple int in C# APIs
+          if (Object.is(this.pos, -0)) this.pos = -1;
+        }
 
         // #4 icon is automatically kept
         // #5 show override of buttons (on buttons, must convert to bool)

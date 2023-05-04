@@ -15,8 +15,8 @@ export class TemplateEditor extends HasLog {
 
     addButton(template: ToolbarTemplate, groupName: string, id: string, name: string, pos: number): void {
         // fromStart
-        const fromStart = !(Object.is(pos, -0) || pos < 0);
-        pos = Math.abs(pos);
+        const fromStart = pos >= 0;
+        pos = Math.abs(pos) - (fromStart ? 0 : 1);
         // console.log('addbutton - pos', `${fromStart ? '+' : '-'}${pos}`);
         const cl = this.log.call('addButton', `..., ${groupName}, ${id}, ${name}, ${fromStart ? '+' : '-'}${pos}, ${fromStart}`);
         if (!template) return cl.done('no template');
@@ -48,8 +48,8 @@ export class TemplateEditor extends HasLog {
     }
 
     addGroup(template: ToolbarTemplate, groupName: string, pos: number): ToolbarTemplateGroup {
-        const fromStart = !(Object.is(pos, -0) || pos < 0);
-        pos = Math.abs(pos);
+        const fromStart = pos >= 0;
+        pos = Math.abs(pos) - (fromStart ? 0 : 1);
         const cl = this.log.call('addGroup', `..., ${groupName}, ${fromStart ? '+' : '-'}${pos}`);
         this.ensureGroups(template);
         const alreadyExists = this.findGroup(template, groupName);
