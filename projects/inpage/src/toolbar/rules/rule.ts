@@ -1,4 +1,5 @@
 import { Operations as Operators, RuleConstants as RC, RuleParams, RuleParamsHelper } from '.';
+import { prefixBase64, prefixJson64 } from '../../constants/rules';
 import { HasLog, Log } from '../../core';
 import { TypeValue } from '../../plumbing';
 import { ToolbarButtonSettings, ToolbarSettings } from '../config';
@@ -224,14 +225,14 @@ export class BuildRule extends HasLog {
             if (!isNaN(+val)) return [key, Number(val)];
 
             // revert base64 encoding
-            if (typeof(val) === 'string' && val.startsWith('base64:')) {
-              const afterPrefix = val.split('base64:')[1];
-              return [key, atob(afterPrefix)];
+            if (typeof(val) === 'string' && val.startsWith(prefixBase64)) {
+              const afterPrefix = val.split(prefixBase64)[1];
+              return [key, window.atob(afterPrefix)];
             }
 
-            if (typeof(val) === 'string' && val.startsWith('json64:')) {
-              const afterPrefix = val.split('json64:')[1];
-              return [key, JSON.parse(atob(afterPrefix))];
+            if (typeof(val) === 'string' && val.startsWith(prefixJson64)) {
+              const afterPrefix = val.split(prefixJson64)[1];
+              return [key, JSON.parse(window.atob(afterPrefix))];
             }
 
             return [key, val];
