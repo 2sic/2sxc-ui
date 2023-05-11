@@ -2,15 +2,15 @@
 import { ContextComplete } from '../../context/bundles/context-bundle-button';
 import { Translator } from '../../i18n/translator';
 import { HasLog } from '../../core';
-import { ToolbarWhenNoToolbarProvided } from '../config';
 import { ToolbarRenderer } from '../render/toolbar-renderer';
 import { TagToolbar } from '../tag-toolbars/tag-toolbar';
 import { ToolbarLifecycle } from '../toolbar-lifecycle';
 import { ToolbarManager } from '../toolbar-manager';
 import { ToolbarInitConfig } from './toolbar-init-config';
+import { getToolbarWhenNoneProvided } from '../templates/toolbar-when-no-toolbar-provided';
 
 // quick debug - set to false if not needed for production
-const dbg = false;
+const dbg = true;
 /**
  * @internal
  */
@@ -202,7 +202,7 @@ function addDefaultToolbarConfigToTag(parentTag: HTMLElement): HTMLElement[] {
     if (ctx.ui.autoToolbar === false)
         return null;
 
-    contentTag.setAttribute(C.Toolbar.attr.full, JSON.stringify(ToolbarWhenNoToolbarProvided));
+    contentTag.setAttribute(C.Toolbar.attr.full, JSON.stringify(getToolbarWhenNoneProvided(ctx?.system?.error)));
 
     return [contentTag];
 }

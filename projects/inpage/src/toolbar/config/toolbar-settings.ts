@@ -1,6 +1,4 @@
-﻿import { ToolbarInitConfig } from '../initialize/toolbar-init-config';
-import { RuleManager } from '../rules/rule-manager';
-import { ToolbarTemplate } from '../templates';
+﻿import { RuleManager } from '../rules/rule-manager';
 
 /** @internal */
 export const TlbHoverPrefix = 'sc-tb-hover-';
@@ -130,10 +128,12 @@ export class ToolbarSettings {
     return partialSettings;
   }
 
-  static getDefaults = () => new ToolbarSettings({ autoAddMore: TLB_MORE_AUTO, hover: TLB_HOV_RIGHT, show: TLB_SHOW_HOVER, follow: 'default' });
+  static getDefaults = () => new ToolbarSettings({ autoAddMore: TLB_MORE_AUTO, hover: TLB_HOV_RIGHT, show: TLB_SHOW_HOVER, follow: followDefault });
 
   /** Setup for situations where an empty toolbar is needed, without any data or configuration */
-  static getForEmpty = () => new ToolbarSettings({ autoAddMore: TLB_MORE_AUTO, hover: TLB_HOV_LEFT, show: TLB_SHOW_HOVER, follow: 'default' });
+  static getForEmpty = () => new ToolbarSettings({ autoAddMore: TLB_MORE_AUTO, hover: TLB_HOV_LEFT, show: TLB_SHOW_HOVER, follow: followDefault });
+
+  static getForEmptyAsRule = () => `settings&autoAddMore=${TLB_MORE_AUTO}&hover=${TLB_HOV_LEFT}&show=${TLB_SHOW_HOVER}&follow=${followDefault}`;
 
   /**
    * figure out best code to determine where to put it.
@@ -162,12 +162,3 @@ export class ToolbarSettings {
   }
 }
 
-
-// TODO: this is in the wrong place, shouldn't be in settings
-/**
- * @internal
- */
-export const ToolbarWhenNoToolbarProvided = {
-  toolbar: {} as ToolbarTemplate,
-  settings: ToolbarSettings.getForEmpty(),
-} as ToolbarInitConfig;

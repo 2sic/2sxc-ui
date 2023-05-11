@@ -1,3 +1,4 @@
+import { prefixJson64 } from '../../constants/rules';
 import { TypeValue } from '../../core';
 
 /**
@@ -8,7 +9,7 @@ export type TypeNoteMode = 'info' | 'warning' | 'help' | 'link' | undefined;
 /**
  * @internal
  */
-export interface Note {
+export class Note {
   /** The note itself, as text. ATM no HTML support. */
   note?: string;
   /** The type is mainly for the icon ATM. */
@@ -19,6 +20,10 @@ export interface Note {
   background?: string;
   /** allowHtml - ATM not used */
   allowHtml?: boolean;
+
+  public static toJson64String(note: Note): string {
+    return `${prefixJson64}${window.btoa(JSON.stringify(note))}`;
+  }
 }
 
 /**
