@@ -9,7 +9,7 @@ import { WorkflowHelper, WorkflowPhases, WorkflowStepCodeArguments } from '../wo
 import { ContentBlockEditor } from './content-block-editor';
 
 /**
- * This is the rendering compontent, responsible to update the page when something changes.
+ * This is the rendering component, responsible to update the page when something changes.
  * Depending on the feature-set it will use ajax or not
  * @internal
  */
@@ -49,6 +49,15 @@ class RendererGlobal extends HasLog {
             if (WorkflowHelper.isCancelled(wfArgs)) {
                 cl.add('Workflow return false, will cancel and not refresh.');
                 return Promise.resolve();
+            }
+
+            // if Oqtane (2sxc 16.01) then reload using Blazor
+            const winForOqt = window as any;
+            if (winForOqt.ToSic?.Sxc?.Oqtane)
+            {
+              console.log('Oqtane detected, will reload using Blazor');
+              winForOqt.ToSic.Sxc.Oqtane.reloadModule(context.sxc.id);
+              return Promise.resolve();
             }
 
             // if ajax is not supported, we must reload the whole page
