@@ -11,17 +11,23 @@ import { TypeValue } from '../../../inpage/src/plumbing';
 interface ItemIdentifierShared {
   EntityId?: number;
   Prefill?: Record<string, TypeValue>;
+
+  /** New 16.01 - fields to show/hide in the edit-dialog */
+  Fields?: string;
+
+  /** New 16.01 - parameters should be independent from prefill */
+  Parameters?: Record<string, TypeValue>;
 }
 
 /**
  * Simple identifier, which is id/type-name
  * @internal
  */
-export interface ItemIdentifierSimple {
+export interface ItemIdentifierSimple extends Omit<ItemIdentifierShared, "EntityId"> {
   EntityId: number;
   ContentTypeName?: string;
   Metadata?: CommandParamsMetadata;
-  Prefill?: Record<string, TypeValue>;
+  // Prefill?: Record<string, TypeValue>;
 }
 
 /**
@@ -60,7 +66,10 @@ export interface ItemIdentifierInList extends ItemIdentifierShared {
   /** The index position within that field/part */
   Index: number;
 
+  /** The parent/group we're referencing */
   Parent: string;
+
+  /** The field which contains the item we're referencing */
   Field: string;
 }
 
