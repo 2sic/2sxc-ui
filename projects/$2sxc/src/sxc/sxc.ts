@@ -1,10 +1,11 @@
-﻿import { ContextIdentifier } from '../sxc-global/context-identifier';
+﻿import { SxcGlobalEnvironment } from './../environment/sxc-global-environment';
+import { ContextIdentifier } from '../sxc-global/context-identifier';
 import { SxcWebApi } from './web-api/sxc-web-api';
 import { ApiUrlRoots, HasLog, ToSxcName } from '../../../core';
 import { SxcManage } from './sxc-manage';
 import { SxcData } from './data/sxc-data';
 import { SxcQuery } from './data/sxc-query';
-import { SxcGlobal } from '..';
+import { EnvironmentSpecs, SxcGlobal, SxcGlobalHttp } from '..';
 import { SxcCms } from './sxc-cms';
 
 /**
@@ -61,7 +62,6 @@ export class Sxc extends HasLog {
     public ctx?: ContextIdentifier,
   ) {
     super('SxcInstance', null, 'Generating for ' + id + ':' + cbid);
-    this.webApi = new SxcWebApi(this);
     
     // add manage property, but not within initializer, because inside the manage-initializer it may reference 2sxc again
     try { // sometimes the manage can't be built, like before installing
@@ -69,6 +69,10 @@ export class Sxc extends HasLog {
     } catch (e) {
       console.error('error in 2sxc - will only log but not throw', e);
     }
+
+    // New 16.01 - get env from the current tag instead of the entire page - if possible
+    this.http = this.loadEnv(root);
+    this.webApi = new SxcWebApi(this);
 
     // ensure that data-APIs used incorrectly shows good warnings
     patchDataWithWarnings(this.data);
@@ -79,6 +83,22 @@ export class Sxc extends HasLog {
     if (this.manage.context && this.manage.context.app && this.manage.context.app.currentLanguage)
     root._translateInit(this.manage);    // init translate, not really nice, but ok for now
   }
+
+  private loadEnv(root: SxcGlobal): SxcGlobalHttp {
+    const localEnv = (this.manage as any)?.editContext?.JsApi as EnvironmentSpecs;
+    if (!localEnv) return root.http;
+    const rootEnv = (root.env as any).headers as EnvironmentSpecs;
+    const final = localEnv ? { ...rootEnv, ...localEnv } : rootEnv;
+    const env = new SxcGlobalEnvironment();
+    env.load(final, 'sxc-instance');
+    return new SxcGlobalHttp(env);
+  }
+
+  /**
+   * Http helper for API calls and such
+   * @internal
+   */
+  public http: SxcGlobalHttp;
 
   /**
    * TypeGuard for TypeScript to verify this is a SxcInstance
@@ -122,7 +142,7 @@ export class Sxc extends HasLog {
     if (ApiUrlRoots.indexOf(scope) === -1)
     return virtualPath;
     
-    return this.root.http.apiRoot(ToSxcName) + scope + '/' + virtualPath.substring(virtualPath.indexOf('/') + 1);
+    return this.http.apiRoot(ToSxcName) + scope + '/' + virtualPath.substring(virtualPath.indexOf('/') + 1);
   }
     
     

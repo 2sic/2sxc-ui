@@ -14,8 +14,9 @@ import { ZzzSxcWebApiDeprecated } from './sxc-web-api-deprecated';
 export class SxcWebApi implements ZzzSxcWebApiDeprecated {
     /**
      * @internal
+     * TODO: PROBABLY remove ? but must be sure it's not used elsewhere
      */
-    public readonly env: SxcGlobalEnvironment;
+    private readonly env: SxcGlobalEnvironment;
 
     /**
      * 
@@ -173,7 +174,7 @@ export class SxcWebApi implements ZzzSxcWebApiDeprecated {
      * Use this if you need to get a list of headers in another system
      */
     headers(method?: string): Record<string, string> {
-        const headers = this.sxc.root.http.headers(this.sxc.id, this.sxc.cbid, this.sxc.ctx);
+        const headers = this.sxc.http.headers(this.sxc.id, this.sxc.cbid, this.sxc.ctx);
         if (!method) {
             return headers;
         }
@@ -213,7 +214,7 @@ export class SxcWebApi implements ZzzSxcWebApiDeprecated {
             const action = urlParts[1];
             url = `app/auto/api/${controller}/${action}`;
         }
-        url = this.sxc.root.http.apiUrl(url);
+        url = this.sxc.http.apiUrl(url);
 
         // params fixes
         params = `${urlAndParams[1] || ''}&${params ? typeof params === 'string' ? params : NoJQ.param(params) : ''}`
