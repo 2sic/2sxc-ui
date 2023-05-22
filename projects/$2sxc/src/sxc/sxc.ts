@@ -86,6 +86,16 @@ export class Sxc extends HasLog {
     root._translateInit(this.manage);    // init translate, not really nice, but ok for now
   }
 
+  /**
+   * New v16.01 - WIP
+   * We have the problem that sometimes the environment is not available on the page or is wrong. 
+   * * On a page where a 2sxc-module was just added
+   * * On a module which is in the skin, so technically from a different page
+   * 
+   * Based on this we are trying to include all relevant information from the root-env, but override it with the local env
+   * @param root 
+   * @returns 
+   */
   private loadEnv(root: SxcGlobal): { env: SxcGlobalEnvironment, http: SxcGlobalHttp } {
     const localEnv = (this.manage as any)?.editContext?.JsApi as EnvironmentSpecs;
     if (!localEnv) return { env: root.env, http: root.http };
