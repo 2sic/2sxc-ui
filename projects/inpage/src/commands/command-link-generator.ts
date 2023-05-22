@@ -108,7 +108,8 @@ export class CommandLinkGenerator extends HasLog {
    * Determine the url to open a dialog, based on the settings which UI version to use
    */
   private getDialogUrl(context: ContextComplete): string {
-    const env = window.$2sxc.env;
+    // 2023-05-22 v16.01 changed from: window.$2sxc.env;
+    const env = context.sxc?.env ?? window.$2sxc.env;
     let customParams = env.dialogQuery();
     if (customParams && !customParams.startsWith('&')) customParams = '&' + customParams;
     return urlClean(`${env.uiRoot()}${C.DialogPaths.eavUi}`) + `?pageId=${env.page()}&sxcver=${context.instance.sxcVersion}${customParams}`;

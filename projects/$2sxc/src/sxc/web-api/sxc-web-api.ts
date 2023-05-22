@@ -1,6 +1,5 @@
 ﻿import { Sxc } from '../sxc';
 import { AjaxPromise } from './ajax-promise';
-import { SxcGlobalEnvironment } from '../../environment';
 import { ZzzAjaxSettingsDeprecated } from './ajax-settings';
 import { NoJQ } from '../../../../core';
 import { ZzzSxcWebApiDeprecated } from './sxc-web-api-deprecated';
@@ -12,11 +11,12 @@ import { ZzzSxcWebApiDeprecated } from './sxc-web-api-deprecated';
  * @public
  */
 export class SxcWebApi implements ZzzSxcWebApiDeprecated {
-    /**
-     * @internal
-     * TODO: PROBABLY remove ? but must be sure it's not used elsewhere
-     */
-    private readonly env: SxcGlobalEnvironment;
+    // 2023-05-22 believe this is never used, so removing  
+    // /**
+    //  * @internal
+    //  * TODO: PROBABLY remove ? but must be sure it's not used elsewhere
+    //  */
+    // private readonly env: SxcGlobalEnvironment;
 
     /**
      * 
@@ -24,7 +24,8 @@ export class SxcWebApi implements ZzzSxcWebApiDeprecated {
      * @internal
      */
     constructor(private readonly sxc: Sxc) {
-        this.env = sxc.root.env;
+      // 2023-05-22 believe this is never used, so removing
+      // this.env = sxc.root.env;
     }
 
     /**

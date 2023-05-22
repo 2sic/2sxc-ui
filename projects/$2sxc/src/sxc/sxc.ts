@@ -71,7 +71,9 @@ export class Sxc extends HasLog {
     }
 
     // New 16.01 - get env from the current tag instead of the entire page - if possible
-    this.http = this.loadEnv(root);
+    const envAndHttp = this.loadEnv(root);
+    this.env = envAndHttp.env;
+    this.http = envAndHttp.http;
     this.webApi = new SxcWebApi(this);
 
     // ensure that data-APIs used incorrectly shows good warnings
@@ -84,16 +86,21 @@ export class Sxc extends HasLog {
     root._translateInit(this.manage);    // init translate, not really nice, but ok for now
   }
 
-  private loadEnv(root: SxcGlobal): SxcGlobalHttp {
+  private loadEnv(root: SxcGlobal): { env: SxcGlobalEnvironment, http: SxcGlobalHttp } {
     const localEnv = (this.manage as any)?.editContext?.JsApi as EnvironmentSpecs;
-    if (!localEnv) return root.http;
+    if (!localEnv) return { env: root.env, http: root.http };
     const rootEnv = (root.env as any).headers as EnvironmentSpecs;
     const final = localEnv ? { ...rootEnv, ...localEnv } : rootEnv;
     const env = new SxcGlobalEnvironment();
     env.load(final, 'sxc-instance');
-    return new SxcGlobalHttp(env);
+    return { env, http: new SxcGlobalHttp(env) };
   }
 
+  /**
+   * Env helper for API calls and such
+   * @internal
+   */
+  public env: SxcGlobalEnvironment;
   /**
    * Http helper for API calls and such
    * @internal
