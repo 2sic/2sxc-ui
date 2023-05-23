@@ -11,7 +11,9 @@
     "cms": "cd projects/cms && npm run release && cd ../..",
     "doc-dnn-sxc-angular": "cd projects/dnn-sxc-angular/ && typedoc --tsconfig projects/dnn-sxc-angular && cd ../..",
     "turn-on": "robocopy projects/turnOn/dist/ %Dev2sxcAssets%/dist/turnOn && robocopy projects/turnOn/dist/ %Dev2sxcDnnRoot%/DesktopModules/ToSIC_SexyContent/dist/turnOn",
-    "cms-dist": "robocopy projects/cms/dist/ %Dev2sxcAssets%/dist/cms && robocopy projects/cms/dist/ %Dev2sxcDnnRoot%/DesktopModules/ToSIC_SexyContent/dist/cms"
+    "cms-dist": "robocopy projects/cms/dist/ %Dev2sxcAssets%/dist/cms",
+    "//cms-dist-dnn": "Had to put this on own line, because env variables only seem to work on the first part before &&",
+    "cms-dist-dnn": "robocopy projects/cms/dist/ %Dev2sxcDnnRoot%/DesktopModules/ToSIC_SexyContent/dist/cms"
   },
   "repository": {
     "type": "git",
