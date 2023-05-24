@@ -64,12 +64,12 @@ $sub-tag: 'img';
         padding-right: $gutter;
       }
 
-      // experimental, not final
-      &.wysiwyg-middle {
-        float: left;
-        padding-left: $half-gutter;
-        padding-right: $half-gutter;
-      }
+      // // experimental, not final
+      // &.wysiwyg-middle {
+      //   float: left;
+      //   padding-left: $half-gutter;
+      //   padding-right: $half-gutter;
+      // }
       
       &.wysiwyg-50 {
         width: $width50-wg;

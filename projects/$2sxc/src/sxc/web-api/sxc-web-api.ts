@@ -1,6 +1,5 @@
 ﻿import { Sxc } from '../sxc';
 import { AjaxPromise } from './ajax-promise';
-import { SxcGlobalEnvironment } from '../../environment';
 import { ZzzAjaxSettingsDeprecated } from './ajax-settings';
 import { NoJQ } from '../../../../core';
 import { ZzzSxcWebApiDeprecated } from './sxc-web-api-deprecated';
@@ -12,10 +11,12 @@ import { ZzzSxcWebApiDeprecated } from './sxc-web-api-deprecated';
  * @public
  */
 export class SxcWebApi implements ZzzSxcWebApiDeprecated {
-    /**
-     * @internal
-     */
-    public readonly env: SxcGlobalEnvironment;
+    // 2023-05-22 believe this is never used, so removing  
+    // /**
+    //  * @internal
+    //  * TODO: PROBABLY remove ? but must be sure it's not used elsewhere
+    //  */
+    // private readonly env: SxcGlobalEnvironment;
 
     /**
      * 
@@ -23,7 +24,8 @@ export class SxcWebApi implements ZzzSxcWebApiDeprecated {
      * @internal
      */
     constructor(private readonly sxc: Sxc) {
-        this.env = sxc.root.env;
+      // 2023-05-22 believe this is never used, so removing
+      // this.env = sxc.root.env;
     }
 
     /**
@@ -173,7 +175,7 @@ export class SxcWebApi implements ZzzSxcWebApiDeprecated {
      * Use this if you need to get a list of headers in another system
      */
     headers(method?: string): Record<string, string> {
-        const headers = this.sxc.root.http.headers(this.sxc.id, this.sxc.cbid, this.sxc.ctx);
+        const headers = this.sxc.http.headers(this.sxc.id, this.sxc.cbid, this.sxc.ctx);
         if (!method) {
             return headers;
         }
@@ -213,7 +215,7 @@ export class SxcWebApi implements ZzzSxcWebApiDeprecated {
             const action = urlParts[1];
             url = `app/auto/api/${controller}/${action}`;
         }
-        url = this.sxc.root.http.apiUrl(url);
+        url = this.sxc.http.apiUrl(url);
 
         // params fixes
         params = `${urlAndParams[1] || ''}&${params ? typeof params === 'string' ? params : NoJQ.param(params) : ''}`
