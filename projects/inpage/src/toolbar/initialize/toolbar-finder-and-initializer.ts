@@ -10,7 +10,7 @@ import { ToolbarInitConfig } from './toolbar-init-config';
 import { getToolbarWhenNoneProvided } from '../templates/toolbar-when-no-toolbar-provided';
 
 // quick debug - set to false if not needed for production
-const dbg = true;
+const dbg = false;
 /**
  * @internal
  */
