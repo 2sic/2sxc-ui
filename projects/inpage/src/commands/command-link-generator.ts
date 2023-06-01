@@ -80,7 +80,11 @@ export class CommandLinkGenerator extends HasLog {
     // when doing new, there may be a prefill in the link to initialize the new item
     if (params.prefill)
       for (let i = 0; i < this.items.length; i++)
-        (this.items[i] as ItemIdentifierSimple).Prefill = params.prefill;
+        {
+          debugger;
+          this.addFieldsAndParameters(this.items[i] as ItemIdentifierSimple, params);
+          // (this.items[i] as ItemIdentifierSimple).Prefill = params.prefill
+        };
 
     delete urlItems.prefill; // added 2020-03-11, seemed strange that it's not removed
     urlItems.items = JSON.stringify(this.items); // Serialize/json-ify the complex items-list
@@ -131,8 +135,10 @@ export class CommandLinkGenerator extends HasLog {
   }
 
   private addFieldsAndParameters<T extends AnyIdentifier>(item: T, params: CommandParams): T {
-    if (params?.fields)
-      (item as ItemIdentifierSimple).Fields = params.fields;
+    if (params == null) return item;
+    if (params.prefill) (item as ItemIdentifierSimple).Prefill = params.prefill;
+    if (params.fields) (item as ItemIdentifierSimple).Fields = params.fields;
+    if (params.form) (item as ItemIdentifierSimple).Parameters = params.form;
     return item;
   }
 

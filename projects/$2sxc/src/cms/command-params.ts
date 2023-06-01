@@ -1,4 +1,5 @@
 ﻿import { CommandNames, ItemIdentifierInList, ItemIdentifierSimple, CommandParamsMetadata } from '.';
+import { TypeValue } from '../../../core/plumbing/type-value';
 
 /**
  * Command parameters are handed over to a command for execution.
@@ -147,11 +148,22 @@ export interface CommandParams extends Record<string, unknown>
      * @public
      */
     parent?: string;
+
     /** 
-     * The purpose of this varies by [Command](xref:Api.Js.SxcJs.CommandNames).
-     * @public
+     * Determines which fields to show in the edit-ui
+     * 
+     * New 16.00 - not public yet
+     * @internal
      */
     fields?: string;
+
+    /** 
+     * Form parameters
+     * 
+     * New 16.02 - not public yet
+     * @internal
+     */
+    form?: Record<string, TypeValue>;
 
     /**
      * for template edit dialog 
