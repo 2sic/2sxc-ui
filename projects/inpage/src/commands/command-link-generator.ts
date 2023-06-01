@@ -80,11 +80,7 @@ export class CommandLinkGenerator extends HasLog {
     // when doing new, there may be a prefill in the link to initialize the new item
     if (params.prefill)
       for (let i = 0; i < this.items.length; i++)
-        {
-          debugger;
-          this.addFieldsAndParameters(this.items[i] as ItemIdentifierSimple, params);
-          // (this.items[i] as ItemIdentifierSimple).Prefill = params.prefill
-        };
+        this.addFieldsAndParameters(this.items[i] as ItemIdentifierSimple, params);
 
     delete urlItems.prefill; // added 2020-03-11, seemed strange that it's not removed
     urlItems.items = JSON.stringify(this.items); // Serialize/json-ify the complex items-list
