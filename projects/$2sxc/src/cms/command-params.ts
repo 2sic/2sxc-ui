@@ -150,12 +150,17 @@ export interface CommandParams extends Record<string, unknown>
     parent?: string;
 
     /** 
-     * Determines which fields to show in the edit-ui
+     * Combined with the parent property determines what to edit
+     * @internal
+     */
+    fields?: string;
+
+    /**
      * 
      * New 16.00 - not public yet
      * @internal
      */
-    fields?: string;
+    uifields?: string;
 
     /** 
      * Form parameters

@@ -13,7 +13,7 @@ interface ItemIdentifierShared {
   Prefill?: Record<string, TypeValue>;
 
   /** New 16.01 - fields to show/hide in the edit-dialog */
-  Fields?: string;
+  UiFields?: string;
 
   /** New 16.02 - parameters should be independent from prefill */
   Parameters?: Record<string, TypeValue>;

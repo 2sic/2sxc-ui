@@ -133,7 +133,7 @@ export class CommandLinkGenerator extends HasLog {
   private addFieldsAndParameters<T extends AnyIdentifier>(item: T, params: CommandParams): T {
     if (params == null) return item;
     if (params.prefill) (item as ItemIdentifierSimple).Prefill = params.prefill;
-    if (params.fields) (item as ItemIdentifierSimple).Fields = params.fields;
+    if (params.uifields) (item as ItemIdentifierSimple).UiFields = params.uifields;
     if (params.form) (item as ItemIdentifierSimple).Parameters = params.form;
     return item;
   }
