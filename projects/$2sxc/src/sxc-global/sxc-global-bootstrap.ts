@@ -52,7 +52,7 @@ export function buildSxcRoot(): SxcGlobal {
     const merged = Object.assign($2sxcGet, addOn, rootApiV2) as SxcGlobal;
     merged.log.add('sxc controller built');
 
-    console.log(`$2sxc ${SxcVersion} with insights-logging - see https://r.2sxc.org/insights`)
+    console.log(`$2sxc ${SxcVersion} with insights-logging - see https://go.2sxc.org/insights`)
 
     return merged;
 }

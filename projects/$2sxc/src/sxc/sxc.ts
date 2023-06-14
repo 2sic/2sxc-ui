@@ -258,4 +258,4 @@ function patchDataWithWarnings(data: any) {
 
 const warning = 'Warning Obsolete Feature on 2sxc JS: the .data has been obsolete for a long time and is repurposed. \n'
 + 'If you are calling ".data.on(...)" or ".data.sourceUrl" you are running very old code. \n' 
-+ 'Guidance to fix this: https://r.2sxc.org/brc-13-id.';
++ 'Guidance to fix this: https://go.2sxc.org/brc-13-id.';
