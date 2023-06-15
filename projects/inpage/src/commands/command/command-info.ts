@@ -52,7 +52,7 @@ Commands.add(CommandNames.info, 'Info', 'info', true, false, {
   // TODO: improve call so params are always directly available
   code(context) {
     if (debug) console.log('2dm - info-button code', context);
-    const link = context.button.command.params?.link ?? getNote(context).link as string;
+    const link = context.button.command.params?.link as string;
     if (debug) console.log('2dm - info-button code - link', link);
 
     if (link)

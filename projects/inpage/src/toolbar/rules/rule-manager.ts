@@ -69,9 +69,15 @@ export class RuleManager extends HasLog {
     // create rules to add the buttons
     var rules = problems.map((p, i) => {
       var note = new Note();
-      note.link = p.link;
-      note.note = p.message;
+      note.note = p.message?.replace('\n', '<br>');
+      note.links = [
+        { url: p.link, label: 'see docs', primary: true },
+      ]
+      // note.link = p.link;
+      // note.linkLabel = 'see docs';
       note.type = p.severity;
+      note.allowHtml = true;
+      note.interactive = true;
       return BuildRule.Create({ name: CommandNames.info, ui: { note }, params: { link: p.link }, pos: devInfoButtonsIndex + i, log: this.log });
     });
     if (debug) console.log('2dm - rules', rules);

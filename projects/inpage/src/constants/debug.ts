@@ -13,5 +13,6 @@ export const Debug = {
     commandInfo: false,
     ToolbarConfigLoaderV10: false,
     RuleManager: false,
+    CommandTippy: true,
   }
 };
