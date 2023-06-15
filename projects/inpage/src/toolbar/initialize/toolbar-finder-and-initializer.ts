@@ -202,7 +202,7 @@ function addDefaultToolbarConfigToTag(parentTag: HTMLElement): HTMLElement[] {
     if (ctx.ui.autoToolbar === false)
         return null;
 
-    contentTag.setAttribute(C.Toolbar.attr.full, JSON.stringify(getToolbarWhenNoneProvided(ctx?.system?.error)));
+    contentTag.setAttribute(C.Toolbar.attr.full, JSON.stringify(getToolbarWhenNoneProvided()));
 
     return [contentTag];
 }

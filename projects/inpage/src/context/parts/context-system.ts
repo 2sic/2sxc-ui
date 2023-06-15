@@ -5,14 +5,14 @@
  * @internal
  */
 export class ContextOfSystem {
-    error: string;
+  error: string;
 
-    problems?: ContextProblems[];
+  problems?: ContextProblems[];
 
-    constructor(editCtx: AttrJsonEditContext) {
-      this.problems = editCtx.error?.problems;
-      if (editCtx.error) {
-        this.error = editCtx.error.type;
-      }
+  constructor(editCtx: AttrJsonEditContext) {
+    this.problems = editCtx.error?.problems;
+    if (editCtx.error) {
+      this.error = editCtx.error.type;
     }
+  }
 }

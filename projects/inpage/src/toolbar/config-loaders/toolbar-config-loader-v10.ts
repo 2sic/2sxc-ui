@@ -17,9 +17,9 @@ export class ToolbarConfigLoaderV10 extends HasLog {
 
   public rules: RuleManager;
 
-  constructor(private toolbar: ToolbarConfigLoader) {
-    super('Tlb.TlbV10', toolbar.log, 'constructor');
-    this.rules = new RuleManager(toolbar);
+  constructor(private configLoader: ToolbarConfigLoader) {
+    super('Tlb.TlbV10', configLoader.log, 'constructor');
+    this.rules = new RuleManager(configLoader);
   }
 
 
@@ -28,7 +28,6 @@ export class ToolbarConfigLoaderV10 extends HasLog {
 
     this.rules.load(raw);
 
-    let template: ToolbarTemplate;
     // #1 prepare settings - get rules and mix with defaults
     // We should use the `ui` parameter, as it's UI rules, but because previously
     // it used the `params` - we must support both :(
@@ -48,21 +47,21 @@ export class ToolbarConfigLoaderV10 extends HasLog {
     const isSublist = (config.toolbar as InPageCommandJson).fields || params?.params?.fields;
     const defToolbarname = isSublist ? ToolbarTemplateSublist.name : ToolbarTemplateDefault.name;
     const toolbarTemplateName = toolbarRule?.name ?? defToolbarname;
-    template = this.toolbar.templates.copy(toolbarTemplateName);
+    let template = this.configLoader.templates.copy(toolbarTemplateName);
     template.settings = settings;
     if (params) template.params = params.params;
 
     // #4 Remove unwanted groups
     const removeGroups = this.rules.getRemoveGroups();
-    removeGroups.forEach((rg) => this.toolbar.templateEditor.removeGroup(template, rg.name));
+    removeGroups.forEach((rg) => this.configLoader.templateEditor.removeGroup(template, rg.name));
 
-    // Add additional buttons
+    // Add additional buttons 16.02
     this.rules.addDeveloperInfos(context);
     const addRules = this.rules.getAdd();
-    this.toolbar.templateEditor.add(template, addRules);
+    this.configLoader.templateEditor.add(template, addRules);
 
     // Build the real toolbar structure
-    const toolbar = this.toolbar.buildTreeAndModifyAccordingToRules(context, template as ToolbarWip);
+    const toolbar = this.configLoader.buildTreeAndModifyAccordingToRules(context, template as ToolbarWip);
     if (!toolbar.identifier) toolbar.identifier = Toolbar.createIdentifier();
     toolbar.settings._rules = this.rules;
     // process the rules one by one

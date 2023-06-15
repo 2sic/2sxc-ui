@@ -71,13 +71,13 @@ export class BuildRule extends HasLog {
     this.load();
   }
 
-  public static Create({ name, ui, params, pos, log }: { name: string; ui: ToolbarButtonSettings & Partial<ToolbarSettings>; params: RuleParams, pos?: number, log: Log; }): BuildRule {
+  public static Create({ name, ui, params, pos, log }: { name: string; ui?: ToolbarButtonSettings & Partial<ToolbarSettings>; params?: RuleParams, pos?: number, log: Log; }): BuildRule {
     var rule = new BuildRule('', log);
     rule.name = name;
-    rule.ui = ui;
+    rule.ui = ui ?? {};
     rule.operator = Operators.add;
     rule.setIdBasedOnOperation(rule.name);
-    rule.params = params;
+    rule.params = params ?? {};
     if (pos) rule.pos = pos;
     return rule;
   }

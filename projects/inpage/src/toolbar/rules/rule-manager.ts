@@ -60,6 +60,13 @@ export class RuleManager extends HasLog {
     if (this.debugAdded) return;
 
     // Skip if no problems reported
+    const hasErr = !!context.system.error;
+    if (hasErr) {
+      const note = new Note();
+      note.note = '<strong>Server Insights Logs</strong> can help <br> you debug server errors.';
+      note.allowHtml = true;
+      this.rules.push(BuildRule.Create({ name: CommandNames.insights, ui: { note, color: 'red' }, pos: 10, log: this.log }));
+    }
     const problems = context.system.problems;
     if (!(problems?.length > 0)) return;
 
@@ -67,14 +74,10 @@ export class RuleManager extends HasLog {
     if (debug) console.log('2dm - has problems', problems);
 
     // create rules to add the buttons
-    var rules = problems.map((p, i) => {
-      var note = new Note();
+    const rules = problems.map((p, i) => {
+      const note = new Note();
       note.note = p.message?.replace('\n', '<br>');
-      note.links = [
-        { url: p.link, label: 'see docs', primary: true },
-      ]
-      // note.link = p.link;
-      // note.linkLabel = 'see docs';
+      note.links = [{ url: p.link, label: 'see docs', primary: true }]
       note.type = p.severity;
       note.allowHtml = true;
       note.interactive = true;
