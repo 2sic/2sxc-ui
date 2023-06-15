@@ -4,7 +4,7 @@ import { TypeValue } from '../../core';
 /**
  * @internal
  */
-export type TypeNoteMode = 'info' | 'warning' | 'help' | 'link' | undefined;
+export type TypeNoteMode = 'info' | 'warning' | 'error' | 'help' | 'link' | undefined;
 
 /**
  * @internal

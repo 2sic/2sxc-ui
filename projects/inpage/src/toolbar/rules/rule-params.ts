@@ -24,4 +24,10 @@ export type RuleParams = Record<string, string> & {
      * @internal
      */
     metadata?: CommandParamsMetadata;
+
+    /**
+     * link added for info-buttons / wip
+     * @internal
+     */
+    link?: string;
 };

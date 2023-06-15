@@ -1,4 +1,4 @@
-﻿import { AttrJsonContentGroup, AttrJsonEnvironment, AttrJsonError, AttrJsonLanguage, AttrJsonUi, AttrJsonUser, ContentBlockReference } from '.';
+﻿import { AttrJsonContentGroup, AttrJsonEnvironment, ContextErrorJsonAndObj, AttrJsonLanguage, AttrJsonUi, AttrJsonUser, ContentBlockReference } from '.';
 
 /**
  * @internal
@@ -14,6 +14,6 @@ export class AttrJsonEditContext {
   /** Information about the content block itself */
   contentBlock: AttrJsonContentGroup;
 
-  error: AttrJsonError;
+  error: ContextErrorJsonAndObj;
   Ui: AttrJsonUi;
 }
