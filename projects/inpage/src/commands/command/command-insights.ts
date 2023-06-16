@@ -8,8 +8,11 @@ const cmd = Command.build(CommandNames.insights, 'Insights', 'speed', true, fals
   dialog: (_) => CommandNames.insights_old_server,
   showCondition: (context) => context.user.CanDevelop,
   code(context, event) {
-    return new Promise((resolve, reject) => {
-      const path = window.$2sxc.http.apiUrl('sys/insights/logs');
+    const insightsPart = context.button.command.params?.part as string;
+    const path = insightsPart
+      ? window.$2sxc.http.apiUrl('sys/insights/' + insightsPart)
+      : window.$2sxc.http.apiUrl('sys/insights/logs');
+    return new Promise((resolve) => {
       window.open(path, '_blank');
       return resolve();
     });
