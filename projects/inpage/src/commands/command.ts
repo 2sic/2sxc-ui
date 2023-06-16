@@ -38,12 +38,14 @@ export class Command {
         if (!note?.note)
           return undefined;
 
+        const allowHtml = note?.allowHtml ?? false;
+
         let tippyProps: Partial<Props> = {
           content: note.note,
           theme: 'light',
           arrow: true,
           delay: [null, null],
-          allowHTML: note?.allowHtml ?? false,
+          allowHTML: allowHtml,
                           
           // activate these to debug the styling in F12
           // trigger: 'click',

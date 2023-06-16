@@ -3,7 +3,7 @@ import { CommandNames } from '../../commands';
 import { Debug } from '../../constants/debug';
 import { ContextComplete } from '../../context';
 import { HasLog } from '../../core';
-import { Note } from '../config';
+import { Note, ToolbarButtonSettings, ToolbarSettings } from '../config';
 import { ToolbarConfigLoader } from '../config-loaders';
 import { BuildSteps } from './build-steps';
 
@@ -11,6 +11,19 @@ const debug = Debug.parts.RuleManager;
 
 const throwOnError = true;
 const devInfoButtonsIndex = 20;
+
+const buttonRip: ToolbarButtonSettings & Partial<ToolbarSettings> = {
+    color: 'orange',
+    icon: '<svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"><!--! Font Awesome Pro 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M368 432V192c0-79.5-64.5-144-144-144S80 112.5 80 192V432H32V192C32 86 118 0 224 0S416 86 416 192V432H368zM0 488c0-13.3 10.7-24 24-24H424c13.3 0 24 10.7 24 24s-10.7 24-24 24H24c-13.3 0-24-10.7-24-24zM248 152v40h48c13.3 0 24 10.7 24 24s-10.7 24-24 24H248V360c0 13.3-10.7 24-24 24s-24-10.7-24-24V240H152c-13.3 0-24-10.7-24-24s10.7-24 24-24h48V152c0-13.3 10.7-24 24-24s24 10.7 24 24z"/></svg>',
+    note: {
+      note: `<strong>Obsolete Code detected</strong>
+      <br>
+      This uses obsolete code which will be removed soon. You should fix the code so it won't break on a future update.
+      <br>
+      Click on the button to see all obsolete code.`,
+      allowHtml: true,
+    }
+}
 
 /**
  * @internal
@@ -67,13 +80,31 @@ export class RuleManager extends HasLog {
       note.allowHtml = true;
       this.rules.push(BuildRule.Create({ name: CommandNames.insights, ui: { note, color: 'red' }, pos: 10, log: this.log }));
     }
-    const problems = context.system.problems;
+
+    // Get any other problems and stop if none found
+    let problems = context.system.problems;
     if (!(problems?.length > 0)) return;
+
+    // If any of the problems report 'obsolete'
+    // add a special button and then skip those problems
+    const codeObsolete = 'obsolete';
+    if (problems.find(p => p.code === codeObsolete) !== undefined) {
+      const insightsRule = BuildRule.Create({
+        name: CommandNames.insights,
+        ui: buttonRip,
+        params: { part: 'Logs?&key=warnings-obsolete'},
+        pos: 11,
+        log: this.log
+      });
+      this.rules.push(insightsRule);
+      problems = problems.filter(p => p.code !== codeObsolete);
+    }
+
 
     // Add warning/info buttons provided by the context - new v16.02
     if (debug) console.log('2dm - has problems', problems);
 
-    // create rules to add the buttons
+    // create rules to add the buttons for all remaining problems
     const rules = problems.map((p, i) => {
       const note = new Note();
       note.note = p.message?.replace('\n', '<br>');
