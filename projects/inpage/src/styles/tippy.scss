@@ -21,9 +21,10 @@ div.tippy-box div.tippy-content {
       }
 
       &:hover, &.tippy-button-primary:hover {
-        text-decoration: none;
-        border: solid 1px #3fa5e2;
         background-color: #3fa5e2;
+        border: solid 1px #3fa5e2;
+        color: #fff;
+        text-decoration: none;
       }
     }
   }
