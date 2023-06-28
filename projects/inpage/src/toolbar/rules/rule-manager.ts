@@ -86,7 +86,8 @@ export class RuleManager extends HasLog {
     const rules = problems.map((p, i) => {
       const note = new Note();
       note.note = p.message?.replace('\n', '<br>');
-      note.links = [{ url: p.link, label: 'see docs', primary: true }]
+      if (p.link)
+        note.links = [{ url: p.link, label: 'see docs', primary: true }];
       note.type = p.severity;
       note.allowHtml = true;
       note.interactive = true;
