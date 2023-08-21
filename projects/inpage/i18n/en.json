@@ -35,6 +35,7 @@
     "TemplateSettings": "view settings",
     "Unpublished": "unpublished",
     "Warning": "warning",
+    "Error": "error",
     "Zone": "manage apps"
   },
   "Delete": {

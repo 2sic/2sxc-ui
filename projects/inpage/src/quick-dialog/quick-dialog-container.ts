@@ -45,6 +45,12 @@ export class QuickDialogContainer extends HasLog {
         if (document.querySelectorAll<HTMLElement>('#personaBar-iframe').length > 0)
             container.classList.add('persona-bar-visible');
         const newIFrame = document.createElement(iframeTag);
+
+        // 2023-07-07 2dm 2sxc 16.02 - added `color-scheme: auto;` to fix dark mode
+        // Otherwise the iframe is not transparent in dark mode
+        // https://fvsch.com/transparent-iframes
+        newIFrame.style.cssText = 'color-scheme: auto;';
+
         const extendedIFrame = convertIFrameToQuickDialog(newIFrame, this);
         container.querySelector<HTMLElement>(`.${iframeClass}`).append(extendedIFrame);
         document.body.append(container);

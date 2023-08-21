@@ -1,6 +1,7 @@
 import { ListWithCursor, ToolbarTemplate, ToolbarTemplateGroup } from '.';
 import { HasLog } from '../../core';
 import { ToolbarConfigLoader } from '../config-loaders';
+import { BuildRule, BuildSteps } from '../rules';
 import { TemplateConstants as TC } from './constants';
 
 /**
@@ -45,6 +46,15 @@ export class TemplateEditor extends HasLog {
         if (fromStart) return pos;
         pos = target.length - pos;
         return pos >= 0 ? pos : target.length;
+    }
+
+    add(template: ToolbarTemplate, rules: BuildRule[]) {
+      rules.forEach((r) => {
+        if (r.step === BuildSteps.group)
+          this.addGroup(template, r.name, r.pos);
+        else
+          this.addButton(template, r.group, r.id, r.name, r.pos);
+      });
     }
 
     addGroup(template: ToolbarTemplate, groupName: string, pos: number): ToolbarTemplateGroup {

@@ -13,6 +13,9 @@ export type RuleParams = Record<string, string> & {
 
     filters?: Record<string, TypeValue | Array<unknown>>;
 
+    /** new 16.02 */
+    form?: Record<string, TypeValue | Array<unknown>>;
+
     /** this is how the metadata-param comes in - as a 'for=someId' - this node will be removed afterwards */
     for?: string;
 
@@ -21,4 +24,10 @@ export type RuleParams = Record<string, string> & {
      * @internal
      */
     metadata?: CommandParamsMetadata;
+
+    /**
+     * link added for info-buttons / wip
+     * @internal
+     */
+    link?: string;
 };

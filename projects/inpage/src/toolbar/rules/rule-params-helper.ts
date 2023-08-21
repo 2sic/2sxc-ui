@@ -6,6 +6,7 @@ import { TypeValue } from '../../plumbing';
 const prefillPrefix = 'prefill:';
 const filterPrefix = 'filter:';
 const contextPrefix = 'context:';
+const formPrefix = 'form:';
 
 /**
  * @internal
@@ -24,6 +25,9 @@ export class RuleParamsHelper {
 
         const filters = RuleParamsHelper.extractSubKeys(params, filterPrefix, log);
         if (filters) params.filters = filters;
+
+        const formParams = RuleParamsHelper.extractSubKeys(params, formPrefix, log);
+        if (formParams) params.form = formParams;
 
         const context = RuleParamsHelper.extractSubKeys(params, contextPrefix, log);
 
