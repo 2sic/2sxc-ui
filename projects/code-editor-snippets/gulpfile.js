@@ -1,16 +1,18 @@
-﻿
-const webpackHelpers = require('../webpack/webpack-helpers');
-const gulp = require('gulp'),
+﻿const gulp = require('gulp'),
     jsXlsx = require('gulp-js-xlsx'),
     rename = require('gulp-rename'),
+    path = require('path'),
+    buildConfig = require('../webpack/load-build-config.js').BuildConfig,
     rootDist = 'dist/';
 
-const destDnn = webpackHelpers.DnnTargetFolder + 'dist/ng-assets/';
-const dest2sxc = webpackHelpers.AssetsTarget + 'dist/ng-assets/';
+const targets = [
+  rootDist, 
+  ...(buildConfig.Sources?.map(t => path.resolve(t, 'dist/ng-assets/')) || []),
+  ...(buildConfig.JsTargets?.map(t => path.resolve(t, 'dist/ng-assets/')) || [])
+].filter(item => item !== null);
 
-gulp.task('default', xlsxSnippetsToJson);
-
-function xlsxSnippetsToJson() {
+function xlsxSnippetsToJson(target) {
+    console.log('Processing target: ' + target);
     var src = 'snippets.xlsx';
     return gulp.src(src)
         .pipe(jsXlsx.run({
@@ -19,7 +21,16 @@ function xlsxSnippetsToJson() {
         .pipe(rename({
             extname: '.json.js'
         }))
-        .pipe(gulp.dest(rootDist))
-        .pipe(gulp.dest(destDnn))
-        .pipe(gulp.dest(dest2sxc));
+        .pipe(gulp.dest(target))
 }
+
+// Gulp task that loops over each target and runs the xlsxSnippetsToJson function
+gulp.task('processAllTargets', function(done) {
+  targets.forEach(target => {
+      xlsxSnippetsToJson(target);
+  });
+  done();
+});
+
+// Set the default Gulp task to 'processAllTargets'
+gulp.task('default', gulp.series('processAllTargets'));

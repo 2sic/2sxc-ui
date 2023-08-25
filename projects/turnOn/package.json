@@ -1,0 +1,19 @@
+{
+  "name": "turnon-deploy",
+  "version": "1.0.0",
+  "description": "helper env to deploy turnOn in 2sxc dev env",
+  "scripts": {
+    "release": "set NODE_ENV=production && node ../webpack/distribute2.js ./dist/ dist/turnon/",
+    "release-watch": "set NODE_ENV=production && node ../webpack/distribute2.js ./dist/ dist/turnon/ -w"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/2sic/2sxc-ui"
+  },
+  "author": "2sic Internet Solutions",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/2sic/2sxc-ui/issues"
+  },
+  "homepage": "https://github.com/2sic/2sxc-ui"
+}

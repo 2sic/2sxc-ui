@@ -48,16 +48,16 @@ http://2sxc-dnn961.dnndev.me/desktopmodules/tosic_sexycontent/dist/ng-edit/?page
 
 Quick Dialog Content
 
-/desktopmodules/tosic_sexycontent/dist/quickDialog/?pageId=56&sxcver=14.3.0.1655366375#zoneId=2&appId=2&tid=56&mid=6935&cbid=6935&api=/en/api/e.x.t/&partOfPage=true&publishing=DraftForbidden&approot=/Portals/0/2sxc/Content&fa=false&rvth=RequestVerificationToken&rvt=RKmKD7uTb9bEznNfkuhwSs1v2ADHUil8RX13hcEW4gKpzX3Ecp5ILvRpNsbbDRMkGM2do5eien8o7jvV0&dialog=layout&items=%5B%7B%22Group%22%3A%7B%22Guid%22%3A%22f8ae3d07-5805-4650-a46d-a047e113ab53%22%2C%22Index%22%3A0%2C%22Part%22%3A%22content%22%2C%22Add%22%3Afalse%7D%7D%2C%7B%22Group%22%3A%7B%22Guid%22%3A%22f8ae3d07-5805-4650-a46d-a047e113ab53%22%2C%22Index%22%3A0%2C%22Part%22%3A%22presentation%22%2C%22Add%22%3Afalse%7D%7D%5D
+/desktopmodules/tosic_sexycontent/dist/quick-dialog/?pageId=56&sxcver=14.3.0.1655366375#zoneId=2&appId=2&tid=56&mid=6935&cbid=6935&api=/en/api/e.x.t/&partOfPage=true&publishing=DraftForbidden&approot=/Portals/0/2sxc/Content&fa=false&rvth=RequestVerificationToken&rvt=RKmKD7uTb9bEznNfkuhwSs1v2ADHUil8RX13hcEW4gKpzX3Ecp5ILvRpNsbbDRMkGM2do5eien8o7jvV0&dialog=layout&items=%5B%7B%22Group%22%3A%7B%22Guid%22%3A%22f8ae3d07-5805-4650-a46d-a047e113ab53%22%2C%22Index%22%3A0%2C%22Part%22%3A%22content%22%2C%22Add%22%3Afalse%7D%7D%2C%7B%22Group%22%3A%7B%22Guid%22%3A%22f8ae3d07-5805-4650-a46d-a047e113ab53%22%2C%22Index%22%3A0%2C%22Part%22%3A%22presentation%22%2C%22Add%22%3Afalse%7D%7D%5D
 
-/desktopmodules/tosic_sexycontent/dist/quickDialog/?pageId=56&sxcver=14.3.0.1655366375#zoneId=2&appId=2&mid=6935&cbid=6935&partOfPage=true&publishing=DraftForbidden&dialog=layout&items=%5B%7B%22Group%22%3A%7B%22Guid%22%3A%22f8ae3d07-5805-4650-a46d-a047e113ab53%22%2C%22Index%22%3A0%2C%22Part%22%3A%22content%22%2C%22Add%22%3Afalse%7D%7D%2C%7B%22Group%22%3A%7B%22Guid%22%3A%22f8ae3d07-5805-4650-a46d-a047e113ab53%22%2C%22Index%22%3A0%2C%22Part%22%3A%22presentation%22%2C%22Add%22%3Afalse%7D%7D%5D
+/desktopmodules/tosic_sexycontent/dist/quick-dialog/?pageId=56&sxcver=14.3.0.1655366375#zoneId=2&appId=2&mid=6935&cbid=6935&partOfPage=true&publishing=DraftForbidden&dialog=layout&items=%5B%7B%22Group%22%3A%7B%22Guid%22%3A%22f8ae3d07-5805-4650-a46d-a047e113ab53%22%2C%22Index%22%3A0%2C%22Part%22%3A%22content%22%2C%22Add%22%3Afalse%7D%7D%2C%7B%22Group%22%3A%7B%22Guid%22%3A%22f8ae3d07-5805-4650-a46d-a047e113ab53%22%2C%22Index%22%3A0%2C%22Part%22%3A%22presentation%22%2C%22Add%22%3Afalse%7D%7D%5D
 
 
 Quick Dialog Blog View-Change
 
-/desktopmodules/tosic_sexycontent/dist/quickDialog/?pageId=680&sxcver=14.3.0.1655366375#zoneId=2&appId=78&tid=680&mid=3002&cbid=3002&api=/en/api/e.x.t/&partOfPage=true&publishing=DraftForbidden&approot=/Portals/0/2sxc/Blog%20App&fa=true&rvth=RequestVerificationToken&rvt=xSRaq-c_rUdqBIb3X8bcBRTvZLD1zZDgD5iYsibL8bcpXTVoXwZEGqaHHhDn1O5UTM2a_NeECeLMBzrq0&dialog=layout&items=%5B%7B%22EntityId%22%3A43664%7D%5D
+/desktopmodules/tosic_sexycontent/dist/quick-dialog/?pageId=680&sxcver=14.3.0.1655366375#zoneId=2&appId=78&tid=680&mid=3002&cbid=3002&api=/en/api/e.x.t/&partOfPage=true&publishing=DraftForbidden&approot=/Portals/0/2sxc/Blog%20App&fa=true&rvth=RequestVerificationToken&rvt=xSRaq-c_rUdqBIb3X8bcBRTvZLD1zZDgD5iYsibL8bcpXTVoXwZEGqaHHhDn1O5UTM2a_NeECeLMBzrq0&dialog=layout&items=%5B%7B%22EntityId%22%3A43664%7D%5D
 
-/desktopmodules/tosic_sexycontent/dist/quickDialog/?pageId=680&sxcver=14.3.0.1655366375#zoneId=2&appId=78&mid=3002&cbid=3002&partOfPage=true&publishing=DraftForbidden&dialog=layout&items=%5B%5D
+/desktopmodules/tosic_sexycontent/dist/quick-dialog/?pageId=680&sxcver=14.3.0.1655366375#zoneId=2&appId=78&mid=3002&cbid=3002&partOfPage=true&publishing=DraftForbidden&dialog=layout&items=%5B%5D
 
 
 

@@ -24,7 +24,7 @@
                 "plugins": "append"
               }
             },
-            "outputPath": "dist/quickDialog",
+            "outputPath": "dist/quick-dialog",
             "index": "src/index-raw.html",
             "main": "src/main.ts",
             "tsConfig": "src/tsconfig.app.json",

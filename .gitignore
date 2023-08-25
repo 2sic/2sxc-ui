@@ -20,3 +20,6 @@ projects/sxc-typings/parts/dist
 projects/sxc-docs
 
 .temp_cache
+projects/$2sxc-jasmine-browser/src/system/**/*.*
+projects/inpage/dist/
+projects/cms/dist/

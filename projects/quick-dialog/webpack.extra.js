@@ -31,7 +31,7 @@ module.exports = (config, _options, _targetOptions) => {
   if(config.mode == 'production' || webpackHelpers.isProduction(nodeEnv)) {
     // find the plugin with duckTyping - very unique property
     var sourceMapPluginConfig = plugins.find(p => p.fallbackModuleFilenameTemplate);
-    sourceMapPluginConfig.options.publicPath = webpackHelpers.getSourcesRootUrl('ng');
+    sourceMapPluginConfig.options.publicPath = webpackHelpers.ExternalSourcePath('dist/quick-dialog');
 
     // new correction in Angular 11
     // Terser complains because the i18n js files are actually JSON, so it's not really valid JS.

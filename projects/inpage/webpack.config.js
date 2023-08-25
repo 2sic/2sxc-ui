@@ -2,12 +2,15 @@
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const webpack = require('webpack');
 const webpackHelpers = require('../webpack/webpack-helpers.js');
+const buildConfig = require('../webpack/load-build-config.js').BuildConfig;
+const path = require('path');
 const CopyPlugin = require('copy-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 const bundleName = "inpage";
-// const dnnTarget = webpackHelpers.DnnTargetFolder + '/dist/' + bundleName;
-const assetsTarget = webpackHelpers.AssetsTarget + '/dist/' + bundleName;
+
+const assetsTarget = buildConfig.hasSource ? path.join(buildConfig.source, 'dist', bundleName) : null;
+const assetsTargetFallback = path.resolve(__dirname, 'dist');
 
 const configuration = {
   mode: 'development',
@@ -33,12 +36,12 @@ const configuration = {
         }
       ],
     }),
-    webpackHelpers.createCopyAfterBuildPlugin(assetsTarget, webpackHelpers.TargetsWithoutAssets, '/dist/' + bundleName),
+    webpackHelpers.createCopyAfterBuildPlugin(assetsTarget, [...(buildConfig.Sources ?? []), ...(buildConfig.JsTargets ?? [])], path.join('dist', bundleName)),
     new BundleAnalyzerPlugin({
       // disable this to get stats and optimize
       analyzerMode: 'disabled',
     }),
-  ],
+  ].filter(item => item !== null),
   module: {
     rules: [
       {
@@ -81,7 +84,7 @@ const configuration = {
   },
   output: {
     filename: bundleName + ".min.js",
-    path: assetsTarget, // webpackHelpers.DnnTargetFolder + '/dist/' + bundleName,
+    path: (buildConfig.hasSource) ? assetsTarget : assetsTargetFallback,
     library: '$2sxcInpage',
   },
   stats: {
@@ -91,6 +94,6 @@ const configuration = {
 
 /* change source map generation based on production mode */
 module.exports = (env, argv) => {
-  webpackHelpers.SetExternalSourceMaps(webpack, argv.mode, configuration, bundleName);
+  webpackHelpers.SetExternalSourceMaps(webpack, argv.mode, configuration, `dist/${bundleName}`);
   return configuration;
 }
