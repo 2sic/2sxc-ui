@@ -4,14 +4,16 @@
   "version": "2.0.0",
   "tasks": [
     {
-        "type": "npm",
-        "script": "release",
-        "problemMatcher": []
+      "type": "npm",
+      "script": "release",
+      "problemMatcher": [],
+      "label": "npm: release",
+      "detail": "webpack --mode=production"
     },
     {
-        "type": "npm",
-        "script": "dev",
-        "problemMatcher": []
+      "type": "npm",
+      "script": "dev",
+      "problemMatcher": []
     }
-]
+  ]
 }
