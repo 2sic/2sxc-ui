@@ -17,6 +17,8 @@ function startCpx(src, target, useWatch) {
   if (!useWatch) {
     // Clear destination folders
     fs.readdir(target, (err, files) => {
+      // Skip this if the folder doesn't exist (eg. new setups)
+      if (!files) return;
       files.forEach(file => {
         // delete old files except Default.aspx
         if (file === 'Default.aspx') return;
