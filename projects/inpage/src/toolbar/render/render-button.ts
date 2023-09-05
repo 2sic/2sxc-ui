@@ -10,124 +10,156 @@ import { ToolbarRenderer } from './toolbar-renderer';
  * @internal
  */
 export class RenderButton extends RenderPart {
-    constructor(parent: ToolbarRenderer) {
-        super(parent, 'Rnd.Button');
-    }
+  constructor(parent: ToolbarRenderer) {
+    super(parent, "Rnd.Button");
+  }
 
-    render(ctx: ContextComplete, groupIndex: number): HTMLElement {
-        const cl = this.log.call('render', `contex: obj, group: ${groupIndex}, btn: ${ctx.button.id}/${ctx.button.command?.name}`);
-        const btnSafe = new ButtonSafe(ctx.button, ctx);
+  render(ctx: ContextComplete, groupIndex: number): HTMLElement {
+    const cl = this.log.call(
+      "render",
+      `contex: obj, group: ${groupIndex}, btn: ${ctx.button.id}/${ctx.button.command?.name}`
+    );
+    const btnSafe = new ButtonSafe(ctx.button, ctx);
 
-        // check if we have rules and merge params into the button
-        const rule = ContextComplete.getRule(ctx);
-        if (rule) cl.data('rule found, will try to merge params', rule);
-        const params = ButtonCommand.mergeAdditionalParams(btnSafe.action(), rule?.params);
+    // check if we have rules and merge params into the button
+    const rule = ContextComplete.getRule(ctx);
+    if (rule) cl.data("rule found, will try to merge params", rule);
+    const params = ButtonCommand.mergeAdditionalParams(
+      btnSafe.action(),
+      rule?.params
+    );
 
+    const group = ctx.toolbar?.groups?.[groupIndex];
+    const groupName = group?.name;
 
-        const group = ctx.toolbar?.groups?.[groupIndex];
-        const groupName = group?.name;
+    const btnLink = document.createElement("a");
 
-        const btnLink = document.createElement('a');
+    const disabled = btnSafe.disabled();
 
-        const disabled = btnSafe.disabled();
+    // put call as plain JavaScript to preserve even if DOM is serialized
+    if (!disabled)
+      btnLink.setAttribute("onclick", this.generateRunJs(rule, ctx, params));
 
-        // put call as plain JavaScript to preserve even if DOM is serialized
-        if (!disabled) btnLink.setAttribute('onclick', this.generateRunJs(rule, ctx , params));
+    // Add various classes
+    const classes =
+      (disabled ? " disabled" : "") +
+      (btnSafe.action() ? ` sc-${btnSafe.action().name}` : "") +
+      ` in-group-${groupIndex}` +
+      (groupName ? ` in-group-${groupName}` : "") +
+      " " +
+      (rule?.ui.class ?? "") +
+      " " +
+      (rule?.ui.classes ?? "") +
+      " " +
+      btnSafe.classes() +
+      " " +
+      btnSafe.dynamicClasses();
+    cl.add("classes: " + classes);
+    HtmlTools.addClasses(btnLink, classes);
 
-        // Add various classes
-        const classes = (disabled ? ' disabled' : '')
-            + (btnSafe.action() ? ` sc-${btnSafe.action().name}` : '')
-            + ` in-group-${groupIndex}`
-            + (groupName ? ` in-group-${groupName}` : '')
-            + ' ' + (rule?.ui.class ?? '')
-            + ' ' + (rule?.ui.classes ?? '')
-            + ' ' + btnSafe.classes()
-            + ' ' + btnSafe.dynamicClasses();
-        cl.add('classes: ' + classes);
-        HtmlTools.addClasses(btnLink, classes);
+    // set title for button, optionally with i18n
+    this.setTitle(rule, btnLink, btnSafe);
 
-        // set title for button, optionally with i18n
-        this.setTitle(rule, btnLink, btnSafe);
+    const divTag = document.createElement("div");
+    divTag.appendChild(this.iconTag(btnSafe, rule));
+    btnLink.appendChild(divTag);
 
-        const divTag = document.createElement('div');
-        divTag.appendChild(this.iconTag(btnSafe, rule));
-        btnLink.appendChild(divTag);
+    // set color - new in 10.27
+    this.processColorRules(btnSafe, rule, ctx, divTag);
 
-        // set color - new in 10.27
-        this.processColorRules(btnSafe, rule, ctx, divTag);
+    // add tippy new 15.04
+    btnSafe.tippy(ctx, btnLink);
 
-        // add tippy new 15.04
-        btnSafe.tippy(ctx, btnLink);
+    return cl.return(btnLink);
+  }
 
-        return cl.return(btnLink);
-    }
-
-
-
-    private setTitle(rule: BuildRule, btnLink: HTMLAnchorElement, btn: ButtonSafe) {
-        const callLog = this.log.call('setTitles');
-        const uiTitle = rule?.ui?.title;
-        if (uiTitle) {
-            callLog.add(`uiTitle: ${uiTitle}`);
-            btnLink.setAttribute('title', uiTitle);
-        } else {
-            const i18nTitle = btn.title();
-            callLog.add(`i18nTitle: ${i18nTitle}`);
-            if (i18nTitle) btnLink.setAttribute('data-i18n', `[title]${i18nTitle}`);
-        }
-        callLog.done();
-    }
-
-    private processColorRules(btn: ButtonSafe, rule: BuildRule, ctx: ContextComplete, divTag: HTMLDivElement) {
-        const callLog = this.log.call('processColorRules');
-        let color = rule?.ui?.color ?? btn.color() ?? ctx.toolbar.settings.color;
-
-        // catch edge case where the color is something like 808080 - which is treated as a number
-        if (color && typeof color === 'number') color = (color as number).toString();
-        if (color && typeof color === 'string') {
-            const parts = color.split(',');
-            if (parts[0]) divTag.style.backgroundColor = correctColorCodes(parts[0]);
-            if (parts[1]) divTag.style.color = correctColorCodes(parts[1]);
-        }
-
-        return callLog.done(color ?? 'no color');
-    }
-
-    private generateRunJs(rule: BuildRule, ctx: ContextComplete, params: CommandParams) {
-        // 2022-05-18 2dm: #CustomContext New we can override the context
-        let modifyContext = rule?.context;
-        if (!modifyContext || Object.keys(modifyContext).length === 0)
-            modifyContext = undefined;
-        else
-            modifyContext = { ...modifyContext, complete: true };
-        const targetContext = modifyContext ? JSON.stringify(modifyContext) : `${ctx.instance.id}, ${ctx.contentBlockReference.id}`;
-
-        // 2022-06-28 experimental trying to move to cms.run
-        if (params?.action === CommandNames.code) {
-          const { action, ...cleanParams } = params;
-          const newP = { action: params.action, params: cleanParams };
-          return `$2sxc(${targetContext}).cms.run(${JSON.stringify(newP)}, event);`;
-        }
-        return `$2sxc(${targetContext}).manage.run(${JSON.stringify(params)}, event);`;
-    }
-
-    private iconTag(btn: ButtonSafe, rule: BuildRule) {
-      const callLog = this.log.call('iconTag');
-      const icon = rule?.ui?.icon || btn.icon();
-      if (icon.indexOf('<svg') > -1) {
-        // Temporary dom element
-        const symbol = document.createElement('template');
-        symbol.innerHTML = icon;
-        // Note: It would be tempting to set the viewBox here, but it's not possible
-        // because we cannot calculate the size before rendering
-        return callLog.return(symbol.content.firstChild, icon);
+  private setTitle(
+    rule: BuildRule,
+    btnLink: HTMLAnchorElement,
+    btn: ButtonSafe
+  ) {
+    const callLog = this.log.call("setTitles");
+    const uiTitle = rule?.ui?.title;
+    if (uiTitle) {
+      if (uiTitle.indexOf("i18n:") === 0) {
+        const i18nTitle = uiTitle.substring(5);
+        callLog.add(`i18nTitle: ${i18nTitle}`);
+        btnLink.setAttribute("data-i18n", `[title]${i18nTitle}`);
       } else {
-        const symbol = document.createElement('i');
-        HtmlTools.addClasses(symbol, icon);
-        symbol.setAttribute('aria-hidden', 'true');
-        return callLog.return(symbol, icon);
+        callLog.add(`uiTitle: ${uiTitle}`);
+        btnLink.setAttribute("title", uiTitle);
       }
+    } else {
+      const i18nTitle = btn.title();
+      callLog.add(`i18nTitle: ${i18nTitle}`);
+      if (i18nTitle) btnLink.setAttribute("data-i18n", `[title]${i18nTitle}`);
     }
+    callLog.done();
+  }
+
+  private processColorRules(
+    btn: ButtonSafe,
+    rule: BuildRule,
+    ctx: ContextComplete,
+    divTag: HTMLDivElement
+  ) {
+    const callLog = this.log.call("processColorRules");
+    let color = rule?.ui?.color ?? btn.color() ?? ctx.toolbar.settings.color;
+
+    // catch edge case where the color is something like 808080 - which is treated as a number
+    if (color && typeof color === "number")
+      color = (color as number).toString();
+    if (color && typeof color === "string") {
+      const parts = color.split(",");
+      if (parts[0]) divTag.style.backgroundColor = correctColorCodes(parts[0]);
+      if (parts[1]) divTag.style.color = correctColorCodes(parts[1]);
+    }
+
+    return callLog.done(color ?? "no color");
+  }
+
+  private generateRunJs(
+    rule: BuildRule,
+    ctx: ContextComplete,
+    params: CommandParams
+  ) {
+    // 2022-05-18 2dm: #CustomContext New we can override the context
+    let modifyContext = rule?.context;
+    if (!modifyContext || Object.keys(modifyContext).length === 0)
+      modifyContext = undefined;
+    else modifyContext = { ...modifyContext, complete: true };
+    const targetContext = modifyContext
+      ? JSON.stringify(modifyContext)
+      : `${ctx.instance.id}, ${ctx.contentBlockReference.id}`;
+
+    // 2022-06-28 experimental trying to move to cms.run
+    if (params?.action === CommandNames.code) {
+      const { action, ...cleanParams } = params;
+      const newP = { action: params.action, params: cleanParams };
+      return `$2sxc(${targetContext}).cms.run(${JSON.stringify(newP)}, event);`;
+    }
+    return `$2sxc(${targetContext}).manage.run(${JSON.stringify(
+      params
+    )}, event);`;
+  }
+
+  private iconTag(btn: ButtonSafe, rule: BuildRule) {
+    const callLog = this.log.call("iconTag");
+    const icon = rule?.ui?.icon || btn.icon();
+    if (icon.indexOf("<svg") > -1) {
+      // Temporary dom element
+      const symbol = document.createElement("template");
+      symbol.innerHTML = icon;
+      // Note: It would be tempting to set the viewBox here, but it's not possible
+      // because we cannot calculate the size before rendering
+      return callLog.return(symbol.content.firstChild, icon);
+    } else {
+      const symbol = document.createElement("i");
+      HtmlTools.addClasses(symbol, icon);
+      symbol.setAttribute("aria-hidden", "true");
+      return callLog.return(symbol, icon);
+    }
+  }
 }
 
 // detect Hex-colors 6-digits or 8 in case transparent

@@ -70,6 +70,14 @@ export class ToolbarSettings {
   /** Show behavior (always, hover, ...) */
   show: TypeShow = TLB_SHOW_HOVER;
 
+  /**
+   * Experimental - try to delay the show in certain cases where the toolbar is not typical
+   * Introduced in 16.04, not officially released
+   * Reason is that certain image toolbars should be felt to be different, as they affect non-private images
+   * @internal
+   */
+  delayShow: number = 0;
+
   /** Follow behavior - if the toolbar should scroll with the page or remain where it was hovered */
   follow: TypeFollow = followDefault;
 
