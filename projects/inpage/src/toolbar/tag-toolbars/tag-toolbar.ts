@@ -34,7 +34,6 @@ export class TagToolbar {
     this.follow = settings.follow;
     this.alwaysShow = settings.show === TLB_SHOW_ALWAYS;
     this.delayShow = settings.delayShow ?? 0;
-console.log('2dm: delayShow', this.delayShow);
 
     // Ensure toolbar gets visible when hovering
     this.addMouseEvents(hoverTag);
