@@ -11,5 +11,8 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/2sic/2sxc-ui/tree/develop/packages/2sxc-load-build-config"
+  },
+  "dependencies": {
+    "jsonc-parser": "^3.2.0"
   }
 }

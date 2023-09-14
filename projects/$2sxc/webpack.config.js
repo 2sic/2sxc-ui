@@ -1,7 +1,7 @@
 ﻿const path = require('path');
 const webpack = require('webpack');
 const webpackHelpers = require('../webpack/webpack-helpers.js');
-const buildConfig = require('../webpack/load-build-config.js').BuildConfig;
+const buildConfig = require('@2sic.com/2sxc-load-build-config').BuildConfig;
 const assetsTarget = (buildConfig.hasSource) ? path.join(buildConfig.source, 'js') : null;
 const assetsTargetFallback = path.resolve(__dirname, 'dist');
 

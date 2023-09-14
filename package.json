@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/2sic/2sxc-ui#readme",
   "devDependencies": {
+    "@2sic.com/2sxc-load-build-config": "https://gitpkg.now.sh/2sic/2sxc-ui/packages/2sxc-load-build-config?develop",
     "chalk": "^4.1.2",
     "chokidar": "^3.4.2",
     "cpx": "^1.5.0",

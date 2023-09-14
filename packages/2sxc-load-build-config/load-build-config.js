@@ -1,4 +1,5 @@
-// Important: this is "@2sic.com/2sxc-load-build-config": "git+https://github.com/2sic/2sxc-ui.git#develop:packages/2sxc-load-build-config"
+// Important: this is "@2sic.com/2sxc-load-build-config": "https://gitpkg.now.sh/2sic/2sxc-ui/packages/2sxc-load-build-config?develop"
+// instal it with: npm i -D 'https://gitpkg.now.sh/2sic/2sxc-ui/packages/2sxc-load-build-config?develop'
 const path = require('path');
 const fs = require('fs-extra');
 const jsoncParser = require('jsonc-parser');
