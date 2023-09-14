@@ -1,6 +1,6 @@
 {
   "name": "@2sic.com/2sxc-load-build-config",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "main": "load-build-config.js",
   "scripts": {
