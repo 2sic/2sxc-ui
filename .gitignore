@@ -23,3 +23,6 @@ projects/sxc-docs
 projects/$2sxc-jasmine-browser/src/system/**/*.*
 projects/inpage/dist/
 projects/cms/dist/
+
+# Exclude 2sxc-build.config.json
+2sxc-build.config.json
