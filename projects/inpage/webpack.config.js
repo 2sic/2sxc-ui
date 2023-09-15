@@ -2,7 +2,8 @@
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const webpack = require('webpack');
 const webpackHelpers = require('../webpack/webpack-helpers.js');
-const buildConfig = require('@2sic.com/2sxc-load-build-config').BuildConfig;
+// const buildConfig = require('@2sic.com/2sxc-load-build-config').BuildConfig;
+const buildConfig = require('../../packages/2sxc-load-build-config').BuildConfig;
 const path = require('path');
 const CopyPlugin = require('copy-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;

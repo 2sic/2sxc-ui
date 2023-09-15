@@ -3,7 +3,8 @@ const cpx = require('cpx');
 const chalk = require('chalk');
 const chokidar = require('chokidar');
 const fs = require('fs-extra');
-const bc = require('@2sic.com/2sxc-load-build-config');
+// const bc = require('@2sic.com/2sxc-load-build-config');
+const bc = require('../../packages/2sxc-load-build-config');
 const buildConfig = bc.BuildConfig;
 const debug = true;
 

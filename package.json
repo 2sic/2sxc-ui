@@ -22,8 +22,10 @@
     "url": "https://github.com/2sic/2sxc-ui/issues"
   },
   "homepage": "https://github.com/2sic/2sxc-ui#readme",
+  "_moduleAliases": {
+    "@2sic.com/2sxc-load-build-config": "./packages/2sxc-load-build-config"
+  },
   "devDependencies": {
-    "@2sic.com/2sxc-load-build-config": "https://gitpkg.now.sh/2sic/2sxc-ui/packages/2sxc-load-build-config?bc0bf98ba6b745ab8efa974e5d15114980fe650d",
     "chalk": "^4.1.2",
     "chokidar": "^3.4.2",
     "cpx": "^1.5.0",

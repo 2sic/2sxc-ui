@@ -3,7 +3,8 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const FixStyleOnlyEntriesPlugin = require("webpack-remove-empty-scripts");
 const webpack = require('webpack');
 const webpackHelpers = require('../webpack/webpack-helpers.js');
-const buildConfig = require('@2sic.com/2sxc-load-build-config').BuildConfig
+// const buildConfig = require('@2sic.com/2sxc-load-build-config').BuildConfig
+const buildConfig = require('../../packages/2sxc-load-build-config').BuildConfig
 const bundleName = "cms";
 
 function getConfiguration(env) {

@@ -2,7 +2,8 @@
     jsXlsx = require('gulp-js-xlsx'),
     rename = require('gulp-rename'),
     path = require('path'),
-    buildConfig = require('@2sic.com/2sxc-load-build-config').BuildConfig,
+    // buildConfig = require('@2sic.com/2sxc-load-build-config').BuildConfig,
+    buildConfig = require('../../packages/2sxc-load-build-config').BuildConfig,
     rootDist = 'dist/';
 
 const targets = [
