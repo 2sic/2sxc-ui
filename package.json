@@ -3,7 +3,7 @@
   "version": "16.06.00",
   "description": "2sxc UI - the JS UI of 2sxc",
   "scripts": {
-    "ci-all": "cd projects/$2sxc && npm ci && cd ../.. && cd projects/inpage && npm ci && cd ../.. && cd projects/code-editor-snippets && npm ci && cd ../.. && cd projects/quick-dialog && npm ci && cd ../.. && cd projects/cms && npm ci && cd ../.. && cd projects/turnOn && npm ci && cd ../..",
+    "ci-all": "npm ci && cd projects/$2sxc && npm ci && cd ../.. && cd projects/inpage && npm ci && cd ../.. && cd projects/code-editor-snippets && npm ci && cd ../.. && cd projects/quick-dialog && npm ci && cd ../.. && cd projects/cms && npm ci && cd ../.. && cd projects/turnOn && npm ci && cd ../..",
     "release-all": "npm run js2sxc && npm run inpage && npm run snippets && npm run quickdialog && npm run cms && npm run turn-on",
     "js2sxc": "cd projects/$2sxc && npm run release && cd ../..",
     "inpage": "cd projects/inpage && npm run release && cd ../..",
@@ -22,9 +22,6 @@
     "url": "https://github.com/2sic/2sxc-ui/issues"
   },
   "homepage": "https://github.com/2sic/2sxc-ui#readme",
-  "_moduleAliases": {
-    "@2sic.com/2sxc-load-build-config": "./packages/2sxc-load-build-config"
-  },
   "devDependencies": {
     "chalk": "^4.1.2",
     "chokidar": "^3.4.2",
