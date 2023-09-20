@@ -1,7 +1,10 @@
-﻿const webpack = require('webpack');
+﻿const path = require('path');
+const webpack = require('webpack');
 const webpackHelpers = require('../webpack/webpack-helpers.js');
-
-const assetsTarget = webpackHelpers.AssetsTarget + 'js';
+// const buildConfig = require('@2sic.com/2sxc-load-build-config').BuildConfig;
+const buildConfig = require('../../packages/2sxc-load-build-config').BuildConfig;
+const assetsTarget = (buildConfig.hasSource) ? path.join(buildConfig.source, 'js') : null;
+const assetsTargetFallback = path.resolve(__dirname, 'dist');
 
 const configuration = {
   mode: 'development',
@@ -21,14 +24,14 @@ const configuration = {
   },
   output: {
     filename: "2sxc.api" + ".min.js",
-    path: assetsTarget,
+    path: (buildConfig.hasSource) ? assetsTarget : assetsTargetFallback,
     library: '$2sxcJsApi',
   },
   plugins: [
     webpackHelpers.CreateDefinePlugin(webpack),
     // after build, copy the files from the project assets
-    webpackHelpers.createCopyAfterBuildPlugin(assetsTarget, webpackHelpers.TargetsWithoutAssets, 'js'),
-  ]
+    webpackHelpers.createCopyAfterBuildPlugin(assetsTarget, buildConfig.JsTargets, 'js'),
+  ].filter(item => item !== null)
 };
 
 /* change source map generation based on production mode */

@@ -1,0 +1,18 @@
+{
+  "name": "@2sic.com/2sxc-load-build-config",
+  "version": "1.0.1",
+  "description": "",
+  "main": "load-build-config.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/2sic/2sxc-ui/tree/develop/packages/2sxc-load-build-config"
+  },
+  "dependencies": {
+    "jsonc-parser": "^3.2.0"
+  }
+}

@@ -1,21 +1,23 @@
 2sxc UI - the JS UI of 2sxc
 ============
 
-This project is part of 2sxc, https://github.com/2sic/2sxc.
+This project is part of 2sxc, <https://github.com/2sic/2sxc>.
 
-It is separate to keep concerns separate and make contributions simpler (because it's a smaller project). 
+It is separate to keep concerns separate and make contributions simpler (because it's a smaller project).
 
 ## Build Everything
 
-Note that using `npm run release-all` all projects will be built. 
+Note that using `npm run release-all` all projects will be built.
 
 But there is a requirement: in each project you must have previously install all npm packages.
-So if this is the first time you do it, you must enter each project and run `npm ci`.
+So if this is the first time you do it, call `npm run ci-all` in the root projects.
 
+Building each project will just place the stuff in each `dist` folder.
+To auto-distribute it to wherever you want, check out <https://go.2sxc.org/build>.
 
 ## JS Projects for 2sxc in this Repo
 
-Each project has different ways of building / deploying, mostly because they have different histories. Check out each readme for details. 
+Each project has different ways of building / deploying, mostly because they have different histories. Check out each readme for details.
 
 1. `projects/$2sxc` contains the API which does things like talk to the server using the dnn-headers etc.  
     put into `[target]/js`

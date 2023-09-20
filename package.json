@@ -1,19 +1,16 @@
 {
   "name": "2sxc-ui",
-  "version": "16.04.00",
+  "version": "16.06.00",
   "description": "2sxc UI - the JS UI of 2sxc",
   "scripts": {
-    "release-all": "npm run js2sxc && npm run inpage && npm run snippets && npm run quickdialog && npm run turn-on && npm run cms && npm run cms-dist",
+    "ci-all": "npm ci && cd projects/$2sxc && npm ci && cd ../.. && cd projects/inpage && npm ci && cd ../.. && cd projects/code-editor-snippets && npm ci && cd ../.. && cd projects/quick-dialog && npm ci && cd ../.. && cd projects/cms && npm ci && cd ../.. && cd projects/turnOn && npm ci && cd ../..",
+    "release-all": "npm run js2sxc && npm run inpage && npm run snippets && npm run quickdialog && npm run cms && npm run turn-on",
     "js2sxc": "cd projects/$2sxc && npm run release && cd ../..",
     "inpage": "cd projects/inpage && npm run release && cd ../..",
     "snippets": "cd projects/code-editor-snippets && npm run gulp  && cd ../..",
     "quickdialog": "cd projects/quick-dialog && npm run release && cd ../..",
     "cms": "cd projects/cms && npm run release && cd ../..",
-    "doc-dnn-sxc-angular": "cd projects/dnn-sxc-angular/ && typedoc --tsconfig projects/dnn-sxc-angular && cd ../..",
-    "turn-on": "robocopy projects/turnOn/dist/ %Dev2sxcAssets%/dist/turnOn && robocopy projects/turnOn/dist/ %Dev2sxcDnnRoot%/DesktopModules/ToSIC_SexyContent/dist/turnOn",
-    "cms-dist": "robocopy projects/cms/dist/ %Dev2sxcAssets%/dist/cms",
-    "//cms-dist-dnn": "Had to put this on own line, because env variables only seem to work on the first part before &&",
-    "cms-dist-dnn": "robocopy projects/cms/dist/ %Dev2sxcDnnRoot%/DesktopModules/ToSIC_SexyContent/dist/cms"
+    "turn-on": "cd projects/turnOn && npm run release && cd ../.."
   },
   "repository": {
     "type": "git",
@@ -26,12 +23,14 @@
   },
   "homepage": "https://github.com/2sic/2sxc-ui#readme",
   "devDependencies": {
-    "chalk": "^4.1.0",
+    "chalk": "^4.1.2",
     "chokidar": "^3.4.2",
     "cpx": "^1.5.0",
     "fs-extra": "^9.0.1",
     "webpack-shell-plugin": "^0.5.0",
     "webpack-shell-plugin-next": "^1.2.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "jsonc-parser": "^3.2.0"
+  }
 }

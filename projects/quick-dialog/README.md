@@ -20,4 +20,4 @@ For production (minified with external source files) use: `npm run release`
 
 ## Source Maps
 
-During development the source maps are used from the `dist/quickDialog` folder. The release build changes to use source maps from `sources.2sxc.org`.
+During development the source maps are used from the `dist/quick-dialog` folder. The release build changes to use source maps from `sources.2sxc.org`.

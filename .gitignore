@@ -20,3 +20,11 @@ projects/sxc-typings/parts/dist
 projects/sxc-docs
 
 .temp_cache
+projects/$2sxc-jasmine-browser/src/system/**/*.*
+# projects/inpage/dist/
+# projects/cms/dist/
+dist/
+!projects/turnOn/dist
+
+# Exclude 2sxc-build.config.json
+**/2sxc-build.config.json
