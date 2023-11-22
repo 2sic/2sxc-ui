@@ -13,6 +13,8 @@ const bundleName = "inpage";
 const assetsTarget = buildConfig.hasSource ? path.join(buildConfig.source, 'dist', bundleName) : null;
 const assetsTargetFallback = path.resolve(__dirname, 'dist');
 
+// console.log('2dm assetsTarget', assetsTarget);
+
 const configuration = {
   mode: 'development',
   entry: "./src/index.ts",
@@ -20,7 +22,8 @@ const configuration = {
   optimization: {
     minimize: true,
     minimizer: [
-      new CssMinimizerPlugin({})
+      new CssMinimizerPlugin({}),
+      '...',
     ],
   },
   plugins: [
@@ -33,7 +36,8 @@ const configuration = {
         {
           from: './i18n/*.json',
           to: './i18n/[name].js',
-          toType: 'template'
+          toType: 'template',         // means that to: is a template for the new file name
+          info: { minimized: true },  // prevents Terser from trying (and failing) to minify the json files
         }
       ],
     }),
