@@ -15,6 +15,8 @@ import { ToolbarWorkflowManager } from '../../workflow/toolbar-workflow-manager'
 import { WorkflowStep } from '../../workflow/workflow-step';
 import { CommandLinkGenerator } from '../command-link-generator';
 
+const debug = true;
+
 type CommandPromise<T> = Promise<T|void>;
 
 /**
@@ -185,39 +187,52 @@ export class CmsEngine extends HasLog {
         // 1. resolve promise, as the window won't report when closed
         resolve(context as unknown as T);
 
-        // 2. add real link to the A tag. The first tag is probably the <i> tag, so we need to find the <a> tag
-        let tag = origEvent.target as HTMLElement;
-        while (tag != null && tag.tagName !== 'A') tag = tag.parentElement;
+        if (debug) console.log('2dm link click with ctrl/shift - open in new window');
 
-        // special case: if the command was not started from inside a link, then we must use old behavior with open-window
-        if (!tag) {
-          console.log('2sxc run: link should open in a new window, but was not started from a link. Using window.open()');
-          window.open(link);
+        // 2. add real link to the A tag. The first tag is probably the <i> tag, so we need to find the <a> tag
+        if (CmsEngine.applyLinkToButton(origEvent, link, isNewWindow ? '_blank' : null)) {
+          if (debug) console.log('link click with ctrl/shift all done');
           return;
         }
 
-        // Remember the old link / target, in case we accidentally change a link which is not part of the toolbar
-        const aTag = tag as HTMLLinkElement;
-        const oldLink = aTag.href;
-        const oldTarget = aTag.target;
-        aTag.href = link;
-
-        // 3. If it's a new window, we must also set the target
-        if (isNewWindow) aTag.target = '_blank';
-                
-        // 4. After the click is run, we must clear the href again, so it doesn't open in the current window
-        setTimeout(() => {
-          // note: we usually must removeAttribute, otherwise next-normal-clicks will not behave as expected
-          if (oldLink) aTag.href = oldLink; else aTag.removeAttribute('href');
-          if (oldTarget) aTag.target = oldTarget; else aTag.removeAttribute('target');
-        }, 100);
-
-        // 5. let the normal click happen, and return so the rest of the code doesn't run
+        if (debug) console.log('2sxc run: link should open in a new window, but was not started from a link. Using window.open()');
+        window.open(link);
         return;
       }
 
       // case 3: not new window, no special ctrl/shift, so use the normal popup
       window.$2sxc.totalPopup.open(link, completePromise);
     });
+  }
+
+  static applyLinkToButton(event: MouseEvent, link: string, target: string): boolean {
+    if (debug) console.log('applyLinkToButton', event, link, target);
+    let tag = event.target as HTMLElement;
+    while (tag != null && tag.tagName !== 'A') tag = tag.parentElement;
+    if (!tag) {
+      if (debug) console.log('no tag found, returning false');
+      return false;
+    }
+
+    if (debug) console.log('tag found, applying link to it', tag);
+
+    // Remember the old link / target, in case we accidentally change a link which is not part of the toolbar
+    const aTag = tag as HTMLLinkElement;
+    const oldLink = aTag.href;
+    const oldTarget = aTag.target;
+    aTag.href = link;
+
+    // 3. If it's a new window, we must also set the target
+    if (target) aTag.target = target;
+            
+    // 4. After the click is run, we must clear the href again, so it doesn't open in the current window
+    setTimeout(() => {
+      if (debug) console.log('restoring old link', aTag, oldLink, oldTarget);
+      // note: we usually must removeAttribute, otherwise next-normal-clicks will not behave as expected
+      if (oldLink) aTag.href = oldLink; else aTag.removeAttribute('href');
+      if (oldTarget) aTag.target = oldTarget; else aTag.removeAttribute('target');
+    }, 100);
+
+    return true;
   }
 }

@@ -1,4 +1,4 @@
-﻿import { CommandNames, Commands } from '..';
+﻿import { CmsEngine, CommandNames, Commands } from '..';
 import { ContextComplete } from '../../context';
 import { TypeNoteMode } from '../../toolbar/config';
 import { iconPrefix, tlbI18nPrefix } from '../command';
@@ -50,16 +50,21 @@ Commands.add(CommandNames.info, 'Info', 'info', true, false, {
   color: (ctx) => colors[getNote(ctx)?.type as keyof typeof colors ?? 'info'],
 
   // TODO: improve call so params are always directly available
-  code(context) {
+  code(context, event) {
     if (debug) console.log('2dm - info-button code', context);
-    const link = context.button.command.params?.link as string;
+    const params = context.button.command.params;
+    const link = params?.link as string;
+    const target = params?.target as string; 
     if (debug) console.log('2dm - info-button code - link', link);
 
-    if (link)
-      window.open(link as string, '_blank');
-    else
+    if (!link) {
       console.log('info-button clicked, but nothing will happen, because no link was specified in the params. This may be expected/ok.');
+      return Promise.resolve();
+    }
 
+    // try to use normal click behavior, otherwise use window.open
+    if (!CmsEngine.applyLinkToButton(event, link, target))
+      window.open(link as string, target ?? '_blank');
     return Promise.resolve();
   },
 });
