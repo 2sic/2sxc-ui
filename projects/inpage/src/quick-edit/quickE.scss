@@ -1,0 +1,198 @@
+﻿$inpage-btn-bg: linear-gradient(
+  125deg,
+  rgba(15, 45, 80, 1) 40%,
+  rgba(148, 27, 78, 1) 100%
+);
+
+$quicke-btn-size: 34px;
+$quicke-btn-bg-size: 32px 32px;
+
+/****** Content block menu */
+
+.sc-content-block-menu {
+  height: 40px;
+  line-height: 35px;
+  margin: -20px 0 0 0;
+  /* opacity: 0.8; */
+  padding: 0;
+  pointer-events: none;
+  position: absolute;
+  text-align: center;
+  z-index: 999;
+}
+
+.sc-content-block-menu a {
+  cursor: pointer;
+  display: inline-block;
+  font-size: 18px;
+  height: $quicke-btn-size;
+  margin: 0 3px !important;
+  padding: 0 !important;
+  pointer-events: auto;
+  text-indent: -9999px;
+  width: $quicke-btn-size;
+}
+
+.sc-content-block-quick-insert:before,
+.sc-content-block-quick-insert:after {
+  background: $inpage-btn-bg;
+  content: " ";
+  display: block;
+  height: 2px;
+  left: 50%;
+  position: absolute;
+  top: 19px;
+  width: 60px;
+}
+
+.sc-content-block-quick-insert:before {
+  margin-left: -150px;
+}
+
+.sc-content-block-quick-insert:after {
+  margin-left: 90px;
+}
+
+/* select dropdowns */
+.sc-content-block-menu select {
+  text-indent: 0 !important;
+}
+.sc-content-block-menu #paneList a {
+  text-indent: 0 !important;
+  width: initial;
+}
+
+/*#region icons */
+.sc-content-block-menu-addcontent {
+  background: url(images/icon-content-light.svg);
+  background-size: $quicke-btn-bg-size;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+
+.sc-content-block-menu-addcontent.sc-content-block-menu-module {
+  background: url(images/icon-content-dark.svg);
+  background-size: $quicke-btn-bg-size;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+
+.sc-content-block-menu-addapp {
+  background: url(images/icon-app-light.svg);
+  background-size: $quicke-btn-bg-size;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+
+.sc-content-block-menu-addapp.sc-content-block-menu-module {
+  background: url(images/icon-app-dark.svg);
+  background-size: $quicke-btn-bg-size;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+
+.sc-content-block-menu a.sc-content-block-menu-addcontent.hide-content {
+  display: none;
+}
+.sc-content-block-menu a.sc-content-block-menu-addapp.hide-app {
+  display: none;
+}
+
+/*#endregion */
+
+a.sc-content-block-menu-btn {
+  /* background: #002753; /* #2F9BF2; */
+  background: $inpage-btn-bg;
+  border-bottom-right-radius: 10px;
+  border-top-left-radius: 10px;
+  border: 1px white solid;
+  color: white !important;
+  text-indent: 0 !important;
+}
+
+/* show in-text placeholders when they are still empty */
+
+div.sc-content-block-list.show-placeholder:empty {
+  background-color: rgba(47, 155, 242, 0.1);
+  height: 20px;
+}
+
+.sc-invisible {
+  display: none !important;
+}
+
+.sc-cb-action {
+  /* -webkit-filter: grayscale(75%);
+    filter: grayscale(75%); */
+}
+
+.sc-cb-is-selected {
+  -webkit-filter: blur(5px);
+  filter: blur(5px);
+}
+
+/* prepare panes and content-block lists for background animations */
+div.sc-content-block-list,
+.sc-cb-pane-glow {
+  transition: background-color 0.3s linear 0s;
+}
+
+@keyframes glow {
+  from {
+    text-shadow: 0 0 5px #6dffca, 0 0 3px #002c50, 0 0 8px #16ffaa,
+      0 0 8px #08c6ff;
+  }
+
+  to {
+    text-shadow: 0 0 3px #09c28d, 0 0 8px #09c28d, 0 0 7px #08c6ff,
+      0 0 10px #09c28d, 0 0 8px #09c28d;
+  }
+}
+
+/* highlight pane / content-block-list if mouse stays over toolbar for a bit */
+
+.sc-cb-highlight-for-insert {
+  background-color: rgba(128, 128, 128, 0.1);
+  transition-delay: 1s;
+}
+
+div.sc-content-block-list.sc-cb-highlight-for-insert {
+  background-color: rgba(47, 155, 242, 0.1);
+  transition-delay: 1s;
+}
+
+/* this is needed to disable the paste button till it can be used */
+.sc-unavailable {
+  display: none !important;
+}
+
+.sc-content-block-selected-menu {
+  display: none;
+}
+
+a.sc-content-block-selected-menu.sc-content-block-menu-btn {
+  -webkit-filter: grayscale(0);
+  filter: grayscale(0);
+}
+
+/* Disable certain buttons as configured - new in 11.11.03 */
+
+.sc-content-block-menu-addcontent.disable-addContent {
+  display: none !important;
+}
+
+.sc-content-block-menu-addapp.disable-addApp {
+  display: none !important;
+}
+.sc-content-block-menu-btn.icon-sxc-ok.disable-select {
+  display: none !important;
+}
+.sc-content-block-menu-btn.icon-sxc-paste.disable-paste {
+  display: none !important;
+}
+.sc-content-block-menu-btn.icon-sxc-trash-empty.disable-delete {
+  display: none !important;
+}
+.sc-content-block-menu-btn.icon-sxc-move.disable-move {
+  display: none !important;
+}
