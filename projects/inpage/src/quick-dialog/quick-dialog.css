@@ -43,7 +43,12 @@ div.sc-uninitialized {
 div.sc-uninitialized div {
   margin: 5px auto;
   color: #fff;
-  background: #002753;/* rgb(2, 139, 255); */
+  /* background: #002753;/* rgb(2, 139, 255); */
+  background: linear-gradient(
+    125deg,
+    rgba(15, 45, 80, 1) 40%,
+    rgba(148, 27, 78, 1) 100%
+  );
   font-size: 48px;
   margin: 5px;
   width: 100px;
