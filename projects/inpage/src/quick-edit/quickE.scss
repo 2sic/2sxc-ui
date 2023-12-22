@@ -113,7 +113,7 @@ a.sc-content-block-menu-btn {
 /* show in-text placeholders when they are still empty */
 
 div.sc-content-block-list.show-placeholder:empty {
-  background-color: rgba(47, 155, 242, 0.1);
+  background: rgba(47, 155, 242, 0.1);
   height: 20px;
 }
 
@@ -152,12 +152,12 @@ div.sc-content-block-list,
 /* highlight pane / content-block-list if mouse stays over toolbar for a bit */
 
 .sc-cb-highlight-for-insert {
-  background-color: rgba(128, 128, 128, 0.1);
+  background: rgba(128, 128, 128, 0.1);
   transition-delay: 1s;
 }
 
 div.sc-content-block-list.sc-cb-highlight-for-insert {
-  background-color: rgba(47, 155, 242, 0.1);
+  background: rgba(47, 155, 242, 0.1);
   transition-delay: 1s;
 }
 

@@ -111,7 +111,7 @@ export class RenderButton extends RenderPart {
       color = (color as number).toString();
     if (color && typeof color === "string") {
       const parts = color.split(",");
-      if (parts[0]) divTag.style.backgroundColor = correctColorCodes(parts[0]);
+      if (parts[0]) divTag.style.background = correctColorCodes(parts[0]);
       if (parts[1]) divTag.style.color = correctColorCodes(parts[1]);
     }
 

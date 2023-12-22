@@ -105,10 +105,14 @@ body.sc-tb-show-all [sxc-toolbar-hover] .sc-menu {
 
 /* Modify the color of sub-lists to be more transparent / lighter */
 .sc-menu.sc-sublist a div {
-  background-color: #012c4fad; /* #0088f4ad */
+  background: #012c4fad; /* #0088f4ad */
   // TODO:
 }
 
+.sc-menu.sc-sublist a div {
+  background: #012c4fad; /* #0088f4ad */
+  // TODO:
+}
 .sc-menu a.single-field div {
   background: $inpage-btn-bg;
   mix-blend-mode: difference;
@@ -163,15 +167,13 @@ body.sc-tb-show-all [sxc-toolbar-hover] .sc-menu {
   background: $inpage-btn-bg;
 }
 .sc-menu a.in-group-edit-advanced div {
-  background-color: grey;
+  background: grey;
 }
 .sc-menu a.group-pro div {
-  background: none; // undo 2-color gradient
-  background-color: $inpage-btn-bg-pro;
+  background: $inpage-btn-bg-pro;
 }
 .sc-menu a.group-alert div {
-  background: none; // undo 2-color gradient
-  background-color: $inpage-btn-bg-error;
+  background: $inpage-btn-bg-error;
 }
 
 /* Change icon color to gray if not available */
