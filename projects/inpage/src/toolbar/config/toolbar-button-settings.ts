@@ -32,6 +32,18 @@ export class Note {
    */
   interactive?: boolean;
 
+  /** 
+   * delay in ms
+   * @internal
+   */
+  delay?: number;
+
+  /** 
+   * linger in ms
+   * @internal
+   */
+  linger?: number;
+
   public static toJson64String(note: Note): string {
     return `${prefixJson64}${window.btoa(JSON.stringify(note))}`;
   }

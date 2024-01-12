@@ -33,25 +33,34 @@ export class Command {
       partOfPage: () => partOfPage,
       color: () => undefined,
       tippy: (ctx, tag) => {
+        // get the rule and only continue if there is a note attached
         const ui = ContextComplete.getRule(ctx)?.ui;
         const note = (ui?.note as Note);
-        if (!note?.note)
-          return undefined;
+        if (!note?.note) return undefined;
 
         const allowHtml = note?.allowHtml ?? false;
 
+        // see https://atomiks.github.io/tippyjs/v5/all-props/
         let tippyProps: Partial<Props> = {
+          // the normal contents to show, maybe with html
           content: note.note,
+          // the theme to use - ATM a build in-theme and some custom css in `tippy.scss`
           theme: 'light',
+          // use a 'v' arrow at the bottom
           arrow: true,
-          delay: [null, null],
+          // custom delay/linger, default in 0
+          delay: [note.delay, note.linger],
+          // allow html in the content
           allowHTML: allowHtml,
                           
           // activate these to debug the styling in F12
           // trigger: 'click',
           // hideOnClick: false,
           // interactive: true,
+
+          // custom styling applied when it appears
           onMount: (instance) => {
+            // ATM only background color handled
             if (!note?.background) return;
             const content = instance.popper.querySelector('.tippy-content') as HTMLElement;
             // console.log('popper', content);
@@ -59,10 +68,11 @@ export class Command {
           }                
         };
 
-        // Experimental 16.02
+        // Experimental 16.02 - ATM used for insights /code-help Tippys only
         if (note.interactive)
           tippyProps = this.tippyMakeInteractive(tippyProps);
         
+        // If config has links, add them and enable interactive
         tippyProps = this.tippyAddLinks(tippyProps, note);
 
         if (debugTippy) console.log('Command-Tippy', note, tippyProps);
@@ -74,18 +84,29 @@ export class Command {
     };
   }
 
+  /**
+   * If config has links, add them and enable interactive
+   */
   private tippyAddLinks(tippyProps: Partial<Props>, note: Note) {
+    // If no links, return
     if (!note.links || note.links.length === 0) return tippyProps;
+    // Generate html for the links
     const html = note.links.map(l => `<a class="tippy-button ${l.primary ? 'tippy-button-primary': ''}" href="${l.url}" target="_blank">${l.label ?? '🔗 more'}</a>`);
     return {
+      // make interactive
       ...this.tippyMakeInteractive(tippyProps),
       allowHTML: true,
+      // content must be repacked, and links added at the bottom.
       content: `<div>${note.note}<div>
       <br>
       <div class="tippy-buttons">${html}</div>`,
     };
   } 
 
+  /**
+   * If it needs to be interactive, then changes are made to allow mouse to travel to it.
+   * eg. we need to append it to the body
+   */
   private tippyMakeInteractive(tippyProps: Partial<Props>) {
     return {
       ...tippyProps,
