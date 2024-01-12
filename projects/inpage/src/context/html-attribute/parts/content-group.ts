@@ -1,15 +1,22 @@
-﻿/**
+﻿import { ContentAppUnifiedInCtxAndAttr } from '../../parts/context-app';
+import { ContentBlockUnifiedInCtxAndAttr } from '../../parts/context-content-block';
+
+/**
  * @internal
  */
-export class AttrJsonContentGroup {
+export interface AttrJsonContentGroup extends ContentBlockUnifiedInCtxAndAttr, ContentAppUnifiedInCtxAndAttr {
   // ReSharper disable InconsistentNaming
   IsCreated: boolean;
   IsList: boolean;
   TemplateId: number;
   Edition: string;
   TemplatePath: string;
-  /** True if the template comes from the shared location - new in v13 */
-  TemplateIsShared: boolean;
+  // /**
+  //  * True if the template comes from the shared location - new in v13
+  //  * Changed to lower case in v17
+  //  */
+  // templateIsShared: boolean;
+
   QueryId: number | null;
   ContentTypeName: string;
   AppUrl: string;

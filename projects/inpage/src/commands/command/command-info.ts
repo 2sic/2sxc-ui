@@ -1,8 +1,7 @@
 ﻿import { CmsEngine, CommandNames, Commands } from '..';
 import { ContextComplete } from '../../context';
-import { TypeNoteMode } from '../../toolbar/config';
 import { iconPrefix, tlbI18nPrefix } from '../command';
-import { Note } from '../../toolbar/config/toolbar-button-settings';
+import { Note, TypeNoteMode } from '../../toolbar/config/Note';
 import { Debug } from '../../constants/debug';
 
 const debug = Debug.parts.commandInfo;

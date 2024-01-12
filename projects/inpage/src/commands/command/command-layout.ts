@@ -2,6 +2,7 @@
 import { QeSelectors } from '../../quick-edit';
 import { ContextForLists } from '../../quick-edit/context-for-lists';
 import { SxcTools } from '../../sxc/sxc-tools';
+import { Note } from '../../toolbar/config/Note';
 
 /**
  * import this module to commands.ts
@@ -26,4 +27,26 @@ Commands.add(CommandNames.layout, 'ChangeLayout', 'glasses', true, true, {
     }
     return CmsEngine.openDialog(context, event);
   },
+
+  
+  notes(context) {
+    // console.log(`2dm ctx`, context);
+
+    const app = context.app;
+    const cb = context.contentBlock;
+
+    const lightspeed = `<a href="https://go.2sxc.org/lightspeed" target="_blank">⚡ LightSpeed Cache</a>`
+    const renderTime = cb.renderLightspeed
+      ? `<strike>${cb.renderMs}ms</strike> 0ms using ${lightspeed}`
+      : `${cb.renderMs}ms (no ${lightspeed})`;
+
+    const stats = `App: ${app.appName} <br>
+    View: ${cb.viewName} <br>
+    Page: ${context.page.id}, Module: ${context.instance.id} <br>
+    ⌛ ${renderTime} <br>`;
+    const note = `<strong>Layout</strong> <br>
+    ${stats}`;
+    const noteObj = new Note({ type: 'info', note, allowHtml: true, background: '#DFC2F2', delay: 1000, interactive: true });
+    return [noteObj];
+  }
 });

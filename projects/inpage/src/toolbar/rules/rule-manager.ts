@@ -3,8 +3,8 @@ import { CommandNames } from '../../commands';
 import { Debug } from '../../constants/debug';
 import { ContextComplete } from '../../context';
 import { HasLog } from '../../core';
-import { Note } from '../config';
 import { ToolbarConfigLoader } from '../config-loaders';
+import { Note } from '../config/Note';
 import { BuildSteps } from './build-steps';
 import { addStandardObsoleteButtons } from './rules-obsolete-code';
 

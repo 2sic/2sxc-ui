@@ -1,7 +1,7 @@
 ﻿import tippy, { Props } from 'tippy.js';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { Button } from '../toolbar/config/button';
-import { Note } from '../toolbar/config/toolbar-button-settings';
+import { Note } from '../toolbar/config/Note';
 import { Debug } from '../constants/debug';
 
 export const iconPrefix = 'icon-sxc-';
@@ -35,7 +35,16 @@ export class Command {
       tippy: (ctx, tag) => {
         // get the rule and only continue if there is a note attached
         const ui = ContextComplete.getRule(ctx)?.ui;
-        const note = (ui?.note as Note);
+        let note = (ui?.note as Note);
+        
+        // if there is no specified note, see if the button definition would have one
+        if (!note && more.notes) {
+          debugger;
+          var notes = more.notes(ctx);
+          if (notes && notes.length > 0) note = notes[0];
+        }
+
+        // if no note, return
         if (!note?.note) return undefined;
 
         const allowHtml = note?.allowHtml ?? false;
@@ -64,7 +73,7 @@ export class Command {
             if (!note?.background) return;
             const content = instance.popper.querySelector('.tippy-content') as HTMLElement;
             // console.log('popper', content);
-            content.style.backgroundColor = note.background;
+            content.style.background = note.background;
           }                
         };
 
@@ -128,6 +137,11 @@ export class Command {
                 more: Partial<Button>,
                 ): Command {
     const cmd = new Command(name);
+    // debug entry
+    // if (name == 'layout') {
+    //   console.log('test 2dm: ' + name);
+    //   debugger;
+    // }
 
     // Toolbar API v2
     cmd.mergeDefaults(translateKey, icon, uiOnly, partOfPage, more);
