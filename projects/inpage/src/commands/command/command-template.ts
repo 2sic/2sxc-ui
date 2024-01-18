@@ -19,7 +19,7 @@ const cmd = Command.build(CommandNames.template, 'Develop', 'code', true, false,
     linkGenerator.items = [identifier];
   },
 
-  addParamsToLink: (ctx) => ({ isshared: ctx.contentBlock.TemplateIsShared }),
+  addParamsToLink: (ctx) => ({ isshared: ctx.contentBlock.templateIsShared }),
 
 });
 
