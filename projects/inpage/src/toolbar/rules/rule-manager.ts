@@ -63,9 +63,13 @@ export class RuleManager extends HasLog {
     // Skip if no problems reported
     const hasErr = !!context.system.error;
     if (hasErr) {
-      const note = new Note();
-      note.note = '<strong>Server Insights Logs</strong> can help <br> you debug server errors.';
-      note.allowHtml = true;
+      const note = new Note({
+        // type: 'error',
+        note: '<strong>Server Insights Logs</strong> can help <br> you debug server errors.',
+        asHtml: true,
+      });
+      // note.note = '<strong>Server Insights Logs</strong> can help <br> you debug server errors.';
+      // note.allowHtml = true;
       this.rules.push(BuildRule.Create({ name: CommandNames.insights, ui: { note, color: 'red' }, pos: 10, log: this.log }));
     }
 
@@ -84,13 +88,18 @@ export class RuleManager extends HasLog {
 
     // create rules to add the buttons for all remaining problems
     const rules = problems.map((p, i) => {
-      const note = new Note();
-      note.note = p.message?.replace('\n', '<br>');
+      const note = new Note({
+        type: p.severity,
+        note: p.message?.replace('\n', '<br>'),
+        asHtml: true,
+        interactive: true,
+      });
+      // note.note = p.message?.replace('\n', '<br>');
       if (p.link)
         note.links = [{ url: p.link, label: 'see docs', primary: true }];
-      note.type = p.severity;
-      note.allowHtml = true;
-      note.interactive = true;
+      // note.type = p.severity;
+      // note.allowHtml = true;
+      // note.interactive = true;
       return BuildRule.Create({ name: CommandNames.info, ui: { note }, params: { link: p.link }, pos: devInfoButtonsIndex + i, log: this.log });
     });
     if (debug) console.log('2dm - rules', rules);
