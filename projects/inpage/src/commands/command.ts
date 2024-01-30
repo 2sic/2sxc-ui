@@ -47,7 +47,7 @@ export class Command {
         // if no note, return
         if (!note?.note) return undefined;
 
-        const allowHtml = note?.allowHtml ?? false;
+        const allowHtml = note?.asHtml ?? false;
 
         // see https://atomiks.github.io/tippyjs/v5/all-props/
         let tippyProps: Partial<Props> = {

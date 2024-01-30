@@ -46,7 +46,15 @@ Commands.add(CommandNames.layout, 'ChangeLayout', 'glasses', true, true, {
     ⌛ ${renderTime} <br>`;
     const note = `<strong>Layout</strong> <br>
     ${stats}`;
-    const noteObj = new Note({ type: 'info', note, allowHtml: true, background: '#DFC2F2', delay: 1000, interactive: true });
+
+    const noteObj = new Note({
+      type: 'info',
+      note,
+      asHtml: true,
+      background: '#DFC2F2',
+      delay: 1000,
+      interactive: true
+    });
     return [noteObj];
   }
 });

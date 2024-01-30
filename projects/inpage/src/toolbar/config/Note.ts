@@ -28,7 +28,7 @@ export class Note {
    * allowHtml - ATM not used - could change
    * @internal
    */
-  allowHtml?: boolean;
+  asHtml?: boolean;
 
   /**
    * ATM not used - could change
