@@ -207,9 +207,14 @@ export class CmsEngine extends HasLog {
 
   static applyLinkToButton(event: MouseEvent, link: string, target: string): boolean {
     if (debug) console.log('applyLinkToButton', event, link, target);
-    let tag = event.target as HTMLElement;
+
+    // Get clicked tag from event and try to find a parent link tag
+    // event can be unknown, eg. when triggered from the Dnn-Module-Menu https://github.com/2sic/2sxc/issues/3280
+    let tag = event?.target as HTMLElement;
     while (tag != null && tag.tagName !== 'A') tag = tag.parentElement;
-    if (!tag) {
+
+    // If we didn't find an A tag, we can't apply the link. Return false so the caller handles it.
+    if (tag == null) {
       if (debug) console.log('no tag found, returning false');
       return false;
     }
