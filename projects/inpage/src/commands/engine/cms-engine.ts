@@ -15,7 +15,7 @@ import { ToolbarWorkflowManager } from '../../workflow/toolbar-workflow-manager'
 import { WorkflowStep } from '../../workflow/workflow-step';
 import { CommandLinkGenerator } from '../command-link-generator';
 
-const debug = true;
+const debug = false;
 
 type CommandPromise<T> = Promise<T|void>;
 
