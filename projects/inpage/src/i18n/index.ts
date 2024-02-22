@@ -5,7 +5,7 @@ export const primaryLanguage = 'en';
 /**
  * @internal
  */
-export const translations = ['en', 'de', 'fr', 'it', 'uk', 'nl'];
+export const translations = ['en', 'de', 'fr', 'fa', 'it', 'uk', 'nl'];
 /**
  * @internal
  */
