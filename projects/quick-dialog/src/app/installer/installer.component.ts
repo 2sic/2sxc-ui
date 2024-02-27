@@ -38,6 +38,7 @@ export class InstallerComponent implements OnInit {
     private api: AppInstallSettingsService,
     private sanitizer: DomSanitizer,
   ) {
+    // copied to eav-ui file-upload-dialog
     this.subscriptions.push(
       this.api.settings$.subscribe(settings => {
         this.settings = settings;
@@ -62,6 +63,7 @@ export class InstallerComponent implements OnInit {
 
   private alreadyProcessing = false;
 
+  // copied to eav-ui file-upload-dialog
   // Initial Observable to monitor messages
   private messages$ = fromEvent(window, 'message').pipe(
 
@@ -94,6 +96,7 @@ export class InstallerComponent implements OnInit {
       tap(() => { console.log('test message received'); }),
     ).subscribe());
 
+    // copied to eav-ui file-upload-dialog
     // Subscription to listen to 'specs' messages
     this.subscriptions.push(this.messages$.pipe(
       // Verify it's for this action
@@ -115,6 +118,7 @@ export class InstallerComponent implements OnInit {
       }),
     ).subscribe());
 
+    // copied to eav-ui file-upload-dialog
     // Subscription to listen to 'install' messages
     this.subscriptions.push(this.messages$.pipe(
       filter(data => data.action === 'install'),
