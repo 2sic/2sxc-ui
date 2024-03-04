@@ -7,6 +7,7 @@ import { log } from 'app/core/log';
 import { Constants } from 'app/core/constants';
 import { InstallSettings } from './installer-models';
 
+// copied to eav-ui
 @Injectable()
 export class AppInstallSettingsService {
 

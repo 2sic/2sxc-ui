@@ -8,6 +8,7 @@ import { HttpClient } from '@angular/common/http';
 import { Constants } from 'app/core/constants';
 import { InstallPackage } from './messages';
 
+// copied to eav-ui
 @Injectable()
 export class InstallerService {
 
