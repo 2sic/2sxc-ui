@@ -1,7 +1,14 @@
 /**
+ * Special variable which is filled in during compile by the definePlugin
+ */
+declare const IsDevBuild: boolean;
+
+
+/**
  * @internal
  */
 export const Debug = {
+  isDevBuild: IsDevBuild,
   cms: {
     autoDump: false,
     run: true,

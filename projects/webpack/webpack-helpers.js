@@ -9,6 +9,7 @@ const rootVersion = rootPackage.version;
 function createDefinePlugin(webpack) {
   return new webpack.DefinePlugin({
     ROOTVERSION: JSON.stringify(rootVersion),
+    IsDevBuild: !process.env.NODE_ENV || process.env.NODE_ENV === 'development', // null or 'development'
   });
 }
 

@@ -52,3 +52,7 @@ import './dnn/index';
 
 
 import './styles/index.scss';
+import { Debug } from './constants/debug';
+
+if (Debug.isDevBuild)
+  console.log('2sxc inpage - dev mode!');
