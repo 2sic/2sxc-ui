@@ -51,3 +51,22 @@ export const AppApiMap = {
  * @internal
  */
 export const NumberNotDefinedHuge = 274200000000;
+
+// Moving to here because it's used in inpage and $2sxc
+
+/**
+ * Attribute Names used in the HTML
+ */
+export const Attributes = {
+  InstanceId: 'data-cb-instance',
+  Context: 'data-edit-context',
+  ContentBlockId: 'data-cb-id',
+};
+
+export const C = {
+  Attributes: Attributes,
+  Sel: {
+    SxcDivs: `div[${Attributes.Context}]`,
+  },
+
+}

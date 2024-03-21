@@ -1,4 +1,4 @@
-﻿import { SxcGlobalEnvironment } from './../environment/sxc-global-environment';
+﻿import { SxcGlobalEnvironment } from '../environment/sxc-global-environment';
 import { ContextIdentifier } from '../sxc-global/context-identifier';
 import { SxcWebApi } from './web-api/sxc-web-api';
 import { ApiUrlRoots, HasLog, ToSxcName } from '../../../core';
@@ -9,14 +9,12 @@ import { SxcCms } from './sxc-cms';
 import { SxcGlobal } from '../sxc-global/sxc-global';
 import { SxcGlobalHttp } from '../sxc-global/sxc-global-http';
 import { EnvironmentSpecs } from '../environment/environment-specs';
-import { InstanceContext } from '../dom/instance-context';
-import { DomTools } from '../dom/dom-tools';
 
 /**
 * The typical sxc-instance object for a specific DNN module or content-block
 * @public
 */
-export class Sxc extends HasLog {
+export class SxcInstance extends HasLog {
   /** @internal */
   private _isSxcInstance = true;
 
@@ -102,9 +100,12 @@ export class Sxc extends HasLog {
   private loadEnv(root: SxcGlobal): { env: SxcGlobalEnvironment, http: SxcGlobalHttp } {
     // get the JsApi from the JSON attribute using the inpage `manage` object
     // will only exist if JsCms is active!
-    let localEnv = ((this.manage as any)?.editContext as InstanceContext)?.JsApi
-      // Try the JsApi from the JSON attribute directly
-      ?? DomTools.getContext(this)?.JsApi;
+    const localEnv = (this.manage as any)?.editContext?.JsApi as EnvironmentSpecs;
+
+    // Try the JsApi from the JSON attribute directly
+    if (!localEnv) {
+      var node = this;
+    }
 
     if (!localEnv) return { env: root.env, http: root.http };
     const rootEnv = (root.env as any).headers as EnvironmentSpecs;
@@ -199,8 +200,8 @@ export class Sxc extends HasLog {
     // let's try to show good messages in most cases
     let infoText = 'Had an error talking to the server (status ' + result.status + ').';
     const srvResp = result.responseText
-      ? JSON.parse(result.responseText) // for jquery ajax errors
-      : result.data; // for angular $http
+    ? JSON.parse(result.responseText) // for jquery ajax errors
+    : result.data; // for angular $http
     if (srvResp) {
       const msg = srvResp.Message;
       if (msg) infoText += '\nMessage: ' + msg;

@@ -1,7 +1,6 @@
 import { Sxc } from '../../../$2sxc/src/sxc/sxc';
 import { C } from '../constants';
-import { SxcTools } from '../sxc/sxc-tools';
-
+import { DomTools } from '../../../$2sxc/src/dom/dom-tools';
 /**
  * @internal
  */
@@ -12,7 +11,7 @@ export class HtmlTools {
     }
 
     static isDisabled(sxc: Sxc): boolean {
-        const tag = SxcTools.getTag(sxc);
+        const tag = DomTools.getTag(sxc);
         return !!tag.getAttribute(C.Toolbar.attr.disable);
     }
 

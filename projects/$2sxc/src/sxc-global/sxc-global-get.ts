@@ -31,7 +31,8 @@ export function $2sxcGet(id: number | ContextIdentifier | HTMLElement | Sxc, cbi
         ctx = ContextIdentifier.ensureCompleteOrThrow(id);
         // get moduleId or create fake, based on zone and app because this is used to identify the object in the cache
         id = ctx.moduleId ?? ctx.zoneId * 100000 + ctx.appId;
-    } else if (id instanceof HTMLElement && id.matches(toolbarSelector) && !id.closest(sxcDivsSelector)) {
+    }
+    else if (id instanceof HTMLElement && id.matches(toolbarSelector) && !id.closest(sxcDivsSelector)) {
         // for toolbars that are not inside 2sxc modules (e.g. in skin)
         const contextAttr = 'sxc-context';
         const contextAttribute = id.getAttribute(contextAttr);

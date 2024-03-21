@@ -6,12 +6,11 @@ import { EditManager } from '../manage/edit-manager';
 import { NoJQ } from '../plumbing';
 import { QuickDialog } from '../quick-dialog';
 import * as QuickEditState from '../quick-dialog/state';
-import { SxcTools } from '../sxc/sxc-tools';
 import { toolbarSelector } from '../toolbar';
 import { monitorSvgIconsInToolbar } from '../toolbar/render/svg-icons';
 import { TagToolbarManager } from '../toolbar/tag-toolbars/tag-toolbar-manager';
 import { ToolbarManager } from '../toolbar/toolbar-manager';
-
+import { DomTools } from '../../../$2sxc/src/dom/dom-tools';
 /**
  * This contains everything necessary to bootstrap the edit mode.
  * It must be initialized and started at the end in the x-bootstrap code,
@@ -211,7 +210,7 @@ export class BootstrapInPage extends HasLog {
             return callLog.return(false, 'is initialized');
 
         // already has a glasses button
-        const tag = SxcTools.getTag(sxci);
+        const tag = DomTools.getTag(sxci);
         if (tag.querySelectorAll<HTMLElement>(`.${C.ClsNames.UnInitialized}`).length !== 0)
             return callLog.return(false, 'already has button');
 

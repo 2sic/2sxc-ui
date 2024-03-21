@@ -1,9 +1,8 @@
 ﻿import { CmsEngine, CommandNames, Commands } from '..';
 import { QeSelectors } from '../../quick-edit';
 import { ContextForLists } from '../../quick-edit/context-for-lists';
-import { SxcTools } from '../../sxc/sxc-tools';
 import { Note } from '../../toolbar/config/Note';
-
+import { DomTools } from '../../../../$2sxc/src/dom/dom-tools';
 /**
  * import this module to commands.ts
  * @internal
@@ -18,7 +17,7 @@ Commands.add(CommandNames.layout, 'ChangeLayout', 'glasses', true, true, {
     // if this fails, try to find it based on the sxc-instance
     const attrSel = '[' + QeSelectors.blocks.cb.context + ']';
     // note: sometimes when the page loads, this can be auto-triggered and not have an event
-    const listSpecs = SxcTools.getTag(context.sxc).closest<HTMLElement>(attrSel);
+    const listSpecs = DomTools.getTag(context.sxc).closest<HTMLElement>(attrSel);
 
     // Now check if we have apps-parameters to pass on
     if (listSpecs) {

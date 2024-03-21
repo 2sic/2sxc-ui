@@ -5,9 +5,10 @@
   QuickEClipboard,
   Selection,
 } from ".";
-import { SxcTools } from "../sxc/sxc-tools";
 import { ContextForLists } from "./context-for-lists";
 import { ModifierContentBlockInstance } from "./modifier-content-block-internal";
+import { DomTools } from '../../../$2sxc/src/dom/dom-tools';
+import { AttrJsonEditContext } from '../context/html-attribute/edit-context-root';
 
 /**
  * extend the quick edit with the core commands
@@ -76,7 +77,7 @@ export class ModifierContentBlock extends ModifierBase {
    * TODO: @2dm - not really sure what this is, should be documented more clearly
    */
   findListIndex(tag: HTMLElement, fallback: number): number {
-    const editContext = SxcTools.getEditContextOfTag(tag);
+    const editContext = DomTools.getContextOfTag(tag) as AttrJsonEditContext;
     const listIndex = editContext?.contentBlockReference?.parentIndex ?? fallback;
     return listIndex;
   }
