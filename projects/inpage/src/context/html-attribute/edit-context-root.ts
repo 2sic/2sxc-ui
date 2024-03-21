@@ -18,5 +18,5 @@ export class AttrJsonEditContext implements InstanceContext {
   error: ContextErrorJsonAndObj;
   Ui: AttrJsonUi;
 
-  JsApi: EnvironmentSpecs;
+  jsApi: EnvironmentSpecs;
 }
