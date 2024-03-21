@@ -102,9 +102,9 @@ export class Sxc extends HasLog {
   private loadEnv(root: SxcGlobal): { env: SxcGlobalEnvironment, http: SxcGlobalHttp } {
     // get the JsApi from the JSON attribute using the inpage `manage` object
     // will only exist if JsCms is active!
-    let localEnv = ((this.manage as any)?.editContext as InstanceContext)?.JsApi
+    let localEnv = ((this.manage as any)?.editContext as InstanceContext)?.jsApi
       // Try the JsApi from the JSON attribute directly
-      ?? DomTools.getContext(this)?.JsApi;
+      ?? DomTools.getContext(this)?.jsApi;
 
     if (!localEnv) return { env: root.env, http: root.http };
     const rootEnv = (root.env as any).headers as EnvironmentSpecs;

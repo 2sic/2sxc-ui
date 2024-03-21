@@ -16,5 +16,5 @@ export interface InstanceContext {
 
   // error: ContextErrorJsonAndObj;
   // Ui: AttrJsonUi;
-  JsApi: EnvironmentSpecs;
+  jsApi: EnvironmentSpecs;
 }
