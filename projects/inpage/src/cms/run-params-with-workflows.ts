@@ -1,4 +1,4 @@
-import { RunParams } from '../../../$2sxc/src/cms';
+import { RunParams } from '../../../$2sxc/src/cms/run-params';
 import { WorkflowStep } from '../workflow';
 
 /**

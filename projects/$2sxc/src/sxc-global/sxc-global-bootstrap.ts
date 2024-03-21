@@ -1,10 +1,12 @@
 ﻿import { TotalPopup } from '../tools/total-popup';
 import { UrlParams } from '../tools/url-params';
 import { Stats } from '../Stats';
-import { SxcGlobalDebug, SxcGlobal, SxcGlobalEnvironment } from '..';
 import { Insights, Log, SxcVersion } from '../../../core';
 import { $2sxcGet } from './sxc-global-get';
 import { SxcGlobalHttp } from './sxc-global-http';
+import { SxcGlobal } from './sxc-global';
+import { SxcGlobalDebug } from './sxc-global-debug';
+import { SxcGlobalEnvironment } from '../environment/sxc-global-environment';
 
 
 /**
@@ -23,8 +25,7 @@ export function buildSxcRoot(): SxcGlobal {
         get: $2sxcGet,
         _controllers: {} as any,
         beta: {},
-        // 2022-06-01 2dm disabled, believe this is for the old .data
-        // _data: {},
+
         // this creates a full-screen iframe-popup and provides a close-command to finish the dialog as needed
         totalPopup: new TotalPopup(),
         urlParams: urlManager,
@@ -35,18 +36,6 @@ export function buildSxcRoot(): SxcGlobal {
         stats: stats,
         insights: (partName: string, index?: number, start?: number, length?: number) => Insights.show(partName, index, start, length),
         _insights: Insights,
-
-        // 2022-06-01 2dm removed, don't think this is used anywhere
-        // mini-helpers to manage 2sxc parts, a bit like a dependency loader
-        // which will optimize to load min/max depending on debug state
-        // parts: {
-        //     getUrl(url: string, preventUnmin: boolean) {
-        //         // let r = url;// (preventUnmin || !debug.load) ? url : url.replace('.min', ''); // use min or not
-        //         if (debug.uncache && url.indexOf('sxcver') === -1)
-        //             return url + ((url.indexOf('?') === -1) ? '?' : '&') + 'sxcver=' + debug.uncache;
-        //         return url;
-        //     },
-        // },
     };
 
     const merged = Object.assign($2sxcGet, addOn, rootApiV2) as SxcGlobal;

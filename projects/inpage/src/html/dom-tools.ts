@@ -1,4 +1,4 @@
-import { Sxc } from '../../../$2sxc/src';
+import { Sxc } from '../../../$2sxc/src/sxc/sxc';
 import { C } from '../constants';
 import { SxcTools } from '../sxc/sxc-tools';
 

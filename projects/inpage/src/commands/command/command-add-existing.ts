@@ -1,5 +1,5 @@
 ﻿import { CmdParHlp, CommandNames, Commands } from '..';
-import { ItemIdentifierInList } from '../../../../$2sxc/src/cms';
+import { ItemIdentifierInList } from '../../../../$2sxc/src/cms/item-identifiers';
 import { SharedLogic } from './shared-logic';
 
 /**

@@ -1,6 +1,6 @@
-import { EnvironmentSpecs } from '..';
 import { Log } from '../../../core';
 import { EnvironmentMetaLoader } from './env-loader-meta';
+import { EnvironmentSpecs } from './environment-specs';
 
 const InputValue = 'value';
 

@@ -1,4 +1,4 @@
-﻿import { Sxc } from '../../../../$2sxc/src';
+﻿import { Sxc } from '../../../../$2sxc/src/sxc/sxc';
 import { Obj } from '../../plumbing';
 import { SxcTools } from '../../sxc/sxc-tools';
 import { Button } from '../../toolbar/config/button';

@@ -1,7 +1,7 @@
-import { EnvironmentSpecs } from '..';
 import { EnvironmentMetaLoader } from './env-loader-meta';
 import { HasLog, Insights, SxcApiUrlRoot } from '../../../core';
 import { AntiForgeryTokenHeaderNameDnn, DnnUiRoot, PlatformDnn } from '../constants';
+import { EnvironmentSpecs } from './environment-specs';
 
 declare const _jsApi: EnvironmentSpecs;
 

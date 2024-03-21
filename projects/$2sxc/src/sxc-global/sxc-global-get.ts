@@ -1,5 +1,7 @@
-﻿import { Sxc, SxcGlobal } from '..';
+﻿
+import { Sxc } from '../sxc/sxc';
 import { ContextIdentifier } from './context-identifier';
+import { SxcGlobal } from './sxc-global';
 
 declare const window: Window;
 // TODO: copied from selectors in inpage project. Probably best to move selectors from inpage to core

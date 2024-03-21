@@ -1,5 +1,5 @@
-﻿import { SxcManage } from '../../../$2sxc/src';
-import { RunParamsWithContext } from '../../../$2sxc/src/cms';
+﻿import { SxcManage } from '../../../$2sxc/src/sxc/sxc-manage';
+import { RunParamsWithContext } from '../../../$2sxc/src/cms/run-params';
 import { SxcGlobalCms } from '../cms/sxc-global-cms';
 import { CommandParams } from '../commands';
 import { ContextComplete } from '../context/bundles/context-bundle-button';

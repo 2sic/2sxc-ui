@@ -1,5 +1,5 @@
 ﻿import { ContextBundleContent, ContextComplete } from '.';
-import { Sxc } from '../../../../$2sxc/src';
+import { Sxc } from '../../../../$2sxc/src/sxc/sxc';
 import { Button } from '../../toolbar/config/button';
 import { Toolbar } from '../../toolbar/config/toolbar';
 import { AttrJsonEditContext } from '../html-attribute';

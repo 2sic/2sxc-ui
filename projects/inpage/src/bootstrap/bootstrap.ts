@@ -1,4 +1,4 @@
-import { Sxc } from '../../../$2sxc/src';
+import { Sxc } from '../../../$2sxc/src/sxc/sxc';
 import { CommandNames, iconPrefix } from '../commands';
 import { C } from '../constants';
 import { HasLog, Insights, Log } from '../core';

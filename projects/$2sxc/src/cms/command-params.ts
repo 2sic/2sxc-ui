@@ -1,5 +1,7 @@
-﻿import { CommandNames, ItemIdentifierInList, ItemIdentifierSimple, CommandParamsMetadata } from '.';
-import { TypeValue } from '../../../core/plumbing/type-value';
+﻿import { TypeValue } from '../../../core/plumbing/type-value';
+import { CommandNames } from './command-names';
+import { CommandParamsMetadata } from './command-params-metadata';
+import { ItemIdentifierInList, ItemIdentifierSimple } from './item-identifiers';
 
 /**
  * Command parameters are handed over to a command for execution.

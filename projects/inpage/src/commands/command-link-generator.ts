@@ -1,5 +1,6 @@
 ﻿import { CmdParHlp } from '.';
-import { CommandParams, ItemIdentifierCopy, ItemIdentifierInList, ItemIdentifierSimple, TemplateIdentifier } from '../../../$2sxc/src/cms';
+import { CommandParams } from '../../../$2sxc/src/cms/command-params';
+import { ItemIdentifierCopy, ItemIdentifierInList, ItemIdentifierSimple, TemplateIdentifier } from '../../../$2sxc/src/cms/item-identifiers';
 import { C } from '../constants';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { HasLog, Log } from '../core';

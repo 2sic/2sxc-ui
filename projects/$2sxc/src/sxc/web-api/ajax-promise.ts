@@ -1,6 +1,7 @@
-import { Sxc, SxcWebApi } from '..';
 import { NoJQ } from '../../../../core';
+import { Sxc } from '../sxc';
 import { ZzzAjaxSettingsDeprecated } from './ajax-settings';
+import { SxcWebApi } from './sxc-web-api';
 
 /** @internal */
 export class AjaxPromise {

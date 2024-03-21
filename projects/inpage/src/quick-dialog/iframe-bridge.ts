@@ -1,5 +1,5 @@
 ﻿import { QuickDialogContainer } from '.';
-import { Sxc } from '../../../$2sxc/src';
+import { Sxc } from '../../../$2sxc/src/sxc/sxc';
 import { IIFrameBridge } from '../../../connect-parts/inpage-quick-dialog';
 import { IQuickDialogConfig } from '../../../connect-parts/inpage-quick-dialog';
 import { ContentBlockEditor } from '../contentBlock/content-block-editor';

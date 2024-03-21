@@ -5,8 +5,10 @@ import { ApiUrlRoots, HasLog, ToSxcName } from '../../../core';
 import { SxcManage } from './sxc-manage';
 import { SxcData } from './data/sxc-data';
 import { SxcQuery } from './data/sxc-query';
-import { EnvironmentSpecs, SxcGlobal, SxcGlobalHttp } from '..';
 import { SxcCms } from './sxc-cms';
+import { SxcGlobal } from '../sxc-global/sxc-global';
+import { SxcGlobalHttp } from '../sxc-global/sxc-global-http';
+import { EnvironmentSpecs } from '../environment/environment-specs';
 
 /**
 * The typical sxc-instance object for a specific DNN module or content-block

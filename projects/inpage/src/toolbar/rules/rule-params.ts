@@ -1,4 +1,4 @@
-import { CommandParamsMetadata } from '../../../../$2sxc/src/cms';
+import { CommandParamsMetadata } from '../../../../$2sxc/src/cms/command-params-metadata';
 import { TypeValue } from '../../plumbing';
 
 /**
