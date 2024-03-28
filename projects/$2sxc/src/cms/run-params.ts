@@ -1,4 +1,5 @@
-import { ContextIdentifier, Sxc } from '..';
+import { ContextIdentifier } from '../sxc-global/context-identifier';
+import { Sxc } from '../sxc/sxc';
 import { CommandNames } from './command-names';
 import { CommandParams } from './command-params';
 

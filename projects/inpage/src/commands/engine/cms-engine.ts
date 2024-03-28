@@ -1,5 +1,5 @@
-﻿import { RunParams } from '../../../../$2sxc/src/cms';
-import { CommandParams } from '../../../../$2sxc/src/cms';
+﻿import { RunParams } from '../../../../$2sxc/src/cms/run-params';
+import { CommandParams } from '../../../../$2sxc/src/cms/command-params';
 import { RunParamsHelpers } from '../../cms/run-params-helpers';
 import { ContentBlockEditor } from '../../contentBlock/content-block-editor';
 import { renderer } from '../../contentBlock/render';

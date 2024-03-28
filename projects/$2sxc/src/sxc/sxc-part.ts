@@ -1,4 +1,4 @@
-import { Sxc } from '..';
+import { Sxc } from './sxc';
 
 /**
  * Base class for anything attached to an sxc-instance.

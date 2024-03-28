@@ -1,4 +1,5 @@
-﻿import { Sxc, SxcGlobalManage as ISxcGlobalManage } from '../../../$2sxc/src';
+﻿import { Sxc } from '../../../$2sxc/src/sxc/sxc';
+import { SxcGlobalManage as ISxcGlobalManage } from '../../../$2sxc/src/sxc-global/sxc-global-manage';
 import { ContextComplete } from '../context';
 import { SxcCmsReal } from '../sxc/sxc-cms-real';
 import { SxcTools } from '../sxc/sxc-tools';

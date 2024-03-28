@@ -1,6 +1,6 @@
-import { Sxc } from '..';
-import { MetadataTargetTypes } from '../../data';
 import { MetadataFor } from '../../data/metadata-for';
+import { MetadataTargetTypes } from '../../data/target-types';
+import { Sxc } from '../sxc';
 import { SxcDataServiceBase } from './sxc-data-service-base';
 
 const ContentApiRoot = 'app/auto/data';

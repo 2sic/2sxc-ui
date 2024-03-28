@@ -1,9 +1,9 @@
-import { EnvironmentSpecs } from '..';
-import { SxcGlobalEnvironment } from '.';
 import { EnvironmentDnnSfLoader } from './env-loader-dnn-sf';
 import { MetaHeaderJsApi, PlatformOqtane } from '../constants';
 import { HasLog, Log } from '../../../core';
 import { EnvironmentLoaderDynamic } from './env-loader-dynamic';
+import { SxcGlobalEnvironment } from './sxc-global-environment';
+import { EnvironmentSpecs } from './environment-specs';
 
 // temp: usually 10, but because Oqtane has some delays, we'll temporarily increase to 100 till we're safe
 const maxRetries = 100;

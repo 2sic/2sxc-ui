@@ -1,7 +1,7 @@
-import { SxcGlobalEnvironment } from '.';
 import { HasLog, NoJQ } from '../../../core';
-import { EnvironmentSpecs } from '..';
 import { AntiForgeryTokenHeaderNameDnn, DnnUiRoot, PlatformDnn } from '../constants';
+import { EnvironmentSpecs } from './environment-specs';
+import { SxcGlobalEnvironment } from './sxc-global-environment';
 
 const helpAutoDetect = 'You must either include jQuery on the page or inject the jsApi parameters to prevent auto-detection.';
 declare const window: Window;

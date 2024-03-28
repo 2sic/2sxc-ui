@@ -1,4 +1,5 @@
-import { Sxc } from '..';
+import { Sxc } from '../sxc/sxc';
+
 
 /**
  * @internal

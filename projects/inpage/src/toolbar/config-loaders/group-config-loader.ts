@@ -1,7 +1,7 @@
 ﻿import { ToolbarWip } from '.';
 import { InPageButtonJson, InPageCommandJson } from '.';
 import { ButtonGroupWip } from '.';
-import { RunParams } from '../../../../$2sxc/src/cms';
+import { RunParams } from '../../../../$2sxc/src/cms/run-params';
 import { CommandNames, CommandParams, Commands } from '../../commands';
 import { HasLog } from '../../core';
 import { TypeValue } from '../../plumbing';

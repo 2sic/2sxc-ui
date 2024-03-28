@@ -1,6 +1,6 @@
 import { SxcPart } from './sxc-part';
 import { RunParams } from '../cms/run-params';
-import { Sxc } from '.';
+import { Sxc } from './sxc';
 
 /**
  * This is in charge of sxc.cms on the instance level.

@@ -1,5 +1,5 @@
 ﻿import { QuickDialogContainer } from '.';
-import { Sxc } from '../../../$2sxc/src';
+import { Sxc } from '../../../$2sxc/src/sxc/sxc';
 import { IIFrameBridge } from '../../../connect-parts/inpage-quick-dialog';
 import { IQuickDialogConfig } from '../../../connect-parts/inpage-quick-dialog';
 import { ContentBlockEditor } from '../contentBlock/content-block-editor';
@@ -8,9 +8,9 @@ import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { HasLog, NoJQ } from '../core';
 import { EditManager } from '../manage/edit-manager';
 import { TypeUnsafe } from '../plumbing/TypeTbD';
-import { SxcTools } from '../sxc/sxc-tools';
 import { QuickDialog } from './quick-dialog';
 import { QuickDialogConfig } from './quick-dialog-config';
+import { DomTools } from '../../../$2sxc/src/dom/dom-tools';
 
 const scrollTopOffset: number = 80;
 const animationTime: number = 400;
@@ -116,7 +116,7 @@ export class IFrameBridge extends HasLog implements IIFrameBridge {
 
         this.changed = false;
         this.instanceSxc = sxc;
-        this.tagModule = SxcTools.getTag(sxc).parentElement;
+        this.tagModule = DomTools.getTag(sxc).parentElement;
         this.sxcCacheKey = sxc.cacheKey;
         if (dialogName) this.dialogName = dialogName;
         cl.done();

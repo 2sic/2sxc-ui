@@ -23,8 +23,7 @@ export abstract class HasLog {
    */
   constructor(
     logName: string,
-    /** @internal */
-    private parentLog?: Log,
+    parentLog?: Log,
     initialMessage?: string,
   ) {
     this.initLogInternal(logName, parentLog, initialMessage);
@@ -36,16 +35,17 @@ export abstract class HasLog {
 
   /** @internal */
   private initLogInternal(name: string, parentLog?: Log, initialMessage?: string): void {
-    if (this.log == null)
-        // standard & most common case: just create log
-        this.log = new Log(name, parentLog, initialMessage);
-    else {
-    // late-init case, where the log was already created - just reconfig keeping what was in it
-      this.log.rename(name);
-      this.log.linkLog(parentLog);
-      if (initialMessage != null)
-        this.log.add(initialMessage);
+    // standard & most common case: just create new log
+    if (this.log == null) {
+      this.log = new Log(name, parentLog, initialMessage);
+      return;
     }
+
+    // late-init case, where the log was already created - just reconfig keeping what was in it
+    this.log.rename(name);
+    this.log.linkLog(parentLog);
+    if (initialMessage != null)
+      this.log.add(initialMessage);
   }
 
 }

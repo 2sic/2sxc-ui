@@ -1,4 +1,4 @@
-import { Sxc } from '..';
+import { Sxc } from '../sxc';
 import { SxcPart } from '../sxc-part';
 import { SxcWebApi } from '../web-api/sxc-web-api';
 

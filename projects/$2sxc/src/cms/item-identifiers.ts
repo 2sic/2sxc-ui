@@ -1,5 +1,5 @@
-import { CommandParamsMetadata } from '.';
 import { TypeValue } from '../../../inpage/src/plumbing';
+import { CommandParamsMetadata } from './command-params-metadata';
 
 // NOTE: THESE ITEM IDENTIFIERS SHOULD PROBABLY ALWAYS REMAIN INTERNAL
 // As we need the flexibility to change them, without breaking public APIs

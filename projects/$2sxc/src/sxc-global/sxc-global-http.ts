@@ -1,6 +1,7 @@
 import { ApiExtensionPlaceholder } from '../constants';
 import { AppApiMarker, HasLog, HeaderNames, ToSxcName } from '../../../core';
-import { ContextIdentifier, SxcGlobalEnvironment } from '..';
+import { SxcGlobalEnvironment } from '../environment/sxc-global-environment';
+import { ContextIdentifier } from './context-identifier';
 
 /**
  * Global HTTP Service for information and helpers on `$2sxc.http`
