@@ -48,6 +48,12 @@ export class Note {
    */
   linger?: number;
 
+  /**
+   * indicates that this is a system note, which is usually a different color
+   * @internal
+   */
+  isSystem?: boolean;
+
   public static toJson64String(note: Note): string {
     return `${prefixJson64}${window.btoa(JSON.stringify(note))}`;
   }

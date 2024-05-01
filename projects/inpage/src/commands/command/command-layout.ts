@@ -56,9 +56,9 @@ Commands.add(CommandNames.layout, 'ChangeLayout', 'glasses', true, true, {
       type: 'info',
       note,
       asHtml: true,
-      background: '#DFC2F2',
-      delay: 250,
-      interactive: true
+      delay: 500,
+      interactive: true,
+      isSystem: true,
     });
     return [noteObj];
   }
