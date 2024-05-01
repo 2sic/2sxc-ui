@@ -18,6 +18,13 @@ export interface AttrJsonContentGroup extends ContentBlockUnifiedInCtxAndAttr, C
   // templateIsShared: boolean;
 
   QueryId: number | null;
+
+  /** new 17.07 */
+  queryName: string;
+  
+  /** new 17.07 */
+  queryInfo: string;
+
   ContentTypeName: string;
   AppUrl: string;
   AppSettingsId: number;
@@ -30,4 +37,5 @@ export interface AttrJsonContentGroup extends ContentBlockUnifiedInCtxAndAttr, C
   Guid: string;
   Id: number;
   // ReSharper restore InconsistentNaming
+
 }

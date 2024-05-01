@@ -40,10 +40,15 @@ Commands.add(CommandNames.layout, 'ChangeLayout', 'glasses', true, true, {
       ? `<strike>${cb.renderMs}ms</strike> 0ms using ${lightspeed}`
       : `${cb.renderMs}ms (no ${lightspeed})`;
 
-    const stats = `App: ${app.appName} <br>
+    const queryInfo = cb.queryName ? `Query: ${cb.queryName} <br>${cb.queryInfo}<br>` : '';
+
+    const stats = `
+    App: ${app.appName} <br>
     View: ${cb.viewName} <br>
+    ${queryInfo}
     Page: ${context.page.id}, Module: ${context.instance.id} <br>
-    ⌛ ${renderTime} <br>`;
+    ⌛ ${renderTime} <br>
+    `;
     const note = `<strong>Layout</strong> <br>
     ${stats}`;
 

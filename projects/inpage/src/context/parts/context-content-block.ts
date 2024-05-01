@@ -33,6 +33,10 @@ export class ContextOfContentBlock extends ContentBlockUnifiedInCtxAndAttr {
   isCreated: boolean;
   isList: boolean;
   queryId: number;
+  /** new v17.07 for layout-info only ATM */
+  queryName: string;
+  /** new v17.07 for layout-info only ATM */
+  queryInfo: string;
   templateId: number;
   contentTypeId: string;
   contentGroupId: string;
@@ -53,7 +57,10 @@ export class ContextOfContentBlock extends ContentBlockUnifiedInCtxAndAttr {
     if (!cb) return;
     this.isCreated = cb.IsCreated;
     this.isList = cb.IsList;
+
     this.queryId = cb.QueryId;
+    this.queryName = cb.queryName;
+    this.queryInfo = cb.queryInfo;
     this.templateId = cb.TemplateId;
     this.templatePath = cb.TemplatePath;
     this.templateIsShared = cb.templateIsShared;
