@@ -3,6 +3,7 @@ import { QeSelectors } from '../../quick-edit';
 import { ContextForLists } from '../../quick-edit/context-for-lists';
 import { Note } from '../../toolbar/config/Note';
 import { DomTools } from '../../../../$2sxc/src/dom/dom-tools';
+import { Debug } from '../../constants/debug';
 /**
  * import this module to commands.ts
  * @internal
@@ -29,7 +30,7 @@ Commands.add(CommandNames.layout, 'ChangeLayout', 'glasses', true, true, {
 
   
   notes(context) {
-    // console.log(`2dm ctx`, context);
+    Debug.log(`2dm ctx`, context);
 
     const app = context.app;
     const cb = context.contentBlock;
