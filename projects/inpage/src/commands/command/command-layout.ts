@@ -30,7 +30,7 @@ Commands.add(CommandNames.layout, 'ChangeLayout', 'glasses', true, true, {
 
   
   notes(context) {
-    Debug.log(`2dm ctx`, context);
+    // Debug.log(`2dm ctx`, context);
 
     const app = context.app;
     const cb = context.contentBlock;
@@ -57,7 +57,7 @@ Commands.add(CommandNames.layout, 'ChangeLayout', 'glasses', true, true, {
       note,
       asHtml: true,
       background: '#DFC2F2',
-      delay: 1000,
+      delay: 250,
       interactive: true
     });
     return [noteObj];

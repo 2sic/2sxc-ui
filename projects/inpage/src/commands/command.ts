@@ -39,7 +39,6 @@ export class Command {
         
         // if there is no specified note, see if the button definition would have one
         if (!note && more.notes) {
-          debugger;
           var notes = more.notes(ctx);
           if (notes && notes.length > 0) note = notes[0];
         }
