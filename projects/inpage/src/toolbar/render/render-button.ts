@@ -1,4 +1,5 @@
 ﻿import { CommandNames, CommandParams } from '../../commands';
+import { Debug } from '../../constants/debug';
 import { ContextComplete } from '../../context/bundles/context-bundle-button';
 import { HtmlTools } from '../../html/dom-tools';
 import { ButtonCommand, ButtonSafe } from '../config';
@@ -17,7 +18,7 @@ export class RenderButton extends RenderPart {
   render(ctx: ContextComplete, groupIndex: number): HTMLElement {
     const cl = this.log.call(
       "render",
-      `contex: obj, group: ${groupIndex}, btn: ${ctx.button.id}/${ctx.button.command?.name}`
+      `context: obj, group: ${groupIndex}, btn: ${ctx.button.id}/${ctx.button.command?.name}`
     );
     const btnSafe = new ButtonSafe(ctx.button, ctx);
 

@@ -19,6 +19,15 @@ export const Debug = {
     run: true,
   },
 
+  /**
+   * Logs the arguments if the build is a development build
+   *
+   * @param {...any[]} args
+   */
+  log (...args: any[]) {
+    if (IsDevBuild) console.log(...args);
+  },
+
   // Full debug on specific parts of the code
   // should always be empty in production
   parts: {

@@ -3,6 +3,7 @@ import { QeSelectors } from '../../quick-edit';
 import { ContextForLists } from '../../quick-edit/context-for-lists';
 import { Note } from '../../toolbar/config/Note';
 import { DomTools } from '../../../../$2sxc/src/dom/dom-tools';
+import { Debug } from '../../constants/debug';
 /**
  * import this module to commands.ts
  * @internal
@@ -29,7 +30,7 @@ Commands.add(CommandNames.layout, 'ChangeLayout', 'glasses', true, true, {
 
   
   notes(context) {
-    // console.log(`2dm ctx`, context);
+    // Debug.log(`2dm ctx`, context);
 
     const app = context.app;
     const cb = context.contentBlock;
@@ -39,10 +40,15 @@ Commands.add(CommandNames.layout, 'ChangeLayout', 'glasses', true, true, {
       ? `<strike>${cb.renderMs}ms</strike> 0ms using ${lightspeed}`
       : `${cb.renderMs}ms (no ${lightspeed})`;
 
-    const stats = `App: ${app.appName} <br>
+    const queryInfo = cb.queryName ? `Query: ${cb.queryName} <br>${cb.queryInfo}<br>` : '';
+
+    const stats = `
+    App: ${app.appName} <br>
     View: ${cb.viewName} <br>
+    ${queryInfo}
     Page: ${context.page.id}, Module: ${context.instance.id} <br>
-    ⌛ ${renderTime} <br>`;
+    ⌛ ${renderTime} <br>
+    `;
     const note = `<strong>Layout</strong> <br>
     ${stats}`;
 
@@ -50,9 +56,9 @@ Commands.add(CommandNames.layout, 'ChangeLayout', 'glasses', true, true, {
       type: 'info',
       note,
       asHtml: true,
-      background: '#DFC2F2',
-      delay: 1000,
-      interactive: true
+      delay: 500,
+      interactive: true,
+      isSystem: true,
     });
     return [noteObj];
   }

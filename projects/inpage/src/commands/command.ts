@@ -32,6 +32,8 @@ export class Command {
       uiActionOnly: () => uiOnly,
       partOfPage: () => partOfPage,
       color: () => undefined,
+
+      /** Initialize Tippy if we have any notes */
       tippy: (ctx, tag) => {
         // get the rule and only continue if there is a note attached
         const ui = ContextComplete.getRule(ctx)?.ui;
@@ -39,7 +41,6 @@ export class Command {
         
         // if there is no specified note, see if the button definition would have one
         if (!note && more.notes) {
-          debugger;
           var notes = more.notes(ctx);
           if (notes && notes.length > 0) note = notes[0];
         }
@@ -70,8 +71,9 @@ export class Command {
           // custom styling applied when it appears
           onMount: (instance) => {
             // ATM only background color handled
-            if (!note?.background) return;
             const content = instance.popper.querySelector('.tippy-content') as HTMLElement;
+            if (note.isSystem) content.style.background = '#DFC2F2';
+            if (!note?.background) return;
             // console.log('popper', content);
             content.style.background = note.background;
           }                
@@ -87,6 +89,13 @@ export class Command {
         if (debugTippy) console.log('Command-Tippy', note, tippyProps);
 
         tippy(tag, tippyProps);
+
+        // if the note has a delay, add an indicator
+        if (note.delay > 100) {
+          tag.classList.add('note-delayed');
+          if (note.isSystem) tag.classList.add('note-system');
+        }
+
         return undefined;
       },
       ...more,

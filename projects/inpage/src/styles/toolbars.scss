@@ -103,6 +103,33 @@ body.sc-tb-show-all [sxc-toolbar-hover] .sc-menu {
   display: flex;
 }
 
+// Notes Style: Add a dot after menu items with a note which is delayed
+.sc-menu a.note-delayed:after {
+  content:"•";
+  // color: #FFF740; // post-it yellow https://www.color-hex.com/color-palette/29241
+  color: #B2AC2C; // darker shade https://www.color-hex.com/color/b2ac2c
+  background: transparent;
+
+  // Positioning experiment #3
+  position: absolute;
+  top: 13px;
+  padding-left: 20px;
+  width: 0;
+  height: 0;
+
+  font-size: 1rem;
+  display: inline-block;
+  // don't handle clicks on this element
+  pointer-events: none;
+}
+
+// Notes Style: System notes should have another color indicator.
+.sc-menu a.note-system:after {
+  color: #DFC2F2; // darker shade https://www.color-hex.com/color/b2ac2c
+}
+
+
+
 /* Modify the color of sub-lists to be more transparent / lighter */
 .sc-menu.sc-sublist a div {
   background: #012c4fad; /* #0088f4ad */
