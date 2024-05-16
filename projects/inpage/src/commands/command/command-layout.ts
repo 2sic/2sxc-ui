@@ -34,6 +34,7 @@ Commands.add(CommandNames.layout, 'ChangeLayout', 'glasses', true, true, {
 
     const app = context.app;
     const cb = context.contentBlock;
+    const edition = cb.edition;
 
     const lightspeed = `<a href="https://go.2sxc.org/lightspeed" target="_blank">⚡ LightSpeed Cache</a>`
     const renderTime = cb.renderLightspeed
@@ -43,9 +44,8 @@ Commands.add(CommandNames.layout, 'ChangeLayout', 'glasses', true, true, {
     const queryInfo = cb.queryName ? `Query: ${cb.queryName} <br>${cb.queryInfo}<br>` : '';
 
     const stats = `
-    App: ${app.appName} <br>
-    View: ${cb.viewName} <br>
-    Edition: ${context.contentBlock.edition} <br>
+    App: <strong>${app.appName}</strong> <br>
+    View: <strong>${cb.viewName}</strong> ${(edition ? '[edition: ' + edition + ']' : '')}<br>
     ${queryInfo}
     Page: ${context.page.id}, Module: ${context.instance.id} <br>
     ⌛ ${renderTime} <br>
