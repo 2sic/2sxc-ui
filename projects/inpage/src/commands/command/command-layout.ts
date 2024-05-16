@@ -45,6 +45,7 @@ Commands.add(CommandNames.layout, 'ChangeLayout', 'glasses', true, true, {
     const stats = `
     App: ${app.appName} <br>
     View: ${cb.viewName} <br>
+    Edition: ${context.contentBlock.edition} <br>
     ${queryInfo}
     Page: ${context.page.id}, Module: ${context.instance.id} <br>
     ⌛ ${renderTime} <br>
