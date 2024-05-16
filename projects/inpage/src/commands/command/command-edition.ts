@@ -6,21 +6,27 @@ import { Note } from '../../toolbar/config/Note';
  * This is a dummy command to just set an edition.
  * It's not meant to show in the toolbar, but it should be callable on $2sxc(...).cms.run({ action: 'log', params: { message: 'hello' } })
  * 
+ * can have these parameters on the params object
+ * - ask - force the UI to prompt for the edition
+ * - edition - the edition to set, or prefill in the prompt
+ * - editions - optional list of editions to suggest
+ * - reset: boolean - reset the edition
+ * 
  * import this module to commands.ts
  * @internal
  */
-Commands.add(CommandNames.edition, 'CommandEdition', 'bomb', true, false, {
+Commands.add(CommandNames.edition, 'Edition', 'bomb', true, false, {
 
   code(context, event) {
     const appId = context.app.id;
     const cookieName = `app-${appId}-edition`;
     const params = context.button.command.params;
-    const edOriginal = params.edition;
+    const edOriginal = params.edition as string;
 
     if (params.reset)
       return resetCookie();
 
-    const allEditions = context.contentBlock.editions ?? '';
+    const allEditions = params.editions as string ?? context.contentBlock.editions ?? '';
     const niceEditions = allEditions.split(',').join(', ');
     const editionsMsg = allEditions ? `Known Editions (from app.json): ${niceEditions}\n` : '';
     const promptMsg = `To switch to another edition on App ${appId}, enter the edition:\n${editionsMsg}\nRemember to reload the page afterwards to see the changes.`;
@@ -36,16 +42,15 @@ Commands.add(CommandNames.edition, 'CommandEdition', 'bomb', true, false, {
     // if edition is empty, unset the cookie
     if (!edition)
       return resetCookie();
-    else {
-      // set a cookie like "app-id-edition" but only for this browser windows session
-      console.log(`Will set cookie ${cookieName}=${edition}`)
-      document.cookie = `${cookieName}=${edition}; path=/;`;
-      return new Promise((resolve, reject) => {});
-    }
+
+    // set a cookie like "app-id-edition" but only for this browser windows session
+    console.log(`Will set cookie ${cookieName}=${edition}`)
+    document.cookie = `${cookieName}=${edition}; path=/;`;
+    return new Promise((resolve, reject) => {});
 
     function resetCookie(): Promise<void> {
       console.log(`Will unset cookie ${cookieName}`);
-      document.cookie = `${cookieName}=reset; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+      document.cookie = `${cookieName}=flush; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
       return new Promise((resolve, reject) => {});
     }
   },

@@ -7,7 +7,7 @@ import { Debug } from '../../constants/debug';
  * import this module to commands.ts
  * @internal
  */
-Commands.add(CommandNames.log, 'CommandLog', 'bomb', true, false, {
+Commands.add(CommandNames.log, 'Log', 'bomb', true, false, {
 
   // inlineWindow: (_) => true,
 
