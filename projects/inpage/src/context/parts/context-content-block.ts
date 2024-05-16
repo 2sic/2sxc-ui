@@ -50,6 +50,11 @@ export class ContextOfContentBlock extends ContentBlockUnifiedInCtxAndAttr {
   // New in 12.11
   edition?: string;
 
+  /**
+   * new 17.08, CSV of editions
+   */
+  editions?: string;
+
   constructor(editCtx: AttrJsonEditContext) {
     super();
     // Initialize Content-Group Values
@@ -65,6 +70,7 @@ export class ContextOfContentBlock extends ContentBlockUnifiedInCtxAndAttr {
     this.templatePath = cb.TemplatePath;
     this.templateIsShared = cb.templateIsShared;
     this.edition = cb.Edition ?? null;
+    this.editions = cb.editions ?? null;
     this.contentTypeId = cb.ContentTypeName;
     this.contentGroupId = cb.Guid;
 

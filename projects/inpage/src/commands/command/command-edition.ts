@@ -20,8 +20,13 @@ Commands.add(CommandNames.edition, 'CommandEdition', 'bomb', true, false, {
     if (params.reset)
       return resetCookie();
 
+    const allEditions = context.contentBlock.editions ?? '';
+    const niceEditions = allEditions.split(',').join(', ');
+    const editionsMsg = allEditions ? `Known Editions (from app.json): ${niceEditions}\n` : '';
+    const promptMsg = `To switch to another edition on App ${appId}, enter the edition:\n${editionsMsg}\nRemember to reload the page afterwards to see the changes.`;
+
     const edition = (params.ask || !edOriginal)
-        ? prompt('Please enter the edition. ', edOriginal as string ?? '')
+        ? prompt(promptMsg, edOriginal as string ?? '')
         : edOriginal;
 
     Debug.log('command: app id', appId);
@@ -81,7 +86,7 @@ export function editionInNote(context: ContextComplete, showToAll: boolean): str
   const edition = cb.edition;
 
   // figure out if we provide a button to change editions
-  const enableEditionSwitch = showToAll || context.user.CanDevelop;
+  const enableEditionSwitch = showToAll || context.user.CanDevelop || context.user.canSwitchEdition;
 
   const editionButton = enableEditionSwitch
     ? `<button onclick="$2sxc(${context.sxc.id, context.sxc.id}).cms.run({ action: 'edition', params: { ask: true, edition: '${edition}', editions: 'live,staging' } })">${edition}</button>`
