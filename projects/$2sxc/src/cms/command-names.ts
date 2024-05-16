@@ -215,6 +215,18 @@ export const enum CommandNames {
     layout = 'layout',
 
     /**
+     * just add a log, mainly for verifying functionality of running commands
+     * @internal
+     */
+    log = 'log',
+
+    /**
+     * WIP
+     * @internal
+     */
+    edition = 'edition',
+
+    /**
      * `metadata` opens the edit-dialog for the current metadata item.
      * <br> 🔘 It only appears if the toolbar explicitly asks for it.
      * <br> 📩 [Parameters](xref:Api.Js.SxcJs.CommandMetadataParams)

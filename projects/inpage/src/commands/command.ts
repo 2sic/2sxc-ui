@@ -37,7 +37,7 @@ export class Command {
       tippy: (ctx, tag) => {
         // get the rule and only continue if there is a note attached
         const ui = ContextComplete.getRule(ctx)?.ui;
-        let note = (ui?.note as Note);
+        let note = (ui?.note);
         
         // if there is no specified note, see if the button definition would have one
         if (!note && more.notes) {

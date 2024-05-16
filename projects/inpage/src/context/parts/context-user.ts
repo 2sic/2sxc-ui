@@ -1,5 +1,4 @@
-﻿import { ContextComplete } from '..';
-import { AttrJsonEditContext, AttrJsonUser } from '../html-attribute';
+﻿import { AttrJsonEditContext, AttrJsonUser } from "../html-attribute";
 
 /**
  * things about the user
@@ -9,18 +8,11 @@ import { AttrJsonEditContext, AttrJsonUser } from '../html-attribute';
  * @internal
  */
 export class ContextOfUser extends AttrJsonUser {
-
-    constructor(editCtx?: AttrJsonEditContext) {
-        super();
-        if (!editCtx || !editCtx.User) return;
-        this.CanDevelop = editCtx.User.CanDevelop;
-        this.CanAdmin = editCtx.User.CanAdmin;
-    }
-
-    static fromContext(context: ContextComplete): ContextOfUser {
-        const user = new ContextOfUser();
-        user.CanDevelop = context.user.CanDevelop;
-        user.CanAdmin = context.user.CanAdmin;
-        return user;
-    }
+  constructor(editCtx?: AttrJsonEditContext) {
+    super();
+    if (!editCtx || !editCtx.User) return;
+    this.CanDevelop = editCtx.User.CanDevelop;
+    this.CanAdmin = editCtx.User.CanAdmin;
+    this.canSwitchEdition = editCtx.User.canSwitchEdition;
+  }
 }

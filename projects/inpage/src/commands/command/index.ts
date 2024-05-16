@@ -17,12 +17,12 @@
 /** @internal */ import './old-command-custom';
 /** @internal */ import './command-delete';
 /** @internal */ import './command-edit';
-// /** @internal */ import './command-help';
+/** @internal */ import './command-edition';
 /** @internal */ import './command-info';
 /** @internal */ import './command-insights';
-// /** @internal */ import './command-link';
 /** @internal */ import './command-list';
 /** @internal */ import './command-layout';
+/** @internal */ import './command-log';
 /** @internal */ import './command-metadata';
 /** @internal */ import './command-more';
 /** @internal */ import './command-movedown';

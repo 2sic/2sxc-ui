@@ -10,6 +10,11 @@ export interface AttrJsonContentGroup extends ContentBlockUnifiedInCtxAndAttr, C
   IsList: boolean;
   TemplateId: number;
   Edition: string;
+
+  /**
+   * new 17.08, CSV of editions
+   */
+  editions: string;
   TemplatePath: string;
   // /**
   //  * True if the template comes from the shared location - new in v13
