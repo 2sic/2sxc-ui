@@ -3,6 +3,7 @@ import { QeSelectors } from '../../quick-edit';
 import { ContextForLists } from '../../quick-edit/context-for-lists';
 import { Note } from '../../toolbar/config/Note';
 import { DomTools } from '../../../../$2sxc/src/dom/dom-tools';
+import { editionInNote } from './command-edition';
 /**
  * import this module to commands.ts
  * @internal
@@ -42,9 +43,11 @@ Commands.add(CommandNames.layout, 'ChangeLayout', 'glasses', true, true, {
 
     const queryInfo = cb.queryName ? `Query: ${cb.queryName} <br>${cb.queryInfo}<br>` : '';
 
+    const editionButton = editionInNote(context, false);
+
     const stats = `
     App: <strong>${app.appName}</strong> <br>
-    View: <strong>${cb.viewName}</strong> ${(edition ? '[edition: ' + edition + ']' : '')}<br>
+    View: <strong>${cb.viewName}</strong> - ${(edition ? 'edition: ' + editionButton : '')}<br>
     ${queryInfo}
     Page: ${context.page.id}, Module: ${context.instance.id} <br>
     ⌛ ${renderTime} <br>

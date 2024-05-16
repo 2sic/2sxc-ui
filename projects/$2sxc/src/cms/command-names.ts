@@ -216,8 +216,15 @@ export const enum CommandNames {
 
     /**
      * just add a log, mainly for verifying functionality of running commands
+     * @internal
      */
     log = 'log',
+
+    /**
+     * WIP
+     * @internal
+     */
+    edition = 'edition',
 
     /**
      * `metadata` opens the edit-dialog for the current metadata item.

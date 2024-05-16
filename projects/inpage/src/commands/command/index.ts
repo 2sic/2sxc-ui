@@ -17,6 +17,7 @@
 /** @internal */ import './old-command-custom';
 /** @internal */ import './command-delete';
 /** @internal */ import './command-edit';
+/** @internal */ import './command-edition';
 /** @internal */ import './command-info';
 /** @internal */ import './command-insights';
 /** @internal */ import './command-list';
