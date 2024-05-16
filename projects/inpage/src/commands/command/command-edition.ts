@@ -15,7 +15,7 @@ import { Note } from '../../toolbar/config/Note';
  * import this module to commands.ts
  * @internal
  */
-Commands.add(CommandNames.edition, 'Edition', 'bomb', true, false, {
+Commands.add(CommandNames.edition, 'Edition', 'edition', true, false, {
 
   code(context, event) {
     const appId = context.app.id;

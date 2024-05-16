@@ -11,7 +11,7 @@
 .icon-sxc-list-numbered:before { content: '\e809'; } /* '' */
 .icon-sxc-replace:before { content: '\e80a'; } /* '' */
 .icon-sxc-settings:before { content: '\e80b'; } /* '' */
-.icon-sxc-manage:before { content: '\e80c'; } /* '' */
+.icon-sxc-manage-old:before { content: '\e80c'; } /* '' */
 .icon-sxc-sliders:before { content: '\e80d'; } /* '' */
 .icon-sxc-table:before { content: '\e80e'; } /* '' */
 .icon-sxc-tag:before { content: '\e80f'; } /* '' */
@@ -19,6 +19,7 @@
 .icon-sxc-info:before { content: '\e811'; } /* '' */
 .icon-sxc-warning:before { content: '\e812'; } /* '' */
 .icon-sxc-plus:before { content: '\e813'; } /* '' */
+.icon-sxc-edition:before { content: '\e814'; } /* '' */
 .icon-sxc-move-down:before { content: '\e815'; } /* '' */
 .icon-sxc-move-up:before { content: '\e816'; } /* '' */
 .icon-sxc-plus-circled:before { content: '\e817'; } /* '' */
@@ -40,3 +41,4 @@
 .icon-sxc-filter:before { content: '\ec2e'; } /* '' */
 .icon-sxc-options:before { content: '\eddd'; } /* '' */
 .icon-sxc-help:before { content: '\f128'; } /* '' */
+.icon-sxc-manage:before { content: '\f1b3'; } /* '' */
