@@ -22,6 +22,11 @@ export class ContentBlockUnifiedInCtxAndAttr {
 
   renderMs: number;
   renderLightspeed: boolean;
+
+  /**
+   * Disable the view switching, typically because the current view was triggered by a url parameter.
+   */
+  viewSwitchDisabled?: boolean;
 } 
 
 /**
@@ -77,5 +82,7 @@ export class ContextOfContentBlock extends ContentBlockUnifiedInCtxAndAttr {
     this.viewName = cb.viewName;
     this.renderMs = cb.renderMs;
     this.renderLightspeed = cb.renderLightspeed;
+
+    this.viewSwitchDisabled = cb.viewSwitchDisabled;
   }
 }

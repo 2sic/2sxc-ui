@@ -9,6 +9,7 @@
     "AppSettings": "app settings",
     "AppSettingsDisabled": "no app settings to configure",
     "ChangeLayout": "change layout",
+    "ChangeLayoutDisabled": "change layout is disabled because this is a details-page",
     "ConfirmRemove": "This will remove this content-item from this list, but not delete it (so you can add it again later). \nSee 2sxc.org/help for more. \n\nOk to remove?",
     "ContentItems": "content items / data of this type",
     "ContentType": "fields of this content-type",
