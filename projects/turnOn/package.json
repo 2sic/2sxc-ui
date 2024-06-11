@@ -4,7 +4,8 @@
   "description": "helper env to deploy turnOn in 2sxc dev env",
   "scripts": {
     "release": "set NODE_ENV=production && node ../webpack/distribute2.js ./node_modules/turn-on/dist/ dist/turnon/",
-    "release-watch": "set NODE_ENV=production && node ../webpack/distribute2.js ./node_modules/turn-on/dist/ dist/turnon/ -w"
+    "release-watch": "set NODE_ENV=production && node ../webpack/distribute2.js ./node_modules/turn-on/dist/ dist/turnon/ -w",
+    "update": "npm install \"github:2sic/turnOn\" -D"
   },
   "repository": {
     "type": "git",
