@@ -14,25 +14,60 @@
   }
 }
 
-// Width 33% - this is the correct formula
+// Class -wg means "with gutter"
+// Class -last means "last in a row" - so the previous ones already had all the gutters
+
+// Width 33% - this is the correct formula for width with half a gutter
 // 1. take 100% and remove 2 gutters
 // 2. divide by 3 - that's the width of an image without gutter
 // 3. add half a gutter to the width of the image
-// width: calc((100% - ($gutter * 2)) / 3 + $gutter/2);
+// Original: width: calc((100% - ($gutter * 2)) / 3 + $gutter/2);
+// Improved: width: calc(100% / 3 - ($gutter * 2 / 3) + $gutter/2);
+// Improved: width: calc(33.33% - ($gutter * 2/3) + $gutter * 1.5/3);
+// Improved: width: calc(33.33% - ($gutter * 2/3) + $gutter * 1.5/3);
 
+// Width 33% with a full gutter (so first/second in 33% row)
+// 1. take 100% and remove 2 gutters
+// 2. divide by 3 - that's the width of an image without gutter
+// 3. add a full gutter to the width of the image
+// Original: width: calc((100% - ($gutter * 2)) / 3 + $gutter);
+// Improved: width: calc(100% / 3 - ($gutter * 2 / 3) + $gutter);
+// Improved: width: calc(33.33% - ($gutter * 2/3) + $gutter);
+// Improved: width: calc(33.33% + ($gutter * 1/3));
+// Improved: width: calc(33.33% + $gutter/3);
+
+// But in our setup, the first images all have the full gutter, so
+// $width33-wg is that width + a full gutter
+
+// 33.33% for 1/3th column; 2 gutters spread evenly
+// []-|[]-|[]
 $width33-wg: calc(33.33% + ($gutter / 3));
 $width33-last: calc(33.33% - ($gutter / 3 * 2));
 
+// Special case for "tiny" images, ATM only meant for first/last, not entire sequences
+// 16.66% for 1/6th column
+$width16-wg: calc(16.66% + ($gutter / 6));
+$width16-last: calc(16.66% - ($gutter / 6 * 5));
+
+// 12.5% for 1/8th column; 7 gutters spread evenly
+$width12-wg: calc(12.5% + ($gutter / 8));
+$width12-last: calc(12.5% - ($gutter / 8 * 7));
+
+// 66.66% only one gutter.
+// [...]--|[] If first one is 66.66% then wg adds 2/3s of a gutter
+// []--|[...] If it's the second one, then it is 66% 1/3rd of a gutter
 $width66-wg: calc(66.66% + ($gutter * 2 / 3));
 $width66-last: calc(66.66% - $gutter / 3);
 
-
+// 25% - first one has 1/4 of a gutter, last one is 25% without 3/4 of a gutter
 $width25-wg: calc(25% + ($gutter / 4));
 $width25-last: calc(25% - $gutter * 3 / 4);
 
+// 50% - first one has 1/2 of a gutter, last one is 50% without 1/2 of a gutter
 $width50-wg: calc(50% + $gutter/2);
 $width50-last: calc(50% - $gutter/2);
 
+// 75% - first one has 3/4 of a gutter, last one is 75% without 1/4 of a gutter
 $width75-wg: calc(75% + ($gutter * 3 / 4));
 $width75-last: calc(75% - ($gutter / 4));
 
@@ -71,9 +106,10 @@ $sub-tag: 'img';
       //   padding-right: $half-gutter;
       // }
       
-      &.wysiwyg-50 {
-        width: $width50-wg;
+      &.wysiwyg-16 {
+        width: $width16-wg;
       }
+
       &.wysiwyg-33 {
         width: $width33-wg;
 
@@ -81,12 +117,23 @@ $sub-tag: 'img';
           width: $width33-wg;
         }
       }
+
       &.wysiwyg-66 {
         width: $width66-wg;
       }
+
+      &.wysiwyg-12 {
+        width: $width12-wg;
+      }
+
       &.wysiwyg-25 {
         width: $width25-wg;
       }
+
+      &.wysiwyg-50 {
+        width: $width50-wg;
+      }
+
       &.wysiwyg-75 {
         width: $width75-wg;
       }
