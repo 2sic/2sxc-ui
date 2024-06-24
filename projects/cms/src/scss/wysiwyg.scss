@@ -25,6 +25,10 @@
 
 $gutter: 30px;
 
+:root {
+  --wysiwyg-gutter: 30px;
+}
+
 // $container-breakpoint-xs: 300;  // Mobile width typical 320px, but container would be smaller
 $container-breakpoint-sm: 480px; // Typical grid would be 576px, container would be smaller
 // $container-breakpoint-md: 768px;
