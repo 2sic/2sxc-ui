@@ -85,7 +85,7 @@ function positionAndAlign(element: HTMLElement, coords: PositionCoordinates) {
     element.style.left = `${coords.x - quickE.bodyOffset.x}px`;
     element.style.top = `${coords.yh - quickE.bodyOffset.y}px`;
     element.style.width = `${NoJQ.width(coords.element)}px`;
-    element.style.display = 'block';
+    element.style.display = 'inline-flex';
     return element;
 }
 

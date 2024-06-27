@@ -182,7 +182,7 @@ export class TagToolbar {
   private show() {
     // console.log('show');
     this.initializeIfNecessary();
-    this.toolbarElement.style.display = 'block';
+    this.toolbarElement.style.display = 'inline-flex';
     this.updatePosition(true);
     this.activateScrollWatcher();
   }
