@@ -73,9 +73,13 @@ export class InstallerComponent implements OnInit {
     // Get data from event.
     map((evt: MessageEvent) => {
       try {
+        // note: since 2024-05 we are suddenly receiving object messages from somewhere
+        // not sure from where - atm we'll just use, but maybe we should filter them out?
+        if (typeof(evt.data) === 'object')
+          return evt.data as CrossWindowMessage;
         return JSON.parse(evt.data) as CrossWindowMessage;
       } catch (e) {
-        console.error('error procesing message. Message was ' + evt.data, e);
+        console.error('error processing message. Message / errors were ', evt.data, e);
         return void 0;
       }
     }),
