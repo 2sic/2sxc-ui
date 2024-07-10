@@ -38,7 +38,7 @@ Commands.add(CommandNames.layout, translateKey, 'glasses', true, true, {
 
   title(ctx) {
     const i18nKey = tlbI18nPrefix + translateKey + (!ctx.contentBlock.viewSwitchDisabled ? '' : 'Disabled');
-    console.log('layout title', i18nKey);
+    // console.log('layout title', i18nKey);
     return i18nKey;
   },
 
