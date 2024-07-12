@@ -5,6 +5,8 @@ import { NoJQ } from '../../plumbing';
 import { TLB_FOLLOW_ALWAYS, TLB_FOLLOW_INITIAL, TLB_FOLLOW_SCROLL, TLB_SHOW_ALWAYS, TypeFollow, TLB_HOV_RIGHT, TLB_HOV_MID, TlbHoverPrefix } from '../config/toolbar-settings';
 import { ToolbarLifecycle } from '../toolbar-lifecycle';
 
+const logThis = false;
+
 const TagToolbarPadding = 4;
 const TagToolbarPaddingRight = 0;
 const ToolbarHeight = 20;
@@ -115,12 +117,21 @@ export class TagToolbar {
       tagHeight: this.hoverTag.offsetHeight,
       mousePos: TagToolbarManager.mousePosition,
       win: {
-          scrollY: window.scrollY,
-          width: document.documentElement.clientWidth,
+        scrollY: window.scrollY,
+        width: document.documentElement.clientWidth,
       },
       padding: TagToolbarPadding,
       // tag: this.hoverTag, // just for debugging
     };
+
+    if (logThis)
+      console.log('updatePosition', {
+      initial: initial,
+      hoverTag: this.hoverTag,
+      mousePosition: TagToolbarManager.mousePosition,
+      toolbarElementBoundingRect: this.toolbarElement.getBoundingClientRect(),
+      position: position,
+    });
 
     // If we scrolled down, the toolbar might not be visible - calculate offset
     position.tagScrollOffset = Math.min(position.viewportOffset - position.bodyOffset.top, 0);
@@ -171,7 +182,7 @@ export class TagToolbar {
   private show() {
     // console.log('show');
     this.initializeIfNecessary();
-    this.toolbarElement.style.display = 'block';
+    this.toolbarElement.style.display = 'inline-flex';
     this.updatePosition(true);
     this.activateScrollWatcher();
   }

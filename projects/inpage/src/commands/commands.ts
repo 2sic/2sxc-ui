@@ -32,8 +32,7 @@ export class Commands extends HasLog {
 
   get = (name: string) => this.list[name]; // a specific action definition
 
-  add(name: string, translateKey: string, icon: string, uiOnly: boolean, partOfPage: boolean,
-      more: Partial<Button>): Command {
+  add(name: string, translateKey: string, icon: string, uiOnly: boolean, partOfPage: boolean, more: Partial<Button>): Command {
       const cmd = this.addDef(Command.build(name, translateKey, icon, uiOnly, partOfPage, more));
       this.log.add(`add command '${name}'`, cmd);
       return cmd;

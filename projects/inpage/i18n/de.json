@@ -9,6 +9,7 @@
     "AppSettings": "App Einstellungen",
     "AppSettingsDisabled": "Keine App Einstellungen",
     "ChangeLayout": "Layout ändern",
+    "ChangeLayoutDisabled": "Layout ändern ist nicht verfügbar, da dies eine Detail-Seite ist",
     "ConfirmRemove": "Dieses Inhalts-Element von der Liste wird entfernt, aber nicht gelöscht. So kann man es später wieder hinzufügen. \nSiehe auch 2sxc.org/help. \n\nEntfernen ok?",
     "ContentItems": "elemente / daten dieses Typs",
     "ContentType": "Felder des Inhaltstypen",

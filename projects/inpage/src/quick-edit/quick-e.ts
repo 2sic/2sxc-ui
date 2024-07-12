@@ -60,7 +60,8 @@ export class QuickE extends HasLog {
     start(): void {
         try {
             this.loadPageConfig();
-            if (this.config.enable) {
+            // check for body, because in some cases html from Oqtane page could be without body for a moment
+            if (!!this.body && this.config.enable) {
                 // initialize first body-offset
                 this.bodyOffset = Positioning.getBodyPosition();
                 this.enable();

@@ -16,11 +16,6 @@ export interface AttrJsonContentGroup extends ContentBlockUnifiedInCtxAndAttr, C
    */
   editions: string;
   TemplatePath: string;
-  // /**
-  //  * True if the template comes from the shared location - new in v13
-  //  * Changed to lower case in v17
-  //  */
-  // templateIsShared: boolean;
 
   QueryId: number | null;
 

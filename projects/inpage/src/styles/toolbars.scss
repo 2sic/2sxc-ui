@@ -57,19 +57,21 @@ body.sc-tb-show-all [sxc-toolbar-hover] .sc-menu {
   list-style-type: none;
   margin: 0;
   padding: 0;
-  display: inline;
+  display: inline-flex;
   z-index: 1499;
 }
 .sc-menu li {
   list-style-type: none;
   padding: 0 !important;
   margin: 0 !important;
-  display: inline;
+  display: inline-flex;
 }
+
 .sc-menu a {
-  margin-right: 4px !important;
   cursor: pointer;
+  margin-right: 4px !important;
   margin-left: 0 !important;
+  position: relative;
 }
 
 /* this one is for buttons which can have a full/empty state */
@@ -85,14 +87,21 @@ body.sc-tb-show-all [sxc-toolbar-hover] .sc-menu {
 .sc-menu a div {
   width: 28px !important;
   height: 28px !important;
-  line-height: 28px !important;
+  // line-height: 28px !important;
   background: $inpage-btn-bg;
-  border-style: solid;
+  border: 2px solid white;
   box-sizing: content-box;
   border-radius: 20px;
-  -moz-border-radius: 20px;
+
+  // TODO: maybe do this for 2sxc 19 or so...
+  // border-top-left-radius: 12px;
+  // border-top-right-radius: 4px;
+  // border-bottom-left-radius: 4px;
+  // border-bottom-right-radius: 12px;
+
+  // -moz-border-radius: 20px;
   color: #fff;
-  text-align: center;
+  // text-align: center;
   font-size: 15px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
