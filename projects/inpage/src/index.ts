@@ -54,4 +54,6 @@ import './dnn/index';
 import './styles/index.scss';
 import { Debug } from './constants/debug';
 
-Debug.log('2sxc inpage - dev mode!');
+// TODO: @2dm - this doesn't quite work - only in $2sxc / core but not in the inpage
+// probably because it seems to have a duplicate copy of the $2sxc code...
+// Debug.log('2sxc inpage - dev mode!');
