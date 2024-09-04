@@ -57,10 +57,10 @@ class RendererGlobal extends HasLog {
               console.log('Oqtane detected, will reload using Blazor');
               winForOqt.ToSic.Sxc.Oqtane.reloadModule(context.sxc.id).then((reloaded: boolean) => {
                 if (reloaded) {
-                  console.log('Oqtane interactive, reloaded using Blazor');
+                  console.log(`Oqtane interactive, reloaded using Blazor (pr:${preview},t:${C.ContentBlock.UseExistingTemplate})`);
                   return Promise.resolve();
                 } else {
-                  console.log('Oqtane static SSR, reload with JS');
+                  console.log(`Oqtane static SSR, reload with JS (pr:${preview},t:${C.ContentBlock.UseExistingTemplate})`);
                   return this.ajaxLoad(context, C.ContentBlock.UseExistingTemplate, preview)
                     .then((result) => {
                         return cl.return(result);
