@@ -25,7 +25,7 @@ export class SxcCmsReal extends SxcCms {
    */
   run<T>(runParams: RunParams): Promise<void | T> {
     RunParamsHelpers.ensureRunParamsInstanceOrError(runParams);
-    return new SxcGlobalCms().runInternal({ ...runParams, context: this.sxc });
+    return new SxcGlobalCms().runInternal({ ...runParams, context: this.sxc, triggeredBy: 'sxcCmsReal.run' });
   }
 
   // runTemplateDevelop() {

@@ -28,7 +28,7 @@ Commands.add(CommandNames.layout, translateKey, 'glasses', true, true, {
       const specs = ContextForLists.getFromDom(listSpecs);
       ctx.button.command.params.apps = specs.apps;
     }
-    return CmsEngine.openDialog(ctx, event);
+    return CmsEngine.openDialog(ctx, event, 'commandLayout.add');
   },
 
   /** make button disabled on details-views */
