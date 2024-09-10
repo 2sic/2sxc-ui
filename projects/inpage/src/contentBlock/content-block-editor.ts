@@ -58,7 +58,7 @@ export class ContentBlockEditor extends HasLog {
             .then(() => {
                 // only reload on ajax, not on app as that was already re-loaded on the preview
                 // necessary to show the original template again
-                if (wasShowingPreview) renderer.reloadAndReInitialize(context);
+                if (wasShowingPreview) renderer.reloadAndReInitialize(context, 'contentBlockEditor.updateTemplateFromDia');
             });
         return cl.return(promise);
     }

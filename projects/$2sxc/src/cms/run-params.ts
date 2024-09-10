@@ -52,4 +52,9 @@ export interface RunParamsWithContext extends RunParams {
    * We always need the tag OR the context, but never both
    */
   context?: Sxc | ContextIdentifier;
+
+  /**
+   * Method caller (for logging)
+   */
+  triggeredBy?: string
 }

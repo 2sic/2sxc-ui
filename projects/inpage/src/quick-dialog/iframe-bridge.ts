@@ -57,7 +57,7 @@ export class IFrameBridge extends HasLog implements IIFrameBridge {
     }
 
     run(verb: string) {
-        (this.uncachedSxc().manage as EditManager).run(verb);
+        (this.uncachedSxc().manage as EditManager).run(verb, undefined, undefined, 'iframeBridge.run');
     }
 
     cancel(): void { QuickDialog.singleton().cancel(this); }
@@ -70,10 +70,18 @@ export class IFrameBridge extends HasLog implements IIFrameBridge {
     }
 
     reloadAndReInit(): Promise<IQuickDialogConfig> {
+        const cl = this.log.call('reloadAndReInit');
         this.changed = false;
-        return renderer.reloadAndReInitialize(this.getContext(), true, true)
-            .then(() => this.scrollToTarget(this.tagModule))
-            .then(() => Promise.resolve(this.getAdditionalDashboardConfig()));
+        cl.done();
+        return renderer.reloadAndReInitialize(this.getContext(), 'iframeBridge.reloadAndReInit', true, true)
+            .then(() => {
+              cl.add('scrollToTarget');
+              return this.scrollToTarget(this.tagModule);
+            })
+            .then(() => {
+              cl.add('getAdditionalDashboardConfig');
+              return Promise.resolve(this.getAdditionalDashboardConfig());
+            });
     }
 
     setTemplate(templateId: number, templateName: string, final: boolean): Promise<boolean> {
@@ -92,7 +100,7 @@ export class IFrameBridge extends HasLog implements IIFrameBridge {
         const reallySave = final || !ajax;
         let promise = reallySave
             ? ContentBlockEditor.singleton().updateTemplateFromDia(context, templateId)
-            : renderer.ajaxLoad(context, templateId, true);
+            : renderer.ajaxLoad(context, templateId, true, 'iframeBridge.setTemplate');
 
         if (final)
             promise = promise.then(() => QuickDialog.singleton().setVisible(false));

@@ -59,7 +59,7 @@ export class CmsEngine extends HasLog {
     // ensure we have the right event despite browser differences
     event = event || (window.event as MouseEvent);
 
-    const result: CommandPromise<T> = this.run(context as ContextComplete, cmdParams, event);
+    const result: CommandPromise<T> = this.run(context as ContextComplete, cmdParams, event, undefined, 'sxcGlobalCms.detectParamsAndRun');
     return cl.return(result);
   }
 
@@ -70,8 +70,8 @@ export class CmsEngine extends HasLog {
    * @param settings
    * @param event
    */
-  run<T>(context: ContextComplete, nameOrParams: string | CommandParams, event: MouseEvent, wipParamsWithWorkflow?: RunParams): CommandPromise<T> {
-    const cl = this.log.call('run<T>');
+  run<T>(context: ContextComplete, nameOrParams: string | CommandParams, event: MouseEvent, wipParamsWithWorkflow?: RunParams, triggeredBy?: string): CommandPromise<T> {
+    const cl = this.log.call('run<T>', `triggeredBy: ${triggeredBy}`, undefined, { context });
     let cmdParams = this.runParamsHelper.getParamsFromNameOrParams(nameOrParams);
     cmdParams = this.runParamsHelper.expandParamsWithDefaults(cmdParams);
 
@@ -124,7 +124,7 @@ export class CmsEngine extends HasLog {
       cl.add('UI command, no pre-flight to ensure content-block');
       finalPromise = wrapperPromise.then((wfArgs) => WorkflowHelper.isCancelled(wfArgs)
         ? Promise.resolve<T>(null)
-        : commandPromise(context, origEvent));
+        : commandPromise(context, origEvent, 'cmsEngine.run#UI command'));
     } else {
       // if more than just a UI-action, then it needs to be sure the content-group is created first
       cl.add('command might change data, wrap in pre-flight to ensure content-block');
@@ -132,7 +132,7 @@ export class CmsEngine extends HasLog {
         ? Promise.resolve<T>(null)
         : ContentBlockEditor.singleton()
             .prepareToAddContent(context, cmdParams.useModuleList)
-            .then(() => commandPromise(context, origEvent))
+            .then(() => commandPromise(context, origEvent, 'cmsEngine.run#non UI command'))
       );
     }
 
@@ -151,8 +151,8 @@ export class CmsEngine extends HasLog {
   /**
    * Open a new dialog of the angular-ui
    */
-  static openDialog<T>(context: ContextComplete, event: MouseEvent): CommandPromise<T> {
-    const log = new Log('Cms.OpnDlg');
+  static openDialog<T>(context: ContextComplete, event: MouseEvent, triggeredBy: string): CommandPromise<T> {
+    const log = new Log('Cms.OpnDlg', null, `triggeredBy: ${triggeredBy}`);
     Insights.add('cms', 'open-dialog', log);
     // the link contains everything to open a full dialog (lots of params added)
     const link = new CommandLinkGenerator(context, log).getLink();
@@ -167,7 +167,7 @@ export class CmsEngine extends HasLog {
         // call the normal promise-resolve so the `.then` will be continued
         resolve(context as unknown as T);
         // reload the UI as specified
-        renderer.reloadAndReInitialize(context);
+        renderer.reloadAndReInitialize(context, 'cmsEngine.openDialog');
       };
 
       // Case 1: check if inline window (quick-dialog)
