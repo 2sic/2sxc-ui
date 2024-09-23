@@ -103,6 +103,6 @@ function doAndReload<T>(
       ? context.sxc.webApi.fetchRaw(context.sxc.webApi.url(url, params), undefined, 'DELETE')
       : context.sxc.webApi.fetchJson(context.sxc.webApi.url(url, params)))
     .then(() => {
-      renderer.reloadAndReInitialize(context);
+      renderer.reloadAndReInitialize(context, 'doAndReload');
     });
 }

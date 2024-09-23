@@ -1,4 +1,5 @@
-﻿import { ModifierContentBlock, ModifierDnnModule, PositionCoordinates, Positioning, QeSelectors, QuickEditOverlay } from '.';
+﻿import { time } from 'console';
+import { ModifierContentBlock, ModifierDnnModule, PositionCoordinates, Positioning, QeSelectors, QuickEditOverlay } from '.';
 import { HasLog, Insights, NoJQ } from '../core';
 import { QuickEditConfigEnableAuto, QuickEditConfigRoot } from './quick-e-configuration';
 
@@ -15,7 +16,8 @@ export class QuickE extends HasLog {
 
     /** Singleton */
     public static singleton(): QuickE {
-        return this._singleton ?? (this._singleton = new QuickE());
+      // we are reusing existing QuickE object in case that inpage script is loaded again 
+      return this._singleton ??= window.$quickE ?? new QuickE();
     }
     private static _singleton: QuickE;
 
@@ -58,6 +60,7 @@ export class QuickE extends HasLog {
     }
 
     start(): void {
+        const cl = this.log.call('start');
         try {
             this.loadPageConfig();
             // check for body, because in some cases html from Oqtane page could be without body for a moment
@@ -70,6 +73,7 @@ export class QuickE extends HasLog {
         } catch (e) {
             console.error("couldn't start quick-edit", e);
         }
+        cl.done();
     }
 
     /**
@@ -94,7 +98,7 @@ export class QuickE extends HasLog {
         const configs = document.querySelectorAll<HTMLElement>(`[${configAttr}]`);
         let confJ: string;
 
-        if (configs.length > 0) {
+        if (configs?.length > 0) {
             cl.add('found configs', configs);
             // go through reverse list, as the last is the most important...
             let finalConfig = {} as QuickEditConfigRoot;

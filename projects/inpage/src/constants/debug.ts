@@ -35,6 +35,11 @@ export const Debug = {
     ToolbarConfigLoaderV10: false,
     RuleManager: false,
     CommandTippy: false,
-    [QuickEClipboardLogId]: true,
+    [QuickEClipboardLogId]: false,
+    'Rnd.Rndrer': false,
+    'QDl.IfBrig': false,
+    'Cmd.Exec': false,
+    'Cms.Api': false,
+    'Q-E.Main': false,
   }
 };

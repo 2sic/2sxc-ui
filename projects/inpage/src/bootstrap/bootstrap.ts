@@ -28,6 +28,8 @@ export class BootstrapInPage extends HasLog {
   private openedTemplatePickerOnce: boolean = false;
   private diagCancelStateOnStart: boolean = QuickEditState.cancelled.get();
 
+  // The bootstrapper code could be more optimized for multiple loads, 
+  // but it was not feasible to do so at this time.
   initialize() {
     const callLog = this.log.call('initialize');
     // reset cancelled state after one reload
@@ -117,9 +119,9 @@ export class BootstrapInPage extends HasLog {
     });
 
     observer.observe(document.body, {
-        attributes: false,
-        childList: true,
-        subtree: true,
+      attributes: false,
+      childList: true,
+      subtree: true,
     });
     callLog.return('watchDomChanges done');
   }
@@ -209,7 +211,7 @@ export class BootstrapInPage extends HasLog {
 
   private showGlassesButtonIfUninitialized(sxci: Sxc): boolean {
     const callLog = this.log.call('showGlassesButtonIfUninitialized');
-    
+
     // already initialized
     if (this.isInitialized(sxci))
       return callLog.return(false, 'is initialized');

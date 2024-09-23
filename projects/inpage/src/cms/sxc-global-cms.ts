@@ -87,7 +87,7 @@ export class SxcGlobalCms extends HasLog {
     eventOrSettings?: CommandParams | MouseEvent,
     event?: MouseEvent,
   ): Promise<void | T> {
-    return this.runInternal(context, nameOrSettings, eventOrSettings, event);
+    return this.runInternal(context, nameOrSettings, eventOrSettings, event, "sxcGlobalCms.run");
   }
 
   /**
@@ -104,8 +104,9 @@ export class SxcGlobalCms extends HasLog {
     nameOrSettings?: string | CommandParams,
     eventOrSettings?: CommandParams | MouseEvent,
     event?: MouseEvent,
+    triggeredBy?: string,
   ): Promise<void | T> {
-    const cl = this.log.call('run<T>');
+    const cl = this.log.call('run<T>2', `triggeredBy: ${triggeredBy}`);
 
     const cmsEngine = new CmsEngine(this.log);
 
@@ -118,7 +119,7 @@ export class SxcGlobalCms extends HasLog {
         : context.tag;
       const realCtx = ContextComplete.findContext(contextGiver);
       context.params = { action: context.action, ...context.params };
-      innerCall = () => cmsEngine.run(realCtx, context.params, context.event, context);
+      innerCall = () => cmsEngine.run(realCtx, context.params, context.event, context, 'sxcGlobalCms.runInternal');
     } else {
       const realCtx = ContextBundleInstance.is(context)
         ? context
