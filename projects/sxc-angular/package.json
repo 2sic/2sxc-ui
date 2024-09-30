@@ -8,10 +8,7 @@
     "dsa-copy:template-ng": "cpx \"dist/sxc-angular/{,**/}*.*\" \"/Projects/2sxc/app-template-angular/ng/node_modules/@2sic.com/sxc-angular\" -v",
     "pub": "cd dist/sxc-angular && npm publish",
     "pub-dry": "cd dist/sxc-angular && npm publish --dry-run",
-    "pub-beta": "cd dist/sxc-angular && npm publish --tag beta",
-    "test": "ng test",
-    "lint": "ng lint",
-    "e2e": "ng e2e"
+    "pub-beta": "cd dist/sxc-angular && npm publish --tag beta"
   },
   "private": true,
   "dependencies": {
@@ -23,8 +20,8 @@
     "@angular/platform-browser": "^18.2.6",
     "@angular/platform-browser-dynamic": "^18.2.6",
     "@angular/router": "^18.2.6",
-    "rxjs": "~6.6.0",
-    "tslib": "^2.1.0",
+    "rxjs": "~7.8.0",
+    "tslib": "^2.3.0",
     "zone.js": "~0.14.10"
   },
   "devDependencies": {
@@ -32,23 +29,15 @@
     "@angular-devkit/build-angular": "^18.2.6",
     "@angular/cli": "^18.2.6",
     "@angular/compiler-cli": "^18.2.6",
-    "@angular/language-service": "^18.2.6",
-    "@types/jasmine": "~3.6.0",
-    "@types/jasminewd2": "~2.0.3",
-    "@types/node": "^12.11.1",
-    "codelyzer": "^6.0.0",
+    "@types/jasmine": "~5.1.0",
     "cpx": "^1.5.0",
-    "jasmine-core": "~3.6.0",
-    "jasmine-spec-reporter": "~5.0.0",
-    "karma": "~6.4.4",
-    "karma-chrome-launcher": "~3.1.0",
-    "karma-coverage-istanbul-reporter": "~3.0.2",
-    "karma-jasmine": "~4.0.0",
-    "karma-jasmine-html-reporter": "^1.5.0",
+    "jasmine-core": "~5.2.0",
+    "karma": "~6.4.0",
+    "karma-chrome-launcher": "~3.2.0",
+    "karma-coverage": "~2.2.0",
+    "karma-jasmine": "~5.1.0",
+    "karma-jasmine-html-reporter": "~2.1.0",
     "ng-packagr": "^18.2.1",
-    "protractor": "~7.0.0",
-    "ts-node": "~8.3.0",
-    "tslint": "~6.1.0",
-    "typescript": "^5.4.5"
+    "typescript": "~5.5.2"
   }
 }
