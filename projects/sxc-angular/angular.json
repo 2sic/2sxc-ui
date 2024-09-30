@@ -45,6 +45,6 @@
           }
         }
       }
-    }},
-  "defaultProject": "sxc-angular"
+    }
+  }
 }
