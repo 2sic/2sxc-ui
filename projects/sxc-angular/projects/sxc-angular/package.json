@@ -1,6 +1,6 @@
 {
   "name": "@2sic.com/sxc-angular",
-  "version": "14.07.01",
+  "version": "18.00.00",
   "author": "2sic.com - daniel mettler (iJungleboy)",
   "bugs": {
     "url": "https://github.com/2sic/2sxc-ui/issues"
@@ -10,10 +10,10 @@
     "tslib": "^2.0.0"
   },
   "peerDependencies": {
-    "@angular/common": ">=13.0.0",
-    "@angular/core": ">=13.0.0",
-    "@angular/platform-browser": ">=13.0.0",
-    "rxjs": ">=6.6.0"
+    "@angular/common": ">=18.0.0",
+    "@angular/core": ">=18.0.0",
+    "@angular/platform-browser": ">=18.0.0",
+    "rxjs": ">=7.0.0"
   },
   "homepage": "https://github.com/2sic/2sxc-ui/tree/master/projects/sxc-angular#readme",
   "license": "MIT",

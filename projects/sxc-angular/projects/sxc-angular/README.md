@@ -4,7 +4,7 @@
 
 > Connecting 2sxc, Angular with Dnn/Oqtane
 
-This is a connector for angular 13+ ([git](https://github.com/angular/angular) | [web](https://angular.io/)) for developers using
+This is a connector for angular 18+ ([git](https://github.com/angular/angular) | [web](https://angular.io/)) for developers using
 
 1. the open source CMS Meta-Module 2sxc 14+ ([git](https://github.com/2sic/2sxc/) | [web](https://2sxc.org/)) 
 1. either the open source platform DNN 9.6.1+ ([git](https://github.com/dnnsoftware/Dnn.Platform) | [web](https://www.dnnsoftware.com/)) 
@@ -107,6 +107,7 @@ To use them, best check out the [tutorial app](https://2sxc.org/en/apps/app/tuto
 1. 2021-02 Added tag-toolbar attribute and created refresh callback so the page doesn't reload (_requires 2sxc 11.12_)
 1. 2021-02-26 v.11.01 - added new attribute `angular-path` to use as base for lazy loading
 1. 2022-06-24 released v14 and changed from `dnn-sxc-angular` to `sxc-angular` as it's now for Dnn and Oqtane
+1. 2024-09-30 released v18 for Angular 18
 
 ## Todo (status 2022-06)
 
