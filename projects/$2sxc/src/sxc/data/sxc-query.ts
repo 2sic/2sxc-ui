@@ -1,4 +1,4 @@
-import { Sxc } from '..';
+import { Sxc } from '../sxc';
 import { SxcDataServiceBase } from './sxc-data-service-base';
 
 /**

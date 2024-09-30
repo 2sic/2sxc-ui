@@ -1,4 +1,3 @@
-
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { App } from 'app/core/app';
 import { BehaviorObservable } from 'app/core/behavior-observable';
@@ -7,15 +6,19 @@ import { DebugConfig } from 'app/debug-config';
 import { IDialogFrameElement, IIFrameBridge, IQuickDialogConfig } from 'app/interfaces/shared';
 import { ContentType } from 'app/template-picker/content-type';
 import { Template } from 'app/template-picker/template';
-import { combineLatest, merge, Observable, timer } from 'rxjs';
-import { filter, map, skipUntil, startWith } from 'rxjs/operators';
+import { combineLatest, merge, Observable, timer, BehaviorSubject } from 'rxjs';
+import { filter, map, skipUntil, startWith, share } from 'rxjs/operators';
 import { BackendSettings } from '../core/backend-settings';
-import { cAppActionImport } from './constants';
 import { CurrentDataService } from './current-data.service';
 import { ContentTypesProcessor } from './data/content-types-processor.service';
 import { PickerService } from './picker.service';
+import { nameofFactory } from '../core/nameof';
 
 const log = parentLog.subLog('picker', DebugConfig.picker.enabled);
+
+const nameofTPC = nameofFactory<TemplatePickerComponent>();
+
+const debug = false;
 
 @Component({
   selector: 'app-template-picker',
@@ -33,11 +36,11 @@ export class TemplatePickerComponent implements OnInit {
   /** is in the main content-app or a generic app */
   isContent: boolean;
 
-  /** show advanced features (admin/host only) */
-  showAdvanced = false;
+  /** Needs the installer */
+  installerNeeded = false;
 
-  /** show the installer */
-  showInstaller = false;
+  /** Show the Installer */
+  installerShow = false;
 
   /** Stream to indicate ready, for loading-indicator */
   ready$: Observable<boolean>;
@@ -49,8 +52,20 @@ export class TemplatePickerComponent implements OnInit {
   /** Indicate if the user is allowed to change content-types or not */
   preventTypeSwitch: boolean;
 
-  /** Indicates whether the installer can be shown in this dialog or not */
-  isBadContextForInstaller = false;
+  /** Indicates whether the installer can be shown in this dialog or not. True if inner-content. */
+  isInnerContent = false;
+
+  /** Indicates whether the search bar will be shown in this dialog or not */
+  showSearchBar = false;
+
+  /**
+   * Indicates whether the install apps and all apps buttons will be shown in this dialog or not
+   * only on empty-content or all apps in admin-mode
+   */
+  showInstallAndAllApps = false;
+
+  /** Show the admin-this-app button */
+  showAdminApp = false;
 
   /** The communication-object to the parent */
   private bridge: IIFrameBridge;
@@ -61,7 +76,7 @@ export class TemplatePickerComponent implements OnInit {
   /** Ajax-support changes how saving/changing is handled */
   private supportsAjax: boolean;
 
-  preventAppSwich = false;
+  preventAppSwitch = false;
 
   public showDebug = DebugConfig.picker.showDebugPanel;
 
@@ -91,7 +106,7 @@ export class TemplatePickerComponent implements OnInit {
     const dashInfo = this.bridge.getAdditionalDashboardConfig();
 
     this.boot(dashInfo);
-    this.debugObservables();
+    if (debug) this.debugObservables();
   }
 
   ngOnInit(): void {
@@ -105,10 +120,6 @@ export class TemplatePickerComponent implements OnInit {
 
     // Make sure we have the latest backend settings
     this.backendSettings.setApp(dashInfo.appId);
-    this.backendSettings.data.subscribe(settings => {
-      this.showAdvanced = settings.Enable?.CodeEditor ?? false;
-    });
-
     // start data-loading
     this.api.initLoading(!dashInfo.isContent);
 
@@ -120,41 +131,67 @@ export class TemplatePickerComponent implements OnInit {
   }
 
   private debugObservables() {
+    console.log('debugObservables');
+    // this.tab$.subscribe(t => log.add(`tab changed to ${t}`));
+
     if (!DebugConfig.picker.streams) return;
-    this.loading$.subscribe(l => log.add(`loading$:${l}`));
-    this.ready$.subscribe(r => log.add(`ready$:${r}`));
+    this.loading$.subscribe(l => log.add(`quick-dialog loading$:${l}`));
+    this.ready$.subscribe(r => log.add(`quick-dialog ready$:${r}`));
   }
 
   /**
    * wire up observables for this component
    */
+  private observablesAlreadyInitialized = false;
   private initObservables(initDone$: Observable<boolean>): void {
+    if (this.observablesAlreadyInitialized) return;
+    this.observablesAlreadyInitialized = true;
+
     const initTrue$ = initDone$.pipe(filter(t => !!t));
 
     // wire up basic observables
-    this.ready$ = combineLatest([this.api.ready$, this.loading$])
-      .pipe(map(([r, l]) => r && !l));
+    this.ready$ = combineLatest([this.api.ready$, this.loading$]).pipe(
+      map(([ready, loading]) => ready && !loading),
+      share()
+    );
 
     // all apps are the same as provided by the api
     this.apps$ = this.api.apps$;
 
     // if the content-type or app is set, switch tabs (ignore null/empty states)
-    const typeOrAppReady = merge(this.state.type$, this.state.app$)
-      .pipe(filter(t => !!t));
-    combineLatest([typeOrAppReady, initTrue$])
-      .subscribe(_ => this.switchTab());
+    const typeOrAppReady = merge(this.state.type$, this.state.app$).pipe(
+      filter(t => !!t),
+      share()
+    );
+    combineLatest([typeOrAppReady, initTrue$]).subscribe(_ => this.switchTab('type/app ready and init-true'));
 
     // once the data is known, check if installer is needed
-    combineLatest([this.api.templates$,
+    combineLatest([
+      this.api.templates$,
       this.api.contentTypes$,
       this.api.apps$,
-      this.api.ready$.pipe(filter(r => !!r))])
-      .pipe(
-        map(([templates, _, apps, _2]) => {
+      this.api.ready$.pipe(filter(r => !!r)),
+      this.backendSettings.showAdvanced$
+    ]).pipe(
+        map(([templates, _, apps, _2, showAdv]) => {
           log.add('apps/templates loaded, will check if we should show installer');
-          this.showInstaller = this.isContent
+          // Installer is needed on content without templates, or apps without any apps
+          this.installerNeeded = this.isContent
             ? templates.length === 0
-            : apps.filter(a => a.AppId !== cAppActionImport).length === 0;
+            : apps.length === 0;
+          this.installerShow = showAdv && this.installerNeeded && !this.isInnerContent;
+          this.showSearchBar = !this.installerNeeded;
+          this.showInstallAndAllApps = showAdv && (this.installerShow || !this.isContent);
+          this.showAdminApp = showAdv && !this.installerNeeded;
+
+          log.add('Debug Relevant Properties', {
+            installerNeeded: this.installerNeeded,
+            showAdv: showAdv,
+            isInnerContent: this.isInnerContent,
+            installerShow: this.installerShow,
+          });
+
+          // if (this.showDebug) console.log('initObservables...combineLatest(...)', this);
         }))
       .subscribe();
 
@@ -197,11 +234,12 @@ export class TemplatePickerComponent implements OnInit {
 
 
   private initValuesFromBridge(config: IQuickDialogConfig): void {
+    if (this.showDebug) console.log(`initValuesFromBridge(config)`, config);
     this.preventTypeSwitch = config.hasContent;
-    this.isBadContextForInstaller = config.isInnerContent;
+    this.isInnerContent = config.isInnerContent;
     this.isContent = config.isContent;
     this.supportsAjax = this.isContent || config.supportsAjax;
-    this.preventAppSwich = config.hasContent;
+    this.preventAppSwitch = config.hasContent;
     this.showCancel = config.templateId != null;
   }
 
@@ -217,7 +255,7 @@ export class TemplatePickerComponent implements OnInit {
    */
   selectApp(before: App, after: App): void {
     if (before && before.AppId === after.AppId) {
-      this.switchTab();
+      this.switchTab('select app');
     } else {
       this.updateApp(after);
       this.templateFilter = '';
@@ -229,7 +267,7 @@ export class TemplatePickerComponent implements OnInit {
    */
   selectContentType(before: ContentType, after: ContentType): void {
     if (before && before.StaticName === after.StaticName) {
-      this.switchTab();
+      this.switchTab('select template');
     } else {
       this.setContentType(after);
       this.templateFilter = '';
@@ -250,10 +288,15 @@ export class TemplatePickerComponent implements OnInit {
     this.state.activateType(contentType);
   }
 
-  switchTab() {
-    log.add('switchTab()');
-    // must delay change because of a bug in the tabs-updating
-    timer(100).toPromise().then(_ => this.tabIndex = 1);
+  switchTab(message: string) {
+    const msg = `switchTab(${message})`;
+    log.add(msg);
+    this.tabIndex = 1;
+    this.cdRef.detectChanges();
+    // repeat after delay because of a bug in the tabs-updating (unclear why...)
+    // timer(100).toPromise().then(_ => {
+    //   return this.tabIndex = 1;
+    // });
   }
 
 
@@ -261,8 +304,8 @@ export class TemplatePickerComponent implements OnInit {
     // ajax-support can change as apps are changed; for ajax, maybe both the previous and new must support it
     // or just new? still WIP
     const ajax = newApp.SupportsAjaxReload;
-    log.add(`changing app to ${newApp.AppId}; prevent-switch: ${this.preventAppSwich} use-ajax:${ajax}`);
-    if (this.preventAppSwich) return;
+    log.add(`changing app to ${newApp.AppId}; prevent-switch: ${this.preventAppSwitch} use-ajax:${ajax}`);
+    if (this.preventAppSwitch) return;
 
 
     this.loading$.next(true);

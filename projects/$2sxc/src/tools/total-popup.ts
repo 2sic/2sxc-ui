@@ -13,7 +13,10 @@ export class TotalPopup {
         }
 
         const wrapper = document.createElement('div');
-        wrapper.setAttribute('style', ' top: 0;left: 0;width: 100%;height: 100%; position:fixed; z-index:' + z);
+        // 2023-07-07 2dm 2sxc 16.02 - added `color-scheme: auto;` to fix dark mode
+        // Otherwise the iframe is not transparent in dark mode
+        // https://fvsch.com/transparent-iframes
+        wrapper.setAttribute('style', ' top: 0;left: 0;width: 100%;height: 100%; color-scheme: auto; position:fixed; z-index:' + z);
         document.body.appendChild(wrapper);
 
         const ifrm = document.createElement('iframe');

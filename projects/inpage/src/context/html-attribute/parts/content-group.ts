@@ -1,16 +1,30 @@
-﻿/**
+﻿import { ContentAppUnifiedInCtxAndAttr } from '../../parts/context-app';
+import { ContentBlockUnifiedInCtxAndAttr } from '../../parts/context-content-block';
+
+/**
  * @internal
  */
-export class AttrJsonContentGroup {
+export interface AttrJsonContentGroup extends ContentBlockUnifiedInCtxAndAttr, ContentAppUnifiedInCtxAndAttr {
   // ReSharper disable InconsistentNaming
   IsCreated: boolean;
   IsList: boolean;
   TemplateId: number;
   Edition: string;
+
+  /**
+   * new 17.08, CSV of editions
+   */
+  editions: string;
   TemplatePath: string;
-  /** True if the template comes from the shared location - new in v13 */
-  TemplateIsShared: boolean;
+
   QueryId: number | null;
+
+  /** new 17.07 */
+  queryName: string;
+  
+  /** new 17.07 */
+  queryInfo: string;
+
   ContentTypeName: string;
   AppUrl: string;
   AppSettingsId: number;
@@ -23,4 +37,5 @@ export class AttrJsonContentGroup {
   Guid: string;
   Id: number;
   // ReSharper restore InconsistentNaming
+
 }

@@ -1,5 +1,5 @@
 ﻿import { ContextBundleInstance, ContextOfContentBlock, ContextOfItem } from '..';
-import { Sxc } from '../../../../$2sxc/src';
+import { Sxc } from '../../../../$2sxc/src/sxc/sxc';
 import { AttrJsonEditContext } from '../html-attribute';
 import { ContentBlockReference } from '../html-attribute/parts/content-block';
 

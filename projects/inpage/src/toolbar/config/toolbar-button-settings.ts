@@ -1,4 +1,5 @@
 import { TypeValue } from '../../core';
+import { Note } from './Note';
 
 /**
  * @internal
@@ -10,5 +11,9 @@ export interface ToolbarButtonSettings {
   show?: boolean;
   code?: string;
   title?: string;
-  [key: string]: TypeValue;
+
+  /** WIP 15.04 */
+  note?: Note;
+
+  [key: string]: TypeValue | Note;
 }

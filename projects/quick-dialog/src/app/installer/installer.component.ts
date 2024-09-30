@@ -1,13 +1,15 @@
 
-import { tap, switchMap, map, filter, debounceTime, catchError } from 'rxjs/operators';
-import { Component, OnInit, Input } from '@angular/core';
+import { tap, switchMap, map, filter, debounceTime, catchError, take } from 'rxjs/operators';
+import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { InstallerService } from 'app/installer/installer.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { fromEvent, of, Subscription } from 'rxjs';
-import { GettingStartedService } from './getting-started.service';
+import { AppInstallSettingsService } from './getting-started.service';
 import { Config } from '../config';
-
-declare const $2sxc: any;
+import { CrossWindowMessage, InstallPackage, SpecsForInstaller } from './messages';
+import { DebugConfig } from 'app/debug-config';
+import { IDialogFrameElement } from '../../../../connect-parts/inpage-quick-dialog';
+import { InstallSettings } from './installer-models';
 
 @Component({
   selector: 'app-installer',
@@ -17,23 +19,37 @@ declare const $2sxc: any;
 export class InstallerComponent implements OnInit {
   @Input() isContentApp: boolean;
 
+  @ViewChild('installerWindow') installerWindow: ElementRef;
+
   showProgress: boolean;
-  currentPackage: any;
+  currentPackage: InstallPackage;
   remoteInstallerUrl = '';
+  settings: InstallSettings;
   ready = false;
 
   private subscriptions: Subscription[] = [];
 
+  showDebug = DebugConfig.picker.showDebugPanel;
+
+  devSimulateInstall = false;
+
   constructor(
     private installer: InstallerService,
-    private api: GettingStartedService,
+    private api: AppInstallSettingsService,
     private sanitizer: DomSanitizer,
   ) {
+    // copied to eav-ui file-upload-dialog
     this.subscriptions.push(
-      this.api.gettingStarted$.subscribe(url => {
-        this.remoteInstallerUrl = <string>this.sanitizer.bypassSecurityTrustResourceUrl(url);
+      this.api.settings$.subscribe(settings => {
+        this.settings = settings;
+        this.remoteInstallerUrl = <string>this.sanitizer.bypassSecurityTrustResourceUrl(settings.remoteUrl);
         this.ready = true;
       }));
+
+    // get configuration from iframe-bridge and set everything
+    const bridge = (<IDialogFrameElement>window.frameElement).bridge;
+    const dashInfo = bridge.getAdditionalDashboardConfig();
+    this.showDebug = dashInfo.debug;
 
     window.bootController.rebootRequest$.pipe(
       debounceTime(1000))
@@ -41,33 +57,75 @@ export class InstallerComponent implements OnInit {
   }
 
   destroy(): void {
-    this.subscriptions
-      .forEach(sub => sub.unsubscribe());
+    this.subscriptions.forEach(sub => sub.unsubscribe());
     console.log('destroy subs', this.subscriptions);
   }
 
+  private alreadyProcessing = false;
+
+  // copied to eav-ui file-upload-dialog
+  // Initial Observable to monitor messages
+  private messages$ = fromEvent(window, 'message').pipe(
+
+    // Ensure only one installation is processed.
+    filter(() => !this.alreadyProcessing),
+
+    // Get data from event.
+    map((evt: MessageEvent) => {
+      try {
+        // note: since 2024-05 we are suddenly receiving object messages from somewhere
+        // not sure from where - atm we'll just use, but maybe we should filter them out?
+        if (typeof(evt.data) === 'object')
+          return evt.data as CrossWindowMessage;
+        return JSON.parse(evt.data) as CrossWindowMessage;
+      } catch (e) {
+        console.error('error processing message. Message / errors were ', evt.data, e);
+        return void 0;
+      }
+    }),
+
+    // Check if data is valid and the moduleID matches
+    filter(data => data && Number(data.moduleId) === Config.moduleId()),
+  );
+
   ngOnInit() {
-    let alreadyProcessing = false;
     this.api.loadGettingStarted(this.isContentApp);
 
-    this.subscriptions.push(fromEvent(window, 'message').pipe(
-
-      // Ensure only one installation is processed.
-      filter(() => !alreadyProcessing),
-
-      // Get data from event.
-      map((evt: MessageEvent) => {
-        try {
-          return JSON.parse(evt.data);
-        } catch (e) {
-          return void 0;
-        }
+    // Subscription to listen to 'test' messages
+    this.subscriptions.push(this.messages$.pipe(
+      tap((data) => {
+        console.log('debug data', data);
       }),
+      filter(data => data.action === 'test'),
+      tap(() => { console.log('test message received'); }),
+    ).subscribe());
 
-      // Check if data is correct.
-      filter(data => data
-        && Number(data.moduleId) === Config.moduleId()
-        && data.action === 'install'),
+    // copied to eav-ui file-upload-dialog
+    // Subscription to listen to 'specs' messages
+    this.subscriptions.push(this.messages$.pipe(
+      // Verify it's for this action
+      filter(data => data.action === 'specs'),
+
+      // Send message to iframe
+      tap(() => {
+        const winFrame = this.installerWindow.nativeElement as HTMLIFrameElement;
+        const specsMsg: SpecsForInstaller = {
+          action: 'specs',
+          data: {
+            installedApps: this.settings.installedApps,
+            rules: this.settings.rules,
+          },
+        };
+        const specsJson = JSON.stringify(specsMsg);
+        winFrame.contentWindow.postMessage(specsJson, '*');
+        console.log('debug: just sent specs message:' + specsJson, specsMsg, winFrame);
+      }),
+    ).subscribe());
+
+    // copied to eav-ui file-upload-dialog
+    // Subscription to listen to 'install' messages
+    this.subscriptions.push(this.messages$.pipe(
+      filter(data => data.action === 'install'),
 
       // Get packages from data.
       map(data => Object.values(data.packages)),
@@ -75,7 +133,7 @@ export class InstallerComponent implements OnInit {
       // Show confirm dialog.
       filter(packages => {
         const packagesDisplayNames = packages
-          .reduce((t, c) => `${t} - ${(c as any).displayName}\n`, '');
+          .reduce((t, c) => `${t} - ${c.displayName}\n`, '');
 
         const msg = `Do you want to install these packages?
 
@@ -84,23 +142,34 @@ This takes about 10 seconds per package. Don't reload the page while it's instal
         return confirm(msg);
       }),
 
+      // Install the packages one at a time
       switchMap(packages => {
-        alreadyProcessing = true;
+        this.alreadyProcessing = true;
         this.showProgress = true;
-        return this.installer.installPackages(packages, p => this.currentPackage = p);
+        if (this.devSimulateInstall) {
+          alert('would install packages now, see list in console');
+          console.log('packages', packages);
+          return of(true);
+        } else
+          return this.installer.installPackages(packages, p => this.currentPackage = p);
       }),
 
       tap(() => {
         this.showProgress = false;
         alert('Installation complete 👍');
-        window.top.location.reload();
+        if (this.devSimulateInstall)
+          console.log(`would reload now, but won't, as we're just simulating.`);
+        else
+          window.top.location.reload();
       }),
 
       catchError(error => {
         console.error('Error: ', error);
         this.showProgress = false;
-        alreadyProcessing = false;
-        var errorMsg = `An error occurred: ${error.error?.Message ?? error.error?.message ?? ''}
+        this.alreadyProcessing = false;
+        const errorMsg = `An error occurred: Package ${this.currentPackage.displayName}
+
+${error.error?.Message ?? error.error?.message ?? ''}
 
 ${error.message}
 
@@ -109,5 +178,13 @@ Please try again later or check how to manually install content-templates: https
         return of(error);
       }),
     ).subscribe());
+  }
+
+  sendMessage(message: string) {
+    window.postMessage(JSON.stringify({ action: message, moduleId: Config.moduleId() } as CrossWindowMessage));
+  }
+
+  toggleSimulate() {
+    this.devSimulateInstall = !this.devSimulateInstall;
   }
 }

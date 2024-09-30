@@ -1,4 +1,5 @@
-import { ContextIdentifier, Sxc } from '..';
+import { ContextIdentifier } from '../sxc-global/context-identifier';
+import { Sxc } from '../sxc/sxc';
 import { CommandNames } from './command-names';
 import { CommandParams } from './command-params';
 
@@ -51,4 +52,9 @@ export interface RunParamsWithContext extends RunParams {
    * We always need the tag OR the context, but never both
    */
   context?: Sxc | ContextIdentifier;
+
+  /**
+   * Method caller (for logging)
+   */
+  triggeredBy?: string
 }

@@ -5,7 +5,7 @@ declare const window: Window;
 /** @public */
 type LogList = Array<{ key: string, log: Log}>;
 
-const msgIntro = 'This is the $2sxc JS Insights - see https://r.2sxc.org/insights \n'
+const msgIntro = 'This is the $2sxc JS Insights - see https://go.2sxc.org/insights \n'
     + 'Add ?debug=true to the url to log more data. \n'
     + 'Copy/paste code lines below to see details. \n'
     + '----------------------------------------------------------------------\n';

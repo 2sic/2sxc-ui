@@ -1,15 +1,18 @@
-﻿import { AttrJsonEditContext } from '../html-attribute';
+﻿import { AttrJsonEditContext, ContextErrorJsonAndObj, ContextProblems } from '../html-attribute';
 
 /**
  * this will be everything about the current system, like system / api -paths etc.
  * @internal
  */
 export class ContextOfSystem {
-    error: string;
+  error: string;
 
-    constructor(editCtx: AttrJsonEditContext) {
-        if (editCtx.error) {
-            this.error = editCtx.error.type;
-        }
+  problems?: ContextProblems[];
+
+  constructor(editCtx: AttrJsonEditContext) {
+    this.problems = editCtx.error?.problems;
+    if (editCtx.error) {
+      this.error = editCtx.error.type;
     }
+  }
 }

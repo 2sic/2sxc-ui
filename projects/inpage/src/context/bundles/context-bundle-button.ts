@@ -1,11 +1,11 @@
-﻿import { Sxc } from '../../../../$2sxc/src';
+﻿import { Sxc } from '../../../../$2sxc/src/sxc/sxc';
 import { Obj } from '../../plumbing';
 import { SxcTools } from '../../sxc/sxc-tools';
 import { Button } from '../../toolbar/config/button';
 import { ToolbarWorkflowManager } from '../../workflow';
 import { AttrJsonEditContext } from '../html-attribute';
 import { ContextBundleToolbar } from './context-bundle-toolbar';
-
+import { DomTools } from '../../../../$2sxc/src/dom/dom-tools';
 /**
  * @public
  */
@@ -15,6 +15,13 @@ export class ContextComplete extends ContextBundleToolbar {
 
   /** @internal */
   button?: Button;
+
+  /** @internal
+   * must be implemented as static, because the final object is actually just an interface and created from values.
+   */
+  static getRule(ctx: ContextComplete) {
+    return ctx.toolbar?.settings?._rules?.find(ctx.button.id);
+  }
 
   /** @internal */
   commandWorkflow?: ToolbarWorkflowManager;
@@ -39,7 +46,7 @@ export class ContextComplete extends ContextBundleToolbar {
         sxc = window.$2sxc(tagOrSxc, cbid);
     } else { // it is HTMLElement
         sxc = window.$2sxc(tagOrSxc);
-        containerTag = SxcTools.getContainerTag(tagOrSxc);
+        containerTag = DomTools.getContainerTag(tagOrSxc);
     }
 
     const contextOfButton = ContextComplete.getContextInstance(sxc, containerTag);

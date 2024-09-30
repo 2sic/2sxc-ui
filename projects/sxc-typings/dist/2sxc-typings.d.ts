@@ -185,7 +185,12 @@ declare class BuildRule extends HasLog {
     overrideShow(): boolean | undefined;
     private load;
     private loadHeader;
-    private loadHeaderParts;
+    /**
+     * Load the header
+     * @param forKey the key being loaded, to handle special case settings/toolbar
+     * @param rest the parameters to process
+     */
+    private leadHeaderAndUi;
     private loadParamsAndPrefill;
     private dicToArray;
     private splitParamsDic;
@@ -1406,6 +1411,13 @@ export declare class ContextIdentifier {
      * @internal
      */
     static ensureCompleteOrThrow(ctx: ContextIdentifier): ContextIdentifier;
+    /**
+     * Create a string-id to identify in a cache.
+     * @param ctx
+     * @returns
+     * @internal
+     */
+    static toCacheKey(ctx: ContextIdentifier): string;
 }
 
 /**
@@ -1574,6 +1586,12 @@ export declare interface EnvironmentSpecs {
     uiRoot: string;
     /** The platform code like 'dnn' or 'oqt' */
     platform: string;
+    /**
+     * Additional URL params for the dialog
+     * added in v14.08
+     * @internal
+     */
+    dialogQuery?: string;
 }
 
 /**
@@ -2597,15 +2615,27 @@ declare class RuleManager extends HasLog {
     find(id: string): BuildRule | undefined;
     /** find all rules matching a criteria */
     filter(criteria: (x: BuildRule) => boolean): BuildRule[];
-    /** the settings are usually retrieved on settings, but you can also put them behind the toolbar */
-    getSettings: () => BuildRule;
-    /** the params for the command - if not found, will use the toolbar params */
+    /**
+     * The settings are usually retrieved on settings,
+     * but you can also put them behind the toolbar.
+     * But mixing both won't work ATM by design.
+     */
+    getSettings(): {
+        ui: any;
+        params: any;
+    };
+    /**
+     * The params for the command - if not found, will use the toolbar params.
+     * But it's either or, mixing won't work by design ATM.
+     */
     getParams: () => BuildRule;
     getToolbar: () => BuildRule;
     getAdd: () => BuildRule[];
     getRemoveGroups: () => BuildRule[];
     /** Find a system rule (marked with '$') */
     private getSystemRule;
+    /** Find a system rule (marked with '$') */
+    private getSystemRuleS;
 }
 
 /**
@@ -3182,7 +3212,7 @@ export declare class SxcGlobalDebug {
      */
     load: boolean;
     /**
-     * Cache breaker string, contans the version number of 2sxc if one is provided with sxcver=...
+     * Cache breaker string, contains the version number of 2sxc if one is provided with sxcver=...
      */
     uncache: string;
     constructor();
@@ -3245,6 +3275,13 @@ export declare class SxcGlobalEnvironment extends HasLog {
      * The platform code like 'oqt' or 'dnn' in case the JS needs to know the difference
      */
     platform(): string;
+    /**
+     * The dialogQuery added in 14.08 because of issues with opening the dialog on sub-portals
+     * ATM very internal
+     * Don't check if it was initialized, because it's valid if it doesn't exist
+     * @internal
+     */
+    dialogQuery(): string;
     /** @internal */
     private ensureReadyOrThrow;
 }
@@ -3608,6 +3645,39 @@ export declare interface TemplateIdentifier {
     Path?: string;
 }
 
+/** @internal */
+declare const TLB_FOLLOW_ALWAYS = "always";
+
+/** @internal */
+declare const TLB_FOLLOW_INITIAL = "initial";
+
+/** @internal */
+declare const TLB_FOLLOW_SCROLL = "scroll";
+
+/** @internal */
+declare const TLB_HOV_LEFT = "left";
+
+/** @internal */
+declare const TLB_HOV_RIGHT = "right";
+
+/** @internal */
+declare const TLB_MORE_AUTO = "auto";
+
+/** @internal */
+declare const TLB_MORE_END = "end";
+
+/** @internal */
+declare const TLB_MORE_NEVER = "never";
+
+/** @internal */
+declare const TLB_MORE_START = "start";
+
+/** @internal */
+declare const TLB_SHOW_ALWAYS = "always";
+
+/** @internal */
+declare const TLB_SHOW_HOVER = "hover";
+
 /**
  * Runtime configuration of the toolbar.
  * contains a toolbar config + settings + mny groups
@@ -3629,31 +3699,6 @@ declare class Toolbar {
     constructor();
     static createIdentifier(): string;
 }
-
-/**
- * @internal
- */
-declare const TOOLBAR_FOLLOW_ALWAYS = "always";
-
-/**
- * @internal
- */
-declare const TOOLBAR_FOLLOW_INITIAL = "initial";
-
-/**
- * @internal
- */
-declare const TOOLBAR_FOLLOW_SCROLL = "scroll";
-
-/**
- * @internal
- */
-declare const TOOLBAR_SHOW_ALWAYS = "always";
-
-/**
- * @internal
- */
-declare const TOOLBAR_SHOW_HOVER = "hover";
 
 /**
  * @internal
@@ -3817,6 +3862,14 @@ declare class ToolbarSettings {
     static getDefaults: () => ToolbarSettings;
     /** Setup for situations where an empty toolbar is needed, without any data or configuration */
     static getForEmpty: () => ToolbarSettings;
+    /**
+     * figure out best code to determine where to put it.
+     * Important to neutralize historically different param names,
+     * and to auto-detect if hover is left.
+     * @param settings
+     * @returns
+     */
+    static bestAddMorePos(settings: ToolbarSettings): "end" | "start" | "never";
 }
 
 /**
@@ -3959,19 +4012,17 @@ export declare class TotalPopup {
     closeThis(): void;
 }
 
-declare type TypeAutoAddMore = null | 'start' | 'end' | true;
+/** @internal */
+declare type TypeAutoAddMore = null | typeof TLB_MORE_AUTO | typeof TLB_MORE_END | typeof TLB_MORE_START | typeof TLB_MORE_NEVER;
 
-/**
- * @internal
- */
-declare type TypeFollow = 'default' | 'none' | typeof TOOLBAR_FOLLOW_INITIAL | typeof TOOLBAR_FOLLOW_ALWAYS | typeof TOOLBAR_FOLLOW_SCROLL;
+/** @internal */
+declare type TypeFollow = 'default' | 'none' | typeof TLB_FOLLOW_INITIAL | typeof TLB_FOLLOW_ALWAYS | typeof TLB_FOLLOW_SCROLL;
 
-declare type TypeHover = 'left' | 'right' | 'none';
+/** @internal */
+declare type TypeHover = typeof TLB_HOV_LEFT | typeof TLB_HOV_RIGHT | 'none';
 
-/**
- * @internal
- */
-declare type TypeShow = typeof TOOLBAR_SHOW_ALWAYS | typeof TOOLBAR_SHOW_HOVER;
+/** @internal */
+declare type TypeShow = typeof TLB_SHOW_ALWAYS | typeof TLB_SHOW_HOVER;
 
 /**
  * TypeTbd is a replacement for the any-type, in places where we explicitly want to check the type

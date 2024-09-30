@@ -1,4 +1,4 @@
-﻿import { Sxc } from '../../../../$2sxc/src';
+﻿import { Sxc } from '../../../../$2sxc/src/sxc/sxc';
 import { AttrJsonEditContext } from '../html-attribute';
 
 /**

@@ -29,8 +29,6 @@ export const ToolbarTemplateSublist: ToolbarTemplate = {
   ],
   defaults: {},
   params: {},
-  settings: {
-    autoAddMore: 'end',
-  },
+  settings: {},
   _isToolbarTemplate: true,
 };

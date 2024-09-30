@@ -1,23 +1,25 @@
 import { TranslateService } from '@ngx-translate/core';
 import { Component, ElementRef } from '@angular/core';
-import { DnnAppComponent, Context } from '@2sic.com/dnn-sxc-angular';
+import { SxcAppComponent, Context } from '@2sic.com/sxc-angular';
 import { Config } from './config';
 import { SupportedLanguages, langCode2, PrimaryUiLanguage } from './i18n';
-import { HttpClient } from '@angular/common/http';
 import { BackendSettings } from './core/backend-settings';
+import { AppIconsService } from './core/app-icon-registry';
 
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.css'],
+  providers: [AppIconsService]
 })
-export class AppComponent extends DnnAppComponent {
+export class AppComponent extends SxcAppComponent {
   constructor(
     public translate: TranslateService,
     el: ElementRef,
     context: Context,
     backendSettings: BackendSettings,
+    iconService: AppIconsService,
   ) {
     super(el, context.preConfigure({ sxc: Config.getSxcInstance() }), false);
     translate.addLangs(SupportedLanguages);
@@ -30,5 +32,7 @@ export class AppComponent extends DnnAppComponent {
         translate.setDefaultLang(PrimaryUiLanguage);
         translate.use(langCode2(lang.Current));
       });
+
+    iconService.load();
   }
 }

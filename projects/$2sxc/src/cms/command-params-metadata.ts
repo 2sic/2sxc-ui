@@ -1,4 +1,4 @@
-import { MetadataTargetTypes } from '../data';
+import { MetadataTargetTypes } from '../data/target-types';
 
 /**
  * Parameters on `metadata` for commands which have a metadata-target. 

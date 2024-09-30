@@ -1,9 +1,10 @@
-﻿import { AttrJsonContentGroup, AttrJsonEnvironment, AttrJsonError, AttrJsonLanguage, AttrJsonUi, AttrJsonUser, ContentBlockReference } from '.';
-
+﻿import { AttrJsonContentGroup, AttrJsonEnvironment, ContextErrorJsonAndObj, AttrJsonLanguage, AttrJsonUi, AttrJsonUser, ContentBlockReference } from '.';
+import { EnvironmentSpecs } from '../../../../$2sxc/src/environment/environment-specs';
+import { InstanceContext } from '../../../../$2sxc/src/dom/instance-context';
 /**
  * @internal
  */
-export class AttrJsonEditContext {
+export class AttrJsonEditContext implements InstanceContext {
   Environment: AttrJsonEnvironment;
   User: AttrJsonUser;
   Language: AttrJsonLanguage;
@@ -14,6 +15,8 @@ export class AttrJsonEditContext {
   /** Information about the content block itself */
   contentBlock: AttrJsonContentGroup;
 
-  error: AttrJsonError;
+  error: ContextErrorJsonAndObj;
   Ui: AttrJsonUi;
+
+  jsApi: EnvironmentSpecs;
 }

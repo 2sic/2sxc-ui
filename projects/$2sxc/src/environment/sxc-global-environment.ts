@@ -1,7 +1,7 @@
-import { EnvironmentSpecs } from '..';
 import { EnvironmentMetaLoader } from './env-loader-meta';
 import { HasLog, Insights, SxcApiUrlRoot } from '../../../core';
 import { AntiForgeryTokenHeaderNameDnn, DnnUiRoot, PlatformDnn } from '../constants';
+import { EnvironmentSpecs } from './environment-specs';
 
 declare const _jsApi: EnvironmentSpecs;
 
@@ -132,6 +132,17 @@ export class SxcGlobalEnvironment extends HasLog {
         this.ensureReadyOrThrow('platform');
         return this.header.platform || PlatformDnn;
     }
+
+    /**
+     * The dialogQuery added in 14.08 because of issues with opening the dialog on sub-portals
+     * ATM very internal
+     * Don't check if it was initialized, because it's valid if it doesn't exist
+     * @internal
+     */
+    public dialogQuery(): string {
+      return this.header.dialogQuery ?? null;
+    }
+  
 
     /** @internal */
     private ensureReadyOrThrow(partRequested: string): void {

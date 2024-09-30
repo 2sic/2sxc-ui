@@ -1,9 +1,11 @@
+const path = require('path');
 const cpx = require('cpx');
 const chalk = require('chalk');
 const chokidar = require('chokidar');
 const fs = require('fs-extra');
-const webpackHelpers = require('./webpack-helpers.js');
-
+// const bc = require('@2sic.com/2sxc-load-build-config');
+const bc = require('../../packages/2sxc-load-build-config');
+const buildConfig = bc.BuildConfig;
 const debug = true;
 
 function showCopyProgress(e) {
@@ -13,42 +15,45 @@ function showCopyProgress(e) {
 }
 
 function startCpx(src, target, useWatch) {
+  console.log(chalk.blue(`Starting copy for '${src}' to '${target}' with watch=${useWatch}`));
   const msgWatch = useWatch ? '-watcher' : '';
   if (!useWatch) {
     // Clear destination folders
     fs.readdir(target, (err, files) => {
+      // Skip this if the folder doesn't exist (eg. new setups)
+      if (!files) return;
       files.forEach(file => {
         // delete old files except Default.aspx
         if (file === 'Default.aspx') return;
-        fs.removeSync(`${target}/${file}`);
+        fs.removeSync(path.join(target, file));
       });
     });
   }
   var cpxCommand = useWatch ? cpx.watch : cpx.copy;
-  console.log(chalk.blue(`Starting copy${msgWatch} for '${src}' to '${target}'`));
   cpxCommand(src, target).on("copy", showCopyProgress);
 }
 
-
-
-
 function runAllCpx(root, targetAddOn, watch) {
-    const cpxFilter = root + '/**/*.*';
+    const cpxFilter = path.join(bc.fixPath(root, false, true),'/**/*.*');
     // Start CPX in copy or watch mode
-    webpackHelpers.Targets.forEach(t => {
-        startCpx(cpxFilter, t + targetAddOn, watch);
+
+    // dist to Sources
+    buildConfig.Sources?.forEach(t => {
+      startCpx(cpxFilter, path.join(t, targetAddOn), watch);
     });
-    // startCpx(cpxFilter, webpackHelpers.AssetsTarget + targetAddOn, watch);
-    // startCpx(cpxFilter, webpackHelpers.DnnTargetFolder + targetAddOn, watch);
+
+    // dist to all JsTargets
+    buildConfig.JsTargets?.forEach(t => {
+        startCpx(cpxFilter, path.join(t, targetAddOn), watch);
+    });
 }
 
 // Watch the dist folder till the important folders are created, then start file sync
-function waitToRunAllCpx(path, targetAddOn) {
-  const lastSlash = path.lastIndexOf('/');
-  const parentPath = path.substr(0, lastSlash);
-  const folderToWaitFor = path.substr(lastSlash + 1, 25);
+function waitToRunAllCpx(runPath, targetAddOn) {
+  const lastSlash = runPath.lastIndexOf('/');
+  const parentPath = runPath.substr(0, lastSlash);
+  const folderToWaitFor = runPath.substr(lastSlash + 1, 25);
   console.log(chalk.blue(`Watch to Copy '${parentPath}', '${folderToWaitFor}', '${targetAddOn}'`));
-
 
   var runInnerCallback = true;
   const watcher = chokidar.watch(parentPath);

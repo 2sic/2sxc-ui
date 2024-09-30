@@ -1,0 +1,31 @@
+div.tippy-box div.tippy-content {
+  div.tippy-buttons {
+    padding-bottom: 5px;
+    text-align: center;
+  }
+
+  a {
+    color: #3fa5e2;
+    &:hover {
+      text-decoration: underline;
+    }
+
+    &.tippy-button {
+      border: solid 1px #002753;
+      border-radius: 8px;
+      padding: 5px;
+      
+      &.tippy-button-primary {
+        background: #002753;
+        color: #fff;
+      }
+
+      &:hover, &.tippy-button-primary:hover {
+        background: #3fa5e2;
+        border: solid 1px #3fa5e2;
+        color: #fff;
+        text-decoration: none;
+      }
+    }
+  }
+}

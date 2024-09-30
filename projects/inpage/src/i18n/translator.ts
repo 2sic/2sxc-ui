@@ -1,5 +1,5 @@
 ﻿import i18next, { i18n } from 'i18next';
-import XHR from 'i18next-xhr-backend';
+import XHR from 'i18next-http-backend';
 // @ts-ignore
 import locI18next from 'loc-i18next';
 import { primaryLanguage, translations, translationsPath } from '.';
@@ -46,7 +46,7 @@ class TranslatorGlobal extends HasLog {
             .init({
                 lng: context.app.currentLanguage.substr(0, 2),
                 fallbackLng: primaryLanguage,
-                whitelist: translations,
+                // whitelist: translations,
                 preload: [primaryLanguage],
                 backend: {
                     loadPath: urlClean(realRootPath + translationsPath),

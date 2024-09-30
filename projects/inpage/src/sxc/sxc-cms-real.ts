@@ -1,5 +1,5 @@
-import { Sxc } from '../../../$2sxc/src';
-import { RunParams } from '../../../$2sxc/src/cms';
+import { Sxc } from '../../../$2sxc/src/sxc/sxc';
+import { RunParams } from '../../../$2sxc/src/cms/run-params';
 import { SxcCms } from '../../../$2sxc/src/sxc/sxc-cms';
 import { RunParamsHelpers } from '../cms/run-params-helpers';
 import { SxcGlobalCms } from '../cms/sxc-global-cms';
@@ -25,7 +25,7 @@ export class SxcCmsReal extends SxcCms {
    */
   run<T>(runParams: RunParams): Promise<void | T> {
     RunParamsHelpers.ensureRunParamsInstanceOrError(runParams);
-    return new SxcGlobalCms().runInternal({ ...runParams, context: this.sxc });
+    return new SxcGlobalCms().runInternal({ ...runParams, context: this.sxc, triggeredBy: 'sxcCmsReal.run' });
   }
 
   // runTemplateDevelop() {

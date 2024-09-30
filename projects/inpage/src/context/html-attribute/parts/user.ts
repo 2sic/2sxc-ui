@@ -6,4 +6,9 @@ export class AttrJsonUser {
 
   // new v13
   CanAdmin: boolean;
+
+  /**
+   * user can switch editions
+   */
+  canSwitchEdition: boolean;
 }

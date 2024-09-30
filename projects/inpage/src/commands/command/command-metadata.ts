@@ -1,5 +1,5 @@
 ﻿import { Command, CommandNames, Commands } from '..';
-import { ItemIdentifierSimple } from '../../../../$2sxc/src/cms';
+import { ItemIdentifierSimple } from '../../../../$2sxc/src/cms/item-identifiers';
 
 const MetadataDefaultKeyType = 'string';
 const MetadataDefaultTargetType = 10; // cms-item

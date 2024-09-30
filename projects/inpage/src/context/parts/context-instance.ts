@@ -1,4 +1,4 @@
-﻿import { Sxc } from '../../../../$2sxc/src';
+﻿import { Sxc } from '../../../../$2sxc/src/sxc/sxc';
 import { SxcVersion } from '../../../../core';
 import { C } from '../../constants';
 import { AttrJsonEditContext } from '../html-attribute';

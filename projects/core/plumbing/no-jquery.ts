@@ -79,11 +79,6 @@ export class NoJQ {
         return height;
     }
 
-    /** https://api.jquery.com/outerWidth/ */
-    static outerWidth(element: HTMLElement): number {
-        const outerWidth = element.offsetWidth;
-        return outerWidth;
-    }
 
     /** https://api.jquery.com/empty/ */
     static empty(element: HTMLElement): void {

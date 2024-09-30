@@ -1,4 +1,5 @@
 ﻿import { NoJQ } from '../plumbing';
+import { TlbShowPrefix } from './config';
 
 // tslint:disable-next-line: no-var-requires
 const Shake = require('shake.js');
@@ -7,7 +8,7 @@ const Shake = require('shake.js');
 NoJQ.ready(() => {
   // this will add a css-class to auto-show all toolbars (or remove it again)
   function toggleAllToolbars() {
-    document.body.classList.toggle('sc-tb-show-all');
+    document.body.classList.toggle(`${TlbShowPrefix}all`);
   }
 
   // debugger; // shake is not working, neither on ios nor android. Might be because of http and might work with https

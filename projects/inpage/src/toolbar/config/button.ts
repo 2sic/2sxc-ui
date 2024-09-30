@@ -4,6 +4,7 @@ import { CommandCode } from '../../commands/command-code';
 import { CommandLinkGenerator } from '../../commands/command-link-generator';
 import { ContextComplete } from '../../context/bundles/context-bundle-button';
 import { Obj, TypeTbD } from '../../plumbing';
+import { Note } from './Note';
 
 /**
  * This is the most common call signature on most ButtonConfig properties
@@ -80,6 +81,18 @@ export class Button {
     code?: CommandCode;
 
     /**
+     * The color which could be supplied per button - new for `info`
+     * New v15.04
+     */
+    color: ButtonPropGen<string | undefined>;
+
+    /**
+     * The tippy which could be supplied per button - new for `info`
+     * v15.04
+     */
+    tippy: (context: ContextComplete, tag: HTMLElement) => void;
+
+    /**
      * Additional parameters which are used to RUN the command.
      * So it's not used when preparing a toolbar button, but only when executing
      */
@@ -88,7 +101,11 @@ export class Button {
     /** this is just a UI interaction, won't create data so won't need pre-flight */
     uiActionOnly: ButtonPropGen<boolean>;
 
-
+    /**
+     * WIP - ability to specify notes which will be shown in the toolbar
+     * @internal
+     */
+    notes?: ButtonPropGen<Note[]>;
 
     /** Detect if this is a Button */
     static is(thing: unknown): thing is Button {

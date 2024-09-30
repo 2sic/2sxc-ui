@@ -1,5 +1,11 @@
 ﻿import { Command, CommandNames, Commands } from '..';
 
+const InsightsApiRoot = 'sys/insights';
+
+export function insightsUrl(part: string): string {
+  return window.$2sxc.http.apiUrl(`${InsightsApiRoot}/${part}`);
+}
+
 /**
  * import this module to commands.ts
  * @internal
@@ -8,8 +14,8 @@ const cmd = Command.build(CommandNames.insights, 'Insights', 'speed', true, fals
   dialog: (_) => CommandNames.insights_old_server,
   showCondition: (context) => context.user.CanDevelop,
   code(context, event) {
-    return new Promise((resolve, reject) => {
-      const path = window.$2sxc.http.apiUrl('sys/insights/logs');
+    const path = insightsUrl(context.button.command.params?.part as string ?? 'logs');
+    return new Promise((resolve) => {
       window.open(path, '_blank');
       return resolve();
     });

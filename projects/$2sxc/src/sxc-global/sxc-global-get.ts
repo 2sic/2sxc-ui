@@ -1,5 +1,7 @@
-﻿import { Sxc, SxcGlobal } from '..';
+﻿
+import { Sxc } from '../sxc/sxc';
 import { ContextIdentifier } from './context-identifier';
+import { SxcGlobal } from './sxc-global';
 
 declare const window: Window;
 // TODO: copied from selectors in inpage project. Probably best to move selectors from inpage to core
@@ -29,7 +31,8 @@ export function $2sxcGet(id: number | ContextIdentifier | HTMLElement | Sxc, cbi
         ctx = ContextIdentifier.ensureCompleteOrThrow(id);
         // get moduleId or create fake, based on zone and app because this is used to identify the object in the cache
         id = ctx.moduleId ?? ctx.zoneId * 100000 + ctx.appId;
-    } else if (id instanceof HTMLElement && id.matches(toolbarSelector) && !id.closest(sxcDivsSelector)) {
+    }
+    else if (id instanceof HTMLElement && id.matches(toolbarSelector) && !id.closest(sxcDivsSelector)) {
         // for toolbars that are not inside 2sxc modules (e.g. in skin)
         const contextAttr = 'sxc-context';
         const contextAttribute = id.getAttribute(contextAttr);
@@ -60,7 +63,6 @@ export function $2sxcGet(id: number | ContextIdentifier | HTMLElement | Sxc, cbi
 }
 
 function autoFind(domElement: HTMLElement): [number, number] {
-debugger;
     const containerTag = domElement.closest('.sc-content-block');
     if (!containerTag) return null;
     const iid = containerTag.getAttribute('data-cb-instance');

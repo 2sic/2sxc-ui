@@ -1,4 +1,11 @@
 {
   "editor.tabSize": 2,
-  "editor.detectIndentation": false
+  "editor.detectIndentation": false,
+  "cSpell.words": [
+    "Blazor",
+    "endregion",
+    "inpage",
+    "Lightspeed",
+    "Oqtane"
+  ]
 }

@@ -24,7 +24,7 @@
                 "plugins": "append"
               }
             },
-            "outputPath": "dist/quickDialog",
+            "outputPath": "dist/quick-dialog",
             "index": "src/index-raw.html",
             "main": "src/main.ts",
             "tsConfig": "src/tsconfig.app.json",
@@ -58,14 +58,15 @@
             },
             "development": {
               "optimization": false,
+              "outputHashing": "none",
               "sourceMap": true,
               "namedChunks": false,
               "extractLicenses": true,
               "vendorChunk": true,
               "buildOptimizer": false
-            },
-            "defaultConfiguration": "development"
-          }
+            }
+          },
+          "defaultConfiguration": "development"
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
@@ -124,7 +125,6 @@
       }
     }
   },
-  "defaultProject": "ui-a4",
   "schematics": {
     "@schematics/angular:component": {
       "prefix": "app",

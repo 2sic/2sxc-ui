@@ -1,5 +1,5 @@
 ﻿import { Command, CommandNames, Commands } from '..';
-import { TemplateIdentifier } from '../../../../$2sxc/src/cms';
+import { TemplateIdentifier } from '../../../../$2sxc/src/cms/item-identifiers';
 
 /**
  * import this module to commands.ts
@@ -19,7 +19,7 @@ const cmd = Command.build(CommandNames.template, 'Develop', 'code', true, false,
     linkGenerator.items = [identifier];
   },
 
-  addParamsToLink: (ctx) => ({ isshared: ctx.contentBlock.TemplateIsShared }),
+  addParamsToLink: (ctx) => ({ isshared: ctx.contentBlock.templateIsShared }),
 
 });
 

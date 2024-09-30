@@ -1,4 +1,4 @@
-import { CommandParamsMetadata } from '../../../../$2sxc/src/cms';
+import { CommandParamsMetadata } from '../../../../$2sxc/src/cms/command-params-metadata';
 import { CommandParamsEntityById, CommandParamsEntityInContentBlock, CommandParamsEntityInList } from './command-params-entity';
 
 

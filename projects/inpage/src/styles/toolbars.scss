@@ -1,0 +1,232 @@
+/*
+    These are all the styles that end up going in-page
+    They should all have the prefix sc (short for sxc) to ensure that they never conflict with other styles in the page
+*/
+
+/* note: maybe there's a better way without changing the positioning of the main element... */
+*[sxc-toolbar-hover] {
+  position: relative;
+}
+[sxc-toolbar-hover] .sc-menu.sc-tb-hover-right {
+  position: absolute;
+  left: auto;
+  right: $inpage-tlb-margin;
+  top: $inpage-tlb-margin;
+}
+[sxc-toolbar-hover] .sc-menu.sc-tb-hover-left {
+  position: absolute;
+  left: $inpage-tlb-margin;
+  right: auto;
+  top: $inpage-tlb-margin;
+}
+[sxc-toolbar-hover] .sc-menu.sc-tb-hover-center {
+  position: absolute;
+  margin-left: 0;
+  margin-right: 0;
+  top: $inpage-tlb-margin;
+  display: inline-block;
+}
+[sxc-toolbar-hover] .sc-menu.sc-tb-hover-none {
+  position: static;
+  right: auto;
+  top: auto;
+}
+
+[sxc-toolbar-hover] .sc-menu.sc-tb-show-always,
+[sxc-toolbar-hover]:hover .sc-menu.sc-tb-show-always {
+  display: initial;
+}
+[sxc-toolbar-hover] .sc-menu.sc-tb-show-hover {
+  opacity: 0;
+}
+body.sc-tb-show-all [sxc-toolbar-hover] .sc-menu {
+  display: initial !important;
+}
+[sxc-toolbar-hover]:hover .sc-menu.sc-tb-show-hover {
+  display: block;
+  opacity: 1;
+}
+[sxc-toolbar-hover]:hover
+  [sxc-toolbar-hover]:not(:hover)
+  .sc-menu.sc-tb-show-hover {
+  opacity: 0;
+} /* prevent hover of a parent, when the item itself is not hovered */
+/* ReSharper restore Html.AttributeNotResolved */
+
+.sc-menu {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  display: inline-flex;
+  z-index: 1499;
+}
+.sc-menu li {
+  list-style-type: none;
+  padding: 0 !important;
+  margin: 0 !important;
+  display: inline-flex;
+}
+
+.sc-menu a {
+  cursor: pointer;
+  margin-right: 4px !important;
+  margin-left: 0 !important;
+  position: relative;
+}
+
+/* this one is for buttons which can have a full/empty state */
+.sc-menu li a.empty i,
+.sc-menu li a.empty svg {
+  opacity: 0.4;
+}
+/* this one is for buttons which can be disabled, like publish */
+.sc-menu li a.disabled i {
+  opacity: 0.4;
+}
+
+.sc-menu a div {
+  width: 28px !important;
+  height: 28px !important;
+  // line-height: 28px !important;
+  background: $inpage-btn-bg;
+  border: 2px solid white;
+  box-sizing: content-box;
+  border-radius: 20px;
+
+  // TODO: maybe do this for 2sxc 19 or so...
+  // border-top-left-radius: 12px;
+  // border-top-right-radius: 4px;
+  // border-bottom-left-radius: 4px;
+  // border-bottom-right-radius: 12px;
+
+  // -moz-border-radius: 20px;
+  color: #fff;
+  // text-align: center;
+  font-size: 15px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+
+  /* Rules to position content SVG which are not ::before icons */
+  align-items: center;
+  justify-content: center;
+  display: flex;
+}
+
+// Notes Style: Add a dot after menu items with a note which is delayed
+.sc-menu a.note-delayed:after {
+  content:"•";
+  // color: #FFF740; // post-it yellow https://www.color-hex.com/color-palette/29241
+  color: #B2AC2C; // darker shade https://www.color-hex.com/color/b2ac2c
+  background: transparent;
+
+  // Positioning experiment #3
+  position: absolute;
+  top: 13px;
+  padding-left: 20px;
+  width: 0;
+  height: 0;
+
+  font-size: 1rem;
+  display: inline-block;
+  // don't handle clicks on this element
+  pointer-events: none;
+}
+
+// Notes Style: System notes should have another color indicator.
+.sc-menu a.note-system:after {
+  color: #DFC2F2; // darker shade https://www.color-hex.com/color/b2ac2c
+}
+
+
+
+/* Modify the color of sub-lists to be more transparent / lighter */
+.sc-menu.sc-sublist a div {
+  background: #012c4fad; /* #0088f4ad */
+  // TODO:
+}
+
+.sc-menu.sc-sublist a div {
+  background: #012c4fad; /* #0088f4ad */
+  // TODO:
+}
+.sc-menu a.single-field div {
+  background: $inpage-btn-bg;
+  mix-blend-mode: difference;
+}
+
+.sc-menu a div:hover {
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.25), 0 6px 10px rgba(0, 0, 0, 0.22);
+}
+
+.sc-menu a div i {
+  margin-left: auto;
+  margin-right: auto;
+  vertical-align: text-bottom;
+}
+
+/* All Menu SVG rules */
+.sc-menu a div svg {
+  position: relative;
+  width: 18px;
+  height: 18px;
+}
+
+/* Make all SVG fills white, which didn't explicitly say they have a fill (like fill=none) */
+.sc-menu a div svg *:not([fill]) {
+  fill: white;
+}
+
+/* end SVG rules */
+
+/* Because of IE11 issue with cascading class there need to be .sc-menu.group-X on each group declaration */
+/* hide all links by default */
+.sc-menu.group-0 a,
+.sc-menu.group-1 a,
+.sc-menu.group-2 a,
+.sc-menu.group-3 a,
+.sc-menu.group-4 a,
+.sc-menu.group-5 a {
+  display: none;
+}
+
+/* show them group-wise */
+.sc-menu.group-0 a.in-group-0,
+.sc-menu.group-1 a.in-group-1,
+.sc-menu.group-2 a.in-group-2,
+.sc-menu.group-3 a.in-group-3,
+.sc-menu.group-4 a.in-group-4,
+.sc-menu.group-5 a.in-group-5 {
+  display: inline-block;
+}
+
+.sc-menu a.group-default div {
+  background: $inpage-btn-bg;
+}
+.sc-menu a.in-group-edit-advanced div {
+  background: grey;
+}
+.sc-menu a.group-pro div {
+  background: $inpage-btn-bg-pro;
+}
+.sc-menu a.group-alert div {
+  background: $inpage-btn-bg-error;
+}
+
+/* Change icon color to gray if not available */
+.sc-menu span.disabled {
+  color: #aaa;
+}
+
+/* the more group is rotated in these groups */
+.in-group-1 i.btn-mode:before,
+.in-group-5 i.btn-mode:before {
+  transform: rotate(45deg);
+}
+.in-group-2 i.btn-mode:before,
+.in-group-6 i.btn-mode:before {
+  transform: rotate(90deg);
+}
+.group-3 i.btn-mode:before,
+.group-7 i.btn-mode:before {
+  transform: rotate(135deg);
+}

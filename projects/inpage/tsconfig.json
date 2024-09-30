@@ -13,7 +13,8 @@
     "inlineSources": false,
     "target": "es5",
     "typeRoots": [
-      "node_modules/@types"
+      "./node_modules/@types",
+      "./typings"
     ],
     "allowJs": true,
     "module": "es2015",
@@ -28,8 +29,9 @@
   "include": [
     "./src/**/*.ts",
     "./test/**/*.ts",
-    "./typings/**/*.ts"
-, "src/cms/sxc-global-cms.ts"  ],
+    "./typings/**/*.ts",
+    "./typings/custom.d.ts"
+  ],
   "exclude": [
     "_reports",
     "bin",

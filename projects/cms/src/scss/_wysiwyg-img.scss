@@ -1,0 +1,31 @@
+// The surrounding tag, in the editor it's `mce-content-body`, in the html output it's `wysiwyg-container`
+$container-tag: 'wysiwyg-container';
+
+// The main tag of the outermost image-thingy. In the editor it's `img`, in the html output it's `picture`
+$main-tag: 'picture';
+
+// The inner tag of the image-thingy. In the editor it's blank, in the html output it's `img`
+$sub-tag: 'img';
+
+// Import default css variables
+@import './wysiwyg-img-shared-setup.scss';
+
+// Import container css
+@import './wysiwyg-img-shared-container.scss';
+
+// TODO:
+// - maybe right-stack?
+// - responsive behavior
+
+
+@container #{$container-tag} (min-width: #{$container-breakpoint-sm}) {
+  .#{$container-tag} {
+    @import './wysiwyg-img-shared-img-columns.scss';
+  }
+}
+
+@container #{$container-tag} (max-width: #{$container-breakpoint-sm}) {
+  .#{$container-tag} img {
+    width: 100%;
+  }
+}

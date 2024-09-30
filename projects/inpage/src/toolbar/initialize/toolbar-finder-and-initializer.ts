@@ -2,12 +2,12 @@
 import { ContextComplete } from '../../context/bundles/context-bundle-button';
 import { Translator } from '../../i18n/translator';
 import { HasLog } from '../../core';
-import { ToolbarWhenNoToolbarProvided } from '../config';
 import { ToolbarRenderer } from '../render/toolbar-renderer';
 import { TagToolbar } from '../tag-toolbars/tag-toolbar';
 import { ToolbarLifecycle } from '../toolbar-lifecycle';
 import { ToolbarManager } from '../toolbar-manager';
 import { ToolbarInitConfig } from './toolbar-init-config';
+import { getToolbarWhenNoneProvided } from '../templates/toolbar-when-no-toolbar-provided';
 
 // quick debug - set to false if not needed for production
 const dbg = false;
@@ -36,10 +36,8 @@ export class ToolbarConfigFinderAndInitializer extends HasLog {
      * @param parentTag
      * @param optionalId
      */
-    buildDnnModule(parentTag: HTMLElement/*, optionalId?: number*/): void {
+    buildDnnModule(parentTag: HTMLElement): void {
         const cl = this.log.call('buildDnnModule');
-        // 2021-09-17 optionalId is probably never used
-        // parentTag = parentTag ?? document.querySelector<HTMLElement>('.DnnModule-' + optionalId);
 
         // if something says the toolbars are disabled, then skip
         if (parentTag.getAttribute(C.Toolbar.attr.disable)) return cl.done('disabled');
@@ -204,7 +202,7 @@ function addDefaultToolbarConfigToTag(parentTag: HTMLElement): HTMLElement[] {
     if (ctx.ui.autoToolbar === false)
         return null;
 
-    contentTag.setAttribute(C.Toolbar.attr.full, JSON.stringify(ToolbarWhenNoToolbarProvided));
+    contentTag.setAttribute(C.Toolbar.attr.full, JSON.stringify(getToolbarWhenNoneProvided()));
 
     return [contentTag];
 }

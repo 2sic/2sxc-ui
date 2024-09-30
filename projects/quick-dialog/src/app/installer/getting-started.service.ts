@@ -5,26 +5,25 @@ import { HttpClient } from '@angular/common/http';
 import { Subject, Observable } from 'rxjs';
 import { log } from 'app/core/log';
 import { Constants } from 'app/core/constants';
+import { InstallSettings } from './installer-models';
 
+// copied to eav-ui
 @Injectable()
-export class GettingStartedService {
-  gettingStarted$: Observable<string>;
-  ready$ = new Observable<boolean>();
+export class AppInstallSettingsService {
 
-  private gettingStartedSubject: Subject<string> = new Subject<string>();
+  private installSettingsSubject: Subject<InstallSettings> = new Subject<InstallSettings>();
+  settings$: Observable<InstallSettings> = this.installSettingsSubject.asObservable();
 
   constructor(private http: HttpClient) {
-    this.gettingStarted$ = this.gettingStartedSubject.asObservable();
-    this.ready$ = this.gettingStarted$.pipe(
+    const ready$ = this.settings$.pipe(
       map(() => true),
       startWith(false));
 
-    this.ready$.pipe(tap(r => log.add(`ready getting started:${r}`))).subscribe();
+    ready$.pipe(tap(r => log.add(`ready getting started:${r}`))).subscribe();
   }
 
   public loadGettingStarted(isContentApp: boolean): void {
-    this.http.get<string>(`${Constants.webApiRemoteInstaller}?isContentApp=${isContentApp}`)
-      .subscribe(json => this.gettingStartedSubject.next(json));
+    this.http.get<InstallSettings>(`${Constants.webApiInstallSettings}?isContentApp=${isContentApp}`)
+      .subscribe(json => this.installSettingsSubject.next(json));
   }
-
 }

@@ -1,9 +1,13 @@
-import { UrlParams } from '../tools';
-import { SxcGlobalEnvironment } from '../environment';
 import { Insights, Log } from '../../../core';
-import { ContextIdentifier, SxcGlobalDebug, Stats, Sxc, TotalPopup } from '..';
 import { SxcGlobalHttp } from './sxc-global-http';
 import { SxcGlobalManage } from './sxc-global-manage';
+import { SxcGlobalEnvironment } from '../environment/sxc-global-environment';
+import { UrlParams } from '../tools/url-params';
+import { TotalPopup } from '../tools/total-popup';
+import { ContextIdentifier } from './context-identifier';
+import { Sxc } from '../sxc/sxc';
+import { SxcGlobalDebug } from './sxc-global-debug';
+import { Stats } from '../Stats';
 
 /**
  * This is the root global `window.$2sxc` function / object. 

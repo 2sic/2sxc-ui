@@ -1,5 +1,5 @@
-import { CommandParamsMetadata } from '.';
 import { TypeValue } from '../../../inpage/src/plumbing';
+import { CommandParamsMetadata } from './command-params-metadata';
 
 // NOTE: THESE ITEM IDENTIFIERS SHOULD PROBABLY ALWAYS REMAIN INTERNAL
 // As we need the flexibility to change them, without breaking public APIs
@@ -11,17 +11,24 @@ import { TypeValue } from '../../../inpage/src/plumbing';
 interface ItemIdentifierShared {
   EntityId?: number;
   Prefill?: Record<string, TypeValue>;
+
+  /** New 16.01 - fields to show/hide in the edit-dialog */
+  UiFields?: string;
+
+  /** New 16.02 - parameters should be independent from prefill */
+  Parameters?: Record<string, TypeValue>;
+
 }
 
 /**
  * Simple identifier, which is id/type-name
  * @internal
  */
-export interface ItemIdentifierSimple {
+export interface ItemIdentifierSimple extends Omit<ItemIdentifierShared, "EntityId"> {
   EntityId: number;
   ContentTypeName?: string;
   Metadata?: CommandParamsMetadata;
-  Prefill?: Record<string, TypeValue>;
+  // Prefill?: Record<string, TypeValue>;
 }
 
 /**
@@ -32,36 +39,6 @@ export interface ItemIdentifierSimple {
 export interface ItemIdentifierCopy extends ItemIdentifierShared {
   DuplicateEntity: number;
   ContentTypeName?: string;
-}
-
-/**
- * Group identifier
- * @internal
- * TODO: KEEP INTERNAL, PROBABLY RENAME "Part" to "Field" or something in the whole chain
- * TODO: MAY BE replaced completely with ItemIdentifierInField, as it has the same purpose
- */
-export interface ItemIdentifierParent {
-  /** The parent entity GUID - in these cases usually the ContentBlock */
-  Guid: string;
-
-  /** The part of the parent it's in, kind of the "Field" - should be renamed to Field ASAP */
-  Part?: string;
-
-  /** The index position within that field/part */
-  Index: number;
-
-  /** Whether to add the item - alternative is just to leave it, if it already existed */
-  Add: boolean;
-}
-
-/**
- * Experimental in 10.27
- * @internal
- */
-export interface ItemIdentifierInField extends ItemIdentifierSimple {
-  Parent?: string;
-  Field?: string;
-  Add?: boolean;
 }
 
 /**
@@ -83,7 +60,17 @@ export interface TemplateIdentifier {
  * Complex identifier using a group
  * @internal
  */
-export interface ItemIdentifierGroup extends ItemIdentifierShared {
-  Group: ItemIdentifierParent;
+export interface ItemIdentifierInList extends ItemIdentifierShared {
+  /** Whether to add the item - alternative is just to leave it, if it already existed */
+  Add: boolean;
+
+  /** The index position within that field/part */
+  Index: number;
+
+  /** The parent/group we're referencing */
+  Parent: string;
+
+  /** The field which contains the item we're referencing */
+  Field: string;
 }
 

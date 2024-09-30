@@ -1,6 +1,6 @@
 ﻿import { ToolbarConfigLoader } from '.';
 import { InPageCommandJsonWithTooMuchInfo } from '.';
-import { CommandParams } from '../../../../$2sxc/src/cms';
+import { CommandParams } from '../../../../$2sxc/src/cms/command-params';
 import { HasLog } from '../../core';
 
 /**

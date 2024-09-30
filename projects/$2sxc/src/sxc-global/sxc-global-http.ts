@@ -1,6 +1,7 @@
 import { ApiExtensionPlaceholder } from '../constants';
 import { AppApiMarker, HasLog, HeaderNames, ToSxcName } from '../../../core';
-import { ContextIdentifier, SxcGlobalEnvironment } from '..';
+import { SxcGlobalEnvironment } from '../environment/sxc-global-environment';
+import { ContextIdentifier } from './context-identifier';
 
 /**
  * Global HTTP Service for information and helpers on `$2sxc.http`
@@ -61,7 +62,7 @@ export class SxcGlobalHttp extends HasLog {
         cbid = ctx?.blockId ?? cbid;
 
         // TODO: THE #_ignoreHeaders is only used in edit-ui, and should be changed to somehow say use-in-URL
-        if (!ctx?._ignoreHeaders) {
+        if (!ctx?._noContextInHttpHeaders) {
             if (id) fHeaders[HeaderNames.ModuleId] = id.toString();
             if (cbid) fHeaders[HeaderNames.ContentBlockId] = cbid.toString();
             fHeaders[HeaderNames.TabId] = pageId;

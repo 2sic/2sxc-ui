@@ -14,7 +14,7 @@ import { InstallerModule } from 'app/installer/installer.module';
 import { DebugPipe } from './debug.pipe';
 import { ContentTypesProcessor } from './data/content-types-processor.service';
 import { MaterialModule } from 'app/material-module';
-import { FilterByPropertyValuePipe } from './filter-by-property-value.pipe';
+import { FilterByPropertyValuePipe, FilterByBoolPropertyPipe } from './filter-by-property-value.pipe';
 
 @NgModule({
   exports: [
@@ -42,6 +42,7 @@ import { FilterByPropertyValuePipe } from './filter-by-property-value.pipe';
     TemplateFilterPipe,
     DebugPipe,
     FilterByPropertyValuePipe,
+    FilterByBoolPropertyPipe,
   ]
 })
 export class TemplatePickerModule { }

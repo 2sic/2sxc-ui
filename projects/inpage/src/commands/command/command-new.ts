@@ -41,6 +41,6 @@ Commands.add(CommandNames.new, 'New', 'plus', false, true, {
     delete params.useModuleList;
 
     // done
-    return CmsEngine.openDialog(context, event);
+    return CmsEngine.openDialog(context, event, 'commandNew.add');
   },
 });

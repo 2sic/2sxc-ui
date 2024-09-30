@@ -1,0 +1,40 @@
+
+$inpage-tlb-margin: 5px;
+
+:root {
+  --2sxc-tlb-margin: 5px;
+  --2sxc-tlb-btn-bg: linear-gradient(
+    125deg,
+    rgba(15, 45, 80, 1) 40%,
+    rgba(148, 27, 78, 1) 100%
+  );
+  --2sxc-tlb-btn-pro-bg: #018552;
+  --2sxc-tlb-btn-error-bg: #ff0000;
+}
+
+$inpage-btn-bg-pro: var(--2sxc-tlb-btn-pro-bg, #018552);
+
+$inpage-btn-bg-error: var(--2sxc-tlb-btn-error-bg, #ff0000);
+
+$inpage-btn-bg: var(
+  --2sxc-tlb-btn-bg,
+  linear-gradient(
+    125deg,
+    rgba(15, 45, 80, 1) 40%,
+    rgba(148, 27, 78, 1) 100%
+  )
+);
+
+@import './dnn.scss';
+
+@import './icons.scss';
+
+@import './popup.scss';
+
+@import './toolbars.scss';
+
+
+// Tippy
+@import 'tippy.js/dist/tippy.css';
+@import 'tippy.js/themes/light.css';
+@import './tippy.scss';

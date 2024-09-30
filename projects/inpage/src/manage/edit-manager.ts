@@ -1,10 +1,10 @@
-﻿import { SxcManage } from '../../../$2sxc/src';
-import { RunParamsWithContext } from '../../../$2sxc/src/cms';
+﻿import { SxcManage } from '../../../$2sxc/src/sxc/sxc-manage';
+import { RunParamsWithContext } from '../../../$2sxc/src/cms/run-params';
 import { SxcGlobalCms } from '../cms/sxc-global-cms';
 import { CommandParams } from '../commands';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { AttrJsonEditContext } from '../context/html-attribute/edit-context-root';
-import { TypeUnsafe } from '../plumbing';
+import { HasLog, Log, TypeUnsafe } from '../plumbing';
 import { ToolbarManager } from '../toolbar';
 import { ToolbarSettings } from '../toolbar/config';
 import { InPageButtonJson } from '../toolbar/config-loaders';
@@ -14,12 +14,14 @@ import { ToolbarRenderer } from '../toolbar/render/toolbar-renderer';
  * Instance specific edit manager
  * @internal
  */
-export class EditManager implements SxcManage {
+export class EditManager extends HasLog implements SxcManage {
 
     constructor(
         public editContext: AttrJsonEditContext,
         public context: ContextComplete,
+        parentLog?: Log
     ) {
+        super('Edit.Mng', parentLog, 'start');
     }
 
     //#region Official, public properties and commands, which are stable for use from the outside
@@ -32,12 +34,15 @@ export class EditManager implements SxcManage {
       nameOrSettings: string | CommandParams,
       eventOrSettings?: CommandParams | MouseEvent,
       event?: MouseEvent,
+      triggeredBy?: string,
     ): Promise<void | T> {
+      const cl = this.log.call('run<T>', `triggeredBy: ${triggeredBy}`);
       // Capture cases where this is called using the new/modern params, which is a mistake
       if ((nameOrSettings as RunParamsWithContext).context || (nameOrSettings as RunParamsWithContext).workflows)
         throw "You are calling '.manage.run(...)' with a parameter 'context' or workflows. You should probably be calling the new '.cms.run(...)' instead.";
       const cntx = ContextComplete.findContext(this.context.sxc);
-      return new SxcGlobalCms().runInternal(cntx, nameOrSettings, eventOrSettings, event);
+      cl.done();
+      return new SxcGlobalCms().runInternal(cntx, nameOrSettings, eventOrSettings, event, 'editManager.run');
     }
     /**
      * Generate a button (an <a>-tag) for one specific toolbar-action.
