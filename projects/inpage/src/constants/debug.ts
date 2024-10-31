@@ -41,5 +41,8 @@ export const Debug = {
     'Cmd.Exec': false,
     'Cms.Api': false,
     'Q-E.Main': false,
+    'debugObservables': false,
+    'Sys.Bootst': false,
+    'Bts.Module': false,
   }
 };

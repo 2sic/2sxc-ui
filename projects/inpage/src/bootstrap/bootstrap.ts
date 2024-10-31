@@ -182,7 +182,7 @@ export class BootstrapInPage extends HasLog {
 
 
   private initInstance(module: HTMLElement, isFirstRun: boolean): void {
-    const cl = this.log.call('initInstance', `module: obj, isFirstRun: ${isFirstRun}) initialized: ${this.initializedInstances}`);
+    const cl = this.log.call('initInstance', `isFirstRun: ${isFirstRun}) initialized: ${this.initializedInstances} module: obj`, null, {module});
 
     // if instance is already in the list of initialized modules, skip
     // otherwise add for next time to prevent recursions
@@ -210,7 +210,7 @@ export class BootstrapInPage extends HasLog {
 
 
   private showGlassesButtonIfUninitialized(sxci: Sxc): boolean {
-    const callLog = this.log.call('showGlassesButtonIfUninitialized');
+    const callLog = this.log.call('showGlassesButtonIfUninitialized',`sxci:`, null, {sxci});
 
     // already initialized
     if (this.isInitialized(sxci))
@@ -238,7 +238,12 @@ export class BootstrapInPage extends HasLog {
   isInitialized(sxci: Sxc): boolean {
     const manage = sxci?.manage as EditManager;
     const cg = manage?.editContext?.contentBlock;
-    return cg && cg.TemplateId !== 0;
+
+    // special case, when app is rendered in skin and should not offer templates picker 
+    // when js assets are loaded because of other app (2sic/2sxc#3380)
+    const hasJsApi = manage?.editContext?.jsApi != null;
+
+    return (cg && cg?.TemplateId !== 0) || (!cg && hasJsApi);
   }
 }
 
