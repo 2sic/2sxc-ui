@@ -182,7 +182,7 @@ export class BootstrapInPage extends HasLog {
 
 
   private initInstance(module: HTMLElement, isFirstRun: boolean): void {
-    const cl = this.log.call('initInstance', `isFirstRun: ${isFirstRun}) initialized: ${this.initializedInstances} module: obj`, null, {module});
+    const cl = this.log.call('initInstance', `isFirstRun: ${isFirstRun}) initialized: ${this.initializedInstances} module: obj`, null, { module });
 
     // if instance is already in the list of initialized modules, skip
     // otherwise add for next time to prevent recursions
@@ -210,7 +210,7 @@ export class BootstrapInPage extends HasLog {
 
 
   private showGlassesButtonIfUninitialized(sxci: Sxc): boolean {
-    const callLog = this.log.call('showGlassesButtonIfUninitialized',`sxci:`, null, {sxci});
+    const callLog = this.log.call('showGlassesButtonIfUninitialized', `sxci:`, null, { sxci });
 
     // already initialized
     if (this.isInitialized(sxci))
@@ -234,17 +234,35 @@ export class BootstrapInPage extends HasLog {
     return callLog.return(true, 'ok');
   }
 
+  /**
+   * Determines whether the Sxc instance is properly initialized.
+   * This method checks if the app is ready for use, considering special cases
+   * where the app may be rendered within a skin or affected by this inpage JavaScript
+   * assets loaded by other apps.
+   *
+   * @param sxcInstance - The Sxc instance to check for initialization.
+   * @returns True if the app is initialized; otherwise, false.
+   */
+  isInitialized(sxcInstance: Sxc): boolean {
+    const editManager = sxcInstance?.manage as EditManager;
+    const editContext = editManager?.editContext;
+    const contentBlock = editContext?.contentBlock;
 
-  isInitialized(sxci: Sxc): boolean {
-    const manage = sxci?.manage as EditManager;
-    const cg = manage?.editContext?.contentBlock;
+    // Special handling for apps rendered within a skin using IRenderService.
+    // In such cases, when the app is not editable, it still receives a 'data-edit-context' attribute
+    // that contains only the 'jsApi' node (without the 'contentBlock' node).
+    // If another app on the page (in edit mode) loads this inpage JavaScript assets,
+    // a bug causes the template picker to appear for this app even though it is in view mode
+    // and lacks most of the editContext nodes except 'jsApi'.
+    // Refer to issue 2sic/2sic#3380 for more details.
+    const isAppInSkin = !contentBlock && editContext?.jsApi != null;
 
-    // special case, when app is rendered in skin and should not offer templates picker 
-    // when js assets are loaded because of other app (2sic/2sxc#3380)
-    const hasJsApi = manage?.editContext?.jsApi != null;
+    // Check if the content block exists and has a valid template ID.
+    const hasValidTemplate = contentBlock && contentBlock.TemplateId !== 0;
 
-    return (cg && cg?.TemplateId !== 0) || (!cg && hasJsApi);
+    return hasValidTemplate || isAppInSkin;
   }
+
 }
 
 
