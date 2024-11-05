@@ -11,7 +11,7 @@ const MetadataDefaultTargetType = 10; // cms-item
  */
 export const MetadataCommand = Command.build(CommandNames.metadata, 'Metadata', 'tag', false, false, {
 
-  addParamsToLink: (_) => ({ mode: CommandNames.newMode }),
+  parameters: (_) => ({ mode: CommandNames.newMode }),
 
   dialog: (_) => CommandNames.edit, // don't use "new" (default) but use "edit"
 
@@ -38,7 +38,7 @@ export const MetadataCommand = Command.build(CommandNames.metadata, 'Metadata', 
  * @internal
  */
 export const ImageMetadataCommand = Command.build(CommandNames.image, 'Image', 'focus', false, false, {
-  addParamsToLink: MetadataCommand.buttonDefaults.addParamsToLink,
+  parameters: MetadataCommand.buttonDefaults.parameters,
   dialog: MetadataCommand.buttonDefaults.dialog,
   classes: 'single-field',
   dynamicClasses: MetadataCommand.buttonDefaults.dynamicClasses,

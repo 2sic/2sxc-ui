@@ -7,7 +7,7 @@
 const cmd = Command.build(CommandNames.query, 'QueryEdit', 'filter', true, false, {
   dialog: (_) => 'pipeline-designer',
 
-  addParamsToLink: (ctx) => ({ pipelineId: ctx.contentBlock.queryId }),
+  parameters: (ctx) => ({ pipelineId: ctx.contentBlock.queryId }),
 
   newWindow: (_) => true,
 

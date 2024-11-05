@@ -8,7 +8,7 @@ import { createContentTypeParams } from './command-content-type';
 const cmd = Command.build(CommandNames.data, 'ContentItems', 'table', true, false, {
   dialog: (_) => CommandNames.data_old_contentItems,
 
-  addParamsToLink: createContentTypeParams,
+  parameters: createContentTypeParams,
 
   // only show to admin-users and in cases where we know the content-type
   showCondition: (context) => !!context.user.CanAdmin && !!createContentTypeParams(context).contentType,

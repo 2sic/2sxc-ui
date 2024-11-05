@@ -8,8 +8,8 @@ import { isNothing } from '../../plumbing';
  * @internal
  */
 export class ButtonSafe {
-  constructor(private button: Button, private context: ContextComplete) {
-  }
+
+  constructor(private button: Button, private context: ContextComplete) { }
 
   action = () => this.button.command;
 
@@ -43,7 +43,7 @@ export class ButtonSafe {
   newWindow = () => getVal(this.button.newWindow, this.context, false);
 
   /** The parameters which are used to run the command */
-  addParamsToLink = () => getVal(this.button.addParamsToLink, this.context, {});
+  parameters = () => getVal(this.button.parameters, this.context, {});
 
   /** Determines if this button runs in the page - affecting publishing */
   partOfPage = () => getVal(this.button.partOfPage, this.context, false);
@@ -59,6 +59,7 @@ export class ButtonSafe {
   /** this is just a UI interaction, won't create data so won't need pre-flight */
   uiActionOnly = () => getVal(this.button.uiActionOnly, this.context, true);
 
+  /** Don't add items-info to the link, new v18.03 */
   noItems = () => getVal(this.button.noItems, this.context, false);
 }
 

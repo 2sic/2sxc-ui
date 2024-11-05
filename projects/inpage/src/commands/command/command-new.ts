@@ -12,7 +12,7 @@ import { CmdParHlp } from '../cmd-par-hlp';
  * @internal
  */
 Commands.add(CommandNames.new, 'New', 'plus', false, true, {
-  addParamsToLink: (_) => ({ mode: CommandNames.newMode }),
+  parameters: (_) => ({ mode: CommandNames.newMode }),
 
   dialog: (_) => CommandNames.edit, // don't use "new" (default) but use "edit"
 

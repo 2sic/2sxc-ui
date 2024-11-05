@@ -95,8 +95,10 @@ export class Button {
   /**
    * Additional parameters which are used to RUN the command.
    * So it's not used when preparing a toolbar button, but only when executing
+   *
+   * Important: used to be called 'addParamsToLink' up to v18.03, but I assume was never public
    */
-  addParamsToLink?: ButtonPropGen<CommandParams>;
+  parameters?: ButtonPropGen<CommandParams>;
 
   /** this is just a UI interaction, won't create data so won't need pre-flight */
   uiActionOnly: ButtonPropGen<boolean>;
@@ -108,8 +110,8 @@ export class Button {
   notes?: ButtonPropGen<Note[]>;
 
   /**
-   * WIP
    * Specify that this button should not include items in the command
+   * New 18.03
    * @internal
    */
   noItems?: ButtonGenOrProp<boolean>;
