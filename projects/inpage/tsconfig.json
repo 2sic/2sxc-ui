@@ -11,17 +11,17 @@
     "removeComments": false,
     "sourceMap": true,
     "inlineSources": false,
-    "target": "es5",
+    "target": "ES2022",
     "typeRoots": [
       "./node_modules/@types",
       "./typings"
     ],
     "allowJs": true,
-    "module": "es2015",
+    "module": "ESNext",
     "moduleResolution": "node",
     "lib": [
-      "es2015.promise",
-      "es5",
+      // "es2015.promise",
+      // "es5",
       "dom",
       "ES2021.String",
     ]
