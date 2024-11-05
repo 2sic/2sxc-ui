@@ -19,105 +19,112 @@ type ButtonGenOrProp<T> = ButtonPropGen<T> | T;
  * @internal
  */
 export class Button {
-    /** The ID is important for tracking this button and applying modifiers */
-    id: string;
+  /** The ID is important for tracking this button and applying modifiers */
+  id: string;
 
-    /** The underlying command which will be run */
-    command: ButtonCommand;
+  /** The underlying command which will be run */
+  command: ButtonCommand;
 
-    /** classes which will be applied to this button */
-    classes: string = '';
+  /** classes which will be applied to this button */
+  classes: string = '';
 
-    constructor(command: ButtonCommand, name: string) {
-        this.command = command;
-        // if the name is an identifier, split it
-        const parts = Button.splitName(name);
-        this.id = parts.id;
-        // this.name = parts.name;
-        // get defaults from action commandDefinition
-        if (command?.command?.buttonDefaults)
-            Obj.TypeSafeAssign(this, command.command.buttonDefaults);
-    }
+  constructor(command: ButtonCommand, name: string) {
+    this.command = command;
+    // if the name is an identifier, split it
+    const parts = Button.splitName(name);
+    this.id = parts.id;
+    // this.name = parts.name;
+    // get defaults from action commandDefinition
+    if (command?.command?.buttonDefaults)
+      Obj.TypeSafeAssign(this, command.command.buttonDefaults);
+  }
 
-    static splitName(identifier: string): { id: string, name: CommandNames } {
-        const parts = identifier.split('=');
-        return { id: parts[0], name: (parts[1] || identifier) as CommandNames};
-    }
+  static splitName(identifier: string): { id: string, name: CommandNames } {
+    const parts = identifier.split('=');
+    return { id: parts[0], name: (parts[1] || identifier) as CommandNames};
+  }
 
-    /** Configure the link generator before it creates the link */
-    configureLinkGenerator: (context: ContextComplete, linkGenerator: CommandLinkGenerator) => void;
+  /** Configure the link generator before it creates the link */
+  configureLinkGenerator: (context: ContextComplete, linkGenerator: CommandLinkGenerator) => void;
 
-    /** The dialog name */
-    dialog?: ButtonGenOrProp<string>;
+  /** The dialog name */
+  dialog?: ButtonGenOrProp<string>;
 
-    /** Check if full-screen, always a function */
-    fullScreen?: ButtonPropGen<boolean>;
+  /** Check if full-screen, always a function */
+  fullScreen?: ButtonPropGen<boolean>;
 
-    /** Determines if the button should be disabled */
-    disabled?: ButtonGenOrProp<boolean>;
+  /** Determines if the button should be disabled */
+  disabled?: ButtonGenOrProp<boolean>;
 
-    /** Dynamicaly determine classes - must always be a function */
-    dynamicClasses: ButtonPropGen<string>;
+  /** Dynamically determine classes - must always be a function */
+  dynamicClasses: ButtonPropGen<string>;
 
-    /** The icon to show in the button */
-    icon?: ButtonGenOrProp<string>;
+  /** The icon to show in the button */
+  icon?: ButtonGenOrProp<string>;
 
-    /** Determine if it should use the inline window, always a function */
-    inlineWindow?: ButtonPropGen<boolean> = () => false;
+  /** Determine if it should use the inline window, always a function */
+  inlineWindow?: ButtonPropGen<boolean> = () => false;
 
-    /** Check if we should open a new window, always an FN */
-    newWindow?: ButtonPropGen<boolean>;
+  /** Check if we should open a new window, always an FN */
+  newWindow?: ButtonPropGen<boolean>;
 
-    /** Method which determines if it should be shown or not */
-    showCondition?: ButtonPropGen<boolean>;
+  /** Method which determines if it should be shown or not */
+  showCondition?: ButtonPropGen<boolean>;
 
-    /** The title of this button which will usually be i18n keys */
-    title?: ButtonPropGen<string>;
+  /** The title of this button which will usually be i18n keys */
+  title?: ButtonPropGen<string>;
 
-    /** Determines if this button runs in the page - affecting publishing */
-    partOfPage?: ButtonPropGen<boolean>;
+  /** Determines if this button runs in the page - affecting publishing */
+  partOfPage?: ButtonPropGen<boolean>;
 
-    /** The code to run for this button - if empty, will default to open a dialog */
-    code?: CommandCode;
+  /** The code to run for this button - if empty, will default to open a dialog */
+  code?: CommandCode;
 
-    /**
-     * The color which could be supplied per button - new for `info`
-     * New v15.04
-     */
-    color: ButtonPropGen<string | undefined>;
+  /**
+   * The color which could be supplied per button - new for `info`
+   * New v15.04
+   */
+  color: ButtonPropGen<string | undefined>;
 
-    /**
-     * The tippy which could be supplied per button - new for `info`
-     * v15.04
-     */
-    tippy: (context: ContextComplete, tag: HTMLElement) => void;
+  /**
+   * The tippy which could be supplied per button - new for `info`
+   * v15.04
+   */
+  tippy: (context: ContextComplete, tag: HTMLElement) => void;
 
-    /**
-     * Additional parameters which are used to RUN the command.
-     * So it's not used when preparing a toolbar button, but only when executing
-     */
-    addParamsToLink?: ButtonPropGen<CommandParams>;
+  /**
+   * Additional parameters which are used to RUN the command.
+   * So it's not used when preparing a toolbar button, but only when executing
+   */
+  addParamsToLink?: ButtonPropGen<CommandParams>;
 
-    /** this is just a UI interaction, won't create data so won't need pre-flight */
-    uiActionOnly: ButtonPropGen<boolean>;
+  /** this is just a UI interaction, won't create data so won't need pre-flight */
+  uiActionOnly: ButtonPropGen<boolean>;
 
-    /**
-     * WIP - ability to specify notes which will be shown in the toolbar
-     * @internal
-     */
-    notes?: ButtonPropGen<Note[]>;
+  /**
+   * Ability to specify notes which will be shown in the toolbar
+   * @internal
+   */
+  notes?: ButtonPropGen<Note[]>;
 
-    /** Detect if this is a Button */
-    static is(thing: unknown): thing is Button {
-        return (thing as Button).command !== undefined;
-    }
+  /**
+   * WIP
+   * Specify that this button should not include items in the command
+   * @internal
+   */
+  noItems?: ButtonGenOrProp<boolean>;
 
-    static isArray(thing: TypeTbD): thing is Button[] {
-        return thing.length && Button.is(thing[0]);
-    }
+  /** Detect if this is a Button */
+  static is(thing: unknown): thing is Button {
+    return (thing as Button).command !== undefined;
+  }
 
-    static isPropGen<T>(thing: ButtonGenOrProp<T>): thing is ButtonPropGen<T> {
-        return typeof thing === 'function';
-    }
+  static isArray(thing: TypeTbD): thing is Button[] {
+    return thing.length && Button.is(thing[0]);
+  }
+
+  static isPropGen<T>(thing: ButtonGenOrProp<T>): thing is ButtonPropGen<T> {
+    return typeof thing === 'function';
+  }
 }
 
