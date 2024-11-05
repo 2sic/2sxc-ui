@@ -78,5 +78,7 @@ Commands.add(CommandNames.layout, translateKey, 'glasses', true, true, {
       isSystem: true,
     });
     return [noteObj];
-  }
+  },
+
+  noItems: true,
 });

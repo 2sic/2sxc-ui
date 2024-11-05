@@ -20,4 +20,7 @@ Commands.add(CommandNames.appResources, 'AppResources', 'translate', true, false
 
   // if it doesn't have a query, make the button faded
   dynamicClasses: (context) => context.app.resourcesId !== null ? '' : 'empty',
+
+  // The items will transport the resourcesId
+  noItems: false,
 });

@@ -29,6 +29,9 @@ export const MetadataCommand = Command.build(CommandNames.metadata, 'Metadata', 
     };
     linkGenerator.items[0] = {...linkGenerator.items[0], ...itm };
   },
+
+  // The items will transport the metadata
+  noItems: false,
 });
 
 /**

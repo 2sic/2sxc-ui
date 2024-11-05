@@ -6,4 +6,6 @@
  * import this module to commands.ts
  * @internal
  */
-Commands.add(CommandNames.appImport, 'Dashboard', '', true, false, {});
+Commands.add(CommandNames.appImport, 'Dashboard', '', true, false, {
+  noItems: true,
+});

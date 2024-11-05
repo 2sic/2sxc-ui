@@ -6,9 +6,10 @@
  */
 const cmd = Command.build(CommandNames.system, 'Zone', 'manage', true, false, {
   dialog: (_) => CommandNames.system_old_zone,
-  showCondition: (context) => {
-    return !!context.user.CanAdmin;
-  },
+  
+  showCondition: (ctx) => !!ctx.user.CanAdmin,
+
+  noItems: true,
 });
 
 Commands.addCommand(cmd);

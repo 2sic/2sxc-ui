@@ -20,6 +20,8 @@ const cmd = Command.build(CommandNames.insights, 'Insights', 'speed', true, fals
       return resolve();
     });
   },
+
+  noItems: true,
 });
 
 Commands.addCommand(cmd);

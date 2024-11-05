@@ -9,17 +9,10 @@ import { CmdParHlp } from '../cmd-par-hlp';
  * import this module to commands.ts
  * @internal
  */
-Commands.add(
-  CommandNames.add,
-  'AddDemo',
-  'plus-circled',
-  false,
-  true,
-  {
-    showCondition: (context) => SharedLogic.isList(context),
-    code(context) {
-      return Actions.addItem(context, CmdParHlp.getIndex(context) + 1);
-    },
+Commands.add(CommandNames.add, 'AddDemo', 'plus-circled', false, true, {
+    showCondition: (ctx) => SharedLogic.isList(ctx),
+
+    code: (ctx) => Actions.addItem(ctx, CmdParHlp.getIndex(ctx) + 1),
   },
 );
 

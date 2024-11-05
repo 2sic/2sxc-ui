@@ -66,4 +66,6 @@ Commands.add(CommandNames.info, 'Info', 'info', true, false, {
       window.open(link as string, target ?? '_blank');
     return Promise.resolve();
   },
+
+  noItems: true,
 });

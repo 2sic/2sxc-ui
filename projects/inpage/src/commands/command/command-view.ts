@@ -12,6 +12,9 @@ const cmd = Command.build(CommandNames.view, 'TemplateSettings', 'sliders', true
   configureLinkGenerator: (ctx, linkGen) => {
     linkGen.items = [{ EntityId: ctx.contentBlock.templateId }];
   },
+
+  // Special: the items are fake, they transport info about the template
+  noItems: false,
 });
 
 Commands.addCommand(cmd);

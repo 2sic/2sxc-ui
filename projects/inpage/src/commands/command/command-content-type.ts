@@ -1,4 +1,4 @@
-﻿import { Command, CommandContentTypeParams, CommandNames, CommandParams, Commands } from '..';
+﻿import { Command, CommandContentTypeParams, CommandNames, Commands } from '..';
 import { ContextComplete } from '../../context';
 
 /**
@@ -11,9 +11,9 @@ const cmd = Command.build(CommandNames.fields, 'ContentType', 'fields', true, fa
   addParamsToLink: createContentTypeParams,
 
   // only show to admin-users and in cases where we know the content-type
-  showCondition: (context) => {
-    return !!context.user.CanDevelop && !!createContentTypeParams(context).contentType;
-  },
+  showCondition: (context) => !!context.user.CanDevelop && !!createContentTypeParams(context).contentType,
+
+  noItems: true,
 });
 
 Commands.addCommand(cmd);

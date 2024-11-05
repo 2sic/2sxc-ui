@@ -21,6 +21,8 @@ const cmd = Command.build(CommandNames.template, 'Develop', 'code', true, false,
 
   addParamsToLink: (ctx) => ({ isshared: ctx.contentBlock.templateIsShared }),
 
+  // Special: the items are fake, they transport info about the template
+  noItems: false,
 });
 
 Commands.addCommand(cmd);

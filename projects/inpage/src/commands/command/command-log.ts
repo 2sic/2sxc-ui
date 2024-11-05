@@ -1,5 +1,5 @@
 ﻿import { CommandNames, Commands } from '..';
-import { Debug } from '../../constants/debug';
+
 /**
  * This is a dummy command to just log a message.
  * It's not meant to show in the toolbar, but it should be callable on $2sxc(...).cms.run({ action: 'log', params: { message: 'hello' } })
@@ -9,12 +9,12 @@ import { Debug } from '../../constants/debug';
  */
 Commands.add(CommandNames.log, 'Log', 'bomb', true, false, {
 
-  // inlineWindow: (_) => true,
-
   code(context, event) {
     console.log('command: log (message/context)', context.button.command.params.message, context);
     return new Promise((resolve, reject) => {});
   },
+
+  noItems: true,
 });
 
 // Test code

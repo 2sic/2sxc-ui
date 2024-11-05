@@ -5,7 +5,7 @@
  * @internal
  */
 Commands.add(CommandNames.apps, 'Zone', 'manage', true, false, {
-  showCondition: (context) => {
-    return !!context.user.CanAdmin;
-  },
+  showCondition: (context) => !!context.user.CanAdmin,
+
+  noItems: true,
 });

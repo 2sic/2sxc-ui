@@ -27,8 +27,10 @@ const cmd = Command.build(CommandNames.code, 'Custom', 'bomb', true, false, {
       }
 
       let code = params.call;
-      if (!code) return errAndResolve(errNoCode);
-      if (typeof code !== 'string') return errAndResolve(errCodeNotString);
+      if (!code)
+        return errAndResolve(errNoCode);
+      if (typeof code !== 'string')
+        return errAndResolve(errCodeNotString);
       if (code.indexOf('(') !== -1 || code.indexOf(' ') !== -1)
         return errAndResolve(`${errPrefix}but 'call' contained '(' or ' ' characters - not allowed.`);
 

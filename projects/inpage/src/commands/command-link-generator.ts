@@ -84,7 +84,10 @@ export class CommandLinkGenerator extends HasLog {
         this.addFieldsAndParameters(this.items[i] as ItemIdentifierSimple, params);
 
     delete urlItems.prefill; // added 2020-03-11, seemed strange that it's not removed
-    urlItems.items = JSON.stringify(this.items); // Serialize/json-ify the complex items-list
+
+    // Only add items if button doesn't forbid it - new v18.03
+    if (!button.noItems())
+      urlItems.items = JSON.stringify(this.items); // Serialize/json-ify the complex items-list
 
     // clone the params and adjust parts based on partOfPage settings...
     const partOfPage = button.partOfPage();

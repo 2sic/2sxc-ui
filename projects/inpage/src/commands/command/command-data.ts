@@ -11,9 +11,7 @@ const cmd = Command.build(CommandNames.data, 'ContentItems', 'table', true, fals
   addParamsToLink: createContentTypeParams,
 
   // only show to admin-users and in cases where we know the content-type
-  showCondition: (context) => {
-    return !!context.user.CanAdmin && !!createContentTypeParams(context).contentType;
-  },
+  showCondition: (context) => !!context.user.CanAdmin && !!createContentTypeParams(context).contentType,
 
   configureLinkGenerator: (context, linkGenerator) => {
     if (context.button.command.params.filters) {
@@ -26,6 +24,8 @@ const cmd = Command.build(CommandNames.data, 'ContentItems', 'table', true, fals
       linkGenerator.urlParams.filters = enc;
     }
   },
+
+  noItems: true,
 });
 
 Commands.addCommand(cmd);
