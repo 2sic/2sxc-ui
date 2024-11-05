@@ -121,10 +121,12 @@ export class IFrameBridge extends HasLog implements IIFrameBridge {
     setup(sxc: Sxc, dialogName: string): void {
         const cl = this.log.call('setup');
         cl.data('rewire with sxc: ', sxc);
-
+        cl.data('dialogName: ', dialogName);
         this.changed = false;
         this.instanceSxc = sxc;
-        this.tagModule = DomTools.getTag(sxc).parentElement;
+        const tag = DomTools.getTag(sxc);
+        cl.data('tag: ', tag);
+        this.tagModule = tag?.parentElement;      
         this.sxcCacheKey = sxc.cacheKey;
         if (dialogName) this.dialogName = dialogName;
         cl.done();

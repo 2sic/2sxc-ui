@@ -38,7 +38,7 @@ export class CommandLinkGenerator extends HasLog {
     cl.data('items', this.items);
 
     // initialize params
-    this.urlParams = button.addParamsToLink() as unknown;
+    this.urlParams = button.parameters() as unknown;
     const dialog = button.dialog();
     // note: this corrects how the variable to name the dialog changed in the history of 2sxc from action to dialog
     this.urlParams = { ...{ dialog: dialog || command.name }, ...this.urlParams };
@@ -84,7 +84,10 @@ export class CommandLinkGenerator extends HasLog {
         this.addFieldsAndParameters(this.items[i] as ItemIdentifierSimple, params);
 
     delete urlItems.prefill; // added 2020-03-11, seemed strange that it's not removed
-    urlItems.items = JSON.stringify(this.items); // Serialize/json-ify the complex items-list
+
+    // Only add items if button doesn't forbid it - new v18.03
+    if (!button.noItems())
+      urlItems.items = JSON.stringify(this.items); // Serialize/json-ify the complex items-list
 
     // clone the params and adjust parts based on partOfPage settings...
     const partOfPage = button.partOfPage();

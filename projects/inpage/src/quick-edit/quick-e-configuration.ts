@@ -51,6 +51,9 @@ export class QuickEditConfig {
 
   /**
    * Optional detailed configuration of the buttons.
+   * The buttons configuration on the root.
+   * Will be used for the `modules` and `innerBlocks` if not specified there.
+   * Note that if not specified, will always default to true for all buttons.
    */
   buttons?: QuickEditConfigButtons;
 }
@@ -60,12 +63,12 @@ export class QuickEditConfig {
  * @public
  */
 export class QuickEditConfigRoot extends QuickEditConfig {
-  /**
-   * The buttons configuration on the root.
-   * Will be used for the `modules` and `innerBlocks` if not specified there.
-   * Note that if not specified, will always default to true for all buttons.
-   */
-  buttons?: QuickEditConfigButtons;
+  // /**
+  //  * The buttons configuration on the root.
+  //  * Will be used for the `modules` and `innerBlocks` if not specified there.
+  //  * Note that if not specified, will always default to true for all buttons.
+  //  */
+  // buttons?: QuickEditConfigButtons;
 
   /**
    * Optional configuration for the Inner Content Blocks.

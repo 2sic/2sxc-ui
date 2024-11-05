@@ -1,4 +1,4 @@
-﻿import { Command, CommandContentTypeParams, CommandNames, CommandParams, Commands } from '..';
+﻿import { Command, CommandContentTypeParams, CommandNames, Commands } from '..';
 import { ContextComplete } from '../../context';
 
 /**
@@ -8,12 +8,12 @@ import { ContextComplete } from '../../context';
 const cmd = Command.build(CommandNames.fields, 'ContentType', 'fields', true, false, {
   dialog: (_) => CommandNames.fields_old_contenttype,
 
-  addParamsToLink: createContentTypeParams,
+  parameters: createContentTypeParams,
 
   // only show to admin-users and in cases where we know the content-type
-  showCondition: (context) => {
-    return !!context.user.CanDevelop && !!createContentTypeParams(context).contentType;
-  },
+  showCondition: (ctx) => !!ctx.user.CanDevelop && !!createContentTypeParams(ctx).contentType,
+
+  noItems: true,
 });
 
 Commands.addCommand(cmd);
@@ -23,10 +23,9 @@ Commands.addCommand(Command.clone(cmd, CommandNames.fields_old_contenttype));
 /**
  * @internal
  */
-export function createContentTypeParams(context: ContextComplete): { contentType: string } {
-  const result: CommandContentTypeParams = {
-    contentType: context.button.command.params.contentType
-    || context.contentBlock.contentTypeId,
-  };
-  return result;
+export function createContentTypeParams(ctx: ContextComplete): { contentType: string } {
+  return {
+    contentType: ctx.button.command.params.contentType
+    || ctx.contentBlock.contentTypeId,
+  } satisfies CommandContentTypeParams;
 }

@@ -76,7 +76,9 @@ Commands.add(CommandNames.edition, 'Edition', 'edition', true, false, {
       isSystem: true,
     });
     return [noteObj];
-  }
+  },
+
+  noItems: true,
 });
 
 /**

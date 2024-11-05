@@ -19,8 +19,10 @@ const cmd = Command.build(CommandNames.template, 'Develop', 'code', true, false,
     linkGenerator.items = [identifier];
   },
 
-  addParamsToLink: (ctx) => ({ isshared: ctx.contentBlock.templateIsShared }),
+  parameters: (ctx) => ({ isshared: ctx.contentBlock.templateIsShared }),
 
+  // Special: the items are fake, they transport info about the template
+  noItems: false,
 });
 
 Commands.addCommand(cmd);

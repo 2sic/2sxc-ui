@@ -24,4 +24,7 @@ Commands.add(CommandNames.appSettings, 'AppSettings', 'sliders', true, false, {
 
   // if it doesn't have a settings, make it less strong
   dynamicClasses: (context) => context.app.settingsId !== null ? '' : 'empty',
+
+  // The items will transport the settingsId
+  noItems: false,
 });

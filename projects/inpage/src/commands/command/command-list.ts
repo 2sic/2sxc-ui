@@ -21,6 +21,9 @@ const cmd = Command.build(CommandNames.list, 'Sort', 'list-numbered', false, tru
       Field: params.fields,
     }];
   },
+
+  // the items contain info about the list to show
+  noItems: false,
 });
 
 Commands.addCommand(cmd);

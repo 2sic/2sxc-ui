@@ -7,7 +7,7 @@
 const cmd = Command.build(CommandNames.query, 'QueryEdit', 'filter', true, false, {
   dialog: (_) => 'pipeline-designer',
 
-  addParamsToLink: (ctx) => ({ pipelineId: ctx.contentBlock.queryId }),
+  parameters: (ctx) => ({ pipelineId: ctx.contentBlock.queryId }),
 
   newWindow: (_) => true,
 
@@ -19,6 +19,8 @@ const cmd = Command.build(CommandNames.query, 'QueryEdit', 'filter', true, false
 
   // if it doesn't have a query, make it less strong
   dynamicClasses: (ctx) => ctx.contentBlock.queryId ? '' : 'empty',
+
+  noItems: true,
 });
 
 

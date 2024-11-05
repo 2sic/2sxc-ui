@@ -27,7 +27,7 @@ function logTest(): boolean
 export class EnvironmentMetaLoader extends HasLog {
     public retries = 0;
 
-    public log: Log;
+    // public log: Log;
 
     private dynamicPageHelper: EnvironmentLoaderDynamic;
 

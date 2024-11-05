@@ -7,12 +7,11 @@
  * @internal
  */
 Commands.add(CommandNames.edit, 'Edit', 'pencil', false, true, {
-  addParamsToLink: (ctx) => ({ mode: CommandNames.edit }),
+  parameters: _ => ({ mode: CommandNames.edit }),
   showCondition(ctx) {
+    const pars = ctx.button.command.params;
     // need ID or a "slot", otherwise edit won't work
-    const result =
-      !!ctx.button.command.params.entityId ||
-      !!ctx.button.command.params.useModuleList;
+    const result = !!pars.entityId || !!pars.useModuleList;
     return result;
   },
 });
