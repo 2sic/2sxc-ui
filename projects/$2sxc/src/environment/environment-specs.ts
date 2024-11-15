@@ -37,4 +37,11 @@ export interface EnvironmentSpecs {
    * @internal
    */
   dialogQuery?: string;
+
+  /**
+   * The public key for secure endpoints
+   * added in v18.05
+   * @internal
+   */
+  secureEndpointPublicKey?: string
 }

@@ -1570,6 +1570,7 @@ export declare class SxcGlobalEnvironment extends HasLog {
      */
     platform(): string;
     /* Excluded from this release type: dialogQuery */
+    /* Excluded from this release type: secureEndpointPublicKey */
     /* Excluded from this release type: ensureReadyOrThrow */
 }
 

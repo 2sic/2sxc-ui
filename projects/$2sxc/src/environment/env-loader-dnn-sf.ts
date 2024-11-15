@@ -50,7 +50,9 @@ export class EnvironmentDnnSfLoader extends HasLog {
             rvtHeader: AntiForgeryTokenHeaderNameDnn,
             rvt: dnnSf.getAntiForgeryValue(),
             uiRoot: DnnUiRoot,
-            platform: PlatformDnn,
+            platform: PlatformDnn
+            // dialogQuery: '',
+            // secureEndpointPublicKey: ''
         };
         this.env.load(sfJsInfo, 'dnn SF');
         cl.done();
