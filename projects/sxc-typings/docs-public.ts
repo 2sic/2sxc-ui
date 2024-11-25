@@ -791,6 +791,7 @@ export declare interface EnvironmentSpecs {
     /** The platform code like 'dnn' or 'oqt' */
     platform: string;
     /* Excluded from this release type: dialogQuery */
+    /* Excluded from this release type: secureEndpointPublicKey */
 }
 
 /**
