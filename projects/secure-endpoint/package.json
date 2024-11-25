@@ -1,16 +1,21 @@
 {
-  "name": "secure-endpoint",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "name": "2sic-2sxc-secure-endpoint",
+  "version": "18.05.00",
+  "description": "Secure Endpoint API for 2sxc JS",
+  "main": "2sxc.secure-endpoint.min.js",
   "scripts": {
-    "build": "tsc",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "release": "webpack --mode=production",
+    "secure-endpoint-prod": "webpack --watch --mode=production",
+    "secure-endpoint-dev": "webpack --watch --mode=development"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "typescript": "^5.6.3"
+    "ts-loader": "^9.5.1",
+    "typescript": "^5.6.3",
+    "webpack": "^5.96.1",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^5.1.0"
   }
 }
