@@ -1,22 +1,40 @@
 import { EncryptedData } from "./encrypted-data";
 
+declare global {
+  interface Window {
+    $2sxc: {
+      env: {
+        secureEndpointPublicKey: () => string;
+      };
+    };
+  }
+}
+
 export class SecureEndpoint {
   private cachedPublicKey: string | null = null;
-
-  // TODO: tmp, delete after implementation of reading from jsApi
-  private testPublicKey: string = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA4qrDDOykS8z6x51jlBZebPePuhnSlSHyMCEtyqUOETqavbHY9y8Kw5xBnDTzturd5vbtebw9YsotzRGY6ku9yCmc3uDF0P5DK6AVNxuDs4ziXXzCV1rKmB49ulqy53ygeIDZCFOGFpybFE6Qgg2W7taHfO+2Lkvx1zqtdhZmDl2Na1YwOhuXIq7Jym8Xn2Zb/2eYNQI5Y6jjDMwF3kJh3MpZhc6rw56fWKau4lkaxSx5IeH8U6L4Yzt63TyJ7PCLN5uNxkI25nUrHVW5nkmxexTA3ahk3hYH4MAd1GKNiXKTLPX1hzUq+fG3W9M++xv5i0NQrTU7YLlml19nfVSSFQIDAQAB";
-
-  // TODO: #1 Enable/disable secure-endpoint feature (could be implicit by loading JS lib, or existance of SecureEndpointPublicKey in html).
-  // TODO: #2 window.crypto.subtle feature is available only in secure browser contexts (HTTPS). Need to provide warning and fallback when feature is missing.
 
   /**
    * Function to encrypt data
    * @param data - Data to encrypt
-   * @returns Encrypted data containing the encrypted key, IV, and encrypted data
+   * @returns Encrypted data containing the encrypted key, IV, and encrypted data, or unecrypted data if public key or crypto is not available
    */
-  public async encryptData(data: string): Promise<EncryptedData> {
+  public async encryptData(data: any): Promise<any> {
     // Fetch the RSA public key from the server
-    const publicKeyPem: string = await this.getPublicKey();
+    const publicKeyPem: string | null = await this.getPublicKey();
+
+    // Enable/disable secure-endpoint feature (implicit by existance of SecureEndpointPublicKey in html).
+    // If the public key is not available, return original unencrypted data
+    if (!publicKeyPem) {
+      console.warn("Public key not available. Returning unencrypted data.");
+      return data;
+    }
+
+    // window.crypto.subtle feature is available only in secure browser contexts (HTTPS). 
+    // Need to provide warning and fallback when feature is missing.
+    if (!window.crypto.subtle) {
+      console.warn("window.crypto.subtle is not available. Check if pages is on HTTPS. Returning unencrypted data.");
+      return data;
+    }
 
     // Import the RSA public key
     const publicKey: CryptoKey = await this.importPublicKey(publicKeyPem);
@@ -48,7 +66,10 @@ export class SecureEndpoint {
 
     // Convert the data to ArrayBuffer
     const enc: TextEncoder = new TextEncoder();
-    const encodedMessage: Uint8Array = enc.encode(data);
+
+    const dataString: string = JSON.stringify(data);
+
+    const encodedMessage: Uint8Array = enc.encode(dataString);
 
     // Encrypt the data using AES key
     const encryptedData: ArrayBuffer = await window.crypto.subtle.encrypt(
@@ -65,7 +86,7 @@ export class SecureEndpoint {
     const encryptedDataBase64: string = this.arrayBufferToBase64(encryptedData);
     const ivBase64: string = this.arrayBufferToBase64(iv.buffer);
 
-    return { version: 1, data: encryptedDataBase64, key: encryptedKeyBase64, iv: ivBase64 };
+    return new EncryptedData(encryptedDataBase64, encryptedKeyBase64, ivBase64);
   }
 
   /**
@@ -76,9 +97,7 @@ export class SecureEndpoint {
       return this.cachedPublicKey;
     }
 
-    // TODO: read form jsApi meta-tag in header
-    this.cachedPublicKey = this.testPublicKey;
-
+    this.cachedPublicKey = window.$2sxc.env.secureEndpointPublicKey()
     return this.cachedPublicKey;
   }
 
