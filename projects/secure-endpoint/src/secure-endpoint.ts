@@ -107,44 +107,9 @@ export class SecureEndpoint {
    * @returns ArrayBuffer of DER
    */
   private getSpkiDer(spkiPem: string): ArrayBuffer {
-    const pemContents: string = this.getPemContents(spkiPem);
+    const pemContents: string = spkiPem;
     const binaryDerString: string = window.atob(pemContents);
     return this.str2ab(binaryDerString);
-  }
-
-  /**
-   * Extracts the base64 content from a PEM formatted string
-   * @param spkiPem - SPKI public key in PEM format
-   * @returns Base64 string without PEM headers/footers and quotes
-   */
-  private getPemContents(spkiPem: string): string {
-    let pemContent: string = spkiPem;
-    pemContent = pemContent.replace(/\\r\\n/g, '');
-    pemContent = this.removeFromStart(pemContent, "-----BEGIN PUBLIC KEY-----");
-    pemContent = this.removeFromEnd(pemContent, "-----END PUBLIC KEY-----");
-    pemContent = this.removeFromStart(pemContent, `"`);
-    pemContent = this.removeFromEnd(pemContent, `"`);
-    return pemContent;
-  }
-
-  /**
-   * Removes a specified substring from the start of the content if it exists
-   * @param content - Original string
-   * @param remove - Substring to remove
-   * @returns Modified string
-   */
-  private removeFromStart(content: string, remove: string): string {
-    return content.startsWith(remove) ? content.substring(remove.length) : content;
-  }
-
-  /**
-   * Removes a specified substring from the end of the content if it exists
-   * @param content - Original string
-   * @param remove - Substring to remove
-   * @returns Modified string
-   */
-  private removeFromEnd(content: string, remove: string): string {
-    return content.endsWith(remove) ? content.substring(0, content.length - remove.length) : content;
   }
 
   /**
