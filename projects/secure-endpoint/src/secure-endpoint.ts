@@ -12,6 +12,13 @@ declare global {
 
 export class SecureEndpoint {
   private cachedPublicKey: string | null = null;
+  private throwExceptionWhenEncryptionIsNotAvailable: boolean;
+  private showDialogOnException: boolean;
+
+  constructor(config?: { throwExceptionWhenEncryptionIsNotAvailable?: boolean; showDialogOnException?: boolean }) {
+    this.throwExceptionWhenEncryptionIsNotAvailable = config?.throwExceptionWhenEncryptionIsNotAvailable ?? false;
+    this.showDialogOnException = config?.showDialogOnException ?? false;
+  }
 
   /**
    * Function to encrypt data
@@ -25,14 +32,14 @@ export class SecureEndpoint {
     // Enable/disable secure-endpoint feature (implicit by existance of SecureEndpointPublicKey in html).
     // If the public key is not available, return original unencrypted data
     if (!publicKeyPem) {
-      console.warn("Public key not available. Returning unencrypted data.");
+      this.handleError("Encryption is not available. Public key is missing.");
       return data;
     }
 
     // window.crypto.subtle feature is available only in secure browser contexts (HTTPS). 
     // Need to provide warning and fallback when feature is missing.
     if (!window.crypto.subtle) {
-      console.warn("window.crypto.subtle is not available. Check if pages is on HTTPS. Returning unencrypted data.");
+      this.handleError("Encryption is not available because 'window.crypto.subtle' is unavailable. Check if page is on HTTPS.");
       return data;
     }
 
@@ -87,6 +94,20 @@ export class SecureEndpoint {
     const ivBase64: string = this.arrayBufferToBase64(iv.buffer);
 
     return new EncryptedData(encryptedDataBase64, encryptedKeyBase64, ivBase64);
+  }
+
+  /**
+   * Handle error as configured. Throw exception or log warning
+   * @param message - Error message
+   */
+  private handleError(message: string) {
+    if (this.throwExceptionWhenEncryptionIsNotAvailable) {
+      // console.error(message);
+      if (this.showDialogOnException) alert(message);
+      throw new Error(message);
+    } else {
+      console.warn(message + "\nReturning unencrypted data.");
+    } 
   }
 
   /**
