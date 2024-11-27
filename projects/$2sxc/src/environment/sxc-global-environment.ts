@@ -149,8 +149,8 @@ export class SxcGlobalEnvironment extends HasLog {
      * Don't check if it was initialized, because it's valid if it doesn't exist
      * @internal
      */
-    public secureEndpointPublicKey(): string {
-      return this.header.secureEndpointPublicKey ?? null;
+    public publicKey(): string {
+      return this.header.publicKey ?? null;
     }
 
     /** @internal */

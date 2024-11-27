@@ -52,7 +52,7 @@ export class EnvironmentDnnSfLoader extends HasLog {
             uiRoot: DnnUiRoot,
             platform: PlatformDnn
             // dialogQuery: '',
-            // secureEndpointPublicKey: ''
+            // publicKey: ''
         };
         this.env.load(sfJsInfo, 'dnn SF');
         cl.done();

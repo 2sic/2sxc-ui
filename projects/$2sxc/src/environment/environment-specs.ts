@@ -43,5 +43,5 @@ export interface EnvironmentSpecs {
    * added in v18.05
    * @internal
    */
-  secureEndpointPublicKey?: string
+  publicKey?: string
 }

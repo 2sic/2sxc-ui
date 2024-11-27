@@ -1,3 +1,4 @@
+import { Sxc } from '../sxc';
 import { EncryptedData } from './encrypted-data';
 
 export class SecureEndpoint {
@@ -5,18 +6,20 @@ export class SecureEndpoint {
   private encrypt: boolean | 'auto' | 'force';
   private throwIfFails: boolean = false;
   private showErrorToUser: boolean = false;
+  private sxc: Sxc;
 
-  constructor(config?: { 
+  constructor(config: {
+    sxc: Sxc,
     encrypt?: null | boolean | 'auto' | 'force'; // true / false / 'auto' (default) / 'force'
     showErrorToUser?: boolean 
   }) {
-     
+    this.sxc = config.sxc;
     // Set the encryption mode, (null defaults to 'auto')
-    this.encrypt = config?.encrypt ?? 'auto';
+    this.encrypt = config.encrypt ?? 'auto';
     // If encrypt is 'force' and encryption fails, throw error
-    this.throwIfFails = (config?.encrypt == true || config?.encrypt == 'force') ? true : false;
+    this.throwIfFails = (config.encrypt == true || config.encrypt == 'force') ? true : false;
     // If showErrorToUser is true, show error to user
-    this.showErrorToUser = config?.showErrorToUser ?? false;
+    this.showErrorToUser = config.showErrorToUser ?? false;
   }
 
   /**
@@ -26,6 +29,7 @@ export class SecureEndpoint {
    */
   public async encryptData(data: any): Promise<any> {
     // Fetch the RSA public key from the server
+    debugger;
     const publicKeyPem: string | null = this.getPublicKey();
 
     // Return unencrypted data if encryption is disabled
@@ -114,11 +118,11 @@ export class SecureEndpoint {
    * Read the public key from the jsApi
    */
   private getPublicKey(): string {
-    if (this.cachedPublicKey !== null) {
+    if (this.cachedPublicKey)
       return this.cachedPublicKey;
-    }
 
-    this.cachedPublicKey = window.$2sxc.env.secureEndpointPublicKey()
+    this.cachedPublicKey = this.sxc.env.publicKey();
+    debugger;
     return this.cachedPublicKey;
   }
 
