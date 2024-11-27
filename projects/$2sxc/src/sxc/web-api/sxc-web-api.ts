@@ -148,7 +148,6 @@ export class SxcWebApi implements ZzzSxcWebApiDeprecated {
 
     // Handle encryption if needed
     if (options.encrypt) {
-      debugger;
       const secureEndpoint = new SecureEndpoint({
         sxc: this.sxc,
         encrypt: options.encrypt,

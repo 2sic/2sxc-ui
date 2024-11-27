@@ -29,7 +29,6 @@ export class SecureEndpoint {
    */
   public async encryptData(data: any): Promise<any> {
     // Fetch the RSA public key from the server
-    debugger;
     const publicKeyPem: string | null = this.getPublicKey();
 
     // Return unencrypted data if encryption is disabled
@@ -122,7 +121,6 @@ export class SecureEndpoint {
       return this.cachedPublicKey;
 
     this.cachedPublicKey = this.sxc.env.publicKey();
-    debugger;
     return this.cachedPublicKey;
   }
 
