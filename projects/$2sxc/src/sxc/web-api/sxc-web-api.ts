@@ -132,22 +132,12 @@ export class SxcWebApi implements ZzzSxcWebApiDeprecated {
     url = this.url(url, ctxParams);
 
     // Handle method and options
-    let finalMethod: string;
-    let options: FetchOptions = {};
-    if (typeof method === 'string') {
-      finalMethod = method;
-    } else if (typeof method === 'object') {
-      options = method;
-      options.encrypt = options.encrypt ?? 'auto';
-      finalMethod = options.method || (data ? 'POST' : 'GET');
-    } else {
-      finalMethod = data ? 'POST' : 'GET';
-    }
+    let options: FetchOptions = this.prepareOptions(method, data);
 
-    const headers = this.headers(finalMethod);
+    const headers = this.headers(options.method);
 
     // Handle encryption if needed
-    if (options.encrypt) {
+    if (options.method == 'POST' && options.encrypt) {
       const secureEndpoint = new SecureEndpoint({
         sxc: this.sxc,
         encrypt: options.encrypt,
@@ -167,9 +157,25 @@ export class SxcWebApi implements ZzzSxcWebApiDeprecated {
 
     return fetch(url, {
       headers,
-      method: finalMethod,
+      method: options.method,
       ...(data && { body: data as string }),
     });
+  }
+
+  // prepare options
+  private prepareOptions(method: string | FetchOptions, data: string | Record<string, any>) {
+    let options: FetchOptions = {
+      method: (data ? 'POST' : 'GET'),
+      encrypt: 'auto', 
+    };
+    if (typeof method === 'string') {
+      options.method = method;
+    } else if (typeof method === 'object') {
+      options = method;
+      options.method = options.method || (data ? 'POST' : 'GET');
+      options.encrypt = options.encrypt ?? 'auto';
+    }
+    return options;
   }
 
   // Note: fetch was documented in v12.10 (December 2021) but will probably never be used externally
