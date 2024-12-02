@@ -31,6 +31,10 @@ export class SecureEndpoint {
     if (this.encrypt === false) 
       return data;
 
+    // // Edge case: when data is unedfined, null, empty or {} and return unencrypted data
+    // if (!data || JSON.stringify(data) === '{}')
+    //   return data;
+
     // Fetch the RSA public key from the server
     const publicKeyPem: string | null = this.sxc.env.publicKey();
 
