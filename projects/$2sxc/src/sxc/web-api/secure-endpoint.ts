@@ -2,7 +2,6 @@ import { Sxc } from '../sxc';
 import { EncryptedData } from './encrypted-data';
 
 export class SecureEndpoint {
-  private cachedPublicKey: string | null = null;
   private encrypt: boolean | 'auto' | 'force';
   private throwIfFails: boolean = false;
   private showErrorToUser: boolean = false;
@@ -28,11 +27,16 @@ export class SecureEndpoint {
    * @returns Encrypted data containing the encrypted key, IV, and encrypted data, or unecrypted data if public key or crypto is not available
    */
   public async encryptData(data: any): Promise<any> {
-    // Fetch the RSA public key from the server
-    const publicKeyPem: string | null = this.getPublicKey();
-
     // Return unencrypted data if encryption is disabled
-    if (this.encrypt === false) return data;
+    if (this.encrypt === false) 
+      return data;
+
+    // // Edge case: when data is unedfined, null, empty or {} and return unencrypted data
+    // if (!data || JSON.stringify(data) === '{}')
+    //   return data;
+
+    // Fetch the RSA public key from the server
+    const publicKeyPem: string | null = this.sxc.env.publicKey();
 
     // If the public key is not available, eventaly return original unencrypted data
     if (!publicKeyPem) {
@@ -111,17 +115,6 @@ export class SecureEndpoint {
     } else {
       console.warn(message + "\nReturning unencrypted data.");
     } 
-  }
-
-  /**
-   * Read the public key from the jsApi
-   */
-  private getPublicKey(): string {
-    if (this.cachedPublicKey)
-      return this.cachedPublicKey;
-
-    this.cachedPublicKey = this.sxc.env.publicKey();
-    return this.cachedPublicKey;
   }
 
   /**
