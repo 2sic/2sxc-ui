@@ -132,7 +132,7 @@ export class SxcWebApi implements ZzzSxcWebApiDeprecated {
     url = this.url(url, ctxParams);
 
     // Handle method and options
-    let options: FetchOptions = this.prepareOptions(method, data);
+    const options: FetchOptions = this.prepareOptions(method, data);
 
     const headers = this.headers(options.method);
 

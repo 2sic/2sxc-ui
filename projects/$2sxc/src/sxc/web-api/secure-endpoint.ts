@@ -26,9 +26,9 @@ export class SecureEndpoint {
    * @param data - Data to encrypt
    * @returns Encrypted data containing the encrypted key, IV, and encrypted data, or unecrypted data if public key or crypto is not available
    */
-  public async encryptData(data: any): Promise<any> {
+  public async encryptData(data: unknown): Promise<unknown> {
     // Return unencrypted data if encryption is disabled
-    if (this.encrypt === false) 
+    if (this.encrypt === false)
       return data;
 
     // // Edge case: when data is unedfined, null, empty or {} and return unencrypted data
