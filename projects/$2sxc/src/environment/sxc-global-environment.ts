@@ -143,6 +143,15 @@ export class SxcGlobalEnvironment extends HasLog {
       return this.header.dialogQuery ?? null;
     }
   
+    /**
+     * The public key for secure endpoints
+     * ATM very internal
+     * Don't check if it was initialized, because it's valid if it doesn't exist
+     * @internal
+     */
+    public publicKey(): string {
+      return this.header.publicKey ?? null;
+    }
 
     /** @internal */
     private ensureReadyOrThrow(partRequested: string): void {

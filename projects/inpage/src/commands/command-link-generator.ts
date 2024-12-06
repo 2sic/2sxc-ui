@@ -1,4 +1,5 @@
 ﻿import { CmdParHlp } from '.';
+import { SxcGlobalEnvironment } from '../../../$2sxc/src';
 import { CommandParams } from '../../../$2sxc/src/cms/command-params';
 import { ItemIdentifierCopy, ItemIdentifierInList, ItemIdentifierSimple, TemplateIdentifier } from '../../../$2sxc/src/cms/item-identifiers';
 import { C } from '../constants';
@@ -104,8 +105,8 @@ export class CommandLinkGenerator extends HasLog {
       } catch (e) { /* ignore */ }
     }
 
-    return `${rootUrl}#${NoJQ.param(ngDialogParams).replace(/%2F/g, '/')}&${NoJQ.param(urlItems)}${this.debugUrlParam}`
-      + items2;
+    return`${rootUrl}#${NoJQ.param(ngDialogParams).replace(/%2F/g, '/')}&${NoJQ.param(urlItems)}${this.debugUrlParam}`
+     + items2;
   }
 
   /**
@@ -116,7 +117,11 @@ export class CommandLinkGenerator extends HasLog {
     const env = context.sxc?.env ?? window.$2sxc.env;
     let customParams = env.dialogQuery();
     if (customParams && !customParams.startsWith('&')) customParams = '&' + customParams;
-    return urlClean(`${env.uiRoot()}${C.DialogPaths.eavUi}`) + `?pageId=${env.page()}&sxcver=${context.instance.sxcVersion}${customParams}`;
+    return urlClean(`${env.uiRoot()}${C.DialogPaths.eavUi}`) + `?pageId=${env.page()}&wpk=${this.withPublicKey(env)}&sxcver=${context.instance.sxcVersion}${customParams}`;
+  }
+
+  private withPublicKey(env: SxcGlobalEnvironment): boolean {
+    return env.publicKey() !== null;
   }
 
   private addItem() {

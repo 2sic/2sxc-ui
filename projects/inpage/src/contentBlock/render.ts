@@ -2,11 +2,12 @@
 import { C } from '../constants';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { HtmlTools } from '../html/dom-tools';
-import { AssetsLoader, HasLog, Insights, NoJQ } from '../core';
+import { HasLog, Insights, NoJQ } from '../core';
 import { QuickE } from '../quick-edit/quick-e';
 import { WorkflowHelper, WorkflowPhases, WorkflowStepCodeArguments } from '../workflow';
 import { ContentBlockEditor } from './content-block-editor';
 import { DomTools } from '../../../$2sxc/src/dom/dom-tools';
+import { AssetsLoader } from '../../../core/plumbing/assets-loader';
 /**
  * This is the rendering component, responsible to update the page when something changes.
  * Depending on the feature-set it will use ajax or not

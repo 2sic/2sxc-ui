@@ -3,7 +3,7 @@ import { AntiForgeryTokenHeaderNameDnn, DnnUiRoot, PlatformDnn } from '../consta
 import { EnvironmentSpecs } from './environment-specs';
 import { SxcGlobalEnvironment } from './sxc-global-environment';
 
-const helpAutoDetect = 'You must either include jQuery on the page or inject the jsApi parameters to prevent auto-detection.';
+const helpAutoDetect = 'You must inject the jsApi parameters to prevent auto-detection.';
 declare const window: Window;
 
 /**
@@ -50,7 +50,9 @@ export class EnvironmentDnnSfLoader extends HasLog {
             rvtHeader: AntiForgeryTokenHeaderNameDnn,
             rvt: dnnSf.getAntiForgeryValue(),
             uiRoot: DnnUiRoot,
-            platform: PlatformDnn,
+            platform: PlatformDnn
+            // dialogQuery: '',
+            // publicKey: ''
         };
         this.env.load(sfJsInfo, 'dnn SF');
         cl.done();

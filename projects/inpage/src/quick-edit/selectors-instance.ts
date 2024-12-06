@@ -18,13 +18,12 @@ const contentBlockAndModuleSelectors: { [key: string]: CbOrMod } = {
         selector: '.DnnModule',
         // Found no better way to get all panes - the hidden variable does not exist when not in edit page mode
         findAllLists: () => {
+            // TODO: 2024-12-04 2dm - seems we had a workaround for the `:has` selector, but probably don't need it anymore
+            //
             // jquery :has selector (https://api.jquery.com/has-selector/) is not a compatible with css selector
             // and doesn't work without jquery (https://developer.mozilla.org/en-US/docs/Web/CSS/:has)
             // and has absolutely terrible performance (380-560 ms)
             // $('.DNNEmptyPane, .dnnDropEmptyPanes, :has(>.DnnModule)')
-
-            // compact javascript solution is still very slow (10-15 ms)
-            // Array.from(document.querySelectorAll('*')).filter((e) => e.matches('.DNNEmptyPane, .dnnDropEmptyPanes') || Array.from(e.children).some((c) => c.matches('.DnnModule')))
 
             // as fast as can be (3-5 ms)
             const found: HTMLElement[] = [];
