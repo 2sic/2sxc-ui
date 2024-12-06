@@ -1,44 +1,37 @@
 import { Sxc } from '../sxc';
 import { EncryptedData } from './encrypted-data';
+import { FetchOptions } from './fetch-options';
 
-export class SecureEndpoint {
-  private encrypt: boolean | 'auto' | 'force';
-  private throwIfFails: boolean = false;
-  private showErrorToUser: boolean = false;
-  private sxc: Sxc;
+export class SecureEndpoint implements Omit<FetchOptions, 'method'> {
+  public encryptBody;
+  public encryptShowErrorToUser;
 
-  constructor(config: {
-    sxc: Sxc,
-    encrypt?: null | boolean | 'auto' | 'force'; // true / false / 'auto' (default) / 'force'
-    showErrorToUser?: boolean 
-  }) {
-    this.sxc = config.sxc;
+  private throwIfFails: boolean;
+
+  constructor(private sxc: Sxc, config: FetchOptions) {
+    // console.log(`encrypt config`, config);
     // Set the encryption mode, (null defaults to 'auto')
-    this.encrypt = config.encrypt ?? 'auto';
+    this.encryptBody = config.encryptBody ?? config.encrypt ?? 'auto';
     // If encrypt is 'force' and encryption fails, throw error
-    this.throwIfFails = (config.encrypt == true || config.encrypt == 'force') ? true : false;
+    this.throwIfFails = (config.encryptBody == true || config.encryptBody == 'force');
     // If showErrorToUser is true, show error to user
-    this.showErrorToUser = config.showErrorToUser ?? false;
+    this.encryptShowErrorToUser = config.encryptShowErrorToUser ?? false;
   }
 
   /**
    * Function to encrypt data
    * @param data - Data to encrypt
-   * @returns Encrypted data containing the encrypted key, IV, and encrypted data, or unecrypted data if public key or crypto is not available
+   * @returns Encrypted data containing the encrypted key, IV, and encrypted data, or unencrypted data if public key or crypto is not available
    */
-  public async encryptData(data: unknown): Promise<unknown> {
+  public async encryptData(data: string | Record<string, unknown>): Promise<string | Record<string, unknown>> {
     // Return unencrypted data if encryption is disabled
-    if (this.encrypt === false)
+    if (this.encryptBody === false)
       return data;
-
-    // // Edge case: when data is unedfined, null, empty or {} and return unencrypted data
-    // if (!data || JSON.stringify(data) === '{}')
-    //   return data;
 
     // Fetch the RSA public key from the server
     const publicKeyPem: string | null = this.sxc.env.publicKey();
 
-    // If the public key is not available, eventaly return original unencrypted data
+    // If the public key is not available, eventually return original unencrypted data
     if (!publicKeyPem) {
       this.handleOrThrowError("Encryption is not available. Public key is missing.");
       return data; // eventually fallback to return unencrypted data
@@ -55,11 +48,14 @@ export class SecureEndpoint {
 
     // Generate a random AES key
     const aesKey: CryptoKey = await window.crypto.subtle.generateKey(
+      // algorithm:
       {
         name: "AES-CBC",
         length: 256,
       },
-      true, // extractable
+      // extractable:
+      true, 
+      // keyUsages:
       ["encrypt", "decrypt"]
     );
 
@@ -75,13 +71,13 @@ export class SecureEndpoint {
       rawAesKey
     );
 
-    // Generate a random IV
+    // Generate a random IV (initialization vector, so that the first block is not predictable)
     const iv: Uint8Array = window.crypto.getRandomValues(new Uint8Array(16)); // 16 bytes for AES-CBC
 
     // Convert the data to ArrayBuffer
     const enc: TextEncoder = new TextEncoder();
 
-    const dataString: string = JSON.stringify(data);
+    const dataString: string = JSON.stringify(data ?? "");
 
     const encodedMessage: Uint8Array = enc.encode(dataString);
 
@@ -96,11 +92,14 @@ export class SecureEndpoint {
     );
 
     // Convert ArrayBuffers to base64 strings
+    // This ensures that the very final JSON conversion is lighter
+    // Otherwise the binary values will be converted to "\u0006" sequences which take much more space
     const encryptedKeyBase64: string = this.arrayBufferToBase64(encryptedKey);
     const encryptedDataBase64: string = this.arrayBufferToBase64(encryptedData);
     const ivBase64: string = this.arrayBufferToBase64(iv.buffer);
 
-    return new EncryptedData(encryptedDataBase64, encryptedKeyBase64, ivBase64);
+    const encrypted = new EncryptedData(encryptedDataBase64, encryptedKeyBase64, ivBase64);
+    return encrypted as unknown as Record<string, unknown>;
   }
 
   /**
@@ -108,7 +107,7 @@ export class SecureEndpoint {
    * @param message - Error message
    */
   private handleOrThrowError(message: string) {
-    if (this.showErrorToUser) alert(message);
+    if (this.encryptShowErrorToUser) alert(message);
     if (this.throwIfFails) {
       // console.error(message);  
       throw new Error(message);
@@ -123,8 +122,7 @@ export class SecureEndpoint {
    * @returns ArrayBuffer of DER
    */
   private getSpkiDer(spkiPem: string): ArrayBuffer {
-    const pemContents: string = spkiPem;
-    const binaryDerString: string = window.atob(pemContents);
+    const binaryDerString: string = window.atob(spkiPem);
     return this.str2ab(binaryDerString);
   }
 

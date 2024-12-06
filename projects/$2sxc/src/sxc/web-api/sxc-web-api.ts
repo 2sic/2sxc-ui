@@ -120,31 +120,27 @@ export class SxcWebApi implements ZzzSxcWebApiDeprecated {
    * maybe: webApi.fetchRaw({url: 'Rss/Feed', params: { id: 47 }})
    * maybe: webApi.fetchRaw({url: ..., params: { ...}, body: { ...}, method: 'GET' })
    */
-  async fetchRaw(url: string, data?: string | Record<string, any>, method?: string | FetchOptions): Promise<Response> {
+  async fetchRaw(url: string, data?: string | Record<string, unknown>, method?: string | FetchOptions): Promise<Response> {
     const ctxParams = {} as { appId?: number; zoneId?: number; };
     const ctx = this.sxc.ctx;
-    const urlLower = url.toLocaleLowerCase();
+
+    // Auto-Add appid / zoneid if needed
     // Note: #_autoAppIdsInUrl is only used in edit-ui formulas
+    const urlLower = url.toLocaleLowerCase();
     if (ctx?._autoAppIdsInUrl && urlLower.includes('app/auto/')) {
-      if (ctx?.appId && !urlLower.includes('appid=')) ctxParams.appId = ctx.appId;
-      if (ctx?.zoneId && !urlLower.includes('zoneid=')) ctxParams.zoneId = ctx.zoneId;
+      if (ctx.appId && !urlLower.includes('appid=')) ctxParams.appId = ctx.appId;
+      if (ctx.zoneId && !urlLower.includes('zoneid=')) ctxParams.zoneId = ctx.zoneId;
     }
     url = this.url(url, ctxParams);
 
     // Handle method and options
-    const options: FetchOptions = this.prepareOptions(method, data);
+    const fetchOptions = this.prepareOptions(method, data);
 
-    const headers = this.headers(options.method);
+    const headers = this.headers(fetchOptions.method);
 
     // Handle encryption if needed
-    if (options.method == 'POST' && options.encrypt) {
-      const secureEndpoint = new SecureEndpoint({
-        sxc: this.sxc,
-        encrypt: options.encrypt,
-        showErrorToUser: options.encryptShowErrorToUser 
-      });
-      data = await secureEndpoint.encryptData(data);
-    }
+    if (fetchOptions.method == 'POST')
+      data = await new SecureEndpoint(this.sxc, fetchOptions).encryptData(data);
 
     if (data) {
       // test if data is a json. If it's not, convert it to json
@@ -157,25 +153,29 @@ export class SxcWebApi implements ZzzSxcWebApiDeprecated {
 
     return fetch(url, {
       headers,
-      method: options.method,
+      method: fetchOptions.method,
       ...(data && { body: data as string }),
     });
   }
 
   // prepare options
-  private prepareOptions(method: string | FetchOptions, data: string | Record<string, any>) {
-    let options: FetchOptions = {
+  private prepareOptions(methodOrOptions: string | FetchOptions, data: string | Record<string, any>): FetchOptions {
+    const defaults: FetchOptions = {
       method: (data ? 'POST' : 'GET'),
-      encrypt: 'auto', 
+      encrypt: 'auto',
+      encryptBody: 'auto', 
     };
-    if (typeof method === 'string') {
-      options.method = method;
-    } else if (typeof method === 'object') {
-      options = method;
-      options.method = options.method || (data ? 'POST' : 'GET');
-      options.encrypt = options.encrypt ?? 'auto';
-    }
-    return options;
+    if (typeof methodOrOptions === 'string')
+      return { ...defaults, method: methodOrOptions };
+    
+    if (typeof methodOrOptions === 'object')
+      return {
+        ...methodOrOptions,
+        method: methodOrOptions.method || defaults.method,
+        encrypt: methodOrOptions.encrypt ?? defaults.encrypt,
+        encryptBody: methodOrOptions.encryptBody ?? methodOrOptions.encrypt ?? defaults.encryptBody,
+      };
+    return defaults;
   }
 
   // Note: fetch was documented in v12.10 (December 2021) but will probably never be used externally
