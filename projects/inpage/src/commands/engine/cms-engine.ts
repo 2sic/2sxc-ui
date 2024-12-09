@@ -83,7 +83,7 @@ export class CmsEngine extends HasLog {
     cl.add(`run command '${name}'`);
 
     // Toolbar API v2
-    const btnCommand = new ButtonCommand(name, /* contentType, */ cmdParams);
+    const btnCommand = new ButtonCommand(name, cmdParams);
     const newButtonConfig = new Button(btnCommand, btnCommand.name);
 
     // merge conf & settings, but settings has higher priority
