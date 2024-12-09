@@ -7,7 +7,6 @@ import { renderer } from '../contentBlock/render';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { HasLog, NoJQ } from '../core';
 import { EditManager } from '../manage/edit-manager';
-import { TypeUnsafe } from '../plumbing/TypeTbD';
 import { QuickDialog } from './quick-dialog';
 import { QuickDialogConfig } from './quick-dialog-config';
 import { DomTools } from '../../../$2sxc/src/dom/dom-tools';
@@ -39,7 +38,7 @@ export class IFrameBridge extends HasLog implements IIFrameBridge {
      */
     private uncachedSxc(): Sxc {
         if (!this.instanceSxc) throw "can't find sxc-instance of IFrame, probably it wasn't initialized yet";
-        return this.instanceSxc.recreate(true) as TypeUnsafe as Sxc;
+        return this.instanceSxc.recreate(true);
     }
 
     getContext(): ContextComplete {

@@ -1,7 +1,6 @@
 ﻿import { CmdParHlp } from '..';
 import { renderer } from '../../contentBlock/render';
 import { ContextComplete } from '../../context/bundles/context-bundle-button';
-import { TypeUnsafe } from '../../plumbing/TypeTbD';
 import { ContentListActionParams } from './content-list-action-params';
 
 //#region WebApi Endpoints used: 2sxc
@@ -95,10 +94,9 @@ function doAndReload<T>(
   url: string,
   params: ContentListActionParams,
   verb: 'get' | 'post' | 'delete' = 'get',
-  postData: TypeUnsafe = {},
 ): Promise<void | T> {
   return (verb === 'post'
-    ? context.sxc.webApi.fetchRaw(context.sxc.webApi.url(url, params), postData, 'POST')
+    ? context.sxc.webApi.fetchRaw(context.sxc.webApi.url(url, params), null, 'POST')
     : verb === 'delete'
       ? context.sxc.webApi.fetchRaw(context.sxc.webApi.url(url, params), undefined, 'DELETE')
       : context.sxc.webApi.fetchJson(context.sxc.webApi.url(url, params)))

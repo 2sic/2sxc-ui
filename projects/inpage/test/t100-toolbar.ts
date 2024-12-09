@@ -8,14 +8,13 @@ import 'jasmine';
 import { ContextComplete } from '../src/context/bundles/context-bundle-button';
 // import { generateFallbackToolbar } from '../src/toolbar/build-toolbars';
 import { AttrJsonEditContext } from '../src/context/html-attribute/edit-context-root';
-import { TypeUnsafe } from '../src/plumbing';
 // import { expandToolbarConfig, ToolbarConfigBuilder } from '../src/toolbar/toolbar/toolbar-expand-config';
 // import { renderToolbar } from '../src/toolbar/item/render-toolbar';
 import { ToolbarSettings } from '../src/toolbar/config/toolbar-settings';
 import { ToolbarRenderer } from '../src/toolbar/render/toolbar-renderer';
 import { ToolbarManager } from '../src/toolbar/toolbar-manager';
 
-const expandToolbarConfig = (cnt: ContextComplete, toolbarData: TypeUnsafe, toolbarSettings: ToolbarSettings) => {
+const expandToolbarConfig = (cnt: ContextComplete, toolbarData: any, toolbarSettings: ToolbarSettings) => {
     toolbarData = {settings: {...toolbarData.settings, ...toolbarSettings}, ...toolbarData};
     return ToolbarManager.singleton().loadConfig(cnt, toolbarData);
     // return new ToolbarConfigLoader(null).expandToolbarConfig;

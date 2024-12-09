@@ -3,7 +3,7 @@ import { CommandNames, CommandParams } from '../../commands';
 import { CommandCode } from '../../commands/command-code';
 import { CommandLinkGenerator } from '../../commands/command-link-generator';
 import { ContextComplete } from '../../context/bundles/context-bundle-button';
-import { Obj, TypeTbD } from '../../plumbing';
+import { Obj } from '../../plumbing';
 import { Note } from './Note';
 
 /**
@@ -121,8 +121,8 @@ export class Button {
     return (thing as Button).command !== undefined;
   }
 
-  static isArray(thing: TypeTbD): thing is Button[] {
-    return thing.length && Button.is(thing[0]);
+  static isArray(thing: unknown): thing is Button[] {
+    return (thing as Button[]).length && Button.is((thing as Button[])[0]);
   }
 
   static isPropGen<T>(thing: ButtonGenOrProp<T>): thing is ButtonPropGen<T> {

@@ -1,6 +1,5 @@
 import { Button, ButtonPropGen } from '.';
 import { ContextComplete } from '../../context/bundles/context-bundle-button';
-import { isNothing } from '../../plumbing';
 
 /**
  * Special helper to read a button configuration
@@ -66,7 +65,7 @@ export class ButtonSafe {
 
 /** Evaluate a property or generator and return the property */
 function getVal<T>(propOrGen: ButtonPropGen<T> | T, ctx: ContextComplete, fallback: T): T {
-  if (isNothing(propOrGen))
+  if (propOrGen == null)
     return fallback;
   const result = Button.isPropGen(propOrGen)
     ? propOrGen(ctx)

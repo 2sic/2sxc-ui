@@ -6,7 +6,7 @@ import { C } from '../constants';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { HasLog, Log } from '../core';
 import { DialogCoreParams } from '../manage/dialog-core-params';
-import { NoJQ, TypeUnsafe, TypeValue, flattenSlashes } from '../plumbing';
+import { NoJQ, TypeValue, flattenSlashes } from '../plumbing';
 import { ButtonSafe } from '../toolbar/config';
 
 // 2022-06-16 2dm experimental
@@ -40,6 +40,7 @@ export class CommandLinkGenerator extends HasLog {
     const cl = this.log.call('constructor');
     const button = new ButtonSafe(context.button, context);
     const command = button.action();
+
     // Initialize Items - use predefined or create empty array
     this.items = command.params.items || [];
     cl.data('items', this.items);
@@ -137,9 +138,11 @@ export class CommandLinkGenerator extends HasLog {
     const params = this.context.button.command.params;
 
     // two ways to name the content-type-name this, v 7.2+ and older
-    const ct = params.contentType || (params as TypeUnsafe).attributeSetName;
-    if (params.entityId) item.EntityId = params.entityId;
-    if (ct) item.ContentTypeName = ct;
+    const ct = params.contentType || (params as CommandParams & { attributeSetName: string }).attributeSetName;
+    if (params.entityId)
+      item.EntityId = params.entityId;
+    if (ct)
+      item.ContentTypeName = ct;
 
     // only add if there was stuff to add
     if (item.EntityId || item.ContentTypeName) {
