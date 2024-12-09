@@ -74,3 +74,24 @@ export interface ItemIdentifierInList extends ItemIdentifierShared {
   Field: string;
 }
 
+/**
+ * Any identifier, which can be any of the above
+ * @internal
+ */
+export type AnyIdentifier = (
+  | ItemIdentifierSimple
+  | ItemIdentifierCopy
+  | ItemIdentifierInList
+  | TemplateIdentifier
+);
+
+/**
+ * The parameters for the item-url
+ * @internal
+ */
+export interface ItemUrlParameters {
+  prefill?: Record<string, TypeValue>;
+  items?: string;
+  contentTypeName?: string;
+  filters?: string;
+}

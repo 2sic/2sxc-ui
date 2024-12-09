@@ -1,30 +1,13 @@
 ﻿import { CmdParHlp } from '.';
 import { SxcGlobalEnvironment } from '../../../$2sxc/src';
 import { CommandParams } from '../../../$2sxc/src/cms/command-params';
-import { ItemIdentifierCopy, ItemIdentifierInList, ItemIdentifierSimple, TemplateIdentifier } from '../../../$2sxc/src/cms/item-identifiers';
+import { AnyIdentifier, ItemIdentifierInList, ItemIdentifierSimple, ItemUrlParameters } from '../../../$2sxc/src/cms/item-identifiers';
 import { C } from '../constants';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { HasLog, Log } from '../core';
 import { DialogCoreParams } from '../manage/dialog-core-params';
-import { NoJQ, TypeValue, flattenSlashes } from '../plumbing';
+import { NoJQ, flattenSlashes } from '../plumbing';
 import { ButtonSafe } from '../toolbar/config';
-
-// 2022-06-16 2dm experimental
-const urlMode2 = false;
-
-type AnyIdentifier = (
-  | ItemIdentifierSimple
-  | ItemIdentifierCopy
-  | ItemIdentifierInList
-  | TemplateIdentifier
-);
-
-interface UrlItemParams {
-  prefill?: Record<string, TypeValue>;
-  items?: string;
-  contentTypeName?: string;
-  filters?: string;
-}
 
 /**
  * This is responsible for taking a context with command and everything
@@ -33,34 +16,36 @@ interface UrlItemParams {
  */
 export class CommandLinkGenerator extends HasLog {
   public items: AnyIdentifier[];
-  public readonly urlParams: UrlItemParams;
 
-  constructor(public readonly context: ContextComplete, parentLog: Log) {
+  constructor(private buttonSafe: ButtonSafe, public readonly context: ContextComplete, parentLog: Log) {
     super('Cmd.LnkGen', parentLog);
     const cl = this.log.call('constructor');
-    const button = new ButtonSafe(context.button, context);
-    const command = button.action();
+    const command = buttonSafe.action();
 
     // Initialize Items - use predefined or create empty array
     this.items = command.params.items || [];
     cl.data('items', this.items);
 
-    // initialize params
-    this.urlParams = button.parameters() as unknown;
-    const dialog = button.dialog();
-    // This corrects how the variable to name the dialog changed in the history of 2sxc from action to dialog
-    this.urlParams = {
-      ...{ dialog: dialog || command.name },
-      ...this.urlParams
-    };
-    cl.data('urlParams', this.urlParams);
-
-    this.#buildItemsList(button);
+    this.#buildItemsList(buttonSafe);
 
     // if the command has own configuration stuff, do that now
     if (context.button.configureLinkGenerator)
       context.button.configureLinkGenerator(context, this);
     cl.done();
+  }
+
+  #getUrlParams(): ItemUrlParameters {
+    const l = this.log.call('constructor');
+    // initialize params
+    const dialog = this.buttonSafe.dialog();
+    // This corrects how the variable to name the dialog changed in the history of 2sxc from action to dialog
+    const { items, ...otherParams } = this.buttonSafe.parameters();
+    const urlParams = {
+      dialog: dialog || this.buttonSafe.action().name,
+      ...otherParams
+    } satisfies ItemUrlParameters;
+    l.data('urlParams', urlParams);
+    return urlParams;
   }
 
 
@@ -83,7 +68,11 @@ export class CommandLinkGenerator extends HasLog {
     const context = this.context;
     const button = new ButtonSafe(context.button, context);
     const params = button.action().params;
-    const urlItems = this.urlParams;
+
+    // initialize params
+    const urlItems = context.button.tweakGeneratedUrlParameters
+      ? context.button.tweakGeneratedUrlParameters(context, this.#getUrlParams())
+      : this.#getUrlParams();
 
     // steps for all actions: prefill, serialize, open-dialog
     // when doing new, there may be a prefill in the link to initialize the new item
@@ -104,17 +93,9 @@ export class CommandLinkGenerator extends HasLog {
     // initialize root url to dialog
     const rootUrl = this.#getDialogUrl(context);
 
-    let items2 = '';
-    if (urlMode2 && this.items) {
-      try {
-        items2 = '&' + window.$2sxc.urlParams.toUrl({ i2: this.items } );
-        // console.log('items2', items2);
-      } catch (e) { /* ignore */ }
-    }
-
     const debugUrlParam = window.$2sxc.urlParams.get('debug') ? '&debug=true' : '';
     const dialogParams = NoJQ.param(ngDialogParams).replace(/%2F/g, '/');
-    return`${rootUrl}#${dialogParams}&${NoJQ.param(urlItems)}${debugUrlParam}${items2}`;
+    return`${rootUrl}#${dialogParams}&${NoJQ.param(urlItems)}${debugUrlParam}`;
   }
 
   /**

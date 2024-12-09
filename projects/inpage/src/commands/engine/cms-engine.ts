@@ -155,8 +155,8 @@ export class CmsEngine extends HasLog {
     const log = new Log('Cms.OpnDlg', null, `triggeredBy: ${triggeredBy}`);
     Insights.add('cms', 'open-dialog', log);
     // the link contains everything to open a full dialog (lots of params added)
-    const link = new CommandLinkGenerator(context, log).getLink();
     const btn = new ButtonSafe(context.button, context);
+    const link = new CommandLinkGenerator(btn, context, log).getLink();
 
     const origEvent = event || (window.event as MouseEvent);
 

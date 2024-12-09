@@ -1,4 +1,5 @@
 ﻿import { ButtonCommand } from '.';
+import { ItemUrlParameters } from '../../../../$2sxc/src/cms/item-identifiers';
 import { CommandNames, CommandParams } from '../../commands';
 import { CommandCode } from '../../commands/command-code';
 import { CommandLinkGenerator } from '../../commands/command-link-generator';
@@ -13,6 +14,7 @@ import { Note } from './Note';
 export type ButtonPropGen<T> = (context: ContextComplete) => T;
 
 type ButtonGenOrProp<T> = ButtonPropGen<T> | T;
+
 
 /**
  * The real button configuration as it's used at runtime
@@ -46,6 +48,8 @@ export class Button {
 
   /** Configure the link generator before it creates the link */
   configureLinkGenerator: (context: ContextComplete, linkGenerator: CommandLinkGenerator) => void;
+
+  tweakGeneratedUrlParameters?: (context: ContextComplete, itemUrlParameters: ItemUrlParameters) => ItemUrlParameters;
 
   /** The dialog name */
   dialog?: ButtonGenOrProp<string>;
