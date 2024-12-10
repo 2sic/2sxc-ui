@@ -7,6 +7,7 @@ const prefillPrefix = 'prefill:';
 const filterPrefix = 'filter:';
 const contextPrefix = 'context:';
 const formPrefix = 'form:';
+const dialogSettingsPrefix = 'dialogSettings:'; // 2024-12-10 v18.07 #dialogSettings - new prefix for dialog settings
 
 /**
  * @internal
@@ -28,6 +29,9 @@ export class RuleParamsHelper {
 
         const formParams = RuleParamsHelper.extractSubKeys(params, formPrefix, log);
         if (formParams) params.form = formParams;
+
+        const dialogSettings = RuleParamsHelper.extractSubKeys(params, dialogSettingsPrefix, log);
+        if (dialogSettings) params.dialogSettings = dialogSettings;
 
         const context = RuleParamsHelper.extractSubKeys(params, contextPrefix, log);
 

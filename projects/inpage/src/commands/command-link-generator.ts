@@ -39,7 +39,7 @@ export class CommandLinkGenerator extends HasLog {
     // initialize params
     const dialog = this.buttonSafe.dialog();
     // This corrects how the variable to name the dialog changed in the history of 2sxc from action to dialog
-    const { items, ...otherParams } = this.buttonSafe.parameters();
+    const { items: _, ...otherParams } = this.buttonSafe.parameters();
     const urlParams = {
       dialog: dialog || this.buttonSafe.action().name,
       ...otherParams
@@ -68,6 +68,8 @@ export class CommandLinkGenerator extends HasLog {
     const context = this.context;
     const button = new ButtonSafe(context.button, context);
     const params = button.action().params;
+
+    debugger;
 
     // initialize params
     const urlItems = context.button.tweakGeneratedUrlParameters

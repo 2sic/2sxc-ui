@@ -16,6 +16,8 @@ export type RuleParams = Record<string, string> & {
     /** new 16.02 */
     form?: Record<string, TypeValue | Array<unknown>>;
 
+    dialogSettings?: Record<string, unknown>;
+
     /** this is how the metadata-param comes in - as a 'for=someId' - this node will be removed afterwards */
     for?: string;
 

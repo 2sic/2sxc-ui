@@ -16,6 +16,8 @@ export class DialogCoreParams {
   /** new in 10.27 - for quick-dialog */
   readonly apps?: string;
 
+  public dialogSettings?: unknown;
+
   constructor(context: ContextComplete, partOfPage: boolean) {
 
     // #CustomContext
@@ -43,7 +45,15 @@ export class DialogCoreParams {
     if (partOfPage)
       this.publishing = context.contentBlockReference.publishingMode;
 
-    if (context?.button?.command?.params?.apps)
+    // new in 10.27 - for quick-dialog
+    // I believe it's to restrict apps which can be selected
+    // for adding to inner content.
+    // Note that this is probably an undocumented feature, which should be surfaced some day.
+    if (context.button?.command?.params?.apps)
         this.apps = context.button.command.params.apps;
+
+    this.dialogSettings = context.button?.command?.params?.dialogSettings;
+    if (!this.dialogSettings)
+      delete this.dialogSettings;
   }
 }
