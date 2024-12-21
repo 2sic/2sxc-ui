@@ -5,7 +5,7 @@ import locI18next from 'loc-i18next';
 import { primaryLanguage, translations, translationsPath } from '.';
 import { IDs } from '../constants/ids';
 import { ContextComplete } from '../context/bundles';
-import { HasLog, Insights, urlClean } from '../core';
+import { HasLog, Insights, flattenSlashes } from '../core';
 import { EditManager } from '../manage/edit-manager';
 import { SxcTools } from '../sxc/sxc-tools';
 
@@ -49,7 +49,7 @@ class TranslatorGlobal extends HasLog {
                 // whitelist: translations,
                 preload: [primaryLanguage],
                 backend: {
-                    loadPath: urlClean(realRootPath + translationsPath),
+                    loadPath: flattenSlashes(realRootPath + translationsPath),
                 },
             }, () => this.initLoc());
         this.initialized = true;

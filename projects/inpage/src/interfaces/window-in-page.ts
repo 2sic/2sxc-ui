@@ -1,5 +1,4 @@
-﻿import { TypeWeDontCare } from '../plumbing';
-import { QuickE } from '../quick-edit/quick-e';
+﻿import { QuickE } from '../quick-edit/quick-e';
 
 /**
  * Update Window object with global 2sxc objects / Dnn objects
@@ -9,7 +8,7 @@ import { QuickE } from '../quick-edit/quick-e';
 declare global {
   interface Window {
     dnn_tabVersioningEnabled: boolean;
-    dnn: TypeWeDontCare;
+    dnn: any;
     $quickE: QuickE ;
   }
 }

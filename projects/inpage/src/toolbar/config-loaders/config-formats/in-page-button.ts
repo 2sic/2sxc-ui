@@ -1,6 +1,5 @@
 ﻿import { InPageCommandJson } from '..';
 import { CommandParams } from '../../../../../$2sxc/src/cms/command-params';
-import { TypeTbD, TypeUnsafe } from '../../../plumbing';
 import { Button } from '../../config';
 
 /**
@@ -46,8 +45,8 @@ export class InPageButtonJson {
     _expanded?: boolean; // marker to determine that the configuration has already been initialized
 
     // check two common signatures - command and action
-    static is(thing: TypeTbD): thing is InPageButtonJson {
-        return thing.command !== undefined || thing.action !== undefined;
+    static is(thing: unknown): thing is InPageButtonJson {
+        return (thing as InPageButtonJson).command !== undefined || (thing as { action: string }).action !== undefined;
     }
 
     static isArray(thing: unknown[]): thing is InPageButtonJson[] {
@@ -64,12 +63,12 @@ export class InPageButtonJson {
         if (oldFormat.icon) config.icon = oldFormat.icon;
 
         // Method Properties
-        if (oldFormat.fullScreen) config.fullScreen = evalPropOrFun(oldFormat.fullScreen);
-        if (oldFormat.icon) config.icon = evalPropOrFun(oldFormat.icon);
-        if (oldFormat.inlineWindow) config.inlineWindow = evalPropOrFun(oldFormat.inlineWindow);
-        if (oldFormat.newWindow) config.newWindow = evalPropOrFun(oldFormat.newWindow);
-        if (oldFormat.partOfPage) config.partOfPage = evalPropOrFun(oldFormat.partOfPage);
-        if (oldFormat.title) config.title = evalPropOrFun(oldFormat.title);
+        if (oldFormat.fullScreen) config.fullScreen = evalPropOrFun<boolean>(oldFormat.fullScreen);
+        if (oldFormat.icon) config.icon = evalPropOrFun<string>(oldFormat.icon);
+        if (oldFormat.inlineWindow) config.inlineWindow = evalPropOrFun<boolean>(oldFormat.inlineWindow);
+        if (oldFormat.newWindow) config.newWindow = evalPropOrFun<boolean>(oldFormat.newWindow);
+        if (oldFormat.partOfPage) config.partOfPage = evalPropOrFun<boolean>(oldFormat.partOfPage);
+        if (oldFormat.title) config.title = evalPropOrFun<string>(oldFormat.title);
 
         return config;
     }
@@ -77,8 +76,10 @@ export class InPageButtonJson {
 }
 
 
-function evalPropOrFun(propOrFunction: unknown): TypeUnsafe {
-    if (propOrFunction === undefined || propOrFunction === null) return false;
-    if (typeof (propOrFunction) === 'function') return propOrFunction;
+function evalPropOrFun<T>(propOrFunction: T | (() => T)): () => T {
+    if (propOrFunction === undefined || propOrFunction === null)
+      return null;
+    if (typeof (propOrFunction) === 'function')
+      return propOrFunction as () => T;
     return () => propOrFunction;
 }

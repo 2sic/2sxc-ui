@@ -177,4 +177,12 @@ export interface CommandParams extends Record<string, unknown>
      * @internal
      */
     isshared?: boolean;
+
+
+    /**
+     * Settings to pass to the dialog.
+     * 
+     * @internal v18.07 - not public
+     */
+    dialogSettings?: unknown;
 }

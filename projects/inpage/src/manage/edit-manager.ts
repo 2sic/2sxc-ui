@@ -4,8 +4,8 @@ import { SxcGlobalCms } from '../cms/sxc-global-cms';
 import { CommandParams } from '../commands';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { AttrJsonEditContext } from '../context/html-attribute/edit-context-root';
-import { HasLog, Log, TypeUnsafe } from '../plumbing';
-import { ToolbarManager } from '../toolbar';
+import { HasLog, Log } from '../plumbing';
+import { InPageToolbarConfigVariations, ToolbarInitConfig, ToolbarManager } from '../toolbar';
 import { ToolbarSettings } from '../toolbar/config';
 import { InPageButtonJson } from '../toolbar/config-loaders';
 import { ToolbarRenderer } from '../toolbar/render/toolbar-renderer';
@@ -66,11 +66,14 @@ export class EditManager extends HasLog implements SxcManage {
      *
      * it is publicly used in Razor scripts of inpage, so take a care to preserve function signature
      */
-    getToolbar(tbConfig: TypeUnsafe, moreSettings: ToolbarSettings): string {
+    getToolbar(tbConfig: ToolbarInitConfig | InPageToolbarConfigVariations, moreSettings: ToolbarSettings): string {
         // if toolbar is an array, use as-is, otherwise assume properties are params
         const toolbar = Array.isArray(tbConfig) ? tbConfig : { ...tbConfig };
-        tbConfig = { settings: { ...tbConfig.settings, ...moreSettings }, toolbar: toolbar };
-        const toolbarConfig = ToolbarManager.singleton().loadConfig(this.context, tbConfig);
+        const typedConfig = {
+          settings: { ...(tbConfig as ToolbarInitConfig).settings, ...moreSettings },
+          toolbar: toolbar as InPageToolbarConfigVariations,
+        } satisfies ToolbarInitConfig;
+        const toolbarConfig = ToolbarManager.singleton().loadConfig(this.context, typedConfig);
         this.context.toolbar = toolbarConfig;
         return new ToolbarRenderer(this.context).render();
     }

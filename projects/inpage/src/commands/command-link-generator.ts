@@ -1,23 +1,13 @@
 ﻿import { CmdParHlp } from '.';
 import { SxcGlobalEnvironment } from '../../../$2sxc/src';
 import { CommandParams } from '../../../$2sxc/src/cms/command-params';
-import { ItemIdentifierCopy, ItemIdentifierInList, ItemIdentifierSimple, TemplateIdentifier } from '../../../$2sxc/src/cms/item-identifiers';
+import { AnyIdentifier, ItemIdentifierInList, ItemIdentifierSimple, ItemUrlParameters } from '../../../$2sxc/src/cms/item-identifiers';
 import { C } from '../constants';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { HasLog, Log } from '../core';
-import { NgUrlValuesWithoutParams } from '../manage/ng-dialog-params';
-import { NoJQ, TypeUnsafe, TypeValue, urlClean } from '../plumbing';
+import { DialogCoreParams } from '../manage/dialog-core-params';
+import { NoJQ, flattenSlashes } from '../plumbing';
 import { ButtonSafe } from '../toolbar/config';
-
-// 2022-06-16 2dm experimental
-const urlMode2 = false;
-
-type AnyIdentifier = (
-  | ItemIdentifierSimple
-  | ItemIdentifierCopy
-  | ItemIdentifierInList
-  | TemplateIdentifier
-);
 
 /**
  * This is responsible for taking a context with command and everything
@@ -26,29 +16,17 @@ type AnyIdentifier = (
  */
 export class CommandLinkGenerator extends HasLog {
   public items: AnyIdentifier[];
-  public readonly urlParams: UrlItemParams;
-  private readonly debugUrlParam: string;
 
-  constructor(public readonly context: ContextComplete, parentLog: Log) {
+  constructor(private buttonSafe: ButtonSafe, public readonly context: ContextComplete, parentLog: Log) {
     super('Cmd.LnkGen', parentLog);
     const cl = this.log.call('constructor');
-    const button = new ButtonSafe(context.button, context);
-    const command = button.action();
+    const command = buttonSafe.action();
+
     // Initialize Items - use predefined or create empty array
     this.items = command.params.items || [];
     cl.data('items', this.items);
 
-    // initialize params
-    this.urlParams = button.parameters() as unknown;
-    const dialog = button.dialog();
-    // note: this corrects how the variable to name the dialog changed in the history of 2sxc from action to dialog
-    this.urlParams = { ...{ dialog: dialog || command.name }, ...this.urlParams };
-    cl.data('urlParams', this.urlParams);
-
-    // get isDebug url Parameter
-    this.debugUrlParam = window.$2sxc.urlParams.get('debug') ? '&debug=true' : '';
-
-    this.buildItemsList(button);
+    this.#buildItemsList(buttonSafe);
 
     // if the command has own configuration stuff, do that now
     if (context.button.configureLinkGenerator)
@@ -56,17 +34,31 @@ export class CommandLinkGenerator extends HasLog {
     cl.done();
   }
 
+  #getUrlParams(): ItemUrlParameters {
+    const l = this.log.call('constructor');
+    // initialize params
+    const dialog = this.buttonSafe.dialog();
+    // This corrects how the variable to name the dialog changed in the history of 2sxc from action to dialog
+    const { items: _, ...otherParams } = this.buttonSafe.parameters();
+    const urlParams = {
+      dialog: dialog || this.buttonSafe.action().name,
+      ...otherParams
+    } satisfies ItemUrlParameters;
+    l.data('urlParams', urlParams);
+    return urlParams;
+  }
+
 
   /**
    * Generate items for editing/changing or simple item depending on the scenario.
    */
-  private buildItemsList(button: ButtonSafe) {
+  #buildItemsList(button: ButtonSafe) {
     if (button.action().params.useModuleList)
-      this.addContentGroupItems(true);
+      this.#addContentGroupItems(true);
     else if (button.action().params.parent)
-      this.addItemInList();
+      this.#addItemInList();
     else
-      this.addItem();
+      this.#addItem();
   }
 
   /**
@@ -76,13 +68,19 @@ export class CommandLinkGenerator extends HasLog {
     const context = this.context;
     const button = new ButtonSafe(context.button, context);
     const params = button.action().params;
-    const urlItems = this.urlParams as unknown as UrlItemParams;
+
+    debugger;
+
+    // initialize params
+    const urlItems = context.button.tweakGeneratedUrlParameters
+      ? context.button.tweakGeneratedUrlParameters(context, this.#getUrlParams())
+      : this.#getUrlParams();
 
     // steps for all actions: prefill, serialize, open-dialog
     // when doing new, there may be a prefill in the link to initialize the new item
     if (params.prefill)
       for (let i = 0; i < this.items.length; i++)
-        this.addFieldsAndParameters(this.items[i] as ItemIdentifierSimple, params);
+        this.#addFieldsAndParameters(this.items[i] as ItemIdentifierSimple, params);
 
     delete urlItems.prefill; // added 2020-03-11, seemed strange that it's not removed
 
@@ -92,58 +90,55 @@ export class CommandLinkGenerator extends HasLog {
 
     // clone the params and adjust parts based on partOfPage settings...
     const partOfPage = button.partOfPage();
-    const ngDialogParams = new NgUrlValuesWithoutParams(context, partOfPage);
+    const ngDialogParams = new DialogCoreParams(context, partOfPage);
 
     // initialize root url to dialog
-    const rootUrl = this.getDialogUrl(context);
+    const rootUrl = this.#getDialogUrl(context);
 
-    let items2 = '';
-    if (urlMode2 && this.items) {
-      try {
-        items2 = '&' + window.$2sxc.urlParams.toUrl({ i2: this.items } );
-        // console.log('items2', items2);
-      } catch (e) { /* ignore */ }
-    }
-
-    return`${rootUrl}#${NoJQ.param(ngDialogParams).replace(/%2F/g, '/')}&${NoJQ.param(urlItems)}${this.debugUrlParam}`
-     + items2;
+    const debugUrlParam = window.$2sxc.urlParams.get('debug') ? '&debug=true' : '';
+    const dialogParams = NoJQ.param(ngDialogParams).replace(/%2F/g, '/');
+    return`${rootUrl}#${dialogParams}&${NoJQ.param(urlItems)}${debugUrlParam}`;
   }
 
   /**
    * Determine the url to open a dialog, based on the settings which UI version to use
    */
-  private getDialogUrl(context: ContextComplete): string {
-    // 2023-05-22 v16.01 changed from: window.$2sxc.env;
+  #getDialogUrl(context: ContextComplete): string {
     const env = context.sxc?.env ?? window.$2sxc.env;
     let customParams = env.dialogQuery();
-    if (customParams && !customParams.startsWith('&')) customParams = '&' + customParams;
-    return urlClean(`${env.uiRoot()}${C.DialogPaths.eavUi}`) + `?pageId=${env.page()}&wpk=${this.withPublicKey(env)}&sxcver=${context.instance.sxcVersion}${customParams}`;
+    if (customParams && !customParams.startsWith('&'))
+      customParams = '&' + customParams;
+    const baseUrl = flattenSlashes(`${env.uiRoot()}${C.DialogPaths.eavUi}`);
+    return `${baseUrl}?pageId=${env.page()}&wpk=${this.#withPublicKey(env)}&sxcver=${context.instance.sxcVersion}${customParams}`;
   }
 
-  private withPublicKey(env: SxcGlobalEnvironment): boolean {
+  #withPublicKey(env: SxcGlobalEnvironment): boolean {
     return env.publicKey() !== null;
   }
 
-  private addItem() {
+  #addItem() {
     const item = {} as ItemIdentifierSimple;
     const params = this.context.button.command.params;
 
     // two ways to name the content-type-name this, v 7.2+ and older
-    const ct = params.contentType || (params as TypeUnsafe).attributeSetName;
-    if (params.entityId) item.EntityId = params.entityId;
-    if (ct) item.ContentTypeName = ct;
+    const ct = params.contentType || (params as CommandParams & { attributeSetName: string }).attributeSetName;
+    if (params.entityId)
+      item.EntityId = params.entityId;
+    if (ct)
+      item.ContentTypeName = ct;
 
     // only add if there was stuff to add
     if (item.EntityId || item.ContentTypeName) {
-      this.items.push(this.addFieldsAndParameters(item, params));
+      this.items.push(this.#addFieldsAndParameters(item, params));
     }
   }
 
-  private addFieldsAndParameters<T extends AnyIdentifier>(item: T, params: CommandParams): T {
+  #addFieldsAndParameters<T extends AnyIdentifier>(item: T, params: CommandParams): T {
     if (params == null) return item;
-    if (params.prefill) (item as ItemIdentifierSimple).Prefill = params.prefill;
-    if (params.uifields) (item as ItemIdentifierSimple).UiFields = params.uifields;
-    if (params.form) (item as ItemIdentifierSimple).Parameters = params.form;
+    const itemIdentifier = item as ItemIdentifierSimple;
+    if (params.prefill) itemIdentifier.Prefill = params.prefill;
+    if (params.uifields) itemIdentifier.UiFields = params.uifields;
+    if (params.form) itemIdentifier.Parameters = params.form;
     return item;
   }
 
@@ -151,7 +146,7 @@ export class CommandLinkGenerator extends HasLog {
    * this will tell the command to edit a item from the sorted list in the group,
    * optionally together with the presentation item
    */
-  private addContentGroupItems(withPresentation: boolean) {
+  #addContentGroupItems(withPresentation: boolean) {
     const cl = this.log.call('addContentGroupItems', `${withPresentation}`);
     // const params = this.context.button.command.params;
     const i = CmdParHlp.getIndex(this.context);
@@ -161,9 +156,9 @@ export class CommandLinkGenerator extends HasLog {
     const groupId = this.context.contentBlock.contentGroupId;
     const params = this.context.button.command.params;
 
-    const fields: string[] = [this.findPartName(true)];
-    if (withPresentation) fields.push(this.findPartName(false));
-    fields.map((f) => this.addContentGroupItem(groupId, index, f, isAdd, params));
+    const fields: string[] = [this.#findPartName(true)];
+    if (withPresentation) fields.push(this.#findPartName(false));
+    fields.map((f) => this.#addContentGroupItem(groupId, index, f, isAdd, params));
     cl.done();
   }
 
@@ -172,7 +167,7 @@ export class CommandLinkGenerator extends HasLog {
   /**
    * this adds an item of the content-group, based on the group GUID and the sequence number
    */
-  private addContentGroupItem(guid: string, index: number, part: string, isAdd: boolean, params: CommandParams) {
+  #addContentGroupItem(guid: string, index: number, part: string, isAdd: boolean, params: CommandParams) {
     const cl = this.log.call('addContentGroupItem', `${guid}, ${index}, ${part}, ${isAdd}`);
     const item = {
       Add: isAdd,
@@ -180,7 +175,7 @@ export class CommandLinkGenerator extends HasLog {
       Parent: guid,
       Field: part.toLocaleLowerCase(),
     };
-    this.items.push(this.addFieldsAndParameters(item, params));
+    this.items.push(this.#addFieldsAndParameters(item, params));
     cl.done();
   }
 
@@ -190,7 +185,7 @@ export class CommandLinkGenerator extends HasLog {
    * this will tell the command to edit a item which also belongs to a list
    * this is relevant when adding new items
    */
-  private addItemInList() {
+  #addItemInList() {
     const params = this.context.button.command.params;
     const index = CmdParHlp.getIndex(params);
     const isAdd = this.context.button.command.name === 'new';
@@ -206,22 +201,16 @@ export class CommandLinkGenerator extends HasLog {
           Add: isAdd,
           Index: index,
         } as ItemIdentifierInList;
-        this.items.push(this.addFieldsAndParameters(item, params));
+        this.items.push(this.#addFieldsAndParameters(item, params));
     });
   }
 
   /**
    * find the part name for both the API to give the right item (when using groups) and for i18n
    */
-  private findPartName(content: boolean): string {
+  #findPartName(content: boolean): string {
     const isContentAndNotHeader = (CmdParHlp.getIndex(this.context) !== -1);
     return (isContentAndNotHeader ? '' : 'List') + (content ? 'Content' : 'Presentation');
   }
 }
 
-interface UrlItemParams {
-    prefill?: Record<string, TypeValue>;
-    items?: string;
-    contentTypeName?: string;
-    filters?: string;
-}
