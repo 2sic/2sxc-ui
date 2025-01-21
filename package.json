@@ -1,6 +1,6 @@
 {
   "name": "2sxc-ui",
-  "version": "19.01.00",
+  "version": "19.02.00",
   "description": "2sxc UI - the JS UI of 2sxc",
   "scripts": {
     "ci-all": "npm ci && cd projects/$2sxc && npm ci && cd ../.. && cd projects/inpage && npm ci && cd ../.. && cd projects/code-editor-snippets && npm ci && cd ../.. && cd projects/quick-dialog && npm ci && cd ../.. && cd projects/cms && npm ci && cd ../.. && cd projects/turnOn && npm ci && cd ../..",
