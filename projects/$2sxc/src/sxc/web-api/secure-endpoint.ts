@@ -108,12 +108,12 @@ export class SecureEndpoint implements Omit<FetchOptions, 'method'> {
    */
   private handleOrThrowError(message: string) {
     if (this.encryptShowErrorToUser) alert(message);
-    if (this.throwIfFails) {
+    if (this.throwIfFails)
       // console.error(message);  
       throw new Error(message);
-    } else {
-      console.warn(message + "\nReturning unencrypted data.");
-    } 
+    // for debugging
+    // else
+    //   console.warn(message + "\nReturning unencrypted data.");
   }
 
   /**
