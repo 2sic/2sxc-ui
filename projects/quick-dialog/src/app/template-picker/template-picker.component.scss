@@ -1,258 +1,319 @@
 :host {
   display: block;
   padding-top: 56px;
+
   .content {
-      background: #fafafa;
-      box-shadow: 0 -1px 2px rgba(0, 0, 0, .3);
-      position: relative;
-      .card {
-          max-width: 1200px;
-          margin: 0 auto;
-          min-height: 164px;
-          .top-controls {
-              position: absolute;
-              height: 56px;
-              right: 4px;
-              top: -56px;
-              width: 100%;
-              text-align: center;
-              z-index: 2;
-              display: flex;
-              flex-direction: row;
-              align-items: center;
-              button {
-                  display: inline-block;
-                  float: none;
-                  position: relative;
-                  top: 28px;
-              }
-              button.secondary {
-                  background: #fafafa !important;
-                  color: rgba(0, 0, 0, .8);
-              }
-          }
-          .tiles {
-              white-space: nowrap;
-              overflow-x: auto;
-              &:not(.show-installer) {
-                height: 132px;
-                overflow-y: hidden;
-              }
-              .tile {
-                  box-sizing: border-box;
-                  background: #fff;
-                  display: inline-block;
-                  margin: 12px 0 12px 12px;
-                  position: relative;
-                  font-size: 12px;
-                  border-radius: 22px 0 22px 0;
-                  height: 88px;
-                  width: 88px;
-                  line-height: 88px;
-                  text-align: center;
-                  overflow: hidden;
-                  cursor: pointer;
-                  color: #00275388; // rgba(0, 0, 0, .8);
-                  transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
-                  box-shadow: 0 1px 3px rgba(0, 0, 0, .12), 0 1px 2px rgba(0, 0, 0, .24);
-                  &:hover {
-                      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
-                      .title {
-                          opacity: 1;
-                          text-overflow: initial;
-                          height: auto;
-                          min-height: 24px;
-                          padding: 4px;
-                          white-space: pre-wrap;
-                          line-height: normal;
-                          span {
-                              transform: translate(0, 0);
-                          }
-                      }
-                      .version {
-                          opacity: 1;
-                      }
-                  }
-                  &.blocked {
-                      cursor: not-allowed;
-                      opacity: 0.5;
-                  }
-                  &:active,
-                  &.active {
-                      cursor: pointer;
-                      box-shadow: 0 14px 28px #00275344 /*rgba(0, 120, 220, 0.25)*/, 0 10px 10px rgba(0, 120, 220, 0.22);
-                      opacity: 1;
-                  }
-                  &.active,
-                  &:focus {
-                      // color: #fff;
-                      // color: rgb(0, 120, 220);
-                      color: #002753;
-                  }
-                  &.config {
-                      box-shadow: none;
-                      border: 1px dashed rgba(0, 0, 0, .2);
-                      background: transparent;
-                  }
-                  .bg {
-                      position: absolute;
-                      left: 0;
-                      top: 0;
-                      width: 100%;
-                      height: 100%;
-                      img {
-                          width: 100%;
-                          height: 100%;
-                      }
-                  }
-                  .title {
-                      display: inline-block;
-                      position: absolute;
-                      box-sizing: border-box;
-                      padding: 0 4px;
-                      left: 0;
-                      bottom: 0;
-                      width: 100%;
-                      height: 24px;
-                      line-height: 24px;
-                      background: rgba(255, 255, 255, 1);
-                      color: rgba(0, 0, 0, .8);
-                      letter-spacing: .1pt;
-                      font-size: 11px;
-                      text-overflow: ellipsis;
-                      overflow: hidden;
-                      white-space: nowrap;
-                      opacity: 0;
-                      font-weight: bold;
-                      transition: opacity .4s ease;
-                      &.show {
-                          opacity: 1;
-                          span {
-                              transform: translate(0, 0);
-                          }
-                      }
-                      span {
-                          display: inline-block;
-                          transform: translate(0, 24px);
-                          transition: transform .4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-                      }
-                  }
-                  .version {
-                      display: inline-block;
-                      position: absolute;
-                      box-sizing: border-box;
-                      padding: 0 4px;
-                      right: 0;
-                      top: 0;
-                      width: 24px;
-                      height: 24px;
-                      line-height: 24px;
-                      // background: rgba(255, 255, 255, 1);
-                      color: #fff;
-                      letter-spacing: .1pt;
-                      font-size: 11px;
-                      font-weight: bold;
-                      white-space: nowrap;
-                      opacity: 0;
-                      transition: opacity .4s ease;
-                      span {
-                          // display: inline-block;
-                          transform: translate(0, 24px);
-                          transition: transform .4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-                          text-shadow: 0px 0px 5px #000
-                      }
+    background: #fafafa;
+    box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.3);
+    position: relative;
 
-                  }
-              }
-          }
-          .templates-spinner {
-              width: 48px;
-              margin: 12px 0 12px 12px;
-              height: 88px;
-              display: inline-block;
-          }
-          mat-select {
-              width: 320px;
-          }
-          .row {
-              margin: 8px 0;
-          }
-          button {
-              margin: 0 0 0 8px;
-              float: left;
-              background: #002753; // #0088f4;
-          }
-          .fr-getting-started {
-              border: none;
-          }
+    .debug-container {
+      padding: 1rem;
+      margin: 1rem;
+    }
+
+    .card {
+      max-width: 1200px;
+      margin: 0 auto;
+      min-height: 164px;
+
+      .top-controls {
+        position: absolute;
+        height: 56px;
+        right: 4px;
+        top: -56px;
+        width: 100%;
+        text-align: center;
+        z-index: 2;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
+        button {
+          display: inline-block;
+          float: none;
+          position: relative;
+          top: 28px;
+        }
+
+        button.primary {
+          color: #fafafa;
+        }
+
+        button.secondary {
+          background: #fafafa !important;
+          color: rgba(0, 0, 0, 0.8);
+        }
       }
 
-      .no-install-allowed {
-          background: #F44336;
-          display: block;
-          padding: 16px;
-          border-radius: 2px;
-          color: #fff;
-          line-height: 24px;
-          box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+      .tiles {
+        white-space: nowrap;
+        overflow-x: auto;
+
+        &:not(.show-installer) {
+          height: 132px;
+          overflow-y: hidden;
+        }
+
+        .tile {
+          box-sizing: border-box;
+          background: #fff;
+          display: inline-block;
+          margin: 12px 0 12px 12px;
+          position: relative;
+          font-size: 12px;
+          border-radius: 22px 0 22px 0;
+          height: 88px;
+          width: 88px;
+          line-height: 88px;
           text-align: center;
+          overflow: hidden;
+          cursor: pointer;
+          color: #00275388; // rgba(0, 0, 0, .8);
+          transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12),
+            0 1px 2px rgba(0, 0, 0, 0.24);
+
+          &:hover {
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16),
+              0 3px 6px rgba(0, 0, 0, 0.23);
+
+            .title {
+              opacity: 1;
+              text-overflow: initial;
+              height: auto;
+              min-height: 24px;
+              padding: 4px;
+              white-space: pre-wrap;
+              line-height: normal;
+              span {
+                transform: translate(0, 0);
+              }
+            }
+
+            .version {
+              opacity: 1;
+            }
+          }
+
+          &.blocked {
+            pointer-events: none;
+            opacity: 0.5;
+          }
+
+          &:active,
+          &.active {
+            cursor: pointer;
+            box-shadow: 0 14px 28px #00275344 /*rgba(0, 120, 220, 0.25)*/,
+              0 10px 10px rgba(0, 120, 220, 0.22);
+            opacity: 1;
+          }
+
+          &.active,
+          &:focus {
+            color: #002753;
+          }
+
+          &.config {
+            box-shadow: none;
+            border: 1px dashed rgba(0, 0, 0, 0.2);
+            background: transparent;
+          }
+
+          .bg {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            img {
+              width: 100%;
+              height: 100%;
+            }
+          }
+
+          .title {
+            display: inline-block;
+            position: absolute;
+            box-sizing: border-box;
+            padding: 0 4px;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            height: 24px;
+            line-height: 24px;
+            background: rgba(255, 255, 255, 1);
+            color: rgba(0, 0, 0, 0.8);
+            letter-spacing: 0.1pt;
+            font-size: 11px;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+            opacity: 0;
+            font-weight: bold;
+            transition: opacity 0.4s ease;
+
+            &.show {
+              opacity: 1;
+
+              span {
+                transform: translate(0, 0);
+              }
+            }
+
+            span {
+              display: inline-block;
+              transform: translate(0, 24px);
+              transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            }
+          }
+
+          .version {
+            display: inline-block;
+            position: absolute;
+            box-sizing: border-box;
+            padding: 0 4px;
+            right: 0;
+            top: 0;
+            width: 24px;
+            height: 24px;
+            line-height: 24px;
+            // background: rgba(255, 255, 255, 1);
+            color: #fff;
+            letter-spacing: 0.1pt;
+            font-size: 11px;
+            font-weight: bold;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+
+            span {
+              // display: inline-block;
+              transform: translate(0, 24px);
+              transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+              text-shadow: 0px 0px 5px #000;
+            }
+          }
+        }
       }
+
+      .templates-spinner {
+        width: 48px;
+        margin: 12px 0 12px 12px;
+        height: 88px;
+        display: inline-block;
+      }
+
+      mat-select {
+        width: 320px;
+      }
+
+      .row {
+        margin: 8px 0;
+      }
+
+      button {
+        margin: 0 0 0 8px;
+        float: left;
+        background: #002753; // #0088f4;
+      }
+
+      .fr-getting-started {
+        border: none;
+      }
+    }
+
+    .no-install-allowed {
+      background: #f44336;
+      display: block;
+      padding: 16px;
+      border-radius: 2px;
+      color: #fff;
+      line-height: 24px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+      text-align: center;
+    }
   }
 
-  .mat-tab-group {
-      ::ng-deep .mat-tab-label.mat-tab-disabled {
-          opacity: initial;
-          color: initial;
-          margin-left: auto;
-      }
+  .mat-mdc-tab-group {
+    ::ng-deep .mat-tab-label.mat-tab-disabled {
+      opacity: initial;
+      color: initial;
+      margin-left: auto;
+    }
   }
 
   .search-field {
-      position: relative;
-      input {
-          border: none;
-          outline: none;
-          border-bottom: 1px solid grey;
-          background: transparent;
-          padding-right: 20px;
-          width: 60px;
-          box-sizing: border-box;
-          &:focus {
-              border-color: black;
-          }
+    position: relative;
+
+    input {
+      border: none;
+      outline: none;
+      border-bottom: 1px solid grey;
+      background: transparent;
+      padding-right: 20px;
+      width: 60px;
+      box-sizing: border-box;
+
+      &:focus {
+        border-color: black;
       }
-      &::after {
-          position: absolute;
-          right: 0px;
-          top: 0;
-          padding: 2px;
-          font-family: "Material Symbols Outlined";
-          content: "search";
-      }
+    }
+
+    &::after {
+      position: absolute;
+      right: 0px;
+      top: 0;
+      padding: 2px;
+      font-family: "Material Symbols Outlined";
+      content: "search";
+    }
   }
+
   .config-btn {
-      float: initial !important;
-      background: initial !important;
-      .mat-icon {
-          color: #00275388;
-      }
+    float: initial !important;
+    background: initial !important;
+
+    .mat-icon {
+      color: #00275388;
+    }
   }
 }
 
 ::ng-deep mat-tab-group {
   mat-tab-header {
-      border-bottom: none !important;
-      mat-ink-bar {
-          display: none !important;
+    border-bottom: none !important;
+
+    mat-ink-bar {
+      display: none !important;
+    }
+
+    .mat-tab-labels {
+      .mat-tab-label {
+        min-width: 0 !important;
+        
+        &.mat-tab-label-active {
+          opacity: 1;
+        }
       }
-      .mat-tab-labels {
-          // display: block;
-          .mat-tab-label {
-              min-width: 0 !important;
-              &.mat-tab-label-active {
-                  opacity: 1;
-              }
-          }
-      }
+    }
+  }
+}
+
+// 21.03.2025 - @2pp
+// In old version the settings where a disabled tab to achiebe the right layout
+// In newer angular material versions this doesn't work anymore
+// So I had to outsource the Tabs-Content and style it here
+.tabs-bar {
+  display: flex;
+  justify-content: space-between;
+
+  .tabs-bar-settings {
+    display: flex;
+    align-items: center;
+  }
+
+  @media (max-width: 600px) {
+    flex-direction: column;
   }
 }

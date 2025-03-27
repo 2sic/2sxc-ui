@@ -1,19 +1,21 @@
-// See https://material.angular.io/guide/theming
+// Update imports to use the new Material theming API
 @use '@angular/material' as mat;
 
-@import '@angular/material/theming';
-// Plus imports for other components in your app.
-
-// Include the common styles for Angular Material. We include this here so that you only
-// have to load a single css file for Angular Material in your app.
-// **Be sure that you only ever include this mixin once!**
-@include mat.core();
+// Include core styles (ensure it's included only once)
+@include mat.elevation-classes();
+@include mat.app-background();
 
 // Define the default theme
-$primary: mat.define-palette(mat.$cyan-palette, 800);
-$accent: mat.define-palette(mat.$light-blue-palette, 600, A100, A400);
-$warn: mat.define-palette(mat.$red-palette, 600);
-$theme: mat.define-light-theme($primary, $accent, $warn);
+$primary: mat.m2-define-palette(mat.$m2-cyan-palette, 800);
+$accent: mat.m2-define-palette(mat.$m2-light-blue-palette, 600, A100, A400);
+$warn: mat.m2-define-palette(mat.$m2-red-palette, 600);
+$theme: mat.m2-define-light-theme((
+  color: (
+    primary: $primary,
+    accent: $accent,
+    warn: $warn,
+  )
+));
 
 // 2020-07-30 old - the entire theme
 // my guess is we have a lot of trash included, but I'm not sure how to reduce it efficiently

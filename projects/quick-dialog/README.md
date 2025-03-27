@@ -1,5 +1,13 @@
 # 2sxc Quick-Dialog
 
+## Installation
+
+1. Put the 2sxc-ui folder inside C:\Projects\2sxc (it searches for the `2sxc-build.config.json` file)
+1. Run `npm ci` inside the root of 2sxc-ui
+1. Go to the desired project (eg. ...\2sxc-ui\projects\quick-dialog)
+1. To run the website see Build instructions below
+1. Add this param: `?debug=true` to your dev websites url
+
 This is a UI component of 2sxc - a dialog which slides in from the bottom of the screen. It has these functions
 
 1. Pick content-type, app, view etc.
@@ -8,7 +16,7 @@ This is a UI component of 2sxc - a dialog which slides in from the bottom of the
 
 ## Technology
 
-As of 2020-07 it's built using Angular 10 and Ivy.
+As of 2025-02-14 it's built using Angular 19.
 
 ## Build
 

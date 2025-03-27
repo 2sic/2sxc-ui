@@ -1,16 +1,22 @@
-<div class="progress" *ngIf="showProgress">
-  <mat-progress-spinner [mode]="'indeterminate'"></mat-progress-spinner>
-  <span>Installing {{ currentPackage?.displayName }}..</span>
-</div>
-<div *ngIf="ready">
-  <iframe #installerWindow class="fr-getting-started" id="frGettingStarted" [src]="remoteInstallerUrl" width="100%" height="300px"></iframe>
-</div>
-<div *ngIf="showDebug">
-  Debug:
-  <button type="button" (click)="sendMessage('test')">Send Test message</button>
-  -
-  Simulate Install: {{devSimulateInstall}}
-  <button type="button" (click)="toggleSimulate()">toggle</button>
-  - 
-  <button type="button" (click)="sendMessage('specs')">Send 'specs' message</button>
-</div>
+@if (showProgress) {
+  <div class="progress">
+    <mat-progress-spinner [mode]="'indeterminate'"></mat-progress-spinner>
+    <span>Installing {{ currentPackage?.displayName }}..</span>
+  </div>
+}
+@if (ready) {
+  <div>
+    <iframe #installerWindow class="fr-getting-started" id="frGettingStarted" [src]="remoteInstallerUrl" width="100%" height="300px"></iframe>
+  </div>
+}
+@if (showDebug) {
+  <div>
+    Debug:
+    <button type="button" (click)="sendMessage('test')">Send Test message</button>
+    -
+    Simulate Install: {{devSimulateInstall}}
+    <button type="button" (click)="toggleSimulate()">toggle</button>
+    -
+    <button type="button" (click)="sendMessage('specs')">Send 'specs' message</button>
+  </div>
+}
