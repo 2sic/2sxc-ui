@@ -3,7 +3,7 @@ import { SxcHttpInterceptorProvider } from "@2sic.com/sxc-angular";
 import { HttpClient, withInterceptorsFromDi, provideHttpClient } from "@angular/common/http";
 import { BrowserModule } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { TranslateModule, TranslateLoader } from "@ngx-translate/core";
+import { TranslateModule, TranslateLoader, TranslateModuleConfig } from "@ngx-translate/core";
 import { TranslateHttpLoader } from "@ngx-translate/http-loader";
 import { i18nExtension, pathToI18n, PrimaryUiLanguage } from "./i18n";
 import { catchError } from "rxjs/operators";
@@ -37,13 +37,22 @@ export const appConfig: ApplicationConfig = {
     importProvidersFrom(
       BrowserModule,
       BrowserAnimationsModule,
-      TranslateModule.forRoot({
-        loader: {
-          provide: TranslateLoader,
-          useFactory: HttpLoaderFactory,
-          deps: [HttpClient],
-        },
-      })
+      TranslateModule.forRoot(),
+      TranslateModule.forChild(buildTranslateConfiguration(HttpLoaderFactory)),
     ),
   ],
 };
+
+function buildTranslateConfiguration(factory: (http: HttpClient) => TranslateLoader): TranslateModuleConfig {
+  const config: TranslateModuleConfig = {
+    loader: {
+      provide: TranslateLoader,
+      useFactory: factory,
+      deps: [HttpClient],
+    },
+    defaultLanguage: 'en',
+    isolate: true,
+  };
+  return config;
+}
+
