@@ -43,7 +43,8 @@ module.exports = function (config) {
         noParse: ['clear'] // fix for "SyntaxError: Octal literal in strict mode"
       },
       compilerOptions: {
-        lib: ['es2015.promise', 'es5', 'dom'] // fix for "'Promise' only refers to a type"
+        lib: ["es2021", "dom"],
+        target: 'ES2015',
       }
     },
 

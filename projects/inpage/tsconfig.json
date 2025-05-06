@@ -1,6 +1,7 @@
 {
   "compileOnSave": true,
   "compilerOptions": {
+    "baseUrl": "./src",
     //"outFile": "../../dist-test/inpage/inpage.min.js",
     "outDir": "compiled",
     "noEmitOnError": false,
