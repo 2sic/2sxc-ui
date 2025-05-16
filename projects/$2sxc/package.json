@@ -6,7 +6,7 @@
     "release": "webpack --mode=production",
     "2sxc-js-prod": "webpack --watch --mode=production",
     "2sxc-js-dev": "webpack --watch --mode=development",
-    "test": "jasmine-ts",
+    "test": "jasmine",
     "postinstall": "npx json -I -f ./node_modules/jasmine/package.json -e \"delete this.exports\""
   },
   "repository": {
@@ -23,7 +23,7 @@
     "@types/jasmine": "^4.3.0",
     "@types/jquery": "^2.0.33",
     "babel-eslint": "^8.2.3",
-    "jasmine": "^4.3.0",
+    "jasmine": "^4.6.0",
     "jasmine-core": "^4.3.0",
     "jasmine-spec-reporter": "^7.0.0",
     "jasmine-ts": "^0.4.0",
