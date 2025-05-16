@@ -12,6 +12,8 @@
   "dependencies": {
     "i18next": "^21.9.1",
     "i18next-http-backend": "^1.4.1",
+    "karma-jasmine-html-reporter": "^2.1.0",
+    "karma-typescript": "^5.5.4",
     "loc-i18next": "^0.1.4",
     "shake.js": "git+https://github.com/alexgibson/shake.js.git",
     "tippy.js": "^6.3.7"
