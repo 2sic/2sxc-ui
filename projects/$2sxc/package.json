@@ -6,7 +6,7 @@
     "release": "webpack --mode=production",
     "2sxc-js-prod": "webpack --watch --mode=production",
     "2sxc-js-dev": "webpack --watch --mode=development",
-    "test": "jasmine",
+    "test": "karma start",
     "postinstall": "npx json -I -f ./node_modules/jasmine/package.json -e \"delete this.exports\""
   },
   "repository": {
