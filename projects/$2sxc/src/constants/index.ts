@@ -15,7 +15,7 @@ export const MetaHeaderJsApi = '_jsApi';
  * The fallback path to the UI
  * @internal
  */
-export const DnnUiRoot = '/desktopmodules/tosic_sexycontent/';
+export const DnnUiRoot = '/desktopmodules/ToSic.Sxc/';
 
 /**
  * @internal
