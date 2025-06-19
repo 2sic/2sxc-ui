@@ -9,7 +9,6 @@ export class AppIconsService {
     // v18.01 - changing to Material Symbols
     // this.matIconRegistry.setDefaultFontSetClass('material-icons-outlined');
     this.matIconRegistry.setDefaultFontSetClass('material-symbols-outlined');
-
-    console.log('2dm: Loading App Icons');
+    // console.log('2dm: Loading App Icons');
   }
 }

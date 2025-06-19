@@ -171,7 +171,7 @@ export class TemplatePickerComponent implements OnInit {
   }
 
   private debugObservables() {
-    console.log("debugObservables");
+    // console.log("debugObservables");
     // this.tab$.subscribe(t => log.add(`tab changed to ${t}`));
 
     if (!DebugConfig.picker.streams) return;

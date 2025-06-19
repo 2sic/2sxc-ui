@@ -7,7 +7,7 @@ import { Pipe, PipeTransform } from "@angular/core";
 })
 export class DebugPipe implements PipeTransform {
   transform<T>(obj: T, note: string): T {
-    console.log(`pd:${note} (${typeof obj})`, obj);
+    // console.log(`2pp pd:${note} (${typeof obj})`, obj);
     return obj;
   }
 }

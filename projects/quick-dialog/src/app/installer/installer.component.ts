@@ -73,7 +73,7 @@ export class InstallerComponent implements OnInit {
 
   destroy(): void {
     this.subscriptions.forEach((sub) => sub.unsubscribe());
-    console.log("destroy subs", this.subscriptions);
+    // console.log("2pp destroy subs", this.subscriptions);
   }
 
   private alreadyProcessing = false;
