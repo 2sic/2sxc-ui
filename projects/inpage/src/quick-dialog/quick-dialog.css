@@ -46,8 +46,12 @@ div.sc-uninitialized div {
   /* background: #002753;/* rgb(2, 139, 255); */
   background: linear-gradient(
     125deg,
+    /* v19
     rgba(15, 45, 80, 1) 40%,
     rgba(148, 27, 78, 1) 100%
+    v20 */
+    rgba(36, 14, 18, 1) 10%, /* #240E12 */
+    rgba(149, 44, 66, 1) 90% /* #952C42 */
   );
   font-size: 48px;
   margin: 5px;
