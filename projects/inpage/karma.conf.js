@@ -25,17 +25,21 @@ module.exports = function (config) {
     jasmineHtmlReporter: {
       suppressAll: true, // removes the duplicated traces
     },
-    reporters: ["progress", "kjhtml"],
-    browsers: ["Chrome"],
-    restartOnFileChange: true,
     preprocessors: {
       "./test/*.ts": ["karma-typescript"],
     },
     karmaTypescriptConfig: {
       tsconfig: "./tsconfig.json",
       compilerOptions: {
-        lib: ["es2021", "dom"]
+      target: "ES2022",
+      module: "ES2022",
+        types: [
+          "jasmine"
+        ]
       },
     },
+    reporters: ["progress", "kjhtml", "karma-typescript"],
+    browsers: ["Chrome"],
+    restartOnFileChange: true,
   });
 };

@@ -25,9 +25,6 @@ module.exports = function (config) {
     jasmineHtmlReporter: {
       suppressAll: true, // removes the duplicated traces
     },
-    reporters: ["progress", "kjhtml"],
-    browsers: ["Chrome"],
-    restartOnFileChange: true,
     preprocessors: {
       "./test/*.ts": ["karma-typescript"],
     },
@@ -37,5 +34,8 @@ module.exports = function (config) {
         lib: ["es2021", "dom"]
       },
     },
+    reporters: ["progress", "kjhtml"],
+    browsers: ["Chrome"],
+    restartOnFileChange: true,
   });
 };

@@ -1,30 +1,29 @@
 {
   "compileOnSave": true,
   "compilerOptions": {
-    //"outFile": "../../dist-test/inpage/inpage.min.js",
     "outDir": "compiled",
     "noEmitOnError": false,
     "noImplicitAny": true,
-    //"noFallthroughCasesInSwitch": true,
     "allowUnreachableCode": false,
-    //"allowUnusedLabels": false,
     "removeComments": false,
     "sourceMap": true,
     "inlineSources": false,
     "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "lib": [
+      "es2021",
+      "dom",
+      "ES2021.String"
+    ],
     "typeRoots": [
       "./node_modules/@types",
       "./typings"
     ],
-    "allowJs": true,
-    "module": "ESNext",
-    "moduleResolution": "node",
-    "lib": [
-      // "es2015.promise",
-      // "es5",
-      "es2021",
-      "dom",
-      "ES2021.String",
+    "types": [
+      "node",
+      "jquery",
+      "jasmine"
     ]
   },
   "include": [
