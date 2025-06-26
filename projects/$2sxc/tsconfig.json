@@ -8,21 +8,19 @@
     "sourceMap": true,
     "inlineSources": true,
     "target": "es5",
-    "lib": ["es2015", "es2016", "es2017", "ES2021.String", "dom"],
+    "lib": ["es2015", "es2016", "es2017", "ES2021.String", "es2021", "dom"],
     "outDir": "compiled",
     //"module":  "amd"
     "strict": false,
     // "module":"es2015", // moved to inner tsconfig.json because it breaks npm test
-    "moduleResolution": "node",
+    "moduleResolution": "node"
   },
   "include": [
     "./src/*.ts",
     "./src/*.js",
     "./src/**/*.ts",
-    "../inpage/src/commands/command/workflow-commands.ts",
+    "./test/**/*.ts",
+    "../inpage/src/commands/command/workflow-commands.ts"
   ],
-  "exclude": [
-    "node_modules",
-    "../inpage/node_modules/**"
-  ]
+  "exclude": ["node_modules", "../inpage/node_modules/**"]
 }

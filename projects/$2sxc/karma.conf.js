@@ -31,14 +31,10 @@ module.exports = function (config) {
     karmaTypescriptConfig: {
       tsconfig: "./tsconfig.json",
       compilerOptions: {
-      target: "ES2022",
-      module: "ES2022",
-        types: [
-          "jasmine"
-        ]
+        lib: ["es2021", "dom"]
       },
     },
-    reporters: ["progress", "kjhtml", "karma-typescript"],
+    reporters: ["progress", "kjhtml"],
     browsers: ["Chrome"],
     restartOnFileChange: true,
   });
