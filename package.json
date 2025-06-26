@@ -1,9 +1,9 @@
 {
   "name": "2sxc-ui",
-  "version": "19.03.03",
+  "version": "20.00.00",
   "description": "2sxc UI - the JS UI of 2sxc",
   "scripts": {
-    "ci-all": "npm ci && cd projects/$2sxc && npm ci && cd ../.. && cd projects/inpage && npm ci && cd ../.. && cd projects/code-editor-snippets && npm ci && cd ../.. && cd projects/quick-dialog && npm ci && cd ../.. && cd projects/cms && npm ci && cd ../.. && cd projects/turnOn && npm ci && cd ../..",
+    "ci-all": "npm ci && cd projects/$2sxc && npm ci && cd ../.. && cd projects/inpage && npm ci && cd ../.. && cd projects/code-editor-snippets && npm ci && cd ../.. && cd projects/quick-dialog && npm ci --legacy-peer-deps && cd ../.. && cd projects/cms && npm ci && cd ../.. && cd projects/turnOn && npm ci && cd ../..",
     "release-all": "npm run js2sxc && npm run inpage && npm run snippets && npm run quickdialog && npm run cms && npm run turn-on",
     "js2sxc": "cd projects/$2sxc && npm run release && cd ../..",
     "inpage": "cd projects/inpage && npm run release && cd ../..",

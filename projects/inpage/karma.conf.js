@@ -17,7 +17,7 @@ module.exports = function (config) {
     // list of files / patterns to load in the browser
     files: [
       '../2sxc-dnn742/Website/Resources/Libraries/jQuery/01_09_01/jquery.js', // resolve $
-      '../2sxc-dnn742/Website/DesktopModules/ToSIC_SexyContent/Js/2sxc.api.min.js', // resolve $2sxc
+      '../2sxc-dnn742/Website/DesktopModules/ToSic.Sxc/Js/2sxc.api.min.js', // resolve $2sxc
       './src/polyfills/es6-promise.auto.js',
       './src/**/libs/*.js',
       './src/**/*.ts',

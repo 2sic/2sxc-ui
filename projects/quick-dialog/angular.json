@@ -71,14 +71,14 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "ui-a4:build"
+            "buildTarget": "ui-a4:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "ui-a4:build:production"
+              "buildTarget": "ui-a4:build:production"
             },
             "development": {
-              "browserTarget": "ui-a4:build:development"
+              "buildTarget": "ui-a4:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -86,7 +86,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "ui-a4:build"
+            "buildTarget": "ui-a4:build"
           }
         },
         "test": {

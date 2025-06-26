@@ -5,8 +5,12 @@ $inpage-tlb-margin: 5px;
   --2sxc-tlb-margin: 5px;
   --2sxc-tlb-btn-bg: linear-gradient(
     125deg,
+    /* v19
     rgba(15, 45, 80, 1) 40%,
     rgba(148, 27, 78, 1) 100%
+    v20 */
+    rgba(36, 14, 18, 1) 10%, /* #240E12 */
+    rgba(149, 44, 66, 1) 90% /* #952C42 */
   );
   --2sxc-tlb-btn-pro-bg: #018552;
   --2sxc-tlb-btn-error-bg: #ff0000;
@@ -16,14 +20,7 @@ $inpage-btn-bg-pro: var(--2sxc-tlb-btn-pro-bg, #018552);
 
 $inpage-btn-bg-error: var(--2sxc-tlb-btn-error-bg, #ff0000);
 
-$inpage-btn-bg: var(
-  --2sxc-tlb-btn-bg,
-  linear-gradient(
-    125deg,
-    rgba(15, 45, 80, 1) 40%,
-    rgba(148, 27, 78, 1) 100%
-  )
-);
+$inpage-btn-bg: var(--2sxc-tlb-btn-bg);
 
 @import './dnn.scss';
 
