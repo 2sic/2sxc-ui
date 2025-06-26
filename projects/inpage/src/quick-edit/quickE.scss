@@ -64,34 +64,10 @@ $quicke-btn-bg-size: 32px 32px;
 }
 
 /*#region icons */
-.sc-content-block-menu-addcontent {
-  background: url(images/icon-content-light.svg);
-  background-size: $quicke-btn-bg-size;
-  background-position: center center;
-  background-repeat: no-repeat;
+a.sc-content-block-menu-addcontent,
+a.sc-content-block-menu-addapp {
+  text-decoration: none;
 }
-
-.sc-content-block-menu-addcontent.sc-content-block-menu-module {
-  background: url(images/icon-content-dark.svg);
-  background-size: $quicke-btn-bg-size;
-  background-position: center center;
-  background-repeat: no-repeat;
-}
-
-.sc-content-block-menu-addapp {
-  background: url(images/icon-app-light.svg);
-  background-size: $quicke-btn-bg-size;
-  background-position: center center;
-  background-repeat: no-repeat;
-}
-
-.sc-content-block-menu-addapp.sc-content-block-menu-module {
-  background: url(images/icon-app-dark.svg);
-  background-size: $quicke-btn-bg-size;
-  background-position: center center;
-  background-repeat: no-repeat;
-}
-
 .sc-content-block-menu a.sc-content-block-menu-addcontent.hide-content {
   display: none;
 }
@@ -101,7 +77,9 @@ $quicke-btn-bg-size: 32px 32px;
 
 /*#endregion */
 
-a.sc-content-block-menu-btn {
+a.sc-content-block-menu-btn,
+a.sc-content-block-menu-addcontent,
+a.sc-content-block-menu-addapp {
   /* background: #002753; /* #2F9BF2; */
   background: $inpage-btn-bg;
   border-bottom-right-radius: 10px;
