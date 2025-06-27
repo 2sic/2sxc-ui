@@ -1,5 +1,5 @@
 // Update imports to use the new Material theming API
-@use '@angular/material' as mat;
+@use "@angular/material" as mat;
 
 // Include core styles (ensure it's included only once)
 @include mat.elevation-classes();
@@ -9,14 +9,26 @@
 $primary: mat.m2-define-palette(mat.$m2-cyan-palette, 800);
 $accent: mat.m2-define-palette(mat.$m2-light-blue-palette, 600, A100, A400);
 $warn: mat.m2-define-palette(mat.$m2-red-palette, 600);
-$theme: mat.m2-define-light-theme((
-  color: (
-    primary: $primary,
-    accent: $accent,
-    warn: $warn,
+$theme: mat.m2-define-light-theme(
+  (
+    color: (
+      primary: $primary,
+      accent: $accent,
+      warn: $warn,
+    ),
   )
-));
+);
 
 // 2020-07-30 old - the entire theme
 // my guess is we have a lot of trash included, but I'm not sure how to reduce it efficiently
 @include mat.all-component-themes($theme);
+
+// 2sxc v20 Gradient (Main Color)
+.sxc-gradient {
+  background: linear-gradient(
+    125deg,
+    rgba(36, 14, 18, 1) /* #952C42 */ 10%,
+    rgba(149, 44, 66, 1) /* #240E12 */ 90%
+  ) !important;
+  color: white !important;
+}

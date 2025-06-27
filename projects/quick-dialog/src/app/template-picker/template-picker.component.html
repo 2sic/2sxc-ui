@@ -24,7 +24,8 @@
   >
     <div class="top-controls" style="display: flex; flex-direction: row; justify-content: center; align-items: center;">
       @if (template) {
-        <button mat-fab class="primary" (click)="persistTemplate(template)" [attr.title]="'TemplatePicker.Save' | translate">
+        <button mat-fab class="sxc-gradient" (click)="persistTemplate(template)" [attr.title]="'TemplatePicker.Save' | translate"
+          style="background: linear-gradient(90deg, rgba(36,14,18,1) 10%, rgba(149,44,66,1) 90%);">
           <mat-icon>check</mat-icon>
         </button>
       }
