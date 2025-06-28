@@ -6,6 +6,8 @@
 .icon-sxc-options-old:before { content: '\e804'; } /* '' */
 .icon-sxc-link:before { content: '\e805'; } /* '' */
 .icon-sxc-ok:before { content: '\e806'; } /* '' */
+.icon-sxc-content:before { content: '\e825'; } /* '' */
+.icon-sxc-app:before { content: '\e826'; } /* '' */
 .icon-sxc-fields:before { content: '\e807'; } /* '' */
 .icon-sxc-filter-1:before { content: '\e808'; } /* '' */
 .icon-sxc-list-numbered:before { content: '\e809'; } /* '' */

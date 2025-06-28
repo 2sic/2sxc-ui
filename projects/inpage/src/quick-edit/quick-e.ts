@@ -2,8 +2,10 @@
 import { ModifierContentBlock, ModifierDnnModule, PositionCoordinates, Positioning, QeSelectors, QuickEditOverlay } from '.';
 import { HasLog, Insights, NoJQ } from '../core';
 import { QuickEditConfigEnableAuto, QuickEditConfigRoot } from './quick-e-configuration';
+import { iconPrefix } from '../commands';
 
 const configAttr: string = 'quick-edit-config';
+const iconPre = iconPrefix;
 const classForAddContent = 'sc-content-block-menu-addcontent';
 const classForAddApp = 'sc-content-block-menu-addapp';
 
@@ -21,12 +23,11 @@ export class QuickE extends HasLog {
     }
     private static _singleton: QuickE;
 
-
     body = document.body;
     main = NoJQ.domFromString('<div class="sc-content-block-menu sc-content-block-quick-insert sc-i18n"></div>')[0] as QuickEditOverlay.Main;
     template =
-        `<a class='${classForAddContent} sc-invisible' data-type='Default' data-i18n='[titleTemplate]QuickInsertMenu.AddBlockContent'>&nbsp;</a>`
-        + `<a class='${classForAddApp} sc-invisible' data-type='' data-i18n='[titleTemplate]QuickInsertMenu.AddBlockApp'>&nbsp;</a>`
+        `<a class='sc-content-block-menu-btn sc-cb-action ${iconPre}content ${classForAddContent} sc-invisible' data-type='Default' data-i18n='[titleTemplate]QuickInsertMenu.AddBlockContent'></a>`
+        + `<a class='sc-content-block-menu-btn sc-cb-action ${iconPre}app ${classForAddApp} sc-invisible' data-type='' data-i18n='[titleTemplate]QuickInsertMenu.AddBlockApp'></a>`
         + `${QuickEditOverlay.btn('select', 'ok', 'Select', true)}${QuickEditOverlay.btn('paste', 'paste', 'Paste', true, true)}`;
     selected = QuickEditOverlay.selectedOverlay;
     // will be populated later in the module section
