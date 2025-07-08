@@ -86,8 +86,6 @@ export class ToolbarConfigLoaderV09 extends HasLog {
   private buildFullDefinition(
       toolbarContext: ContextComplete,
       unstructuredConfig: InPageToolbarConfigVariations,
-      // #CodeChange#2020-03-22#InstanceConfig - believe this is completely unused; remove in June
-      // instanceConfig: InstanceConfig,
       toolbarSettings: ToolbarSettings,
   ): Toolbar {
     const cl = this.log.call('buildFullDefinition');
