@@ -16,7 +16,11 @@ export class DialogCoreParams {
   /** new in 10.27 - for quick-dialog */
   readonly apps?: string;
 
-  public dialogSettings?: unknown;
+  /**
+   * Settings to pass to the dialog.
+   * @internal v18.07 - not public - trying to finalize v20 (believe it was not used yet)
+   */
+  public settings?: unknown;
 
   constructor(context: ContextComplete, partOfPage: boolean) {
 
@@ -52,8 +56,8 @@ export class DialogCoreParams {
     if (context.button?.command?.params?.apps)
         this.apps = context.button.command.params.apps;
 
-    this.dialogSettings = context.button?.command?.params?.dialogSettings;
-    if (!this.dialogSettings)
-      delete this.dialogSettings;
+    this.settings = context.button?.command?.params?.settings;
+    if (!this.settings)
+      delete this.settings;
   }
 }

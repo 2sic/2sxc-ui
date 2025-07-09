@@ -48,9 +48,6 @@ export class BuildRule extends HasLog {
    */
   ui: ToolbarButtonSettings & Partial<ToolbarSettings> = {};
 
-  /** ATM unused url-part after the hash - will probably be needed in future */
-  // private hash: Dictionary<string> = {};
-
   //#endregion
 
   //#region New #CustomContext
@@ -64,7 +61,7 @@ export class BuildRule extends HasLog {
   //#endregion
 
   /** WIP v20 new? */
-  dialogSettings?: Record<string, unknown>;
+  settings?: Record<string, unknown>;
 
   constructor(public ruleString: string, parentLog: Log) {
     super('Tlb.BdRule', parentLog);
@@ -108,7 +105,7 @@ export class BuildRule extends HasLog {
       const processed = this.loadParamsAndPrefill(parts.params);
       this.params = processed.params;
       this.context = processed.context;
-      this.dialogSettings = processed.dialogSettings;
+      this.settings = processed.settings;
     }
     // ATM seems unused...? hash is already processed before in loadHeader
     // if (parts.ui) this.hash = this.loadDictionary(parts.ui);

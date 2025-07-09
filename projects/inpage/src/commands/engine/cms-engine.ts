@@ -159,8 +159,6 @@ export class CmsEngine extends HasLog {
     const btn = new ButtonSafe(context.button, context);
     const link = new CommandLinkGenerator(btn, context, log).getLink();
 
-    Debug.log(`CmsEngine.openDialog: link: ${link}`, context, btn);
-
     const origEvent = event || (window.event as MouseEvent);
 
     return new Promise<T>((resolve) => {

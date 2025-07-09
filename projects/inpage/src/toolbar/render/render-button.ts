@@ -30,8 +30,8 @@ export class RenderButton extends RenderPart {
       rule?.params
     );
 
-    if (rule?.dialogSettings)
-      params = { ...params, dialogSettings: rule.dialogSettings };
+    if (rule?.settings)
+      params = { ...params, settings: rule.settings };
 
     const group = ctx.toolbar?.groups?.[groupIndex];
     const groupName = group?.name;
@@ -43,7 +43,6 @@ export class RenderButton extends RenderPart {
     // put call as plain JavaScript to preserve even if DOM is serialized
     if (!disabled) {
       const runJs = this.generateRunJs(rule, ctx, params);
-      Debug.log(`renderButton: runJs: ${runJs}`);
       btnLink.setAttribute("onclick", runJs);
     }
 

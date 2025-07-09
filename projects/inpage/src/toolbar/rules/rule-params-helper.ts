@@ -20,9 +20,10 @@ export interface ProcessedParams {
   context: Record<string, TypeValue>;
 
   /**
+   * Dialog Settings to pass to the dialog.
    * WIP v20
    */
-  dialogSettings?: Record<string, unknown>;
+  settings?: Record<string, unknown>;
 }
 
 /**
@@ -44,9 +45,7 @@ export class RuleParamsHelper {
     if (formParams)
       params.form = formParams;
 
-    const dialogSettings = RuleParamsHelper.extractSubKeys(params, dialogSettingsPrefix, log);
-    // if (dialogSettings)
-    //   params.dialogSettings = dialogSettings;
+    const settings = RuleParamsHelper.extractSubKeys(params, dialogSettingsPrefix, log);
 
     const context = RuleParamsHelper.extractSubKeys(params, contextPrefix, log);
 
@@ -59,7 +58,7 @@ export class RuleParamsHelper {
     // process metadata
     if (params.for)
       params.metadata = RuleParamsHelper.processMetadata(params, log);
-    return cl.return({ params, context, dialogSettings });
+    return cl.return({ params, context, settings });
   }
 
   private static processMetadata(params: RuleParams, log: Log): CommandParamsMetadata {
