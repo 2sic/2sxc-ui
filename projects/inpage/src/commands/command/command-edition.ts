@@ -21,14 +21,15 @@ Commands.add(CommandNames.edition, 'Edition', 'edition', true, false, {
 
   code(context, _) {
     const edition = context.contentBlock.edition;
+
     return $2sxc(context.sxc.id, context.sxc.id).cms.run({
       action: CommandNames.new,
       params: {
         contentType: ConfigEditionContentType,
         edition,
-      },
-      settings: {
-        save: 'false'
+        settings: {
+          save: 'false'
+        },
       },
     });
   },
