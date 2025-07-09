@@ -14,6 +14,7 @@ import { WorkflowHelper, WorkflowPhases, WorkflowStepCodeArguments } from '../..
 import { ToolbarWorkflowManager } from '../../workflow/toolbar-workflow-manager';
 import { WorkflowStep } from '../../workflow/workflow-step';
 import { CommandLinkGenerator } from '../command-link-generator';
+import { Debug } from '../../constants/debug';
 
 const debug = false;
 
@@ -157,6 +158,8 @@ export class CmsEngine extends HasLog {
     // the link contains everything to open a full dialog (lots of params added)
     const btn = new ButtonSafe(context.button, context);
     const link = new CommandLinkGenerator(btn, context, log).getLink();
+
+    Debug.log(`CmsEngine.openDialog: link: ${link}`, context, btn);
 
     const origEvent = event || (window.event as MouseEvent);
 
