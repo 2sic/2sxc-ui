@@ -41,7 +41,12 @@ const configuration = {
         }
       ],
     }),
-    webpackHelpers.createCopyAfterBuildPlugin(assetsTarget, [...(buildConfig.Sources ?? []), ...(buildConfig.JsTargets ?? [])], path.join('dist', bundleName)),
+    webpackHelpers.createCopyAfterBuildPlugin(assetsTarget, [
+        ...(buildConfig.Sources ?? []),
+        ...(buildConfig.JsTargets ?? [])
+      ],
+      path.join('dist', bundleName)
+    ),
     new BundleAnalyzerPlugin({
       // disable this to get stats and optimize
       analyzerMode: 'disabled',

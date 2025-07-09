@@ -71,14 +71,16 @@ export class CmsEngine extends HasLog {
    * @param settings
    * @param event
    */
-  run<T>(context: ContextComplete, nameOrParams: string | CommandParams, event: MouseEvent, wipParamsWithWorkflow?: RunParams, triggeredBy?: string): CommandPromise<T> {
+  run<T>(context: ContextComplete, params: CommandParams, event: MouseEvent, wipParamsWithWorkflow?: RunParams, triggeredBy?: string): CommandPromise<T> {
     const cl = this.log.call('run<T>', `triggeredBy: ${triggeredBy}`, undefined, { context });
-    let cmdParams = this.runParamsHelper.getParamsFromNameOrParams(nameOrParams);
-    cmdParams = this.runParamsHelper.expandParamsWithDefaults(cmdParams);
+
+    const cmdParams = this.runParamsHelper.expandParamsWithDefaults(params);
 
     const origEvent = event;
     const name = cmdParams.action;
 
+    // console.warn('2dm: cms-engine.ts: run', { context, params, cmdParams });
+    
     cl.add(`run command '${name}'`);
 
     // Toolbar API v2
