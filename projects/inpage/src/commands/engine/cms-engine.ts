@@ -78,9 +78,7 @@ export class CmsEngine extends HasLog {
 
     const origEvent = event;
     const name = cmdParams.action;
-    // 2dm 2022-07-05 #badContentTypeExtractAndRefill - we seem to extract it, just to put it back on the ButtonCommand
-    // const contentType = cmdParams.contentType;
-    // cl.add(`run command '${name}' for type ${contentType}`);
+
     cl.add(`run command '${name}'`);
 
     // Toolbar API v2

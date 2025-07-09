@@ -32,6 +32,8 @@ export interface RunParams {
    * Because of limitations in automatic documentation, the type here is set to `unknown` but it's actually `WorkflowStep` | `WorkflowStep[]`
    */
   workflows?: unknown;
+
+  settings?: Record<string, unknown>;
 }
 
 /**
