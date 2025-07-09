@@ -32,8 +32,6 @@ export interface RunParams {
    * Because of limitations in automatic documentation, the type here is set to `unknown` but it's actually `WorkflowStep` | `WorkflowStep[]`
    */
   workflows?: unknown;
-
-  settings?: Record<string, unknown>;
 }
 
 /**
@@ -59,4 +57,12 @@ export interface RunParamsWithContext extends RunParams {
    * Method caller (for logging)
    */
   triggeredBy?: string
+}
+
+export interface RunParamsWithContextClean extends Omit<RunParamsWithContext, 'context'> {
+  /**
+   * The context to run in, basically containing module id, etc.
+   * We always need the tag OR the context, but never both
+   */
+  context?: Sxc;
 }

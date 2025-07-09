@@ -40,7 +40,7 @@ export class EditManager extends HasLog implements SxcManage {
       // Capture cases where this is called using the new/modern params, which is a mistake
       if ((nameOrSettings as RunParamsWithContext).context || (nameOrSettings as RunParamsWithContext).workflows)
         throw "You are calling '.manage.run(...)' with a parameter 'context' or workflows. You should probably be calling the new '.cms.run(...)' instead.";
-      const cntx = ContextComplete.findContext(this.context.sxc);
+      const cntx = ContextComplete.expandContext(this.context.sxc);
       cl.done();
       return new SxcGlobalCms().runInternal(cntx, nameOrSettings, eventOrSettings, event, 'editManager.run');
     }

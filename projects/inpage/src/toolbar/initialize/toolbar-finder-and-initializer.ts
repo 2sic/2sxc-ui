@@ -135,7 +135,7 @@ export class ToolbarConfigFinderAndInitializer extends HasLog {
         const cl = this.log.call('convertConfigToToolbars');
         cl.data('tag', tag);
         cl.data('config', config);
-        const context = ContextComplete.findContext(tag);
+        const context = ContextComplete.expandContext(tag);
         context.toolbar = this.tlbManager.loadConfig(context, config);
 
         // V2 where the full toolbar is included in one setting
@@ -198,7 +198,7 @@ function addDefaultToolbarConfigToTag(parentTag: HTMLElement): HTMLElement[] {
     const contentTag = outsideCb ? parentTag.querySelector<HTMLElement>(`div${C.Cb.selectors.ofName}`) : parentTag;
 
     // auto toolbar
-    const ctx = ContextComplete.findContext(contentTag);
+    const ctx = ContextComplete.expandContext(contentTag);
     if (ctx.ui.autoToolbar === false)
         return null;
 

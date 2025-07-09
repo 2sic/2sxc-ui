@@ -43,7 +43,7 @@ export class IFrameBridge extends HasLog implements IIFrameBridge {
 
     getContext(): ContextComplete {
         const cl = this.log.call('getContext');
-        return cl.return(ContextComplete.findContext(this.uncachedSxc()));
+        return cl.return(ContextComplete.expandContext(this.uncachedSxc()));
     }
 
     getAdditionalDashboardConfig() {

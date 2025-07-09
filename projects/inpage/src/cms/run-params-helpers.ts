@@ -1,7 +1,7 @@
 import { Sxc } from '../../../$2sxc/src/sxc/sxc';
 import { RunParams, RunParamsWithContext } from '../../../$2sxc/src/cms/run-params';
 import { ContextIdentifier } from '../../../$2sxc/src/sxc-global/context-identifier';
-import { CommandParams, Commands } from '../commands';
+import { CommandNames, CommandParams, Commands } from '../commands';
 import { HasLog, Log } from '../core';
 
 /**
@@ -26,9 +26,9 @@ export class RunParamsHelpers extends HasLog {
         // check if nameOrString is name (string) or object (settings)
         const nameIsString = typeof nameOrSettings === 'string';
         cl.add(`adapting settings; name string: ${nameIsString}; name = ${nameOrSettings}`);
-        const result = (nameIsString
-            ? { action: nameOrSettings }
-            : nameOrSettings) as CommandParams;
+        const result = nameIsString
+            ? { action: nameOrSettings as CommandNames } satisfies CommandParams
+            : nameOrSettings;
         return cl.return(result);
     }
 

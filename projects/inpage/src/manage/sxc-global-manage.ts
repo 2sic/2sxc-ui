@@ -25,7 +25,7 @@ export class SxcGlobalManage implements ISxcGlobalManage {
    */
   initInstance(sxc: Sxc) {
     try {
-      const myContext = ContextComplete.findContext(sxc);
+      const myContext = ContextComplete.expandContext(sxc);
       const editContext = SxcTools.getEditContext(sxc);
 
       sxc.manage = new EditManager(editContext, myContext);
