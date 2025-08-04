@@ -1,10 +1,12 @@
 ﻿import { CommandNames, Commands } from '..';
-import { Debug } from '../../constants/debug';
 import { ContextComplete } from '../../context';
 import { Note } from '../../toolbar/config/Note';
+
+const ConfigEditionContentType = 'b535b6aa-d0a1-40c1-b996-b7e8461efc0c'; // this is the content type for the edition configuration
+
 /**
  * This is a dummy command to just set an edition.
- * It's not meant to show in the toolbar, but it should be callable on $2sxc(...).cms.run({ action: 'log', params: { message: 'hello' } })
+ * It's not meant to show in the toolbar, but it should be callable on $2sxc(...).cms.run({ action: 'edition' })
  * 
  * can have these parameters on the params object
  * - ask - force the UI to prompt for the edition
@@ -17,52 +19,28 @@ import { Note } from '../../toolbar/config/Note';
  */
 Commands.add(CommandNames.edition, 'Edition', 'edition', true, false, {
 
-  code(context, event) {
-    const appId = context.app.id;
-    const cookieName = `app-${appId}-edition`;
-    const params = context.button.command.params;
-    const edOriginal = params.edition as string;
+  code(context, _) {
+    const edition = context.contentBlock.edition;
 
-    if (params.reset)
-      return resetCookie();
-
-    const allEditions = params.editions as string ?? context.contentBlock.editions ?? '';
-    const niceEditions = allEditions.split(',').join(', ');
-    const editionsMsg = allEditions ? `Known Editions (from app.json): ${niceEditions}\n` : '';
-    const promptMsg = `To switch to another edition on App ${appId}, enter the edition:\n${editionsMsg}\nRemember to reload the page afterwards to see the changes.`;
-
-    const edition = (params.ask || !edOriginal)
-        ? prompt(promptMsg, edOriginal as string ?? '')
-        : edOriginal;
-
-    Debug.log('command: app id', appId);
-    Debug.log('command: log (message/context)', edition);
-    Debug.log('command: edition (edition)', params.edition, context);
-
-    // if edition is empty, unset the cookie
-    if (!edition)
-      return resetCookie();
-
-    // set a cookie like "app-id-edition" but only for this browser windows session
-    console.log(`Will set cookie ${cookieName}=${edition}`)
-    document.cookie = `${cookieName}=${edition}; path=/;`;
-    return new Promise((resolve, reject) => {});
-
-    function resetCookie(): Promise<void> {
-      console.log(`Will unset cookie ${cookieName}`);
-      document.cookie = `${cookieName}=flush; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
-      return new Promise((resolve, reject) => {});
-    }
+    return $2sxc(context.sxc.id, context.sxc.id).cms.run({
+      action: CommandNames.new,
+      params: {
+        contentType: ConfigEditionContentType,
+        edition,
+        settings: {
+          save: 'false'
+        },
+      },
+    });
   },
 
   notes(context) {
     // Debug.log(`2dm ctx`, context);
-    const cb = context.contentBlock;
-    const edition = cb.edition;
+    const edition = context.contentBlock.edition;
     const editionButton = editionInNote(context, true);
 
     const stats = `
-    View: <strong>${cb.viewName}</strong> - ${(edition ? 'edition: ' + editionButton : '')}<br>
+    View: <strong>${context.contentBlock.viewName}</strong> - ${(edition ? 'edition: ' + editionButton : '')}<br>
     `;
     const note = `<strong>View / Edition</strong> <br>
     ${stats}`;
@@ -89,14 +67,13 @@ Commands.add(CommandNames.edition, 'Edition', 'edition', true, false, {
  * @returns 
  */
 export function editionInNote(context: ContextComplete, showToAll: boolean): string {
-  const cb = context.contentBlock;
-  const edition = cb.edition;
+  const edition = context.contentBlock.edition;
 
   // figure out if we provide a button to change editions
   const enableEditionSwitch = showToAll || context.user.CanDevelop || context.user.canSwitchEdition;
 
   const editionButton = enableEditionSwitch
-    ? `<button onclick="$2sxc(${context.sxc.id, context.sxc.id}).cms.run({ action: 'edition', params: { ask: true, edition: '${edition}', editions: 'live,staging' } })">${edition}</button>`
+    ? `<button onclick="$2sxc(${context.sxc.id, context.sxc.id}).cms.run({ action:'edition'})">${edition}</button>`
     : edition;
 
   return editionButton;

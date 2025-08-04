@@ -48,9 +48,6 @@ export class BuildRule extends HasLog {
    */
   ui: ToolbarButtonSettings & Partial<ToolbarSettings> = {};
 
-  /** ATM unused url-part after the hash - will probably be needed in future */
-  // private hash: Dictionary<string> = {};
-
   //#endregion
 
   //#region New #CustomContext
@@ -60,7 +57,11 @@ export class BuildRule extends HasLog {
     zoneId?: number,
     complete?: boolean,
   } = {};
+
   //#endregion
+
+  /** WIP v20 new? */
+  settings?: Record<string, unknown>;
 
   constructor(public ruleString: string, parentLog: Log) {
     super('Tlb.BdRule', parentLog);
@@ -96,13 +97,15 @@ export class BuildRule extends HasLog {
   private load() {
     const cl = this.log.call('load', this.ruleString);
     const parts = splitUrlSections(this.ruleString);
-    if (!parts.key) return cl.done("no key, won't load");
+    if (!parts.key)
+      return cl.done("no key, won't load");
 
     this.loadHeader(parts.key);
     if (parts.params) {
       const processed = this.loadParamsAndPrefill(parts.params);
       this.params = processed.params;
       this.context = processed.context;
+      this.settings = processed.settings;
     }
     // ATM seems unused...? hash is already processed before in loadHeader
     // if (parts.ui) this.hash = this.loadDictionary(parts.ui);
@@ -158,11 +161,14 @@ export class BuildRule extends HasLog {
    */
   private leadHeaderAndUi(forKey: string, rest: string[][]) {
     const cl = this.log.call('loadHeaderParts');
-    if (!rest.length) return cl.done('nothing to load');
+    if (!rest.length)
+      return cl.done('nothing to load');
     const parts = this.dicToArray(rest);
     // #1 pick up id & name
-    if (parts.id) this.id = parts.id as string;
-    if (parts.name) this.name = parts.name as string;
+    if (parts.id)
+      this.id = parts.id as string;
+    if (parts.name)
+      this.name = parts.name as string;
     // #2 pick up group
     if (typeof parts.group === 'string') {
       this.group = parts.group;
@@ -174,14 +180,15 @@ export class BuildRule extends HasLog {
     {
       this.pos = Number(parts.pos);
       // v15.09 2023-04-06 get rid of -0 (legacy) because it causes trouble with simple int in C# APIs
-      if (Object.is(this.pos, -0)) this.pos = -1;
+      if (Object.is(this.pos, -0))
+        this.pos = -1;
     }
 
     // #4 icon is automatically kept
     // #5 show override of buttons (on buttons, must convert to bool)
     if (forKey !== BuildSteps.settings && forKey !== BuildSteps.toolbar)
-    if (typeof parts.show === 'string')
-      (parts as Record<string, TypeValue>).show = parts.show === 'true';
+      if (typeof parts.show === 'string')
+        (parts as Record<string, TypeValue>).show = parts.show === 'true';
     this.ui = parts;
     return cl.return(this.ui, 'button rules');
   }
@@ -193,13 +200,6 @@ export class BuildRule extends HasLog {
     const split = RuleParamsHelper.processParams(parms, this.log);
     return cl.return(split);
   }
-
-  // private loadDictionary(original: string): Dictionary<string> {
-  //     const cl = this.log.call('loadHash', original);
-  //     const parts = this.splitParamsDic(original);
-  //     cl.data('button', parts);
-  //     return cl.return(parts);
-  // }
 
   //#region string manipulation helpers
 
@@ -233,11 +233,14 @@ export class BuildRule extends HasLog {
       // fix url encoding
       if (val?.indexOf('%') > -1) val = decodeURIComponent(val);
       // fix C# typed true/false or string representations
-      if (val === 'True' || val === 'true') return [key, true];
-      if (val === 'False' || val === 'false') return [key, false];
+      if (val === 'True' || val === 'true')
+        return [key, true];
+      if (val === 'False' || val === 'false')
+        return [key, false];
 
       // cast numbers to proper number objects
-      if (!isNaN(+val)) return [key, Number(val)];
+      if (!isNaN(+val))
+        return [key, Number(val)];
 
       // revert base64 encoding
       if (typeof(val) === 'string' && val.startsWith(prefixBase64)) {

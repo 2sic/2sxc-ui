@@ -67,21 +67,14 @@ export class ButtonConfigLoader extends HasLog {
     /**
      * remove buttons which are not valid based on add condition
      */
-    removeDisableButtons(context: ContextComplete, full: Toolbar,
-        // #CodeChange#2020-03-22#InstanceConfig - believe this is completely unused; remove in June
-        // config: InstanceConfig
-    ): void {
+    removeDisableButtons(context: ContextComplete, full: Toolbar): void {
         const wrapLog = this.log.call('removeDisableButtons', `length of groups: ${full.groups.length}`);
         const btnGroups = full.groups;
         for (let g = 0; g < btnGroups.length; g++) {
             const btns = btnGroups[g].buttons;
-            // #CodeChange#2020-03-22#InstanceConfig - believe this is completely unused; remove in June
-            // const config = InstanceConfig.fromContext(context);
             this.removeUnfitButtons(context, /* full,*/ btns /* config, */);
 
             wrapLog.add('will disable appropriate buttons');
-            // #CodeChange#2020-03-22#InstanceConfig - believe this is completely unused; remove in June
-            // disableButtons(context, btns/*, config */);
 
             // remove the group, if no buttons left, or only "more"
             if (btns.length === 0 || (btns.length === 1 && btns[0].command.name === CommandNames.more)) {
@@ -110,8 +103,6 @@ export class ButtonConfigLoader extends HasLog {
 
 
     private removeUnfitButtons(context: ContextComplete, btns: Button[]): void {
-        // #CodeChange#2020-03-22#InstanceConfig - believe this is completely unused; remove in June
-        // config: InstanceConfig,
         const cl = this.log.call('removeUnfitButtons');
         let removals = '';
         for (let i = 0; i < btns.length; i++) {

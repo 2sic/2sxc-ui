@@ -1,6 +1,6 @@
 ﻿import { Sxc } from '../../../$2sxc/src/sxc/sxc';
 import { ContextIdentifier } from '../../../$2sxc/src/sxc-global/context-identifier';
-import { RunParamsWithContext } from '../../../$2sxc/src/cms/run-params';
+import { RunParamsWithContext, RunParamsWithContextClean } from '../../../$2sxc/src/cms/run-params';
 import { CommandParams } from '../../../$2sxc/src/cms/command-params';
 import { CmsEngine } from '../commands';
 import { C } from '../constants';
@@ -111,26 +111,49 @@ export class SxcGlobalCms extends HasLog {
     const cmsEngine = new CmsEngine(this.log);
 
     // Figure out inner-call based on if context is new RunParams or not (in that case it should be a tag or a full context)
-    let innerCall: () => Promise<void>;
+    // normally this shouldn't even get here, but older code was like this, so we keep it for now 2025-07 v20
     if (RunParamsHelpers.is$sxcRunParams(context)) {
       // V1 which has RunParamsWithContext all in the first parameter
-      const contextGiver = (ContextIdentifier.is(context.context) || Sxc.is(context.context))
+      const contextGiver = ContextIdentifier.is(context.context) || Sxc.is(context.context)
         ? window.$2sxc(context.context)
-        : context.tag;
-      const realCtx = ContextComplete.findContext(contextGiver);
-      context.params = { action: context.action, ...context.params };
-      innerCall = () => cmsEngine.run(realCtx, context.params, context.event, context, 'sxcGlobalCms.runInternal');
-    } else {
-      const realCtx = ContextBundleInstance.is(context)
-        ? context
-        : ContextComplete.findContext(context);
-
-      innerCall = () => cmsEngine.detectParamsAndRun(realCtx, nameOrSettings, eventOrSettings, event);
+        : window.$2sxc(context.tag);
+      const contextClean = { ...context, context: contextGiver } satisfies RunParamsWithContextClean;
+      return this.runClean<T>(contextClean);
     }
+    
+    const realCtx = ContextBundleInstance.is(context)
+      ? context
+      : ContextComplete.expandContext(context);
+
+    const innerCall: () => Promise<void> = () => cmsEngine.detectParamsAndRun(realCtx, nameOrSettings, eventOrSettings, event);
 
     const result: Promise<void | T> = this.do(innerCall);
     return cl.return(result, 'ok');
   }
+
+  /**
+   * Run a command within a specific context.
+   * @param runParamsWithCtx The context - either an HTML tag which determines a module/instance, or an Sxc instance
+   * @returns A promise which triggers when the command has completed.
+   * @internal
+   */
+  runClean<T>(runParamsWithCtx: RunParamsWithContextClean): Promise<void | T> {
+    const cl = this.log.call('runClean<T>', `triggeredBy: ${runParamsWithCtx.triggeredBy}`);
+
+    // Figure out inner-call based on if context is new RunParams or not (in that case it should be a tag or a full context)
+    const ctxComplete = ContextComplete.expandContext(runParamsWithCtx.context);
+    runParamsWithCtx.params = {
+      action: runParamsWithCtx.action,
+      ...runParamsWithCtx.params,
+    } satisfies CommandParams;
+
+    const innerCall: () => Promise<void> = () => new CmsEngine(this.log)
+      .run(ctxComplete, runParamsWithCtx.params, runParamsWithCtx.event, runParamsWithCtx, `${runParamsWithCtx.triggeredBy} - sxcGlobalCms.runInternal`);
+
+    const result: Promise<void | T> = this.do(innerCall);
+    return cl.return(result, 'ok');
+  }
+
 
   /**
    * reset/clear the log if alwaysResetLog is true

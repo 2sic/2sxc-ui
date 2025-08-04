@@ -25,7 +25,8 @@ export const Debug = {
    * @param {...any[]} args
    */
   log (...args: any[]) {
-    if (IsDevBuild) console.log(...args);
+    if (IsDevBuild)
+      console.log(...args);
   },
 
   // Full debug on specific parts of the code

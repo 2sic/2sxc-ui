@@ -9,9 +9,9 @@
  */
 Commands.add(CommandNames.log, 'Log', 'bomb', true, false, {
 
-  code(context, event) {
+  code(context, _event) {
     console.log('command: log (message/context)', context.button.command.params.message, context);
-    return new Promise((resolve, reject) => {});
+    return new Promise((_resolve, _reject) => {});
   },
 
   noItems: true,

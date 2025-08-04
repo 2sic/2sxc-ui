@@ -25,10 +25,13 @@ export class RenderButton extends RenderPart {
     // check if we have rules and merge params into the button
     const rule = ContextComplete.getRule(ctx);
     if (rule) cl.data("rule found, will try to merge params", rule);
-    const params = ButtonCommand.mergeAdditionalParams(
+    let params = ButtonCommand.mergeAdditionalParams(
       btnSafe.action(),
       rule?.params
     );
+
+    if (rule?.settings)
+      params = { ...params, settings: rule.settings };
 
     const group = ctx.toolbar?.groups?.[groupIndex];
     const groupName = group?.name;
@@ -38,8 +41,10 @@ export class RenderButton extends RenderPart {
     const disabled = btnSafe.disabled();
 
     // put call as plain JavaScript to preserve even if DOM is serialized
-    if (!disabled)
-      btnLink.setAttribute("onclick", this.generateRunJs(rule, ctx, params));
+    if (!disabled) {
+      const runJs = this.generateRunJs(rule, ctx, params);
+      btnLink.setAttribute("onclick", runJs);
+    }
 
     // Add various classes
     const classes =
@@ -112,8 +117,10 @@ export class RenderButton extends RenderPart {
       color = (color as number).toString();
     if (color && typeof color === "string") {
       const parts = color.split(",");
-      if (parts[0]) divTag.style.background = correctColorCodes(parts[0]);
-      if (parts[1]) divTag.style.color = correctColorCodes(parts[1]);
+      if (parts[0])
+        divTag.style.background = correctColorCodes(parts[0]);
+      if (parts[1])
+        divTag.style.color = correctColorCodes(parts[1]);
     }
 
     return callLog.done(color ?? "no color");
@@ -126,14 +133,14 @@ export class RenderButton extends RenderPart {
   ) {
     // 2022-05-18 2dm: #CustomContext New we can override the context
     let modifyContext = rule?.context;
-    if (!modifyContext || Object.keys(modifyContext).length === 0)
-      modifyContext = undefined;
-    else modifyContext = { ...modifyContext, complete: true };
+    modifyContext = (!modifyContext || Object.keys(modifyContext).length === 0)
+      ? undefined
+      : { ...modifyContext, complete: true };
     const targetContext = modifyContext
       ? JSON.stringify(modifyContext)
       : `${ctx.instance.id}, ${ctx.contentBlockReference.id}`;
 
-    // 2022-06-28 experimental trying to move to cms.run
+    // Placing real JS on each button
     if (params?.action === CommandNames.code) {
       const { action, ...cleanParams } = params;
       const newP = { action: params.action, params: cleanParams };

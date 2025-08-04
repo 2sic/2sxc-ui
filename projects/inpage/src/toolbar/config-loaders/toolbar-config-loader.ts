@@ -77,8 +77,7 @@ export class ToolbarConfigLoader extends HasLog {
   public buildTreeAndModifyAccordingToRules(toolbarContext: ContextComplete, configWip: ToolbarWip) {
     const wrapLog = this.log.call('buildFullDefinition');
     const tlbConfig = this.groups.expandButtonGroups(configWip);
-    // #CodeChange#2020-03-22#InstanceConfig - believe this is completely unused; remove in June
-    this.button.removeDisableButtons(toolbarContext, tlbConfig /*, instanceConfig */);
+    this.button.removeDisableButtons(toolbarContext, tlbConfig);
     return wrapLog.return(tlbConfig);
   }
 

@@ -28,7 +28,7 @@ const $2sxc = window.$2sxc as SxcGlobal & SxcGlobalWithCms;
 const wasLoaded = !!$2sxc._manage; // for Oqtane
 
 // #2 Now attach initialization helpers and global objects, so that $2sxc always has these
-$2sxc.context ??= ContextComplete.findContext; // primary API to get the context
+$2sxc.context ??= ContextComplete.expandContext; // primary API to get the context
 $2sxc._translateInit ??= (manage: EditManager) => Translator.initManager(manage); // reference in ./2sxc-api/js/ToSic.Sxc.Instance.ts
 $2sxc.translate ??= translate; // provide an official translate API for 2sxc
 $2sxc._manage ??= new SxcGlobalManage(); // used out of this project in ToSic.Sxc.Instance and 2sxc.api.js

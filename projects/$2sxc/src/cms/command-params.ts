@@ -182,7 +182,7 @@ export interface CommandParams extends Record<string, unknown>
     /**
      * Settings to pass to the dialog.
      * 
-     * @internal v18.07 - not public
+     * @internal v18.07 - not public - trying to finalize v20 (believe it was not used yet)
      */
-    dialogSettings?: unknown;
+    settings?: unknown;
 }

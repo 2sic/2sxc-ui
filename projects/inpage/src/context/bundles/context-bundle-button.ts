@@ -36,7 +36,7 @@ export class ContextComplete extends ContextBundleToolbar {
    * Primary API to get the context (context is cached)
    * @internal
    */
-  static findContext(tagOrSxc: Sxc | HTMLElement | number, cbid?: number): ContextComplete {
+  static expandContext(tagOrSxc: Sxc | HTMLElement | number, cbid?: number): ContextComplete {
     let sxc: Sxc;
     let containerTag: HTMLElement = null;
 
@@ -59,7 +59,7 @@ export class ContextComplete extends ContextBundleToolbar {
    * @internal
    */
   static contextCopy(htmlElementOrId: HTMLElement | number, cbid?: number): ContextComplete {
-    const contextOfButton = ContextComplete.findContext(htmlElementOrId, cbid);
+    const contextOfButton = ContextComplete.expandContext(htmlElementOrId, cbid);
     // set sxc to null because of cyclic reference, so we can serialize it
     contextOfButton.sxc = null;
     // make a copy

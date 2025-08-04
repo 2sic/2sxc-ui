@@ -29,7 +29,7 @@ export interface SxcGlobalWithCms {
   /**
    * @internal
    */
-  context: typeof ContextComplete.findContext;
+  context: typeof ContextComplete.expandContext;
 
   /**
    * Content Management features on the $2sxc

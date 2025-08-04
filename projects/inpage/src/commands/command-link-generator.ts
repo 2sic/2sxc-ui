@@ -157,7 +157,8 @@ export class CommandLinkGenerator extends HasLog {
     const params = this.context.button.command.params;
 
     const fields: string[] = [this.#findPartName(true)];
-    if (withPresentation) fields.push(this.#findPartName(false));
+    if (withPresentation)
+      fields.push(this.#findPartName(false));
     fields.map((f) => this.#addContentGroupItem(groupId, index, f, isAdd, params));
     cl.done();
   }

@@ -14,6 +14,7 @@ import { WorkflowHelper, WorkflowPhases, WorkflowStepCodeArguments } from '../..
 import { ToolbarWorkflowManager } from '../../workflow/toolbar-workflow-manager';
 import { WorkflowStep } from '../../workflow/workflow-step';
 import { CommandLinkGenerator } from '../command-link-generator';
+import { Debug } from '../../constants/debug';
 
 const debug = false;
 
@@ -70,16 +71,16 @@ export class CmsEngine extends HasLog {
    * @param settings
    * @param event
    */
-  run<T>(context: ContextComplete, nameOrParams: string | CommandParams, event: MouseEvent, wipParamsWithWorkflow?: RunParams, triggeredBy?: string): CommandPromise<T> {
+  run<T>(context: ContextComplete, params: CommandParams, event: MouseEvent, wipParamsWithWorkflow?: RunParams, triggeredBy?: string): CommandPromise<T> {
     const cl = this.log.call('run<T>', `triggeredBy: ${triggeredBy}`, undefined, { context });
-    let cmdParams = this.runParamsHelper.getParamsFromNameOrParams(nameOrParams);
-    cmdParams = this.runParamsHelper.expandParamsWithDefaults(cmdParams);
+
+    const cmdParams = this.runParamsHelper.expandParamsWithDefaults(params);
 
     const origEvent = event;
     const name = cmdParams.action;
-    // 2dm 2022-07-05 #badContentTypeExtractAndRefill - we seem to extract it, just to put it back on the ButtonCommand
-    // const contentType = cmdParams.contentType;
-    // cl.add(`run command '${name}' for type ${contentType}`);
+
+    // console.warn('2dm: cms-engine.ts: run', { context, params, cmdParams });
+    
     cl.add(`run command '${name}'`);
 
     // Toolbar API v2
