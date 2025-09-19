@@ -2,8 +2,8 @@
   125deg,
     /* v19
     rgba(15, 45, 80, 1) 40%,
-    rgba(148, 27, 78, 1) 100%
-    v20 */
+    rgba(148, 27, 78, 1) 100% */
+    /* v20 */
     rgba(36, 14, 18, 1) 10%, /* #240E12 */
     rgba(149, 44, 66, 1) 90% /* #952C42 */
 );
@@ -102,11 +102,6 @@ div.sc-content-block-list.show-placeholder:empty {
 
 .sc-invisible {
   display: none !important;
-}
-
-.sc-cb-action {
-  /* -webkit-filter: grayscale(75%);
-    filter: grayscale(75%); */
 }
 
 .sc-cb-is-selected {
