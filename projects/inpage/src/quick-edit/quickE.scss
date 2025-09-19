@@ -8,6 +8,13 @@
     rgba(149, 44, 66, 1) 90% /* #952C42 */
 );
 
+// Accordion (light) variant
+$inpage-btn-bg-accordion: linear-gradient(
+  125deg,
+    rgb(85, 34, 43) 10%,
+    rgb(209, 63, 95) 90%
+);
+
 $quicke-btn-size: 34px;
 $quicke-btn-bg-size: 32px 32px;
 
@@ -17,7 +24,6 @@ $quicke-btn-bg-size: 32px 32px;
   height: 40px;
   line-height: 35px;
   margin: -20px 0 0 0;
-  /* opacity: 0.8; */
   padding: 0;
   pointer-events: none;
   position: absolute;
@@ -73,29 +79,37 @@ a.sc-content-block-menu-addapp,
 a.sc-content-block-menu-btn {
   text-decoration: none;
 }
-.sc-content-block-menu a.sc-content-block-menu-addcontent.hide-content {
-  display: none;
-}
+
+/* hide elements when flagged */
+.sc-content-block-menu a.sc-content-block-menu-addcontent.hide-content,
 .sc-content-block-menu a.sc-content-block-menu-addapp.hide-app {
   display: none;
 }
 
-/*#endregion */
+a.sc-content-block-menu-addcontent.sc-content-block-menu-module,
+a.sc-content-block-menu-addapp.sc-content-block-menu-module,
+a.sc-content-block-menu-btn.sc-content-block-menu-module,
+a.sc-content-block-menu-btn.sc-cb-action.icon-sxc-paste.sc-content-block-menu-module,
+a.sc-content-block-menu-btn.sc-cb-action.icon-sxc-move,
+a.sc-content-block-menu-btn.sc-cb-action.icon-sxc-trash-empty {
+  background: $inpage-btn-bg;
+}
 
+/* Base styles for all buttons (uses accordion styles, but get's overridden by the code above - when not in accordion) */
 a.sc-content-block-menu-btn,
 a.sc-content-block-menu-addcontent,
 a.sc-content-block-menu-addapp {
-  /* background: #002753; /* #2F9BF2; */
-  background: $inpage-btn-bg;
   border-bottom-right-radius: 10px;
   border-top-left-radius: 10px;
   border: 1px white solid;
   color: white !important;
   text-indent: 0 !important;
+  background: $inpage-btn-bg-accordion;
 }
 
-/* show in-text placeholders when they are still empty */
+/* other unrelated rules left as-is (kept for context) */
 
+/* show in-text placeholders when they are still empty */
 div.sc-content-block-list.show-placeholder:empty {
   background: rgba(47, 155, 242, 0.1);
   height: 20px;
