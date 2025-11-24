@@ -1,5 +1,5 @@
 ﻿import { CommandWithParams } from '.';
-import { ItemUrlParameters } from '../../../../$2sxc/src/cms/item-identifiers';
+import { AnyIdentifier, ItemUrlParameters } from '../../../../$2sxc/src/cms/item-identifiers';
 import { CommandNames, CommandParams } from '../../commands';
 import { CommandCode } from '../../commands/command-code';
 import { CommandLinkGenerator } from '../../commands/command-link-generator';
@@ -47,7 +47,10 @@ export class Button {
   }
 
   /** Configure the link generator before it creates the link */
-  configureLinkGenerator: (context: ContextComplete, linkGenerator: CommandLinkGenerator) => void;
+  // configureLinkGenerator: (context: ContextComplete, linkGenerator: CommandLinkGenerator) => void;
+
+  /** Replacement for configureLinkGenerator - v20.09 */
+  customItems: (ctx: ContextComplete, items: AnyIdentifier[]) => AnyIdentifier[];
 
   tweakGeneratedUrlParameters?: (context: ContextComplete, itemUrlParameters: ItemUrlParameters) => ItemUrlParameters;
 

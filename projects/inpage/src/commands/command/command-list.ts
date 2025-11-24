@@ -10,11 +10,23 @@ const cmd = CommandDefinition.build(CommandNames.list, 'Sort', 'list-numbered', 
 
   showCondition: (context) => SharedLogic.isList(context),
 
-  configureLinkGenerator: (context, linkGenerator) => {
-    if (!SharedLogic.isFieldList(context)) return;
+  // configureLinkGenerator: (context, linkGenerator) => {
+  //   if (!SharedLogic.isFieldList(context)) return;
 
-    const params = context.button.command.params;
-    linkGenerator.items = [{
+  //   const params = context.button.command.params;
+  //   linkGenerator.items = [{
+  //     Add: false,
+  //     Index: CmdParHlp.getIndex(params),
+  //     Parent: params.parent,
+  //     Field: params.fields,
+  //   }];
+  // },
+
+  customItems: (ctx, _) => {
+    if (!SharedLogic.isFieldList(ctx)) return [];
+
+    const params = ctx.button.command.params;
+    return [{
       Add: false,
       Index: CmdParHlp.getIndex(params),
       Parent: params.parent,

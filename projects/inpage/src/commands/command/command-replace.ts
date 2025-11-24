@@ -11,14 +11,28 @@ Commands.add(CommandNames.replace, 'Replace', 'replace', false, true, {
     return SharedLogic.isReferencedItem(context);
   },
 
-  configureLinkGenerator: (context, linkGenerator) => {
-    // default case is ContentBlock - in which case it doesn't need to redefine the items
-    if (!SharedLogic.isFieldList(context))
-      return;
+  // configureLinkGenerator: (ctx, linkGenerator) => {
+  //   // default case is ContentBlock - in which case it doesn't need to redefine the items
+  //   if (!SharedLogic.isFieldList(ctx))
+  //     return;
 
-    // fieldList - redefine the items
-    const params = context.button.command.params;
-    linkGenerator.items = [{
+  //   // fieldList - redefine the items
+  //   const params = ctx.button.command.params;
+  //   linkGenerator.items = [{
+  //     Add: false,
+  //     Index: CmdParHlp.getIndex(params),
+  //     Parent: params.parent,
+  //     Field: params.fields,
+  //   }];
+  // },
+
+  customItems: (ctx, items) => {
+    // default case is ContentBlock - in which case it doesn't need to redefine the items
+    if (!SharedLogic.isFieldList(ctx))
+      return [];
+
+    const params = ctx.button.command.params;
+    return [{
       Add: false,
       Index: CmdParHlp.getIndex(params),
       Parent: params.parent,

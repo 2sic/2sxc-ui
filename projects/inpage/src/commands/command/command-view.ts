@@ -9,8 +9,12 @@ const cmd = CommandDefinition.build(CommandNames.view, 'TemplateSettings', 'slid
 
   showCondition: (ctx) => !!ctx.user.CanDevelop && !ctx.app.isContent,
 
-  configureLinkGenerator: (ctx, linkGen) => {
-    linkGen.items = [{ EntityId: ctx.contentBlock.templateId }];
+  // configureLinkGenerator: (ctx, linkGen) => {
+  //   linkGen.items = [{ EntityId: ctx.contentBlock.templateId }];
+  // },
+
+  customItems: (ctx, _) => {
+    return [{ EntityId: ctx.contentBlock.templateId }];
   },
 
   // Special: the items are fake, they transport info about the template

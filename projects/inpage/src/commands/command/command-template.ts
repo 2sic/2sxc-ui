@@ -11,14 +11,24 @@ const cmd = CommandDefinition.build(CommandNames.template, 'Develop', 'code', tr
 
   showCondition: (context) => !!context.user.CanDevelop,
 
-  configureLinkGenerator: (context, linkGenerator) => {
-    const cb = context.contentBlock;
+  // configureLinkGenerator: (context, linkGenerator) => {
+  //   const cb = context.contentBlock;
+  //   const identifier: TemplateIdentifier = { EntityId: cb.templateId };
+  //   if (cb.templatePath)
+  //     identifier.Path = cb.templatePath;
+  //   if (cb.edition)
+  //     identifier.Edition = cb.edition;
+  //   linkGenerator.items = [identifier];
+  // },
+
+  customItems: (ctx, _) => {
+    const cb = ctx.contentBlock;
     const identifier: TemplateIdentifier = { EntityId: cb.templateId };
     if (cb.templatePath)
       identifier.Path = cb.templatePath;
     if (cb.edition)
       identifier.Edition = cb.edition;
-    linkGenerator.items = [identifier];
+    return [identifier];
   },
 
   parameters: (ctx) => ({ isshared: ctx.contentBlock.templateIsShared }),

@@ -21,13 +21,22 @@ const metadataSharedParts : Partial<Button> = {
   // only add a metadata-button if it has metadata-infos
   showCondition: (ctx) => !!ctx.button.command.params.metadata,
 
-  configureLinkGenerator(_, linkGenerator) {
+  // configureLinkGenerator(_, linkGenerator) {
+  //   const itm: Partial<ItemIdentifierSimple> = {
+  //     Metadata: {
+  //       ...{ keyType: MetadataDefaultKeyType, targetType: MetadataDefaultTargetType },
+  //       ...linkGenerator.context.button.command.params.metadata },
+  //   };
+  //   linkGenerator.items[0] = {...linkGenerator.items[0], ...itm };
+  // },
+
+  customItems: (ctx, items) => {
     const itm: Partial<ItemIdentifierSimple> = {
       Metadata: {
         ...{ keyType: MetadataDefaultKeyType, targetType: MetadataDefaultTargetType },
-        ...linkGenerator.context.button.command.params.metadata },
+        ...ctx.button.command.params.metadata },
     };
-    linkGenerator.items[0] = {...linkGenerator.items[0], ...itm };
+    return [ {...items[0], ...itm }, ...items.slice(1)];
   },
 
   // We need the items, they will contain the metadata

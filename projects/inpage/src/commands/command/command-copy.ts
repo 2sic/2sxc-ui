@@ -13,11 +13,19 @@ Commands.add(CommandNames.copy, 'Copy', 'copy', false, true, {
   // needs to have an existing entityId to work
   showCondition: (ctx) => !!ctx.button.command.params.entityId,
 
-  configureLinkGenerator: (ctx, linkGenerator) => {
+  // configureLinkGenerator: (ctx, linkGenerator) => {
+  //   const originalId = ctx.button.command.params.entityId;
+  //   const typeName = createContentTypeParams(ctx).contentType;
+  //   if (!typeName)
+  //     throw new Error("can't copy: missing contentType");
+  //   linkGenerator.items = [{ DuplicateEntity: originalId, ContentTypeName: typeName }];
+  // },
+
+  customItems: (ctx, _) => {
     const originalId = ctx.button.command.params.entityId;
     const typeName = createContentTypeParams(ctx).contentType;
     if (!typeName)
       throw new Error("can't copy: missing contentType");
-    linkGenerator.items = [{ DuplicateEntity: originalId, ContentTypeName: typeName }];
+    return [{ DuplicateEntity: originalId, ContentTypeName: typeName }];
   },
 });

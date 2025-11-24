@@ -15,7 +15,7 @@ import { ButtonSafe } from '../toolbar/config';
  * @internal
  */
 export class CommandLinkGenerator extends HasLog {
-  public items: AnyIdentifier[];
+  private items: AnyIdentifier[];
 
   constructor(private buttonSafe: ButtonSafe, public readonly context: ContextComplete, parentLog: Log) {
     super('Cmd.LnkGen', parentLog);
@@ -27,14 +27,16 @@ export class CommandLinkGenerator extends HasLog {
     const command = buttonSafe.btnCommand();
 
     // Initialize Items - use predefined or create empty array
-    this.items = command.params.items || [];
-    l.data('items', this.items);
+    var items: AnyIdentifier[] = command.params.items || [];
+    l.data('items', items);
 
-    this.#buildItemsList(buttonSafe);
+    items = this.#buildItemsList(items, buttonSafe);
 
     // if the command has own configuration stuff, do that now
-    if (context.button.configureLinkGenerator)
-      context.button.configureLinkGenerator(context, this);
+    if (context.button.customItems)
+      items = context.button.customItems(context, items);
+
+    this.items = items;
     l.done();
   }
 
@@ -61,14 +63,15 @@ export class CommandLinkGenerator extends HasLog {
   /**
    * Generate items for editing/changing or simple item depending on the scenario.
    */
-  #buildItemsList(button: ButtonSafe) {
+  #buildItemsList(items: AnyIdentifier[], button: ButtonSafe): AnyIdentifier[] {
     const params = button.btnCommand().params;
     if (params.useModuleList)
-      this.#addContentGroupItems(true);
+      items = this.#addContentGroupItems(items, true);
     else if (params.parent)
-      this.#addItemInList();
+      items = this.#addItemInList(items);
     else
-      this.#addItem();
+      items = this.#addItem(items);
+    return items;
   }
 
   /**
@@ -86,18 +89,19 @@ export class CommandLinkGenerator extends HasLog {
       ? context.button.tweakGeneratedUrlParameters(context, this.#getUrlParams())
       : this.#getUrlParams();
 
+    var items = this.items;
+
     // steps for all actions: prefill, serialize, open-dialog
     // when doing new, there may be a prefill in the link to initialize the new item
     if (params.prefill)
-      for (let i = 0; i < this.items.length; i++)
-        this.#addFieldsAndParameters(this.items[i] as ItemIdentifierSimple, params);
+      items = items.map(itm => this.#addFieldsAndParameters(itm as ItemIdentifierSimple, params));
 
     // drop root prefill property as it was transferred to items
     delete urlItems.prefill;
 
     // Only add items if button doesn't forbid it - new v18.03
     if (!button.skipAutoAddItemsSafe())
-      urlItems.items = JSON.stringify(this.items); // Serialize/json-ify the complex items-list
+      urlItems.items = JSON.stringify(items); // Serialize/json-ify the complex items-list
 
     // clone the params and adjust parts based on partOfPage settings...
     const partOfPage = button.partOfPageSafe();
@@ -129,7 +133,7 @@ export class CommandLinkGenerator extends HasLog {
     return env.publicKey() !== null;
   }
 
-  #addItem() {
+  #addItem(items: AnyIdentifier[]) {
     const item = {} as ItemIdentifierSimple;
     const params = this.context.button.command.params;
 
@@ -141,25 +145,34 @@ export class CommandLinkGenerator extends HasLog {
       item.ContentTypeName = ct;
 
     // only add if there was stuff to add
-    if (item.EntityId || item.ContentTypeName) {
-      this.items.push(this.#addFieldsAndParameters(item, params));
-    }
+    return (item.EntityId || item.ContentTypeName) 
+      ? [...items, this.#addFieldsAndParameters(item, params)]
+      : items;
   }
 
   #addFieldsAndParameters<T extends AnyIdentifier>(item: T, params: CommandParams): T {
-    if (params == null) return item;
+    if (params == null)
+      return item;
     const itemIdentifier = item as ItemIdentifierSimple;
-    if (params.prefill) itemIdentifier.Prefill = params.prefill;
-    if (params.uifields) itemIdentifier.UiFields = params.uifields;
-    if (params.form) itemIdentifier.Parameters = params.form;
-    return item;
+    return { ...itemIdentifier,
+      ...(params.prefill ? { Prefill: params.prefill } : {}),
+      ...(params.uifields ? { UiFields: params.uifields } : {}),
+      ...(params.form ? { Parameters: params.form } : {}),
+    } as T;
+    // if (params.prefill)
+    //   itemIdentifier.Prefill = params.prefill;
+    // if (params.uifields)
+    //   itemIdentifier.UiFields = params.uifields;
+    // if (params.form)
+    //   itemIdentifier.Parameters = params.form;
+    // return item;
   }
 
   /**
    * this will tell the command to edit a item from the sorted list in the group,
    * optionally together with the presentation item
    */
-  #addContentGroupItems(withPresentation: boolean) {
+  #addContentGroupItems(items: AnyIdentifier[], withPresentation: boolean) {
     const cl = this.log.call('addContentGroupItems', `${withPresentation}`);
     // const params = this.context.button.command.params;
     const i = CmdParHlp.getIndex(this.context);
@@ -172,8 +185,8 @@ export class CommandLinkGenerator extends HasLog {
     const fields: string[] = [this.#findPartName(true)];
     if (withPresentation)
       fields.push(this.#findPartName(false));
-    fields.map((f) => this.#addContentGroupItem(groupId, index, f, isAdd, params));
-    cl.done();
+    const newItems = fields.map((f) => this.#addContentGroupItem(groupId, index, f, isAdd, params));
+    return cl.return([...items, ...newItems]);
   }
 
 
@@ -181,7 +194,7 @@ export class CommandLinkGenerator extends HasLog {
   /**
    * this adds an item of the content-group, based on the group GUID and the sequence number
    */
-  #addContentGroupItem(guid: string, index: number, part: string, isAdd: boolean, params: CommandParams) {
+  #addContentGroupItem(guid: string, index: number, part: string, isAdd: boolean, params: CommandParams): AnyIdentifier {
     const cl = this.log.call('addContentGroupItem', `${guid}, ${index}, ${part}, ${isAdd}`);
     const item = {
       Add: isAdd,
@@ -189,8 +202,8 @@ export class CommandLinkGenerator extends HasLog {
       Parent: guid,
       Field: part.toLocaleLowerCase(),
     };
-    this.items.push(this.#addFieldsAndParameters(item, params));
-    cl.done();
+    const newItem = this.#addFieldsAndParameters(item, params);
+    return cl.return(newItem);
   }
 
 
@@ -199,24 +212,28 @@ export class CommandLinkGenerator extends HasLog {
    * this will tell the command to edit a item which also belongs to a list
    * this is relevant when adding new items
    */
-  #addItemInList() {
+  #addItemInList(items: AnyIdentifier[]) {
     const params = this.context.button.command.params;
     const index = CmdParHlp.getIndex(params);
     const isAdd = this.context.button.command.name === 'new';
     const groupId = params.parent;
 
     // New in 10.27 - if params has a field, use that
-    if (params.fields)
-      params.fields.split(',').map((f) => { 
-        const item = {
-          EntityId: isAdd ? 0 : params.entityId,
-          Field: f,
-          Parent: groupId,
-          Add: isAdd,
-          Index: index,
-        } as ItemIdentifierInList;
-        this.items.push(this.#addFieldsAndParameters(item, params));
+    if (!params.fields)
+      return items;
+    // if (params.fields)
+    const moreItems = params.fields.split(',').map((f) => { 
+      const item = {
+        EntityId: isAdd ? 0 : params.entityId,
+        Field: f,
+        Parent: groupId,
+        Add: isAdd,
+        Index: index,
+      } as ItemIdentifierInList;
+      
+      return this.#addFieldsAndParameters(item, params);
     });
+    return [...items, ...moreItems];
   }
 
   /**

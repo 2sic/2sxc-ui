@@ -8,22 +8,26 @@ Commands.add(CommandNames.appSettings, 'AppSettings', 'sliders', true, false, {
 
   dialog: () => CommandNames.edit,
 
-  disabled: (context) => context.app.settingsId === null,
+  disabled: (ctx) => ctx.app.settingsId === null,
 
-  title: (context) =>
+  title: (ctx) =>
   `Toolbar.AppSettings${
-    context.app.settingsId === null ? 'Disabled' : ''
+    ctx.app.settingsId === null ? 'Disabled' : ''
   }`,
 
   // only if settings exist, or are 0 (to be created)
-  showCondition: (context) => context.user.CanAdmin,
+  showCondition: (ctx) => ctx.user.CanAdmin,
 
-  configureLinkGenerator: (context, linkGenerator) => {
-    linkGenerator.items = [{ EntityId: context.app.settingsId }];
+  // configureLinkGenerator: (context, linkGenerator) => {
+  //   linkGenerator.items = [{ EntityId: context.app.settingsId }];
+  // },
+
+  customItems: (ctx, _) => {
+    return [{ EntityId: ctx.app.settingsId }];
   },
 
   // if it doesn't have a settings, make it less strong
-  dynamicClasses: (context) => context.app.settingsId !== null ? '' : 'empty',
+  dynamicClasses: (ctx) => ctx.app.settingsId !== null ? '' : 'empty',
 
   // The items will transport the settingsId
   noItems: false,
