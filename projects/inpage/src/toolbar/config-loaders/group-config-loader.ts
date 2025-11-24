@@ -76,9 +76,6 @@ export class ButtonGroupConfigLoader extends HasLog {
         // first check if we already got params in the object - then we will use those, otherwise the main object
         const realParams = (btnCommand as RunParams).params || InPageCommandJson.noAction(btnCommand);
 
-        // 2dm 2022-07-05 #badContentTypeExtractAndRefill - we seem to extract it, just to put it back on the ButtonCommand
-        // const contentType = realParams.contentType;
-
         // if the button belongs to a content-item, move the specs up to the item into the settings-object
         btnCommand = this.toolbar.command.updateToV9(btnCommand);
 

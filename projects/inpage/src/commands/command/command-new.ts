@@ -16,13 +16,13 @@ Commands.add(CommandNames.new, 'New', 'plus', false, true, {
 
   dialog: (_) => CommandNames.edit, // don't use "new" (default) but use "edit"
 
-  showCondition(context) {
+  showCondition(ctx) {
     // don't provide new if type unknown or on the header-item
-    return  !!context.button.command.params.contentType || SharedLogic.isList(context);
+    return  !!ctx.button.command.params.contentType || SharedLogic.isList(ctx);
   },
 
-  code(context, event) {
-    const params = context.button.command.params;
+  code(ctx, event) {
+    const params = ctx.button.command.params;
     // todo - should refactor this to be a toolbarManager.contentBlock command
     params.index = CmdParHlp.getIndex(params) + 1;
 
@@ -38,9 +38,9 @@ Commands.add(CommandNames.new, 'New', 'plus', false, true, {
     // since useModuleList doesn't need to specify the contentType
     // this means that it's a custom new button, and useModuleList is wrong.
     if (params.useModuleList && params.contentType)
-    delete params.useModuleList;
+      delete params.useModuleList;
 
     // done
-    return CmsEngine.openDialog(context, event, 'commandNew.add');
+    return CmsEngine.openDialog(ctx, event, 'commandNew.add');
   },
 });

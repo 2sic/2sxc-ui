@@ -152,7 +152,7 @@ export class ToolbarConfigLoaderV09 extends HasLog {
       l.add('Case 2: is array');
       if (unstructuredConfig.length === 0)
         return l.return([], '2a: empty array');
-      if (Button.isArray(unstructuredConfig))
+      if (Button.isButtonArray(unstructuredConfig))
         return l.return([{ buttons: unstructuredConfig }], '2b: array of groups');
       if (InPageButtonJson.is(unstructuredConfig[0]))
         return l.return([{ buttons: unstructuredConfig as InPageButtonJson[]}],

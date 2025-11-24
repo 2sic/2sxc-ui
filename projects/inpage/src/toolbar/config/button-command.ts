@@ -9,11 +9,9 @@ export class ButtonCommand {
 
     // customCode: string;
 
-    constructor(public name: CommandNames, /* contentType?: string, */ public params?: CommandParams) {
+    constructor(public name: CommandNames, public params?: CommandParams) {
         if (!params)
           this.params = {};
-        // 2dm 2022-07-05 #badContentTypeExtractAndRefill - we seem to extract it, just to put it back on the ButtonCommand
-        // if (contentType) this.params.contentType = contentType;
         this.command = Commands.singleton().get(name); // activate command for this
     }
 

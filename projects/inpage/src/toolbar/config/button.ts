@@ -97,10 +97,10 @@ export class Button {
   tippy: (context: ContextComplete, tag: HTMLElement) => void;
 
   /**
-   * Additional parameters which are used to RUN the command.
+   * Additional! parameters which are used to RUN the command.
    * So it's not used when preparing a toolbar button, but only when executing
    *
-   * Important: used to be called 'addParamsToLink' up to v18.03, but I assume was never public
+   * Important: used to be called 'addParamsToLink' up to v18.03
    */
   parameters?: ButtonPropGen<CommandParams>;
 
@@ -125,7 +125,7 @@ export class Button {
     return (thing as Button).command !== undefined;
   }
 
-  static isArray(thing: unknown): thing is Button[] {
+  static isButtonArray(thing: unknown): thing is Button[] {
     return (thing as Button[]).length && Button.is((thing as Button[])[0]);
   }
 
