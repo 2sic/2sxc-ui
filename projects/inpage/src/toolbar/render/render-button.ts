@@ -26,7 +26,7 @@ export class RenderButton extends RenderPart {
     const rule = ContextComplete.getRule(ctx);
     if (rule) cl.data("rule found, will try to merge params", rule);
     let params = ButtonCommand.mergeAdditionalParams(
-      btnSafe.action(),
+      btnSafe.btnCommand(),
       rule?.params
     );
 
@@ -38,7 +38,7 @@ export class RenderButton extends RenderPart {
 
     const btnLink = document.createElement("a");
 
-    const disabled = btnSafe.disabled();
+    const disabled = btnSafe.disabledSafe();
 
     // put call as plain JavaScript to preserve even if DOM is serialized
     if (!disabled) {
@@ -49,7 +49,7 @@ export class RenderButton extends RenderPart {
     // Add various classes
     const classes =
       (disabled ? " disabled" : "") +
-      (btnSafe.action() ? ` sc-${btnSafe.action().name}` : "") +
+      (btnSafe.btnCommand() ? ` sc-${btnSafe.btnCommand().name}` : "") +
       ` in-group-${groupIndex}` +
       (groupName ? ` in-group-${groupName}` : "") +
       " " +
@@ -59,7 +59,7 @@ export class RenderButton extends RenderPart {
       " " +
       btnSafe.classes() +
       " " +
-      btnSafe.dynamicClasses();
+      btnSafe.dynClassesSafe();
     cl.add("classes: " + classes);
     HtmlTools.addClasses(btnLink, classes);
 
@@ -74,7 +74,7 @@ export class RenderButton extends RenderPart {
     this.processColorRules(btnSafe, rule, ctx, divTag);
 
     // add tippy new 15.04
-    btnSafe.tippy(ctx, btnLink);
+    btnSafe.tippySafe(ctx, btnLink);
 
     return cl.return(btnLink);
   }
@@ -96,7 +96,7 @@ export class RenderButton extends RenderPart {
         btnLink.setAttribute("title", uiTitle);
       }
     } else {
-      const i18nTitle = btn.title();
+      const i18nTitle = btn.titleSafe();
       callLog.add(`i18nTitle: ${i18nTitle}`);
       if (i18nTitle) btnLink.setAttribute("data-i18n", `[title]${i18nTitle}`);
     }
@@ -110,7 +110,7 @@ export class RenderButton extends RenderPart {
     divTag: HTMLDivElement
   ) {
     const callLog = this.log.call("processColorRules");
-    let color = rule?.ui?.color ?? btn.color() ?? ctx.toolbar.settings.color;
+    let color = rule?.ui?.color ?? btn.colorSafe() ?? ctx.toolbar.settings.color;
 
     // catch edge case where the color is something like 808080 - which is treated as a number
     if (color && typeof color === "number")
@@ -153,7 +153,7 @@ export class RenderButton extends RenderPart {
 
   private iconTag(btn: ButtonSafe, rule: BuildRule) {
     const callLog = this.log.call("iconTag");
-    const icon = rule?.ui?.icon || btn.icon();
+    const icon = rule?.ui?.icon || btn.iconSafe();
     if (icon.indexOf("<svg") > -1) {
       // Temporary dom element
       const symbol = document.createElement("template");

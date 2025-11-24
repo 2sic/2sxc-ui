@@ -121,7 +121,7 @@ export class CmsEngine extends HasLog {
 
     // get button configuration to detect if it's only a UI action (like the more-button)
     let finalPromise: CommandPromise<T>;
-    if (new ButtonSafe(button, context).uiActionOnly()) {
+    if (new ButtonSafe(button, context).uiActionOnlySafe()) {
       cl.add('UI command, no pre-flight to ensure content-block');
       finalPromise = wrapperPromise.then((wfArgs) => WorkflowHelper.isCancelled(wfArgs)
         ? Promise.resolve<T>(null)
@@ -172,16 +172,16 @@ export class CmsEngine extends HasLog {
       };
 
       // Case 1: check if inline window (quick-dialog)
-      if (btn.inlineWindow()) {
+      if (btn.inlineWindowSafe()) {
         // test if it should be full screen (value or resolve-function)
         QuickDialog.singleton()
-          .showOrToggleFromToolbar(context, link, btn.fullScreen(), btn.dialog())
+          .showOrToggleFromToolbar(context, link, btn.fullScreenSafe(), btn.dialogSafe())
           .then((isChanged) => { if (isChanged) completePromise(); });
         return;
       }
 
       // Case 2: It's a normal pop-up dialog - either in a new tab/window or in a popup
-      const isNewWindow = btn.newWindow();
+      const isNewWindow = btn.newWindowSafe();
 
       // Experimental v17 - ctrl-click opens in new window; shift-click opens in popup
       if (isNewWindow || origEvent?.ctrlKey || origEvent?.shiftKey) {

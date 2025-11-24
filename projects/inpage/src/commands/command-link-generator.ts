@@ -19,29 +19,38 @@ export class CommandLinkGenerator extends HasLog {
 
   constructor(private buttonSafe: ButtonSafe, public readonly context: ContextComplete, parentLog: Log) {
     super('Cmd.LnkGen', parentLog);
-    const cl = this.log.call('constructor');
-    const command = buttonSafe.action();
+    
+    // WIP
+    this.log.liveDump = true;
+
+    const l = this.log.call('constructor');
+    const command = buttonSafe.btnCommand();
 
     // Initialize Items - use predefined or create empty array
     this.items = command.params.items || [];
-    cl.data('items', this.items);
+    l.data('items', this.items);
 
     this.#buildItemsList(buttonSafe);
 
     // if the command has own configuration stuff, do that now
     if (context.button.configureLinkGenerator)
       context.button.configureLinkGenerator(context, this);
-    cl.done();
+    l.done();
   }
 
   #getUrlParams(): ItemUrlParameters {
-    const l = this.log.call('constructor');
+    const l = this.log.call('getUrlParams');
+    const btnSafe = this.buttonSafe;
+
+    l.data('btnSafe.parameters', btnSafe.parametersSafe());
+    l.data('button.btnCommand().params', btnSafe.btnCommand().params);
+    l.data('this.context', this.context);
     // initialize params
-    const dialog = this.buttonSafe.dialog();
+    const dialog = btnSafe.dialogSafe();
     // This corrects how the variable to name the dialog changed in the history of 2sxc from action to dialog
-    const { items: _, ...otherParams } = this.buttonSafe.parameters();
+    const { items: _, ...otherParams } = btnSafe.parametersSafe();
     const urlParams = {
-      dialog: dialog || this.buttonSafe.action().name,
+      dialog: dialog || btnSafe.btnCommand().name,
       ...otherParams
     } satisfies ItemUrlParameters;
     l.data('urlParams', urlParams);
@@ -53,9 +62,10 @@ export class CommandLinkGenerator extends HasLog {
    * Generate items for editing/changing or simple item depending on the scenario.
    */
   #buildItemsList(button: ButtonSafe) {
-    if (button.action().params.useModuleList)
+    const params = button.btnCommand().params;
+    if (params.useModuleList)
       this.#addContentGroupItems(true);
-    else if (button.action().params.parent)
+    else if (params.parent)
       this.#addItemInList();
     else
       this.#addItem();
@@ -67,7 +77,7 @@ export class CommandLinkGenerator extends HasLog {
   getLink() {
     const context = this.context;
     const button = new ButtonSafe(context.button, context);
-    const params = button.action().params;
+    const params = button.btnCommand().params;
 
     debugger;
 
@@ -82,20 +92,23 @@ export class CommandLinkGenerator extends HasLog {
       for (let i = 0; i < this.items.length; i++)
         this.#addFieldsAndParameters(this.items[i] as ItemIdentifierSimple, params);
 
-    delete urlItems.prefill; // added 2020-03-11, seemed strange that it's not removed
+    // drop root prefill property as it was transferred to items
+    delete urlItems.prefill;
 
     // Only add items if button doesn't forbid it - new v18.03
-    if (!button.noItems())
+    if (!button.noItemsSafe())
       urlItems.items = JSON.stringify(this.items); // Serialize/json-ify the complex items-list
 
     // clone the params and adjust parts based on partOfPage settings...
-    const partOfPage = button.partOfPage();
+    const partOfPage = button.partOfPageSafe();
     const ngDialogParams = new DialogCoreParams(context, partOfPage);
 
     // initialize root url to dialog
     const rootUrl = this.#getDialogUrl(context);
 
+    // preserve debug param if present
     const debugUrlParam = window.$2sxc.urlParams.get('debug') ? '&debug=true' : '';
+    // clean/replace escaped "/" in url parameters
     const dialogParams = NoJQ.param(ngDialogParams).replace(/%2F/g, '/');
     return`${rootUrl}#${dialogParams}&${NoJQ.param(urlItems)}${debugUrlParam}`;
   }

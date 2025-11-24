@@ -115,8 +115,8 @@ export class ButtonConfigLoader extends HasLog {
                   // make sure params on the rule are also respected when checking the show-condition
                   // I think this should have happened earlier, but as of 2022-06 it's necessary
                   var btnSafe = new ButtonSafe(btn, context);
-                  ButtonCommand.mergeAdditionalParams(btnSafe.action(), rule?.params);
-                  show = btnSafe.showCondition();
+                  ButtonCommand.mergeAdditionalParams(btnSafe.btnCommand(), rule?.params);
+                  show = btnSafe.showConditionSafe();
                 }
                 if (show === false) {
                     removals += `#${i} "${btn.command.name}"; `;
