@@ -1,4 +1,4 @@
-﻿import { Command, CommandNames, Commands } from '..';
+﻿import { CommandDefinition, CommandNames, Commands } from '..';
 
 /**
  * @internal
@@ -15,7 +15,7 @@ const errCodeNotString = `${errPrefix}but 'call' doesn't seem to be a string.`;
  * This is only available in v14+, before it was called 'custom' and that still exists
  * @internal
  */
-const cmd = Command.build(CommandNames.code, 'Custom', 'bomb', true, false, {
+const cmd = CommandDefinition.build(CommandNames.code, 'Custom', 'bomb', true, false, {
   code(context, event) {
     return new Promise((resolve, reject) => {
       const params = context.button.command.params;

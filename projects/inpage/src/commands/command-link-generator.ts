@@ -96,7 +96,7 @@ export class CommandLinkGenerator extends HasLog {
     delete urlItems.prefill;
 
     // Only add items if button doesn't forbid it - new v18.03
-    if (!button.noItemsSafe())
+    if (!button.skipAutoAddItemsSafe())
       urlItems.items = JSON.stringify(this.items); // Serialize/json-ify the complex items-list
 
     // clone the params and adjust parts based on partOfPage settings...

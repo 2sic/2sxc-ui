@@ -5,7 +5,7 @@ import { Commands } from '../../commands';
 import { ContextComplete } from '../../context/bundles';
 import { HasLog } from '../../core';
 import { TypeValue } from '../../plumbing';
-import { Button, ButtonCommand, Toolbar } from '../config';
+import { Button, CommandWithParams, Toolbar } from '../config';
 import { ButtonSafe } from '../config/button-safe';
 import { CommandNames } from './../../commands/';
 
@@ -115,7 +115,7 @@ export class ButtonConfigLoader extends HasLog {
                   // make sure params on the rule are also respected when checking the show-condition
                   // I think this should have happened earlier, but as of 2022-06 it's necessary
                   var btnSafe = new ButtonSafe(btn, context);
-                  ButtonCommand.mergeAdditionalParams(btnSafe.btnCommand(), rule?.params);
+                  CommandWithParams.mergeAdditionalParams(btnSafe.btnCommand(), rule?.params);
                   show = btnSafe.showConditionSafe();
                 }
                 if (show === false) {

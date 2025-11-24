@@ -8,7 +8,7 @@ import { ContextBundleInstance } from '../../context/bundles/context-bundle-inst
 import { HasLog, Insights, Log } from '../../core';
 import { QuickDialog } from '../../quick-dialog/quick-dialog';
 import { Button, ButtonSafe } from '../../toolbar/config';
-import { ButtonCommand } from '../../toolbar/config';
+import { CommandWithParams } from '../../toolbar/config';
 import { InPageButtonJson } from '../../toolbar/config-loaders/config-formats/in-page-button';
 import { WorkflowHelper, WorkflowPhases, WorkflowStepCodeArguments } from '../../workflow';
 import { ToolbarWorkflowManager } from '../../workflow/toolbar-workflow-manager';
@@ -84,7 +84,7 @@ export class CmsEngine extends HasLog {
     cl.add(`run command '${name}'`);
 
     // Toolbar API v2
-    const btnCommand = new ButtonCommand(name, cmdParams);
+    const btnCommand = new CommandWithParams(name, cmdParams);
     const newButtonConfig = new Button(btnCommand, btnCommand.name);
 
     // merge conf & settings, but settings has higher priority

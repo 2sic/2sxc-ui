@@ -60,7 +60,7 @@ export class ButtonSafe {
   uiActionOnlySafe = () => this.getVal(this.button.uiActionOnly, true);
 
   /** Don't add items-info to the link, new v18.03 */
-  noItemsSafe = () => this.getVal(this.button.noItems, false);
+  skipAutoAddItemsSafe = () => this.getVal(this.button.noItems, false);
 
 
   /** Evaluate a property or generator and return the property */

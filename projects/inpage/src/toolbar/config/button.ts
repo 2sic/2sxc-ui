@@ -1,4 +1,4 @@
-﻿import { ButtonCommand } from '.';
+﻿import { CommandWithParams } from '.';
 import { ItemUrlParameters } from '../../../../$2sxc/src/cms/item-identifiers';
 import { CommandNames, CommandParams } from '../../commands';
 import { CommandCode } from '../../commands/command-code';
@@ -25,20 +25,20 @@ export class Button {
   id: string;
 
   /** The underlying command which will be run */
-  command: ButtonCommand;
+  command: CommandWithParams;
 
   /** classes which will be applied to this button */
   classes: string = '';
 
-  constructor(command: ButtonCommand, name: string) {
+  constructor(command: CommandWithParams, name: string) {
     this.command = command;
     // if the name is an identifier, split it
     const parts = Button.splitName(name);
     this.id = parts.id;
     // this.name = parts.name;
     // get defaults from action commandDefinition
-    if (command?.command?.buttonDefaults)
-      Obj.TypeSafeAssign(this, command.command.buttonDefaults);
+    if (command?.commandDef?.buttonDefaults)
+      Obj.TypeSafeAssign(this, command.commandDef.buttonDefaults);
   }
 
   static splitName(identifier: string): { id: string, name: CommandNames } {

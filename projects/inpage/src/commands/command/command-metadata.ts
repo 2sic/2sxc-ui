@@ -1,15 +1,15 @@
-﻿import { Command, CommandNames, Commands } from '..';
+﻿import { CommandDefinition, CommandNames, Commands } from '..';
 import { ItemIdentifierSimple } from '../../../../$2sxc/src/cms/item-identifiers';
+import { Button } from '../../toolbar/config/button';
 
 const MetadataDefaultKeyType = 'string';
 const MetadataDefaultTargetType = 10; // cms-item
+
 /**
- * create a metadata toolbar
- *
- * import this module to commands.ts
+ * This is the shared structure of both metadata and image-metadata commands
  * @internal
  */
-export const MetadataCommand = Command.build(CommandNames.metadata, 'Metadata', 'tag', false, false, {
+const metadataSharedParts : Partial<Button> = {
 
   parameters: (_) => ({ mode: CommandNames.newMode }),
 
@@ -30,22 +30,26 @@ export const MetadataCommand = Command.build(CommandNames.metadata, 'Metadata', 
     linkGenerator.items[0] = {...linkGenerator.items[0], ...itm };
   },
 
-  // The items will transport the metadata
+  // We need the items, they will contain the metadata
   noItems: false,
-});
+};
+
+/**
+ * create a metadata toolbar
+ *
+ * import this module to commands.ts
+ * @internal
+ */
+const metadata = CommandDefinition.build(CommandNames.metadata, 'Metadata', 'tag', false, false, metadataSharedParts);
 
 /**
  * @internal
  */
-export const ImageMetadataCommand = Command.build(CommandNames.image, 'Image', 'focus', false, false, {
-  parameters: MetadataCommand.buttonDefaults.parameters,
-  dialog: MetadataCommand.buttonDefaults.dialog,
+const imageMetadata = CommandDefinition.build(CommandNames.image, 'Image', 'focus', false, false, {
+  ...metadataSharedParts,
   classes: 'single-field',
-  dynamicClasses: MetadataCommand.buttonDefaults.dynamicClasses,
-  showCondition: MetadataCommand.buttonDefaults.showCondition,
-  configureLinkGenerator: MetadataCommand.buttonDefaults.configureLinkGenerator,
 });
 
-Commands.addCommand(MetadataCommand);
-Commands.addCommand(ImageMetadataCommand);
+Commands.addCommand(metadata);
+Commands.addCommand(imageMetadata);
 

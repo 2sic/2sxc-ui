@@ -1,10 +1,10 @@
-﻿import { Command, CommandNames, Commands } from '..';
+﻿import { CommandDefinition, CommandNames, Commands } from '..';
 
 /**
  * import this module to commands.ts
  * @internal
  */
-const cmd = Command.build(CommandNames.system, 'Zone', 'manage', true, false, {
+const cmd = CommandDefinition.build(CommandNames.system, 'Zone', 'manage', true, false, {
   dialog: (_) => CommandNames.system_old_zone,
   
   showCondition: (ctx) => !!ctx.user.CanAdmin,
@@ -13,4 +13,4 @@ const cmd = Command.build(CommandNames.system, 'Zone', 'manage', true, false, {
 });
 
 Commands.addCommand(cmd);
-Commands.addCommand(Command.clone(cmd, CommandNames.system_old_zone));
+Commands.addCommand(CommandDefinition.clone(cmd, CommandNames.system_old_zone));

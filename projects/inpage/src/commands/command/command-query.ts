@@ -1,10 +1,10 @@
-﻿import { Command, CommandNames, Commands, tlbI18nPrefix } from '..';
+﻿import { CommandDefinition, CommandNames, Commands, tlbI18nPrefix } from '..';
 
 /**
  * import this module to commands.ts
  * @internal
  */
-const cmd = Command.build(CommandNames.query, 'QueryEdit', 'filter', true, false, {
+const cmd = CommandDefinition.build(CommandNames.query, 'QueryEdit', 'filter', true, false, {
   dialog: (_) => 'pipeline-designer',
 
   parameters: (ctx) => ({ pipelineId: ctx.contentBlock.queryId }),
@@ -25,4 +25,4 @@ const cmd = Command.build(CommandNames.query, 'QueryEdit', 'filter', true, false
 
 
 Commands.addCommand(cmd);
-Commands.addCommand(Command.clone(cmd, CommandNames.query_old_templateQuery));
+Commands.addCommand(CommandDefinition.clone(cmd, CommandNames.query_old_templateQuery));

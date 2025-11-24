@@ -13,7 +13,8 @@ Commands.add(CommandNames.replace, 'Replace', 'replace', false, true, {
 
   configureLinkGenerator: (context, linkGenerator) => {
     // default case is ContentBlock - in which case it doesn't need to redefine the items
-    if (!SharedLogic.isFieldList(context)) return;
+    if (!SharedLogic.isFieldList(context))
+      return;
 
     // fieldList - redefine the items
     const params = context.button.command.params;

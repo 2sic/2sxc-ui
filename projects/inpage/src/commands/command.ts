@@ -12,7 +12,7 @@ const debugTippy = Debug.parts.CommandTippy;
 /**
  * @internal
  */
-export class Command {
+export class CommandDefinition {
   constructor(public name: string) {
   }
 
@@ -144,13 +144,8 @@ export class Command {
                 uiOnly: boolean,
                 partOfPage: boolean,
                 more: Partial<Button>,
-                ): Command {
-    const cmd = new Command(name);
-    // debug entry
-    // if (name == 'layout') {
-    //   console.log('test 2dm: ' + name);
-    //   debugger;
-    // }
+                ): CommandDefinition {
+    const cmd = new CommandDefinition(name);
 
     // Toolbar API v2
     cmd.mergeDefaults(translateKey, icon, uiOnly, partOfPage, more);
@@ -161,8 +156,8 @@ export class Command {
   /**
    * @internal
    */
-  static clone(command: Command, name: string) {
-    const clone = new Command(name);
+  static clone(command: CommandDefinition, name: string) {
+    const clone = new CommandDefinition(name);
     clone.buttonDefaults = command.buttonDefaults;
     return clone;
   }

@@ -2,7 +2,7 @@
 import { Debug } from '../../constants/debug';
 import { ContextComplete } from '../../context/bundles/context-bundle-button';
 import { HtmlTools } from '../../html/dom-tools';
-import { ButtonCommand, ButtonSafe } from '../config';
+import { CommandWithParams, ButtonSafe } from '../config';
 import { BuildRule } from '../rules/rule';
 import { RenderPart } from './render-part-base';
 import { ToolbarRenderer } from './toolbar-renderer';
@@ -25,7 +25,7 @@ export class RenderButton extends RenderPart {
     // check if we have rules and merge params into the button
     const rule = ContextComplete.getRule(ctx);
     if (rule) cl.data("rule found, will try to merge params", rule);
-    let params = ButtonCommand.mergeAdditionalParams(
+    let params = CommandWithParams.mergeAdditionalParams(
       btnSafe.btnCommand(),
       rule?.params
     );

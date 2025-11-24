@@ -1,11 +1,11 @@
-﻿import { Command, CommandNames, Commands, SharedLogic } from '..';
+﻿import { CommandDefinition, CommandNames, Commands, SharedLogic } from '..';
 import { CmdParHlp } from '../cmd-par-hlp';
 
 /**
  * import this module to commands.ts
  * @internal
  */
-const cmd = Command.build(CommandNames.list, 'Sort', 'list-numbered', false, true, {
+const cmd = CommandDefinition.build(CommandNames.list, 'Sort', 'list-numbered', false, true, {
   dialog: (_) => CommandNames.list_old_instanceList,
 
   showCondition: (context) => SharedLogic.isList(context),
@@ -27,4 +27,4 @@ const cmd = Command.build(CommandNames.list, 'Sort', 'list-numbered', false, tru
 });
 
 Commands.addCommand(cmd);
-Commands.addCommand(Command.clone(cmd, CommandNames.list_old_instanceList));
+Commands.addCommand(CommandDefinition.clone(cmd, CommandNames.list_old_instanceList));

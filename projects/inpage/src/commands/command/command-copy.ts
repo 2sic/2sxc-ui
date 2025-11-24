@@ -16,7 +16,8 @@ Commands.add(CommandNames.copy, 'Copy', 'copy', false, true, {
   configureLinkGenerator: (ctx, linkGenerator) => {
     const originalId = ctx.button.command.params.entityId;
     const typeName = createContentTypeParams(ctx).contentType;
-    if (!typeName) throw new Error("can't copy: missing contentType");
+    if (!typeName)
+      throw new Error("can't copy: missing contentType");
     linkGenerator.items = [{ DuplicateEntity: originalId, ContentTypeName: typeName }];
   },
 });

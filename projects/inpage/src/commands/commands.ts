@@ -1,6 +1,6 @@
 ﻿import { HasLog, Insights } from '../core';
 import { Button } from '../toolbar/config';
-import { Command } from './command';
+import { CommandDefinition } from './command';
 
 /**
  * Singleton Catalog of all commands
@@ -14,16 +14,16 @@ export class Commands extends HasLog {
   }
   static #singleton: Commands;
 
-  public static add(name: string, translateKey: string, icon: string, uiOnly: boolean, partOfPage: boolean, more: Partial<Button>): Command {
+  public static add(name: string, translateKey: string, icon: string, uiOnly: boolean, partOfPage: boolean, more: Partial<Button>): CommandDefinition {
     return this.singleton().add(name, translateKey, icon, uiOnly, partOfPage, more);
   }
 
-  public static addCommand(command: Command): void {
+  public static addCommand(command: CommandDefinition): void {
     return this.singleton().addCommand(command);
   }
 
-  #all: Command[] = [];
-  list: Record<string, Command> = {}; // hash - table of action definitions, to be used a list()["action - name"]
+  #all: CommandDefinition[] = [];
+  list: Record<string, CommandDefinition> = {}; // hash - table of action definitions, to be used a list()["action - name"]
 
   private constructor() {
     super('Cmd.Catlog');
@@ -32,19 +32,19 @@ export class Commands extends HasLog {
 
   get = (name: string) => this.list[name]; // a specific action definition
 
-  add(name: string, translateKey: string, icon: string, uiOnly: boolean, partOfPage: boolean, more: Partial<Button>): Command {
-    const cmd = this.#add(Command.build(name, translateKey, icon, uiOnly, partOfPage, more));
+  add(name: string, translateKey: string, icon: string, uiOnly: boolean, partOfPage: boolean, more: Partial<Button>): CommandDefinition {
+    const cmd = this.#add(CommandDefinition.build(name, translateKey, icon, uiOnly, partOfPage, more));
     this.log.add(`add command '${name}'`, cmd);
     return cmd;
   }
 
-  addCommand(command: Command): void {
+  addCommand(command: CommandDefinition): void {
     const cmd = this.#add(command);
     this.log.add(`add command '${cmd.name}'`, cmd);
   }
 
 
-  #add(def: Command): Command {
+  #add(def: CommandDefinition): CommandDefinition {
     if (!this.list[def.name]) {
       // add
       this.#all.push(def);
