@@ -18,8 +18,6 @@ import { Debug } from '../../constants/debug';
 
 const debug = false;
 
-type CommandPromise<T> = Promise<T|void>;
-
 /**
  * The CMS engine is global, and needs the context to work.
  * @internal
@@ -60,7 +58,7 @@ export class CmsEngine extends HasLog {
     // ensure we have the right event despite browser differences
     event = event || (window.event as MouseEvent);
 
-    const result: CommandPromise<T> = this.run(context as ContextComplete, cmdParams, event, undefined, 'sxcGlobalCms.detectParamsAndRun');
+    const result = this.run<T>(context as ContextComplete, cmdParams, event, undefined, 'sxcGlobalCms.detectParamsAndRun');
     return cl.return(result);
   }
 
@@ -71,13 +69,13 @@ export class CmsEngine extends HasLog {
    * @param settings
    * @param event
    */
-  run<T>(context: ContextComplete, params: CommandParams, event: MouseEvent, wipParamsWithWorkflow?: RunParams, triggeredBy?: string): CommandPromise<T> {
+  run<T>(context: ContextComplete, params: CommandParams, event: MouseEvent, paramsWithWorkflow?: RunParams, triggeredBy?: string): Promise<void | T> {
     const cl = this.log.call('run<T>', `triggeredBy: ${triggeredBy}`, undefined, { context });
 
     const cmdParams = this.runParamsHelper.expandParamsWithDefaults(params);
 
     const origEvent = event;
-    const name = cmdParams.action;
+    const name = params.action;
 
     // console.warn('2dm: cms-engine.ts: run', { context, params, cmdParams });
     
@@ -102,9 +100,9 @@ export class CmsEngine extends HasLog {
 
     // New in 12.10 - Workflow can be provided by run-call
     let wf: ToolbarWorkflowManager;
-    if (wipParamsWithWorkflow?.workflows) {
+    if (paramsWithWorkflow?.workflows) {
       wf = new ToolbarWorkflowManager(this.log);
-      wf.add(wipParamsWithWorkflow.workflows as WorkflowStep | WorkflowStep[]);
+      wf.add(paramsWithWorkflow.workflows as WorkflowStep | WorkflowStep[]);
     } else
       wf = WorkflowHelper.getWorkflow(origEvent?.target as HTMLElement);
 
@@ -120,7 +118,7 @@ export class CmsEngine extends HasLog {
     }
 
     // get button configuration to detect if it's only a UI action (like the more-button)
-    let finalPromise: CommandPromise<T>;
+    let finalPromise: Promise<void | T>;
     if (new ButtonSafe(button, context).uiActionOnlySafe()) {
       cl.add('UI command, no pre-flight to ensure content-block');
       finalPromise = wrapperPromise.then((wfArgs) => WorkflowHelper.isCancelled(wfArgs)
@@ -152,7 +150,7 @@ export class CmsEngine extends HasLog {
   /**
    * Open a new dialog of the angular-ui
    */
-  static openDialog<T>(context: ContextComplete, event: MouseEvent, triggeredBy: string): CommandPromise<T> {
+  static openDialog<T>(context: ContextComplete, event: MouseEvent, triggeredBy: string): Promise<void | T> {
     const log = new Log('Cms.OpnDlg', null, `triggeredBy: ${triggeredBy}`);
     Insights.add('cms', 'open-dialog', log);
     // the link contains everything to open a full dialog (lots of params added)

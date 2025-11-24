@@ -29,6 +29,7 @@ export class ContextComplete extends ContextBundleToolbar {
   /** @internal */
   constructor(editCtx: AttrJsonEditContext, sxc?: Sxc) {
     super(editCtx, sxc);
+    this.sxc = sxc;
     // note that the button will not be filled here, as it will be filled somewhere else
   }
 
@@ -49,9 +50,7 @@ export class ContextComplete extends ContextBundleToolbar {
         containerTag = DomTools.getContainerTag(tagOrSxc);
     }
 
-    const contextOfButton = ContextComplete.getContextInstance(sxc, containerTag);
-    contextOfButton.sxc = sxc;
-    return contextOfButton;
+    return ContextComplete.#getContextInstance(sxc, containerTag);
   }
 
   /**
@@ -75,7 +74,7 @@ export class ContextComplete extends ContextBundleToolbar {
    * @param htmlElement
    * @internal
    */
-  static getContextInstance(sxc: Sxc, htmlElement?: HTMLElement): ContextComplete {
+  static #getContextInstance(sxc: Sxc, htmlElement?: HTMLElement): ContextComplete {
     const editContext = SxcTools.getEditContext(sxc, htmlElement);
     return new ContextComplete(editContext, sxc);
   }
