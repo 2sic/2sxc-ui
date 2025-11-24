@@ -10,7 +10,8 @@ Commands.add(CommandNames.delete, 'Delete', 'cancel', true, false, {
   showCondition(context) {
     const p = context.button.command.params;
     // can never be used for a modulelist item, as it is always in use somewhere
-    if (p.useModuleList) return false;
+    if (p.useModuleList)
+      return false;
 
     // check if all data exists required for deleting
     // before 10.27, it was entityId, entityGuid and entityTitle

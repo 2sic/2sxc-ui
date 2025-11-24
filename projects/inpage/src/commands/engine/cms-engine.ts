@@ -72,10 +72,12 @@ export class CmsEngine extends HasLog {
   run<T>(context: ContextComplete, params: CommandParams, event: MouseEvent, paramsWithWorkflow?: RunParams, triggeredBy?: string): Promise<void | T> {
     const cl = this.log.call('run<T>', `triggeredBy: ${triggeredBy}`, undefined, { context });
 
-    const cmdParams = this.runParamsHelper.expandParamsWithDefaults(params);
-
-    const origEvent = event;
     const name = params.action;
+    const origEvent = event;
+
+    // #DisableExpandParamsWithDefaults
+    // const cmdParams = this.runParamsHelper.expandParamsWithDefaults(params);
+    const cmdParams = params;
 
     // console.warn('2dm: cms-engine.ts: run', { context, params, cmdParams });
     
