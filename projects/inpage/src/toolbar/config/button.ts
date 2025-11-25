@@ -32,7 +32,7 @@ export class Button {
 
   constructor(command: CommandWithParams, name: string) {
     this.command = command;
-    // if the name is an identifier, split it
+    // if the name is an identifier like "someId=add", split it; note: as of 2025-11 2dm is not sure when this would be used
     const parts = Button.splitName(name);
     this.id = parts.id;
     // this.name = parts.name;

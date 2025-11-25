@@ -127,7 +127,7 @@ export class SxcGlobalCms extends HasLog {
 
     const innerCall: () => Promise<void> = () => cmsEngine.detectParamsAndRun(realCtx, nameOrSettings, eventOrSettings, event);
 
-    const result: Promise<void | T> = this.do(innerCall);
+    const result: Promise<void | T> = this.#do(innerCall);
     return cl.return(result, 'ok');
   }
 
@@ -148,9 +148,9 @@ export class SxcGlobalCms extends HasLog {
     } satisfies CommandParams;
 
     const innerCall: () => Promise<void> = () => new CmsEngine(this.log)
-      .run(ctxComplete, runParamsWithCtx.params, runParamsWithCtx.event, runParamsWithCtx, `${runParamsWithCtx.triggeredBy} - sxcGlobalCms.runInternal`);
+      .run(ctxComplete, runParamsWithCtx.params, runParamsWithCtx.event, runParamsWithCtx, `${runParamsWithCtx.triggeredBy} - sxcGlobalCms.runClean`);
 
-    const result: Promise<void | T> = this.do(innerCall);
+    const result: Promise<void | T> = this.#do(innerCall);
     return cl.return(result, 'ok');
   }
 
@@ -159,7 +159,7 @@ export class SxcGlobalCms extends HasLog {
    * reset/clear the log if alwaysResetLog is true
    * @internal
    */
-  private do<T>(innerCall: () => Promise<T>): Promise<T> {
+  #do<T>(innerCall: () => Promise<T>): Promise<T> {
     const cl = this.log.call('do');
     this.resetLog();
     const result = innerCall();
