@@ -1,6 +1,6 @@
 ﻿import { InPageCommandJson } from '..';
 import { CommandParams } from '../../../../../$2sxc/src/cms/command-params';
-import { Button } from '../../config';
+import { ButtonConfiguration, ButtonDefinition } from '../../config';
 
 /**
  * Button Definition v1. from old API
@@ -53,8 +53,8 @@ export class InPageButtonJson {
         return thing.length > 0 && InPageButtonJson.is(thing[0]);
     }
 
-    static toButton(oldFormat: InPageButtonJson): Partial<Button> {
-        const config: Partial<Button> = {
+    static toButton(oldFormat: InPageButtonJson): Partial<ButtonDefinition> {
+        const config: Partial<ButtonDefinition> = {
           // simple value properties
           ...(oldFormat.classes ? { classes: oldFormat.classes } : {}),
           ...(oldFormat.dialog ? { dialog: oldFormat.dialog } : {}),

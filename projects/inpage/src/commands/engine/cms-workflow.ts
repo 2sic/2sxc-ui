@@ -1,9 +1,8 @@
 ﻿import { RunParams } from '../../../../$2sxc/src/cms/run-params';
-import { RunParamsHelpers } from '../../cms/run-params-helpers';
 import { ContentBlockEditor } from '../../contentBlock/content-block-editor';
 import { ContextComplete } from '../../context/bundles/context-bundle-button';
 import { HasLog, Log } from '../../core';
-import { Button, ButtonSafe } from '../../toolbar/config';
+import { ButtonConfiguration, ButtonSafe } from '../../toolbar/config';
 import { WorkflowHelper, WorkflowPhases, WorkflowStepCodeArguments } from '../../workflow';
 import { ToolbarWorkflowManager } from '../../workflow/toolbar-workflow-manager';
 import { WorkflowStep } from '../../workflow/workflow-step';
@@ -21,7 +20,7 @@ export class CmsWorkflow extends HasLog {
     super('Cmd.WF', parentLog, 'start');
   }
 
-  wrapInWorkflow<T>(name: string, commandPromise: CommandCode, button: Button, context: ContextComplete, origEvent: MouseEvent, paramsWithWorkflow?: RunParams): Promise<void | T> {
+  wrapInWorkflow<T>(name: string, commandPromise: CommandCode, button: ButtonConfiguration, context: ContextComplete, origEvent: MouseEvent, paramsWithWorkflow?: RunParams): Promise<void | T> {
     const l = this.log.call('run<T>', null, undefined, { context });
 
     // New in 11.12 - find commandWorkflow of toolbar or use a dummy so the remaining code will always work

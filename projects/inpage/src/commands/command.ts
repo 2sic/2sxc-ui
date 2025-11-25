@@ -1,6 +1,6 @@
 ﻿import tippy, { Props } from 'tippy.js';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
-import { Button } from '../toolbar/config/button';
+import { ButtonDefinition } from '../toolbar/config/button';
 import { Note } from '../toolbar/config/Note';
 import { Debug } from '../constants/debug';
 
@@ -17,12 +17,12 @@ export class CommandDefinition {
   }
 
   /** the defaults are important for new buttons that just know this command */
-  buttonDefaults: Partial<Button>;
+  buttonDefaults: Partial<ButtonDefinition>;
 
   /**
    * @internal
    */
-  mergeDefaults(translateKey: string, icon: string, uiOnly: boolean, partOfPage: boolean, more: Partial<Button>): void {
+  mergeDefaults(translateKey: string, icon: string, uiOnly: boolean, partOfPage: boolean, more: Partial<ButtonDefinition>): void {
     if (typeof (partOfPage) !== 'boolean')
       throw 'partOfPage in commands not provided, order will be wrong!';
 
@@ -99,7 +99,7 @@ export class CommandDefinition {
         return undefined;
       },
       ...more,
-    };
+    } satisfies Partial<ButtonDefinition>;
   }
 
   /**
@@ -143,7 +143,7 @@ export class CommandDefinition {
                 icon: string,
                 uiOnly: boolean,
                 partOfPage: boolean,
-                more: Partial<Button>,
+                more: Partial<ButtonDefinition>,
                 ): CommandDefinition {
     const cmd = new CommandDefinition(name);
 

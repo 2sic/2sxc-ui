@@ -1,6 +1,6 @@
 ﻿import { CommandDefinition, CommandNames, Commands } from '..';
 import { ItemIdentifierSimple } from '../../../../$2sxc/src/cms/item-identifiers';
-import { Button } from '../../toolbar/config/button';
+import { ButtonDefinition } from '../../toolbar/config/button';
 
 const MetadataDefaultKeyType = 'string';
 const MetadataDefaultTargetType = 10; // cms-item
@@ -9,7 +9,7 @@ const MetadataDefaultTargetType = 10; // cms-item
  * This is the shared structure of both metadata and image-metadata commands
  * @internal
  */
-const metadataSharedParts : Partial<Button> = {
+const metadataSharedParts : Partial<ButtonDefinition> = {
 
   parameters: (_) => ({ mode: CommandNames.newMode }),
 

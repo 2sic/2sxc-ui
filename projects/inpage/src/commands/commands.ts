@@ -1,5 +1,5 @@
 ﻿import { HasLog, Insights } from '../core';
-import { Button } from '../toolbar/config';
+import { ButtonDefinition } from '../toolbar/config';
 import { CommandDefinition } from './command';
 
 /**
@@ -14,7 +14,7 @@ export class Commands extends HasLog {
   }
   static #singleton: Commands;
 
-  public static add(name: string, translateKey: string, icon: string, uiOnly: boolean, partOfPage: boolean, more: Partial<Button>): CommandDefinition {
+  public static add(name: string, translateKey: string, icon: string, uiOnly: boolean, partOfPage: boolean, more: Partial<ButtonDefinition>): CommandDefinition {
     return this.singleton().add(name, translateKey, icon, uiOnly, partOfPage, more);
   }
 
@@ -32,7 +32,7 @@ export class Commands extends HasLog {
 
   get = (name: string) => this.list[name]; // a specific action definition
 
-  add(name: string, translateKey: string, icon: string, uiOnly: boolean, partOfPage: boolean, more: Partial<Button>): CommandDefinition {
+  add(name: string, translateKey: string, icon: string, uiOnly: boolean, partOfPage: boolean, more: Partial<ButtonDefinition>): CommandDefinition {
     const cmd = this.#add(CommandDefinition.build(name, translateKey, icon, uiOnly, partOfPage, more));
     this.log.add(`add command '${name}'`, cmd);
     return cmd;

@@ -2,9 +2,7 @@
 import { AnyIdentifier, ItemUrlParameters } from '../../../../$2sxc/src/cms/item-identifiers';
 import { CommandNames, CommandParams } from '../../commands';
 import { CommandCode } from '../../commands/command-code';
-import { CommandLinkGenerator } from '../../commands/command-link-generator';
 import { ContextComplete } from '../../context/bundles/context-bundle-button';
-import { Obj } from '../../plumbing';
 import { Note } from './Note';
 
 /**
@@ -15,36 +13,15 @@ export type ButtonPropGen<T> = (context: ContextComplete) => T;
 
 type ButtonGenOrProp<T> = ButtonPropGen<T> | T;
 
-
 /**
- * The real button configuration as it's used at runtime
- * @internal
+ * A button definition contains all the possible properties which can be defined
+ * for a button. These are then used to create command structures for potential buttons.
+ * @public
  */
-export class Button {
-  /** The ID is important for tracking this button and applying modifiers */
-  id: string;
-
-  /** The underlying command which will be run */
-  command: CommandWithParams;
+export class ButtonDefinition {
 
   /** classes which will be applied to this button */
   classes: string = '';
-
-  constructor(command: CommandWithParams, name: string) {
-    this.command = command;
-    // if the name is an identifier like "someId=add", split it; note: as of 2025-11 2dm is not sure when this would be used
-    const parts = Button.splitName(name);
-    this.id = parts.id;
-    // this.name = parts.name;
-    // get defaults from action commandDefinition
-    if (command?.commandDef?.buttonDefaults)
-      Obj.TypeSafeAssign(this, command.commandDef.buttonDefaults);
-  }
-
-  static splitName(identifier: string): { id: string, name: CommandNames } {
-    const parts = identifier.split('=');
-    return { id: parts[0], name: (parts[1] || identifier) as CommandNames};
-  }
 
   /** Configure the link generator before it creates the link */
   // configureLinkGenerator: (context: ContextComplete, linkGenerator: CommandLinkGenerator) => void;
@@ -122,14 +99,45 @@ export class Button {
    * @internal
    */
   noItems?: ButtonGenOrProp<boolean>;
+}
 
-  /** Detect if this is a Button */
-  static is(thing: unknown): thing is Button {
-    return (thing as Button).command !== undefined;
+/**
+ * The real button configuration as it's used at runtime.
+ * It identifies the button by an ID, has the command to run, and
+ * gets defaults from the command definition.
+ * @internal
+ */
+export class ButtonConfiguration {
+  /** The ID is important for tracking this button and applying modifiers */
+  id: string;
+
+  /** The underlying command which will be run */
+  command: CommandWithParams;
+
+  definition: Partial<ButtonDefinition>;
+
+  constructor(command: CommandWithParams, name: string) {
+    // super();
+    this.command = command;
+    // if the name is an identifier like "someId=add", split it; note: as of 2025-11 2dm is not sure when this would be used
+    const parts = ButtonConfiguration.splitName(name);
+    this.id = parts.id;
+
+    this.definition = command.commandDef?.buttonDefaults || {};
   }
 
-  static isButtonArray(thing: unknown): thing is Button[] {
-    return (thing as Button[]).length && Button.is((thing as Button[])[0]);
+  static splitName(identifier: string): { id: string, name: CommandNames } {
+    const parts = identifier.split('=');
+    return { id: parts[0], name: (parts[1] || identifier) as CommandNames};
+  }
+
+  /** Detect if this is a Button */
+  static is(thing: unknown): thing is ButtonConfiguration {
+    return (thing as ButtonConfiguration).command !== undefined;
+  }
+
+  static isButtonArray(thing: unknown): thing is ButtonConfiguration[] {
+    return (thing as ButtonConfiguration[]).length && ButtonConfiguration.is((thing as ButtonConfiguration[])[0]);
   }
 
   static isPropGen<T>(thing: ButtonGenOrProp<T>): thing is ButtonPropGen<T> {

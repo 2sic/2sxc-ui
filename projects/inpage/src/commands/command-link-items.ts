@@ -3,7 +3,7 @@ import { CommandParams } from '../../../$2sxc/src/cms/command-params';
 import { AnyIdentifier, ItemIdentifierInList, ItemIdentifierSimple, ItemUrlParameters } from '../../../$2sxc/src/cms/item-identifiers';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { HasLog, Log } from '../core';
-import { ButtonSafe } from '../toolbar/config';
+import { ButtonDefinition, ButtonSafe } from '../toolbar/config';
 
 /**
  * This is responsible for taking a context with command and everything
@@ -30,8 +30,9 @@ export class CommandLinkItems extends HasLog {
     items = this.#buildItemsList(items, this.buttonSafe);
 
     // if the command has own configuration stuff, do that now
-    if (this.context.button.customItems)
-      items = this.context.button.customItems(this.context, items);
+    const btnDef = this.context.button.definition;
+    if (btnDef.customItems)
+      items = btnDef.customItems(this.context, items);
 
     // steps for all actions: prefill, serialize, open-dialog
     // when doing new, there may be a prefill in the link to initialize the new item

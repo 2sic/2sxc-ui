@@ -5,7 +5,7 @@ import { Commands } from '../../commands';
 import { ContextComplete } from '../../context/bundles';
 import { HasLog } from '../../core';
 import { TypeValue } from '../../plumbing';
-import { Button, CommandWithParams, Toolbar } from '../config';
+import { ButtonConfiguration, CommandWithParams, Toolbar } from '../config';
 import { ButtonSafe } from '../config/button-safe';
 import { CommandNames } from './../../commands/';
 
@@ -90,7 +90,7 @@ export class ButtonConfigLoader extends HasLog {
     /**
      * enhance button-object with default icons, etc.
      */
-    addDefaultBtnSettings(btn: Button,
+    addDefaultBtnSettings(btn: ButtonConfiguration,
                           groupDefaults: Record<string, TypeValue> | null,
                           tlbDefaults: Record<string, TypeValue> | null | undefined,
                           actions: Commands) {
@@ -102,7 +102,7 @@ export class ButtonConfigLoader extends HasLog {
 
 
 
-    private removeUnfitButtons(context: ContextComplete, btns: Button[]): void {
+    private removeUnfitButtons(context: ContextComplete, btns: ButtonConfiguration[]): void {
         const cl = this.log.call('removeUnfitButtons');
         let removals = '';
         for (let i = 0; i < btns.length; i++) {
@@ -150,7 +150,7 @@ const btnProperties = [
  * @param actions
  * @param propName
  */
-function fallbackBtnSetting(btn: Button,
+function fallbackBtnSetting(btn: ButtonConfiguration,
                             groupDefaults: Record<string, TypeValue> | null,
                             toolbarDefaults: Record<string, TypeValue> | null | undefined,
                             actions: Commands,

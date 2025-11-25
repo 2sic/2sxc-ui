@@ -6,7 +6,7 @@
 export class Obj {
     /**
      * This is the same as Object.assign, but type-safe.
-     * Use it as a replacetment for Object.Assign(this, ... ) in constructors
+     * Use it as a replacement for Object.Assign(this, ... ) in constructors
      */
     static TypeSafeAssign <T, K extends keyof T>(...args: T[]) {
         args.reduce( (result, current) =>

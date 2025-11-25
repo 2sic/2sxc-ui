@@ -1,7 +1,7 @@
 ﻿import { Sxc } from '../../../../$2sxc/src/sxc/sxc';
 import { Obj } from '../../plumbing';
 import { SxcTools } from '../../sxc/sxc-tools';
-import { Button } from '../../toolbar/config/button';
+import { ButtonConfiguration } from '../../toolbar/config/button';
 import { ToolbarWorkflowManager } from '../../workflow';
 import { AttrJsonEditContext } from '../html-attribute';
 import { ContextBundleToolbar } from './context-bundle-toolbar';
@@ -14,7 +14,7 @@ export class ContextComplete extends ContextBundleToolbar {
   private _isCtxComplete = true;
 
   /** @internal */
-  button?: Button;
+  button?: ButtonConfiguration;
 
   /** @internal
    * must be implemented as static, because the final object is actually just an interface and created from values.

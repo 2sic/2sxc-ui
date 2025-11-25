@@ -7,7 +7,7 @@ import { ContextComplete } from '../../context/bundles/context-bundle-button';
 import { ContextBundleInstance } from '../../context/bundles/context-bundle-instance';
 import { HasLog, Insights, Log } from '../../core';
 import { QuickDialog } from '../../quick-dialog/quick-dialog';
-import { Button, ButtonSafe } from '../../toolbar/config';
+import { ButtonConfiguration, ButtonSafe } from '../../toolbar/config';
 import { CommandWithParams } from '../../toolbar/config';
 import { InPageButtonJson } from '../../toolbar/config-loaders/config-formats/in-page-button';
 import { WorkflowHelper, WorkflowPhases, WorkflowStepCodeArguments } from '../../workflow';
@@ -87,10 +87,10 @@ export class CmsEngine extends HasLog {
 
     // Toolbar API v2
     const btnCommand = new CommandWithParams(name, cmdParams);
-    const newButtonConfig = new Button(btnCommand, btnCommand.name);
+    const newButtonConfig = new ButtonConfiguration(btnCommand, btnCommand.name);
 
     // merge conf & settings, but settings has higher priority
-    const button: Button = {
+    const button: ButtonConfiguration = {
       ...newButtonConfig,
       ...InPageButtonJson.toButton(cmdParams as unknown),
     };
@@ -100,7 +100,7 @@ export class CmsEngine extends HasLog {
     l.data('button', context.button);
 
     // In case we don't have special code, use generic code
-    let commandPromise = button.code;
+    let commandPromise = button.definition.code;
     if (!commandPromise) {
       l.add('button, no code - generating code to open standard dialog');
       commandPromise = CmsEngine.openDialog;

@@ -5,7 +5,7 @@ import { RunParams } from '../../../../$2sxc/src/cms/run-params';
 import { CommandNames, CommandParams, Commands } from '../../commands';
 import { HasLog } from '../../core';
 import { TypeValue } from '../../plumbing';
-import { Button, CommandWithParams, Toolbar, ToolbarSettings } from '../config';
+import { ButtonConfiguration, CommandWithParams, Toolbar, ToolbarSettings } from '../config';
 import { ButtonGroup } from '../config';
 import { TemplateConstants as TC } from '../templates/constants';
 import { TLB_MORE_END, TLB_MORE_NEVER } from './../config/toolbar-settings';
@@ -35,14 +35,14 @@ export class ButtonGroupConfigLoader extends HasLog {
             const group = fullToolbar.groups[g];
             const groupDefaults = (group as ButtonGroup).defaults;
             const btns = this.expandButtonList(group, fullToolbar.settings);
-            const buttonConfigs: Button[] = [];
+            const buttonConfigs: ButtonConfiguration[] = [];
 
             if (Array.isArray(btns)) {
                 cl.add(`will process ${btns.length} buttons`);
                 for (let b = 0; b < btns.length; b++)
                     buttonConfigs.push(this.convertToButton(btns[b], fullToolbar.params, fullToolbar.defaults, groupDefaults));
             } else
-                cl.add("no button array found, won't do a.nything");
+                cl.add("no button array found, won't do anything");
 
             // Toolbar API v2 overwrite V1
             group.buttons = buttonConfigs;
@@ -63,10 +63,10 @@ export class ButtonGroupConfigLoader extends HasLog {
                     sharedParams: CommandParams | Record<string, TypeValue>,
                     sharedDefaults: Record<string, TypeValue>,
                     groupDefaults: Record<string, TypeValue>,
-                    ): Button {
+                    ): ButtonConfiguration {
         let btnCommand = (btn as unknown as { command: CommandParams; }).command;
         const identifier = btnCommand.action;
-        const name = Button.splitName(identifier).name;
+        const name = ButtonConfiguration.splitName(identifier).name;
 
         if (!(Commands.singleton().get(name))) {
             this.log.add(`couldn't find action ${name} - show warning`);
@@ -83,7 +83,7 @@ export class ButtonGroupConfigLoader extends HasLog {
         const params = { ...realParams, ...sharedParams };
         // Toolbar API v2
         const command = new CommandWithParams(name, params);
-        let newButtonConfig = new Button(command, identifier);
+        let newButtonConfig = new ButtonConfiguration(command, identifier);
 
         // settings adapter from v1 to v2
         newButtonConfig = { ...newButtonConfig, ...InPageButtonJson.toButton(btn) };

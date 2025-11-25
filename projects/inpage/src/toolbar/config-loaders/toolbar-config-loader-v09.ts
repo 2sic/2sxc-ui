@@ -2,7 +2,7 @@ import { InPageButtonGroupJson, InPageButtonJson, InPageCommandJson, ToolbarConf
 import { InPageToolbarConfigVariations, ToolbarInitConfig } from '..';
 import { ContextComplete } from '../../context';
 import { HasLog } from '../../core';
-import { Button, Toolbar, ToolbarSettings } from '../config';
+import { ButtonConfiguration, Toolbar, ToolbarSettings } from '../config';
 import { RuleManager } from '../rules';
 import { ToolbarTemplate, ToolbarTemplateDefault, ToolbarTemplateGroup, ToolbarTemplateSublist } from '../templates';
 
@@ -152,7 +152,7 @@ export class ToolbarConfigLoaderV09 extends HasLog {
       l.add('Case 2: is array');
       if (unstructuredConfig.length === 0)
         return l.return([], '2a: empty array');
-      if (Button.isButtonArray(unstructuredConfig))
+      if (ButtonConfiguration.isButtonArray(unstructuredConfig))
         return l.return([{ buttons: unstructuredConfig }], '2b: array of groups');
       if (InPageButtonJson.is(unstructuredConfig[0]))
         return l.return([{ buttons: unstructuredConfig as InPageButtonJson[]}],

@@ -55,8 +55,9 @@ export class CommandLinkGenerator extends HasLog {
     debugger;
 
     // initialize params
-    const urlItems = context.button.tweakGeneratedUrlParameters
-      ? context.button.tweakGeneratedUrlParameters(context, this.#getUrlParams())
+    const btnDef = context.button.definition;
+    const urlItems = btnDef.tweakGeneratedUrlParameters
+      ? btnDef.tweakGeneratedUrlParameters(context, this.#getUrlParams())
       : this.#getUrlParams();
 
     // Only add items if button doesn't forbid it - new v18.03

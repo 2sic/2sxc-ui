@@ -1,4 +1,4 @@
-﻿import { Button } from '.';
+﻿import { ButtonConfiguration } from '.';
 import { TypeValue } from '../../plumbing';
 
 /**
@@ -13,7 +13,7 @@ export class ButtonGroup {
 
     defaults: Record<string, TypeValue> = {};
 
-    constructor(public buttons: Button[]) {
+    constructor(public buttons: ButtonConfiguration[]) {
         // adds these to the items
         this.buttons = buttons || [];
     }

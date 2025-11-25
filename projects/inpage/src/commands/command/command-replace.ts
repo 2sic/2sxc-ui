@@ -26,7 +26,7 @@ Commands.add(CommandNames.replace, 'Replace', 'replace', false, true, {
   //   }];
   // },
 
-  customItems: (ctx, items) => {
+  customItems: (ctx, _) => {
     // default case is ContentBlock - in which case it doesn't need to redefine the items
     if (!SharedLogic.isFieldList(ctx))
       return [];
