@@ -80,7 +80,7 @@ export class CommandLinkItems extends HasLog {
   #addFieldsAndParameters<T extends AnyIdentifier>(item: T, params: CommandParams): T {
     if (params == null)
       return item;
-    console.log('2dm - addFieldsAndParameters', { item, params });
+    // console.log('2dm - addFieldsAndParameters', { item, params });
     const itemIdentifier = item as ItemIdentifierSimple;
     const result = { ...itemIdentifier,
       ...(params.prefill ? { Prefill: params.prefill } : {}),

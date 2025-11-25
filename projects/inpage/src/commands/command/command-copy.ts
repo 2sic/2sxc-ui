@@ -28,7 +28,7 @@ Commands.add(CommandNames.copy, 'Copy', 'copy', false, true, {
     if (!typeName)
       throw new Error("can't copy: missing contentType");
 
-    console.log('2dm - copy custom items', params);
+    // console.log('2dm - copy custom items', params);
 
     // only return the copy info if not using module list - variant for before 20.09
     const item = { DuplicateEntity: originalId, ContentTypeName: typeName };
