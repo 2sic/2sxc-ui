@@ -3,7 +3,7 @@ import { CommandParams } from '../../../$2sxc/src/cms/command-params';
 import { AnyIdentifier, ItemIdentifierInList, ItemIdentifierSimple, ItemUrlParameters } from '../../../$2sxc/src/cms/item-identifiers';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { HasLog, Log } from '../core';
-import { ButtonDefinition, ButtonSafe } from '../toolbar/config';
+import { ButtonSafe } from '../toolbar/config';
 
 /**
  * This is responsible for taking a context with command and everything

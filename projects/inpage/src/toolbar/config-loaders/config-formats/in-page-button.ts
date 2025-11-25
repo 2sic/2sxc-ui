@@ -1,6 +1,6 @@
 ﻿import { InPageCommandJson } from '..';
 import { CommandParams } from '../../../../../$2sxc/src/cms/command-params';
-import { ButtonConfiguration, ButtonDefinition } from '../../config';
+import { ButtonDefinition } from '../../config/button-definition';
 
 /**
  * Button Definition v1. from old API

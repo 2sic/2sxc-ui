@@ -1,6 +1,6 @@
 ﻿import tippy, { Props } from 'tippy.js';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
-import { ButtonDefinition } from '../toolbar/config/button';
+import { ButtonDefinition } from '../toolbar/config/button-definition';
 import { Note } from '../toolbar/config/Note';
 import { Debug } from '../constants/debug';
 

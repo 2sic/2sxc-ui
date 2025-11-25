@@ -1,6 +1,6 @@
 ﻿import { CommandDefinition, CommandNames, Commands } from '..';
 import { ItemIdentifierSimple } from '../../../../$2sxc/src/cms/item-identifiers';
-import { ButtonDefinition } from '../../toolbar/config/button';
+import { ButtonDefinition } from '../../toolbar/config/button-definition';
 
 const MetadataDefaultKeyType = 'string';
 const MetadataDefaultTargetType = 10; // cms-item

@@ -1,5 +1,6 @@
-import { ButtonConfiguration, ButtonDefinition, ButtonPropGen } from '.';
+import { ButtonConfiguration, ButtonPropGen } from '.';
 import { ContextComplete } from '../../context/bundles/context-bundle-button';
+import { ButtonDefinition } from './button-definition';
 
 /**
  * Special helper to read a button configuration

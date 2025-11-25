@@ -1,5 +1,5 @@
 ﻿import { HasLog, Insights } from '../core';
-import { ButtonDefinition } from '../toolbar/config';
+import { ButtonDefinition } from '../toolbar/config/button-definition';
 import { CommandDefinition } from './command';
 
 /**
