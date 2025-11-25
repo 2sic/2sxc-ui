@@ -83,7 +83,7 @@ export class ButtonGroupConfigLoader extends HasLog {
         const params = { ...realParams, ...sharedParams };
         // Toolbar API v2
         const command = new CommandWithParams(name, params);
-        let newButtonConfig = new ButtonConfiguration(command, identifier);
+        let newButtonConfig = new ButtonConfiguration(identifier, command);
 
         // settings adapter from v1 to v2
         newButtonConfig = { ...newButtonConfig, ...InPageButtonJson.toButton(btn) };

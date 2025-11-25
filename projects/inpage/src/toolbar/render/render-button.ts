@@ -2,7 +2,7 @@
 import { Debug } from '../../constants/debug';
 import { ContextComplete } from '../../context/bundles/context-bundle-button';
 import { HtmlTools } from '../../html/dom-tools';
-import { CommandWithParams, ButtonSafe } from '../config';
+import { CommandWithParams, ButtonWithContext } from '../config';
 import { BuildRule } from '../rules/rule';
 import { RenderPart } from './render-part-base';
 import { ToolbarRenderer } from './toolbar-renderer';
@@ -20,7 +20,7 @@ export class RenderButton extends RenderPart {
       "render",
       `context: obj, group: ${groupIndex}, btn: ${ctx.button.id}/${ctx.button.command?.name}`
     );
-    const btnSafe = new ButtonSafe(ctx.button, ctx);
+    const btnSafe = new ButtonWithContext(ctx.button, ctx);
 
     // check if we have rules and merge params into the button
     const rule = ContextComplete.getRule(ctx);
@@ -38,7 +38,7 @@ export class RenderButton extends RenderPart {
 
     const btnLink = document.createElement("a");
 
-    const disabled = btnSafe.disabledSafe();
+    const disabled = btnSafe.getDisabled();
 
     // put call as plain JavaScript to preserve even if DOM is serialized
     if (!disabled) {
@@ -57,9 +57,9 @@ export class RenderButton extends RenderPart {
       " " +
       (rule?.ui.classes ?? "") +
       " " +
-      btnSafe.classes() +
+      btnSafe.getClasses() +
       " " +
-      btnSafe.dynClassesSafe();
+      btnSafe.getDynClasses();
     cl.add("classes: " + classes);
     HtmlTools.addClasses(btnLink, classes);
 
@@ -74,7 +74,7 @@ export class RenderButton extends RenderPart {
     this.processColorRules(btnSafe, rule, ctx, divTag);
 
     // add tippy new 15.04
-    btnSafe.tippySafe(ctx, btnLink);
+    btnSafe.getTippy(ctx, btnLink);
 
     return cl.return(btnLink);
   }
@@ -82,7 +82,7 @@ export class RenderButton extends RenderPart {
   private setTitle(
     rule: BuildRule,
     btnLink: HTMLAnchorElement,
-    btn: ButtonSafe
+    btn: ButtonWithContext
   ) {
     const callLog = this.log.call("setTitles");
     const uiTitle = rule?.ui?.title;
@@ -96,7 +96,7 @@ export class RenderButton extends RenderPart {
         btnLink.setAttribute("title", uiTitle);
       }
     } else {
-      const i18nTitle = btn.titleSafe();
+      const i18nTitle = btn.getTitle();
       callLog.add(`i18nTitle: ${i18nTitle}`);
       if (i18nTitle) btnLink.setAttribute("data-i18n", `[title]${i18nTitle}`);
     }
@@ -104,13 +104,13 @@ export class RenderButton extends RenderPart {
   }
 
   private processColorRules(
-    btn: ButtonSafe,
+    btn: ButtonWithContext,
     rule: BuildRule,
     ctx: ContextComplete,
     divTag: HTMLDivElement
   ) {
     const callLog = this.log.call("processColorRules");
-    let color = rule?.ui?.color ?? btn.colorSafe() ?? ctx.toolbar.settings.color;
+    let color = rule?.ui?.color ?? btn.getColor() ?? ctx.toolbar.settings.color;
 
     // catch edge case where the color is something like 808080 - which is treated as a number
     if (color && typeof color === "number")
@@ -151,9 +151,9 @@ export class RenderButton extends RenderPart {
     )}, event);`;
   }
 
-  private iconTag(btn: ButtonSafe, rule: BuildRule) {
+  private iconTag(btn: ButtonWithContext, rule: BuildRule) {
     const callLog = this.log.call("iconTag");
-    const icon = rule?.ui?.icon || btn.iconSafe();
+    const icon = rule?.ui?.icon || btn.getIcon();
     if (icon.indexOf("<svg") > -1) {
       // Temporary dom element
       const symbol = document.createElement("template");

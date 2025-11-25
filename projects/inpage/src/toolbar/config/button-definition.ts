@@ -1,7 +1,7 @@
 import { AnyIdentifier, ItemUrlParameters } from '../../../../$2sxc/src';
 import { CommandCode, CommandParams } from '../../commands';
 import { ContextComplete } from '../../context';
-import { ButtonGenOrProp, ButtonPropGen } from './button';
+import { ButtonPropGenOrValue, ButtonPropGen } from './button';
 import { Note } from './Note';
 
 /**
@@ -23,19 +23,19 @@ export class ButtonDefinition {
   tweakGeneratedUrlParameters?: (context: ContextComplete, itemUrlParameters: ItemUrlParameters) => ItemUrlParameters;
 
   /** The dialog name */
-  dialog?: ButtonGenOrProp<string>;
+  dialog?: ButtonPropGenOrValue<string>;
 
   /** Check if full-screen, always a function */
   fullScreen?: ButtonPropGen<boolean>;
 
   /** Determines if the button should be disabled */
-  disabled?: ButtonGenOrProp<boolean>;
+  disabled?: ButtonPropGenOrValue<boolean>;
 
   /** Dynamically determine classes - must always be a function */
   dynamicClasses: ButtonPropGen<string>;
 
   /** The icon to show in the button */
-  icon?: ButtonGenOrProp<string>;
+  icon?: ButtonPropGenOrValue<string>;
 
   /** Determine if it should use the inline window, always a function */
   inlineWindow?: ButtonPropGen<boolean> = () => false;
@@ -89,5 +89,5 @@ export class ButtonDefinition {
    * New 18.03
    * @internal
    */
-  noItems?: ButtonGenOrProp<boolean>;
+  noItems?: ButtonPropGenOrValue<boolean>;
 }

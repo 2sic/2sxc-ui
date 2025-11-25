@@ -9,7 +9,7 @@ import { ButtonDefinition } from './button-definition';
  */
 export type ButtonPropGen<T> = (context: ContextComplete) => T;
 
-export type ButtonGenOrProp<T> = ButtonPropGen<T> | T;
+export type ButtonPropGenOrValue<T> = ButtonPropGen<T> | T;
 
 /**
  * The real button configuration as it's used at runtime.
@@ -24,13 +24,15 @@ export class ButtonConfiguration {
   /** The underlying command which will be run */
   command: CommandWithParams;
 
+  /** The definition defaults to use for this button */
   definition: Partial<ButtonDefinition>;
 
-  constructor(command: CommandWithParams, name: string) {
+  constructor(nameOrNamePair: string, command: CommandWithParams, public overrides?: Partial<ButtonDefinition>) {
     // super();
     this.command = command;
-    // if the name is an identifier like "someId=add", split it; note: as of 2025-11 2dm is not sure when this would be used
-    const parts = ButtonConfiguration.splitName(name);
+    // if the name is an identifier like "someId=add", split it
+    // note: as of 2025-11 2dm is not sure when this would be used
+    const parts = ButtonConfiguration.splitName(nameOrNamePair);
     this.id = parts.id;
 
     this.definition = command.commandDef?.buttonDefaults || {};
@@ -50,8 +52,4 @@ export class ButtonConfiguration {
     return (thing as ButtonConfiguration[]).length && ButtonConfiguration.is((thing as ButtonConfiguration[])[0]);
   }
 
-  static isPropGen<T>(thing: ButtonGenOrProp<T>): thing is ButtonPropGen<T> {
-    return typeof thing === 'function';
-  }
 }
-

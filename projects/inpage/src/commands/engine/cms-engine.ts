@@ -7,7 +7,7 @@ import { ContextComplete } from '../../context/bundles/context-bundle-button';
 import { ContextBundleInstance } from '../../context/bundles/context-bundle-instance';
 import { HasLog, Insights, Log } from '../../core';
 import { QuickDialog } from '../../quick-dialog/quick-dialog';
-import { ButtonConfiguration, ButtonSafe } from '../../toolbar/config';
+import { ButtonConfiguration, ButtonWithContext } from '../../toolbar/config';
 import { CommandWithParams } from '../../toolbar/config';
 import { InPageButtonJson } from '../../toolbar/config-loaders/config-formats/in-page-button';
 import { WorkflowHelper, WorkflowPhases, WorkflowStepCodeArguments } from '../../workflow';
@@ -87,13 +87,11 @@ export class CmsEngine extends HasLog {
 
     // Toolbar API v2
     const btnCommand = new CommandWithParams(name, cmdParams);
-    const newButtonConfig = new ButtonConfiguration(btnCommand, btnCommand.name);
 
-    // merge conf & settings, but settings has higher priority
-    const button: ButtonConfiguration = {
-      ...newButtonConfig,
-      ...InPageButtonJson.toButton(cmdParams as unknown),
-    };
+    // Support old 2sxc v8 API, where the params could be a JS object with method/properties
+    const overrides = InPageButtonJson.toButton(params as unknown as InPageButtonJson);
+    const newButtonConfig = new ButtonConfiguration(btnCommand.name, btnCommand, overrides);
+    const button = newButtonConfig;
 
     // attach to context for inner calls which might access it
     context.button = button;
@@ -128,7 +126,7 @@ export class CmsEngine extends HasLog {
     const log = new Log('Cms.OpnDlg', null, `triggeredBy: ${triggeredBy}`);
     Insights.add('cms', 'open-dialog', log);
     // the link contains everything to open a full dialog (lots of params added)
-    const btn = new ButtonSafe(context.button, context);
+    const btn = new ButtonWithContext(context.button, context);
     const link = new CommandLinkGenerator(btn, context, log).getLink();
 
     const origEvent = event || (window.event as MouseEvent);
@@ -144,16 +142,16 @@ export class CmsEngine extends HasLog {
       };
 
       // Case 1: check if inline window (quick-dialog)
-      if (btn.inlineWindowSafe()) {
+      if (btn.getInlineWindow()) {
         // test if it should be full screen (value or resolve-function)
         QuickDialog.singleton()
-          .showOrToggleFromToolbar(context, link, btn.fullScreenSafe(), btn.dialogSafe())
+          .showOrToggleFromToolbar(context, link, btn.getFullScreen(), btn.getDialog())
           .then((isChanged) => { if (isChanged) completePromise(); });
         return;
       }
 
       // Case 2: It's a normal pop-up dialog - either in a new tab/window or in a popup
-      const isNewWindow = btn.newWindowSafe();
+      const isNewWindow = btn.getNewWindow();
 
       // Experimental v17 - ctrl-click opens in new window; shift-click opens in popup
       if (isNewWindow || origEvent?.ctrlKey || origEvent?.shiftKey) {

@@ -3,7 +3,7 @@ import { CommandParams } from '../../../$2sxc/src/cms/command-params';
 import { AnyIdentifier, ItemIdentifierInList, ItemIdentifierSimple, ItemUrlParameters } from '../../../$2sxc/src/cms/item-identifiers';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { HasLog, Log } from '../core';
-import { ButtonSafe } from '../toolbar/config';
+import { ButtonWithContext } from '../toolbar/config';
 
 /**
  * This is responsible for taking a context with command and everything
@@ -12,7 +12,7 @@ import { ButtonSafe } from '../toolbar/config';
  */
 export class CommandLinkItems extends HasLog {
 
-  constructor(private buttonSafe: ButtonSafe, private readonly context: ContextComplete, parentLog: Log) {
+  constructor(private buttonSafe: ButtonWithContext, private readonly context: ContextComplete, parentLog: Log) {
     super('Cmd.LnkGenItems', parentLog);
     
     // WIP
@@ -47,7 +47,7 @@ export class CommandLinkItems extends HasLog {
   /**
    * Generate items for editing/changing or simple item depending on the scenario.
    */
-  #buildItemsList(items: AnyIdentifier[], button: ButtonSafe): AnyIdentifier[] {
+  #buildItemsList(items: AnyIdentifier[], button: ButtonWithContext): AnyIdentifier[] {
     const params = button.btnCommand().params;
     if (params.useModuleList)
       items = this.#addContentGroupItems(items, true);

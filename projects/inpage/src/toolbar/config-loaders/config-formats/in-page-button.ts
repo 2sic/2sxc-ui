@@ -61,9 +61,9 @@ export class InPageButtonJson {
           ...(oldFormat.disabled ? { disabled: oldFormat.disabled } : {}),
           ...(oldFormat.icon ? { icon: oldFormat.icon } : {}),
 
-          // Method Properties
+          // Method Properties - simplified, since now every property can be a value or a function anyhow
           ...(oldFormat.fullScreen ? { fullScreen: evalPropOrFun<boolean>(oldFormat.fullScreen) } : {}),
-          ...(oldFormat.icon ? { icon: evalPropOrFun<string>(oldFormat.icon) } : {}),
+          // ...(oldFormat.icon ? { icon: evalPropOrFun<string>(oldFormat.icon) } : {}),
           ...(oldFormat.inlineWindow ? { inlineWindow: evalPropOrFun<boolean>(oldFormat.inlineWindow) } : {}),
           ...(oldFormat.newWindow ? { newWindow: evalPropOrFun<boolean>(oldFormat.newWindow) } : {}),
           ...(oldFormat.partOfPage ? { partOfPage: evalPropOrFun<boolean>(oldFormat.partOfPage) } : {}),
@@ -91,7 +91,7 @@ export class InPageButtonJson {
 
 
 function evalPropOrFun<T>(propOrFunction: T | (() => T)): () => T {
-    if (propOrFunction === undefined || propOrFunction === null)
+    if (propOrFunction == null)
       return null;
     if (typeof (propOrFunction) === 'function')
       return propOrFunction as () => T;

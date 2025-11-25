@@ -5,7 +5,7 @@ import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { HasLog, Log } from '../core';
 import { DialogCoreParams } from '../manage/dialog-core-params';
 import { NoJQ, flattenSlashes } from '../plumbing';
-import { ButtonSafe } from '../toolbar/config';
+import { ButtonWithContext } from '../toolbar/config';
 import { CommandLinkItems } from './command-link-items';
 
 /**
@@ -15,7 +15,7 @@ import { CommandLinkItems } from './command-link-items';
  */
 export class CommandLinkGenerator extends HasLog {
 
-  constructor(private buttonSafe: ButtonSafe, public readonly context: ContextComplete, parentLog: Log) {
+  constructor(private buttonSafe: ButtonWithContext, public readonly context: ContextComplete, parentLog: Log) {
     super('Cmd.LnkGen', parentLog);
     
     // WIP
@@ -29,13 +29,13 @@ export class CommandLinkGenerator extends HasLog {
     const l = this.log.call('getUrlParams');
     const btnSafe = this.buttonSafe;
 
-    l.data('btnSafe.parameters', btnSafe.parametersSafe());
+    l.data('btnSafe.parameters', btnSafe.getParameters());
     l.data('button.btnCommand().params', btnSafe.btnCommand().params);
     l.data('this.context', this.context);
     // initialize params
-    const dialog = btnSafe.dialogSafe();
+    const dialog = btnSafe.getDialog();
     // This corrects how the variable to name the dialog changed in the history of 2sxc from action to dialog
-    const { items: _, ...otherParams } = btnSafe.parametersSafe();
+    const { items: _, ...otherParams } = btnSafe.getParameters();
     const urlParams = {
       dialog: dialog || btnSafe.btnCommand().name,
       ...otherParams
@@ -61,7 +61,7 @@ export class CommandLinkGenerator extends HasLog {
       : this.#getUrlParams();
 
     // Only add items if button doesn't forbid it - new v18.03
-    if (!button.skipAutoAddItemsSafe()) {
+    if (!button.getSkipAutoAddItems()) {
       const commandLinkItems = new CommandLinkItems(button, context, this.log);
       urlItems.items = commandLinkItems.getItemsForUrl(params);
     }
@@ -70,7 +70,7 @@ export class CommandLinkGenerator extends HasLog {
     delete urlItems.prefill;
 
     // clone the params and adjust parts based on partOfPage settings...
-    const partOfPage = button.partOfPageSafe();
+    const partOfPage = button.getPartOfPage();
     const ngDialogParams = new DialogCoreParams(context, partOfPage);
 
     // initialize root url to dialog

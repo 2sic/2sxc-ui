@@ -2,7 +2,7 @@
 import { ContentBlockEditor } from '../../contentBlock/content-block-editor';
 import { ContextComplete } from '../../context/bundles/context-bundle-button';
 import { HasLog, Log } from '../../core';
-import { ButtonConfiguration, ButtonSafe } from '../../toolbar/config';
+import { ButtonConfiguration, ButtonWithContext } from '../../toolbar/config';
 import { WorkflowHelper, WorkflowPhases, WorkflowStepCodeArguments } from '../../workflow';
 import { ToolbarWorkflowManager } from '../../workflow/toolbar-workflow-manager';
 import { WorkflowStep } from '../../workflow/workflow-step';
@@ -40,7 +40,7 @@ export class CmsWorkflow extends HasLog {
 
     // get button configuration to detect if it's only a UI action (like the more-button)
     let finalPromise: Promise<void | T>;
-    if (new ButtonSafe(button, context).uiActionOnlySafe()) {
+    if (new ButtonWithContext(button, context).getUiActionOnly()) {
       l.add('UI command, no pre-flight to ensure content-block');
       finalPromise = wrapperPromise.then((wfArgs) => WorkflowHelper.isCancelled(wfArgs)
         ? Promise.resolve<T>(null)
