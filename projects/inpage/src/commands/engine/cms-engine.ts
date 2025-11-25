@@ -15,6 +15,8 @@ import { ToolbarWorkflowManager } from '../../workflow/toolbar-workflow-manager'
 import { WorkflowStep } from '../../workflow/workflow-step';
 import { CommandLinkGenerator } from '../command-link-generator';
 import { Debug } from '../../constants/debug';
+import { CommandCode } from '../command-code';
+import { CmsWorkflow } from './cms-workflow';
 
 const debug = false;
 
@@ -70,7 +72,7 @@ export class CmsEngine extends HasLog {
    * @param event
    */
   run<T>(context: ContextComplete, params: CommandParams, event: MouseEvent, paramsWithWorkflow?: RunParams, triggeredBy?: string): Promise<void | T> {
-    const cl = this.log.call('run<T>', `triggeredBy: ${triggeredBy}`, undefined, { context });
+    const l = this.log.call('run<T>', `triggeredBy: ${triggeredBy}`, undefined, { context });
 
     const name = params.action;
     const origEvent = event;
@@ -81,7 +83,7 @@ export class CmsEngine extends HasLog {
 
     // console.warn('2dm: cms-engine.ts: run', { context, params, cmdParams });
     
-    cl.add(`run command '${name}'`);
+    l.add(`run command '${name}'`);
 
     // Toolbar API v2
     const btnCommand = new CommandWithParams(name, cmdParams);
@@ -95,57 +97,27 @@ export class CmsEngine extends HasLog {
 
     // attach to context for inner calls which might access it
     context.button = button;
-    cl.data('button', context.button);
-
-    // New in 11.12 - find commandWorkflow of toolbar or use a dummy so the remaining code will always work
-    // note: in cases where the click comes from elsewhere (like from the quick-dialog) there is no event
-
-    // New in 12.10 - Workflow can be provided by run-call
-    let wf: ToolbarWorkflowManager;
-    if (paramsWithWorkflow?.workflows) {
-      wf = new ToolbarWorkflowManager(this.log);
-      wf.add(paramsWithWorkflow.workflows as WorkflowStep | WorkflowStep[]);
-    } else
-      wf = WorkflowHelper.getWorkflow(origEvent?.target as HTMLElement);
-
-    // Attach to context, so it's available after running the command
-    context.commandWorkflow = wf;
-    const wrapperPromise = wf.run(new WorkflowStepCodeArguments(name, WorkflowPhases.before, context));
+    l.data('button', context.button);
 
     // In case we don't have special code, use generic code
     let commandPromise = button.code;
     if (!commandPromise) {
-      cl.add('button, no code - generating code to open standard dialog');
+      l.add('button, no code - generating code to open standard dialog');
       commandPromise = CmsEngine.openDialog;
     }
 
-    // get button configuration to detect if it's only a UI action (like the more-button)
-    let finalPromise: Promise<void | T>;
-    if (new ButtonSafe(button, context).uiActionOnlySafe()) {
-      cl.add('UI command, no pre-flight to ensure content-block');
-      finalPromise = wrapperPromise.then((wfArgs) => WorkflowHelper.isCancelled(wfArgs)
-        ? Promise.resolve<T>(null)
-        : commandPromise(context, origEvent, 'cmsEngine.run#UI command'));
-    } else {
-      // if more than just a UI-action, then it needs to be sure the content-group is created first
-      cl.add('command might change data, wrap in pre-flight to ensure content-block');
-      finalPromise = wrapperPromise.then((wfArgs) => WorkflowHelper.isCancelled(wfArgs)
-        ? Promise.resolve<T>(null)
-        : ContentBlockEditor.singleton()
-            .prepareToAddContent(context, cmdParams.useModuleList)
-            .then(() => commandPromise(context, origEvent, 'cmsEngine.run#non UI command'))
-      );
-    }
-
-    // Attach post-command workflow
-    const promiseWithAfterEffects = finalPromise.then((result) => {
-      return wf
-        .run(new WorkflowStepCodeArguments(name, WorkflowPhases.after, null, result))
-        .then(() => result);
-    });
-
-    return cl.return(promiseWithAfterEffects);
+    const cmsWorkflow = new CmsWorkflow(this.log);
+    const promiseWithWorkflow = cmsWorkflow.wrapInWorkflow<T>(
+      name,
+      commandPromise,
+      button,
+      context,
+      origEvent,
+      paramsWithWorkflow
+    );
+    return l.return(promiseWithWorkflow);
   }
+
 
 
 
