@@ -4,6 +4,7 @@ import { AnyIdentifier, ItemIdentifierCopy, ItemIdentifierInList, ItemIdentifier
 import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { HasLog, Log } from '../core';
 import { ButtonWithContext } from '../toolbar/config';
+import { RuleParams } from '../toolbar/rules';
 
 /**
  * This is responsible for taking a context with command and everything
@@ -15,8 +16,8 @@ export class CommandLinkItems extends HasLog {
   constructor(private buttonAndCtx: ButtonWithContext, private readonly context: ContextComplete, parentLog: Log) {
     super('Cmd.LnkGenItems', parentLog);
     
-    // WIP
-    this.log.liveDump = true;
+    // Debugging
+    // this.log.liveDump = true;
 
     const l = this.log.call('constructor');
     l.done();

@@ -73,7 +73,7 @@ export class CmsEngine extends HasLog {
    */
   run<T>(context: ContextComplete, params: CommandParams, event: MouseEvent, paramsWithWorkflow?: RunParams, triggeredBy?: string): Promise<void | T> {
     const l = this.log.call('run<T>', `triggeredBy: ${triggeredBy}`, undefined, { context });
-    this.log.liveDump = true;
+    // this.log.liveDump = true;
     const name = params.action;
     const origEvent = event;
 

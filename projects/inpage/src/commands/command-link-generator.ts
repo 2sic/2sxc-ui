@@ -18,8 +18,8 @@ export class CommandLinkGenerator extends HasLog {
   constructor(private buttonSafe: ButtonWithContext, public readonly context: ContextComplete, parentLog: Log) {
     super('Cmd.LnkGen', parentLog);
     
-    // WIP
-    this.log.liveDump = true;
+    // Debugging
+    // this.log.liveDump = true;
 
     const l = this.log.call('constructor');
     l.done();
