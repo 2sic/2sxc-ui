@@ -52,7 +52,7 @@ export class CommandLinkGenerator extends HasLog {
     const button = this.buttonSafe; // new ButtonSafe(context.button, context);
     const params = button.btnCommand().params;
 
-    debugger;
+    this.log.add('generating link for button', params);
 
     // initialize params
     const btnDef = context.button.definition;

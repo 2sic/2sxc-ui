@@ -1,4 +1,4 @@
-﻿import { CommandNames, Commands } from '..';
+﻿import { CmdParHlp, CommandNames, Commands } from '..';
 import { createContentTypeParams } from './command-content-type';
 
 /**
@@ -22,10 +22,26 @@ Commands.add(CommandNames.copy, 'Copy', 'copy', false, true, {
   // },
 
   customItems: (ctx, _) => {
-    const originalId = ctx.button.command.params.entityId;
+    const params = ctx.button.command.params;
+    const originalId = params.entityId;
     const typeName = createContentTypeParams(ctx).contentType;
     if (!typeName)
       throw new Error("can't copy: missing contentType");
-    return [{ DuplicateEntity: originalId, ContentTypeName: typeName }];
+
+    console.log('2dm - copy custom items', params);
+
+    // only return the copy info if not using module list - variant for before 20.09
+    const item = { DuplicateEntity: originalId, ContentTypeName: typeName };
+    if (!params.parent || !params.fields)
+      return [item];
+
+    return [{
+      ...item,
+      EntityId: 0,
+      Add: true,
+      Parent: params.parent,
+      Field: params.fields,
+      Index: CmdParHlp.getIndex(params) + 1,
+    }];
   },
 });

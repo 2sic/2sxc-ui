@@ -56,16 +56,19 @@ export interface CommandParams extends Record<string, unknown>
      * @public
      */
     contentType?: string;
+
     /** @internal old */
     contentTypeName?: string;
 
     /** @internal */
     pipelineId?: number;
+
     /** 
      * The purpose of this varies by [Command](xref:Api.Js.SxcJs.CommandNames).
      * @public
      */
     filters?: string;
+    
     /** @internal */
     dialog?: string;
 
@@ -107,6 +110,8 @@ export interface CommandParams extends Record<string, unknown>
 
     /** 
      * The purpose of this varies by [Command](xref:Api.Js.SxcJs.CommandNames).
+     * This is only for the module-specific list of items.
+     * When using parent/fields, this is not relevant.
      * @public
      */
     useModuleList?: true;
@@ -178,6 +183,13 @@ export interface CommandParams extends Record<string, unknown>
      */
     isshared?: boolean;
 
+
+    /**
+     * for copying an entity - the id of the entity to copy - new 20.09
+     * EXPERIMENTAL - WILL PROBABLY BE REMOVED AGAIN
+     * @internal
+     */
+    copyId?: number;
 
     /**
      * Settings to pass to the dialog.

@@ -1,6 +1,6 @@
 ﻿import { CmdParHlp } from '.';
 import { CommandParams } from '../../../$2sxc/src/cms/command-params';
-import { AnyIdentifier, ItemIdentifierInList, ItemIdentifierSimple, ItemUrlParameters } from '../../../$2sxc/src/cms/item-identifiers';
+import { AnyIdentifier, ItemIdentifierCopy, ItemIdentifierInList, ItemIdentifierSimple, ItemUrlParameters } from '../../../$2sxc/src/cms/item-identifiers';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
 import { HasLog, Log } from '../core';
 import { ButtonWithContext } from '../toolbar/config';
@@ -12,7 +12,7 @@ import { ButtonWithContext } from '../toolbar/config';
  */
 export class CommandLinkItems extends HasLog {
 
-  constructor(private buttonSafe: ButtonWithContext, private readonly context: ContextComplete, parentLog: Log) {
+  constructor(private buttonAndCtx: ButtonWithContext, private readonly context: ContextComplete, parentLog: Log) {
     super('Cmd.LnkGenItems', parentLog);
     
     // WIP
@@ -26,8 +26,9 @@ export class CommandLinkItems extends HasLog {
     const l = this.log.call('getItemsForUrl');
     var items: AnyIdentifier[] = params.items || [];
     l.data('items', items);
+    l.data('params', params);
 
-    items = this.#buildItemsList(items, this.buttonSafe);
+    items = this.#buildItemsList(items, this.buttonAndCtx);
 
     // if the command has own configuration stuff, do that now
     const btnDef = this.context.button.definition;
@@ -79,12 +80,15 @@ export class CommandLinkItems extends HasLog {
   #addFieldsAndParameters<T extends AnyIdentifier>(item: T, params: CommandParams): T {
     if (params == null)
       return item;
+    console.log('2dm - addFieldsAndParameters', { item, params });
     const itemIdentifier = item as ItemIdentifierSimple;
-    return { ...itemIdentifier,
+    const result = { ...itemIdentifier,
       ...(params.prefill ? { Prefill: params.prefill } : {}),
       ...(params.uifields ? { UiFields: params.uifields } : {}),
       ...(params.form ? { Parameters: params.form } : {}),
-    } as T;
+      ...(params.copyId ? ({ DuplicateEntity: params.copyId } ) : {}),
+    } satisfies Partial<ItemIdentifierCopy>;
+    return result as T;
   }
 
   /**
