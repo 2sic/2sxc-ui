@@ -34,10 +34,10 @@ export class ToolbarConfigLoaderV09 extends HasLog {
     }
 
     // if it has an action or is an array, keep that. Otherwise get standard buttons
-    const draftToolbar = this.getTemplateIfNoButtonsSpecified(context, config.toolbar as InPageToolbarConfigVariations);
+    const draftToolbar = this.#getTemplateIfNoButtonsSpecified(context, config.toolbar as InPageToolbarConfigVariations);
     cl.data('after template check', draftToolbar);
 
-    const toolbar = this.buildFullDefinition(context, draftToolbar, toolbarSettings);
+    const toolbar = this.#buildFullDefinition(context, draftToolbar, toolbarSettings);
     return cl.return(toolbar, 'ok');
   }
 
@@ -46,19 +46,25 @@ export class ToolbarConfigLoaderV09 extends HasLog {
    * If the raw data has specs for what buttons, use that
    * Otherwise load the button list from the template
    */
-  private getTemplateIfNoButtonsSpecified(context: ContextComplete, raw: InPageToolbarConfigVariations): InPageToolbarConfigVariations {
+  #getTemplateIfNoButtonsSpecified(context: ContextComplete, raw: InPageToolbarConfigVariations): InPageToolbarConfigVariations {
     const cl = this.log.call('getTemplateIfNoButtonsSpecified');
     cl.add('initial', raw);
 
-    if (InPageCommandJson.hasActions(raw)) return cl.return(raw, 'has actions, keep raw');
-    if (ToolbarTemplate.hasGroups(raw)) return cl.return(raw, 'has groups, keep raw');
-    if (ToolbarTemplateGroup.is(raw)) return cl.return(raw, 'is group, keep raw');
-    if (Array.isArray(raw)) return cl.return(raw, 'is array, keep raw');
+    if (InPageCommandJson.hasActions(raw))
+      return cl.return(raw, 'has actions, keep raw');
+    if (ToolbarTemplate.hasGroups(raw))
+      return cl.return(raw, 'has groups, keep raw');
+    if (ToolbarTemplateGroup.is(raw))
+      return cl.return(raw, 'is group, keep raw');
+    if (Array.isArray(raw))
+      return cl.return(raw, 'is array, keep raw');
 
     // final: nothing defined, use template
     cl.add('no toolbar structure specified, will use standard toolbar template');
     // If it's a sub-list toolbar, use the special template for it
-    const defToolbarname = (raw as InPageCommandJson).fields ? ToolbarTemplateSublist.name : ToolbarTemplateDefault.name;
+    const defToolbarname = (raw as InPageCommandJson).fields
+      ? ToolbarTemplateSublist.name
+      : ToolbarTemplateDefault.name;
     const template = this.configLoader.templates.copy(defToolbarname);
     template.params = (Array.isArray(raw) && raw[0]) || raw; // attach parameters
 
@@ -83,10 +89,10 @@ export class ToolbarConfigLoaderV09 extends HasLog {
    * just a command (detected by "action"): \{ entityId: 17, action: "edit" \}
    * array of commands: [\{entityId: 17, action: "edit"\}, \{contentType: "blog", action: "new"\}]
    */
-  private buildFullDefinition(
-      toolbarContext: ContextComplete,
-      unstructuredConfig: InPageToolbarConfigVariations,
-      toolbarSettings: ToolbarSettings,
+  #buildFullDefinition(
+    toolbarContext: ContextComplete,
+    unstructuredConfig: InPageToolbarConfigVariations,
+    toolbarSettings: ToolbarSettings,
   ): Toolbar {
     const cl = this.log.call('buildFullDefinition');
 
@@ -121,7 +127,7 @@ export class ToolbarConfigLoaderV09 extends HasLog {
     if (!unstructuredConfig) throw (`preparing toolbar, with nothing to work on: ${unstructuredConfig}`);
 
     const newToolbar: ToolbarWip = new Toolbar();
-    newToolbar.groups = this.findGroups(unstructuredConfig);
+    newToolbar.groups = this.#findGroups(unstructuredConfig);
 
     const probablyTemplate = unstructuredConfig as ToolbarTemplate;
     newToolbar.params = probablyTemplate.params || {}; // these are the default command parameters
@@ -134,7 +140,7 @@ export class ToolbarConfigLoaderV09 extends HasLog {
   }
 
 
-  private findGroups(unstructuredConfig: InPageToolbarConfigVariations): InPageButtonGroupJson[] {
+  #findGroups(unstructuredConfig: InPageToolbarConfigVariations): InPageButtonGroupJson[] {
     const l = this.log.call('findGroups');
     l.data('initial', unstructuredConfig);
 
