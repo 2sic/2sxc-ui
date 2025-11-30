@@ -28,14 +28,16 @@ export class ButtonConfiguration {
   definition: Partial<ButtonDefinition>;
 
   constructor(nameOrNamePair: string, command: CommandWithParams, public overrides?: Partial<ButtonDefinition>) {
-    // super();
     this.command = command;
     // if the name is an identifier like "someId=add", split it
     // note: as of 2025-11 2dm is not sure when this would be used
     const parts = ButtonConfiguration.splitName(nameOrNamePair);
     this.id = parts.id;
 
-    this.definition = command.commandDef?.buttonDefaults || {};
+    // Copy the entire definition,
+    // as it may get changed at a later time
+    // and we don't want to have that affect the foundational definition
+    this.definition = { ...(command.commandDef?.buttonDefaults || {}) };
   }
 
   static splitName(identifier: string): { id: string, name: CommandNames } {

@@ -6,6 +6,7 @@ import { ContextComplete } from '../../context/bundles';
 import { HasLog } from '../../core';
 import { TypeValue } from '../../plumbing';
 import { ButtonConfiguration, CommandWithParams, Toolbar } from '../config';
+import { ButtonDefinition } from '../config/button-definition';
 import { ButtonWithContext } from '../config/button-safe';
 import { CommandNames } from './../../commands/';
 
@@ -132,7 +133,7 @@ export class ButtonConfigLoader extends HasLog {
 
 }
 
-const btnProperties = [
+const btnProperties: (keyof ButtonDefinition)[] = [
   'classes',
   'icon',
   'title',
@@ -150,31 +151,29 @@ const btnProperties = [
  * @param actions
  * @param propName
  */
-function fallbackBtnSetting(btn: ButtonConfiguration,
-                            groupDefaults: Record<string, TypeValue> | null,
-                            toolbarDefaults: Record<string, TypeValue> | null | undefined,
-                            actions: Commands,
-                            propName: string) {
-    const target = btn as unknown as Record<string, TypeValue>;
+function fallbackBtnSetting(
+  btn: ButtonConfiguration,
+  groupDefaults: Record<string, TypeValue> | null,
+  toolbarDefaults: Record<string, TypeValue> | null | undefined,
+  actions: Commands,
+  propName: keyof ButtonDefinition,
+) {
+  const target = btn.definition as Record<string, TypeValue>;
 
-    // skip it property is already set
-    if (target[propName])
-        return;
+  // skip it property is already set
+  if (target[propName])
+    return;
 
-    if (groupDefaults && groupDefaults[propName])
-        return target[propName] = groupDefaults[propName];
+  // first try group defaults, then toolbar defaults
+  const newValue = groupDefaults?.[propName] ?? toolbarDefaults?.[propName];
+  if (newValue)
+    return target[propName] = newValue;
 
-    // if the toolbar has defaults, try use that property
-    if (toolbarDefaults && toolbarDefaults[propName])
-        return target[propName] = toolbarDefaults[propName];
-
-    // if there is an action, try to use that property name
-    if (btn.command && btn.command.name) {
-        const a = actions.get(btn.command.name);
-        if (a && a.buttonDefaults) {
-            const c = a.buttonDefaults as Record<string, TypeValue>;
-            if (c[propName])
-                return target[propName] = c[propName];
-        }
-    }
+  // if there is an action, try to use that property name
+  if (btn.command?.name) {
+    const a = actions.get(btn.command.name);
+    const c = a?.buttonDefaults as Record<string, TypeValue>;
+    if (c?.[propName])
+      return target[propName] = c[propName];
+  }
 }
