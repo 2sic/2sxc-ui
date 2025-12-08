@@ -43,3 +43,9 @@ For faster webpack execution during development it is not enabled by default.
 ```javascript
 var generateTypedocDocumentation = false;
 ```
+
+## ToDo / Improvements
+
+1. Improve Production bundling - it seems Tippy is included with a lot of code that's not used
+1. Improve Production bundling - it seems $2sxc is included, when only the types should be included
+1. Unit tests for all kinds of toolbar operations
