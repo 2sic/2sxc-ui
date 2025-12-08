@@ -22,8 +22,9 @@ const cmd = CommandDefinition.build(CommandNames.list, 'Sort', 'list-numbered', 
   //   }];
   // },
 
-  customItems: (ctx, _) => {
-    if (!SharedLogic.isFieldList(ctx)) return [];
+  customItems: (ctx, items) => {
+    if (!SharedLogic.isFieldList(ctx))
+      return items;
 
     const params = ctx.button.command.params;
     return [{

@@ -26,10 +26,10 @@ Commands.add(CommandNames.replace, 'Replace', 'replace', false, true, {
   //   }];
   // },
 
-  customItems: (ctx, _) => {
+  customItems: (ctx, items) => {
     // default case is ContentBlock - in which case it doesn't need to redefine the items
     if (!SharedLogic.isFieldList(ctx))
-      return [];
+      return items;
 
     const params = ctx.button.command.params;
     return [{
