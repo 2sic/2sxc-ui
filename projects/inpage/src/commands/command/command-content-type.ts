@@ -1,11 +1,11 @@
-﻿import { Command, CommandContentTypeParams, CommandNames, Commands } from '..';
+﻿import { CommandDefinition, CommandContentTypeParams, CommandNames, Commands } from '..';
 import { ContextComplete } from '../../context';
 
 /**
  * import this module to commands.ts
  * @internal
  */
-const cmd = Command.build(CommandNames.fields, 'ContentType', 'fields', true, false, {
+const cmd = CommandDefinition.build(CommandNames.fields, 'ContentType', 'fields', true, false, {
   dialog: (_) => CommandNames.fields_old_contenttype,
 
   parameters: createContentTypeParams,
@@ -17,7 +17,7 @@ const cmd = Command.build(CommandNames.fields, 'ContentType', 'fields', true, fa
 });
 
 Commands.addCommand(cmd);
-Commands.addCommand(Command.clone(cmd, CommandNames.fields_old_contenttype));
+Commands.addCommand(CommandDefinition.clone(cmd, CommandNames.fields_old_contenttype));
 
 
 /**

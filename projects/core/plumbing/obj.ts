@@ -4,18 +4,19 @@
  * @internal
  */
 export class Obj {
-    /**
-     * This is the same as Object.assign, but type-safe.
-     * Use it as a replacetment for Object.Assign(this, ... ) in constructors
-     */
-    static TypeSafeAssign <T, K extends keyof T>(...args: T[]) {
-        args.reduce( (result, current) =>
-            (Object.keys(current) as K[]).reduce((target, key) => {
-                target[key] = current[key];
-                return target;
-            }, result)
-        , args[0]);
-    }
+    // 2025-11-25 2dm deprecated, shouldn't use any more
+    // /**
+    //  * This is the same as Object.assign, but type-safe.
+    //  * Use it as a replacement for Object.Assign(this, ... ) in constructors
+    //  */
+    // static TypeSafeAssign <T, K extends keyof T>(...args: T[]) {
+    //     args.reduce( (result, current) =>
+    //         (Object.keys(current) as K[]).reduce((target, key) => {
+    //             target[key] = current[key];
+    //             return target;
+    //         }, result)
+    //     , args[0]);
+    // }
 
     static DeepClone<T>(original: T, ignoreCircular = false): T {
         if(original === undefined || original === null)

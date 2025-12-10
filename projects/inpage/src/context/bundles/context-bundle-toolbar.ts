@@ -1,6 +1,6 @@
 ﻿import { ContextBundleContent, ContextComplete } from '.';
 import { Sxc } from '../../../../$2sxc/src/sxc/sxc';
-import { Button } from '../../toolbar/config/button';
+import { ButtonConfiguration } from '../../toolbar/config/button';
 import { Toolbar } from '../../toolbar/config/toolbar';
 import { AttrJsonEditContext } from '../html-attribute';
 
@@ -18,7 +18,7 @@ export class ContextBundleToolbar extends ContextBundleContent {
   }
 
   /** @internal */
-  forButton(button: Button): ContextComplete {
+  forButton(button: ButtonConfiguration): ContextComplete {
     // the ContextBundleButton is the same as toolbar, just with .button
     const clone = {...this} as unknown as ContextComplete;
     clone.button = button;

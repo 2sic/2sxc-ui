@@ -37,17 +37,20 @@ export class RunParamsHelpers extends HasLog {
      * and return a full settings object with all defaults from
      * the command definition
      * @param params
+     * 
+     * 2025-11-24 2dm - I believe this doesn't do anything useful, and just makes things more complex.
+     * so i'll #DisableExpandParamsWithDefaults and see if anything breaks.
      */
-    public expandParamsWithDefaults(params: CommandParams): CommandParams {
-        const cl = this.log.call('expandParamsWithDefaults');
-        const name = params.action;
-        cl.add(`will add defaults for ${name} from buttonConfig`);
-        const defaults = Commands.singleton().get(name).buttonDefaults;
-        cl.data('defaults to merge', defaults);
-        // TODO: 2dm - suspicious cast
-        // merge conf & settings, but...?
-        return cl.return({...defaults, ...params} as CommandParams);
-    }
+    // public expandParamsWithDefaults(params: CommandParams): CommandParams {
+    //     const cl = this.log.call('expandParamsWithDefaults');
+    //     const name = params.action;
+    //     cl.add(`will add defaults for ${name} from buttonConfig`);
+    //     const defaults = Commands.singleton().get(name).buttonDefaults;
+    //     cl.data('defaults to merge', defaults);
+    //     // TODO: 2dm - suspicious cast
+    //     // merge conf & settings, but...?
+    //     return cl.return({...defaults, ...params} as CommandParams);
+    // }
 
 
     // ----- Static Helpers -----

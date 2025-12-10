@@ -1,6 +1,6 @@
 ﻿import tippy, { Props } from 'tippy.js';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
-import { Button } from '../toolbar/config/button';
+import { ButtonDefinition } from '../toolbar/config/button-definition';
 import { Note } from '../toolbar/config/Note';
 import { Debug } from '../constants/debug';
 
@@ -12,17 +12,17 @@ const debugTippy = Debug.parts.CommandTippy;
 /**
  * @internal
  */
-export class Command {
+export class CommandDefinition {
   constructor(public name: string) {
   }
 
   /** the defaults are important for new buttons that just know this command */
-  buttonDefaults: Partial<Button>;
+  buttonDefaults: Partial<ButtonDefinition>;
 
   /**
    * @internal
    */
-  mergeDefaults(translateKey: string, icon: string, uiOnly: boolean, partOfPage: boolean, more: Partial<Button>): void {
+  mergeDefaults(translateKey: string, icon: string, uiOnly: boolean, partOfPage: boolean, more: Partial<ButtonDefinition>): void {
     if (typeof (partOfPage) !== 'boolean')
       throw 'partOfPage in commands not provided, order will be wrong!';
 
@@ -99,7 +99,7 @@ export class Command {
         return undefined;
       },
       ...more,
-    };
+    } satisfies Partial<ButtonDefinition>;
   }
 
   /**
@@ -143,14 +143,9 @@ export class Command {
                 icon: string,
                 uiOnly: boolean,
                 partOfPage: boolean,
-                more: Partial<Button>,
-                ): Command {
-    const cmd = new Command(name);
-    // debug entry
-    // if (name == 'layout') {
-    //   console.log('test 2dm: ' + name);
-    //   debugger;
-    // }
+                more: Partial<ButtonDefinition>,
+                ): CommandDefinition {
+    const cmd = new CommandDefinition(name);
 
     // Toolbar API v2
     cmd.mergeDefaults(translateKey, icon, uiOnly, partOfPage, more);
@@ -161,8 +156,8 @@ export class Command {
   /**
    * @internal
    */
-  static clone(command: Command, name: string) {
-    const clone = new Command(name);
+  static clone(command: CommandDefinition, name: string) {
+    const clone = new CommandDefinition(name);
     clone.buttonDefaults = command.buttonDefaults;
     return clone;
   }

@@ -26,8 +26,8 @@ export class ToolbarConfigLoader extends HasLog {
 
   /** Special constructor that can only be called from the ToolbarManager */
   constructor(_owner: ToolbarManager) {
-      // important: always create a new log as it will be stored in insights
-      super('Tlb.TlbCnf');
+    // important: always create a new log as it will be stored in insights
+    super('Tlb.TlbCnf');
   }
 
   private setLoggingAndCreateHelpers(toolbarData: InPageToolbarConfigVariations): void {

@@ -1,6 +1,6 @@
 ﻿import { InPageCommandJson } from '..';
 import { CommandParams } from '../../../../../$2sxc/src/cms/command-params';
-import { Button } from '../../config';
+import { ButtonDefinition } from '../../config/button-definition';
 
 /**
  * Button Definition v1. from old API
@@ -53,22 +53,36 @@ export class InPageButtonJson {
         return thing.length > 0 && InPageButtonJson.is(thing[0]);
     }
 
-    static toButton(oldFormat: InPageButtonJson): Partial<Button> {
-        const config: Partial<Button> = {};
+    static toButton(oldFormat: InPageButtonJson): Partial<ButtonDefinition> {
+        const config: Partial<ButtonDefinition> = {
+          // simple value properties
+          ...(oldFormat.classes ? { classes: oldFormat.classes } : {}),
+          ...(oldFormat.dialog ? { dialog: oldFormat.dialog } : {}),
+          ...(oldFormat.disabled ? { disabled: oldFormat.disabled } : {}),
+          ...(oldFormat.icon ? { icon: oldFormat.icon } : {}),
+
+          // Method Properties - simplified, since now every property can be a value or a function anyhow
+          ...(oldFormat.fullScreen ? { fullScreen: evalPropOrFun<boolean>(oldFormat.fullScreen) } : {}),
+          // ...(oldFormat.icon ? { icon: evalPropOrFun<string>(oldFormat.icon) } : {}),
+          ...(oldFormat.inlineWindow ? { inlineWindow: evalPropOrFun<boolean>(oldFormat.inlineWindow) } : {}),
+          ...(oldFormat.newWindow ? { newWindow: evalPropOrFun<boolean>(oldFormat.newWindow) } : {}),
+          ...(oldFormat.partOfPage ? { partOfPage: evalPropOrFun<boolean>(oldFormat.partOfPage) } : {}),
+          ...(oldFormat.title ? { title: evalPropOrFun<string>(oldFormat.title) } : {}),
+        };
 
         // simple value properties
-        if (oldFormat.classes) config.classes = oldFormat.classes;
-        if (oldFormat.dialog) config.dialog = oldFormat.dialog;
-        if (oldFormat.disabled) config.disabled = oldFormat.disabled;
-        if (oldFormat.icon) config.icon = oldFormat.icon;
+        // if (oldFormat.classes) config.classes = oldFormat.classes;
+        // if (oldFormat.dialog) config.dialog = oldFormat.dialog;
+        // if (oldFormat.disabled) config.disabled = oldFormat.disabled;
+        // if (oldFormat.icon) config.icon = oldFormat.icon;
 
         // Method Properties
-        if (oldFormat.fullScreen) config.fullScreen = evalPropOrFun<boolean>(oldFormat.fullScreen);
-        if (oldFormat.icon) config.icon = evalPropOrFun<string>(oldFormat.icon);
-        if (oldFormat.inlineWindow) config.inlineWindow = evalPropOrFun<boolean>(oldFormat.inlineWindow);
-        if (oldFormat.newWindow) config.newWindow = evalPropOrFun<boolean>(oldFormat.newWindow);
-        if (oldFormat.partOfPage) config.partOfPage = evalPropOrFun<boolean>(oldFormat.partOfPage);
-        if (oldFormat.title) config.title = evalPropOrFun<string>(oldFormat.title);
+        // if (oldFormat.fullScreen) config.fullScreen = evalPropOrFun<boolean>(oldFormat.fullScreen);
+        // if (oldFormat.icon) config.icon = evalPropOrFun<string>(oldFormat.icon);
+        // if (oldFormat.inlineWindow) config.inlineWindow = evalPropOrFun<boolean>(oldFormat.inlineWindow);
+        // if (oldFormat.newWindow) config.newWindow = evalPropOrFun<boolean>(oldFormat.newWindow);
+        // if (oldFormat.partOfPage) config.partOfPage = evalPropOrFun<boolean>(oldFormat.partOfPage);
+        // if (oldFormat.title) config.title = evalPropOrFun<string>(oldFormat.title);
 
         return config;
     }
@@ -77,7 +91,7 @@ export class InPageButtonJson {
 
 
 function evalPropOrFun<T>(propOrFunction: T | (() => T)): () => T {
-    if (propOrFunction === undefined || propOrFunction === null)
+    if (propOrFunction == null)
       return null;
     if (typeof (propOrFunction) === 'function')
       return propOrFunction as () => T;

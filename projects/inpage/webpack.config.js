@@ -10,7 +10,9 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPl
 
 const bundleName = "inpage";
 
-const assetsTarget = buildConfig.hasSource ? path.join(buildConfig.source, 'dist', bundleName) : null;
+const assetsTarget = buildConfig.hasSource
+  ? path.join(buildConfig.source, 'dist', bundleName)
+  : null;
 const assetsTargetFallback = path.resolve(__dirname, 'dist');
 
 // console.log('2dm assetsTarget', assetsTarget);

@@ -1,6 +1,6 @@
 {
   "name": "2sxc-ui",
-  "version": "20.00.08",
+  "version": "20.00.09",
   "description": "2sxc UI - the JS UI of 2sxc",
   "scripts": {
     "ci-all": "npm ci && cd projects/$2sxc && npm ci && cd ../.. && cd projects/inpage && npm ci && cd ../.. && cd projects/code-editor-snippets && npm ci && cd ../.. && cd projects/quick-dialog && npm ci --legacy-peer-deps && cd ../.. && cd projects/cms && npm ci && cd ../.. && cd projects/turnOn && npm ci && cd ../..",
@@ -25,7 +25,7 @@
   "devDependencies": {
     "chalk": "^4.1.2",
     "chokidar": "^3.4.2",
-    "cpx": "^1.5.0",
+    "cpx": "^1.2.1",
     "fs-extra": "^9.0.1",
     "webpack-shell-plugin": "^0.5.0",
     "webpack-shell-plugin-next": "^1.2.0"

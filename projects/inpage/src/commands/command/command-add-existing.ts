@@ -11,23 +11,43 @@ Commands.add(CommandNames.addExisting, 'AddExisting', 'add-existing', false, tru
 
   showCondition: (context) => SharedLogic.isList(context),
 
-  configureLinkGenerator: (context, linkGenerator) => {
-    if (SharedLogic.isFieldList(context)) {
-      const params = context.button.command.params;
-      linkGenerator.items = [{
+  // configureLinkGenerator: (context, linkGenerator) => {
+  //   if (SharedLogic.isFieldList(context)) {
+  //     const params = context.button.command.params;
+  //     linkGenerator.items = [{
+  //       Add: true,
+  //       Index: CmdParHlp.getIndex(params) + 1,
+  //       Parent: params.parent,
+  //       Field: params.fields,
+  //     }];
+  //     return;
+  //   }
+    
+  //   if (SharedLogic.isPartOfBlockList(context)) {
+  //     const topItem = linkGenerator.items[0] as ItemIdentifierInList;
+  //     topItem.Add = true;
+  //     topItem.Index++;
+  //     linkGenerator.items = [topItem];
+  //   }
+  // },
+
+  customItems: (ctx, items) => {
+    if (SharedLogic.isFieldList(ctx)) {
+      const params = ctx.button.command.params;
+      return [{
         Add: true,
         Index: CmdParHlp.getIndex(params) + 1,
         Parent: params.parent,
         Field: params.fields,
       }];
-      return;
     }
     
-    if (SharedLogic.isPartOfBlockList(context)) {
-      const topItem = linkGenerator.items[0] as ItemIdentifierInList;
+    if (SharedLogic.isPartOfBlockList(ctx)) {
+      const topItem = items[0] as ItemIdentifierInList;
       topItem.Add = true;
       topItem.Index++;
-      linkGenerator.items = [topItem];
+      return [topItem];
     }
   },
+    
 });

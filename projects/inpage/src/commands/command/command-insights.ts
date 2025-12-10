@@ -1,4 +1,4 @@
-﻿import { Command, CommandNames, Commands } from '..';
+﻿import { CommandDefinition, CommandNames, Commands } from '..';
 
 const InsightsApiRoot = 'sys/insights';
 
@@ -10,7 +10,7 @@ export function insightsUrl(part: string): string {
  * import this module to commands.ts
  * @internal
  */
-const cmd = Command.build(CommandNames.insights, 'Insights', 'speed', true, false, {
+const cmd = CommandDefinition.build(CommandNames.insights, 'Insights', 'speed', true, false, {
   dialog: (_) => CommandNames.insights_old_server,
   showCondition: (context) => context.user.CanDevelop,
   code(context, event) {
@@ -25,4 +25,4 @@ const cmd = Command.build(CommandNames.insights, 'Insights', 'speed', true, fals
 });
 
 Commands.addCommand(cmd);
-Commands.addCommand(Command.clone(cmd, CommandNames.insights_old_server));
+Commands.addCommand(CommandDefinition.clone(cmd, CommandNames.insights_old_server));

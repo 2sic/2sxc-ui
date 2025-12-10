@@ -1,22 +1,34 @@
-﻿import { Command, CommandNames, Commands } from '..';
+﻿import { CommandDefinition, CommandNames, Commands } from '..';
 import { TemplateIdentifier } from '../../../../$2sxc/src/cms/item-identifiers';
 
 /**
  * import this module to commands.ts
  * @internal
  */
-const cmd = Command.build(CommandNames.template, 'Develop', 'code', true, false, {
+const cmd = CommandDefinition.build(CommandNames.template, 'Develop', 'code', true, false, {
   newWindow: (_) => true,
   dialog: (_) => 'develop',
 
   showCondition: (context) => !!context.user.CanDevelop,
 
-  configureLinkGenerator: (context, linkGenerator) => {
-    const cb = context.contentBlock;
+  // configureLinkGenerator: (context, linkGenerator) => {
+  //   const cb = context.contentBlock;
+  //   const identifier: TemplateIdentifier = { EntityId: cb.templateId };
+  //   if (cb.templatePath)
+  //     identifier.Path = cb.templatePath;
+  //   if (cb.edition)
+  //     identifier.Edition = cb.edition;
+  //   linkGenerator.items = [identifier];
+  // },
+
+  customItems: (ctx, _) => {
+    const cb = ctx.contentBlock;
     const identifier: TemplateIdentifier = { EntityId: cb.templateId };
-    if (cb.templatePath) identifier.Path = cb.templatePath;
-    if (cb.edition) identifier.Edition = cb.edition;
-    linkGenerator.items = [identifier];
+    if (cb.templatePath)
+      identifier.Path = cb.templatePath;
+    if (cb.edition)
+      identifier.Edition = cb.edition;
+    return [identifier];
   },
 
   parameters: (ctx) => ({ isshared: ctx.contentBlock.templateIsShared }),
@@ -26,4 +38,4 @@ const cmd = Command.build(CommandNames.template, 'Develop', 'code', true, false,
 });
 
 Commands.addCommand(cmd);
-Commands.addCommand(Command.clone(cmd, CommandNames.template_old_develop));
+Commands.addCommand(CommandDefinition.clone(cmd, CommandNames.template_old_develop));

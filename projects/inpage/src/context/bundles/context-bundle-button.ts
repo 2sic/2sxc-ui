@@ -1,7 +1,7 @@
 ﻿import { Sxc } from '../../../../$2sxc/src/sxc/sxc';
 import { Obj } from '../../plumbing';
 import { SxcTools } from '../../sxc/sxc-tools';
-import { Button } from '../../toolbar/config/button';
+import { ButtonConfiguration } from '../../toolbar/config/button';
 import { ToolbarWorkflowManager } from '../../workflow';
 import { AttrJsonEditContext } from '../html-attribute';
 import { ContextBundleToolbar } from './context-bundle-toolbar';
@@ -14,7 +14,7 @@ export class ContextComplete extends ContextBundleToolbar {
   private _isCtxComplete = true;
 
   /** @internal */
-  button?: Button;
+  button?: ButtonConfiguration;
 
   /** @internal
    * must be implemented as static, because the final object is actually just an interface and created from values.
@@ -29,6 +29,7 @@ export class ContextComplete extends ContextBundleToolbar {
   /** @internal */
   constructor(editCtx: AttrJsonEditContext, sxc?: Sxc) {
     super(editCtx, sxc);
+    this.sxc = sxc;
     // note that the button will not be filled here, as it will be filled somewhere else
   }
 
@@ -49,9 +50,7 @@ export class ContextComplete extends ContextBundleToolbar {
         containerTag = DomTools.getContainerTag(tagOrSxc);
     }
 
-    const contextOfButton = ContextComplete.getContextInstance(sxc, containerTag);
-    contextOfButton.sxc = sxc;
-    return contextOfButton;
+    return ContextComplete.#getContextInstance(sxc, containerTag);
   }
 
   /**
@@ -75,7 +74,7 @@ export class ContextComplete extends ContextBundleToolbar {
    * @param htmlElement
    * @internal
    */
-  static getContextInstance(sxc: Sxc, htmlElement?: HTMLElement): ContextComplete {
+  static #getContextInstance(sxc: Sxc, htmlElement?: HTMLElement): ContextComplete {
     const editContext = SxcTools.getEditContext(sxc, htmlElement);
     return new ContextComplete(editContext, sxc);
   }

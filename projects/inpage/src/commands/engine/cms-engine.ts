@@ -7,18 +7,18 @@ import { ContextComplete } from '../../context/bundles/context-bundle-button';
 import { ContextBundleInstance } from '../../context/bundles/context-bundle-instance';
 import { HasLog, Insights, Log } from '../../core';
 import { QuickDialog } from '../../quick-dialog/quick-dialog';
-import { Button, ButtonSafe } from '../../toolbar/config';
-import { ButtonCommand } from '../../toolbar/config';
+import { ButtonConfiguration, ButtonWithContext } from '../../toolbar/config';
+import { CommandWithParams } from '../../toolbar/config';
 import { InPageButtonJson } from '../../toolbar/config-loaders/config-formats/in-page-button';
 import { WorkflowHelper, WorkflowPhases, WorkflowStepCodeArguments } from '../../workflow';
 import { ToolbarWorkflowManager } from '../../workflow/toolbar-workflow-manager';
 import { WorkflowStep } from '../../workflow/workflow-step';
 import { CommandLinkGenerator } from '../command-link-generator';
 import { Debug } from '../../constants/debug';
+import { CommandCode } from '../command-code';
+import { CmsWorkflow } from './cms-workflow';
 
 const debug = false;
-
-type CommandPromise<T> = Promise<T|void>;
 
 /**
  * The CMS engine is global, and needs the context to work.
@@ -60,7 +60,7 @@ export class CmsEngine extends HasLog {
     // ensure we have the right event despite browser differences
     event = event || (window.event as MouseEvent);
 
-    const result: CommandPromise<T> = this.run(context as ContextComplete, cmdParams, event, undefined, 'sxcGlobalCms.detectParamsAndRun');
+    const result = this.run<T>(context as ContextComplete, cmdParams, event, undefined, 'sxcGlobalCms.detectParamsAndRun');
     return cl.return(result);
   }
 
@@ -71,92 +71,62 @@ export class CmsEngine extends HasLog {
    * @param settings
    * @param event
    */
-  run<T>(context: ContextComplete, params: CommandParams, event: MouseEvent, wipParamsWithWorkflow?: RunParams, triggeredBy?: string): CommandPromise<T> {
-    const cl = this.log.call('run<T>', `triggeredBy: ${triggeredBy}`, undefined, { context });
-
-    const cmdParams = this.runParamsHelper.expandParamsWithDefaults(params);
-
+  run<T>(context: ContextComplete, params: CommandParams, event: MouseEvent, paramsWithWorkflow?: RunParams, triggeredBy?: string): Promise<void | T> {
+    const l = this.log.call('run<T>', `triggeredBy: ${triggeredBy}`, undefined, { context });
+    // this.log.liveDump = true;
+    const name = params.action;
     const origEvent = event;
-    const name = cmdParams.action;
+
+    // #DisableExpandParamsWithDefaults
+    // const cmdParams = this.runParamsHelper.expandParamsWithDefaults(params);
+    const cmdParams = params;
 
     // console.warn('2dm: cms-engine.ts: run', { context, params, cmdParams });
     
-    cl.add(`run command '${name}'`);
+    l.add(`run command '${name}'`);
 
     // Toolbar API v2
-    const btnCommand = new ButtonCommand(name, cmdParams);
-    const newButtonConfig = new Button(btnCommand, btnCommand.name);
+    const btnCommand = new CommandWithParams(name, cmdParams);
 
-    // merge conf & settings, but settings has higher priority
-    const button: Button = {
-      ...newButtonConfig,
-      ...InPageButtonJson.toButton(cmdParams as unknown),
-    };
+    // Support old 2sxc v8 API, where the params could be a JS object with method/properties
+    const overrides = InPageButtonJson.toButton(params as unknown as InPageButtonJson);
+    const newButtonConfig = new ButtonConfiguration(btnCommand.name, btnCommand, overrides);
+    const button = newButtonConfig;
 
     // attach to context for inner calls which might access it
     context.button = button;
-    cl.data('button', context.button);
-
-    // New in 11.12 - find commandWorkflow of toolbar or use a dummy so the remaining code will always work
-    // note: in cases where the click comes from elsewhere (like from the quick-dialog) there is no event
-
-    // New in 12.10 - Workflow can be provided by run-call
-    let wf: ToolbarWorkflowManager;
-    if (wipParamsWithWorkflow?.workflows) {
-      wf = new ToolbarWorkflowManager(this.log);
-      wf.add(wipParamsWithWorkflow.workflows as WorkflowStep | WorkflowStep[]);
-    } else
-      wf = WorkflowHelper.getWorkflow(origEvent?.target as HTMLElement);
-
-    // Attach to context, so it's available after running the command
-    context.commandWorkflow = wf;
-    const wrapperPromise = wf.run(new WorkflowStepCodeArguments(name, WorkflowPhases.before, context));
+    l.data('button', context.button);
 
     // In case we don't have special code, use generic code
-    let commandPromise = button.code;
+    let commandPromise = button.definition.code;
     if (!commandPromise) {
-      cl.add('button, no code - generating code to open standard dialog');
+      l.add('button, no code - generating code to open standard dialog');
       commandPromise = CmsEngine.openDialog;
     }
 
-    // get button configuration to detect if it's only a UI action (like the more-button)
-    let finalPromise: CommandPromise<T>;
-    if (new ButtonSafe(button, context).uiActionOnly()) {
-      cl.add('UI command, no pre-flight to ensure content-block');
-      finalPromise = wrapperPromise.then((wfArgs) => WorkflowHelper.isCancelled(wfArgs)
-        ? Promise.resolve<T>(null)
-        : commandPromise(context, origEvent, 'cmsEngine.run#UI command'));
-    } else {
-      // if more than just a UI-action, then it needs to be sure the content-group is created first
-      cl.add('command might change data, wrap in pre-flight to ensure content-block');
-      finalPromise = wrapperPromise.then((wfArgs) => WorkflowHelper.isCancelled(wfArgs)
-        ? Promise.resolve<T>(null)
-        : ContentBlockEditor.singleton()
-            .prepareToAddContent(context, cmdParams.useModuleList)
-            .then(() => commandPromise(context, origEvent, 'cmsEngine.run#non UI command'))
-      );
-    }
-
-    // Attach post-command workflow
-    const promiseWithAfterEffects = finalPromise.then((result) => {
-      return wf
-        .run(new WorkflowStepCodeArguments(name, WorkflowPhases.after, null, result))
-        .then(() => result);
-    });
-
-    return cl.return(promiseWithAfterEffects);
+    const cmsWorkflow = new CmsWorkflow(this.log);
+    const promiseWithWorkflow = cmsWorkflow.wrapInWorkflow<T>(
+      name,
+      commandPromise,
+      button,
+      context,
+      origEvent,
+      paramsWithWorkflow
+    );
+    return l.return(promiseWithWorkflow);
   }
+
 
 
 
   /**
    * Open a new dialog of the angular-ui
    */
-  static openDialog<T>(context: ContextComplete, event: MouseEvent, triggeredBy: string): CommandPromise<T> {
+  static openDialog<T>(context: ContextComplete, event: MouseEvent, triggeredBy: string): Promise<void | T> {
     const log = new Log('Cms.OpnDlg', null, `triggeredBy: ${triggeredBy}`);
     Insights.add('cms', 'open-dialog', log);
     // the link contains everything to open a full dialog (lots of params added)
-    const btn = new ButtonSafe(context.button, context);
+    const btn = new ButtonWithContext(context.button, context);
     const link = new CommandLinkGenerator(btn, context, log).getLink();
 
     const origEvent = event || (window.event as MouseEvent);
@@ -172,16 +142,16 @@ export class CmsEngine extends HasLog {
       };
 
       // Case 1: check if inline window (quick-dialog)
-      if (btn.inlineWindow()) {
+      if (btn.getInlineWindow()) {
         // test if it should be full screen (value or resolve-function)
         QuickDialog.singleton()
-          .showOrToggleFromToolbar(context, link, btn.fullScreen(), btn.dialog())
+          .showOrToggleFromToolbar(context, link, btn.getFullScreen(), btn.getDialog())
           .then((isChanged) => { if (isChanged) completePromise(); });
         return;
       }
 
       // Case 2: It's a normal pop-up dialog - either in a new tab/window or in a popup
-      const isNewWindow = btn.newWindow();
+      const isNewWindow = btn.getNewWindow();
 
       // Experimental v17 - ctrl-click opens in new window; shift-click opens in popup
       if (isNewWindow || origEvent?.ctrlKey || origEvent?.shiftKey) {

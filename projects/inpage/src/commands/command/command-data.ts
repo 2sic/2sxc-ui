@@ -1,11 +1,11 @@
-﻿import { Command, CommandNames, Commands } from '..';
+﻿import { CommandDefinition, CommandNames, Commands } from '..';
 import { createContentTypeParams } from './command-content-type';
 
 /**
  * import this module to commands.ts
  * @internal
  */
-const cmd = Command.build(CommandNames.data, 'ContentItems', 'table', true, false, {
+const cmd = CommandDefinition.build(CommandNames.data, 'ContentItems', 'table', true, false, {
   dialog: (_) => CommandNames.data_old_contentItems,
 
   parameters: createContentTypeParams,
@@ -35,4 +35,4 @@ const cmd = Command.build(CommandNames.data, 'ContentItems', 'table', true, fals
 });
 
 Commands.addCommand(cmd);
-Commands.addCommand(Command.clone(cmd, CommandNames.data_old_contentItems));
+Commands.addCommand(CommandDefinition.clone(cmd, CommandNames.data_old_contentItems));

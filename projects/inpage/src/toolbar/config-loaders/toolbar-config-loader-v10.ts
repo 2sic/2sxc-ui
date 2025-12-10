@@ -24,7 +24,7 @@ export class ToolbarConfigLoaderV10 extends HasLog {
 
 
   public loadV10(context: ContextComplete, config: ToolbarInitConfig, raw: string[]): Toolbar {
-    const cl = this.log.call('loadV10');
+    const l = this.log.call('loadV10');
 
     this.rules.load(raw);
 
@@ -49,7 +49,8 @@ export class ToolbarConfigLoaderV10 extends HasLog {
     const toolbarTemplateName = toolbarRule?.name ?? defToolbarname;
     let template = this.configLoader.templates.copy(toolbarTemplateName);
     template.settings = settings;
-    if (params) template.params = params.params;
+    if (params)
+      template.params = params.params;
 
     // #4 Remove unwanted groups
     const removeGroups = this.rules.getRemoveGroups();
@@ -62,9 +63,10 @@ export class ToolbarConfigLoaderV10 extends HasLog {
 
     // Build the real toolbar structure
     const toolbar = this.configLoader.buildTreeAndModifyAccordingToRules(context, template as ToolbarWip);
-    if (!toolbar.identifier) toolbar.identifier = Toolbar.createIdentifier();
+    if (!toolbar.identifier)
+      toolbar.identifier = Toolbar.createIdentifier();
     toolbar.settings._rules = this.rules;
     // process the rules one by one
-    return cl.return(toolbar, 'ok');
+    return l.return(toolbar, 'ok');
   }
 }

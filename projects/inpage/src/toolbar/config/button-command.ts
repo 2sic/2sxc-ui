@@ -1,24 +1,20 @@
-﻿import { Command, CommandNames, CommandParams, Commands } from '../../commands';
+﻿import { CommandDefinition, CommandNames, CommandParams, Commands } from '../../commands';
 import { TypeValue } from '../../plumbing';
 
 /**
  * @internal
  */
-export class ButtonCommand {
-    readonly command: Command; // reference to action to be run
+export class CommandWithParams {
+    readonly commandDef: CommandDefinition; // reference to original definition which should run
 
-    // customCode: string;
-
-    constructor(public name: CommandNames, /* contentType?: string, */ public params?: CommandParams) {
+    constructor(public name: CommandNames, public params?: CommandParams) {
         if (!params)
           this.params = {};
-        // 2dm 2022-07-05 #badContentTypeExtractAndRefill - we seem to extract it, just to put it back on the ButtonCommand
-        // if (contentType) this.params.contentType = contentType;
-        this.command = Commands.singleton().get(name); // activate command for this
+        this.commandDef = Commands.singleton().get(name); // activate command for this
     }
 
     /** make static, as many ButtonCommand signatures are actually not objects */
-    static mergeAdditionalParams(command: ButtonCommand, additionalParams: Record<string, TypeValue>): CommandParams {
+    static mergeAdditionalParams(command: CommandWithParams, additionalParams: Record<string, TypeValue>): CommandParams {
         let params: CommandParams = {};
         if (command) {
             if (command.name)

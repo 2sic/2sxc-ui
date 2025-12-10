@@ -1,15 +1,15 @@
-﻿import { Command, CommandNames, Commands } from '..';
+﻿import { CommandDefinition, CommandNames, Commands } from '..';
 import { ItemIdentifierSimple } from '../../../../$2sxc/src/cms/item-identifiers';
+import { ButtonDefinition } from '../../toolbar/config/button-definition';
 
 const MetadataDefaultKeyType = 'string';
 const MetadataDefaultTargetType = 10; // cms-item
+
 /**
- * create a metadata toolbar
- *
- * import this module to commands.ts
+ * This is the shared structure of both metadata and image-metadata commands
  * @internal
  */
-export const MetadataCommand = Command.build(CommandNames.metadata, 'Metadata', 'tag', false, false, {
+const metadataSharedParts : Partial<ButtonDefinition> = {
 
   parameters: (_) => ({ mode: CommandNames.newMode }),
 
@@ -21,31 +21,44 @@ export const MetadataCommand = Command.build(CommandNames.metadata, 'Metadata', 
   // only add a metadata-button if it has metadata-infos
   showCondition: (ctx) => !!ctx.button.command.params.metadata,
 
-  configureLinkGenerator(_, linkGenerator) {
+  // configureLinkGenerator(_, linkGenerator) {
+  //   const itm: Partial<ItemIdentifierSimple> = {
+  //     Metadata: {
+  //       ...{ keyType: MetadataDefaultKeyType, targetType: MetadataDefaultTargetType },
+  //       ...linkGenerator.context.button.command.params.metadata },
+  //   };
+  //   linkGenerator.items[0] = {...linkGenerator.items[0], ...itm };
+  // },
+
+  customItems: (ctx, items) => {
     const itm: Partial<ItemIdentifierSimple> = {
       Metadata: {
         ...{ keyType: MetadataDefaultKeyType, targetType: MetadataDefaultTargetType },
-        ...linkGenerator.context.button.command.params.metadata },
+        ...ctx.button.command.params.metadata },
     };
-    linkGenerator.items[0] = {...linkGenerator.items[0], ...itm };
+    return [ {...items[0], ...itm }, ...items.slice(1)];
   },
 
-  // The items will transport the metadata
+  // We need the items, they will contain the metadata
   noItems: false,
-});
+};
+
+/**
+ * create a metadata toolbar
+ *
+ * import this module to commands.ts
+ * @internal
+ */
+const metadata = CommandDefinition.build(CommandNames.metadata, 'Metadata', 'tag', false, false, metadataSharedParts);
 
 /**
  * @internal
  */
-export const ImageMetadataCommand = Command.build(CommandNames.image, 'Image', 'focus', false, false, {
-  parameters: MetadataCommand.buttonDefaults.parameters,
-  dialog: MetadataCommand.buttonDefaults.dialog,
+const imageMetadata = CommandDefinition.build(CommandNames.image, 'Image', 'focus', false, false, {
+  ...metadataSharedParts,
   classes: 'single-field',
-  dynamicClasses: MetadataCommand.buttonDefaults.dynamicClasses,
-  showCondition: MetadataCommand.buttonDefaults.showCondition,
-  configureLinkGenerator: MetadataCommand.buttonDefaults.configureLinkGenerator,
 });
 
-Commands.addCommand(MetadataCommand);
-Commands.addCommand(ImageMetadataCommand);
+Commands.addCommand(metadata);
+Commands.addCommand(imageMetadata);
 
