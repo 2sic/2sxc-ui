@@ -72,14 +72,14 @@ export class SecureEndpoint implements Omit<FetchOptions, 'method'> {
     );
 
     // Generate a random IV (initialization vector, so that the first block is not predictable)
-    const iv: Uint8Array = window.crypto.getRandomValues(new Uint8Array(16)); // 16 bytes for AES-CBC
+    const iv = window.crypto.getRandomValues(new Uint8Array(16)); // 16 bytes for AES-CBC
 
     // Convert the data to ArrayBuffer
-    const enc: TextEncoder = new TextEncoder();
+    const enc = new TextEncoder();
 
-    const dataString: string = JSON.stringify(data ?? "");
+    const dataString = JSON.stringify(data ?? "");
 
-    const encodedMessage: Uint8Array = enc.encode(dataString);
+    const encodedMessage = enc.encode(dataString);
 
     // Encrypt the data using AES key
     const encryptedData: ArrayBuffer = await window.crypto.subtle.encrypt(
