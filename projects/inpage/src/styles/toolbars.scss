@@ -4,6 +4,7 @@
 */
 
 /* note: maybe there's a better way without changing the positioning of the main element... */
+@use "./variables" as *;
 *[sxc-toolbar-hover] {
   position: relative;
 }
