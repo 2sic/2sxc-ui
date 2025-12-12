@@ -23,7 +23,6 @@
     "types": [
       "node",
       "jquery",
-      "jasmine"
     ]
   },
   "include": [
