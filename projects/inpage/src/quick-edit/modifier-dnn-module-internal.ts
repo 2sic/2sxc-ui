@@ -174,7 +174,7 @@ function sendDnnAjax(req: DnnHttpRequest): Promise<any> {
             success?.(resData);
             return resData;
         })
-        .catch((err: Error) => {
+        .catch((err: Error): void => {
             alert(`Error while talking to server: ${err.message}`);
             return undefined;
         });

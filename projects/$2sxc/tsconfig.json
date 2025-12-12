@@ -19,7 +19,7 @@
     "./src/*.ts",
     "./src/*.js",
     "./src/**/*.ts",
-    "./test/**/*.ts",
+    // "./test/**/*.ts",
     "../inpage/src/commands/command/workflow-commands.ts"
   ],
   "exclude": ["node_modules", "../inpage/node_modules/**"]

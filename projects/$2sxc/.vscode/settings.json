@@ -10,5 +10,9 @@
   "testExplorer.codeLens": true,
 
   "testExplorer.gutterDecoration": true,
+  "cSpell.words": [
+    "docfx",
+    "inpage"
+  ],
   
 }

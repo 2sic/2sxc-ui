@@ -28,7 +28,7 @@ export class ToolbarConfigLoaderV09 extends HasLog {
     // Default to empty toolbar settings if we don't have a toolbar or settings
     // important: the checks look a bit strange, but there are cases where {} settings are handed in
     // and we can't count the keys because that would result in other checks
-    if (Object.keys(config.toolbar).length > 0 && toolbarSettings === ({} as ToolbarSettings)) {
+    if (Object.keys(config.toolbar).length > 0 && toolbarSettings == ({} as ToolbarSettings)) {
       cl.add('no data or settings, will use default settings for empty');
       toolbarSettings = ToolbarSettings.getForEmpty();
     }
