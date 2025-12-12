@@ -1,37 +1,22 @@
-
-$inpage-tlb-margin: 5px;
+@use "sass:meta";
 
 :root {
   --2sxc-tlb-margin: 5px;
   --2sxc-tlb-btn-bg: linear-gradient(
     125deg,
-    /* v19
-    rgba(15, 45, 80, 1) 40%,
-    rgba(148, 27, 78, 1) 100%
-    v20 */
-    rgba(36, 14, 18, 1) 10%, /* #240E12 */
-    rgba(149, 44, 66, 1) 90% /* #952C42 */
+    rgba(36, 14, 18, 1) 10%,
+    rgba(149, 44, 66, 1) 90%
   );
   --2sxc-tlb-btn-pro-bg: #018552;
   --2sxc-tlb-btn-error-bg: #ff0000;
 }
 
-$inpage-btn-bg-pro: var(--2sxc-tlb-btn-pro-bg, #018552);
+@include meta.load-css("dnn.scss");
+@include meta.load-css("icons.scss");
+@include meta.load-css("popup.scss");
+@include meta.load-css("toolbars.scss");
 
-$inpage-btn-bg-error: var(--2sxc-tlb-btn-error-bg, #ff0000);
-
-$inpage-btn-bg: var(--2sxc-tlb-btn-bg);
-
-@import './dnn.scss';
-
-@import './icons.scss';
-
-@import './popup.scss';
-
-@import './toolbars.scss';
-
-
-// Tippy
-@import 'tippy.js/dist/tippy.css';
-@import 'tippy.js/themes/light.css';
-@import './tippy.scss';
+// externe CSS
+@import "tippy.js/dist/tippy.css";
+@import "tippy.js/themes/light.css";
+@include meta.load-css("tippy.scss");
