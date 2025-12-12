@@ -1,7 +1,7 @@
 import { LogEntry, LogCall } from '.';
 import { Debug } from '../../inpage/src/constants/debug';
 
-const keepData = location.search.indexOf("debug=true") !== -1;
+const keepData = document.location.search.indexOf("debug=true") !== -1;
 
 const maxScopeLen = 3;
 const maxNameLen = 6;

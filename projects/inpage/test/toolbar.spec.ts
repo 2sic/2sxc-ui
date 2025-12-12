@@ -1,38 +1,35 @@
+import { expect, test, describe } from 'vitest';
 import { CommandNames } from "../../$2sxc/src/cms/command-names";
 import { CommandParams } from "../../$2sxc/src/cms/command-params";
 import { TypeValue } from "../../core/plumbing/type-value";
-import { CommandDefinition } from "../src/commands/command";
 import { Commands } from "../src/commands/commands";
 import { CommandWithParams } from "../src/toolbar/config/button-command";
 
+const testCommand = "TestCommand" as CommandNames;
 
 describe("ButtonCommand", function () {
   describe("ButtonCommand", function () {
-  let dummyCommand: CommandDefinition;
 
-    beforeEach(function () {
-      spyOn(Commands, 'singleton').and.returnValue({
-        get: jasmine.createSpy('get').and.returnValue(dummyCommand)
-      } as unknown as Commands);
+    test("test-command should not exist in commands", function () {
+      const def = Commands.singleton().get(testCommand);
+      expect(def).toBeUndefined();
     });
 
-    it("should initialize with default empty params if none provided", function () {
-      const commandName: CommandNames = "TestCommand" as CommandNames;
-      const buttonCommand = new CommandWithParams(commandName);
+    test("should initialize with default empty params if none provided", function () {
+      const buttonCommand = new CommandWithParams(testCommand);
       expect(buttonCommand.params).toEqual({});
-      expect(buttonCommand.commandDef).toBe(dummyCommand);
+      expect(buttonCommand.commandDef).toBeUndefined();
     });
 
-    it("should initialize with provided params", function () {
-      const commandName: CommandNames = "TestCommand" as CommandNames;
+    test("should initialize with provided params", function () {
       const initialParams: CommandParams = { key: "value" };
-      const buttonCommand = new CommandWithParams(commandName, initialParams);
+      const buttonCommand = new CommandWithParams(testCommand, initialParams);
       expect(buttonCommand.params).toEqual(initialParams);
-      expect(buttonCommand.commandDef).toBe(dummyCommand);
+      expect(buttonCommand.commandDef).toBeUndefined();
     });
 
-    it("should merge additional params correctly", function () {
-      const commandName: CommandNames = "MergeTest" as CommandNames;
+    test("should merge additional params correctly", function () {
+      const commandName = "MergeTest" as CommandNames;
       const initialParams: CommandParams = { param1: "value1" };
       const buttonCommand = new CommandWithParams(commandName, initialParams);
       const additional: Record<string, TypeValue> = { param2: "value2" };
