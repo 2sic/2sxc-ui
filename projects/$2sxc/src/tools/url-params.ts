@@ -67,6 +67,7 @@ export class UrlParams {
      * Convert an object to be used in a URL.
      * Uses a custom, brief syntax which can change at any time. 
      * So to unwrap, always use the toObj method.
+     * IMPORTANT: This is an old experiment from ca. 2020 and was never used in production.
      * @param obj 
      * @returns 
      * @internal
@@ -77,6 +78,7 @@ export class UrlParams {
 
     /**
      * Convert a url which was created by toUrl back to an object.
+     * IMPORTANT: This is an old experiment from ca. 2020 and was never used in production.
      * @param url 
      * @returns
      * @internal
