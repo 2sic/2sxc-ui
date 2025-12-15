@@ -72,25 +72,32 @@ export class BuildRule extends HasLog {
     this.load(ruleString);
   }
 
-  public static Create({ name, ui, params, pos, log }: { name: string; ui?: ToolbarButtonSettings & Partial<ToolbarSettings>; params?: RuleParams, pos?: number, log: Log; }): BuildRule {
+  public static Create({ name, ui, params, pos, log }: {
+      name: string;
+      ui?: ToolbarButtonSettings & Partial<ToolbarSettings>,
+      params?: RuleParams,
+      pos?: number,
+      log: Log,
+  }): BuildRule {
     var rule = new BuildRule('', log);
     rule.name = name;
     rule.ui = ui ?? {};
     rule.operator = Operators.add;
     rule.setIdBasedOnOperation(rule.name);
     rule.params = params ?? {};
-    if (pos) rule.pos = pos;
+    if (pos)
+      rule.pos = pos;
     return rule;
   }
 
   /** Tells if this rule will override the show settings  */
-  overrideShow(): boolean | undefined {
+  overrideShow(): boolean | null {
     if (this.operator === Operators.remove) return false;
     if (this.operator === Operators.add) return true;
-    if (this.operator === Operators.addAuto) return undefined;
+    if (this.operator === Operators.addAuto) return null;
     if (this.operator === Operators.modify)
       return this.ui?.show; // can be true/false/undefined
-    return undefined;
+    return null;
   }
 
 
@@ -115,7 +122,7 @@ export class BuildRule extends HasLog {
 
 
   private loadHeader(rule: string): void {
-    const cl = this.log.call('loadHeader', rule);
+    const l = this.log.call('loadHeader', rule);
     const parts = RuleLoadTools.splitParamsArray(rule);
     let key = parts?.[0]?.[0] || RC.Keys.None;
 
@@ -127,25 +134,28 @@ export class BuildRule extends HasLog {
         ? Operators.system
         : Operators.add;
     this.operator = operator as Operators;
-    cl.add(`name part '${key}', firstChar '${operator}'`);
+    l.add(`name part '${key}', firstChar '${operator}'`);
     // remember the primary keyword because this determines what we're doing
     // but truncate the first char if it had an operator
     key = knownOperatorFound ? key.substring(1) : key;
 
     const knowStepFound = Object.values(BuildSteps).includes(key as BuildSteps);
-    this.step = knowStepFound ? key : BuildSteps.button;
+    this.step = knowStepFound
+      ? key
+      : BuildSteps.button;
 
     this.setIdBasedOnOperation(key);
 
     // command name defaults to name, can be reset by load-headers
     // assumes key is something like "group=myGroup" or just "edit"
     this.name = parts?.[0]?.[1] || key;
-    if (parts.length > 1) this.leadHeaderAndUi(key, parts.slice(1));
+    if (parts.length > 1)
+      this.loadHeaderAndUi(key, parts.slice(1));
 
-    return cl.done();
+    return l.done();
   }
 
-  public setIdBasedOnOperation(key: string) {
+  private setIdBasedOnOperation(key: string) {
     // for system and %-change operations the id should be the name of the standard button
     // ...but if it's an add-operation, we must keep the IDs apart because various
     // properties are set at a much later time
@@ -159,10 +169,10 @@ export class BuildRule extends HasLog {
    * @param forKey the key being loaded, to handle special case settings/toolbar
    * @param rest the parameters to process
    */
-  private leadHeaderAndUi(forKey: string, rest: string[][]) {
-    const cl = this.log.call('loadHeaderParts');
+  private loadHeaderAndUi(forKey: string, rest: string[][]) {
+    const l = this.log.call('loadHeaderParts');
     if (!rest.length)
-      return cl.done('nothing to load');
+      return l.done('nothing to load');
     const parts = RuleLoadTools.dicToArray(rest);
     // #1 pick up id & name
     if (parts.id)
@@ -178,27 +188,31 @@ export class BuildRule extends HasLog {
     // Note that JS preserves -0, which is kind of unique
     if (parts.pos != null)
     {
-      this.pos = Number(parts.pos);
+      let pos = Number(parts.pos);
       // v15.09 2023-04-06 get rid of -0 (legacy) because it causes trouble with simple int in C# APIs
-      if (Object.is(this.pos, -0))
-        this.pos = -1;
+      this.pos = Object.is(pos, -0)
+        ? -1
+        : pos;
     }
 
     // #4 icon is automatically kept
     // #5 show override of buttons (on buttons, must convert to bool)
+
+    // #6 Set show if this rule is specific to this button, and not a general settings/toolbar rule
+    // This ensures that an explicit show takes precedence later on
     if (forKey !== BuildSteps.settings && forKey !== BuildSteps.toolbar)
       if (typeof parts.show === 'string')
         (parts as Record<string, TypeValue>).show = parts.show === 'true';
     this.ui = parts;
-    return cl.return(this.ui, 'button rules');
+    return l.return(this.ui, 'button rules');
   }
 
   private loadParamsAndPrefill(rule: string): ProcessedParams {
-    const cl = this.log.call('loadParams', rule);
+    const l = this.log.call('loadParams', rule);
     const params = RuleLoadTools.splitParamsDic(rule);
-    cl.data('params', params);
+    l.data('params', params);
     const split = RuleParamsHelper.processParams(params, this.log);
-    return cl.return(split);
+    return l.return(split);
   }
 
 }

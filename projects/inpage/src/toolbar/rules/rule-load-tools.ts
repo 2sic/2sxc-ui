@@ -5,7 +5,14 @@ import { prefixBase64, prefixJson64 } from '../../constants/rules';
  */
 export class RuleLoadTools {
 
-  static splitUrlSections(str: string): { key: string; params: string; button: string; } | undefined {
+  static splitUrlSections(str: string): {
+    /** The key is the initial part with the action name and any additional parameters before the '?' */
+    key: string;
+    /** The params are the part after the '?' and before the '#' */
+    params: string;
+    /** The button part is the part after the '#' */
+    button: string;
+  } | undefined {
     // dev link: https://regex101.com/r/vK4rV7/519
     // inspired by https://stackoverflow.com/questions/27745/getting-parts-of-a-url-regex
     const regex = /^([^\/?#]*)?([^?#]*)(\?([^#]*))?(#(.*))?/i;
@@ -13,7 +20,11 @@ export class RuleLoadTools {
     const m = regex.exec(str);
 
     if (m && m !== null)
-      return { key: m[1], params: m[4], button: m[6] };
+      return {
+        key: m[1],    // capture #1 in the beginning, like '+edit&something=other&els=ok'
+        params: m[4], // capture #4 after the '?' like 'aoeuaoeu=5&aoeuaou=aoeu'
+        button: m[6]  // capture #6 after the '#' like 'but=thi&aouoaeu'
+      };
     return undefined;
   }
 
