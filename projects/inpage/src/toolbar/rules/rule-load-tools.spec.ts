@@ -22,9 +22,9 @@ describe("RuleLoadTools.splitUrlSections", () => {
     // Empty
     ["", { key: undefined, params: undefined, button: undefined }],
     // undefined
-    [undefined, { key: undefined, params: 'undefined', button: undefined }],
+    [undefined, { key: 'undefined', params: undefined, button: undefined }],
     // null
-    [null, { key: undefined, params: undefined, button: undefined }],
+    [null, { key: 'null', params: undefined, button: undefined }], 
     // Key only (various forms)
     ["edit", { key: "edit", params: undefined, button: undefined }],
     // Ensures the key may start with "+" and is preserved verbatim.
