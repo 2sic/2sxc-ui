@@ -1,5 +1,5 @@
 import { startWith } from "rxjs/operators";
-import { enableProdMode } from "@angular/core";
+import { enableProdMode, provideZoneChangeDetection } from "@angular/core";
 import { platformBrowserDynamic } from "@angular/platform-browser-dynamic";
 import { environment } from "./environments/environment";
 import { BootController } from "./app/core/boot-control";
@@ -27,7 +27,7 @@ function init() {
     console.log("platform destroy error", e);
   }
 
-  bootstrapApplication(AppComponent, appConfig).catch((err) =>
+  bootstrapApplication(AppComponent, {...appConfig, providers: [provideZoneChangeDetection(), ...appConfig.providers]}).catch((err) =>
     console.error(err)
   );
 }
