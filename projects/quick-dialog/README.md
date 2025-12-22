@@ -18,6 +18,13 @@ This is a UI component of 2sxc - a dialog which slides in from the bottom of the
 
 As of 2025-02-14 it's built using Angular 19.
 
+## Development
+
+1. Run `dev` or `dev-angular` together with `dev-dist` 
+1. You can change something in the debug box in the template-picker and open your devsite with **?debug=true** to see it.
+
+_You should see the files being changed at C:\Projects\2sxc\dev-website\Website\DesktopModules\ToSic.Sxc\dist\quick-dialog_
+
 ## Build
 
 The package is standalone, but when built will copy the result to a very specific path in `c:\`. The build scripts always use watchers.

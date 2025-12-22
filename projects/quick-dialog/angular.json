@@ -10,66 +10,49 @@
   "newProjectRoot": "projects",
   "projects": {
     "ui-a4": {
+      "projectType": "application",
       "root": "",
       "sourceRoot": "src",
-      "projectType": "application",
       "architect": {
         "build": {
-          "builder": "@angular-builders/custom-webpack:browser",
+          "builder": "@angular/build:application",
           "options": {
-            "customWebpackConfig": {
-              "path": "./webpack.extra.js",
-              "replaceDuplicatePlugins": false,
-              "mergeRules": {
-                "plugins": "append"
-              }
+            "outputPath": {
+              "base": "dist/quick-dialog"
             },
-            "outputPath": "dist/quick-dialog",
             "index": "src/index-raw.html",
-            "main": "src/main.ts",
+            "browser": "src/main.ts",
+            "polyfills": ["src/polyfills.ts"],
             "tsConfig": "src/tsconfig.app.json",
-            "polyfills": "src/polyfills.ts",
-            "assets": [
-              "src/favicon.ico"
-            ],
-            "styles": [
-              "src/styles.css",
-              "src/theme.scss"
-            ],
+            "assets": ["src/favicon.ico", "src/assets"],
+            "styles": ["src/styles.css", "src/theme.scss"],
             "scripts": []
           },
           "configurations": {
             "production": {
-              "optimization": true,
-              "outputHashing": "all",
-              "sourceMap": true,
-              "namedChunks": false,
-              "aot": true,
-              "extractLicenses": true,
-              "vendorChunk": true,
-              "buildOptimizer": true,
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.prod.ts"
                 }
               ],
-              "deleteOutputPath": true
+              "optimization": true,
+              "outputHashing": "bundles",
+              "sourceMap": true,
+              "namedChunks": true,
+              "extractLicenses": true
             },
             "development": {
               "optimization": false,
-              "outputHashing": "none",
               "sourceMap": true,
-              "namedChunks": false,
-              "extractLicenses": true,
-              "vendorChunk": true,
-              "buildOptimizer": false
+              "namedChunks": true,
+              "extractLicenses": false
             }
           },
           "defaultConfiguration": "development"
         },
         "serve": {
-          "builder": "@angular-devkit/build-angular:dev-server",
+          "builder": "@angular/build:dev-server",
           "options": {
             "buildTarget": "ui-a4:build"
           },
@@ -84,42 +67,17 @@
           "defaultConfiguration": "development"
         },
         "extract-i18n": {
-          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "builder": "@angular/build:extract-i18n",
           "options": {
             "buildTarget": "ui-a4:build"
           }
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "@angular/build:unit-test",
           "options": {
-            "main": "src/test.ts",
-            "karmaConfig": "./karma.conf.js",
-            "polyfills": "src/polyfills.ts",
+            "buildTarget": "ui-a4:build:development",
             "tsConfig": "src/tsconfig.spec.json",
-            "scripts": [],
-            "styles": [
-              "src/styles.css",
-              "src/theme.scss"
-            ],
-            "assets": [
-              "src/assets",
-              "src/index-raw.html",
-              "src/favicon.ico"
-            ]
-          }
-        }
-      }
-    },
-    "ui-a4-e2e": {
-      "root": "e2e",
-      "sourceRoot": "e2e",
-      "projectType": "application",
-      "architect": {
-        "e2e": {
-          "builder": "@angular-devkit/build-angular:protractor",
-          "options": {
-            "protractorConfig": "./protractor.conf.js",
-            "devServerTarget": "ui-a4:serve"
+            "runner": "karma"
           }
         }
       }
@@ -128,10 +86,30 @@
   "schematics": {
     "@schematics/angular:component": {
       "prefix": "app",
-      "style": "scss"
+      "style": "scss",
+      "type": "component"
     },
     "@schematics/angular:directive": {
-      "prefix": "app"
+      "prefix": "app",
+      "type": "directive"
+    },
+    "@schematics/angular:service": {
+      "type": "service"
+    },
+    "@schematics/angular:guard": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:interceptor": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:module": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:pipe": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:resolver": {
+      "typeSeparator": "."
     }
   }
 }
