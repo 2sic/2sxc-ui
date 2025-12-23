@@ -8,12 +8,23 @@
       "script": "release",
       "problemMatcher": [],
       "label": "npm: release",
-      "detail": "webpack --mode=production"
+      // "detail": "webpack --mode=production",
+      "group": "build",
     },
     {
       "type": "npm",
       "script": "dev",
+      "group": "build",
       "problemMatcher": []
-    }
+    },
+    // {
+    //   "type": "typescript",
+    //   "tsconfig": "tsconfig.json",
+    //   "problemMatcher": [
+    //     "$tsc"
+    //   ],
+    //   "group": "build",
+    //   "label": "tsc: build - tsconfig.json"
+    // }
   ]
 }

@@ -6,17 +6,13 @@
     "sourceMap": true,
     "esModuleInterop": true,
     "declaration": false,
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "target": "es2020",
+    "target": "ES2022",
+    "module": "esnext",
     "typeRoots": [
       "node_modules/@types"
     ],
-    "lib": [
-      "es2017",
-      "dom"
-    ],
-    "module": "esnext"
   }
 }

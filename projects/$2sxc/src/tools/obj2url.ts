@@ -21,6 +21,7 @@ const specialValues = bools.concat(['null']);
 
 /**
  * Custom converter to pass objects into a URL and back.
+ * IMPORTANT: This is an old experiment from ca. 2020 and was never used in production.
  * @internal
  */
 export class ToolUrlObjects {
