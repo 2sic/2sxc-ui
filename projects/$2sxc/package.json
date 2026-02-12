@@ -1,11 +1,10 @@
 {
   "name": "2sic-2sxc-js-api",
-  "version": "14.00.00",
   "description": "The $2sxc JS API for 2sxc.org",
   "scripts": {
     "release": "webpack --mode=production",
-    "2sxc-js-prod": "webpack --watch --mode=production",
-    "2sxc-js-dev": "webpack --watch --mode=development",
+    "watch": "webpack --watch --mode=development",
+    "watch-prod": "webpack --watch --mode=production",
     "test": "karma start",
     "postinstall": "npx json -I -f ./node_modules/jasmine/package.json -e \"delete this.exports\""
   },
