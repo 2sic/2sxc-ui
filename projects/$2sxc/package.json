@@ -5,8 +5,8 @@
     "release": "webpack --mode=production",
     "watch": "webpack --watch --mode=development",
     "watch-prod": "webpack --watch --mode=production",
-    "test": "karma start",
-    "postinstall": "npx json -I -f ./node_modules/jasmine/package.json -e \"delete this.exports\""
+    "test": "vitest run",
+    "test:watch": "vitest watch"
   },
   "repository": {
     "type": "git",
