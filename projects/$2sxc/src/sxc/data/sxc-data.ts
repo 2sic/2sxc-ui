@@ -22,6 +22,7 @@ export class SxcData<T = unknown> extends SxcDataServiceBase {
 
   /**
    * Get all items of this type.
+   * @param params optional parameters - typically for OData - new in v21.06
    */
   getAll(params?: string | Record<string, unknown>): Promise<T[]> { // TODO: @2rb
     return this.getInternal<T[]>(undefined, params);
