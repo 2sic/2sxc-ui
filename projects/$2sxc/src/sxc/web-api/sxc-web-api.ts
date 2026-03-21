@@ -13,21 +13,12 @@ import { SecureEndpoint } from './secure-endpoint';
  * @public
  */
 export class SxcWebApi implements ZzzSxcWebApiDeprecated {
-  // 2023-05-22 believe this is never used, so removing  
-  // /**
-  //  * @internal
-  //  * TODO: PROBABLY remove ? but must be sure it's not used elsewhere
-  //  */
-  // private readonly env: SxcGlobalEnvironment;
-
   /**
    * 
    * @param sxc 
    * @internal
    */
   constructor(private readonly sxc: Sxc) {
-    // 2023-05-22 believe this is never used, so removing
-    // this.env = sxc.root.env;
   }
 
   /**
@@ -222,6 +213,9 @@ export class SxcWebApi implements ZzzSxcWebApiDeprecated {
     return headers;
   }
 
+  // TODO: @2rb - create unit tests to test this method, with all kinds of combinations of urls and params.
+  // also try variants where the params start with an '?' or a '&' to make sure it doesn't break.
+
   /**
    * 
    * @param url A short, medium or long url. 
@@ -234,7 +228,8 @@ export class SxcWebApi implements ZzzSxcWebApiDeprecated {
    * it will auto-expand to have the full url as needed for an API call. 
    */
   url(url: string, params?: string | Record<string, any>): string {
-    if (url == null) return url;
+    if (url == null)
+      return url;
 
     const urlAndParams = url.split('#')[0].split('?');
 
@@ -249,13 +244,25 @@ export class SxcWebApi implements ZzzSxcWebApiDeprecated {
     url = this.sxc.http.apiUrl(url);
 
     // params fixes
-    params = `${urlAndParams[1] || ''}&${params ? typeof params === 'string' ? params : NoJQ.param(params) : ''}`
+    const paramsString = params
+      ? typeof params === 'string' ? params : NoJQ.param(params)
+      : '';
+    params = `${urlAndParams[1] || ''}&${paramsString}`
       .split('&')
-      .filter(p => !!p)
+      .filter(p => !!p) // drop empty params
       .join('&');
 
+    // unescape some characters that are commonly used in OData urls, to make them more readable.
+    params = params
+      .replace(/%24/g, "$")
+      .replace(/%2C/g, ",")
+
+    // fix issue where if the initial url already has params, we need to add the new params with an '&' instead of a '?'
+    // 2026-03-21, self detected, no public issue, but this was a bug in the url method, so fixing it.
+    const urlHasQuestionMark = url.includes('?');
+
     // result
-    url = [url, params].filter(p => !!p).join('?');
+    url = [url, params].filter(p => !!p).join(urlHasQuestionMark ? '&' : '?');
     return url;
   }
 }
