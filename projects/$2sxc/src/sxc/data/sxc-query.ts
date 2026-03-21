@@ -40,9 +40,11 @@ export class SxcQuery extends SxcDataServiceBase {
   getStream<T = unknown>(stream: string, urlParams: string | Record<string, unknown>, data: string | Record<string, unknown>): Promise<T[]>;
   
   getStream<T = unknown>(stream: string, urlParams?: string | Record<string, unknown>, data?: string | Record<string, unknown>): Promise<T[]> {
-    if (stream.indexOf(',') !== -1) throw "parameter 'stream' can only contain one stream name for 'getStream'";
+    if (stream.indexOf(',') !== -1)
+      throw "parameter 'stream' can only contain one stream name for 'getStream'";
     return this.getInternal<unknown>(stream, urlParams, data).then((data) => {
-      if (data == null || !data.hasOwnProperty(stream)) return [];
+      if (data == null || !data.hasOwnProperty(stream))
+        return [];
       return (data as any)[stream] as T[];
     })
   }
@@ -93,13 +95,14 @@ export class SxcQuery extends SxcDataServiceBase {
   /**
    * Get all or one data entity from the backend
    * @param id optional id as number or string - if not provided, will get all
-   * @param params optional parameters - ATM not usefuly but we plan to support more filters etc. 
+   * @param params optional parameters - ATM not useful but we plan to support more filters etc. 
    * @returns an array with 1 or n entities in the simple JSON format
    * @internal
    */
   private getInternal<T = unknown>(streams?: string, params?: string | Record<string, any>, data?: string | Record<string, unknown>): Promise<T> {
-    let path = "app/auto/query/" + this.name;
-    if (streams && (typeof streams === 'string')) path += "?stream=" + streams;
+    let path = `app/auto/query/${this.name}`;
+    if (streams && (typeof streams === 'string'))
+      path += "?stream=" + streams;
     return this.webApi.fetchJson(this.webApi.url(path, params), data);
   }
 }
