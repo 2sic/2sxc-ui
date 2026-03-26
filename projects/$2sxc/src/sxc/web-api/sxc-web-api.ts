@@ -213,9 +213,6 @@ export class SxcWebApi implements ZzzSxcWebApiDeprecated {
     return headers;
   }
 
-  // TODO: @2rb - create unit tests to test this method, with all kinds of combinations of urls and params.
-  // also try variants where the params start with an '?' or a '&' to make sure it doesn't break.
-
   /**
    * 
    * @param url A short, medium or long url. 
