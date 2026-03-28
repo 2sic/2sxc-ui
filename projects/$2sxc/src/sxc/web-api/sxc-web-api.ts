@@ -249,6 +249,9 @@ export class SxcWebApi implements ZzzSxcWebApiDeprecated {
       .filter(p => !!p) // drop empty params
       .join('&');
 
+    // Trim leading ? or & if present
+    params = params.replace(/^[?&]/, '');
+
     // unescape some characters that are commonly used in OData urls, to make them more readable.
     params = params
       .replace(/%24/g, "$")
