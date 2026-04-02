@@ -7,11 +7,6 @@ import { ToolbarTemplateGroup } from '../../templates/toolbar-template-group';
 /**
  * @internal
  */
-export type ButtonGroupsWip = ButtonGroupWip[];
-
-/**
- * @internal
- */
 export type ButtonGroupWip = ButtonGroup | InPageButtonGroupJson | ToolbarTemplateGroup;
 
 /**
@@ -21,7 +16,7 @@ export type ButtonGroupWip = ButtonGroup | InPageButtonGroupJson | ToolbarTempla
  */
 export interface ToolbarWip {
     /** The groups of buttons in this toolbar */
-    groups: ButtonGroupsWip;
+    groups: ButtonGroupWip[];
 
     /** Settings like floating of toolbar, etc. */
     settings: ToolbarSettings;
