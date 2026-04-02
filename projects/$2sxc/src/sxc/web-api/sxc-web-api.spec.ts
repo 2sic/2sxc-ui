@@ -78,8 +78,6 @@ describe("SxcWebApi.url", () => {
         { page: 2 },
         "https://host/app/auto/api/Blog/Posts?cat=news&page=2",
       ],
-
-      // drops empty query separators
       [
         "Blog/Posts?&&a=1&&",
         "&b=2&&",
