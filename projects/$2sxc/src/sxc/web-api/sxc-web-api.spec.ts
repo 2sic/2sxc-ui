@@ -78,8 +78,6 @@ describe("SxcWebApi.url", () => {
         { page: 2 },
         "https://host/app/auto/api/Blog/Posts?cat=news&page=2",
       ],
-
-      // drops empty query separators
       [
         "Blog/Posts?&&a=1&&",
         "&b=2&&",
@@ -96,8 +94,6 @@ describe("SxcWebApi.url", () => {
         { page: 2 },
         "https://host/app/auto/api/Blog/Posts?cat=news&page=2",
       ],
-
-      // merges string params with existing query
       [
         "Blog/Posts?cat=news",
         "page=2",
@@ -142,7 +138,7 @@ describe("SxcWebApi.url", () => {
       ["app/auto/api/Blog/Posts", "app/auto/api/Blog/Posts"],
     ];
 
-    it.each(cases)("normalizes url: %s", (input, expectedInner) => {
+    it.each(cases)("calls apiUrl with %s normalized", (input, expectedInner) => {
       const sxc = {
         http: {
           apiUrl: vi.fn((url: string) => `https://host/${url}`),
@@ -156,8 +152,11 @@ describe("SxcWebApi.url", () => {
     });
   });
 
-  it("returns null if url is null", () => {
-    const api = createApi();
-    expect(api.url(null as any)).toBeNull();
+  describe("null handling", () => {
+    it("returns null if url is null", () => {
+      const api = createApi();
+
+      expect(api.url(null as any)).toBeNull();
+    });
   });
 });
