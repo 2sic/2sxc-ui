@@ -31,6 +31,10 @@ describe("SxcWebApi.url", () => {
     });
 
     it("keeps empty params undefined", () => {
+      // TODO: @2rb - this is not elegant - if you have many tests with the same setup, you should probably create a helper function that creates the api and calls url with the given params, to avoid repeating the same code in each test
+      // So the code here should just be "expectNoEffect(undefined)", "expectNoEffect(null)", etc, and the helper function would call api.url with the given params and check that the result is the same as when params is undefined
+      // ALTERNATIVE: USE AN it.each for these cases (probably even better)
+      // just make sure the test value would (maybe) use %o?
       expectUrl(
         "Blog/Posts",
         undefined,
@@ -61,6 +65,9 @@ describe("SxcWebApi.url", () => {
         "https://host/app/auto/api/Blog/Posts",
       );
     });
+
+    // TODO: @2rb - WHAT about empty string with just whitespace?
+    // not sure what should happen, but having a clear test documents the behavior
   });
 
   describe("short and medium url normalization", () => {
