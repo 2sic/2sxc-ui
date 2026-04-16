@@ -24,50 +24,29 @@ describe("SxcWebApi.url", () => {
     expect(api.url(inputUrl, params as any)).toBe(expected);
   }
 
+  function expectNoParamsEffect(params: unknown) {
+    expectUrl(
+      "Blog/Posts",
+      params,
+      "https://host/app/auto/api/Blog/Posts",
+    );
+  }
+
   describe("null and empty handling", () => {
     it("returns null if url is null", () => {
       const api = createApi();
       expect(api.url(null as any)).toBeNull();
     });
 
-    it("keeps empty params undefined", () => {
-      // TODO: @2rb - this is not elegant - if you have many tests with the same setup, you should probably create a helper function that creates the api and calls url with the given params, to avoid repeating the same code in each test
-      // So the code here should just be "expectNoEffect(undefined)", "expectNoEffect(null)", etc, and the helper function would call api.url with the given params and check that the result is the same as when params is undefined
-      // ALTERNATIVE: USE AN it.each for these cases (probably even better)
-      // just make sure the test value would (maybe) use %o?
-      expectUrl(
-        "Blog/Posts",
-        undefined,
-        "https://host/app/auto/api/Blog/Posts",
-      );
+    it.each([
+      ["undefined", undefined],
+      ["null", null],
+      ["empty object", {}],
+      ["empty string", ""],
+      ["whitespace string", "   "],
+    ])("keeps %s params undefined", (_label, params) => {
+      expectNoParamsEffect(params);
     });
-
-    it("keeps null params undefined", () => {
-      expectUrl(
-        "Blog/Posts",
-        null,
-        "https://host/app/auto/api/Blog/Posts",
-      );
-    });
-
-    it("keeps empty object params undefined", () => {
-      expectUrl(
-        "Blog/Posts",
-        {},
-        "https://host/app/auto/api/Blog/Posts",
-      );
-    });
-
-    it("keeps empty string params undefined", () => {
-      expectUrl(
-        "Blog/Posts",
-        "",
-        "https://host/app/auto/api/Blog/Posts",
-      );
-    });
-
-    // TODO: @2rb - WHAT about empty string with just whitespace?
-    // not sure what should happen, but having a clear test documents the behavior
   });
 
   describe("short and medium url normalization", () => {
@@ -155,172 +134,157 @@ describe("SxcWebApi.url", () => {
   });
 
   describe("existing query params in url", () => {
-    it("keeps existing query params if no additional params are provided", () => {
-      expectUrl(
+    it.each([
+      [
+        "keeps existing query params if no additional params are provided",
         "Blog/Posts?cat=news",
         undefined,
         "https://host/app/auto/api/Blog/Posts?cat=news",
-      );
-    });
-
-    it("merges existing query with object params", () => {
-      expectUrl(
+      ],
+      [
+        "merges existing query with object params",
         "Blog/Posts?cat=news",
         { page: 2 },
         "https://host/app/auto/api/Blog/Posts?cat=news&page=2",
-      );
-    });
-
-    it("merges existing query with plain string params", () => {
-      expectUrl(
+      ],
+      [
+        "merges existing query with plain string params",
         "Blog/Posts?cat=news",
         "page=2",
         "https://host/app/auto/api/Blog/Posts?cat=news&page=2",
-      );
-    });
-
-    it("merges existing query with string params starting with ?", () => {
-      expectUrl(
+      ],
+      [
+        "merges existing query with string params starting with ?",
         "Blog/Posts?cat=news",
         "?page=2",
         "https://host/app/auto/api/Blog/Posts?cat=news&page=2",
-      );
-    });
-
-    it("merges existing query with string params starting with &", () => {
-      expectUrl(
+      ],
+      [
+        "merges existing query with string params starting with &",
         "Blog/Posts?cat=news",
         "&page=2",
         "https://host/app/auto/api/Blog/Posts?cat=news&page=2",
-      );
-    });
-
-    it("drops duplicate separator noise when merging", () => {
-      expectUrl(
+      ],
+      [
+        "drops duplicate separator noise when merging",
         "Blog/Posts?&&a=1&&",
         "&b=2&&",
         "https://host/app/auto/api/Blog/Posts?a=1&b=2",
-      );
-    });
-
-    it("keeps multiple existing query params and appends new object params", () => {
-      expectUrl(
+      ],
+      [
+        "keeps multiple existing query params and appends new object params",
         "Blog/Posts?cat=news&lang=en",
         { page: 2 },
         "https://host/app/auto/api/Blog/Posts?cat=news&lang=en&page=2",
-      );
+      ],
+    ])("%s", (_label, inputUrl, params, expected) => {
+      expectUrl(inputUrl, params, expected);
     });
   });
 
   describe("hash fragment handling", () => {
-    it("removes hash fragments when no extra params exist", () => {
-      expectUrl(
+    it.each([
+      [
+        "removes hash fragments when no extra params exist",
         "Blog/Posts?cat=news#abc",
         null,
         "https://host/app/auto/api/Blog/Posts?cat=news",
-      );
-    });
-
-    it("removes hash fragments and appends object params", () => {
-      expectUrl(
+      ],
+      [
+        "removes hash fragments and appends object params",
         "Blog/Posts?cat=news#abc",
         { page: 2 },
         "https://host/app/auto/api/Blog/Posts?cat=news&page=2",
-      );
-    });
-
-    it("removes hash fragments without query params", () => {
-      expectUrl(
+      ],
+      [
+        "removes hash fragments without query params",
         "Blog/Posts#abc",
         { page: 2 },
         "https://host/app/auto/api/Blog/Posts?page=2",
-      );
+      ],
+    ])("%s", (_label, inputUrl, params, expected) => {
+      expectUrl(inputUrl, params, expected);
     });
   });
 
   describe("separator normalization", () => {
-    it("removes leading ? from final params", () => {
-      expectUrl(
-        "Blog/Posts",
+    it.each([
+      [
+        "removes leading ? from final params",
         "?page=2",
         "https://host/app/auto/api/Blog/Posts?page=2",
-      );
-    });
-
-    it("removes leading & from final params", () => {
-      expectUrl(
-        "Blog/Posts",
+      ],
+      [
+        "removes leading & from final params",
         "&page=2",
         "https://host/app/auto/api/Blog/Posts?page=2",
-      );
-    });
-
-    it("drops empty param entries caused by repeated separators", () => {
-      expectUrl(
-        "Blog/Posts",
+      ],
+      [
+        "drops empty param entries caused by repeated separators",
         "&&page=2&&lang=en&&",
         "https://host/app/auto/api/Blog/Posts?page=2&lang=en",
-      );
-    });
-
-    it("does not add a trailing ? when params normalize to empty", () => {
-      expectUrl(
-        "Blog/Posts",
+      ],
+      [
+        "does not add a trailing ? when params normalize to empty",
         "&&",
         "https://host/app/auto/api/Blog/Posts",
-      );
+      ],
+    ])("%s", (_label, params, expected) => {
+      expectUrl("Blog/Posts", params, expected);
     });
   });
 
   describe("OData-style params", () => {
-    it("keeps $select readable", () => {
-      expectUrl(
+    it.each([
+      [
+        "keeps $select readable",
         "Blog/Posts",
         { $select: "Title,Id" },
         "https://host/app/auto/api/Blog/Posts?$select=Title,Id",
-      );
-    });
-
-    it("keeps $orderby readable", () => {
-      expectUrl(
+      ],
+      [
+        "keeps $orderby readable",
         "Blog/Posts",
         { $orderby: "Title,Id" },
         "https://host/app/auto/api/Blog/Posts?$orderby=Title,Id",
-      );
-    });
-
-    it("encodes filter values but unescapes $", () => {
-      expectUrl(
+      ],
+      [
+        "encodes filter values but unescapes $",
         "Blog/Posts",
         { $filter: "Title eq 'Test'" },
         "https://host/app/auto/api/Blog/Posts?$filter=Title+eq+%27Test%27",
-      );
-    });
-
-    it("combines multiple OData params", () => {
-      expectUrl(
+      ],
+      [
+        "combines multiple OData params",
         "Blog/Posts",
         { $select: "Title,Id", $filter: "Title eq 'Test'" },
         "https://host/app/auto/api/Blog/Posts?$select=Title,Id&$filter=Title+eq+%27Test%27",
-      );
-    });
-
-    it("merges OData params with existing query params", () => {
-      expectUrl(
+      ],
+      [
+        "merges OData params with existing query params",
         "Blog/Posts?lang=en",
         { $select: "Title,Id" },
         "https://host/app/auto/api/Blog/Posts?lang=en&$select=Title,Id",
-      );
+      ],
+    ])("%s", (_label, inputUrl, params, expected) => {
+      expectUrl(inputUrl, params, expected);
     });
   });
 
-  describe("behavior documentation for current edge cases", () => {
-    it("does not trim whitespace in string params", () => {
-      expectUrl(
-        "Blog/Posts",
+  describe("whitespace normalization", () => {
+    it.each([
+      [
+        "trims surrounding whitespace in string params",
         "  id=1  ",
-        "https://host/app/auto/api/Blog/Posts?++id=1++",
-      );
+        "https://host/app/auto/api/Blog/Posts?id=1",
+      ],
+      [
+        "treats whitespace-only string params as empty",
+        "   ",
+        "https://host/app/auto/api/Blog/Posts",
+      ],
+    ])("%s", (_label, params, expected) => {
+      expectUrl("Blog/Posts", params, expected);
     });
   });
 });
