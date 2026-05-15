@@ -18,6 +18,7 @@ export class CommandLinkItems extends HasLog {
     
     // Debugging
     // this.log.liveDump = true;
+    // this.log.keepData = true;
 
     const l = this.log.call('constructor');
     l.done();
@@ -50,14 +51,13 @@ export class CommandLinkItems extends HasLog {
    * Generate items for editing/changing or simple item depending on the scenario.
    */
   #buildItemsList(items: AnyIdentifier[], button: ButtonWithContext): AnyIdentifier[] {
+    const l = this.log.call('buildItemsList');
     const params = button.btnCommand().params!;
     if (params.useModuleList)
-      items = this.#addContentGroupItems(items, true);
-    else if (params.parent)
-      items = this.#addItemInList(items);
-    else
-      items = this.#addItem(items);
-    return items;
+      return this.#addContentGroupItems(items, true);
+    if (params.parent)
+      return this.#addItemInList(items);
+    return this.#addItem(items);
   }
 
 
@@ -79,17 +79,20 @@ export class CommandLinkItems extends HasLog {
   }
 
   #addFieldsAndParameters<T extends AnyIdentifier>(item: T, params: CommandParams): T {
+    const l = this.log.call('addFieldsAndParameters');
     if (params == null)
-      return item;
+      return l.return(item, 'no params, done');
+
     // console.log('2dm - addFieldsAndParameters', { item, params });
     const itemIdentifier = item as ItemIdentifierSimple;
-    const result = { ...itemIdentifier,
+    const result = {
+      ...itemIdentifier,
       ...(params.prefill ? { Prefill: params.prefill } : {}),
       ...(params.uifields ? { UiFields: params.uifields } : {}),
       ...(params.form ? { Parameters: params.form } : {}),
       ...(params.copyId ? ({ DuplicateEntity: params.copyId } ) : {}),
     } satisfies Partial<ItemIdentifierCopy>;
-    return result as T;
+    return l.return(result as T);
   }
 
   /**
@@ -101,9 +104,10 @@ export class CommandLinkItems extends HasLog {
     const i = CmdParHlp.getIndex(this.context);
     const isContentAndNotHeader = (i !== -1);
     const index = (isContentAndNotHeader ? i : 0) ?? 0;
-    const isAdd = this.context.button!.command.name === 'new';
+    const cmd = this.context.button!.command;
+    const isAdd = cmd.name === 'new';
     const groupId = this.context.contentBlock.contentGroupId;
-    const params = this.context.button!.command.params!;
+    const params = cmd.params!;
 
     const fields: string[] = [this.#findPartName(true)];
     if (withPresentation)
@@ -136,27 +140,34 @@ export class CommandLinkItems extends HasLog {
    * this is relevant when adding new items
    */
   #addItemInList(items: AnyIdentifier[]) {
-    const params = this.context.button!.command.params!;
+    const l = this.log.call('addItemInList');  
+    const cmd = this.context.button!.command;
+    const params = cmd.params!;
     const index = CmdParHlp.getIndex(params);
-    const isAdd = this.context.button!.command.name === 'new';
+    const isAdd = cmd.name === 'new';
     const groupId = params.parent;
 
     // New in 10.27 - if params has a field, use that
     if (!params.fields)
-      return items;
-    // if (params.fields)
-    const moreItems = params.fields.split(',').map((f) => { 
-      const item = {
-        EntityId: isAdd ? 0 : params.entityId,
-        Field: f,
-        Parent: groupId,
-        Add: isAdd,
-        Index: index,
-      } as ItemIdentifierInList;
-      
-      return this.#addFieldsAndParameters(item, params);
-    });
-    return [...items, ...moreItems];
+      return l.return(items, 'no fields, done');
+
+    const moreItems = params.fields
+      .split(',')
+      .map((f) => { 
+        const item = {
+          Add: isAdd,
+          // New 2026-05-15 add content-type name if specified
+          // to allow custom content-types in multi-type fields
+          ...(params.contentType ? { ContentTypeName: params.contentType } : {}),
+          EntityId: isAdd ? 0 : params.entityId,
+          Field: f,
+          Index: index,
+          Parent: groupId,
+        } as ItemIdentifierInList;
+        
+        return this.#addFieldsAndParameters(item, params);
+      });
+    return l.return([...items, ...moreItems]);
   }
 
   /**
