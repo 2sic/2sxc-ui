@@ -18,7 +18,7 @@ export class ButtonDefinition {
   /** Configure the link generator before it creates the link */
   // configureLinkGenerator: (context: ContextComplete, linkGenerator: CommandLinkGenerator) => void;
   /** Replacement for configureLinkGenerator - v20.09 */
-  customItems: (ctx: ContextComplete, items: AnyIdentifier[]) => AnyIdentifier[];
+  customItems?: (ctx: ContextComplete, items: AnyIdentifier[]) => AnyIdentifier[];
 
   tweakGeneratedUrlParameters?: (context: ContextComplete, itemUrlParameters: ItemUrlParameters) => ItemUrlParameters;
 
@@ -32,7 +32,7 @@ export class ButtonDefinition {
   disabled?: ButtonPropGenOrValue<boolean>;
 
   /** Dynamically determine classes - must always be a function */
-  dynamicClasses: ButtonPropGen<string>;
+  dynamicClasses?: ButtonPropGen<string>;
 
   /** The icon to show in the button */
   icon?: ButtonPropGenOrValue<string>;
@@ -59,13 +59,13 @@ export class ButtonDefinition {
    * The color which could be supplied per button - new for `info`
    * New v15.04
    */
-  color: ButtonPropGen<string | undefined>;
+  color?: ButtonPropGen<string | undefined>;
 
   /**
    * The tippy which could be supplied per button - new for `info`
    * v15.04
    */
-  tippy: (context: ContextComplete, tag: HTMLElement) => void;
+  tippy?: (context: ContextComplete, tag: HTMLElement) => void;
 
   /**
    * Additional! parameters which are used to RUN the command.
@@ -76,7 +76,7 @@ export class ButtonDefinition {
   parameters?: ButtonPropGen<CommandParams>;
 
   /** this is just a UI interaction, won't create data so won't need pre-flight */
-  uiActionOnly: ButtonPropGen<boolean>;
+  uiActionOnly?: ButtonPropGen<boolean>;
 
   /**
    * Ability to specify notes which will be shown in the toolbar

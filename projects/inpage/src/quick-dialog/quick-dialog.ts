@@ -9,10 +9,10 @@ import * as QuickEditState from './state';
 const diagShowClass: string = 'dia-select';
 
 /** dialog manager - the currently active dialog object */
-let current: IDialogFrameElement = null;
+let current: IDialogFrameElement | null = null;
 
 interface IFrameWindow extends Window {
-    reboot(): void;
+  reboot(): void;
 }
 
 /**
@@ -40,7 +40,7 @@ export class QuickDialog extends HasLog {
      * Determines if a.ny dialog is currently showing
      */
     isVisible() {
-        return current != null;
+      return current != null;
     }
 
     /**
@@ -75,24 +75,23 @@ export class QuickDialog extends HasLog {
         this.container.setSize(isFullscreen);
         const iFrame = this.container.getIFrame();
 
-        // in case it's a toggle
+        // in case it's a toggle (isVisible is true if 'current' has a value)
         if (this.isVisible()) {
             cl.add('is already visible');
             // check if we're just toggling the current, or will show a new one afterwards
-            const isForSame = dialogName && current
-                && (current.bridge as IFrameBridge).isConfiguredFor(context.sxc.cacheKey, dialogName);
+            const isForSame = dialogName && (current!.bridge as IFrameBridge).isConfiguredFor(context.sxc.cacheKey, dialogName);
             const togglePromise = isForSame ? this.promise : null;
-            this.cancel(current.bridge);
+            this.cancel(current!.bridge);
             // just a hide this, return the old promise
-            if (togglePromise) return cl.return(togglePromise, 'just toggle off');
+            if (togglePromise)
+              return cl.return(togglePromise, 'just toggle off');
         }
 
         const dialogUrl = this.setUrlToQuickDialog(url);
         (iFrame.bridge as IFrameBridge).setup(context.sxc, dialogName);
         iFrame.setAttribute('src', dialogUrl);
         // if the window had already been loaded, re-init
-        if (iFrame.contentWindow && (iFrame.contentWindow as IFrameWindow).reboot)
-            (iFrame.contentWindow as IFrameWindow).reboot();
+        (iFrame.contentWindow as IFrameWindow)?.reboot();
 
         // make sure it's visible'
         this.setVisible(true);
@@ -103,7 +102,7 @@ export class QuickDialog extends HasLog {
         const callLog = this.log.call('cancel');
         this.setVisible(false);
         QuickEditState.cancelled.set('true');
-        this.resolvePromise(bridge.changed);
+        this.resolvePromise?.(bridge.changed);
         callLog.done();
     }
 
@@ -124,8 +123,8 @@ export class QuickDialog extends HasLog {
     }
 
     //#region promise handling
-    private promise: Promise<boolean>;
-    private resolvePromise: (value?: boolean) => void;
+    private promise?: Promise<boolean>;
+    private resolvePromise?: (value: boolean) => void;
     private promiseRestart(): Promise<boolean> {
         this.promise = new Promise<boolean>(
             (resolve) => (this.resolvePromise = resolve),

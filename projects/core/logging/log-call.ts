@@ -6,25 +6,30 @@ export class LogCall {
     public initialEntry: LogEntry;
 
     constructor(public log: Log, public name: string, callParams?: string, message?: string, data?: {[key:string]: unknown }) {
-        this.initialEntry = this.log._prepareEntry(name + '(' + (callParams || '') + ')');
+        this.initialEntry = this.log._prepareEntry(`${name}(${callParams || ''})`);
         this.log._callDepthAdd(name);
         this.log._addEntry(this.initialEntry);
-        if (typeof message === 'string') this.add(message);
-        if (data) for (let key in data) this.data('initial:' + key, data[key]);
+        if (typeof message === 'string')
+          this.add(message);
+        if (data)
+          for (let key in data)
+            this.data(`initial:${key}`, data[key]);
     }
 
-    private lastMessage: string;
+    private lastMessage?: string;
 
     add(message: string, data?: unknown, behavior?: LEO) {
         this.lastMessage = message;
         this.log.add(message, data);
-        if (behavior) this.processExtraBehavior(behavior, message, data);
+        if (behavior)
+          this.processExtraBehavior(behavior, message, data);
     }
 
     onlyAddIfNew(message: string, behavior?: LEO) {
         if (this.lastMessage !== message)
-        this.add(message);
-        if (behavior) this.processExtraBehavior(behavior, message, undefined);
+          this.add(message);
+        if (behavior)
+          this.processExtraBehavior(behavior, message, undefined);
     }
 
     /** Add data - but only if data logging is enabled */
@@ -48,7 +53,8 @@ export class LogCall {
         if (this.log.liveDump || this.log._parentHasLiveDump)
             this.add(this.name + ' = ' + message, result);
 
-        if (behavior) this.processExtraBehavior<T>(behavior, message, result);
+        if (behavior)
+          this.processExtraBehavior<T>(behavior, message, result);
         return result;
     }
 
@@ -58,9 +64,13 @@ export class LogCall {
      * then you can trace the stack-call to see where the error originated
      */
     private processExtraBehavior<T>(behavior: LEO, message: string, data: T) {
-        if (behavior === LEO.log) console.log(message, data);
-        if (behavior === LEO.warn) console.warn(message, data);
-        if (behavior === LEO.error || behavior === LEO.throw) console.error(message, data);
-        if (behavior === LEO.throw) throw message;
+        if (behavior === LEO.log)
+          console.log(message, data);
+        if (behavior === LEO.warn)
+          console.warn(message, data);
+        if (behavior === LEO.error || behavior === LEO.throw)
+          console.error(message, data);
+        if (behavior === LEO.throw)
+          throw message;
     }
 }

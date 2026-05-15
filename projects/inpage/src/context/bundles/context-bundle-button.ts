@@ -20,7 +20,7 @@ export class ContextComplete extends ContextBundleToolbar {
    * must be implemented as static, because the final object is actually just an interface and created from values.
    */
   static getRule(ctx: ContextComplete) {
-    return ctx.toolbar?.settings?._rules?.find(ctx.button.id);
+    return ctx.toolbar?.settings?._rules?.find(ctx.button!.id);
   }
 
   /** @internal */
@@ -39,17 +39,19 @@ export class ContextComplete extends ContextBundleToolbar {
    */
   static expandContext(tagOrSxc: Sxc | HTMLElement | number, cbid?: number): ContextComplete {
     let sxc: Sxc;
-    let containerTag: HTMLElement = null;
+    let containerTag: HTMLElement | null = null;
 
-    if (Sxc.is(tagOrSxc)) { // it is SxcInstance
-        sxc = tagOrSxc;
-    } else if (typeof tagOrSxc === 'number') { // it is number
-        sxc = window.$2sxc(tagOrSxc, cbid);
-    } else { // it is HTMLElement
-        sxc = window.$2sxc(tagOrSxc);
-        containerTag = DomTools.getContainerTag(tagOrSxc);
-    }
-
+    // it is SxcInstance
+    if (Sxc.is(tagOrSxc)) 
+        return ContextComplete.#getContextInstance(tagOrSxc);
+    
+    // it is number
+    if (typeof tagOrSxc === 'number')
+      return ContextComplete.#getContextInstance(window.$2sxc(tagOrSxc, cbid));
+    
+    // it is HTMLElement
+    sxc = window.$2sxc(tagOrSxc);
+    containerTag = DomTools.getContainerTag(tagOrSxc);
     return ContextComplete.#getContextInstance(sxc, containerTag);
   }
 
@@ -60,7 +62,7 @@ export class ContextComplete extends ContextBundleToolbar {
   static contextCopy(htmlElementOrId: HTMLElement | number, cbid?: number): ContextComplete {
     const contextOfButton = ContextComplete.expandContext(htmlElementOrId, cbid);
     // set sxc to null because of cyclic reference, so we can serialize it
-    contextOfButton.sxc = null;
+    contextOfButton.sxc = null!;
     // make a copy
     const copyOfContext = Obj.DeepClone(contextOfButton);
     // bring sxc back to context

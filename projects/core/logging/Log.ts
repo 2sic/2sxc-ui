@@ -42,7 +42,7 @@ export class Log {
    * @param string optional initial message to log
    * @internal
    */
-  constructor(name: string, parent?: Log, initialMessage?: string) {
+  constructor(name: string, parent?: Log | null, initialMessage?: string) {
     this.rename(name);
     this.linkLog(parent);
 
@@ -56,7 +56,8 @@ export class Log {
     }
 
     this.startTime = new Date().getTime();
-    if (initialMessage != null) this.add(initialMessage);
+    if (initialMessage != null)
+      this.add(initialMessage);
   }
 
   /* if we should live-dump, can be selectively activated */
@@ -76,7 +77,7 @@ export class Log {
    * Full identifier of this log-object, with full hierarchy
    * @internal
    */
-  fullIdentifier = (): string => `${(this.parent ? this.parent.fullIdentifier() : '')}${this.identifier()}`
+  fullIdentifier = (): string => `${(this.parent?.fullIdentifier() ?? '')}${this.identifier()}`
 
   /**
    * give this logger a new name
@@ -103,7 +104,7 @@ export class Log {
    * this must be called manually
    * @internal
    */
-  linkLog = (parent: Log): void => {
+  linkLog = (parent?: Log | null): void => {
     this.parent = parent || this.parent; // if new parent isn't defined, don't replace
     if (this.parent) {
       this._parentHasLiveDump = this.parent.liveDump || this.parent._parentHasLiveDump;
@@ -138,7 +139,8 @@ export class Log {
 
   /** @internal */
   addData(message: (() => string) | string, data: unknown): void {
-    if (this.logData()) this.add(message, data);
+    if (this.logData())
+      this.add(message, data);
   }
 
   /** @internal */
@@ -192,7 +194,7 @@ export class Log {
    * @param end
    * @internal
    */
-  dump(one: LogEntry = null, separator = ' - '): void {
+  dump(one: LogEntry | null = null, separator = ' - '): void {
     if (one) this.dumpOne(0, one, separator);
     else this.dumpList();
   }
@@ -245,7 +247,7 @@ export class Log {
    * parent logger - important if loggers are chained
    * @internal
    */
-  private parent: Log;
+  private parent?: Log;
 
   /**
    * scope of this logger - to easily see which ones
@@ -267,7 +269,7 @@ export class Log {
   private id = (): string => this.idCache || (this.idCache = this.randomString(2));
 
   /** @internal */
-  private idCache: string;
+  private idCache?: string;
 
   /**
    * Unique identifier of this log object, with name and ID

@@ -1,4 +1,5 @@
 import { ButtonConfiguration, ButtonPropGenOrValue, ButtonPropGen } from '.';
+import { CommandNames } from '../../commands';
 import { ContextComplete } from '../../context/bundles/context-bundle-button';
 import { ButtonDefinition } from './button-definition';
 
@@ -24,34 +25,34 @@ export class ButtonWithContext {
   getColor = () => this.#getBestValue(def => def.color, undefined);
 
   /** The dialog name - should default to the name */
-  getDialog = () => this.#getBestValue(def => def.dialog, this.button.command.name);
+  getDialog = () => this.#getBestValue(def => def.dialog, this.button.command.name) as CommandNames;
 
   /** Determines if the button should be disabled */
-  getDisabled = () => this.#getBestValue(def => def.disabled, false);
+  getDisabled = () => this.#getBestValue(def => def.disabled, false) as boolean;
 
   /** Dynamically determine classes - must always be a function */
-  getDynClasses = () => this.#getBestValue(def => def.dynamicClasses, '');
+  getDynClasses = () => this.#getBestValue(def => def.dynamicClasses, '') as string;
 
   /** Check if full-screen, always a function */
-  getFullScreen = () => this.#getBestValue(def => def.fullScreen, false);
+  getFullScreen = () => this.#getBestValue(def => def.fullScreen, false) as boolean;
 
   /** The icon to show in the button */
   getIcon = () => this.#getBestValue(def => def.icon, '');
 
   /** Determine if it should use the inline window, always a function */
-  getInlineWindow = () => this.#getBestValue(def => def.inlineWindow, false);
+  getInlineWindow = () => this.#getBestValue(def => def.inlineWindow, false) as boolean;
 
   /** Check if we should open a new window, always an FN */
-  getNewWindow = () => this.#getBestValue(def => def.newWindow, false);
+  getNewWindow = () => this.#getBestValue(def => def.newWindow, false) as boolean;
 
   /** The parameters which are used to run the command */
   getParameters = () => this.#getBestValue(def => def.parameters, {});
 
   /** Determines if this button runs in the page - affecting publishing */
-  getPartOfPage = () => this.#getBestValue(def => def.partOfPage, false);
+  getPartOfPage = () => this.#getBestValue(def => def.partOfPage, false) as boolean;
 
   /** Method which determines if it should be shown or not */
-  getShowCondition = () => this.#getBestValue(def => def.showCondition, true);
+  getShowCondition = () => this.#getBestValue(def => def.showCondition, true) as boolean;
 
   getTippy = (context: ContextComplete, tag: HTMLElement) => this.button.definition.tippy?.(context, tag);
 
@@ -59,10 +60,10 @@ export class ButtonWithContext {
   getTitle = () => this.#getBestValue(def => def.title, 'unknown-title');
 
   /** this is just a UI interaction, won't create data so won't need pre-flight */
-  getUiActionOnly = () => this.#getBestValue(def => def.uiActionOnly, true);
+  getUiActionOnly = () => this.#getBestValue(def => def.uiActionOnly, true) as boolean;
 
   /** Don't add items-info to the link, new v18.03 */
-  getSkipAutoAddItems = () => this.#getBestValue(def => def.noItems, false);
+  getSkipAutoAddItems = () => this.#getBestValue(def => def.noItems, false) as boolean;
 
   #getBestValue<T>(select: (x: Partial<ButtonDefinition>) => ButtonPropGenOrValue<T>, fallback: T): T {
     if (this.button.overrides) {

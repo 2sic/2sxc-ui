@@ -28,7 +28,6 @@ export interface ItemIdentifierSimple extends Omit<ItemIdentifierShared, "Entity
   EntityId: number;
   ContentTypeName?: string;
   Metadata?: CommandParamsMetadata;
-  // Prefill?: Record<string, TypeValue>;
 }
 
 /**

@@ -32,7 +32,7 @@ export class CommandLinkItems extends HasLog {
     items = this.#buildItemsList(items, this.buttonAndCtx);
 
     // if the command has own configuration stuff, do that now
-    const btnDef = this.context.button.definition;
+    const btnDef = this.context.button!.definition;
     if (btnDef.customItems)
       items = btnDef.customItems(this.context, items);
 
@@ -50,7 +50,7 @@ export class CommandLinkItems extends HasLog {
    * Generate items for editing/changing or simple item depending on the scenario.
    */
   #buildItemsList(items: AnyIdentifier[], button: ButtonWithContext): AnyIdentifier[] {
-    const params = button.btnCommand().params;
+    const params = button.btnCommand().params!;
     if (params.useModuleList)
       items = this.#addContentGroupItems(items, true);
     else if (params.parent)
@@ -63,7 +63,7 @@ export class CommandLinkItems extends HasLog {
 
   #addItem(items: AnyIdentifier[]) {
     const item = {} as ItemIdentifierSimple;
-    const params = this.context.button.command.params;
+    const params = this.context.button!.command.params!;
 
     // two ways to name the content-type-name this, v 7.2+ and older
     const ct = params.contentType || (params as CommandParams & { attributeSetName: string }).attributeSetName;
@@ -100,10 +100,10 @@ export class CommandLinkItems extends HasLog {
     const cl = this.log.call('addContentGroupItems', `${withPresentation}`);
     const i = CmdParHlp.getIndex(this.context);
     const isContentAndNotHeader = (i !== -1);
-    const index = isContentAndNotHeader ? i : 0;
-    const isAdd = this.context.button.command.name === 'new';
+    const index = (isContentAndNotHeader ? i : 0) ?? 0;
+    const isAdd = this.context.button!.command.name === 'new';
     const groupId = this.context.contentBlock.contentGroupId;
-    const params = this.context.button.command.params;
+    const params = this.context.button!.command.params!;
 
     const fields: string[] = [this.#findPartName(true)];
     if (withPresentation)
@@ -136,9 +136,9 @@ export class CommandLinkItems extends HasLog {
    * this is relevant when adding new items
    */
   #addItemInList(items: AnyIdentifier[]) {
-    const params = this.context.button.command.params;
+    const params = this.context.button!.command.params!;
     const index = CmdParHlp.getIndex(params);
-    const isAdd = this.context.button.command.name === 'new';
+    const isAdd = this.context.button!.command.name === 'new';
     const groupId = params.parent;
 
     // New in 10.27 - if params has a field, use that

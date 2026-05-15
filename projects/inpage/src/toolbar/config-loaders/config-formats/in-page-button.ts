@@ -26,12 +26,12 @@ export class InPageButtonJson {
 
     /**
      * partOfPage (new in 2sxc 9.5)
-     * determines if resulting changes should effect the Evoq/DNN Page Publishing
-     * note that it only effects the page-lifecyle, if the resulting dialogs and APIs respect this setting
+     * determines if resulting changes should effect the DNN Page Publishing
+     * note that it only effects the page-lifecycle, if the resulting dialogs and APIs respect this setting
      */
     partOfPage?: boolean;
 
-    /** if this is just something visual; otherwise a webservice will ensure that a content-group exists (for editing etc.) */
+    /** if this is just something visual; otherwise a web service will ensure that a content-group exists (for editing etc.) */
     uiActionOnly?: boolean;
 
     /** the code executed on click, if it's not the default action */
@@ -69,30 +69,16 @@ export class InPageButtonJson {
           ...(oldFormat.partOfPage ? { partOfPage: evalPropOrFun<boolean>(oldFormat.partOfPage) } : {}),
           ...(oldFormat.title ? { title: evalPropOrFun<string>(oldFormat.title) } : {}),
         };
-
-        // simple value properties
-        // if (oldFormat.classes) config.classes = oldFormat.classes;
-        // if (oldFormat.dialog) config.dialog = oldFormat.dialog;
-        // if (oldFormat.disabled) config.disabled = oldFormat.disabled;
-        // if (oldFormat.icon) config.icon = oldFormat.icon;
-
-        // Method Properties
-        // if (oldFormat.fullScreen) config.fullScreen = evalPropOrFun<boolean>(oldFormat.fullScreen);
-        // if (oldFormat.icon) config.icon = evalPropOrFun<string>(oldFormat.icon);
-        // if (oldFormat.inlineWindow) config.inlineWindow = evalPropOrFun<boolean>(oldFormat.inlineWindow);
-        // if (oldFormat.newWindow) config.newWindow = evalPropOrFun<boolean>(oldFormat.newWindow);
-        // if (oldFormat.partOfPage) config.partOfPage = evalPropOrFun<boolean>(oldFormat.partOfPage);
-        // if (oldFormat.title) config.title = evalPropOrFun<string>(oldFormat.title);
-
+        
         return config;
     }
 
 }
 
 
-function evalPropOrFun<T>(propOrFunction: T | (() => T)): () => T {
+function evalPropOrFun<T>(propOrFunction: T | (() => T)): (() => T) | undefined {
     if (propOrFunction == null)
-      return null;
+      return undefined;
     if (typeof (propOrFunction) === 'function')
       return propOrFunction as () => T;
     return () => propOrFunction;
