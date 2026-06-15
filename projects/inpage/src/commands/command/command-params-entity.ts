@@ -1,6 +1,6 @@
 ﻿
 /**
- * Parameters used for commands which address a specificy entity.
+ * Parameters used for commands which address a specify entity.
  * <br>
  * ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)
  * @public
@@ -20,7 +20,7 @@
  */
  export interface CommandParamsEntityInContentBlock {
   /**
-   * Determins the position of the item in the list.
+   * Determines the position of the item in the list.
    * index was added in v14.04 to replace the `sortOrder` which had a confusing name.
    */
   index: number;
@@ -40,7 +40,7 @@
  */
  export interface CommandParamsEntityInList {
   /**
-   * Determins the position of the item in the list of that entity-field.
+   * Determines the position of the item in the list of that entity-field.
    */
   index: number;
 

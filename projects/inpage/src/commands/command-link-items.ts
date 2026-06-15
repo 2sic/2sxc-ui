@@ -54,10 +54,10 @@ export class CommandLinkItems extends HasLog {
     const l = this.log.call('buildItemsList');
     const params = button.btnCommand().params!;
     if (params.useModuleList)
-      return this.#addContentGroupItems(items, true);
+      return l.return(this.#addContentGroupItems(items, true), 'module-list');
     if (params.parent)
-      return this.#addItemInList(items);
-    return this.#addItem(items);
+      return l.return(this.#addItemInList(items), 'parent-list');
+    return l.return(this.#addItem(items), 'default mode');
   }
 
 
