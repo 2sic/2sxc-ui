@@ -39,6 +39,7 @@ Commands.add(CommandNames.addExisting, 'AddExisting', 'add-existing', false, tru
         Index: CmdParHlp.getIndex(params) + 1,
         Parent: params.parent,
         Field: params.fields,
+        ...(params?.contentType ? { ContentType: params.contentType } : {}),
       }];
     }
     
