@@ -3,7 +3,7 @@ import { ToolbarInitConfig } from '..';
 import { Debug } from '../../constants/debug';
 import { ContextComplete } from '../../context';
 import { HasLog } from '../../core';
-import { Toolbar, ToolbarSettings } from '../config';
+import { Toolbar, ToolbarHelpers, ToolbarSettings } from '../config';
 import { BuildSteps, RuleManager } from '../rules';
 import { ToolbarTemplate, ToolbarTemplateDefault, ToolbarTemplateSublist } from '../templates';
 import { ToolbarWip } from './config-formats/toolbar-wip';
@@ -44,9 +44,9 @@ export class ToolbarConfigLoaderV10 extends HasLog {
     const params = this.rules.getParams();
 
     // If it's a sub-list toolbar, use the special template for it
-    const isSublist = (config.toolbar as InPageCommandJson).fields || params?.params?.fields;
-    const defToolbarname = isSublist ? ToolbarTemplateSublist.name : ToolbarTemplateDefault.name;
-    const toolbarTemplateName = toolbarRule?.name ?? defToolbarname;
+    const isSubList = (config.toolbar as InPageCommandJson).fields || params?.params?.fields;
+    const defToolbarName = isSubList ? ToolbarTemplateSublist.name : ToolbarTemplateDefault.name;
+    const toolbarTemplateName = toolbarRule?.name ?? defToolbarName;
     let template = this.configLoader.templates.copy(toolbarTemplateName);
     template.settings = settings;
     if (params)
@@ -64,7 +64,7 @@ export class ToolbarConfigLoaderV10 extends HasLog {
     // Build the real toolbar structure
     const toolbar = this.configLoader.buildTreeAndModifyAccordingToRules(context, template as ToolbarWip);
     if (!toolbar.identifier)
-      toolbar.identifier = Toolbar.createIdentifier();
+      toolbar.identifier = ToolbarHelpers.createIdentifier();
     toolbar.settings._rules = this.rules;
     // process the rules one by one
     return l.return(toolbar, 'ok');

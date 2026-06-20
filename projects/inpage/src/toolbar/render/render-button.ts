@@ -3,7 +3,7 @@ import { Debug } from '../../constants/debug';
 import { ContextComplete } from '../../context/bundles/context-bundle-button';
 import { ContextHelpers } from '../../context/bundles/ContextHelpers';
 import { HtmlTools } from '../../html/dom-tools';
-import { CommandWithParams, ButtonWithContext } from '../config';
+import { ButtonWithContext, BtnCmdHelpers } from '../config';
 import { BuildRule } from '../rules/rule';
 import { RenderPart } from './render-part-base';
 import { ToolbarRenderer } from './toolbar-renderer';
@@ -27,7 +27,7 @@ export class RenderButton extends RenderPart {
     // check if we have rules and merge params into the button
     const rule = ContextHelpers.getRule(ctx);
     if (rule) cl.data("rule found, will try to merge params", rule);
-    let params = CommandWithParams.mergeParamsWithRulesAndClean(
+    let params = BtnCmdHelpers.mergeParamsWithRulesAndClean(
       btnSafe.btnCommand(),
       rule
     );
@@ -105,7 +105,8 @@ export class RenderButton extends RenderPart {
     } else {
       const i18nTitle = btn.getTitle();
       callLog.add(`i18nTitle: ${i18nTitle}`);
-      if (i18nTitle) btnLink.setAttribute("data-i18n", `[title]${i18nTitle}`);
+      if (i18nTitle)
+        btnLink.setAttribute("data-i18n", `[title]${i18nTitle}`);
     }
     callLog.done();
   }
@@ -117,7 +118,7 @@ export class RenderButton extends RenderPart {
     divTag: HTMLDivElement
   ) {
     const callLog = this.log.call("processColorRules");
-    let color = rule?.ui?.color ?? btn.getColor() ?? ctx.toolbar.settings.color;
+    let color = rule?.ui?.color ?? btn.getColor() ?? ctx.toolbar?.settings?.color;
 
     // catch edge case where the color is something like 808080 - which is treated as a number
     if (color && typeof color === "number")

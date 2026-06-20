@@ -5,14 +5,27 @@ import { BuildRule } from '../rules/rule';
 /**
  * @internal
  */
-export class CommandWithParams {
+export interface CommandWithParams {
     readonly commandDef: CommandDefinition; // reference to original definition which should run
+    name: CommandNames;
+    params?: CommandParams;
 
-    constructor(public name: CommandNames, public params?: CommandParams) {
-        if (!params)
-            this.params = {};
-        this.commandDef = Commands.singleton().get(name); // activate command for this
-    }
+    // constructor(public name: CommandNames, public params?: CommandParams) {
+    //     if (!params)
+    //         this.params = {};
+    //     this.commandDef = Commands.singleton().get(name); // activate command for this
+    // }
+}
+
+export function createCmdWithParams(name: CommandNames, params?: CommandParams): CommandWithParams {
+    return {
+      params: params ?? {},
+      name,
+      commandDef: Commands.singleton().get(name)
+    } satisfies CommandWithParams;
+}
+
+export class BtnCmdHelpers {
 
     /** make static, as many ButtonCommand signatures are actually not objects */
     static mergeAdditionalParams(command: CommandWithParams, additionalParams: Record<string, TypeValue>): CommandParams {
@@ -42,14 +55,30 @@ export class CommandWithParams {
     }
 
     static mergeParamsWithRulesAndClean(command: CommandWithParams, rule: BuildRule | null): CommandParams {
+        const cmdParamsBefore = { ...(command?.params ?? {}) };
+        const ruleParamsBefore = { ...(rule?.params ?? {}) };
+
+        // 2026-06-20 2dm: Special early clean-up of conflicting identifiers
+        // Note that this changes the underlying command.params, which is a side-effect
+        // but it's by design and kind of necessary (see method above)
+        const cp = command?.params;
+        const rp = rule?.params;
+        if (cp?.parent && rp?.entityId) {
+            delete(cp.parent);
+            delete(cp.fields);
+            delete(cp.index);
+            delete(cp.entityGuid);
+            delete(cp.contentType);
+        }
+
         // if (rule?.params?.fields)
           console.log('2dm - fields',
             JSON.parse(JSON.stringify(
-              { commandParams: command?.params, ruleParams: rule?.params }
+              { cmdParamsBefore, ruleParamsBefore, cp }
             ))
           );
 
-        let params = CommandWithParams.mergeAdditionalParams(command, rule?.params ?? {});
+        let params = BtnCmdHelpers.mergeAdditionalParams(command, rule?.params ?? {});
 
         // Also add settings, if provided by the rule.
         params = {
@@ -65,5 +94,4 @@ export class CommandWithParams {
 
         return params;
     }
-
 }

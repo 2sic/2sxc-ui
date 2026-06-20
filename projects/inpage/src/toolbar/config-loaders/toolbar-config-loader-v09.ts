@@ -2,7 +2,7 @@ import { InPageButtonGroupJson, InPageButtonJson, InPageCommandJson, ToolbarConf
 import { InPageToolbarConfigVariations, ToolbarInitConfig } from '..';
 import { ContextComplete } from '../../context';
 import { HasLog } from '../../core';
-import { ButtonConfiguration, Toolbar, ToolbarSettings } from '../config';
+import { ButtonConfiguration, Toolbar, ToolbarHelpers, ToolbarSettings } from '../config';
 import { RuleManager } from '../rules';
 import { ToolbarTemplate, ToolbarTemplateDefault, ToolbarTemplateGroup, ToolbarTemplateSublist } from '../templates';
 
@@ -124,9 +124,10 @@ export class ToolbarConfigLoaderV09 extends HasLog {
   private ensureDefinitionTree(unstructuredConfig: InPageToolbarConfigVariations, toolbarSettings: ToolbarSettings): ToolbarWip {
     const l = this.log.call('ensureDefinitionTree');
     // original is null/undefined, just return empty set
-    if (!unstructuredConfig) throw (`preparing toolbar, with nothing to work on: ${unstructuredConfig}`);
+    if (!unstructuredConfig)
+      throw (`preparing toolbar, with nothing to work on: ${unstructuredConfig}`);
 
-    const newToolbar: ToolbarWip = new Toolbar();
+    const newToolbar: ToolbarWip = ToolbarHelpers.create();
     newToolbar.groups = this.#findGroups(unstructuredConfig);
 
     const probablyTemplate = unstructuredConfig as ToolbarTemplate;

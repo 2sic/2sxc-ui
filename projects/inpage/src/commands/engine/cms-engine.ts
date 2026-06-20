@@ -6,7 +6,7 @@ import { ContextComplete } from '../../context/bundles/context-bundle-button';
 import { ContextBundleInstance } from '../../context/bundles/context-bundle-instance';
 import { HasLog, Insights, Log } from '../../core';
 import { QuickDialog } from '../../quick-dialog/quick-dialog';
-import { ButtonConfiguration, ButtonWithContext } from '../../toolbar/config';
+import { ButtonConfiguration, ButtonWithContext, createCmdWithParams } from '../../toolbar/config';
 import { CommandWithParams } from '../../toolbar/config';
 import { InPageButtonJson } from '../../toolbar/config-loaders/config-formats/in-page-button';
 import { CommandLinkGenerator } from '../command-link-generator';
@@ -81,7 +81,7 @@ export class CmsEngine extends HasLog {
     l.add(`run command '${name}'`);
 
     // Toolbar API v2
-    const btnCommand = new CommandWithParams(name, cmdParams);
+    const btnCommand = createCmdWithParams(name, cmdParams);
 
     // Support old 2sxc v8 API, where the params could be a JS object with method/properties
     const overrides = InPageButtonJson.toButton(params as unknown as InPageButtonJson);
