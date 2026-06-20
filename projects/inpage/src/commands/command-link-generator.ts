@@ -20,6 +20,7 @@ export class CommandLinkGenerator extends HasLog {
     
     // Debugging
     // this.log.liveDump = true;
+    // console.log('2dm');
 
     const l = this.log.call('constructor');
     l.done();

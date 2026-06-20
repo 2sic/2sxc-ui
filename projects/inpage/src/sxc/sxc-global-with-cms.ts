@@ -1,5 +1,6 @@
 ﻿import { SxcGlobalCms } from '../cms/sxc-global-cms';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
+import { ContextHelpers } from '../context/bundles/ContextHelpers';
 import { SystemUpgrader } from '../system/2sxc.system';
 
 /**
@@ -29,7 +30,7 @@ export interface SxcGlobalWithCms {
   /**
    * @internal
    */
-  context: typeof ContextComplete.expandContext;
+  context: typeof ContextHelpers.expandContext;
 
   /**
    * Content Management features on the $2sxc

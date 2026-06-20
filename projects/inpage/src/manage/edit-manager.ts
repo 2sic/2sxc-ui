@@ -3,6 +3,7 @@ import { RunParamsWithContext } from '../../../$2sxc/src/cms/run-params';
 import { SxcGlobalCms } from '../cms/sxc-global-cms';
 import { CommandParams } from '../commands';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
+import { ContextHelpers } from '../context/bundles/ContextHelpers';
 import { AttrJsonEditContext } from '../context/html-attribute/edit-context-root';
 import { HasLog, Log } from '../plumbing';
 import { InPageToolbarConfigVariations, ToolbarInitConfig, ToolbarManager } from '../toolbar';
@@ -40,7 +41,7 @@ export class EditManager extends HasLog implements SxcManage {
       // Capture cases where this is called using the new/modern params, which is a mistake
       if ((nameOrSettings as RunParamsWithContext).context || (nameOrSettings as RunParamsWithContext).workflows)
         throw "You are calling '.manage.run(...)' with a parameter 'context' or workflows. You should probably be calling the new '.cms.run(...)' instead.";
-      const cntx = ContextComplete.expandContext(this.context.sxc);
+      const cntx = ContextHelpers.expandContext(this.context.sxc);
       cl.done();
       return new SxcGlobalCms().runInternal(cntx, nameOrSettings, eventOrSettings, event, 'editManager.run');
     }

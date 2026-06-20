@@ -3,6 +3,7 @@ import { ContextComplete } from '../../context';
 import { iconPrefix, tlbI18nPrefix } from '../command';
 import { Note, TypeNoteMode } from '../../toolbar/config/Note';
 import { Debug } from '../../constants/debug';
+import { ContextHelpers } from '../../context/bundles/ContextHelpers';
 
 const debug = Debug.parts.commandInfo;
 
@@ -29,7 +30,7 @@ const colors = {
 
 function getNote(ctx: ContextComplete): Note {
   if (debug) console.log('2dm - note: ctx-ui', ctx?.ui);
-  const note = ContextComplete.getRule(ctx)?.ui?.note ?? { };
+  const note = ContextHelpers.getRule(ctx)?.ui?.note ?? { };
   // Set type explicitly (spread operator wouldn't always work, because type could be null)
   note.type = note.type ?? 'info';
   if (debug) console.log('2dm - note', note);

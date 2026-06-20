@@ -4,10 +4,10 @@ import { RunParamsWithContext, RunParamsWithContextClean } from '../../../$2sxc/
 import { CommandParams } from '../../../$2sxc/src/cms/command-params';
 import { CmsEngine } from '../commands';
 import { C } from '../constants';
-import { ContextComplete } from '../context/bundles/context-bundle-button';
-import { ContextBundleInstance } from '../context/bundles/context-bundle-instance';
+import { ContextBundleInstance, isContextBundleInstance } from '../context/bundles/context-bundle-instance';
 import { HasLog, Insights, Log } from '../core';
 import { RunParamsHelpers } from './run-params-helpers';
+import { ContextHelpers } from '../context/bundles/ContextHelpers';
 
 const logId = 'Cms.Api';
 
@@ -121,9 +121,9 @@ export class SxcGlobalCms extends HasLog {
       return this.runClean<T>(contextClean);
     }
     
-    const realCtx = ContextBundleInstance.is(context)
+    const realCtx = isContextBundleInstance(context)
       ? context
-      : ContextComplete.expandContext(context);
+      : ContextHelpers.expandContext(context);
 
     const innerCall: () => Promise<void> = () => cmsEngine.detectParamsAndRun(realCtx, nameOrSettings, eventOrSettings, event);
 
@@ -141,7 +141,7 @@ export class SxcGlobalCms extends HasLog {
     const cl = this.log.call('runClean<T>', `triggeredBy: ${runParamsWithCtx.triggeredBy}`);
 
     // Figure out inner-call based on if context is new RunParams or not (in that case it should be a tag or a full context)
-    const ctxComplete = ContextComplete.expandContext(runParamsWithCtx.context);
+    const ctxComplete = ContextHelpers.expandContext(runParamsWithCtx.context);
     runParamsWithCtx.params = {
       action: runParamsWithCtx.action,
       ...runParamsWithCtx.params,

@@ -4,7 +4,7 @@ import { InstanceContext } from '../../../../$2sxc/src/dom/instance-context';
 /**
  * @internal
  */
-export class AttrJsonEditContext implements InstanceContext {
+export interface AttrJsonEditContext extends InstanceContext {
   Environment: AttrJsonEnvironment;
   User: AttrJsonUser;
   Language: AttrJsonLanguage;

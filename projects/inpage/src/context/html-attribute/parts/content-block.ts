@@ -6,26 +6,39 @@ import { IDs } from '../../../constants/ids';
  * so this class is never really instantiated.
  * @internal
  */
-export class ContentBlockReference {
+export interface ContentBlockReference {
   /** How changes are published - draft required/optional */
-  public publishingMode: string = IDs.publishAllowed;
+  publishingMode: string;
 
   /** ID of the reference item - very rarely used */
-  public id: number = NumberNotDefinedHuge;
+  id: number;
 
   /** GUID of the parent item referencing this Content Block */
-  public parentGuid: string = null;
+  parentGuid: string | null;
 
   /** Field in which this content block is references */
-  public parentField: string = null;
+  parentField: string | null;
 
   /** Index of the reference - what position it's in in the list of that field */
-  public parentIndex: number = 0;
+  parentIndex: number;
 
   /** If this content is part of the page */
-  public partOfPage: boolean = false;
+  partOfPage: boolean;
 
-  constructor(original: Partial<ContentBlockReference>) {
-      Object.assign(this, original);
-  }
+  // constructor(original: Partial<ContentBlockReference>) {
+  //     Object.assign(this, original);
+  // }
+}
+
+// 2026-06-20 2dm: minor warning: since we don't spread the original object
+// there is a small risk that some properties will be missing
+export function createContentBlockReference(original: Partial<ContentBlockReference>): ContentBlockReference {
+  return {
+    publishingMode: original?.publishingMode ?? IDs.publishAllowed,
+    id: original?.id ?? NumberNotDefinedHuge,
+    parentGuid: original?.parentGuid ?? null,
+    parentField: original?.parentField ?? null,
+    parentIndex: original?.parentIndex ?? 0,
+    partOfPage: original?.partOfPage ?? false
+  } satisfies ContentBlockReference; // new ContentBlockReference(original);
 }

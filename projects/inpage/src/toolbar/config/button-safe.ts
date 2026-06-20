@@ -10,7 +10,9 @@ import { ButtonDefinition } from './button-definition';
  */
 export class ButtonWithContext {
 
-  constructor(private button: ButtonConfiguration, private context: ContextComplete) {
+  constructor(
+    private button: ButtonConfiguration,
+    private context: ContextComplete) {
   }
 
   btnCommand = () => this.button.command;

@@ -1,6 +1,7 @@
 ﻿import { CommandNames, CommandParams } from '../../commands';
 import { Debug } from '../../constants/debug';
 import { ContextComplete } from '../../context/bundles/context-bundle-button';
+import { ContextHelpers } from '../../context/bundles/ContextHelpers';
 import { HtmlTools } from '../../html/dom-tools';
 import { CommandWithParams, ButtonWithContext } from '../config';
 import { BuildRule } from '../rules/rule';
@@ -16,22 +17,27 @@ export class RenderButton extends RenderPart {
   }
 
   render(ctx: ContextComplete, groupIndex: number): HTMLElement {
+    const button = ctx.button!; // never null, because ContextComplete, but Types don't clearly show this
     const cl = this.log.call(
       "render",
-      `context: obj, group: ${groupIndex}, btn: ${ctx.button.id}/${ctx.button.command?.name}`
+      `context: obj, group: ${groupIndex}, btn: ${button.id}/${button.command?.name}`
     );
-    const btnSafe = new ButtonWithContext(ctx.button, ctx);
+    const btnSafe = new ButtonWithContext(button, ctx);
 
     // check if we have rules and merge params into the button
-    const rule = ContextComplete.getRule(ctx);
+    const rule = ContextHelpers.getRule(ctx);
     if (rule) cl.data("rule found, will try to merge params", rule);
-    let params = CommandWithParams.mergeAdditionalParams(
+    let params = CommandWithParams.mergeParamsWithRulesAndClean(
       btnSafe.btnCommand(),
-      rule?.params
+      rule
     );
 
-    if (rule?.settings)
-      params = { ...params, settings: rule.settings };
+    // if (rule?.settings)
+      // params = {
+      //   ...params,
+      //   ...(rule?.settings ? { settings: rule.settings } : {})
+      //   //settings: rule.settings
+      // };
 
     const group = ctx.toolbar?.groups?.[groupIndex];
     const groupName = group?.name;
@@ -40,16 +46,17 @@ export class RenderButton extends RenderPart {
 
     const disabled = btnSafe.getDisabled();
 
-    // put call as plain JavaScript to preserve even if DOM is serialized
+    // If enabled, add onclick. Store as plain JavaScript to preserve even if DOM is serialized
     if (!disabled) {
       const runJs = this.generateRunJs(rule, ctx, params);
       btnLink.setAttribute("onclick", runJs);
     }
 
     // Add various classes
+    const btnCommand = btnSafe.btnCommand()?.name;
     const classes =
       (disabled ? " disabled" : "") +
-      (btnSafe.btnCommand() ? ` sc-${btnSafe.btnCommand().name}` : "") +
+      (btnCommand ? ` sc-${btnCommand}` : "") +
       ` in-group-${groupIndex}` +
       (groupName ? ` in-group-${groupName}` : "") +
       " " +
@@ -80,7 +87,7 @@ export class RenderButton extends RenderPart {
   }
 
   private setTitle(
-    rule: BuildRule,
+    rule: BuildRule | null,
     btnLink: HTMLAnchorElement,
     btn: ButtonWithContext
   ) {
@@ -105,7 +112,7 @@ export class RenderButton extends RenderPart {
 
   private processColorRules(
     btn: ButtonWithContext,
-    rule: BuildRule,
+    rule: BuildRule | null,
     ctx: ContextComplete,
     divTag: HTMLDivElement
   ) {
@@ -127,7 +134,7 @@ export class RenderButton extends RenderPart {
   }
 
   private generateRunJs(
-    rule: BuildRule,
+    rule: BuildRule | null,
     ctx: ContextComplete,
     params: CommandParams
   ) {
@@ -151,16 +158,16 @@ export class RenderButton extends RenderPart {
     )}, event);`;
   }
 
-  private iconTag(btn: ButtonWithContext, rule: BuildRule) {
+  private iconTag(btn: ButtonWithContext, rule?: BuildRule | null): HTMLElement {
     const callLog = this.log.call("iconTag");
-    const icon = rule?.ui?.icon || btn.getIcon();
+    const icon = rule?.ui?.icon || btn.getIcon() || '';
     if (icon.indexOf("<svg") > -1) {
       // Temporary dom element
       const symbol = document.createElement("template");
       symbol.innerHTML = icon;
       // Note: It would be tempting to set the viewBox here, but it's not possible
       // because we cannot calculate the size before rendering
-      return callLog.return(symbol.content.firstChild, icon);
+      return callLog.return(symbol.content.firstChild as HTMLElement, icon);
     } else {
       const symbol = document.createElement("i");
       HtmlTools.addClasses(symbol, icon);
