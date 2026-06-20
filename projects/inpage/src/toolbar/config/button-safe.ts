@@ -1,6 +1,6 @@
 import { ButtonConfiguration, ButtonPropGenOrValue, ButtonPropGen } from '.';
 import { CommandNames } from '../../commands';
-import { ContextComplete } from '../../context/bundles/context-bundle-button';
+import { ContextComplete, ContextCompleteWithButton } from '../../context/bundles/context-bundle-button';
 import { ButtonDefinition } from './button-definition';
 
 /**
@@ -12,8 +12,8 @@ export class ButtonWithContext {
 
   constructor(
     private button: ButtonConfiguration,
-    private context: ContextComplete) {
-  }
+    private context: ContextCompleteWithButton,
+  ) { }
 
   btnCommand = () => this.button.command;
 
@@ -56,7 +56,7 @@ export class ButtonWithContext {
   /** Method which determines if it should be shown or not */
   getShowCondition = () => this.#getBestValue(def => def.showCondition, true) as boolean;
 
-  getTippy = (context: ContextComplete, tag: HTMLElement) => this.button.definition.tippy?.(context, tag);
+  getTippy = (context: ContextCompleteWithButton, tag: HTMLElement) => this.button.definition.tippy?.(context, tag);
 
   /** The title of this button which will usually be i18n keys */
   getTitle = () => this.#getBestValue(def => def.title, 'unknown-title');
@@ -80,7 +80,7 @@ export class ButtonWithContext {
 
 
 /** Evaluate a property or generator and return the property */
-function getVal<T>(context: ContextComplete, propOrGen: ButtonPropGen<T> | T, fallback: T): T {
+function getVal<T>(context: ContextCompleteWithButton, propOrGen: ButtonPropGen<T> | T, fallback: T): T {
   if (propOrGen == null)
     return fallback;
   const result = isPropGen(propOrGen)

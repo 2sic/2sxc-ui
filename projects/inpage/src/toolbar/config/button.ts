@@ -1,13 +1,13 @@
 ﻿import { CommandWithParams } from '.';
 import { CommandNames } from '../../commands';
-import { ContextComplete } from '../../context/bundles/context-bundle-button';
+import { ContextCompleteWithButton } from '../../context/bundles/context-bundle-button';
 import { ButtonDefinition } from './button-definition';
 
 /**
  * This is the most common call signature on most ButtonConfig properties
  * @public
  */
-export type ButtonPropGen<T> = (context: ContextComplete) => T;
+export type ButtonPropGen<T> = (context: ContextCompleteWithButton) => T;
 
 export type ButtonPropGenOrValue<T> = ButtonPropGen<T> | T;
 

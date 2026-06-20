@@ -2,7 +2,7 @@
 import { InPageButtonJson } from '.';
 import { ToolbarConfigLoader } from '.';
 import { Commands } from '../../commands';
-import { ContextComplete } from '../../context/bundles/context-bundle-button';
+import { ContextComplete, ContextCompleteWithButton } from '../../context/bundles/context-bundle-button';
 import { HasLog } from '../../core';
 import { TypeValue } from '../../plumbing';
 import { BtnCmdHelpers, ButtonConfiguration, Toolbar } from '../config';
@@ -111,7 +111,7 @@ export class ButtonConfigLoader extends HasLog {
       const btn = btns[i];
       if (!btn.command)
         continue;
-      const btnCtx: ContextComplete = {
+      const btnCtx: ContextCompleteWithButton = {
         ...context,
         button: btn,
       }

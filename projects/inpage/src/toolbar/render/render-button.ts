@@ -1,6 +1,6 @@
 ﻿import { CommandNames, CommandParams } from '../../commands';
 import { Debug } from '../../constants/debug';
-import { ContextComplete } from '../../context/bundles/context-bundle-button';
+import { ContextComplete, ContextCompleteWithButton } from '../../context/bundles/context-bundle-button';
 import { ContextHelpers } from '../../context/bundles/ContextHelpers';
 import { HtmlTools } from '../../html/dom-tools';
 import { ButtonWithContext, BtnCmdHelpers } from '../config';
@@ -16,8 +16,8 @@ export class RenderButton extends RenderPart {
     super(parent, "Rnd.Button");
   }
 
-  render(ctx: ContextComplete, groupIndex: number): HTMLElement {
-    const button = ctx.button!; // never null, because ContextComplete, but Types don't clearly show this
+  render(ctx: ContextCompleteWithButton, groupIndex: number): HTMLElement {
+    const button = ctx.button!; // never null, because ContextCompleteWithButton, but Types don't clearly show this
     const cl = this.log.call(
       "render",
       `context: obj, group: ${groupIndex}, btn: ${button.id}/${button.command?.name}`

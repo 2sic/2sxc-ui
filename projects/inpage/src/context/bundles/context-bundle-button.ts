@@ -39,6 +39,10 @@ export interface ContextComplete extends ContextBundleToolbar {
   // }
 }
 
+export interface ContextCompleteWithButton extends ContextComplete {
+  button: ButtonConfiguration;
+}
+
 export function createContextComplete(editCtx: AttrJsonEditContext, sxc: Sxc): ContextComplete {
   return {
     _isCtxComplete: true,
@@ -47,9 +51,7 @@ export function createContextComplete(editCtx: AttrJsonEditContext, sxc: Sxc): C
 }
 
 /** @internal */
-export function cloneForButton(original: ContextComplete, button: ButtonConfiguration): ContextComplete {
+export function cloneForButton(original: ContextComplete, button: ButtonConfiguration): ContextCompleteWithButton {
   // the ContextBundleButton is the same as toolbar, just with .button
-  const clone = { ...original } satisfies ContextComplete;
-  clone.button = button;
-  return clone;
+  return { ...original, button };
 }

@@ -1,6 +1,6 @@
 ﻿import { CmdParHlp } from '..';
 import { renderer } from '../../contentBlock/render';
-import { ContextComplete } from '../../context/bundles/context-bundle-button';
+import { ContextComplete, ContextCompleteWithButton } from '../../context/bundles/context-bundle-button';
 import { ContentListActionParams } from './content-list-action-params';
 
 //#region WebApi Endpoints used: 2sxc
@@ -18,17 +18,17 @@ const webApiBlockPublish = 'cms/block/publish';
 class ContentListActions {
   /**
    * add an item to the list at this position
-   * @param {ContextComplete} context
+   * @param {ContextCompleteWithButton} context
    * @param {number} index
    */
-  addItem<T>(context: ContextComplete, index: number) {
+  addItem<T>(context: ContextCompleteWithButton, index: number) {
     return doAndReload<T>(context, webApiAdd, { index }, 'post');
   }
 
   /**
    * remove an item from a list, then reload
    */
-  removeFromList(context: ContextComplete) {
+  removeFromList(context: ContextCompleteWithButton) {
     const params = context.button.command.params;
     return doAndReload<void>(context, webApiRemoveFromList, {
       index: CmdParHlp.getIndex(params),
@@ -40,7 +40,7 @@ class ContentListActions {
   /**
    * change the order of an item in a list, then reload
    */
-  changeOrder(context: ContextComplete, index: number, toIndex: number) {
+  changeOrder(context: ContextCompleteWithButton, index: number, toIndex: number) {
     const params = context.button.command.params;
     return doAndReload<void>(context, webApiReorder, {
       parent: params.parent,

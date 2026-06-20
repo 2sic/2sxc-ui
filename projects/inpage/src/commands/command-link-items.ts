@@ -1,10 +1,9 @@
 ﻿import { CmdParHlp } from '.';
 import { CommandParams } from '../../../$2sxc/src/cms/command-params';
 import { AnyIdentifier, ItemIdentifierCopy, ItemIdentifierInList, ItemIdentifierSimple, ItemUrlParameters } from '../../../$2sxc/src/cms/item-identifiers';
-import { ContextComplete } from '../context/bundles/context-bundle-button';
+import { ContextCompleteWithButton } from '../context/bundles/context-bundle-button';
 import { HasLog, Log } from '../core';
 import { ButtonWithContext } from '../toolbar/config';
-import { RuleParams } from '../toolbar/rules';
 
 /**
  * This is responsible for taking a context with command and everything
@@ -13,7 +12,7 @@ import { RuleParams } from '../toolbar/rules';
  */
 export class CommandLinkItems extends HasLog {
 
-  constructor(private buttonAndCtx: ButtonWithContext, private readonly context: ContextComplete, parentLog: Log) {
+  constructor(private buttonAndCtx: ButtonWithContext, private readonly context: ContextCompleteWithButton, parentLog: Log) {
     super('Cmd.LnkGenItems', parentLog);
     
     // Debugging

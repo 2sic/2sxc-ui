@@ -2,7 +2,7 @@
 import { RunParamsWithContext } from '../../../$2sxc/src/cms/run-params';
 import { SxcGlobalCms } from '../cms/sxc-global-cms';
 import { CommandParams } from '../commands';
-import { ContextComplete } from '../context/bundles/context-bundle-button';
+import { ContextComplete, ContextCompleteWithButton } from '../context/bundles/context-bundle-button';
 import { ContextHelpers } from '../context/bundles/ContextHelpers';
 import { AttrJsonEditContext } from '../context/html-attribute/edit-context-root';
 import { HasLog, Log } from '../plumbing';
@@ -53,9 +53,11 @@ export class EditManager extends HasLog implements SxcManage {
      * it is publicly used out of inpage, so take a care to preserve function signature
      */
     getButton(actDef: InPageButtonJson, groupIndex: number): string {
-        this.context.button = ToolbarManager.singleton().getLoader('getButton')
-            .groups.convertToButton(actDef, {}, {}, {});
-        const button = new ToolbarRenderer(this.context).button.render(this.context, groupIndex);
+        this.context.button = ToolbarManager.singleton()
+            .getLoader('getButton')
+            .groups
+            .convertToButton(actDef, {}, {}, {});
+        const button = new ToolbarRenderer(this.context).button.render(this.context as ContextCompleteWithButton, groupIndex);
         return button.outerHTML;
     }
 

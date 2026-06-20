@@ -2,7 +2,7 @@
 import { CommandParams } from '../../../../$2sxc/src/cms/command-params';
 import { RunParamsHelpers } from '../../cms/run-params-helpers';
 import { renderer } from '../../contentBlock/render';
-import { ContextComplete } from '../../context/bundles/context-bundle-button';
+import { ContextComplete, ContextCompleteWithButton } from '../../context/bundles/context-bundle-button';
 import { ContextBundleInstance } from '../../context/bundles/context-bundle-instance';
 import { HasLog, Insights, Log } from '../../core';
 import { QuickDialog } from '../../quick-dialog/quick-dialog';
@@ -88,7 +88,11 @@ export class CmsEngine extends HasLog {
     const button = new ButtonConfiguration(btnCommand.name, btnCommand, overrides);
 
     // attach to context for inner calls which might access it
-    context.button = button;
+    const ctxWithButton: ContextCompleteWithButton = {
+      ...context,
+      button,
+    };
+    // context.button = button;
     l.data('button', context.button);
 
     // In case we don't have special code, use generic code
@@ -103,7 +107,7 @@ export class CmsEngine extends HasLog {
       name,
       commandPromise,
       button,
-      context,
+      ctxWithButton,
       origEvent,
       paramsWithWorkflow
     );
@@ -116,7 +120,7 @@ export class CmsEngine extends HasLog {
   /**
    * Open a new dialog of the angular-ui
    */
-  static openDialog<T>(context: ContextComplete, event: MouseEvent, triggeredBy?: string): Promise<void | T> {
+  static openDialog<T>(context: ContextCompleteWithButton, event: MouseEvent, triggeredBy?: string): Promise<void | T> {
     const log = new Log('Cms.OpnDlg', null, `triggeredBy: ${triggeredBy}`);
     Insights.add('cms', 'open-dialog', log);
     // the link contains everything to open a full dialog (lots of params added)
