@@ -1,8 +1,11 @@
 ﻿import { Sxc } from '../../../../$2sxc/src/sxc/sxc';
 import { AttrJsonEditContext } from '../html-attribute';
-import { ContextOfInstance, ContextOfPage, ContextOfSystem, ContextOfUser, createContextOfInstance, createContextOfPage, createContextOfSystem, createContextOfUser } from '../parts';
 import { ContextOfApp, createContextOfApp } from '../parts/context-app';
+import { ContextOfInstance, createContextOfInstance } from '../parts/context-instance';
+import { ContextOfPage, createContextOfPage } from '../parts/context-page';
+import { ContextOfSystem, createContextOfSystem } from '../parts/context-system';
 import { ContextOfUi, createContextOfUi } from '../parts/context-ui';
+import { ContextOfUser, createContextOfUser } from '../parts/context-user';
 
 /**
  * @public
