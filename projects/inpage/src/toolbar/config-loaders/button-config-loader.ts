@@ -111,7 +111,10 @@ export class ButtonConfigLoader extends HasLog {
       const btn = btns[i];
       if (!btn.command)
         continue;
-      context.button = btn; // add to context for calls
+      const btnCtx: ContextComplete = {
+        ...context,
+        button: btn,
+      }
       const rule = this.toolbar.toolbarV10.rules.find(btn.id || btn.command.name);
       let show = rule?.overrideShow();
 
@@ -119,7 +122,7 @@ export class ButtonConfigLoader extends HasLog {
       if (show == null) {
         // make sure params on the rule are also respected when checking the show-condition
         // I think this should have happened earlier, but as of 2022-06 it's necessary
-        var btnSafe = new ButtonWithContext(btn, context);
+        var btnSafe = new ButtonWithContext(btn, btnCtx);
         CommandWithParams.mergeAdditionalParams(btnSafe.btnCommand(), rule?.params ?? {});
         show = btnSafe.getShowCondition();
       }
