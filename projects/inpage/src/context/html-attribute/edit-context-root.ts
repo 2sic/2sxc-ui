@@ -10,13 +10,13 @@ export interface AttrJsonEditContext extends InstanceContext {
   Language: AttrJsonLanguage;
 
   /** Reference to the content block with information about the parent */
-  contentBlockReference: ContentBlockReference;
+  contentBlockReference?: ContentBlockReference;
 
   /** Information about the content block itself */
   contentBlock: AttrJsonContentGroup;
 
-  error: ContextErrorJsonAndObj;
-  Ui: AttrJsonUi;
+  error?: ContextErrorJsonAndObj;
+  Ui?: AttrJsonUi;
 
   jsApi: EnvironmentSpecs;
 }

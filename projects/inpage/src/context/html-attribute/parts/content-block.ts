@@ -40,5 +40,5 @@ export function createContentBlockReference(original: Partial<ContentBlockRefere
     parentField: original?.parentField ?? null,
     parentIndex: original?.parentIndex ?? 0,
     partOfPage: original?.partOfPage ?? false
-  } satisfies ContentBlockReference; // new ContentBlockReference(original);
+  } satisfies ContentBlockReference;
 }

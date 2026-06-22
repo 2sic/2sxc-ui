@@ -1,7 +1,7 @@
 ﻿/**
  * @internal
  */
-export class ContextErrorJsonAndObj {
+export interface ContextErrorJsonAndObj {
   type: string;
   problems?: ContextProblems[];
 }
@@ -11,7 +11,7 @@ export class ContextErrorJsonAndObj {
  * Context problems - same type in Json and in object
  * @internal
  */
-export class ContextProblems {
+export interface ContextProblems {
   severity: /*'none' | */ 'info' | 'warning' | 'error';
   scope: 'view' | 'app';
   code: string;
