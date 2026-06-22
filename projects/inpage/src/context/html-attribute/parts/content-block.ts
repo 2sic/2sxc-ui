@@ -32,7 +32,7 @@ export interface ContentBlockReference {
 
 // 2026-06-20 2dm: minor warning: since we don't spread the original object
 // there is a small risk that some properties will be missing
-export function createContentBlockReference(original: Partial<ContentBlockReference>): ContentBlockReference {
+export function createContentBlockReference(original: Partial<ContentBlockReference> | null | undefined): ContentBlockReference {
   return {
     publishingMode: original?.publishingMode ?? IDs.publishAllowed,
     id: original?.id ?? NumberNotDefinedHuge,

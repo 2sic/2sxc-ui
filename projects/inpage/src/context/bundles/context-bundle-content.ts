@@ -8,44 +8,44 @@ import { ContextBundleInstance, createContextBundleInstance } from './context-bu
  * @public
  */
 export interface ContextBundleContent extends ContextBundleInstance {
-  // 2026-06-20 2dm - has no values and seems unused
-  /**
-   * information about the current item
-   * @internal
-   */
-  // item: ContextOfItem;
+    // 2026-06-20 2dm - has no values and seems unused
+    /**
+     * information about the current item
+     * @internal
+     */
+    // item: ContextOfItem;
 
-  /**
-   * Reference to a Content-Block
-   * @internal
-   */
-  contentBlockReference: ContentBlockReference;
+    /**
+     * Reference to a Content-Block
+     * @internal
+     */
+    contentBlockReference: ContentBlockReference;
 
-  /**
-   * The content-block itself with specs like is-app, etc.
-   * @internal
-   */
-  contentBlock: ContextOfContentBlock;
+    /**
+     * The content-block itself with specs like is-app, etc.
+     * @internal
+     */
+    contentBlock: ContextOfContentBlock;
 
-  // /** @internal */
-  // constructor(editCtx: AttrJsonEditContext, sxc: Sxc) {
-  //   super(editCtx, sxc);
+    // /** @internal */
+    // constructor(editCtx: AttrJsonEditContext, sxc: Sxc) {
+    //   super(editCtx, sxc);
 
-  //   // information about the current item
-  //   // this.item = new ContextOfItem(editCtx);
+    //   // information about the current item
+    //   // this.item = new ContextOfItem(editCtx);
 
-  //   this.contentBlockReference = createContentBlockReference(editCtx.contentBlockReference);
+    //   this.contentBlockReference = createContentBlockReference(editCtx.contentBlockReference);
 
-  //   // information related to the current contentBlock
-  //   this.contentBlock = createContextOfContentBlock(editCtx);
-  // }
+    //   // information related to the current contentBlock
+    //   this.contentBlock = createContextOfContentBlock(editCtx);
+    // }
 }
 
 /** @internal */
 export function createContextBundleContent(editCtx: AttrJsonEditContext, sxc: Sxc): ContextBundleContent {
-  return {
-    ...createContextBundleInstance(editCtx, sxc),
-    contentBlockReference: createContentBlockReference(editCtx.contentBlockReference),
-    contentBlock: createContextOfContentBlock(editCtx),
-  } satisfies ContextBundleContent;
+    return {
+        ...createContextBundleInstance(editCtx, sxc),
+        contentBlockReference: createContentBlockReference(editCtx.contentBlockReference),
+        contentBlock: createContextOfContentBlock(editCtx),
+    } satisfies ContextBundleContent;
 }
