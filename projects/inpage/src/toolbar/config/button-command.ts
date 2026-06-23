@@ -19,9 +19,9 @@ export interface CommandWithParams {
 
 export function createCmdWithParams(name: CommandNames, params?: CommandParams): CommandWithParams {
     return {
-      params: params ?? {},
-      name,
-      commandDef: Commands.singleton().get(name)
+        params: params ?? {},
+        name,
+        commandDef: Commands.singleton().get(name)
     } satisfies CommandWithParams;
 }
 
@@ -55,10 +55,14 @@ export class BtnCmdHelpers {
     }
 
     static mergeParamsWithRulesAndClean(command: CommandWithParams, rule: BuildRule | null): CommandParams {
-        const cmdParamsBefore = { ...(command?.params ?? {}) };
-        const ruleParamsBefore = { ...(rule?.params ?? {}) };
 
         // 2026-06-20 2dm: Special early clean-up of conflicting identifiers
+        // Edge case: in some cases we can have conflicting identifiers
+        // One from the button / rule itself, one from the context (toolbar main)
+        // In this case, it could cause trouble down the road,
+        // as it may try to edit both the item "2345" as well as the "child 0000-0000-0000" of a parent.
+        // This would result in the edit working, but the parent also getting modified, so we must prevent this.
+        
         // Note that this changes the underlying command.params, which is a side-effect
         // but it's by design and kind of necessary (see method above)
         const cp = command?.params;
@@ -71,12 +75,11 @@ export class BtnCmdHelpers {
             delete(cp.contentType);
         }
 
-        // if (rule?.params?.fields)
-          console.log('2dm - fields',
-            JSON.parse(JSON.stringify(
-              { cmdParamsBefore, ruleParamsBefore, cp }
-            ))
-          );
+        // Run pre-clean if the button needs it
+        // new 2026-06-22 2dm for add-existing to prevent inheriting contentType from the main toolbar definition
+        const preClean = command.commandDef.buttonDefaults.preCleanSharedParams;
+        if (command.params && preClean)
+            command.params = preClean(command.params);
 
         let params = BtnCmdHelpers.mergeAdditionalParams(command, rule?.params ?? {});
 
@@ -86,11 +89,6 @@ export class BtnCmdHelpers {
           ...(rule?.settings ? { settings: rule.settings } : {})
         };
 
-        // Edge case: in some cases we can have conflicting identifiers
-        // One from the button / rule itself, one from the context (toolbar main)
-        // In this case, it could cause trouble down the road,
-        // as it may try to edit both the item "2345" as well as the "child 0000-0000-0000" of a parent.
-        // This would result in the edit working, but the parent also getting modified, so we must prevent this.
 
         return params;
     }

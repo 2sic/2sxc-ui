@@ -90,4 +90,11 @@ export class ButtonDefinition {
    * @internal
    */
   noItems?: ButtonPropGenOrValue<boolean>;
+
+  /**
+   * Allow the button to drop certain conflicting parameters which may be inherited from the main toolbar definition.
+   * New 2026-06-22 v22 2dm
+   * @internal
+   */
+  preCleanSharedParams?: (globalParams: CommandParams) => CommandParams;
 }

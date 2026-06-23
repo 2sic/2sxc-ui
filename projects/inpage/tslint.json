@@ -15,7 +15,7 @@
     "indent": [
       true,
       "spaces",
-      2
+      4
     ],
     "interface-name": false,
     "no-consecutive-blank-lines": false,
