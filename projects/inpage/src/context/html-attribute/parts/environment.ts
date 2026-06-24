@@ -3,7 +3,7 @@
 /**
  * @internal
  */
-export class AttrJsonEnvironment {
+export interface AttrJsonEnvironment {
   // ReSharper disable InconsistentNaming
   WebsiteId: number;
   WebsiteUrl: string;

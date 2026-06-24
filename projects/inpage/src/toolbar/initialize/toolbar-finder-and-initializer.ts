@@ -1,5 +1,5 @@
 ﻿import { C } from '../../constants/index';
-import { ContextComplete } from '../../context/bundles/context-bundle-button';
+import { ContextHelpers } from '../../context/bundles/ContextHelpers';
 import { Translator } from '../../i18n/translator';
 import { HasLog } from '../../core';
 import { ToolbarRenderer } from '../render/toolbar-renderer';
@@ -135,7 +135,7 @@ export class ToolbarConfigFinderAndInitializer extends HasLog {
         const cl = this.log.call('convertConfigToToolbars');
         cl.data('tag', tag);
         cl.data('config', config);
-        const context = ContextComplete.expandContext(tag);
+        const context = ContextHelpers.expandContext(tag);
         context.toolbar = this.tlbManager.loadConfig(context, config);
 
         // V2 where the full toolbar is included in one setting
@@ -198,7 +198,7 @@ function addDefaultToolbarConfigToTag(parentTag: HTMLElement): HTMLElement[] {
     const contentTag = outsideCb ? parentTag.querySelector<HTMLElement>(`div${C.Cb.selectors.ofName}`) : parentTag;
 
     // auto toolbar
-    const ctx = ContextComplete.expandContext(contentTag);
+    const ctx = ContextHelpers.expandContext(contentTag);
     if (ctx.ui.autoToolbar === false)
         return null;
 

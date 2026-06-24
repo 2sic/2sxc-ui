@@ -1,7 +1,7 @@
 ﻿/**
  * @internal
  */
-export class AttrJsonLanguage {
+export interface AttrJsonLanguage {
   // ReSharper disable InconsistentNaming
   Current: string;
   Primary: string;

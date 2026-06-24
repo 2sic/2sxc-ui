@@ -2,7 +2,7 @@
 export class AssetsLoader {
 
   /** Asynchronously runs external and inline scripts in series */
-  static runScripts(scripts: HTMLScriptElement[], callback: () => void): void {
+  static runScripts(scripts: HTMLScriptElement[], callback?: () => void): void {
     const script = scripts[0];
     const others = scripts.slice(1);
     if (script == null) {

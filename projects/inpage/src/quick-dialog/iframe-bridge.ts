@@ -5,10 +5,11 @@ import { IQuickDialogConfig } from '../../../connect-parts/inpage-quick-dialog';
 import { ContentBlockEditor } from '../contentBlock/content-block-editor';
 import { renderer } from '../contentBlock/render';
 import { ContextComplete } from '../context/bundles/context-bundle-button';
+import { ContextHelpers } from '../context/bundles/ContextHelpers';
 import { HasLog, NoJQ } from '../core';
 import { EditManager } from '../manage/edit-manager';
 import { QuickDialog } from './quick-dialog';
-import { QuickDialogConfig } from './quick-dialog-config';
+import { createQuickDialogConfig } from './quick-dialog-config';
 import { DomTools } from '../../../$2sxc/src/dom/dom-tools';
 
 const scrollTopOffset: number = 80;
@@ -43,12 +44,12 @@ export class IFrameBridge extends HasLog implements IIFrameBridge {
 
     getContext(): ContextComplete {
         const cl = this.log.call('getContext');
-        return cl.return(ContextComplete.expandContext(this.uncachedSxc()));
+        return cl.return(ContextHelpers.expandContext(this.uncachedSxc()));
     }
 
     getAdditionalDashboardConfig() {
         const cl = this.log.call('getAdditionalDashboardConfig');
-        return cl.return(QuickDialogConfig.fromContext(this.getContext()));
+        return cl.return(createQuickDialogConfig(this.getContext()));
     }
 
     hide(): void {

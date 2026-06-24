@@ -2,10 +2,10 @@
 import { InPageButtonJson } from '.';
 import { ToolbarConfigLoader } from '.';
 import { Commands } from '../../commands';
-import { ContextComplete } from '../../context/bundles';
+import { ContextComplete, ContextCompleteWithButton } from '../../context/bundles/context-bundle-button';
 import { HasLog } from '../../core';
 import { TypeValue } from '../../plumbing';
-import { ButtonConfiguration, CommandWithParams, Toolbar } from '../config';
+import { BtnCmdHelpers, ButtonConfiguration, Toolbar } from '../config';
 import { ButtonDefinition } from '../config/button-definition';
 import { ButtonWithContext } from '../config/button-safe';
 import { CommandNames } from './../../commands/';
@@ -111,7 +111,10 @@ export class ButtonConfigLoader extends HasLog {
       const btn = btns[i];
       if (!btn.command)
         continue;
-      context.button = btn; // add to context for calls
+      const btnCtx: ContextCompleteWithButton = {
+        ...context,
+        button: btn,
+      }
       const rule = this.toolbar.toolbarV10.rules.find(btn.id || btn.command.name);
       let show = rule?.overrideShow();
 
@@ -119,8 +122,8 @@ export class ButtonConfigLoader extends HasLog {
       if (show == null) {
         // make sure params on the rule are also respected when checking the show-condition
         // I think this should have happened earlier, but as of 2022-06 it's necessary
-        var btnSafe = new ButtonWithContext(btn, context);
-        CommandWithParams.mergeAdditionalParams(btnSafe.btnCommand(), rule?.params);
+        var btnSafe = new ButtonWithContext(btn, btnCtx);
+        BtnCmdHelpers.mergeAdditionalParams(btnSafe.btnCommand(), rule?.params ?? {});
         show = btnSafe.getShowCondition();
       }
 

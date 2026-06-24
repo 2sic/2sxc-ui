@@ -111,7 +111,7 @@ export class ToolbarWorkflowManager extends HasLog {
     const cl = this.log.call('attach');
     if (!node) return;
     (node as ToolbarWithWorkflow).commandWorkflow = this;
-    Insights.add('workflow', context.toolbar?.identifier, this.log);
+    Insights.add('workflow', context.toolbar?.identifier ?? '', this.log);
     cl.done();
   }
 

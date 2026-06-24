@@ -1,4 +1,5 @@
-﻿import { ContextBundleToolbar } from '../../context/bundles/context-bundle-toolbar';
+﻿import { cloneForButton, ContextComplete } from '../../context';
+import { ContextBundleToolbar } from '../../context/bundles/context-bundle-toolbar';
 import { ButtonGroup } from '../config';
 import { RenderPart } from './render-part-base';
 import { ToolbarRenderer } from './toolbar-renderer';
@@ -27,7 +28,8 @@ export class RenderButtonGroups extends RenderPart {
         const tags: HTMLElement[] = []; // temporary storage for detached HTML DOM objects
         const btns = group.buttons;
         for (let h = 0; h < btns.length; h++) {
-            const btnContext = context.forButton(btns[h]);
+            // this is a bit ugly, but I guess it's just a context-toolbar + .button, so we can clone the context and add the button to it
+            const btnContext = cloneForButton(context as ContextComplete, btns[h]);
             const tag = this.parent.button.render(btnContext, groupNumber);
             // add button to group of buttons
             const item = document.createElement('li');

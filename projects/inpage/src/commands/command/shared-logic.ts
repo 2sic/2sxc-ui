@@ -1,5 +1,5 @@
 import { CmdParHlp } from '..';
-import { ContextComplete } from '../../context';
+import { ContextCompleteWithButton } from '../../context';
 
 /**
  * Shared logic like for deciding if we show list buttons
@@ -7,7 +7,7 @@ import { ContextComplete } from '../../context';
  * @internal
  */
 export class SharedLogic {
-  static isPartOfBlockList(context: ContextComplete) {
+  static isPartOfBlockList(context: ContextCompleteWithButton) {
     return !!(context.contentBlock.isList &&
       context.button.command.params.useModuleList &&
       CmdParHlp.getIndex(context) !== -1);    // -1 is the header item
@@ -18,20 +18,20 @@ export class SharedLogic {
      * It's similar to isBlockList, but will return true even if it's
      * a non-list (single item only)
      */
-    static isBlockReference(context: ContextComplete) {
+    static isBlockReference(context: ContextCompleteWithButton) {
       return !!context.button.command.params.useModuleList;    // -1 is the header item
     }
 
-    static isFieldList(context: ContextComplete) {
+    static isFieldList(context: ContextCompleteWithButton) {
       const params = context.button?.command.params;
       return !!(params?.fields && params?.parent);
     }
 
-    static isList(context: ContextComplete) {
+    static isList(context: ContextCompleteWithButton) {
       return this.isPartOfBlockList(context) || this.isFieldList(context);
     }
 
-    static isReferencedItem(context: ContextComplete) {
+    static isReferencedItem(context: ContextCompleteWithButton) {
       return this.isBlockReference(context) || this.isFieldList(context);
     }
 }

@@ -1,88 +1,63 @@
 ﻿import { Sxc } from '../../../../$2sxc/src/sxc/sxc';
-import { Obj } from '../../plumbing';
-import { SxcTools } from '../../sxc/sxc-tools';
 import { ButtonConfiguration } from '../../toolbar/config/button';
 import { ToolbarWorkflowManager } from '../../workflow';
 import { AttrJsonEditContext } from '../html-attribute';
-import { ContextBundleToolbar } from './context-bundle-toolbar';
-import { DomTools } from '../../../../$2sxc/src/dom/dom-tools';
+import { ContextBundleToolbar, createContextBundleToolbar } from './context-bundle-toolbar';
+
 /**
  * @public
  */
-export class ContextComplete extends ContextBundleToolbar {
-  /** @internal */
-  private _isCtxComplete = true;
+export interface ContextComplete extends ContextBundleToolbar {
+    /** @internal */
+    _isCtxComplete: true;
 
-  /** @internal */
-  button?: ButtonConfiguration;
+    /** @internal */
+    button?: ButtonConfiguration;
 
-  /** @internal
-   * must be implemented as static, because the final object is actually just an interface and created from values.
-   */
-  static getRule(ctx: ContextComplete) {
-    return ctx.toolbar?.settings?._rules?.find(ctx.button.id);
-  }
+    /** @internal */
+    commandWorkflow?: ToolbarWorkflowManager;
 
-  /** @internal */
-  commandWorkflow?: ToolbarWorkflowManager;
+    // /** @internal */
+    // constructor(editCtx: AttrJsonEditContext, sxc: Sxc) {
+    //   super(editCtx, sxc);
+    //   this.sxc = sxc;
+    //   // note that the button will not be filled here, as it will be filled somewhere else
+    // }
 
-  /** @internal */
-  constructor(editCtx: AttrJsonEditContext, sxc?: Sxc) {
-    super(editCtx, sxc);
-    this.sxc = sxc;
-    // note that the button will not be filled here, as it will be filled somewhere else
-  }
+    // /**
+    //  * Create copy of context, so it can be modified before use
+    //  * @internal
+    //  */
+    // static contextCopy(htmlElementOrId: HTMLElement | number, cbid?: number): ContextComplete {
+    //   const contextOfButton = ContextHelpers.expandContext(htmlElementOrId, cbid);
+    //   // set sxc to null because of cyclic reference, so we can serialize it
+    //   contextOfButton.sxc = null!;
+    //   // make a copy
+    //   const copyOfContext = Obj.DeepClone(contextOfButton);
+    //   // bring sxc back to context
+    //   contextOfButton.sxc = window.$2sxc(htmlElementOrId) as Sxc;
+    //   return copyOfContext;
+    // }
+}
 
-  /**
-   * Primary API to get the context (context is cached)
-   * @internal
-   */
-  static expandContext(tagOrSxc: Sxc | HTMLElement | number, cbid?: number): ContextComplete {
-    let sxc: Sxc;
-    let containerTag: HTMLElement = null;
+/**
+ * Complete context with a button (explicitly)
+ * @internal
+ */
+export interface ContextCompleteWithButton extends ContextComplete {
+    /** @internal */
+    button: ButtonConfiguration;
+}
 
-    if (Sxc.is(tagOrSxc)) { // it is SxcInstance
-        sxc = tagOrSxc;
-    } else if (typeof tagOrSxc === 'number') { // it is number
-        sxc = window.$2sxc(tagOrSxc, cbid);
-    } else { // it is HTMLElement
-        sxc = window.$2sxc(tagOrSxc);
-        containerTag = DomTools.getContainerTag(tagOrSxc);
-    }
+export function createContextComplete(editCtx: AttrJsonEditContext, sxc: Sxc): ContextComplete {
+    return {
+        _isCtxComplete: true,
+        ...createContextBundleToolbar(editCtx, sxc),
+    } satisfies ContextComplete;
+}
 
-    return ContextComplete.#getContextInstance(sxc, containerTag);
-  }
-
-  /**
-   * Create copy of context, so it can be modified before use
-   * @internal
-   */
-  static contextCopy(htmlElementOrId: HTMLElement | number, cbid?: number): ContextComplete {
-    const contextOfButton = ContextComplete.expandContext(htmlElementOrId, cbid);
-    // set sxc to null because of cyclic reference, so we can serialize it
-    contextOfButton.sxc = null;
-    // make a copy
-    const copyOfContext = Obj.DeepClone(contextOfButton);
-    // bring sxc back to context
-    contextOfButton.sxc = window.$2sxc(htmlElementOrId) as Sxc;
-    return copyOfContext;
-  }
-
-  /**
-   * Create new context
-   * @param sxc
-   * @param htmlElement
-   * @internal
-   */
-  static #getContextInstance(sxc: Sxc, htmlElement?: HTMLElement): ContextComplete {
-    const editContext = SxcTools.getEditContext(sxc, htmlElement);
-    return new ContextComplete(editContext, sxc);
-  }
-
-  /**
-   * @internal
-   */
-  static is(thing: unknown): thing is ContextComplete {
-    return (thing as ContextComplete)._isCtxComplete;
-  }
+/** @internal */
+export function cloneForButton(original: ContextComplete, button: ButtonConfiguration): ContextCompleteWithButton {
+    // the ContextBundleButton is the same as toolbar, just with .button
+    return { ...original, button };
 }

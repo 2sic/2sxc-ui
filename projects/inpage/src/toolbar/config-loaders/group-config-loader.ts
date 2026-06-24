@@ -5,7 +5,7 @@ import { RunParams } from '../../../../$2sxc/src/cms/run-params';
 import { CommandNames, CommandParams, Commands } from '../../commands';
 import { HasLog } from '../../core';
 import { TypeValue } from '../../plumbing';
-import { ButtonConfiguration, CommandWithParams, Toolbar, ToolbarSettings } from '../config';
+import { ButtonConfiguration, CommandWithParams, createCmdWithParams, Toolbar, ToolbarSettings } from '../config';
 import { ButtonGroup } from '../config';
 import { TemplateConstants as TC } from '../templates/constants';
 import { TLB_MORE_END, TLB_MORE_NEVER } from './../config/toolbar-settings';
@@ -83,7 +83,7 @@ export class ButtonGroupConfigLoader extends HasLog {
     // parameters adapter from v1 to v2
     const params = { ...realParams, ...sharedParams };
     // Toolbar API v2
-    const command = new CommandWithParams(name, params);
+    const command = createCmdWithParams(name, params);
     let newButtonConfig = new ButtonConfiguration(identifier, command);
 
     // settings adapter from v1 to v2

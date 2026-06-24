@@ -1,21 +1,15 @@
 ﻿import { RunParams } from '../../../../$2sxc/src/cms/run-params';
 import { CommandParams } from '../../../../$2sxc/src/cms/command-params';
 import { RunParamsHelpers } from '../../cms/run-params-helpers';
-import { ContentBlockEditor } from '../../contentBlock/content-block-editor';
 import { renderer } from '../../contentBlock/render';
-import { ContextComplete } from '../../context/bundles/context-bundle-button';
+import { ContextComplete, ContextCompleteWithButton } from '../../context/bundles/context-bundle-button';
 import { ContextBundleInstance } from '../../context/bundles/context-bundle-instance';
 import { HasLog, Insights, Log } from '../../core';
 import { QuickDialog } from '../../quick-dialog/quick-dialog';
-import { ButtonConfiguration, ButtonWithContext } from '../../toolbar/config';
+import { ButtonConfiguration, ButtonWithContext, createCmdWithParams } from '../../toolbar/config';
 import { CommandWithParams } from '../../toolbar/config';
 import { InPageButtonJson } from '../../toolbar/config-loaders/config-formats/in-page-button';
-import { WorkflowHelper, WorkflowPhases, WorkflowStepCodeArguments } from '../../workflow';
-import { ToolbarWorkflowManager } from '../../workflow/toolbar-workflow-manager';
-import { WorkflowStep } from '../../workflow/workflow-step';
 import { CommandLinkGenerator } from '../command-link-generator';
-import { Debug } from '../../constants/debug';
-import { CommandCode } from '../command-code';
 import { CmsWorkflow } from './cms-workflow';
 
 const debug = false;
@@ -74,27 +68,31 @@ export class CmsEngine extends HasLog {
   run<T>(context: ContextComplete, params: CommandParams, event: MouseEvent, paramsWithWorkflow?: RunParams, triggeredBy?: string): Promise<void | T> {
     const l = this.log.call('run<T>', `triggeredBy: ${triggeredBy}`, undefined, { context });
     // this.log.liveDump = true;
-    const name = params.action;
+    const name = params.action!;
     const origEvent = event;
 
     // #DisableExpandParamsWithDefaults
     // const cmdParams = this.runParamsHelper.expandParamsWithDefaults(params);
     const cmdParams = params;
 
-    // console.warn('2dm: cms-engine.ts: run', { context, params, cmdParams });
+    if (this.log.liveDump)
+      console.warn('2dm: cms-engine.ts: run', { context, params, cmdParams });
     
     l.add(`run command '${name}'`);
 
     // Toolbar API v2
-    const btnCommand = new CommandWithParams(name, cmdParams);
+    const btnCommand = createCmdWithParams(name, cmdParams);
 
     // Support old 2sxc v8 API, where the params could be a JS object with method/properties
     const overrides = InPageButtonJson.toButton(params as unknown as InPageButtonJson);
-    const newButtonConfig = new ButtonConfiguration(btnCommand.name, btnCommand, overrides);
-    const button = newButtonConfig;
+    const button = new ButtonConfiguration(btnCommand.name, btnCommand, overrides);
 
     // attach to context for inner calls which might access it
-    context.button = button;
+    const ctxWithButton: ContextCompleteWithButton = {
+      ...context,
+      button,
+    };
+    // context.button = button;
     l.data('button', context.button);
 
     // In case we don't have special code, use generic code
@@ -109,7 +107,7 @@ export class CmsEngine extends HasLog {
       name,
       commandPromise,
       button,
-      context,
+      ctxWithButton,
       origEvent,
       paramsWithWorkflow
     );
@@ -122,11 +120,11 @@ export class CmsEngine extends HasLog {
   /**
    * Open a new dialog of the angular-ui
    */
-  static openDialog<T>(context: ContextComplete, event: MouseEvent, triggeredBy: string): Promise<void | T> {
+  static openDialog<T>(context: ContextCompleteWithButton, event: MouseEvent, triggeredBy?: string): Promise<void | T> {
     const log = new Log('Cms.OpnDlg', null, `triggeredBy: ${triggeredBy}`);
     Insights.add('cms', 'open-dialog', log);
     // the link contains everything to open a full dialog (lots of params added)
-    const btn = new ButtonWithContext(context.button, context);
+    const btn = new ButtonWithContext(context.button!, context);
     const link = new CommandLinkGenerator(btn, context, log).getLink();
 
     const origEvent = event || (window.event as MouseEvent);
@@ -176,13 +174,14 @@ export class CmsEngine extends HasLog {
     });
   }
 
-  static applyLinkToButton(event: MouseEvent, link: string, target: string): boolean {
+  static applyLinkToButton(event: MouseEvent, link: string, target: string | null): boolean {
     if (debug) console.log('applyLinkToButton', event, link, target);
 
     // Get clicked tag from event and try to find a parent link tag
     // event can be unknown, eg. when triggered from the Dnn-Module-Menu https://github.com/2sic/2sxc/issues/3280
-    let tag = event?.target as HTMLElement;
-    while (tag != null && tag.tagName !== 'A') tag = tag.parentElement;
+    let tag = event?.target as HTMLElement | null;
+    while (tag != null && tag.tagName !== 'A')
+      tag = tag.parentElement;
 
     // If we didn't find an A tag, we can't apply the link. Return false so the caller handles it.
     if (tag == null) {

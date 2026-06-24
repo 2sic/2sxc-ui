@@ -1,7 +1,7 @@
 ﻿import { SxcGlobalEnvironment } from '../../../$2sxc/src';
 import { ItemUrlParameters } from '../../../$2sxc/src/cms/item-identifiers';
 import { C } from '../constants';
-import { ContextComplete } from '../context/bundles/context-bundle-button';
+import { ContextCompleteWithButton } from '../context/bundles/context-bundle-button';
 import { HasLog, Log } from '../core';
 import { DialogCoreParams } from '../manage/dialog-core-params';
 import { NoJQ, flattenSlashes } from '../plumbing';
@@ -15,11 +15,12 @@ import { CommandLinkItems } from './command-link-items';
  */
 export class CommandLinkGenerator extends HasLog {
 
-  constructor(private buttonSafe: ButtonWithContext, public readonly context: ContextComplete, parentLog: Log) {
+  constructor(private buttonSafe: ButtonWithContext, public readonly context: ContextCompleteWithButton, parentLog: Log) {
     super('Cmd.LnkGen', parentLog);
     
     // Debugging
     // this.log.liveDump = true;
+    // console.log('2dm');
 
     const l = this.log.call('constructor');
     l.done();
@@ -86,7 +87,7 @@ export class CommandLinkGenerator extends HasLog {
   /**
    * Determine the url to open a dialog, based on the settings which UI version to use
    */
-  #getDialogUrl(context: ContextComplete): string {
+  #getDialogUrl(context: ContextCompleteWithButton): string {
     const env = context.sxc?.env ?? window.$2sxc.env;
     let customParams = env.dialogQuery();
     if (customParams && !customParams.startsWith('&'))

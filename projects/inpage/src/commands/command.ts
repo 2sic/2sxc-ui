@@ -1,5 +1,5 @@
 ﻿import tippy, { Props } from 'tippy.js';
-import { ContextComplete } from '../context/bundles/context-bundle-button';
+import { ContextHelpers } from '../context/bundles/ContextHelpers';
 import { ButtonDefinition } from '../toolbar/config/button-definition';
 import { Note } from '../toolbar/config/Note';
 import { Debug } from '../constants/debug';
@@ -36,7 +36,7 @@ export class CommandDefinition {
       /** Initialize Tippy if we have any notes */
       tippy: (ctx, tag) => {
         // get the rule and only continue if there is a note attached
-        const ui = ContextComplete.getRule(ctx)?.ui;
+        const ui = ContextHelpers.getRule(ctx)?.ui;
         let note = (ui?.note);
         
         // if there is no specified note, see if the button definition would have one

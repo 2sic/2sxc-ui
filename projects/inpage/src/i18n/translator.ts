@@ -2,12 +2,12 @@
 import XHR from 'i18next-http-backend';
 // @ts-ignore
 import locI18next from 'loc-i18next';
-import { primaryLanguage, translations, translationsPath } from '.';
+import { primaryLanguage, translationsPath } from '.';
 import { IDs } from '../constants/ids';
-import { ContextComplete } from '../context/bundles';
 import { HasLog, Insights, flattenSlashes } from '../core';
 import { EditManager } from '../manage/edit-manager';
 import { SxcTools } from '../sxc/sxc-tools';
+import { ContextComplete, createContextComplete } from '../context';
 
 let localize: any;
 // let initialized: boolean = false;
@@ -65,7 +65,7 @@ class TranslatorGlobal extends HasLog {
         const sxc = window.$2sxc(htmlElementOrId);
         this.initialized = false; // for real, it is not initialized...
         const editContext = SxcTools.getEditContext(sxc);
-        const context = new ContextComplete(editContext, sxc);
+        const context = createContextComplete(editContext, sxc);
         return cl.return(context);
     }
 

@@ -1,7 +1,7 @@
 ﻿/**
  * @internal
  */
-export class AttrJsonEntity {
+export interface AttrJsonEntity {
   // ReSharper disable InconsistentNaming
   Key: string;
   Value: string;

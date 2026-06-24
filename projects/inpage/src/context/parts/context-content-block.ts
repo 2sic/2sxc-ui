@@ -1,6 +1,6 @@
 ﻿import { AttrJsonEditContext } from '../html-attribute';
 
-export class ContentBlockUnifiedInCtxAndAttr {
+export interface ContentBlockUnifiedInCtxAndAttr {
   /**
    * Informs if the razor file is from a shared location - usually false.
    * Important for opening the code editor.
@@ -33,11 +33,11 @@ export class ContentBlockUnifiedInCtxAndAttr {
  * information related to the current contentBlock, incl
  * @internal
  */
-export class ContextOfContentBlock extends ContentBlockUnifiedInCtxAndAttr {
+export interface ContextOfContentBlock extends ContentBlockUnifiedInCtxAndAttr {
   // ContentGroup
   isCreated: boolean;
   isList: boolean;
-  queryId: number;
+  queryId: number | null;
   /** new v17.07 for layout-info only ATM */
   queryName: string;
   /** new v17.07 for layout-info only ATM */
@@ -60,29 +60,58 @@ export class ContextOfContentBlock extends ContentBlockUnifiedInCtxAndAttr {
    */
   editions?: string;
 
-  constructor(editCtx: AttrJsonEditContext) {
-    super();
-    // Initialize Content-Group Values
-    const cb = editCtx.contentBlock;
-    if (!cb) return;
-    this.isCreated = cb.IsCreated;
-    this.isList = cb.IsList;
+  // constructor(editCtx: AttrJsonEditContext) {
+  //   super();
+  //   // Initialize Content-Group Values
+  //   const cb = editCtx.contentBlock;
+  //   if (!cb) return;
+  //   this.isCreated = cb.IsCreated;
+  //   this.isList = cb.IsList;
 
-    this.queryId = cb.QueryId;
-    this.queryName = cb.queryName;
-    this.queryInfo = cb.queryInfo;
-    this.templateId = cb.TemplateId;
-    this.templatePath = cb.TemplatePath;
-    this.templateIsShared = cb.templateIsShared;
-    this.edition = cb.Edition ?? null;
-    this.editions = cb.editions ?? null;
-    this.contentTypeId = cb.ContentTypeName;
-    this.contentGroupId = cb.Guid;
+  //   this.queryId = cb.QueryId;
+  //   this.queryName = cb.queryName;
+  //   this.queryInfo = cb.queryInfo;
+  //   this.templateId = cb.TemplateId;
+  //   this.templatePath = cb.TemplatePath;
+  //   this.templateIsShared = cb.templateIsShared;
+  //   this.edition = cb.Edition ?? null;
+  //   this.editions = cb.editions ?? null;
+  //   this.contentTypeId = cb.ContentTypeName;
+  //   this.contentGroupId = cb.Guid;
 
-    this.viewName = cb.viewName;
-    this.renderMs = cb.renderMs;
-    this.renderLightspeed = cb.renderLightspeed;
+  //   this.viewName = cb.viewName;
+  //   this.renderMs = cb.renderMs;
+  //   this.renderLightspeed = cb.renderLightspeed;
 
-    this.viewSwitchDisabled = cb.viewSwitchDisabled;
-  }
+  //   this.viewSwitchDisabled = cb.viewSwitchDisabled;
+  // }
+}
+
+export function createContextOfContentBlock(editCtx: AttrJsonEditContext): ContextOfContentBlock {
+  const cb = editCtx.contentBlock;
+
+  // 2026-06-12 Note: this feels a bit unsafe, but it's how the previous code did it.
+  if (!cb)
+    return {} as ContextOfContentBlock;
+
+  return {
+    isCreated: cb.IsCreated,
+    isList: cb.IsList,
+
+    queryId: cb.QueryId,
+    queryName: cb.queryName,
+    queryInfo: cb.queryInfo,
+    templateId: cb.TemplateId,
+    templatePath: cb.TemplatePath,
+    templateIsShared: cb.templateIsShared,
+    edition: cb.Edition ?? null,
+    editions: cb.editions ?? null,
+    contentTypeId: cb.ContentTypeName,
+    contentGroupId: cb.Guid,
+
+    viewName: cb.viewName,
+    renderMs: cb.renderMs,
+    renderLightspeed: cb.renderLightspeed,
+    viewSwitchDisabled: cb.viewSwitchDisabled,
+  } satisfies ContextOfContentBlock; // new ContextOfContentBlock(editCtx);
 }

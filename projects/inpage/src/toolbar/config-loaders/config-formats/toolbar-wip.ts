@@ -19,15 +19,15 @@ export interface ToolbarWip {
     groups: ButtonGroupWip[];
 
     /** Settings like floating of toolbar, etc. */
-    settings: ToolbarSettings;
+    settings?: ToolbarSettings;
 
     /** Params for the commands, like EntityId, Content - Type - Name */
-    params: Record<string, TypeValue> | CommandParams;
+    params?: Record<string, TypeValue> | CommandParams;
 
     /** show more debug info */
     debug?: boolean;
 
     /**  the button defaults like icon, etc. */
-    defaults: Record<string, TypeValue>;
+    defaults?: Record<string, TypeValue>;
 
 }

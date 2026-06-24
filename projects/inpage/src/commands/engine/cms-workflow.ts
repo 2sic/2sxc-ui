@@ -1,6 +1,6 @@
 ﻿import { RunParams } from '../../../../$2sxc/src/cms/run-params';
 import { ContentBlockEditor } from '../../contentBlock/content-block-editor';
-import { ContextComplete } from '../../context/bundles/context-bundle-button';
+import { ContextCompleteWithButton } from '../../context/bundles/context-bundle-button';
 import { HasLog, Log } from '../../core';
 import { ButtonConfiguration, ButtonWithContext } from '../../toolbar/config';
 import { WorkflowHelper, WorkflowPhases, WorkflowStepCodeArguments } from '../../workflow';
@@ -20,8 +20,8 @@ export class CmsWorkflow extends HasLog {
     super('Cmd.WF', parentLog, 'start');
   }
 
-  wrapInWorkflow<T>(name: string, commandPromise: CommandCode, button: ButtonConfiguration, context: ContextComplete, origEvent: MouseEvent, paramsWithWorkflow?: RunParams): Promise<void | T> {
-    const l = this.log.call('run<T>', null, undefined, { context });
+  wrapInWorkflow<T>(name: string, commandPromise: CommandCode, button: ButtonConfiguration, context: ContextCompleteWithButton, origEvent: MouseEvent, paramsWithWorkflow?: RunParams): Promise<void | T> {
+    const l = this.log.call('run<T>', undefined, undefined, { context });
 
     // New in 11.12 - find commandWorkflow of toolbar or use a dummy so the remaining code will always work
     // note: in cases where the click comes from elsewhere (like from the quick-dialog) there is no event
@@ -43,15 +43,15 @@ export class CmsWorkflow extends HasLog {
     if (new ButtonWithContext(button, context).getUiActionOnly()) {
       l.add('UI command, no pre-flight to ensure content-block');
       finalPromise = wrapperPromise.then((wfArgs) => WorkflowHelper.isCancelled(wfArgs)
-        ? Promise.resolve<T>(null)
+        ? Promise.resolve<void>(undefined)
         : commandPromise(context, origEvent, 'cmsEngine.run#UI command'));
     } else {
       // if more than just a UI-action, then it needs to be sure the content-group is created first
       l.add('command might change data, wrap in pre-flight to ensure content-block');
       finalPromise = wrapperPromise.then((wfArgs) => WorkflowHelper.isCancelled(wfArgs)
-        ? Promise.resolve<T>(null)
+        ? Promise.resolve<void>(undefined)
         : ContentBlockEditor.singleton()
-            .prepareToAddContent(context, button.command.params?.useModuleList)
+            .prepareToAddContent(context, button.command.params?.useModuleList ?? false)
             .then(() => commandPromise(context, origEvent, 'cmsEngine.run#non UI command'))
       );
     }

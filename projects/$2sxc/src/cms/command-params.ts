@@ -50,7 +50,9 @@ export interface CommandParams extends Record<string, unknown>
      */
     mode?: string;
 
-    // both contentType and contentTypeName were used historically, so both variations may exist in Razor templaets
+    // both contentType and contentTypeName were used historically, so both variations may exist in Razor templates
+    // This is the new one
+    // 2026-06-20 2dm - adding ability to use this for the replace/add dialog.
     /** 
      * The purpose of this varies by [Command](xref:Api.Js.SxcJs.CommandNames).
      * @public

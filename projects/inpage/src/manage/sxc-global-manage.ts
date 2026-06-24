@@ -1,10 +1,10 @@
 ﻿import { Sxc } from '../../../$2sxc/src/sxc/sxc';
 import { SxcGlobalManage as ISxcGlobalManage } from '../../../$2sxc/src/sxc-global/sxc-global-manage';
-import { ContextComplete } from '../context';
 import { SxcCmsReal } from '../sxc/sxc-cms-real';
 import { SxcTools } from '../sxc/sxc-tools';
 import { ToolbarManager } from '../toolbar';
 import { EditManager } from './edit-manager';
+import { ContextHelpers } from '../context/bundles/ContextHelpers';
 
 /**
  * A helper-controller in charge of opening edit-dialogues + creating the toolbars for it
@@ -25,7 +25,7 @@ export class SxcGlobalManage implements ISxcGlobalManage {
    */
   initInstance(sxc: Sxc) {
     try {
-      const myContext = ContextComplete.expandContext(sxc);
+      const myContext = ContextHelpers.expandContext(sxc);
       const editContext = SxcTools.getEditContext(sxc);
 
       sxc.manage = new EditManager(editContext, myContext);
