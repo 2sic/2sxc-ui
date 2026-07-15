@@ -1,6 +1,6 @@
 import { ApplicationConfig, importProvidersFrom } from "@angular/core";
 import { SxcHttpInterceptorProvider } from "@2sic.com/sxc-angular";
-import { HttpClient, withInterceptorsFromDi, provideHttpClient } from "@angular/common/http";
+import { HttpClient, withInterceptorsFromDi, provideHttpClient, withXhr } from "@angular/common/http";
 import { BrowserModule } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { TranslateModule, TranslateLoader, TranslateModuleConfig } from "@ngx-translate/core";
@@ -33,7 +33,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 export const appConfig: ApplicationConfig = {
   providers: [
     SxcHttpInterceptorProvider,
-    provideHttpClient(withInterceptorsFromDi()),
+    provideHttpClient(withXhr(), withInterceptorsFromDi()),
     importProvidersFrom(
       BrowserModule,
       BrowserAnimationsModule,

@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from "@angular/core";
+import { ChangeDetectorRef, Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
 import { App } from "app/core/app";
 import { BehaviorObservable } from "app/core/behavior-observable";
 import { Log, log as parentLog } from "app/core/log";
@@ -57,6 +57,7 @@ const debug = false;
     FormsModule,
     InstallerComponent
 ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   providers: [
     TemplateFilterPipe,
     ContentTypesProcessor,

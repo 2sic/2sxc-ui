@@ -1,5 +1,5 @@
 import { TranslateService } from "@ngx-translate/core";
-import { Component, ElementRef } from "@angular/core";
+import { Component, ElementRef, ChangeDetectionStrategy } from "@angular/core";
 import { SxcAppComponent, Context } from "@2sic.com/sxc-angular";
 import { Config } from "./config";
 import { SupportedLanguages, langCode2, PrimaryUiLanguage } from "./i18n";
@@ -12,6 +12,7 @@ import { TemplatePickerComponent } from "./template-picker/template-picker.compo
   templateUrl: "./app.component.html",
   styleUrls: ["./app.component.css"],
   providers: [AppIconsService],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [TemplatePickerComponent]
 })
 export class AppComponent extends SxcAppComponent {

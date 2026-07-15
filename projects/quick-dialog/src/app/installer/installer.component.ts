@@ -6,7 +6,7 @@ import {
   debounceTime,
   catchError,
 } from "rxjs/operators";
-import { Component, OnInit, Input, ViewChild, ElementRef } from "@angular/core";
+import { Component, OnInit, Input, ViewChild, ElementRef, ChangeDetectionStrategy } from "@angular/core";
 import { InstallerService } from "app/installer/installer.service";
 import { DomSanitizer } from "@angular/platform-browser";
 import { fromEvent, of, Subscription } from "rxjs";
@@ -26,6 +26,7 @@ import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
   selector: "app-installer",
   templateUrl: "./installer.component.html",
   styleUrls: ["./installer.component.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [MatProgressSpinnerModule]
 })
 export class InstallerComponent implements OnInit {

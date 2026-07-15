@@ -16,7 +16,7 @@ This is a UI component of 2sxc - a dialog which slides in from the bottom of the
 
 ## Technology
 
-As of 2025-02-14 it's built using Angular 19.
+As of 2026-07-15 it's built using Angular 22.
 
 ## Development
 
