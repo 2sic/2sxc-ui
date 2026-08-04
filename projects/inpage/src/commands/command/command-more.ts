@@ -22,11 +22,12 @@ Commands.add(CommandNames.more, 'MoreActions', 'options btn-mode', true, false, 
 
       event.preventDefault();
 
-      function mouseenterHandler(e: MouseEvent) {
+      function mouseenterHandler(/* e: MouseEvent */) {
         fullMenu2.style.opacity = '1';
       }
 
-      function mouseleaveHandler(e: MouseEvent) {
+      function mouseleaveHandler(this: HTMLElement, event: MouseEvent) {
+        const e = event as MouseEvent;
         if (e.screenX !== 0 && e.screenY !== 0) {
           // hide toolbar on mouseleave
           fullMenu2.style.opacity = '0';
@@ -44,7 +45,7 @@ Commands.add(CommandNames.more, 'MoreActions', 'options btn-mode', true, false, 
       }
 
       // because of issue in Chrome we need to override CSS rules in edit.css for toolbar toggle on mouse hover
-      const scElement = fullMenu2.closest(
+      const scElement = fullMenu2.closest<HTMLElement>(
         '.' + C.Toolbar.classes.oldHover,
       );
       // add mouseenter and mouseleave events to parent sc-element if not already added
