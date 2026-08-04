@@ -58,7 +58,9 @@ const configuration = {
     rules: [
       {
         test: /\.tsx?$/,
-        use: "ts-loader",
+
+        // 2026-08-02 2dm - changing from ts-loader to swc-loader because ts-loader is incompatible with TS7
+        use: "swc-loader",
         exclude: /node_modules/,
       },
       {
