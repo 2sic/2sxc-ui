@@ -59,5 +59,9 @@
     "CMS",
     "TypeScript",
     "JavaScript"
-  ]
+  ],
+  "allowScripts": {
+    "@parcel/watcher@2.5.1": true,
+    "esbuild@0.27.2": true
+  }
 }
