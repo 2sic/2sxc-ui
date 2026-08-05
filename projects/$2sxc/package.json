@@ -3,6 +3,7 @@
   "description": "The $2sxc JS API for 2sxc.org",
   "scripts": {
     "dev": "vite build --watch --mode=development",
+    "dev:once": "vite build --mode=development",
     "release": "vite build --mode=production",
     "release:watch": "vite build --watch --mode=production",
     "test": "vitest run",
