@@ -9,10 +9,11 @@ const rootVersion = rootPackage.version;
  * Create define replacements for Vite
  * This replaces the webpack DefinePlugin functionality
  */
-function createDefineReplacements(mode) {
+function createDefineReplacements(mode, isProd) {
+  console.log('Define Replacements: ', mode, isProd);
   return {
     ROOTVERSION: JSON.stringify(rootVersion),
-    IsDevBuild: !process.env.NODE_ENV || process.env.NODE_ENV === 'development',
+    IsDevBuild: !isProd,
   };
 }
 
@@ -48,9 +49,12 @@ function isProduction(mode) {
  */
 function createCopyAfterBuildPlugin(source, targets, addon) {
   console.log('createCopyAfterBuildPlugin:source', source, '; targets', targets, '; addon', addon);
-  if (!source || !targets) return null;
-  if (!Array.isArray(targets)) throw new Error(`targets should be an array: ${targets}`);
-  if (!addon) throw new Error("addon parameter missing - something like 'js'");
+  if (!source || !targets)
+    return null;
+  if (!Array.isArray(targets))
+    throw new Error(`targets should be an array: ${targets}`);
+  if (!addon)
+    throw new Error("addon parameter missing - something like 'js'");
 
   return {
     name: 'copy-after-build',

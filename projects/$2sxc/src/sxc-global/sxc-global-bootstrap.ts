@@ -1,7 +1,7 @@
 ﻿import { TotalPopup } from '../tools/total-popup';
 import { UrlParams } from '../tools/url-params';
 import { Stats } from '../Stats';
-import { Insights, Log, SxcVersion } from '../../../core';
+import { Insights, Log, SxcDevBuild, SxcVersion } from '../../../core';
 import { $2sxcGet } from './sxc-global-get';
 import { SxcGlobalHttp } from './sxc-global-http';
 import { SxcGlobal } from './sxc-global';
@@ -41,7 +41,7 @@ export function buildSxcRoot(): SxcGlobal {
     const merged = Object.assign($2sxcGet, addOn, rootApiV2) as SxcGlobal;
     merged.log.add('sxc controller built');
 
-    console.log(`$2sxc ${SxcVersion} with insights-logging - see https://go.2sxc.org/insights`)
+    console.log(`$2sxc ${SxcVersion}${SxcDevBuild ? ' (dev build)' : ''} with insights-logging - see https://go.2sxc.org/insights`)
 
     return merged;
 }
