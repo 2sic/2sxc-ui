@@ -2,9 +2,9 @@
   "name": "2sic-2sxc-js-api",
   "description": "The $2sxc JS API for 2sxc.org",
   "scripts": {
+    "dev": "vite build --watch --mode=development",
     "release": "vite build --mode=production",
-    "watch": "vite build --watch --mode=development",
-    "watch-prod": "vite build --watch --mode=production",
+    "release:watch": "vite build --watch --mode=production",
     "test": "vitest run",
     "test:watch": "vitest watch"
   },
@@ -20,7 +20,6 @@
   "homepage": "https://github.com/2sic/2sxc-ui",
   "devDependencies": {
     "@types/jquery": "^4.0.1",
-    "fs-extra": "^11.4.0",
     "typescript": "^7.0.2",
     "vite": "^8.2.0",
     "vitest": "^4.1.10"
