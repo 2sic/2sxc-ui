@@ -22,14 +22,14 @@ function createDefineReplacements(mode, isProd) {
  * In production, we want external source maps
  * In development, we want inline source maps
  */
-function getSourceMapConfig(mode) {
+function getSourceMapConfig(mode, part = 'js') {
   const isProd = isProduction(mode);
   
   if (isProd) {
     // External source maps in production
     return {
       sourcemap: true, // Generate external .map files
-      sourcemapBaseUrl: ExternalSourcePath('js'), // Base URL for source maps
+      sourcemapBaseUrl: ExternalSourcePath(part), // Base URL for source maps
     };
   }
   
@@ -59,7 +59,7 @@ function createCopyAfterBuildPlugin(source, targets, addon) {
   return {
     name: 'copy-after-build',
     closeBundle: async () => {
-      console.log('Vite build done - will now copy from project assets to DNN');
+      console.log('Vite build done - will now copy from project assets to targets');
       
       // Use fs-extra for copying
       for (const target of targets) {
@@ -78,6 +78,44 @@ function createCopyAfterBuildPlugin(source, targets, addon) {
   };
 }
 
+/**
+ * Create a Vite plugin to copy and transform i18n JSON files to JS
+ * This replaces the copy-webpack-plugin functionality
+ * Only runs if i18n folder exists in the calling project
+ */
+function createI18nCopyPlugin(baseDir) {
+  return {
+    name: 'copy-i18n',
+    closeBundle: async () => {
+      const i18nSource = path.resolve(baseDir || import.meta.dirname, 'i18n');
+      
+      // Check if i18n folder exists, skip if not
+      const i18nExists = await fs.pathExists(i18nSource);
+      if (!i18nExists) {
+        return;
+      }
+      
+      const i18nDest = path.resolve(baseDir || import.meta.dirname, 'dist/i18n');
+      
+      // Ensure destination directory exists
+      await fs.ensureDir(i18nDest);
+      
+      // Read all JSON files from i18n folder
+      const files = await fs.readdir(i18nSource);
+      const jsonFiles = files.filter(f => f.endsWith('.json'));
+      
+      for (const file of jsonFiles) {
+        const sourcePath = path.join(i18nSource, file);
+        const destPath = path.join(i18nDest, file.replace('.json', '.js'));
+        
+        // Copy file (just copy as-is, the .js extension signals it's ready)
+        await fs.copy(sourcePath, destPath);
+        console.log(`Copied i18n: ${file} -> ${path.basename(destPath)}`);
+      }
+    },
+  };
+}
+
 function ExternalSourcePath(part) {
   return 'https://sources.2sxc.org/' + rootVersion + '/' + part + '/';
 }
@@ -87,6 +125,7 @@ export {
   getSourceMapConfig,
   createDefineReplacements,
   createCopyAfterBuildPlugin,
+  createI18nCopyPlugin,
   ExternalSourcePath,
 };
 
