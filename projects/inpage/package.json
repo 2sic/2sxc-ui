@@ -12,22 +12,22 @@
     "test": "vitest"
   },
   "dependencies": {
-    "i18next": "^21.9.1",
-    "i18next-http-backend": "^1.4.1",
-    "loc-i18next": "^0.1.4",
+    "i18next": "^26.3.6",
+    "i18next-http-backend": "^4.0.1",
+    "loc-i18next": "^0.1.6",
     "shake.js": "git+https://github.com/alexgibson/shake.js.git",
     "tippy.js": "^6.3.7"
   },
   "devDependencies": {
     "@2sic.com/2sxc-typings": "^14.7.3",
-    "@types/jquery": "^3.5.32",
-    "@types/node": "^25.0.1",
-    "@vitest/ui": "^4.0.16",
-    "jsdom": "^27.3.0",
-    "sass": "^1.96.0",
+    "@types/jquery": "^4.0.1",
+    "@types/node": "^26.1.2",
+    "@vitest/ui": "^4.1.10",
+    "jsdom": "^30.0.1",
+    "sass": "^1.102.0",
     "typescript": "^7.0.2",
     "vite": "^8.2.0",
-    "vitest": "^4.0.16"
+    "vitest": "^4.1.10"
   },
   "repository": {
     "type": "git",
