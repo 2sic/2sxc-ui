@@ -64,7 +64,6 @@
  * ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)
  * @public
  */
-// tslint:disable-next-line: align
 export interface CommandParamsEntity extends CommandParamsEntityById, CommandParamsEntityInContentBlock, CommandParamsEntityInList {
 
 }
