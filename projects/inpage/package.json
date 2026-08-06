@@ -8,7 +8,7 @@
     "dev:once": "vite build --mode=development",
     "release": "vite build --mode=production",
     "release:watch": "vite build --watch --mode=production",
-    "lint": "tslint ./src/**/*.ts -t verbose",
+    "lint": "tsc --noEmit --pretty false -p tsconfig.json",
     "test": "vitest"
   },
   "dependencies": {
@@ -25,7 +25,6 @@
     "@vitest/ui": "^4.0.16",
     "jsdom": "^27.3.0",
     "sass": "^1.96.0",
-    "tslint": "^6.1.3",
     "typescript": "^7.0.2",
     "vite": "^8.2.0",
     "vitest": "^4.0.16"
