@@ -14,6 +14,7 @@ function createDefineReplacements(mode, isProd) {
   return {
     ROOTVERSION: JSON.stringify(rootVersion),
     IsDevBuild: !isProd,
+    'process.env.NODE_ENV': JSON.stringify(mode),
   };
 }
 
