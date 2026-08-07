@@ -13,20 +13,20 @@
     }
 
     &.wysiwyg-spacer-s {
-      height: $gutter/2;
+      height: calc($gutter/2);
     }
 
     &.wysiwyg-spacer-m {
-      height: $gutter*1;
+      height: calc($gutter*1);
       @media screen and (max-width: 768px) {
-        height: $gutter*.75;
+        height: calc($gutter*.75);
       }
     }
     
     &.wysiwyg-spacer-l {
-      height: $gutter*2;
+      height: calc($gutter*2);
       @media screen and (max-width: 768px) {
-        height: $gutter*1.25;
+        height: calc($gutter*1.25);
       }
     }
     

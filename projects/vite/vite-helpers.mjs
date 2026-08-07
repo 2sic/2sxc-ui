@@ -47,8 +47,12 @@ function isProduction(mode) {
 /**
  * Create a Vite plugin to copy files after build
  * This replaces the webpack-shell-plugin-next functionality
+ * @param {string} source - Source directory to copy from
+ * @param {string[]} targets - Array of target directories
+ * @param {string} addon - Subdirectory path to append to targets
+ * @param {function} filter - Optional filter function (filePath, stat) => boolean
  */
-function createCopyAfterBuildPlugin(source, targets, addon) {
+function createCopyAfterBuildPlugin(source, targets, addon, filter) {
   console.log('createCopyAfterBuildPlugin:source', source, '; targets', targets, '; addon', addon);
   if (!source || !targets)
     return null;
@@ -69,6 +73,7 @@ function createCopyAfterBuildPlugin(source, targets, addon) {
           await fs.copy(source, destPath, {
             overwrite: true,
             errorOnExist: false,
+            filter: filter,
           });
           console.log(`Copied from ${source} to ${destPath}`);
         } catch (err) {
