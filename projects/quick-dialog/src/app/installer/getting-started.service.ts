@@ -1,11 +1,15 @@
-
-import { startWith, map, tap } from 'rxjs/operators';
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Subject, Observable } from 'rxjs';
+import { Injectable } from '@angular/core';
 import { log } from 'app/core/log';
-import { Constants } from 'app/core/constants';
-import { InstallSettings } from './installer-models';
+import { Observable, Subject } from 'rxjs';
+import { map, startWith, tap } from 'rxjs/operators';
+import { InstallRule, InstallSettings, InstalledApp } from './installer-models';
+
+interface AppInstallationStreams {
+  settings?: { remoteUrl: string }[];
+  installedApps?: InstalledApp[];
+  rules?: InstallRule[];
+}
 
 // copied to eav-ui
 @Injectable()
@@ -23,7 +27,18 @@ export class AppInstallSettingsService {
   }
 
   public loadGettingStarted(isContentApp: boolean): void {
-    this.http.get<InstallSettings>(`${Constants.webApiInstallSettings}?isContentApp=${isContentApp}`)
-      .subscribe(json => this.installSettingsSubject.next(json));
+    this.http.get<AppInstallationStreams>('app/auto/query/System.SysData/', {
+      params: {
+        SysDataSource: 'System.AppInstallation',
+        IsContentApp: isContentApp.toString(),
+        '$casing': 'camel',
+      },
+    }).pipe(
+      map(result => ({
+        remoteUrl: result.settings?.[0]?.remoteUrl ?? '',
+        installedApps: result.installedApps ?? [],
+        rules: result.rules ?? [],
+      } satisfies InstallSettings)),
+    ).subscribe(settings => this.installSettingsSubject.next(settings));
   }
 }
