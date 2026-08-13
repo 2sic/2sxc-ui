@@ -1,0 +1,6 @@
+{
+  "extends": "./tsconfig.angular22.json",
+  "compilerOptions": {
+    "noCheck": true
+  }
+}
