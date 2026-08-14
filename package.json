@@ -26,9 +26,7 @@
     "chalk": "^4.1.2",
     "chokidar": "^3.4.2",
     "cpx": "^1.2.1",
-    "fs-extra": "^11.4.0",
-    "webpack-shell-plugin": "^0.5.0",
-    "webpack-shell-plugin-next": "^1.2.0"
+    "fs-extra": "^11.4.0"
   },
   "dependencies": {
     "jsonc-parser": "^3.2.0",

@@ -8,7 +8,6 @@
       "script": "release",
       "problemMatcher": [],
       "label": "npm: release",
-      // "detail": "webpack --mode=production",
       "group": "build",
     },
     {
