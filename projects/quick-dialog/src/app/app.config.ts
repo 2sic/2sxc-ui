@@ -1,8 +1,6 @@
 import { ApplicationConfig, importProvidersFrom } from "@angular/core";
 import { SxcHttpInterceptorProvider } from "@2sic.com/sxc-angular";
 import { HttpClient, withInterceptorsFromDi, provideHttpClient } from "@angular/common/http";
-import { BrowserModule } from "@angular/platform-browser";
-import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { TranslateModule, TranslateLoader, TranslateModuleConfig } from "@ngx-translate/core";
 import { TranslateHttpLoader } from "@ngx-translate/http-loader";
 import { i18nExtension, pathToI18n, PrimaryUiLanguage } from "./i18n";
@@ -35,8 +33,6 @@ export const appConfig: ApplicationConfig = {
     SxcHttpInterceptorProvider,
     provideHttpClient(withInterceptorsFromDi()),
     importProvidersFrom(
-      BrowserModule,
-      BrowserAnimationsModule,
       TranslateModule.forRoot(),
       TranslateModule.forChild(buildTranslateConfiguration(HttpLoaderFactory)),
     ),
