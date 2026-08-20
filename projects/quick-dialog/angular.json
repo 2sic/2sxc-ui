@@ -24,7 +24,15 @@
             "browser": "src/main.ts",
             "polyfills": ["src/polyfills.ts"],
             "tsConfig": "src/tsconfig.esbuild.json",
-            "assets": ["src/favicon.ico", "src/assets"],
+            "assets": [
+              "src/favicon.ico",
+              "src/assets",
+              {
+                "glob": "*.json",
+                "input": "src/i18n",
+                "output": "i18n"
+              }
+            ],
             "styles": ["src/styles.css", "src/theme.scss"],
             "scripts": []
           },

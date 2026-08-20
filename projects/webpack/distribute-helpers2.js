@@ -1,5 +1,5 @@
 const path = require('path');
-const cpx = require('cpx');
+const cpx = require('cpx2');
 const chalk = require('chalk');
 const chokidar = require('chokidar');
 const fs = require('fs-extra');
@@ -29,8 +29,19 @@ function startCpx(src, target, useWatch) {
       });
     });
   }
-  var cpxCommand = useWatch ? cpx.watch : cpx.copy;
-  cpxCommand(src, target).on("copy", showCopyProgress);
+  if (useWatch) {
+    cpx.watch(src, target).on("copy", showCopyProgress);
+    return;
+  }
+
+  cpx.copy(src, target, error => {
+    if (error) {
+      console.error(chalk.red(`Copy failed for '${src}' to '${target}'`), error);
+      process.exitCode = 1;
+      return;
+    }
+    console.log(chalk.green(`Copied '${src}' to '${target}'`));
+  });
 }
 
 function runAllCpx(root, targetAddOn, watch) {
@@ -73,7 +84,7 @@ function waitToRunAllCpx(runPath, targetAddOn) {
         if(runInnerCallback) return;
         if(debug) console.log(chalk.yellow(`checking delete for '${path}'`));
         // If it's not the entry path we're looking for, just return
-        if(path.endsWith(`\\${folderToWaitFor}`) && path.endsWith(`/${folderToWaitFor}`)) return;
+        if(!path.endsWith(`\\${folderToWaitFor}`) && !path.endsWith(`/${folderToWaitFor}`)) return;
         // If we got this far, then our main folder was removed
         // In this case, CPX will terminate, so we will need to restart it when it's created again
         console.log(chalk.blue(`Folder ${chalk.yellow(folderToWaitFor)} was removed, will re-activate auto-start when re-created.`));
