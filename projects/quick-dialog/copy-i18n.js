@@ -8,6 +8,7 @@ if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir, { recursive: true });
 
 fs.readdirSync(inputDir).forEach(file => {
   if (file.endsWith('.json')) {
+    // Keep .js copies for older cached Quick-Dialog bundles; current builds load the .json assets directly.
     const src = path.join(inputDir, file);
     const dest = path.join(outputDir, file.replace('.json', '.js'));
     fs.copyFileSync(src, dest);
