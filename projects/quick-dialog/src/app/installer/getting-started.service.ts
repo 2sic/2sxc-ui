@@ -1,20 +1,26 @@
-
-import { startWith, map, tap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Subject, Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
+import { map, startWith, switchMap, take, tap } from 'rxjs/operators';
 import { log } from 'app/core/log';
-import { Constants } from 'app/core/constants';
-import { InstallSettings } from './installer-models';
+import { Config } from '../config';
+import { BackendSettings } from '../core/backend-settings';
+import { InstallRule, InstallSettings, InstalledApp } from './installer-models';
+
+interface AppInstallationResponse {
+  settings?: { remoteUrl: string }[];
+  installedApps?: InstalledApp[];
+  rules?: InstallRule[];
+}
 
 // copied to eav-ui
 @Injectable()
 export class AppInstallSettingsService {
 
-  private installSettingsSubject: Subject<InstallSettings> = new Subject<InstallSettings>();
+  private readonly installSettingsSubject = new Subject<InstallSettings>();
   settings$: Observable<InstallSettings> = this.installSettingsSubject.asObservable();
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private backendSettings: BackendSettings) {
     const ready$ = this.settings$.pipe(
       map(() => true),
       startWith(false));
@@ -23,7 +29,27 @@ export class AppInstallSettingsService {
   }
 
   public loadGettingStarted(isContentApp: boolean): void {
-    this.http.get<InstallSettings>(`${Constants.webApiInstallSettings}?isContentApp=${isContentApp}`)
-      .subscribe(json => this.installSettingsSubject.next(json));
+    this.backendSettings.data.pipe(
+      take(1),
+      switchMap(context => {
+        // When no app exists yet, appId is 0 and the system query must run in the primary app.
+        const appId = Config.appId() || context.Site?.PrimaryApp?.AppId;
+        if (!appId) throw new Error('Could not determine an app ID for the installation settings.');
+
+        return this.http.get<AppInstallationResponse>('app/auto/query/System.SysData/', {
+          params: {
+            appId,
+            SysDataSource: 'System.AppInstallation',
+            IsContentApp: isContentApp,
+            '$casing': 'camel',
+          },
+        });
+      }),
+      map(result => ({
+        remoteUrl: result.settings?.[0]?.remoteUrl ?? '',
+        installedApps: result.installedApps ?? [],
+        rules: result.rules ?? [],
+      } satisfies InstallSettings)),
+    ).subscribe(settings => this.installSettingsSubject.next(settings));
   }
 }

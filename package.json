@@ -25,7 +25,7 @@
   "devDependencies": {
     "chalk": "^4.1.2",
     "chokidar": "^3.4.2",
-    "cpx": "^1.2.1",
+    "cpx2": "^8.0.2",
     "fs-extra": "^11.4.0"
   },
   "dependencies": {
