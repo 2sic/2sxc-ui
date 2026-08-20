@@ -20,6 +20,7 @@ export class ContextDto {
 class WebResourceDto {
   Id?: number;
   Url?: string;
+  PrimaryApp?: { AppId: number };
 }
 
 class AppDto extends WebResourceDto {

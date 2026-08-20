@@ -25,9 +25,15 @@ function init() {
     console.log("platform destroy error", e);
   }
 
-  bootstrapApplication(AppComponent, {...appConfig, providers: [provideZoneChangeDetection(), ...appConfig.providers]}).catch((err) =>
-    console.error(err)
-  );
+  // A reboot can happen after Angular removed the previous host element.
+  if (!document.querySelector("app-root")) {
+    document.body.appendChild(document.createElement("app-root"));
+  }
+
+  bootstrapApplication(AppComponent, {
+    ...appConfig,
+    providers: [provideZoneChangeDetection(), ...appConfig.providers],
+  }).catch(err => console.error(err));
 }
 
 // provide hook for outside reboot calls
