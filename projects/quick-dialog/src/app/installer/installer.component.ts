@@ -6,7 +6,7 @@ import {
   debounceTime,
   catchError,
 } from "rxjs/operators";
-import { Component, OnInit, Input, ViewChild, ElementRef } from "@angular/core";
+import { ChangeDetectorRef, Component, OnInit, Input, ViewChild, ElementRef } from "@angular/core";
 import { InstallerService } from "app/installer/installer.service";
 import { DomSanitizer } from "@angular/platform-browser";
 import { fromEvent, of, Subscription } from "rxjs";
@@ -48,7 +48,8 @@ export class InstallerComponent implements OnInit {
   constructor(
     private installer: InstallerService,
     private api: AppInstallSettingsService,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private cdRef: ChangeDetectorRef
   ) {
     // copied to eav-ui file-upload-dialog
     this.subscriptions.push(
@@ -58,6 +59,7 @@ export class InstallerComponent implements OnInit {
           this.sanitizer.bypassSecurityTrustResourceUrl(settings.remoteUrl)
         );
         this.ready = true;
+        this.cdRef.detectChanges();
       })
     );
 
