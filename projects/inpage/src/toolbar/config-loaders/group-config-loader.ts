@@ -78,7 +78,8 @@ export class ButtonGroupConfigLoader extends HasLog {
     const realParams = (btnCommand as RunParams).params || InPageCommandJson.noAction(btnCommand);
 
     // if the button belongs to a content-item, move the specs up to the item into the settings-object
-    btnCommand = this.toolbar.command.updateToV9(btnCommand);
+    // #CleanUp2sxcEditInformation 2026-08-26 v22 2dm
+    // btnCommand = this.toolbar.command.updateToV9(btnCommand);
 
     // parameters adapter from v1 to v2
     const params = { ...realParams, ...sharedParams };

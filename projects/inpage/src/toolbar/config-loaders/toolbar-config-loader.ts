@@ -18,7 +18,8 @@ export class ToolbarConfigLoader extends HasLog {
   public toolbarV10: ToolbarConfigLoaderV10;
   public groups: ButtonGroupConfigLoader;
   public button: ButtonConfigLoader;
-  public command: CommandConfigLoader;
+  // #CleanUp2sxcEditInformation 2026-08-26 v22 2dm
+  // public command: CommandConfigLoader;
   public templates = ToolbarTemplateManager.singleton();
   public templateEditor: TemplateEditor;
 
@@ -48,7 +49,8 @@ export class ToolbarConfigLoader extends HasLog {
     this.toolbarV10 = new ToolbarConfigLoaderV10(this);
     this.groups = new ButtonGroupConfigLoader(this);
     this.button = new ButtonConfigLoader(this);
-    this.command = new CommandConfigLoader(this);
+    // #CleanUp2sxcEditInformation 2026-08-26 v22 2dm
+    // this.command = new CommandConfigLoader(this);
     this.templateEditor = new TemplateEditor(this);
   }
 
