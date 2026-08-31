@@ -141,7 +141,15 @@ export class InstallerComponent implements OnInit {
               action: "specs",
               data: {
                 installedApps: this.settings.installedApps,
-                rules: this.settings.rules,
+                rules: [
+                  ...this.settings.rules,
+                  ...this.settings.installedApps.map((app) => ({
+                    target: "guid",
+                    appGuid: app.guid,
+                    mode: "f",
+                    url: "",
+                  })),
+                ],
               },
             };
             const specsJson = JSON.stringify(specsMsg);
@@ -184,6 +192,7 @@ This takes about 10 seconds per package. Don't reload the page while it's instal
           switchMap((packages) => {
             this.alreadyProcessing = true;
             this.showProgress = true;
+            this.cdRef.detectChanges();
             if (this.devSimulateInstall) {
               alert("would install packages now, see list in console");
               console.log("packages", packages);
@@ -197,6 +206,7 @@ This takes about 10 seconds per package. Don't reload the page while it's instal
 
           tap(() => {
             this.showProgress = false;
+            this.cdRef.detectChanges();
             alert("Installation complete 👍");
             if (this.devSimulateInstall)
               console.log(
@@ -209,6 +219,7 @@ This takes about 10 seconds per package. Don't reload the page while it's instal
             console.error("Error: ", error);
             this.showProgress = false;
             this.alreadyProcessing = false;
+            this.cdRef.detectChanges();
             const errorMsg = `An error occurred: Package ${
               this.currentPackage.displayName
             }
