@@ -1,7 +1,5 @@
 // TODO
 
-// tslint:disable: align
-
 /** @internal */ export * from './shared-logic';
 /** @internal */ import './command-add';
 /** @internal */ import './command-add-existing';

@@ -90,14 +90,46 @@ export class QuickDialog extends HasLog {
         const dialogUrl = this.setUrlToQuickDialog(url);
         (iFrame.bridge as IFrameBridge).setup(context.sxc, dialogName);
         iFrame.setAttribute('src', dialogUrl);
-        // if the window had already been loaded, re-init
-        (iFrame.contentWindow as IFrameWindow)?.reboot();
 
-        // make sure it's visible'
-        this.setVisible(true);
-        return cl.return(this.promiseRestart(), 'restart');
+        return this.waitForIFrameReboot(iFrame)
+            .then(() => {
+                // make sure it's visible'
+                this.setVisible(true);
+                return cl.return(this.promiseRestart(), 'restart');
+            });
     }
 
+    
+    private waitForIFrameReboot(iFrame: IDialogFrameElement): Promise<void> {
+        const timeoutMs = 1000;
+        const retryMs = 50;
+        const startedAt = Date.now();
+
+        return new Promise<void>((resolve) => {
+            const tryReboot = () => {
+                const contentWindow = iFrame.contentWindow as IFrameWindow | null;
+                try {
+                    if (contentWindow?.reboot) {
+                        contentWindow.reboot();
+                        resolve();
+                        return;
+                    }
+                } catch {
+                    // ignore and retry until the timeout expires
+                }
+
+                if (Date.now() - startedAt >= timeoutMs) {
+                    resolve();
+                    return;
+                }
+
+                window.setTimeout(tryReboot, retryMs);
+            };
+
+            tryReboot();
+        });
+    }
+    
     cancel(bridge: IIFrameBridge) {
         const callLog = this.log.call('cancel');
         this.setVisible(false);
@@ -132,6 +164,7 @@ export class QuickDialog extends HasLog {
         return this.promise;
     }
     //#endregion
+
 
     /**
      * rewrite the url to fit the quick-dialog situation

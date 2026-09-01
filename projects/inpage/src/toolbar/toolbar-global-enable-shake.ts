@@ -1,7 +1,6 @@
 ﻿import { NoJQ } from '../plumbing';
 import { TlbShowPrefix } from './config';
 
-// tslint:disable-next-line: no-var-requires
 const Shake = require('shake.js');
 // ReSharper disable once InconsistentNaming
 // enable shake detection on all toolbars

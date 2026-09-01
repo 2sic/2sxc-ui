@@ -6,7 +6,7 @@ import {
   debounceTime,
   catchError,
 } from "rxjs/operators";
-import { Component, OnInit, Input, ViewChild, ElementRef } from "@angular/core";
+import { ChangeDetectorRef, Component, OnInit, Input, ViewChild, ElementRef } from "@angular/core";
 import { InstallerService } from "app/installer/installer.service";
 import { DomSanitizer } from "@angular/platform-browser";
 import { fromEvent, of, Subscription } from "rxjs";
@@ -48,7 +48,8 @@ export class InstallerComponent implements OnInit {
   constructor(
     private installer: InstallerService,
     private api: AppInstallSettingsService,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private cdRef: ChangeDetectorRef
   ) {
     // copied to eav-ui file-upload-dialog
     this.subscriptions.push(
@@ -58,6 +59,7 @@ export class InstallerComponent implements OnInit {
           this.sanitizer.bypassSecurityTrustResourceUrl(settings.remoteUrl)
         );
         this.ready = true;
+        this.cdRef.detectChanges();
       })
     );
 
@@ -139,7 +141,15 @@ export class InstallerComponent implements OnInit {
               action: "specs",
               data: {
                 installedApps: this.settings.installedApps,
-                rules: this.settings.rules,
+                rules: [
+                  ...this.settings.rules,
+                  ...this.settings.installedApps.map((app) => ({
+                    target: "guid",
+                    appGuid: app.guid,
+                    mode: "f",
+                    url: "",
+                  })),
+                ],
               },
             };
             const specsJson = JSON.stringify(specsMsg);
@@ -182,6 +192,7 @@ This takes about 10 seconds per package. Don't reload the page while it's instal
           switchMap((packages) => {
             this.alreadyProcessing = true;
             this.showProgress = true;
+            this.cdRef.detectChanges();
             if (this.devSimulateInstall) {
               alert("would install packages now, see list in console");
               console.log("packages", packages);
@@ -195,6 +206,7 @@ This takes about 10 seconds per package. Don't reload the page while it's instal
 
           tap(() => {
             this.showProgress = false;
+            this.cdRef.detectChanges();
             alert("Installation complete 👍");
             if (this.devSimulateInstall)
               console.log(
@@ -207,6 +219,7 @@ This takes about 10 seconds per package. Don't reload the page while it's instal
             console.error("Error: ", error);
             this.showProgress = false;
             this.alreadyProcessing = false;
+            this.cdRef.detectChanges();
             const errorMsg = `An error occurred: Package ${
               this.currentPackage.displayName
             }

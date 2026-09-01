@@ -44,7 +44,6 @@ export interface CommandAddParams extends
  * ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)
  * @public
  */
-// tslint:disable-next-line: no-empty-interface
 export interface CommandAddExistingParams extends CommandAddParams {
 }
 
@@ -183,7 +182,6 @@ export interface CommandMetadataParams extends CommandContentTypeParams, Command
  * ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)
  * @public
  */
-// tslint:disable-next-line: no-empty-interface
 export interface CommandNewParams extends CommandContentTypeParams, Partial<CommandParamsEntityInList>, Partial<CommandParamsEntityInContentBlock> {
   /**
    * Optional values to prefill in the new-form

@@ -4,6 +4,7 @@
  * The sub-projects also use this version
  */
 declare const ROOTVERSION: string;
+declare const IsDevBuild: boolean;
 
 /** @internal */
 export const ToSxcName = "2sxc";
@@ -13,6 +14,7 @@ export const SxcVersion = ROOTVERSION;
 
 /** @internal */
 export const SxcApiUrlRoot = 'desktopmodules/2sxc/api/';
+export const SxcDevBuild = IsDevBuild;
 
 /** @internal */
 export const HeaderNames = {

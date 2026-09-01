@@ -1,7 +1,6 @@
 {
   "compileOnSave": true,
   "compilerOptions": {
-    "outDir": "compiled",
     "noEmitOnError": false,
     "noImplicitAny": true,
     "allowUnreachableCode": false,
@@ -10,7 +9,18 @@
     "inlineSources": false,
     "target": "ES2022",
     "module": "ESNext",
-    "moduleResolution": "node",
+
+    // Moving to TS7...
+    // "outDir": "compiled",
+    // "moduleResolution": "node",
+    "strictNullChecks": false,
+    // was a test: "rootDir": "..",
+    "rootDirs": [
+      "./src",
+      "../$2sxc"
+    ],
+
+
     "lib": [
       "es2021",
       "dom",
@@ -25,6 +35,14 @@
       "jquery",
     ]
   },
+
+  // TS 7
+  // not quite working
+  // "references": [
+  //   { "path": "../$2sxc" }
+  // ],
+
+
   "include": [
     "./src/**/*.ts",
     "./test/**/*.ts",
