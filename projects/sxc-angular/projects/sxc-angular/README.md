@@ -4,7 +4,7 @@
 
 Connect Angular 18+ applications to 2sxc on DNN or Oqtane.
 
-The package configures Angular's `HttpClient` with the 2sxc context and request headers, exposes simple data/query/API clients, prevents accidental ASP.NET form submission, and provides standalone editing-toolbar directives.
+The package configures Angular's `HttpClient` with the 2sxc context and request headers, exposes simple data/query/API clients, prevents accidental ASP.NET form submission, and provides editing-toolbar directives.
 
 ## Install
 
@@ -37,7 +37,6 @@ import { initializeSxc } from '@2sic.com/sxc-angular';
 
 @Component({
   selector: 'app-root',
-  standalone: true,
   templateUrl: './app.component.html',
 })
 export class AppComponent {
@@ -80,7 +79,6 @@ import { SxcApp } from '@2sic.com/sxc-angular';
 
 @Component({
   selector: 'app-example',
-  standalone: true,
   template: '',
 })
 export class ExampleComponent {
@@ -107,7 +105,6 @@ import { SxcTagToolbarDirective } from '@2sic.com/sxc-angular';
 
 @Component({
   selector: 'app-item',
-  standalone: true,
   imports: [SxcTagToolbarDirective],
   template: `<article [sxc-toolbar]="toolbar">...</article>`,
 })
