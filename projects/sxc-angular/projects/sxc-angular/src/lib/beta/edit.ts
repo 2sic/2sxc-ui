@@ -2,7 +2,8 @@ import { Context } from '../context/context.service';
 import { Directive, ElementRef, Input, OnInit } from '@angular/core';
 
 @Directive({
-  selector: 'sxc-toolbar'
+  selector: 'sxc-toolbar',
+  standalone: true,
 })
 export class SxcToolbarDirective implements OnInit {
   @Input() config: any = {};

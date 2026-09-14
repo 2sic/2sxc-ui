@@ -1,70 +1,56 @@
-import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { HttpInterceptorFn, HttpRequest } from '@angular/common/http';
+import { inject } from '@angular/core';
 import { apiRouteName, routeApi, routeRoot } from '../contants';
 import { Context } from '../context/context.service';
 
-@Injectable()
-export class SxcHttpInterceptor implements HttpInterceptor {
-  constructor(private context: Context) { }
+/** Add the current 2sxc context to same-origin HTTP requests. */
+export const sxcHttpInterceptor: HttpInterceptorFn = (req, next) => {
+  const context = inject(Context);
 
-  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+  // Skip the interceptor for cross-origin requests.
+  if (!isSameOrigin(req))
+    return next(req);
 
-    // skip interceptor for CORS requests
-    if (!this.isSameOrigin(req)) return next.handle(req);
+  let url = req.url;
+  if (context.$2sxc)
+    url = context.$2sxc.http.apiUrl(req.url);
 
-    let url = req.url;
-    let ctx = this.context;
-    if (ctx.$2sxc) {
-      url = ctx.$2sxc.http.apiUrl(req.url);
-    }
+  // Use the configured API edition on routes which support editions.
+  if (context.apiEdition)
+    url = url.replace(routeApi, routeRoot + context.apiEdition + '/' + apiRouteName);
 
-    // change to use api of an edition, if an edition was specified
-    // but only do this on api-routes, the others don't support editions
-    if (ctx.apiEdition) {
-      url = url.replace(routeApi, routeRoot + ctx.apiEdition + '/' + apiRouteName);
-    }
+  if (context.appNameInPath)
+    url = url.replace(routeRoot, `app/${context.appNameInPath}/`);
 
-    if (ctx.appNameInPath) {
-      url = url.replace(routeRoot, `app/${ctx.appNameInPath}/`);
-    }
-
-    let headers = {};
-    if(ctx.addHttpHeaders && ctx.sxc) {
-      headers = ctx.sxc.webApi.headers();
-      headers = this.convertAllPropertiesToString(headers);
-    }
-
-    // Clone the request and update the url with 2sxc params.
-    const newReq = req.clone({
-      url: url,
-      setHeaders: headers,
-    });
-
-    return next.handle(newReq);
+  let headers = {};
+  if (context.addHttpHeaders && context.sxc) {
+    headers = context.sxc.webApi.headers();
+    headers = convertAllPropertiesToString(headers);
   }
 
-  private isSameOrigin(req: HttpRequest<any>) {
-    let url = req.url.toLowerCase();
-    let isRelativeUrl = true;
+  return next(req.clone({
+    url,
+    setHeaders: headers,
+  }));
+};
 
-    if (url.startsWith('https://') || url.startsWith('http://')) {
-      isRelativeUrl = false;
-    } else if (url.startsWith('//')) {
-      // protocol relative url
-      isRelativeUrl = false;
-      url = window.location.protocol + url;
-    }
+function isSameOrigin(req: HttpRequest<unknown>) {
+  let url = req.url.toLowerCase();
+  let isRelativeUrl = true;
 
-    if (isRelativeUrl) return true;
-    if (url.startsWith(`${window.location.protocol}//${window.location.host}`))
-      return true;
-
-    return false;
+  if (url.startsWith('https://') || url.startsWith('http://')) {
+    isRelativeUrl = false;
+  } else if (url.startsWith('//')) {
+    isRelativeUrl = false;
+    url = window.location.protocol + url;
   }
 
+  if (isRelativeUrl)
+    return true;
 
-  private convertAllPropertiesToString(obj: any): any {
-    return Object.keys(obj).reduce((a,k) => ({...a, [k]:obj[k].toString()}), {})
-  }
+  return url.startsWith(`${window.location.protocol}//${window.location.host}`);
+}
+
+function convertAllPropertiesToString(obj: any): any {
+  return Object.keys(obj).reduce((result, key) => ({ ...result, [key]: obj[key].toString() }), {});
 }
