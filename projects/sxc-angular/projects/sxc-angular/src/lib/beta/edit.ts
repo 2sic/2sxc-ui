@@ -3,7 +3,6 @@ import { Directive, ElementRef, Input, OnInit } from '@angular/core';
 
 @Directive({
   selector: 'sxc-toolbar',
-  standalone: true,
 })
 export class SxcToolbarDirective implements OnInit {
   @Input() config: any = {};
