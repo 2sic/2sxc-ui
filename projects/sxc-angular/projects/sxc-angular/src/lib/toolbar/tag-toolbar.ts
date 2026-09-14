@@ -11,7 +11,6 @@ import { Context } from '../context';
  */
 @Directive({
   selector: '[sxc-toolbar]',
-  standalone: true,
 })
 export class SxcTagToolbarDirective implements OnInit {
 
