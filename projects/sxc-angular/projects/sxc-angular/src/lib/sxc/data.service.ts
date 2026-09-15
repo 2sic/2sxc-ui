@@ -13,7 +13,7 @@ export class SxcDataService<T> {
   constructor(
     private http: HttpClient,
     private contentType: string,
-  ) { }
+  ) {}
 
   /**
    * Get all items of this type
