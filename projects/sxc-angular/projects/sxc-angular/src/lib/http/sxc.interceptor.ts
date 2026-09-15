@@ -2,11 +2,11 @@ import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/c
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { apiRouteName, routeApi, routeRoot } from '../contants';
-import { Context } from '../context/context.service';
+import { SxcContext } from '../context/sxc-context.service';
 
 @Injectable()
 export class SxcHttpInterceptor implements HttpInterceptor {
-  constructor(private context: Context) { }
+  constructor(private context: SxcContext) { }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     if (!this.isSameOrigin(req))

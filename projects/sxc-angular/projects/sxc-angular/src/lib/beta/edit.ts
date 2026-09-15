@@ -1,4 +1,4 @@
-import { Context } from '../context/context.service';
+import { SxcContext } from '../context/sxc-context.service';
 import { Directive, ElementRef, Input, OnInit } from '@angular/core';
 
 @Directive({
@@ -10,7 +10,7 @@ export class SxcToolbarDirective implements OnInit {
   
   constructor(
     private elementRef: ElementRef,
-    private context: Context
+    private context: SxcContext
   ) {}
 
   ngOnInit() {

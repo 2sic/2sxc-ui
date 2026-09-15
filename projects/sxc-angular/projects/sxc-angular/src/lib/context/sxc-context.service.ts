@@ -18,18 +18,18 @@ declare let __webpack_public_path__: any;
 
 
 /**
- * The Context gives you things from DNN and 2sxc which matches the current runtime context.
+ * The SxcContext gives you things from DNN and 2sxc which matches the current runtime context.
  * So it auto-detects what's going on in the page and initializes / provides everything.
  *
  * Note: some properties like moduleId are probably not actually in use any more and will probably be empty
  *
- * @class Context
+ * @class SxcContext
  * @implements {ContextInfo}
  */
 @Injectable({
     providedIn: 'root',
 })
-export class Context implements ContextInfo {
+export class SxcContext implements ContextInfo {
   /** The global $2sxc object */
   $2sxc: SxcGlobal;
 
@@ -73,7 +73,7 @@ export class Context implements ContextInfo {
 
         constructorCount++;
         if (constructorCount > 1) {
-          console.warn('The Context object of sxc-angular was created more than once. This is unexpected, and will probably lead to problems with the api calls.')
+          console.warn('The SxcContext object of sxc-angular was created more than once. This is unexpected, and will probably lead to problems with the api calls.')
         }
     }
 

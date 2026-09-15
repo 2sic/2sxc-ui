@@ -1,5 +1,5 @@
 import { Directive, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Context } from '../context';
+import { SxcContext } from '../context';
 
 /**
  * The toolbar attribute to be used on any HTML tag.
@@ -28,7 +28,7 @@ export class SxcTagToolbarDirective implements OnInit {
    */
   @Output('refresh') refresh = new EventEmitter<any>();
 
-  constructor(private element: ElementRef, private context: Context) {
+  constructor(private element: ElementRef, private context: SxcContext) {
   }
 
   ngOnInit() {

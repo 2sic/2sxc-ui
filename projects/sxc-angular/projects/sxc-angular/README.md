@@ -46,7 +46,7 @@ export class AppComponent {
 
 Both steps are required:
 
-- `provideSxc()` registers `Context`, `SxcApp`, `SxcInitializer`, Angular's `HttpClient`, and the 2sxc interceptor.
+- `provideSxc()` registers `SxcContext`, `SxcApp`, `SxcInitializer`, Angular's `HttpClient`, and the 2sxc interceptor.
 - `sxc.initialize(element)` reads the context from the root component before its lifecycle hooks run.
 
 No Angular modules or base component are required.

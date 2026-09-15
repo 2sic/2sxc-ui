@@ -1,6 +1,6 @@
 import { ElementRef, Injectable } from '@angular/core';
 import { ContextInfoPreconfigure } from './context/context-info-preconfigure';
-import { Context } from './context/context.service';
+import { SxcContext } from './context/sxc-context.service';
 
 export interface SxcConfig {
   context?: Partial<ContextInfoPreconfigure>;
@@ -10,10 +10,10 @@ export interface SxcConfig {
 @Injectable()
 export class SxcInitializer {
   constructor(
-    private context: Context
+    private context: SxcContext
   ) { }
 
-  initialize(element: ElementRef, config: SxcConfig = {}): Context {
+  initialize(element: ElementRef, config: SxcConfig = {}): SxcContext {
     if (config.context)
       this.context.preConfigure(config.context);
 
