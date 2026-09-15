@@ -4,7 +4,7 @@
 
 Connect Angular 18+ applications to 2sxc on DNN or Oqtane.
 
-The package configures Angular's `HttpClient` with the 2sxc context and request headers, exposes simple data/query/API clients, prevents accidental ASP.NET form submission, and provides editing-toolbar directives.
+The package configures Angular's `HttpClient` with the 2sxc context and request headers, exposes simple data/query/API clients, prevents accidental ASP.NET form submission, and provides standalone editing-toolbar directives.
 
 ## Install
 
@@ -14,9 +14,7 @@ npm install @2sic.com/sxc-angular
 
 ## Configure
 
-Standalone applications require two small calls.
-
-First, add `provideSxc()` to the application configuration:
+First, register all sxc-angular providers in the application configuration:
 
 ```ts
 import { ApplicationConfig } from '@angular/core';
@@ -29,35 +27,35 @@ export const appConfig: ApplicationConfig = {
 };
 ```
 
-Then call `initializeSxc()` once in the root component constructor:
+Then inject the initializer and root element into the root component:
 
 ```ts
-import { Component } from '@angular/core';
-import { initializeSxc } from '@2sic.com/sxc-angular';
+import { Component, ElementRef } from '@angular/core';
+import { SxcInitializer } from '@2sic.com/sxc-angular';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
 })
 export class AppComponent {
-  constructor() {
-    initializeSxc();
+  constructor(element: ElementRef, sxc: SxcInitializer) {
+    sxc.initialize(element);
   }
 }
 ```
 
-Both calls are required:
+Both steps are required:
 
-- `provideSxc()` provides Angular's `HttpClient` and adds the 2sxc interceptor.
-- `initializeSxc()` reads the context from the root component host before its lifecycle hooks run.
+- `provideSxc()` registers `Context`, `SxcApp`, `SxcInitializer`, Angular's `HttpClient`, and the 2sxc interceptor.
+- `sxc.initialize(element)` reads the context from the root component before its lifecycle hooks run.
 
 No Angular modules or base component are required.
 
 Optional context overrides and form submission behavior belong on the initialization call:
 
 ```ts
-constructor() {
-  initializeSxc({
+constructor(element: ElementRef, sxc: SxcInitializer) {
+  sxc.initialize(element, {
     context: {
       moduleId: 42,
       apiEdition: 'live',
@@ -79,6 +77,7 @@ import { SxcApp } from '@2sic.com/sxc-angular';
 
 @Component({
   selector: 'app-example',
+  standalone: true,
   template: '',
 })
 export class ExampleComponent {
@@ -105,6 +104,7 @@ import { SxcTagToolbarDirective } from '@2sic.com/sxc-angular';
 
 @Component({
   selector: 'app-item',
+  standalone: true,
   imports: [SxcTagToolbarDirective],
   template: `<article [sxc-toolbar]="toolbar">...</article>`,
 })
