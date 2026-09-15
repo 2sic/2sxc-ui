@@ -11,7 +11,7 @@ export interface SxcConfig {
 export class SxcInitializer {
   constructor(
     private context: SxcContext
-  ) { }
+  ) {}
 
   initialize(element: ElementRef, config: SxcConfig = {}): SxcContext {
     if (config.context)
