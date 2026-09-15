@@ -1,13 +1,11 @@
 import {  SxcGlobal, Sxc } from '@2sic.com/2sxc-typings';
 import { ElementRef, Injectable } from '@angular/core';
 import { appTag } from '../names';
-import { ContextInfo } from './context-info';
 import { AppTagService } from './apptag.service'
-import { ContextInfoPreconfigure } from './context-info-preconfigure'
 
 declare const window: Window;
 
-const runtimeDefaults: Partial<ContextInfo> = {
+const runtimeDefaults: Partial<SxcContext> = {
     addHttpHeaders: true
 };
 
@@ -24,12 +22,11 @@ declare let __webpack_public_path__: any;
  * Note: some properties like moduleId are probably not actually in use any more and will probably be empty
  *
  * @class SxcContext
- * @implements {ContextInfo}
  */
 @Injectable({
     providedIn: 'root',
 })
-export class SxcContext implements ContextInfo {
+export class SxcContext {
   /** The global $2sxc object */
   $2sxc: SxcGlobal;
 
@@ -62,7 +59,7 @@ export class SxcContext implements ContextInfo {
   angularPath?: string;
 
     private appTagService: AppTagService;
-    private preConfiguration: Partial<ContextInfoPreconfigure>;
+    private preConfiguration: Partial<SxcContext>;
 
     constructor() {
         this.$2sxc = window.$2sxc;
@@ -94,7 +91,7 @@ export class SxcContext implements ContextInfo {
      * Pre-Configure this context - can be used to configure values in a subclass
      * @param preConfig Pre-Configuration values for this context
      */
-    preConfigure(preConfig: Partial<ContextInfoPreconfigure>) {
+    preConfigure(preConfig: Partial<SxcContext>) {
         this.preConfiguration = preConfig;
         return this;
     }
@@ -111,7 +108,7 @@ export class SxcContext implements ContextInfo {
             ...runtimeDefaults, // defaults - lowest priority
             ...this.getContextFromAppTag(), // app tags override settings
             ...this.preConfiguration
-        } as ContextInfo;
+        } as Partial<SxcContext>;
 
         // Use pre-configured values already in settings if defined; otherwise
         // get from HTMLNode
@@ -151,9 +148,9 @@ export class SxcContext implements ContextInfo {
      * Get context information like module-id from the app-root tag
      * new in Sxc-Angular 8
      */
-    private getContextFromAppTag() : Partial<ContextInfo> {
+    private getContextFromAppTag(): Partial<SxcContext> {
 
-        let contextFromApp: Partial<ContextInfo> = {
+        const contextFromApp: Partial<SxcContext> = {
             edition: this.appTagService.getAttribute(appTag.edition),
             apiEdition: this.appTagService.getAttribute(appTag.apiEdition),
             // 2021-02-26 2dm v11.01 added

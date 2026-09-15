@@ -3,7 +3,7 @@
   The exports here must be chosen wisely, because they should really only contain the publicly used / created / typed objects.
 */
 
-export { provideSxc } from './provide-sxc';
+export { sxcEnvironmentProviders as provideSxc } from './provide-sxc';
 export { SxcInitializer } from './sxc-initializer.service';
 export type { SxcConfig } from './sxc-initializer.service';
 export * from './context';

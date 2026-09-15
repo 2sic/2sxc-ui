@@ -1,9 +1,8 @@
 import { ElementRef, Injectable } from '@angular/core';
-import { ContextInfoPreconfigure } from './context/context-info-preconfigure';
 import { SxcContext } from './context/sxc-context.service';
 
 export interface SxcConfig {
-  context?: Partial<ContextInfoPreconfigure>;
+  context?: Partial<SxcContext>;
   enableDefaultSubmit?: boolean;
 }
 
@@ -13,13 +12,13 @@ export class SxcInitializer {
     private context: SxcContext
   ) {}
 
-  initialize(element: ElementRef, config: SxcConfig = {}): SxcContext {
-    if (config.context)
+  initialize(element: ElementRef, config?: SxcConfig): SxcContext {
+    if (config?.context)
       this.context.preConfigure(config.context);
 
     this.context.autoConfigure(element);
 
-    if (!config.enableDefaultSubmit)
+    if (!config?.enableDefaultSubmit)
       this.preventDefaultSubmit(element);
 
     return this.context;

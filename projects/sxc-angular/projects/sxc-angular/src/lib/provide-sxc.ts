@@ -5,8 +5,16 @@ import { SxcHttpInterceptorProvider } from './http/sxc.interceptor-provider';
 import { SxcApp } from './sxc/sxc-app';
 import { SxcInitializer } from './sxc-initializer.service';
 
-/** Register every service required by sxc-angular. */
-export function provideSxc(): EnvironmentProviders {
+/**
+ * Register every service required by sxc-angular.
+ * This includes
+ * - SxcContext
+ * - SxcApp
+ * - SxcInitializer
+ * - SxcHttpInterceptorProvider which ensures that http requests have the necessary headers
+ * - HttpClient with interceptors from DI
+ */
+export function sxcEnvironmentProviders(): EnvironmentProviders {
   return makeEnvironmentProviders([
     SxcContext,
     SxcApp,
