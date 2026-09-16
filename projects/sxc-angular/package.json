@@ -8,7 +8,8 @@
     "dsa-copy:template-ng": "cpx \"dist/sxc-angular/{,**/}*.*\" \"/Projects/2sxc/app-template-angular/ng/node_modules/@2sic.com/sxc-angular\" -v",
     "pub": "cd dist/sxc-angular && npm publish",
     "pub-dry": "cd dist/sxc-angular && npm publish --dry-run",
-    "pub-beta": "cd dist/sxc-angular && npm publish --tag beta"
+    "pub-beta": "cd dist/sxc-angular && npm publish --tag beta",
+    "pub-dry-beta": "cd dist/sxc-angular && npm publish --dry-run --tag beta"
   },
   "private": true,
   "dependencies": {
