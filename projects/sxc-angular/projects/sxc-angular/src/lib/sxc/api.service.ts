@@ -13,8 +13,8 @@ export class SxcApiService {
   constructor(
     private http: HttpClient,
     private controller: string
-  ) {  }
-
+  ) {}
+  
   /**
    * Get the request URL of the api
    */

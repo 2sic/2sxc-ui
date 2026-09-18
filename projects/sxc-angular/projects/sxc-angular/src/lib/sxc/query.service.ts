@@ -13,8 +13,8 @@ import { routeQuery } from '../contants';
 export class SxcQueryService<T> {
   constructor(
     private http: HttpClient,
-    private name: string
-  ) { }
+    private name: string,
+  ) {}
 
   readonly streamParamKey = 'stream';
 
@@ -70,7 +70,9 @@ export class SxcQueryService<T> {
     const url = `${routeQuery}/${this.name}?${this.streamParamKey}=${stream}`;
     const streamParams: HttpParams = getHttpParams(urlParams);
 
-    if (data) return this.http.post<T>(url, data, { params: streamParams }).pipe(map(res => res[stream]));
+    if (data)
+      return this.http.post<T>(url, data, { params: streamParams }).pipe(map(res => res[stream]));
+
     return this.http.get<T>(url, { params: streamParams }).pipe(map(res => res[stream]));
   }
 
@@ -98,7 +100,9 @@ export class SxcQueryService<T> {
     const url = `${routeQuery}/${this.name}?${this.streamParamKey}=${streams.join(',')}`;
     const streamParams: HttpParams = getHttpParams(urlParams);
 
-    if (data) return this.http.post<T>(url, data, { params: streamParams });
+    if (data)
+      return this.http.post<T>(url, data, { params: streamParams });
+    
     return this.http.get<T>(url, { params: streamParams });
   }
 }

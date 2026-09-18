@@ -1,16 +1,22 @@
-import { Context } from '../context/context.service';
+import { SxcContext } from '../context/sxc-context.service';
 import { Directive, ElementRef, Input, OnInit } from '@angular/core';
 
 @Directive({
-  selector: 'sxc-toolbar'
+  selector: 'sxc-toolbar',
+  standalone: true,
 })
 export class SxcToolbarDirective implements OnInit {
   @Input() config: any = {};
-  constructor(private elementRef: ElementRef, private context: Context) {}
+  
+  constructor(
+    private elementRef: ElementRef,
+    private context: SxcContext
+  ) {}
 
   ngOnInit() {
     const sxc = this.context.sxc as any;
-    if (!sxc.manage) return; // edit not available, probably not logged in
+    if (!sxc.manage)
+      return; // edit not available, probably not logged in
     this.elementRef.nativeElement.innerHTML = sxc.manage.getToolbar(this.config.toolbar, this.config.settings);
   }
 

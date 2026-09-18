@@ -1,5 +1,5 @@
 import { Directive, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Context } from '../context';
+import { SxcContext } from '../context';
 
 /**
  * The toolbar attribute to be used on any HTML tag.
@@ -11,6 +11,7 @@ import { Context } from '../context';
  */
 @Directive({
   selector: '[sxc-toolbar]',
+  standalone: true,
 })
 export class SxcTagToolbarDirective implements OnInit {
 
@@ -27,11 +28,12 @@ export class SxcTagToolbarDirective implements OnInit {
    */
   @Output('refresh') refresh = new EventEmitter<any>();
 
-  constructor(private element: ElementRef, private context: Context) {
+  constructor(private element: ElementRef, private context: SxcContext) {
   }
 
   ngOnInit() {
-    if (!this.context?.sxc?.isEditMode()) return;
+    if (!this.context?.sxc?.isEditMode())
+      return;
     const node = this.element.nativeElement;
     this.preventRefreshIfListenerConfigured();
     node.setAttribute("sxc-toolbar", JSON.stringify(this.sxcToolbar || {}));
