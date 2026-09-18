@@ -10,5 +10,8 @@
     "Oqtane",
     "sxcver",
     "uifields"
-  ]
+  ],
+  "files.exclude": {
+    "compiled/**": true
+  }
 }
