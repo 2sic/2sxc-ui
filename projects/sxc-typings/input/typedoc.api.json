@@ -1,8 +1,8 @@
 {
   "metadata": {
     "toolPackage": "@microsoft/api-extractor",
-    "toolVersion": "7.25.2",
-    "schemaVersion": 1006,
+    "toolVersion": "7.59.2",
+    "schemaVersion": 1011,
     "oldestForwardsCompatibleVersion": 1001,
     "tsdocConfig": {
       "$schema": "https://developer.microsoft.com/json-schemas/tsdoc/v0/tsdoc.schema.json",
@@ -115,6 +115,22 @@
           "syntaxKind": "modifier"
         },
         {
+          "tagName": "@jsx",
+          "syntaxKind": "block"
+        },
+        {
+          "tagName": "@jsxRuntime",
+          "syntaxKind": "block"
+        },
+        {
+          "tagName": "@jsxFrag",
+          "syntaxKind": "block"
+        },
+        {
+          "tagName": "@jsxImportSource",
+          "syntaxKind": "block"
+        },
+        {
           "tagName": "@betaDocumentation",
           "syntaxKind": "modifier"
         },
@@ -164,16 +180,18 @@
   "canonicalReference": "@2sic.com/2sxc-typings!",
   "docComment": "",
   "name": "@2sic.com/2sxc-typings",
+  "preserveMemberOrder": false,
   "members": [
     {
       "kind": "EntryPoint",
       "canonicalReference": "@2sic.com/2sxc-typings!",
       "name": "",
+      "preserveMemberOrder": false,
       "members": [
         {
           "kind": "Interface",
           "canonicalReference": "@2sic.com/2sxc-typings!CommandAddExistingParams:interface",
-          "docComment": "/**\n * Parameters used for the command `add-existing`. <br> The contentType name determines what items will be shown in the dialog. Depending on your use case, you will need to use the [](xref:Api.Js.SxcJs.CommandParamsEntityInList) or [](xref:Api.Js.SxcJs.CommandParamsEntityInContentBlock) parameters as well. <br> ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)\n *\n * @public\n */\n",
+          "docComment": "/**\n * Parameters used for the command `add-existing`.<br>\n * The contentType name determines what items will be shown in the dialog.\n * Depending on your use case, you will need to use the\n * [](xref:Api.Js.SxcJs.CommandParamsEntityInList) or [](xref:Api.Js.SxcJs.CommandParamsEntityInContentBlock) parameters as well.<br>\n * ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)\n *\n * @public\n */\n",
           "excerptTokens": [
             {
               "kind": "Content",
@@ -189,8 +207,10 @@
               "text": " "
             }
           ],
+          "fileUrlPath": "parts/dist/inpage/src/commands/command/command-params-all.d.ts",
           "releaseTag": "Public",
           "name": "CommandAddExistingParams",
+          "preserveMemberOrder": false,
           "members": [],
           "extendsTokenRanges": [
             {
@@ -202,7 +222,7 @@
         {
           "kind": "Interface",
           "canonicalReference": "@2sic.com/2sxc-typings!CommandAddParams:interface",
-          "docComment": "/**\n * Parameters used for the command `add`. <br> The `contentType` determines what items will be created, the `index` where. Depending on your use case, you will need to use the [](xref:Api.Js.SxcJs.CommandParamsEntityInList) or [](xref:Api.Js.SxcJs.CommandParamsEntityInContentBlock) parameters as well. <br> ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)\n *\n * @public\n */\n",
+          "docComment": "/**\n * Parameters used for the command `add`.<br>\n * The `contentType` determines what items will be created, the `index` where.\n * Depending on your use case, you will need to use the\n * [](xref:Api.Js.SxcJs.CommandParamsEntityInList) or [](xref:Api.Js.SxcJs.CommandParamsEntityInContentBlock) parameters as well.<br>\n * ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)\n *\n * @public\n */\n",
           "excerptTokens": [
             {
               "kind": "Content",
@@ -295,11 +315,17 @@
             },
             {
               "kind": "Content",
-              "text": ", 'index'>> "
+              "text": ", 'index'>>"
+            },
+            {
+              "kind": "Content",
+              "text": " "
             }
           ],
+          "fileUrlPath": "parts/dist/inpage/src/commands/command/command-params-all.d.ts",
           "releaseTag": "Public",
           "name": "CommandAddParams",
+          "preserveMemberOrder": false,
           "members": [],
           "extendsTokenRanges": [
             {
@@ -316,27 +342,82 @@
             },
             {
               "startIndex": 15,
-              "endIndex": 20
+              "endIndex": 21
             }
           ]
         },
         {
+          "kind": "TypeAlias",
+          "canonicalReference": "@2sic.com/2sxc-typings!CommandCode:type",
+          "docComment": "/**\n * Signature of a command code; returning a promise.\n *\n * @public\n */\n",
+          "excerptTokens": [
+            {
+              "kind": "Content",
+              "text": "export type CommandCode = "
+            },
+            {
+              "kind": "Content",
+              "text": "<T>(context: "
+            },
+            {
+              "kind": "Reference",
+              "text": "ContextCompleteWithButton",
+              "canonicalReference": "@2sic.com/2sxc-typings!~ContextCompleteWithButton:interface"
+            },
+            {
+              "kind": "Content",
+              "text": ", event: "
+            },
+            {
+              "kind": "Reference",
+              "text": "MouseEvent",
+              "canonicalReference": "!MouseEvent:interface"
+            },
+            {
+              "kind": "Content",
+              "text": ", triggeredBy?: string) => "
+            },
+            {
+              "kind": "Reference",
+              "text": "Promise",
+              "canonicalReference": "!Promise:interface"
+            },
+            {
+              "kind": "Content",
+              "text": "<void | T>"
+            },
+            {
+              "kind": "Content",
+              "text": ";"
+            }
+          ],
+          "fileUrlPath": "parts/dist/inpage/src/commands/command-code.d.ts",
+          "releaseTag": "Public",
+          "name": "CommandCode",
+          "typeTokenRange": {
+            "startIndex": 1,
+            "endIndex": 8
+          }
+        },
+        {
           "kind": "Interface",
           "canonicalReference": "@2sic.com/2sxc-typings!CommandCodeParams:interface",
-          "docComment": "/**\n * Parameters used for the command `code` on toolbars (new in v14.4). <br> ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)\n *\n * @public\n */\n",
+          "docComment": "/**\n * Parameters used for the command `code` on toolbars (new in v14.4).<br>\n * ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)\n *\n * @public\n */\n",
           "excerptTokens": [
             {
               "kind": "Content",
               "text": "export interface CommandCodeParams "
             }
           ],
+          "fileUrlPath": "parts/dist/inpage/src/commands/command/command-params-all.d.ts",
           "releaseTag": "Public",
           "name": "CommandCodeParams",
+          "preserveMemberOrder": false,
           "members": [
             {
               "kind": "PropertySignature",
               "canonicalReference": "@2sic.com/2sxc-typings!CommandCodeParams#call:member",
-              "docComment": "/**\n * Name of the function to call - must be available in the context. This is usually as a function window. Example: <br> If `call` is `sayHello` you need a `window.sayHello(params, context, event)`.\n */\n",
+              "docComment": "/**\n * Name of the function to call - must be available in the context.\n * This is usually as a function window. Example:<br>\n * If `call` is `sayHello` you need a `window.sayHello(params, context, event)`.\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -366,15 +447,17 @@
         {
           "kind": "Interface",
           "canonicalReference": "@2sic.com/2sxc-typings!CommandContentTypeParams:interface",
-          "docComment": "/**\n * Parameters used for the command `contenttype`. <br> The content-type name determines what items will be loaded to manage the fields. <br> ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)\n *\n * @public\n */\n",
+          "docComment": "/**\n * Parameters used for the command `contenttype`.<br>\n * The content-type name determines what items will be loaded to manage the fields.<br>\n * ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)\n *\n * @public\n */\n",
           "excerptTokens": [
             {
               "kind": "Content",
               "text": "export interface CommandContentTypeParams "
             }
           ],
+          "fileUrlPath": "parts/dist/inpage/src/commands/command/command-params-all.d.ts",
           "releaseTag": "Public",
           "name": "CommandContentTypeParams",
+          "preserveMemberOrder": false,
           "members": [
             {
               "kind": "PropertySignature",
@@ -409,7 +492,7 @@
         {
           "kind": "Interface",
           "canonicalReference": "@2sic.com/2sxc-typings!CommandCopyParams:interface",
-          "docComment": "/**\n * Parameters used for the command `copy`. Will copy the entity on `entityId`. <br> ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)\n *\n * @public\n */\n",
+          "docComment": "/**\n * Parameters used for the command `copy`.\n * Will copy the entity on `entityId`.<br>\n * ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)\n *\n * @public\n */\n",
           "excerptTokens": [
             {
               "kind": "Content",
@@ -434,8 +517,10 @@
               "text": " "
             }
           ],
+          "fileUrlPath": "parts/dist/inpage/src/commands/command/command-params-all.d.ts",
           "releaseTag": "Public",
           "name": "CommandCopyParams",
+          "preserveMemberOrder": false,
           "members": [],
           "extendsTokenRanges": [
             {
@@ -451,7 +536,7 @@
         {
           "kind": "Interface",
           "canonicalReference": "@2sic.com/2sxc-typings!CommandDataParams:interface",
-          "docComment": "/**\n * Parameters used for the command `data`. <br> The content-type name determines what items will be managed. <br> ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)\n *\n * @public\n */\n",
+          "docComment": "/**\n * Parameters used for the command `data`.<br>\n * The content-type name determines what items will be managed.<br>\n * ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)\n *\n * @public\n */\n",
           "excerptTokens": [
             {
               "kind": "Content",
@@ -467,13 +552,15 @@
               "text": " "
             }
           ],
+          "fileUrlPath": "parts/dist/inpage/src/commands/command/command-params-all.d.ts",
           "releaseTag": "Public",
           "name": "CommandDataParams",
+          "preserveMemberOrder": false,
           "members": [
             {
               "kind": "PropertySignature",
               "canonicalReference": "@2sic.com/2sxc-typings!CommandDataParams#filters:member",
-              "docComment": "/**\n * Filters to apply to the list of items. <br> Each property targets a field. The value is a string, number or array for filtering EntityIds or EntityGuids\n */\n",
+              "docComment": "/**\n * Filters to apply to the list of items.<br>\n * Each property targets a field.\n * The value is a string, number or array for filtering EntityIds or EntityGuids\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -513,15 +600,17 @@
         {
           "kind": "Interface",
           "canonicalReference": "@2sic.com/2sxc-typings!CommandDeleteParams:interface",
-          "docComment": "/**\n * Parameters used for the command `delete`. <br> ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)\n *\n * @public\n */\n",
+          "docComment": "/**\n * Parameters used for the command `delete`.<br>\n * ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)\n *\n * @public\n */\n",
           "excerptTokens": [
             {
               "kind": "Content",
               "text": "export interface CommandDeleteParams "
             }
           ],
+          "fileUrlPath": "parts/dist/inpage/src/commands/command/command-params-all.d.ts",
           "releaseTag": "Public",
           "name": "CommandDeleteParams",
+          "preserveMemberOrder": false,
           "members": [
             {
               "kind": "PropertySignature",
@@ -580,7 +669,7 @@
             {
               "kind": "PropertySignature",
               "canonicalReference": "@2sic.com/2sxc-typings!CommandDeleteParams#entityTitle:member",
-              "docComment": "/**\n * Title of item to delete, usually detected from context. This is important to show the \"Are you sure?\" dialog.\n */\n",
+              "docComment": "/**\n * Title of item to delete, usually detected from context.\n * This is important to show the \"Are you sure?\" dialog.\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -610,7 +699,7 @@
         {
           "kind": "Interface",
           "canonicalReference": "@2sic.com/2sxc-typings!CommandMetadataParams:interface",
-          "docComment": "/**\n * Parameters used for the command `metadata`. <br> Will do either one of these: - if it has an `entityId`, will just open `edit` for that Entity - if it has no `entityId`, will open `new` for the current `contentType` and assign to the target specified by `metadata`: <br> ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)\n *\n * @public\n */\n",
+          "docComment": "/**\n * Parameters used for the command `metadata`.<br>\n * Will do either one of these:\n * - if it has an `entityId`, will just open `edit` for that Entity\n * - if it has no `entityId`, will open `new` for the current `contentType`\n * and assign to the target specified by `metadata`:<br>\n * ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)\n *\n * @public\n */\n",
           "excerptTokens": [
             {
               "kind": "Content",
@@ -635,8 +724,10 @@
               "text": " "
             }
           ],
+          "fileUrlPath": "parts/dist/inpage/src/commands/command/command-params-all.d.ts",
           "releaseTag": "Public",
           "name": "CommandMetadataParams",
+          "preserveMemberOrder": false,
           "members": [
             {
               "kind": "PropertySignature",
@@ -688,13 +779,15 @@
               "text": "export declare const enum CommandNames "
             }
           ],
+          "fileUrlPath": "parts/dist/$2sxc/src/cms/command-names.d.ts",
           "releaseTag": "Public",
           "name": "CommandNames",
+          "preserveMemberOrder": false,
           "members": [
             {
               "kind": "EnumMember",
               "canonicalReference": "@2sic.com/2sxc-typings!CommandNames.add:member",
-              "docComment": "/**\n * `add` adds another demo-item to a **list of items**. It does not open the edit-dialog. <br> The new item is placed after the item the (+) was clicked on. <br>💡 This is different than new, which opens a dialog to add something. <br> 🪜 Only appears on toolbars of items which are in a list. <br> 📩 [Parameters](xref:Api.Js.SxcJs.CommandAddParams)\n */\n",
+              "docComment": "/**\n * `add` adds another demo-item to a **list of items**.\n * It does not open the edit-dialog.<br> The new item is placed after the item the (+) was clicked on.<br>💡\n * This is different than new, which opens a dialog to add something.<br> 🪜 Only appears on toolbars of items which are in a list.<br> 📩 [Parameters](xref:Api.Js.SxcJs.CommandAddParams)\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -705,17 +798,17 @@
                   "text": "\"add\""
                 }
               ],
-              "releaseTag": "Public",
-              "name": "add",
               "initializerTokenRange": {
                 "startIndex": 1,
                 "endIndex": 2
-              }
+              },
+              "releaseTag": "Public",
+              "name": "add"
             },
             {
               "kind": "EnumMember",
               "canonicalReference": "@2sic.com/2sxc-typings!CommandNames.addExisting:member",
-              "docComment": "/**\n * `add-existing` opens a dialog allowing the user to select an existing item to add to a **list of items**. <br> The new item is placed after the item the (+) was clicked on. <br> 🪜 Only appears on toolbars of items which are in a list. <br> 📩 [Parameters](xref:Api.Js.SxcJs.CommandAddExistingParams) <br> 🆕 in v11.01\n */\n",
+              "docComment": "/**\n * `add-existing` opens a dialog allowing the user to select an existing item to add to a **list of items**.<br> The new item is placed after the item the (+) was clicked on.<br> 🪜 Only appears on toolbars of items which are in a list.<br> 📩 [Parameters](xref:Api.Js.SxcJs.CommandAddExistingParams)<br> 🆕 in v11.01\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -726,17 +819,17 @@
                   "text": "\"add-existing\""
                 }
               ],
-              "releaseTag": "Public",
-              "name": "addExisting",
               "initializerTokenRange": {
                 "startIndex": 1,
                 "endIndex": 2
-              }
+              },
+              "releaseTag": "Public",
+              "name": "addExisting"
             },
             {
               "kind": "EnumMember",
               "canonicalReference": "@2sic.com/2sxc-typings!CommandNames.app:member",
-              "docComment": "/**\n * `app` opens the app-admin dialog <br> 🔐 Toolbar shows this automatically to elevated admins. <br> 📩 No params required, (auto-detected from context)\n */\n",
+              "docComment": "/**\n * `app` opens the app-admin dialog<br> 🔐 Toolbar shows this automatically to elevated admins.<br> 📩 No params required,\n * (auto-detected from context)\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -747,17 +840,17 @@
                   "text": "\"app\""
                 }
               ],
-              "releaseTag": "Public",
-              "name": "app",
               "initializerTokenRange": {
                 "startIndex": 1,
                 "endIndex": 2
-              }
+              },
+              "releaseTag": "Public",
+              "name": "app"
             },
             {
               "kind": "EnumMember",
               "canonicalReference": "@2sic.com/2sxc-typings!CommandNames.appImport:member",
-              "docComment": "/**\n * `app-import` opens the dialog to import an App. <br> 🔘 This is not available on the toolbar. <br> 📩 No params required, (auto-detected from context)\n */\n",
+              "docComment": "/**\n * `app-import` opens the dialog to import an App.<br> 🔘 This is not available on the toolbar.<br> 📩 No params required,\n * (auto-detected from context)\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -768,17 +861,17 @@
                   "text": "\"app-import\""
                 }
               ],
-              "releaseTag": "Public",
-              "name": "appImport",
               "initializerTokenRange": {
                 "startIndex": 1,
                 "endIndex": 2
-              }
+              },
+              "releaseTag": "Public",
+              "name": "appImport"
             },
             {
               "kind": "EnumMember",
               "canonicalReference": "@2sic.com/2sxc-typings!CommandNames.appResources:member",
-              "docComment": "/**\n * `app-resources` opens the edit dialog for app-resources (multi-language texts, labels etc.). <br> 🔘 It's disabled on the toolbar if the app doesn't have resource-values to configure. <br> 🔐 Toolbar shows this automatically to elevated admins. <br> 📩 No params required, (auto-detected from context)\n */\n",
+              "docComment": "/**\n * `app-resources` opens the edit dialog for app-resources (multi-language texts, labels etc.).<br> 🔘 It's disabled on the toolbar if the app doesn't have resource-values to configure.<br> 🔐 Toolbar shows this automatically to elevated admins.<br> 📩 No params required,\n * (auto-detected from context)\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -789,17 +882,17 @@
                   "text": "\"app-resources\""
                 }
               ],
-              "releaseTag": "Public",
-              "name": "appResources",
               "initializerTokenRange": {
                 "startIndex": 1,
                 "endIndex": 2
-              }
+              },
+              "releaseTag": "Public",
+              "name": "appResources"
             },
             {
               "kind": "EnumMember",
               "canonicalReference": "@2sic.com/2sxc-typings!CommandNames.apps:member",
-              "docComment": "/**\n * `apps` opens the manage all apps dialog. <br> 🔐 Toolbar shows this automatically to elevated admins. <br> 📩 No params required, (auto-detected based on toolbar)\n */\n",
+              "docComment": "/**\n * `apps` opens the manage all apps dialog.<br> 🔐 Toolbar shows this automatically to elevated admins.<br> 📩 No params required,\n * (auto-detected based on toolbar)\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -810,17 +903,17 @@
                   "text": "\"apps\""
                 }
               ],
-              "releaseTag": "Public",
-              "name": "apps",
               "initializerTokenRange": {
                 "startIndex": 1,
                 "endIndex": 2
-              }
+              },
+              "releaseTag": "Public",
+              "name": "apps"
             },
             {
               "kind": "EnumMember",
               "canonicalReference": "@2sic.com/2sxc-typings!CommandNames.appSettings:member",
-              "docComment": "/**\n * `app-settings` opens the edit dialog for the app-settings. <br> 🔘 It's disabled on the toolbar if the app doesn't have setting-values to configure <br> 🔐 Toolbar shows this automatically to elevated admins. <br> 📩 No params required, (auto-detected from context)\n */\n",
+              "docComment": "/**\n * `app-settings` opens the edit dialog for the app-settings.<br> 🔘 It's disabled on the toolbar if the app doesn't have setting-values to configure<br> 🔐 Toolbar shows this automatically to elevated admins.<br> 📩 No params required,\n * (auto-detected from context)\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -831,17 +924,17 @@
                   "text": "\"app-settings\""
                 }
               ],
-              "releaseTag": "Public",
-              "name": "appSettings",
               "initializerTokenRange": {
                 "startIndex": 1,
                 "endIndex": 2
-              }
+              },
+              "releaseTag": "Public",
+              "name": "appSettings"
             },
             {
               "kind": "EnumMember",
               "canonicalReference": "@2sic.com/2sxc-typings!CommandNames.code:member",
-              "docComment": "/**\n * `code` will execute custom javascript. <br> 🔘 This is mainly for toolbars, to add buttons with custom code. <br> 📩 [Parameters](xref:Api.Js.SxcJs.CommandCodeParams) <br> _this used to be called `custom` and had a different setup_\n */\n",
+              "docComment": "/**\n * `code` will execute custom javascript.<br> 🔘 This is mainly for toolbars, to add buttons with custom code.<br> 📩 [Parameters](xref:Api.Js.SxcJs.CommandCodeParams)<br> _this used to be called `custom` and had a different setup_\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -852,17 +945,17 @@
                   "text": "\"code\""
                 }
               ],
-              "releaseTag": "Public",
-              "name": "code",
               "initializerTokenRange": {
                 "startIndex": 1,
                 "endIndex": 2
-              }
+              },
+              "releaseTag": "Public",
+              "name": "code"
             },
             {
               "kind": "EnumMember",
               "canonicalReference": "@2sic.com/2sxc-typings!CommandNames.copy:member",
-              "docComment": "/**\n * `copy` opens the edit-dialog for the current item in copy-mode, so when saving it will be a new item. <br> 📩 [Parameters](xref:Api.Js.SxcJs.CommandCopyParams) <br> 🆕 in v14.03\n */\n",
+              "docComment": "/**\n * `copy` opens the edit-dialog for the current item in copy-mode, so when saving it will be a new item.<br> 📩 [Parameters](xref:Api.Js.SxcJs.CommandCopyParams)<br> 🆕 in v14.03\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -873,17 +966,17 @@
                   "text": "\"copy\""
                 }
               ],
-              "releaseTag": "Public",
-              "name": "copy",
               "initializerTokenRange": {
                 "startIndex": 1,
                 "endIndex": 2
-              }
+              },
+              "releaseTag": "Public",
+              "name": "copy"
             },
             {
               "kind": "EnumMember",
               "canonicalReference": "@2sic.com/2sxc-typings!CommandNames.data:member",
-              "docComment": "/**\n * `data` opens the list to manage all items of a specific content-type. <br> 🔘 Will use the settings of the current template to open. It is only shown to elevated admins. <br> 📩 [Parameters](xref:Api.Js.SxcJs.CommandDataParams)\n */\n",
+              "docComment": "/**\n * `data` opens the list to manage all items of a specific content-type.<br> 🔘 Will use the settings of the current template to open.\n * It is only shown to elevated admins.<br> 📩 [Parameters](xref:Api.Js.SxcJs.CommandDataParams)\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -894,17 +987,17 @@
                   "text": "\"data\""
                 }
               ],
-              "releaseTag": "Public",
-              "name": "data",
               "initializerTokenRange": {
                 "startIndex": 1,
                 "endIndex": 2
-              }
+              },
+              "releaseTag": "Public",
+              "name": "data"
             },
             {
               "kind": "EnumMember",
               "canonicalReference": "@2sic.com/2sxc-typings!CommandNames.delete:member",
-              "docComment": "/**\n * `delete` will delete (not just remove) a content-item. <br> 💡 This is similar to `remove` but really deletes the data from the DB. <br> 🔘 It only appears if the toolbar explicitly asks for it. <br> 📩 [Parameters](xref:Api.Js.SxcJs.CommandDeleteParams) (auto-detected from context)\n */\n",
+              "docComment": "/**\n * `delete` will delete (not just remove) a content-item.<br> 💡 This is similar to `remove` but really deletes the data from the DB.<br> 🔘 It only appears if the toolbar explicitly asks for it.<br> 📩 [Parameters](xref:Api.Js.SxcJs.CommandDeleteParams)\n * (auto-detected from context)\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -915,17 +1008,17 @@
                   "text": "\"delete\""
                 }
               ],
-              "releaseTag": "Public",
-              "name": "delete",
               "initializerTokenRange": {
                 "startIndex": 1,
                 "endIndex": 2
-              }
+              },
+              "releaseTag": "Public",
+              "name": "delete"
             },
             {
               "kind": "EnumMember",
               "canonicalReference": "@2sic.com/2sxc-typings!CommandNames.edit:member",
-              "docComment": "/**\n * `edit` opens an edit-dialog. <br> In scenarios where the page is currently showing a _demo item_, this will have the same effect as `add`. So instead of editing the _demo item_ it would trigger a dialog to add a new item. <br> 🔘 Only appears if `entityId` is known or item is in a list. <br> 📩 Parameters either one of these: [Id](xref:Api.Js.SxcJs.CommandParamsEntityById), [In Block](xref:Api.Js.SxcJs.CommandParamsEntityInContentBlock), [In List](xref:Api.Js.SxcJs.CommandParamsEntityInList) (auto-detected from context)\n */\n",
+              "docComment": "/**\n * `edit` opens an edit-dialog.<br>\n * In scenarios where the page is currently showing a _demo item_, this will have the same effect as `add`.\n * So instead of editing the _demo item_ it would trigger a dialog to add a new item.<br> 🔘 Only appears if `entityId` is known or item is in a list.<br> 📩 Parameters either one of these:\n * [Id](xref:Api.Js.SxcJs.CommandParamsEntityById),\n * [In Block](xref:Api.Js.SxcJs.CommandParamsEntityInContentBlock),\n * [In List](xref:Api.Js.SxcJs.CommandParamsEntityInList)\n * (auto-detected from context)\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -936,17 +1029,17 @@
                   "text": "\"edit\""
                 }
               ],
-              "releaseTag": "Public",
-              "name": "edit",
               "initializerTokenRange": {
                 "startIndex": 1,
                 "endIndex": 2
-              }
+              },
+              "releaseTag": "Public",
+              "name": "edit"
             },
             {
               "kind": "EnumMember",
               "canonicalReference": "@2sic.com/2sxc-typings!CommandNames.fields:member",
-              "docComment": "/**\n * `fields` opens the dialog to view or modify fields of a content-type. <br> 🔘 On a toolbar it will use the content-type of the current item. <br> 🔐 Toolbar shows this automatically to elevated admins. <br> 📩 [Parameters](xref:Api.Js.SxcJs.CommandContentTypeParams)\n */\n",
+              "docComment": "/**\n * `fields` opens the dialog to view or modify fields of a content-type.<br> 🔘 On a toolbar it will use the content-type of the current item.<br> 🔐 Toolbar shows this automatically to elevated admins.<br> 📩 [Parameters](xref:Api.Js.SxcJs.CommandContentTypeParams)\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -957,17 +1050,17 @@
                   "text": "\"fields\""
                 }
               ],
-              "releaseTag": "Public",
-              "name": "fields",
               "initializerTokenRange": {
                 "startIndex": 1,
                 "endIndex": 2
-              }
+              },
+              "releaseTag": "Public",
+              "name": "fields"
             },
             {
               "kind": "EnumMember",
               "canonicalReference": "@2sic.com/2sxc-typings!CommandNames.insights:member",
-              "docComment": "/**\n * `insights` opens the insights logs page <br> 🔐 Toolbar shows this automatically to elevated admins. <br> 📩 No params required.\n */\n",
+              "docComment": "/**\n * `insights` opens the insights logs page<br> 🔐 Toolbar shows this automatically to elevated admins.<br> 📩 No params required.\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -978,17 +1071,17 @@
                   "text": "\"insights\""
                 }
               ],
-              "releaseTag": "Public",
-              "name": "insights",
               "initializerTokenRange": {
                 "startIndex": 1,
                 "endIndex": 2
-              }
+              },
+              "releaseTag": "Public",
+              "name": "insights"
             },
             {
               "kind": "EnumMember",
               "canonicalReference": "@2sic.com/2sxc-typings!CommandNames.layout:member",
-              "docComment": "/**\n * `layout` opens the in-page dialog to change the layout of the current content. <br> 📩 No params required, (auto-detected from context)\n */\n",
+              "docComment": "/**\n * `layout` opens the in-page dialog to change the layout of the current content.<br> 📩 No params required,\n * (auto-detected from context)\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -999,17 +1092,17 @@
                   "text": "\"layout\""
                 }
               ],
-              "releaseTag": "Public",
-              "name": "layout",
               "initializerTokenRange": {
                 "startIndex": 1,
                 "endIndex": 2
-              }
+              },
+              "releaseTag": "Public",
+              "name": "layout"
             },
             {
               "kind": "EnumMember",
               "canonicalReference": "@2sic.com/2sxc-typings!CommandNames.list:member",
-              "docComment": "/**\n * `instance-list` opens a dialog to manually re-order **items in a list**. <br> 🪜 Only appears on toolbars of items which are in a list. <br> 📩 No params required, (auto-detected from context)\n */\n",
+              "docComment": "/**\n * `instance-list` opens a dialog to manually re-order **items in a list**.<br> 🪜 Only appears on toolbars of items which are in a list.<br> 📩 No params required,\n * (auto-detected from context)\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -1020,17 +1113,17 @@
                   "text": "\"list\""
                 }
               ],
-              "releaseTag": "Public",
-              "name": "list",
               "initializerTokenRange": {
                 "startIndex": 1,
                 "endIndex": 2
-              }
+              },
+              "releaseTag": "Public",
+              "name": "list"
             },
             {
               "kind": "EnumMember",
               "canonicalReference": "@2sic.com/2sxc-typings!CommandNames.metadata:member",
-              "docComment": "/**\n * `metadata` opens the edit-dialog for the current metadata item. <br> 🔘 It only appears if the toolbar explicitly asks for it. <br> 📩 [Parameters](xref:Api.Js.SxcJs.CommandMetadataParams)\n */\n",
+              "docComment": "/**\n * `metadata` opens the edit-dialog for the current metadata item.<br> 🔘 It only appears if the toolbar explicitly asks for it.<br> 📩 [Parameters](xref:Api.Js.SxcJs.CommandMetadataParams)\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -1041,17 +1134,17 @@
                   "text": "\"metadata\""
                 }
               ],
-              "releaseTag": "Public",
-              "name": "metadata",
               "initializerTokenRange": {
                 "startIndex": 1,
                 "endIndex": 2
-              }
+              },
+              "releaseTag": "Public",
+              "name": "metadata"
             },
             {
               "kind": "EnumMember",
               "canonicalReference": "@2sic.com/2sxc-typings!CommandNames.more:member",
-              "docComment": "/**\n * `more` create a \"…\" (ellipsis) button which flips through the button groups of toolbars <br> 🔘 It only appears if the toolbar has `more`=`auto` and has multiple groups. <br> 📩 No params required, (auto-detected based on toolbar)\n */\n",
+              "docComment": "/**\n * `more` create a \"…\" (ellipsis) button which flips through the button groups of toolbars<br> 🔘 It only appears if the toolbar has `more`=`auto` and has multiple groups.<br> 📩 No params required,\n * (auto-detected based on toolbar)\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -1062,17 +1155,17 @@
                   "text": "\"more\""
                 }
               ],
-              "releaseTag": "Public",
-              "name": "more",
               "initializerTokenRange": {
                 "startIndex": 1,
                 "endIndex": 2
-              }
+              },
+              "releaseTag": "Public",
+              "name": "more"
             },
             {
               "kind": "EnumMember",
               "canonicalReference": "@2sic.com/2sxc-typings!CommandNames.moveDown:member",
-              "docComment": "/**\n * `movedown` moves a content-item down one position in a **list of items**. <br> 🪜 Only appears on toolbars of items which are in a list. <br> 📩 Parameters either one of these: [In Block](xref:Api.Js.SxcJs.CommandParamsEntityInContentBlock), [In List](xref:Api.Js.SxcJs.CommandParamsEntityInList) (auto-detected from context)\n */\n",
+              "docComment": "/**\n * `movedown` moves a content-item down one position in a **list of items**.<br> 🪜 Only appears on toolbars of items which are in a list.<br> 📩 Parameters either one of these:\n * [In Block](xref:Api.Js.SxcJs.CommandParamsEntityInContentBlock),\n * [In List](xref:Api.Js.SxcJs.CommandParamsEntityInList)\n * (auto-detected from context)\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -1083,17 +1176,17 @@
                   "text": "\"movedown\""
                 }
               ],
-              "releaseTag": "Public",
-              "name": "moveDown",
               "initializerTokenRange": {
                 "startIndex": 1,
                 "endIndex": 2
-              }
+              },
+              "releaseTag": "Public",
+              "name": "moveDown"
             },
             {
               "kind": "EnumMember",
               "canonicalReference": "@2sic.com/2sxc-typings!CommandNames.moveUp:member",
-              "docComment": "/**\n * `moveup` moves a content-item up one position in a **list of items**. <br> 🪜 Only appears on toolbars of items which are in a list. <br> 📩 Parameters either one of these: [In Block](xref:Api.Js.SxcJs.CommandParamsEntityInContentBlock), [In List](xref:Api.Js.SxcJs.CommandParamsEntityInList) (auto-detected from context)\n */\n",
+              "docComment": "/**\n * `moveup` moves a content-item up one position in a **list of items**.<br> 🪜 Only appears on toolbars of items which are in a list.<br> 📩 Parameters either one of these:\n * [In Block](xref:Api.Js.SxcJs.CommandParamsEntityInContentBlock),\n * [In List](xref:Api.Js.SxcJs.CommandParamsEntityInList)\n * (auto-detected from context)\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -1104,17 +1197,17 @@
                   "text": "\"moveup\""
                 }
               ],
-              "releaseTag": "Public",
-              "name": "moveUp",
               "initializerTokenRange": {
                 "startIndex": 1,
                 "endIndex": 2
-              }
+              },
+              "releaseTag": "Public",
+              "name": "moveUp"
             },
             {
               "kind": "EnumMember",
               "canonicalReference": "@2sic.com/2sxc-typings!CommandNames.new:member",
-              "docComment": "/**\n * `new` opens the edit-dialog to create a new item/entity. <br> If the previous item is in a list, it will add it to that list _after_ the previous item with the toolbar. Otherwise it just creates it and the visualization will differ depending on the App. <br> 🪜 It works differently for lists - in which case it also adds it to the list. <br> 📩 [Parameters](xref:Api.Js.SxcJs.CommandNewParams) (usually auto-detected from context)\n */\n",
+              "docComment": "/**\n * `new` opens the edit-dialog to create a new item/entity.<br>\n * If the previous item is in a list, it will add it to that list _after_ the previous item with the toolbar.\n * Otherwise it just creates it and the visualization will differ depending on the App.<br> 🪜 It works differently for lists - in which case it also adds it to the list.<br> 📩 [Parameters](xref:Api.Js.SxcJs.CommandNewParams)\n * (usually auto-detected from context)\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -1125,17 +1218,17 @@
                   "text": "\"new\""
                 }
               ],
-              "releaseTag": "Public",
-              "name": "new",
               "initializerTokenRange": {
                 "startIndex": 1,
                 "endIndex": 2
-              }
+              },
+              "releaseTag": "Public",
+              "name": "new"
             },
             {
               "kind": "EnumMember",
               "canonicalReference": "@2sic.com/2sxc-typings!CommandNames.publish:member",
-              "docComment": "/**\n * `publish` tells the system to update a content-items status to published. If there was a published and a draft before, the draft will replace the previous item <br> 🔘 Appears automatically if the item is in draft mode / not published. <br> 📩 Parameters either one of these: [Id](xref:Api.Js.SxcJs.CommandParamsEntityById), [In Block](xref:Api.Js.SxcJs.CommandParamsEntityInContentBlock), [In List](xref:Api.Js.SxcJs.CommandParamsEntityInList) (auto-detected from context)\n */\n",
+              "docComment": "/**\n * `publish` tells the system to update a content-items status to published. If there was a published and a draft before, the draft will replace the previous item<br> 🔘 Appears automatically if the item is in draft mode / not published.<br> 📩 Parameters either one of these:\n * [Id](xref:Api.Js.SxcJs.CommandParamsEntityById),\n * [In Block](xref:Api.Js.SxcJs.CommandParamsEntityInContentBlock),\n * [In List](xref:Api.Js.SxcJs.CommandParamsEntityInList)\n * (auto-detected from context)\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -1146,17 +1239,17 @@
                   "text": "\"publish\""
                 }
               ],
-              "releaseTag": "Public",
-              "name": "publish",
               "initializerTokenRange": {
                 "startIndex": 1,
                 "endIndex": 2
-              }
+              },
+              "releaseTag": "Public",
+              "name": "publish"
             },
             {
               "kind": "EnumMember",
               "canonicalReference": "@2sic.com/2sxc-typings!CommandNames.query:member",
-              "docComment": "/**\n * `template-query` opens the pipeline/query-designer in a new window. <br> 🔘 It's not available on the simple Content App, only on full Apps. It is disabled if no query is configured. <br> 🔐 Toolbar shows this automatically to elevated admins. <br> 📩 No params required, (auto-detected from context)\n */\n",
+              "docComment": "/**\n * `template-query` opens the pipeline/query-designer in a new window.<br> 🔘 It's not available on the simple Content App, only on full Apps.\n * It is disabled if no query is configured.<br> 🔐 Toolbar shows this automatically to elevated admins.<br> 📩 No params required,\n * (auto-detected from context)\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -1167,17 +1260,17 @@
                   "text": "\"query\""
                 }
               ],
-              "releaseTag": "Public",
-              "name": "query",
               "initializerTokenRange": {
                 "startIndex": 1,
                 "endIndex": 2
-              }
+              },
+              "releaseTag": "Public",
+              "name": "query"
             },
             {
               "kind": "EnumMember",
               "canonicalReference": "@2sic.com/2sxc-typings!CommandNames.remove:member",
-              "docComment": "/**\n * `remove` removes an item from a list of items. <br> 🪜 Only appears on toolbars of items which are in a list. <br> 📩 [Parameters](xref:Api.Js.SxcJs.CommandParamsEntityInList) (auto-detected from context)\n */\n",
+              "docComment": "/**\n * `remove` removes an item from a list of items.<br> 🪜 Only appears on toolbars of items which are in a list.<br> 📩 [Parameters](xref:Api.Js.SxcJs.CommandParamsEntityInList)\n * (auto-detected from context)\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -1188,17 +1281,17 @@
                   "text": "\"remove\""
                 }
               ],
-              "releaseTag": "Public",
-              "name": "remove",
               "initializerTokenRange": {
                 "startIndex": 1,
                 "endIndex": 2
-              }
+              },
+              "releaseTag": "Public",
+              "name": "remove"
             },
             {
               "kind": "EnumMember",
               "canonicalReference": "@2sic.com/2sxc-typings!CommandNames.replace:member",
-              "docComment": "/**\n * `replace` opens the dialog to assign a different content-item in this slot on module-assigned content items <br> 📩 [Parameters](xref:Api.Js.SxcJs.CommandParamsEntityInList) (auto-detected from context)\n */\n",
+              "docComment": "/**\n * `replace` opens the dialog to assign a different content-item in this slot on module-assigned content items<br> 📩 [Parameters](xref:Api.Js.SxcJs.CommandParamsEntityInList)\n * (auto-detected from context)\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -1209,17 +1302,17 @@
                   "text": "\"replace\""
                 }
               ],
-              "releaseTag": "Public",
-              "name": "replace",
               "initializerTokenRange": {
                 "startIndex": 1,
                 "endIndex": 2
-              }
+              },
+              "releaseTag": "Public",
+              "name": "replace"
             },
             {
               "kind": "EnumMember",
               "canonicalReference": "@2sic.com/2sxc-typings!CommandNames.system:member",
-              "docComment": "/**\n * `system` opens the system dialog for this zone/site. <br> 🔐 Toolbar shows this automatically to elevated admins. <br> 📩 No params required, (auto-detected from context)\n */\n",
+              "docComment": "/**\n * `system` opens the system dialog for this zone/site.<br> 🔐 Toolbar shows this automatically to elevated admins.<br> 📩 No params required,\n * (auto-detected from context)\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -1230,17 +1323,17 @@
                   "text": "\"system\""
                 }
               ],
-              "releaseTag": "Public",
-              "name": "system",
               "initializerTokenRange": {
                 "startIndex": 1,
                 "endIndex": 2
-              }
+              },
+              "releaseTag": "Public",
+              "name": "system"
             },
             {
               "kind": "EnumMember",
               "canonicalReference": "@2sic.com/2sxc-typings!CommandNames.template:member",
-              "docComment": "/**\n * `template-develop` opens the template-editor dialog in a new window. <br> 🔐 Toolbar shows this automatically to elevated admins. <br> 📩 No params required, (auto-detected from context)\n */\n",
+              "docComment": "/**\n * `template-develop` opens the template-editor dialog in a new window.<br> 🔐 Toolbar shows this automatically to elevated admins.<br> 📩 No params required,\n * (auto-detected from context)\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -1251,17 +1344,17 @@
                   "text": "\"template\""
                 }
               ],
-              "releaseTag": "Public",
-              "name": "template",
               "initializerTokenRange": {
                 "startIndex": 1,
                 "endIndex": 2
-              }
+              },
+              "releaseTag": "Public",
+              "name": "template"
             },
             {
               "kind": "EnumMember",
               "canonicalReference": "@2sic.com/2sxc-typings!CommandNames.view:member",
-              "docComment": "/**\n * `template-settings` will change settings on the template currently used <br> 🔐 Toolbar shows this automatically to elevated admins.\n */\n",
+              "docComment": "/**\n * `template-settings` will change settings on the template currently used<br> 🔐 Toolbar shows this automatically to elevated admins.\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -1272,19 +1365,19 @@
                   "text": "\"view\""
                 }
               ],
-              "releaseTag": "Public",
-              "name": "view",
               "initializerTokenRange": {
                 "startIndex": 1,
                 "endIndex": 2
-              }
+              },
+              "releaseTag": "Public",
+              "name": "view"
             }
           ]
         },
         {
           "kind": "Interface",
           "canonicalReference": "@2sic.com/2sxc-typings!CommandNewParams:interface",
-          "docComment": "/**\n * Parameters used for the command `new` <br> The ContentType name determines what kind of item will be created. <br> Can also contain `prefill` to add values to the new item. <br> Can also contain list-information, in which case it's added to that list. Depending on your use case, you will need to use the [](xref:Api.Js.SxcJs.CommandParamsEntityInList) or [](xref:Api.Js.SxcJs.CommandParamsEntityInContentBlock) parameters as well. <br> ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)\n *\n * @public\n */\n",
+          "docComment": "/**\n * Parameters used for the command `new`<br>\n * The ContentType name determines what kind of item will be created.<br>\n * Can also contain `prefill` to add values to the new item.<br>\n * Can also contain list-information, in which case it's added to that list.\n * Depending on your use case, you will need to use the\n * [](xref:Api.Js.SxcJs.CommandParamsEntityInList) or [](xref:Api.Js.SxcJs.CommandParamsEntityInContentBlock) parameters as well.<br>\n * ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)\n *\n * @public\n */\n",
           "excerptTokens": [
             {
               "kind": "Content",
@@ -1337,11 +1430,17 @@
             },
             {
               "kind": "Content",
-              "text": "> "
+              "text": ">"
+            },
+            {
+              "kind": "Content",
+              "text": " "
             }
           ],
+          "fileUrlPath": "parts/dist/inpage/src/commands/command/command-params-all.d.ts",
           "releaseTag": "Public",
           "name": "CommandNewParams",
+          "preserveMemberOrder": false,
           "members": [
             {
               "kind": "PropertySignature",
@@ -1387,14 +1486,14 @@
             },
             {
               "startIndex": 8,
-              "endIndex": 11
+              "endIndex": 12
             }
           ]
         },
         {
           "kind": "Interface",
           "canonicalReference": "@2sic.com/2sxc-typings!CommandParams:interface",
-          "docComment": "/**\n * Command parameters are handed over to a command for execution. It contains all possible combinations of parameters that can be used in a command.\n *\n * We will try to improve how this is documented, but ATM it just has all parameters, even though you may need none, or just a few.\n *\n * _Note: For your specific commands, you can also pass other parameters._\n *\n * **Important for the docs**\n *\n * Most properties are actually not visible (you will get them in the types though). So actually you will usually create one of these: * [](xref:Api.Js.SxcJs.CommandParamsEntityById) * [](xref:Api.Js.SxcJs.CommandParamsEntityInContentBlock) * [](xref:Api.Js.SxcJs.CommandParamsEntityInList) * [](xref:Api.Js.SxcJs.CommandAddParams) * [](xref:Api.Js.SxcJs.CommandAddExistingParams) * [](xref:Api.Js.SxcJs.CommandDataParams) * [](xref:Api.Js.SxcJs.CommandCopyParams) * [](xref:Api.Js.SxcJs.CommandCodeParams) * [](xref:Api.Js.SxcJs.CommandDeleteParams) * [](xref:Api.Js.SxcJs.CommandMetadataParams) * [](xref:Api.Js.SxcJs.CommandNewParams)\n *\n * Because of this, most of the properties below are NOT documented, as their purpose can change depending on the command used.\n *\n * @public\n */\n",
+          "docComment": "/**\n * Command parameters are handed over to a command for execution.\n * It contains all possible combinations of parameters that can be used in a command.\n *\n * We will try to improve how this is documented, but ATM it just has all parameters,\n * even though you may need none, or just a few.\n *\n * _Note: For your specific commands, you can also pass other parameters._\n *\n * **Important for the docs**\n *\n * Most properties are actually not visible (you will get them in the types though).\n * So actually you will usually create one of these:\n * * [](xref:Api.Js.SxcJs.CommandParamsEntityById)\n * * [](xref:Api.Js.SxcJs.CommandParamsEntityInContentBlock)\n * * [](xref:Api.Js.SxcJs.CommandParamsEntityInList)\n * * [](xref:Api.Js.SxcJs.CommandAddParams)\n * * [](xref:Api.Js.SxcJs.CommandAddExistingParams)\n * * [](xref:Api.Js.SxcJs.CommandDataParams)\n * * [](xref:Api.Js.SxcJs.CommandCopyParams)\n * * [](xref:Api.Js.SxcJs.CommandCodeParams)\n * * [](xref:Api.Js.SxcJs.CommandDeleteParams)\n * * [](xref:Api.Js.SxcJs.CommandMetadataParams)\n * * [](xref:Api.Js.SxcJs.CommandNewParams)\n *\n * Because of this, most of the properties below are NOT documented, as their purpose can change depending on the command used.\n *\n * @public\n */\n",
           "excerptTokens": [
             {
               "kind": "Content",
@@ -1407,11 +1506,17 @@
             },
             {
               "kind": "Content",
-              "text": "<string, unknown> "
+              "text": "<string, unknown>"
+            },
+            {
+              "kind": "Content",
+              "text": " "
             }
           ],
+          "fileUrlPath": "parts/dist/$2sxc/src/cms/command-params.d.ts",
           "releaseTag": "Public",
           "name": "CommandParams",
+          "preserveMemberOrder": false,
           "members": [
             {
               "kind": "PropertySignature",
@@ -1543,33 +1648,6 @@
               "isOptional": true,
               "releaseTag": "Public",
               "name": "entityTitle",
-              "propertyTypeTokenRange": {
-                "startIndex": 1,
-                "endIndex": 2
-              }
-            },
-            {
-              "kind": "PropertySignature",
-              "canonicalReference": "@2sic.com/2sxc-typings!CommandParams#fields:member",
-              "docComment": "/**\n * The purpose of this varies by [Command](xref:Api.Js.SxcJs.CommandNames).\n *\n * @public\n */\n",
-              "excerptTokens": [
-                {
-                  "kind": "Content",
-                  "text": "fields?: "
-                },
-                {
-                  "kind": "Content",
-                  "text": "string"
-                },
-                {
-                  "kind": "Content",
-                  "text": ";"
-                }
-              ],
-              "isReadonly": false,
-              "isOptional": true,
-              "releaseTag": "Public",
-              "name": "fields",
               "propertyTypeTokenRange": {
                 "startIndex": 1,
                 "endIndex": 2
@@ -1755,7 +1833,7 @@
             {
               "kind": "PropertySignature",
               "canonicalReference": "@2sic.com/2sxc-typings!CommandParams#useModuleList:member",
-              "docComment": "/**\n * The purpose of this varies by [Command](xref:Api.Js.SxcJs.CommandNames).\n *\n * @public\n */\n",
+              "docComment": "/**\n * The purpose of this varies by [Command](xref:Api.Js.SxcJs.CommandNames).\n * This is only for the module-specific list of items.\n * When using parent/fields, this is not relevant.\n *\n * @public\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -1783,14 +1861,14 @@
           "extendsTokenRanges": [
             {
               "startIndex": 1,
-              "endIndex": 2
+              "endIndex": 3
             }
           ]
         },
         {
           "kind": "Interface",
           "canonicalReference": "@2sic.com/2sxc-typings!CommandParamsEntity:interface",
-          "docComment": "/**\n * Parameters used for commands which need an entity ID or a list-reference. <br> ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)\n *\n * @public\n */\n",
+          "docComment": "/**\n * Parameters used for commands which need an entity ID or a list-reference.<br>\n * ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)\n *\n * @public\n */\n",
           "excerptTokens": [
             {
               "kind": "Content",
@@ -1824,8 +1902,10 @@
               "text": " "
             }
           ],
+          "fileUrlPath": "parts/dist/inpage/src/commands/command/command-params-entity.d.ts",
           "releaseTag": "Public",
           "name": "CommandParamsEntity",
+          "preserveMemberOrder": false,
           "members": [],
           "extendsTokenRanges": [
             {
@@ -1845,15 +1925,17 @@
         {
           "kind": "Interface",
           "canonicalReference": "@2sic.com/2sxc-typings!CommandParamsEntityById:interface",
-          "docComment": "/**\n * Parameters used for commands which address a specificy entity. <br> ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)\n *\n * @public\n */\n",
+          "docComment": "/**\n * Parameters used for commands which address a specify entity.<br>\n * ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)\n *\n * @public\n */\n",
           "excerptTokens": [
             {
               "kind": "Content",
               "text": "export interface CommandParamsEntityById "
             }
           ],
+          "fileUrlPath": "parts/dist/inpage/src/commands/command/command-params-entity.d.ts",
           "releaseTag": "Public",
           "name": "CommandParamsEntityById",
+          "preserveMemberOrder": false,
           "members": [
             {
               "kind": "PropertySignature",
@@ -1888,20 +1970,22 @@
         {
           "kind": "Interface",
           "canonicalReference": "@2sic.com/2sxc-typings!CommandParamsEntityInContentBlock:interface",
-          "docComment": "/**\n * Parameters used for command which expect an item from a list of a ContentBlock. <br> ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)\n *\n * @public\n */\n",
+          "docComment": "/**\n * Parameters used for command which expect an item from a list of a ContentBlock.<br>\n * ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)\n *\n * @public\n */\n",
           "excerptTokens": [
             {
               "kind": "Content",
               "text": "export interface CommandParamsEntityInContentBlock "
             }
           ],
+          "fileUrlPath": "parts/dist/inpage/src/commands/command/command-params-entity.d.ts",
           "releaseTag": "Public",
           "name": "CommandParamsEntityInContentBlock",
+          "preserveMemberOrder": false,
           "members": [
             {
               "kind": "PropertySignature",
               "canonicalReference": "@2sic.com/2sxc-typings!CommandParamsEntityInContentBlock#index:member",
-              "docComment": "/**\n * Determins the position of the item in the list. index was added in v14.04 to replace the `sortOrder` which had a confusing name.\n */\n",
+              "docComment": "/**\n * Determines the position of the item in the list.\n * index was added in v14.04 to replace the `sortOrder` which had a confusing name.\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -1958,20 +2042,22 @@
         {
           "kind": "Interface",
           "canonicalReference": "@2sic.com/2sxc-typings!CommandParamsEntityInList:interface",
-          "docComment": "/**\n * Parameters used for command which expect an item in a list (field) of a parent. <br> ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)\n *\n * @public\n */\n",
+          "docComment": "/**\n * Parameters used for command which expect an item in a list (field) of a parent.<br>\n * ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)\n *\n * @public\n */\n",
           "excerptTokens": [
             {
               "kind": "Content",
               "text": "export interface CommandParamsEntityInList "
             }
           ],
+          "fileUrlPath": "parts/dist/inpage/src/commands/command/command-params-entity.d.ts",
           "releaseTag": "Public",
           "name": "CommandParamsEntityInList",
+          "preserveMemberOrder": false,
           "members": [
             {
               "kind": "PropertySignature",
               "canonicalReference": "@2sic.com/2sxc-typings!CommandParamsEntityInList#fields:member",
-              "docComment": "/**\n * Parent Entity field(s) name(s). Usually just one field, like `Authors`. In field-sets it could be `Author,Award` or similar.\n */\n",
+              "docComment": "/**\n * Parent Entity field(s) name(s).\n * Usually just one field, like `Authors`.\n * In field-sets it could be `Author,Award` or similar.\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -1998,7 +2084,7 @@
             {
               "kind": "PropertySignature",
               "canonicalReference": "@2sic.com/2sxc-typings!CommandParamsEntityInList#index:member",
-              "docComment": "/**\n * Determins the position of the item in the list of that entity-field.\n */\n",
+              "docComment": "/**\n * Determines the position of the item in the list of that entity-field.\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -2062,8 +2148,10 @@
               "text": "export interface CommandParamsMetadata "
             }
           ],
+          "fileUrlPath": "parts/dist/$2sxc/src/cms/command-params-metadata.d.ts",
           "releaseTag": "Public",
           "name": "CommandParamsMetadata",
+          "preserveMemberOrder": false,
           "members": [
             {
               "kind": "PropertySignature",
@@ -2160,13 +2248,16 @@
               "text": "export declare class ContextIdentifier "
             }
           ],
+          "fileUrlPath": "parts/dist/$2sxc/src/sxc-global/context-identifier.d.ts",
           "releaseTag": "Public",
+          "isAbstract": false,
           "name": "ContextIdentifier",
+          "preserveMemberOrder": false,
           "members": [
             {
               "kind": "Property",
               "canonicalReference": "@2sic.com/2sxc-typings!ContextIdentifier#appId:member",
-              "docComment": "/**\n * AppId of this Context  @requires appId\n */\n",
+              "docComment": "/**\n * AppId of this Context @requires appId\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -2190,12 +2281,13 @@
                 "endIndex": 2
               },
               "isStatic": false,
-              "isProtected": false
+              "isProtected": false,
+              "isAbstract": false
             },
             {
               "kind": "Property",
               "canonicalReference": "@2sic.com/2sxc-typings!ContextIdentifier#moduleId:member",
-              "docComment": "/**\n * ModuleId of this Context (optional)  @optional\n */\n",
+              "docComment": "/**\n * ModuleId of this Context (optional) @optional\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -2219,12 +2311,13 @@
                 "endIndex": 2
               },
               "isStatic": false,
-              "isProtected": false
+              "isProtected": false,
+              "isAbstract": false
             },
             {
               "kind": "Property",
               "canonicalReference": "@2sic.com/2sxc-typings!ContextIdentifier#pageId:member",
-              "docComment": "/**\n * PageId of this Context (optional)  @optional\n */\n",
+              "docComment": "/**\n * PageId of this Context (optional) @optional\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -2248,12 +2341,13 @@
                 "endIndex": 2
               },
               "isStatic": false,
-              "isProtected": false
+              "isProtected": false,
+              "isAbstract": false
             },
             {
               "kind": "Property",
               "canonicalReference": "@2sic.com/2sxc-typings!ContextIdentifier#zoneId:member",
-              "docComment": "/**\n * ZoneId of this Context  @requires zoneId\n */\n",
+              "docComment": "/**\n * ZoneId of this Context @requires zoneId\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -2277,7 +2371,8 @@
                 "endIndex": 2
               },
               "isStatic": false,
-              "isProtected": false
+              "isProtected": false,
+              "isAbstract": false
             }
           ],
           "implementsTokenRanges": []
@@ -2292,8 +2387,10 @@
               "text": "export interface EnvironmentSpecs "
             }
           ],
+          "fileUrlPath": "parts/dist/$2sxc/src/environment/environment-specs.d.ts",
           "releaseTag": "Public",
           "name": "EnvironmentSpecs",
+          "preserveMemberOrder": false,
           "members": [
             {
               "kind": "PropertySignature",
@@ -2490,35 +2587,41 @@
         {
           "kind": "Class",
           "canonicalReference": "@2sic.com/2sxc-typings!HasLog:class",
-          "docComment": "/**\n * Any object that has an own log object  @export  @interface HasLog\n *\n * @remarks\n *\n * The constructor for this class is marked as internal. Third-party code should not call the constructor directly or create subclasses that extend the `HasLog` class.\n *\n * @public\n */\n",
+          "docComment": "/**\n * Any object that has an own log object @export @interface HasLog\n *\n * @remarks\n *\n * The constructor for this class is marked as internal. Third-party code should not call the constructor directly or create subclasses that extend the `HasLog` class.\n *\n * @public\n */\n",
           "excerptTokens": [
             {
               "kind": "Content",
               "text": "export declare abstract class HasLog "
             }
           ],
+          "fileUrlPath": "parts/dist/core/logging/has-log.d.ts",
           "releaseTag": "Public",
+          "isAbstract": true,
           "name": "HasLog",
+          "preserveMemberOrder": false,
           "members": [],
           "implementsTokenRanges": []
         },
         {
           "kind": "Class",
           "canonicalReference": "@2sic.com/2sxc-typings!Log:class",
-          "docComment": "/**\n * A log object which will collect log entries for another ojbect  @export  @interface Log\n *\n * @remarks\n *\n * The constructor for this class is marked as internal. Third-party code should not call the constructor directly or create subclasses that extend the `Log` class.\n *\n * @public\n */\n",
+          "docComment": "/**\n * A log object which will collect log entries for another object @export @interface Log\n *\n * @remarks\n *\n * The constructor for this class is marked as internal. Third-party code should not call the constructor directly or create subclasses that extend the `Log` class.\n *\n * @public\n */\n",
           "excerptTokens": [
             {
               "kind": "Content",
               "text": "export declare class Log "
             }
           ],
+          "fileUrlPath": "parts/dist/core/logging/Log.d.ts",
           "releaseTag": "Public",
+          "isAbstract": false,
           "name": "Log",
+          "preserveMemberOrder": false,
           "members": [
             {
               "kind": "Method",
               "canonicalReference": "@2sic.com/2sxc-typings!Log#add:member(1)",
-              "docComment": "/**\n * Add a simple message to the log\n *\n * @param message - preferred usage is with string parameter: log.add(`description ${ parameter }`);\n *\n * in case that we experience error with normal string parameter, we can use arrow function to enclose parameter like this () => parameter but use it very rarely, because there is certainly a performance implication! log.add(`description ${() => parameter}`);\n */\n",
+              "docComment": "/**\n * Add a simple message to the log\n *\n * @param message - preferred usage is with string parameter:\n * log.add(`description ${ parameter }`);\n *\n * in case that we experience error with normal string parameter, we can use arrow function to enclose parameter like this () => parameter\n * but use it very rarely, because there is certainly a performance implication!\n * log.add(`description ${() => parameter}`);\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -2576,6 +2679,7 @@
                 }
               ],
               "isOptional": false,
+              "isAbstract": false,
               "name": "add"
             },
             {
@@ -2610,12 +2714,13 @@
                 "endIndex": 3
               },
               "isStatic": false,
-              "isProtected": false
+              "isProtected": false,
+              "isAbstract": false
             },
             {
               "kind": "Property",
               "canonicalReference": "@2sic.com/2sxc-typings!Log#maxEntries:member",
-              "docComment": "/**\n * Maximum amount of entries to add - to prevent memory hoging\n */\n",
+              "docComment": "/**\n * Maximum amount of entries to add - to prevent memory hogging\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -2639,7 +2744,8 @@
                 "endIndex": 2
               },
               "isStatic": false,
-              "isProtected": false
+              "isProtected": false,
+              "isAbstract": false
             },
             {
               "kind": "Property",
@@ -2668,7 +2774,8 @@
                 "endIndex": 2
               },
               "isStatic": false,
-              "isProtected": false
+              "isProtected": false,
+              "isAbstract": false
             }
           ],
           "implementsTokenRanges": []
@@ -2676,15 +2783,18 @@
         {
           "kind": "Class",
           "canonicalReference": "@2sic.com/2sxc-typings!LogEntry:class",
-          "docComment": "/**\n * A log entry item  @export  @interface LogEntry\n *\n * @remarks\n *\n * The constructor for this class is marked as internal. Third-party code should not call the constructor directly or create subclasses that extend the `LogEntry` class.\n *\n * @public\n */\n",
+          "docComment": "/**\n * A log entry item @export @interface LogEntry\n *\n * @remarks\n *\n * The constructor for this class is marked as internal. Third-party code should not call the constructor directly or create subclasses that extend the `LogEntry` class.\n *\n * @public\n */\n",
           "excerptTokens": [
             {
               "kind": "Content",
               "text": "export declare class LogEntry "
             }
           ],
+          "fileUrlPath": "parts/dist/core/logging/entry.d.ts",
           "releaseTag": "Public",
+          "isAbstract": false,
           "name": "LogEntry",
+          "preserveMemberOrder": false,
           "members": [
             {
               "kind": "Property",
@@ -2713,7 +2823,8 @@
                 "endIndex": 2
               },
               "isStatic": false,
-              "isProtected": false
+              "isProtected": false,
+              "isAbstract": false
             },
             {
               "kind": "Property",
@@ -2742,7 +2853,8 @@
                 "endIndex": 2
               },
               "isStatic": false,
-              "isProtected": false
+              "isProtected": false,
+              "isAbstract": false
             }
           ],
           "implementsTokenRanges": []
@@ -2750,15 +2862,17 @@
         {
           "kind": "Interface",
           "canonicalReference": "@2sic.com/2sxc-typings!MetadataFor:interface",
-          "docComment": "/**\n * A Metadata-Target identifier to tell an entity that it describes something else.\n *\n * Usually used in Sxc instances with the [Data Service](xref:Api.Js.SxcJs.SxcData)\n *\n * Warning: There is another MetadataFor type and they are not fully consistent. This is historical and not easy to correct, but we're working on it.\n *\n * @public\n */\n",
+          "docComment": "/**\n * A Metadata-Target identifier to tell an entity that it describes something else.\n *\n * Usually used in Sxc instances with the [Data Service](xref:Api.Js.SxcJs.SxcData)\n *\n * Warning: There is another MetadataFor type and they are not fully consistent.\n * This is historical and not easy to correct, but we're working on it.\n *\n * @public\n */\n",
           "excerptTokens": [
             {
               "kind": "Content",
               "text": "export interface MetadataFor "
             }
           ],
+          "fileUrlPath": "parts/dist/$2sxc/src/data/metadata-for.d.ts",
           "releaseTag": "Public",
           "name": "MetadataFor",
+          "preserveMemberOrder": false,
           "members": [
             {
               "kind": "PropertySignature",
@@ -2844,7 +2958,7 @@
             {
               "kind": "PropertySignature",
               "canonicalReference": "@2sic.com/2sxc-typings!MetadataFor#Target:member",
-              "docComment": "/**\n * The target type identifier - TODO: @2dm - THIS SHOULD probably be number only\n */\n",
+              "docComment": "/**\n * The target type identifier\n * - TODO: @2dm - THIS SHOULD probably be number only\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -2886,13 +3000,15 @@
               "text": "export declare enum MetadataTargetTypes "
             }
           ],
+          "fileUrlPath": "parts/dist/$2sxc/src/data/target-types.d.ts",
           "releaseTag": "Public",
           "name": "MetadataTargetTypes",
+          "preserveMemberOrder": false,
           "members": [
             {
               "kind": "EnumMember",
               "canonicalReference": "@2sic.com/2sxc-typings!MetadataTargetTypes.App:member",
-              "docComment": "/**\n * App metadata (3). Used to give Apps additional properties. Remarks = The key should always be an int ID of the App.\n */\n",
+              "docComment": "/**\n * App metadata (3). Used to give Apps additional properties.\n * Remarks =\n * The key should always be an int ID of the App.\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -2903,17 +3019,17 @@
                   "text": "3"
                 }
               ],
-              "releaseTag": "Public",
-              "name": "App",
               "initializerTokenRange": {
                 "startIndex": 1,
                 "endIndex": 2
-              }
+              },
+              "releaseTag": "Public",
+              "name": "App"
             },
             {
               "kind": "EnumMember",
               "canonicalReference": "@2sic.com/2sxc-typings!MetadataTargetTypes.Attribute:member",
-              "docComment": "/**\n * Metadata of attributes / fields (2). This is used to store configuration like the field label, amount-of-rows, etc. Remarks = The key is always a number (int) pointing to the Attribute ID in the DB.\n */\n",
+              "docComment": "/**\n * Metadata of attributes / fields (2). This is used to store configuration like the field label, amount-of-rows, etc.\n * Remarks =\n * The key is always a number (int) pointing to the Attribute ID in the DB.\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -2924,17 +3040,17 @@
                   "text": "2"
                 }
               ],
-              "releaseTag": "Public",
-              "name": "Attribute",
               "initializerTokenRange": {
                 "startIndex": 1,
                 "endIndex": 2
-              }
+              },
+              "releaseTag": "Public",
+              "name": "Attribute"
             },
             {
               "kind": "EnumMember",
               "canonicalReference": "@2sic.com/2sxc-typings!MetadataTargetTypes.CmsItem:member",
-              "docComment": "/**\n * Item / Object of the Platform, like a File or Folder etc. (10) Remarks = * The key is usually a string to further specify what it's describing, like \"file:72\" * The text equivalent is CmsObject\n */\n",
+              "docComment": "/**\n * Item / Object of the Platform, like a File or Folder etc. (10)\n * Remarks =\n * * The key is usually a string to further specify what it's describing, like \"file:72\"\n * * The text equivalent is CmsObject\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -2945,12 +3061,12 @@
                   "text": "10"
                 }
               ],
-              "releaseTag": "Public",
-              "name": "CmsItem",
               "initializerTokenRange": {
                 "startIndex": 1,
                 "endIndex": 2
-              }
+              },
+              "releaseTag": "Public",
+              "name": "CmsItem"
             },
             {
               "kind": "EnumMember",
@@ -2966,12 +3082,12 @@
                   "text": "5"
                 }
               ],
-              "releaseTag": "Public",
-              "name": "ContentType",
               "initializerTokenRange": {
                 "startIndex": 1,
                 "endIndex": 2
-              }
+              },
+              "releaseTag": "Public",
+              "name": "ContentType"
             },
             {
               "kind": "EnumMember",
@@ -2987,12 +3103,12 @@
                   "text": "90"
                 }
               ],
-              "releaseTag": "Public",
-              "name": "Custom",
               "initializerTokenRange": {
                 "startIndex": 1,
                 "endIndex": 2
-              }
+              },
+              "releaseTag": "Public",
+              "name": "Custom"
             },
             {
               "kind": "EnumMember",
@@ -3008,12 +3124,12 @@
                   "text": "91"
                 }
               ],
-              "releaseTag": "Public",
-              "name": "Custom1",
               "initializerTokenRange": {
                 "startIndex": 1,
                 "endIndex": 2
-              }
+              },
+              "releaseTag": "Public",
+              "name": "Custom1"
             },
             {
               "kind": "EnumMember",
@@ -3029,12 +3145,12 @@
                   "text": "92"
                 }
               ],
-              "releaseTag": "Public",
-              "name": "Custom2",
               "initializerTokenRange": {
                 "startIndex": 1,
                 "endIndex": 2
-              }
+              },
+              "releaseTag": "Public",
+              "name": "Custom2"
             },
             {
               "kind": "EnumMember",
@@ -3050,12 +3166,12 @@
                   "text": "93"
                 }
               ],
-              "releaseTag": "Public",
-              "name": "Custom3",
               "initializerTokenRange": {
                 "startIndex": 1,
                 "endIndex": 2
-              }
+              },
+              "releaseTag": "Public",
+              "name": "Custom3"
             },
             {
               "kind": "EnumMember",
@@ -3071,12 +3187,12 @@
                   "text": "94"
                 }
               ],
-              "releaseTag": "Public",
-              "name": "Custom4",
               "initializerTokenRange": {
                 "startIndex": 1,
                 "endIndex": 2
-              }
+              },
+              "releaseTag": "Public",
+              "name": "Custom4"
             },
             {
               "kind": "EnumMember",
@@ -3092,12 +3208,12 @@
                   "text": "95"
                 }
               ],
-              "releaseTag": "Public",
-              "name": "Custom5",
               "initializerTokenRange": {
                 "startIndex": 1,
                 "endIndex": 2
-              }
+              },
+              "releaseTag": "Public",
+              "name": "Custom5"
             },
             {
               "kind": "EnumMember",
@@ -3113,12 +3229,12 @@
                   "text": "96"
                 }
               ],
-              "releaseTag": "Public",
-              "name": "Custom6",
               "initializerTokenRange": {
                 "startIndex": 1,
                 "endIndex": 2
-              }
+              },
+              "releaseTag": "Public",
+              "name": "Custom6"
             },
             {
               "kind": "EnumMember",
@@ -3134,12 +3250,12 @@
                   "text": "97"
                 }
               ],
-              "releaseTag": "Public",
-              "name": "Custom7",
               "initializerTokenRange": {
                 "startIndex": 1,
                 "endIndex": 2
-              }
+              },
+              "releaseTag": "Public",
+              "name": "Custom7"
             },
             {
               "kind": "EnumMember",
@@ -3155,12 +3271,12 @@
                   "text": "98"
                 }
               ],
-              "releaseTag": "Public",
-              "name": "Custom8",
               "initializerTokenRange": {
                 "startIndex": 1,
                 "endIndex": 2
-              }
+              },
+              "releaseTag": "Public",
+              "name": "Custom8"
             },
             {
               "kind": "EnumMember",
@@ -3176,17 +3292,17 @@
                   "text": "99"
                 }
               ],
-              "releaseTag": "Public",
-              "name": "Custom9",
               "initializerTokenRange": {
                 "startIndex": 1,
                 "endIndex": 2
-              }
+              },
+              "releaseTag": "Public",
+              "name": "Custom9"
             },
             {
               "kind": "EnumMember",
               "canonicalReference": "@2sic.com/2sxc-typings!MetadataTargetTypes.Entity:member",
-              "docComment": "/**\n * Metadata of entities / data-items (4). This lets us enhance entities with additional information. Remarks = The Key should always be a GUID\n */\n",
+              "docComment": "/**\n * Metadata of entities / data-items (4).\n * This lets us enhance entities with additional information.\n * Remarks =\n * The Key should always be a GUID\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -3197,17 +3313,17 @@
                   "text": "4"
                 }
               ],
-              "releaseTag": "Public",
-              "name": "Entity",
               "initializerTokenRange": {
                 "startIndex": 1,
                 "endIndex": 2
-              }
+              },
+              "releaseTag": "Public",
+              "name": "Entity"
             },
             {
               "kind": "EnumMember",
               "canonicalReference": "@2sic.com/2sxc-typings!MetadataTargetTypes.Module:member",
-              "docComment": "/**\n * A Module - like a module containing some content (16) Remarks = New in v13</remarks>\n */\n",
+              "docComment": "/**\n * A Module - like a module containing some content (16)\n * Remarks = New in v13</remarks>\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -3218,17 +3334,17 @@
                   "text": "16"
                 }
               ],
-              "releaseTag": "Public",
-              "name": "Module",
               "initializerTokenRange": {
                 "startIndex": 1,
                 "endIndex": 2
-              }
+              },
+              "releaseTag": "Public",
+              "name": "Module"
             },
             {
               "kind": "EnumMember",
               "canonicalReference": "@2sic.com/2sxc-typings!MetadataTargetTypes.ModuleVariant:member",
-              "docComment": "/**\n * A Module - like a module containing some content (17) Remarks = New in v13 / beta</remarks>\n */\n",
+              "docComment": "/**\n * A Module - like a module containing some content (17)\n * Remarks = New in v13 / beta</remarks>\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -3239,12 +3355,12 @@
                   "text": "17"
                 }
               ],
-              "releaseTag": "Public",
-              "name": "ModuleVariant",
               "initializerTokenRange": {
                 "startIndex": 1,
                 "endIndex": 2
-              }
+              },
+              "releaseTag": "Public",
+              "name": "ModuleVariant"
             },
             {
               "kind": "EnumMember",
@@ -3260,17 +3376,17 @@
                   "text": "1"
                 }
               ],
-              "releaseTag": "Public",
-              "name": "None",
               "initializerTokenRange": {
                 "startIndex": 1,
                 "endIndex": 2
-              }
+              },
+              "releaseTag": "Public",
+              "name": "None"
             },
             {
               "kind": "EnumMember",
               "canonicalReference": "@2sic.com/2sxc-typings!MetadataTargetTypes.Page:member",
-              "docComment": "/**\n * A Page - like the current page (14) Remarks = New in v13</remarks>\n */\n",
+              "docComment": "/**\n * A Page - like the current page (14)\n * Remarks = New in v13</remarks>\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -3281,17 +3397,17 @@
                   "text": "14"
                 }
               ],
-              "releaseTag": "Public",
-              "name": "Page",
               "initializerTokenRange": {
                 "startIndex": 1,
                 "endIndex": 2
-              }
+              },
+              "releaseTag": "Public",
+              "name": "Page"
             },
             {
               "kind": "EnumMember",
               "canonicalReference": "@2sic.com/2sxc-typings!MetadataTargetTypes.PageVariant:member",
-              "docComment": "/**\n * A Page - like the current page (15) Remarks = New in v13 / beta</remarks>\n */\n",
+              "docComment": "/**\n * A Page - like the current page (15)\n * Remarks = New in v13 / beta</remarks>\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -3302,17 +3418,17 @@
                   "text": "15"
                 }
               ],
-              "releaseTag": "Public",
-              "name": "PageVariant",
               "initializerTokenRange": {
                 "startIndex": 1,
                 "endIndex": 2
-              }
+              },
+              "releaseTag": "Public",
+              "name": "PageVariant"
             },
             {
               "kind": "EnumMember",
               "canonicalReference": "@2sic.com/2sxc-typings!MetadataTargetTypes.Site:member",
-              "docComment": "/**\n * A Site - like the current site (12) Remarks = New in v13</remarks>\n */\n",
+              "docComment": "/**\n * A Site - like the current site (12)\n * Remarks = New in v13</remarks>\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -3323,17 +3439,17 @@
                   "text": "12"
                 }
               ],
-              "releaseTag": "Public",
-              "name": "Site",
               "initializerTokenRange": {
                 "startIndex": 1,
                 "endIndex": 2
-              }
+              },
+              "releaseTag": "Public",
+              "name": "Site"
             },
             {
               "kind": "EnumMember",
               "canonicalReference": "@2sic.com/2sxc-typings!MetadataTargetTypes.SiteVariant:member",
-              "docComment": "/**\n * A Site - like the current site (13) Remarks = New in v13 / beta</remarks>\n */\n",
+              "docComment": "/**\n * A Site - like the current site (13)\n * Remarks = New in v13 / beta</remarks>\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -3344,17 +3460,17 @@
                   "text": "13"
                 }
               ],
-              "releaseTag": "Public",
-              "name": "SiteVariant",
               "initializerTokenRange": {
                 "startIndex": 1,
                 "endIndex": 2
-              }
+              },
+              "releaseTag": "Public",
+              "name": "SiteVariant"
             },
             {
               "kind": "EnumMember",
               "canonicalReference": "@2sic.com/2sxc-typings!MetadataTargetTypes.System:member",
-              "docComment": "/**\n * The entire system / platform - so Metadata for the current Dnn/Oqtane installation (11). Remarks = This is not in use as of now, just added for completeness sakes. New in v13\n */\n",
+              "docComment": "/**\n * The entire system / platform - so Metadata for the current Dnn/Oqtane installation (11).\n * Remarks =\n * This is not in use as of now, just added for completeness sakes.\n * New in v13\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -3365,17 +3481,17 @@
                   "text": "11"
                 }
               ],
-              "releaseTag": "Public",
-              "name": "System",
               "initializerTokenRange": {
                 "startIndex": 1,
                 "endIndex": 2
-              }
+              },
+              "releaseTag": "Public",
+              "name": "System"
             },
             {
               "kind": "EnumMember",
               "canonicalReference": "@2sic.com/2sxc-typings!MetadataTargetTypes.Undefined:member",
-              "docComment": "/**\n * Undefined Type (0) - included for completeness. Not usually used, actually None (1) is the default\n */\n",
+              "docComment": "/**\n * Undefined Type (0) - included for completeness.\n * Not usually used, actually None (1) is the default\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -3386,17 +3502,17 @@
                   "text": "0"
                 }
               ],
-              "releaseTag": "Public",
-              "name": "Undefined",
               "initializerTokenRange": {
                 "startIndex": 1,
                 "endIndex": 2
-              }
+              },
+              "releaseTag": "Public",
+              "name": "Undefined"
             },
             {
               "kind": "EnumMember",
               "canonicalReference": "@2sic.com/2sxc-typings!MetadataTargetTypes.User:member",
-              "docComment": "/**\n * A User - like the admin-user (18) Remarks = New in v13</remarks>\n */\n",
+              "docComment": "/**\n * A User - like the admin-user (18)\n * Remarks = New in v13</remarks>\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -3407,17 +3523,17 @@
                   "text": "18"
                 }
               ],
-              "releaseTag": "Public",
-              "name": "User",
               "initializerTokenRange": {
                 "startIndex": 1,
                 "endIndex": 2
-              }
+              },
+              "releaseTag": "Public",
+              "name": "User"
             },
             {
               "kind": "EnumMember",
               "canonicalReference": "@2sic.com/2sxc-typings!MetadataTargetTypes.Zone:member",
-              "docComment": "/**\n * Zone metadata (6) - used to give a Zone additional information. Only used in very special cases, best not use.\n */\n",
+              "docComment": "/**\n * Zone metadata (6) - used to give a Zone additional information.\n * Only used in very special cases, best not use.\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -3428,12 +3544,12 @@
                   "text": "6"
                 }
               ],
-              "releaseTag": "Public",
-              "name": "Zone",
               "initializerTokenRange": {
                 "startIndex": 1,
                 "endIndex": 2
-              }
+              },
+              "releaseTag": "Public",
+              "name": "Zone"
             }
           ]
         },
@@ -3447,13 +3563,16 @@
               "text": "export declare class QuickEditConfig "
             }
           ],
+          "fileUrlPath": "parts/dist/inpage/src/quick-edit/quick-e-configuration.d.ts",
           "releaseTag": "Public",
+          "isAbstract": false,
           "name": "QuickEditConfig",
+          "preserveMemberOrder": false,
           "members": [
             {
               "kind": "Property",
               "canonicalReference": "@2sic.com/2sxc-typings!QuickEditConfig#buttons:member",
-              "docComment": "/**\n * Optional detailed configuration of the buttons.\n */\n",
+              "docComment": "/**\n * Optional detailed configuration of the buttons.\n * The buttons configuration on the root.\n * Will be used for the `modules` and `innerBlocks` if not specified there.\n * Note that if not specified, will always default to true for all buttons.\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -3478,7 +3597,8 @@
                 "endIndex": 2
               },
               "isStatic": false,
-              "isProtected": false
+              "isProtected": false,
+              "isAbstract": false
             },
             {
               "kind": "Property",
@@ -3507,7 +3627,8 @@
                 "endIndex": 2
               },
               "isStatic": false,
-              "isProtected": false
+              "isProtected": false,
+              "isAbstract": false
             }
           ],
           "implementsTokenRanges": []
@@ -3522,8 +3643,11 @@
               "text": "export declare class QuickEditConfigButtons "
             }
           ],
+          "fileUrlPath": "parts/dist/inpage/src/quick-edit/quick-e-configuration.d.ts",
           "releaseTag": "Public",
+          "isAbstract": false,
           "name": "QuickEditConfigButtons",
+          "preserveMemberOrder": false,
           "members": [
             {
               "kind": "Property",
@@ -3552,7 +3676,8 @@
                 "endIndex": 2
               },
               "isStatic": false,
-              "isProtected": false
+              "isProtected": false,
+              "isAbstract": false
             },
             {
               "kind": "Property",
@@ -3581,7 +3706,8 @@
                 "endIndex": 2
               },
               "isStatic": false,
-              "isProtected": false
+              "isProtected": false,
+              "isAbstract": false
             },
             {
               "kind": "Property",
@@ -3610,7 +3736,8 @@
                 "endIndex": 2
               },
               "isStatic": false,
-              "isProtected": false
+              "isProtected": false,
+              "isAbstract": false
             },
             {
               "kind": "Property",
@@ -3639,7 +3766,8 @@
                 "endIndex": 2
               },
               "isStatic": false,
-              "isProtected": false
+              "isProtected": false,
+              "isAbstract": false
             },
             {
               "kind": "Property",
@@ -3668,7 +3796,8 @@
                 "endIndex": 2
               },
               "isStatic": false,
-              "isProtected": false
+              "isProtected": false,
+              "isAbstract": false
             },
             {
               "kind": "Property",
@@ -3697,7 +3826,8 @@
                 "endIndex": 2
               },
               "isStatic": false,
-              "isProtected": false
+              "isProtected": false,
+              "isAbstract": false
             }
           ],
           "implementsTokenRanges": []
@@ -3716,6 +3846,7 @@
               "text": "string"
             }
           ],
+          "fileUrlPath": "parts/dist/inpage/src/quick-edit/quick-e-configuration.d.ts",
           "isReadonly": true,
           "releaseTag": "Public",
           "name": "QuickEditConfigEnableAuto",
@@ -3743,39 +3874,12 @@
               "text": " "
             }
           ],
+          "fileUrlPath": "parts/dist/inpage/src/quick-edit/quick-e-configuration.d.ts",
           "releaseTag": "Public",
+          "isAbstract": false,
           "name": "QuickEditConfigRoot",
+          "preserveMemberOrder": false,
           "members": [
-            {
-              "kind": "Property",
-              "canonicalReference": "@2sic.com/2sxc-typings!QuickEditConfigRoot#buttons:member",
-              "docComment": "/**\n * The buttons configuration on the root. Will be used for the `modules` and `innerBlocks` if not specified there. Note that if not specified, will always default to true for all buttons.\n */\n",
-              "excerptTokens": [
-                {
-                  "kind": "Content",
-                  "text": "buttons?: "
-                },
-                {
-                  "kind": "Reference",
-                  "text": "QuickEditConfigButtons",
-                  "canonicalReference": "@2sic.com/2sxc-typings!QuickEditConfigButtons:class"
-                },
-                {
-                  "kind": "Content",
-                  "text": ";"
-                }
-              ],
-              "isReadonly": false,
-              "isOptional": true,
-              "releaseTag": "Public",
-              "name": "buttons",
-              "propertyTypeTokenRange": {
-                "startIndex": 1,
-                "endIndex": 2
-              },
-              "isStatic": false,
-              "isProtected": false
-            },
             {
               "kind": "Property",
               "canonicalReference": "@2sic.com/2sxc-typings!QuickEditConfigRoot#innerBlocks:member",
@@ -3804,7 +3908,8 @@
                 "endIndex": 2
               },
               "isStatic": false,
-              "isProtected": false
+              "isProtected": false,
+              "isAbstract": false
             },
             {
               "kind": "Property",
@@ -3834,7 +3939,8 @@
                 "endIndex": 2
               },
               "isStatic": false,
-              "isProtected": false
+              "isProtected": false,
+              "isAbstract": false
             }
           ],
           "extendsTokenRange": {
@@ -3846,20 +3952,22 @@
         {
           "kind": "Interface",
           "canonicalReference": "@2sic.com/2sxc-typings!RunParams:interface",
-          "docComment": "/**\n * Parameters for the Instance sxc.cms.run(...) command. New in 13.03\n */\n",
+          "docComment": "/**\n * Parameters for the Instance sxc.cms.run(...) command.\n * New in 13.03\n */\n",
           "excerptTokens": [
             {
               "kind": "Content",
               "text": "export interface RunParams "
             }
           ],
+          "fileUrlPath": "parts/dist/$2sxc/src/cms/run-params.d.ts",
           "releaseTag": "Public",
           "name": "RunParams",
+          "preserveMemberOrder": false,
           "members": [
             {
               "kind": "PropertySignature",
               "canonicalReference": "@2sic.com/2sxc-typings!RunParams#action:member",
-              "docComment": "/**\n * The action to perform. Required.\n */\n",
+              "docComment": "/**\n * The action to perform.\n * Required.\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -3887,7 +3995,7 @@
             {
               "kind": "PropertySignature",
               "canonicalReference": "@2sic.com/2sxc-typings!RunParams#event:member",
-              "docComment": "/**\n * The event which triggered this command - sometimes useful internally further use. Optional in most cases, but in some cases it will improve the behavior of the code.\n */\n",
+              "docComment": "/**\n * The event which triggered this command - sometimes useful internally further use.\n * Optional in most cases, but in some cases it will improve the behavior of the code.\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -3915,7 +4023,7 @@
             {
               "kind": "PropertySignature",
               "canonicalReference": "@2sic.com/2sxc-typings!RunParams#params:member",
-              "docComment": "/**\n * The command params, like contentType, entityId etc. Optional for many actions.\n */\n",
+              "docComment": "/**\n * The command params, like contentType, entityId etc.\n * Optional for many actions.\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -3943,7 +4051,7 @@
             {
               "kind": "PropertySignature",
               "canonicalReference": "@2sic.com/2sxc-typings!RunParams#workflows:member",
-              "docComment": "/**\n * Workflows work the same way as with a toolbar, except that they are added here and not registered on init. Because of limitations in automatic documentation, the type here is set to `unknown` but it's actually `WorkflowStep` | `WorkflowStep[]`\n */\n",
+              "docComment": "/**\n * Workflows work the same way as with a toolbar, except that they are added here and not registered on init.\n * Because of limitations in automatic documentation, the type here is set to `unknown` but it's actually `WorkflowStep` | `WorkflowStep[]`\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -3973,7 +4081,7 @@
         {
           "kind": "Interface",
           "canonicalReference": "@2sic.com/2sxc-typings!RunParamsWithContext:interface",
-          "docComment": "/**\n * Parameters for the **Global** $2sxc.cms.run(...) command in Addition to the [RunParams](xref:Api.Js.SxcJs.RunParams). It provides context to the run-params such as a Sxc instance or a tag which it started on. New in 12.10\n *\n * @public\n */\n",
+          "docComment": "/**\n * Parameters for the **Global** $2sxc.cms.run(...) command in Addition to the [RunParams](xref:Api.Js.SxcJs.RunParams).\n * It provides context to the run-params such as a Sxc instance or a tag which it started on.\n * New in 12.10\n *\n * @public\n */\n",
           "excerptTokens": [
             {
               "kind": "Content",
@@ -3989,13 +4097,15 @@
               "text": " "
             }
           ],
+          "fileUrlPath": "parts/dist/$2sxc/src/cms/run-params.d.ts",
           "releaseTag": "Public",
           "name": "RunParamsWithContext",
+          "preserveMemberOrder": false,
           "members": [
             {
               "kind": "PropertySignature",
               "canonicalReference": "@2sic.com/2sxc-typings!RunParamsWithContext#context:member",
-              "docComment": "/**\n * The context to run in, basically containing module id, etc. We always need the tag OR the context, but never both\n */\n",
+              "docComment": "/**\n * The context to run in, basically containing module id, etc.\n * We always need the tag OR the context, but never both\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -4032,7 +4142,7 @@
             {
               "kind": "PropertySignature",
               "canonicalReference": "@2sic.com/2sxc-typings!RunParamsWithContext#tag:member",
-              "docComment": "/**\n * The tag on which the run was triggered - it's used to give the command a context to start from We always need the tag OR the context, but never both\n */\n",
+              "docComment": "/**\n * The tag on which the run was triggered - it's used to give the command a context to start from\n * We always need the tag OR the context, but never both\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -4052,6 +4162,33 @@
               "isOptional": true,
               "releaseTag": "Public",
               "name": "tag",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              }
+            },
+            {
+              "kind": "PropertySignature",
+              "canonicalReference": "@2sic.com/2sxc-typings!RunParamsWithContext#triggeredBy:member",
+              "docComment": "/**\n * Method caller (for logging)\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "triggeredBy?: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "string"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isReadonly": false,
+              "isOptional": true,
+              "releaseTag": "Public",
+              "name": "triggeredBy",
               "propertyTypeTokenRange": {
                 "startIndex": 1,
                 "endIndex": 2
@@ -4084,13 +4221,16 @@
               "text": " "
             }
           ],
+          "fileUrlPath": "parts/dist/$2sxc/src/sxc/sxc.d.ts",
           "releaseTag": "Public",
+          "isAbstract": false,
           "name": "Sxc",
+          "preserveMemberOrder": false,
           "members": [
             {
               "kind": "Property",
               "canonicalReference": "@2sic.com/2sxc-typings!Sxc#cbid:member",
-              "docComment": "/**\n * content-block ID, which is either the module ID, or the content-block definition entity ID this is an advanced concept you usually don't care about, otherwise you should research it\n */\n",
+              "docComment": "/**\n * content-block ID, which is either the module ID, or the content-block definition entity ID\n * this is an advanced concept you usually don't care about, otherwise you should research it\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -4114,7 +4254,8 @@
                 "endIndex": 2
               },
               "isStatic": false,
-              "isProtected": false
+              "isProtected": false,
+              "isAbstract": false
             },
             {
               "kind": "Property",
@@ -4144,7 +4285,8 @@
                 "endIndex": 2
               },
               "isStatic": false,
-              "isProtected": false
+              "isProtected": false,
+              "isAbstract": false
             },
             {
               "kind": "Method",
@@ -4217,6 +4359,7 @@
                 }
               ],
               "isOptional": false,
+              "isAbstract": false,
               "name": "data"
             },
             {
@@ -4246,7 +4389,8 @@
                 "endIndex": 2
               },
               "isStatic": false,
-              "isProtected": false
+              "isProtected": false,
+              "isAbstract": false
             },
             {
               "kind": "Method",
@@ -4276,6 +4420,7 @@
               "overloadIndex": 1,
               "parameters": [],
               "isOptional": false,
+              "isAbstract": false,
               "name": "isEditMode"
             },
             {
@@ -4324,12 +4469,13 @@
                 }
               ],
               "isOptional": false,
+              "isAbstract": false,
               "name": "query"
             },
             {
               "kind": "Property",
               "canonicalReference": "@2sic.com/2sxc-typings!Sxc#webApi:member",
-              "docComment": "/**\n * Web API calls for this instance. This is the pure call APIs system. To get data or queries, best use the data or query services.\n */\n",
+              "docComment": "/**\n * Web API calls for this instance.\n * This is the pure call APIs system.\n * To get data or queries, best use the data or query services.\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -4354,7 +4500,8 @@
                 "endIndex": 2
               },
               "isStatic": false,
-              "isProtected": false
+              "isProtected": false,
+              "isAbstract": false
             }
           ],
           "extendsTokenRange": {
@@ -4366,7 +4513,7 @@
         {
           "kind": "Class",
           "canonicalReference": "@2sic.com/2sxc-typings!SxcCms:class",
-          "docComment": "/**\n * This is in charge of sxc.cms on the instance level. ATM it just has the run command. In future, it may also have dedicated command like `layout` etc.\n *\n * @remarks\n *\n * The constructor for this class is marked as internal. Third-party code should not call the constructor directly or create subclasses that extend the `SxcCms` class.\n *\n * @public\n */\n",
+          "docComment": "/**\n * This is in charge of sxc.cms on the instance level.\n * ATM it just has the run command.\n * In future, it may also have dedicated command like `layout` etc.\n *\n * @remarks\n *\n * The constructor for this class is marked as internal. Third-party code should not call the constructor directly or create subclasses that extend the `SxcCms` class.\n *\n * @public\n */\n",
           "excerptTokens": [
             {
               "kind": "Content",
@@ -4382,13 +4529,16 @@
               "text": " "
             }
           ],
+          "fileUrlPath": "parts/dist/$2sxc/src/sxc/sxc-cms.d.ts",
           "releaseTag": "Public",
+          "isAbstract": false,
           "name": "SxcCms",
+          "preserveMemberOrder": false,
           "members": [
             {
               "kind": "Method",
               "canonicalReference": "@2sic.com/2sxc-typings!SxcCms#run:member(1)",
-              "docComment": "/**\n * Run a command on this sxc-instance. Requires edit mode to be on, which would enable the edit-JS parts. To use, remember to activate `2sxc.JsCms` on the page\n *\n * @param runParams - real type is actually RunParams\n */\n",
+              "docComment": "/**\n * Run a command on this sxc-instance.\n * Requires edit mode to be on, which would enable the edit-JS parts.\n * To use, remember to activate `2sxc.JsCms` on the page\n *\n * @param runParams - real type is actually RunParams\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -4449,6 +4599,7 @@
                 }
               ],
               "isOptional": false,
+              "isAbstract": false,
               "name": "run"
             }
           ],
@@ -4485,6 +4636,7 @@
               "text": " "
             }
           ],
+          "fileUrlPath": "parts/dist/$2sxc/src/sxc/data/sxc-data.d.ts",
           "releaseTag": "Public",
           "typeParameters": [
             {
@@ -4499,7 +4651,9 @@
               }
             }
           ],
+          "isAbstract": false,
           "name": "SxcData",
+          "preserveMemberOrder": false,
           "members": [
             {
               "kind": "Method",
@@ -4565,6 +4719,7 @@
                 }
               ],
               "isOptional": false,
+              "isAbstract": false,
               "name": "create"
             },
             {
@@ -4652,6 +4807,7 @@
                 }
               ],
               "isOptional": false,
+              "isAbstract": false,
               "name": "create"
             },
             {
@@ -4704,6 +4860,7 @@
                 }
               ],
               "isOptional": false,
+              "isAbstract": false,
               "name": "delete"
             },
             {
@@ -4756,16 +4913,34 @@
                 }
               ],
               "isOptional": false,
+              "isAbstract": false,
               "name": "delete"
             },
             {
               "kind": "Method",
               "canonicalReference": "@2sic.com/2sxc-typings!SxcData#getAll:member(1)",
-              "docComment": "/**\n * Get all items of this type.\n */\n",
+              "docComment": "/**\n * Get all items of this type.\n *\n * @param params - optional parameters - typically for OData - new in v21.06\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
-                  "text": "getAll(): "
+                  "text": "getAll(params?: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "string | "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "Record",
+                  "canonicalReference": "!Record:type"
+                },
+                {
+                  "kind": "Content",
+                  "text": "<string, unknown>"
+                },
+                {
+                  "kind": "Content",
+                  "text": "): "
                 },
                 {
                   "kind": "Reference",
@@ -4783,14 +4958,24 @@
               ],
               "isStatic": false,
               "returnTypeTokenRange": {
-                "startIndex": 1,
-                "endIndex": 3
+                "startIndex": 5,
+                "endIndex": 7
               },
               "releaseTag": "Public",
               "isProtected": false,
               "overloadIndex": 1,
-              "parameters": [],
+              "parameters": [
+                {
+                  "parameterName": "params",
+                  "parameterTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 4
+                  },
+                  "isOptional": true
+                }
+              ],
               "isOptional": false,
+              "isAbstract": false,
               "name": "getAll"
             },
             {
@@ -4843,6 +5028,7 @@
                 }
               ],
               "isOptional": false,
+              "isAbstract": false,
               "name": "getOne"
             },
             {
@@ -4872,7 +5058,8 @@
                 "endIndex": 2
               },
               "isStatic": false,
-              "isProtected": false
+              "isProtected": false,
+              "isAbstract": false
             },
             {
               "kind": "Method",
@@ -4954,6 +5141,7 @@
                 }
               ],
               "isOptional": false,
+              "isAbstract": false,
               "name": "update"
             }
           ],
@@ -4966,7 +5154,7 @@
         {
           "kind": "Class",
           "canonicalReference": "@2sic.com/2sxc-typings!SxcDataServiceBase:class",
-          "docComment": "/**\n * Base class doing common checks. This is internal and not important, but we can't keep it out of the docs.\n *\n * @remarks\n *\n * The constructor for this class is marked as internal. Third-party code should not call the constructor directly or create subclasses that extend the `SxcDataServiceBase` class.\n *\n * @public\n */\n",
+          "docComment": "/**\n * Base class doing common checks.\n * This is internal and not important, but we can't keep it out of the docs.\n *\n * @remarks\n *\n * The constructor for this class is marked as internal. Third-party code should not call the constructor directly or create subclasses that extend the `SxcDataServiceBase` class.\n *\n * @public\n */\n",
           "excerptTokens": [
             {
               "kind": "Content",
@@ -4982,8 +5170,11 @@
               "text": " "
             }
           ],
+          "fileUrlPath": "parts/dist/$2sxc/src/sxc/data/sxc-data-service-base.d.ts",
           "releaseTag": "Public",
+          "isAbstract": true,
           "name": "SxcDataServiceBase",
+          "preserveMemberOrder": false,
           "members": [
             {
               "kind": "Property",
@@ -5012,7 +5203,8 @@
                 "endIndex": 2
               },
               "isStatic": false,
-              "isProtected": false
+              "isProtected": false,
+              "isAbstract": false
             },
             {
               "kind": "Property",
@@ -5042,7 +5234,8 @@
                 "endIndex": 2
               },
               "isStatic": false,
-              "isProtected": true
+              "isProtected": true,
+              "isAbstract": false
             }
           ],
           "extendsTokenRange": {
@@ -5061,8 +5254,10 @@
               "text": "export interface SxcGlobal "
             }
           ],
+          "fileUrlPath": "parts/dist/$2sxc/src/sxc-global/sxc-global.d.ts",
           "releaseTag": "Public",
           "name": "SxcGlobal",
+          "preserveMemberOrder": false,
           "members": [
             {
               "kind": "CallSignature",
@@ -5150,7 +5345,7 @@
             {
               "kind": "PropertySignature",
               "canonicalReference": "@2sic.com/2sxc-typings!SxcGlobal#env:member",
-              "docComment": "/**\n * Environment information  @type {SxcGlobalEnvironment}\n */\n",
+              "docComment": "/**\n * Environment information @type {SxcGlobalEnvironment}\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -5178,7 +5373,7 @@
             {
               "kind": "MethodSignature",
               "canonicalReference": "@2sic.com/2sxc-typings!SxcGlobal#get:member(1)",
-              "docComment": "/**\n * Get an Sxc Instance using the moduleId. Using `$2sxc.get(...)` is the same as using `$2sxc(...)`\n *\n * @param moduleId - number: moduleId\n *\n * @returns SxcInstance  @since v14.01\n */\n",
+              "docComment": "/**\n * Get an Sxc Instance using the moduleId.\n * Using `$2sxc.get(...)` is the same as using `$2sxc(...)`\n *\n * @param moduleId - number: moduleId\n *\n * @returns SxcInstance @since v14.01\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -5224,7 +5419,7 @@
             {
               "kind": "MethodSignature",
               "canonicalReference": "@2sic.com/2sxc-typings!SxcGlobal#get:member(2)",
-              "docComment": "/**\n * Get an Sxc Instance using the moduleId and contentBlockId. Using `$2sxc.get(...)` is the same as using `$2sxc(...)`\n *\n * @param moduleId - number: moduleId\n *\n * @param contentBlockId - number: content-block ID\n *\n * @returns Sxc  @since v14.01\n */\n",
+              "docComment": "/**\n * Get an Sxc Instance using the moduleId and contentBlockId.\n * Using `$2sxc.get(...)` is the same as using `$2sxc(...)`\n *\n * @param moduleId - number: moduleId\n *\n * @param contentBlockId - number: content-block ID\n *\n * @returns Sxc @since v14.01\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -5286,7 +5481,7 @@
             {
               "kind": "MethodSignature",
               "canonicalReference": "@2sic.com/2sxc-typings!SxcGlobal#get:member(3)",
-              "docComment": "/**\n * Get an Sxc Instance using a tag / `HtmlElement`. Using `$2sxc.get(...)` is the same as using `$2sxc(...)`\n *\n * @param tag - HTMLElement: tag in the page\n *\n * @returns Sxc  @since v14.01\n */\n",
+              "docComment": "/**\n * Get an Sxc Instance using a tag / `HtmlElement`. Using `$2sxc.get(...)` is the same as using `$2sxc(...)`\n *\n * @param tag - HTMLElement: tag in the page\n *\n * @returns Sxc @since v14.01\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -5333,7 +5528,7 @@
             {
               "kind": "MethodSignature",
               "canonicalReference": "@2sic.com/2sxc-typings!SxcGlobal#get:member(4)",
-              "docComment": "/**\n * Get an Sxc Instance using a full context-identifier (advanced). Using `$2sxc.get(...)` is the same as using `$2sxc(...)`\n *\n * @param context - ContextIdentifier: full context identifier\n *\n * @returns Sxc  @since v14.01\n */\n",
+              "docComment": "/**\n * Get an Sxc Instance using a full context-identifier (advanced). Using `$2sxc.get(...)` is the same as using `$2sxc(...)`\n *\n * @param context - ContextIdentifier: full context identifier\n *\n * @returns Sxc @since v14.01\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -5380,7 +5575,7 @@
             {
               "kind": "MethodSignature",
               "canonicalReference": "@2sic.com/2sxc-typings!SxcGlobal#get:member(5)",
-              "docComment": "/**\n * Get an Sxc Instance passing in an existing Sxc - just for cases where you're not sure what you aready have. Using `$2sxc.get(...)` is the same as using `$2sxc(...)`\n *\n * @param sxc - Sxc: an existing sxc - will just be returned\n *\n * @returns Sxc - the same Sxc as the one which was passed in  @since v14.01\n */\n",
+              "docComment": "/**\n * Get an Sxc Instance passing in an existing Sxc - just for cases where you're not sure what you aready have. Using `$2sxc.get(...)` is the same as using `$2sxc(...)`\n *\n * @param sxc - Sxc: an existing sxc - will just be returned\n *\n * @returns Sxc - the same Sxc as the one which was passed in @since v14.01\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -5455,7 +5650,7 @@
             {
               "kind": "MethodSignature",
               "canonicalReference": "@2sic.com/2sxc-typings!SxcGlobal#insights:member(1)",
-              "docComment": "/**\n * The debugging / insights system. Call the `$2sxc.insights()` without parameters to get instructions what the parameters could be.\n *\n * @param partName - optional name of a part of the system for which we want to see the logs\n *\n * @param index - optional index on that part for which log we want to see\n *\n * @param start - log start index - this is to skip the first few lines if there are too many\n *\n * @param length - amount of lines to show - in some cases will default to 25\n */\n",
+              "docComment": "/**\n * The debugging / insights system.\n * Call the `$2sxc.insights()` without parameters to get instructions what the parameters could be.\n *\n * @param partName - optional name of a part of the system for which we want to see the logs\n *\n * @param index - optional index on that part for which log we want to see\n *\n * @param start - log start index - this is to skip the first few lines if there are too many\n *\n * @param length - amount of lines to show - in some cases will default to 25\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -5548,7 +5743,7 @@
             {
               "kind": "PropertySignature",
               "canonicalReference": "@2sic.com/2sxc-typings!SxcGlobal#sysinfo:member",
-              "docComment": "/**\n * system information, mainly for checking which version of 2sxc is running note: it's not always updated reliably, but it helps when debugging\n */\n",
+              "docComment": "/**\n * system information, mainly for checking which version of 2sxc is running\n * note: it's not always updated reliably, but it helps when debugging\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -5622,8 +5817,11 @@
               "text": " "
             }
           ],
+          "fileUrlPath": "parts/dist/inpage/src/cms/sxc-global-cms.d.ts",
           "releaseTag": "Public",
+          "isAbstract": false,
           "name": "SxcGlobalCms",
+          "preserveMemberOrder": false,
           "members": [
             {
               "kind": "Method",
@@ -5689,6 +5887,7 @@
                 }
               ],
               "isOptional": false,
+              "isAbstract": false,
               "name": "run"
             },
             {
@@ -5788,6 +5987,7 @@
                 }
               ],
               "isOptional": false,
+              "isAbstract": false,
               "name": "run"
             },
             {
@@ -5904,6 +6104,7 @@
                 }
               ],
               "isOptional": false,
+              "isAbstract": false,
               "name": "run"
             },
             {
@@ -6004,6 +6205,7 @@
                 }
               ],
               "isOptional": false,
+              "isAbstract": false,
               "name": "run"
             }
           ],
@@ -6032,8 +6234,11 @@
               "text": " "
             }
           ],
+          "fileUrlPath": "parts/dist/$2sxc/src/environment/sxc-global-environment.d.ts",
           "releaseTag": "Public",
+          "isAbstract": false,
           "name": "SxcGlobalEnvironment",
+          "preserveMemberOrder": false,
           "members": [
             {
               "kind": "Method",
@@ -6063,12 +6268,13 @@
               "overloadIndex": 1,
               "parameters": [],
               "isOptional": false,
+              "isAbstract": false,
               "name": "api"
             },
             {
               "kind": "Method",
               "canonicalReference": "@2sic.com/2sxc-typings!SxcGlobalEnvironment#load:member(1)",
-              "docComment": "/**\n * Manually load a new EnvironmentSpecs in cases where the page cannot provide them. This is only used in scenarios outside of Dnn / Oqtane, you will usually not need this.\n *\n * @param envSpecs - new info to load\n *\n * @param source - _optional_ name where the data came from\n */\n",
+              "docComment": "/**\n * Manually load a new EnvironmentSpecs in cases where the page cannot provide them.\n * This is only used in scenarios outside of Dnn / Oqtane, you will usually not need this.\n *\n * @param envSpecs - new info to load\n *\n * @param source - _optional_ name where the data came from\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -6127,6 +6333,7 @@
                 }
               ],
               "isOptional": false,
+              "isAbstract": false,
               "name": "load"
             },
             {
@@ -6157,6 +6364,7 @@
               "overloadIndex": 1,
               "parameters": [],
               "isOptional": false,
+              "isAbstract": false,
               "name": "page"
             },
             {
@@ -6187,6 +6395,7 @@
               "overloadIndex": 1,
               "parameters": [],
               "isOptional": false,
+              "isAbstract": false,
               "name": "platform"
             },
             {
@@ -6216,7 +6425,8 @@
                 "endIndex": 2
               },
               "isStatic": false,
-              "isProtected": false
+              "isProtected": false,
+              "isAbstract": false
             },
             {
               "kind": "Method",
@@ -6246,6 +6456,7 @@
               "overloadIndex": 1,
               "parameters": [],
               "isOptional": false,
+              "isAbstract": false,
               "name": "rvt"
             },
             {
@@ -6276,6 +6487,7 @@
               "overloadIndex": 1,
               "parameters": [],
               "isOptional": false,
+              "isAbstract": false,
               "name": "rvtHeader"
             },
             {
@@ -6305,7 +6517,8 @@
                 "endIndex": 2
               },
               "isStatic": false,
-              "isProtected": false
+              "isProtected": false,
+              "isAbstract": false
             }
           ],
           "extendsTokenRange": {
@@ -6333,13 +6546,16 @@
               "text": " "
             }
           ],
+          "fileUrlPath": "parts/dist/$2sxc/src/sxc-global/sxc-global-http.d.ts",
           "releaseTag": "Public",
+          "isAbstract": false,
           "name": "SxcGlobalHttp",
+          "preserveMemberOrder": false,
           "members": [
             {
               "kind": "Method",
               "canonicalReference": "@2sic.com/2sxc-typings!SxcGlobalHttp#apiUrl:member(1)",
-              "docComment": "/**\n * Convert short urls like `app/auto/api/Posts/All` to the full URL needed. Will ignore urls which clearly already are the full url.\n *\n * @param url - short URL like `app/auto/api/Posts/All`\n *\n * @returns the converted, long url with the full endpoint\n */\n",
+              "docComment": "/**\n * Convert short urls like `app/auto/api/Posts/All` to the full URL needed.\n * Will ignore urls which clearly already are the full url.\n *\n * @param url - short URL like `app/auto/api/Posts/All`\n *\n * @returns the converted, long url with the full endpoint\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -6381,12 +6597,13 @@
                 }
               ],
               "isOptional": false,
+              "isAbstract": false,
               "name": "apiUrl"
             },
             {
               "kind": "Method",
               "canonicalReference": "@2sic.com/2sxc-typings!SxcGlobalHttp#apiUrl:member(2)",
-              "docComment": "/**\n * Convert short urls like `app/auto/api/Posts/All` to the full URL needed. Will ignore urls which clearly already are the full url.\n *\n * @param url - short URL like `app/auto/api/Posts/All`\n *\n * @param endpointName - _optional_ endpoint name if accessing a different exotic endpoint\n *\n * @returns the converted, long url with the full endpoint\n */\n",
+              "docComment": "/**\n * Convert short urls like `app/auto/api/Posts/All` to the full URL needed.\n * Will ignore urls which clearly already are the full url.\n *\n * @param url - short URL like `app/auto/api/Posts/All`\n *\n * @param endpointName - _optional_ endpoint name if accessing a different exotic endpoint\n *\n * @returns the converted, long url with the full endpoint\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -6444,6 +6661,7 @@
                 }
               ],
               "isOptional": false,
+              "isAbstract": false,
               "name": "apiUrl"
             },
             {
@@ -6479,6 +6697,7 @@
               "overloadIndex": 1,
               "parameters": [],
               "isOptional": false,
+              "isAbstract": false,
               "name": "headers"
             },
             {
@@ -6531,6 +6750,7 @@
                 }
               ],
               "isOptional": false,
+              "isAbstract": false,
               "name": "headers"
             },
             {
@@ -6599,12 +6819,13 @@
                 }
               ],
               "isOptional": false,
+              "isAbstract": false,
               "name": "headers"
             },
             {
               "kind": "Method",
               "canonicalReference": "@2sic.com/2sxc-typings!SxcGlobalHttp#headers:member(4)",
-              "docComment": "/**\n * All the headers which are needed in an ajax call. Uses a module and content-block context (but these could also be null) and a full context identifier for advanced operations.\n *\n * @param id - _optional_ module ID\n *\n * @param cbid - _optional_ content block ID\n *\n * @param ctx - _optional_ context information to include in the header\n *\n * @returns Dictionary / Record of headers\n */\n",
+              "docComment": "/**\n * All the headers which are needed in an ajax call.\n * Uses a module and content-block context (but these could also be null)\n * and a full context identifier for advanced operations.\n *\n * @param id - _optional_ module ID\n *\n * @param cbid - _optional_ content block ID\n *\n * @param ctx - _optional_ context information to include in the header\n *\n * @returns Dictionary / Record of headers\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -6684,6 +6905,7 @@
                 }
               ],
               "isOptional": false,
+              "isAbstract": false,
               "name": "headers"
             }
           ],
@@ -6703,8 +6925,10 @@
               "text": "export interface SxcGlobalWithCms "
             }
           ],
+          "fileUrlPath": "parts/dist/inpage/src/sxc/sxc-global-with-cms.d.ts",
           "releaseTag": "Public",
           "name": "SxcGlobalWithCms",
+          "preserveMemberOrder": false,
           "members": [
             {
               "kind": "PropertySignature",
@@ -6737,7 +6961,7 @@
             {
               "kind": "MethodSignature",
               "canonicalReference": "@2sic.com/2sxc-typings!SxcGlobalWithCms#translate:member(1)",
-              "docComment": "/**\n * Will retrieve a resource in the current language. Mainly used for toolbars etc. to support localization.\n *\n * Only available when edit mode is on meaning the page feature JsCms is enabled\n *\n * @param key - the key of the resource to translate\n */\n",
+              "docComment": "/**\n * Will retrieve a resource in the current language.\n * Mainly used for toolbars etc. to support localization.\n *\n * Only available when edit mode is on meaning the page feature JsCms is enabled\n *\n * @param key - the key of the resource to translate\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -6785,15 +7009,18 @@
         {
           "kind": "Class",
           "canonicalReference": "@2sic.com/2sxc-typings!SxcPart:class",
-          "docComment": "/**\n * Base class for anything attached to an sxc-instance. This is internal and not important, but we can't keep it out of the docs.\n *\n * @remarks\n *\n * The constructor for this class is marked as internal. Third-party code should not call the constructor directly or create subclasses that extend the `SxcPart` class.\n *\n * @public\n */\n",
+          "docComment": "/**\n * Base class for anything attached to an sxc-instance.\n * This is internal and not important, but we can't keep it out of the docs.\n *\n * @remarks\n *\n * The constructor for this class is marked as internal. Third-party code should not call the constructor directly or create subclasses that extend the `SxcPart` class.\n *\n * @public\n */\n",
           "excerptTokens": [
             {
               "kind": "Content",
               "text": "export declare abstract class SxcPart "
             }
           ],
+          "fileUrlPath": "parts/dist/$2sxc/src/sxc/sxc-part.d.ts",
           "releaseTag": "Public",
+          "isAbstract": true,
           "name": "SxcPart",
+          "preserveMemberOrder": false,
           "members": [],
           "implementsTokenRanges": []
         },
@@ -6816,8 +7043,11 @@
               "text": " "
             }
           ],
+          "fileUrlPath": "parts/dist/$2sxc/src/sxc/data/sxc-query.d.ts",
           "releaseTag": "Public",
+          "isAbstract": false,
           "name": "SxcQuery",
+          "preserveMemberOrder": false,
           "members": [
             {
               "kind": "Method",
@@ -6873,6 +7103,7 @@
               "overloadIndex": 1,
               "parameters": [],
               "isOptional": false,
+              "isAbstract": false,
               "name": "getAll"
             },
             {
@@ -6955,6 +7186,7 @@
                 }
               ],
               "isOptional": false,
+              "isAbstract": false,
               "name": "getAll"
             },
             {
@@ -7062,6 +7294,7 @@
                 }
               ],
               "isOptional": false,
+              "isAbstract": false,
               "name": "getAll"
             },
             {
@@ -7135,6 +7368,7 @@
                 }
               ],
               "isOptional": false,
+              "isAbstract": false,
               "name": "getStream"
             },
             {
@@ -7233,6 +7467,7 @@
                 }
               ],
               "isOptional": false,
+              "isAbstract": false,
               "name": "getStream"
             },
             {
@@ -7356,12 +7591,13 @@
                 }
               ],
               "isOptional": false,
+              "isAbstract": false,
               "name": "getStream"
             },
             {
               "kind": "Method",
               "canonicalReference": "@2sic.com/2sxc-typings!SxcQuery#getStreams:member(1)",
-              "docComment": "/**\n * Get a query but only the mentioned streams. This will reduce the amount of data retrieved on queries that have many streams.  @template T The schema/interfaces of what will be returned\n *\n * @returns {Promise<T>} Promise containing a object with stream-names and items in the streams.\n *\n * @public\n */\n",
+              "docComment": "/**\n * Get a query but only the mentioned streams.\n * This will reduce the amount of data retrieved on queries that have many streams. @template T The schema/interfaces of what will be returned\n *\n * @returns {Promise<T>} Promise containing a object with stream-names and items in the streams.\n *\n * @public\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -7429,12 +7665,13 @@
                 }
               ],
               "isOptional": false,
+              "isAbstract": false,
               "name": "getStreams"
             },
             {
               "kind": "Method",
               "canonicalReference": "@2sic.com/2sxc-typings!SxcQuery#getStreams:member(2)",
-              "docComment": "/**\n * Get a query but only the mentioned streams. This will reduce the amount of data retrieved on queries that have many streams.  @template T The schema/interfaces of what will be returned\n *\n * @param streams - name of streams to get, comma separated\n *\n * @param urlParams - additional parameters for the URL, either as a string or as a object\n *\n * @returns {Promise<T>} Promise containing a object with stream-names and items in the streams.\n *\n * @public\n */\n",
+              "docComment": "/**\n * Get a query but only the mentioned streams.\n * This will reduce the amount of data retrieved on queries that have many streams. @template T The schema/interfaces of what will be returned\n *\n * @param streams - name of streams to get, comma separated\n *\n * @param urlParams - additional parameters for the URL, either as a string or as a object\n *\n * @returns {Promise<T>} Promise containing a object with stream-names and items in the streams.\n *\n * @public\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -7527,12 +7764,13 @@
                 }
               ],
               "isOptional": false,
+              "isAbstract": false,
               "name": "getStreams"
             },
             {
               "kind": "Method",
               "canonicalReference": "@2sic.com/2sxc-typings!SxcQuery#getStreams:member(3)",
-              "docComment": "/**\n * Get a query but only the mentioned streams. This will reduce the amount of data retrieved on queries that have many streams.  @template T The schema/interfaces of what will be returned\n *\n * @param streams - name of streams to get, comma separated\n *\n * @param urlParams - additional parameters for the URL, either as a string or as a object\n *\n * @param data - data to include in case of a POST call - if this is provided, it will use a post\n *\n * @returns {Promise<T>} Promise containing a object with stream-names and items in the streams.\n *\n * @public\n */\n",
+              "docComment": "/**\n * Get a query but only the mentioned streams.\n * This will reduce the amount of data retrieved on queries that have many streams. @template T The schema/interfaces of what will be returned\n *\n * @param streams - name of streams to get, comma separated\n *\n * @param urlParams - additional parameters for the URL, either as a string or as a object\n *\n * @param data - data to include in case of a POST call - if this is provided, it will use a post\n *\n * @returns {Promise<T>} Promise containing a object with stream-names and items in the streams.\n *\n * @public\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -7650,6 +7888,7 @@
                 }
               ],
               "isOptional": false,
+              "isAbstract": false,
               "name": "getStreams"
             },
             {
@@ -7679,7 +7918,8 @@
                 "endIndex": 2
               },
               "isStatic": false,
-              "isProtected": false
+              "isProtected": false,
+              "isAbstract": false
             }
           ],
           "extendsTokenRange": {
@@ -7691,7 +7931,7 @@
         {
           "kind": "Class",
           "canonicalReference": "@2sic.com/2sxc-typings!SxcWebApi:class",
-          "docComment": "/**\n * helper API to run ajax / REST calls to the server it will ensure that the headers etc. are set correctly and that urls are rewritten\n *\n * @remarks\n *\n * The constructor for this class is marked as internal. Third-party code should not call the constructor directly or create subclasses that extend the `SxcWebApi` class.\n *\n * @public\n */\n",
+          "docComment": "/**\n * helper API to run ajax / REST calls to the server\n * it will ensure that the headers etc. are set correctly\n * and that urls are rewritten\n *\n * @remarks\n *\n * The constructor for this class is marked as internal. Third-party code should not call the constructor directly or create subclasses that extend the `SxcWebApi` class.\n *\n * @public\n */\n",
           "excerptTokens": [
             {
               "kind": "Content",
@@ -7707,8 +7947,11 @@
               "text": " "
             }
           ],
+          "fileUrlPath": "parts/dist/$2sxc/src/sxc/web-api/sxc-web-api.d.ts",
           "releaseTag": "Public",
+          "isAbstract": false,
           "name": "SxcWebApi",
+          "preserveMemberOrder": false,
           "members": [
             {
               "kind": "Method",
@@ -7808,12 +8051,13 @@
                 }
               ],
               "isOptional": false,
+              "isAbstract": false,
               "name": "delete"
             },
             {
               "kind": "Method",
               "canonicalReference": "@2sic.com/2sxc-typings!SxcWebApi#fetchJson:member(1)",
-              "docComment": "/**\n * Will retrieve data from the backend using a standard fetch and give you an object.\n *\n * @param url - a full url or short-hand like `controller/method?params` `app/auto/api/controller/method?params`. Note that params would also be specified on the url.\n *\n * @param data - optional POST data\n *\n * @param method - optional method, defaults to `GET` unless it has data, in which case it defaults to `POST`\n *\n * @returns a Promise containing any object.\n */\n",
+              "docComment": "/**\n * Will retrieve data from the backend using a standard fetch and give you an object.\n *\n * @param url - a full url or short-hand like `controller/method?params` `app/auto/api/controller/method?params`. Note that params would also be specified on the url.\n *\n * @param data - optional POST data\n *\n * @param method - optional method or fetch options,, defaults to `GET` unless it has data, in which case it defaults to `POST`\n *\n * @returns a Promise containing any object.\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -7854,7 +8098,12 @@
                 },
                 {
                   "kind": "Content",
-                  "text": "string"
+                  "text": "string | "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "FetchOptions",
+                  "canonicalReference": "@2sic.com/2sxc-typings!~FetchOptions:interface"
                 },
                 {
                   "kind": "Content",
@@ -7889,8 +8138,8 @@
               ],
               "isStatic": false,
               "returnTypeTokenRange": {
-                "startIndex": 11,
-                "endIndex": 13
+                "startIndex": 12,
+                "endIndex": 14
               },
               "releaseTag": "Public",
               "isProtected": false,
@@ -7916,18 +8165,19 @@
                   "parameterName": "method",
                   "parameterTypeTokenRange": {
                     "startIndex": 9,
-                    "endIndex": 10
+                    "endIndex": 11
                   },
                   "isOptional": true
                 }
               ],
               "isOptional": false,
+              "isAbstract": false,
               "name": "fetchJson"
             },
             {
               "kind": "Method",
               "canonicalReference": "@2sic.com/2sxc-typings!SxcWebApi#fetchRaw:member(1)",
-              "docComment": "/**\n * Will retrieve data from the backend using a standard fetch.\n *\n * @param url - a full url or short-hand like `controller/method?params` `app/auto/api/controller/method?params`. Note that params would also be specified on the url.\n *\n * @param data - optional POST data\n *\n * @param method - optional method, defaults to `GET` unless it has data, in which case it defaults to `POST`\n *\n * @returns a Promise containing a Response object, just like a normal fetch would. example: webApi.fetchRaw('Rss/Feed'); example: webApi.fetchRaw(webApi.url('Rss/Feed', { id: 47 })); // url params example: webApi.fetchRaw('Rss/Feed', { id: 47 }); // post params example: webApi.fetchRaw(webApi.url('Rss/Feed', { id: 47 }), { something: 'this is a test' }); // url & post params maybe: webApi.fetchRaw({url: 'Rss/Feed', params: { id: 47 }}) maybe: webApi.fetchRaw({url: ..., params: { ...}, body: { ...}, method: 'GET' })\n */\n",
+              "docComment": "/**\n * Will retrieve data from the backend using a standard fetch.\n *\n * @param url - a full url or short-hand like `controller/method?params` `app/auto/api/controller/method?params`. Note that params would also be specified on the url.\n *\n * @param data - optional POST data\n *\n * @param method - optional method or fetch options, defaults to `GET` unless it has data, in which case it defaults to `POST`\n *\n * @returns a Promise containing a Response object, just like a normal fetch would.\n * example: webApi.fetchRaw('Rss/Feed');\n * example: webApi.fetchRaw(webApi.url('Rss/Feed', { id: 47 })); // url params\n * example: webApi.fetchRaw('Rss/Feed', { id: 47 }); // post params\n * example: webApi.fetchRaw(webApi.url('Rss/Feed', { id: 47 }), { something: 'this is a test' }); // url & post params\n * maybe: webApi.fetchRaw({url: 'Rss/Feed', params: { id: 47 }})\n * maybe: webApi.fetchRaw({url: ..., params: { ...}, body: { ...}, method: 'GET' })\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -7952,7 +8202,7 @@
                 },
                 {
                   "kind": "Content",
-                  "text": "<string, any>"
+                  "text": "<string, unknown>"
                 },
                 {
                   "kind": "Content",
@@ -7960,7 +8210,12 @@
                 },
                 {
                   "kind": "Content",
-                  "text": "string"
+                  "text": "string | "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "FetchOptions",
+                  "canonicalReference": "@2sic.com/2sxc-typings!~FetchOptions:interface"
                 },
                 {
                   "kind": "Content",
@@ -7991,8 +8246,8 @@
               ],
               "isStatic": false,
               "returnTypeTokenRange": {
-                "startIndex": 9,
-                "endIndex": 13
+                "startIndex": 10,
+                "endIndex": 14
               },
               "releaseTag": "Public",
               "isProtected": false,
@@ -8018,12 +8273,13 @@
                   "parameterName": "method",
                   "parameterTypeTokenRange": {
                     "startIndex": 7,
-                    "endIndex": 8
+                    "endIndex": 9
                   },
                   "isOptional": true
                 }
               ],
               "isOptional": false,
+              "isAbstract": false,
               "name": "fetchRaw"
             },
             {
@@ -8124,12 +8380,13 @@
                 }
               ],
               "isOptional": false,
+              "isAbstract": false,
               "name": "get"
             },
             {
               "kind": "Method",
               "canonicalReference": "@2sic.com/2sxc-typings!SxcWebApi#headers:member(1)",
-              "docComment": "/**\n * All the headers which are needed in an ajax call for this to work reliably. Use this if you need to get a list of headers in another system\n */\n",
+              "docComment": "/**\n * All the headers which are needed in an ajax call for this to work reliably.\n * Use this if you need to get a list of headers in another system\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -8176,6 +8433,7 @@
                 }
               ],
               "isOptional": false,
+              "isAbstract": false,
               "name": "headers"
             },
             {
@@ -8276,6 +8534,7 @@
                 }
               ],
               "isOptional": false,
+              "isAbstract": false,
               "name": "post"
             },
             {
@@ -8376,6 +8635,7 @@
                 }
               ],
               "isOptional": false,
+              "isAbstract": false,
               "name": "put"
             },
             {
@@ -8492,12 +8752,13 @@
                 }
               ],
               "isOptional": false,
+              "isAbstract": false,
               "name": "request"
             },
             {
               "kind": "Method",
               "canonicalReference": "@2sic.com/2sxc-typings!SxcWebApi#url:member(1)",
-              "docComment": "/**\n * @param url - A short, medium or long url. Short like `controller/method`, medium like `app/auto/api/controller/method` long like `https://xyz. In all cases it can also have ?params etc.\n *\n * @param params - Optional parameters as string or object, will be added to url-params.\n *\n * @returns In the cases of a short/medium url, it will auto-expand to have the full url as needed for an API call.\n */\n",
+              "docComment": "/**\n * @param url - A short, medium or long url.\n * Short like `controller/method`,\n * medium like `app/auto/api/controller/method`\n * long like `https://xyz.\n * In all cases it can also have ?params etc.\n *\n * @param params - Optional parameters as string or object, will be added to url-params.\n *\n * @returns In the cases of a short/medium url,\n * it will auto-expand to have the full url as needed for an API call.\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -8564,6 +8825,7 @@
                 }
               ],
               "isOptional": false,
+              "isAbstract": false,
               "name": "url"
             }
           ],
@@ -8577,7 +8839,7 @@
         {
           "kind": "Class",
           "canonicalReference": "@2sic.com/2sxc-typings!ToolbarWorkflowManager:class",
-          "docComment": "/**\n * A workflow manager _of a Toolbar_ which will run stuff before / after commands. When toolbars are created, they will add a Manager and then raise an event for in-page code to add workflow steps. Normally the toolbar with raise a `toolbar-init` event where you can then add steps.\n *\n * @remarks\n *\n * The constructor for this class is marked as internal. Third-party code should not call the constructor directly or create subclasses that extend the `ToolbarWorkflowManager` class.\n *\n * @public\n */\n",
+          "docComment": "/**\n * A workflow manager _of a Toolbar_ which will run stuff before / after commands.\n * When toolbars are created, they will add a Manager and then raise an event for in-page code to add workflow steps.\n * Normally the toolbar with raise a `toolbar-init` event where you can then add steps.\n *\n * @remarks\n *\n * The constructor for this class is marked as internal. Third-party code should not call the constructor directly or create subclasses that extend the `ToolbarWorkflowManager` class.\n *\n * @public\n */\n",
           "excerptTokens": [
             {
               "kind": "Content",
@@ -8593,8 +8855,11 @@
               "text": " "
             }
           ],
+          "fileUrlPath": "parts/dist/inpage/src/workflow/toolbar-workflow-manager.d.ts",
           "releaseTag": "Public",
+          "isAbstract": false,
           "name": "ToolbarWorkflowManager",
+          "preserveMemberOrder": false,
           "members": [
             {
               "kind": "Method",
@@ -8655,6 +8920,7 @@
                 }
               ],
               "isOptional": false,
+              "isAbstract": false,
               "name": "add"
             }
           ],
@@ -8671,7 +8937,7 @@
           "excerptTokens": [
             {
               "kind": "Content",
-              "text": "export declare type TypeValue = "
+              "text": "export type TypeValue = "
             },
             {
               "kind": "Content",
@@ -8687,6 +8953,7 @@
               "text": ";"
             }
           ],
+          "fileUrlPath": "parts/dist/core/plumbing/type-value.d.ts",
           "releaseTag": "Public",
           "name": "TypeValue",
           "typeTokenRange": {
@@ -8697,20 +8964,23 @@
         {
           "kind": "Class",
           "canonicalReference": "@2sic.com/2sxc-typings!UrlParams:class",
-          "docComment": "/**\n * Helper object to read url params. Available on `$2sxc.urlParams`\n *\n * @public\n */\n",
+          "docComment": "/**\n * Helper object to read url params.\n * Available on `$2sxc.urlParams`\n *\n * @public\n */\n",
           "excerptTokens": [
             {
               "kind": "Content",
               "text": "export declare class UrlParams "
             }
           ],
+          "fileUrlPath": "parts/dist/$2sxc/src/tools/url-params.d.ts",
           "releaseTag": "Public",
+          "isAbstract": false,
           "name": "UrlParams",
+          "preserveMemberOrder": false,
           "members": [
             {
               "kind": "Method",
               "canonicalReference": "@2sic.com/2sxc-typings!UrlParams#get:member(1)",
-              "docComment": "/**\n * Get a param from the url, no matter if it's behind ? or # If not found, will return an empty string `''`\n *\n * @param name - \n */\n",
+              "docComment": "/**\n * Get a param from the url, no matter if it's behind ? or #\n * If not found, will return an empty string `''`\n *\n * @param name - \n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -8752,6 +9022,7 @@
                 }
               ],
               "isOptional": false,
+              "isAbstract": false,
               "name": "get"
             },
             {
@@ -8782,12 +9053,13 @@
               "overloadIndex": 1,
               "parameters": [],
               "isOptional": false,
+              "isAbstract": false,
               "name": "isDebug"
             },
             {
               "kind": "Method",
               "canonicalReference": "@2sic.com/2sxc-typings!UrlParams#require:member(1)",
-              "docComment": "/**\n * Get a required param from the url, no matter if it's behind ? or # Will throw an error if not found\n *\n * @param name - \n */\n",
+              "docComment": "/**\n * Get a required param from the url, no matter if it's behind ? or #\n * Will throw an error if not found\n *\n * @param name - \n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -8829,6 +9101,7 @@
                 }
               ],
               "isOptional": false,
+              "isAbstract": false,
               "name": "require"
             }
           ],
@@ -8844,8 +9117,10 @@
               "text": "export declare enum WorkflowPhases "
             }
           ],
+          "fileUrlPath": "parts/dist/inpage/src/workflow/workflow-phases.d.ts",
           "releaseTag": "Public",
           "name": "WorkflowPhases",
+          "preserveMemberOrder": false,
           "members": [
             {
               "kind": "EnumMember",
@@ -8861,12 +9136,12 @@
                   "text": "\"after\""
                 }
               ],
-              "releaseTag": "Public",
-              "name": "after",
               "initializerTokenRange": {
                 "startIndex": 1,
                 "endIndex": 2
-              }
+              },
+              "releaseTag": "Public",
+              "name": "after"
             },
             {
               "kind": "EnumMember",
@@ -8882,12 +9157,12 @@
                   "text": "\"all\""
                 }
               ],
-              "releaseTag": "Public",
-              "name": "all",
               "initializerTokenRange": {
                 "startIndex": 1,
                 "endIndex": 2
-              }
+              },
+              "releaseTag": "Public",
+              "name": "all"
             },
             {
               "kind": "EnumMember",
@@ -8903,12 +9178,12 @@
                   "text": "\"before\""
                 }
               ],
-              "releaseTag": "Public",
-              "name": "before",
               "initializerTokenRange": {
                 "startIndex": 1,
                 "endIndex": 2
-              }
+              },
+              "releaseTag": "Public",
+              "name": "before"
             }
           ]
         },
@@ -8922,13 +9197,15 @@
               "text": "export interface WorkflowStep "
             }
           ],
+          "fileUrlPath": "parts/dist/inpage/src/workflow/workflow-step.d.ts",
           "releaseTag": "Public",
           "name": "WorkflowStep",
+          "preserveMemberOrder": false,
           "members": [
             {
               "kind": "PropertySignature",
               "canonicalReference": "@2sic.com/2sxc-typings!WorkflowStep#code:member",
-              "docComment": "/**\n * The code which is run, must be a promise-factory. So it's a function that will return a promise. Required. See [](xref:Api.Js.SxcJs.WorkflowStepCode)\n */\n",
+              "docComment": "/**\n * The code which is run, must be a promise-factory.\n * So it's a function that will return a promise.\n * Required.\n * See [](xref:Api.Js.SxcJs.WorkflowStepCode)\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -8969,7 +9246,7 @@
             {
               "kind": "PropertySignature",
               "canonicalReference": "@2sic.com/2sxc-typings!WorkflowStep#command:member",
-              "docComment": "/**\n * The action this step is for, can be 'any', 'edit', etc. Will be 'all' by default\n */\n",
+              "docComment": "/**\n * The action this step is for, can be 'any', 'edit', etc.\n * Will be 'all' by default\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -8996,7 +9273,7 @@
             {
               "kind": "PropertySignature",
               "canonicalReference": "@2sic.com/2sxc-typings!WorkflowStep#name:member",
-              "docComment": "/**\n * The name of this step, in case it needs to be replaced or somehow controlled Will be empty by default\n */\n",
+              "docComment": "/**\n * The name of this step, in case it needs to be replaced or somehow controlled\n * Will be empty by default\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -9023,7 +9300,7 @@
             {
               "kind": "PropertySignature",
               "canonicalReference": "@2sic.com/2sxc-typings!WorkflowStep#phase:member",
-              "docComment": "/**\n * Action-phase being run, like 'all', 'before', 'after' will be 'before' by default\n */\n",
+              "docComment": "/**\n * Action-phase being run, like 'all', 'before', 'after'\n * will be 'before' by default\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -9051,7 +9328,7 @@
             {
               "kind": "PropertySignature",
               "canonicalReference": "@2sic.com/2sxc-typings!WorkflowStep#priority:member",
-              "docComment": "/**\n * Execution priority, higher comes first Will be 1 by default.\n */\n",
+              "docComment": "/**\n * Execution priority, higher comes first\n * Will be 1 by default.\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -9081,20 +9358,23 @@
         {
           "kind": "Class",
           "canonicalReference": "@2sic.com/2sxc-typings!WorkflowStepCodeArguments:class",
-          "docComment": "/**\n * Arguments for [WorkflowStepCode](xref:Api.Js.SxcJs.WorkflowStepCode). Will be passed to your code and should also be returned by your code. This also allows cancelling further execution.\n *\n * @remarks\n *\n * The constructor for this class is marked as internal. Third-party code should not call the constructor directly or create subclasses that extend the `WorkflowStepCodeArguments` class.\n *\n * @public\n */\n",
+          "docComment": "/**\n * Arguments for [WorkflowStepCode](xref:Api.Js.SxcJs.WorkflowStepCode).\n * Will be passed to your code and should also be returned by your code.\n * This also allows cancelling further execution.\n *\n * @remarks\n *\n * The constructor for this class is marked as internal. Third-party code should not call the constructor directly or create subclasses that extend the `WorkflowStepCodeArguments` class.\n *\n * @public\n */\n",
           "excerptTokens": [
             {
               "kind": "Content",
               "text": "export declare class WorkflowStepCodeArguments "
             }
           ],
+          "fileUrlPath": "parts/dist/inpage/src/workflow/workflow-step-code-arguments.d.ts",
           "releaseTag": "Public",
+          "isAbstract": false,
           "name": "WorkflowStepCodeArguments",
+          "preserveMemberOrder": false,
           "members": [
             {
               "kind": "Property",
               "canonicalReference": "@2sic.com/2sxc-typings!WorkflowStepCodeArguments#cancel:member",
-              "docComment": "/**\n * If the workflow should be cancelled. Can be set by any workflow step. If set to true, following steps / workflows will not run.\n */\n",
+              "docComment": "/**\n * If the workflow should be cancelled.\n * Can be set by any workflow step.\n * If set to true, following steps / workflows will not run.\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -9118,7 +9398,8 @@
                 "endIndex": 2
               },
               "isStatic": false,
-              "isProtected": false
+              "isProtected": false,
+              "isAbstract": false
             },
             {
               "kind": "Property",
@@ -9147,7 +9428,8 @@
                 "endIndex": 2
               },
               "isStatic": false,
-              "isProtected": false
+              "isProtected": false,
+              "isAbstract": false
             },
             {
               "kind": "Property",
@@ -9161,7 +9443,7 @@
                 {
                   "kind": "Reference",
                   "text": "ContextComplete",
-                  "canonicalReference": "@2sic.com/2sxc-typings!ContextComplete:class"
+                  "canonicalReference": "@2sic.com/2sxc-typings!~ContextComplete:interface"
                 },
                 {
                   "kind": "Content",
@@ -9177,7 +9459,8 @@
                 "endIndex": 2
               },
               "isStatic": false,
-              "isProtected": false
+              "isProtected": false,
+              "isAbstract": false
             },
             {
               "kind": "Property",
@@ -9207,12 +9490,13 @@
                 "endIndex": 2
               },
               "isStatic": false,
-              "isProtected": false
+              "isProtected": false,
+              "isAbstract": false
             },
             {
               "kind": "Property",
               "canonicalReference": "@2sic.com/2sxc-typings!WorkflowStepCodeArguments#result:member",
-              "docComment": "/**\n * Result in after-phases of the workflow BETA - never really tested this\n */\n",
+              "docComment": "/**\n * Result in after-phases of the workflow\n * BETA - never really tested this\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -9236,7 +9520,8 @@
                 "endIndex": 2
               },
               "isStatic": false,
-              "isProtected": false
+              "isProtected": false,
+              "isAbstract": false
             }
           ],
           "implementsTokenRanges": []
@@ -9244,15 +9529,17 @@
         {
           "kind": "Interface",
           "canonicalReference": "@2sic.com/2sxc-typings!ZzzAjaxSettingsDeprecated:interface",
-          "docComment": "/**\n * Deprecated parameters for old jQuery AJAX calls. Shouldn't be used any more.\n *\n * @deprecated\n *\n * @public\n */\n",
+          "docComment": "/**\n * Deprecated parameters for old jQuery AJAX calls.\n * Shouldn't be used any more.\n *\n * @deprecated\n *\n * @public\n */\n",
           "excerptTokens": [
             {
               "kind": "Content",
               "text": "export interface ZzzAjaxSettingsDeprecated "
             }
           ],
+          "fileUrlPath": "parts/dist/$2sxc/src/sxc/web-api/ajax-settings.d.ts",
           "releaseTag": "Public",
           "name": "ZzzAjaxSettingsDeprecated",
+          "preserveMemberOrder": false,
           "members": [
             {
               "kind": "PropertySignature",
@@ -9341,20 +9628,22 @@
         {
           "kind": "Interface",
           "canonicalReference": "@2sic.com/2sxc-typings!ZzzSxcWebApiDeprecated:interface",
-          "docComment": "/**\n * **Deprecated** Old APIs on sxc.webApi. They only exist if jQuery is included on the page, and we highly discourage their use.\n *\n * @deprecated\n */\n",
+          "docComment": "/**\n * **Deprecated**\n * Old APIs on sxc.webApi.\n * They only exist if jQuery is included on the page, and we highly discourage their use.\n *\n * @deprecated\n */\n",
           "excerptTokens": [
             {
               "kind": "Content",
               "text": "export interface ZzzSxcWebApiDeprecated "
             }
           ],
+          "fileUrlPath": "parts/dist/$2sxc/src/sxc/web-api/sxc-web-api-deprecated.d.ts",
           "releaseTag": "Public",
           "name": "ZzzSxcWebApiDeprecated",
+          "preserveMemberOrder": false,
           "members": [
             {
               "kind": "MethodSignature",
               "canonicalReference": "@2sic.com/2sxc-typings!ZzzSxcWebApiDeprecated#delete:member(1)",
-              "docComment": "/**\n * **Deprecated** Please use [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchJson) or [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchRaw) instead.\n *\n * Returns an http-delete promise using jQuery\n *\n * @deprecated\n *\n * use fetchJson instead\n *\n * @param settingsOrUrl - the url to talk to\n *\n * @param params - jQuery style ajax parameters\n *\n * @param data - jQuery style data for post/put requests\n *\n * @param preventAutoFail - \n *\n * @returns jQuery ajax promise object\n */\n",
+              "docComment": "/**\n * **Deprecated**\n * Please use [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchJson)\n * or [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchRaw) instead.\n *\n * Returns an http-delete promise using jQuery\n *\n * @deprecated\n *\n * use fetchJson instead\n *\n * @param settingsOrUrl - the url to talk to\n *\n * @param params - jQuery style ajax parameters\n *\n * @param data - jQuery style data for post/put requests\n *\n * @param preventAutoFail - \n *\n * @returns jQuery ajax promise object\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -9452,7 +9741,7 @@
             {
               "kind": "MethodSignature",
               "canonicalReference": "@2sic.com/2sxc-typings!ZzzSxcWebApiDeprecated#get:member(1)",
-              "docComment": "/**\n * **Deprecated** Please use [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchJson) or [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchRaw) instead.\n *\n * Returns an http-get promise using jQuery\n *\n * @deprecated\n *\n * use fetchJson instead\n *\n * @param settingsOrUrl - the url to get\n *\n * @param params - jQuery style ajax parameters\n *\n * @param data - jQuery style data for post/put requests\n *\n * @param preventAutoFail - \n *\n * @returns jQuery ajax promise object\n */\n",
+              "docComment": "/**\n * **Deprecated**\n * Please use [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchJson)\n * or [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchRaw) instead.\n *\n * Returns an http-get promise using jQuery\n *\n * @deprecated\n *\n * use fetchJson instead\n *\n * @param settingsOrUrl - the url to get\n *\n * @param params - jQuery style ajax parameters\n *\n * @param data - jQuery style data for post/put requests\n *\n * @param preventAutoFail - \n *\n * @returns jQuery ajax promise object\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -9550,7 +9839,7 @@
             {
               "kind": "MethodSignature",
               "canonicalReference": "@2sic.com/2sxc-typings!ZzzSxcWebApiDeprecated#post:member(1)",
-              "docComment": "/**\n * **Deprecated** Please use [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchJson) or [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchRaw) instead.\n *\n * Returns an http-post promise using jQuery\n *\n * @deprecated\n *\n * use fetchJson instead\n *\n * @param settingsOrUrl - the url to get\n *\n * @param params - jQuery style ajax parameters\n *\n * @param data - jQuery style data for post/put requests\n *\n * @param preventAutoFail - \n *\n * @returns jQuery ajax promise object\n */\n",
+              "docComment": "/**\n * **Deprecated**\n * Please use [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchJson)\n * or [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchRaw) instead.\n *\n * Returns an http-post promise using jQuery\n *\n * @deprecated\n *\n * use fetchJson instead\n *\n * @param settingsOrUrl - the url to get\n *\n * @param params - jQuery style ajax parameters\n *\n * @param data - jQuery style data for post/put requests\n *\n * @param preventAutoFail - \n *\n * @returns jQuery ajax promise object\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -9648,7 +9937,7 @@
             {
               "kind": "MethodSignature",
               "canonicalReference": "@2sic.com/2sxc-typings!ZzzSxcWebApiDeprecated#put:member(1)",
-              "docComment": "/**\n * **Deprecated** Please use [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchJson) or [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchRaw) instead.\n *\n * Returns an http-put promise using jQuery\n *\n * @deprecated\n *\n * use fetchJson instead\n *\n * @param settingsOrUrl - the url to put\n *\n * @param params - jQuery style ajax parameters\n *\n * @param data - jQuery style data for post/put requests\n *\n * @param preventAutoFail - \n *\n * @returns jQuery ajax promise object\n */\n",
+              "docComment": "/**\n * **Deprecated**\n * Please use [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchJson)\n * or [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchRaw) instead.\n *\n * Returns an http-put promise using jQuery\n *\n * @deprecated\n *\n * use fetchJson instead\n *\n * @param settingsOrUrl - the url to put\n *\n * @param params - jQuery style ajax parameters\n *\n * @param data - jQuery style data for post/put requests\n *\n * @param preventAutoFail - \n *\n * @returns jQuery ajax promise object\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -9746,7 +10035,7 @@
             {
               "kind": "MethodSignature",
               "canonicalReference": "@2sic.com/2sxc-typings!ZzzSxcWebApiDeprecated#request:member(1)",
-              "docComment": "/**\n * **Deprecated** Please use [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchJson) or [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchRaw) instead.\n *\n * Generic http request using jQuery\n *\n * @deprecated\n *\n * use fetchJson instead\n *\n * @param settingsOrUrl - the url to get\n *\n * @param params - jQuery style ajax parameters\n *\n * @param data - jQuery style data for post/put requests\n *\n * @param preventAutoFail - \n *\n * @param method - the http verb name\n *\n * @returns jQuery ajax promise object\n */\n",
+              "docComment": "/**\n * **Deprecated**\n * Please use [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchJson)\n * or [fetchJson()](xref:Api.Js.SxcJs.SxcWebApi.fetchRaw) instead.\n *\n * Generic http request using jQuery\n *\n * @deprecated\n *\n * use fetchJson instead\n *\n * @param settingsOrUrl - the url to get\n *\n * @param params - jQuery style ajax parameters\n *\n * @param data - jQuery style data for post/put requests\n *\n * @param preventAutoFail - \n *\n * @param method - the http verb name\n *\n * @returns jQuery ajax promise object\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",

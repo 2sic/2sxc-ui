@@ -21,7 +21,7 @@
     "../$2sxc/src/*.js", 
     "../$2sxc/src/**/*.ts",
   ],
-"exclude": [
+  "exclude": [
     "node_modules",
     "**/*.spec.ts",
     "**/*.spec.d.ts",
@@ -30,5 +30,6 @@
     "**/tests/**",
     "**/__tests__/**",
     "**/vitest/**",
+    "**/vitest.config.js",
   ]
 }
