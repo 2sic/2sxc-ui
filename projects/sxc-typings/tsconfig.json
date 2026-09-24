@@ -1,10 +1,18 @@
 {
   "extends": "../inpage/tsconfig.json",
   "compilerOptions": {
-    "outDir": "../../sxc-typings/dist",
+    // "outDir": "../../sxc-typings/dist",
     "declaration": true,
     "removeComments": false,
-    "emitDeclarationOnly": true
+    "emitDeclarationOnly": true,
+
+    // "ignoreDeprecations": "6.0",
+    "moduleResolution": "node",
+    // "target": "ES2020",
+    "module": "commonjs", // or "ESNext"
+
+    // Prevent auto-loading all @types in node_modules
+    // "types": []
   },
   "include": [
     "../inpage/src/**/*.ts",
@@ -13,7 +21,14 @@
     "../$2sxc/src/*.js", 
     "../$2sxc/src/**/*.ts",
   ],
-  "exclude": [
-    "**/test/**/*.ts",
+"exclude": [
+    "node_modules",
+    "**/*.spec.ts",
+    "**/*.spec.d.ts",
+    "**/*.test.ts",
+    "**/*.test.d.ts",
+    "**/tests/**",
+    "**/__tests__/**",
+    "**/vitest/**",
   ]
 }

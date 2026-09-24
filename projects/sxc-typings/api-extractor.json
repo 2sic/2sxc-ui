@@ -196,6 +196,11 @@
      * DEFAULT VALUE: "<projectFolder>/dist/<unscopedPackageName>.d.ts"
      */
     // "untrimmedFilePath": "./index-untrimmed-part.d.ts",
+    
+    // new 2026-09-24 2dm
+    // 1. Leave untrimmedFilePath empty to prevent generating the untrimmed file, 
+    //    or keep it if you need an internal bundle.
+    "untrimmedFilePath": "",
 
     /**
      * Specifies the output path for a .d.ts rollup file to be generated with trimming for an "alpha" release.
