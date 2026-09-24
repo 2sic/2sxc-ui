@@ -14,6 +14,7 @@ export const SxcVersion = ROOTVERSION;
 
 /** @internal */
 export const SxcApiUrlRoot = 'desktopmodules/2sxc/api/';
+/** @internal */
 export const SxcDevBuild = IsDevBuild;
 
 /** @internal */
@@ -58,6 +59,7 @@ export const NumberNotDefinedHuge = 274200000000;
 
 /**
  * Attribute Names used in the HTML
+ * @internal
  */
 export const Attributes = {
   InstanceId: 'data-cb-instance',
@@ -65,6 +67,10 @@ export const Attributes = {
   ContentBlockId: 'data-cb-id',
 };
 
+/**
+ * Constants
+ * @internal
+ */
 export const C = {
   Attributes: Attributes,
   Sel: {

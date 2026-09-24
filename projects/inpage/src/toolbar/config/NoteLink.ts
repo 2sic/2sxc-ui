@@ -1,4 +1,7 @@
 
+/**
+ * @internal
+ */
 export interface NoteLink {
   url: string;
   label?: string;
