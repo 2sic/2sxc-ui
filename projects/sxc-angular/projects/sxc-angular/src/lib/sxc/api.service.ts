@@ -33,17 +33,17 @@ export class SxcApiService {
   /**
    * Do a POST request to the specified 2sxc api controller
    */
-  post<T>(method: string, urlParams: UrlParams, body: T): Observable<T> {
+  post<TBody, TResult = TBody>(method: string, urlParams: UrlParams, body: TBody): Observable<TResult> {
     const requestParams: HttpParams = getHttpParams(urlParams);
-    return this.http.post<T>(this.url(method), body, { params: requestParams });
+    return this.http.post<TResult>(this.url(method), body, { params: requestParams });
   }
 
   /**
    * Do a PUT request to the specified 2sxc api controller
    */
-  put<T>(method: string, urlParams: UrlParams, body: T): Observable<T> {
+  put<TBody, TResult = TBody>(method: string, urlParams: UrlParams, body: TBody): Observable<TResult> {
     const requestParams: HttpParams = getHttpParams(urlParams);
-    return this.http.put<T>(this.url(method), body, { params: requestParams });
+    return this.http.put<TResult>(this.url(method), body, { params: requestParams });
   }
 
   /**
@@ -51,6 +51,6 @@ export class SxcApiService {
    */
   delete<T>(method: string, urlParams: UrlParams): Observable<T> {
     const requestParams: HttpParams = getHttpParams(urlParams);
-    return this.http.put<T>(this.url(method), { params: requestParams });
+    return this.http.delete<T>(this.url(method), { params: requestParams });
   }
 }
