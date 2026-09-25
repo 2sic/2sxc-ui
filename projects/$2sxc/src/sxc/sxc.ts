@@ -97,7 +97,8 @@ export class Sxc extends HasLog {
    * 
    * Based on this we are trying to include all relevant information from the root-env, but override it with the local env
    * @param root 
-   * @returns 
+   * @returns
+   * @internal
    */
   private loadEnv(root: SxcGlobal): { env: SxcGlobalEnvironment, http: SxcGlobalHttp } {
     // get the JsApi from the JSON attribute using the inpage `manage` object

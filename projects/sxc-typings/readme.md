@@ -2,9 +2,9 @@
 
 This are the public types for NPM, which should help you write type-safe code when working with the core 2sxc JavaScript APIs.
 
-Use this for your DNN/2sxc TypeScript and to create Angular, React, Vue etc. adaptors. 
+Use this for your DNN/2sxc TypeScript and to create Angular, React, Vue etc. adaptors.
 
-Love from Switzerland, 
+Love from Switzerland,
 Daniel
 
 ## Who this is for

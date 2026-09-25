@@ -4,7 +4,13 @@ import { ButtonDefinition } from '../toolbar/config/button-definition';
 import { Note } from '../toolbar/config/Note';
 import { Debug } from '../constants/debug';
 
+/**
+ * @internal
+ */
 export const iconPrefix = 'icon-sxc-';
+/**
+ * @internal
+ */
 export const tlbI18nPrefix = 'Toolbar.';
 
 const debugTippy = Debug.parts.CommandTippy;

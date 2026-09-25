@@ -1,5 +1,8 @@
 ﻿import { AttrJsonEditContext } from '../html-attribute';
 
+/**
+ * @internal
+ */
 export interface ContentBlockUnifiedInCtxAndAttr {
   /**
    * Informs if the razor file is from a shared location - usually false.
