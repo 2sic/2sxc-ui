@@ -9,6 +9,11 @@ import { ButtonDefinition } from './button-definition';
  */
 export type ButtonPropGen<T> = (context: ContextCompleteWithButton) => T;
 
+
+/**
+ * This is the combined either-function-or-value signature.
+ * @public
+ */
 export type ButtonPropGenOrValue<T> = ButtonPropGen<T> | T;
 
 /**

@@ -19,7 +19,7 @@ import { SxcQueryService } from './query.service';
 export class SxcApp {
   constructor(
     private http: HttpClient,
-  ) { }
+  ) {}
 
   /**
    * Cet a content manager object for a specific ContentType

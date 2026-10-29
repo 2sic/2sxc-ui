@@ -1,4 +1,4 @@
-﻿import { ButtonConfigLoader, ButtonGroupConfigLoader, CommandConfigLoader, ToolbarConfigLoaderV09, ToolbarConfigLoaderV10, ToolbarWip } from '.';
+﻿import { ButtonConfigLoader, ButtonGroupConfigLoader, ToolbarConfigLoaderV09, ToolbarConfigLoaderV10, ToolbarWip } from '.';
 import { ToolbarManager } from '..';
 import { ContextComplete } from '../../context/bundles/context-bundle-button';
 import { HasLog, LogEntry } from '../../core';

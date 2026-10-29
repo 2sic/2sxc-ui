@@ -1,6 +1,6 @@
 {
   "// notes": "The version is used in the final NPM. For beta releases, use pattern '14.02.0-beta.0'",
-  "version": "14.07.05",
+  "version": "22.0.0",
   "main": "./index.d.ts",
   "types": "./index.d.ts",
   "scripts": {
@@ -41,7 +41,7 @@
   },
   "devDependencies": {
     "@microsoft/api-documenter": "^7.17.19",
-    "@microsoft/api-extractor": "^7.25.2",
+    "@microsoft/api-extractor": "^7.59.2",
     "typedoc": "^0.15.8"
   }
 }

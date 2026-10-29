@@ -28,6 +28,12 @@ export declare class AjaxPromise {
 export declare const AntiForgeryTokenHeaderNameDnn = "RequestVerificationToken";
 
 /**
+ * Any identifier, which can be any of the above
+ * @internal
+ */
+export declare type AnyIdentifier = (ItemIdentifierSimple | ItemIdentifierCopy | ItemIdentifierInList | TemplateIdentifier);
+
+/**
  * This is a placeholder in the settings, which must be replaced with "2sxc" or another term for other dnn extensions
  * @internal
  */
@@ -46,24 +52,33 @@ export declare const AppApiMap: {
 /** @internal */
 export declare const AppApiMarker = "app";
 
-/** @internal */
-export declare class AssetsLoader {
-    /** Asynchronously runs external and inline scripts in series */
-    static runScripts(scripts: HTMLScriptElement[], callback: () => void): void;
-}
+/**
+ * Attribute Names used in the HTML
+ */
+export declare const Attributes: {
+    InstanceId: string;
+    Context: string;
+    ContentBlockId: string;
+};
 
 /**
  * @internal
  */
-declare class AttrJsonContentGroup {
+declare interface AttrJsonContentGroup extends ContentBlockUnifiedInCtxAndAttr, ContentAppUnifiedInCtxAndAttr {
     IsCreated: boolean;
     IsList: boolean;
     TemplateId: number;
     Edition: string;
+    /**
+     * new 17.08, CSV of editions
+     */
+    editions: string;
     TemplatePath: string;
-    /** True if the template comes from the shared location - new in v13 */
-    TemplateIsShared: boolean;
     QueryId: number | null;
+    /** new 17.07 */
+    queryName: string;
+    /** new 17.07 */
+    queryInfo: string;
     ContentTypeName: string;
     AppUrl: string;
     AppSettingsId: number;
@@ -80,22 +95,23 @@ declare class AttrJsonContentGroup {
 /**
  * @internal
  */
-declare class AttrJsonEditContext {
+declare interface AttrJsonEditContext extends InstanceContext {
     Environment: AttrJsonEnvironment;
     User: AttrJsonUser;
     Language: AttrJsonLanguage;
     /** Reference to the content block with information about the parent */
-    contentBlockReference: ContentBlockReference;
+    contentBlockReference?: ContentBlockReference;
     /** Information about the content block itself */
     contentBlock: AttrJsonContentGroup;
-    error: AttrJsonError;
-    Ui: AttrJsonUi;
+    error?: ContextErrorJsonAndObj;
+    Ui?: AttrJsonUi;
+    jsApi: EnvironmentSpecs;
 }
 
 /**
  * @internal
  */
-declare class AttrJsonEntity {
+declare interface AttrJsonEntity {
     Key: string;
     Value: string;
 }
@@ -103,7 +119,7 @@ declare class AttrJsonEntity {
 /**
  * @internal
  */
-declare class AttrJsonEnvironment {
+declare interface AttrJsonEnvironment {
     WebsiteId: number;
     WebsiteUrl: string;
     PageId: number;
@@ -118,14 +134,7 @@ declare class AttrJsonEnvironment {
 /**
  * @internal
  */
-declare class AttrJsonError {
-    type: string;
-}
-
-/**
- * @internal
- */
-declare class AttrJsonLanguage {
+declare interface AttrJsonLanguage {
     Current: string;
     Primary: string;
     All: string[] | null;
@@ -134,7 +143,7 @@ declare class AttrJsonLanguage {
 /**
  * @internal
  */
-declare class AttrJsonUi {
+declare interface AttrJsonUi {
     AutoToolbar: boolean;
     Form: string;
 }
@@ -142,9 +151,13 @@ declare class AttrJsonUi {
 /**
  * @internal
  */
-declare class AttrJsonUser {
+declare interface AttrJsonUser {
     CanDevelop: boolean;
     CanAdmin: boolean;
+    /**
+     * user can switch editions; lower case!
+     */
+    canSwitchEdition: boolean;
 }
 
 /**
@@ -174,27 +187,33 @@ declare class BuildRule extends HasLog {
      * Note: can also be Partial<ToolbarSettings>
      */
     ui: ToolbarButtonSettings & Partial<ToolbarSettings>;
-    /** ATM unused url-part after the hash - will probably be needed in future */
     context: {
         appId?: number;
         zoneId?: number;
         complete?: boolean;
     };
+    /** WIP v20 new? */
+    settings?: Record<string, unknown>;
     constructor(ruleString: string, parentLog: Log);
+    static Create({ name, ui, params, pos, log }: {
+        name: string;
+        ui?: ToolbarButtonSettings & Partial<ToolbarSettings>;
+        params?: RuleParams;
+        pos?: number;
+        log: Log;
+    }): BuildRule;
     /** Tells if this rule will override the show settings  */
-    overrideShow(): boolean | undefined;
+    overrideShow(): boolean | null;
     private load;
     private loadHeader;
+    private setIdBasedOnOperation;
     /**
      * Load the header
      * @param forKey the key being loaded, to handle special case settings/toolbar
      * @param rest the parameters to process
      */
-    private leadHeaderAndUi;
+    private loadHeaderAndUi;
     private loadParamsAndPrefill;
-    private dicToArray;
-    private splitParamsDic;
-    private splitParamsArray;
 }
 
 /**
@@ -215,75 +234,11 @@ declare enum BuildSteps {
 export declare function buildSxcRoot(): SxcGlobal;
 
 /**
- * The real button configuration as it's used at runtime
- * @internal
- */
-declare class Button {
-    /** The ID is important for tracking this button and applying modifiers */
-    id: string;
-    /** The underlying command which will be run */
-    command: ButtonCommand;
-    /** classes which will be applied to this button */
-    classes: string;
-    constructor(command: ButtonCommand, name: string);
-    static splitName(identifier: string): {
-        id: string;
-        name: CommandNames;
-    };
-    /** Configure the link generator before it creates the link */
-    configureLinkGenerator: (context: ContextComplete, linkGenerator: CommandLinkGenerator) => void;
-    /** The dialog name */
-    dialog?: ButtonGenOrProp<string>;
-    /** Check if full-screen, always a function */
-    fullScreen?: ButtonPropGen<boolean>;
-    /** Determines if the button should be disabled */
-    disabled?: ButtonGenOrProp<boolean>;
-    /** Dynamicaly determine classes - must always be a function */
-    dynamicClasses: ButtonPropGen<string>;
-    /** The icon to show in the button */
-    icon?: ButtonGenOrProp<string>;
-    /** Determine if it should use the inline window, always a function */
-    inlineWindow?: ButtonPropGen<boolean>;
-    /** Check if we should open a new window, always an FN */
-    newWindow?: ButtonPropGen<boolean>;
-    /** Method which determines if it should be shown or not */
-    showCondition?: ButtonPropGen<boolean>;
-    /** The title of this button which will usually be i18n keys */
-    title?: ButtonPropGen<string>;
-    /** Determines if this button runs in the page - affecting publishing */
-    partOfPage?: ButtonPropGen<boolean>;
-    /** The code to run for this button - if empty, will default to open a dialog */
-    code?: CommandCode;
-    /**
-     * Additional parameters which are used to RUN the command.
-     * So it's not used when preparing a toolbar button, but only when executing
-     */
-    addParamsToLink?: ButtonPropGen<CommandParams>;
-    /** this is just a UI interaction, won't create data so won't need pre-flight */
-    uiActionOnly: ButtonPropGen<boolean>;
-    /** Detect if this is a Button */
-    static is(thing: unknown): thing is Button;
-    static isArray(thing: TypeTbD): thing is Button[];
-    static isPropGen<T>(thing: ButtonGenOrProp<T>): thing is ButtonPropGen<T>;
-}
-
-/**
- * @internal
- */
-declare class ButtonCommand {
-    name: CommandNames;
-    params?: CommandParams;
-    readonly command: Command;
-    constructor(name: CommandNames, /* contentType?: string, */ params?: CommandParams);
-    /** make static, as many ButtonCommand signatures are actually not objects */
-    static mergeAdditionalParams(command: ButtonCommand, additionalParams: Record<string, TypeValue>): CommandParams;
-}
-
-/**
  * This is a system to build button configurations
  * @internal
  */
 declare class ButtonConfigLoader extends HasLog {
+    #private;
     private toolbar;
     constructor(toolbar: ToolbarConfigLoader);
     /**
@@ -299,24 +254,117 @@ declare class ButtonConfigLoader extends HasLog {
     /**
      * enhance button-object with default icons, etc.
      */
-    addDefaultBtnSettings(btn: Button, groupDefaults: Record<string, TypeValue> | null, tlbDefaults: Record<string, TypeValue> | null | undefined, actions: Commands): void;
-    private removeUnfitButtons;
+    addDefaultBtnSettings(btn: ButtonConfiguration, groupDefaults: Record<string, TypeValue> | null, tlbDefaults: Record<string, TypeValue> | null | undefined, actions: Commands): void;
 }
 
-declare type ButtonGenOrProp<T> = ButtonPropGen<T> | T;
+/**
+ * The real button configuration as it's used at runtime.
+ * It identifies the button by an ID, has the command to run, and
+ * gets defaults from the command definition.
+ * @internal
+ */
+declare class ButtonConfiguration {
+    overrides?: Partial<ButtonDefinition>;
+    /** The ID is important for tracking this button and applying modifiers */
+    id: string;
+    /** The underlying command which will be run */
+    command: CommandWithParams;
+    /** The definition defaults to use for this button */
+    definition: Partial<ButtonDefinition>;
+    constructor(nameOrNamePair: string, command: CommandWithParams, overrides?: Partial<ButtonDefinition>);
+    static splitName(identifier: string): {
+        id: string;
+        name: CommandNames;
+    };
+    /** Detect if this is a Button */
+    static is(thing: unknown): thing is ButtonConfiguration;
+    static isButtonArray(thing: unknown): thing is ButtonConfiguration[];
+}
+
+/**
+ * A button definition contains all the possible properties which can be defined
+ * for a button. These are then used to create command structures for potential buttons.
+ * @public
+ */
+declare class ButtonDefinition {
+    /** classes which will be applied to this button */
+    classes: string;
+    /** Configure the link generator before it creates the link */
+    /** Replacement for configureLinkGenerator - v20.09 */
+    customItems?: (ctx: ContextCompleteWithButton, items: AnyIdentifier[]) => AnyIdentifier[];
+    tweakGeneratedUrlParameters?: (context: ContextCompleteWithButton, itemUrlParameters: ItemUrlParameters) => ItemUrlParameters;
+    /** The dialog name */
+    dialog?: ButtonPropGenOrValue<string>;
+    /** Check if full-screen, always a function */
+    fullScreen?: ButtonPropGen<boolean>;
+    /** Determines if the button should be disabled */
+    disabled?: ButtonPropGenOrValue<boolean>;
+    /** Dynamically determine classes - must always be a function */
+    dynamicClasses?: ButtonPropGen<string>;
+    /** The icon to show in the button */
+    icon?: ButtonPropGenOrValue<string>;
+    /** Determine if it should use the inline window, always a function */
+    inlineWindow?: ButtonPropGen<boolean>;
+    /** Check if we should open a new window, always an FN */
+    newWindow?: ButtonPropGen<boolean>;
+    /** Method which determines if it should be shown or not */
+    showCondition?: ButtonPropGen<boolean>;
+    /** The title of this button which will usually be i18n keys */
+    title?: ButtonPropGen<string>;
+    /** Determines if this button runs in the page - affecting publishing */
+    partOfPage?: ButtonPropGen<boolean>;
+    /** The code to run for this button - if empty, will default to open a dialog */
+    code?: CommandCode;
+    /**
+     * The color which could be supplied per button - new for `info`
+     * New v15.04
+     */
+    color?: ButtonPropGen<string | undefined>;
+    /**
+     * The tippy which could be supplied per button - new for `info`
+     * v15.04
+     */
+    tippy?: (context: ContextCompleteWithButton, tag: HTMLElement) => void;
+    /**
+     * Additional! parameters which are used to RUN the command.
+     * So it's not used when preparing a toolbar button, but only when executing
+     *
+     * Important: used to be called 'addParamsToLink' up to v18.03
+     */
+    parameters?: ButtonPropGen<CommandParams>;
+    /** this is just a UI interaction, won't create data so won't need pre-flight */
+    uiActionOnly?: ButtonPropGen<boolean>;
+    /**
+     * Ability to specify notes which will be shown in the toolbar
+     * @internal
+     */
+    notes?: ButtonPropGen<Note[]>;
+    /**
+     * Specify that this button should not include items in the command
+     * New 18.03
+     * @internal
+     */
+    noItems?: ButtonPropGenOrValue<boolean>;
+    /**
+     * Allow the button to drop certain conflicting parameters which may be inherited from the main toolbar definition.
+     * New 2026-06-22 v22 2dm
+     * @internal
+     */
+    preCleanSharedParams?: (globalParams: CommandParams) => CommandParams;
+}
 
 /**
  * @internal
  */
 declare class ButtonGroup {
-    buttons: Button[];
+    buttons: ButtonConfiguration[];
     /**
      * Group name - for identification
      * It's automatically set if using toolbar templates, otherwise it'll probably be undefined
      */
     name?: string;
     defaults: Record<string, TypeValue>;
-    constructor(buttons: Button[]);
+    constructor(buttons: ButtonConfiguration[]);
     /** Detect if this is a ButtonGroup */
     static is(thing: unknown): thing is ButtonGroup;
     /** Detect if this is a ButtonGroup */
@@ -327,6 +375,7 @@ declare class ButtonGroup {
  * @internal
  */
 declare class ButtonGroupConfigLoader extends HasLog {
+    #private;
     private toolbar;
     constructor(toolbar: ToolbarConfigLoader);
     /**
@@ -340,29 +389,11 @@ declare class ButtonGroupConfigLoader extends HasLog {
      * WARNING: Note that this does the same task as convertToButton in the ButtonConfigLoader - but very differently
      *          I'm not sure why though.
      */
-    convertToButton(btn: InPageButtonJson, sharedParams: CommandParams | Record<string, TypeValue>, sharedDefaults: Record<string, TypeValue>, groupDefaults: Record<string, TypeValue>): Button;
-    /**
-     * take a list of buttons (objects OR strings)
-     * and convert to proper array of buttons with actions
-     * on the in is a object with buttons, which are either:
-     * - a string like "edit" or multi-value "layout,more"
-     * - an array of such strings incl. optional complex objects which are
-     */
-    private expandButtonList;
+    convertToButton(btn: InPageButtonJson, sharedParams: CommandParams | Record<string, TypeValue>, sharedDefaults: Record<string, TypeValue>, groupDefaults: Record<string, TypeValue>): ButtonConfiguration;
     private expandButtonAndAddToList;
     /** Add the "more" button at the end or beginning */
     private addMoreButton;
-    /**
-     * If there is only one group, then remove the More button.
-     * Note that this has to happen almost at the end, because groups will be removed if empty
-     */
-    private dropMoreIfOnlyOneGroup;
 }
-
-/**
- * @internal
- */
-declare type ButtonGroupsWip = ButtonGroupWip[];
 
 /**
  * @internal
@@ -373,7 +404,20 @@ declare type ButtonGroupWip = ButtonGroup | InPageButtonGroupJson | ToolbarTempl
  * This is the most common call signature on most ButtonConfig properties
  * @public
  */
-declare type ButtonPropGen<T> = (context: ContextComplete) => T;
+declare type ButtonPropGen<T> = (context: ContextCompleteWithButton) => T;
+
+declare type ButtonPropGenOrValue<T> = ButtonPropGen<T> | T;
+
+export declare const C: {
+    Attributes: {
+        InstanceId: string;
+        Context: string;
+        ContentBlockId: string;
+    };
+    Sel: {
+        SxcDivs: string;
+    };
+};
 
 /**
  * Structure for constants in the selectors, to guarantee we got everything
@@ -410,36 +454,12 @@ export declare class CmsEngine extends HasLog {
      * @param settings
      * @param event
      */
-    run<T>(context: ContextComplete, nameOrParams: string | CommandParams, event: MouseEvent, wipParamsWithWorkflow?: RunParams): CommandPromise<T>;
+    run<T>(context: ContextComplete, params: CommandParams, event: MouseEvent, paramsWithWorkflow?: RunParams, triggeredBy?: string): Promise<void | T>;
     /**
      * Open a new dialog of the angular-ui
      */
-    static openDialog<T>(context: ContextComplete, event: MouseEvent): CommandPromise<T>;
-}
-
-/**
- * @internal
- */
-export declare class Command {
-    name: string;
-    constructor(name: string);
-    /** the defaults are important for new buttons that just know this command */
-    buttonDefaults: Partial<Button>;
-    /**
-     *
-     * @internal
-     */
-    mergeDefaults(translateKey: string, icon: string, uiOnly: boolean, partOfPage: boolean, more: Partial<Button>): void;
-    /**
-     *
-     * @returns
-     * @internal
-     */
-    static build(name: string, translateKey: string, icon: string, uiOnly: boolean, partOfPage: boolean, more: Partial<Button>): Command;
-    /**
-     * @internal
-     */
-    static clone(command: Command, name: string): Command;
+    static openDialog<T>(context: ContextCompleteWithButton, event: MouseEvent, triggeredBy?: string): Promise<void | T>;
+    static applyLinkToButton(event: MouseEvent, link: string, target: string | null): boolean;
 }
 
 /**
@@ -471,7 +491,7 @@ export declare interface CommandAddParams extends CommandContentTypeParams, Pick
 /**
  * @internal
  */
-export declare type CommandCode = <T>(context: ContextComplete, event: MouseEvent) => Promise<void | T>;
+export declare type CommandCode = <T>(context: ContextCompleteWithButton, event: MouseEvent, triggeredBy?: string) => Promise<void | T>;
 
 /**
  * Parameters used for the command `code` on toolbars (new in v14.4).
@@ -487,21 +507,6 @@ export declare interface CommandCodeParams {
      * If `call` is `sayHello` you need a `window.sayHello(params, context, event)`.
      */
     call: string;
-}
-
-/**
- * @internal
- */
-declare class CommandConfigLoader extends HasLog {
-    private toolbar;
-    constructor(toolbar: ToolbarConfigLoader);
-    /**
-     * entity support (compatibility for pre 2sxc v9.x)
-     * does some clean-up work on a button-definition object
-     * because the target item could be specified directly, or in a complex internal object called entity
-     * @param actDef
-     */
-    updateToV9(actDef: InPageCommandJsonWithTooMuchInfo): CommandParams;
 }
 
 /**
@@ -572,6 +577,39 @@ export declare interface CommandDataParams extends CommandContentTypeParams {
 }
 
 /**
+ * @internal
+ */
+export declare class CommandDefinition {
+    name: string;
+    constructor(name: string);
+    /** the defaults are important for new buttons that just know this command */
+    buttonDefaults: Partial<ButtonDefinition>;
+    /**
+     * @internal
+     */
+    mergeDefaults(translateKey: string, icon: string, uiOnly: boolean, partOfPage: boolean, more: Partial<ButtonDefinition>): void;
+    /**
+     * If config has links, add them and enable interactive
+     */
+    private tippyAddLinks;
+    /**
+     * If it needs to be interactive, then changes are made to allow mouse to travel to it.
+     * eg. we need to append it to the body
+     */
+    private tippyMakeInteractive;
+    /**
+     *
+     * @returns
+     * @internal
+     */
+    static build(name: string, translateKey: string, icon: string, uiOnly: boolean, partOfPage: boolean, more: Partial<ButtonDefinition>): CommandDefinition;
+    /**
+     * @internal
+     */
+    static clone(command: CommandDefinition, name: string): CommandDefinition;
+}
+
+/**
  * Parameters used for the command `delete`.
  * <br>
  * ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)
@@ -591,51 +629,6 @@ export declare interface CommandDeleteParams {
      * This is important to show the "Are you sure?" dialog.
      */
     entityTitle: string;
-}
-
-/**
- * This is responsible for taking a context with command and everything
- * then building the link for opening the correct dialogs
- * @internal
- */
-declare class CommandLinkGenerator extends HasLog {
-    readonly context: ContextComplete;
-    items: Array<ItemIdentifierSimple | ItemIdentifierCopy | ItemIdentifierGroup | TemplateIdentifier>;
-    readonly urlParams: UrlItemParams;
-    private readonly debugUrlParam;
-    constructor(context: ContextComplete, parentLog: Log);
-    /**
-     * Generate items for editing/changing or simple item depending on the scenario.
-     */
-    private buildItemsList;
-    /**
-     * build the link, combining specific params with global ones and put all in the url
-     */
-    getLink(): string;
-    /**
-     * Determine the url to open a dialog, based on the settings which UI version to use
-     */
-    private getDialogUrl;
-    private addItem;
-    /**
-     * this will tell the command to edit a item from the sorted list in the group,
-     * optionally together with the presentation item
-     */
-    private addContentGroupItems;
-    /**
-     * this adds an item of the content-group, based on the group GUID and the sequence number
-     */
-    private addContentGroupItem;
-    /**
-     * EXPERIMENTAL in 10.27, if a parent is specified, use that
-     * this will tell the command to edit a item which also belongs to a list
-     * this is relevant when adding new items
-     */
-    private addItemInList;
-    /**
-     * find the part name for both the API to give the right item (when using groups) and for i18n
-     */
-    private findPartName;
 }
 
 /**
@@ -780,10 +773,25 @@ export declare const enum CommandNames {
      */
     edit = "edit",
     /**
+     * `help` shows a button with a question mark and a tooltip with some info.
+     * <br>
+     * When clicked it opens a link.
+     * <br> 📩 Parameters either one of these: TODO
+     * @internal - still WIP v15.04
+     * TODO: AS IT'S basically identical with link, we should reconsider this...?
+     */
+    help = "help",
+    /**
      * `image` opens the edit-dialog for the metadata of the current image
      * @internal - may be removed soon
      */
     image = "image",
+    /**
+     * `info` shows a button with a info icon, with optional tooltip and an alert with some info.
+     * <br> 📩 Parameters either one of these: TODO
+     * @internal - still WIP v15.04
+     */
+    info = "info",
     /**
      * `insights` opens the insights logs page
      * <br> 🔐 Toolbar shows this automatically to elevated admins.
@@ -795,6 +803,13 @@ export declare const enum CommandNames {
      * @internal
      */
     insights_old_server = "insights-server",
+    /**
+     * `link` shows a button with a link icon, with optional tooltip.
+     * When clicked it opens a link.
+     * <br> 📩 Parameters either one of these: TODO
+     * @internal - still WIP v15.04
+     */
+    link = "link",
     /**
      * `instance-list` opens a dialog to manually re-order **items in a list**.
      * <br> 🪜 Only appears on toolbars of items which are in a list.
@@ -813,6 +828,16 @@ export declare const enum CommandNames {
      * (auto-detected from context)
      */
     layout = "layout",
+    /**
+     * just add a log, mainly for verifying functionality of running commands
+     * @internal
+     */
+    log = "log",
+    /**
+     * WIP
+     * @internal
+     */
+    edition = "edition",
     /**
      * `metadata` opens the edit-dialog for the current metadata item.
      * <br> 🔘 It only appears if the toolbar explicitly asks for it.
@@ -988,7 +1013,7 @@ export declare interface CommandParams extends Record<string, unknown> {
      */
     action?: CommandNames;
     /** @internal */
-    items?: Array<ItemIdentifierSimple | ItemIdentifierGroup>;
+    items?: Array<ItemIdentifierSimple | ItemIdentifierInList>;
     /**
      * Special change of dialogs, for example to change the edit-dialog into a new-dialog.
      * @internal - not sure how this matches / replaces dialog, probably internal only
@@ -1042,6 +1067,8 @@ export declare interface CommandParams extends Record<string, unknown> {
     title?: string;
     /**
      * The purpose of this varies by [Command](xref:Api.Js.SxcJs.CommandNames).
+     * This is only for the module-specific list of items.
+     * When using parent/fields, this is not relevant.
      * @public
      */
     useModuleList?: true;
@@ -1078,15 +1105,40 @@ export declare interface CommandParams extends Record<string, unknown> {
      */
     parent?: string;
     /**
-     * The purpose of this varies by [Command](xref:Api.Js.SxcJs.CommandNames).
-     * @public
+     * Combined with the parent property determines what to edit
+     * @internal
      */
     fields?: string;
+    /**
+     *
+     * New 16.00 - not public yet
+     * @internal
+     */
+    uifields?: string;
+    /**
+     * Form parameters
+     *
+     * New 16.02 - not public yet
+     * @internal
+     */
+    form?: Record<string, TypeValue>;
     /**
      * for template edit dialog
      * @internal
      */
     isshared?: boolean;
+    /**
+     * for copying an entity - the id of the entity to copy - new 20.09
+     * EXPERIMENTAL - WILL PROBABLY BE REMOVED AGAIN
+     * @internal
+     */
+    copyId?: number;
+    /**
+     * Settings to pass to the dialog.
+     *
+     * @internal v18.07 - not public - trying to finalize v20 (believe it was not used yet)
+     */
+    settings?: unknown;
 }
 
 /**
@@ -1099,7 +1151,7 @@ export declare interface CommandParamsEntity extends CommandParamsEntityById, Co
 }
 
 /**
- * Parameters used for commands which address a specificy entity.
+ * Parameters used for commands which address a specify entity.
  * <br>
  * ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)
  * @public
@@ -1119,7 +1171,7 @@ export declare interface CommandParamsEntityById {
  */
 export declare interface CommandParamsEntityInContentBlock {
     /**
-     * Determins the position of the item in the list.
+     * Determines the position of the item in the list.
      * index was added in v14.04 to replace the `sortOrder` which had a confusing name.
      */
     index: number;
@@ -1137,7 +1189,7 @@ export declare interface CommandParamsEntityInContentBlock {
  */
 export declare interface CommandParamsEntityInList {
     /**
-     * Determins the position of the item in the list of that entity-field.
+     * Determines the position of the item in the list of that entity-field.
      */
     index: number;
     /**
@@ -1171,25 +1223,37 @@ export declare interface CommandParamsMetadata {
     targetType?: MetadataTargetTypes;
 }
 
-declare type CommandPromise<T> = Promise<T | void>;
-
 /**
  * Singleton Catalog of all commands
  * @internal
  */
 export declare class Commands extends HasLog {
+    #private;
     /** Singleton */
     static singleton(): Commands;
-    private static _singleton;
-    static add(name: string, translateKey: string, icon: string, uiOnly: boolean, partOfPage: boolean, more: Partial<Button>): Command;
-    static addCommand(command: Command): void;
-    private commandList;
-    list: Record<string, Command>;
+    static add(name: string, translateKey: string, icon: string, uiOnly: boolean, partOfPage: boolean, more: Partial<ButtonDefinition>): CommandDefinition;
+    static addCommand(command: CommandDefinition): void;
+    list: Record<string, CommandDefinition>;
     private constructor();
-    get: (name: string) => Command;
-    add(name: string, translateKey: string, icon: string, uiOnly: boolean, partOfPage: boolean, more: Partial<Button>): Command;
-    addCommand(command: Command): void;
-    private addDef;
+    get: (name: string) => CommandDefinition;
+    add(name: string, translateKey: string, icon: string, uiOnly: boolean, partOfPage: boolean, more: Partial<ButtonDefinition>): CommandDefinition;
+    addCommand(command: CommandDefinition): void;
+}
+
+/**
+ * @internal
+ */
+declare interface CommandWithParams {
+    readonly commandDef: CommandDefinition;
+    name: CommandNames;
+    params?: CommandParams;
+}
+
+declare interface ContentAppUnifiedInCtxAndAttr {
+    /**
+     * App name for showing in the layout infos - new v17
+     */
+    appName: string;
 }
 
 /**
@@ -1197,20 +1261,40 @@ export declare class Commands extends HasLog {
  * so this class is never really instantiated.
  * @internal
  */
-declare class ContentBlockReference {
+declare interface ContentBlockReference {
     /** How changes are published - draft required/optional */
     publishingMode: string;
     /** ID of the reference item - very rarely used */
     id: number;
     /** GUID of the parent item referencing this Content Block */
-    parentGuid: string;
+    parentGuid: string | null;
     /** Field in which this content block is references */
-    parentField: string;
+    parentField: string | null;
     /** Index of the reference - what position it's in in the list of that field */
     parentIndex: number;
     /** If this content is part of the page */
     partOfPage: boolean;
-    constructor(original: Partial<ContentBlockReference>);
+}
+
+declare interface ContentBlockUnifiedInCtxAndAttr {
+    /**
+     * Informs if the razor file is from a shared location - usually false.
+     * Important for opening the code editor.
+     *
+     * True if the template comes from the shared location - new in v13
+     * Changed to lower case in v17 and unified in v17
+     */
+    templateIsShared: boolean;
+    /**
+     * View name for showing in the layout infos - new v17
+     */
+    viewName: string;
+    renderMs: number;
+    renderLightspeed: boolean;
+    /**
+     * Disable the view switching, typically because the current view was triggered by a url parameter.
+     */
+    viewSwitchDisabled?: boolean;
 }
 
 /**
@@ -1236,18 +1320,18 @@ export declare class ContentListActionParams {
 declare class ContentListActions {
     /**
      * add an item to the list at this position
-     * @param {ContextComplete} context
+     * @param {ContextCompleteWithButton} context
      * @param {number} index
      */
-    addItem<T>(context: ContextComplete, index: number): Promise<void | T>;
+    addItem<T>(context: ContextCompleteWithButton, index: number): Promise<void | T>;
     /**
      * remove an item from a list, then reload
      */
-    removeFromList(context: ContextComplete): Promise<void>;
+    removeFromList(context: ContextCompleteWithButton): Promise<void>;
     /**
      * change the order of an item in a list, then reload
      */
-    changeOrder(context: ContextComplete, index: number, toIndex: number): Promise<void>;
+    changeOrder(context: ContextCompleteWithButton, index: number, toIndex: number): Promise<void>;
     /**
      * set a content-item in this block to published, then reload
      */
@@ -1261,12 +1345,11 @@ declare class ContentListActions {
 /**
  * @public
  */
-declare class ContextBundleContent extends ContextBundleInstance {
+declare interface ContextBundleContent extends ContextBundleInstance {
     /**
      * information about the current item
      * @internal
      */
-    item: ContextOfItem;
     /**
      * Reference to a Content-Block
      * @internal
@@ -1277,84 +1360,109 @@ declare class ContextBundleContent extends ContextBundleInstance {
      * @internal
      */
     contentBlock: ContextOfContentBlock;
-    /** @internal */
-    constructor(editCtx: AttrJsonEditContext, sxc: Sxc);
 }
 
 /**
+ * Context Bundle containing information about the current instance, app, page, system, user and ui.
+ * Foundation for specific context bundles, even though ATM it's only inherited 1x and contains everything.
  * @public
  */
-declare class ContextBundleInstance {
+declare interface ContextBundleInstance {
+    /**
+     * Marker to specify that this is a correctly constructed context bundle
+     * @internal
+     */
+    _isContext: true;
     /**
      * instance of sxc object
+     * @internal
      */
     sxc: Sxc;
-    /** @internal */
+    /**
+     * information related to the current DNN module, incl.instanceId, etc.
+     * @internal
+     */
     instance: ContextOfInstance;
-    /** @internal */
+    /**
+     * this will be about the current app, settings of the app, app - paths, etc.
+     * @internal
+     */
     app: ContextOfApp;
-    /** @internal */
+    /**
+     * ensure that the UI will load the correct assets to enable editing
+     * @internal
+     */
     ui: ContextOfUi;
-    /** @internal */
+    /**
+     * this will be information related to the current page
+     * @internal
+     */
     page: ContextOfPage;
-    /** @internal */
+    /**
+     * this will be everything about the current system, like system / api -paths etc.
+     * @internal
+     */
     system: ContextOfSystem;
     /** @internal */
-    tenant: ContextOfTenant;
-    /** @internal */
+    /**
+     * things about the user
+     * @internal
+     */
     user: ContextOfUser;
-    _isContext: boolean;
-    /** @internal */
-    constructor(editCtx: AttrJsonEditContext, sxc: Sxc);
-    /** @internal */
-    static is(thing: unknown): thing is ContextBundleInstance;
 }
 
 /**
  * @public
  */
-declare class ContextBundleToolbar extends ContextBundleContent {
+declare interface ContextBundleToolbar extends ContextBundleContent {
     /** @internal */
-    toolbar: Toolbar;
-    /** @internal */
-    constructor(editCtx: AttrJsonEditContext, sxc: Sxc);
-    /** @internal */
-    forButton(button: Button): ContextComplete;
+    toolbar?: Toolbar;
 }
 
 /**
  * @public
  */
-declare class ContextComplete extends ContextBundleToolbar {
+declare interface ContextComplete extends ContextBundleToolbar {
     /** @internal */
-    private _isCtxComplete;
+    _isCtxComplete: true;
     /** @internal */
-    button?: Button;
+    button?: ButtonConfiguration;
     /** @internal */
     commandWorkflow?: ToolbarWorkflowManager;
+}
+
+/**
+ * Complete context with a button (explicitly)
+ * @internal
+ */
+declare interface ContextCompleteWithButton extends ContextComplete {
     /** @internal */
-    constructor(editCtx: AttrJsonEditContext, sxc?: Sxc);
+    button: ButtonConfiguration;
+}
+
+/**
+ * @internal
+ */
+declare interface ContextErrorJsonAndObj {
+    type: string;
+    problems?: ContextProblems[];
+}
+
+declare class ContextHelpers {
+    #private;
+    /**
+     * @internal
+     */
+    static isComplete(thing: unknown): thing is ContextComplete;
+    /** @internal
+     * must be implemented as static, because the final object is actually just an interface and created from values.
+     */
+    static getRule(ctx: ContextComplete): BuildRule | null;
     /**
      * Primary API to get the context (context is cached)
      * @internal
      */
-    static findContext(tagOrSxc: Sxc | HTMLElement | number, cbid?: number): ContextComplete;
-    /**
-     * Create copy of context, so it can be modified before use
-     * @internal
-     */
-    static contextCopy(htmlElementOrId: HTMLElement | number, cbid?: number): ContextComplete;
-    /**
-     * Create new context
-     * @param sxc
-     * @param htmlElement
-     * @internal
-     */
-    static getContextInstance(sxc: Sxc, htmlElement?: HTMLElement): ContextComplete;
-    /**
-     * @internal
-     */
-    static is(thing: unknown): thing is ContextComplete;
+    static expandContext(tagOrSxc: Sxc | HTMLElement | number, cbid?: number): ContextComplete;
 }
 
 /**
@@ -1383,10 +1491,17 @@ export declare class ContextIdentifier {
      */
     moduleId?: number;
     /**
-     * Exclude pageId and moduleId headers in web requests
+     * Exclude pageId and moduleId headers in web requests.
+     * Internal - only used in edit-ui formulas. Any other use must be documented here.
      * @internal
      */
-    _ignoreHeaders?: boolean;
+    _noContextInHttpHeaders?: boolean;
+    /**
+     * Auto add the appid= and zoneid= to the url if not yet set
+     * Internal - only used in edit-ui formulas. Any other use must be documented here.
+     * @internal
+     */
+    _autoAppIdsInUrl?: boolean;
     /**
      * Marks the context as complete, so it won't merge in anything else
      * WIP #CustomContext ATM for the updated edit-ui
@@ -1424,7 +1539,7 @@ export declare class ContextIdentifier {
  * this will be about the current app, settings of the app, app - paths, etc.
  * @internal
  */
-declare class ContextOfApp {
+declare interface ContextOfApp extends ContentAppUnifiedInCtxAndAttr {
     /**
      * IsContent is used for 2 things
      * 1. Determine if certain buttons should be enabled in the toolbar
@@ -1432,9 +1547,9 @@ declare class ContextOfApp {
      * Should default to true, because that's the more basic/restricted mode
      */
     isContent: boolean;
-    settingsId: number;
-    resourcesId: number;
-    appPath: string;
+    settingsId: number | null;
+    resourcesId: number | null;
+    appPath?: string;
     hasContent: boolean;
     supportsAjax: boolean;
     zoneId: number;
@@ -1442,102 +1557,92 @@ declare class ContextOfApp {
     currentLanguage: string;
     primaryLanguage: string;
     allLanguages: string[] | null;
-    constructor(editCtx: AttrJsonEditContext, sxc: Sxc);
 }
 
 /**
  * information related to the current contentBlock, incl
  * @internal
  */
-declare class ContextOfContentBlock {
+declare interface ContextOfContentBlock extends ContentBlockUnifiedInCtxAndAttr {
     isCreated: boolean;
     isList: boolean;
-    queryId: number;
+    queryId: number | null;
+    /** new v17.07 for layout-info only ATM */
+    queryName: string;
+    /** new v17.07 for layout-info only ATM */
+    queryInfo: string;
     templateId: number;
     contentTypeId: string;
     contentGroupId: string;
     templatePath?: string;
-    TemplateIsShared: boolean;
     edition?: string;
-    constructor(editCtx: AttrJsonEditContext);
+    /**
+     * new 17.08, CSV of editions
+     */
+    editions?: string;
 }
 
 /**
  * information related to the current DNN module, incl.instanceId,
  * @internal
  */
-declare class ContextOfInstance {
+declare interface ContextOfInstance {
     id: number;
     isEditable: boolean;
     allowPublish: boolean;
     sxcVersion: string;
     parameters: AttrJsonEntity[] | null;
     sxcRootUrl: string;
-    constructor(editCtx: AttrJsonEditContext, sxc: Sxc);
-}
-
-/**
- * information about the current item
- * ATM empty, not sure if it serves a purpose...
- * @internal
- */
-declare class ContextOfItem {
-    constructor(editCtx: AttrJsonEditContext);
 }
 
 /**
  * this will be information related to the current page
  * @internal
  */
-declare class ContextOfPage {
+declare interface ContextOfPage {
     id: number;
-    constructor(editCtx: AttrJsonEditContext, sxc: Sxc);
 }
 
 /**
  * this will be everything about the current system, like system / api -paths etc.
  * @internal
  */
-declare class ContextOfSystem {
+declare interface ContextOfSystem {
     error: string;
-    constructor(editCtx: AttrJsonEditContext);
-}
-
-/**
- * this will be something about the current tenant(the dnn portal)
- * @internal
- */
-declare class ContextOfTenant {
-    constructor(editCtx: AttrJsonEditContext);
+    problems?: ContextProblems[];
 }
 
 /**
  * ensure that the UI will load the correct assets to enable editing
  * @internal
  */
-declare class ContextOfUi {
+declare interface ContextOfUi {
     autoToolbar?: boolean;
-    form: string;
-    constructor(editCtx: AttrJsonEditContext);
 }
 
 /**
- * things about the user
- * ~~note that the properties are also used in url-params and ajax calls, so don't rename~~
- * 2022-02-23 2dm - renamed to upper case now, assume it shouldn't have a side effect because
- * it shouldn't be used in ajax calls, since the dialogs get the settings from the backend
  * @internal
  */
-declare class ContextOfUser extends AttrJsonUser {
-    constructor(editCtx?: AttrJsonEditContext);
-    static fromContext(context: ContextComplete): ContextOfUser;
+declare interface ContextOfUser extends AttrJsonUser {
+}
+
+/**
+ * Context problems - same type in Json and in object
+ * @internal
+ */
+declare interface ContextProblems {
+    severity: /*'none' | */ 'info' | 'warning' | 'error';
+    scope: 'view' | 'app';
+    code: string;
+    message: string;
+    link: string;
 }
 
 /**
  * The fallback path to the UI
  * @internal
  */
-export declare const DnnUiRoot = "/desktopmodules/tosic_sexycontent/";
+export declare const DnnUiRoot = "/desktopmodules/ToSic.Sxc/";
 
 /**
  * This loads environment information from the meta-header tag.
@@ -1547,7 +1652,6 @@ export declare const DnnUiRoot = "/desktopmodules/tosic_sexycontent/";
 export declare class EnvironmentMetaLoader extends HasLog {
     env: SxcGlobalEnvironment;
     retries: number;
-    log: Log;
     private dynamicPageHelper;
     constructor(env: SxcGlobalEnvironment);
     loadMetaFromHeader(forceFallback?: boolean): void;
@@ -1592,7 +1696,41 @@ export declare interface EnvironmentSpecs {
      * @internal
      */
     dialogQuery?: string;
+    /**
+     * The public key for secure endpoints
+     * added in v18.05
+     * @internal
+     */
+    publicKey?: string;
 }
+
+/**
+ * Options for fetch requests.
+ * Typically to customize encryption behavior (new v18.05)
+ */
+declare interface FetchOptions {
+    method?: string;
+    /**
+     * Encrypt the request.
+     * As of v18.05 it will only cover the body, but in future
+     * it could also cover url parameters and maybe headers.
+     */
+    encrypt?: boolean | 'auto' | 'force';
+    /**
+     * Encrypt the body of the request.
+     */
+    encryptBody?: boolean | 'auto' | 'force';
+    /**
+     * Note: make this an undocumented feature.
+     * Naming is not final, but we won't do anything ATM.
+     * Developer should use error handling
+     * @internal
+     */
+    encryptShowErrorToUser?: boolean;
+}
+
+/** @internal */
+export declare function flattenSlashes(original: string): string;
 
 /**
  * Any object that has an own log object
@@ -1601,8 +1739,6 @@ export declare interface EnvironmentSpecs {
  * @public
  */
 export declare abstract class HasLog {
-    /** @internal */
-    private parentLog?;
     /**
      * The logger for this object
      * @internal usually not relevant and could make docs confusing
@@ -1616,9 +1752,7 @@ export declare abstract class HasLog {
      * @param initialMessage optional start-message to log
      * @internal
      */
-    constructor(logName: string, 
-    /** @internal */
-    parentLog?: Log, initialMessage?: string);
+    constructor(logName: string, parentLog?: Log, initialMessage?: string);
     /** @internal */
     initLog: (name: string, parentLog?: Log, initialMessage?: string) => void;
     /** @internal */
@@ -1632,6 +1766,8 @@ export declare const HeaderNames: {
     TabId: string;
     PageId: string;
 };
+
+export declare const iconPrefix = "icon-sxc-";
 
 /**
  * @internal
@@ -1657,11 +1793,11 @@ declare class InPageButtonJson {
     disabled?: boolean;
     /**
      * partOfPage (new in 2sxc 9.5)
-     * determines if resulting changes should effect the Evoq/DNN Page Publishing
-     * note that it only effects the page-lifecyle, if the resulting dialogs and APIs respect this setting
+     * determines if resulting changes should effect the DNN Page Publishing
+     * note that it only effects the page-lifecycle, if the resulting dialogs and APIs respect this setting
      */
     partOfPage?: boolean;
-    /** if this is just something visual; otherwise a webservice will ensure that a content-group exists (for editing etc.) */
+    /** if this is just something visual; otherwise a web service will ensure that a content-group exists (for editing etc.) */
     uiActionOnly?: boolean;
     /** the code executed on click, if it's not the default action */
     code?<T>(settings: CommandParams): Promise<void | T>;
@@ -1670,9 +1806,9 @@ declare class InPageButtonJson {
     inlineWindow?: boolean;
     fullScreen?: boolean;
     _expanded?: boolean;
-    static is(thing: TypeTbD): thing is InPageButtonJson;
+    static is(thing: unknown): thing is InPageButtonJson;
     static isArray(thing: unknown[]): thing is InPageButtonJson[];
-    static toButton(oldFormat: InPageButtonJson): Partial<Button>;
+    static toButton(oldFormat: InPageButtonJson): Partial<ButtonDefinition>;
 }
 
 /**
@@ -1699,18 +1835,6 @@ declare class InPageCommandJson {
     static hasModify(thing: unknown): thing is InPageCommandJson;
     /** Important for object merging - because otherwise action will be preserved */
     static noAction(thing: InPageCommandJson): InPageCommandJson;
-}
-
-/**
- * @internal
- */
-declare interface InPageCommandJsonWithTooMuchInfo extends InPageCommandJson {
-    entity?: {
-        EntityId: number;
-        _2sxcEditInformation: {
-            sortOrder?: number;
-        };
-    };
 }
 
 /**
@@ -1746,6 +1870,13 @@ declare class InsightsSingleton extends HasLog {
 }
 
 /**
+ * @internal
+ */
+declare interface InstanceContext {
+    jsApi: EnvironmentSpecs;
+}
+
+/**
  * Simple identifier, which is id/type-name
  * @internal
  * WAIT with publishing, we'll probably change the duplicate-entity to a bool instead of an id
@@ -1759,35 +1890,15 @@ export declare interface ItemIdentifierCopy extends ItemIdentifierShared {
  * Complex identifier using a group
  * @internal
  */
-export declare interface ItemIdentifierGroup extends ItemIdentifierShared {
-    Group: ItemIdentifierParent;
-}
-
-/**
- * Experimental in 10.27
- * @internal
- */
-export declare interface ItemIdentifierInField extends ItemIdentifierSimple {
-    Parent?: string;
-    Field?: string;
-    Add?: boolean;
-}
-
-/**
- * Group identifier
- * @internal
- * TODO: KEEP INTERNAL, PROBABLY RENAME "Part" to "Field" or something in the whole chain
- * TODO: MAY BE replaced completely with ItemIdentifierInField, as it has the same purpose
- */
-export declare interface ItemIdentifierParent {
-    /** The parent entity GUID - in these cases usually the ContentBlock */
-    Guid: string;
-    /** The part of the parent it's in, kind of the "Field" - should be renamed to Field ASAP */
-    Part?: string;
-    /** The index position within that field/part */
-    Index: number;
+export declare interface ItemIdentifierInList extends ItemIdentifierShared {
     /** Whether to add the item - alternative is just to leave it, if it already existed */
     Add: boolean;
+    /** The index position within that field/part */
+    Index: number;
+    /** The parent/group we're referencing */
+    Parent: string;
+    /** The field which contains the item we're referencing */
+    Field: string;
 }
 
 /**
@@ -1797,17 +1908,31 @@ export declare interface ItemIdentifierParent {
 declare interface ItemIdentifierShared {
     EntityId?: number;
     Prefill?: Record<string, TypeValue>;
+    /** New 16.01 - fields to show/hide in the edit-dialog */
+    UiFields?: string;
+    /** New 16.02 - parameters should be independent from prefill */
+    Parameters?: Record<string, TypeValue>;
 }
 
 /**
  * Simple identifier, which is id/type-name
  * @internal
  */
-export declare interface ItemIdentifierSimple {
+export declare interface ItemIdentifierSimple extends Omit<ItemIdentifierShared, "EntityId"> {
     EntityId: number;
     ContentTypeName?: string;
     Metadata?: CommandParamsMetadata;
-    Prefill?: Record<string, TypeValue>;
+}
+
+/**
+ * The parameters for the item-url
+ * @internal
+ */
+export declare interface ItemUrlParameters {
+    prefill?: Record<string, TypeValue>;
+    items?: string;
+    contentTypeName?: string;
+    filters?: string;
 }
 
 /**
@@ -1821,7 +1946,7 @@ declare interface ListWithCursor {
 }
 
 /**
- * A log object which will collect log entries for another ojbect
+ * A log object which will collect log entries for another object
  * @export
  * @interface Log
  * @public
@@ -1838,7 +1963,7 @@ export declare class Log {
     /** @internal */
     startTime: number;
     /**
-     * Maximum amount of entries to add - to prevent memory hoging
+     * Maximum amount of entries to add - to prevent memory hogging
      */
     maxEntries: number;
     /**
@@ -1848,7 +1973,7 @@ export declare class Log {
      * @param string optional initial message to log
      * @internal
      */
-    constructor(name: string, parent?: Log, initialMessage?: string);
+    constructor(name: string, parent?: Log | null, initialMessage?: string);
     /** @internal */
     liveDump: boolean;
     /** @internal */
@@ -1876,7 +2001,7 @@ export declare class Log {
      * this must be called manually
      * @internal
      */
-    linkLog: (parent: Log) => void;
+    linkLog: (parent?: Log | null) => void;
     /**
      * Add a simple message to the log
      * @param message
@@ -1912,7 +2037,7 @@ export declare class Log {
      * @param end
      * @internal
      */
-    dump(one?: LogEntry, separator?: string): void;
+    dump(one?: LogEntry | null, separator?: string): void;
     /** @internal */
     dumpList(start?: number, length?: number): void;
     /** @internal */
@@ -1934,7 +2059,7 @@ export declare class Log {
      * parent logger - important if loggers are chained
      * @internal
      */
-    private parent;
+    private parent?;
     /**
      * scope of this logger - to easily see which ones
      * are about the same topic
@@ -1951,7 +2076,7 @@ export declare class Log {
      */
     private id;
     /** @internal */
-    private idCache;
+    private idCache?;
     /**
      * Unique identifier of this log object, with name and ID
      * @internal
@@ -1968,7 +2093,7 @@ export declare class LogCall {
     constructor(log: Log, name: string, callParams?: string, message?: string, data?: {
         [key: string]: unknown;
     });
-    private lastMessage;
+    private lastMessage?;
     add(message: string, data?: unknown, behavior?: LogEntryOptions): void;
     onlyAddIfNew(message: string, behavior?: LogEntryOptions): void;
     /** Add data - but only if data logging is enabled */
@@ -2205,7 +2330,8 @@ export declare abstract class ModifierBase extends HasLog {
  */
 export declare class ModifierContentBlock extends ModifierBase {
     constructor();
-    getInstanceModifier(tag: HTMLElement): ModifierContentBlockInstance;
+    private getInstanceModifier;
+    /** Delete an inner content-block */
     delete(clip: Selection_2): Promise<void>;
     create(parent: number, field: string, listIndex: number, appOrContent: string, list: HTMLElement, newGuid: string): Promise<void>;
     move(oldClip: Selection_2, newClip: Selection_2): void;
@@ -2216,6 +2342,7 @@ export declare class ModifierContentBlock extends ModifierBase {
     findClipListIndex(clip: Selection_2): number;
     /**
      * find the real index of a block tag as it may not match the DOM index
+     * TODO: @2dm - not really sure what this is, should be documented more clearly
      */
     findListIndex(tag: HTMLElement, fallback: number): number;
     /**
@@ -2223,35 +2350,6 @@ export declare class ModifierContentBlock extends ModifierBase {
      * So the 'this' is not a ContentBlockModifier, but the html-tag which was clicked
      */
     static onCbButtonClick(): void | Promise<void>;
-}
-
-/**
- * contains commands to create/move/delete a content-block in an inner-content
- * @internal
- */
-declare class ModifierContentBlockInstance extends HasLog {
-    private sxcInstance;
-    constructor(parent: ModifierContentBlock, sxcInstance: Sxc);
-    /**
-     * create content block
-     */
-    create(parentId: number, field: string, index: number, app: string, // app name
-    container: HTMLElement, guid: string): Promise<void>;
-    /**
-     * move content block
-     * @param parentId
-     * @param field
-     * @param indexFrom
-     * @param indexTo
-     */
-    move(parent: string, field: string, indexFrom: number, indexTo: number): Promise<void>;
-    /**
-     * delete a content-block inside a list of content-blocks
-     * @param parent
-     * @param field
-     * @param index
-     */
-    delete(parent: string, field: string, index: number): Promise<void>;
 }
 
 /**
@@ -2310,14 +2408,58 @@ export declare class NoJQ {
     static width(element: HTMLElement): number;
     /** https://api.jquery.com/height/ */
     static height(element: HTMLElement): number;
-    /** https://api.jquery.com/outerWidth/ */
-    static outerWidth(element: HTMLElement): number;
     /** https://api.jquery.com/empty/ */
     static empty(element: HTMLElement): void;
     /** https://api.jquery.com/replacewith/ */
     static replaceWith(toBeReplaced: HTMLElement, newElement: HTMLElement, runScripts: boolean): void;
     /** https://api.jquery.com/append/ */
     static append(parent: HTMLElement, newElements: HTMLElement[], runScripts: boolean): void;
+}
+
+/**
+ * @internal
+ */
+declare class Note {
+    constructor(params?: Partial<Note>);
+    /** The note itself, as text. ATM no HTML support. */
+    note?: string;
+    /** The type is mainly for the icon ATM. */
+    type?: TypeNoteMode;
+    links?: NoteLink[];
+    /** background color */
+    background?: string;
+    /**
+     * allowHtml - ATM not used - could change
+     * @internal
+     */
+    asHtml?: boolean;
+    /**
+     * ATM not used - could change
+     * @internal
+     */
+    interactive?: boolean;
+    /**
+     * delay in ms
+     * @internal
+     */
+    delay?: number;
+    /**
+     * linger in ms
+     * @internal
+     */
+    linger?: number;
+    /**
+     * indicates that this is a system note, which is usually a different color
+     * @internal
+     */
+    isSystem?: boolean;
+    static toJson64String(note: Note): string;
+}
+
+declare interface NoteLink {
+    url: string;
+    label?: string;
+    primary?: boolean;
 }
 
 /**
@@ -2333,11 +2475,6 @@ export declare const NumberNotDefinedHuge = 274200000000;
  * @internal
  */
 export declare class Obj {
-    /**
-     * This is the same as Object.assign, but type-safe.
-     * Use it as a replacetment for Object.Assign(this, ... ) in constructors
-     */
-    static TypeSafeAssign<T, K extends keyof T>(...args: T[]): void;
     static DeepClone<T>(original: T, ignoreCircular?: boolean): T;
 }
 
@@ -2348,7 +2485,7 @@ declare enum Operations {
     add = "+",
     addAuto = "\u00B1",
     remove = "-",
-    system = "$",
+    system = "$",// for $params, $settings?
     modify = "%"
 }
 
@@ -2514,6 +2651,9 @@ export declare class QuickEditConfig {
     enable?: boolean | 'auto';
     /**
      * Optional detailed configuration of the buttons.
+     * The buttons configuration on the root.
+     * Will be used for the `modules` and `innerBlocks` if not specified there.
+     * Note that if not specified, will always default to true for all buttons.
      */
     buttons?: QuickEditConfigButtons;
 }
@@ -2557,12 +2697,6 @@ export declare const QuickEditConfigEnableAuto: string;
  */
 export declare class QuickEditConfigRoot extends QuickEditConfig {
     /**
-     * The buttons configuration on the root.
-     * Will be used for the `modules` and `innerBlocks` if not specified there.
-     * Note that if not specified, will always default to true for all buttons.
-     */
-    buttons?: QuickEditConfigButtons;
-    /**
      * Optional configuration for the Inner Content Blocks.
      */
     innerBlocks?: QuickEditConfig;
@@ -2591,7 +2725,7 @@ export declare namespace QuickEditOverlay {
     }
     export function setButtonActivationClasses(buttons: QuickEditConfigButtons, linkTags: HTMLElement[]): void;
     export function btn(action: string, icon: string, i18N: string, invisible?: boolean, unavailable?: boolean, classes?: string): string;
-    const selectedOverlay: Selection;
+    const selectedOverlay: QuickEditOverlay.Selection;
 }
 
 /**
@@ -2611,6 +2745,13 @@ declare class RuleManager extends HasLog {
     constructor(parent: ToolbarConfigLoader);
     /** Load/initialize the rules which were found */
     load(rawList: string[]): BuildRule[];
+    /**
+     * Find out if there are any problems on this block, and add buttons to see them to the toolbar
+     * @param context
+     * @returns
+     */
+    addDeveloperInfos(context: ContextComplete): void;
+    private debugAdded;
     /** Find a single rule matching an ID */
     find(id: string): BuildRule | undefined;
     /** find all rules matching a criteria */
@@ -2642,11 +2783,13 @@ declare class RuleManager extends HasLog {
  * @internal
  */
 declare type RuleParams = Record<string, string> & {
-    /** Speciall prefill-list used for any kind of new-action/operation with prefill */
+    /** Special prefill-list used for any kind of new-action/operation with prefill */
     contentType?: string;
     entityId?: string | number;
     prefill?: Record<string, TypeValue>;
     filters?: Record<string, TypeValue | Array<unknown>>;
+    /** new 16.02 */
+    form?: Record<string, TypeValue | Array<unknown>>;
     /** this is how the metadata-param comes in - as a 'for=someId' - this node will be removed afterwards */
     for?: string;
     /**
@@ -2654,6 +2797,11 @@ declare type RuleParams = Record<string, string> & {
      * @internal
      */
     metadata?: CommandParamsMetadata;
+    /**
+     * link added for info-buttons / wip
+     * @internal
+     */
+    link?: string;
 };
 
 /**
@@ -2703,8 +2851,10 @@ export declare class RunParamsHelpers extends HasLog {
      * and return a full settings object with all defaults from
      * the command definition
      * @param params
+     *
+     * 2025-11-24 2dm - I believe this doesn't do anything useful, and just makes things more complex.
+     * so i'll #DisableExpandParamsWithDefaults and see if anything breaks.
      */
-    expandParamsWithDefaults(params: CommandParams): CommandParams;
     /**
      * Checks if the run params are complete, as would be used in the $2sxc.cms.run
      * @internal
@@ -2738,6 +2888,18 @@ export declare interface RunParamsWithContext extends RunParams {
      * We always need the tag OR the context, but never both
      */
     context?: Sxc | ContextIdentifier;
+    /**
+     * Method caller (for logging)
+     */
+    triggeredBy?: string;
+}
+
+export declare interface RunParamsWithContextClean extends Omit<RunParamsWithContext, 'context'> {
+    /**
+     * The context to run in, basically containing module id, etc.
+     * We always need the tag OR the context, but never both
+     */
+    context?: Sxc;
 }
 
 /**
@@ -2763,7 +2925,7 @@ declare class Selection_2 {
     list: HTMLElement;
     item: HTMLElement;
     index: number;
-    type: 'mod' | 'cb';
+    type: "mod" | "cb";
 }
 export { Selection_2 as Selection }
 
@@ -2773,16 +2935,16 @@ export { Selection_2 as Selection }
  * @internal
  */
 export declare class SharedLogic {
-    static isPartOfBlockList(context: ContextComplete): boolean;
+    static isPartOfBlockList(context: ContextCompleteWithButton): boolean;
     /**
      * This will tell us, if the item is being referenced (like in a list)
      * It's similar to isBlockList, but will return true even if it's
      * a non-list (single item only)
      */
-    static isBlockReference(context: ContextComplete): boolean;
-    static isFieldList(context: ContextComplete): boolean;
-    static isList(context: ContextComplete): boolean;
-    static isReferencedItem(context: ContextComplete): boolean;
+    static isBlockReference(context: ContextCompleteWithButton): boolean;
+    static isFieldList(context: ContextCompleteWithButton): boolean;
+    static isList(context: ContextCompleteWithButton): boolean;
+    static isReferencedItem(context: ContextCompleteWithButton): boolean;
 }
 
 /** @internal */
@@ -2859,6 +3021,27 @@ export declare class Sxc extends HasLog {
      * @internal
      */
     ctx?: ContextIdentifier);
+    /**
+     * New v16.01 - WIP
+     * We have the problem that sometimes the environment is not available on the page or is wrong.
+     * * On a page where a 2sxc-module was just added
+     * * On a module which is in the skin, so technically from a different page
+     *
+     * Based on this we are trying to include all relevant information from the root-env, but override it with the local env
+     * @param root
+     * @returns
+     */
+    private loadEnv;
+    /**
+     * Env helper for API calls and such
+     * @internal
+     */
+    env: SxcGlobalEnvironment;
+    /**
+     * Http helper for API calls and such
+     * @internal
+     */
+    http: SxcGlobalHttp;
     /**
      * TypeGuard for TypeScript to verify this is a SxcInstance
      * @param thing
@@ -2960,8 +3143,9 @@ export declare class SxcData<T = unknown> extends SxcDataServiceBase {
     constructor(sxc: Sxc, name: string);
     /**
      * Get all items of this type.
+     * @param params optional parameters - typically for OData - new in v21.06
      */
-    getAll(): Promise<T[]>;
+    getAll(params?: string | Record<string, unknown>): Promise<T[]>;
     /**
      * Get the specific item with the ID. It will return null if not found
      */
@@ -3020,6 +3204,8 @@ export declare abstract class SxcDataServiceBase extends SxcPart {
      */
     constructor(sxc: Sxc, name: string, nameInError: string);
 }
+
+export declare const SxcDevBuild: boolean;
 
 /**
  * This is the root global `window.$2sxc` function / object.
@@ -3144,6 +3330,7 @@ export declare interface SxcGlobal {
  * @public
  */
 export declare class SxcGlobalCms extends HasLog {
+    #private;
     /**
      * @internal
      */
@@ -3197,12 +3384,14 @@ export declare class SxcGlobalCms extends HasLog {
      * @returns A promise which triggers when the command has completed.
      * @internal
      */
-    runInternal<T>(context: ContextBundleInstance | HTMLElement | RunParamsWithContext, nameOrSettings?: string | CommandParams, eventOrSettings?: CommandParams | MouseEvent, event?: MouseEvent): Promise<void | T>;
+    runInternal<T>(context: ContextBundleInstance | HTMLElement | RunParamsWithContext, nameOrSettings?: string | CommandParams, eventOrSettings?: CommandParams | MouseEvent, event?: MouseEvent, triggeredBy?: string): Promise<void | T>;
     /**
-     * reset/clear the log if alwaysResetLog is true
+     * Run a command within a specific context.
+     * @param runParamsWithCtx The context - either an HTML tag which determines a module/instance, or an Sxc instance
+     * @returns A promise which triggers when the command has completed.
      * @internal
      */
-    private do;
+    runClean<T>(runParamsWithCtx: RunParamsWithContextClean): Promise<void | T>;
 }
 
 /** @internal */
@@ -3282,6 +3471,13 @@ export declare class SxcGlobalEnvironment extends HasLog {
      * @internal
      */
     dialogQuery(): string;
+    /**
+     * The public key for secure endpoints
+     * ATM very internal
+     * Don't check if it was initialized, because it's valid if it doesn't exist
+     * @internal
+     */
+    publicKey(): string;
     /** @internal */
     private ensureReadyOrThrow;
 }
@@ -3387,7 +3583,7 @@ export declare interface SxcGlobalWithCms {
     /**
      * @internal
      */
-    context: typeof ContextComplete.findContext;
+    context: typeof ContextHelpers.expandContext;
     /**
      * Content Management features on the $2sxc
      */
@@ -3486,7 +3682,7 @@ export declare class SxcQuery extends SxcDataServiceBase {
     /**
      * Get all or one data entity from the backend
      * @param id optional id as number or string - if not provided, will get all
-     * @param params optional parameters - ATM not usefuly but we plan to support more filters etc.
+     * @param params optional parameters - ATM not useful but we plan to support more filters etc.
      * @returns an array with 1 or n entities in the simple JSON format
      * @internal
      */
@@ -3497,25 +3693,10 @@ export declare class SxcQuery extends SxcDataServiceBase {
  * @internal
  */
 export declare class SxcTools {
-    static get(module: number | HTMLElement, cbid?: number): Sxc;
     /**
      * get edit-context info of html element or sxc-object
      */
     static getEditContext(sxc: Sxc, htmlElement?: HTMLElement): AttrJsonEditContext;
-    /**
-     * get the edit-context object (a json object) of the current tag/sxc-instance
-     * @returns edit-context object
-     */
-    static getEditContextOfTag(htmlTag: HTMLElement | undefined): AttrJsonEditContext;
-    /**
-     * get nearest html tag of the sxc instance with data-edit-context
-     */
-    static getContainerTag(htmlTag: HTMLElement): HTMLElement;
-    /**
-     * get a html tag of the sxc instance
-     * @returns resulting html
-     */
-    static getTag(sxci: Sxc): HTMLElement;
 }
 
 /** @internal */
@@ -3529,10 +3710,6 @@ export declare const SxcVersion: string;
  */
 export declare class SxcWebApi implements ZzzSxcWebApiDeprecated {
     private readonly sxc;
-    /**
-     * @internal
-     */
-    readonly env: SxcGlobalEnvironment;
     /**
      *
      * @param sxc
@@ -3568,7 +3745,7 @@ export declare class SxcWebApi implements ZzzSxcWebApiDeprecated {
      * Will retrieve data from the backend using a standard fetch.
      * @param url a full url or short-hand like `controller/method?params` `app/auto/api/controller/method?params`. Note that params would also be specified on the url.
      * @param data optional POST data
-     * @param method optional method, defaults to `GET` unless it has data, in which case it defaults to `POST`
+     * @param method optional method or fetch options, defaults to `GET` unless it has data, in which case it defaults to `POST`
      * @returns a Promise containing a Response object, just like a normal fetch would.
      * example: webApi.fetchRaw('Rss/Feed');
      * example: webApi.fetchRaw(webApi.url('Rss/Feed', { id: 47 })); // url params
@@ -3577,17 +3754,18 @@ export declare class SxcWebApi implements ZzzSxcWebApiDeprecated {
      * maybe: webApi.fetchRaw({url: 'Rss/Feed', params: { id: 47 }})
      * maybe: webApi.fetchRaw({url: ..., params: { ...}, body: { ...}, method: 'GET' })
      */
-    fetchRaw(url: string, data?: string | Record<string, any>, method?: string): Promise<Response>;
+    fetchRaw(url: string, data?: string | Record<string, unknown>, method?: string | FetchOptions): Promise<Response>;
+    private prepareOptions;
     /** @internal */
-    fetch(url: string, data?: string | Record<string, any>, method?: string): Promise<Response>;
+    fetch(url: string, data?: string | Record<string, any>, method?: string | FetchOptions): Promise<Response>;
     /**
      * Will retrieve data from the backend using a standard fetch and give you an object.
      * @param url a full url or short-hand like `controller/method?params` `app/auto/api/controller/method?params`. Note that params would also be specified on the url.
      * @param data optional POST data
-     * @param method optional method, defaults to `GET` unless it has data, in which case it defaults to `POST`
+     * @param method optional method or fetch options,, defaults to `GET` unless it has data, in which case it defaults to `POST`
      * @returns a Promise containing any object.
      */
-    fetchJson<T = any>(url: string, data?: string | Record<string, any>, method?: string): Promise<T>;
+    fetchJson<T = any>(url: string, data?: string | Record<string, any>, method?: string | FetchOptions): Promise<T>;
     /**
      * All the headers which are needed in an ajax call for this to work reliably.
      * Use this if you need to get a list of headers in another system
@@ -3625,6 +3803,7 @@ declare class TemplateEditor extends HasLog {
     addButton(template: ToolbarTemplate, groupName: string, id: string, name: string, pos: number): void;
     private findInsertPosition;
     private correctPosStartEnd;
+    add(template: ToolbarTemplate, rules: BuildRule[]): void;
     addGroup(template: ToolbarTemplate, groupName: string, pos: number): ToolbarTemplateGroup;
     removeGroup(template: ToolbarTemplate, groupName: string): void;
     private ensureGroups;
@@ -3678,26 +3857,26 @@ declare const TLB_SHOW_ALWAYS = "always";
 /** @internal */
 declare const TLB_SHOW_HOVER = "hover";
 
+export declare const tlbI18nPrefix = "Toolbar.";
+
 /**
  * Runtime configuration of the toolbar.
  * contains a toolbar config + settings + mny groups
  * @internal
  */
-declare class Toolbar {
+declare interface Toolbar {
     /** Toolbar ID to better identify which toolbar we're looking at - has special long name to never confuse with other IDs */
     identifier: string;
     /** The groups of buttons in this toolbar */
     groups: ButtonGroup[];
-    /** Setttings like floating of toolbar, etc. */
-    settings: ToolbarSettings;
+    /** Settings like floating of toolbar, etc. */
+    settings?: ToolbarSettings;
     /** Params for the commands, like EntityId, Content - Type - Name */
-    params: Record<string, TypeValue>;
+    params?: Record<string, TypeValue>;
     /** show more debug info */
     debug?: boolean;
     /**  the button defaults like icon, etc. */
-    defaults: Record<string, TypeValue>;
-    constructor();
-    static createIdentifier(): string;
+    defaults?: Record<string, TypeValue>;
 }
 
 /**
@@ -3710,7 +3889,9 @@ declare interface ToolbarButtonSettings {
     show?: boolean;
     code?: string;
     title?: string;
-    [key: string]: TypeValue;
+    /** WIP 15.04 */
+    note?: Note;
+    [key: string]: TypeValue | Note;
 }
 
 /**
@@ -3721,7 +3902,6 @@ declare class ToolbarConfigLoader extends HasLog {
     toolbarV10: ToolbarConfigLoaderV10;
     groups: ButtonGroupConfigLoader;
     button: ButtonConfigLoader;
-    command: CommandConfigLoader;
     templates: ToolbarTemplateManager;
     templateEditor: TemplateEditor;
     logs: Array<{
@@ -3739,25 +3919,11 @@ declare class ToolbarConfigLoader extends HasLog {
  * @internal
  */
 declare class ToolbarConfigLoaderV09 extends HasLog {
-    private toolbar;
-    constructor(toolbar: ToolbarConfigLoader);
+    #private;
+    private configLoader;
+    private rules;
+    constructor(configLoader: ToolbarConfigLoader);
     loadV9(context: ContextComplete, config: ToolbarInitConfig): Toolbar;
-    /**
-     * If the raw data has specs for what buttons, use that
-     * Otherwise load the button list from the template
-     */
-    getTemplateIfNoButtonsSpecified(raw: InPageToolbarConfigVariations): InPageToolbarConfigVariations;
-    /**
-     * take various common input format and convert it to a full toolbar-structure definition
-     * can handle the following input formats (the param unstructuredConfig):
-     * complete tree (detected by "groups): \{ groups: [ \{\}, \{\}], name: ..., defaults: \{...\} \}
-     * group of buttons (detected by "buttons): \{ buttons: "..." | [], name: ..., ... \}
-     * list of buttons (detected by IsArray with action): [ \{ action: "..." | []\}, \{ action: ""|[]\} ]
-     * button (detected by "command"): \{ command: ""|[], icon: "..", ... \}
-     * just a command (detected by "action"): \{ entityId: 17, action: "edit" \}
-     * array of commands: [\{entityId: 17, action: "edit"\}, \{contentType: "blog", action: "new"\}]
-     */
-    buildFullDefinition(toolbarContext: ContextComplete, unstructuredConfig: InPageToolbarConfigVariations, toolbarSettings: ToolbarSettings): Toolbar;
     /**
      * this will take an input which could already be a tree, but it could also be a
      * button-definition, or just a string, and make sure that afterwards it's a tree with groups
@@ -3768,16 +3934,15 @@ declare class ToolbarConfigLoaderV09 extends HasLog {
      * - params, officially formatted
      */
     private ensureDefinitionTree;
-    private findGroups;
 }
 
 /**
  * @internal
  */
 declare class ToolbarConfigLoaderV10 extends HasLog {
-    private toolbar;
+    private configLoader;
     rules: RuleManager;
-    constructor(toolbar: ToolbarConfigLoader);
+    constructor(configLoader: ToolbarConfigLoader);
     loadV10(context: ContextComplete, config: ToolbarInitConfig, raw: string[]): Toolbar;
 }
 
@@ -3821,10 +3986,21 @@ declare class ToolbarManager extends HasLog {
 declare class ToolbarSettings {
     /** Automatically add the '...' more button to the toolbar */
     autoAddMore: TypeAutoAddMore;
-    /** Hover placement of the toolbar */
-    hover: TypeHover;
+    /**
+     * Hover placement of the toolbar
+     * Note: originally it was just left | right | default etc.
+     * In v15 we augmented this to allow right-middle, left-middle etc. for image toolbars
+     */
+    hover: TypeHoverH;
     /** Show behavior (always, hover, ...) */
     show: TypeShow;
+    /**
+     * Experimental - try to delay the show in certain cases where the toolbar is not typical
+     * Introduced in 16.04, not officially released
+     * Reason is that certain image toolbars should be felt to be different, as they affect non-private images
+     * @internal
+     */
+    delayShow: number;
     /** Follow behavior - if the toolbar should scroll with the page or remain where it was hovered */
     follow: TypeFollow;
     /**
@@ -3862,6 +4038,7 @@ declare class ToolbarSettings {
     static getDefaults: () => ToolbarSettings;
     /** Setup for situations where an empty toolbar is needed, without any data or configuration */
     static getForEmpty: () => ToolbarSettings;
+    static getForEmptyAsRule: () => string;
     /**
      * figure out best code to determine where to put it.
      * Important to neutralize historically different param names,
@@ -3869,7 +4046,7 @@ declare class ToolbarSettings {
      * @param settings
      * @returns
      */
-    static bestAddMorePos(settings: ToolbarSettings): "end" | "start" | "never";
+    static bestAddMorePos(settings: ToolbarSettings): "never" | "end" | "start";
 }
 
 /**
@@ -3934,15 +4111,15 @@ declare class ToolbarTemplateManager extends HasLog {
  */
 declare interface ToolbarWip {
     /** The groups of buttons in this toolbar */
-    groups: ButtonGroupsWip;
+    groups: ButtonGroupWip[];
     /** Settings like floating of toolbar, etc. */
-    settings: ToolbarSettings;
+    settings?: ToolbarSettings;
     /** Params for the commands, like EntityId, Content - Type - Name */
-    params: Record<string, TypeValue> | CommandParams;
+    params?: Record<string, TypeValue> | CommandParams;
     /** show more debug info */
     debug?: boolean;
     /**  the button defaults like icon, etc. */
-    defaults: Record<string, TypeValue>;
+    defaults?: Record<string, TypeValue>;
 }
 
 /**
@@ -4019,28 +4196,17 @@ declare type TypeAutoAddMore = null | typeof TLB_MORE_AUTO | typeof TLB_MORE_END
 declare type TypeFollow = 'default' | 'none' | typeof TLB_FOLLOW_INITIAL | typeof TLB_FOLLOW_ALWAYS | typeof TLB_FOLLOW_SCROLL;
 
 /** @internal */
-declare type TypeHover = typeof TLB_HOV_LEFT | typeof TLB_HOV_RIGHT | 'none';
+declare type TypeHoverH = typeof TLB_HOV_LEFT | typeof TLB_HOV_RIGHT | 'none';
+
+/**
+ * @internal
+ */
+declare type TypeNoteMode = 'info' | 'warning' | 'error' | 'help' | 'link' | undefined;
 
 /** @internal */
 declare type TypeShow = typeof TLB_SHOW_ALWAYS | typeof TLB_SHOW_HOVER;
 
-/**
- * TypeTbd is a replacement for the any-type, in places where we explicitly want to check the type
- * @internal
- */
-declare type TypeTbD = any;
-
 export declare type TypeValue = boolean | string | number | Date;
-
-/** @internal */
-export declare function urlClean(original: string): string;
-
-declare interface UrlItemParams {
-    prefill?: Record<string, TypeValue>;
-    items?: string;
-    contentTypeName?: string;
-    filters?: string;
-}
 
 /**
  * Helper object to read url params.
@@ -4069,6 +4235,7 @@ export declare class UrlParams {
      * Convert an object to be used in a URL.
      * Uses a custom, brief syntax which can change at any time.
      * So to unwrap, always use the toObj method.
+     * IMPORTANT: This is an old experiment from ca. 2020 and was never used in production.
      * @param obj
      * @returns
      * @internal
@@ -4076,6 +4243,7 @@ export declare class UrlParams {
     toUrl(obj: any): string;
     /**
      * Convert a url which was created by toUrl back to an object.
+     * IMPORTANT: This is an old experiment from ca. 2020 and was never used in production.
      * @param url
      * @returns
      * @internal

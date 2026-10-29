@@ -4,6 +4,8 @@
 
 /* Excluded from this release type: AntiForgeryTokenHeaderNameDnn */
 
+/* Excluded from this release type: AnyIdentifier */
+
 /* Excluded from this release type: ApiExtensionPlaceholder */
 
 /* Excluded from this release type: ApiUrlRoots */
@@ -12,7 +14,7 @@
 
 /* Excluded from this release type: AppApiMarker */
 
-/* Excluded from this release type: AssetsLoader */
+/* Excluded from this release type: Attributes */
 
 /* Excluded from this release type: AttrJsonContentGroup */
 
@@ -21,8 +23,6 @@
 /* Excluded from this release type: AttrJsonEntity */
 
 /* Excluded from this release type: AttrJsonEnvironment */
-
-/* Excluded from this release type: AttrJsonError */
 
 /* Excluded from this release type: AttrJsonLanguage */
 
@@ -36,19 +36,71 @@
 
 /* Excluded from this release type: buildSxcRoot */
 
-/* Excluded from this release type: Button */
-
-/* Excluded from this release type: ButtonCommand */
-
 /* Excluded from this release type: ButtonConfigLoader */
 
-declare type ButtonGenOrProp<T> = ButtonPropGen<T> | T;
+/* Excluded from this release type: ButtonConfiguration */
+
+/**
+ * A button definition contains all the possible properties which can be defined
+ * for a button. These are then used to create command structures for potential buttons.
+ * @public
+ */
+declare class ButtonDefinition {
+    /** classes which will be applied to this button */
+    classes: string;
+    /** Configure the link generator before it creates the link */
+    /** Replacement for configureLinkGenerator - v20.09 */
+    customItems?: (ctx: ContextCompleteWithButton, items: AnyIdentifier[]) => AnyIdentifier[];
+    tweakGeneratedUrlParameters?: (context: ContextCompleteWithButton, itemUrlParameters: ItemUrlParameters) => ItemUrlParameters;
+    /** The dialog name */
+    dialog?: ButtonPropGenOrValue<string>;
+    /** Check if full-screen, always a function */
+    fullScreen?: ButtonPropGen<boolean>;
+    /** Determines if the button should be disabled */
+    disabled?: ButtonPropGenOrValue<boolean>;
+    /** Dynamically determine classes - must always be a function */
+    dynamicClasses?: ButtonPropGen<string>;
+    /** The icon to show in the button */
+    icon?: ButtonPropGenOrValue<string>;
+    /** Determine if it should use the inline window, always a function */
+    inlineWindow?: ButtonPropGen<boolean>;
+    /** Check if we should open a new window, always an FN */
+    newWindow?: ButtonPropGen<boolean>;
+    /** Method which determines if it should be shown or not */
+    showCondition?: ButtonPropGen<boolean>;
+    /** The title of this button which will usually be i18n keys */
+    title?: ButtonPropGen<string>;
+    /** Determines if this button runs in the page - affecting publishing */
+    partOfPage?: ButtonPropGen<boolean>;
+    /** The code to run for this button - if empty, will default to open a dialog */
+    code?: CommandCode;
+    /**
+     * The color which could be supplied per button - new for `info`
+     * New v15.04
+     */
+    color?: ButtonPropGen<string | undefined>;
+    /**
+     * The tippy which could be supplied per button - new for `info`
+     * v15.04
+     */
+    tippy?: (context: ContextCompleteWithButton, tag: HTMLElement) => void;
+    /**
+     * Additional! parameters which are used to RUN the command.
+     * So it's not used when preparing a toolbar button, but only when executing
+     *
+     * Important: used to be called 'addParamsToLink' up to v18.03
+     */
+    parameters?: ButtonPropGen<CommandParams>;
+    /** this is just a UI interaction, won't create data so won't need pre-flight */
+    uiActionOnly?: ButtonPropGen<boolean>;
+    /* Excluded from this release type: notes */
+    /* Excluded from this release type: noItems */
+    /* Excluded from this release type: preCleanSharedParams */
+}
 
 /* Excluded from this release type: ButtonGroup */
 
 /* Excluded from this release type: ButtonGroupConfigLoader */
-
-/* Excluded from this release type: ButtonGroupsWip */
 
 /* Excluded from this release type: ButtonGroupWip */
 
@@ -56,7 +108,15 @@ declare type ButtonGenOrProp<T> = ButtonPropGen<T> | T;
  * This is the most common call signature on most ButtonConfig properties
  * @public
  */
-declare type ButtonPropGen<T> = (context: ContextComplete) => T;
+declare type ButtonPropGen<T> = (context: ContextCompleteWithButton) => T;
+
+/**
+ * This is the combined either-function-or-value signature.
+ * @public
+ */
+declare type ButtonPropGenOrValue<T> = ButtonPropGen<T> | T;
+
+/* Excluded from this release type: C */
 
 /**
  * Structure for constants in the selectors, to guarantee we got everything
@@ -74,8 +134,6 @@ declare interface CbOrMod {
 /* Excluded from this release type: CmdParHlp */
 
 /* Excluded from this release type: CmsEngine */
-
-/* Excluded from this release type: Command */
 
 /**
  * Parameters used for the command `add-existing`.
@@ -103,7 +161,11 @@ export declare interface CommandAddExistingParams extends CommandAddParams {
 export declare interface CommandAddParams extends CommandContentTypeParams, Pick<CommandParamsEntityInList, 'index'>, Partial<Omit<CommandParamsEntityInList, 'index'>>, Partial<Omit<CommandParamsEntityInContentBlock, 'index'>> {
 }
 
-/* Excluded from this release type: CommandCode */
+/**
+ * Signature of a command code; returning a promise.
+ * @public
+ */
+export declare type CommandCode = <T>(context: ContextCompleteWithButton, event: MouseEvent, triggeredBy?: string) => Promise<void | T>;
 
 /**
  * Parameters used for the command `code` on toolbars (new in v14.4).
@@ -120,8 +182,6 @@ export declare interface CommandCodeParams {
      */
     call: string;
 }
-
-/* Excluded from this release type: CommandConfigLoader */
 
 /**
  * Parameters used for the command `contenttype`.
@@ -168,6 +228,8 @@ export declare interface CommandDataParams extends CommandContentTypeParams {
     filters?: Record<string, string | number | string[] | number[]>;
 }
 
+/* Excluded from this release type: CommandDefinition */
+
 /**
  * Parameters used for the command `delete`.
  * <br>
@@ -189,8 +251,6 @@ export declare interface CommandDeleteParams {
      */
     entityTitle: string;
 }
-
-/* Excluded from this release type: CommandLinkGenerator */
 
 /**
  * Parameters used for the command `metadata`.
@@ -321,7 +381,9 @@ export declare const enum CommandNames {
      * (auto-detected from context)
      */
     edit = "edit",
+    /* Excluded from this release type: help */
     /* Excluded from this release type: image */
+    /* Excluded from this release type: info */
     /**
      * `insights` opens the insights logs page
      * <br> 🔐 Toolbar shows this automatically to elevated admins.
@@ -329,6 +391,7 @@ export declare const enum CommandNames {
      */
     insights = "insights",
     /* Excluded from this release type: insights_old_server */
+    /* Excluded from this release type: link */
     /**
      * `instance-list` opens a dialog to manually re-order **items in a list**.
      * <br> 🪜 Only appears on toolbars of items which are in a list.
@@ -343,6 +406,8 @@ export declare const enum CommandNames {
      * (auto-detected from context)
      */
     layout = "layout",
+    /* Excluded from this release type: log */
+    /* Excluded from this release type: edition */
     /**
      * `metadata` opens the edit-dialog for the current metadata item.
      * <br> 🔘 It only appears if the toolbar explicitly asks for it.
@@ -536,6 +601,8 @@ export declare interface CommandParams extends Record<string, unknown> {
     title?: string;
     /**
      * The purpose of this varies by [Command](xref:Api.Js.SxcJs.CommandNames).
+     * This is only for the module-specific list of items.
+     * When using parent/fields, this is not relevant.
      * @public
      */
     useModuleList?: true;
@@ -562,12 +629,12 @@ export declare interface CommandParams extends Record<string, unknown> {
      * @public
      */
     parent?: string;
-    /**
-     * The purpose of this varies by [Command](xref:Api.Js.SxcJs.CommandNames).
-     * @public
-     */
-    fields?: string;
+    /* Excluded from this release type: fields */
+    /* Excluded from this release type: uifields */
+    /* Excluded from this release type: form */
     /* Excluded from this release type: isshared */
+    /* Excluded from this release type: copyId */
+    /* Excluded from this release type: settings */
 }
 
 /**
@@ -580,7 +647,7 @@ export declare interface CommandParamsEntity extends CommandParamsEntityById, Co
 }
 
 /**
- * Parameters used for commands which address a specificy entity.
+ * Parameters used for commands which address a specify entity.
  * <br>
  * ⤴️ back to [All Command Names](xref:Api.Js.SxcJs.CommandNames)
  * @public
@@ -600,7 +667,7 @@ export declare interface CommandParamsEntityById {
  */
 export declare interface CommandParamsEntityInContentBlock {
     /**
-     * Determins the position of the item in the list.
+     * Determines the position of the item in the list.
      * index was added in v14.04 to replace the `sortOrder` which had a confusing name.
      */
     index: number;
@@ -618,7 +685,7 @@ export declare interface CommandParamsEntityInContentBlock {
  */
 export declare interface CommandParamsEntityInList {
     /**
-     * Determins the position of the item in the list of that entity-field.
+     * Determines the position of the item in the list of that entity-field.
      */
     index: number;
     /**
@@ -652,11 +719,20 @@ export declare interface CommandParamsMetadata {
     targetType?: MetadataTargetTypes;
 }
 
-declare type CommandPromise<T> = Promise<T | void>;
-
 /* Excluded from this release type: Commands */
 
+/* Excluded from this release type: CommandWithParams */
+
+declare interface ContentAppUnifiedInCtxAndAttr {
+    /**
+     * App name for showing in the layout infos - new v17
+     */
+    appName: string;
+}
+
 /* Excluded from this release type: ContentBlockReference */
+
+/* Excluded from this release type: ContentBlockUnifiedInCtxAndAttr */
 
 /* Excluded from this release type: ContentListActionParams */
 
@@ -665,54 +741,59 @@ declare type CommandPromise<T> = Promise<T | void>;
 /**
  * @public
  */
-declare class ContextBundleContent extends ContextBundleInstance {
-    /* Excluded from this release type: item */
+declare interface ContextBundleContent extends ContextBundleInstance {
     /* Excluded from this release type: contentBlockReference */
     /* Excluded from this release type: contentBlock */
-    /* Excluded from this release type: __constructor */
 }
 
 /**
+ * Context Bundle containing information about the current instance, app, page, system, user and ui.
+ * Foundation for specific context bundles, even though ATM it's only inherited 1x and contains everything.
  * @public
  */
-declare class ContextBundleInstance {
-    /**
-     * instance of sxc object
-     */
-    sxc: Sxc;
+declare interface ContextBundleInstance {
+    /* Excluded from this release type: _isContext */
+    /* Excluded from this release type: sxc */
     /* Excluded from this release type: instance */
     /* Excluded from this release type: app */
     /* Excluded from this release type: ui */
     /* Excluded from this release type: page */
     /* Excluded from this release type: system */
-    /* Excluded from this release type: tenant */
     /* Excluded from this release type: user */
-    _isContext: boolean;
-    /* Excluded from this release type: __constructor */
-    /* Excluded from this release type: is */
 }
 
 /**
  * @public
  */
-declare class ContextBundleToolbar extends ContextBundleContent {
+declare interface ContextBundleToolbar extends ContextBundleContent {
     /* Excluded from this release type: toolbar */
-    /* Excluded from this release type: __constructor */
-    /* Excluded from this release type: forButton */
 }
 
 /**
  * @public
  */
-declare class ContextComplete extends ContextBundleToolbar {
+declare interface ContextComplete extends ContextBundleToolbar {
     /* Excluded from this release type: _isCtxComplete */
     /* Excluded from this release type: button */
     /* Excluded from this release type: commandWorkflow */
-    /* Excluded from this release type: __constructor */
-    /* Excluded from this release type: findContext */
-    /* Excluded from this release type: contextCopy */
-    /* Excluded from this release type: getContextInstance */
-    /* Excluded from this release type: is */
+}
+
+/**
+ * Complete context with a button (explicitly)
+ * @public
+ */
+declare interface ContextCompleteWithButton extends ContextComplete {
+    /** @public */
+    button: ButtonConfiguration;
+}
+
+/* Excluded from this release type: ContextErrorJsonAndObj */
+
+declare class ContextHelpers {
+    #private;
+    /* Excluded from this release type: isComplete */
+    /* Excluded from this release type: getRule */
+    /* Excluded from this release type: expandContext */
 }
 
 /**
@@ -740,7 +821,8 @@ export declare class ContextIdentifier {
      * @optional
      */
     moduleId?: number;
-    /* Excluded from this release type: _ignoreHeaders */
+    /* Excluded from this release type: _noContextInHttpHeaders */
+    /* Excluded from this release type: _autoAppIdsInUrl */
     /* Excluded from this release type: complete */
     /* Excluded from this release type: blockId */
     /* Excluded from this release type: is */
@@ -754,17 +836,15 @@ export declare class ContextIdentifier {
 
 /* Excluded from this release type: ContextOfInstance */
 
-/* Excluded from this release type: ContextOfItem */
-
 /* Excluded from this release type: ContextOfPage */
 
 /* Excluded from this release type: ContextOfSystem */
 
-/* Excluded from this release type: ContextOfTenant */
-
 /* Excluded from this release type: ContextOfUi */
 
 /* Excluded from this release type: ContextOfUser */
+
+/* Excluded from this release type: ContextProblems */
 
 /* Excluded from this release type: DnnUiRoot */
 
@@ -791,8 +871,29 @@ export declare interface EnvironmentSpecs {
     /** The platform code like 'dnn' or 'oqt' */
     platform: string;
     /* Excluded from this release type: dialogQuery */
-    /* Excluded from this release type: secureEndpointPublicKey */
+    /* Excluded from this release type: publicKey */
 }
+
+/**
+ * Options for fetch requests.
+ * Typically to customize encryption behavior (new v18.05)
+ */
+declare interface FetchOptions {
+    method?: string;
+    /**
+     * Encrypt the request.
+     * As of v18.05 it will only cover the body, but in future
+     * it could also cover url parameters and maybe headers.
+     */
+    encrypt?: boolean | 'auto' | 'force';
+    /**
+     * Encrypt the body of the request.
+     */
+    encryptBody?: boolean | 'auto' | 'force';
+    /* Excluded from this release type: encryptShowErrorToUser */
+}
+
+/* Excluded from this release type: flattenSlashes */
 
 /**
  * Any object that has an own log object
@@ -801,7 +902,6 @@ export declare interface EnvironmentSpecs {
  * @public
  */
 export declare abstract class HasLog {
-    /* Excluded from this release type: parentLog */
     /* Excluded from this release type: log */
     /* Excluded from this release type: __constructor */
     /* Excluded from this release type: initLog */
@@ -810,13 +910,13 @@ export declare abstract class HasLog {
 
 /* Excluded from this release type: HeaderNames */
 
+/* Excluded from this release type: iconPrefix */
+
 /* Excluded from this release type: InPageButtonGroupJson */
 
 /* Excluded from this release type: InPageButtonJson */
 
 /* Excluded from this release type: InPageCommandJson */
-
-/* Excluded from this release type: InPageCommandJsonWithTooMuchInfo */
 
 /* Excluded from this release type: InPageToolbarConfigVariations */
 
@@ -830,22 +930,22 @@ declare class InsightsLogSet {
 
 /* Excluded from this release type: InsightsSingleton */
 
+/* Excluded from this release type: InstanceContext */
+
 /* Excluded from this release type: ItemIdentifierCopy */
 
-/* Excluded from this release type: ItemIdentifierGroup */
-
-/* Excluded from this release type: ItemIdentifierInField */
-
-/* Excluded from this release type: ItemIdentifierParent */
+/* Excluded from this release type: ItemIdentifierInList */
 
 /* Excluded from this release type: ItemIdentifierShared */
 
 /* Excluded from this release type: ItemIdentifierSimple */
 
+/* Excluded from this release type: ItemUrlParameters */
+
 /* Excluded from this release type: ListWithCursor */
 
 /**
- * A log object which will collect log entries for another ojbect
+ * A log object which will collect log entries for another object
  * @export
  * @interface Log
  * @public
@@ -859,7 +959,7 @@ export declare class Log {
     /* Excluded from this release type: callDepths */
     /* Excluded from this release type: startTime */
     /**
-     * Maximum amount of entries to add - to prevent memory hoging
+     * Maximum amount of entries to add - to prevent memory hogging
      */
     maxEntries: number;
     /* Excluded from this release type: __constructor */
@@ -1088,13 +1188,15 @@ export declare enum MetadataTargetTypes {
 
 /* Excluded from this release type: ModifierContentBlock */
 
-/* Excluded from this release type: ModifierContentBlockInstance */
-
 /* Excluded from this release type: ModifierDnnModule */
 
 /* Excluded from this release type: ModifierDnnModuleInternal */
 
 /* Excluded from this release type: NoJQ */
+
+/* Excluded from this release type: Note */
+
+/* Excluded from this release type: NoteLink */
 
 /* Excluded from this release type: NumberNotDefinedHuge */
 
@@ -1131,6 +1233,9 @@ export declare class QuickEditConfig {
     enable?: boolean | 'auto';
     /**
      * Optional detailed configuration of the buttons.
+     * The buttons configuration on the root.
+     * Will be used for the `modules` and `innerBlocks` if not specified there.
+     * Note that if not specified, will always default to true for all buttons.
      */
     buttons?: QuickEditConfigButtons;
 }
@@ -1173,12 +1278,6 @@ export declare const QuickEditConfigEnableAuto: string;
  * @public
  */
 export declare class QuickEditConfigRoot extends QuickEditConfig {
-    /**
-     * The buttons configuration on the root.
-     * Will be used for the `modules` and `innerBlocks` if not specified there.
-     * Note that if not specified, will always default to true for all buttons.
-     */
-    buttons?: QuickEditConfigButtons;
     /**
      * Optional configuration for the Inner Content Blocks.
      */
@@ -1244,7 +1343,13 @@ export declare interface RunParamsWithContext extends RunParams {
      * We always need the tag OR the context, but never both
      */
     context?: Sxc | ContextIdentifier;
+    /**
+     * Method caller (for logging)
+     */
+    triggeredBy?: string;
 }
+
+/* Excluded from this release type: RunParamsWithContextClean */
 
 /* Excluded from this release type: RunParamsWithWorkflows */
 
@@ -1282,6 +1387,9 @@ export declare class Sxc extends HasLog {
      */
     cms: SxcCms;
     /* Excluded from this release type: __constructor */
+    /* Excluded from this release type: loadEnv */
+    /* Excluded from this release type: env */
+    /* Excluded from this release type: http */
     /* Excluded from this release type: is */
     /**
      * Get a data service for a specific content-type.
@@ -1334,8 +1442,9 @@ export declare class SxcData<T = unknown> extends SxcDataServiceBase {
     /* Excluded from this release type: __constructor */
     /**
      * Get all items of this type.
+     * @param params optional parameters - typically for OData - new in v21.06
      */
-    getAll(): Promise<T[]>;
+    getAll(params?: string | Record<string, unknown>): Promise<T[]>;
     /**
      * Get the specific item with the ID. It will return null if not found
      */
@@ -1378,6 +1487,8 @@ export declare abstract class SxcDataServiceBase extends SxcPart {
     protected readonly webApi: SxcWebApi;
     /* Excluded from this release type: __constructor */
 }
+
+/* Excluded from this release type: SxcDevBuild */
 
 /**
  * This is the root global `window.$2sxc` function / object.
@@ -1483,6 +1594,7 @@ export declare interface SxcGlobal {
  * @public
  */
 export declare class SxcGlobalCms extends HasLog {
+    #private;
     /* Excluded from this release type: autoDump */
     /* Excluded from this release type: __constructor */
     /* Excluded from this release type: resetLog */
@@ -1518,7 +1630,7 @@ export declare class SxcGlobalCms extends HasLog {
      */
     run<T>(tag: HTMLElement, commandParams: CommandParams, event?: MouseEvent): Promise<void | T>;
     /* Excluded from this release type: runInternal */
-    /* Excluded from this release type: do */
+    /* Excluded from this release type: runClean */
 }
 
 /* Excluded from this release type: SxcGlobalDebug */
@@ -1571,7 +1683,7 @@ export declare class SxcGlobalEnvironment extends HasLog {
      */
     platform(): string;
     /* Excluded from this release type: dialogQuery */
-    /* Excluded from this release type: secureEndpointPublicKey */
+    /* Excluded from this release type: publicKey */
     /* Excluded from this release type: ensureReadyOrThrow */
 }
 
@@ -1731,7 +1843,6 @@ export declare class SxcQuery extends SxcDataServiceBase {
  */
 export declare class SxcWebApi implements ZzzSxcWebApiDeprecated {
     private readonly sxc;
-    /* Excluded from this release type: env */
     /* Excluded from this release type: __constructor */
     /**
      * **Deprecated** - docs in the separate interface
@@ -1762,7 +1873,7 @@ export declare class SxcWebApi implements ZzzSxcWebApiDeprecated {
      * Will retrieve data from the backend using a standard fetch.
      * @param url a full url or short-hand like `controller/method?params` `app/auto/api/controller/method?params`. Note that params would also be specified on the url.
      * @param data optional POST data
-     * @param method optional method, defaults to `GET` unless it has data, in which case it defaults to `POST`
+     * @param method optional method or fetch options, defaults to `GET` unless it has data, in which case it defaults to `POST`
      * @returns a Promise containing a Response object, just like a normal fetch would.
      * example: webApi.fetchRaw('Rss/Feed');
      * example: webApi.fetchRaw(webApi.url('Rss/Feed', { id: 47 })); // url params
@@ -1771,16 +1882,17 @@ export declare class SxcWebApi implements ZzzSxcWebApiDeprecated {
      * maybe: webApi.fetchRaw({url: 'Rss/Feed', params: { id: 47 }})
      * maybe: webApi.fetchRaw({url: ..., params: { ...}, body: { ...}, method: 'GET' })
      */
-    fetchRaw(url: string, data?: string | Record<string, any>, method?: string): Promise<Response>;
+    fetchRaw(url: string, data?: string | Record<string, unknown>, method?: string | FetchOptions): Promise<Response>;
+    private prepareOptions;
     /* Excluded from this release type: fetch */
     /**
      * Will retrieve data from the backend using a standard fetch and give you an object.
      * @param url a full url or short-hand like `controller/method?params` `app/auto/api/controller/method?params`. Note that params would also be specified on the url.
      * @param data optional POST data
-     * @param method optional method, defaults to `GET` unless it has data, in which case it defaults to `POST`
+     * @param method optional method or fetch options,, defaults to `GET` unless it has data, in which case it defaults to `POST`
      * @returns a Promise containing any object.
      */
-    fetchJson<T = any>(url: string, data?: string | Record<string, any>, method?: string): Promise<T>;
+    fetchJson<T = any>(url: string, data?: string | Record<string, any>, method?: string | FetchOptions): Promise<T>;
     /**
      * All the headers which are needed in an ajax call for this to work reliably.
      * Use this if you need to get a list of headers in another system
@@ -1827,6 +1939,8 @@ export declare class SxcWebApi implements ZzzSxcWebApiDeprecated {
 /* Excluded from this release type: TLB_SHOW_ALWAYS */
 
 /* Excluded from this release type: TLB_SHOW_HOVER */
+
+/* Excluded from this release type: tlbI18nPrefix */
 
 /* Excluded from this release type: Toolbar */
 
@@ -1882,22 +1996,13 @@ export declare class ToolbarWorkflowManager extends HasLog {
 
 /* Excluded from this release type: TypeFollow */
 
-/* Excluded from this release type: TypeHover */
+/* Excluded from this release type: TypeHoverH */
+
+/* Excluded from this release type: TypeNoteMode */
 
 /* Excluded from this release type: TypeShow */
 
-/* Excluded from this release type: TypeTbD */
-
 export declare type TypeValue = boolean | string | number | Date;
-
-/* Excluded from this release type: urlClean */
-
-declare interface UrlItemParams {
-    prefill?: Record<string, TypeValue>;
-    items?: string;
-    contentTypeName?: string;
-    filters?: string;
-}
 
 /**
  * Helper object to read url params.

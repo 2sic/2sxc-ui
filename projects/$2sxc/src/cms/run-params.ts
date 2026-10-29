@@ -59,6 +59,9 @@ export interface RunParamsWithContext extends RunParams {
   triggeredBy?: string
 }
 
+/**
+ * @internal
+ */
 export interface RunParamsWithContextClean extends Omit<RunParamsWithContext, 'context'> {
   /**
    * The context to run in, basically containing module id, etc.

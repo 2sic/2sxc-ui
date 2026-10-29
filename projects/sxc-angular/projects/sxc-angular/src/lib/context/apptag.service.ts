@@ -11,8 +11,7 @@ export class AppTagService {
      * The app-tag on the HTML page.
      */
     private appElement: ElementRef
-    ) {
-  }
+    ) {}
 
   /**
    * Get the value of an attribute on the main app-tag

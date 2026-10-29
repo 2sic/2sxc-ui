@@ -42,7 +42,7 @@ export interface ContextComplete extends ContextBundleToolbar {
 
 /**
  * Complete context with a button (explicitly)
- * @internal
+ * @public
  */
 export interface ContextCompleteWithButton extends ContextComplete {
     /** @internal */
