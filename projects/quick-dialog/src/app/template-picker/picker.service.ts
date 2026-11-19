@@ -1,5 +1,5 @@
 import { combineLatest } from 'rxjs';
-import { map, startWith, share } from 'rxjs/operators';
+import { map, startWith, share, switchMap, take, tap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
@@ -11,6 +11,13 @@ import { Constants } from 'app/core/constants';
 import { DebugConfig } from 'app/debug-config';
 import { BehaviorObservable } from 'app/core/behavior-observable';
 import { Config } from '../config';
+import { BackendSettings } from '../core/backend-settings';
+
+interface BlockConfigOptionsResponse {
+  Templates?: Template[];
+  ContentTypes?: ContentType[];
+  Apps?: App[];
+}
 
 const log = parentLog.subLog('api', DebugConfig.api.enabled);
 const uninitializedList = []; // this must be created as a variable, so we can check later if it's still the original or a new empty list
@@ -37,7 +44,7 @@ export class PickerService {
   // all the subjects - these are all multi-cast, so don't use share!
   // #endregion
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private backendSettings: BackendSettings) {
     log.add('constructor()');
     this.buildObservables();
     this.enableLogging();
@@ -60,66 +67,48 @@ export class PickerService {
   public saveAppId(appId: string, reloadParts: boolean): Promise<any> {
     log.add(`saveAppId(${appId}, ${reloadParts})`);
     // skip doing anything here, if we're in content-mode (which doesn't use/change apps)
-    if (!this.loadApps) throw new Error(`can't save app, as we're not in app-mode`);
+    if (!this.mustLoadApps) throw new Error(`can't save app, as we're not in app-mode`);
     return this.http.post(`${Constants.webApiSetApp}?appId=${appId}`, {}).toPromise();
   }
-
-
 
   public initLoading(requireApps: boolean): Observable<any> {
     log.add(`initLoading(requireApps: ${requireApps})`);
     this.mustLoadApps = requireApps;
-    if (requireApps) this.loadApps();
     return this.reloadAppParts();
   }
 
   public reloadAppParts(): Observable<any> {
-    return combineLatest([this.loadTemplates(), this.loadContentTypes()]);
-  }
-
-  /**
-   * load templates - is sometimes repeated if the app changes
-   */
-  public loadTemplates(): Observable<any> {
-    log.add('loadTemplates()');
+    log.add('loadBlockConfigOptions()');
     this.templates$.reset();
-    const obs = this.http.get<Template[]>(Constants.webApiGetTemplates)
-      .pipe(share()); // ensure it's only run once
-
-    obs.subscribe(response => this.templates$.next(response || []));
-    return obs;
-  }
-
-  /**
-   * Load the ContentTypes - only needed on first initialization
-   */
-  private loadContentTypes(): Observable<any> {
-    log.add(`loadContentTypes()`);
     this.contentTypes$.reset();
-    const obs = this.http.get<ContentType[]>(Constants.webApiGetTypes)
-      .pipe(share()); // ensure it's only run once
-    obs.pipe(map(response => (response || []).map(ct => {
-        ct.Label = ct.Properties?.Label ?? ct.Name;
-        return ct;
-      })))
-      .subscribe(json => this.contentTypes$.next(json));
-    return obs;
-  }
+    const obs = this.backendSettings.data.pipe(
+      take(1),
+      switchMap(context => {
+        // A block without an app still needs an app identity to execute the system query.
+        const appId = Config.appId() || context.Site?.PrimaryApp?.AppId;
+        if (!appId) throw new Error('Could not determine an app ID for the block configuration options.');
 
-  /**
-   * Load all Apps, only needed on first initialization
-   */
-  private loadApps(): Observable<any> {
-    const alreadyLoaded = !this.apps$.isInitial();
-    log.add(`loadApps() - skip:${alreadyLoaded}`);
-    if (alreadyLoaded) return;
+        return this.http.get<BlockConfigOptionsResponse>(Constants.webApiBlockConfigOptions, {
+          params: {
+            appId,
+            SysDataSource: 'System.BlockConfigOptions',
+            Apps: Config.apps() ?? '',
+          },
+        });
+      }),
+      tap(response => {
+        this.templates$.next(response.Templates ?? []);
+        this.contentTypes$.next((response.ContentTypes ?? []).map(ct => {
+          ct.Label = ct.Properties?.Label ?? ct.Name;
+          return ct;
+        }));
+        if (this.mustLoadApps && this.apps$.isInitial())
+          this.apps$.subject.next((response.Apps ?? []).map(app => new App(app)));
+      }),
+      share(), // initLoading starts the request; callers can also observe the same result
+    );
 
-    const appsFilter = Config.apps();
-
-    const obs = this.http.get<any[]>(`${Constants.webApiGetApps}?apps=${appsFilter}`)
-      .pipe(share()); // ensure it's only run once
-
-    obs.subscribe(response => this.apps$.subject.next(response.map(a => new App(a))));
+    obs.subscribe();
     return obs;
   }
 
