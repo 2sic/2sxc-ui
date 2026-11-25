@@ -6,9 +6,7 @@ export const Constants = {
   webApiInstallPackage: 'sys/install/RemotePackage',
   // webApiRemoteInstaller: 'sys/install/RemoteWizardUrl',
   webApiInstallSettings: 'sys/install/InstallSettings',
-  webApiGetTemplates: 'cms/block/Templates',
-  webApiGetTypes: 'cms/block/ContentTypes',
-  webApiGetApps: 'cms/block/Apps',
+  webApiBlockConfigOptions: 'app/auto/query/System.SysData/',
   webApiSetApp: 'cms/block/App',
   //#endregion
 };
