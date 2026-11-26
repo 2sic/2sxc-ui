@@ -67,7 +67,10 @@ export class BtnCmdHelpers {
         // but it's by design and kind of necessary (see method above)
         const cp = command?.params;
         const rp = rule?.params;
-        if (cp?.parent && rp?.entityId) {
+        // Copying an item in an entity-list needs the shared parent/fields context so the
+        // duplicate can be inserted back into the same list. Other commands with their own
+        // entityId must still discard conflicting context identifiers.
+        if (command.name !== CommandNames.copy && cp?.parent && rp?.entityId) {
             delete(cp.parent);
             delete(cp.fields);
             delete(cp.index);
